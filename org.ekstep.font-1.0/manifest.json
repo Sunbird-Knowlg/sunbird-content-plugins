@@ -1,0 +1,101 @@
+{
+    "id": "org.ekstep.font",
+    "ver": "1.0",
+    "author": "Santhosh Vasabhaktula",
+    "title": "Font Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "menu": [{
+            "id": "font",
+            "category": "context",
+            "type": "icon",
+            "toolTip": "Font",
+            "title": "Font",
+            "iconClass": "fa fa-font fa-lg fa-inverse menu-icon",
+            "state": "HIDE",
+            "isDropdown": false,
+            "dropdown": []
+        }, {
+            "id": "fontweight",
+            "category": "context",
+            "type": "icon",
+            "toolTip": "Bold",
+            "title": "Bold",
+            "iconClass": "fa fa-bold fa-lg fa-inverse menu-icon",
+            "state": "HIDE",
+            "isDropdown": false,
+            "dropdown": [],
+            "onclick": {
+                "id": "font:toggleBold",
+                "data": {}
+            }
+        }, {
+            "id": "fontstyle",
+            "category": "context",
+            "type": "icon",
+            "toolTip": "Italic",
+            "title": "Italic",
+            "iconClass": "fa fa-italic fa-lg fa-inverse menu-icon",
+            "state": "HIDE",
+            "isDropdown": false,
+            "dropdown": [],
+            "onclick": {
+                "id": "font:toggleItalic",
+                "data": {}
+            }
+        },{
+            "id": "fontfamily",
+            "category": "context",
+            "type": "select",
+            "toolTip": "Style",
+            "title": "Style",
+            "iconClass": "fa fa-font fa-lg fa-inverse menu-icon",
+            "state": "HIDE",
+            "isDropdown": false,
+            "dropdown": [],
+            "options": [
+                    "Arial",
+                    "Courier",
+                    "Georgia",
+                    "Helvetica",
+                    "Monospace",
+                    "Sans-serif",
+                    "Serif",
+                    "Tahoma",
+                    "Times",
+                    "Trebuchet MS",
+                    "Verdana",
+                    "NotoSansKannada",
+                    "NotoSansGujarati",
+                    "NotoSansBengali",
+                    "NotoSansGurmukhi",
+                    "NotoSansOriya",
+                    "NotoSansDevanagari",
+                    "NotoSansTamil",
+                    "NotoSansTelugu",
+                    "NotoNastaliqUrdu",
+                    "NotoSansMalayalam"],
+            "onchange": {
+                "id": "font:updateStyle",
+                "data": {"id": "fontfamily"}
+            }
+        },{
+            "id": "fontsize",
+            "category": "context",
+            "type": "select",
+            "toolTip": "Size",
+            "title": "Size",
+            "iconClass": "fa fa-font fa-lg fa-inverse menu-icon",
+            "state": "HIDE",
+            "isDropdown": false,
+            "dropdown": [],
+            "options": [18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 54, 60, 66, 72, 80, 88, 96],
+            "onchange": {
+                "id": "font:updateSize",
+                "data": {"id": "fontsize"}
+            }
+        }]
+    }
+}

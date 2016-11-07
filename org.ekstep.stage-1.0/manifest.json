@@ -1,0 +1,24 @@
+{
+	"id": "org.ekstep.stage",
+	"ver": "1.0",
+	"author": "Santhosh Vasabhaktula",
+    "title": "Stage Plugin",
+    "description": "",
+    "publishedDate": "",
+	"editor": {
+		"main": "editor/plugin.js",
+		"menu": [{
+			"id": "stage",
+			"category": "main",
+			"type": "icon",
+			"toolTip": "Add Stage",
+			"title": "Stage",
+			"iconClass": "fa fa-lg fa-desktop fa-inverse menu-icon",
+			"onclick": {
+				"id": "stage:create",
+				"data": {
+	            }
+			}
+		}]
+	}
+}

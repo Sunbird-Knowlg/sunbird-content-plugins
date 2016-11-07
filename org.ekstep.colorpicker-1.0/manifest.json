@@ -1,0 +1,31 @@
+{
+	"id": "org.ekstep.colorpicker",
+	"ver": "1.0",
+	"author": "Santhosh Vasabhaktula",
+	"title": "Colorpicker Plugin",
+	"description": "",
+	"publishedDate": "",
+	"editor": {
+		"main": "editor/plugin.js",
+		"dependencies": [
+			{"type": "js", "src": "editor/jscolor.min.js"}
+		],
+		"menu": [
+			{
+				"id": "colorpicker",
+				"category": "context",
+				"type": "icon",
+				"toolTip": "Change Color",
+				"title": "Color",
+				"iconClass": "jscolor",
+				"iconStyle": "display: block; width:16px; height:16px; margin: auto; margin-top: 0px; margin-bottom: 6px",
+				"state": "HIDE",
+				"onclick": {
+					"id": "colorpicker:show",
+					"data": {}
+				}
+			}
+		]
+	},
+	"renderer": {}
+}

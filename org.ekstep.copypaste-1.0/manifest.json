@@ -1,0 +1,38 @@
+{
+    "id": "org.ekstep.copypaste",
+    "ver": "1.0",
+    "author": "Santhosh Vasabhaktula",
+    "title": "Copy paste Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "menu": [
+            {
+                "id": "copy",
+                "category": "context",
+                "type": "icon",
+                "toolTip": "copy",
+                "title": "copy",
+                "iconClass": "fa fa-lg fa-files-o fa-inverse menu-icon",
+                "state": "HIDE",
+                "onclick": {
+                    "id": "copy:copyItem",
+                    "data": {}
+                }
+            }, {
+                "id": "paste",
+                "category": "context",
+                "type": "icon",
+                "toolTip": "paste",
+                "title": "paste",
+                "iconClass": "fa fa-lg fa fa-clipboard fa-inverse menu-icon",
+                "state": "HIDE",
+                "onclick": {
+                    "id": "paste:pasteItem",
+                    "data": {}
+                }
+            }
+        ]
+    }
+}

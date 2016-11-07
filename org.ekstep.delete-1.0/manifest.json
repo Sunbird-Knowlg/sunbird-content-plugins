@@ -1,0 +1,24 @@
+{
+	"id": "org.ekstep.delete",
+	"ver": "1.0",
+	"author": "Santhosh Vasabhaktula",
+    "title": "Delete Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+    	"main": "editor/plugin.js",
+		"menu": [{
+			"id": "delete",
+			"category": "context",
+			"type": "icon",
+			"toolTip": "Delete",
+			"title": "Delete",
+			"iconClass": "fa fa-lg fa-trash-o fa-inverse menu-icon",
+			"state": "HIDE",
+			"onclick": {
+				"id": "delete:invoke",
+				"data": {}
+			}
+		}]
+    }
+}

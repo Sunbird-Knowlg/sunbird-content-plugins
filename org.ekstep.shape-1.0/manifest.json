@@ -1,0 +1,93 @@
+{
+    "id": "org.ekstep.shape",
+    "ver": "1.0",
+    "author": "Santhosh Vasabhaktula",
+    "title": "Shape Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            { "type": "plugin", "plugin": "org.ekstep.colorpicker", "ver": "1.0" }
+        ],
+        "menu": [{
+            "id": "shape",
+            "category": "main",
+            "type": "image",
+            "toolTip": "Add Shapes",
+            "title": "Shapes",
+            "iconImage": "assets/shapes.png",
+            "submenu": [{
+                "id": "rectangle",
+                "type": "image",
+                "toolTip": "Add Rectangle",
+                "title": "Rectangle",
+                "iconImage": "assets/rectangle.png",
+                "onclick": {
+                    "id": "shape:createRectange",
+                    "data": {
+                        "left": 100,
+                        "top": 100,
+                        "fill": "rgb(255,255,0)",
+                        "width": 100,
+                        "height": 100
+                    }
+                }
+            }, {
+                "id": "circle",
+                "type": "image",
+                "toolTip": "Add Circle",
+                "title": "Circle",
+                "iconImage": "assets/circle.png",
+                "onclick": {
+                    "id": "shape:createCircle",
+                    "data": {
+                        "left": 150,
+                        "top": 150,
+                        "fill": "rgb(0,255,0)",
+                        "rx": 100,
+                        "ry": 100
+                    }
+                }
+            }, {
+                "id": "rounded-rectangle",
+                "type": "image",
+                "toolTip": "Add Rounded Rectangle",
+                "title": "Rounded Rectangle",
+                "iconImage": "assets/rounded-rectangle.png",
+                "onclick": {
+                    "id": "shape:createRectange",
+                    "data": {
+                        "left": 100,
+                        "top": 100,
+                        "fill": "rgb(255,0,0)",
+                        "width": 100,
+                        "height": 100,
+                        "rx": 10,
+                        "ry": 10
+                    }
+                }
+            }]
+        }],
+        "initdata": {
+            "props": {
+                "left": 200,
+                "top": 200
+            }
+        }
+    },
+    "config": [{
+        "id": "colorpicker",
+        "category": "context",
+        "type": "icon",
+        "toolTip": "Change Color",
+        "title": "Color",
+        "iconClass": "jscolor",
+        "iconStyle": "display: block; width:16px; height:16px; margin: auto; margin-top: 0px; margin-bottom: 6px",
+        "state": "HIDE",
+        "onclick": {
+            "id": "colorpicker:show",
+            "data": {}
+        }
+    }]
+}

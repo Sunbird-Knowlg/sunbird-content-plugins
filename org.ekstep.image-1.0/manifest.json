@@ -1,0 +1,31 @@
+{
+    "id": "org.ekstep.image",
+    "ver": "1.0",
+    "author": "Santhosh Vasabhaktula",
+    "title": "Image Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "menu": [{
+            "id": "image",
+            "category": "main",
+            "type": "icon",
+            "toolTip": "Add Image",
+            "title": "Image",
+            "iconClass": "fa fa-lg fa-picture-o fa-inverse menu-icon",
+            "onclick": {
+                "id": "image:getImage",
+                "data": {
+                    "url": "plugins/image/assets/try_again_popup.png"
+                }
+            }
+        }]
+    },
+    "initdata": {
+        "props": {
+            "left": 200,
+            "top": 200
+        }
+    }
+}

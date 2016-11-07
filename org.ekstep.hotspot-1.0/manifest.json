@@ -1,0 +1,53 @@
+{
+    "id": "org.ekstep.hotspot",
+    "ver": "1.0",
+    "author": "Santhosh Vasabhaktula",
+    "title": "Hotspot Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            { "type": "plugin", "plugin": "org.ekstep.colorpicker", "ver": "1.0" }
+        ],
+        "menu": [{
+            "id": "hotspot",
+            "category": "main",
+            "type": "image",
+            "toolTip": "Add Hotspot",
+            "title": "Hotspot",
+            "iconImage": "assets/hotspot.png",
+            "onclick": {
+                "id": "hotspot:create",
+                "data": {
+                    "left": 100,
+                    "top": 100,
+                    "fill": "rgb(255,0,0)",
+                    "width": 100,
+                    "height": 100,
+                    "opacity": 0.4
+                }
+            }
+        }]
+    },
+    "initdata": {
+        "props": {
+            "left": 200,
+            "top": 200
+        }
+    },
+    "config": [{
+        "id": "colorpicker",
+        "category": "context",
+        "type": "icon",
+        "toolTip": "Change Color",
+        "title": "Color",
+        "iconClass": "jscolor",
+        "iconStyle": "display: block; width:16px; height:16px; margin: auto; margin-top: 0px; margin-bottom: 6px",
+        "state": "HIDE",
+        "onclick": {
+            "id": "colorpicker:show",
+            "data": {}
+        }
+    }]
+}

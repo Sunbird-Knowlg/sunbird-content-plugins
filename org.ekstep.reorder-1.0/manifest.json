@@ -1,0 +1,41 @@
+{
+	"id": "org.ekstep.reorder",
+	"ver": "1.0",
+	"author": "Santhosh Vasabhaktula",
+    "title": "Re-order Plugin",
+    "description": "",
+    "publishedDate": "",
+	"editor": {
+		"main": "editor/plugin.js",
+		"menu": [{
+			"id": "reorder",
+			"category": "context",
+			"type": "icon",
+			"toolTip": "Re-order",
+			"title": "Reorder",
+			"iconClass": "fa fa-sort fa-lg fa-inverse menu-icon",
+			"state": "HIDE",
+			"submenu": [{
+				"id": "sendtofront",
+				"type": "image",
+				"toolTip": "Send to front",
+				"title": "Bring Front",
+				"iconImage": "assets/bring-front.png",
+				"onclick": {
+					"id": "reorder:sendtofront",
+					"data": {}
+				}
+			},{
+				"id": "sendtoback",
+				"type": "image",
+				"toolTip": "Send to back",
+				"title": "Send Back",
+				"iconImage": "assets/send-back.png",
+				"onclick": {
+					"id": "reorder:sendtoback",
+					"data": {}
+				}
+			}]
+		}]
+	}
+}
