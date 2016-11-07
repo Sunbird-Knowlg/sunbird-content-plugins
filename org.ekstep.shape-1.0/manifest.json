@@ -69,25 +69,25 @@
                 }
             }]
         }],
+        "config": [{
+            "id": "colorpicker",
+            "category": "context",
+            "type": "icon",
+            "toolTip": "Change Color",
+            "title": "Color",
+            "iconClass": "jscolor",
+            "iconStyle": "display: block; width:16px; height:16px; margin: auto; margin-top: 0px; margin-bottom: 6px",
+            "state": "HIDE",
+            "onclick": {
+                "id": "colorpicker:show",
+                "data": {}
+            }
+        }],
         "initdata": {
             "props": {
                 "left": 200,
                 "top": 200
             }
         }
-    },
-    "config": [{
-        "id": "colorpicker",
-        "category": "context",
-        "type": "icon",
-        "toolTip": "Change Color",
-        "title": "Color",
-        "iconClass": "jscolor",
-        "iconStyle": "display: block; width:16px; height:16px; margin: auto; margin-top: 0px; margin-bottom: 6px",
-        "state": "HIDE",
-        "onclick": {
-            "id": "colorpicker:show",
-            "data": {}
-        }
-    }]
+    }
 }
