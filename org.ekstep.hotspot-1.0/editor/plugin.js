@@ -4,13 +4,12 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("hotspot:create", this.addHotspot, this);
     },
     newInstance: function(data) {
-        data.props.id = this.id;
         if (data.type && data.type === "hotspot") {
             this.editorObj = new fabric.Rect(data.props);
         }
-         this.attributes.type = "roundrect";
-         this.attributes.radius = 1;
-         this.attributes.hitArea = true;
+        this.attributes.type = "roundrect";
+        this.attributes.radius = 1;
+        this.attributes.hitArea = true;
     },
     addHotspot: function(event, data) {
         this.create({ type: 'hotspot', props: data });

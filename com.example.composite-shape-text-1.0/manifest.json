@@ -1,5 +1,5 @@
 {
-    "id": "com.ilimi.composite-shape-text",
+    "id": "com.example.composite-shape-text",
     "ver": "1.0",
     "editor": {
         "main": "editor/plugin.js",
