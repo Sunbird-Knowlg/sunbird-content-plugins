@@ -1,6 +1,7 @@
 {
     "id": "org.ekstep.scribblepad",
     "ver": "1.0",
+    "shortId": "scribble",
     "author": "Santhosh Vasabhaktula",
     "title": "Scribblepad Plugin",
     "description": "",

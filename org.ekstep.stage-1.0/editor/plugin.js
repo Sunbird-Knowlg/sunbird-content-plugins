@@ -8,8 +8,6 @@ EkstepEditor.basePlugin.extend({
         y: 0,
         w: 720,
         h: 405,
-        scaleX: 1,
-        scaleY: 1,
         visible: true
     },
     initialize: function() {

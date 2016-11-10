@@ -1,6 +1,7 @@
 {
     "id": "org.ekstep.image",
     "ver": "1.0",
+    "shortId": "image",
     "author": "Santhosh Vasabhaktula",
     "title": "Image Plugin",
     "description": "",

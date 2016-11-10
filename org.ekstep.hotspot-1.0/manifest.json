@@ -1,6 +1,7 @@
 {
     "id": "org.ekstep.hotspot",
     "ver": "1.0",
+    "shortId": "hotspot",
     "author": "Santhosh Vasabhaktula",
     "title": "Hotspot Plugin",
     "description": "",

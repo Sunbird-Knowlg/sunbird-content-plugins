@@ -1,6 +1,7 @@
 {
     "id": "org.ekstep.text",
     "ver": "1.0",
+    "shortId": "text",
     "author": "Santhosh Vasabhaktula",
     "title": "Text Plugin",
     "description": "",

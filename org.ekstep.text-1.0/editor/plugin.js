@@ -50,7 +50,7 @@ EkstepEditor.basePlugin.extend({
     stageUnselect: function(data) {
         textEditor.hide();
     },
-    updateAttributes: function() {
+    getAttributes: function() {
         var instance = this;
         var dataList = {
             "__text": "text",
@@ -69,6 +69,7 @@ EkstepEditor.basePlugin.extend({
             this.attributes.weight = (fontWeight + ' ' + fontStyle).trim();
             this.attributes.type = "text";
         }
+        return this.attributes;
     },
     updateContextMenu: function (data, event) {
         EkstepEditorAPI.updateContextMenus([

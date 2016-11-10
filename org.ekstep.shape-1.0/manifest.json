@@ -1,6 +1,7 @@
 {
     "id": "org.ekstep.shape",
     "ver": "1.0",
+    "shortId": "shape",
     "author": "Santhosh Vasabhaktula",
     "title": "Shape Plugin",
     "description": "",
