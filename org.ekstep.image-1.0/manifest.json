@@ -16,7 +16,7 @@
             "title": "Image",
             "iconClass": "fa fa-lg fa-picture-o fa-inverse menu-icon",
             "onclick": {
-                "id": "image:getImage",
+                "id": "image:add",
                 "data": {
                     "url": "plugins/image/assets/try_again_popup.png"
                 }

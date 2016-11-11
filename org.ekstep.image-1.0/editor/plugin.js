@@ -1,23 +1,25 @@
 EkstepEditor.basePlugin.extend({
     type: "image",
+    useProxy: true,
     initialize: function() {
-        EkstepEditor.eventManager.addEventListener("image:getImage", this.getImage, this);
+        EkstepEditor.eventManager.addEventListener("image:add", this.showAssetBrowser, this);
     },
     newInstance: function(data) {
-        if (data.type === "image") this.editorObj = data.props;
+        this.editorObj = data.props;
     },
-    getImage: function() {
+    showAssetBrowser: function() {
         //TODO: get image from image browser and load the image
         var instance = this;
         var addImageToStage = function(url) {
-            fabric.Image.fromURL(url, function(img) {
+            var imageURL = instance.useProxy ? "image/get/" + encodeURIComponent(url) : url;
+            fabric.Image.fromURL(imageURL, function(img) {
                 img.set({
                     top: 50,
                     left: 50,
                     width: 300,
                     height: 300
                 });
-                instance.addImage({}, img);
+                instance.addImage(img);
             });
         };
 
@@ -33,7 +35,7 @@ EkstepEditor.basePlugin.extend({
         var uibModalInstance = imageBrowserPopUp.open(uibConfig);
         EkstepEditor.ImagePlugin = {
             addImageAsset: function(url) {
-                //addImageToStage(url);
+                addImageToStage(url);
             }
         };
 
@@ -48,8 +50,8 @@ EkstepEditor.basePlugin.extend({
 
 
     },
-    addImage: function(event, data) {
-        this.create({ type: 'image', props: data });
+    addImage: function(data) {
+        this.create({ props: data });
     },
 
     editor: function() {
