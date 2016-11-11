@@ -29,7 +29,8 @@ EkstepEditor.basePlugin.extend({
             h: 405,
             scaleX: 1,
             scaleY: 1,
-            visible: true
+            visible: true,
+            id: this.id
         };
     },
     addChild: function(plugin) {

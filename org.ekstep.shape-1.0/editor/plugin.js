@@ -8,10 +8,12 @@ EkstepEditor.basePlugin.extend({
         switch (data.type) {
             case 'rect':
                 this.editorObj = new fabric.Rect(data.props);
+                this.attributes = data.props;
                 this.attributes.type = 'rect';
                 break;
             case 'circle':
                 this.editorObj = new fabric.Ellipse(data.props);
+                this.attributes = data.props;
                 this.attributes.type = 'ellipse';
                 break;
             default:
