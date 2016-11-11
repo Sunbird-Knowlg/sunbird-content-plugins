@@ -5,6 +5,7 @@ EkstepEditor.basePlugin.extend({
     },
     newInstance: function(data) {
         if (data && data.type === "scribblepad") this.editorObj = new fabric.Rect(data.props);
+        this.attributes = data.props;
         this.attributes.type = 'roundrect';
         this.attributes.thickness = 2;
         this.attributes.color = '#000';

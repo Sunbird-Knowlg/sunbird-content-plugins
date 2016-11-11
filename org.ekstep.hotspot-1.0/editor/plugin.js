@@ -7,6 +7,7 @@ EkstepEditor.basePlugin.extend({
         if (data.type && data.type === "hotspot") {
             this.editorObj = new fabric.Rect(data.props);
         }
+        this.attributes = data.props;
         this.attributes.type = "roundrect";
         this.attributes.radius = 1;
         this.attributes.hitArea = true;
