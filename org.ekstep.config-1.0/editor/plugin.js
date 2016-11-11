@@ -34,7 +34,7 @@ EkstepEditor.basePlugin.extend({
         var plugin = EkstepEditorAPI.getPluginInstance(data.id);
         EkstepEditor.jQuery('#toolbarHiddenButton').offset({
             top: (this.canvasOffset.top + plugin.editorObj.top - this.margin.top),
-            left: (this.canvasOffset.left + plugin.editorObj.left + (plugin.editorObj.width / 2) - this.margin.left)
+            left: (this.canvasOffset.left + plugin.editorObj.left + (plugin.editorObj.getWidth() / 2) - this.margin.left)
         });
         this.toolbarObj.show();
         var pluginConfig = EkstepEditorAPI.getCurrentObject().getPluginConfig();

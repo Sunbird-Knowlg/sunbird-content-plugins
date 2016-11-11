@@ -9,7 +9,7 @@ EkstepEditor.basePlugin.extend({
     getImage: function() {
         //TODO: get image from image browser and load the image
         var instance = this;
-        fabric.Image.fromURL("plugins/org.ekstep.image-1.0/assets/try_again_popup.png", function(img) {
+        fabric.Image.fromURL("image/get/" + encodeURIComponent("https://dev.ekstep.in/assets/public/content/d09ceec025889c57ca02db08dea77999_1477636668010.jpeg"), function(img) {
             console.log("image added");
             img.set({
                 top: 50,
