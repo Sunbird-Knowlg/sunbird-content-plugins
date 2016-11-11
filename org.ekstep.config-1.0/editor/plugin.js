@@ -12,6 +12,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
         EkstepEditorAPI.addEventListener("config:show", this.showConfig, this);
         EkstepEditorAPI.addEventListener("stage:unselect", this.stageUnselect, this);
+        EkstepEditorAPI.addEventListener("config:update", this.configUpdate, this);
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
             angScope.contextToolbar = instance.manifest.editor.data.toolbars;
@@ -36,11 +37,11 @@ EkstepEditor.basePlugin.extend({
             left: (this.canvasOffset.left + plugin.editorObj.left + (plugin.editorObj.width / 2) - this.margin.left)
         });
         this.toolbarObj.show();
-
         var pluginConfig = EkstepEditorAPI.getCurrentObject().getPluginConfig();
         if (_.isUndefined(pluginConfig)) {
             pluginConfig = [];
         }
+        pluginConfig["pluginId"] = EkstepEditorAPI.getCurrentObject().id;
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
             angScope.pluginConfig = pluginConfig;
@@ -53,10 +54,14 @@ EkstepEditor.basePlugin.extend({
     },
     showConfig: function(event, data) {
         EkstepEditor.jQuery("#plugin-toolbar-container").toggle();
-        EkstepEditorAPI.getCurrentObject().updateContextMenu();
+        var pluginConfig = EkstepEditorAPI.getCurrentObject().getPluginConfig();
+        EkstepEditorAPI.getCurrentObject().resetConfig();
     },
     stageUnselect: function(data) {
         if (this.toolbarObj)
             this.toolbarObj.hide();
     },
+    configUpdate: function(event, data) {
+        EkstepEditorAPI.getCurrentObject().resetConfig(data);
+    }
 });

@@ -5,7 +5,6 @@
         "main": "editor/plugin.js",
         "dependencies": [
             {"type": "plugin", "plugin": "org.ekstep.colorpicker", "ver": "1.0"},
-            {"type": "plugin", "plugin": "org.ekstep.font", "ver": "1.0"},
             {"type": "plugin", "plugin": "org.ekstep.text", "ver": "1.0"},
             {"type": "plugin", "plugin": "org.ekstep.shape", "ver": "1.0"}
         ],

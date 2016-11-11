@@ -23,10 +23,6 @@ EkstepEditor.basePlugin.extend({
     createCircle: function(event, data) {
         this.create({ type: 'circle', props: data });
     },
-    updateColor: function(color) {
-        this.editorObj.fill = color;
-        this.attributes.fill = color;
-    },
     updateAttributes: function() {
         var instance = this;
         var dataList = { "opacity": "opacity", "stroke": "stroke", "stroke-width": "stroke-width", "scaleX": "scaleX", "scaleY": "scaleY" };
@@ -37,7 +33,8 @@ EkstepEditor.basePlugin.extend({
             this.attributes.radius = this.editorObj.rx;
         }
     },
-    updateContextMenu: function () {
-        EkstepEditorAPI.updateContextMenu({ id: 'colorpicker', state: 'HIDE', data: { color: EkstepEditorAPI.getEditorObject().getFill() } });
+    resetConfig: function(data) {
+        this.config = this.config || {};
+        EkstepEditorAPI.dispatchEvent("colorpicker:state", { id: "colorpicker" });
     }
 });

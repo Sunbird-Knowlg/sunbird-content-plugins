@@ -24,26 +24,6 @@ EkstepEditor.basePlugin.extend({
     objectUnselected: function(event, data) {
         fabric.util.removeListener(fabric.document, 'dblclick', this.dblClickHandler);
     },
-    updateColor: function(color) {
-        this.editorObj.fill = color;
-        this.attributes.color = data;
-    },
-    toggleBold: function() {
-        this.editorObj.setFontWeight(this.editorObj.getFontWeight() !== 'bold' ? 'bold' : 'normal');
-        EkstepEditorAPI.updateContextMenu({ id: 'fontweight', selected: (this.editorObj.getFontWeight() === 'bold'), data: {} });
-    },
-    toggleItalic: function() {
-        this.editorObj.setFontStyle(this.editorObj.getFontStyle() !== 'italic' ? 'italic' : 'normal');
-        EkstepEditorAPI.updateContextMenu({ id: 'fontstyle', selected: (this.editorObj.getFontStyle() === 'italic'), data: {} });
-    },
-    updateStyle: function(style) {
-        this.editorObj.setFontFamily(style);
-        this.attributes.font = style;
-    },
-    updateSize: function(size) {
-        this.editorObj.setFontSize(size);
-        this.attributes.fontsize = size;
-    },
     dblClickHandler: function() {
         textEditor.showEditor(EkstepEditorAPI.getEditorObject().id);
     },
@@ -71,13 +51,38 @@ EkstepEditor.basePlugin.extend({
         }
         return this.attributes;
     },
-    updateContextMenu: function (data, event) {
-        EkstepEditorAPI.updateContextMenus([
-            { id: 'colorpicker', state: 'HIDE', data: { color: EkstepEditorAPI.getEditorObject().getFill() } },
-            { id: 'fontweight', state: 'HIDE', selected: (EkstepEditorAPI.getEditorObject().getFontWeight() === 'bold'), data: {} },
-            { id: 'fontstyle', state: 'HIDE', selected: (EkstepEditorAPI.getEditorObject().getFontStyle() === 'italic'), data: {} },
-            { id: 'fontfamily', state: 'HIDE', selected: true, data: { fontfamily: EkstepEditorAPI.getEditorObject().getFontFamily() } },
-            { id: 'fontsize', state: 'HIDE', selected: true, data: { fontsize: EkstepEditorAPI.getEditorObject().getFontSize() } },
-        ]);
+    resetConfig: function(data) {
+        var instance = this;
+        this.config = this.config || {};
+        _.forEach(data, function(val) {
+            switch (val) {
+                case "fontweight":
+                    instance.config.fontweight = (instance.editorObj.getFontWeight() === "bold");
+                    instance.editorObj.setFontWeight(instance.config.fontweight ? 'normal' : 'bold');
+                    break;
+                case "fontstyle":
+                    instance.config.fontstyle = (instance.editorObj.getFontStyle() === "italic");
+                    instance.editorObj.setFontStyle(instance.config.fontstyle ? 'normal' : 'italic');
+                    break;
+                case "fontfamily":
+                    instance.config.fontfamily = EkstepEditor.jQuery("#fontfamily").val().split(":")[1];
+                    instance.editorObj.setFontFamily(instance.config.fontfamily);
+                    break;
+                case "fontsize":
+                    instance.config.fontsize = EkstepEditor.jQuery("#fontsize").val().split(":")[1];
+                    instance.editorObj.setFontSize(instance.config.fontsize);
+                    break;
+                default:
+
+                    break;
+            }
+        });
+        EkstepEditor.jQuery("#fontweight").toggleClass("btn-primary", (this.editorObj.getFontWeight() === "bold"));
+        EkstepEditor.jQuery("#fontstyle").toggleClass("btn-primary", (this.editorObj.getFontStyle() === "italic"));
+        EkstepEditor.jQuery("#fontfamily").val("string:" + this.editorObj.getFontFamily());
+        EkstepEditor.jQuery("#fontsize").val("number:" + this.editorObj.getFontSize());
+        EkstepEditorAPI.dispatchEvent("colorpicker:state", { id: "colorpicker" });
+        EkstepEditorAPI.render();
+        EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
     }
 });

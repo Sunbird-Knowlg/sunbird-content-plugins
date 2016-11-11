@@ -9,7 +9,9 @@
         "main": "editor/plugin.js",
         "dependencies": [
 			{"type": "js", "src": "editor/jquery.toolbar.min.js"},
-			{"type": "css", "src": "editor/jquery.toolbar.css"}
+			{"type": "css", "src": "editor/jquery.toolbar.css"},
+            {"type": "js", "src": "editor/plugin.util.js"}
+            
 		],
         "data": {
         	"toolbars": [

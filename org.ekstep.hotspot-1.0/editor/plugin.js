@@ -14,10 +14,6 @@ EkstepEditor.basePlugin.extend({
     addHotspot: function(event, data) {
         this.create({ type: 'hotspot', props: data });
     },
-    updateColor: function(color) {
-        this.editorObj.fill = color;
-        this.attributes.fill = color;
-    },
     onRemove: function(event) {
 
     },
@@ -31,7 +27,8 @@ EkstepEditor.basePlugin.extend({
             this.attributes.radius = this.editorObj.rx;
         }
     },
-    updateContextMenu: function () {
-        EkstepEditorAPI.updateContextMenu({ id: 'colorpicker', state: 'HIDE', data: { color: EkstepEditorAPI.getEditorObject().getFill() } });
+    resetConfig: function(data) {
+        this.config = this.config || {};
+        EkstepEditorAPI.dispatchEvent("colorpicker:state", { id: "colorpicker" });
     }
 });

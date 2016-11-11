@@ -12,10 +12,6 @@ EkstepEditor.basePlugin.extend({
     addScribblepad: function(event, data) {
         this.create({ type: "scribblepad", props: data });
     },
-    updateColor: function(color) {
-        this.editorObj.fill = color;
-        this.attributes.fill = color;
-    },
     updateAttributes: function() {
         var instance = this;
         var dataList = { "radius": "radius", "opacity": "opacity", "stroke": "stroke", "stroke-width": "stroke-width", "scaleX": "scaleX", "scaleY": "scaleY" };
@@ -25,7 +21,8 @@ EkstepEditor.basePlugin.extend({
             })
         }
     },
-    updateContextMenu: function () {
-        EkstepEditorAPI.updateContextMenu({ id: 'colorpicker', state: 'HIDE', data: { color: EkstepEditorAPI.getEditorObject().getFill() } });
+    resetConfig: function(data) {
+        this.config = this.config || {};
+        EkstepEditorAPI.dispatchEvent("colorpicker:state", { id: "colorpicker" });
     }
 });

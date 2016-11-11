@@ -10,18 +10,26 @@ EkstepEditor.basePlugin.extend({
         this.picker.show();
     },
     updateState: function(event, data) {
-            this.picker = new jscolor(document.getElementById(this.manifest.editor.menu[0].id), {
+        if (EkstepEditor.jQuery("#" + data.id).attr("colorpicker") != "added") {
+            this.picker = new jscolor(document.getElementById(data.id), {
                 valueElement: null,
                 onFineChange: function() {
                     EkstepEditorAPI.dispatchEvent("colorpicker:update", this.toHEXString());
                 }
             });
-        if (data && data.color)
+
+            EkstepEditor.jQuery("#" + data.id).attr("colorpicker", "added");
+        }
+        if (data && data.color) {
             this.picker.fromString(data.color);
+        } else {
+            this.picker.fromString(EkstepEditorAPI.getCurrentObject().editorObj.getFill());
+        }
     },
     updateColor: function(event, data) {
-        EkstepEditorAPI.getCurrentObject().updateColor(data);
+        EkstepEditorAPI.getCurrentObject().editorObj.setFill(data);
+        EkstepEditorAPI.getCurrentObject().config.colorpicker = data;
         EkstepEditorAPI.render();
-        EkstepEditorAPI.dispatchEvent('object:modified', {id: EkstepEditorAPI.getEditorObject().id});
+        EkstepEditorAPI.dispatchEvent('object:modified', { id: EkstepEditorAPI.getEditorObject().id });
     }
 });

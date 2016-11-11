@@ -32,13 +32,12 @@
         }],
         "config": [{
             "id": "colorpicker",
-            "category": "context",
-            "type": "icon",
+            "type": "colorpicker",
             "toolTip": "Change Color",
             "title": "Color",
+            "isDropdown": false,
             "iconClass": "jscolor",
-            "iconStyle": "display: block; width:16px; height:16px; margin: auto; margin-top: 0px; margin-bottom: 6px",
-            "state": "HIDE",
+            "iconStyle": "width:20px;height:20px;",
             "onclick": {
                 "id": "colorpicker:show",
                 "data": {}
