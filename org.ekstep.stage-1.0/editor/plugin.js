@@ -41,8 +41,8 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.dispatchEvent('object:modified', { id: plugin.id });
     },
     render: function(canvas) {
-        _.forEach(this.children, function(plugin) {
-            canvas.add(plugin.editorObj);
+        _.forEach(_.sortBy(this.children, [function(o) { return o.getAttribute('z-index'); }]), function(plugin) {
+            plugin.render(canvas);
         });
         canvas.renderAll();
         this.thumbnail = canvas.toDataURL('png');
@@ -51,6 +51,13 @@ EkstepEditor.basePlugin.extend({
 
     },
     modified: function(event, data) {
+        _.forEach(EkstepEditorAPI.getCurrentStage().children, function(child) {
+            if(child.editorObj) {
+                child.attributes['z-index'] = EkstepEditorAPI.getCanvas().getObjects().indexOf(child.editorObj);
+            } else {
+                child.attributes['z-index'] = EkstepEditorAPI.getCanvas().getObjects().length;
+            }
+        });
         EkstepEditor.jQuery('#img-' + EkstepEditorAPI.getCurrentStage().id).attr('src', EkstepEditorAPI.getCanvas().toDataURL('png'));
     },
     objectSelected: function(event, data) {

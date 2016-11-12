@@ -9,7 +9,12 @@ EkstepEditor.basePlugin.extend({
             case 'rect':
                 this.editorObj = new fabric.Rect(data.props);
                 this.attributes = data.props;
-                this.attributes.type = 'rect';
+                if(_.isUndefined(data.props.rx)) {
+                    this.attributes.type = 'rect';
+                } else {
+                    this.attributes.type = 'roundrect';
+                    this.attributes.radius = this.attributes.rx;
+                }
                 break;
             case 'circle':
                 this.editorObj = new fabric.Ellipse(data.props);

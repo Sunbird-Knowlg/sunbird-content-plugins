@@ -16,7 +16,7 @@
             "title": "Text",
             "iconClass": "fa fa-lg fa-object-ungroup fa-inverse menu-icon",
             "onclick": {
-                "id": "shape-text:createNew",
+                "id": "shape-text:create",
                 "data": {
                     "text": {
                         "type": "i-textbox",
@@ -64,49 +64,47 @@
             }
         }],
         "initdata": {
-            "props": {
-                "text": {
-                    "type": "i-textbox",
-                    "text": "Add Text Here",
-                    "left": 270,
-                    "top": 204,
-                    "fontFamily": "Arial",
-                    "fontSize": "18",
-                    "minWidth": 250,
-                    "width": 250,
-                    "maxWidth": 250,
-                    "lockMovementX": true,
-                    "lockMovementY": true,
-                    "lockScalingX": true,
-                    "lockScalingY": true
-                },
-                "rectangle": {
-                    "type": "rect",
-                    "left": 264,
-                    "top": 85,
-                    "fill": "rgb(0,255,0)",
-                    "width": 180,
-                    "height": 100,
-                    "rx": 10,
-                    "ry": 10,
-                    "lockscalingX": true,
-                    "lockMovementX": true,
-                    "lockMovementY": true,
-                    "lockScalingX": true,
-                    "lockScalingY": true
-                },
-                "invisibleShape": {
-                    "type": "rect",
-                    "left": 202,
-                    "top": 37,
-                    "fill": "rgb(255,255,255)",
-                    "width": 300,
-                    "height": 250,
-                    "stroke": "rgb(7,7,7)",
-                    "strokeDashArray": [5, 5],
-                    "strokeWidth": 1,
-                    "padding": 10
-                }
+            "text": {
+                "type": "i-textbox",
+                "text": "Add Text Here",
+                "left": 270,
+                "top": 204,
+                "fontFamily": "Arial",
+                "fontSize": "18",
+                "minWidth": 250,
+                "width": 250,
+                "maxWidth": 250,
+                "lockMovementX": true,
+                "lockMovementY": true,
+                "lockScalingX": true,
+                "lockScalingY": true
+            },
+            "rectangle": {
+                "type": "rect",
+                "left": 264,
+                "top": 85,
+                "fill": "rgb(0,255,0)",
+                "width": 180,
+                "height": 100,
+                "rx": 10,
+                "ry": 10,
+                "lockscalingX": true,
+                "lockMovementX": true,
+                "lockMovementY": true,
+                "lockScalingX": true,
+                "lockScalingY": true
+            },
+            "invisibleShape": {
+                "type": "rect",
+                "left": 202,
+                "top": 37,
+                "fill": "rgb(255,255,255)",
+                "width": 300,
+                "height": 250,
+                "stroke": "rgb(7,7,7)",
+                "strokeDashArray": [5, 5],
+                "strokeWidth": 1,
+                "padding": 10
             }
         }
     },
