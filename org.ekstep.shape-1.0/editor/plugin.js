@@ -9,7 +9,7 @@ EkstepEditor.basePlugin.extend({
             case 'rect':
                 this.editorObj = new fabric.Rect(data.props);
                 this.attributes = data.props;
-                if(_.isUndefined(data.props.rx)) {
+                if (_.isUndefined(data.props.rx)) {
                     this.attributes.type = 'rect';
                 } else {
                     this.attributes.type = 'roundrect';
@@ -23,6 +23,7 @@ EkstepEditor.basePlugin.extend({
                 break;
             default:
         }
+        this.config = this.config || {};
     },
     createRectange: function(event, data) {
         this.create({ type: 'rect', props: data });
@@ -40,8 +41,12 @@ EkstepEditor.basePlugin.extend({
             this.attributes.radius = this.editorObj.rx;
         }
     },
-    resetConfig: function(data) {
-        this.config = this.config || {};
-        EkstepEditorAPI.dispatchEvent("colorpicker:state", { id: "colorpicker" });
+    onConfigChange: function(data) {
+        if (data.color) {
+            EkstepEditorAPI.getCurrentObject().editorObj.setFill(data.color);
+            EkstepEditorAPI.getCurrentObject().config.color = data.color;
+        }
+        EkstepEditorAPI.render();
+        EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
     }
 });

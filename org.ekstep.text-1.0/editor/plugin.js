@@ -10,6 +10,7 @@ EkstepEditor.basePlugin.extend({
             this.editorObj = new fabric.ITextbox(data.props.text, data.props);
         }
         this.data = undefined;
+        this.config = this.config || {}
     },
     showTextBox: function(event, data) {
         this.create({ type: 'text', props: data });
@@ -51,37 +52,11 @@ EkstepEditor.basePlugin.extend({
         }
         return this.attributes;
     },
-    resetConfig: function(data) {
-        var instance = this;
-        this.config = this.config || {};
-        _.forEach(data, function(val) {
-            switch (val) {
-                case "fontweight":
-                    instance.config.fontweight = (instance.editorObj.getFontWeight() === "bold");
-                    instance.editorObj.setFontWeight(instance.config.fontweight ? 'normal' : 'bold');
-                    break;
-                case "fontstyle":
-                    instance.config.fontstyle = (instance.editorObj.getFontStyle() === "italic");
-                    instance.editorObj.setFontStyle(instance.config.fontstyle ? 'normal' : 'italic');
-                    break;
-                case "fontfamily":
-                    instance.config.fontfamily = EkstepEditor.jQuery("#fontfamily").val().split(":")[1];
-                    instance.editorObj.setFontFamily(instance.config.fontfamily);
-                    break;
-                case "fontsize":
-                    instance.config.fontsize = EkstepEditor.jQuery("#fontsize").val().split(":")[1];
-                    instance.editorObj.setFontSize(instance.config.fontsize);
-                    break;
-                default:
-
-                    break;
-            }
-        });
-        EkstepEditor.jQuery("#fontweight").toggleClass("btn-primary", (this.editorObj.getFontWeight() === "bold"));
-        EkstepEditor.jQuery("#fontstyle").toggleClass("btn-primary", (this.editorObj.getFontStyle() === "italic"));
-        EkstepEditor.jQuery("#fontfamily").val("string:" + this.editorObj.getFontFamily());
-        EkstepEditor.jQuery("#fontsize").val("number:" + this.editorObj.getFontSize());
-        EkstepEditorAPI.dispatchEvent("colorpicker:state", { id: "colorpicker" });
+    onConfigChange: function(data) {
+        if (data.color) {
+            EkstepEditorAPI.getCurrentObject().editorObj.setFill(data.color);
+            EkstepEditorAPI.getCurrentObject().config.color = data.color;
+        }
         EkstepEditorAPI.render();
         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
     }
