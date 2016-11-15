@@ -1,0 +1,13 @@
+{
+    "id": "org.ekstep.imagebrowser",
+    "ver": "1.0",
+    "shortId": "imagebrowser",
+    "author": "Sunil A S",
+    "title": "Image Browser",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "menu": []
+    }
+}
