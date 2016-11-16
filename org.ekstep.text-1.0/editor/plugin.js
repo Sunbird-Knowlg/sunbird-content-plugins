@@ -1,20 +1,14 @@
 EkstepEditor.basePlugin.extend({
     type: "text",
     initialize: function() {
-        EkstepEditorAPI.addEventListener("text:showTextBox", this.showTextBox, this);
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
         EkstepEditorAPI.addEventListener("stage:unselect", this.stageUnselect, this);
     },
-    newInstance: function(data) {
-        if (data && data.props) {
-            this.editorObj = new fabric.ITextbox(data.props.text, data.props);
-        }
-        this.data = undefined;
-        this.config = this.config || {}
-    },
-    showTextBox: function(event, data) {
-        this.create({ type: 'text', props: data });
-        textEditor.showEditor(EkstepEditorAPI.getEditorObject().id);
+    newInstance: function() {
+        var props = this.convertToFabric(this.attributes);
+        delete props.__text;
+        this.editorObj = new fabric.ITextbox(this.attributes.__text, props);
+        textEditor.showEditor(this.id);
     },
     selected: function(instance) {
         fabric.util.addListener(fabric.document, 'dblclick', this.dblClickHandler);
@@ -48,7 +42,6 @@ EkstepEditor.basePlugin.extend({
             var fontWeight = _.isUndefined(this.editorObj.get("fontWeight")) ? "" : this.editorObj.get("fontWeight");
             var fontStyle = _.isUndefined(this.editorObj.get("fontStyle")) ? "" : this.editorObj.get("fontStyle");
             this.attributes.weight = (fontWeight + ' ' + fontStyle).trim();
-            this.attributes.type = "text";
         }
         return this.attributes;
     },

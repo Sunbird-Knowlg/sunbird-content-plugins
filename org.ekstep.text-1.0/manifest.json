@@ -20,26 +20,19 @@
             "title": "Text",
             "iconClass": "fa fa-lg fa-text-width fa-inverse menu-icon",
             "onclick": {
-                "id": "text:showTextBox",
+                "id": "org.ekstep.text:create",
                 "data": {
-                    "text": "",
-                    "left": 200,
-                    "top": 200,
+                    "__text": "",
+                    "x": 200,
+                    "y": 200,
                     "fontFamily": "Arial",
                     "fontSize": "18",
                     "minWidth": 20,
-                    "width": 350,
+                    "w": 350,
                     "maxWidth": 500
                 }
             }
         }],
-        "initdata": {
-            "props": {
-                "text": "",
-                "left": 200,
-                "top": 200
-            }
-        },
         "config": [{
             "id": "iconmenu",
             "isDropdown": true,

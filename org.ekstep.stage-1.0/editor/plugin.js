@@ -6,13 +6,6 @@ EkstepEditor.basePlugin.extend({
     thumbnail: undefined,
     onclick: undefined,
     currentObject: undefined,
-    attributes: {
-        x: 0,
-        y: 0,
-        w: 720,
-        h: 405,
-        visible: true
-    },
     initialize: function() {
         EkstepEditorAPI.addEventListener("stage:create", this.createStage, this);
         EkstepEditorAPI.addEventListener("object:modified", this.modified, this);
@@ -30,9 +23,6 @@ EkstepEditor.basePlugin.extend({
             y: 0,
             w: 720,
             h: 405,
-            scaleX: 1,
-            scaleY: 1,
-            visible: true,
             id: this.id
         };
     },
@@ -51,9 +41,6 @@ EkstepEditor.basePlugin.extend({
         this.thumbnail = canvas.toDataURL('png');
         EkstepEditorAPI.refreshStages();
     },
-    editor: function() {
-
-    },
     modified: function(event, data) {
         _.forEach(EkstepEditorAPI.getCurrentStage().children, function(child) {
             if(child.editorObj) {
@@ -63,7 +50,6 @@ EkstepEditor.basePlugin.extend({
             }
         });
         EkstepEditorAPI.getCurrentStage().thumbnail = EkstepEditorAPI.getCanvas().toDataURL('png');
-        //EkstepEditorAPI.jQuery('#img-' + EkstepEditorAPI.getCurrentStage().id).attr('src', EkstepEditorAPI.getCanvas().toDataURL('png'));
         EkstepEditorAPI.refreshStages();
     },
     objectSelected: function(event, data) {
