@@ -49,6 +49,7 @@ EkstepEditor.basePlugin.extend({
         });
         canvas.renderAll();
         this.thumbnail = canvas.toDataURL('png');
+        EkstepEditorAPI.refreshStages();
     },
     editor: function() {
 
@@ -61,7 +62,9 @@ EkstepEditor.basePlugin.extend({
                 child.attributes['z-index'] = EkstepEditorAPI.getCanvas().getObjects().length;
             }
         });
-        EkstepEditor.jQuery('#img-' + EkstepEditorAPI.getCurrentStage().id).attr('src', EkstepEditorAPI.getCanvas().toDataURL('png'));
+        EkstepEditorAPI.getCurrentStage().thumbnail = EkstepEditorAPI.getCanvas().toDataURL('png');
+        //EkstepEditorAPI.jQuery('#img-' + EkstepEditorAPI.getCurrentStage().id).attr('src', EkstepEditorAPI.getCanvas().toDataURL('png'));
+        EkstepEditorAPI.refreshStages();
     },
     objectSelected: function(event, data) {
         if(!_.isUndefined(this.currentObject) && this.currentObject !== data.id) {
