@@ -34,99 +34,49 @@
             }
         }],
         "config": [{
-            "id": "iconmenu",
-            "isDropdown": true,
-            "submenu": [{
-                "id": "fontweight",
-                "type": "icon",
-                "toolTip": "Bold",
-                "title": "Bold",
-                "isDropdown": false,
-                "defaultValue": false,
+            "propertyName": "font",
+            "dataType": "group",
+            "description": "Choose fontweight and fontstyle",
+            "config": [{
+                "propertyName": "fontweight",
+                "title": "Font Weight",
+                "description": "Select font size for the text",
+                "dataType": "icon",
                 "iconClass": "fa fa-bold fa-lg",
-                "dropdown": [],
-                "onclick": {
-                    "id": "config:update",
-                    "data": {"id": "fontweight"}
-                }
+                "required": true,
+                "defaultValue": false
             }, {
-                "id": "fontstyle",
-                "category": "context",
-                "type": "icon",
-                "toolTip": "Italic",
-                "title": "Italic",
-                "isDropdown": false,
-                "defaultValue": false,
+                "propertyName": "fontstyle",
+                "title": "Font Style",
+                "description": "Select font style for the text",
+                "dataType": "icon",
                 "iconClass": "fa fa-italic fa-lg",
-                "dropdown": [],
-                "onclick": {
-                    "id": "config:update",
-                    "data": {"id":"fontstyle"}
-                }
-            }],
-            "onclick": {
-                "id": "",
-                "data": {}
-            }
+                "required": true,
+                "defaultValue": false
+            }]
         }, {
-            "id": "colorpicker",
-            "type": "colorpicker",
-            "toolTip": "Change Color",
+            "propertyName": "color",
             "title": "Color",
-            "isDropdown": false,
-            "iconClass": "jscolor",
-            "iconStyle": "width:20px;height:20px;",
-            "onclick": {
-                "id": "colorpicker:show",
-                "data": {}
-            }
+            "description": "Choose a color from the color picker",
+            "dataType": "colorpicker",
+            "required": true,
+            "defaultValue": "rgb(255,0,0)"
         }, {
-            "id": "fontfamily",
-            "category": "context",
-            "type": "select",
-            "toolTip": "Font Family",
+            "propertyName": "fontfamily",
             "title": "Font Family",
-            "isDropdown": false,
-            "defaultValue": "Arial",
-            "options": [
-                "Arial",
-                "Courier",
-                "Georgia",
-                "Helvetica",
-                "Monospace",
-                "Sans-serif",
-                "Serif",
-                "Tahoma",
-                "Times",
-                "Trebuchet MS",
-                "Verdana",
-                "NotoSansKannada",
-                "NotoSansGujarati",
-                "NotoSansBengali",
-                "NotoSansGurmukhi",
-                "NotoSansOriya",
-                "NotoSansDevanagari",
-                "NotoSansTamil",
-                "NotoSansTelugu",
-                "NotoNastaliqUrdu",
-                "NotoSansMalayalam"
-            ],
-            "onchange": {
-                "id": "config:update",
-                "data": { "id": "fontfamily" }
-            }
+            "description": "Select font family for the text",
+            "dataType": "select",
+            "range": ["Arial", "Courier", "Georgia", "Helvetica", "Monospace", "Sans-serif", "Serif", "Tahoma", "Times", "Trebuchet MS", "Verdana", "NotoSansKannada", "NotoSansGujarati", "NotoSansBengali", "NotoSansGurmukhi", "NotoSansOriya", "NotoSansDevanagari", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu", "NotoSansMalayalam"],
+            "required": true,
+            "defaultValue": "Arial"
         }, {
-            "id": "fontsize",
-            "type": "select",
-            "toolTip": "Font Size",
+            "propertyName": "fontsize",
             "title": "Font Size",
-            "isDropdown": false,
-            "defaultValue": 18,
-            "options": [18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 54, 60, 66, 72, 80, 88, 96],
-            "onchange": {
-                "id": "config:update",
-                "data": { "id": "fontsize" }
-            }
+            "description": "Select font size for the text",
+            "dataType": "select",
+            "range": [18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 54, 60, 66, 72, 80, 88, 96],
+            "required": true,
+            "defaultValue": 18
         }]
     }
 

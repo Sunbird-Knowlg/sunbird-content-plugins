@@ -34,17 +34,12 @@
             }
         }],
         "config": [{
-            "id": "colorpicker",
-            "type": "colorpicker",
-            "toolTip": "Change Color",
+            "propertyName": "color",
             "title": "Color",
-            "isDropdown": false,
-            "iconClass": "jscolor",
-            "iconStyle": "width:20px;height:20px;",
-            "onclick": {
-                "id": "colorpicker:show",
-                "data": {}
-            }
+            "description": "Choose a color from the color picker",
+            "dataType": "colorpicker",
+            "required": true,
+            "defaultValue": "#3399FF"
         }]
     },
     "initdata": {

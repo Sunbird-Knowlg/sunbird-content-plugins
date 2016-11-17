@@ -10,14 +10,14 @@
         "dependencies": [
 			{"type": "js", "src": "editor/jquery.toolbar.min.js"},
 			{"type": "css", "src": "editor/jquery.toolbar.css"},
-            {"type": "js", "src": "editor/plugin.util.js"}
-            
+            {"type": "js", "src": "editor/plugin.util.js"},
+            {"type": "js", "src": "editor/micromarkdown.min.js"}
 		],
         "data": {
         	"toolbars": [
         		{"show": true, "iconClass": "fa fa-cog", "onclick": { "id": "config:show", "data": {}}},
-        		{"show": true, "iconClass": "fa fa-tasks", "onclick": {}},
-        		{"show": true, "iconClass": "fa fa-question-circle", "onclick": {}}
+        		{"show": true, "iconClass": "fa fa-tasks", "onclick": {"id": "config:properties", "data": {}}},
+        		{"show": true, "iconClass": "fa fa-question-circle", "onclick": {"id": "config:help", "data": {}}}
         	]
         }
     }

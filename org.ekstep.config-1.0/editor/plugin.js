@@ -15,6 +15,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("config:show", this.showConfig, this);
         EkstepEditorAPI.addEventListener("stage:unselect", this.stageUnselect, this);
         EkstepEditorAPI.addEventListener("config:help", this.showHelp, this);
+        EkstepEditorAPI.addEventListener("config:properties", this.showProperties, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:colorpicker", this.showColorPicker, this);
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
@@ -61,6 +62,7 @@ EkstepEditor.basePlugin.extend({
         angScope.safeApply(function() {
             angScope.showPluginConfig = true;
             angScope.showPluginHelp = false;
+            angScope.showPluginProperty = false;
             angScope.pluginConfig = instance.pluginConfigManifest;
             angScope.configData = instance.configData;
             angScope.$watch('configData', function(newValue, oldValue) {
@@ -105,9 +107,22 @@ EkstepEditor.basePlugin.extend({
         angScope.safeApply(function() {
             angScope.showPluginConfig = false;
             angScope.showPluginHelp = true;
+            angScope.showPluginProperty = false;
         });
         var helpText = EkstepEditorAPI.getCurrentObject().getHelp();
-        var parsedText = micromarkdown.parse(helpText);
-        EkstepEditor.jQuery("#pluginHelp").html(parsedText);
+        EkstepEditor.jQuery("#pluginHelp").html(micromarkdown.parse(helpText));
+    },
+    showProperties: function () {
+        EkstepEditor.jQuery("#plugin-toolbar-container").show();
+        var properties = EkstepEditorAPI.getCurrentObject().getProperties();
+        var angScope = EkstepEditorAPI.getAngularScope();
+        angScope.safeApply(function() {
+            angScope.showPluginConfig = false;
+            angScope.showPluginHelp = false;
+            angScope.showPluginProperty = true;
+            angScope.pluginProperties = properties;
+        });
+        
+
     }
 });

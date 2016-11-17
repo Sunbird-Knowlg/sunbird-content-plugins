@@ -45,12 +45,48 @@ EkstepEditor.basePlugin.extend({
         }
         return this.attributes;
     },
-    onConfigChange: function(data) {
-        if (data.color) {
-            EkstepEditorAPI.getCurrentObject().editorObj.setFill(data.color);
-            EkstepEditorAPI.getCurrentObject().config.color = data.color;
+    onConfigChange: function(key, value) {
+        switch (key) {
+            case "fontweight":
+                this.editorObj.setFontWeight(value ? "bold" : "normal");
+                this.attributes.fontWeight = value;
+                break;
+            case "fontstyle":
+                this.editorObj.setFontStyle(value ? "italic" : "normal");
+                this.attributes.fontStyle = value;
+                break;
+            case "fontfamily":
+                this.editorObj.setFontFamily(value);
+                this.attributes.fontFamily = value;
+                break;
+            case "fontsize":
+                this.editorObj.setFontSize(value);
+                this.attributes.fontSize = value;
+                break;
+            case "color":
+                this.editorObj.setFill(value);
+                this.attributes.fill = value;
+                break;
         }
+
         EkstepEditorAPI.render();
         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
+    },
+    getConfig: function() {
+        var config = { color: this.attributes.fill, fontfamily: this.attributes.fontFamily, fontsize: this.attributes.fontSize }
+        config.fontweight = this.attributes.fontWeight || false;
+        config.fontstyle = this.attributes.fontStyle || false;
+        return config;
+    },
+    getHelp: function() {
+        var help = "";
+        EkstepEditor.loadResource('/plugins/org.ekstep.text-1.0/editor/help.md', 'text', function(err, data) {
+            if (err) {
+                help = 'Unable to load help';
+            } else {
+                help = data;
+            }
+        });
+        return help;
     }
 });

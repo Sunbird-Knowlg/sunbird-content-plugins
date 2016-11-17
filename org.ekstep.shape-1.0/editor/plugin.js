@@ -26,26 +26,37 @@ EkstepEditor.basePlugin.extend({
                 break;
             default:
         }
-        if(this.editorObj) this.editorObj.setFill(props.fill);
+        if (this.editorObj) this.editorObj.setFill(props.fill);
     },
     onConfigChange: function(key, value) {
-        switch(key) {
+        switch (key) {
             case 'color':
                 this.editorObj.setFill(value);
                 this.attributes.fill = value;
                 break;
             case 'radius':
-                this.editorObj.set({'rx': value});
+                this.editorObj.set({ 'rx': value });
                 this.attributes.radius = value;
         }
         EkstepEditorAPI.render();
         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
     },
     getConfig: function() {
-        var config = {color: this.attributes.fill};
+        var config = { color: this.attributes.fill };
         if (this.attributes.type == 'roundrect') {
             config.radius = 10;
         }
         return config;
+    },
+    getHelp: function() {
+        var help = "";
+        EkstepEditor.loadResource('/plugins/org.ekstep.shape-1.0/editor/help.md', 'text', function(err, data) {
+            if (err) {
+                help = 'Unable to load help';
+            } else {
+                help = data;
+            }
+        });
+        return help;
     }
 });
