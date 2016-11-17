@@ -16,17 +16,8 @@
             "title": "Image",
             "iconClass": "fa fa-lg fa-picture-o fa-inverse menu-icon",
             "onclick": {
-                "id": "image:add",
-                "data": {
-                    "url": "plugins/image/assets/try_again_popup.png"
-                }
+                "id": "image:add"                
             }
         }]
-    },
-    "initdata": {
-        "props": {
-            "left": 200,
-            "top": 200
-        }
     }
 }

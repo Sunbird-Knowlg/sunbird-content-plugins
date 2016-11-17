@@ -5,27 +5,37 @@ EkstepEditor.basePlugin.extend({
         EkstepEditor.eventManager.addEventListener("image:add", this.getImage, this);
         EkstepEditor.eventManager.addEventListener("imagebrowser:selected", this.addImage, this);
     },
-    newInstance: function(data) {
-        this.editorObj = data.props;
+    newInstance: function() {
+        this.editorObj = this.attributes.imageObj;
     },
     getImage: function() {
         EkstepEditor.eventManager.dispatchEvent('imagebrowser:show');
     },
     addImage: function(events, url) {
-        
         var instance = this;
-        (function addImageToStage(url) {            
-            var imageURL = instance.useProxy ? "image/get/" + encodeURIComponent(url) : url;
-            fabric.Image.fromURL(imageURL, function(img) {
-                img.set({
-                    top: 50,
-                    left: 50,
-                    width: 300,
-                    height: 300
-                });
-                instance.create({ props: img });
+        var imageURL = instance.useProxy ? "image/get/" + encodeURIComponent(url) : url;
+        console.log("imageUrl:", imageURL);
+        fabric.Image.fromURL(imageURL, function(img) {
+            img.set({
+                top: 50,
+                left: 50,
+                width: 300,
+                height: 300
             });
-        })(url);
+            var data = {
+                x: 20,
+                y: 20,
+                w: 50,
+                h: 50,
+                url: url,
+                imageObj: img
+            };
+
+            EkstepEditor.eventManager.dispatchEvent('org.ekstep.image:create', data);
+        });
+
+
+
     },
     editor: function() {
 
