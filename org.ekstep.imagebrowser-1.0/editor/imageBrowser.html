@@ -1,0 +1,78 @@
+<style>
+.modal.in .modal-dialog {
+    width: 65%;
+}
+
+.tab-content {
+    height: 400px;
+}
+
+.modal-body {
+    padding: 0px;
+}
+
+.nav-tabs {
+    background: none;
+}
+
+.imageBrowserContent {
+    margin: 12px;
+}
+
+.modal-footer {
+    padding: 10px;
+    text-align: right;
+}
+
+.img-thumbnail {
+    margin: 3px;
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+}
+
+.img-thumbnail:hover {
+    opacity: 0.4;
+}
+
+.scrollWindow {
+    margin-top: 30px;
+    overflow: scroll;
+    height: 320px;
+}
+
+.fa-2x-custom {
+    color: aliceblue;
+    margin-right: 10px;
+    margin-left: 2px;
+    font-size: 2em;
+}
+
+.fa-2x-custom:hover {
+    color: white;
+}
+
+.fa-image-selected {
+    color: #3899ec;
+    margin-right: 10px;
+    margin-left: 2px;
+    font-size: 2em;
+}
+</style>
+<div class="imageBrowserContent">
+    <text style="font-size: 20px;">Add Image</text>
+    <uib-tabset active="active">
+        <uib-tab index="0" heading="Image">
+            <input id="searchTextBox" type="text" style="width: 95%; float: left; font-size: 20px;" placeholder="search image..." /> <span> <button id="searchButton" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button> </span>
+            <div id="assetWindow" class="col-xs-8 col-sm-8 col-md-8 col-lg-8 scrollWindow">
+                <div id="assetArea" class="row"> </div>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="padding: 25px; font-size: 25px;">
+            </div>
+        </uib-tab>
+    </uib-tabset>
+    <div class="modal-footer">
+        <button id="selectanduse" class="btn btn-primary" type="button">Select</button>
+        <button id="closePopUp" class="btn btn-warning" type="button">Cancel</button>
+    </div>
+</div>
