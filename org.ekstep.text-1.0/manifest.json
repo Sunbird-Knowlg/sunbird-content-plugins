@@ -23,12 +23,12 @@
                 "id": "org.ekstep.text:create",
                 "data": {
                     "__text": "",
-                    "x": 200,
-                    "y": 200,
+                    "x": 10,
+                    "y": 20,
                     "fontFamily": "Arial",
                     "fontSize": "18",
                     "minWidth": 20,
-                    "w": 350,
+                    "w": 35,
                     "maxWidth": 500
                 }
             }
