@@ -19,13 +19,14 @@
             "title": "scribblepad",
             "iconImage": "assets/scribblepad.png",
             "onclick": {
-                "id": "scribblepad:create",
+                "id": "org.ekstep.scribblepad:create",
                 "data": {
-                    "left": 100,
-                    "top": 100,
+                    "type" : "roundrect",
+                    "y": 20,
+                    "x": 25,
                     "fill": "#3399FF",
-                    "width": 200,
-                    "height": 225,
+                    "w": 27,
+                    "h": 60,
                     "stroke": 1,
                     "strokeWidth": 2,
                     "strokeDashArray": [5, 5]
@@ -48,8 +49,8 @@
     },
     "initdata": {
         "props": {
-            "left": 200,
-            "top": 200
+            "y": 200,
+            "x": 200
         }
     }
 }
