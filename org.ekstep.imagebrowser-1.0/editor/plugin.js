@@ -1,7 +1,7 @@
 EkstepEditor.basePlugin.extend({
     type: 'imagebrowser',
     initialize: function() {
-        EkstepEditor.eventManager.addEventListener("imagebrowser:show", this.showAssetBrowser, this);
+        EkstepEditor.eventManager.addEventListener("imagebrowser:show", this.initPreview, this);
         EkstepEditor.eventManager.addEventListener("imagebrowser:close", this.closeAssetBrowser, this);
         window.org_ekstep_image_1_0 = {
             ImageSource: function(event, src, id) {
@@ -14,6 +14,12 @@ EkstepEditor.basePlugin.extend({
                 EkstepEditor.jQuery('#' + "fa-check-" + id).addClass("fa-image-selected");
             }
         };
+    },
+    initPreview: function() {
+        var instance = this;
+        this.loadResource('editor/imageBrowser.html', 'html', function(err, response) {
+            instance.showAssetBrowser(err, response);
+        });
     },
     getImageFromServer: function(searchText) {
         var instance = this,
@@ -40,7 +46,7 @@ EkstepEditor.basePlugin.extend({
 
         _.isUndefined(searchText) ? null : requestObj.request.filters.name = [searchText];
 
-        iservice.http.post(EkstepEditor.configService.searchServiceBaseUrl + 'v2/search', requestObj, requestHeaders).then(function(res) {
+        iservice.http.post(EkstepEditor.config.baseURL + '/api/search/v2/search', requestObj, requestHeaders, function(err, res) {            
             instance.appendImageTag(res.data.result.content);
         });
     },
@@ -66,25 +72,19 @@ EkstepEditor.basePlugin.extend({
 
 
     },
-    showAssetBrowser: function() {
+    showAssetBrowser: function(err, data) {
         var instance = this,
             uibConfig,
             imageBrowserPopUp,
             uibModalInstance,
             searchText;
 
-
         uibConfig = {
-            modal_header: this.popupHTML().modal_header(),
-            modal_content: this.popupHTML().modal_content(),
-            modal_footer: this.popupHTML().modal_footer(),
+            modal_content: data,
             size: 'sm'
         };
 
-        imageBrowserPopUp = new EkstepEditor.popupService();
-
-        uibModalInstance = imageBrowserPopUp.open(uibConfig);
-
+        uibModalInstance = EkstepEditorAPI.getService('popup').open(uibConfig);
         uibModalInstance.rendered.then(function() {
             //close popup window
             EkstepEditor.jQuery('#closePopUp').click(function() {
@@ -123,87 +123,5 @@ EkstepEditor.basePlugin.extend({
             instance.getImageFromServer();
         });
 
-    },
-    popupHTML: function() {
-        return {
-            modal_header: function() {
-                return;
-            },
-            modal_content: function() {
-                var strVar = "";
-                strVar += "<style>";
-                strVar += ".modal.in .modal-dialog {";
-                strVar += "    width: 65%;";
-                strVar += "}";
-                strVar += "";
-                strVar += ".tab-content {";
-                strVar += "    height: 400px;";
-                strVar += "}";
-                strVar += "";
-                strVar += ".modal-body { padding: 0px;}";
-                strVar += ".nav-tabs {";
-                strVar += "    background: none;";
-                strVar += "}";
-                strVar += "";
-                strVar += ".imageBrowserContent {";
-                strVar += "    margin: 12px;";
-                strVar += "}";
-                strVar += "";
-                strVar += ".modal-footer {";
-                strVar += "    padding: 10px;";
-                strVar += "    text-align: right;";
-                strVar += "}";
-                strVar += "";
-                strVar += ".img-thumbnail {";
-                strVar += "    margin: 3px;";
-                strVar += "    cursor: pointer; padding: 0; position: relative;";
-                strVar += "}";
-                strVar += "";
-                strVar += ".img-thumbnail:hover {";
-                strVar += "		 opacity: 0.4;"
-                strVar += "}";
-                strVar += ".scrollWindow {";
-                strVar += "    margin-top: 30px;";
-                strVar += "    overflow: scroll;";
-                strVar += "    height: 320px;";
-                strVar += "}";
-                strVar += "";
-                strVar += ".fa-2x-custom { color: aliceblue; margin-right: 10px; margin-left: 2px; font-size: 2em;}"
-                strVar += "";
-                strVar += ".fa-2x-custom:hover {color: white; }"
-                strVar += "";
-                strVar += ".fa-image-selected { color: #3899ec; margin-right: 10px; margin-left: 2px; font-size: 2em;}"
-                strVar += "";
-                strVar += "<\/style>";
-                strVar += "<div class=\"imageBrowserContent\">";
-                strVar += "    <text style=\"font-size: 20px;\">Add Image<\/text>";
-                strVar += "    <uib-tabset active=\"active\">";
-                strVar += "        <uib-tab index=\"0\" heading=\"Image\">";
-                strVar += "            <input id=\"searchTextBox\" type=\"text\" style=\"width: 95%; float: left; font-size: 20px;\" placeholder=\"search image...\" \/>";
-                strVar += "            <span>";
-                strVar += "                    <button id=\"searchButton\" class=\"btn btn-primary\"><i class=\"fa fa-search\" aria-hidden=\"true\"><\/i><\/button>";
-                strVar += "                    <\/span>";
-                strVar += "            <div id=\"assetWindow\" class=\"col-xs-8 col-sm-8 col-md-8 col-lg-8 scrollWindow\">";
-                strVar += "                <div id=\"assetArea\" class=\"row\">";
-                strVar += "                <\/div>";
-                strVar += "            <\/div>";
-                strVar += "            <div class=\"col-xs-4 col-sm-4 col-md-4 col-lg-4\" style=\"padding: 25px; font-size: 25px;\">";
-                strVar += "            <\/div>";
-                strVar += "        <\/uib-tab>";
-                strVar += "    <\/uib-tabset>";
-                strVar += "<\/div>";
-                strVar += "";
-
-                return strVar;
-            },
-
-            modal_footer: function() {
-                var strVar = "";
-                strVar += "<button id=\"selectanduse\" class=\"btn btn-primary\" type=\"button\">Select<\/button>";
-                strVar += "<button id=\"closePopUp\" class=\"btn btn-warning\" type=\"button\">Cancel<\/button>";
-                return strVar;
-            }
-        }
     }
-
 });
