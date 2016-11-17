@@ -46,5 +46,6 @@ EkstepEditor.basePlugin.extend({
         if (this.attributes.type == 'roundrect') {
             config.radius = 10;
         }
+        return config;
     }
 });
