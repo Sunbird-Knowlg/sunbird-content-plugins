@@ -19,16 +19,12 @@ EkstepEditor.basePlugin.extend({
         var popupService = EkstepEditorAPI.getService('popup');
         var contentService = EkstepEditorAPI.getService('content');
 
-        popupService.open(popupConfig).rendered.then(function() {
-            
-            EkstepEditor.jQuery("span").filter(":contains('undefined')").remove();
+        popupService.open(popupConfig).rendered.then(function() {            
             var previewContentIframe = EkstepEditor.jQuery('#previewContentIframe')[0];
             previewContentIframe.src = instance.previewURL;
             
-            previewContentIframe.onload = function() {
-                contentService.getContentMetadata('do_10096674', function(err, response) {
-                    previewContentIframe.contentWindow.setContentData(response.data.result.content, instance.contentBody, { "showStartPage": true, "showEndPage": true });
-                });
+            previewContentIframe.onload = function() {                
+                previewContentIframe.contentWindow.setContentData(EkstepEditorAPI.getService('content').getContentMeta(), instance.contentBody, { "showStartPage": true, "showEndPage": true });
             };
         });
     }
