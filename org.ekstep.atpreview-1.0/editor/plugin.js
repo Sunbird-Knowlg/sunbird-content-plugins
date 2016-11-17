@@ -23,8 +23,9 @@ EkstepEditor.basePlugin.extend({
             var previewContentIframe = EkstepEditor.jQuery('#previewContentIframe')[0];
             previewContentIframe.src = instance.previewURL;
             
-            previewContentIframe.onload = function() {                
-                previewContentIframe.contentWindow.setContentData(EkstepEditorAPI.getService('content').getContentMeta(), instance.contentBody, { "showStartPage": true, "showEndPage": true });
+            previewContentIframe.onload = function() {
+                var meta = EkstepEditorAPI.getService('content').getContentMeta(EkstepEditorAPI.globalContext.contentId);                
+                previewContentIframe.contentWindow.setContentData(meta.contentMeta, instance.contentBody, { "showStartPage": true, "showEndPage": true });
             };
         });
     }
