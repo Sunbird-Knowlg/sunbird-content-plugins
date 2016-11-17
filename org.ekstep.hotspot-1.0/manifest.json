@@ -19,13 +19,14 @@
             "title": "Hotspot",
             "iconImage": "assets/hotspot.png",
             "onclick": {
-                "id": "hotspot:create",
+                "id": "org.ekstep.hotspot:create",
                 "data": {
-                    "left": 100,
-                    "top": 100,
+                    "type" : "rect",
+                    "y": 20,
+                    "x": 20,
                     "fill": "rgb(255,0,0)",
-                    "width": 100,
-                    "height": 100,
+                    "w": 15,
+                    "h": 25,
                     "opacity": 0.4
                 }
             }
@@ -46,8 +47,8 @@
     },
     "initdata": {
         "props": {
-            "left": 200,
-            "top": 200
+            "y": 20,
+            "x": 20
         }
     }
 }

@@ -1,17 +1,11 @@
 EkstepEditor.basePlugin.extend({
     type: "scribblepad",
-    initialize: function() {
-        EkstepEditorAPI.addEventListener("scribblepad:create", this.addScribblepad, this);
-    },
-    newInstance: function(data) {
-        if (data && data.type === "scribblepad") this.editorObj = new fabric.Rect(data.props);
-        this.attributes = data.props;
-        this.attributes.type = 'roundrect';
-        this.attributes.thickness = 2;
-        this.attributes.color = '#000';
-    },
-    addScribblepad: function(event, data) {
-        this.create({ type: "scribblepad", props: data });
+    initialize: function() {},
+    newInstance: function() {
+        var props = this.convertToFabric(this.attributes);        
+        if(this.attributes.type === 'roundrect'){
+            this.editorObj = new fabric.Rect(props);
+        }
     },
     updateAttributes: function() {
         var instance = this;
