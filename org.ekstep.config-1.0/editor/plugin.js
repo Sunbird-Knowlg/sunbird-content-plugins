@@ -12,6 +12,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
         EkstepEditorAPI.addEventListener("config:show", this.showConfig, this);
         EkstepEditorAPI.addEventListener("stage:unselect", this.stageUnselect, this);
+        EkstepEditorAPI.addEventListener("config:help", this.showHelp, this);
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
             angScope.contextToolbar = instance.manifest.editor.data.toolbars;
@@ -29,6 +30,8 @@ EkstepEditor.basePlugin.extend({
         }, 1000);
     },
     objectSelected: function(event, data) {
+
+        var instance = this;
         this.selectedPlugin = data.id;
         var plugin = EkstepEditorAPI.getPluginInstance(data.id);
         EkstepEditor.jQuery('#toolbarHiddenButton').offset({
@@ -36,15 +39,7 @@ EkstepEditor.basePlugin.extend({
             left: (this.canvasOffset.left + plugin.editorObj.left + (plugin.editorObj.getWidth() / 2) - this.margin.left)
         });
         this.toolbarObj.show();
-        var pluginConfig = EkstepEditorAPI.getCurrentObject().getPluginConfig();
-        if (_.isUndefined(pluginConfig)) {
-            pluginConfig = [];
-        }
-        pluginConfig["pluginId"] = EkstepEditorAPI.getCurrentObject().id;
-        var angScope = EkstepEditorAPI.getAngularScope();
-        angScope.safeApply(function() {
-            angScope.pluginConfig = pluginConfig;
-        });
+
     },
     objectUnselected: function(event, data) {
         if (this.toolbarObj && this.selectedPlugin === data.id)
@@ -53,22 +48,64 @@ EkstepEditor.basePlugin.extend({
     },
     showConfig: function(event, data) {
         var instance = this;
-        EkstepEditor.jQuery("#plugin-toolbar-container").toggle();
-        var pluginConfig = EkstepEditorAPI.getCurrentObject().getPluginConfig();
-        _.forEach(pluginConfig, function (config) {
-            instance.invoke(config)
+        EkstepEditor.jQuery("#plugin-toolbar-container").show();
+        var pluginConfigManifest = _.clone(EkstepEditorAPI.getCurrentObject().getPluginConfig());
+        var configData = _.clone(EkstepEditorAPI.getCurrentObject().getConfig());
+        if (_.isUndefined(pluginConfigManifest)) {
+            pluginConfigManifest = [];
+        }
+        pluginConfigManifest["pluginId"] = EkstepEditorAPI.getCurrentObject().id;
+        var angScope = EkstepEditorAPI.getAngularScope();
+        angScope.safeApply(function() {
+            angScope.showPluginConfig = true;
+            angScope.showPluginHelp = false;
+            angScope.pluginConfig = pluginConfigManifest;
+            angScope.configData = configData;
+            angScope.$watch('configData', function(newValue, oldValue) {
+                instance.updateConfig(newValue, oldValue);
+            }, true);
+
+        });
+        _.forEach(pluginConfigManifest, function(config) {
+            instance.invoke(config, configData)
         })
     },
     stageUnselect: function(data) {
         if (this.toolbarObj)
             this.toolbarObj.hide();
     },
-    invoke: function (config) {
+    invoke: function(config, configData) {
         if (config.type === 'colorpicker') {
-            EkstepEditorAPI.dispatchEvent("colorpicker:state", { id: "colorpicker", callback: this.onConfigChange });
+            var eventData = { id: "colorpicker", callback: this.onConfigChange };
+            if (!_.isUndefined(configData) && !_.isUndefined(configData.color)) { eventData.color = configData.color };
+            setTimeout(function() { EkstepEditorAPI.dispatchEvent("colorpicker:state", eventData) }, 200);
         }
     },
-    onConfigChange: function (configData) {
-        EkstepEditorAPI.getCurrentObject().onConfigChange(configData);
+    updateConfig: function(newValue, oldValue) {
+        var instance = this;
+        var changedValues = _.reduce(oldValue, function(result, value, key) {
+            return _.isEqual(value, newValue[key]) ?
+                result : result.concat(key);
+        }, []);
+        _.forEach(changedValues, function(cv) {
+            instance.onConfigChange(cv, newValue[cv]);
+        })
+    },
+    onConfigChange: function(key, value) {
+        EkstepEditorAPI.getCurrentObject().onConfigChange(key, value);
+    },
+    saveConfig: function(config) {
+        EkstepEditorAPI.getCurrentObject().saveConfig(config);
+    },
+    showHelp: function() {
+        EkstepEditor.jQuery("#plugin-toolbar-container").show();
+        var angScope = EkstepEditorAPI.getAngularScope();
+        angScope.safeApply(function() {
+            angScope.showPluginConfig = false;
+            angScope.showPluginHelp = true;
+        });
+        var helpText = EkstepEditorAPI.getCurrentObject().getHelp();
+        var parsedText = micromarkdown.parse(helpText);
+        EkstepEditor.jQuery("#pluginHelp").html(parsedText);
     }
 });
