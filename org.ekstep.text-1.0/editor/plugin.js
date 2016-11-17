@@ -88,5 +88,12 @@ EkstepEditor.basePlugin.extend({
             }
         });
         return help;
+    },
+    getProperties: function () {
+        var props = _.omitBy(_.clone(this.attributes), _.isObject);
+        props = _.omitBy(props, _.isNaN);
+        delete props.__text;
+        props.text = this.editorObj.text;
+        return props;
     }
 });
