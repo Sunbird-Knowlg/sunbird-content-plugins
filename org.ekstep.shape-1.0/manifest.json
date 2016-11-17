@@ -75,7 +75,7 @@
             "propertyName": "color",
             "title": "Color",
             "description": "Choose a color from the color picker",
-            "dataType": "color",
+            "dataType": "colorpicker",
             "required": true,
             "defaultValue": "#000000"
         }]

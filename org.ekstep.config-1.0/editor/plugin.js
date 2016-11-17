@@ -6,6 +6,8 @@ EkstepEditor.basePlugin.extend({
         left: 7.5,
         top: 30,
     },
+    pluginConfigManifest: undefined,
+    configData: undefined,
     initialize: function() {
         var instance = this;
         EkstepEditorAPI.addEventListener("object:selected", this.objectSelected, this);
@@ -13,6 +15,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("config:show", this.showConfig, this);
         EkstepEditorAPI.addEventListener("stage:unselect", this.stageUnselect, this);
         EkstepEditorAPI.addEventListener("config:help", this.showHelp, this);
+        EkstepEditorAPI.addEventListener("org.ekstep.config:colorpicker", this.showColorPicker, this);
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
             angScope.contextToolbar = instance.manifest.editor.data.toolbars;
@@ -49,25 +52,24 @@ EkstepEditor.basePlugin.extend({
     showConfig: function(event, data) {
         var instance = this;
         EkstepEditor.jQuery("#plugin-toolbar-container").show();
-        var pluginConfigManifest = _.clone(EkstepEditorAPI.getCurrentObject().getPluginConfig());
-        var configData = _.clone(EkstepEditorAPI.getCurrentObject().getConfig());
-        if (_.isUndefined(pluginConfigManifest)) {
-            pluginConfigManifest = [];
+        this.pluginConfigManifest = _.clone(EkstepEditorAPI.getCurrentObject().getPluginConfig());
+        this.configData = _.clone(EkstepEditorAPI.getCurrentObject().getConfig());
+        if (_.isUndefined(this.pluginConfigManifest)) {
+            this.pluginConfigManifest = [];
         }
-        pluginConfigManifest["pluginId"] = EkstepEditorAPI.getCurrentObject().id;
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
             angScope.showPluginConfig = true;
             angScope.showPluginHelp = false;
-            angScope.pluginConfig = pluginConfigManifest;
-            angScope.configData = configData;
+            angScope.pluginConfig = instance.pluginConfigManifest;
+            angScope.configData = instance.configData;
             angScope.$watch('configData', function(newValue, oldValue) {
                 instance.updateConfig(newValue, oldValue);
             }, true);
 
         });
-        _.forEach(pluginConfigManifest, function(config) {
-            instance.invoke(config, configData)
+        _.forEach(instance.pluginConfigManifest, function(config) {
+            instance.invoke(config, instance.configData)
         })
     },
     stageUnselect: function(data) {
@@ -75,10 +77,10 @@ EkstepEditor.basePlugin.extend({
             this.toolbarObj.hide();
     },
     invoke: function(config, configData) {
-        if (config.type === 'colorpicker') {
-            var eventData = { id: "colorpicker", callback: this.onConfigChange };
-            if (!_.isUndefined(configData) && !_.isUndefined(configData.color)) { eventData.color = configData.color };
-            setTimeout(function() { EkstepEditorAPI.dispatchEvent("colorpicker:state", eventData) }, 200);
+        configData = configData || {};
+        if (config.dataType === 'colorpicker') {
+            var eventData = { id: config.propertyName, callback: this.onConfigChange, color: configData[config.propertyName]};
+            setTimeout(function() { EkstepEditorAPI.dispatchEvent("colorpicker:state", eventData) }, 500);
         }
     },
     updateConfig: function(newValue, oldValue) {
