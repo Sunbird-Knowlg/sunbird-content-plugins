@@ -18,3 +18,4 @@ EkstepEditor.basePlugin.extend({
 		EkstepEditorAPI.updateContextMenu({id: 'delete', state: 'HIDE', data: {}});
 	}
 });
+//# sourceURL=deleteplugin.js

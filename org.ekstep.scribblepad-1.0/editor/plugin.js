@@ -39,3 +39,4 @@ EkstepEditor.basePlugin.extend({
         return help;
     }
 });
+//# sourceURL=scribblepadplugin.js

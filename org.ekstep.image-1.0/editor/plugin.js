@@ -47,3 +47,4 @@ EkstepEditor.basePlugin.extend({
 
     }
 });
+//# sourceURL=imageplugin.js

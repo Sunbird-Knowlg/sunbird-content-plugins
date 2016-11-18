@@ -97,3 +97,4 @@ EkstepEditor.basePlugin.extend({
         return props;
     }
 });
+//# sourceURL=textplugin.js

@@ -64,3 +64,4 @@ EkstepEditor.basePlugin.extend({
     }
 
 });
+//# sourceURL=stageplugin.js

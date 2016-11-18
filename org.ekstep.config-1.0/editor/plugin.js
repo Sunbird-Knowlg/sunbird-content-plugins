@@ -126,3 +126,4 @@ EkstepEditor.basePlugin.extend({
 
     }
 });
+//# sourceURL=configplugin.js

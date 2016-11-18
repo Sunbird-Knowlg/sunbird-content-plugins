@@ -43,3 +43,4 @@ EkstepEditor.basePlugin.extend({
         return help;
     }
 });
+//# sourceURL=hotspotplugin.js

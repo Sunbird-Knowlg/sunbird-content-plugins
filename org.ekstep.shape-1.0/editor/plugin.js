@@ -60,3 +60,4 @@ EkstepEditor.basePlugin.extend({
         return help;
     }
 });
+//# sourceURL=shapeplugin.js

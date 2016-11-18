@@ -24,3 +24,4 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.updateContextMenu({ id: 'reorder', state: 'HIDE', data: {}});
     }
 });
+//# sourceURL=reorderplugin.js
