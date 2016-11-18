@@ -3,10 +3,11 @@ EkstepEditor.basePlugin.extend({
     initialize: function() {},
     newInstance: function() {
         var props = this.convertToFabric(this.attributes);
+        console.log('props', props);
         switch (this.attributes.type) {
             case 'ellipse':
-                props.rx = props.r;
-                props.ry = props.r;
+                props.rx = props.w/2;
+                props.ry = props.h/2;
                 this.editorObj = new fabric.Ellipse(props);
                 break;
             case 'roundrect':

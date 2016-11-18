@@ -79,7 +79,6 @@ EkstepEditor.basePlugin.extend({
         if(childCount == instance.children.length) {
             canvas.clear();
             instance.render(canvas);
-            canvas.dispose();
             $('#' + instance.id).remove();
             cb();
         } else {
