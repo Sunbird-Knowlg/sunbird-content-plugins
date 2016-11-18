@@ -27,7 +27,7 @@ EkstepEditor.basePlugin.extend({
                 y: 20,
                 w: 50,
                 h: 50,
-                url: url,
+                url: imageURL,
                 imageObj: img
             };
 
