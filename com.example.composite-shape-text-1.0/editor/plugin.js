@@ -32,3 +32,5 @@ EkstepEditor.basePlugin.extend({
         canvas.add(this.children[1].editorObj);
     }
 });
+
+//# sourceURL=compositeplugin.js

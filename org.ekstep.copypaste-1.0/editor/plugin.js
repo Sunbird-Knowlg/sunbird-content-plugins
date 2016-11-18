@@ -23,3 +23,4 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.updateContextMenu({ id: 'copy', state: 'HIDE', data: {} });
     }
 });
+//# sourceURL=copypasteplugin.js

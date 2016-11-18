@@ -30,3 +30,5 @@ EkstepEditor.basePlugin.extend({
         });
     }
 });
+
+//# sourceURL=atpreviewplugin.js

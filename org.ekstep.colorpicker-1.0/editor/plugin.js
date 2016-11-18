@@ -26,3 +26,4 @@ EkstepEditor.basePlugin.extend({
         }
     }
 });
+//# sourceURL=colorpickerplugin.js

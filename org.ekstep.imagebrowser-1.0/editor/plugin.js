@@ -129,3 +129,4 @@ EkstepEditor.basePlugin.extend({
 
     }
 });
+//# sourceURL=imagebrowserplugin.js

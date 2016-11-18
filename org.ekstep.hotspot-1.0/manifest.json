@@ -21,7 +21,7 @@
             "onclick": {
                 "id": "org.ekstep.hotspot:create",
                 "data": {
-                    "type" : "rect",
+                    "type": "rect",
                     "y": 20,
                     "x": 20,
                     "fill": "rgb(255,0,0)",
@@ -38,7 +38,11 @@
             "dataType": "colorpicker",
             "required": true,
             "defaultValue": "rgb(255,0,0)"
-        }]
+        }],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        }
     },
     "initdata": {
         "props": {

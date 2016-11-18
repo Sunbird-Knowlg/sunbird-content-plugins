@@ -109,8 +109,10 @@ EkstepEditor.basePlugin.extend({
             angScope.showPluginHelp = true;
             angScope.showPluginProperty = false;
         });
-        var helpText = EkstepEditorAPI.getCurrentObject().getHelp();
-        EkstepEditor.jQuery("#pluginHelp").html(micromarkdown.parse(helpText));
+        EkstepEditorAPI.getCurrentObject().getHelp(function (helpText) {
+            EkstepEditor.jQuery("#pluginHelp").html(micromarkdown.parse(helpText));
+        });
+        
     },
     showProperties: function () {
         EkstepEditor.jQuery("#plugin-toolbar-container").show();
@@ -126,3 +128,4 @@ EkstepEditor.basePlugin.extend({
 
     }
 });
+//# sourceURL=configplugin.js

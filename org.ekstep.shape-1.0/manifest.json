@@ -78,6 +78,10 @@
             "dataType": "colorpicker",
             "required": true,
             "defaultValue": "#000000"
-        }]
+        }],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        } 
     }
 }
