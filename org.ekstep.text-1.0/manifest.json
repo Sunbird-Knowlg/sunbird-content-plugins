@@ -29,7 +29,8 @@
                     "fontSize": 18,
                     "minWidth": 20,
                     "w": 35,
-                    "maxWidth": 500
+                    "maxWidth": 500,
+                    "fill": "#000000"
                 }
             }
         }],
