@@ -1,6 +1,6 @@
 /*css */
 
-#pluginProperties {
+#pluginProperties, #pluginHelp{
   max-height: 400px;
   overflow-y: auto;
 }
