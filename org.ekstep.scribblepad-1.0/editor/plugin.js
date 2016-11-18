@@ -26,17 +26,6 @@ EkstepEditor.basePlugin.extend({
     },
     getConfig: function() {
         return { color: this.attributes.fill };
-    },
-    getHelp: function() {
-        var help = "";
-        EkstepEditor.loadResource('/plugins/org.ekstep.scribblepad-1.0/editor/help.md', 'text', function(err, data) {
-            if (err) {
-                help = 'Unable to load help';
-            } else {
-                help = data;
-            }
-        });
-        return help;
     }
 });
 //# sourceURL=scribblepadplugin.js
