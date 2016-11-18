@@ -16,9 +16,9 @@
 		],
         "data": {
         	"toolbars": [
-        		{"show": true, "iconClass": "fa fa-cog", "onclick": { "id": "config:show", "data": {}}},
-        		{"show": true, "iconClass": "fa fa-tasks", "onclick": {"id": "config:properties", "data": {}}},
-        		{"show": true, "iconClass": "fa fa-question-circle", "onclick": {"id": "config:help", "data": {}}}
+        		{"show": true, "iconClass": "fa fa-cog fa-lg", "onclick": { "id": "config:show", "data": {}}},
+        		{"show": true, "iconClass": "fa fa-tasks fa-lg", "onclick": {"id": "config:properties", "data": {}}},
+        		{"show": true, "iconClass": "fa fa-question-circle fa-lg", "onclick": {"id": "config:help", "data": {}}}
         	]
         }
     }
