@@ -21,7 +21,7 @@
             "onclick": {
                 "id": "org.ekstep.scribblepad:create",
                 "data": {
-                    "type" : "roundrect",
+                    "type": "roundrect",
                     "y": 20,
                     "x": 25,
                     "fill": "#3399FF",
@@ -40,7 +40,11 @@
             "dataType": "colorpicker",
             "required": true,
             "defaultValue": "#3399FF"
-        }]
+        }],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        }
     },
     "initdata": {
         "props": {

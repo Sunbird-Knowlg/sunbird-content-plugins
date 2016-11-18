@@ -78,17 +78,6 @@ EkstepEditor.basePlugin.extend({
         config.fontstyle = this.attributes.fontStyle || false;
         return config;
     },
-    getHelp: function() {
-        var help = "";
-        EkstepEditor.loadResource('/plugins/org.ekstep.text-1.0/editor/help.md', 'text', function(err, data) {
-            if (err) {
-                help = 'Unable to load help';
-            } else {
-                help = data;
-            }
-        });
-        return help;
-    },
     getProperties: function () {
         var props = _.omitBy(_.clone(this.attributes), _.isObject);
         props = _.omitBy(props, _.isNaN);
