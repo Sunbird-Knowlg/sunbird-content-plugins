@@ -1,13 +1,13 @@
 EkstepEditor.basePlugin.extend({
     type: 'imagebrowser',
+    initData: undefined,
     initialize: function() {
         EkstepEditor.eventManager.addEventListener("imagebrowser:show", this.initPreview, this);
         EkstepEditor.eventManager.addEventListener("imagebrowser:close", this.closeAssetBrowser, this);
         window.org_ekstep_image_1_0 = {
             ImageSource: function(event, src, id) {
-                console.log("image event", event);
                 EkstepEditor.jQuery('#selectanduse').removeClass('disabled');
-                EkstepEditor.jQuery('#selectanduse').attr({ src: src });
+                EkstepEditor.jQuery('#selectanduse').attr({ 'data-src': src, 'data-id': id });
                 if (EkstepEditor.jQuery("i").hasClass("fa-image-selected")) {
                     EkstepEditor.jQuery("i").removeClass("fa-image-selected");
                 }
@@ -15,8 +15,9 @@ EkstepEditor.basePlugin.extend({
             }
         };
     },
-    initPreview: function() {
+    initPreview: function(event, data) {
         var instance = this;
+        this.initData = data;
         this.loadResource('editor/imageBrowser.html', 'html', function(err, response) {
             instance.showAssetBrowser(err, response);
         });
@@ -65,8 +66,8 @@ EkstepEditor.basePlugin.extend({
         }
 
         _.forEach(asset, function(obj, index) {
-            var imageElement = "<img class=\"img-thumbnail\"" + "id=img-" + index + " src=" + obj.downloadUrl + " onclick=\"window.org_ekstep_image_1_0.ImageSource(event, src, id);\" width=\"120\" height=\"120\">";
-            imageElement += "<i " + "id=fa-check-img-" + index + " class=\"fa fa-check-square-o fa-2x-custom\" aria-hidden=\"true\"><\/i>";
+            var imageElement = "<img class=\"img-thumbnail\"" + "id=" + obj.identifier + " src=" + obj.downloadUrl + " onclick=\"window.org_ekstep_image_1_0.ImageSource(event, src, id);\" width=\"120\" height=\"120\">";
+            imageElement += "<i " + "id=fa-check-" + obj.identifier + " class=\"fa fa-check-square-o fa-2x-custom\" aria-hidden=\"true\"><\/i>";
             EkstepEditor.jQuery('#assetArea').append(imageElement);
         });
 
@@ -93,7 +94,10 @@ EkstepEditor.basePlugin.extend({
             });
 
             EkstepEditor.jQuery('#selectanduse').click(function() {
-                EkstepEditor.eventManager.dispatchEvent("imagebrowser:selected", EkstepEditor.jQuery(this).attr('src'));
+                var data = _.clone(instance.initData);
+                data.asset = EkstepEditor.jQuery(this).attr('data-id');
+                data.src = EkstepEditor.jQuery(this).attr('data-src');
+                EkstepEditor.eventManager.dispatchEvent("imagebrowser:add", data);
                 uibModalInstance.close('cancel');
             });
 

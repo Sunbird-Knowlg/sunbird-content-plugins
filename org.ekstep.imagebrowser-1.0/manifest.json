@@ -8,6 +8,22 @@
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
-        "menu": []
+        "menu": [{
+            "id": "image",
+            "category": "main",
+            "type": "icon",
+            "toolTip": "Add Image",
+            "title": "Image",
+            "iconClass": "fa fa-lg fa-picture-o fa-inverse menu-icon",
+            "onclick": {
+                "id": "imagebrowser:show",
+                "data": {
+                    "x": 20,
+                    "y": 20,
+                    "w": 50,
+                    "h": 50
+                }
+            }
+        }]
     }
 }
