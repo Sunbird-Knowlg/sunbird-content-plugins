@@ -10,7 +10,8 @@ EkstepEditor.basePlugin.extend({
         var _parent = this.parent;
         this.parent = undefined;
         var props = this.convertToFabric(this.attributes);
-        var imageURL = EkstepEditorAPI.globalContext.useProxyForURL ? "image/get/" + encodeURIComponent(props.src) : props.src;
+        var media = this.media[this.attributes.asset];
+        var imageURL = EkstepEditorAPI.globalContext.useProxyForURL ? "image/get/" + encodeURIComponent(media.src) : media.src;
         fabric.Image.fromURL(imageURL, function(img) {
             instance.editorObj = img;
             instance.parent = _parent;

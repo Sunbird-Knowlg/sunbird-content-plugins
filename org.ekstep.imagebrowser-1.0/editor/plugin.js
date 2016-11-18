@@ -71,7 +71,6 @@ EkstepEditor.basePlugin.extend({
             EkstepEditor.jQuery('#assetArea').append(imageElement);
         });
 
-
     },
     showAssetBrowser: function(err, data) {
         var instance = this,
@@ -96,7 +95,11 @@ EkstepEditor.basePlugin.extend({
             EkstepEditor.jQuery('#selectanduse').click(function() {
                 var data = _.clone(instance.initData);
                 data.asset = EkstepEditor.jQuery(this).attr('data-id');
-                data.src = EkstepEditor.jQuery(this).attr('data-src');
+                data.assetMedia = {
+                    id: data.asset,
+                    src: EkstepEditor.jQuery(this).attr('data-src'),
+                    type: 'image'
+                }
                 EkstepEditor.eventManager.dispatchEvent("imagebrowser:add", data);
                 uibModalInstance.close('cancel');
             });

@@ -6,6 +6,7 @@ EkstepEditor.basePlugin.extend({
     thumbnail: undefined,
     onclick: undefined,
     currentObject: undefined,
+    canvas: undefined,
     initialize: function() {
         EkstepEditorAPI.addEventListener("stage:create", this.createStage, this);
         EkstepEditorAPI.addEventListener("object:modified", this.modified, this);
@@ -26,12 +27,29 @@ EkstepEditor.basePlugin.extend({
             id: this.id
         };
     },
+    setCanvas: function(canvas) {
+        this.canvas = canvas;
+    },
     addChild: function(plugin) {
         this.children.push(plugin);
-        EkstepEditorAPI.getCanvas().add(plugin.editorObj);
-        EkstepEditorAPI.getCanvas().setActiveObject(plugin.editorObj);
-        EkstepEditorAPI.getCanvas().trigger('object:selected', { target: plugin.editorObj });
+        this.canvas.add(plugin.editorObj);
+        this.canvas.setActiveObject(plugin.editorObj);
+        this.canvas.trigger('object:selected', { target: plugin.editorObj });
+        this.setThumbnail();
         EkstepEditorAPI.dispatchEvent('object:modified', { id: plugin.id });
+    },
+    setThumbnail: function() {
+        this.thumbnail = this.canvas.toDataURL('png');
+    },
+    updateZIndex: function() {
+        var instance = this;
+        _.forEach(this.children, function(child) {
+            if(child.editorObj) {
+                child.attributes['z-index'] = instance.canvas.getObjects().indexOf(child.editorObj);
+            } else {
+                child.attributes['z-index'] = instance.canvas.getObjects().length;
+            }
+        });
     },
     render: function(canvas) {
         _.forEach(_.sortBy(this.children, [function(o) { return o.getAttribute('z-index'); }]), function(plugin) {
@@ -42,14 +60,8 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.refreshStages();
     },
     modified: function(event, data) {
-        _.forEach(EkstepEditorAPI.getCurrentStage().children, function(child) {
-            if(child.editorObj) {
-                child.attributes['z-index'] = EkstepEditorAPI.getCanvas().getObjects().indexOf(child.editorObj);
-            } else {
-                child.attributes['z-index'] = EkstepEditorAPI.getCanvas().getObjects().length;
-            }
-        });
-        EkstepEditorAPI.getCurrentStage().thumbnail = EkstepEditorAPI.getCanvas().toDataURL('png');
+        EkstepEditorAPI.getCurrentStage().updateZIndex();
+        EkstepEditorAPI.getCurrentStage().setThumbnail();
         EkstepEditorAPI.refreshStages();
     },
     objectSelected: function(event, data) {
@@ -61,7 +73,20 @@ EkstepEditor.basePlugin.extend({
     },
     objectRemoved: function(event, data) {
         this.currentObject = undefined;
+    },
+    destroyOnLoad: function(childCount, canvas, cb) {
+        var instance = this;
+        if(childCount == instance.children.length) {
+            canvas.clear();
+            instance.render(canvas);
+            canvas.dispose();
+            $('#' + instance.id).remove();
+            cb();
+        } else {
+            setTimeout(function() {
+                instance.destroyOnLoad(childCount, canvas, cb);
+            }, 1000);
+        }
     }
-
 });
 //# sourceURL=stageplugin.js
