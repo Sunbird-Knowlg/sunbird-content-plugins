@@ -15,16 +15,16 @@ EkstepEditor.basePlugin.extend({
     showPreview: function(err, data) {
         console.log(this.previewURL);
         var instance = this;
-        var popupConfig = { modal_content: data, windowClass: 'modal-preview', size: 'lg'};
+        var popupConfig = { template: data, windowClass: 'modal-preview', size: 'lg' };
         var popupService = EkstepEditorAPI.getService('popup');
         var contentService = EkstepEditorAPI.getService('content');
 
-        popupService.open(popupConfig).rendered.then(function() {            
+        popupService.open(popupConfig, function() {            
             var previewContentIframe = EkstepEditor.jQuery('#previewContentIframe')[0];
             previewContentIframe.src = instance.previewURL;
-            
+
             previewContentIframe.onload = function() {
-                var meta = EkstepEditorAPI.getService('content').getContentMeta(EkstepEditorAPI.globalContext.contentId);                
+                var meta = EkstepEditorAPI.getService('content').getContentMeta(EkstepEditorAPI.globalContext.contentId);
                 previewContentIframe.contentWindow.setContentData(meta.contentMeta, instance.contentBody, { "showStartPage": true, "showEndPage": true });
             };
         });
