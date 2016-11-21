@@ -99,16 +99,23 @@ EkstepEditor.basePlugin.extend({
         if (data.h) retData.height = data.h;
         if (data.radius) retData.rx = data.radius;
         if (data.color) retData.fill = data.color;
-        if (data.weight && _.includes(data.weight, 'bold')) { retData.fontWeight = "bold";
-            data.fontweight = true; }
-        if (data.weight && _.includes(data.weight, 'italic')) { retData.fontStyle = "italic";
-            data.fontstyle = true; };
-        if (data.font) { retData.fontFamily = data.font;
-            data.fontFamily = data.font };
+        if (data.weight && _.includes(data.weight, 'bold')) {
+            retData.fontWeight = "bold";
+            data.fontweight = true;
+        } else { data.fontweight = false; }
+        if (data.weight && _.includes(data.weight, 'italic')) {
+            retData.fontStyle = "italic";
+            data.fontstyle = true;
+        } else {data.fontstyle = false;}
+        if (data.font) {
+            retData.fontFamily = data.font;
+            data.fontFamily = data.font
+        }
         if (data.fontsize) {
             var fontSize = this.updateFontSize(data.fontsize, true);
             retData.fontSize = fontSize;
-            data.fontSize = fontSize; };
+            data.fontSize = fontSize;
+        };
         return retData;
     }
 });
