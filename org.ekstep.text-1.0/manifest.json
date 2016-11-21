@@ -30,7 +30,9 @@
                     "minWidth": 20,
                     "w": 35,
                     "maxWidth": 500,
-                    "fill": "#000000"
+                    "fill": "#000000",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal"
                 }
             }
         }],
