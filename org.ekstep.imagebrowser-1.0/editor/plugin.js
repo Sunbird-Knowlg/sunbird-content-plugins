@@ -88,7 +88,12 @@ EkstepEditor.basePlugin.extend({
 
             ctrl.ImageSource = function(event, $index) {
                 data.asset = event.target.attributes.data_id.value;
-                data.src = event.target.attributes.src.value;
+                data.assetMedia = {
+                    id: data.asset,
+                    src: event.target.attributes.src.value,
+                    type: 'image'
+                }
+
                 ctrl.selectDisable = false;
                 _.forEach(ctrl.selected_images, function(obj, index) {
                     if (obj.index !== $index) {
