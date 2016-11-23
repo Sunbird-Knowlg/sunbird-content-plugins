@@ -31,6 +31,7 @@ EkstepEditor.basePlugin.extend({
         var attributes = _.omit(_.clone(this.attributes), ['top', 'left', 'width', 'height', 'fontFamily', 'fontfamily', 'fontSize', 'fontstyle', 'fontweight', 'scaleX', 'scaleY']);
         attributes.font = this.editorObj.get('fontFamily');
         attributes['__text'] = this.editorObj.get('text');
+        attributes.fontsize = this.updateFontSize(this.editorObj.get('fontSize'), false);
         var fontWeight = _.isUndefined(this.editorObj.get("fontWeight")) ? "" : this.editorObj.get("fontWeight");
         var fontStyle = _.isUndefined(this.editorObj.get("fontStyle")) ? "" : this.editorObj.get("fontStyle");
         attributes.weight = (fontWeight + ' ' + fontStyle).trim();
@@ -54,7 +55,6 @@ EkstepEditor.basePlugin.extend({
             case "fontsize":
                 this.editorObj.setFontSize(value);
                 this.attributes.fontSize = value;
-                this.attributes.fontsize = this.updateFontSize(value, false);
                 break;
             case "color":
                 this.editorObj.setFill(value);
