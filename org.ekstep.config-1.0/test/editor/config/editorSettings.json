@@ -1,0 +1,6 @@
+{
+  "plugins": {
+    "org.ekstep.config": "1.0",
+    "org.ekstep.shape": "1.0"
+  }
+}
