@@ -41,22 +41,9 @@ EkstepEditor.basePlugin.extend({
     },
     showAssetBrowser: function(err, data) {
         var instance = this,
-            uibConfig,
             imageBrowserPopUp,
-            uibModalInstance,
             searchText;
 
-
-
-        uibConfig = {
-            template: data,
-            size: 'sm',
-            controller: 'popupController',
-            controllerAs: '$ctrl',
-            resolve: {
-                data: {}
-            }
-        };
         var controllerCallback = function(ctrl, scope, $uibModalInstance) {
             var data;
             data = _.clone(instance.initData);
@@ -110,7 +97,7 @@ EkstepEditor.basePlugin.extend({
             }
         };
 
-        uibModalInstance = EkstepEditorAPI.getService('popup').open(uibConfig, controllerCallback);
+        EkstepEditorAPI.getService('popup').open({template: data, size: 'lg'}, controllerCallback);
     }
 });
 //# sourceURL=imagebrowserplugin.js
