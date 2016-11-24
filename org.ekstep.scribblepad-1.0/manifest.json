@@ -25,10 +25,7 @@
                     "x": 25,
                     "fill": "#3399FF",
                     "w": 27,
-                    "h": 60,
-                    "stroke": 1,
-                    "strokeWidth": 2,
-                    "strokeDashArray": [5, 5]
+                    "h": 60
                 }
             },
             "media": [{

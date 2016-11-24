@@ -3,6 +3,9 @@ EkstepEditor.basePlugin.extend({
     initialize: function() {},
     newInstance: function() {
         var props = this.convertToFabric(this.attributes);
+        props.stroke = 1;
+        props.strokeWidth = 2;
+        props.strokeDashArray = [5, 5];
         if (this.attributes.type === 'roundrect') {
             this.editorObj = new fabric.Rect(props);
             this.addMedia({
@@ -30,6 +33,15 @@ EkstepEditor.basePlugin.extend({
         }
         EkstepEditorAPI.render();
         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
+    },
+    getAttributes: function() {
+        var attr = this._super();
+        delete attr.strokeDashArray;
+        attr['stroke-width'] = 1;
+        attr['opacity'] = 0.3;
+        attr.stroke = '#663300';
+        attr.thickness = 2;
+        return attr;
     },
     getConfig: function() {
         return { color: this.attributes.fill };
