@@ -18,7 +18,6 @@ describe('Shape plugin', function() {
     describe('on shape:createRectangle', function() {
         it('should call createRectangle', function() {
             EkstepEditorAPI.dispatchEvent("shape:createRectangle", rectData);
-            console.log("harish", EkstepEditorAPI.getCurrentObject());
             // spyEvent = spyOn('createRectangle');
             // expect('createRectangle').toHaveBeenCalled();
             // expect(spyEvent).toHaveBeenTriggered();
