@@ -1,0 +1,33 @@
+{
+    "id": "org.ekstep.assessmentbrowser",
+    "ver": "1.0",
+    "shortId": "assessmentbrowser",
+    "author": "Santhosh Vasabhaktula",
+    "title": "AssessmentBrowser Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            { "type": "css", "src": "editor/css/assessmentbrowser.css" },
+            { "type": "css", "src": "editor/css/bootstrap-multiselect.css" },
+            { "type": "css", "src": "editor/css/portal.css" },
+            { "type": "js", "src": "editor/assessmentbrowser_util.js" },
+            { "type": "js", "src": "editor/bootstrap-multiselect.js" },
+            { "type": "js", "src": "../../app/libs/utils.js" },
+            { "type": "js", "src": "../../app/libs/xml2json.js" }
+        ],
+        "menu": [{
+            "id": "assessmentbrowser",
+            "category": "main",
+            "type": "icon",
+            "toolTip": "Add Assessment",
+            "title": "AssessmentBrowser",
+            "iconClass": "fa fa-bars fa-inverse",
+            "onclick": {
+                "id": "assessmentbrowser:show",
+                "data": {}
+            }
+        }]
+    }
+}

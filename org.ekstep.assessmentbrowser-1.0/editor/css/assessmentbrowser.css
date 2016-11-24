@@ -1,0 +1,65 @@
+.item-activity-container {
+    float: none;
+    width: 100%;
+    padding: 0;
+    overflow: hidden !important;
+}
+
+.modal-title .pull-left h2 {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1;
+    float: left;
+    margin: 16px 2px 15px 28px;
+    color: #4C4C4C;
+}
+
+.modal-title .pull-left #title {
+    margin: 5px;
+    border: 0 transparent;
+    width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #0093dd;
+}
+
+.modal-title .fa-pencil {
+    position: relative;
+    bottom: 34px;
+    left: 206px;
+    color: #b9b9b9;
+}
+
+.modal-title {
+    background: #FFF;
+    height: 50px;
+    padding: 0;
+}
+
+.assessment-counts {
+    float: left;
+    position: relative;
+    top: 15px;
+    right: 5px;
+}
+
+.modal-close {
+    float: right;
+    position: relative;
+    top: 18px;
+    margin: 0 30px;
+    cursor: pointer;
+}
+
+.item-activity-container #filter-bar .multiselect {
+    width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #0093dd;
+}
+
+.modal.in .modal-dialog {
+    width: 98%;
+}
