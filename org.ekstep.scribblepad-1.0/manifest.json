@@ -1,7 +1,6 @@
 {
     "id": "org.ekstep.scribblepad",
     "ver": "1.0",
-    "shortId": "scribble",
     "author": "Santhosh Vasabhaktula",
     "title": "Scribblepad Plugin",
     "description": "",
@@ -31,7 +30,12 @@
                     "strokeWidth": 2,
                     "strokeDashArray": [5, 5]
                 }
-            }
+            },
+            "media": [{
+                "id": "eraserImage",
+                "src": "assets/EraserImage.png",
+                "type": "image"
+            }]
         }],
         "config": [{
             "propertyName": "color",
@@ -45,6 +49,9 @@
             "src": "editor/help.md",
             "dataType": "text"
         }
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
     },
     "initdata": {
         "props": {

@@ -1,10 +1,17 @@
 EkstepEditor.basePlugin.extend({
-    type: "scribblepad",
+    type: "org.ekstep.scribblepad",
     initialize: function() {},
     newInstance: function() {
         var props = this.convertToFabric(this.attributes);
         if (this.attributes.type === 'roundrect') {
             this.editorObj = new fabric.Rect(props);
+            this.addMedia({
+                id: "org.ekstep.scribblepad.eraser",
+                src: "http://localhost:3000/plugins/org.ekstep.scribblepad-1.0/assets/Eraser.png",
+                assetId: "org.ekstep.scribblepad.eraser",
+                type: "image",
+                preload: true
+            });
         }
     },
     updateAttributes: function() {
