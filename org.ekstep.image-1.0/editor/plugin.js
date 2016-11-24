@@ -17,6 +17,11 @@ EkstepEditor.basePlugin.extend({
             instance.parent = _parent;
             instance.postInit();
         }, props);
+    },
+    getCopy: function() {
+        var cp = this._super();
+        cp.assetMedia = this.media[this.attributes.asset];
+        return cp;
     }
 });
 //# sourceURL=imageplugin.js

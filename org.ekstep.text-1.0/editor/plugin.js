@@ -10,7 +10,9 @@ EkstepEditor.basePlugin.extend({
         var props = this.convertToFabric(this.attributes);
         delete props.__text;
         this.editorObj = new fabric.ITextbox(this.attributes.__text, props);
-        textEditor.showEditor(this.id);
+        if(this.attributes.__text == '') {
+            textEditor.showEditor(this.id);
+        }
     },
     selected: function(instance) {
         fabric.util.addListener(fabric.document, 'dblclick', this.dblClickHandler);
