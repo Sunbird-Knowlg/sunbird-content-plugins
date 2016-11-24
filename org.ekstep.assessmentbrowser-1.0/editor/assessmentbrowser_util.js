@@ -43,10 +43,8 @@ var assessmentBrowserUtil = (function() {
                 } else {
                     throw itemAbsentError;
                 }
-            } else {
-                if (!itemJson.template) {
-                    throw "Item does not contain template";
-                }
+            } else if (!itemJson.template) {
+                throw "Item does not contain template";
             }
 
             var story = { "theme": { "manifest": { "media": [] }, "template": [], "controller": [{ "name": "sampleAssessment", "type": "items", "id": "sampleAssessment", "__cdata": {} }], "startStage": "sampleAssessmentStage", "id": "theme", "ver": 0.3, "stage": [{ "id": "baseStage1", "preload": true, "image": [], "audio": [], "voice": [] }, { "id": "sampleAssessmentStage", "x": 0, "y": 0, "w": 100, "h": 100, "g": [{ "embed": { "template": "item", "var-item": "item" }, "x": 10, "y": 0, "w": 80, "h": 90 }], "iterate": "sampleAssessment", "var": "item" }] } };
@@ -112,11 +110,7 @@ var assessmentBrowserUtil = (function() {
     }
 
     function applyReverseProxyUrl(media, reverseProxyUrl) {
-        var op;
-        var nativeProtocol = "https:"; /*setting native protocol of all media assets to https: */
-        var actualUrl = "https://ekstep-public.s3-ap-southeast-1.amazonaws.com/";
-
-        op = /https?:\/\/ekstep-public.s3-ap-southeast-1.amazonaws.com\//g.exec(media.src);
+        var op = /https?:\/\/ekstep-public.s3-ap-southeast-1.amazonaws.com\//g.exec(media.src);
         if (op) {
             media.src = media.src.replace(op[0], reverseProxyUrl);
         }

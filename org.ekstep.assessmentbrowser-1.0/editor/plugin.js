@@ -29,10 +29,7 @@ EkstepEditor.basePlugin.extend({
                     var itemPreviewError = "Preview could not be shown."
                     ctrl.itemPreviewDisplay = ctrl.itemPreviewDefaultMessage;
 
-                    ctrl.assessment = {
-                        purposes: ["Knowledge", "Conceptual", "Application", "Problem Solving"],
-                        domain: ["Numeracy", "Literacy"],
-                    };
+                    ctrl.assessment = {};
                     ctrl.activity = {
                         'title': '',
                         'qlevel': '',
@@ -262,7 +259,6 @@ EkstepEditor.basePlugin.extend({
                     };
 
                     ctrl.addItemActivity = function() {
-                        //TODO 
                         console.log('items ', ctrl.cart.items);
                         return ctrl.cart.items;
                     }
