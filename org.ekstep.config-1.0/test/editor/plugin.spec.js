@@ -41,7 +41,7 @@ describe('Config plugin', function() {
     });
     it('should call object selected', function() {
         EkstepEditorAPI.dispatchEvent("object:selected", { id: EkstepEditorAPI.getCurrentObject().id })
-        expect($('.tool-container').css('opacity')).toEqual('1');
+        expect(parseFloat($('.tool-container').css('opacity'))).toBeGreaterThan(0);
     });
     it('should call object unselected', function() {
         EkstepEditorAPI.dispatchEvent("object:unselected", { id: EkstepEditorAPI.getCurrentObject().id })
