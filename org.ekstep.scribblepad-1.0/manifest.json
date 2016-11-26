@@ -49,11 +49,5 @@
     },
     "renderer": {
         "main": "renderer/plugin.js"
-    },
-    "initdata": {
-        "props": {
-            "y": 200,
-            "x": 200
-        }
     }
 }

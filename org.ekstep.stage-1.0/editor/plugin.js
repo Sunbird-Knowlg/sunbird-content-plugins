@@ -14,7 +14,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("object:removed", this.objectRemoved, this);
     },
     createStage: function(event, data) {
-        EkstepEditorAPI.instantiatePlugin(this.manifest.id + '@' + this.manifest.ver, {});
+        EkstepEditorAPI.instantiatePlugin(this.manifest.id, {});
     },
     newInstance: function(data) {
         this.onclick = { id: 'stage:select', data: { stageId: this.id } }
