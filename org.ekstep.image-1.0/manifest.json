@@ -7,6 +7,18 @@
     "description": "",
     "publishedDate": "",
     "editor": {
-        "main": "editor/plugin.js"
+        "main": "editor/plugin.js",
+        "menu": [{
+            "id": "image",
+            "category": "main",
+            "type": "icon",
+            "toolTip": "Add Image",
+            "title": "Image",
+            "iconClass": "fa fa-lg fa-picture-o fa-inverse menu-icon",
+            "onclick": {
+                "id": "org.ekstep.assetbrowser:show",
+                "data": "org.ekstep.image:onAddAsset:image"
+            }
+        }]
     }
 }

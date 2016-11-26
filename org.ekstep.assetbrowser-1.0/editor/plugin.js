@@ -1,12 +1,13 @@
 EkstepEditor.basePlugin.extend({
     type: 'assetbrowser',
     initData: undefined,
+    eventId: undefined,
     initialize: function() {
-        EkstepEditor.eventManager.addEventListener("assetbrowser:show", this.initPreview, this);
-        EkstepEditor.eventManager.addEventListener("assetbrowser:close", this.closeAssetBrowser, this);
+        EkstepEditorAPI.addEventListener(this.manifest.id+ ":show", this.initPreview, this);        
     },
     initPreview: function(event, data) {
         var instance = this;
+        this.eventId = data;
         this.loadResource('editor/assetBrowser.html', 'html', function(err, response) {
             instance.showAssetBrowser(err, response);
         });
@@ -43,14 +44,15 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.getService('popup').open({ template: data, size: 'lg', resolve: { data: { instance: this } } }, this.browserController);
     },
     browserController: function(ctrl, scope, $uibModalInstance, resolvedData, $sce) {
-        var audiodata={},
-            imagedata={"x": 20, "y": 20, "w": 50, "h": 50},
+        var audiodata = {},
+            imagedata = { "x": 20, "y": 20, "w": 50, "h": 50 },
             searchText,
             instance = resolvedData.instance,
             lastSelectedAudio,
             lastSelectedImage,
             audioTabSelected = false,
             imageTabSelected = true;
+            //mainScope = EkstepEditorAPI.getAngularScope();
 
 
         ctrl.selected_images = {};
@@ -170,15 +172,20 @@ EkstepEditor.basePlugin.extend({
 
         ctrl.select = function() {
             if (imagedata && imagedata.asset && imageTabSelected) {
-                EkstepEditor.eventManager.dispatchEvent("assetbrowser:add:image", imagedata);
-                $uibModalInstance.dismiss('cancel');
+                (!_.isUndefined(instance.eventId)) && EkstepEditorAPI.dispatchEvent(instance.eventId, imagedata);
+                ctrl.cancel();
             }
 
-            if (audiodata && audiodata.asset && audioTabSelected) {
-                EkstepEditor.eventManager.dispatchEvent("assetbrowser:add:audio", audiodata);
+            /*if (audiodata && audiodata.asset && audioTabSelected) {
+                (!_.isUndefined(instance.eventId)) && EkstepEditorAPI.dispatchEvent(instance.eventId, audiodata);
                 console.log('audiodata', audiodata);
-                $uibModalInstance.dismiss('cancel');
-            }
+                mainScope.safeApply(function() {
+                    mainScope.attachmentHolder = {}
+                    mainScope.attachmentHolder.show = true;
+                    mainScope.attachmentHolder.audio_title = audiodata.asset;
+                });
+                ctrl.cancel();
+            }*/
         }
     }
 });

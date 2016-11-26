@@ -1,7 +1,7 @@
 EkstepEditor.basePlugin.extend({
     initialize: function() {
         var instance = this;
-        EkstepEditorAPI.addEventListener("assetbrowser:add:image", function(event, data) {
+        EkstepEditorAPI.addEventListener(instance.manifest.id + ":onAddAsset:image", function(event, data) {
             EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', data);
         }, this);
     },

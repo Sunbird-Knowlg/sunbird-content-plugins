@@ -7,17 +7,6 @@
     "description": "",
     "publishedDate": "",
     "editor": {
-        "main": "editor/plugin.js",
-        "menu": [{
-            "id": "asset",
-            "category": "main",
-            "type": "icon",
-            "toolTip": "Add Item",
-            "title": "Asset",
-            "iconClass": "fa fa-lg fa-shopping-cart fa-inverse menu-icon",
-            "onclick": {
-                "id": "assetbrowser:show"
-            }
-        }]
+        "main": "editor/plugin.js"
     }
 }
