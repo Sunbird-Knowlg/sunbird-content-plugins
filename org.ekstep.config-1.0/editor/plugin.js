@@ -5,27 +5,42 @@
  * @class Config
  * @extends EkstepEditor.basePlugin
  *
- * @author Harish Gangula <harishg@ilimi.in>
+ * @author Harishkumar Gangula <harishg@ilimi.in>
  */
 EkstepEditor.basePlugin.extend({
-
+    /** @member {undefined|Object} canvasOffset
+     * @memberof Config
+     */
     canvasOffset: undefined,
-    selectedPlugin: undefined,
+    /** @member {undefined|String} selectedPluginId
+     * @memberof Config
+     */
+    selectedPluginId: undefined,
+    /** @member {undefined|Object} toolbarObj
+     * @memberof Config
+     */
     toolbarObj: undefined,
     margin: {
         left: 7.5,
         top: 30,
     },
-
+    /** @member {undefined|Array} pluginConfigManifest
+     * @memberof Config
+     */
     pluginConfigManifest: undefined,
+    /** @member {undefined|Array} configData
+     * @memberof Config
+     */
     configData: undefined,
-  /**
-   * register events
-   * initialize toolbar
-   *
-   *
-   */
-  initialize: function() {
+    /**
+     * 
+     * The events are registred which are used to update the selected editor object
+     * <br/>Assign canvasOffset using <b>jquery</b> offset method
+     * <br/>Initialize toolbar 
+     * @override
+     * @memberof Config
+     */
+    initialize: function() {
         var instance = this;
         EkstepEditorAPI.addEventListener("object:selected", this.objectSelected, this);
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
@@ -40,6 +55,7 @@ EkstepEditor.basePlugin.extend({
         angScope.safeApply(function() {
             angScope.contextToolbar = instance.manifest.editor.data.toolbars;
         });
+
         this.canvasOffset = $('#canvas').offset();
         setTimeout(function() {
             instance.toolbarObj = Object.create(ToolBar);
@@ -52,13 +68,14 @@ EkstepEditor.basePlugin.extend({
             console.log('Context toolbar initialized');
         }, 1000);
     },
-  /**
-   * Place config toolbar on top of plugin, based on its location
-   * @param event object:selected
-   * @param data id of the selected plugin
-   */
+    /**
+     * Place config toolbar on top of plugin, based on its location
+     * @param event object:selected
+     * @param data id of the selected plugin
+     * @memberof Config
+     */
     objectSelected: function(event, data) {
-        this.selectedPlugin = data.id;
+        this.selectedPluginId = data.id;
         var plugin = EkstepEditorAPI.getPluginInstance(data.id);
         EkstepEditor.jQuery('#toolbarHiddenButton').offset({
             top: (this.canvasOffset.top + plugin.editorObj.top - this.margin.top),
@@ -67,15 +84,20 @@ EkstepEditor.basePlugin.extend({
         if (this.toolbarObj) this.toolbarObj.show();
     },
     objectUnselected: function(event, data) {
-        if (this.toolbarObj && this.selectedPlugin === data.id)
+        if (this.toolbarObj && this.selectedPluginId === data.id)
             this.toolbarObj.hide();
         EkstepEditor.jQuery("#plugin-toolbar-container").hide();
     },
-  /**
-   * Show configuration
-   * @param event
-   * @param data
-   */
+    /**
+     *  Show configuration
+     *  <br/> 1. Gets the selected object from canvas and toolbar is location is set and based on selected object location in canvas
+     *  <br/> 2. Get the selected plugin manifest and config data and assign it to angular scope to render the view and update angular model with config data
+     *  <br/> 3. Watches the config data with angular watch method and on change of config data calls updateConfig method
+     *  <br/> 4. Iterates pluginConfigManifest  and invoke method is called
+     *  @param event config:show is the event called
+     *  @param data Object type is sent to method
+     *  @memberof Config
+     */
     showConfig: function(event, data) {
         var instance = this;
         var selectedPluginObj = EkstepEditorAPI.getCurrentObject().editorObj;
@@ -106,10 +128,22 @@ EkstepEditor.basePlugin.extend({
             instance.invoke(config, instance.configData)
         })
     },
+    /**
+     * This is called on stage unselect event fired 
+     * This will hide toolbar if it is visible on DOM
+     * @param data {Object}
+     * @memberof Config
+     */
     stageUnselect: function(data) {
         if (this.toolbarObj)
             this.toolbarObj.hide();
     },
+    /**
+     * This method invokes any config items require to  initialize before showing in config toolbar
+     * @param  config {Array}
+     * @param  configData {Array}
+     * @memberof Config
+     */
     invoke: function(config, configData) {
         configData = configData || {};
         if (config.dataType === 'colorpicker') {
@@ -117,6 +151,12 @@ EkstepEditor.basePlugin.extend({
             setTimeout(function() { EkstepEditorAPI.dispatchEvent("colorpicker:state", eventData) }, 500);
         }
     },
+    /**
+     * This method gets the old and new config data and compares the both and calls the onConfigChange method with the key and value of new value
+     * @param  newValue {Object}
+     * @param  oldValue {Object}
+     * @memberof Config
+     */
     updateConfig: function(newValue, oldValue) {
         var instance = this;
         var changedValues = _.reduce(oldValue, function(result, value, key) {
@@ -127,13 +167,31 @@ EkstepEditor.basePlugin.extend({
             instance.onConfigChange(cv, newValue[cv]);
         })
     },
+    /**
+     * This will call the selected plugin onConfigChange method with key and value which is recevied as params
+     * @param  key {String}
+     * @param  value {Any}
+     * @memberof Config
+     */
     onConfigChange: function(key, value) {
         EkstepEditorAPI.getCurrentObject().onConfigChange(key, value);
     },
+    /**
+     * This is lifecycle method called when object saves the all the config data at a time
+     * @param  config {Object}
+     * @memberof Config
+     */
     saveConfig: function(config) {
         EkstepEditorAPI.getCurrentObject().saveConfig(config);
     },
-    showHelp: function() {
+    /**
+     * This method called when config:help event is fired  
+     * <br/> It will show the help data for the selected plugin 
+     * @param  event {Object}
+     * @param  data {Object}
+     *  @memberof Config
+     */
+    showHelp: function(event, data) {
         EkstepEditor.jQuery("#plugin-toolbar-container").show();
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
@@ -146,7 +204,14 @@ EkstepEditor.basePlugin.extend({
         });
 
     },
-    showProperties: function() {
+    /**
+     * This method called when config:properties event is fired  
+     * It shows the properties of the selected plugin
+     * @param  event {Object}
+     * @param  data {Object}
+     * @memberof Config
+     */
+    showProperties: function(event, data) {
         EkstepEditor.jQuery("#plugin-toolbar-container").show();
         var properties = EkstepEditorAPI.getCurrentObject().getProperties();
         var angScope = EkstepEditorAPI.getAngularScope();
@@ -157,6 +222,13 @@ EkstepEditor.basePlugin.extend({
             angScope.pluginProperties = properties;
         });
     },
+    /**
+     * * This method called when object:moving or object:scaling events is fired 
+     * It will moves the toolbar with plugin object when moving and scaling in canvas 
+     * @param  event {Object}
+     * @param  data {Object}  
+     * @memberof Config   
+     */
     objectModifying: function(event, data) {
         if (data && data.id) {
             this.selectedPlugin = data.id;
