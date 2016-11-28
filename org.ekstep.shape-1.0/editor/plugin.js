@@ -1,13 +1,29 @@
+/**
+ * 
+ * Simple plugin to create geometrical shapes
+ * @class shape
+ * @extends EkstepEditor.basePlugin
+ *
+ * @author Sunil A S <sunils@ilimi.in>
+ * @fires object:modified
+ */
 EkstepEditor.basePlugin.extend({
     type: "shape",
     initialize: function() {},
+    /**
+     *
+     *   invoked by framework when instantiating plugin instance.
+     *   Creates following shapes: Circle, Rectangle, Round Rectangle
+     *   @memberof shape
+     *
+     */
     newInstance: function() {
         var props = this.convertToFabric(this.attributes);
         console.log('props', props);
         switch (this.attributes.type) {
             case 'ellipse':
-                props.rx = props.w/2;
-                props.ry = props.h/2;
+                props.rx = props.w / 2;
+                props.ry = props.h / 2;
                 this.editorObj = new fabric.Ellipse(props);
                 break;
             case 'roundrect':
@@ -29,6 +45,13 @@ EkstepEditor.basePlugin.extend({
         }
         if (this.editorObj) this.editorObj.setFill(props.fill);
     },
+    /**
+     *
+     *   update editorObj properties on config change
+     *   @memberof shape
+     *   
+     *
+     */
     onConfigChange: function(key, value) {
         switch (key) {
             case 'color':
@@ -42,6 +65,13 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.render();
         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
     },
+    /**
+     *
+     *   get config data plugin instance
+     *   @returns {Object}
+     *   config object
+     *   @memberof shape
+     */
     getConfig: function() {
         var config = { color: this.attributes.fill };
         if (this.attributes.type == 'roundrect') {

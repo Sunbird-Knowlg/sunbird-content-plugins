@@ -1,10 +1,35 @@
+/**
+ * 
+ * plugin to get asset (image/audio) from learning platform
+ * @class assetBrowser
+ * @extends EkstepEditor.basePlugin
+ * @author Sunil A S <sunils@ilimi.in>
+ * @fires stagedecorator:addcomponent 
+ * @listens org.ekstep.assetbrowser:show
+ */
+
 EkstepEditor.basePlugin.extend({
     type: 'assetbrowser',
     initData: undefined,
-    cb: function(){},    
+    /**
+    *   @memberof cb {Funtion} callback
+    *   @memberof assetBrowser
+    */
+    cb: function(){},
+    /**
+    *   registers events
+    *   @memberof assetBrowser
+    *
+    */    
     initialize: function() {
         EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.initPreview, this);
     },
+    /**        
+    *   load html template to show the popup
+    *   @param event {Object} event
+    *   @param cb {Function} callback to be fired when asset is available.
+    *   @memberof assetBrowser
+    */
     initPreview: function(event, cb) {
         var instance = this;
         this.cb = cb;       
@@ -12,6 +37,14 @@ EkstepEditor.basePlugin.extend({
             instance.showAssetBrowser(err, response);
         });
     },
+    /**    
+    *   get asset from Learning platfrom
+    *   @param {String} name of the asset
+    *   @param {String} type of media
+    *   @param {Function} callback to be fired when XHR request is completed
+    *   @memberof assetBrowser
+    *
+    */
     getAsset: function(searchText, mediaType, cb) {
         var instance = this,
             iservice = new EkstepEditor.iService(),
@@ -40,9 +73,25 @@ EkstepEditor.basePlugin.extend({
         iservice.http.post(EkstepEditor.config.baseURL + '/api/search/v2/search', requestObj, requestHeaders, cb);
 
     },
+    /**    
+    *   invokes popup service to show the popup window
+    *   @param err {Object} err when loading template async
+    *   @param data {String} template HTML 
+    *   @memberof assetBrowser
+    */
     showAssetBrowser: function(err, data) {
         EkstepEditorAPI.getService('popup').open({ template: data, size: 'lg', resolve: { data: { instance: this } } }, this.browserController);
     },
+    /**
+    *   @memberof assetBrowser
+    *   angular controller for popup service as callback
+    *   @param ctrl {Object} popupController object
+    *   @param scope {Object} popupController scope object
+    *   @param $uibModalInstance {Object} ui-bootstrap modal instance
+    *   @param resolvedData {Object} data passed to uib config
+    *   @param $sce {Object} strict contextual escaping service
+    *   @memberof assetBrowser
+    */
     browserController: function(ctrl, scope, $uibModalInstance, resolvedData, $sce) {
         var audiodata = {},
             imagedata = { "x": 20, "y": 20, "w": 50, "h": 50 },
@@ -176,12 +225,12 @@ EkstepEditor.basePlugin.extend({
                 ctrl.cancel();
             }
 
-            /*if (audiodata && audiodata.asset && audioTabSelected) {
-                instance.cb(audiodata);
+            if (audiodata && audiodata.asset && audioTabSelected) {
+                //instance.cb(audiodata);
                 console.log('audiodata', audiodata);
-                //EkstepEditorAPI.dispatchEvent("stagedecorator:addcomponent", { component: 'audio', title: audiodata.asset });
+                EkstepEditorAPI.dispatchEvent("stagedecorator:addcomponent", { component: 'audio', title: audiodata.asset });
                 ctrl.cancel();
-            }*/
+            }
         }
     }
 });
