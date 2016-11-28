@@ -16,8 +16,7 @@
             "title": "Image",
             "iconClass": "fa fa-lg fa-picture-o fa-inverse menu-icon",
             "onclick": {
-                "id": "org.ekstep.assetbrowser:show",
-                "data": "org.ekstep.image:onAddAsset:image"
+                "id": "org.ekstep.image:assetbrowser:open"
             }
         }]
     }

@@ -1,9 +1,7 @@
 EkstepEditor.basePlugin.extend({
     initialize: function() {
         var instance = this;
-        EkstepEditorAPI.addEventListener(instance.manifest.id + ":onAddAsset:image", function(event, data) {
-            EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', data);
-        }, this);
+        EkstepEditorAPI.addEventListener(instance.manifest.id + ":assetbrowser:open", this.openBrowser, this);
     },
     newInstance: function() {
         var instance = this;
@@ -17,6 +15,12 @@ EkstepEditor.basePlugin.extend({
             instance.parent = _parent;
             instance.postInit();
         }, props);
+    },
+    openBrowser: function() {
+        var instance = this;
+        EkstepEditorAPI.dispatchEvent('org.ekstep.assetbrowser:show', function(data) {
+            EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', data);
+        });
     },
     getCopy: function() {
         var cp = this._super();

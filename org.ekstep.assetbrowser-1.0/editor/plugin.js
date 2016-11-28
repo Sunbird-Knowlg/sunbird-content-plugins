@@ -1,13 +1,13 @@
 EkstepEditor.basePlugin.extend({
     type: 'assetbrowser',
     initData: undefined,
-    eventId: undefined,
+    cb: function(){},    
     initialize: function() {
-        EkstepEditorAPI.addEventListener(this.manifest.id+ ":show", this.initPreview, this);        
+        EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.initPreview, this);
     },
-    initPreview: function(event, data) {
+    initPreview: function(event, cb) {
         var instance = this;
-        this.eventId = data;
+        this.cb = cb;       
         this.loadResource('editor/assetBrowser.html', 'html', function(err, response) {
             instance.showAssetBrowser(err, response);
         });
@@ -172,18 +172,14 @@ EkstepEditor.basePlugin.extend({
 
         ctrl.select = function() {
             if (imagedata && imagedata.asset && imageTabSelected) {
-                (!_.isUndefined(instance.eventId)) && EkstepEditorAPI.dispatchEvent(instance.eventId, imagedata);
+                instance.cb(imagedata);
                 ctrl.cancel();
             }
 
             /*if (audiodata && audiodata.asset && audioTabSelected) {
-                (!_.isUndefined(instance.eventId)) && EkstepEditorAPI.dispatchEvent(instance.eventId, audiodata);
+                instance.cb(audiodata);
                 console.log('audiodata', audiodata);
-                mainScope.safeApply(function() {
-                    mainScope.attachmentHolder = {}
-                    mainScope.attachmentHolder.show = true;
-                    mainScope.attachmentHolder.audio_title = audiodata.asset;
-                });
+                //EkstepEditorAPI.dispatchEvent("stagedecorator:addcomponent", { component: 'audio', title: audiodata.asset });
                 ctrl.cancel();
             }*/
         }
