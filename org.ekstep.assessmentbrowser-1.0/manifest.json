@@ -13,9 +13,8 @@
             { "type": "css", "src": "editor/css/bootstrap-multiselect.css" },
             { "type": "css", "src": "editor/css/portal.css" },
             { "type": "js", "src": "editor/assessmentbrowser_util.js" },
-            { "type": "js", "src": "editor/bootstrap-multiselect.js" },
-            { "type": "js", "src": "../../app/libs/utils.js" },
-            { "type": "js", "src": "../../app/libs/xml2json.js" }
+            { "type": "js", "src": "editor/libs/bootstrap-multiselect.js" },
+            { "type": "js", "src": "editor/libs/xml2json.js" }
         ],
         "menu": [{
             "id": "assessmentbrowser",
@@ -23,9 +22,9 @@
             "type": "icon",
             "toolTip": "Add Assessment",
             "title": "AssessmentBrowser",
-            "iconClass": "fa fa-bars fa-inverse",
+            "iconClass": "fa fa-question-circle fa-inverse menu-icon",
             "onclick": {
-                "id": "assessmentbrowser:show",
+                "id": "org.ekstep.assessmentbrowser:show",
                 "data": {}
             }
         }]
