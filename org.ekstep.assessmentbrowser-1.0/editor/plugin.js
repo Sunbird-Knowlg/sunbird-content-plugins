@@ -1,5 +1,6 @@
 EkstepEditor.basePlugin.extend({
     type: "assessmentbrowser",
+    previewURL: 'preview/preview.html?webview=true',
     callback: function() {},
     initialize: function() {
         EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.loadHtml, this);
@@ -222,7 +223,7 @@ EkstepEditor.basePlugin.extend({
 
         ctrl.previewLoad = function() {
             if (itemIframe.src == "")
-                itemIframe.src = 'preview/preview.html?webview=true';
+                itemIframe.src = instance.previewURL;
             itemIframe.addEventListener('load', function() {
                 itemIframe.contentWindow.setContentData(null, ctrl.itemPreviewContent, config);
             });
