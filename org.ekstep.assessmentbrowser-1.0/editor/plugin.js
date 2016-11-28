@@ -1,27 +1,28 @@
 EkstepEditor.basePlugin.extend({
     type: "assessmentbrowser",
-    callback: undefined,
+    callback: function() {},
     initialize: function() {
-        EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.showAssessmentBrowser, this);
+        EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.loadHtml, this);
     },
-    showAssessmentBrowser: function(event, callback) {
-        this.callback = !_.isUndefined(callback) ? callback : undefined;
+    loadHtml: function(event, callback) {
+        var instance = this;
+        this.callback = callback;
+        this.loadResource('editor/assessmentbrowser.html', 'html', function(err, response) {
+            instance.showAssessmentBrowser(err, response);
+        });
+    },
+    showAssessmentBrowser: function(err, data) {
         var instance = this,
             uibConfig;
-        EkstepEditor.loadResource('/plugins/org.ekstep.assessmentbrowser-1.0/editor/assessmentbrowser.html', 'html', function(err, data) {
-            if (err) {
-                console.log('Unable to load assessmentbrowser html');
-            } else {
-                uibConfig = {
-                    template: data,
-                    resolve: {
-                        data: { instance: instance }
-                    }
-                };
 
-                EkstepEditorAPI.getService('popup').open(uibConfig, instance.controllerCallback);
+        uibConfig = {
+            template: data,
+            resolve: {
+                data: { instance: instance }
             }
-        });
+        };
+
+        EkstepEditorAPI.getService('popup').open(uibConfig, instance.controllerCallback);
     },
     controllerCallback: function(ctrl, scope, $uibModalInstance, resolvedData) {
         $('.modal').addClass('modal-editor');
@@ -266,7 +267,7 @@ EkstepEditor.basePlugin.extend({
         ctrl.addItemActivity = function() {
             console.log('items ', ctrl.cart.items);
             //return ctrl.cart.items;
-            if(!_.isUndefined(instance.callback)){
+            if (!_.isUndefined(instance.callback)) {
                 instance.callback(ctrl.cart.items);
                 ctrl.cancel();
             }
