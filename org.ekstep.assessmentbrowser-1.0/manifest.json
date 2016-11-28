@@ -15,18 +15,6 @@
             { "type": "js", "src": "editor/assessmentbrowser_util.js" },
             { "type": "js", "src": "editor/libs/bootstrap-multiselect.js" },
             { "type": "js", "src": "editor/libs/xml2json.js" }
-        ],
-        "menu": [{
-            "id": "assessmentbrowser",
-            "category": "main",
-            "type": "icon",
-            "toolTip": "Add Assessment",
-            "title": "AssessmentBrowser",
-            "iconClass": "fa fa-question-circle fa-inverse menu-icon",
-            "onclick": {
-                "id": "org.ekstep.assessmentbrowser:show",
-                "data": {}
-            }
-        }]
+        ]
     }
 }

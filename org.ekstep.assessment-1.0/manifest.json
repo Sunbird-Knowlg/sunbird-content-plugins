@@ -1,0 +1,24 @@
+{
+    "id": "org.ekstep.assessment",
+    "ver": "1.0",
+    "shortId": "assessment",
+    "author": "Santhosh Vasabhaktula",
+    "title": "Assessment Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "menu": [{
+            "id": "assessment",
+            "category": "main",
+            "type": "icon",
+            "toolTip": "Add Assessment",
+            "title": "Assessment",
+            "iconClass": "fa fa-question-circle fa-inverse menu-icon",
+            "onclick": {
+                "id": "org.ekstep.assessment:showPopup",
+                "data": {}
+            }
+        }]
+    }
+}

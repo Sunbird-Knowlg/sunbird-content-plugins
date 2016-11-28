@@ -1,11 +1,11 @@
 EkstepEditor.basePlugin.extend({
     type: "assessmentbrowser",
-    eventId: undefined,
+    callback: undefined,
     initialize: function() {
         EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.showAssessmentBrowser, this);
     },
-    showAssessmentBrowser: function(event, data) {
-        this.eventId = !_.isUndefined(data.eventId) ? data.eventId : undefined;
+    showAssessmentBrowser: function(event, callback) {
+        this.callback = !_.isUndefined(callback) ? callback : undefined;
         var instance = this,
             uibConfig;
         EkstepEditor.loadResource('/plugins/org.ekstep.assessmentbrowser-1.0/editor/assessmentbrowser.html', 'html', function(err, data) {
@@ -13,19 +13,23 @@ EkstepEditor.basePlugin.extend({
                 console.log('Unable to load assessmentbrowser html');
             } else {
                 uibConfig = {
-                    template: data
+                    template: data,
+                    resolve: {
+                        data: { instance: instance }
+                    }
                 };
 
                 EkstepEditorAPI.getService('popup').open(uibConfig, instance.controllerCallback);
             }
         });
     },
-    controllerCallback: function(ctrl, scope, $uibModalInstance) {
+    controllerCallback: function(ctrl, scope, $uibModalInstance, resolvedData) {
         $('.modal').addClass('modal-editor');
         $('.modal').addClass('item-activity');
 
         var itemIframe = EkstepEditor.jQuery('#itemIframe')[0],
-            config = { "showStartPage": false, "showEndPage": false };
+            config = { "showStartPage": false, "showEndPage": false },
+            instance = resolvedData.instance;
 
         ctrl.isFiltersShown = true;
         ctrl.isMyQuestions = false;
@@ -262,8 +266,10 @@ EkstepEditor.basePlugin.extend({
         ctrl.addItemActivity = function() {
             console.log('items ', ctrl.cart.items);
             //return ctrl.cart.items;
-            EkstepEditorAPI.dispatchEvent(this.eventId, ctrl.cart.items);
-            ctrl.cancel();
+            if(!_.isUndefined(instance.callback)){
+                instance.callback(ctrl.cart.items);
+                ctrl.cancel();
+            }
         }
 
         ctrl.cancel = function() {
