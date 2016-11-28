@@ -1,4 +1,14 @@
+/**
+ * Config
+ * The purpose of {@link Configplugin} is to encapsulate configurable properties and providing a UI for changing values
+ *
+ * @class Config
+ * @extends EkstepEditor.basePlugin
+ *
+ * @author Harish Gangula <harishg@ilimi.in>
+ */
 EkstepEditor.basePlugin.extend({
+
     canvasOffset: undefined,
     selectedPlugin: undefined,
     toolbarObj: undefined,
@@ -6,9 +16,16 @@ EkstepEditor.basePlugin.extend({
         left: 7.5,
         top: 30,
     },
+
     pluginConfigManifest: undefined,
     configData: undefined,
-    initialize: function() {
+  /**
+   * register events
+   * initialize toolbar
+   *
+   *
+   */
+  initialize: function() {
         var instance = this;
         EkstepEditorAPI.addEventListener("object:selected", this.objectSelected, this);
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
@@ -35,6 +52,11 @@ EkstepEditor.basePlugin.extend({
             console.log('Context toolbar initialized');
         }, 1000);
     },
+  /**
+   * Place config toolbar on top of plugin, based on its location
+   * @param event object:selected
+   * @param data id of the selected plugin
+   */
     objectSelected: function(event, data) {
         this.selectedPlugin = data.id;
         var plugin = EkstepEditorAPI.getPluginInstance(data.id);
@@ -49,6 +71,11 @@ EkstepEditor.basePlugin.extend({
             this.toolbarObj.hide();
         EkstepEditor.jQuery("#plugin-toolbar-container").hide();
     },
+  /**
+   * Show configuration
+   * @param event
+   * @param data
+   */
     showConfig: function(event, data) {
         var instance = this;
         var selectedPluginObj = EkstepEditorAPI.getCurrentObject().editorObj;
