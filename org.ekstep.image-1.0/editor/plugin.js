@@ -46,8 +46,8 @@ EkstepEditor.basePlugin.extend({
     */
     openBrowser: function() {
         var instance = this;
-        EkstepEditorAPI.dispatchEvent('org.ekstep.assetbrowser:show', function(data) {
-            EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', data);
+        EkstepEditorAPI.dispatchEvent('org.ekstep.assetbrowser:show', {
+            callback: function(data) {EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', data)}
         });
     },
     /**

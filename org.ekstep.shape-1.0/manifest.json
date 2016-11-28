@@ -83,6 +83,14 @@
         "help": {
             "src": "editor/help.md",
             "dataType": "text"
-        } 
+        },
+        "init-data": {
+            "type": "rect",
+            "x": 10,
+            "y": 20,
+            "fill": "#FFFF00",
+            "w": 14,
+            "h": 25
+        }
     }
 }

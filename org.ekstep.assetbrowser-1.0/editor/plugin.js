@@ -30,9 +30,9 @@ EkstepEditor.basePlugin.extend({
     *   @param cb {Function} callback to be fired when asset is available.
     *   @memberof assetBrowser
     */
-    initPreview: function(event, cb) {
+    initPreview: function(event, data) {
         var instance = this;
-        this.cb = cb;       
+        this.cb = data.callback;       
         this.loadResource('editor/assetBrowser.html', 'html', function(err, response) {
             instance.showAssetBrowser(err, response);
         });

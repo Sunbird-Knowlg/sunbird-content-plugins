@@ -84,7 +84,20 @@
         "help": {
             "src": "editor/help.md",
             "dataType": "text"
-        } 
+        },
+        "init-data": {
+            "__text": "",
+            "x": 10,
+            "y": 20,
+            "fontFamily": "Arial",
+            "fontSize": 18,
+            "minWidth": 20,
+            "w": 35,
+            "maxWidth": 500,
+            "fill": "#000000",
+            "fontStyle": "normal",
+            "fontWeight": "normal"
+        }
     }
 
 }
