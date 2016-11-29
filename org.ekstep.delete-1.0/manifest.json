@@ -13,7 +13,7 @@
 			"type": "icon",
 			"toolTip": "Delete",
 			"title": "Delete",
-			"iconClass": "fa fa-lg fa-trash-o fa-inverse menu-icon",
+			"iconClass": "trash outline icon",
 			"state": "HIDE",
 			"onclick": {
 				"id": "delete:invoke",

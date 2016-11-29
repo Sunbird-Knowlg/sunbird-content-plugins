@@ -17,7 +17,7 @@
             "type": "icon",
             "toolTip": "Add Image",
             "title": "Image",
-            "iconClass": "fa fa-lg fa-picture-o fa-inverse menu-icon",
+            "iconClass": "image icon",
             "onclick": {
                 "id": "org.ekstep.image:assetbrowser:open"
             }

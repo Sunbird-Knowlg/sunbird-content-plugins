@@ -13,7 +13,7 @@
 			"type": "icon",
 			"toolTip": "Re-order",
 			"title": "Reorder",
-			"iconClass": "fa fa-sort fa-lg fa-inverse menu-icon",
+			"iconClass": "sort icon",
 			"state": "HIDE",
 			"submenu": [{
 				"id": "sendtofront",

@@ -14,7 +14,7 @@
                 "type": "icon",
                 "toolTip": "copy",
                 "title": "copy",
-                "iconClass": "fa fa-lg fa-files-o fa-inverse menu-icon",
+                "iconClass": "copy icon",
                 "state": "HIDE",
                 "onclick": {
                     "id": "copy:copyItem",
@@ -26,7 +26,7 @@
                 "type": "icon",
                 "toolTip": "paste",
                 "title": "paste",
-                "iconClass": "fa fa-lg fa fa-clipboard fa-inverse menu-icon",
+                "iconClass": "paste icon",
                 "state": "HIDE",
                 "onclick": {
                     "id": "paste:pasteItem",

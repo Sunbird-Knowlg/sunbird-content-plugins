@@ -18,7 +18,7 @@
             "type": "icon",
             "toolTip": "Add Text",
             "title": "Text",
-            "iconClass": "fa fa-lg fa-text-width fa-inverse menu-icon",
+            "iconClass": "text width icon",
             "onclick": {
                 "id": "org.ekstep.text:create",
                 "data": {
