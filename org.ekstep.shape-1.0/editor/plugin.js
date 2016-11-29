@@ -19,7 +19,6 @@ EkstepEditor.basePlugin.extend({
      */
     newInstance: function() {
         var props = this.convertToFabric(this.attributes);
-        console.log('props', props);
         switch (this.attributes.type) {
             case 'ellipse':
                 props.rx = props.w / 2;

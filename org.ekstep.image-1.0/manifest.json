@@ -8,6 +8,9 @@
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
+        "dependencies": [
+            {"type": "plugin", "plugin": "org.ekstep.assetbrowser", "ver": "1.0"}
+        ],
         "menu": [{
             "id": "image",
             "category": "main",
