@@ -1,34 +1,94 @@
+/**
+ * Text
+ * The purpose of {@link TextPlugin} is used to create or modifiy the text in editor
+ *
+ * @class Text
+ * @extends EkstepEditor.basePlugin
+ *
+ * @author Harishkumar Gangula <harishg@ilimi.in>
+ */
 EkstepEditor.basePlugin.extend({
+    /**
+     * This expains the type of the plugin 
+     * @member {String} type
+     * @memberof Text
+     */
     type: "text",
+    /**
+     * Magic Number is used to calculate the from and to ECML conversion 
+     * @member {Number} magicNumber
+     * @memberof Text
+     */
     magicNumber: 1920,
+    /**
+     * Editor Width is used to calculate the from and to ECML conversion 
+     * @member {Number} editorWidth
+     * @memberof Text
+     */
     editorWidth: 720,
+    /**
+     * The events are registred which are used which are used to add or remove fabric events and other custom events
+     * @memberof Text
+     */
     initialize: function() {
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
         EkstepEditorAPI.addEventListener("stage:unselect", this.stageUnselect, this);
     },
+    /**
+     * This method used to create the text fabric object and assigns it to editor of the instance
+     * convertToFabric is used to convert attributes to fabric properties 
+     * It shows the text editor popup to enter text to add it to canvas editor fabric object
+     * @memberof Text
+     */
     newInstance: function() {
         var props = this.convertToFabric(this.attributes);
         delete props.__text;
         this.editorObj = new fabric.ITextbox(this.attributes.__text, props);
-        if(this.attributes.__text == '') {
+        if (this.attributes.__text == '') {
             textEditor.showEditor(this.id);
         }
     },
+    /**
+     * This method overridden from Ekstepeditor.basePlugin and here we double click event is added
+     * @memberof Text
+     */
     selected: function(instance) {
         fabric.util.addListener(fabric.document, 'dblclick', this.dblClickHandler);
     },
+    /**
+     * This method overridden from Ekstepeditor.basePlugin and here we double click event is removed
+     * @memberof Text
+     */
     deselected: function(instance, options, event) {
         fabric.util.removeListener(fabric.document, 'dblclick', this.dblClickHandler);
     },
+    /**
+     * This method is called when the object:unselected event is fired
+     * It will remove the double click event for the canvas
+     * @memberof Text
+     */
     objectUnselected: function(event, data) {
         fabric.util.removeListener(fabric.document, 'dblclick', this.dblClickHandler);
     },
+    /**
+     * This method is callback for double click event which will call the textEditor to show the ediotor to add or modify text.
+     * @memberof Text
+     */
     dblClickHandler: function() {
         textEditor.showEditor(EkstepEditorAPI.getEditorObject().id);
     },
+    /**
+     * This method is called when the stage:unselect event is fired,
+     * It will hide the texteditor
+     * @memberof Text
+     */
     stageUnselect: function(data) {
         textEditor.hide();
     },
+    /**
+     * This method overridden from Ekstepeditor.basePlugin and this will provide attributes to generate content for Genie
+     * @memberof Text
+     */
     getAttributes: function() {
         var attributes = _.omit(_.clone(this.attributes), ['top', 'left', 'width', 'height', 'fontFamily', 'fontfamily', 'fontSize', 'fontstyle', 'fontweight', 'scaleX', 'scaleY']);
         attributes.font = this.editorObj.get('fontFamily');
@@ -39,6 +99,11 @@ EkstepEditor.basePlugin.extend({
         attributes.weight = (fontWeight + ' ' + fontStyle).trim();
         return attributes;
     },
+    /**
+     * This method overridden from Ekstepeditor.basePlugin and it will be called on change of config plugin,
+     * <br/>It will update the fontweight, fontstyle, fontfamily,fontsize and color of the plugin
+     * @memberof Text
+     */
     onConfigChange: function(key, value) {
         switch (key) {
             case "fontweight":
@@ -66,12 +131,20 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.render();
         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
     },
+    /**
+     * This method overridden from Ekstepeditor.basePlugin and it will provide the config of this plugin
+     * @memberof Text
+     */
     getConfig: function() {
         var config = { color: this.attributes.color || this.attributes.fill, fontfamily: this.attributes.fontFamily, fontsize: this.attributes.fontSize }
         config.fontweight = this.attributes.fontweight || false;
         config.fontstyle = this.attributes.fontstyle || false;
         return config;
     },
+    /**
+     * This method overridden from Ekstepeditor.basePlugin and it will provide the properties of this plugin
+     * @memberof Text
+     */
     getProperties: function() {
         var props = _.omitBy(_.clone(this.attributes), _.isObject);
         props = _.omitBy(props, _.isNaN);
@@ -79,6 +152,13 @@ EkstepEditor.basePlugin.extend({
         props.text = this.editorObj.text;
         return props;
     },
+    /**
+     * This method is used to convert font size when we are doing from or to conversion based on the flag 
+     * @memberof Text
+     * @param {Number} initFontSize  This is font size need to be converted
+     * @param {Boolean} The flag  It provides the flag on conversion to ecml or from ecml with values false, true 
+     * @return {Number} fontsize The fontsize is converted font size
+     */
     updateFontSize: function(initFontSize, flag) {
         var fontsize = undefined;
         if (flag) { // from ECML conversion
@@ -93,6 +173,14 @@ EkstepEditor.basePlugin.extend({
         }
         return fontsize;
     },
+    /**
+     * This method overridden from Ekstepeditor.basePlugin 
+     * <br/>It is used convert data to fabric elements before creating the editor Object
+     * <br/>Here font weight , style and size to be converted to fabric 
+     * @param {Object} data This data provided by either api or on creation of new instance
+     * @return {Object} retData retData is fabric form of data used to create fabric text object
+     * @memberof Text
+     */
     convertToFabric: function(data) {
         var retData = _.clone(data);
         if (data.x) retData.left = data.x;
@@ -108,7 +196,7 @@ EkstepEditor.basePlugin.extend({
         if (data.weight && _.includes(data.weight, 'italic')) {
             retData.fontStyle = "italic";
             data.fontstyle = true;
-        } else {data.fontstyle = false;}
+        } else { data.fontstyle = false; }
         if (data.font) {
             retData.fontFamily = data.font;
             data.fontFamily = data.font

@@ -21,7 +21,7 @@
             "onclick": {
                 "id": "org.ekstep.hotspot:create",
                 "data": {
-                    "type": "rect",
+                    "type": "roundrect",
                     "y": 20,
                     "x": 20,
                     "fill": "rgb(255,0,0)",
