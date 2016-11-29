@@ -17,6 +17,7 @@
             "toolTip": "Add scribblepad",
             "title": "scribblepad",
             "iconImage": "assets/scribblepad.png",
+            "iconClass": "at-inverted",
             "onclick": {
                 "id": "org.ekstep.scribblepad:create",
                 "data": {
