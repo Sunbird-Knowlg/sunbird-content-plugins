@@ -16,7 +16,7 @@ EkstepEditor.basePlugin.extend({
      */
     newInstance: function() {
         var props = this.convertToFabric(this.attributes);
-        if (this.attributes.type === 'rect') {
+        if (this.attributes.type === 'roundrect') {
             this.editorObj = new fabric.Rect(props);
         }
     },
