@@ -1,0 +1,60 @@
+{
+    "id": "com.example.composite-text-image-shape",
+    "ver": "3.0",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            {"type": "plugin", "plugin": "org.ekstep.text", "ver": "1.0"},
+            {"type": "plugin", "plugin": "org.ekstep.shape", "ver": "1.0"},
+            {"type": "plugin", "plugin": "org.ekstep.image", "ver": "1.0"}
+        ],
+        "init-data": {
+            "x": 13,
+            "y": 13,
+            "w": 70,
+            "h": 70,
+            "data": {
+                "text": {
+                    "__text": "Shape with Image",
+                    "x": 37,
+                    "y": 75,
+                    "w": 30
+                },
+                "shape": {
+                    "type": "rect",
+                    "x": 15,
+                    "y": 15,
+                    "w": 30,
+                    "h": 50
+                },
+                "image": {
+                    "assetMedia": {
+                        "id": "com.example.composite-text-image-shape:image",
+                        "src": "assets/blank_img.png",
+                        "type": "image"
+                    },
+                    "asset": "com.example.composite-text-image-shape:image",
+                    "x": 50,
+                    "y": 15,
+                    "w": 30,
+                    "h": 50
+                }
+            },
+            "config": {
+                "text": {
+                    "fontFamily": "Arial",
+                    "fontSize": "22"
+                },
+                "shape": {
+                    "color": "rgb(0,255,0)"
+                },
+                "invisibleShape": {
+                    "color": "rgb(255,255,255)"
+                }
+            }
+        }
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    }
+}
