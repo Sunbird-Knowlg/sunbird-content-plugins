@@ -21,7 +21,7 @@
 				"toolTip": "Send to front",
 				"title": "Bring Front",
 				"iconImage": "assets/bring-front.png",
-				"iconClass": "at-inverted",
+				"iconClass": "",
 				"onclick": {
 					"id": "reorder:sendtofront",
 					"data": {}
@@ -32,7 +32,7 @@
 				"toolTip": "Send to back",
 				"title": "Send Back",
 				"iconImage": "assets/send-back.png",
-				"iconClass": "at-inverted",
+				"iconClass": "",
 				"onclick": {
 					"id": "reorder:sendtoback",
 					"data": {}
