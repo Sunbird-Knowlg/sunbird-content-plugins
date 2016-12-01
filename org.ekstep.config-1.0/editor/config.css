@@ -1,17 +1,19 @@
 /*css */
 
-#pluginProperties,
-#pluginHelp {
-    max-height: 400px;
-    overflow-y: auto;
-}
-
 .at.config.properties.content {
     background-color: #3f4d9c !important;
 }
+
 .at.config.properties.header {
     color: #FFF !important;
 }
-.hide{
-  display: none;
+
+.hide {
+    display: none;
+}
+
+.config-toolbar-content {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
 }

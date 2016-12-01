@@ -101,13 +101,6 @@ EkstepEditor.basePlugin.extend({
      */
     showConfig: function(event, data) {
         var instance = this;
-        var selectedPluginObj = EkstepEditorAPI.getCurrentObject().editorObj;
-        EkstepEditor.jQuery("#plugin-toolbar-container").show();
-        EkstepEditor.jQuery('#plugin-toolbar-container').offset({
-            top: (this.canvasOffset.top + selectedPluginObj.top),
-            left: (this.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() + this.margin.left)
-        });
-
         this.pluginConfigManifest = _.clone(EkstepEditorAPI.getCurrentObject().getPluginConfig());
         this.configData = _.clone(EkstepEditorAPI.getCurrentObject().getConfig());
         if (_.isUndefined(this.pluginConfigManifest)) {
@@ -202,7 +195,6 @@ EkstepEditor.basePlugin.extend({
      */
     showHelp: function(event, data) {
         var instance = this;
-        EkstepEditor.jQuery("#plugin-toolbar-container").show();
         EkstepEditorAPI.getCurrentObject().getHelp(function(helpText) {
             EkstepEditor.jQuery("#pluginHelp").html(micromarkdown.parse(helpText));
             instance.animateToolbar("pluginHelpContent");
@@ -216,7 +208,6 @@ EkstepEditor.basePlugin.extend({
      * @memberof Config
      */
     showProperties: function(event, data) {
-        EkstepEditor.jQuery("#plugin-toolbar-container").show();
         var properties = EkstepEditorAPI.getCurrentObject().getProperties();
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
@@ -247,24 +238,22 @@ EkstepEditor.basePlugin.extend({
         }
     },
     animateToolbar: function(id) {
-        var instance = this;
+        var selectedPluginObj = EkstepEditorAPI.getCurrentObject().editorObj;
+        EkstepEditor.jQuery("#plugin-toolbar-container").show();
+        EkstepEditor.jQuery('#plugin-toolbar-container').offset({
+            top: (this.canvasOffset.top + selectedPluginObj.top),
+            left: (this.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() + this.margin.left)
+        });
         if ($("#" + id).hasClass('active')) return;
         $('#pluginToolbarShape')
-        .shape('flip right')
-        .shape('set duration', 500)
-        .shape('onChange', function () {
-            //console.log($("#" + id).hasClass('active'))
-        });
-        
-        // $("#pluginToolbarShape").on("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function() {
-        //     setTimeout(function() {
-        //         if (!$("#" + id).hasClass('active')) {
-        //             instance.animateToolbar(id);
-        //         }
-        //     }, 100);
-
-        // });
-
+            .shape({
+                onChange: function() {
+                    $("#pluginToolbarShape .side").each(function() {
+                        $(this).removeClass('active');
+                    })
+                    $("#" + id).addClass('active');
+                }
+            }).shape('flip right');
     }
 });
 //# sourceURL=configplugin.js
