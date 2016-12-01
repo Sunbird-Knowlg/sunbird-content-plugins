@@ -80,19 +80,17 @@ EkstepEditor.basePlugin.extend({
     *   @memberof assetBrowser
     */
     showAssetBrowser: function(err, data) {
-        EkstepEditorAPI.getService('popup').open({ template: data, size: 'lg', resolve: { data: { instance: this } } }, this.browserController);
+        EkstepEditorAPI.getService('popup').open({ template: data, data: { instance: this } }, this.browserController);
     },
     /**
     *   @memberof assetBrowser
     *   angular controller for popup service as callback
     *   @param ctrl {Object} popupController object
-    *   @param scope {Object} popupController scope object
-    *   @param $uibModalInstance {Object} ui-bootstrap modal instance
-    *   @param resolvedData {Object} data passed to uib config
-    *   @param $sce {Object} strict contextual escaping service
+    *   @param scope {Object} popupController scope object    
+    *   @param resolvedData {Object} data passed to popup config    
     *   @memberof assetBrowser
     */
-    browserController: function(ctrl, scope, $uibModalInstance, resolvedData, $sce) {
+    browserController: function(ctrl, $injector, resolvedData) {
         var audiodata = {},
             imagedata = { "x": 20, "y": 20, "w": 50, "h": 50 },
             searchText,
@@ -103,7 +101,7 @@ EkstepEditor.basePlugin.extend({
             imageTabSelected = true;
             //mainScope = EkstepEditorAPI.getAngularScope();
 
-
+        var $sce = $injector.get('$sce');
         ctrl.selected_images = {};
         ctrl.selected_audios = {};
         ctrl.selectBtnDisable = true;
@@ -173,7 +171,7 @@ EkstepEditor.basePlugin.extend({
         }
 
         ctrl.cancel = function() {
-            $uibModalInstance.dismiss('cancel');
+            
         };
 
         ctrl.ImageSource = function(event, $index) {
