@@ -17,3 +17,6 @@
     overflow-y: auto;
     overflow-x: hidden;
 }
+.toolbarOptions{
+  z-index:120;
+}
