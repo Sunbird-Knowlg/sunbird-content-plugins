@@ -43,17 +43,19 @@
             "config": [{
                 "propertyName": "fontweight",
                 "title": "Font Weight",
+                "toolTip": "Bold",
                 "description": "Select font size for the text",
                 "dataType": "icon",
-                "iconClass": "fa fa-bold fa-lg",
+                "iconClass": "bold icon",
                 "required": true,
                 "defaultValue": false
             }, {
                 "propertyName": "fontstyle",
                 "title": "Font Style",
+                "toolTip": "Italic",
                 "description": "Select font style for the text",
                 "dataType": "icon",
-                "iconClass": "fa fa-italic fa-lg",
+                "iconClass": "italic icon",
                 "required": true,
                 "defaultValue": false
             }]

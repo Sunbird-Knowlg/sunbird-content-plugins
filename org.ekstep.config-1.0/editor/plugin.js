@@ -87,6 +87,7 @@ EkstepEditor.basePlugin.extend({
         if (this.toolbarObj && this.selectedPluginId === data.id)
             this.toolbarObj.hide();
         EkstepEditor.jQuery("#plugin-toolbar-container").hide();
+
     },
     /**
      *  Show configuration
@@ -103,9 +104,10 @@ EkstepEditor.basePlugin.extend({
         var selectedPluginObj = EkstepEditorAPI.getCurrentObject().editorObj;
         EkstepEditor.jQuery("#plugin-toolbar-container").show();
         EkstepEditor.jQuery('#plugin-toolbar-container').offset({
-            top: (this.canvasOffset.top + this.margin.top + selectedPluginObj.top),
+            top: (this.canvasOffset.top + selectedPluginObj.top),
             left: (this.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() + this.margin.left)
         });
+
         this.pluginConfigManifest = _.clone(EkstepEditorAPI.getCurrentObject().getPluginConfig());
         this.configData = _.clone(EkstepEditorAPI.getCurrentObject().getConfig());
         if (_.isUndefined(this.pluginConfigManifest)) {
@@ -114,9 +116,6 @@ EkstepEditor.basePlugin.extend({
         }
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
-            angScope.showPluginConfig = true;
-            angScope.showPluginHelp = false;
-            angScope.showPluginProperty = false;
             angScope.pluginConfig = instance.pluginConfigManifest;
             angScope.configData = instance.configData;
             angScope.$watch('configData', function(newValue, oldValue) {
@@ -127,6 +126,16 @@ EkstepEditor.basePlugin.extend({
         _.forEach(instance.pluginConfigManifest, function(config) {
             instance.invoke(config, instance.configData)
         })
+
+        /*
+        semantic ui apply
+         */
+        setTimeout(function() {
+            $(".ui.dropdown").each(function() {
+                $(this).dropdown();
+            })
+        }, 500);
+        this.animateToolbar("pluginConfig");
     },
     /**
      * This is called on stage unselect event fired 
@@ -192,17 +201,12 @@ EkstepEditor.basePlugin.extend({
      *  @memberof Config
      */
     showHelp: function(event, data) {
+        var instance = this;
         EkstepEditor.jQuery("#plugin-toolbar-container").show();
-        var angScope = EkstepEditorAPI.getAngularScope();
-        angScope.safeApply(function() {
-            angScope.showPluginConfig = false;
-            angScope.showPluginHelp = true;
-            angScope.showPluginProperty = false;
-        });
         EkstepEditorAPI.getCurrentObject().getHelp(function(helpText) {
             EkstepEditor.jQuery("#pluginHelp").html(micromarkdown.parse(helpText));
+            instance.animateToolbar("pluginHelpContent");
         });
-
     },
     /**
      * This method called when config:properties event is fired  
@@ -216,11 +220,9 @@ EkstepEditor.basePlugin.extend({
         var properties = EkstepEditorAPI.getCurrentObject().getProperties();
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
-            angScope.showPluginConfig = false;
-            angScope.showPluginHelp = false;
-            angScope.showPluginProperty = true;
             angScope.pluginProperties = properties;
         });
+        this.animateToolbar("pluginProperties");
     },
     /**
      * * This method called when object:moving or object:scaling events is fired 
@@ -243,6 +245,26 @@ EkstepEditor.basePlugin.extend({
                 left: (this.canvasOffset.left + plugin.editorObj.left + plugin.editorObj.getWidth() + this.margin.left)
             });
         }
+    },
+    animateToolbar: function(id) {
+        var instance = this;
+        if ($("#" + id).hasClass('active')) return;
+        $('#pluginToolbarShape')
+        .shape('flip right')
+        .shape('set duration', 500)
+        .shape('onChange', function () {
+            //console.log($("#" + id).hasClass('active'))
+        });
+        
+        // $("#pluginToolbarShape").on("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function() {
+        //     setTimeout(function() {
+        //         if (!$("#" + id).hasClass('active')) {
+        //             instance.animateToolbar(id);
+        //         }
+        //     }, 100);
+
+        // });
+
     }
 });
 //# sourceURL=configplugin.js

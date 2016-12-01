@@ -29,6 +29,7 @@ EkstepEditor.basePlugin.extend({
                 this.manifest.editor.config.push({
                     "propertyName": "radius",
                     "title": "Radius",
+                    "placeholder":"Radius",
                     "description": "Input radius for the rounded rectangle",
                     "dataType": "input",
                     "valueType": "number",
