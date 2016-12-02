@@ -105,7 +105,7 @@ var textEditor = (function() {
         } else {
             $cancelBtn.show();
         }
-        setTimeout(function(){EkstepEditor.jQuery("#toolbarOptions").hide();},200);
+        setTimeout(function(){EkstepEditor.jQuery("#toolbarOptions").hide();},600);
     }
 
     function hideEditor() {

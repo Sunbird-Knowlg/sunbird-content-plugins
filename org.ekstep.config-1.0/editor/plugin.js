@@ -45,8 +45,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("config:help", this.showHelp, this);
         EkstepEditorAPI.addEventListener("config:properties", this.showProperties, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:colorpicker", this.showColorPicker, this);
-        EkstepEditorAPI.addEventListener("object:moving", this.objectModifying, this);
-        EkstepEditorAPI.addEventListener("object:scaling", this.objectModifying, this);
+        EkstepEditorAPI.addEventListener("object:modified", this.objectModified, this);
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
             angScope.contextToolbar = instance.manifest.editor.data.toolbars;
@@ -63,17 +62,15 @@ EkstepEditor.basePlugin.extend({
     objectSelected: function(event, data) {
         this.selectedPluginId = data.id;
         var plugin = EkstepEditorAPI.getPluginInstance(data.id);
-        EkstepEditor.jQuery('#toolbarOptions').show();
         EkstepEditor.jQuery('#toolbarOptions').offset({
             top: (this.canvasOffset.top + plugin.editorObj.top - this.margin.top),
             left: (this.canvasOffset.left + plugin.editorObj.left - this.margin.left)
         });
+        setTimeout(function() { EkstepEditor.jQuery('#toolbarOptions').show(); }, 500);
     },
     objectUnselected: function(event, data) {
-        if (this.selectedPluginId === data.id)
-            EkstepEditor.jQuery('#toolbarOptions').hide();
+        EkstepEditor.jQuery('#toolbarOptions').hide();
         EkstepEditor.jQuery("#plugin-toolbar-container").hide();
-
     },
     /**
      *  Show configuration
@@ -207,19 +204,23 @@ EkstepEditor.basePlugin.extend({
      * @param  data {Object}  
      * @memberof Config   
      */
-    objectModifying: function(event, data) {
+    objectModified: function(event, data) {
         if (data && data.id) {
             this.selectedPlugin = data.id;
             var plugin = EkstepEditorAPI.getPluginInstance(data.id);
-            EkstepEditor.jQuery('#toolbarOptions').show();
-            EkstepEditor.jQuery('#toolbarOptions').offset({
-                top: (this.canvasOffset.top + plugin.editorObj.top - this.margin.top),
-                left: (this.canvasOffset.left + plugin.editorObj.left - this.margin.left)
-            });
-            EkstepEditor.jQuery('#plugin-toolbar-container').offset({
-                top: (this.canvasOffset.top + plugin.editorObj.top),
-                left: (this.canvasOffset.left + plugin.editorObj.left + plugin.editorObj.getWidth() + this.margin.left+15)
-            });
+            if (!_.isUndefined(plugin)) {
+                EkstepEditor.jQuery('#toolbarOptions').show();
+                EkstepEditor.jQuery('#toolbarOptions').offset({
+                    top: (this.canvasOffset.top + plugin.editorObj.top - this.margin.top),
+                    left: (this.canvasOffset.left + plugin.editorObj.left - this.margin.left)
+                });
+                EkstepEditor.jQuery('#plugin-toolbar-container').offset({
+                    top: (this.canvasOffset.top + plugin.editorObj.top),
+                    left: (this.canvasOffset.left + plugin.editorObj.left + plugin.editorObj.getWidth() + this.margin.left + 15)
+                });
+            } else {
+                EkstepEditor.jQuery('#toolbarOptions').hide();
+            }
         }
     },
     animateToolbar: function(id) {
@@ -227,7 +228,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditor.jQuery("#plugin-toolbar-container").show();
         EkstepEditor.jQuery('#plugin-toolbar-container').offset({
             top: (this.canvasOffset.top + selectedPluginObj.top),
-            left: (this.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() + this.margin.left+15)
+            left: (this.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() + this.margin.left + 15)
         });
         if (EkstepEditor.jQuery("#" + id).hasClass('active')) return;
         EkstepEditor.jQuery('#pluginToolbarShape')
