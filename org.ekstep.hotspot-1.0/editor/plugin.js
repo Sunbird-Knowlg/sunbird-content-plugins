@@ -15,6 +15,7 @@ EkstepEditor.basePlugin.extend({
      *   creates new plugin instance with Hotspot shape
      */
     newInstance: function() {
+        this.attributes.opacity = _.isUndefined(this.attributes.opacity) ? 0.4 : this.attributes.opacity;
         var props = this.convertToFabric(this.attributes);
         if (this.attributes.type === 'roundrect') {
             this.editorObj = new fabric.Rect(props);
