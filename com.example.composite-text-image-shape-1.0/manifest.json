@@ -1,6 +1,6 @@
 {
     "id": "com.example.composite-text-image-shape",
-    "ver": "3.0",
+    "ver": "1.0",
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [

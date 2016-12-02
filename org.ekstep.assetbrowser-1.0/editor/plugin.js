@@ -93,8 +93,7 @@ EkstepEditor.basePlugin.extend({
     *   @memberof assetBrowser
     */
     browserController: function(ctrl, scope, $uibModalInstance, resolvedData, $sce) {
-        var audiodata = {},
-            imagedata = { "x": 20, "y": 20, "w": 50, "h": 50 },
+        var audiodata = {}, imagedata = {},
             searchText,
             instance = resolvedData.instance,
             lastSelectedAudio,
