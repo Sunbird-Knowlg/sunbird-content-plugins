@@ -20,3 +20,9 @@
 .toolbarOptions{
   z-index:120;
 }
+.plugin-toolbar-container{
+  display: inline-block;
+}
+.plugin-toolbar-draggable{
+  cursor: move;
+}

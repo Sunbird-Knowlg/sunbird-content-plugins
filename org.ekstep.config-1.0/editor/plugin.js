@@ -60,13 +60,14 @@ EkstepEditor.basePlugin.extend({
      * @memberof Config
      */
     objectSelected: function(event, data) {
+        var instance = this;
         this.selectedPluginId = data.id;
         var plugin = EkstepEditorAPI.getPluginInstance(data.id);
         EkstepEditor.jQuery('#toolbarOptions').offset({
-            top: (this.canvasOffset.top + plugin.editorObj.top - this.margin.top),
-            left: (this.canvasOffset.left + plugin.editorObj.left - this.margin.left)
+            top: (instance.canvasOffset.top + plugin.editorObj.top - instance.margin.top),
+            left: (instance.canvasOffset.left + plugin.editorObj.left - instance.margin.left)
         });
-        setTimeout(function() { EkstepEditor.jQuery('#toolbarOptions').show(); }, 500);
+        EkstepEditor.jQuery('#toolbarOptions').show();
     },
     objectUnselected: function(event, data) {
         EkstepEditor.jQuery('#toolbarOptions').hide();
@@ -220,6 +221,7 @@ EkstepEditor.basePlugin.extend({
                 });
             } else {
                 EkstepEditor.jQuery('#toolbarOptions').hide();
+                EkstepEditor.jQuery('#plugin-toolbar-container').hide();
             }
         }
     },
