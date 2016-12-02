@@ -39,7 +39,14 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.dispatchEvent('object:modified', { id: plugin.id });
     },
     setThumbnail: function() {
-        this.thumbnail = this.canvas.toDataURL('png');
+        /*
+        var thumbnailCanvas = document.getElementById("thumbnailCanvas");
+        var ctx = thumbnailCanvas.getContext("2d");
+        ctx.drawImage(this.canvas.getElement(), 0, 0, 160, 90);
+        this.thumbnail = thumbnailCanvas.toDataURL({format: 'jpeg', quality: 0.8});
+        */
+        this.thumbnail = this.canvas.toDataURL({format: 'jpeg', quality: 0.1});
+        
     },
     updateZIndex: function() {
         var instance = this;
