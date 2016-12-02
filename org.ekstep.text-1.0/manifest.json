@@ -37,6 +37,13 @@
             }
         }],
         "config": [{
+            "propertyName": "color",
+            "title": "Color",
+            "description": "Choose a color from the color picker",
+            "dataType": "colorpicker",
+            "required": true,
+            "defaultValue": "rgb(255,0,0)"
+        }, {
             "propertyName": "font",
             "dataType": "group",
             "description": "Choose fontweight and fontstyle",
@@ -59,13 +66,6 @@
                 "required": true,
                 "defaultValue": false
             }]
-        }, {
-            "propertyName": "color",
-            "title": "Color",
-            "description": "Choose a color from the color picker",
-            "dataType": "colorpicker",
-            "required": true,
-            "defaultValue": "rgb(255,0,0)"
         }, {
             "propertyName": "fontfamily",
             "title": "Font Family",
