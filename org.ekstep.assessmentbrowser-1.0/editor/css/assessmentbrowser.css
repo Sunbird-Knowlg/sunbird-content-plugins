@@ -88,6 +88,18 @@
     background: #E6E6E6;
 }
 
+.item-activity-container .create-question {
+    width: 310px;
+    text-align: center;
+    margin: 25px auto;
+    font-size: 18px;
+    color: #A7A7A7;
+}
+
+.item-activity-container .create-question.no-items {
+    margin: 0 auto;
+}
+
 .item-activity-container .activity-items-info {
     font-family: Helvetica;
     color: #757575;
