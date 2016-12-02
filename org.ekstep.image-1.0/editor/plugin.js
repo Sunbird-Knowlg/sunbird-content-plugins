@@ -31,7 +31,7 @@ EkstepEditor.basePlugin.extend({
         this.parent = undefined;
         var props = this.convertToFabric(this.attributes);
         var media = this.media[this.attributes.asset];
-        media.src = media.src.replace('https://ekstep-public.s3-ap-southeast-1.amazonaws.com/', 'https://dev.ekstep.in/assets/public/')
+        media.src = EkstepEditor.mediaManager.getMediaOriginURL(media.src);
         var imageURL = EkstepEditorAPI.globalContext.useProxyForURL ? "image/get/" + encodeURIComponent(media.src) : media.src;
         fabric.Image.fromURL(imageURL, function(img) {
             instance.editorObj = img;
