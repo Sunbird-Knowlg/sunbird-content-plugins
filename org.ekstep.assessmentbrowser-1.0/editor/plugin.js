@@ -14,24 +14,20 @@ EkstepEditor.basePlugin.extend({
     },
     showAssessmentBrowser: function(err, data) {
         var instance = this,
-            uibConfig;
+            popupConfig;
 
-        uibConfig = {
-            template: data,
-            resolve: {
-                data: { instance: instance }
-            }
+        popupConfig = {
+            template: data,            
+            data: { instance: instance }           
         };
 
-        EkstepEditorAPI.getService('popup').open(uibConfig, instance.controllerCallback);
+        EkstepEditorAPI.getService('popup').open(popupConfig, instance.controllerCallback);
     },
-    controllerCallback: function(ctrl, scope, $uibModalInstance, resolvedData) {
-        $('.modal').addClass('modal-editor');
+    controllerCallback: function(ctrl, scope, data) {
         $('.modal').addClass('item-activity');
-
         var itemIframe = EkstepEditor.jQuery('#itemIframe')[0],
             config = { "showStartPage": false, "showEndPage": false },
-            instance = resolvedData.instance;
+            instance = data.instance;
 
         ctrl.isFiltersShown = true;
         ctrl.isMyQuestions = false;
@@ -77,39 +73,7 @@ EkstepEditor.basePlugin.extend({
                             break;
                     }
                 });
-                EkstepEditorAPI.getAngularScope().safeApply();
-                var gradeoptions = {
-                    includeSelectAllOption: true,
-                    numberDisplayed: 1,
-                    onDropdownShow: function(event) {
-                        var dropdown = EkstepEditor.jQuery(event.target).find('.btn');
-                        var offset = dropdown.offset();
-                        EkstepEditor.jQuery(event.target).find('.dropdown-menu').css({
-                            "position": 'fixed',
-                            "left": '62.5%',
-                            "margin-top": '16%',
-                            "max-width": '13%'
-                        });
-                    }
-                };
-
-                var questiontypeoptions = {
-                    includeSelectAllOption: true,
-                    numberDisplayed: 1,
-                    onDropdownShow: function(event) {
-                        var dropdown = EkstepEditor.jQuery(event.target).find('.btn');
-                        var offset = dropdown.offset();
-                        EkstepEditor.jQuery(event.target).find('.dropdown-menu').css({
-                            "position": 'fixed',
-                            "left": '48%',
-                            "margin-top": '16%',
-                            "max-width": '13%'
-                        });
-                    }
-
-                };
-                EkstepEditor.jQuery("#grade").multiselect(gradeoptions);
-                EkstepEditor.jQuery("#questiontype").multiselect(questiontypeoptions);
+                $('.ui.dropdown').dropdown();
             }
         });
 
@@ -183,6 +147,8 @@ EkstepEditor.basePlugin.extend({
                     }
                     ctrl.totalItems = ctrl.items.length;
                     EkstepEditorAPI.getAngularScope().safeApply();
+                }else{
+                   ctrl.itemsLoading = false; 
                 }
             });
         };
@@ -275,7 +241,7 @@ EkstepEditor.basePlugin.extend({
         }
 
         ctrl.cancel = function() {
-            $uibModalInstance.dismiss('cancel');
+            //$uibModalInstance.dismiss('cancel');
         };
     }
 

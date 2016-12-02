@@ -10,9 +10,7 @@
         "main": "editor/plugin.js",
         "dependencies": [
             { "type": "css", "src": "editor/css/assessmentbrowser.css" },
-            { "type": "css", "src": "editor/css/bootstrap-multiselect.css" },
             { "type": "js", "src": "editor/assessmentbrowser_util.js" },
-            { "type": "js", "src": "editor/libs/bootstrap-multiselect.js" },
             { "type": "js", "src": "editor/libs/xml2json.js" }
         ]
     }

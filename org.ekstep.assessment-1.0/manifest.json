@@ -8,13 +8,16 @@
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
+        "dependencies": [
+            { "type": "plugin", "plugin": "org.ekstep.assessmentbrowser", "ver": "1.0" }
+        ],
         "menu": [{
             "id": "assessment",
             "category": "main",
             "type": "icon",
             "toolTip": "Add Assessment",
             "title": "Assessment",
-            "iconClass": "fa fa-question-circle fa-inverse menu-icon",
+            "iconClass": "browser icon",
             "onclick": {
                 "id": "org.ekstep.assessment:showPopup",
                 "data": {}
