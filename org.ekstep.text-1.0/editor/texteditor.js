@@ -23,29 +23,34 @@ var textEditor = (function() {
     function _removeObject() {
         EkstepEditorAPI.getPluginInstance(pluginId).editorObj.remove();
         EkstepEditorAPI.render();
-        EkstepEditorAPI.dispatchEvent('object:modified', {id: pluginId});
+        EkstepEditorAPI.dispatchEvent('object:modified', { id: pluginId });
     }
 
     function _commonBtnClickAction() {
         $cancelBtn.hide();
         $editor.hide();
         $doneBtn.hide();
-        EkstepEditor.jQuery(".tool-container").show();
+        EkstepEditor.jQuery("#toolbarOptions").show();
     }
 
     function showEditor(id) {
         pluginId = id;
         editorText = EkstepEditorAPI.getPluginInstance(pluginId).editorObj.text;
         if (!$editor.length) {
+            var form = EkstepEditor.jQuery("<div>", { class: "ui form", id: "textEditorContainer" });
+            form.css({
+                "top": EkstepEditor.jQuery("canvas").offset().top,
+                "left": EkstepEditor.jQuery("canvas").offset().left,
+                "position": "absolute"
+            });
+            var field = EkstepEditor.jQuery("<div>", { class: "field" });
+            form.appendTo("body");
+            field.appendTo(form)
             EkstepEditor.jQuery(document.createElement("textarea"))
                 .text(editorText)
-                .attr({ "id": "authoringTextEditor", "placeholder": "Add text here" })
-                .css({
-                    "top": EkstepEditor.jQuery("canvas").offset().top,
-                    "left": EkstepEditor.jQuery("canvas").offset().left,
-                    "position": "absolute"
-                })
-                .appendTo(EkstepEditor.jQuery("body"));
+                .attr({ "id": "authoringTextEditor", "placeholder": "Add text here", "rows": 12 })
+                .css({ "width": "30.5em" })
+                .appendTo(field);
             $editor = EkstepEditor.jQuery("#authoringTextEditor");
         } else {
             $editor.show().val(editorText);
@@ -55,10 +60,10 @@ var textEditor = (function() {
             EkstepEditor.jQuery(document.createElement("button"))
                 .attr("id", "authoringTextEditorBtn")
                 .text("Done")
-                .addClass("btn at-btn at-btn-ok")
+                .addClass("ui primary button")
                 .css({
-                    "top": $editor.offset().top + $editor.outerHeight() + 5,
-                    "left": $editor.offset().left + $editor.outerWidth() - 75,
+                    "top": $editor.offset().top + $editor.innerHeight() - 50,
+                    "left": $editor.offset().left+100,
                     "position": "absolute"
                 })
                 .insertAfter("#authoringTextEditor")
@@ -68,7 +73,7 @@ var textEditor = (function() {
                         EkstepEditorAPI.getPluginInstance(pluginId).editorObj.text = $editor.val();
                         EkstepEditorAPI.render();
                         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getPluginInstance(pluginId).editorObj });
-                        EkstepEditor.jQuery(".tool-container").show();
+                        EkstepEditor.jQuery("#toolbarOptions").show();
                     } else {
                         _removeObject();
                     }
@@ -83,10 +88,10 @@ var textEditor = (function() {
             EkstepEditor.jQuery(document.createElement("button"))
                 .attr("id", "authoringTextEditorCancel")
                 .text("Cancel")
-                .addClass("btn at-btn at-btn-lined")
+                .addClass("ui secondary button")
                 .css({
-                    "top": $editor.offset().top + $editor.outerHeight() + 5,
-                    "left": $editor.offset().left + $editor.outerWidth() - 165,
+                    "top": $editor.offset().top + $editor.innerHeight() - 50,
+                    "left": $editor.offset().left,
                     "position": "absolute"
                 })
                 .insertAfter("#authoringTextEditor")
@@ -100,13 +105,14 @@ var textEditor = (function() {
         } else {
             $cancelBtn.show();
         }
-        EkstepEditor.jQuery(".tool-container").hide();
+        setTimeout(function(){EkstepEditor.jQuery("#toolbarOptions").hide();},200);
     }
+
     function hideEditor() {
         $editor.val("").hide();
         $doneBtn.hide();
         $cancelBtn.hide();
-        EkstepEditor.jQuery(".tool-container").show();
+        EkstepEditor.jQuery("#toolbarOptions").show();
     }
     return {
         showEditor: showEditor,
