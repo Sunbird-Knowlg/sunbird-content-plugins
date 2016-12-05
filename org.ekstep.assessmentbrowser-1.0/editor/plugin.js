@@ -1,10 +1,45 @@
+/**
+ * 
+ * plugin to get assessments (Questions) from learning platform
+ * @class assessmentBrowser
+ * @extends EkstepEditor.basePlugin
+ * @author Kartheek Palla <kartheekp@ilimi.in>
+ * @fires assessment:addassessment to stage
+ * @listens org.ekstep.assessmentbrowser:show
+ */
+
 EkstepEditor.basePlugin.extend({
+    /**
+     * This expains the type of the plugin 
+     * @member {String} type
+     * @memberof assessment
+     */
     type: "assessmentbrowser",
+    /**
+     * Preview URL is used to append src to iframe
+     * @member {string} previewURL
+     * @memberof assessment
+     */
     previewURL: 'preview/preview.html?webview=true',
+    /**
+     *   @memberof callback {Funtion} callback
+     *   @memberof assessmentBrowser
+     */
     callback: function() {},
+    /**
+     *   registers events
+     *   @memberof assessmentBrowser
+     *
+     */
     initialize: function() {
         EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.loadHtml, this);
     },
+    /**        
+     *   load html template to show the popup
+     *   @param event {Object} event
+     *   @param callback {Function} callback to be fired when data is available.
+     *   @memberof assessmentBrowser
+     */
     loadHtml: function(event, callback) {
         var instance = this;
         this.callback = callback;
@@ -12,6 +47,12 @@ EkstepEditor.basePlugin.extend({
             instance.showAssessmentBrowser(err, response);
         });
     },
+    /**    
+    *   invokes popup service to show the popup window
+    *   @param err {Object} err when loading template async
+    *   @param data {String} template HTML 
+    *   @memberof assessmentBrowser
+    */
     showAssessmentBrowser: function(err, data) {
         var instance = this,
             uibConfig;
@@ -25,6 +66,14 @@ EkstepEditor.basePlugin.extend({
 
         EkstepEditorAPI.getService('popup').open(uibConfig, instance.controllerCallback);
     },
+    /**
+    *   angular controller for popup service as callback
+    *   @param ctrl {Object} popupController object
+    *   @param scope {Object} popupController scope object
+    *   @param $uibModalInstance {Object} ui-bootstrap modal instance
+    *   @param resolvedData {Object} data passed to uib config
+    *   @memberof assetBrowser
+    */
     controllerCallback: function(ctrl, scope, $uibModalInstance, resolvedData) {
         $('.modal').addClass('modal-editor');
         $('.modal').addClass('item-activity');
