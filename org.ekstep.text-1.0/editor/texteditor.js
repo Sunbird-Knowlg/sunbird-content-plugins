@@ -112,7 +112,6 @@ var textEditor = (function() {
         $editor.val("").hide();
         $doneBtn.hide();
         $cancelBtn.hide();
-        EkstepEditor.jQuery("#toolbarOptions").show();
     }
     return {
         showEditor: showEditor,
