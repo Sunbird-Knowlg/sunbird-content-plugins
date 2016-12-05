@@ -241,7 +241,7 @@ EkstepEditor.basePlugin.extend({
         }
 
         ctrl.cancel = function() {
-            //$uibModalInstance.dismiss('cancel');
+            $('.ui.modal').modal('hide');
         };
     }
 

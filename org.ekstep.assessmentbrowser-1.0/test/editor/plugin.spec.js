@@ -5,7 +5,8 @@ describe('Assessment-browser plugin', function() {
         MainCtrl,
         config,
         $uibModalInstance,
-        pluginObj;
+        pluginObj,
+        data;
 
     beforeEach(function() {
         jasmine.getJSONFixtures().fixturesPath = 'test';
@@ -37,7 +38,7 @@ describe('Assessment-browser plugin', function() {
         $uibModalInstance = {
             close: jasmine.createSpy('modalInstance.close'),
             dismiss: jasmine.createSpy('modalInstance.dismiss')
-        };
+        };  
     }));
 
     it('should open the popup window', function() {
@@ -60,9 +61,8 @@ describe('Assessment-browser plugin', function() {
 
     it('should call callback function', function(done) {
         EkstepEditorAPI.dispatchEvent("org.ekstep.assessmentbrowser:show", {});
-        spyOn(EkstepEditorAPI, "dispatchEvent");
-
-        pluginObj.controllerCallback($scope);
+        spyOn(EkstepEditorAPI, "dispatchEvent").and.callThrough();
+        pluginObj.controllerCallback($scope, '', { instance: this });
         //spyOn(pluginObj.__proto__, 'controllerCallback');
         setTimeout(function() {
             done();
@@ -71,7 +71,7 @@ describe('Assessment-browser plugin', function() {
     });
 
     it('should call addActivityOptions', function() {
-        pluginObj.controllerCallback($scope);
+        pluginObj.controllerCallback($scope, '', { instance: this });
         $scope.addActivityOptions();
         $scope.activity = { "question_title": "test", "language": "English", 'qlevel': "MEDIUM", "type": "mcq", "gradeLevel": ['Kindergarten', 'Grade 1', 'Grade 2', 'Grade 3', 'Grade 4', 'Grade 5'] };
         $scope.searchQuestions("myQuestions");
@@ -80,7 +80,7 @@ describe('Assessment-browser plugin', function() {
     });
 
     it('should call addItemActivity', function() {
-        pluginObj.controllerCallback($scope);
+        pluginObj.controllerCallback($scope, '', { instance: this });
         $scope.items = [{
             question: {
                 identifier: 'G5Q1',
@@ -113,7 +113,7 @@ describe('Assessment-browser plugin', function() {
     });
 
     it('should call preview', function() {
-        pluginObj.controllerCallback($scope);
+        pluginObj.controllerCallback($scope, '', { instance: this });
         $scope.items = [{
             question: {
                 identifier: 'domain_57876',

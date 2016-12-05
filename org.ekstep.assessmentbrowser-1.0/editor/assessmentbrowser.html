@@ -1,5 +1,6 @@
 <div class="ui modal large">
     <div class="content item-activity-container">
+        <div class="pull-right" ng-click="$ctrl.cancel()"><i class="delete icon"></i></div>
         <div ng-show="$ctrl.isFiltersShown">
             <div class="ui top tabular menu">
                 <a class="item" ng-class="{active: !$ctrl.isMyQuestions}" ng-click="$ctrl.searchQuestions()">All Questions</a>
