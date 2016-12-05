@@ -52,6 +52,7 @@ EkstepEditor.basePlugin.extend({
         });
 
         this.canvasOffset = EkstepEditor.jQuery('#canvas').offset();
+        EkstepEditor.jQuery("#plugin-toolbar-container").draggable()
     },
     /**
      * Place config toolbar on top of plugin, based on its location
