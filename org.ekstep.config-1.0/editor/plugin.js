@@ -63,15 +63,18 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         this.selectedPluginId = data.id;
         var plugin = EkstepEditorAPI.getPluginInstance(data.id);
-        EkstepEditor.jQuery('#toolbarOptions').offset({
+        EkstepEditor.jQuery('#toolbarOptions').css({
+            position: 'absolute',
+            display: 'block',
             top: (instance.canvasOffset.top + plugin.editorObj.top - instance.margin.top),
             left: (instance.canvasOffset.left + plugin.editorObj.left - instance.margin.left)
-        });
-        EkstepEditor.jQuery('#toolbarOptions').show();
+        })
     },
     objectUnselected: function(event, data) {
-        EkstepEditor.jQuery('#toolbarOptions').hide();
-        EkstepEditor.jQuery("#plugin-toolbar-container").hide();
+        if (data.id == this.selectedPluginId) {
+            EkstepEditor.jQuery('#toolbarOptions').hide();
+            EkstepEditor.jQuery("#plugin-toolbar-container").hide();
+        }
     },
     /**
      *  Show configuration
@@ -210,11 +213,10 @@ EkstepEditor.basePlugin.extend({
             this.selectedPlugin = data.id;
             var plugin = EkstepEditorAPI.getPluginInstance(data.id);
             if (!_.isUndefined(plugin)) {
-                EkstepEditor.jQuery('#toolbarOptions').show();
                 EkstepEditor.jQuery('#toolbarOptions').offset({
                     top: (this.canvasOffset.top + plugin.editorObj.top - this.margin.top),
                     left: (this.canvasOffset.left + plugin.editorObj.left - this.margin.left)
-                });
+                }).show();
                 EkstepEditor.jQuery('#plugin-toolbar-container').offset({
                     top: (this.canvasOffset.top + plugin.editorObj.top),
                     left: (this.canvasOffset.left + plugin.editorObj.left + plugin.editorObj.getWidth() + this.margin.left + 15)
