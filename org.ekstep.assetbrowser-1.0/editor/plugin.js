@@ -108,6 +108,7 @@ EkstepEditor.basePlugin.extend({
         ctrl.loadingImage = true;
         ctrl.loadingAudio = true;
 
+        $('.tabular.menu .item').tab();
 
         function imageAssetCb(err, res) {
             if (res && res.data.result.content) {
@@ -171,7 +172,7 @@ EkstepEditor.basePlugin.extend({
         }
 
         ctrl.cancel = function() {
-            
+            $('.ui.modal').modal('hide');
         };
 
         ctrl.ImageSource = function(event, $index) {

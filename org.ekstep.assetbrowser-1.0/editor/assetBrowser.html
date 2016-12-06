@@ -19,9 +19,8 @@
     margin: 12px;
 }
 
-.modal-footer {
-    padding: 10px;
-    text-align: right;
+.assetbrowser_footer {
+    margin: 8px;
 }
 
 .img-thumbnail {
@@ -35,10 +34,19 @@
     opacity: 0.4;
 }
 
-.scrollWindow {
+.imagescrollWindow {
     margin-top: 30px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 10px;
     overflow: scroll;
     height: 320px;
+}
+
+.audioscrollwindow {
+    height: 388px;    
+    overflow: scroll;
+    margin-top: 10px;
 }
 
 .fa-2x-custom {
@@ -96,52 +104,65 @@
     margin-top: 12px;
     color: white;
 }
+
+.assetbrowser_searchBox {
+    width: 100%;
+    margin-bottom: 20px;
+}
+#assetArea2 {
+ width: 20%;   
+}
 </style>
-<div class="ui modal">
-    <div class="imageBrowserContent">
-        <text style="font-size: 20px;"><i class="fa fa-list-ul" aria-hidden="true"></i> Add Items</text>
-        <uib-tabset active="active">
-            <uib-tab index="0" heading="Image" select="$ctrl.imageTab()">
-                <input id="searchTextImage" ng-keypress="$event.keyCode === 13 ? $ctrl.searchKeyPress('image') : null" type="text" style="width: 95%; float: left; font-size: 20px;" placeholder="search image..." value="" /> <span> <button id="searchButton" ng-click="$ctrl.searchKeyPress('image')" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button> </span>
-                <div id="assetWindow" class="col-xs-8 col-sm-8 col-md-8 col-lg-8 scrollWindow">
-                    <i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
-                    <div id="assetArea1" class="assetArea" ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
-                        <img class="img-thumbnail" data_id="{{image.identifier}}" src="{{image.downloadUrl}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected} " width="120" height="120">
-                        <i ng-class="$ctrl.selected_images[$index].selected ? 'fa fa-check-square-o fa-image-selected' : 'fa fa-check-square-o fa-2x-custom'" aria-hidden="true"></i>
-                    </div>
-                    <div uib-alert class="alert-warning" ng-show="$ctrl.imageList.length === 0" style="font-size: 30px; text-align: center;">
-                        <i class="fa fa-exclamation-triangle fa-1x" aria-hidden="true"></i> Image not found
-                    </div>
+<div class="ui modal" style="padding: 10px;">
+    <text style="font-size: 20px; margin-bottom: 10px;"><i class="fa fa-list-ul" aria-hidden="true"></i> Add Items</text>
+    <div class="ui top attached tabular menu">
+        <a class="active item" data-tab="first" ng-click="$ctrl.imageTab()">Image</a>
+        <a class="item" data-tab="second" ng-click="$ctrl.audioTab()">Audio</a>
+    </div>
+    <div class="ui active tab" data-tab="first" style="margin: 10px;">
+        <div class="ui icon input assetbrowser_searchBox" style="margin-bottom: 10px;">
+            <input type="text" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.searchKeyPress('image') : null">
+            <i class="inverted circular search link icon"></i>
+        </div>
+        <div class="ui grid" style="margin: 10px;">
+            <div id="assetWindow" class="four column row imagescrollWindow">
+                <i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
+                <div id="assetArea1" class="assetArea" ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
+                    <img class="img-thumbnail" data_id="{{image.identifier}}" src="{{image.downloadUrl}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected} " width="120" height="120">
+                    <i ng-class="$ctrl.selected_images[$index].selected ? 'fa fa-check-square-o fa-image-selected' : 'fa fa-check-square-o fa-2x-custom'" aria-hidden="true"></i>
                 </div>
-                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="padding: 25px; font-size: 25px;">
-                </div>
-            </uib-tab>
-            <uib-tab index="1" heading="Audio" select="$ctrl.audioTab()">
-                <input id="searchTextAudio" ng-keypress="$event.keyCode === 13 ? $ctrl.searchKeyPress('audio') : null" type="text" style="width: 95%; float: left; font-size: 20px;" placeholder="search audio..." value="" /> <span> <button id="searchButton" ng-click="$ctrl.searchKeyPress('audio')" class="btn btn-primary"><i class="fa fa-search" aria-hidden="true"></i></button> </span>
-                <div id="assetWindow" class="col-xs-8 col-sm-8 col-md-8 col-lg-8 scrollWindow">
-                    <i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingAudio" aria-hidden="true"></i>
-                    <div id="assetArea2" ng-show="$ctrl.audioList.length > 0" ng-repeat="audio in $ctrl.audioList track by $index">
-                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4 audioThumbnail">
-                            <div class="audioitem" ng-click="$ctrl.AudioSource(audio.downloadUrl,audio.identifier, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}">
-                                <audio style="max-width: 85%;" controls id="audio-{{$index}}" ng-src="{{audio.downloadUrl}}" width="120" height="120"></audio>
-                                <div class="audio-tag">{{audio.identifier}}</div>
-                                <div class="audioOverlay" ng-show="$ctrl.selected_audios[$index].selected">
-                                    <i class="fa fa-check-square-o fa-3x faAudioCheck" aria-hidden="true"></i>
-                                </div>
-                            </div>
+            </div>
+        </div>
+    </div>
+    <div class="ui tab" data-tab="second" style="margin: 10px;">
+        <div class="ui icon input assetbrowser_searchBox">
+            <input type="text" placeholder="Search template..." ng-keypress="$event.keyCode === 13 ? $ctrl.searchKeyPress('audio') : null">
+            <i class="inverted circular search link icon" ng-click="$ctrl.searchKeyPress('audio')"></i>
+        </div>
+        <i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingAudio" aria-hidden="true"></i>
+        <div class="ui grid audioscrollwindow">
+            <div id="assetArea2" ng-show="$ctrl.audioList.length > 0" ng-repeat="audio in $ctrl.audioList track by $index">
+                <div class="ten column row">
+                    <div class="audioitem" ng-click="$ctrl.AudioSource(audio.downloadUrl,audio.identifier, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}">
+                        <audio style="max-width: 85%;" controls id="audio-{{$index}}" ng-src="{{audio.downloadUrl}}" width="120" height="120"></audio>
+                        <div class="audio-tag">{{audio.identifier}}</div>
+                        <div class="audioOverlay" ng-show="$ctrl.selected_audios[$index].selected">
+                            <i class="fa fa-check-square-o fa-2x faAudioCheck" aria-hidden="true"></i>
                         </div>
                     </div>
-                    <div uib-alert class="alert-warning" ng-show="$ctrl.audioList.length === 0" style="font-size: 30px; text-align: center;">
-                        <i class="fa fa-exclamation-triangle fa-1x" aria-hidden="true"></i> Audio not found
-                    </div>
                 </div>
-                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="padding: 25px; font-size: 25px;">
+            </div>
+        </div>
+    </div>
+    <div class="ui clearing divider"></div>
+    <div class="assetbrowser_footer">
+        <div class="ui grid">
+            <div class="four column row">
+                <div class="right floated column">
+                    <button id="selectanduse" class="ui blue button" ng-disabled="$ctrl.selectBtnDisable" ng-click="$ctrl.select()" type="button">Select</button>
+                    <button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
                 </div>
-            </uib-tab>
-        </uib-tabset>
-        <div class="modal-footer">
-            <button id="selectanduse" class="btn btn-primary" ng-disabled="$ctrl.selectBtnDisable" ng-click="$ctrl.select()" type="button">Select</button>
-            <button id="closePopUp" class="btn btn-warning" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+            </div>
         </div>
     </div>
 </div>
