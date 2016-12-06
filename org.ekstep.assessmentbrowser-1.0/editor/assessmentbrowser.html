@@ -1,6 +1,10 @@
 <div class="ui modal large">
+    <div class="header headerCls">
+        <h4>Assessment Browser</h4>
+        <i class="close icon" ng-click="$ctrl.cancel()"></i>
+    </div>
     <div class="content item-activity-container">
-        <div class="pull-right" ng-click="$ctrl.cancel()"><i class="delete icon"></i></div>
+        <!-- <div class="pull-right" ng-click="$ctrl.cancel()"><i class="delete icon"></i></div> -->
         <div ng-show="$ctrl.isFiltersShown">
             <div class="ui top tabular menu">
                 <a class="item" ng-class="{active: !$ctrl.isMyQuestions}" ng-click="$ctrl.searchQuestions()">All Questions</a>
@@ -9,7 +13,7 @@
             <div class="filters-container">
                 <div class="ui form">
                     <div class="ui fluid action input">
-                        <input ng-disabled="isFilterAdded()" ng-enter="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions() )" ng-model="$ctrl.activity.question_title" placeholder="Search by question, or question title" type="text"></input>
+                        <input ng-disabled="isFilterAdded()" placeholder="Search by question, or question title" type="text"></input>
                         <div class="ui icon primary button" ng-click="$ctrl.searchQuestions()"><i class="search icon"></i></div>
                     </div>
                     <div class="five fields">
@@ -25,18 +29,24 @@
                             <label>Difficulty</label>
                             <select class="ui dropdown" ng-model="$ctrl.activity.qlevel" ng-options="level for level in $ctrl.assessment.qlevel" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
                                 <option value="">
-                                    All types
+                                    Difficulty
                                 </option>
                             </select>
                         </div>
                         <div class="field">
                             <label>Question Type</label>
                             <select multiple="" class="ui fluid dropdown" ng-model="$ctrl.activity.type" ng-options="type for type in $ctrl.assessment.type" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
+                            <option value="">
+                                    Type
+                                </option>
                             </select>
                         </div>
                         <div class="field">
                             <label>Grade</label>
                             <select multiple="" class="ui fluid dropdown" ng-model="$ctrl.activity.gradeLevel" ng-options="grade for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
+                            <option value="">
+                                    Grade
+                                </option>
                             </select>
                         </div>
                         <div class="field">
@@ -106,18 +116,16 @@
                     <div ng-show="$ctrl.isFiltersShown">
                         <div class="activity-items" ng-class="{'active': item.question.identifier == $ctrl.activePreviewItem}" ng-click="$ctrl.previewItem(item)" ng-repeat="item in $ctrl.items">
                             <div class="ui middle aligned animated list activity-questions">
-                                <div class="item">
-                                    <div class="content">
-                                        <div class="header">{{item.question.question }}</div>
-                                        <div class="description activity-items-info">{{ item.question.description }}</div>
-                                        <p class="bottom activity-items-info">
+                                <div class="content">
+                                        <div class="questionCls">{{item.question.question }}</div>
+                                        <div class="description">{{ item.question.description }}</div>
+                                        <p class="activity-items-info">
                                             <span>{{item.question.type}}</span>
                                             <span> | {{ item.question.qlevel}}</span>
                                             <span> | {{ item.question.title }}</span>
                                         </p>
                                     </div>
                                 </div>
-                            </div>
                             <div class="activity-actions">
                                 <a href="/index.php?option=com_ekcontent&view=itemform&tmpl=component&identifier={{item.question.identifier}}" ng-click="$event.stopPropagation()" ng-show="{{$ctrl.item.question.owner == userDetails.id}}" target="_blank">
                                     <i class="icons-edit-item"></i>

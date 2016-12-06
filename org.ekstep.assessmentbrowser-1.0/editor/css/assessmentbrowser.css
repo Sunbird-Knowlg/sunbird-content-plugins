@@ -76,7 +76,10 @@
     min-height: 84px;
     margin: 0;
     color: #4A8BCD;
-    border-bottom: 1px solid #cccccc;
+    border-radius: 8px;
+    border: 1px solid #cccccc;
+    margin-top: 4px;
+    padding: 5px;
 }
 
 .item-activity-container .activity-items h4 {
@@ -86,6 +89,9 @@
 
 .item-activity-container .activity-items.active {
     background: #E6E6E6;
+}
+.item-activity-container .activity-items:hover{
+    background-color: #f4f6f7 !important; 
 }
 
 .item-activity-container .create-question {
@@ -187,4 +193,34 @@
     font-weight: bold;
     z-index: 10;
 }
-
+/* ------   */
+.headerCls{
+    background-color: #3899ec !important;
+}
+.close{
+    color: #fff !important;
+}
+.headerCls h4{
+    font-weight: 400 !important;
+    font-size: 18px !important;
+    line-height: 18px !important;
+    color: #fff !important;
+    margin-bottom: -1px !important;
+}
+.item-activity-container .activity-items .questionCls {
+    font-weight: 300px !important;
+    color: #000;
+}
+.item-activity-container .activity-items .description {
+    font-weight: 200px !important;
+    font-family: Helvetica;
+    color: #757575;
+}
+.item-activity-container .activity-items .activity-items-info {
+    margin-top: 10px !important;
+    font-weight: 100px !important;
+}
+.headerCls .close{
+    float: right;
+    margin-top: -20px;
+}
