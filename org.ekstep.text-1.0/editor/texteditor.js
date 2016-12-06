@@ -17,7 +17,9 @@ var textEditor = (function() {
     var $editor = EkstepEditor.jQuery("#authoringTextEditor"),
         $doneBtn = EkstepEditor.jQuery("#authoringTextEditorBtn"),
         $cancelBtn = EkstepEditor.jQuery("#authoringTextEditorCancel"),
-        pluginId = undefined,
+        $buttonGrp = EkstepEditor.jQuery('<div>', { class: 'ui buttons', id: 'texteditorBtnGrp' });
+    $orBtn = EkstepEditor.jQuery('<div>', { class: 'or' });
+    pluginId = undefined,
         editorText = undefined;
 
     function _removeObject() {
@@ -27,6 +29,7 @@ var textEditor = (function() {
     }
 
     function _commonBtnClickAction() {
+        $buttonGrp.hide();
         $cancelBtn.hide();
         $editor.hide();
         $doneBtn.hide();
@@ -60,13 +63,8 @@ var textEditor = (function() {
             EkstepEditor.jQuery(document.createElement("button"))
                 .attr("id", "authoringTextEditorBtn")
                 .text("Done")
+                .insertAfter($editor)
                 .addClass("ui primary button")
-                .css({
-                    "top": $editor.offset().top + $editor.innerHeight() - 50,
-                    "left": $editor.offset().left+100,
-                    "position": "absolute"
-                })
-                .insertAfter("#authoringTextEditor")
                 .click(function() {
                     _commonBtnClickAction();
                     if ($editor.val().trim().length) {
@@ -80,6 +78,7 @@ var textEditor = (function() {
                     $editor.val("");
                 });
             $doneBtn = EkstepEditor.jQuery("#authoringTextEditorBtn")
+
         } else {
             $doneBtn.show();
         }
@@ -88,13 +87,8 @@ var textEditor = (function() {
             EkstepEditor.jQuery(document.createElement("button"))
                 .attr("id", "authoringTextEditorCancel")
                 .text("Cancel")
+                .insertAfter($editor)
                 .addClass("ui secondary button")
-                .css({
-                    "top": $editor.offset().top + $editor.innerHeight() - 50,
-                    "left": $editor.offset().left,
-                    "position": "absolute"
-                })
-                .insertAfter("#authoringTextEditor")
                 .click(function() {
                     _commonBtnClickAction();
                     if (!editorText.trim().length) {
@@ -102,14 +96,22 @@ var textEditor = (function() {
                     }
                 });
             $cancelBtn = EkstepEditor.jQuery("#authoringTextEditorCancel");
+
         } else {
             $cancelBtn.show();
         }
-        setTimeout(function(){EkstepEditor.jQuery("#toolbarOptions").hide();},600);
+        $buttonGrp.insertAfter($editor)
+        $buttonGrp.append($cancelBtn);
+        $buttonGrp.append($orBtn);
+        $buttonGrp.append($doneBtn);
+        $buttonGrp.css({position:'absolute', 'top': $editor.offset().top+$editor.height()/2+50,'left': $editor.offset().left+22})
+        $buttonGrp.show();
+        setTimeout(function() { EkstepEditor.jQuery("#toolbarOptions").hide(); }, 600);
     }
 
     function hideEditor() {
         $editor.val("").hide();
+        $buttonGrp.hide();
         $doneBtn.hide();
         $cancelBtn.hide();
     }
