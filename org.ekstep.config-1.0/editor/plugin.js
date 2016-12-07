@@ -52,7 +52,7 @@ EkstepEditor.basePlugin.extend({
         });
 
         this.canvasOffset = EkstepEditor.jQuery('#canvas').offset();
-        EkstepEditor.jQuery("#plugin-toolbar-container").draggable()
+        //EkstepEditor.jQuery("#plugin-toolbar-container").draggable()
     },
     /**
      * Place config toolbar on top of plugin, based on its location
@@ -74,7 +74,10 @@ EkstepEditor.basePlugin.extend({
     objectUnselected: function(event, data) {
         if (data.id == this.selectedPluginId) {
             EkstepEditor.jQuery('#toolbarOptions').hide();
-            EkstepEditor.jQuery("#plugin-toolbar-container").hide();
+            var angScope = EkstepEditorAPI.getAngularScope();
+            angScope.safeApply(function() {
+                angScope.showConfigContainer = false;
+            });
         }
     },
     /**
@@ -107,7 +110,7 @@ EkstepEditor.basePlugin.extend({
         _.forEach(instance.pluginConfigManifest, function(config) {
             instance.invoke(config, instance.configData)
         })
-
+        this.animateToolbar("Configuration");
         /*
         semantic ui apply
          */
@@ -116,7 +119,7 @@ EkstepEditor.basePlugin.extend({
                 EkstepEditor.jQuery(this).dropdown();
             })
         }, 500);
-        this.animateToolbar("pluginConfig");
+
     },
     /**
      * This is called on stage unselect event fired 
@@ -183,8 +186,8 @@ EkstepEditor.basePlugin.extend({
     showHelp: function(event, data) {
         var instance = this;
         EkstepEditorAPI.getCurrentObject().getHelp(function(helpText) {
-            EkstepEditor.jQuery("#pluginHelp").html(micromarkdown.parse(helpText));
-            instance.animateToolbar("pluginHelpContent");
+            EkstepEditor.jQuery("#pluginHelpContent").html(micromarkdown.parse(helpText));
+            instance.animateToolbar("Help");
         });
     },
     /**
@@ -200,7 +203,7 @@ EkstepEditor.basePlugin.extend({
         angScope.safeApply(function() {
             angScope.pluginProperties = properties;
         });
-        this.animateToolbar("pluginProperties");
+        this.animateToolbar("Properties");
     },
     /**
      * * This method called when object:moving or object:scaling events is fired 
@@ -224,27 +227,23 @@ EkstepEditor.basePlugin.extend({
                 });
             } else {
                 EkstepEditor.jQuery('#toolbarOptions').hide();
-                EkstepEditor.jQuery('#plugin-toolbar-container').hide();
+                var angScope = EkstepEditorAPI.getAngularScope();
+                angScope.safeApply(function() {
+                    angScope.showConfigContainer = false;
+                });
             }
         }
     },
-    animateToolbar: function(id) {
-        var selectedPluginObj = EkstepEditorAPI.getCurrentObject().editorObj;
-        EkstepEditor.jQuery("#plugin-toolbar-container").show();
-        EkstepEditor.jQuery('#plugin-toolbar-container').offset({
-            top: (this.canvasOffset.top + selectedPluginObj.top),
-            left: (this.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() + this.margin.left + 15)
+    animateToolbar: function(title) {
+        var instance = this;
+        var angScope = EkstepEditorAPI.getAngularScope();
+        var selectedPluginObj = EkstepEditorAPI.getPluginInstance(instance.selectedPluginId).editorObj;
+        angScope.safeApply(function() {
+            angScope.showConfigContainer = true;
+            angScope.configHeaderText = title;
+            angScope.configStyle = {'top':(instance.canvasOffset.top + selectedPluginObj.top),
+                                    'left':(instance.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() + instance.margin.left + 15)}
         });
-        if (EkstepEditor.jQuery("#" + id).hasClass('active')) return;
-        EkstepEditor.jQuery('#pluginToolbarShape')
-            .shape({
-                onChange: function() {
-                    EkstepEditor.jQuery("#pluginToolbarShape .side").each(function() {
-                        EkstepEditor.jQuery(this).removeClass('active');
-                    })
-                    EkstepEditor.jQuery("#" + id).addClass('active');
-                }
-            }).shape('flip right');
     }
 });
 //# sourceURL=configplugin.js

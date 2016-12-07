@@ -1,11 +1,25 @@
 /*css */
 
 .at.config.properties.content {
-    background-color: #3f4d9c !important;
+    background-color: #3899ec !important;
 }
 
-.at.config.properties.header {
+.config-header {
     color: #FFF !important;
+    font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif !important;
+    font-weight: lighter !important;
+    font-size: 16px !important;
+    letter-spacing: 1px;
+}
+
+.config-close-icon {
+    float: right;
+    margin: 0px !important;
+}
+
+.config-close-icon:hover {
+    background-color: #07589c;
+    border-radius: 100px;
 }
 
 .hide {
@@ -17,15 +31,20 @@
     overflow-y: auto;
     overflow-x: hidden;
 }
-.toolbarOptions{
-  z-index:120;
+
+.toolbarOptions {
+    z-index: 120;
 }
-.plugin-toolbar-container{
-  display: inline-block;
+
+#plugin-toolbar-container {
+    position: absolute;
+    width: 285px;
 }
-.plugin-toolbar-draggable{
-  cursor: move;
+
+.plugin-toolbar-draggable {
+    cursor: move;
 }
-.cursor-move{
-  cursor: move;
+
+.cursor-move {
+    cursor: move;
 }
