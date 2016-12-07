@@ -46,6 +46,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("config:properties", this.showProperties, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:colorpicker", this.showColorPicker, this);
         EkstepEditorAPI.addEventListener("object:modified", this.objectModified, this);
+        EkstepEditorAPI.addEventListener("org.ekstep.config:invoke", this.invoke, this);
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
             angScope.contextToolbar = instance.manifest.editor.data.toolbars;
@@ -108,7 +109,7 @@ EkstepEditor.basePlugin.extend({
 
         });
         _.forEach(instance.pluginConfigManifest, function(config) {
-            instance.invoke(config, instance.configData)
+            instance._invoke(config, instance.configData)
         })
         this.animateToolbar("Configuration");
         /*
@@ -136,7 +137,7 @@ EkstepEditor.basePlugin.extend({
      * @param  configData {Array}
      * @memberof Config
      */
-    invoke: function(config, configData) {
+    _invoke: function(config, configData) {
         configData = configData || {};
         if (config.dataType === 'colorpicker') {
             var eventData = { id: config.propertyName, callback: this.onConfigChange, color: configData[config.propertyName] };
@@ -248,6 +249,21 @@ EkstepEditor.basePlugin.extend({
                 'left': (instance.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() + 15)
             }
         });
+    },
+    invoke: function(event, data) {
+        var instance = this;
+        if (data.type) {
+            switch (data.type) {
+                case 'assetbrowser':
+                    EkstepEditorAPI.dispatchEvent('org.ekstep.assetbrowser:show', {
+                        callback: function(data) { instance.onConfigChange('asset', data) }
+                    });
+                    break;
+                default:
+                    break;
+            }
+        }
     }
+
 });
 //# sourceURL=configplugin.js
