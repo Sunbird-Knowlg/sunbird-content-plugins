@@ -12,10 +12,10 @@ EkstepEditor.basePlugin.extend({
     type: 'assetbrowser',
     initData: undefined,
     /**
-    *   @memberof cb {Funtion} callback
-    *   @memberof assetBrowser
-    */
-    cb: function(){},
+     *   @memberof cb {Funtion} callback
+     *   @memberof assetBrowser
+     */
+    cb: undefined,
     /**
     *   registers events
     *   @memberof assetBrowser
@@ -32,7 +32,8 @@ EkstepEditor.basePlugin.extend({
     */
     initPreview: function(event, data) {
         var instance = this;
-        this.cb = data.callback;       
+        this.cb = data.callback;
+        this.searchFilter = data.searchFilter;
         this.loadResource('editor/assetBrowser.html', 'html', function(err, response) {
             instance.showAssetBrowser(err, response);
         });
@@ -49,7 +50,8 @@ EkstepEditor.basePlugin.extend({
         var instance = this,
             iservice = new EkstepEditor.iService(),
             requestObj,
-            requestHeaders;
+            requestHeaders,
+            allowableFilter;
 
         requestObj = {
             "request": {
@@ -69,6 +71,8 @@ EkstepEditor.basePlugin.extend({
         };
 
         _.isUndefined(searchText) ? null : requestObj.request.filters.name = [searchText];
+        allowableFilter = _.omit(this.searchFilter, ['mediaType', 'license']);
+        _.merge(requestObj.request.filters, allowableFilter);
 
         iservice.http.post(EkstepEditor.config.baseURL + '/api/search/v2/search', requestObj, requestHeaders, cb);
 
@@ -99,7 +103,7 @@ EkstepEditor.basePlugin.extend({
             lastSelectedImage,
             audioTabSelected = false,
             imageTabSelected = true;
-            //mainScope = EkstepEditorAPI.getAngularScope();
+        //mainScope = EkstepEditorAPI.getAngularScope();
 
         var $sce = $injector.get('$sce');
         ctrl.selected_images = {};
@@ -108,7 +112,7 @@ EkstepEditor.basePlugin.extend({
         ctrl.loadingImage = true;
         ctrl.loadingAudio = true;
 
-        $('.tabular.menu .item').tab();
+        $('.menu .item').tab();
 
         function imageAssetCb(err, res) {
             if (res && res.data.result.content) {

@@ -1,37 +1,6 @@
 <style>
-.modal.in .modal-dialog {
-    width: 65%;
-}
-
-.tab-content {
-    height: 400px;
-}
-
-.modal-body {
-    padding: 0px;
-}
-
-.nav-tabs {
-    background: none;
-}
-
-.imageBrowserContent {
-    margin: 12px;
-}
-
 .assetbrowser_footer {
     margin: 8px;
-}
-
-.img-thumbnail {
-    margin: 3px;
-    cursor: pointer;
-    padding: 0;
-    position: relative;
-}
-
-.img-thumbnail:hover {
-    opacity: 0.4;
 }
 
 .imagescrollWindow {
@@ -44,7 +13,7 @@
 }
 
 .audioscrollwindow {
-    height: 388px;    
+    height: 388px;
     overflow: scroll;
     margin-top: 10px;
 }
@@ -65,10 +34,6 @@
     margin-right: 10px;
     margin-left: 2px;
     font-size: 2em;
-}
-
-.assetArea {
-    display: inline-block;
 }
 
 .faloading {
@@ -106,30 +71,93 @@
 }
 
 .assetbrowser_searchBox {
+    padding: 8px;
+    border-bottom: 1px black solid;
     width: 100%;
-    margin-bottom: 20px;
 }
+
 #assetArea2 {
- width: 20%;   
+    width: 20%;
+}
+
+.templatebrowser_main {
+    margin: 0px !important;
+    overflow: scroll;
+    height: 360px;
+}
+
+.templatebrowser_thumbnail {
+    margin-top: 20px;
+    cursor: pointer;
+    position: relative;
+    max-width: 140px;
+}
+
+.templatecard {
+    height: 220px;
+}
+
+.template_header {
+    background-color: #3899ec !important;
+}
+
+.template_header h4 {
+    padding: 0px;
+    margin: 0px;
+    color: #fff;
+}
+
+.template_header .remove {
+    float: right;
+    margin-top: -21px;
+    color: #fff;
+}
+
+.tab_menu {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+    margin-top: 0px !important;
+    margin-bottom: 0px !important;
+}
+
+.asset_thumbnail {
+    height: 140px !important;
+    width: 140px !important;
+    max-height: 140px !important;
+    max-width: 140px !important;
 }
 </style>
-<div class="ui modal" style="padding: 10px;">
-    <text style="font-size: 20px; margin-bottom: 10px;"><i class="fa fa-list-ul" aria-hidden="true"></i> Add Items</text>
-    <div class="ui top attached tabular menu">
+<div class="ui modal">
+    <div class="header template_header" style="">
+        <h4>Choose Items</h4>
+        <i class="remove icon" ng-click="$ctrl.cancel()"></i>
+    </div>
+    <div class="ui pointing secondary menu tab_menu">
         <a class="active item" data-tab="first" ng-click="$ctrl.imageTab()">Image</a>
         <a class="item" data-tab="second" ng-click="$ctrl.audioTab()">Audio</a>
     </div>
     <div class="ui active tab" data-tab="first" style="margin: 10px;">
         <div class="ui icon input assetbrowser_searchBox" style="margin-bottom: 10px;">
-            <input type="text" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.searchKeyPress('image') : null">
-            <i class="inverted circular search link icon"></i>
+            <div id="searchbox" class="ui transparent left icon input templatebrowser_searchBox">
+                <input type="text" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.searchKeyPress('image') : null">
+                <i class="search icon"></i>
+            </div>
         </div>
-        <div class="ui grid" style="margin: 10px;">
-            <div id="assetWindow" class="four column row imagescrollWindow">
-                <i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
-                <div id="assetArea1" class="assetArea" ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
-                    <img class="img-thumbnail" data_id="{{image.identifier}}" src="{{image.downloadUrl}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected} " width="120" height="120">
-                    <i ng-class="$ctrl.selected_images[$index].selected ? 'fa fa-check-square-o fa-image-selected' : 'fa fa-check-square-o fa-2x-custom'" aria-hidden="true"></i>
+        <div class="ui grid templatebrowser_main">
+            <i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
+            <div id="assetArea1" ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
+                <div class="four column row templatebrowser_thumbnail">
+                    <div class="ui card templatecard" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected} " data-html="">
+                        <a class="item" ng-show="$ctrl.selected_images[$index].selected">
+                            <div class="floating ui blue label"><i class="fa fa-check" aria-hidden="true"></i></div>
+                        </a>
+                        <div class="image">
+                            <img class="asset_thumbnail" data_id="{{image.identifier}}" src="{{image.downloadUrl}}">
+                        </div>
+                        <div class="content">
+                            <div class="header">Title:{{image.identifier}}</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -159,8 +187,11 @@
         <div class="ui grid">
             <div class="four column row">
                 <div class="right floated column">
-                    <button id="selectanduse" class="ui blue button" ng-disabled="$ctrl.selectBtnDisable" ng-click="$ctrl.select()" type="button">Select</button>
-                    <button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+                    <div class="ui buttons">
+                        <button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+                        <div class="or"></div>
+                        <button id="selectanduse" class="ui blue button" ng-disabled="$ctrl.selectBtnDisable" ng-click="$ctrl.select()" type="button">Select</button>
+                    </div>
                 </div>
             </div>
         </div>
