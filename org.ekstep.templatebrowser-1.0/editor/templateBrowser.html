@@ -58,13 +58,8 @@
     </div>
     <div class="content">
         <div id="searchbox" class="ui transparent left icon input templatebrowser_searchBox">
-            <input list="browsers" id="templateSearch" type="text" placeholder="Search template..." ng-keypress="$ctrl.search();">
+            <input id="templateSearch" type="text" placeholder="Search template..." ng-keypress="$ctrl.search();">
             <i class="search icon"></i>
-            <datalist id="browsers">
-                <div ng-repeat="text in $ctrl.dynamicText track by $index">
-                    <option value={{text.title}}>
-                </div>
-            </datalist>
         </div>
         <div class="ui clearing divider"></div>
         <div class="ui grid templatebrowser_main">
@@ -86,18 +81,11 @@
             </div>
         </div>
     </div>
-    <div class="ui clearing divider"></div>
-    <div class="templatebrowser_footer">
-        <div class="ui grid">
-            <div class="four column row">
-                <div class="right floated column">
-                    <div class="ui buttons">
-                        <button class="ui orange button" ng-click="$ctrl.closeWindow()">Cancel</button>
-                        <div class="or"></div>
-                        <button ng-class="($ctrl.lastSelected || $ctrl.lastSelected === 0) ? 'ui blue button' : 'ui button'" ng-click="$ctrl.save()">Select</button>
-                    </div>
-                </div>
-            </div>
+    <div class="actions">
+        <div class="ui buttons">
+            <button class="ui orange button" ng-click="$ctrl.closeWindow()">Cancel</button>
+            <div class="or"></div>
+            <button ng-class="($ctrl.lastSelected || $ctrl.lastSelected === 0) ? 'ui blue button' : 'ui button'" ng-click="$ctrl.save()">Select</button>
         </div>
     </div>
 </div>
