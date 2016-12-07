@@ -60,6 +60,10 @@ EkstepEditor.basePlugin.extend({
         var cp = this._super();
         cp.assetMedia = this.media[this.attributes.asset];
         return cp;
+    },
+    onConfigChange: function(key, value) {
+        EkstepEditorAPI.dispatchEvent('delete:invoke');
+        EkstepEditorAPI.dispatchEvent(this.manifest.id + ':create', value)
     }
 });
 //# sourceURL=imageplugin.js
