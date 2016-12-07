@@ -21,6 +21,13 @@
             "onclick": {
                 "id": "org.ekstep.image:assetbrowser:open"
             }
+        }],
+        "config": [{
+            "propertyName": "assetbrowser",
+            "title": "Assest Browser",
+            "description": "Choose a assest from the browser",
+            "dataType": "assetbrowser",
+            "required": true
         }]
     }
 }
