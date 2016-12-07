@@ -13,7 +13,7 @@
             <div class="filters-container">
                 <div class="ui form">
                     <div class="ui fluid action input">
-                        <input ng-disabled="isFilterAdded()" placeholder="Search by question, or question title" type="text"></input>
+                        <input ng-disabled="isFilterAdded()" ng-model="$ctrl.activity.question_title" placeholder="Search by question, or question title" type="text"></input>
                         <div class="ui icon primary button" ng-click="$ctrl.searchQuestions()"><i class="search icon"></i></div>
                     </div>
                     <div class="five fields">
@@ -76,15 +76,17 @@
                         </select>
                         <span class="display-total-count">
                             /{{$ctrl.activityOptions.range.length}} questions
-                            </span>
+                        </span>
                     </div>
                     <div class="field">
+                        <div class="top"></div>
                         <div class="ui checkbox">
                             <input id="showImmediateFeedback" ng-model="$ctrl.activityOptions.showImmediateFeedback" type="checkbox">
                             <label>Show Immediate Feedback</label>
                         </div>
                     </div>
                     <div class="field">
+                        <div class="top"></div>
                         <div class="ui checkbox">
                             <input id="shuffleQuestions" ng-model="$ctrl.activityOptions.shuffle" type="checkbox">
                             <label>Shuffle Questions</label>

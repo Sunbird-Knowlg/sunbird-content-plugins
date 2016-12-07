@@ -224,3 +224,9 @@
     float: right;
     margin-top: -20px;
 }
+.headerCls .close:hover{
+    color: #E6E6E6 !important;
+}
+.activityOptionsForm .top{
+    margin-top: 32px;
+}
