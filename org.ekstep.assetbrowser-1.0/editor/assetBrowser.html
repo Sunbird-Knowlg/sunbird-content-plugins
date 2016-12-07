@@ -155,7 +155,7 @@
             <i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
             <div id="assetArea1" ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
                 <div class="four column row templatebrowser_thumbnail">
-                    <div class="ui card templatecard" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected} " data-html="<div class='header'>Details</div><div class='content'><div class='ui bulleted list'><div class='item'>Name:{{image.name}}</div><div class='item'>Size:{{image.sizeinbytes}}</div><div class='item'>License:{{image.license}}</div>">
+                    <div class="ui card templatecard" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected} " data-html="<div class='header'>Details</div><div class='content'><div class='ui bulleted list'><div class='item'>Name:{{image.name}}</div><div class='item'>Size:{{image.sizeinbytes}}</div><div class='item'>Type:{{image.mimeType}}</div><div class='item'>License:{{image.license}}</div>">
                         <a class="item" ng-show="$ctrl.selected_images[$index].selected">
                             <div class="floating ui blue label"><i class="fa fa-check" aria-hidden="true"></i></div>
                         </a>
@@ -189,19 +189,12 @@
                 </div>
             </div>
         </div>
-    </div>
-    <div class="ui clearing divider"></div>
-    <div class="assetbrowser_footer">
-        <div class="ui grid">
-            <div class="four column row">
-                <div class="right floated column">
-                    <div class="ui buttons">
-                        <button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
-                        <div class="or"></div>
-                        <button id="selectanduse" class="ui blue button" ng-disabled="$ctrl.selectBtnDisable" ng-click="$ctrl.select()" type="button">Select</button>
-                    </div>
-                </div>
-            </div>
+    </div>    
+    <div class="actions">
+        <div class="ui buttons">
+            <button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+            <div class="or"></div>
+            <button id="selectanduse" class="ui blue button" ng-disabled="$ctrl.selectBtnDisable" ng-click="$ctrl.select()" type="button">Select</button>
         </div>
     </div>
 </div>
