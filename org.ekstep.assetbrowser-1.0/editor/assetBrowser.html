@@ -57,6 +57,7 @@
 
 .audioOverlay {
     background-color: hsl(200, 100%, 43%);
+    opacity: 0.7;
     position: absolute;
     top: 0;
     left: 0;
@@ -171,12 +172,14 @@
         </div>
     </div>
     <div class="ui tab" data-tab="second" style="margin: 10px;">
-        <div class="ui icon input assetbrowser_searchBox">
-            <input type="text" placeholder="Search Audio..." ng-keypress="$event.keyCode === 13 ? $ctrl.searchKeyPress('audio') : null">
-            <i class="inverted circular search link icon" ng-click="$ctrl.searchKeyPress('audio')"></i>
+        <div class="ui icon input assetbrowser_searchBox" style="margin-bottom: 10px;">
+            <div id="searchbox" class="ui transparent left icon input templatebrowser_searchBox">
+                <input id="searchTextAudio" type="text" placeholder="Search Audio..." ng-keypress="$event.keyCode === 13 ? $ctrl.searchKeyPress('audio') : null">
+                <i class="search icon"></i>
+            </div>
         </div>
         <i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingAudio" aria-hidden="true"></i>
-        <div class="ui grid audioscrollwindow">
+        <div class="ui grid templatebrowser_main">
             <div id="assetArea2" ng-show="$ctrl.audioList.length > 0" ng-repeat="audio in $ctrl.audioList track by $index">
                 <div class="ten column row">
                     <div class="audioitem" ng-click="$ctrl.AudioSource(audio.downloadUrl,audio.identifier, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}">
@@ -189,7 +192,7 @@
                 </div>
             </div>
         </div>
-    </div>    
+    </div>
     <div class="actions">
         <div class="ui buttons">
             <button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
