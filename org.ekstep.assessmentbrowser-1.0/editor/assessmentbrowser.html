@@ -1,7 +1,17 @@
 <div class="ui modal large">
-    <div class="header headerCls">
-        <h4>Assessment Browser</h4>
-        <i class="close icon" ng-click="$ctrl.cancel()"></i>
+    <div class="header" style="background: hsl(200, 100%, 43%); color: white;">
+        <div class="ui grid">
+            <div class="fifteen wide column">
+                <div class="left floated">
+                    <label>Assessment Browser</label>
+                </div>
+            </div>
+            <div class="one wide column">
+                <div class="right floated">
+                    <i class="remove icon" ng-click="$ctrl.cancel()"></i>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="content item-activity-container">
         <!-- <div class="pull-right" ng-click="$ctrl.cancel()"><i class="delete icon"></i></div> -->
@@ -12,9 +22,11 @@
             </div>
             <div class="filters-container">
                 <div class="ui form">
+                    <div class="field">
                     <div class="ui fluid action input">
                         <input ng-disabled="isFilterAdded()" ng-model="$ctrl.activity.question_title" placeholder="Search by question, or question title" type="text"></input>
                         <div class="ui icon primary button" ng-click="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())"><i class="search icon"></i></div>
+                    </div>
                     </div>
                     <div class="five fields">
                         <div class="field">

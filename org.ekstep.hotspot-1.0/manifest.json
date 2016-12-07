@@ -14,10 +14,10 @@
         "menu": [{
             "id": "hotspot",
             "category": "main",
-            "type": "image",
+            "type": "icon",
             "toolTip": "Add Hotspot",
             "title": "Hotspot",
-            "iconImage": "assets/hotspot.png",
+            "iconClass": "bullseye icon",
             "onclick": {
                 "id": "org.ekstep.hotspot:create",
                 "data": {
