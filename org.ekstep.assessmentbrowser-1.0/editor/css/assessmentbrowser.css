@@ -45,8 +45,9 @@
 .item-activity-container .activity-items-container {
     float: left;
     width: 50%;
-    height: 310px;
+    height: 323px;
     overflow-y: scroll;
+    padding-right: 10px;
 }
 .item-activity-container .activity-questions {
     float: left;
@@ -229,17 +230,10 @@
 .ui.blue.button{
     font-weight: 300 !important;
 }
-.cartnumber{
-    display: inline-block;
-    position: absolute;
-    right: 269px;
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
-    padding: 2px 2px 2px 1px;
-    background: #F2711C;
-    border: 1px solid #FFF;
-    color: #FFF;
-    text-align: center;
-    font-size: 9px;
+.cart-length .cart{
+    margin-right: -16px;
+}
+.cart-length .circular{
+    top: -12px;
+    position: relative;
 }

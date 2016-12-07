@@ -105,7 +105,7 @@
                 <div class="pull-right">
                     <span class="cart-length" ng-show="$ctrl.cart.items.length && $ctrl.isFiltersShown">
                         <i class="add to cart icon large"></i>
-                        <sapn class="cartnumber">{{($ctrl.cart.items.length > 1) ? $ctrl.cart.items.length : $ctrl.cart.items.length }}</span>
+                        <a class="ui orange circular label">{{($ctrl.cart.items.length > 1) ? $ctrl.cart.items.length : $ctrl.cart.items.length }}</a>
                     </span>
                     <button class="ui blue button" ng-click="$ctrl.addActivityOptions()" ng-disabled="!$ctrl.cart.items.length" ng-show="$ctrl.isFiltersShown">NEXT</button>
                     <button class="ui blue  button" ng-click="$ctrl.isFiltersShown = !$ctrl.isFiltersShown" ng-show="!$ctrl.isFiltersShown">Add More Questions</button>
