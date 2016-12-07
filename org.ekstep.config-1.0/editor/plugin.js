@@ -17,7 +17,7 @@ EkstepEditor.basePlugin.extend({
      */
     selectedPluginId: undefined,
     margin: {
-        left: 0,
+        left: 72,
         top: 60,
     },
     /** @member {undefined|Array} pluginConfigManifest
@@ -68,7 +68,7 @@ EkstepEditor.basePlugin.extend({
             position: 'absolute',
             display: 'block',
             top: (instance.canvasOffset.top + plugin.editorObj.top - instance.margin.top),
-            left: (instance.canvasOffset.left + plugin.editorObj.left - instance.margin.left)
+            left: (instance.canvasOffset.left + plugin.editorObj.left + plugin.editorObj.getWidth() / 2 - instance.margin.left)
         })
     },
     objectUnselected: function(event, data) {
@@ -217,13 +217,15 @@ EkstepEditor.basePlugin.extend({
             this.selectedPlugin = data.id;
             var plugin = EkstepEditorAPI.getPluginInstance(data.id);
             if (!_.isUndefined(plugin)) {
-                EkstepEditor.jQuery('#toolbarOptions').offset({
+                EkstepEditor.jQuery('#toolbarOptions').css({
+                    position: 'absolute',
+                    display: 'block',
                     top: (this.canvasOffset.top + plugin.editorObj.top - this.margin.top),
-                    left: (this.canvasOffset.left + plugin.editorObj.left - this.margin.left)
-                }).show();
+                    left: (this.canvasOffset.left + plugin.editorObj.left + plugin.editorObj.getWidth() / 2 - this.margin.left)
+                })
                 EkstepEditor.jQuery('#plugin-toolbar-container').offset({
                     top: (this.canvasOffset.top + plugin.editorObj.top),
-                    left: (this.canvasOffset.left + plugin.editorObj.left + plugin.editorObj.getWidth() + this.margin.left + 15)
+                    left: (this.canvasOffset.left + plugin.editorObj.left + plugin.editorObj.getWidth() + 15)
                 });
             } else {
                 EkstepEditor.jQuery('#toolbarOptions').hide();
@@ -241,8 +243,10 @@ EkstepEditor.basePlugin.extend({
         angScope.safeApply(function() {
             angScope.showConfigContainer = true;
             angScope.configHeaderText = title;
-            angScope.configStyle = {'top':(instance.canvasOffset.top + selectedPluginObj.top),
-                                    'left':(instance.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() + instance.margin.left + 15)}
+            angScope.configStyle = {
+                'top': (instance.canvasOffset.top + selectedPluginObj.top),
+                'left': (instance.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() + 15)
+            }
         });
     }
 });
