@@ -33,7 +33,7 @@ EkstepEditor.basePlugin.extend({
     initPreview: function(event, data) {
         var instance = this;
         this.cb = data.callback;
-        this.searchFilter = data.searchFilter;
+        this.search_filter = data.search_filter;
         this.loadResource('editor/assetBrowser.html', 'html', function(err, response) {
             instance.showAssetBrowser(err, response);
         });
@@ -71,7 +71,7 @@ EkstepEditor.basePlugin.extend({
         };
 
         _.isUndefined(searchText) ? null : requestObj.request.filters.name = [searchText];
-        allowableFilter = _.omit(this.searchFilter, ['mediaType', 'license']);
+        allowableFilter = _.omit(this.search_filter, ['mediaType', 'license']);
         _.merge(requestObj.request.filters, allowableFilter);
 
         iservice.http.post(EkstepEditor.config.baseURL + '/api/search/v2/search', requestObj, requestHeaders, cb);
@@ -117,10 +117,8 @@ EkstepEditor.basePlugin.extend({
         function imageAssetCb(err, res) {
             if (res && res.data.result.content) {
                 ctrl.loadingImage = false;
-                ctrl.imageList = [];
-                _.forEach(res.data.result.content, function(obj, index) {
-                    ctrl.imageList.push({ downloadUrl: trustResource(obj.downloadUrl), identifier: obj.identifier });
-                });
+                ctrl.imageList = res.data.result.content;
+                ctrl.initPopup(res.data.result.content);
             } else {
                 ctrl.imageList = [];
             };
@@ -221,6 +219,25 @@ EkstepEditor.basePlugin.extend({
             lastSelectedAudio = $index;
             return true;
         };
+
+        ctrl.initPopup = function(item) {
+            _.forEach(item, function(obj, index) {
+                $('#assetbrowser-' + index).popup({
+                    hoverable: true,
+                    position: 'right center'
+                });
+                obj.sizeinbytes = ctrl.convertToBytes(obj.size);
+            });
+        };
+
+        ctrl.convertToBytes = function(bytes) {
+            if(_.isUndefined(bytes)) return " N/A";
+            bytes = parseInt(bytes);
+            var precision = 1;
+            var units = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'],
+                number = Math.floor(Math.log(bytes) / Math.log(1024));
+            return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) + ' ' + units[number];
+        }
 
         ctrl.select = function() {
             if (imagedata && imagedata.asset && imageTabSelected) {

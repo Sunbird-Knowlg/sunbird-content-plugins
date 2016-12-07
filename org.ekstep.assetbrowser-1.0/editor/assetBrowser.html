@@ -94,7 +94,8 @@
 }
 
 .templatecard {
-    height: 220px;
+    margin-bottom: 5px !important;
+    height: 175px !important;
 }
 
 .template_header {
@@ -126,6 +127,13 @@
     max-height: 140px !important;
     max-width: 140px !important;
 }
+
+.cardcontent {
+    font-size: 10px !important;
+    font-weight: 100 !important;
+    overflow-wrap: break-word;
+    overflow: hidden;
+}
 </style>
 <div class="ui modal">
     <div class="header template_header" style="">
@@ -139,7 +147,7 @@
     <div class="ui active tab" data-tab="first" style="margin: 10px;">
         <div class="ui icon input assetbrowser_searchBox" style="margin-bottom: 10px;">
             <div id="searchbox" class="ui transparent left icon input templatebrowser_searchBox">
-                <input type="text" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.searchKeyPress('image') : null">
+                <input id="searchTextImage" type="text" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.searchKeyPress('image') : null">
                 <i class="search icon"></i>
             </div>
         </div>
@@ -147,15 +155,15 @@
             <i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
             <div id="assetArea1" ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
                 <div class="four column row templatebrowser_thumbnail">
-                    <div class="ui card templatecard" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected} " data-html="">
+                    <div class="ui card templatecard" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected} " data-html="<div class='header'>Details</div><div class='content'><div class='ui bulleted list'><div class='item'>Name:{{image.name}}</div><div class='item'>Size:{{image.sizeinbytes}}</div><div class='item'>License:{{image.license}}</div>">
                         <a class="item" ng-show="$ctrl.selected_images[$index].selected">
                             <div class="floating ui blue label"><i class="fa fa-check" aria-hidden="true"></i></div>
                         </a>
                         <div class="image">
                             <img class="asset_thumbnail" data_id="{{image.identifier}}" src="{{image.downloadUrl}}">
                         </div>
-                        <div class="content">
-                            <div class="header">Title:{{image.identifier}}</div>
+                        <div class="content cardcontent">
+                            <div class="header">Title: {{image.name}}</div>
                         </div>
                     </div>
                 </div>
