@@ -184,6 +184,7 @@ EkstepEditor.basePlugin.extend({
             ctrl.activityOptions.max_score = ctrl.activityOptions.total_items;
             ctrl.activityOptions.range = _.times(ctrl.activityOptions.total_items).splice(1);
             ctrl.activityOptions.range.push(ctrl.activityOptions.total_items);
+            $('.total-marks .text').html(ctrl.activityOptions.total_items);
             EkstepEditorAPI.getAngularScope().safeApply();
         };
 

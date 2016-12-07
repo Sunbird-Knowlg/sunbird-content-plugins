@@ -126,16 +126,12 @@
 
 .item-activity-container .manage-activity .items-length span {
     padding-top: 8px;
-    text-transform: uppercase;
     float: left;
-    font-size: 12px;
     color: #9b9b9b;
 }
 
 .item-activity-container .manage-activity .cart-length {
     padding: 8px 10px 0 0;
-    font-size: 12px;
-    color: #a3a3a3;
 }
 
 .item-activity-container .manage-activity .add-more-items {
@@ -229,4 +225,21 @@
 }
 .activityOptionsForm .top{
     margin-top: 32px;
+}
+.ui.blue.button{
+    font-weight: 300 !important;
+}
+.cartnumber{
+    display: inline-block;
+    position: absolute;
+    right: 269px;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    padding: 2px 2px 2px 1px;
+    background: #F2711C;
+    border: 1px solid #FFF;
+    color: #FFF;
+    text-align: center;
+    font-size: 9px;
 }

@@ -6,7 +6,7 @@
     <div class="content item-activity-container">
         <!-- <div class="pull-right" ng-click="$ctrl.cancel()"><i class="delete icon"></i></div> -->
         <div ng-show="$ctrl.isFiltersShown">
-            <div class="ui top tabular menu">
+            <div class="ui pointing secondary menu">
                 <a class="item" ng-class="{active: !$ctrl.isMyQuestions}" ng-click="$ctrl.searchQuestions()">All Questions</a>
                 <a class="item" ng-class="{active: $ctrl.isMyQuestions}" ng-click="$ctrl.searchQuestions('myQuestions')">My Questions</a>
             </div>
@@ -14,7 +14,7 @@
                 <div class="ui form">
                     <div class="ui fluid action input">
                         <input ng-disabled="isFilterAdded()" ng-model="$ctrl.activity.question_title" placeholder="Search by question, or question title" type="text"></input>
-                        <div class="ui icon primary button" ng-click="$ctrl.searchQuestions()"><i class="search icon"></i></div>
+                        <div class="ui icon primary button" ng-click="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())"><i class="search icon"></i></div>
                     </div>
                     <div class="five fields">
                         <div class="field">
@@ -104,9 +104,11 @@
                 </div>
                 <div class="pull-right">
                     <span class="cart-length" ng-show="$ctrl.cart.items.length && $ctrl.isFiltersShown">
-                        ({{($ctrl.cart.items.length > 1) ? $ctrl.cart.items.length + ' questions' : $ctrl.cart.items.length + ' question'}} added)</span>
+                        <i class="add to cart icon large"></i>
+                        <sapn class="cartnumber">{{($ctrl.cart.items.length > 1) ? $ctrl.cart.items.length : $ctrl.cart.items.length }}</span>
+                    </span>
                     <button class="ui blue button" ng-click="$ctrl.addActivityOptions()" ng-disabled="!$ctrl.cart.items.length" ng-show="$ctrl.isFiltersShown">NEXT</button>
-                    <button class="ui blue  button" ng-click="$ctrl.isFiltersShown = !$ctrl.isFiltersShown" ng-show="!$ctrl.isFiltersShown">ADD MORE QUESTIONS</button>
+                    <button class="ui blue  button" ng-click="$ctrl.isFiltersShown = !$ctrl.isFiltersShown" ng-show="!$ctrl.isFiltersShown">Add More Questions</button>
                     <button class="ui blue  button" ng-click="$ctrl.addItemActivity()" ng-disabled="activityOptionsForm.$invalid || !activityOptions.title || !$ctrl.cart.items.length" ng-show="!$ctrl.isFiltersShown" type="button">Add Test</button>
                     <a href="" target="_blank">
                         <button class="ui blue  button">Create A Question</button>
@@ -119,15 +121,15 @@
                         <div class="activity-items" ng-class="{'active': item.question.identifier == $ctrl.activePreviewItem}" ng-click="$ctrl.previewItem(item)" ng-repeat="item in $ctrl.items">
                             <div class="ui middle aligned animated list activity-questions">
                                 <div class="content">
-                                        <div class="questionCls">{{item.question.question }}</div>
-                                        <div class="description">{{ item.question.description }}</div>
-                                        <p class="activity-items-info">
-                                            <span>{{item.question.type}}</span>
-                                            <span> | {{ item.question.qlevel}}</span>
-                                            <span> | {{ item.question.title }}</span>
-                                        </p>
-                                    </div>
+                                    <div class="questionCls">{{item.question.question }}</div>
+                                    <div class="description">{{ item.question.description }}</div>
+                                    <p class="activity-items-info">
+                                        <span>{{item.question.type}}</span>
+                                        <span> | {{ item.question.qlevel}}</span>
+                                        <span> | {{ item.question.title }}</span>
+                                    </p>
                                 </div>
+                            </div>
                             <div class="activity-actions">
                                 <a href="/index.php?option=com_ekcontent&view=itemform&tmpl=component&identifier={{item.question.identifier}}" ng-click="$event.stopPropagation()" ng-show="{{$ctrl.item.question.owner == userDetails.id}}" target="_blank">
                                     <i class="icons-edit-item"></i>
@@ -142,11 +144,11 @@
                             <div class="ui middle aligned animated list activity-questions">
                                 <div class="item">
                                     <div class="content">
-                                        <div class="header">{{cartItem.question.question }}</div>
-                                        <div class="description activity-items-info">{{ cartItem.question.description }}</div>
-                                        <p class="bottom activity-items-info">
-                                            <span>{{getQuestionType(cartItem.question.type)}}</span>
-                                            <span> | {{ cartItem.question.qlevel ? cartItem.question.qlevel : 'EASY' }}</span>
+                                        <div class="questionCls">{{cartItem.question.question }}</div>
+                                        <div class="description">{{ cartItem.question.description }}</div>
+                                        <p class="activity-items-info">
+                                            <span>{{cartItem.question.type}}</span>
+                                            <span> | {{ cartItem.question.qlevel}}</span>
                                             <span> | {{ cartItem.question.title }}</span>
                                         </p>
                                     </div>
