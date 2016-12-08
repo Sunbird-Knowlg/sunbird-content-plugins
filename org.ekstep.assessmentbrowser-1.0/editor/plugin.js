@@ -44,7 +44,8 @@ EkstepEditor.basePlugin.extend({
         ctrl.activityOptions = {
             title: "",
             shuffle: false,
-            showImmediateFeedback: true
+            showImmediateFeedback: true,
+            myQuestions: false
         };
 
         EkstepEditor.assessmentService.getLanguages(function(err, resp) {
@@ -77,7 +78,7 @@ EkstepEditor.basePlugin.extend({
             }
         });
 
-        ctrl.searchQuestions = function(myQuestions) {
+        ctrl.searchQuestions = function() {
             var activity = ctrl.activity;
             ctrl.isItemAvailable = true;
             ctrl.itemsLoading = true;
@@ -92,7 +93,7 @@ EkstepEditor.basePlugin.extend({
                     limit: 200
                 }
             };
-            if (myQuestions === "myQuestions") {
+            if (ctrl.activityOptions.myQuestions) {
                 ctrl.isMyQuestions = true;
                 data.request.filters.owner = "";
             } else {

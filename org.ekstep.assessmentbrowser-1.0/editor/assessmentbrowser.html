@@ -1,5 +1,4 @@
 <div class="ui modal large">
-    
     <div class="content item-activity-container">
         <div class="ui mini three steps">
             <div class="{{$ctrl.isFiltersShown ? 'active': ''}} step">
@@ -34,11 +33,13 @@
                             <i class="inverted circular search link icon" ng-click="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())"></i>
                         </div>
                     </div>
-                    <div class="ui accordion field">
-                        <div class="title">
-                            <i class="dropdown icon"></i>Advanced Filters
+                    <div class="ui accordion field" id="assessmentAdvancedFields">
+                        <div class="title" ng-click="$ctrl.showAdvancedFilter = !$ctrl.showAdvancedFilter">
+                            <i class="dropdown icon" ng-if="!$ctrl.showAdvancedFilter"></i>
+                            <i class="dropdown icon" ng-if="$ctrl.showAdvancedFilter" style="transform: rotate(90deg);"></i>
+                            Advanced Filters
                         </div>
-                        <div class="content field">
+                        <div class="content transition {{$ctrl.showAdvancedFilter ? 'visible': 'hidden'}}">
                             <div class="three fields">
                                 <div class="field">
                                     <div class="ui fluid labeled input">
@@ -71,7 +72,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="three inline fields">
+                            <div class="three fields">
                                 <div class="field">
                                     <div class="ui fluid labeled input">
                                         <div class="ui label">&emsp;Grade&nbsp;&nbsp;&nbsp;</div>
@@ -90,7 +91,7 @@
                                 </div>
                                 <div class="field">
                                     <div class="ui toggle checkbox">
-                                        <input type="checkbox" ng-model="$ctrl.activityOptions.shuffle">
+                                        <input type="checkbox" ng-model="$ctrl.activityOptions.myQuestions" ng-change="$ctrl.searchQuestions($ctrl.activityOptions.myQuestions ? 'myQuestions' : '')">
                                         <label>My Questions</label>
                                     </div>
                                 </div>
