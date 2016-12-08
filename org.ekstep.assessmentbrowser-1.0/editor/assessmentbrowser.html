@@ -1,109 +1,145 @@
 <div class="ui modal large">
-    <div class="header" style="background: hsl(200, 100%, 43%); color: white;">
-        <div class="ui grid">
-            <div class="fifteen wide column">
-                <div class="left floated">
-                    <label>Assessment Browser</label>
+    
+    <div class="content item-activity-container">
+        <div class="ui mini three steps">
+            <div class="{{$ctrl.isFiltersShown ? 'active': ''}} step">
+                <i class="truck icon"></i>
+                <div class="content">
+                    <div class="title">Pick Questions</div>
+                    <div class="description">Search and select questions</div>
                 </div>
             </div>
-            <div class="one wide column">
-                <div class="right floated">
-                    <i class="remove icon" ng-click="$ctrl.cancel()"></i>
+            <div class="{{!$ctrl.isFiltersShown ? 'active': ''}} step">
+                <i class="payment icon"></i>
+                <div class="content">
+                    <div class="title">Configure Assessment</div>
+                    <div class="description">Enter assessment title and configure defaults</div>
+                </div>
+            </div>
+            <div class="step">
+                <i class="payment icon"></i>
+                <div class="content">
+                    <div class="title">Add Assessment</div>
+                    <div class="description">Add assessment to the content</div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="content item-activity-container">
         <!-- <div class="pull-right" ng-click="$ctrl.cancel()"><i class="delete icon"></i></div> -->
         <div ng-show="$ctrl.isFiltersShown">
-            <div class="ui pointing secondary menu">
-                <a class="item" ng-class="{active: !$ctrl.isMyQuestions}" ng-click="$ctrl.searchQuestions()">All Questions</a>
-                <a class="item" ng-class="{active: $ctrl.isMyQuestions}" ng-click="$ctrl.searchQuestions('myQuestions')">My Questions</a>
-            </div>
             <div class="filters-container">
                 <div class="ui form">
                     <div class="field">
-                    <div class="ui fluid action input">
-                        <input ng-disabled="isFilterAdded()" ng-model="$ctrl.activity.question_title" placeholder="Search by question, or question title" type="text"></input>
-                        <div class="ui icon primary button" ng-click="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())"><i class="search icon"></i></div>
+                        <div class="ui fluid icon input">
+                            <input ng-disabled="isFilterAdded()" ng-model="$ctrl.activity.question_title" placeholder="Search by question, or question title" type="text"></input>
+                            <i class="inverted circular search link icon" ng-click="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())"></i>
+                        </div>
                     </div>
-                    </div>
-                    <div class="five fields">
-                        <div class="field">
-                            <label>Language</label>
-                            <select class="ui dropdown" ng-model="$ctrl.activity.language" ng-options="lang for lang in $ctrl.assessment.language" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
-                                <option value="">
-                                    All
-                                </option>
-                            </select>
+                    <div class="ui accordion field">
+                        <div class="title">
+                            <i class="dropdown icon"></i>Advanced Filters
                         </div>
-                        <div class="field">
-                            <label>Difficulty</label>
-                            <select class="ui dropdown" ng-model="$ctrl.activity.qlevel" ng-options="level for level in $ctrl.assessment.qlevel" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
-                                <option value="">
-                                    Difficulty
-                                </option>
-                            </select>
-                        </div>
-                        <div class="field">
-                            <label>Question Type</label>
-                            <select multiple="" class="ui fluid dropdown" ng-model="$ctrl.activity.type" ng-options="type for type in $ctrl.assessment.type" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
-                            <option value="">
-                                    Type
-                                </option>
-                            </select>
-                        </div>
-                        <div class="field">
-                            <label>Grade</label>
-                            <select multiple="" class="ui fluid dropdown" ng-model="$ctrl.activity.gradeLevel" ng-options="grade for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
-                            <option value="">
-                                    Grade
-                                </option>
-                            </select>
-                        </div>
-                        <div class="field">
-                            <label>Concepts</label>
-                            <input type="text" placeholder="Concepts">
+                        <div class="content field">
+                            <div class="three fields">
+                                <div class="field">
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">Language</div>
+                                        <select class="ui fluid dropdown" ng-model="$ctrl.activity.language" ng-options="lang for lang in $ctrl.assessment.language" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
+                                            <option value="">
+                                                All
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">Difficulty</div>
+                                        <select class="ui fluid dropdown" ng-model="$ctrl.activity.qlevel" ng-options="level for level in $ctrl.assessment.qlevel" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
+                                            <option value="">
+                                                Difficulty
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">Question Type</div>
+                                        <select multiple="" class="ui fluid dropdown" ng-model="$ctrl.activity.type" ng-options="type for type in $ctrl.assessment.type" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
+                                            <option value="">
+                                                Type
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="three inline fields">
+                                <div class="field">
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">&emsp;Grade&nbsp;&nbsp;&nbsp;</div>
+                                        <select multiple="" class="ui fluid dropdown" ng-model="$ctrl.activity.gradeLevel" ng-options="grade for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
+                                            <option value="">
+                                                Grade
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">Concepts</div>
+                                        <input type="text" placeholder="Concepts" class="fluid">
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui toggle checkbox">
+                                        <input type="checkbox" ng-model="$ctrl.activityOptions.shuffle">
+                                        <label>My Questions</label>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
         <div class="filters-container" ng-show="!$ctrl.isFiltersShown">
-            <h4>Test Settings</h4>
             <div class="ui form activityOptionsForm">
+                <div class="ui two column grid">
+                    <div class="column">
+                        <div class="ui transparent input field required two fields">
+                            <input name="title" ng-model="activityOptions.title" type="text" placeholder="Assessment Title">
+                        </div>
+                    </div>
+                    <div class="column">
+                        <div class="inline two fields">
+                            <div class="field">
+                                <div class="ui toggle checkbox">
+                                    <input type="checkbox" ng-model="$ctrl.activityOptions.showImmediateFeedback">
+                                    <label>Show Immediate Feedback</label>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui toggle checkbox">
+                                    <input type="checkbox" ng-model="$ctrl.activityOptions.shuffle">
+                                    <label>Shuffle Questions</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="five fields">
                     <!-- <span class="fa fa-spinner fa-spin fa-5x at-loader" ng-show="$ctrl.itemActivityLoading"></span> -->
                     <div class="field required">
-                        <label>Add questions to</label>
-                        <input id="title" name="title" ng-model="activityOptions.title" required="" type="text" placeholder="Assessment Title" maxlength="60" />
-                    </div>
-                    <div class="field required">
-                        <label>Total Marks:<i class="icons-mandatory" ng-show="activityOptionsForm.max_score.$error.required"></i></label>
+                        <label>Total Marks<i class="icons-mandatory" ng-show="activityOptionsForm.max_score.$error.required"></i></label>
                         <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="$ctrl.activityOptions.max_score" required="" type="number" />
                     </div>
                     <div class="field">
-                        <label>Display any:</label>
+                        <label>Display any</label>
                         <select class="total-marks ui dropdown" id="total_items" name="total_items" ng-model="$ctrl.activityOptions.total_items" ng-options="option as option for option in $ctrl.activityOptions.range">
                         </select>
                         <span class="display-total-count">
                             /{{$ctrl.activityOptions.range.length}} questions
                         </span>
                     </div>
-                    <div class="field">
-                        <div class="top"></div>
-                        <div class="ui checkbox">
-                            <input id="showImmediateFeedback" ng-model="$ctrl.activityOptions.showImmediateFeedback" type="checkbox">
-                            <label>Show Immediate Feedback</label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="top"></div>
-                        <div class="ui checkbox">
-                            <input id="shuffleQuestions" ng-model="$ctrl.activityOptions.shuffle" type="checkbox">
-                            <label>Shuffle Questions</label>
-                        </div>
-                    </div>
+                    
                 </div>
             </div>
         </div>
@@ -119,12 +155,6 @@
                         <i class="add to cart icon large"></i>
                         <a class="ui orange circular label">{{($ctrl.cart.items.length > 1) ? $ctrl.cart.items.length : $ctrl.cart.items.length }}</a>
                     </span>
-                    <button class="ui blue button" ng-click="$ctrl.addActivityOptions()" ng-disabled="!$ctrl.cart.items.length" ng-show="$ctrl.isFiltersShown">NEXT</button>
-                    <button class="ui blue  button" ng-click="$ctrl.isFiltersShown = !$ctrl.isFiltersShown" ng-show="!$ctrl.isFiltersShown">Add More Questions</button>
-                    <button class="ui blue  button" ng-click="$ctrl.addItemActivity()" ng-disabled="activityOptionsForm.$invalid || !activityOptions.title || !$ctrl.cart.items.length" ng-show="!$ctrl.isFiltersShown" type="button">Add Test</button>
-                    <a href="" target="_blank">
-                        <button class="ui blue  button">Create A Question</button>
-                    </a>
                 </div>
             </div>
             <div ng-show="($ctrl.isFiltersShown && $ctrl.items.length) || (!$ctrl.isFiltersShown && $ctrl.cart.items.length)">
@@ -192,6 +222,21 @@
                     <button class="ui blue button">Create A Question</button>
                 </a>
             </div>
+        </div>
+    </div>
+    <div class="actions">
+        <a href="" target="_blank" class="left floated">
+            <button class="ui blue  button">Create A Question</button>
+        </a>
+        <div class="ui buttons" ng-if="$ctrl.isFiltersShown">
+            <button class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+            <div class="or"></div>
+            <button class="ui blue button" ng-click="$ctrl.addActivityOptions()" ng-disabled="!$ctrl.cart.items.length" type="button">NEXT</button>
+        </div>
+        <div class="ui buttons" ng-if="!$ctrl.isFiltersShown">
+            <button id="closePopUp" class="ui orange button" ng-click="$ctrl.isFiltersShown = !$ctrl.isFiltersShown" type="button">Add More Questions</button>
+            <div class="or"></div>
+            <button id="selectanduse" class="ui blue button" ng-click="$ctrl.addItemActivity()" ng-disabled="activityOptionsForm.$invalid || !activityOptions.title || !$ctrl.cart.items.length" type="button">Add Assessment</button>
         </div>
     </div>
 </div>
