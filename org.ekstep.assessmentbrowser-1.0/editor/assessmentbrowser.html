@@ -1,5 +1,23 @@
+<style type="text/css">
+.filters-container {
+    padding: 8px 10px 4px 18px;
+    background: #f1f1f1;
+}
+.itemIframeMessages {
+    border: 2px solid #E4E4E4;
+    padding: 110px 20px;
+    background: #FFFFFF;
+    text-align: center;
+    font-weight: bold;
+    height: 270px;
+    width: 480px;
+}
+.grid .items .item:hover{
+    background: #f1f1f1;   
+}
+</style>
 <div class="ui modal large">
-    <div class="content item-activity-container">
+    <div class="content">
         <div class="ui mini three steps">
             <div class="{{$ctrl.isFiltersShown ? 'active': ''}} step">
                 <i class="truck icon"></i>
@@ -107,10 +125,6 @@
                                 <i class="asterisk icon"></i>
                             </div>
                         </div>
-
-                       <!--  <div class="ui transparent input field required two fields">
-                            <input name="title" ng-model="activityOptions.title" type="text" placeholder="Assessment Title">
-                        </div> -->
                     </div>
                     <div class="field">
                         <div class="ui fluid labeled input">
@@ -164,7 +178,7 @@
                                 <div class="meta">{{cartItem.question.type}} | {{ cartItem.question.qlevel}} | {{ cartItem.question.title }}</div>
                                 <div class="description">{{ cartItem.question.description }}</div>
                             </div>
-                            <div class="ui checkbox" ng-class="item.isSelected ? 'checked' : '' " style="top: 30px;">
+                            <div class="ui checkbox" ng-class="item.isSelected ? 'checked' : '' ">
                                 <input type="checkbox" checked="" name="check">
                                 <label></label>
                             </div>
