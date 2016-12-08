@@ -17,8 +17,8 @@ EkstepEditor.basePlugin.extend({
      */
     selectedPluginId: undefined,
     margin: {
-        left: 72,
-        top: 60,
+        left: 68,
+        top: 54,
     },
     /** @member {undefined|Array} pluginConfigManifest
      * @memberof Config
@@ -130,6 +130,10 @@ EkstepEditor.basePlugin.extend({
      */
     stageUnselect: function(data) {
         EkstepEditor.jQuery('#toolbarOptions').hide();
+        var angScope = EkstepEditorAPI.getAngularScope();
+        angScope.safeApply(function() {
+            angScope.showConfigContainer = false;
+        });
     },
     /**
      * This method invokes any config items require to  initialize before showing in config toolbar

@@ -6,20 +6,14 @@
 
 .config-header {
     color: #FFF !important;
-    font-family: "Segoe UI", Frutiger, "Frutiger Linotype", "Dejavu Sans", "Helvetica Neue", Arial, sans-serif !important;
-    font-weight: lighter !important;
-    font-size: 16px !important;
-    letter-spacing: 1px;
+    font-size: 18px !important;
+    display: inline !important;
 }
 
 .config-close-icon {
     float: right;
-    margin: 0px !important;
-}
-
-.config-close-icon:hover {
-    background-color: #07589c;
-    border-radius: 100px;
+    display: inline;
+    cursor: pointer;
 }
 
 .hide {
@@ -27,7 +21,7 @@
 }
 
 .config-toolbar-content {
-    max-height: 320px;
+    height: 320px;
     overflow-y: auto;
     overflow-x: hidden;
 }
