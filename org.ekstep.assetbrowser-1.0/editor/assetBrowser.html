@@ -137,20 +137,19 @@
 }
 </style>
 <div class="ui modal">
-    <div class="header template_header" style="">
-        <h4>Choose Items</h4>
-        <i class="remove icon" ng-click="$ctrl.cancel()"></i>
-    </div>
-    <div class="ui pointing secondary menu tab_menu">
-        <a class="active item" data-tab="first" ng-click="$ctrl.imageTab()">Image</a>
-        <a class="item" data-tab="second" ng-click="$ctrl.audioTab()">Audio</a>
-    </div>
-    <div class="ui active tab" data-tab="first" style="margin: 10px;">
-        <div class="ui icon input assetbrowser_searchBox" style="margin-bottom: 10px;">
-            <div id="searchbox" class="ui transparent left icon input templatebrowser_searchBox">
-                <input id="searchTextImage" type="text" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.searchKeyPress('image') : null">
-                <i class="search icon"></i>
+    <div class="ui small one steps">
+        <div class="active step">
+            <i class="image icon"></i>
+            <div class="content">
+                <div class="title">Select {{$ctrl.imageBrowser ? 'Image':'Audio'}}</div>
+                <div class="description">Search and select {{$ctrl.imageBrowser ? 'image':'audio'}}</div>
             </div>
+        </div>
+    </div>
+    <div class="content" ng-show="$ctrl.imageBrowser">
+        <div class="ui fluid icon input">
+            <input ng-model="$ctrl.query" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text"></input>
+            <i class="inverted circular search link icon" ng-click="$ctrl.search()"></i>
         </div>
         <div class="ui grid templatebrowser_main">
             <i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
@@ -171,7 +170,7 @@
             </div>
         </div>
     </div>
-    <div class="ui tab" data-tab="second" style="margin: 10px;">
+    <div class="content" ng-hide="$ctrl.imageBrowser">
         <div class="ui icon input assetbrowser_searchBox" style="margin-bottom: 10px;">
             <div id="searchbox" class="ui transparent left icon input templatebrowser_searchBox">
                 <input id="searchTextAudio" type="text" placeholder="Search Audio..." ng-keypress="$event.keyCode === 13 ? $ctrl.searchKeyPress('audio') : null">

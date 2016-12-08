@@ -33,6 +33,7 @@ EkstepEditor.basePlugin.extend({
     initPreview: function(event, data) {
         var instance = this;
         this.cb = data.callback;
+        this.mediaType = data.type;
         this.search_filter = data.search_filter;
         this.loadResource('editor/assetBrowser.html', 'html', function(err, response) {
             instance.showAssetBrowser(err, response);
@@ -111,6 +112,7 @@ EkstepEditor.basePlugin.extend({
         ctrl.selectBtnDisable = true;
         ctrl.loadingImage = true;
         ctrl.loadingAudio = true;
+        ctrl.imageBrowser = (instance.mediaType == 'image');
 
         $('.menu .item').tab();
 
@@ -160,17 +162,17 @@ EkstepEditor.basePlugin.extend({
             instance.getAsset(undefined, "audio", audioAssetCb);
         };
 
-        ctrl.searchKeyPress = function(mediaType) {
+        ctrl.search = function() {
             var callback,
                 searchText;
 
-            searchText = (mediaType === "image") ? $('#searchTextImage').val() : $('#searchTextAudio').val();
+            searchText = ctrl.query;
             (searchText === "") ? searchText = undefined: null;
-            callback = (mediaType === "image") ? imageAssetCb : callback;
-            callback = (mediaType === "audio") ? audioAssetCb : callback;
+            callback = (instance.mediaType === "image") ? imageAssetCb : callback;
+            callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
             callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
             ctrl.selectBtnDisable = true;
-            callback && instance.getAsset(searchText, mediaType, callback);
+            callback && instance.getAsset(searchText, instance.mediaType, callback);
         }
 
         ctrl.cancel = function() {
