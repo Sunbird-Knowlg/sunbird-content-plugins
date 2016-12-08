@@ -20,21 +20,21 @@
     <div class="content">
         <div class="ui mini three steps">
             <div class="{{$ctrl.isFiltersShown ? 'active': ''}} step">
-                <i class="truck icon"></i>
+                <i class="checkmark box icon"></i>
                 <div class="content">
                     <div class="title">Pick Questions</div>
                     <div class="description">Search and select questions</div>
                 </div>
             </div>
             <div class="{{!$ctrl.isFiltersShown ? 'active': ''}} step">
-                <i class="payment icon"></i>
+                <i class="setting icon"></i>
                 <div class="content">
                     <div class="title">Configure Assessment</div>
                     <div class="description">Enter assessment title and configure defaults</div>
                 </div>
             </div>
             <div class="step">
-                <i class="payment icon"></i>
+                <i class="browser icon"></i>
                 <div class="content">
                     <div class="title">Add Assessment</div>
                     <div class="description">Add assessment to the content</div>
@@ -200,6 +200,9 @@
         <a href="" target="_blank">
             <button class="ui blue left floated button">Create A Question</button>
         </a>
+        <div class="ui label" ng-show="$ctrl.cart.items.length">
+            <a class="ui grey circular label">{{$ctrl.cart.items.length}}</a> Questions added
+        </div>
         <div class="ui buttons" ng-if="$ctrl.isFiltersShown">
             <button class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
             <div class="or"></div>
