@@ -45,8 +45,8 @@
             <div class="ui form">
                 <div class="field">
                     <div class="ui fluid icon input">
-                        <input ng-disabled="isFilterAdded()" ng-model="$ctrl.activity.question_title" placeholder="Search by question, or question title" type="text"></input>
-                        <i class="inverted circular search link icon" ng-click="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())"></i>
+                        <input ng-disabled="isFilterAdded()" ng-model="$ctrl.activity.question_title" placeholder="Search by question, or question title" ng-keypress="$event.keyCode === 13 ? $ctrl.searchQuestions() : null"  type="text"></input>
+                        <i class="inverted circular search link icon" ng-click="$ctrl.searchQuestions()" ></i>
                     </div>
                 </div>
                 <div class="ui accordion field" id="assessmentAdvancedFields">
@@ -59,7 +59,7 @@
                             <div class="field">
                                 <div class="ui fluid labeled input">
                                     <div class="ui label">Language</div>
-                                    <select class="ui fluid dropdown search" ng-model="$ctrl.activity.language" ng-options="lang for lang in $ctrl.assessment.language" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
+                                    <select class="ui fluid dropdown search" ng-model="$ctrl.activity.language" ng-options="lang for lang in $ctrl.assessment.language" ng-change="$ctrl.searchQuestions()">
                                         <option value="">
                                             All
                                         </option>
@@ -69,7 +69,7 @@
                             <div class="field">
                                 <div class="ui fluid labeled input">
                                     <div class="ui label">Difficulty</div>
-                                    <select class="ui fluid dropdown search" ng-model="$ctrl.activity.qlevel" ng-options="level for level in $ctrl.assessment.qlevel" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
+                                    <select class="ui fluid dropdown search" ng-model="$ctrl.activity.qlevel" ng-options="level for level in $ctrl.assessment.qlevel" ng-change="$ctrl.searchQuestions()">
                                         <option value="">
                                             Difficulty
                                         </option>
@@ -79,7 +79,7 @@
                             <div class="field">
                                 <div class="ui fluid labeled input">
                                     <div class="ui label">Question Type</div>
-                                    <select multiple="" class="ui fluid dropdown search" ng-model="$ctrl.activity.type" ng-options="type for type in $ctrl.assessment.type" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
+                                    <select multiple="" class="ui fluid dropdown search" ng-model="$ctrl.activity.type" ng-options="type for type in $ctrl.assessment.type" ng-change="$ctrl.searchQuestions()">
                                         <option value="">
                                             Type
                                         </option>
@@ -91,7 +91,7 @@
                             <div class="field">
                                 <div class="ui fluid labeled input">
                                     <div class="ui label">&emsp;Grade&nbsp;&nbsp;&nbsp;</div>
-                                    <select multiple="" class="ui fluid dropdown search" ng-model="$ctrl.activity.gradeLevel" ng-options="grade for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
+                                    <select multiple="" class="ui fluid dropdown search" ng-model="$ctrl.activity.gradeLevel" ng-options="grade for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="$ctrl.searchQuestions()">
                                         <option value="">
                                             Grade
                                         </option>
@@ -106,7 +106,7 @@
                             </div>
                             <div class="field">
                                 <div class="ui toggle checkbox">
-                                    <input type="checkbox" ng-model="$ctrl.activityOptions.myQuestions" ng-change="$ctrl.searchQuestions($ctrl.activityOptions.myQuestions ? 'myQuestions' : '')">
+                                    <input type="checkbox" ng-model="$ctrl.activityOptions.myQuestions" ng-change="$ctrl.searchQuestions()">
                                     <label>My Questions</label>
                                 </div>
                             </div>
@@ -155,8 +155,13 @@
             </div>
         </div>
         <div class="ui divider"></div>
+        <div class="ui segment" style="width: 100%;height: 270px;" ng-show="$ctrl.itemsLoading">
+            <div class="ui active inverted dimmer">
+                <div class="ui text loader">Just one second, We're fetching that content for you.</div>
+            </div>
+        </div>
         <div ng-show="($ctrl.isFiltersShown && $ctrl.items.length) || (!$ctrl.isFiltersShown && $ctrl.cart.items.length)">
-            <div class="ui two column horizontally padded grid">
+            <div class="ui two column horizontally padded grid" ng-show="!$ctrl.itemsLoading">
                 <div class="column" style="width: 480px;height: 284px; overflow-y: scroll;">
                     <div class="ui large divided items" ng-show="$ctrl.isFiltersShown">
                         <div class="item select" ng-repeat="item in $ctrl.items" ng-click=" item.isSelected ? $ctrl.cart.remove(item) : $ctrl.cart.add(item); $event.stopPropagation()">

@@ -75,7 +75,7 @@ EkstepEditor.basePlugin.extend({
     */
 
     controllerCallback: function(ctrl, scope, data) {
-        $('.modal').addClass('item-activity');
+        EkstepEditorAPI.jQuery('.modal').addClass('item-activity');
         var itemIframe = EkstepEditor.jQuery('#itemIframe')[0],
             config = { "showStartPage": false, "showEndPage": false },
             instance = data.instance;
@@ -125,7 +125,7 @@ EkstepEditor.basePlugin.extend({
                             break;
                     }
                 });
-                $('.ui.dropdown').dropdown({useLabels: false});
+                EkstepEditorAPI.jQuery('.ui.dropdown').dropdown({useLabels: false});
             }
         });
 
@@ -236,7 +236,7 @@ EkstepEditor.basePlugin.extend({
             ctrl.activityOptions.max_score = ctrl.activityOptions.total_items;
             ctrl.activityOptions.range = _.times(ctrl.activityOptions.total_items).splice(1);
             ctrl.activityOptions.range.push(ctrl.activityOptions.total_items);
-            $('.displayCount .text').html(ctrl.activityOptions.total_items);
+            EkstepEditorAPI.jQuery('.displayCount .text').html(ctrl.activityOptions.total_items);
             EkstepEditorAPI.getAngularScope().safeApply();
         };
 
@@ -286,7 +286,6 @@ EkstepEditor.basePlugin.extend({
 
         ctrl.addItemActivity = function() {
             console.log('items ', ctrl.cart.items);
-            //return ctrl.cart.items;
             if (!_.isUndefined(instance.callback)) {
                 instance.callback(ctrl.cart.items);
                 ctrl.cancel();
@@ -294,7 +293,7 @@ EkstepEditor.basePlugin.extend({
         }
 
         ctrl.cancel = function() {
-            $('.ui.modal').modal('hide');
+            EkstepEditorAPI.jQuery('.ui.modal').modal('hide');
         };
     }
 
