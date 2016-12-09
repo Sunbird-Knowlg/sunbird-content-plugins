@@ -97,7 +97,7 @@ EkstepEditor.basePlugin.extend({
     */
     browserController: function(ctrl, $injector, resolvedData) {
         var audiodata = {},
-            imagedata = { "x": 20, "y": 20, "w": 50, "h": 50 },
+            imagedata = { },
             searchText,
             instance = resolvedData.instance,
             lastSelectedAudio,

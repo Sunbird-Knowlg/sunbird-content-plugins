@@ -26,11 +26,14 @@ EkstepEditor.basePlugin.extend({
     * @memberof image
     */
     newInstance: function() {
-        this.attributes.x = 20;
-        this.attributes.y = 20;
-        this.attributes.w = 40;
-        this.attributes.h = 40;
-        this.percentToPixel(this.attributes);
+        if (!this.attributes.x) 
+        {
+            this.attributes.x = 20;
+            this.attributes.y = 20;
+            this.attributes.w = 40;
+            this.attributes.h = 40;
+            this.percentToPixel(this.attributes);
+        }
         var instance = this;
         var _parent = this.parent;
         this.parent = undefined;
