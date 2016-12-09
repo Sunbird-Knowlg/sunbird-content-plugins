@@ -204,7 +204,7 @@ EkstepEditor.basePlugin.extend({
                 }
             });
         };
-        ctrl.searchQuestions();
+
         ctrl.cart = {
             "items": [],
             "getItemIndex": function(item) {
@@ -285,7 +285,6 @@ EkstepEditor.basePlugin.extend({
         };
 
         ctrl.addItemActivity = function() {
-            console.log('items ', ctrl.cart.items);
             if (!_.isUndefined(instance.callback)) {
                 instance.callback(ctrl.cart.items);
                 ctrl.cancel();
@@ -295,6 +294,15 @@ EkstepEditor.basePlugin.extend({
         ctrl.cancel = function() {
             EkstepEditorAPI.jQuery('.ui.modal').modal('hide');
         };
+
+        ctrl.searchQuestions();
+        EkstepEditorAPI.dispatchEvent('org.ekstep.conceptselector:init', {
+            element: 'assessmentConceptSelector',
+            selectedConcepts: [], // All composite keys except mediaType
+            callback: function(data) {
+                console.log('concepts data received - ', data);
+            }
+        });
     }
 
 });
