@@ -23,10 +23,10 @@
             }
         }],
         "config": [{
-            "propertyName": "assetbrowser",
-            "title": "Assest Browser",
-            "description": "Choose a assest from the browser",
-            "dataType": "assetbrowser",
+            "propertyName": "imageBrowser",
+            "title": "Image Browser",
+            "description": "Choose a  from the browser",
+            "dataType": "imagebrowser",
             "required": true
         }]
     }

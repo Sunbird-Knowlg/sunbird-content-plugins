@@ -258,8 +258,9 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         if (data.type) {
             switch (data.type) {
-                case 'assetbrowser':
+                case 'imagebrowser':
                     EkstepEditorAPI.dispatchEvent('org.ekstep.assetbrowser:show', {
+                        type: 'image',
                         callback: function(data) { instance.onConfigChange('asset', data) }
                     });
                     break;
