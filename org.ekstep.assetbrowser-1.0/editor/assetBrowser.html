@@ -146,57 +146,125 @@
             </div>
         </div>
     </div>
-    <div class="content" ng-show="$ctrl.imageBrowser">
-        <div class="ui fluid icon input">
-            <input ng-model="$ctrl.query" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text"></input>
-            <i class="inverted circular search link icon" ng-click="$ctrl.search()"></i>
-        </div>
-        <div class="ui grid templatebrowser_main">
-            <i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
-            <div id="assetArea1" ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
-                <div class="four column row templatebrowser_thumbnail">
-                    <div class="ui card templatecard" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected} " data-html="<div class='header'>Details</div><div class='content'><div class='ui bulleted list'><div class='item'>Name:{{image.name}}</div><div class='item'>Size:{{image.sizeinbytes}}</div><div class='item'>Type:{{image.mimeType}}</div><div class='item'>License:{{image.license}}</div>">
-                        <a class="item" ng-show="$ctrl.selected_images[$index].selected">
-                            <div class="floating ui blue label"><i class="fa fa-check" aria-hidden="true"></i></div>
-                        </a>
-                        <div class="image">
-                            <img class="asset_thumbnail" data_id="{{image.identifier}}" src="{{image.downloadUrl}}">
-                        </div>
-                        <div class="content cardcontent">
-                            <div class="header">Title: {{image.name}}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="ui pointing secondary menu tab_menu">
+        <a class="active item" data-tab="first" ng-click="$ctrl.imageTab()">Image</a>
+        <a class="item" data-tab="second" ng-click="$ctrl.assetUpload()">Upload</a>
     </div>
-    <div class="content" ng-hide="$ctrl.imageBrowser">
-        <div class="ui icon input assetbrowser_searchBox" style="margin-bottom: 10px;">
-            <div id="searchbox" class="ui transparent left icon input templatebrowser_searchBox">
-                <input id="searchTextAudio" type="text" placeholder="Search Audio..." ng-keypress="$event.keyCode === 13 ? $ctrl.searchKeyPress('audio') : null">
-                <i class="search icon"></i>
-            </div>
-        </div>
-        <i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingAudio" aria-hidden="true"></i>
-        <div class="ui grid templatebrowser_main">
-            <div id="assetArea2" ng-show="$ctrl.audioList.length > 0" ng-repeat="audio in $ctrl.audioList track by $index">
-                <div class="ten column row">
-                    <div class="audioitem" ng-click="$ctrl.AudioSource(audio.downloadUrl,audio.identifier, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}">
-                        <audio style="max-width: 85%;" controls id="audio-{{$index}}" ng-src="{{audio.downloadUrl}}" width="120" height="120"></audio>
-                        <div class="audio-tag">{{audio.identifier}}</div>
-                        <div class="audioOverlay" ng-show="$ctrl.selected_audios[$index].selected">
-                            <i class="fa fa-check-square-o fa-2x faAudioCheck" aria-hidden="true"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="ui active tab" data-tab="first" style="margin: 10px;">
+		<div class="content" ng-show="$ctrl.imageBrowser">
+			<div class="ui fluid icon input">
+				<input ng-model="$ctrl.query" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text"></input>
+				<i class="inverted circular search link icon" ng-click="$ctrl.search()"></i>
+			</div>
+			<div class="ui grid templatebrowser_main">
+				<i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
+				<div id="assetArea1" ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
+					<div class="four column row templatebrowser_thumbnail">
+						<div class="ui card templatecard" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected} " data-html="<div class='header'>Details</div><div class='content'><div class='ui bulleted list'><div class='item'>Name:{{image.name}}</div><div class='item'>Size:{{image.sizeinbytes}}</div><div class='item'>Type:{{image.mimeType}}</div><div class='item'>License:{{image.license}}</div>">
+							<a class="item" ng-show="$ctrl.selected_images[$index].selected">
+								<div class="floating ui blue label"><i class="fa fa-check" aria-hidden="true"></i></div>
+							</a>
+							<div class="image">
+								<img class="asset_thumbnail" data_id="{{image.identifier}}" src="{{image.downloadUrl}}">
+							</div>
+							<div class="content cardcontent">
+								<div class="header">Title: {{image.name}}</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="content" ng-hide="$ctrl.imageBrowser">
+			<div class="ui icon input assetbrowser_searchBox" style="margin-bottom: 10px;">
+				<div id="searchbox" class="ui transparent left icon input templatebrowser_searchBox">
+					<input id="searchTextAudio" type="text" placeholder="Search Audio..." ng-keypress="$event.keyCode === 13 ? $ctrl.searchKeyPress('audio') : null">
+					<i class="search icon"></i>
+				</div>
+			</div>
+			<i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingAudio" aria-hidden="true"></i>
+			<div class="ui grid templatebrowser_main">
+				<div id="assetArea2" ng-show="$ctrl.audioList.length > 0" ng-repeat="audio in $ctrl.audioList track by $index">
+					<div class="ten column row">
+						<div class="audioitem" ng-click="$ctrl.AudioSource(audio.downloadUrl,audio.identifier, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}">
+							<audio style="max-width: 85%;" controls id="audio-{{$index}}" ng-src="{{audio.downloadUrl}}" width="120" height="120"></audio>
+							<div class="audio-tag">{{audio.identifier}}</div>
+							<div class="audioOverlay" ng-show="$ctrl.selected_audios[$index].selected">
+								<i class="fa fa-check-square-o fa-2x faAudioCheck" aria-hidden="true"></i>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="ui tab" data-tab="second" style="margin: 10px;">
+		<div class="ui two column divided grid">
+			<div class="row ui form">
+				<div class="column">
+					<div class="field">
+						<label for="assetName" title="Enter asset caption">Select file</label>
+						<input class="cropit-image-input" id="assetfile" type="file" name="assetfile" accept="image/*">
+					</div>
+
+					<div class="grouped fields">
+						<label>
+							<h4 class="ui header">Copyright & License:</h4>
+						</label>
+						<p>I understand and confirm that all lessons/assets created through the authoring tool or uploaded on the Ekstep platform shall be available for free and public use without limitations on the Ekstep platform (portal,applications and any other end user interface that Ekstep platform would enable) and will be licensed under<!--@Todo add policy link --> <a href="#" target="_blank">CC-BY 4.0</a></p>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<input type="radio" ng-model="$ctrl.assetMeta.license" id="ccByContribution1" name="ccByContribution" value="Creative Commons Attribution (CC BY)">
+								<label for="ccByContribution1">Yes, make it available to everyone</label>
+							</div>
+						</div>
+						<div class="field">
+							<div class="ui radio checkbox">
+								<input type="radio" ng-model="$ctrl.assetMeta.license" id="ccByContribution2" name="ccByContribution" value="">
+								<label for="ccByContribution2">No, don't share with anyone</label>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="column">
+					<div class="required field">
+						<label for="assetName" title="Enter asset caption">Asset Caption</label>
+						<input type="text" ng-model="$ctrl.assetMeta.name" id="assetName" name="name" placeholder="Enter asset caption" required />
+					</div>
+
+					<div class="field">
+						<label for="keywords" title="Tags">Tags</label>
+						<input type="text" ng-model="$ctrl.keywordsText" id="keywords" name="keywords" >
+					 </div>
+
+					<div class="field">
+						<label title="Choose Language">Language</label>
+						<select class="ui dropdown" ng-model="$ctrl.languageText" ng-options="lang for lang in $ctrl.asset.language">
+							<option value="">All</option>
+						</select>
+					</div>
+
+					<div class="field">
+						<label for="creator" title="Creator">Creator</label>
+						<input type="text" id="creator" ng-model="$ctrl.assetMeta.creator" class="ng-pristine ng-untouched ng-valid" name="creator" placeholder="Enter Name" required>
+					</div>
+
+					<div class="field">
+						<label for="copyright" title="Enter Copyright">Copyright</label>
+						<input type="text" id="copyright" ng-model="$ctrl.assetMeta.copyright" name="copyright">
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
     <div class="actions">
         <div class="ui buttons">
             <button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
             <div class="or"></div>
-            <button id="selectanduse" class="ui blue button" ng-disabled="$ctrl.selectBtnDisable" ng-click="$ctrl.select()" type="button">Select</button>
+            <button id="selectanduse" class="ui blue button" ng-hide="$ctrl.uploadTabEnabled" ng-disabled="$ctrl.selectBtnDisable" ng-click="$ctrl.select()" type="button">Select</button>
+            <button id="doUpload" class="ui blue button" ng-show="$ctrl.uploadTabEnabled" ng-click="$ctrl.doUpload('image')" type="button">Upload and Use</button>
         </div>
     </div>
 </div>

@@ -97,6 +97,7 @@ EkstepEditor.basePlugin.extend({
     */
     browserController: function(ctrl, $injector, resolvedData) {
         var audiodata = {},
+			assetId,
             imagedata = { },
             searchText,
             instance = resolvedData.instance,
@@ -110,7 +111,30 @@ EkstepEditor.basePlugin.extend({
         ctrl.selected_images = {};
         ctrl.selected_audios = {};
         ctrl.selectBtnDisable = true;
+        ctrl.uploadTabEnabled = false;
         ctrl.loadingImage = true;
+        ctrl.languagecode = 'en';
+        ctrl.asset = {};
+        ctrl.keywordsText;
+        ctrl.languageText = "English";
+        ctrl.assetMeta = {
+			'body': '',
+            'name': '',
+            'keywords': [],
+            'creator': '',
+            'status': 'Draft',
+            'license': '',
+            'owner': 'Ekstep',
+            'code': "org.ekstep"+ Math.random(),
+            'mimeType': "",
+            'mediaType': "",
+            'contentType': "Asset",
+            'osId': "org.ekstep.quiz.app",
+            'copyright': "",
+            'sources': "",
+            'publisher': ""
+        };
+
         ctrl.loadingAudio = true;
         ctrl.imageBrowser = (instance.mediaType == 'image');
 
@@ -153,6 +177,7 @@ EkstepEditor.basePlugin.extend({
             imageTabSelected = true;
             audioTabSelected = !audioTabSelected;
             ctrl.selectBtnDisable = _.isUndefined(lastSelectedImage) ? true : false;
+            ctrl.uploadTabEnabled = false;
         }
 
         ctrl.audioTab = function() {
@@ -160,8 +185,12 @@ EkstepEditor.basePlugin.extend({
             imageTabSelected = !imageTabSelected;
             ctrl.selectBtnDisable = _.isUndefined(lastSelectedAudio) ? true : false;
             instance.getAsset(undefined, "audio", audioAssetCb);
+            ctrl.uploadTabEnabled = false;
         };
 
+        ctrl.assetUpload = function() {
+            ctrl.uploadTabEnabled = true;
+        };
         ctrl.search = function() {
             var callback,
                 searchText;
@@ -254,6 +283,95 @@ EkstepEditor.basePlugin.extend({
                 ctrl.cancel();
             }
         }
+
+        EkstepEditor.assessmentService.getLanguages(function(err, resp) {
+            if (!err && resp.statusText == "OK") {
+                var assetlanguages = {};
+                _.forEach(resp.data.result.languages, function(lang) {
+                    assetlanguages[lang.code] = lang.name;
+                });
+                ctrl.asset.language = _.values(assetlanguages);
+                EkstepEditorAPI.getAngularScope().safeApply();
+            }
+        });
+
+		ctrl.doUpload = function(mediaType) {
+			var requestObj,
+				content = ctrl.assetMeta,
+				data = new FormData();
+
+			jQuery.each(jQuery('#assetfile')[0].files, function(i, file) {
+				data.append('file', file);
+				ctrl.assetMeta.mimeType = file.type;
+
+				// @Todo for audio
+				ctrl.assetMeta.mediaType = "image";
+			});
+
+			/** Convert language into array **/
+			if ((!_.isUndefined(ctrl.languageText)) && (ctrl.languageText) != null) {
+				content.language = [ctrl.languageText];
+			}
+			else {
+				delete content.language;
+			}
+
+			/** Convert keywords in to array **/
+			if ((!_.isUndefined(ctrl.keywordsText)) && (ctrl.keywordsText) != null) {
+				content.keywords = ctrl.keywordsText.split(",");
+			}
+			else {
+				delete content.keywords;
+			}
+
+			/** Don't post blank license **/
+			if (content.license =="") {
+				delete content.license;
+			}
+
+			// Create the content for asset
+			EkstepEditor.assetService.saveAsset(assetId, content, function(err, resp) {
+				if (resp) {
+					alert('Image saved successfully');
+
+					jQuery.ajax({
+						url:"https://dev.ekstep.in/api/learning/v2/content/upload/" + resp.data.result.node_id,
+						type: 'POST',
+						contentType:false,
+						data: data,
+						cache: false,
+						processData: false,
+						beforeSend : function(request) {
+							request.setRequestHeader("user-id", "mahesh");
+						},
+						success: function (resp) {
+							console.log(resp);
+							imagedata.asset = resp.result.node_id;
+
+							console.log(imagedata.asset);
+
+							imagedata.assetMedia = {
+								id: resp.result.node_id,
+								src: resp.result.content_url,
+								type: 'image'
+							}
+
+							console.log(imagedata.assetMedia);
+							instance.cb(imagedata);
+							ctrl.cancel();
+						},
+						complete:function()
+						{
+							console.log("Complete");
+						},
+						error:function()
+						{
+							console.log("error");
+						}
+					});
+                }
+            });
+		}
     }
 });
 //# sourceURL=assetbrowserplugin.js
