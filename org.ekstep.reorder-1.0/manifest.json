@@ -13,7 +13,7 @@
 			"type": "icon",
 			"toolTip": "Re-order",
 			"title": "Reorder",
-			"iconClass": "fa fa-sort fa-lg fa-inverse menu-icon",
+			"iconClass": "sort icon",
 			"state": "HIDE",
 			"submenu": [{
 				"id": "sendtofront",
@@ -21,6 +21,7 @@
 				"toolTip": "Send to front",
 				"title": "Bring Front",
 				"iconImage": "assets/bring-front.png",
+				"iconClass": "",
 				"onclick": {
 					"id": "reorder:sendtofront",
 					"data": {}
@@ -31,6 +32,7 @@
 				"toolTip": "Send to back",
 				"title": "Send Back",
 				"iconImage": "assets/send-back.png",
+				"iconClass": "",
 				"onclick": {
 					"id": "reorder:sendtoback",
 					"data": {}

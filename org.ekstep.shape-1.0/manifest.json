@@ -14,16 +14,16 @@
         "menu": [{
             "id": "shape",
             "category": "main",
-            "type": "image",
+            "type": "icon",
             "toolTip": "Add Shapes",
             "title": "Shapes",
-            "iconImage": "assets/shapes.png",
+            "iconClass": "pie chart icon",
             "submenu": [{
                 "id": "rectangle",
-                "type": "image",
+                "type": "icon",
                 "toolTip": "Add Rectangle",
                 "title": "Rectangle",
-                "iconImage": "assets/rectangle.png",
+                "iconClass": "cube icon",
                 "onclick": {
                     "id": "org.ekstep.shape:create",
                     "data": {
@@ -37,10 +37,10 @@
                 }
             }, {
                 "id": "circle",
-                "type": "image",
+                "type": "icon",
                 "toolTip": "Add Circle",
                 "title": "Circle",
-                "iconImage": "assets/circle.png",
+                "iconClass": "circle icon",
                 "onclick": {
                     "id": "org.ekstep.shape:create",
                     "data": {
@@ -54,10 +54,10 @@
                 }
             }, {
                 "id": "rounded-rectangle",
-                "type": "image",
+                "type": "icon",
                 "toolTip": "Add Rounded Rectangle",
                 "title": "Rounded Rectangle",
-                "iconImage": "assets/rounded-rectangle.png",
+                "iconClass": "square icon",
                 "onclick": {
                     "id": "org.ekstep.shape:create",
                     "data": {

@@ -54,7 +54,7 @@ EkstepEditor.basePlugin.extend({
     showPreview: function(err, data) {
         console.log(this.previewURL);
         var instance = this;
-        var popupConfig = { template: data, windowClass: 'modal-preview', size: 'lg' };
+        var popupConfig = { template: data};
         var popupService = EkstepEditorAPI.getService('popup');
         var contentService = EkstepEditorAPI.getService('content');
 

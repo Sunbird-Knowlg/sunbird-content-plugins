@@ -12,10 +12,10 @@ EkstepEditor.basePlugin.extend({
     type: 'assetbrowser',
     initData: undefined,
     /**
-    *   @memberof cb {Funtion} callback
-    *   @memberof assetBrowser
-    */
-    cb: function(){},
+     *   @memberof cb {Funtion} callback
+     *   @memberof assetBrowser
+     */
+    cb: undefined,
     /**
     *   registers events
     *   @memberof assetBrowser
@@ -32,7 +32,9 @@ EkstepEditor.basePlugin.extend({
     */
     initPreview: function(event, data) {
         var instance = this;
-        this.cb = data.callback;       
+        this.cb = data.callback;
+        this.mediaType = data.type;
+        this.search_filter = data.search_filter;
         this.loadResource('editor/assetBrowser.html', 'html', function(err, response) {
             instance.showAssetBrowser(err, response);
         });
@@ -49,7 +51,8 @@ EkstepEditor.basePlugin.extend({
         var instance = this,
             iservice = new EkstepEditor.iService(),
             requestObj,
-            requestHeaders;
+            requestHeaders,
+            allowableFilter;
 
         requestObj = {
             "request": {
@@ -69,6 +72,8 @@ EkstepEditor.basePlugin.extend({
         };
 
         _.isUndefined(searchText) ? null : requestObj.request.filters.name = [searchText];
+        allowableFilter = _.omit(this.search_filter, ['mediaType', 'license']);
+        _.merge(requestObj.request.filters, allowableFilter);
 
         iservice.http.post(EkstepEditor.config.baseURL + '/api/search/v2/search', requestObj, requestHeaders, cb);
 
@@ -80,43 +85,42 @@ EkstepEditor.basePlugin.extend({
     *   @memberof assetBrowser
     */
     showAssetBrowser: function(err, data) {
-        EkstepEditorAPI.getService('popup').open({ template: data, size: 'lg', resolve: { data: { instance: this } } }, this.browserController);
+        EkstepEditorAPI.getService('popup').open({ template: data, data: { instance: this } }, this.browserController);
     },
     /**
     *   @memberof assetBrowser
     *   angular controller for popup service as callback
     *   @param ctrl {Object} popupController object
-    *   @param scope {Object} popupController scope object
-    *   @param $uibModalInstance {Object} ui-bootstrap modal instance
-    *   @param resolvedData {Object} data passed to uib config
-    *   @param $sce {Object} strict contextual escaping service
+    *   @param scope {Object} popupController scope object    
+    *   @param resolvedData {Object} data passed to popup config    
     *   @memberof assetBrowser
     */
-    browserController: function(ctrl, scope, $uibModalInstance, resolvedData, $sce) {
-        var audiodata = {}, imagedata = {},
+    browserController: function(ctrl, $injector, resolvedData) {
+        var audiodata = {},
+            imagedata = { "x": 20, "y": 20, "w": 50, "h": 50 },
             searchText,
             instance = resolvedData.instance,
             lastSelectedAudio,
             lastSelectedImage,
             audioTabSelected = false,
             imageTabSelected = true;
-            //mainScope = EkstepEditorAPI.getAngularScope();
+        //mainScope = EkstepEditorAPI.getAngularScope();
 
-
+        var $sce = $injector.get('$sce');
         ctrl.selected_images = {};
         ctrl.selected_audios = {};
         ctrl.selectBtnDisable = true;
         ctrl.loadingImage = true;
         ctrl.loadingAudio = true;
+        ctrl.imageBrowser = (instance.mediaType == 'image');
 
+        $('.menu .item').tab();
 
         function imageAssetCb(err, res) {
             if (res && res.data.result.content) {
                 ctrl.loadingImage = false;
-                ctrl.imageList = [];
-                _.forEach(res.data.result.content, function(obj, index) {
-                    ctrl.imageList.push({ downloadUrl: trustResource(obj.downloadUrl), identifier: obj.identifier });
-                });
+                ctrl.imageList = res.data.result.content;
+                ctrl.initPopup(res.data.result.content);
             } else {
                 ctrl.imageList = [];
             };
@@ -158,21 +162,21 @@ EkstepEditor.basePlugin.extend({
             instance.getAsset(undefined, "audio", audioAssetCb);
         };
 
-        ctrl.searchKeyPress = function(mediaType) {
+        ctrl.search = function() {
             var callback,
                 searchText;
 
-            searchText = (mediaType === "image") ? $('#searchTextImage').val() : $('#searchTextAudio').val();
+            searchText = ctrl.query;
             (searchText === "") ? searchText = undefined: null;
-            callback = (mediaType === "image") ? imageAssetCb : callback;
-            callback = (mediaType === "audio") ? audioAssetCb : callback;
+            callback = (instance.mediaType === "image") ? imageAssetCb : callback;
+            callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
             callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
             ctrl.selectBtnDisable = true;
-            callback && instance.getAsset(searchText, mediaType, callback);
+            callback && instance.getAsset(searchText, instance.mediaType, callback);
         }
 
         ctrl.cancel = function() {
-            $uibModalInstance.dismiss('cancel');
+            $('.ui.modal').modal('hide');
         };
 
         ctrl.ImageSource = function(event, $index) {
@@ -217,6 +221,25 @@ EkstepEditor.basePlugin.extend({
             lastSelectedAudio = $index;
             return true;
         };
+
+        ctrl.initPopup = function(item) {
+            _.forEach(item, function(obj, index) {
+                $('#assetbrowser-' + index).popup({
+                    hoverable: true,
+                    position: 'right center'
+                });
+                obj.sizeinbytes = ctrl.convertToBytes(obj.size);
+            });
+        };
+
+        ctrl.convertToBytes = function(bytes) {
+            if(_.isUndefined(bytes)) return " N/A";
+            bytes = parseInt(bytes);
+            var precision = 1;
+            var units = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'],
+                number = Math.floor(Math.log(bytes) / Math.log(1024));
+            return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) + ' ' + units[number];
+        }
 
         ctrl.select = function() {
             if (imagedata && imagedata.asset && imageTabSelected) {

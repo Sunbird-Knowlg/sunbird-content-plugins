@@ -1,268 +1,217 @@
-<div>
-    <div class="modal-header">
-        <div class="modal-title">
-            <div class="pull-left">
-                <h2>Add questions to<i class="icons-mandatory" ></i>: </h2>
-                <input class="form-control" id="title" name="title" ng-model="activityOptions.title" required="" type="text" placeholder="Assessment Title" maxlength="60" />
-                <i class="fa fa-pencil"></i>
-            </div>
-            <div class="pull-right">
-                <div class="assessment-counts">
-                    <span class="cart-counts" ng-show="$ctrl.cart.items.length">
-                    {{$ctrl.cart.items.length}}
-                </span>
-                    <i class="icons-assessment">
-                </i>
-                    <!--<span class="activity-settings-triangle" ng-show="!$ctrl.isFiltersShown"></span>-->
+<style type="text/css">
+.filters-container {
+    padding: 8px 10px 4px 18px;
+    background: #f1f1f1;
+}
+.itemIframeMessages {
+    border: 2px solid #E4E4E4;
+    padding: 110px 20px;
+    background: #FFFFFF;
+    text-align: center;
+    font-weight: bold;
+    height: 270px;
+    width: 480px;
+}
+.grid .items .item:hover{
+    background: #f1f1f1;   
+}
+</style>
+<div class="ui modal large">
+    <div class="content">
+        <div class="ui mini three steps">
+            <div class="{{$ctrl.isFiltersShown ? 'active': ''}} step">
+                <i class="checkmark box icon"></i>
+                <div class="content">
+                    <div class="title">Pick Questions</div>
+                    <div class="description">Search and select questions</div>
                 </div>
-                <div class="modal-close" data-ektelemetry-action="CloseAssessmentPopup" data-ektelemetry-category="AuthoringTool" data-ektelemetry-name="{{stageId}}" ng-click="$ctrl.cancel()">
-                    <i aria-hidden="true" class="icons-modal-close">
-                </i>
+            </div>
+            <div class="{{!$ctrl.isFiltersShown ? 'active': ''}} step">
+                <i class="setting icon"></i>
+                <div class="content">
+                    <div class="title">Configure Assessment</div>
+                    <div class="description">Enter assessment title and configure defaults</div>
+                </div>
+            </div>
+            <div class="step">
+                <i class="browser icon"></i>
+                <div class="content">
+                    <div class="title">Add Assessment</div>
+                    <div class="description">Add assessment to the content</div>
                 </div>
             </div>
         </div>
+        <div ng-show="$ctrl.isFiltersShown" class="filters-container">
+            <div class="ui form">
+                <div class="field">
+                    <div class="ui fluid icon input">
+                        <input ng-disabled="isFilterAdded()" ng-model="$ctrl.activity.question_title" placeholder="Search by question, or question title" type="text"></input>
+                        <i class="inverted circular search link icon" ng-click="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())"></i>
+                    </div>
+                </div>
+                <div class="ui accordion field" id="assessmentAdvancedFields">
+                    <div class="title" ng-click="$ctrl.showAdvancedFilter = !$ctrl.showAdvancedFilter">
+                        <i class="dropdown icon" ng-if="!$ctrl.showAdvancedFilter"></i>
+                        <i class="dropdown icon" ng-if="$ctrl.showAdvancedFilter" style="transform: rotate(90deg);"></i> Advanced Filters
+                    </div>
+                    <div class="content transition {{$ctrl.showAdvancedFilter ? 'visible': 'hidden'}}">
+                        <div class="three fields">
+                            <div class="field">
+                                <div class="ui fluid labeled input">
+                                    <div class="ui label">Language</div>
+                                    <select class="ui fluid dropdown search" ng-model="$ctrl.activity.language" ng-options="lang for lang in $ctrl.assessment.language" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
+                                        <option value="">
+                                            All
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui fluid labeled input">
+                                    <div class="ui label">Difficulty</div>
+                                    <select class="ui fluid dropdown search" ng-model="$ctrl.activity.qlevel" ng-options="level for level in $ctrl.assessment.qlevel" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
+                                        <option value="">
+                                            Difficulty
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui fluid labeled input">
+                                    <div class="ui label">Question Type</div>
+                                    <select multiple="" class="ui fluid dropdown search" ng-model="$ctrl.activity.type" ng-options="type for type in $ctrl.assessment.type" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
+                                        <option value="">
+                                            Type
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="three fields">
+                            <div class="field">
+                                <div class="ui fluid labeled input">
+                                    <div class="ui label">&emsp;Grade&nbsp;&nbsp;&nbsp;</div>
+                                    <select multiple="" class="ui fluid dropdown search" ng-model="$ctrl.activity.gradeLevel" ng-options="grade for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
+                                        <option value="">
+                                            Grade
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui fluid labeled input">
+                                    <div class="ui label">Concepts</div>
+                                    <input type="text" placeholder="Concepts" class="fluid">
+                                </div>
+                            </div>
+                            <div class="field">
+                                <div class="ui toggle checkbox">
+                                    <input type="checkbox" ng-model="$ctrl.activityOptions.myQuestions" ng-change="$ctrl.searchQuestions($ctrl.activityOptions.myQuestions ? 'myQuestions' : '')">
+                                    <label>My Questions</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div ng-show="!$ctrl.isFiltersShown" class="filters-container">
+            <div class="ui form">
+                <div class="five fields">
+                    <div class="field">
+                        <div class="ui corner labeled input">
+                            <input name="title" ng-model="activityOptions.title" type="text" placeholder="Assessment Title" autocomplete="off">
+                            <div class="ui corner label">
+                                <i class="asterisk icon"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui fluid labeled input">
+                            <div class="ui label">Total Marks</div>
+                            <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="$ctrl.activityOptions.max_score" required="" type="number" />
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui fluid labeled input displayCount">
+                            <div class="ui label">Display</div>
+                            <select class="ui fluid dropdown" id="total_items" ng-model="$ctrl.activityOptions.total_items" ng-options="option as option for option in $ctrl.activityOptions.range">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input type="checkbox" ng-model="$ctrl.activityOptions.showImmediateFeedback">
+                            <label>Show Immediate Feedback</label>
+                        </div>
+                    </div>
+                    <div class="field">
+                        <div class="ui toggle checkbox">
+                            <input type="checkbox" ng-model="$ctrl.activityOptions.shuffle">
+                            <label>Shuffle Questions</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui divider"></div>
+        <div ng-show="($ctrl.isFiltersShown && $ctrl.items.length) || (!$ctrl.isFiltersShown && $ctrl.cart.items.length)">
+            <div class="ui two column horizontally padded grid">
+                <div class="column" style="width: 480px;height: 284px; overflow-y: scroll;">
+                    <div class="ui large divided items" ng-show="$ctrl.isFiltersShown">
+                        <div class="item select" ng-repeat="item in $ctrl.items" ng-click=" item.isSelected ? $ctrl.cart.remove(item) : $ctrl.cart.add(item); $event.stopPropagation()">
+                            <div class="middle aligned content">
+                                <div class="header">{{ item.question.question }}</div>
+                                <div class="meta">{{item.question.type}} | {{ item.question.qlevel}} | {{ item.question.title }}</div>
+                                <div class="description">{{ item.question.description }}</div>
+                            </div>
+                            <div class="ui checkbox" ng-class="item.isSelected ? 'checked' : '' ">
+                                <input type="checkbox" ng-checked="item.isSelected ? 'checked' : ''" name="check">
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="ui large divided items" ng-show="!$ctrl.isFiltersShown">
+                        <div class="item select" ng-repeat="cartItem in $ctrl.cart.items" ng-click="$ctrl.cart.remove(cartItem)">
+                            <div class="middle aligned content">
+                                <div class="header">{{ cartItem.question.question }}</div>
+                                <div class="meta">{{cartItem.question.type}} | {{ cartItem.question.qlevel}} | {{ cartItem.question.title }}</div>
+                                <div class="description">{{ cartItem.question.description }}</div>
+                            </div>
+                            <div class="ui checkbox" ng-class="item.isSelected ? 'checked' : '' ">
+                                <input type="checkbox" checked="" name="check">
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column right floated">
+                    <iframe id="itemIframe" ng-hide="!$ctrl.itemPreviewLoading && ($ctrl.itemPreviewContent.error || ($ctrl.itemPreviewDisplay == $ctrl.itemPreviewDefaultMessage))" style="width: 480px;height: 270px; border: 2px solid #E4E4E4;"></iframe>
+                    <div class="itemIframeMessages" ng-show="!$ctrl.itemPreviewLoading && ($ctrl.itemPreviewContent.error || ($ctrl.itemPreviewDisplay == $ctrl.itemPreviewDefaultMessage))">{{$ctrl.itemPreviewDisplay}}</div>
+                </div>
+            </div>
+        </div>
+        <div class="ui center aligned segment" ng-show="($ctrl.items && !$ctrl.items.length) && $ctrl.isFiltersShown">
+            No Data Found
+            <br> Redefine your search filters!
+        </div>
     </div>
-    <div class="modal-body item-activity-container">
-        <section class="item-activity-filters" ng-show="$ctrl.isFiltersShown">
-            <div class="filters-tab">
-                <span ng-class="{active: !$ctrl.isMyQuestions}" ng-click="$ctrl.searchQuestions()">
-                All Questions
-            </span>
-                <span ng-class="{active: $ctrl.isMyQuestions}" ng-click="$ctrl.searchQuestions('myQuestions')">
-                My Questions
-            </span>
-            </div>
-            <div class="filters-container">
-                <div class="input-group search-questions">
-                    <input aria-label="..." class="form-control" ng-disabled="isFilterAdded()" ng-enter="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions() )" ng-model="$ctrl.activity.question_title" placeholder="Search by question, or question title" type="text">
-                    <i class="icons-activity-search" ng-click="$ctrl.searchQuestions()">
-                    </i>
-                    </input>
-                </div>
-                <div class="search-question-filters row combined-search">
-                    <div id="filter-bar">
-                        <div class="form-group">
-                            <label>
-                                Language
-                            </label>
-                            <select class="form-control" ng-model="$ctrl.activity.language" ng-options="lang for lang in $ctrl.assessment.language" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
-                                <option value="">
-                                    All
-                                </option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                Difficulty
-                            </label>
-                            <select class="form-control" ng-model="$ctrl.activity.qlevel" ng-options="level for level in $ctrl.assessment.qlevel" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
-                                <option value="">
-                                    All types
-                                </option>
-                            </select>
-                        </div>
-                        <div class="form-group questiontypeoptions">
-                            <label>
-                                Question Type
-                            </label>
-                            <select class="form-control" id="questiontype" multiple="multiple" ng-model="$ctrl.activity.type" ng-options="key as value for (key , value) in $ctrl.assessment.type" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
-                            </select>
-                        </div>
-                        <div class="form-group gradeoptions">
-                            <label>
-                                Grade
-                            </label>
-                            <select class="form-control" id="grade" multiple="multiple" ng-model="$ctrl.activity.gradeLevel" ng-options="grade for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="($ctrl.isMyQuestions === true ? $ctrl.searchQuestions('myQuestions') : $ctrl.searchQuestions())">
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>
-                                Concepts
-                            </label>
-                            <input class="form-control" ng-click="openConceptSelector()" placeholder="{{activity.conceptsPlaceHolder}}" selectable="false" type="text">
-                            </input>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-        <section class="item-activity-filters item-activity-settings" ng-show="!$ctrl.isFiltersShown">
-            <h6>
-            Test Settings
-        </h6>
-            <div class="item-settings-form">
-                <ng-form name="activityOptionsForm">
-                    <span class="fa fa-spinner fa-spin fa-5x at-loader" ng-show="$ctrl.itemActivityLoading">
-                </span>
-                    <div class="form-group" ng-class="{'has-error': activityOptionsForm.max_score.$invalid}">
-                        <label for="max_score">
-                            Total Marks:
-                            <i class="icons-mandatory" ng-show="activityOptionsForm.max_score.$error.required">
-                        </i>
-                        </label>
-                        <input class="form-control total-marks" id="max_score" name="max_score" ng-model="$ctrl.activityOptions.max_score" required="" type="number" />
-                    </div>
-                    <div class="form-group">
-                        <label for="total_items">
-                            Display any:
-                        </label>
-                        <select class="form-control total-marks" id="total_items" name="total_items" ng-model="$ctrl.activityOptions.total_items" ng-options="option as option for option in $ctrl.activityOptions.range">
-                        </select>
-                        <span class="display-total-count">
-                        /{{$ctrl.activityOptions.range.length}} questions
-                    </span>
-                    </div>
-                    <div class="form-group activity-shuffle">
-                        <input id="showImmediateFeedback" ng-model="$ctrl.activityOptions.showImmediateFeedback" type="checkbox">
-                        <label for="showImmediateFeedback">
-                            Show Immediate Feedback
-                        </label>
-                        </input>
-                    </div>
-                    <div class="form-group activity-shuffle">
-                        <input id="shuffleQuestions" ng-model="$ctrl.activityOptions.shuffle" type="checkbox">
-                        <label for="shuffleQuestions">
-                            Shuffle Questions
-                        </label>
-                        </input>
-                    </div>
-                </ng-form>
-            </div>
-        </section>
-        <div class="item-template-content">
-            <span class="fa fa-spinner fa-spin fa-5x at-loader" ng-show="$ctrl.itemsLoading">
-        </span>
-            <section class="manage-activity">
-                <div class="items-length">
-                    <span ng-show="$ctrl.isFiltersShown">
-                    ({{$ctrl.items.length}}) Questions
-                </span>
-                    <span ng-show="!$ctrl.isFiltersShown">
-                    Added Questions ({{$ctrl.cart.items.length}})
-                </span>
-                </div>
-                <div class="pull-right">
-                    <span class="cart-length" ng-show="$ctrl.cart.items.length && $ctrl.isFiltersShown">
-                    ({{($ctrl.cart.items.length > 1) ? $ctrl.cart.items.length + ' questions' : $ctrl.cart.items.length + ' question'}} added)
-                </span>
-                    <button class="btn at-btn at-btn-ok" ng-click="$ctrl.addActivityOptions()" ng-disabled="!$ctrl.cart.items.length" ng-show="$ctrl.isFiltersShown" type="button">
-                        NEXT
-                    </button>
-                    <button class="btn at-btn at-btn-lined add-more-items" ng-click="$ctrl.isFiltersShown = !$ctrl.isFiltersShown" ng-show="!$ctrl.isFiltersShown">
-                        ADD MORE QUESTIONS
-                    </button>
-                    <button class="btn at-btn at-btn-ok" data-ektelemetry-action="AddAssessment" data-ektelemetry-category="AuthoringTool" data-ektelemetry-name="{{stageId}}" ng-click="$ctrl.addItemActivity()" ng-disabled="activityOptionsForm.$invalid || !activityOptions.title || !$ctrl.cart.items.length" ng-show="!$ctrl.isFiltersShown" type="button">
-                        Add Test
-                    </button>
-                    <a class="btn at-btn at-btn-ok" href="" target="_blank">
-                    Create A Question
-                </a>
-                </div>
-            </section>
-            <div ng-show="($ctrl.isFiltersShown && $ctrl.items.length) || (!$ctrl.isFiltersShown && $ctrl.cart.items.length)">
-                <section class="activity-items-container">
-                    <div ng-show="$ctrl.isFiltersShown">
-                        <div class="activity-items" ng-class="{'active': item.question.identifier == $ctrl.activePreviewItem}" ng-click="$ctrl.previewItem(item)" ng-repeat="item in $ctrl.items">
-                            <div class="activity-questions">
-                                <h4>
-                                {{item.question.question }}
-                            </h4>
-                                <p class="activity-items-info">
-                                    <span>
-                                    {{ item.question.description }}
-                                </span>
-                                </p>
-                                <p class="activity-items-info">
-                                    <span>
-                                    {{getQuestionType(item.question.type)}}
-                                </span>
-                                    <span>
-                                    | {{ item.question.qlevel ? item.question.qlevel : 'EASY' }}
-                                </span>
-                                    <span>
-                                    | {{ item.question.title }}
-                                </span>
-                                </p>
-                            </div>
-                            <div class="activity-actions">
-                                <a href="/index.php?option=com_ekcontent&view=itemform&tmpl=component&identifier={{item.question.identifier}}" ng-click="$event.stopPropagation()" ng-show="{{$ctrl.item.question.owner == userDetails.id}}" target="_blank">
-                                    <i class="icons-edit-item">
-                                </i>
-                                </a>
-                                <button class="btn at-btn at-btn-ok" ng-click="$ctrl.cart.add(item); $event.stopPropagation()" ng-hide="item.isSelected">
-                                    Add
-                                </button>
-                                <button class="btn at-btn btn-warning" ng-click="$ctrl.cart.remove(item); $event.stopPropagation()" ng-show="item.isSelected">
-                                    Remove
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div ng-show="!$ctrl.isFiltersShown">
-                        <div class="activity-items" ng-class="{'active': cartItem.question.identifier == $ctrl.activePreviewItem}" ng-click="$ctrl.previewItem(cartItem)" ng-repeat="cartItem in $ctrl.cart.items">
-                            <div class="activity-questions">
-                                <h4>
-                                {{cartItem.question.question }}
-                            </h4>
-                                <p class="activity-items-info">
-                                    <span>
-                                    {{ cartItem.question.description }}
-                                </span>
-                                </p>
-                                <p class="activity-items-info">
-                                    <span>
-                                    {{getQuestionType(cartItem.question.type)}}
-                                </span>
-                                    <span>
-                                    | {{ cartItem.question.qlevel ? cartItem.question.qlevel : 'EASY' }}
-                                </span>
-                                    <span>
-                                    | {{ cartItem.question.title }}
-                                </span>
-                                </p>
-                            </div>
-                            <div class="activity-actions">
-                                <button class="btn at-btn btn-warning" ng-click="$ctrl.cart.remove(cartItem)">
-                                    Remove
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="create-question" ng-show="$ctrl.isFiltersShown">
-                        <i class="icons-assessment-create">
-                    </i>
-                        <p>
-                            Not what you're looking for ?
-                            <br> You could create something similar!
-                            </br>
-                        </p>
-                        <a class="btn at-btn at-btn-lined" href="/index.php?option=com_ekcontent&view=itemform&tmpl=component" target="_blank">
-                        Create A Question
-                    </a>
-                    </div>
-                </section>
-                <aside class="activity-preview">
-                    <span class="fa fa-spinner fa-spin fa-5x at-loader" ng-show="$ctrl.itemPreviewLoading">
-                </span>
-                    <div class="itemIframeMessages" ng-show="!$ctrl.itemPreviewLoading && ($ctrl.itemPreviewContent.error || ($ctrl.itemPreviewDisplay == $ctrl.itemPreviewDefaultMessage))">
-                        {{$ctrl.itemPreviewDisplay}}
-                    </div>
-                    <iframe id="itemIframe">
-                    </iframe>
-                </aside>
-            </div>
-            <div class="no-items create-question" ng-show="($ctrl.items && !$ctrl.items.length) && $ctrl.isFiltersShown">
-                <i class="icons-assessment-create">
-            </i>
-                <p>
-                    No Data Found
-                    <br> Redefine your search filters!
-                    </br>
-                </p>
-                <a class="btn at-btn at-btn-lined" href="/index.php?option=com_ekcontent&view=itemform&tmpl=component" target="_blank">
-                Create A Question
-            </a>
-            </div>
+    <div class="actions">
+        <a href="" target="_blank">
+            <button class="ui blue left floated button">Create A Question</button>
+        </a>
+        <div class="ui label" ng-show="$ctrl.cart.items.length">
+            <a class="ui grey circular label">{{$ctrl.cart.items.length}}</a> Questions added
+        </div>
+        <div class="ui buttons" ng-if="$ctrl.isFiltersShown">
+            <button class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+            <div class="or"></div>
+            <button class="ui blue button" ng-click="$ctrl.addActivityOptions()" ng-disabled="!$ctrl.cart.items.length" type="button">NEXT</button>
+        </div>
+        <div class="ui buttons" ng-if="!$ctrl.isFiltersShown">
+            <button id="closePopUp" class="ui orange button" ng-click="$ctrl.isFiltersShown = !$ctrl.isFiltersShown" type="button">Add More Questions</button>
+            <div class="or"></div>
+            <button id="selectanduse" class="ui blue button" ng-click="$ctrl.addItemActivity()" ng-disabled="activityOptionsForm.$invalid || !activityOptions.title || !$ctrl.cart.items.length" type="button">Add Assessment</button>
         </div>
     </div>
 </div>

@@ -13,7 +13,7 @@
 			"type": "icon",
 			"toolTip": "Add Stage",
 			"title": "Stage",
-			"iconClass": "fa fa-lg fa-desktop fa-inverse menu-icon",
+			"iconClass": "desktop icon",
 			"onclick": {
 				"id": "stage:create",
 				"data": {

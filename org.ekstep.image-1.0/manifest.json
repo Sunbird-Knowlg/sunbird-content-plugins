@@ -17,10 +17,17 @@
             "type": "icon",
             "toolTip": "Add Image",
             "title": "Image",
-            "iconClass": "fa fa-lg fa-picture-o fa-inverse menu-icon",
+            "iconClass": "image icon",
             "onclick": {
                 "id": "org.ekstep.image:assetbrowser:open"
             }
+        }],
+        "config": [{
+            "propertyName": "assetbrowser",
+            "title": "Assest Browser",
+            "description": "Choose a assest from the browser",
+            "dataType": "assetbrowser",
+            "required": true
         }]
     }
 }

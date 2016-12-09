@@ -56,7 +56,9 @@ EkstepEditor.basePlugin.extend({
     openBrowser: function() {
         var instance = this;
         EkstepEditorAPI.dispatchEvent('org.ekstep.assetbrowser:show', {
-            callback: function(data) {EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', data)}
+            type: 'image',
+            search_filter: {}, // All composite keys except mediaType
+            callback: function(data) { EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', data) }
         });
     },
     /**
@@ -69,6 +71,10 @@ EkstepEditor.basePlugin.extend({
         var cp = this._super();
         cp.assetMedia = this.media[this.attributes.asset];
         return cp;
+    },
+    onConfigChange: function(key, value) {
+        EkstepEditorAPI.dispatchEvent('delete:invoke');
+        EkstepEditorAPI.dispatchEvent(this.manifest.id + ':create', value)
     }
 });
 //# sourceURL=imageplugin.js

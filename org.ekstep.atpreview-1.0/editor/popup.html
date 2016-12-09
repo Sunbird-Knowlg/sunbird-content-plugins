@@ -1,10 +1,32 @@
-<div class="modal-body">
-    <div class="frame-modal-preview">
-        <div class="preview-frame"></div>
-        <div class="frame-modal-content">
-            <div class="modal-body">
-                <iframe id="previewContentIframe" width=100% height=100%></iframe>
-            </div>
+<style>
+.preview-bgimage {
+    position: relative;
+    height: 450px;
+    width: 100%;
+    padding: 0px;
+    background-size: 900px 450px;
+    background: url("/plugins/org.ekstep.atpreview-1.0/asset/editor-frame.png") no-repeat center 0;
+}
+
+.preview-iframe {
+    position: absolute;
+    height: 336px;
+    width: 591px;
+    padding: 0px;
+    top: 7px;
+    left: 145px;
+    border: 0px;
+}
+
+#previewContentIframe {
+	border: 0px;
+}
+</style>
+<div class="ui basic modal">
+    <div class="ui four column centered grid">
+        <div class="preview-bgimage"></div>
+        <div class="preview-iframe">
+            <iframe id="previewContentIframe" width=100% height=100% ></iframe>
         </div>
     </div>
 </div>

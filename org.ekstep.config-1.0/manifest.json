@@ -8,17 +8,16 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-			{"type": "js", "src": "editor/libs/jquery.toolbar.min.js"},
-			{"type": "css", "src": "editor/libs/jquery.toolbar.css"},
-            {"type": "js", "src": "editor/plugin.util.js"},
+            {"type": "js", "src": "editor/libs/jquery-ui.min.js"},
             {"type": "js", "src": "editor/libs/micromarkdown.min.js"},
             {"type": "css", "src": "editor/config.css"}
 		],
         "data": {
         	"toolbars": [
-        		{"show": true, "iconClass": "fa fa-cog fa-lg", "onclick": { "id": "config:show", "data": {}}},
-        		{"show": true, "iconClass": "fa fa-tasks fa-lg", "onclick": {"id": "config:properties", "data": {}}},
-        		{"show": true, "iconClass": "fa fa-question-circle fa-lg", "onclick": {"id": "config:help", "data": {}}}
+        		{"show": true, "iconClass": "setting icon", "onclick": { "id": "config:show", "data": {}}},
+        		{"show": true, "iconClass": "tasks icon", "onclick": {"id": "config:properties", "data": {}}},
+        		{"show": true, "iconClass": "question icon", "onclick": {"id": "config:help", "data": {}}},
+                {"show": true, "iconClass": "thumbs outline up icon", "onclick": {}}
         	]
         }
     }

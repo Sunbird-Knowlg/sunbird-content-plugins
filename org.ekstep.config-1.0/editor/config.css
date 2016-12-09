@@ -1,6 +1,44 @@
 /*css */
 
-#pluginProperties, #pluginHelp{
-  max-height: 400px;
-  overflow-y: auto;
+.at.config.properties.content {
+    background-color: #3899ec !important;
+}
+
+.config-header {
+    color: #FFF !important;
+    font-size: 18px !important;
+    display: inline !important;
+}
+
+.config-close-icon {
+    float: right;
+    display: inline;
+    cursor: pointer;
+}
+
+.hide {
+    display: none;
+}
+
+.config-toolbar-content {
+    height: 320px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.toolbarOptions {
+    z-index: 120;
+}
+
+#plugin-toolbar-container {
+    position: absolute;
+    width: 285px;
+}
+
+.plugin-toolbar-draggable {
+    cursor: move;
+}
+
+.cursor-move {
+    cursor: move;
 }

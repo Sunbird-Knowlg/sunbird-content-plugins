@@ -13,10 +13,10 @@
         "menu": [{
             "id": "scribblepad",
             "category": "main",
-            "type": "image",
+            "type": "icon",
             "toolTip": "Add scribblepad",
             "title": "scribblepad",
-            "iconImage": "assets/scribblepad.png",
+            "iconClass": "paint brush icon",
             "onclick": {
                 "id": "org.ekstep.scribblepad:create",
                 "data": {

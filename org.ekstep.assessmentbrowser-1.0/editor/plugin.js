@@ -55,17 +55,16 @@ EkstepEditor.basePlugin.extend({
     */
     showAssessmentBrowser: function(err, data) {
         var instance = this,
-            uibConfig;
+            popupConfig;
 
-        uibConfig = {
-            template: data,
-            resolve: {
-                data: { instance: instance }
-            }
+        popupConfig = {
+            template: data,            
+            data: { instance: instance }           
         };
 
-        EkstepEditorAPI.getService('popup').open(uibConfig, instance.controllerCallback);
+        EkstepEditorAPI.getService('popup').open(popupConfig, instance.controllerCallback);
     },
+
     /**
     *   angular controller for popup service as callback
     *   @param ctrl {Object} popupController object
@@ -74,13 +73,12 @@ EkstepEditor.basePlugin.extend({
     *   @param resolvedData {Object} data passed to uib config
     *   @memberof assetBrowser
     */
-    controllerCallback: function(ctrl, scope, $uibModalInstance, resolvedData) {
-        $('.modal').addClass('modal-editor');
-        $('.modal').addClass('item-activity');
 
+    controllerCallback: function(ctrl, scope, data) {
+        $('.modal').addClass('item-activity');
         var itemIframe = EkstepEditor.jQuery('#itemIframe')[0],
             config = { "showStartPage": false, "showEndPage": false },
-            instance = resolvedData.instance;
+            instance = data.instance;
 
         ctrl.isFiltersShown = true;
         ctrl.isMyQuestions = false;
@@ -97,10 +95,11 @@ EkstepEditor.basePlugin.extend({
         ctrl.activityOptions = {
             title: "",
             shuffle: false,
-            showImmediateFeedback: true
+            showImmediateFeedback: true,
+            myQuestions: false
         };
 
-        EkstepEditor.assessmentService.getLanguages(function(err, resp) {
+        EkstepEditorAPI.getService('assessmentService').getLanguages(function(err, resp) {
             if (!err && resp.statusText == "OK") {
                 var assessmentlanguages = {};
                 _.forEach(resp.data.result.languages, function(lang) {
@@ -111,7 +110,7 @@ EkstepEditor.basePlugin.extend({
             }
         });
 
-        EkstepEditor.assessmentService.getDefinations(function(err, resp) {
+        EkstepEditorAPI.getService('assessmentService').getDefinations(function(err, resp) {
             if (!err && resp.statusText == "OK") {
                 _.forEach(resp.data.result.definition_node.properties, function(prop) {
                     switch (prop.propertyName) {
@@ -126,43 +125,11 @@ EkstepEditor.basePlugin.extend({
                             break;
                     }
                 });
-                EkstepEditorAPI.getAngularScope().safeApply();
-                var gradeoptions = {
-                    includeSelectAllOption: true,
-                    numberDisplayed: 1,
-                    onDropdownShow: function(event) {
-                        var dropdown = EkstepEditor.jQuery(event.target).find('.btn');
-                        var offset = dropdown.offset();
-                        EkstepEditor.jQuery(event.target).find('.dropdown-menu').css({
-                            "position": 'fixed',
-                            "left": '62.5%',
-                            "margin-top": '16%',
-                            "max-width": '13%'
-                        });
-                    }
-                };
-
-                var questiontypeoptions = {
-                    includeSelectAllOption: true,
-                    numberDisplayed: 1,
-                    onDropdownShow: function(event) {
-                        var dropdown = EkstepEditor.jQuery(event.target).find('.btn');
-                        var offset = dropdown.offset();
-                        EkstepEditor.jQuery(event.target).find('.dropdown-menu').css({
-                            "position": 'fixed',
-                            "left": '48%',
-                            "margin-top": '16%',
-                            "max-width": '13%'
-                        });
-                    }
-
-                };
-                EkstepEditor.jQuery("#grade").multiselect(gradeoptions);
-                EkstepEditor.jQuery("#questiontype").multiselect(questiontypeoptions);
+                $('.ui.dropdown').dropdown({useLabels: false});
             }
         });
 
-        ctrl.searchQuestions = function(myQuestions) {
+        ctrl.searchQuestions = function() {
             var activity = ctrl.activity;
             ctrl.isItemAvailable = true;
             ctrl.itemsLoading = true;
@@ -177,7 +144,7 @@ EkstepEditor.basePlugin.extend({
                     limit: 200
                 }
             };
-            if (myQuestions === "myQuestions") {
+            if (ctrl.activityOptions.myQuestions) {
                 ctrl.isMyQuestions = true;
                 data.request.filters.owner = "";
             } else {
@@ -208,7 +175,7 @@ EkstepEditor.basePlugin.extend({
                     }
                 }
             });
-            EkstepEditor.assessmentService.getQuestions(data, function(err, resp) {
+            EkstepEditorAPI.getService('assessmentService').getQuestions(data, function(err, resp) {
                 if (!err && resp.statusText == "OK") {
                     ctrl.itemsLoading = false;
                     var item;
@@ -232,6 +199,8 @@ EkstepEditor.basePlugin.extend({
                     }
                     ctrl.totalItems = ctrl.items.length;
                     EkstepEditorAPI.getAngularScope().safeApply();
+                }else{
+                   ctrl.itemsLoading = false; 
                 }
             });
         };
@@ -267,6 +236,7 @@ EkstepEditor.basePlugin.extend({
             ctrl.activityOptions.max_score = ctrl.activityOptions.total_items;
             ctrl.activityOptions.range = _.times(ctrl.activityOptions.total_items).splice(1);
             ctrl.activityOptions.range.push(ctrl.activityOptions.total_items);
+            $('.displayCount .text').html(ctrl.activityOptions.total_items);
             EkstepEditorAPI.getAngularScope().safeApply();
         };
 
@@ -279,7 +249,7 @@ EkstepEditor.basePlugin.extend({
         };
         ctrl.previewLoad();
         ctrl.previewItem = function(item) {
-            EkstepEditor.assessmentService.getItem(item.question.identifier, function(err, resp) {
+            EkstepEditorAPI.getService('assessmentService').getItem(item.question.identifier, function(err, resp) {
                 if (!err && resp.statusText == "OK") {
                     item = resp.data.result.assessment_item ? resp.data.result.assessment_item : item;
                     ctrl.itemPreviewLoading = true;
@@ -287,7 +257,7 @@ EkstepEditor.basePlugin.extend({
                     ctrl.activePreviewItem = item.identifier;
                     var templateRef = item.template_id ? item.template_id : item.template;
                     if (templateRef) {
-                        EkstepEditor.assessmentService.getTemplate(templateRef, function(err, response) {
+                        EkstepEditorAPI.getService('assessmentService').getTemplate(templateRef, function(err, response) {
                             if (!err && response.statusText == "OK") {
                                 var x2js = new X2JS({ attributePrefix: 'none', enableToStringFunc: false });
                                 var templateJson = x2js.xml_str2json(response.data.result.content.body);
@@ -324,7 +294,7 @@ EkstepEditor.basePlugin.extend({
         }
 
         ctrl.cancel = function() {
-            $uibModalInstance.dismiss('cancel');
+            $('.ui.modal').modal('hide');
         };
     }
 

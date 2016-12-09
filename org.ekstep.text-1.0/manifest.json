@@ -18,7 +18,7 @@
             "type": "icon",
             "toolTip": "Add Text",
             "title": "Text",
-            "iconClass": "fa fa-lg fa-text-width fa-inverse menu-icon",
+            "iconClass": "text width icon",
             "onclick": {
                 "id": "org.ekstep.text:create",
                 "data": {
@@ -37,33 +37,35 @@
             }
         }],
         "config": [{
-            "propertyName": "font",
-            "dataType": "group",
-            "description": "Choose fontweight and fontstyle",
-            "config": [{
-                "propertyName": "fontweight",
-                "title": "Font Weight",
-                "description": "Select font size for the text",
-                "dataType": "icon",
-                "iconClass": "fa fa-bold fa-lg",
-                "required": true,
-                "defaultValue": false
-            }, {
-                "propertyName": "fontstyle",
-                "title": "Font Style",
-                "description": "Select font style for the text",
-                "dataType": "icon",
-                "iconClass": "fa fa-italic fa-lg",
-                "required": true,
-                "defaultValue": false
-            }]
-        }, {
             "propertyName": "color",
             "title": "Color",
             "description": "Choose a color from the color picker",
             "dataType": "colorpicker",
             "required": true,
             "defaultValue": "rgb(255,0,0)"
+        }, {
+            "propertyName": "font",
+            "dataType": "group",
+            "description": "Choose fontweight and fontstyle",
+            "config": [{
+                "propertyName": "fontweight",
+                "title": "Font Weight",
+                "toolTip": "Bold",
+                "description": "Select font size for the text",
+                "dataType": "icon",
+                "iconClass": "bold icon",
+                "required": true,
+                "defaultValue": false
+            }, {
+                "propertyName": "fontstyle",
+                "title": "Font Style",
+                "toolTip": "Italic",
+                "description": "Select font style for the text",
+                "dataType": "icon",
+                "iconClass": "italic icon",
+                "required": true,
+                "defaultValue": false
+            }]
         }, {
             "propertyName": "fontfamily",
             "title": "Font Family",
