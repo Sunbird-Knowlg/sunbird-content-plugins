@@ -18,7 +18,7 @@ EkstepEditor.basePlugin.extend({
     selectedPluginId: undefined,
     margin: {
         left: 68,
-        top: 54,
+        top: 56,
     },
     /** @member {undefined|Array} pluginConfigManifest
      * @memberof Config
@@ -197,8 +197,7 @@ EkstepEditor.basePlugin.extend({
      * @param  data {Object}
      * @memberof Config
      */
-    showProperties: function(event, data)
- {
+    showProperties: function(event, data) {
         var properties = EkstepEditorAPI.getCurrentObject().getProperties();
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
@@ -221,7 +220,7 @@ EkstepEditor.basePlugin.extend({
                 this.setToolBarPosition();
                 EkstepEditor.jQuery('#plugin-toolbar-container').offset({
                     top: (this.canvasOffset.top + plugin.editorObj.top),
-                    left: (this.canvasOffset.left + plugin.editorObj.left + plugin.editorObj.getWidth() + 15)
+                    left: (this.canvasOffset.left + plugin.editorObj.left + plugin.editorObj.getWidth() + 10)
                 });
             } else {
                 EkstepEditor.jQuery('#toolbarOptions').hide();
@@ -240,8 +239,8 @@ EkstepEditor.basePlugin.extend({
             angScope.showConfigContainer = true;
             angScope.configHeaderText = title;
             angScope.configStyle = {
-                'top': (instance.canvasOffset.top + selectedPluginObj.top),
-                'left': (instance.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() + 15)
+                'top': (instance.canvasOffset.top + selectedPluginObj.top - 10),
+                'left': (instance.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() + 10)
             }
         });
     },
@@ -274,7 +273,7 @@ EkstepEditor.basePlugin.extend({
             position: 'absolute',
             display: 'block',
             top: topPosition,
-            left: leftPosition
+            left: leftPosition-5
         })
     }
 });

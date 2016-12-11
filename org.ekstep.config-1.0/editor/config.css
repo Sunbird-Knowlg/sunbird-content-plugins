@@ -23,7 +23,7 @@
 }
 
 .config-toolbar-content {
-    height: 320px;
+    height: 420px;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -34,7 +34,8 @@
 
 #plugin-toolbar-container {
     position: absolute;
-    width: 285px;
+    width: 300px;
+    z-index: 1000;
 }
 
 .plugin-toolbar-draggable {
