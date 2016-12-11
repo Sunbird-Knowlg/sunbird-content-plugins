@@ -1,10 +1,10 @@
 /**
- * 
+ *
  * plugin to get asset (image/audio) from learning platform
  * @class assetBrowser
  * @extends EkstepEditor.basePlugin
  * @author Sunil A S <sunils@ilimi.in>
- * @fires stagedecorator:addcomponent 
+ * @fires stagedecorator:addcomponent
  * @listens org.ekstep.assetbrowser:show
  */
 
@@ -20,11 +20,11 @@ EkstepEditor.basePlugin.extend({
     *   registers events
     *   @memberof assetBrowser
     *
-    */    
+    */
     initialize: function() {
         EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.initPreview, this);
     },
-    /**        
+    /**
     *   load html template to show the popup
     *   @param event {Object} event
     *   @param cb {Function} callback to be fired when asset is available.
@@ -39,7 +39,8 @@ EkstepEditor.basePlugin.extend({
             instance.showAssetBrowser(err, response);
         });
     },
-    /**    
+
+    /**
     *   get asset from Learning platfrom
     *   @param {String} name of the asset
     *   @param {String} type of media
@@ -78,10 +79,10 @@ EkstepEditor.basePlugin.extend({
         iservice.http.post(EkstepEditor.config.baseURL + '/api/search/v2/search', requestObj, requestHeaders, cb);
 
     },
-    /**    
+    /**
     *   invokes popup service to show the popup window
     *   @param err {Object} err when loading template async
-    *   @param data {String} template HTML 
+    *   @param data {String} template HTML
     *   @memberof assetBrowser
     */
     showAssetBrowser: function(err, data) {
@@ -91,8 +92,8 @@ EkstepEditor.basePlugin.extend({
     *   @memberof assetBrowser
     *   angular controller for popup service as callback
     *   @param ctrl {Object} popupController object
-    *   @param scope {Object} popupController scope object    
-    *   @param resolvedData {Object} data passed to popup config    
+    *   @param scope {Object} popupController scope object
+    *   @param resolvedData {Object} data passed to popup config
     *   @memberof assetBrowser
     */
     browserController: function(ctrl, $injector, resolvedData) {
@@ -114,16 +115,20 @@ EkstepEditor.basePlugin.extend({
         ctrl.uploadTabEnabled = false;
         ctrl.loadingImage = true;
         ctrl.languagecode = 'en';
-        ctrl.asset = {};
+        ctrl.asset = {
+            'requiredField':'',
+        };
+        ctrl.hideField = false;
         ctrl.keywordsText;
         ctrl.languageText = "English";
+        ctrl.optional = true;
+        ctrl.uploadingAsset = false;
         ctrl.assetMeta = {
 			'body': '',
             'name': '',
             'keywords': [],
             'creator': '',
             'status': 'Draft',
-            'license': '',
             'owner': 'Ekstep',
             'code': "org.ekstep"+ Math.random(),
             'mimeType': "",
@@ -191,6 +196,7 @@ EkstepEditor.basePlugin.extend({
         ctrl.assetUpload = function() {
             ctrl.uploadTabEnabled = true;
         };
+
         ctrl.search = function() {
             var callback,
                 searchText;
@@ -295,82 +301,178 @@ EkstepEditor.basePlugin.extend({
             }
         });
 
-		ctrl.doUpload = function(mediaType) {
-			var requestObj,
-				content = ctrl.assetMeta,
-				data = new FormData();
+        ctrl.setPublic = function(){
+            ctrl.assetMeta.license ="Creative Commons Attribution (CC BY)";
+            ctrl.asset.requiredField = 'required';
+            ctrl.hideField = false;
+            ctrl.optional = false;
+        }
 
-			jQuery.each(jQuery('#assetfile')[0].files, function(i, file) {
-				data.append('file', file);
-				ctrl.assetMeta.mimeType = file.type;
+        ctrl.viewMore = function(){
+            $('.removeError').each(function(){ $(this).removeClass('error')});
+            ctrl.hideField = false;
+        }
 
-				// @Todo for audio
-				ctrl.assetMeta.mediaType = "image";
-			});
+        ctrl.setPrivate = function(){
+            delete ctrl.assetMeta.license;
+            ctrl.asset.requiredField = '';
+            ctrl.optional = true;
+            ctrl.hideField = true;
+        }
 
-			/** Convert language into array **/
-			if ((!_.isUndefined(ctrl.languageText)) && (ctrl.languageText) != null) {
-				content.language = [ctrl.languageText];
-			}
-			else {
-				delete content.language;
-			}
+        ctrl.uploadAsset = function(event, fields){
+            var requestObj,
+                content = ctrl.assetMeta,
+                data = new FormData();
+            
+            ctrl.uploadingAsset = true;
 
-			/** Convert keywords in to array **/
-			if ((!_.isUndefined(ctrl.keywordsText)) && (ctrl.keywordsText) != null) {
-				content.keywords = ctrl.keywordsText.split(",");
-			}
-			else {
-				delete content.keywords;
-			}
+            EkstepEditorAPI.getAngularScope().safeApply();
 
-			/** Don't post blank license **/
-			if (content.license =="") {
-				delete content.license;
-			}
+            jQuery.each(jQuery('#assetfile')[0].files, function(i, file) {
+                data.append('file', file);
+                ctrl.assetMeta.mimeType = file.type;
 
-			// Create the content for asset
-			EkstepEditor.assetService.saveAsset(assetId, content, function(err, resp) {
-				if (resp) {
-					alert('Image saved successfully');
+                // @Todo for audio
+                ctrl.assetMeta.mediaType = "image";
+            });
 
-					jQuery.ajax({
-						url:"https://dev.ekstep.in/api/learning/v2/content/upload/" + resp.data.result.node_id,
-						type: 'POST',
-						contentType:false,
-						data: data,
-						cache: false,
-						processData: false,
-						beforeSend : function(request) {
-							request.setRequestHeader("user-id", "mahesh");
-						},
-						success: function (resp) {
-							console.log(resp);
-							imagedata.asset = resp.result.node_id;
+            /** Convert language into array **/
+            if ((!_.isUndefined(ctrl.languageText)) && (ctrl.languageText) != null) {
+                content.language = [ctrl.languageText];
+            }
+            else {
+                delete content.language;
+            }
 
-							console.log(imagedata.asset);
+            /** Convert keywords in to array **/
+            if ((!_.isUndefined(ctrl.keywordsText)) && (ctrl.keywordsText) != null) {
+                content.keywords = ctrl.keywordsText.split(",");
+            }
+            else {
+                delete content.keywords;
+            }
 
-							imagedata.assetMedia = {
-								id: resp.result.node_id,
-								src: resp.result.content_url,
-								type: 'image'
-							}
+            /** Don't post blank license **/
+            /** if (content.license =="") {
+                delete content.license;
+            }*/
 
-							console.log(imagedata.assetMedia);
-							instance.cb(imagedata);
-							ctrl.cancel();
-						},
-						complete:function()
-						{
-							console.log("Complete");
-						},
-						error:function()
-						{
-							console.log("error");
-						}
-					});
+            console.log(content);
+            // Create the content for asset
+            EkstepEditor.assetService.saveAsset(assetId, content, function(err, resp) {
+                if (resp) {
+                    jQuery.ajax({
+                        url:"https://dev.ekstep.in/api/learning/v2/content/upload/" + resp.data.result.node_id,
+                        type: 'POST',
+                        contentType:false,
+                        data: data,
+                        cache: false,
+                        processData: false,
+                        beforeSend : function(request) {
+                            request.setRequestHeader("user-id", "mahesh");
+                        },
+                        success: function (resp) {
+                            console.log(resp);
+                            imagedata.asset = resp.result.node_id;
+
+                            console.log(imagedata.asset);
+
+                            imagedata.assetMedia = resp;
+                            imagedata.assetMedia.id = resp.result.node_id;
+                            imagedata.assetMedia.src = resp.result.content_url;
+                            imagedata.assetMedia.type = 'image';
+                            
+                            console.log(imagedata.assetMedia);
+
+                            instance.cb(imagedata);
+                            ctrl.cancel();
+
+                            alert('Image saved successfully');
+                        },
+                        complete:function()
+                        {
+                            ctrl.uploadingAsset = false;
+                        },
+                        error:function()
+                        {
+                            alert('Error in Uploading image, please try again!');
+                        }
+                    });
                 }
             });
+        }
+
+		ctrl.doUpload = function(mediaType) {
+            $('.ui.form')
+              .form({
+                fields: {
+                  assetfile: {
+                    identifier  : 'assetfile',
+                    rules: [
+                      {
+                        type   : 'empty'
+                      }
+                    ]
+                  },
+                  assetName : {
+                    identifier : 'assetName',
+                    rules : [
+                        {
+                            type : 'empty'
+                        }
+                    ]
+                  },
+
+                  keywords : {
+                    identifier : 'keywords',
+                    optional : true,
+                    rules : [
+                        {
+                            type : 'empty',
+                            
+                        }
+                    ]
+                  },
+
+                  language : {
+                    identifier : 'language',
+                    optional:true,
+                    rules : [
+                        {
+                            type : 'empty'
+                        }
+                    ]
+                  },
+
+                  creator : {
+                    identifier : 'creator',
+                    optional: ctrl.optional,
+                    rules : [
+                        {
+                            type : 'empty'
+                        }
+                    ]
+                  },
+
+                  copyright : {
+                    identifier : 'copyright',
+                    optional: ctrl.optional,
+                    rules : [
+                        {
+                            type : 'empty'
+                        }
+                    ]
+                  },
+                },
+                onSuccess: function (event, fields){
+                     ctrl.uploadAsset(event, fields);
+                },
+                onFailure: function (formErrors, fields){
+                    console.log("All fields validation failed");
+                    return false;
+                }
+              });
 		}
     }
 });
