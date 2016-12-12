@@ -14,11 +14,11 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("object:removed", this.objectRemoved, this);
     },
     createStage: function(event, data) {
-        EkstepEditorAPI.instantiatePlugin(this.manifest.id, {});
+        EkstepEditorAPI.instantiatePlugin(this.manifest.id, data);
     },
-    newInstance: function(data) {
-        this.onclick = { id: 'stage:select', data: { stageId: this.id } }
-        EkstepEditorAPI.addStage(this);
+    newInstance: function() {
+        this.onclick = { id: 'stage:select', data: { stageId: this.id } };
+        var position = this.attributes.position;
         this.attributes = {
             x: 0,
             y: 0,
@@ -26,6 +26,7 @@ EkstepEditor.basePlugin.extend({
             h: 405,
             id: this.id
         };
+        this.addStagetoPosition(this, position);
     },
     setCanvas: function(canvas) {
         this.canvas = canvas;
@@ -92,6 +93,36 @@ EkstepEditor.basePlugin.extend({
             setTimeout(function() {
                 instance.destroyOnLoad(childCount, canvas, cb);
             }, 1000);
+        }
+    },
+    addStagetoPosition: function(stage, position) {
+        var allStages = EkstepEditorAPI.getAllStages(),            
+            currentIndex,
+            positionAltered = false;
+
+        switch (position) {
+            case "beginning":
+                allStages.unshift(stage);
+                positionAltered = true;
+                break;
+            case "end":
+                allStages.push(stage);
+                positionAltered = true;
+                break;
+            case "afterCurrent":
+            case "beforeCurrent":
+                currentIndex = allStages.findIndex(function(obj) {
+                    return obj.id === EkstepEditorAPI.getCurrentStage().id
+                });
+
+                if (position === "afterCurrent" && currentIndex >= 0) allStages.splice(currentIndex + 1, 0, stage) && (positionAltered = true);
+                if (position === "beforeCurrent" && currentIndex >= 0) allStages.splice(currentIndex, 0, stage) && (positionAltered = true);
+                break;
+        };
+
+        if (positionAltered) {
+            EkstepEditor.stageManager.selectStage(null, { stageId: stage.id });
+            EkstepEditorAPI.dispatchEvent('stage:select', { stageId: stage.id });
         }
     }
 });

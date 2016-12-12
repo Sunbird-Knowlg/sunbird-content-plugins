@@ -5,20 +5,52 @@
     "title": "Stage Plugin",
     "description": "",
     "publishedDate": "",
-	"editor": {
-		"main": "editor/plugin.js",
-		"menu": [{
-			"id": "stage",
-			"category": "main",
-			"type": "icon",
-			"toolTip": "Add Stage",
-			"title": "Stage",
-			"iconClass": "desktop icon",
-			"onclick": {
-				"id": "stage:create",
-				"data": {
-	            }
-			}
-		}]
-	}
+    "editor": {
+        "main": "editor/plugin.js",
+        "menu": [{
+            "id": "stage",
+            "category": "main",
+            "type": "icon",
+            "toolTip": "Add Stage",
+            "title": "Stage",
+            "iconClass": "desktop icon",            
+            "submenu": [{
+                "id": "beginning",
+                "type": "icon",
+                "title": "beginning",
+                "iconClass": "fast backward icon",
+                "onclick": {
+                    "id": "stage:create",
+                    "data": { "position": "beginning" }
+                }
+            }, {
+                "id": "end",
+                "type": "icon",
+                "title": "end",
+                "iconClass": "fast forward icon",
+                "onclick": {
+                    "id": "stage:create",
+                    "data": { "position": "end" }
+                }
+            }, {
+                "id": "front",
+                "type": "icon",
+                "title": "after current",
+                "iconClass": "forward icon",
+                "onclick": {
+                    "id": "stage:create",
+                    "data": { "position": "afterCurrent" }
+                }
+            }, {
+                "id": "back",
+                "type": "icon",
+                "title": "before current",
+                "iconClass": "backward icon",
+                "onclick": {
+                    "id": "stage:create",
+                    "data": { "position": "beforeCurrent" }
+                }
+            }]
+        }]
+    }    
 }
