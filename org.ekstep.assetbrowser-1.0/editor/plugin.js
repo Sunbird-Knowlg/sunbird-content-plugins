@@ -34,6 +34,12 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         this.cb = data.callback;
         this.mediaType = data.type;
+
+        if (data.type == 'image') {
+            this.allowedFileSize = (1 * 1024 * 1024);
+            this.allowedMimeTypes = ['image/jpeg','image/jpg','image/png','image/svg+xml'];
+        }
+
         this.search_filter = data.search_filter;
         this.loadResource('editor/assetBrowser.html', 'html', function(err, response) {
             instance.showAssetBrowser(err, response);
@@ -48,7 +54,7 @@ EkstepEditor.basePlugin.extend({
     *   @memberof assetBrowser
     *
     */
-    getAsset: function(searchText, mediaType, cb) {
+    getAsset: function(searchText, mediaType, owner, cb) {
         var instance = this,
             iservice = new EkstepEditor.iService(),
             requestObj,
@@ -60,7 +66,7 @@ EkstepEditor.basePlugin.extend({
                 "filters": {
                     "mediaType": [mediaType],
                     "license": ["Creative Commons Attribution (CC BY)"],
-                    "name": []
+                    "name": [],
                 }
             }
         };
@@ -73,6 +79,7 @@ EkstepEditor.basePlugin.extend({
         };
 
         _.isUndefined(searchText) ? null : requestObj.request.filters.name = [searchText];
+        _.isUndefined (owner) ? null : requestObj.request.filters.owner = owner;
         allowableFilter = _.omit(this.search_filter, ['mediaType', 'license']);
         _.merge(requestObj.request.filters, allowableFilter);
 
@@ -87,6 +94,45 @@ EkstepEditor.basePlugin.extend({
     */
     showAssetBrowser: function(err, data) {
         EkstepEditorAPI.getService('popup').open({ template: data, data: { instance: this } }, this.browserController);
+    },
+    /**
+    *   File size and mime type validation
+    *   @param id {fieldId} Id of the field
+    *   @memberof assetBrowser
+    */
+    fileValidation: function(fieldId) {
+        var instance = this;
+
+        /*Check for browser support for all File API*/
+        if (window.File && window.FileList && window.Blob) {
+            /*Get file size and file type*/
+            var fsize = $('#' + fieldId)[0].files[0].size;
+            var ftype = $('#' + fieldId)[0].files[0].type;
+
+            /*Check file size*/
+            if (fsize > instance.allowedFileSize) {
+                alert('File size is higher than the allowed size!');
+                return false;
+            }
+
+            /*Check mime type*/
+            if (ftype){
+                if ($.inArray(ftype, instance.allowedMimeTypes) == -1) {
+                    alert("File type is not allowed!");
+                    return false;
+                }
+            }
+            /*If no file type is detected, return true*/
+            else{
+                return true;
+            }
+
+            return true;
+        }
+        /*If no browser suppoer for File apis, return true*/
+        else{
+            return true;
+        }
     },
     /**
     *   @memberof assetBrowser
@@ -115,6 +161,7 @@ EkstepEditor.basePlugin.extend({
         ctrl.uploadTabEnabled = false;
         ctrl.loadingImage = true;
         ctrl.languagecode = 'en';
+        ctrl.owner = undefined;
         ctrl.asset = {
             'requiredField':'',
         };
@@ -144,6 +191,25 @@ EkstepEditor.basePlugin.extend({
         ctrl.imageBrowser = (instance.mediaType == 'image');
 
         $('.menu .item').tab();
+        $('.ui.dropdown').dropdown();
+
+        /** Asset Owner filter: Show my or all assets **/
+        $('.dropdown')
+          .dropdown({
+            onChange: function(value, text, $selectedItem) {
+              if (value  == 'my') {
+
+                // @Todo Replace it with user id
+                ctrl.owner = "Ekstep";
+              }
+              else {
+                ctrl.owner = undefined;
+              }
+              
+              ctrl.search();
+              return true;
+            }
+          });
 
         function imageAssetCb(err, res) {
             if (res && res.data.result.content) {
@@ -176,7 +242,7 @@ EkstepEditor.basePlugin.extend({
         }
 
         //load image on opening window
-        instance.getAsset(undefined, "image", imageAssetCb);
+        instance.getAsset(undefined, "image", undefined, imageAssetCb);
 
         ctrl.imageTab = function() {
             imageTabSelected = true;
@@ -189,7 +255,7 @@ EkstepEditor.basePlugin.extend({
             audioTabSelected = true;
             imageTabSelected = !imageTabSelected;
             ctrl.selectBtnDisable = _.isUndefined(lastSelectedAudio) ? true : false;
-            instance.getAsset(undefined, "audio", audioAssetCb);
+            instance.getAsset(undefined, "audio", undefined, audioAssetCb);
             ctrl.uploadTabEnabled = false;
         };
 
@@ -207,7 +273,8 @@ EkstepEditor.basePlugin.extend({
             callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
             callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
             ctrl.selectBtnDisable = true;
-            callback && instance.getAsset(searchText, instance.mediaType, callback);
+
+            callback && instance.getAsset(searchText, instance.mediaType, ctrl.owner, callback);
         }
 
         ctrl.cancel = function() {
@@ -329,12 +396,12 @@ EkstepEditor.basePlugin.extend({
 
             EkstepEditorAPI.getAngularScope().safeApply();
 
-            jQuery.each(jQuery('#assetfile')[0].files, function(i, file) {
+            $.each($('#assetfile')[0].files, function(i, file) {
                 data.append('file', file);
                 ctrl.assetMeta.mimeType = file.type;
 
                 // @Todo for audio
-                ctrl.assetMeta.mediaType = "image";
+                ctrl.assetMeta.mediaType = instance.mediaType;
             });
 
             /** Convert language into array **/
@@ -353,16 +420,11 @@ EkstepEditor.basePlugin.extend({
                 delete content.keywords;
             }
 
-            /** Don't post blank license **/
-            /** if (content.license =="") {
-                delete content.license;
-            }*/
-
             console.log(content);
             // Create the content for asset
             EkstepEditor.assetService.saveAsset(assetId, content, function(err, resp) {
                 if (resp) {
-                    jQuery.ajax({
+                    $.ajax({
                         url:"https://dev.ekstep.in/api/learning/v2/content/upload/" + resp.data.result.node_id,
                         type: 'POST',
                         contentType:false,
@@ -413,6 +475,14 @@ EkstepEditor.basePlugin.extend({
                       {
                         type   : 'empty'
                       }
+                    ]
+                  },
+                  ccByContribution: {
+                    identifier : 'ccByContribution',
+                    rules: [
+                        {
+                            type : 'checked'
+                        }
                     ]
                   },
                   assetName : {
@@ -466,7 +536,15 @@ EkstepEditor.basePlugin.extend({
                   },
                 },
                 onSuccess: function (event, fields){
-                     ctrl.uploadAsset(event, fields);
+                    // validate file
+                    var validateFile = instance.fileValidation('assetfile');
+                    
+                    if (validateFile) {
+                         ctrl.uploadAsset(event, fields);
+                    }
+                    else {
+                        return false;
+                    }
                 },
                 onFailure: function (formErrors, fields){
                     console.log("All fields validation failed");

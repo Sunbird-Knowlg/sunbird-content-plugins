@@ -72,8 +72,6 @@
 }
 
 .assetbrowser_searchBox {
-    padding: 8px;
-    border-bottom: 1px black solid;
     width: 100%;
 }
 
@@ -136,6 +134,7 @@
     overflow: hidden;
 }
 </style>
+
 <div class="ui modal ui form">
     <div class="ui small one steps">
         <div class="active step">
@@ -150,12 +149,28 @@
         <a class="active item" data-tab="first" ng-click="$ctrl.imageTab()">Image</a>
         <a class="item" data-tab="second" ng-click="$ctrl.assetUpload()">Upload</a>
     </div>
+
     <div class="ui active tab" data-tab="first" style="margin: 10px;">
 		<div class="content" ng-show="$ctrl.imageBrowser">
-			<div class="ui fluid icon input">
-				<input ng-model="$ctrl.query" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text"></input>
-				<i class="inverted circular search link icon" ng-click="$ctrl.search()"></i>
+			<div class="ui grid">
+				<div class="nine wide column">
+					<div class="ui icon input assetbrowser_searchBox">
+						<input ng-model="$ctrl.query" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
+						<i class="circular search link icon inverted"></i>
+					</div>
+				</div>
+				<div class="three wide column">
+					<div class="ui floating labeled icon dropdown button">
+					  <i class="filter icon"></i>
+					  <span class="text">All Images</span>
+					  <div class="menu">
+					    <div class="item active selected" data-value="all">All Images</div>
+					    <div class="item" data-value="my">My Images</div>
+					  </div>
+					</div>
+				</div>
 			</div>
+			
 			<div class="ui grid templatebrowser_main">
 				<i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
 				<div id="assetArea1" ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
@@ -206,20 +221,25 @@
 					<div class="required field">
 						<label for="assetfile" title="Enter asset caption">Select file</label>
 						<input class="cropit-image-input" id="assetfile" type="file" name="assetfile" accept="image/jpeg,image/jpg,image/png,image/svg" data-validate="assetfile" />
+						<div class="ui info message">
+							<ul class="list">
+								<li>Allowed file types are: jpeg, jpg, png, svg	</li>
+								<li>Maximum allowed file size: 1 MB	</li>
+							</ul>
+						</div>
 					</div>
-
-					<div class="grouped fields">
-						<label>Copyright & License:</label>
+					<div class="grouped required fields">
+						<label for="ccByContribution" >Copyright & License:</label>
 						<p>I understand and confirm that all lessons/assets created through the authoring tool or uploaded on the Ekstep platform shall be available for free and public use without limitations on the Ekstep platform (portal,applications and any other end user interface that Ekstep platform would enable) and will be licensed under<!--@Todo add policy link --> <a href="#" target="_blank">CC-BY 4.0</a></p>
 						<div class="field">
 							<div class="ui radio checkbox">
-								<input id="ccByContribution1" name="ccByContribution" type="radio" ng-click="$ctrl.setPublic()" value="Creative Commons Attribution (CC BY)">
+								<input id="ccByContribution1" name="ccByContribution" type="radio" ng-click="$ctrl.setPublic()" value="Creative Commons Attribution (CC BY)" data-validate="ccByContribution">
 								<label for="ccByContribution1">Yes, make it available to everyone</label>
 							</div>
 						</div>
 						<div class="field">
 							<div class="ui radio checkbox">
-								<input id="ccByContribution2" name="ccByContribution" type="radio" ng-click="$ctrl.setPrivate()" value="">
+								<input id="ccByContribution2" name="ccByContribution" type="radio" ng-click="$ctrl.setPrivate()" value="" data-validate="ccByContribution">
 								<label for="ccByContribution2">No, don't share with anyone</label>
 							</div>
 						</div>
