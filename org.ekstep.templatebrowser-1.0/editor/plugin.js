@@ -25,12 +25,9 @@ EkstepEditor.basePlugin.extend({
         requestObj = {
             "request": {
                 "filters": {
-                    "objectType": ["AssessmentItem"]
-                },
-                "name": {
-                    "startsWith": searchText
-                },
-                "limit": 10
+                    "objectType": ["AssessmentItem"],
+                    "name": []
+                }
             }
         };
 
@@ -41,6 +38,7 @@ EkstepEditor.basePlugin.extend({
             }
         };
 
+        requestObj.request.filters.name = _.isUndefined(searchText) ? [] : [searchText];        
         iservice.http.post(EkstepEditor.config.baseURL + '/api/search/v2/search', requestObj, requestHeaders, callback);
     },
     browserCallback: function(ctrl, injector, data) {
@@ -50,6 +48,7 @@ EkstepEditor.basePlugin.extend({
         ctrl.lastSelected;
         ctrl.template = {};
         ctrl.dynamicText = [];
+        ctrl.error = false;
 
         ctrl.closeWindow = function() {
             $('.ui.modal').modal('hide');
@@ -58,25 +57,25 @@ EkstepEditor.basePlugin.extend({
         ctrl.search = function() {
             dynamicText = [];
             var search = $('#templateSearch').val();
-            search && data.instance.getTemplates(search, function(err, res) {
-                _.forEach(res.data.result.items, function(obj) { dynamicText.push({ 'title': obj.name }); });
-                ctrl.dynamicText = dynamicText;
-                EkstepEditorAPI.getAngularScope().safeApply();
-            });
+            search && data.instance.getTemplates(search, ctrl.getTemplatesCallback);
         };
 
-        data.instance.getTemplates(null, function(err, res) {
+        ctrl.getTemplatesCallback = function(err, res) {
             if (res) {
                 ctrl.templates = res.data.result.items;
+                ctrl.error = false;
+            }
+            if (err) {
+                ctrl.error = true;
             }
             EkstepEditorAPI.getAngularScope().safeApply();
             if (res) ctrl.initPopup(res.data.result.items);
-            if (err) console.log('template data', err);
-        });
+        };
+
+        data.instance.getTemplates(null, ctrl.getTemplatesCallback);
 
         ctrl.initPopup = function(item) {
             _.forEach(item, function(obj, index) {
-                console.log('obj.identifier', obj.identifier);
                 $('#templatebrowser-' + index).popup({
                     hoverable: true,
                     position: 'right center'
