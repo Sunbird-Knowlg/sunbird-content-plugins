@@ -36,7 +36,7 @@
         }],
         "config": [{
             "propertyName": "color",
-            "title": "Color",
+            "title": "Fill color",
             "description": "Choose a color from the color picker",
             "dataType": "colorpicker",
             "required": true,
