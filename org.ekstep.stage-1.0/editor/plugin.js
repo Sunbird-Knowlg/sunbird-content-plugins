@@ -118,6 +118,9 @@ EkstepEditor.basePlugin.extend({
                 if (position === "afterCurrent" && currentIndex >= 0) allStages.splice(currentIndex + 1, 0, stage) && (positionAltered = true);
                 if (position === "beforeCurrent" && currentIndex >= 0) allStages.splice(currentIndex, 0, stage) && (positionAltered = true);
                 break;
+            default:
+                EkstepEditorAPI.addStage(stage);                
+                break;
         };
 
         if (positionAltered) {
