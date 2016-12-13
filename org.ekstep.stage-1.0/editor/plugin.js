@@ -18,6 +18,8 @@ EkstepEditor.basePlugin.extend({
     },
     newInstance: function() {
         this.onclick = { id: 'stage:select', data: { stageId: this.id } };
+        this.ondelete = { id: 'stage:delete', data: { stageId: this.id } };
+        this.duplicate = { id: 'stage:duplicate', data: { stageId: this.id } };
         var position = this.attributes.position;
         this.attributes = {
             x: 0,
