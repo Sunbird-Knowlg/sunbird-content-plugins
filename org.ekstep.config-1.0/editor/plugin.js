@@ -137,11 +137,21 @@ EkstepEditor.basePlugin.extend({
      * @memberof Config
      */
     _invoke: function(config, configData) {
+        var instance = this;
         configData = configData || {};
         if (config.dataType === 'colorpicker') {
-            var eventData = { id: config.propertyName, callback: this.onConfigChange, color: configData[config.propertyName] };
+            var eventData = { id: config.propertyName, callback: this.onConfigChange, color: configData[config.propertyName]};
             setTimeout(function() { EkstepEditorAPI.dispatchEvent("colorpicker:state", eventData) }, 500);
         }
+        if (config.dataType === 'rangeslider') {
+            setTimeout(function() {
+                EkstepEditor.jQuery('#' + config.propertyName).on("change mouseclick", function() {
+                    EkstepEditor.jQuery('#' + config.propertyName + 'label').html($(this).val());
+                    instance.onConfigChange(config.propertyName, $(this).val());
+                });
+            }, 500);
+        }
+
     },
     /**
      * This method gets the old and new config data and compares the both and calls the onConfigChange method with the key and value of new value
@@ -259,22 +269,24 @@ EkstepEditor.basePlugin.extend({
             }
         }
     },
-    setToolBarPosition: function () {
-        var selectedPluginObj = EkstepEditorAPI.getPluginInstance(this.selectedPluginId).editorObj;
-        var topPosition = this.canvasOffset.top + selectedPluginObj.top - this.margin.top;
-        var leftPosition = this.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() / 2 - this.margin.left;
-        var canvasBottom = this.canvasOffset.top + EkstepEditor.jQuery("#canvas").height() -EkstepEditor.jQuery("#toolbarOptions").height()
-        var canvasRight = this.canvasOffset.left + EkstepEditor.jQuery("#canvas").width() - EkstepEditor.jQuery("#toolbarOptions").width();
-        if (topPosition < this.canvasOffset.top) { topPosition = this.canvasOffset.top;}
-        if (leftPosition < this.canvasOffset.left ) { leftPosition = this.canvasOffset.left;}
-        if (leftPosition > canvasRight) { leftPosition = canvasRight;}   
-        if (topPosition > canvasBottom) {topPosition = canvasBottom;}
-        EkstepEditor.jQuery('#toolbarOptions').css({
-            position: 'absolute',
-            display: 'block',
-            top: topPosition,
-            left: leftPosition-5
-        })
+    setToolBarPosition: function() {
+        if (this.selectedPluginId) {
+            var selectedPluginObj = EkstepEditorAPI.getPluginInstance(this.selectedPluginId).editorObj;
+            var topPosition = this.canvasOffset.top + selectedPluginObj.top - this.margin.top;
+            var leftPosition = this.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() / 2 - this.margin.left;
+            var canvasBottom = this.canvasOffset.top + EkstepEditor.jQuery("#canvas").height() - EkstepEditor.jQuery("#toolbarOptions").height()
+            var canvasRight = this.canvasOffset.left + EkstepEditor.jQuery("#canvas").width() - EkstepEditor.jQuery("#toolbarOptions").width();
+            if (topPosition < this.canvasOffset.top) { topPosition = this.canvasOffset.top; }
+            if (leftPosition < this.canvasOffset.left) { leftPosition = this.canvasOffset.left; }
+            if (leftPosition > canvasRight) { leftPosition = canvasRight; }
+            if (topPosition > canvasBottom) { topPosition = canvasBottom; }
+            EkstepEditor.jQuery('#toolbarOptions').css({
+                position: 'absolute',
+                display: 'block',
+                top: topPosition,
+                left: leftPosition - 5
+            })
+        }
     }
 });
 //# sourceURL=configplugin.js
