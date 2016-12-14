@@ -7,7 +7,6 @@
  * @fires stagedecorator:addcomponent
  * @listens org.ekstep.assetbrowser:show
  */
-
 EkstepEditor.basePlugin.extend({
     type: 'assetbrowser',
     initData: undefined,
@@ -34,16 +33,13 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         this.cb = data.callback;
         this.mediaType = data.type;
-
-        if (data.type == 'image') {
-            this.allowedFileSize = (1 * 1024 * 1024);
-            this.allowedMimeTypes = ['image/jpeg','image/jpg','image/png','image/svg+xml'];
-        }
-
         this.search_filter = data.search_filter;
         this.loadResource('editor/assetBrowser.html', 'html', function(err, response) {
             instance.showAssetBrowser(err, response);
         });
+
+        // $('.ui.dropdown').dropdown();
+        // $('.menu .item').tab();
     },
 
     /**
@@ -100,7 +96,7 @@ EkstepEditor.basePlugin.extend({
     *   @param id {fieldId} Id of the field
     *   @memberof assetBrowser
     */
-    fileValidation: function(fieldId) {
+    fileValidation: function(fieldId, allowedFileSize, allowedMimeTypes) {
         var instance = this;
 
         /*Check for browser support for all File API*/
@@ -110,14 +106,14 @@ EkstepEditor.basePlugin.extend({
             var ftype = $('#' + fieldId)[0].files[0].type;
 
             /*Check file size*/
-            if (fsize > instance.allowedFileSize) {
+            if (fsize > allowedFileSize) {
                 alert('File size is higher than the allowed size!');
                 return false;
             }
 
             /*Check mime type*/
             if (ftype){
-                if ($.inArray(ftype, instance.allowedMimeTypes) == -1) {
+                if ($.inArray(ftype, allowedMimeTypes) == -1) {
                     alert("File type is not allowed!");
                     return false;
                 }
@@ -145,7 +141,7 @@ EkstepEditor.basePlugin.extend({
     browserController: function(ctrl, $injector, resolvedData) {
         var audiodata = {},
 			assetId,
-            imagedata = { },
+            imagedata = {},
             searchText,
             instance = resolvedData.instance,
             lastSelectedAudio,
@@ -188,28 +184,19 @@ EkstepEditor.basePlugin.extend({
         };
 
         ctrl.loadingAudio = true;
-        ctrl.imageBrowser = (instance.mediaType == 'image');
+        ctrl.plugin = instance.mediaType;
+        ctrl.upload =  (instance.mediaType == 'image') ? true: false;
+        ctrl.fileTypes = (instance.mediaType == "image") ? "jpeg, jpg, png, svg" : "mp3, mp4, mpeg, ogg, wav, webm";
+        ctrl.fileSize = (instance.mediaType == "image") ? '1 MB' : '6 MB';
 
-        $('.menu .item').tab();
-        $('.ui.dropdown').dropdown();
-
-        /** Asset Owner filter: Show my or all assets **/
-        $('.dropdown')
-          .dropdown({
-            onChange: function(value, text, $selectedItem) {
-              if (value  == 'my') {
-
-                // @Todo Replace it with user id
-                ctrl.owner = "Ekstep";
-              }
-              else {
-                ctrl.owner = undefined;
-              }
-              
-              ctrl.search();
-              return true;
-            }
-          });
+        if (instance.mediaType == 'image') {
+            ctrl.allowedFileSize = (1 * 1024 * 1024);
+            ctrl.allowedMimeTypes = ['image/jpeg','image/jpg','image/png','image/svg+xml'];
+        }
+        else if (instance.mediaType == 'audio') {
+            ctrl.allowedFileSize = (6 * 1024 * 1024);
+            ctrl.allowedMimeTypes = ['audio/mp3','audio/mp4','audio/mpeg','audio/ogg','audio/webm','audio/x-wav','audio/wav'];
+        }
 
         function imageAssetCb(err, res) {
             if (res && res.data.result.content) {
@@ -242,25 +229,35 @@ EkstepEditor.basePlugin.extend({
         }
 
         //load image on opening window
-        instance.getAsset(undefined, "image", undefined, imageAssetCb);
+        if (instance.mediaType == 'image') {
+            instance.getAsset(undefined, instance.mediaType, undefined, imageAssetCb);
+        }
+        else{
+            instance.getAsset(undefined, instance.mediaType, undefined, audioAssetCb);   
+        }
 
         ctrl.imageTab = function() {
             imageTabSelected = true;
-            audioTabSelected = !audioTabSelected;
+            audioTabSelected = false;
             ctrl.selectBtnDisable = _.isUndefined(lastSelectedImage) ? true : false;
             ctrl.uploadTabEnabled = false;
+            // $('.menu .item').tab();
         }
 
         ctrl.audioTab = function() {
             audioTabSelected = true;
-            imageTabSelected = !imageTabSelected;
+            imageTabSelected = false;
             ctrl.selectBtnDisable = _.isUndefined(lastSelectedAudio) ? true : false;
-            instance.getAsset(undefined, "audio", undefined, audioAssetCb);
+            //instance.getAsset(undefined, "audio", undefined, audioAssetCb);
             ctrl.uploadTabEnabled = false;
+            // $('.menu .item').tab();
         };
 
         ctrl.assetUpload = function() {
             ctrl.uploadTabEnabled = true;
+            imageTabSelected = false;
+            audioTabSelected = false;
+            // $('.menu .item').tab();
         };
 
         ctrl.search = function() {
@@ -435,22 +432,20 @@ EkstepEditor.basePlugin.extend({
                             request.setRequestHeader("user-id", "mahesh");
                         },
                         success: function (resp) {
+                            console.log('response');
                             console.log(resp);
                             imagedata.asset = resp.result.node_id;
-
-                            console.log(imagedata.asset);
-
                             imagedata.assetMedia = resp;
                             imagedata.assetMedia.id = resp.result.node_id;
                             imagedata.assetMedia.src = resp.result.content_url;
-                            imagedata.assetMedia.type = 'image';
+                            imagedata.assetMedia.type = instance.mediaType;
                             
+                            console.log("Passing data");
                             console.log(imagedata.assetMedia);
 
                             instance.cb(imagedata);
+                            alert((instance.mediaType).charAt(0).toUpperCase() + (instance.mediaType).slice(1) + ' successfully uploaded');
                             ctrl.cancel();
-
-                            alert('Image saved successfully');
                         },
                         complete:function()
                         {
@@ -468,12 +463,14 @@ EkstepEditor.basePlugin.extend({
 		ctrl.doUpload = function(mediaType) {
             $('.ui.form')
               .form({
+                inline : true,
                 fields: {
                   assetfile: {
                     identifier  : 'assetfile',
                     rules: [
                       {
-                        type   : 'empty'
+                        type   : 'empty',
+                        prompt: 'Please select file'
                       }
                     ]
                   },
@@ -481,7 +478,8 @@ EkstepEditor.basePlugin.extend({
                     identifier : 'ccByContribution',
                     rules: [
                         {
-                            type : 'checked'
+                            type : 'checked',
+                            prompt: 'Please select Copyright & License'
                         }
                     ]
                   },
@@ -489,7 +487,8 @@ EkstepEditor.basePlugin.extend({
                     identifier : 'assetName',
                     rules : [
                         {
-                            type : 'empty'
+                            type : 'empty',
+                            prompt: 'Please enter asset caption'
                         }
                     ]
                   },
@@ -500,7 +499,7 @@ EkstepEditor.basePlugin.extend({
                     rules : [
                         {
                             type : 'empty',
-                            
+                            prompt: 'Please enter enter tags'
                         }
                     ]
                   },
@@ -510,7 +509,7 @@ EkstepEditor.basePlugin.extend({
                     optional:true,
                     rules : [
                         {
-                            type : 'empty'
+                            type : 'empty',
                         }
                     ]
                   },
@@ -520,7 +519,8 @@ EkstepEditor.basePlugin.extend({
                     optional: ctrl.optional,
                     rules : [
                         {
-                            type : 'empty'
+                            type : 'empty',
+                            prompt: 'Please enter creator name'
                         }
                     ]
                   },
@@ -530,14 +530,15 @@ EkstepEditor.basePlugin.extend({
                     optional: ctrl.optional,
                     rules : [
                         {
-                            type : 'empty'
+                            type : 'empty',
+                            prompt: 'Please enter copyright details'
                         }
                     ]
                   },
                 },
                 onSuccess: function (event, fields){
                     // validate file
-                    var validateFile = instance.fileValidation('assetfile');
+                    var validateFile = instance.fileValidation('assetfile', ctrl.allowedFileSize, ctrl.allowedMimeTypes);
                     
                     if (validateFile) {
                          ctrl.uploadAsset(event, fields);
@@ -547,11 +548,33 @@ EkstepEditor.basePlugin.extend({
                     }
                 },
                 onFailure: function (formErrors, fields){
-                    console.log("All fields validation failed");
+                    console.log("fields validation failed");
                     return false;
                 }
               });
 		}
+
+        setTimeout(function(){
+            $('.menu .item').tab();
+            $('.ui.dropdown').dropdown();
+            $('.ui.radio.checkbox').checkbox();
+
+            /** Asset Owner filter: Show my or all assets **/
+            $('.ui.myAssets.checkbox')
+              .checkbox()
+              .first().checkbox({
+                onChecked: function() {
+                  // @Todo Replace it with user id
+                  ctrl.owner = "Ekstep";
+                  ctrl.search();
+                },
+                onUnchecked: function() {
+                  ctrl.owner = undefined;
+                  ctrl.search();
+                }
+              })
+            ;
+        }, 100); 
     }
 });
 //# sourceURL=assetbrowserplugin.js
