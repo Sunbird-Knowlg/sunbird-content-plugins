@@ -176,6 +176,7 @@ EkstepEditor.basePlugin.extend({
      * @memberof Config
      */
     onConfigChange: function(key, value) {
+        EkstepEditorAPI.getCurrentObject().__proto__.__proto__.onConfigChange(key, value);
         EkstepEditorAPI.getCurrentObject().onConfigChange(key, value);
     },
     /**

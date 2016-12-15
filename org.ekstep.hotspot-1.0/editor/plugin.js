@@ -61,7 +61,10 @@ EkstepEditor.basePlugin.extend({
      *  @memberof hotspot
      */
     getConfig: function() {
-        return { color: this.attributes.fill };
+        var config = this._super();
+        config.opacity = this.attributes.opacity * 100;        
+        config.color = this.attributes.fill;
+        return config;
     }
 });
 //# sourceURL=hotspotplugin.js
