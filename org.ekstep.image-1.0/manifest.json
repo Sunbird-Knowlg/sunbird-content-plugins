@@ -22,7 +22,7 @@
                 "id": "org.ekstep.image:assetbrowser:open"
             }
         }],
-        "config": [{
+        "configManifest": [{
             "propertyName": "imageBrowser",
             "title": "Image Browser",
             "description": "Choose a  from the browser",

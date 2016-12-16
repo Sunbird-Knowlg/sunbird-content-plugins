@@ -26,10 +26,10 @@ EkstepEditor.basePlugin.extend({
                 this.editorObj = new fabric.Ellipse(props);
                 break;
             case 'roundrect':
-                this.manifest.editor.config.push({
+                this.manifest.editor.configManifest.push({
                     "propertyName": "radius",
                     "title": "Radius",
-                    "placeholder":"Radius",
+                    "placeholder": "Radius",
                     "description": "Input radius for the rounded rectangle",
                     "dataType": "input",
                     "valueType": "number",
@@ -62,20 +62,6 @@ EkstepEditor.basePlugin.extend({
                 this.editorObj.set({ 'rx': value });
                 this.attributes.radius = value;
                 break;
-            case 'opacity':
-                this.editorObj.setOpacity(value/100);
-                this.attributes.opacity = value/100;
-                break;
-            case 'strokeWidth':    
-                value = parseInt(value);
-                this.editorObj.set('strokeWidth', value);
-                this.attributes['stroke-width'] = value;
-                this.attributes['strokeWidth'] = value;
-                break;
-            case 'stroke':
-                this.editorObj.setStroke(value);
-                this.attributes.stroke = value;    
-                break;
         }
         EkstepEditorAPI.render();
         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
@@ -88,7 +74,8 @@ EkstepEditor.basePlugin.extend({
      *   @memberof shape
      */
     getConfig: function() {
-        var config = { color: this.attributes.fill, opacity: (this.attributes.opacity*100), strokeWidth: this.attributes.strokeWidth, stroke: this.attributes.stroke};
+        var config = this._super();
+        config.color = this.attributes.fill;
         if (this.attributes.type == 'roundrect') {
             config.radius = 10;
         }

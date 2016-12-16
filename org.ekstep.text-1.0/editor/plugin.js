@@ -136,7 +136,10 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     getConfig: function() {
-        var config = { color: this.attributes.color || this.attributes.fill, fontfamily: this.attributes.fontFamily, fontsize: this.attributes.fontSize }
+        var config = this._super();
+        config.color = this.attributes.color || this.attributes.fill;
+        config.fontfamily = this.attributes.fontFamily; 
+        config.fontsize = this.attributes.fontSize;
         config.fontweight = this.attributes.fontweight || false;
         config.fontstyle = this.attributes.fontstyle || false;
         return config;

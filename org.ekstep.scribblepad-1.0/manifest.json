@@ -25,7 +25,10 @@
                     "x": 25,
                     "fill": "#3399FF",
                     "w": 27,
-                    "h": 60
+                    "h": 60,
+                    "stroke": "rgba(255, 255, 255, 0)",
+                    "strokeWidth": 1,
+                    "opacity": 1
                 }
             },
             "media": [{
@@ -34,7 +37,7 @@
                 "type": "image"
             }]
         }],
-        "config": [{
+        "configManifest": [{
             "propertyName": "color",
             "title": "Fill color",
             "description": "Choose a color from the color picker",

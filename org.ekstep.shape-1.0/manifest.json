@@ -33,9 +33,9 @@
                         "fill": "#FFFF00",
                         "w": 14,
                         "h": 25,
-                        "opacity": 1,
-                        "stroke": "#FFFFFF",
-                        "strokeWidth": 1
+                        "stroke": "rgba(255, 255, 255, 0)",
+                        "strokeWidth": 1,
+                        "opacity": 1
                     }
                 }
             }, {
@@ -53,9 +53,9 @@
                         "fill": "#00FF00",
                         "w": 18,
                         "h": 32,
-                        "opacity": 1,
-                        "stroke": "#FFFFFF",
-                        "strokeWidth": 1
+                        "stroke": "rgba(255, 255, 255, 0)",
+                        "strokeWidth": 1,
+                        "opacity": 1
                     }
                 }
             }, {
@@ -74,46 +74,20 @@
                         "w": 14,
                         "h": 25,
                         "radius": 10,
-                        "opacity": 1,
-                        "stroke": "#FFFFFF",
-                        "strokeWidth": 1
+                        "stroke": "rgba(255, 255, 255, 0)",
+                        "strokeWidth": 1,
+                        "opacity": 1
                     }
                 }
             }]
         }],
-        "config": [{
+        "configManifest": [{
             "propertyName": "color",
             "title": "Fill Color",
             "description": "Choose a color from the color picker",
             "dataType": "colorpicker",
             "required": true,
             "defaultValue": "#000000"
-        }, {
-            "propertyName": "opacity",
-            "title": "Transparency",
-            "description": "Set the transparency for element",
-            "dataType": "rangeslider",
-            "labelSuffix": "%",
-            "required": true,
-            "defaultValue": 100,
-            "minimumValue": 0,
-            "maximumValue": 100
-        },{
-            "propertyName": "stroke",
-            "title": "Border Color",
-            "description": "Set the border color for element",
-            "dataType": "colorpicker",
-            "required": true,
-            "defaultValue": "#FFFFFF"
-        }, {
-            "propertyName": "strokeWidth",
-            "title": "Border Thickness",
-            "description": "Set the border thickness for element",
-            "dataType": "rangeslider",
-            "required": true,
-            "defaultValue": 1,
-            "minimumValue": 0,
-            "maximumValue": 24
         }],
         "help": {
             "src": "editor/help.md",
