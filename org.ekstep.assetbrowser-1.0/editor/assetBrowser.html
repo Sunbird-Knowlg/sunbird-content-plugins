@@ -142,7 +142,7 @@
 
 <div class="assetbrowser ui modal ui form" >
 	<i class="close icon"></i>
-	<div class="header"><i class="{{ ($ctrl.plugin =='image') ? 'image':'music'}} icon"></i>Select {{ ($ctrl.plugin =='image') ? 'Image':'Audio'}}</div>
+	<div class="header"><i class="{{ ($ctrl.plugin =='image') ? 'image':'file audio outline'}} icon"></i>Select {{ ($ctrl.plugin =='image') ? 'Image':'Audio'}}</div>
 	<div class="content">
 		<div class="ui pointing secondary menu">
 		    <a ng-if="$ctrl.plugin == 'image'" id="myAssetsTab" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab()">My Images</a>
