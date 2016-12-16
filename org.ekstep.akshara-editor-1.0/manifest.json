@@ -1,0 +1,91 @@
+{
+    "id": "org.ekstep.akshara-editor",
+    "ver": "1.0",
+    "author": "Swati Singh",
+    "title": "Grid Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            { "type": "plugin", "plugin": "org.ekstep.colorpicker", "ver": "1.0" },
+            { "type": "plugin", "plugin": "org.ekstep.wordbrowser", "ver": "1.0" }
+        ],
+        "menu": [{
+            "id": "grid",
+            "category": "main",
+            "type": "image",
+            "toolTip": "Add Grid",
+            "title": "Grid",
+            "iconClass": "pie chart icon",
+            "submenu": [{
+                "id": "grids",
+                "type": "image",
+                "toolTip": "Add grid",
+                "title": "Rectangle",
+                "iconImage": "assets/rectangle.png",
+                "onclick": {
+                    "id": "org.ekstep.akshara-editor:create",
+                    "data": {
+                        "type": "rect",
+                        "x": 10,
+                        "y": 20,
+                        "fill": "#FFFF00",
+                        "rows": 4,
+                        "columns": 4
+                    }
+                }
+            },
+        {
+                "id": "circle",
+                "type": "image",
+                "toolTip": "Add Circle",
+                "title": "Circle",
+                "iconImage": "assets/circle.png",
+                "onclick": {
+                    "id": "org.ekstep.akshara-editor:wordbrowser:open"
+                   
+                }
+            }]
+        }
+
+    ],
+        "config": [
+        {
+            "propertyName": "color",
+            "title": "Grid Color",
+            "description": "Choose a color from the color picker",
+            "dataType": "colorpicker",
+            "required": true,
+            "defaultValue": "rgb(255,0,0)"
+        }, {
+            "propertyName": "rows",
+            "title": "Rows",
+            "description": "Select number of rows for grid",
+            "dataType": "select",
+            "range": [2,3,4,5],
+            "required": true,
+            "defaultValue": 2
+        }, {
+            "propertyName": "columns",
+            "title": "Columns",
+            "description": "Select number of columns for grid",
+            "dataType": "select",
+            "range": [2,3,4,5],
+            "required": true,
+            "defaultValue": 4
+        },
+        {
+            "propertyName": "wordBrowser",
+            "title": "Word Browser",
+            "description": "Choose a  from the browser",
+            "dataType": "wordbrowser",
+            "required": true
+        }
+    ],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        } 
+    }
+}
