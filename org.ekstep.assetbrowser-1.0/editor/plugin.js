@@ -64,7 +64,7 @@ EkstepEditor.basePlugin.extend({
                     "license": ["Creative Commons Attribution (CC BY)"],
                     "name": [],
                 },
-                "limit":50
+                "limit":30
             }
         };
 
