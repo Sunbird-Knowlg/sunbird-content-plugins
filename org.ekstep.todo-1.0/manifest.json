@@ -1,0 +1,15 @@
+{
+    "id": "org.ekstep.todo",
+    "ver": "1.0",
+    "author": "Gourav More",
+    "title": "Concept Selector Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            {"type": "js", "src": "editor/todos.jQuery.js"},
+            {"type": "css", "src": "editor/todo.css"}
+        ]
+    }
+}
