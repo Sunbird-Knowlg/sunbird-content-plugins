@@ -37,6 +37,21 @@
                     "fontWeight": "normal"
                 }
             }
+        }],
+        "configManifest": [{
+            "propertyName": "highlightcolor",
+            "title": "Highlight Color",
+            "description": "Choose a color from the color picker to highlight the text",
+            "dataType": "colorpicker",
+            "required": true,
+            "defaultValue": "#000000"
+        }, {
+            "propertyName": "autoplay",
+            "title": "Autoplay ",
+            "description": "Set auto play true or false",
+            "dataType": "boolean",
+            "required": true,
+            "defaultValue": false
         }]
     }
 }
