@@ -193,7 +193,7 @@ var conceptModal;
             tabs.tree.hide();
             tabs.search.hide();
             modal.attr('data-mode', 'picked');
-            return initializeNodeList(list);
+            return initializeNodeListForSelected(list);
         };
         renderTree = function(nodes, css) {
             var i, len, node, nodeElement, tree;
@@ -258,6 +258,30 @@ var conceptModal;
                 return updatePickedIds();
             });
         };
+
+        initializeNodeListForSelected = function(tree) {
+            return $('.node', tree).each(function() {
+                var content, head, node;
+                node = $(this);
+                clickHead = $('>.head', node);
+                head = $('>.head', node);
+                content = $('>.content', node);
+                $('>.name', clickHead).on('click', function(e) {
+                    return nodeClicked(node);
+                });
+                if (nodeIsPicked(node)) {
+                    node.addClass('picked');
+                }
+                if (!node.hasClass('childless')) {
+                    $('>.icon', head).on('click', function(e) {
+                        node.toggleClass('opened');
+                        return content.slideToggle();
+                    });
+                }
+                return updatePickedIds();
+            });
+        };
+
         nodeClicked = function(node) {
             if (!node.hasClass('disabled')) {
                 if (config.singlePick) {
