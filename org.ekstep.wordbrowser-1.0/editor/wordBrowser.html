@@ -1,0 +1,288 @@
+<style>
+.modal.in .modal-dialog {
+    width: 65%;
+}
+
+.tab-content {
+    height: 400px;
+}
+
+.modal-body {
+    padding: 0px;
+}
+
+.nav-tabs {
+    background: none;
+}
+
+.imageBrowserContent {
+    margin: 12px;
+}
+
+.modal-footer {
+    padding: 10px;
+    text-align: right;
+}
+
+
+
+.scrollWindow {
+    margin-top: 30px;
+    overflow: scroll;
+    height: 320px;
+}
+
+.fa-2x-custom {
+    color: aliceblue;
+    margin-right: 10px;
+    margin-left: 2px;
+    font-size: 2em;
+}
+
+.fa-2x-custom:hover {
+    color: white;
+}
+
+.fa-image-selected {
+    color: #3899ec;
+    margin-right: 10px;
+    margin-left: 2px;
+    font-size: 2em;
+}
+
+.assetArea {
+    display: inline-block;
+    height: 50px;
+    min-width: 100px;
+    background-color: #BAD9D4;
+    margin: 20px;
+}
+
+.faloading {
+    position: fixed;
+    top: 250px;
+    left: 360px;
+}
+
+.audio-player {
+    background: url(./assets/sound-icon.png);
+    width: 50px;
+    height: 30px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.audio-player audio {
+    min-width: 100%;
+    outline: none;
+    cursor: inherit;
+    width: 100%;
+    opacity: 0;
+    margin: 0 0 0 -11px;
+}
+
+
+.word-select,
+.akshara-select {
+    cursor: pointer;
+}
+
+.word-selected,
+.akshara-selected {
+    color: #000000 !important;
+}
+
+.words-container {
+    max-width: 100%;
+    margin: 1% 0%;
+}
+
+.wrapper {
+    width: 100%;
+    overflow-y: scroll;
+    height: 322px;
+}
+.form-group{
+    width: 33.33%;
+}
+
+.words-list{
+    width: 22%;
+    float: left;
+    margin: 12px;
+}
+.panel{
+    margin-bottom: 20px;
+    background-color: #fff;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px rgba(0,0,0,.05);
+}
+.panel-heading{
+    border: 0px;
+    color: #000;
+    background: #BAD9D4;
+    padding: 20px 15px;
+}
+.panel-body{
+        padding: 15px;
+}
+
+</style>
+
+<div class="ui modal ui form">
+    
+ 
+    <div class="ui active tab" style="margin: 10px;">
+     <div class="container words-container">
+            <div class="page-header">
+                <h4>{{$ctrl.words.length}} words found</h4>
+            </div>
+            <div class="row">
+                <div class="wrapper">
+                    <div class=" words-list" ng-repeat="word in $ctrl.words" ">
+                        <div class="panel ">
+                            <div class="panel-heading ">
+                                <h4>{{word.lemma}}</h4>
+                                <span>
+                               <i class="fa pull-right fa-lg akshara-select " aria-hidden="true "
+                                ng-class="$ctrl.isSelected[word.identifier] ? 'fa-check-square-o' : 'fa-square-o' " ng-click="$ctrl.toggleSelection(word.identifier, word) ">
+                             
+                                </i>
+                                </span>
+                                <div class="info " ng-if="word.pronunciations.length">
+                                    <span class="audio-player ">
+                                                <audio controls="controls " >
+                                                <source ng-src="{{word.pronunciations[0] | trustUrl}} "/>
+                                                </audio>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="panel-body ">
+                                <span class="pull-right ">
+                                        {{word.status}}
+                                    </span>
+                                <span class="pull-left " ng-if="word.pos.length ">
+                                        {{word.pos[0]}}
+                                    </span>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+                
+    </div>
+     
+    </div>
+
+
+    <div class="actions">
+         <i ng-show="$ctrl.uploadingAsset" class="big spinner loading icon"></i>
+        <div class="ui buttons">
+            <button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+            <div class="or"></div>
+            <button id="selectanduse" class="ui blue button"  ng-click="$ctrl.select()" type="button">Select</button>
+           
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="imageBrowserContent">
+  <div>
+            <form class="word-form" role="form">
+                <div class="form-group">
+                <label for="akshras">Aksharas:</label>
+                <input type="text" id="akshras" class="form-control" ng-model="searchItems.akshras"></input>
+            </div>
+                <spab class="form-group">
+                    <label for="language">Language:</label>
+                    <span>{{language}}</span>
+                </span>
+                <span class="form-group">
+                    <label for="grades">{{grades.title}}:</label>
+                    <select class="form-control" id="grades" ng-model="$ctrl.searchItems.grade" ng-options="key as value for (key , value) in $ctrl.grades.range">
+                    </select>
+                </span>
+                <span class="form-group">
+                    <label for="types">Type:</label>
+                    <select multiple="multiple" class="form-control" id="types" ng-model="searchItems.type" ng-options="type as type for type in $ctrl.types">
+                    </select>
+                </span>
+                <span class="form-group">
+                    <label for="attributes">Attributes:</label>
+                    <label class="radio-inline">
+                        <input type="radio" name="has" value="exists" ng-model="searchItems.attributesFlag">Has
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="has" value="not_exists" ng-model="searchItems.attributesFlag">Lacks
+                    </label>
+                    <select multiple="multiple" class="form-control" id="attributes" ng-model="searchItems.attribute" ng-options="attribute.value as attribute.name for attribute in $ctrl.attributes">
+                    </select>
+                </span>
+                 
+
+                <button class="btn btn-primary word-search-btn pull-right" ng-click="getWords();">Search <span class="glyphicon glyphicon-search"></span></button>
+            </form>
+        </div>
+    <div class="container words-container">
+            <div class="page-header">
+                <h4>{{$ctrl.words.length}} words found</h4>
+            </div>
+            <div class="row">
+                <div class="wrapper">
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-xs-12 words-list" ng-repeat="word in $ctrl.words" ">
+                    <div class="panel ">
+                        <div class="panel-heading ">
+                            <h4>{{word.lemma}}</h4>
+                            <i class="fa pull-right fa-lg akshara-select " aria-hidden="true "
+                            ng-class="isSelected[word.identifier] ? 'fa-check-square-o' : 'fa-square-o' " ng-click="$ctrl.toggleSelection(word.identifier, word) ">
+                            <input type="checkbox" name="" ng-click="$ctrl.toggleSelection(word.identifier, word)">
+                    </i>
+                    <div class="info " ng-if="word.pronunciations.length ">
+                        <span class="audio-player ">
+                                    <audio controls="controls " >
+                                    <source ng-src="{{word.pronunciations[0] | trustUrl}} "/>
+                                    </audio>
+                        </span>
+                    </div>
+                </div>
+                <div class="panel-body ">
+                    <span class="pull-right ">
+                            {{word.status}}
+                        </span>
+                    <span class="pull-left " ng-if="word.pos.length ">
+                            {{word.pos[0]}}
+                        </span>
+                </div>
+            </div>
+        </div>
+            </div>
+                
+    </div>
+</div>
+    <div class="modal-footer">
+        <button id="selectanduse" class="btn btn-primary"  ng-click="$ctrl.select()" type="button">Select</button>
+        <button id="closePopUp" class="btn btn-warning" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+    </div>
+</div>
+ -->

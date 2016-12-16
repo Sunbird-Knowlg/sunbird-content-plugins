@@ -63,7 +63,8 @@ EkstepEditor.basePlugin.extend({
                     "mediaType": [mediaType],
                     "license": ["Creative Commons Attribution (CC BY)"],
                     "name": [],
-                }
+                },
+                "limit":30
             }
         };
 
@@ -78,6 +79,8 @@ EkstepEditor.basePlugin.extend({
         _.isUndefined (owner) ? null : requestObj.request.filters.owner = owner;
         allowableFilter = _.omit(this.search_filter, ['mediaType', 'license', 'limit']);
         _.merge(requestObj.request.filters, allowableFilter);
+
+        console.log(requestObj);
 
         iservice.http.post(EkstepEditor.config.baseURL + '/api/search/v2/search', requestObj, requestHeaders, cb);
 
