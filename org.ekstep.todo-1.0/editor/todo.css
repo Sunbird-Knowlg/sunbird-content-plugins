@@ -1,13 +1,17 @@
 
 /* Remove margins and padding from the list */
-ul {
+#pageLevelTodos {
   list-style-type: none;
   margin: 0;
   padding: 0;
 }
 
+.todo-header{
+    font-size: 13px!important;
+}
+
 /* Style the list items */
-ul li {
+#pageLevelTodos li {
   cursor: pointer;
   position: relative;
   padding: 12px 8px 12px 40px;
@@ -22,24 +26,24 @@ ul li {
 }
 
 /* Set all odd list items to a different color (zebra-stripes) */
-ul li:nth-child(odd) {
+#pageLevelTodos li:nth-child(odd) {
   background: #f9f9f9;
 }
 
 /* Darker background-color on hover */
-ul li:hover {
+#pageLevelTodos li:hover {
   background: #ddd;
 }
 
 /* When clicked on, add a background color and strike out text */
-ul li.checked {
+#pageLevelTodos li.checked {
   background: #888;
   color: #fff;
   text-decoration: line-through;
 }
 
 /* Add a "checked" mark when clicked on */
-ul li.checked::before {
+#pageLevelTodos li.checked::before {
   content: '';
   position: absolute;
   border-color: #fff;

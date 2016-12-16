@@ -96,7 +96,7 @@ EkstepEditor.basePlugin.extend({
 
 		setTimeout(function(){
 			// Add a "checked" symbol when clicking on a list item
-			var list = document.querySelector('ul');
+			var list = document.getElementById('pageLevelTodos');
 			list.addEventListener('click', function(ev) {
 			  if (ev.target.tagName === 'LI') {
 				ev.target.classList.toggle('checked');

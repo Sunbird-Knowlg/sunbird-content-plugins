@@ -7,7 +7,7 @@ $.fn.jltodos = function(options){
 				"<i class='large info circle icon image'></i>",
 				"<div class='content'>",
 					"<div class='header'><%= sender_msg %></div>",
-					"<div class='description'>Reported on <%= formatDate(created) %></div>",
+					"<div class='description'>Resolved on <%= formatDate(created) %></div>",
 				"</div>",
 		"</div>"],
 		no_data_msg:"No record found."
