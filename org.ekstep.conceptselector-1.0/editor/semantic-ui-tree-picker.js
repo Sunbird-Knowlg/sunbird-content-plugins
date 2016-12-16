@@ -250,7 +250,7 @@ var conceptModal;
                     node.addClass('picked');
                 }
                 if (!node.hasClass('childless')) {
-                    $('>.icon', head).on('click', function(e) {
+                    $(head).on('click', function(e) {
                         node.toggleClass('opened');
                         return content.slideToggle();
                     });
