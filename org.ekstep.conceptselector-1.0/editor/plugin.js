@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * Plugin to browse concepts and select
  * @class conceptselector
  * @extends EkstepEditor.basePlugin
@@ -13,7 +13,7 @@ EkstepEditor.basePlugin.extend({
     callback: undefined,
     selectors: [],
     /**
-    *  
+    *
     * Registers events.
     * @memberof conceptselector
     */
@@ -23,59 +23,66 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener(instance.manifest.id + ":init", this.initConceptBrowser, this);
     },
     initData: function() {
-        // TODO: Fetch the data from search service
-        // 1. Fire composite search API with Object Types ["Concept", "Dimension", "Domain"]
-        // 2. Iterate through all objects and create a map of {"<concept-id>": {"id": String, "name": String, "type": String}}
-        // 3. Start with Domains and start creating nodes recursively
-        this.conceptData = [
-            {
-              "id": 1,
-              "name": "Appetizers",
-              "nodes": [
-                {"id": 110, "name": "Jalapenos Nachos"},
-                {"id": 120, "name": "Quesadilla", "nodes": [
-                  {"id": 121, "name": "with Cheese", "selectable": "selectable"},
-                  {"id": 122, "name": "with Beef", "selectable": "selectable"},
-                  {"id": 123, "name": "with Chiclen", "selectable": "selectable"}
-                  ]},
-                {"id": 130, "name": "Toquitos Chicken or Beef"},
-                {"id": 140, "name": "Chips", "nodes": [
-                  {"id": 141, "name": "with Cheese"},
-                  {"id": 142, "name": "with Cheese & Beans"}
-                ]}
-              ]
-            },
-
-            {
-              "id": 2,
-              "name": "Tacos",
-              "nodes": [
-                {"id": 210, "name": "Carnitas", nodes: []},
-                {"id": 220, "name": "Carne Asada"},
-                {"id": 230, "name": "Chicken", nodes: []},
-                {"id": 240, "name": "Shredded Beef"},
-                {"id": 250, "name": "Al Pastor"},
-                {"id": 260, "name": "Crispy Potato"}
-              ]
-            },
-
-            {
-              "id": 3,
-              "name": "Breakfast",
-              "nodes": [
-                {"id": 310, "name": "Huevos Rancheros"},
-                {"id": 320, "name": "Machaca Plate"},
-                {"id": 330, "name": "Hievos a la Mexicana"},
-                {"id": 340, "name": "Chile Verde Omelette"}
-              ]
-            }
-        ];
+		var domains = [];
+		EkstepEditor.conceptService.getConceptsTree(function(err, resp) {
+			if (!err && resp.statusText == "OK") {
+				_.forEach(resp.data.result.domains, function(value) {
+					var domain = {};
+					domain.id   = value.identifier;
+					domain.name = value.name;
+					domainChild = [];
+					_.forEach(value.children, function(DomainChildren) {
+						var child = {};
+						_.forEach(resp.data.result.dimensions, function(value) {
+							if (DomainChildren == value.identifier)
+							{
+								child.id   = value.identifier;
+								child.name = value.name;
+								domainChild.push(child);
+								dimensionChild = [];
+								_.forEach(value.children, function(value) {
+									var concept = {};
+									_.forEach(resp.data.result.concepts, function(concepts) {
+										if (value == concepts.identifier)
+										{
+											concept.id   = concepts.identifier;
+											concept.name = concepts.name;
+											concept.selectable = "selectable";
+											conceptChild = [];
+											_.forEach(concepts.children, function(value) {
+													var subConcept = {};
+												_.forEach(resp.data.result.concepts, function(concepts) {
+													if (value == concepts.identifier)
+													{
+														subConcept.id   = concepts.identifier;
+														subConcept.name = concepts.name;
+														subConcept.selectable = "selectable";
+														conceptChild.push(subConcept);
+													}
+												});
+											});
+											concept.nodes = conceptChild;
+											dimensionChild.push(concept);
+										}
+									});
+								});
+								child.nodes = dimensionChild;
+							}
+						});
+					});
+					domain.nodes = domainChild;
+					domains.push(domain);
+				});
+				EkstepEditorAPI.getAngularScope().safeApply();
+			}
+		});
+        this.conceptData = domains;
     },
-    /**    
-    *      
+    /**
+    *
     * open concept selector to select concepts
     * @memberof conceptselector
-    * 
+    *
     */
     initConceptBrowser: function(event, data) {
         var instance = this;
@@ -88,6 +95,7 @@ EkstepEditor.basePlugin.extend({
                 onSubmit: function(nodes) {
                   data.callback(nodes);
                 },
+                /**displayFormat: function(picked) { return "Concepts ("+picked.length+" selected)"; },**/
                 onClose: function() {
                     instance.selectors = _.remove(instance.selectors, function(n) {
                         return n != data.element;

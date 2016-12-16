@@ -26,10 +26,10 @@ EkstepEditor.basePlugin.extend({
                 this.editorObj = new fabric.Ellipse(props);
                 break;
             case 'roundrect':
-                this.manifest.editor.config.push({
+                this.manifest.editor.configManifest.push({
                     "propertyName": "radius",
                     "title": "Radius",
-                    "placeholder":"Radius",
+                    "placeholder": "Radius",
                     "description": "Input radius for the rounded rectangle",
                     "dataType": "input",
                     "valueType": "number",
@@ -61,6 +61,7 @@ EkstepEditor.basePlugin.extend({
             case 'radius':
                 this.editorObj.set({ 'rx': value });
                 this.attributes.radius = value;
+                break;
         }
         EkstepEditorAPI.render();
         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
@@ -73,7 +74,8 @@ EkstepEditor.basePlugin.extend({
      *   @memberof shape
      */
     getConfig: function() {
-        var config = { color: this.attributes.fill };
+        var config = this._super();
+        config.color = this.attributes.fill;
         if (this.attributes.type == 'roundrect') {
             config.radius = 10;
         }

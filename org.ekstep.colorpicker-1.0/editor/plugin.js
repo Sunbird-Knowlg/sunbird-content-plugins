@@ -15,25 +15,14 @@ EkstepEditor.basePlugin.extend({
     type: "colorpicker",
     /**
      * This contains the life cycle  methods of colorpicker
-     * @member {undefined|Object} picker
+     * @member {undefined|Array} picker
      * @memberof ColorPicker
      */
-    picker: undefined,
-    /**
-     * The events are registred which are used to show, update and initialize the colorpicker
-     * @memberof ColorPicker
-     */
+    picker: [],
+    
     initialize: function() {
-        EkstepEditorAPI.addEventListener("colorpicker:show", this.showColorPicker, this);
         EkstepEditorAPI.addEventListener("colorpicker:state", this.invoke, this);
         EkstepEditorAPI.addEventListener("colorpicker:update", this.updateColor, this);
-    },
-    /**
-     * The method is used to show the color palette
-     * @memberof ColorPicker
-     */
-    showColorPicker: function() {
-        this.picker.show();
     },
     /**
      * The method is used to initiate the colorpicker
@@ -43,19 +32,21 @@ EkstepEditor.basePlugin.extend({
      * @memberof ColorPicker 
      */
     invoke: function(event, data) {
+        var instance = this;
         if (EkstepEditor.jQuery("#" + data.id).attr("colorpicker") != "added") {
-            this.picker = new jscolor(document.getElementById(data.id), {
+           this.picker[data.id] = new jscolor(document.getElementById(data.id), {
                 valueElement: null,
                 onFineChange: function() {
-                    data.callback("color", this.toHEXString())
+                    data.callback(data.id, this.toHEXString())
                 }
             });
+
             EkstepEditor.jQuery("#" + data.id).attr("colorpicker", "added");
         }
         if (data && data.color) {
-            this.picker.fromString(data.color);
+            this.picker[data.id].fromString(data.color);
         } else {
-            this.picker.fromString("#000000"); // default color will be black
+            this.picker[data.id].fromString("#000000"); // default color will be black
         }
     }
 });

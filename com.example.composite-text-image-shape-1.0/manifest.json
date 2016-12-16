@@ -40,7 +40,7 @@
                     "h": 50
                 }
             },
-            "config": {
+            "configManifest": {
                 "text": {
                     "fontFamily": "Arial",
                     "fontSize": "22"

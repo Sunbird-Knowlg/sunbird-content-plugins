@@ -32,7 +32,10 @@
                         "y": 20,
                         "fill": "#FFFF00",
                         "w": 14,
-                        "h": 25
+                        "h": 25,
+                        "stroke": "rgba(255, 255, 255, 0)",
+                        "strokeWidth": 1,
+                        "opacity": 1
                     }
                 }
             }, {
@@ -49,7 +52,10 @@
                         "y": 15,
                         "fill": "#00FF00",
                         "w": 18,
-                        "h": 32
+                        "h": 32,
+                        "stroke": "rgba(255, 255, 255, 0)",
+                        "strokeWidth": 1,
+                        "opacity": 1
                     }
                 }
             }, {
@@ -67,14 +73,17 @@
                         "fill": "#FF0000",
                         "w": 14,
                         "h": 25,
-                        "radius": 10
+                        "radius": 10,
+                        "stroke": "rgba(255, 255, 255, 0)",
+                        "strokeWidth": 1,
+                        "opacity": 1
                     }
                 }
             }]
         }],
-        "config": [{
+        "configManifest": [{
             "propertyName": "color",
-            "title": "Color",
+            "title": "Fill Color",
             "description": "Choose a color from the color picker",
             "dataType": "colorpicker",
             "required": true,

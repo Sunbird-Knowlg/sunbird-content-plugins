@@ -14,18 +14,20 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("object:removed", this.objectRemoved, this);
     },
     createStage: function(event, data) {
-        EkstepEditorAPI.instantiatePlugin(this.manifest.id, {});
+        EkstepEditorAPI.instantiatePlugin(this.manifest.id, data);
     },
-    newInstance: function(data) {
-        this.onclick = { id: 'stage:select', data: { stageId: this.id } }
-        EkstepEditorAPI.addStage(this);
+    newInstance: function() {
+        this.onclick = { id: 'stage:select', data: { stageId: this.id } };
+        this.ondelete = { id: 'stage:delete', data: { stageId: this.id } };
+        this.duplicate = { id: 'stage:duplicate', data: { stageId: this.id } };
+        EkstepEditorAPI.addStage(this);        
         this.attributes = {
             x: 0,
             y: 0,
             w: 720,
             h: 405,
             id: this.id
-        };
+        };        
     },
     setCanvas: function(canvas) {
         this.canvas = canvas;

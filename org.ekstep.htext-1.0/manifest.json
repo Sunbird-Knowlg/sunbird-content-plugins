@@ -1,0 +1,57 @@
+{
+    "id": "org.ekstep.htext",
+    "ver": "1.0",
+    "shortId": "htext",
+    "author": "Kartheek Palla",
+    "title": "Readalong Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            { "type": "js", "src": "editor/libs/karaoke.js" },
+            { "type": "js", "src": "editor/libs/jquery.scrollTo.js" },
+            { "type": "js", "src": "editor/libs/jquery.jplayer.min.js" },
+            { "type": "css", "src": "editor/css/jquery-ui.css" }
+        ],
+        "menu": [{
+            "id": "htext",
+            "category": "main",
+            "type": "icon",
+            "toolTip": "Add Readalong",
+            "title": "Readalong",
+            "iconClass": "music icon",
+            "onclick": {
+                "id": "org.ekstep.htext:create",
+                "data": {
+                    "__text": "",
+                    "x": 10,
+                    "y": 20,
+                    "fontFamily": "Arial",
+                    "fontSize": 18,
+                    "minWidth": 20,
+                    "w": 35,
+                    "maxWidth": 500,
+                    "fill": "#000000",
+                    "fontStyle": "normal",
+                    "fontWeight": "normal"
+                }
+            }
+        }],
+        "configManifest": [{
+            "propertyName": "highlightcolor",
+            "title": "Highlight Color",
+            "description": "Choose a color from the color picker to highlight the text",
+            "dataType": "colorpicker",
+            "required": true,
+            "defaultValue": "#000000"
+        }, {
+            "propertyName": "autoplay",
+            "title": "Autoplay ",
+            "description": "Set auto play true or false",
+            "dataType": "boolean",
+            "required": true,
+            "defaultValue": false
+        }]
+    }
+}

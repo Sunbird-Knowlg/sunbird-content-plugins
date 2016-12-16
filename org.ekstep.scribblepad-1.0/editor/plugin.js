@@ -88,7 +88,9 @@ EkstepEditor.basePlugin.extend({
     *   @memberof scribblePad
     */
     getConfig: function() {
-        return { color: this.attributes.fill };
+        var config = this._super();
+        config.color = this.attributes.fill;
+        return config;
     }
 });
 //# sourceURL=scribblepadplugin.js

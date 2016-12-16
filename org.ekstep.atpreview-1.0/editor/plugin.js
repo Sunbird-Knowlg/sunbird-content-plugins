@@ -57,13 +57,13 @@ EkstepEditor.basePlugin.extend({
         var popupConfig = { template: data};
         var popupService = EkstepEditorAPI.getService('popup');
         var contentService = EkstepEditorAPI.getService('content');
+        var meta = EkstepEditorAPI.getService('content').getContentMeta(EkstepEditorAPI.globalContext.contentId);
 
         popupService.open(popupConfig, function() {
             var previewContentIframe = EkstepEditor.jQuery('#previewContentIframe')[0];
             previewContentIframe.src = instance.previewURL;
-
-            previewContentIframe.onload = function() {
-                var meta = EkstepEditorAPI.getService('content').getContentMeta(EkstepEditorAPI.globalContext.contentId);
+            meta.contentMeta = _.isUndefined(meta.contentMeta) ? null : meta.contentMeta;
+            previewContentIframe.onload = function() {                
                 previewContentIframe.contentWindow.setContentData(meta.contentMeta, instance.contentBody, { "showStartPage": true, "showEndPage": true });
             };
         });

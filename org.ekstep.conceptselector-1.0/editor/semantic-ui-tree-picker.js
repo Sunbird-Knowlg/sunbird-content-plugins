@@ -318,7 +318,8 @@ var conceptModal;
                 if (comparator(node)) {
                     results.push({
                         id: node.id,
-                        name: node.name
+                        name: node.name,
+                        selectable: node.selectable
                     });
                 }
                 if (node[config.childrenKey] && node[config.childrenKey].length) {
