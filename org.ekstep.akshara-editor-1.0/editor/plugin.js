@@ -9,7 +9,6 @@ EkstepEditor.basePlugin.extend({
         var props = this.convertToFabric(this.attributes);
         var rows = props.rows;
         var columns = props.columns;
-        console.log("rows" + rows + "columns" + columns);
         var padding = 5;
         var gridWidth = (500 - (padding * (columns - 1))) / columns;
         var gridHeight = (300 - (padding * (rows - 1))) / rows;
@@ -31,7 +30,6 @@ EkstepEditor.basePlugin.extend({
         }
 
         this.editorObj = new fabric.Group(rects);
-console.log(this.editorObj);
     },
      /**    
     *      
@@ -40,7 +38,6 @@ console.log(this.editorObj);
     * 
     */
     openWordBrowser: function() {
-        console.log("=========================here======================");
         var instance = this;
         EkstepEditorAPI.dispatchEvent('org.ekstep.wordbrowser:show', {
             type: 'image',
@@ -56,7 +53,6 @@ console.log(this.editorObj);
     * 
     */
     openAksharaBrowser: function() {
-        console.log("=========================here======================");
         var instance = this;
         EkstepEditorAPI.dispatchEvent('org.ekstep.aksharabrowser:show', {
             type: 'image',
@@ -65,8 +61,6 @@ console.log(this.editorObj);
         });
     },
     onConfigChange: function(key, value) {
-        console.log("onConfigChange::aksharaplugin::called");
-        console.log(key, value);
         var instance = this;
         switch (key) {
             case 'color':
@@ -107,7 +101,6 @@ console.log(this.editorObj);
         EkstepEditorAPI.render();
     },
     getConfig: function() {
-        console.log("getConfig::aksharaplugin::called");
         var config = { color: this.attributes.fill };
         config.rows = this.attributes.rows;
         config.columns = this.attributes.columns;
