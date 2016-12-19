@@ -62,7 +62,7 @@ EkstepEditor.basePlugin.extend({
         popupService.open(popupConfig, function() {
             var previewContentIframe = EkstepEditor.jQuery('#previewContentIframe')[0];
             previewContentIframe.src = instance.previewURL;
-            meta.contentMeta = _.isUndefined(meta.contentMeta) ? null : meta.contentMeta;
+            meta.contentMeta = EkstepEditorAPI._.isUndefined(meta.contentMeta) ? null : meta.contentMeta;
             previewContentIframe.onload = function() {                
                 previewContentIframe.contentWindow.setContentData(meta.contentMeta, instance.contentBody, { "showStartPage": true, "showEndPage": true });
             };
