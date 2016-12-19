@@ -40,7 +40,7 @@
         $('#stopAudio').show();
         //$('#sync-play').css('display', 'none');
         //$('.sync-play-disable').css('display', 'inline-block');
-
+        this.initPlayer(false);
         return this.initSplit();
     };
 
@@ -227,6 +227,7 @@
             elem.css('width', '45px');
             word_idx = self.karaoke.dragSrcEl.data('wordidx');
             self.karaoke.dragSrcEl.css('width', '20px');
+            self.karaoke.dragSrcEl.parent().css('width', '');
             $('.stepMiddle', elem).html(self.karaoke.dragSrcEl.html());
             $('.stepMiddle', elem).attr('draggable', 'true');
             $('.stepMiddle', elem).attr('data-wordIdx', word_idx);

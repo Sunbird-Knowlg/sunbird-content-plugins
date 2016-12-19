@@ -166,7 +166,7 @@
                         <div class="ui form">
                             <div class="field">
                                 <label>Text</label>
-                                <textarea ng-model="$ctrl.readalongText" rows="12" id="readalongText" placeholder="Add text here" style="width: 30.5em;"></textarea>
+                                <textarea ng-model="$ctrl.readalongText" rows="9" id="readalongText" placeholder="Add text here" style="width: 30.5em;"></textarea>
                             </div>
                             <div class="field">
                                 <label>Audio</label>
@@ -184,21 +184,21 @@
                 </div>
             </div>
         </div>
-        <div ng-show="!$ctrl.showText">
+        <div ng-show="!$ctrl.showText" id="AudioSync">
             <div class="ui grid container">
                 <div class="one column row">
                     <div class="column helptext">
                         When the audio starts playing, press the spacebar/button to sync every word with the audio
                     </div>
                 </div>
-                <div class="one column row">
+                <div class="one column row" style="padding: 0px;">
                     <div class="column">
                         <div class="textWrapper">
                             <div id="main-text-block" name="editorTextField" class="text-box"></div>
                         </div>
                     </div>
                 </div>
-                <div class="one column row">
+                <div class="one column row" style="padding: 0px;">
                     <div class="column">
                         <div id="syncBox">
                             <div id="syncBar">
@@ -233,7 +233,7 @@
                         </div>
                     </div>
                     <div class="ui five wide column">
-                        <button class="big ui button" id="syncMark">Click to Mark (or) Use SpaceBar</button>
+                        <button class="huge ui button" id="syncMark">Click to Mark (or) Use SpaceBar</button>
                     </div>
                     <div id="jplayerSync"></div>
                 </div>
@@ -244,7 +244,7 @@
         <div class="ui buttons" ng-if="$ctrl.showText">
             <button class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
             <div class="or"></div>
-            <button class="ui blue button" type="button" ng-click="$ctrl.finalText()">NEXT</button>
+            <button class="ui blue button" type="button" ng-click="$ctrl.finalText()" ng-disabled="!$ctrl.readalongText">NEXT</button>
         </div>
         <div class="ui buttons" ng-if="!$ctrl.showText">
             <button class="ui orange button" ng-click="$ctrl.showText = true;" type="button">Edit Text & Audio</button>
