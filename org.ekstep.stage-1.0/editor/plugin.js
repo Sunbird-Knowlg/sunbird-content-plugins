@@ -52,7 +52,7 @@ EkstepEditor.basePlugin.extend({
     },
     updateZIndex: function() {
         var instance = this;
-        _.forEach(this.children, function(child) {
+        EkstepEditorAPI._.forEach(this.children, function(child) {
             if(child.editorObj) {
                 child.attributes['z-index'] = instance.canvas.getObjects().indexOf(child.editorObj);
             } else {
@@ -61,7 +61,7 @@ EkstepEditor.basePlugin.extend({
         });
     },
     render: function(canvas) {
-        _.forEach(_.sortBy(this.children, [function(o) { return o.getAttribute('z-index'); }]), function(plugin) {
+        EkstepEditorAPI._.forEach(EkstepEditorAPI._.sortBy(this.children, [function(o) { return o.getAttribute('z-index'); }]), function(plugin) {
             plugin.render(canvas);
         });
         canvas.renderAll();
@@ -74,7 +74,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.refreshStages();
     },
     objectSelected: function(event, data) {
-        if(!_.isUndefined(this.currentObject) && this.currentObject !== data.id) {
+        if(!EkstepEditorAPI._.isUndefined(this.currentObject) && this.currentObject !== data.id) {
             var plugin = EkstepEditorAPI.getPluginInstance(this.currentObject);
             EkstepEditorAPI.getCanvas().trigger("selection:cleared", { target: plugin.editorObj });
         }

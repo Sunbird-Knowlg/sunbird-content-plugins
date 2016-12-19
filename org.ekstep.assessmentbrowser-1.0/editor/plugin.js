@@ -69,14 +69,13 @@ EkstepEditor.basePlugin.extend({
     *   angular controller for popup service as callback
     *   @param ctrl {Object} popupController object
     *   @param scope {Object} popupController scope object
-    *   @param $uibModalInstance {Object} ui-bootstrap modal instance
     *   @param resolvedData {Object} data passed to uib config
     *   @memberof assetBrowser
     */
 
     controllerCallback: function(ctrl, scope, data) {
         EkstepEditorAPI.jQuery('.modal').addClass('item-activity');
-        var itemIframe = EkstepEditor.jQuery('#itemIframe')[0],
+        var itemIframe = EkstepEditorAPI.jQuery('#itemIframe')[0],
             config = { "showStartPage": false, "showEndPage": false },
             instance = data.instance;
 
@@ -102,17 +101,17 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.getService('assessmentService').getLanguages(function(err, resp) {
             if (!err && resp.statusText == "OK") {
                 var assessmentlanguages = {};
-                _.forEach(resp.data.result.languages, function(lang) {
+                EkstepEditorAPI._.forEach(resp.data.result.languages, function(lang) {
                     assessmentlanguages[lang.code] = lang.name;
                 });
-                ctrl.assessment.language = _.values(assessmentlanguages);
+                ctrl.assessment.language = EkstepEditorAPI._.values(assessmentlanguages);
                 EkstepEditorAPI.getAngularScope().safeApply();
             }
         });
 
         EkstepEditorAPI.getService('assessmentService').getDefinations(function(err, resp) {
             if (!err && resp.statusText == "OK") {
-                _.forEach(resp.data.result.definition_node.properties, function(prop) {
+                EkstepEditorAPI._.forEach(resp.data.result.definition_node.properties, function(prop) {
                     switch (prop.propertyName) {
                         case "qlevel":
                             ctrl.assessment.qlevel = prop.range;
@@ -150,7 +149,7 @@ EkstepEditor.basePlugin.extend({
             } else {
                 ctrl.isMyQuestions = false;
             }
-            _.forEach(activity, function(value, key) {
+            EkstepEditorAPI._.forEach(activity, function(value, key) {
                 if (value) {
                     switch (key) {
                         case "question_title":
@@ -183,10 +182,10 @@ EkstepEditor.basePlugin.extend({
                     if (!resp.data.result.count || resp.data.result.count <= 0) {
                         ctrl.isItemAvailable = false;
                     } else {
-                        _.forEach(resp.data.result.items, function(value) {
+                        EkstepEditorAPI._.forEach(resp.data.result.items, function(value) {
                             item = {};
                             item.question = value;
-                            if (_.findIndex(ctrl.cart.items, function(i) {
+                            if (EkstepEditorAPI._.findIndex(ctrl.cart.items, function(i) {
                                     return i.question.identifier === value.identifier
                                 }) === -1) {
                                 item.isSelected = false;
@@ -208,7 +207,7 @@ EkstepEditor.basePlugin.extend({
         ctrl.cart = {
             "items": [],
             "getItemIndex": function(item) {
-                return _.findIndex(ctrl.items, function(i) {
+                return EkstepEditorAPI._.findIndex(ctrl.items, function(i) {
                     return i.question.identifier === item.question.identifier
                 });
             },
@@ -220,7 +219,7 @@ EkstepEditor.basePlugin.extend({
                 EkstepEditorAPI.getAngularScope().safeApply();
             },
             "remove": function(item) {
-                _.remove(this.items, function(cartItem) {
+                EkstepEditorAPI._.remove(this.items, function(cartItem) {
                     return item.question.identifier == cartItem.question.identifier;
                 });
                 var itemIndex = this.getItemIndex(item);
@@ -234,7 +233,7 @@ EkstepEditor.basePlugin.extend({
             ctrl.isFiltersShown = false;
             ctrl.activityOptions.total_items = ctrl.cart.items.length;
             ctrl.activityOptions.max_score = ctrl.activityOptions.total_items;
-            ctrl.activityOptions.range = _.times(ctrl.activityOptions.total_items).splice(1);
+            ctrl.activityOptions.range = EkstepEditorAPI._.times(ctrl.activityOptions.total_items).splice(1);
             ctrl.activityOptions.range.push(ctrl.activityOptions.total_items);
             EkstepEditorAPI.jQuery('.displayCount .text').html(ctrl.activityOptions.total_items);
             EkstepEditorAPI.getAngularScope().safeApply();
@@ -262,7 +261,7 @@ EkstepEditor.basePlugin.extend({
                                 var x2js = new X2JS({ attributePrefix: 'none', enableToStringFunc: false });
                                 var templateJson = x2js.xml_str2json(response.data.result.content.body);
                                 ctrl.itemPreviewContent = assessmentBrowserUtil.getQuestionPreviwContent(templateJson, item);
-                                ctrl.itemPreviewDisplay = !_.isUndefined(ctrl.itemPreviewContent.error) ? ctrl.itemPreviewContent.error : '';
+                                ctrl.itemPreviewDisplay = !EkstepEditorAPI._.isUndefined(ctrl.itemPreviewContent.error) ? ctrl.itemPreviewContent.error : '';
                                 ctrl.itemPreviewLoading = false;
                                 itemIframe.contentWindow.location.reload();
                                 EkstepEditorAPI.getAngularScope().safeApply();
@@ -285,7 +284,7 @@ EkstepEditor.basePlugin.extend({
         };
 
         ctrl.addItemActivity = function() {
-            if (!_.isUndefined(instance.callback)) {
+            if (!EkstepEditorAPI._.isUndefined(instance.callback)) {
                 instance.callback(ctrl.cart.items);
                 ctrl.cancel();
             }

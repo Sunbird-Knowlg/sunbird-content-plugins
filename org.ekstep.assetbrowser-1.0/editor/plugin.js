@@ -34,14 +34,37 @@ EkstepEditor.basePlugin.extend({
         this.cb = data.callback;
         this.mediaType = data.type;
         this.search_filter = data.search_filter;
+        this.audio_context = undefined;
+        this.recorder = undefined;
+
         this.loadResource('editor/assetBrowser.html', 'html', function(err, response) {
             instance.showAssetBrowser(err, response);
         });
 
-        // $('.ui.dropdown').dropdown();
-        // $('.menu .item').tab();
-    },
+        // Stop audio on close popup
+        EkstepEditorAPI.jQuery(".assetbrowser.ui.modal").modal({
+            onHidden:function(){
+                if (data.type == "audio") {
+                    instance.stopCurrentPlayAudio();
+                }
+            }
+        });
 
+        if (data.type == "audio") {
+            console.log('initialize audio recorder');
+           instance.initAudioRecorder();
+        }
+        
+    },
+    stopCurrentPlayAudio :function ()
+    {
+        EkstepEditorAPI.jQuery('.assetbrowser audio').each(function(){
+            /*Stop playing*/
+            this.pause();
+            /*Reset time*/
+            this.currentTime = 0;
+        });
+    },
     /**
     *   get asset from Learning platfrom
     *   @param {String} name of the asset
@@ -105,8 +128,8 @@ EkstepEditor.basePlugin.extend({
         /*Check for browser support for all File API*/
         if (window.File && window.FileList && window.Blob) {
             /*Get file size and file type*/
-            var fsize = $('#' + fieldId)[0].files[0].size;
-            var ftype = $('#' + fieldId)[0].files[0].type;
+            var fsize = EkstepEditorAPI.jQuery('#' + fieldId)[0].files[0].size;
+            var ftype = EkstepEditorAPI.jQuery('#' + fieldId)[0].files[0].type;
 
             /*Check file size*/
             if (fsize > allowedFileSize) {
@@ -133,6 +156,60 @@ EkstepEditor.basePlugin.extend({
             return true;
         }
     },
+    initAudioRecorder: function() {
+        var instance = this;
+        jQuery("#audio-record-btn").prop("disabled", true);
+        instance.showUserMediaError("Permissions have not been granted to use your microphone, allow the page access to your devices in order for the audio record to work. Also, reload the page after giving permissions.");
+        var constraints = window.constraints = {
+          audio: false,
+          video: true
+        };
+
+        navigator.getUserMedia = ( navigator.getUserMedia ||
+                       navigator.webkitGetUserMedia ||
+                       navigator.mozGetUserMedia ||
+                       navigator.msGetUserMedia);
+
+        window.URL = window.URL || window.webkitURL;
+
+        navigator.getUserMedia({ audio: true }, function(stream) {
+            var input = instance.audio_context.createMediaStreamSource(stream);
+
+            if (input != undefined)
+            {
+                jQuery("#audio-record-btn").prop("disabled", false);
+                jQuery("#rec-error-msg").hide();
+            }
+
+            instance.recorder = new Recorder(input, {
+              numChannels: 1
+            });
+
+            // The important thing is to save a reference to the MediaStreamAudioSourceNode
+            // thus, *window*.source or any other object reference will do
+            window.source = instance.audio_context.createMediaStreamSource(stream);
+        },instance.handleUserMediaError
+        );
+    },
+    handleUserMediaError: function(error) {
+        if (error.name === 'ConstraintNotSatisfiedError')
+        {
+            instance.showUserMediaError("COM_EKCONTENT_AUDIO_REC_RESOLUTION_ERROR_FIRST" + constraints.video.width.exact + 'x' +constraints.video.width.exact + "COM_EKCONTENT_AUDIO_REC_RESOLUTION_ERROR");
+        }
+        else if (error.name === 'PermissionDeniedError')
+        {
+            instance.showUserMediaError("Permissions have not been granted to use your microphone, allow the page access to your devices in order for the audio record to work. Also, reload the page after giving permissions.");
+        }
+    },
+    showUserMediaError: function(msg, error) {
+        jQuery("#rec-error-msg").show();
+        jQuery("#rec-error-msg-text").html(msg);
+
+        alert(msg);
+        if (typeof error !== 'undefined') {
+            console.error(error);
+        }
+    },
     /**
     *   @memberof assetBrowser
     *   angular controller for popup service as callback
@@ -151,8 +228,6 @@ EkstepEditor.basePlugin.extend({
             lastSelectedImage,
             audioTabSelected = false,
             imageTabSelected = true;
-        //mainScope = EkstepEditorAPI.getAngularScope();
-
         var $sce = $injector.get('$sce');
         ctrl.selected_images = {};
         ctrl.selected_audios = {};
@@ -161,6 +236,8 @@ EkstepEditor.basePlugin.extend({
         ctrl.loadingImage = true;
         ctrl.uploadView = false;
         ctrl.languagecode = 'en';
+        ctrl.record = true;
+        ctrl.uploadView = true;
         ctrl.owner = 'amolg';
         ctrl.asset = {
             'requiredField':'',
@@ -172,6 +249,7 @@ EkstepEditor.basePlugin.extend({
         ctrl.uploadingAsset = false;
         ctrl.assetId = undefined;
         ctrl.tabSelected = "my";
+        ctrl.uploadView = false;
         ctrl.assetMeta = {
 			'body': '',
             'name': '',
@@ -220,12 +298,22 @@ EkstepEditor.basePlugin.extend({
             if (res && res.data.result.content) {
                 ctrl.loadingAudio = false;
                 ctrl.audioList = [];
+                ctrl.initPopup(res.data.result.content);
                 _.forEach(res.data.result.content, function(obj, index) {
-                    ctrl.audioList.push({ downloadUrl: trustResource(obj.downloadUrl), identifier: obj.identifier });
+                    ctrl.audioList.push({ downloadUrl: trustResource(obj.downloadUrl), identifier: obj.identifier, name:obj.name, mimeType:obj.mimeType, license:obj.license });
                 });
             } else {
                 ctrl.audioList = [];
             };
+
+            document.addEventListener('play', function(e){
+                var audios = document.getElementsByTagName('audio');
+                for(var i = 0, len = audios.length; i < len;i++){
+                    if(audios[i] != e.target){
+                        audios[i].pause();
+                    }
+                }
+            }, true);
 
             EkstepEditorAPI.getAngularScope().safeApply();
         };
@@ -243,10 +331,6 @@ EkstepEditor.basePlugin.extend({
         }
 
         ctrl.myAssetTab = function(){
-            /*imageTabSelected = false;
-            audioTabSelected = false;       
-            */
-
             var callback,
                 searchText = ctrl.query;
                 ctrl.selectBtnDisable = false;
@@ -284,8 +368,7 @@ EkstepEditor.basePlugin.extend({
             callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
             ctrl.selectBtnDisable = true;
 
-            callback && instance.getAsset(searchText, instance.mediaType, undefined, callback);
-
+            callback && instance.getAsset(searchText, instance.mediaType, undefined, callback); 
         }
 
         ctrl.uploadClick = function(){
@@ -293,7 +376,7 @@ EkstepEditor.basePlugin.extend({
           //  console.log('Uploa');
 
             setTimeout(function(){
-                $('#uploadtab').trigger('click');
+                EkstepEditorAPI.jQuery('#uploadtab').trigger('click');
             }, 100);
         }
 
@@ -332,7 +415,7 @@ EkstepEditor.basePlugin.extend({
         }
 
         ctrl.cancel = function() {
-            $('.ui.modal').modal('hide');
+            EkstepEditorAPI.jQuery('.ui.modal').modal('hide');
         };
 
         ctrl.ImageSource = function(event, $index) {
@@ -379,13 +462,12 @@ EkstepEditor.basePlugin.extend({
         };
 
         ctrl.initPopup = function(item) {
-            _.forEach(item, function(obj, index) {
-                $('#assetbrowser-' + index).popup({
+            setTimeout(function(){
+                EkstepEditorAPI.jQuery('.infopopover').popup({
                     hoverable: true,
                     position: 'right center'
                 });
-                obj.sizeinbytes = ctrl.convertToBytes(obj.size);
-            });
+            },100)
         };
 
         ctrl.convertToBytes = function(bytes) {
@@ -431,7 +513,7 @@ EkstepEditor.basePlugin.extend({
         }
 
         ctrl.viewMore = function(){
-            $('.removeError').each(function(){ $(this).removeClass('error')});
+            EkstepEditorAPI.jQuery('.removeError').each(function(){ EkstepEditorAPI.jQuery(this).removeClass('error')});
             ctrl.hideField = false;
         }
 
@@ -452,7 +534,7 @@ EkstepEditor.basePlugin.extend({
 
             EkstepEditorAPI.getAngularScope().safeApply();
 
-            $.each($('#assetfile')[0].files, function(i, file) {
+            $.each(EkstepEditorAPI.jQuery('#assetfile')[0].files, function(i, file) {
                 data.append('file', file);
                 ctrl.assetMeta.mimeType = file.type;
 
@@ -538,7 +620,7 @@ EkstepEditor.basePlugin.extend({
         }
 
 		ctrl.doUpload = function(mediaType) {
-            $('.ui.form')
+            EkstepEditorAPI.jQuery('.ui.form')
               .form({
                 inline : true,
                 fields: {
@@ -631,11 +713,19 @@ EkstepEditor.basePlugin.extend({
               });
 		}
 
+        ctrl.switchToUpload = function(){
+            ctrl.uploadView = true;
+        }
+
         setTimeout(function(){
-            $('.assetbrowser .menu .item').tab();
-            $('.assetbrowser .ui.dropdown').dropdown();
-            $('.assetbrowser .ui.radio.checkbox').checkbox();
+            EkstepEditorAPI.jQuery('.assetbrowser .menu .item').tab();
+            EkstepEditorAPI.jQuery('.assetbrowser .ui.dropdown').dropdown();
+            EkstepEditorAPI.jQuery('.assetbrowser .ui.radio.checkbox').checkbox();
         }, 100); 
+    
+     ctrl.startRecording = function(){
+        console.log("11");
+     }
     }
 });
 //# sourceURL=assetbrowserplugin.js

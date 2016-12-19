@@ -90,12 +90,12 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     getAttributes: function() {
-        var attributes = _.omit(_.clone(this.attributes), ['top', 'left', 'width', 'height', 'fontFamily', 'fontfamily', 'fontSize', 'fontstyle', 'fontweight', 'scaleX', 'scaleY']);
+        var attributes = EkstepEditorAPI._.omit(EkstepEditorAPI._.clone(this.attributes), ['top', 'left', 'width', 'height', 'fontFamily', 'fontfamily', 'fontSize', 'fontstyle', 'fontweight', 'scaleX', 'scaleY']);
         attributes.font = this.editorObj.get('fontFamily');
         attributes['__text'] = this.editorObj.get('text');
         attributes.fontsize = this.updateFontSize(this.editorObj.get('fontSize'), false);
-        var fontWeight = _.isUndefined(this.editorObj.get("fontWeight")) ? "" : this.editorObj.get("fontWeight");
-        var fontStyle = _.isUndefined(this.editorObj.get("fontStyle")) ? "" : this.editorObj.get("fontStyle");
+        var fontWeight = EkstepEditorAPI._.isUndefined(this.editorObj.get("fontWeight")) ? "" : this.editorObj.get("fontWeight");
+        var fontStyle = EkstepEditorAPI._.isUndefined(this.editorObj.get("fontStyle")) ? "" : this.editorObj.get("fontStyle");
         attributes.weight = (fontWeight + ' ' + fontStyle).trim();
         return attributes;
     },
@@ -149,8 +149,8 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     getProperties: function() {
-        var props = _.omitBy(_.clone(this.attributes), _.isObject);
-        props = _.omitBy(props, _.isNaN);
+        var props = EkstepEditorAPI._.omitBy(EkstepEditorAPI._.clone(this.attributes), EkstepEditorAPI._.isObject);
+        props = EkstepEditorAPI._.omitBy(props, EkstepEditorAPI._.isNaN);
         delete props.__text;
         props.text = this.editorObj.text;
         return props;
@@ -185,18 +185,18 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     convertToFabric: function(data) {
-        var retData = _.clone(data);
+        var retData = EkstepEditorAPI._.clone(data);
         if (data.x) retData.left = data.x;
         if (data.y) retData.top = data.y;
         if (data.w) retData.width = data.w;
         if (data.h) retData.height = data.h;
         if (data.radius) retData.rx = data.radius;
         if (data.color) retData.fill = data.color;
-        if (data.weight && _.includes(data.weight, 'bold')) {
+        if (data.weight && EkstepEditorAPI._.includes(data.weight, 'bold')) {
             retData.fontWeight = "bold";
             data.fontweight = true;
         } else { data.fontweight = false; }
-        if (data.weight && _.includes(data.weight, 'italic')) {
+        if (data.weight && EkstepEditorAPI._.includes(data.weight, 'italic')) {
             retData.fontStyle = "italic";
             data.fontstyle = true;
         } else { data.fontstyle = false; }

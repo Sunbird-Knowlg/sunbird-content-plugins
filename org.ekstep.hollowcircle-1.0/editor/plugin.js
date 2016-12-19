@@ -10,12 +10,12 @@ EkstepEditor.basePlugin.extend({
     },
     renderConfig: function(event, data) {
         var instance = this;
-        if ($("#hollowcircleconfigColor").length === 0) {
-            $("#plugin-toolbar-container ul").first().append($("<li>", { id: "hollowcircleconfigColor", class: "list-group-item" }));
+        if (EkstepEditorAPI.jQuery("#hollowcircleconfigColor").length === 0) {
+            EkstepEditorAPI.jQuery("#plugin-toolbar-container ul").first().append(EkstepEditorAPI.jQuery("<li>", { id: "hollowcircleconfigColor", class: "list-group-item" }));
 
-            $("#hollowcircleconfigColor").append($("<label>", { text: "color", style: "margin-right:10px" }));
-            $("#hollowcircleconfigColor").append($("<input>", { class: "hc-color-picker" }));
-            $(".hc-color-picker").spectrum({
+            EkstepEditorAPI.jQuery("#hollowcircleconfigColor").append(EkstepEditorAPI.jQuery("<label>", { text: "color", style: "margin-right:10px" }));
+            EkstepEditorAPI.jQuery("#hollowcircleconfigColor").append(EkstepEditorAPI.jQuery("<input>", { class: "hc-color-picker" }));
+            EkstepEditorAPI.jQuery(".hc-color-picker").spectrum({
                 color: EkstepEditorAPI.getCurrentObject().editorObj.getStroke(),
                 showPalette: true,
                 palette: [
@@ -26,27 +26,27 @@ EkstepEditor.basePlugin.extend({
                 change: function(color) { instance.onConfigChange("color", color.toHexString()); }
             });
         } else {
-            $(".hc-color-picker").spectrum("set", EkstepEditorAPI.getCurrentObject().editorObj.getStroke());
+            EkstepEditorAPI.jQuery(".hc-color-picker").spectrum("set", EkstepEditorAPI.getCurrentObject().editorObj.getStroke());
         }
-        if ($("#hollowcircleconfigRadius").length === 0) {
-            $("#plugin-toolbar-container ul").first().append($("<li>", { id: "hollowcircleconfigRadius", class: "list-group-item" }));
-            $("#hollowcircleconfigRadius").append($("<label>", { text: "Radius", style: "margin-right:10px" }));
-            $("#hollowcircleconfigRadius").append($("<input>", { type: "number", id: "hsRadius", class: "hc-radius", value: EkstepEditorAPI.getCurrentObject().editorObj.radius }));
-            $("#hsRadius").on("change keyup mouseup", function() {
-                instance.onConfigChange("radius", parseInt($(this).val()));
+        if (EkstepEditorAPI.jQuery("#hollowcircleconfigRadius").length === 0) {
+            EkstepEditorAPI.jQuery("#plugin-toolbar-container ul").first().append(EkstepEditorAPI.jQuery("<li>", { id: "hollowcircleconfigRadius", class: "list-group-item" }));
+            EkstepEditorAPI.jQuery("#hollowcircleconfigRadius").append(EkstepEditorAPI.jQuery("<label>", { text: "Radius", style: "margin-right:10px" }));
+            EkstepEditorAPI.jQuery("#hollowcircleconfigRadius").append(EkstepEditorAPI.jQuery("<input>", { type: "number", id: "hsRadius", class: "hc-radius", value: EkstepEditorAPI.getCurrentObject().editorObj.radius }));
+            EkstepEditorAPI.jQuery("#hsRadius").on("change keyup mouseup", function() {
+                instance.onConfigChange("radius", parseInt(EkstepEditorAPI.jQuery(this).val()));
             })
         } else {
-            $("#hsRadius").val(EkstepEditorAPI.getCurrentObject().editorObj.radius);
+            EkstepEditorAPI.jQuery("#hsRadius").val(EkstepEditorAPI.getCurrentObject().editorObj.radius);
         }
-        if ($("#hollowcircleconfigStrokeWidth").length === 0) {
-            $("#plugin-toolbar-container ul").first().append($("<li>", { id: "hollowcircleconfigStrokeWidth", class: "list-group-item" }));
-            $("#hollowcircleconfigStrokeWidth").append($("<label>", { text: "Thickness", style: "margin-right:10px" }));
-            $("#hollowcircleconfigStrokeWidth").append($("<input>", { type: "number", id: "hsStrokeWidth", class: "hc-stroke-width", value: EkstepEditorAPI.getCurrentObject().editorObj.strokeWidth }));
-            $("#hsStrokeWidth").on("change keyup mouseup", function() {
-                instance.onConfigChange("strokewidth", parseInt($(this).val()));
+        if (EkstepEditorAPI.jQuery("#hollowcircleconfigStrokeWidth").length === 0) {
+            EkstepEditorAPI.jQuery("#plugin-toolbar-container ul").first().append(EkstepEditorAPI.jQuery("<li>", { id: "hollowcircleconfigStrokeWidth", class: "list-group-item" }));
+            EkstepEditorAPI.jQuery("#hollowcircleconfigStrokeWidth").append(EkstepEditorAPI.jQuery("<label>", { text: "Thickness", style: "margin-right:10px" }));
+            EkstepEditorAPI.jQuery("#hollowcircleconfigStrokeWidth").append(EkstepEditorAPI.jQuery("<input>", { type: "number", id: "hsStrokeWidth", class: "hc-stroke-width", value: EkstepEditorAPI.getCurrentObject().editorObj.strokeWidth }));
+            EkstepEditorAPI.jQuery("#hsStrokeWidth").on("change keyup mouseup", function() {
+                instance.onConfigChange("strokewidth", parseInt(EkstepEditorAPI.jQuery(this).val()));
             })
         } else {
-            $("#hsStrokeWidth").val(EkstepEditorAPI.getCurrentObject().editorObj.strokeWidth);
+            EkstepEditorAPI.jQuery("#hsStrokeWidth").val(EkstepEditorAPI.getCurrentObject().editorObj.strokeWidth);
         }
     },
     onConfigChange: function(key, value) {
@@ -70,9 +70,9 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
     },
     objectUnselected: function (event, data) {
-        $("#hollowcircleconfigStrokeWidth").remove();
-        $("#hollowcircleconfigRadius").remove();
-        $("#hollowcircleconfigColor").remove();
+        EkstepEditorAPI.jQuery("#hollowcircleconfigStrokeWidth").remove();
+        EkstepEditorAPI.jQuery("#hollowcircleconfigRadius").remove();
+        EkstepEditorAPI.jQuery("#hollowcircleconfigColor").remove();
     }
 });
 //# sourceURL=hollowcircleplugin.js
