@@ -36,50 +36,51 @@ EkstepEditor.basePlugin.extend({
 		var obj = {};
 		var widgetRef;
 
-		widgetRef = jQuery("#pageLevelTodos");
+		widgetRef = EkstepEditorAPI.jQuery("#pageLevelTodos");
+
 
 		/**Update widget attribute as per page**/
-		jQuery(widgetRef).attr('data-jlike-url', "index.php?option=com_ekcontent&view=content&id=3103");
-		jQuery(widgetRef).attr('data-jlike-cont-id', "3103");
-		jQuery(widgetRef).attr('data-jlike-subtype', "reviewer#" + "splash");
+		EkstepEditorAPI.jQuery(widgetRef).attr('data-jlike-url', "index.php?option=com_ekcontent&view=content&id=3103");
+		EkstepEditorAPI.jQuery(widgetRef).attr('data-jlike-cont-id', "3103");
+		EkstepEditorAPI.jQuery(widgetRef).attr('data-jlike-subtype', "reviewer#" + "splash");
 
 		/**Unchecked all page level checks on page changes**/
-		jQuery(".page-level-todo").each(function(){
-			jQuery(this).attr("checked", false);
+		EkstepEditorAPI.jQuery(".page-level-todo").each(function(){
+			EkstepEditorAPI.jQuery(this).attr("checked", false);
 		});
 
-		jQuery(".pagelevel-todo").each(function(){
-			jQuery(this).attr("checked", false);
+		EkstepEditorAPI.jQuery(".pagelevel-todo").each(function(){
+			EkstepEditorAPI.jQuery(this).attr("checked", false);
 		});
 
-		var tempRender1 = [
-
-		"<div class='item' data-jlike-todoid='<%= id %>'>",
-				"<input type='checkbox' id='todo<%= id %>' data-jlike-id='<%= id %>' name='todo<%= id %>' data-ek-todomsg='<%= sender_msg %>' onClick='ctrl.updateStatus(this)'>",
-			"<div style='display:inline-block; padding:5px;'>",
-				"<div class='header'><%= sender_msg %></div>",
-				"<div class='description'>Reported on <%= formatDate(created) %></div>",
-			"</div>",
-		"</div>",
-		];
+		var outTempRender = '';
+		outTempRender += '<table class="ui small compact celled definition table">';
+		outTempRender += '<tbody id="reportedIssue">';
+		outTempRender += '</tbody>';
+		outTempRender += '</tbody>';
 
 		var tempRender = [
-		"<li>",
-			"<%= sender_msg %>",
-		"</li>",
+			'<tr>',
+			  '<td class="collapsing">',
+				'<div class="ui fitted slider checkbox">',
+				  '<input type="checkbox"> <label></label>',
+				'</div>',
+			 '</td>',
+			  '<td>Harmful or dangerous content<div><small style="opacity:.5;">Reprted on 2 days ago</small></div></td>',
+			'</tr>',
 		];
 
 		/**Init**/
-		jQuery(widgetRef).jltodos();
+		EkstepEditorAPI.jQuery(widgetRef).jltodos();
 
-		obj["url"]=jQuery(widgetRef).attr("data-jlike-url");
-		obj["cont_id"]=jQuery(widgetRef).attr("data-jlike-cont-id");
-		obj["type"]=jQuery(widgetRef).attr("data-jlike-type");
-		obj["subtype"]=jQuery(widgetRef).attr("data-jlike-subtype");
-		obj["client"]=jQuery(widgetRef).attr("data-jlike-client");
-		obj["content_id"]=jQuery(widgetRef).attr("data-jlike-contentid");
-		obj["assigned_by"]=jQuery(widgetRef).attr("data-jlike-assigned_by");
-		obj["assigned_to"]=jQuery(widgetRef).attr("data-jlike-assigned_to");
+		obj["url"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-url");
+		obj["cont_id"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-cont-id");
+		obj["type"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-type");
+		obj["subtype"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-subtype");
+		obj["client"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-client");
+		obj["content_id"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-contentid");
+		obj["assigned_by"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_by");
+		obj["assigned_to"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_to");
 		obj["state"]=1;
 		obj["status"] = "I";
 
@@ -87,34 +88,25 @@ EkstepEditor.basePlugin.extend({
 		setTimeout(function(){
 
 			/**Render todos**/
-			jQuery("#pageLevelTodos").jltodos({obj:obj, action:'renderTodos', tempRender:tempRender});
+			EkstepEditorAPI.jQuery("#pageLevelTodos").jltodos({obj:obj, action:'renderTodos', tempRender:tempRender, outTempRender:outTempRender});
 
 			obj["status"] = "C";
 			/**Render resovled todos**/
-			jQuery("#pageLevelResolvedTodos").jltodos({obj:obj, action:'renderTodos'});
-		}, 3000);
-
-		setTimeout(function(){
-			// Add a "checked" symbol when clicking on a list item
-			var list = document.getElementById('pageLevelTodos');
-			list.addEventListener('click', function(ev) {
-			  if (ev.target.tagName === 'LI') {
-				ev.target.classList.toggle('checked');
-			  }
-			}, false);
+			EkstepEditorAPI.jQuery("#pageLevelResolvedTodos").addClass('ui relaxed divided list');
+			EkstepEditorAPI.jQuery("#pageLevelResolvedTodos").jltodos({obj:obj, action:'renderTodos'});
 		}, 3000);
 
 		ctrl.updateStatus = function(ref)
 		{
-			var widgetRef = jQuery(ref).closest('ul');
+			var widgetRef = EkstepEditorAPI.jQuery(ref).closest('ul');
 			var status  = 'I';
 
 			if ((ref).checked == true){
 				status = 'C';
 			}
 
-			id=jQuery(ref).attr("data-jlike-id");
-			todotext=jQuery(ref).attr("data-ek-todomsg");
+			id=EkstepEditorAPI.jQuery(ref).attr("data-jlike-id");
+			todotext=EkstepEditorAPI.jQuery(ref).attr("data-ek-todomsg");
 
 			/**Update todo status**/
 			ctrl.save(widgetRef, status, id, todotext);
@@ -126,14 +118,14 @@ EkstepEditor.basePlugin.extend({
 			obj['id']=id;
 			obj["sender_msg"]=todotext;
 
-			obj["url"]=jQuery(widgetRef).attr("data-jlike-url");
-			obj["cont_id"]=jQuery(widgetRef).attr("data-jlike-cont-id");
-			obj["type"]=jQuery(widgetRef).attr("data-jlike-type");
-			obj["subtype"]=jQuery(widgetRef).attr("data-jlike-subtype");
-			obj["client"]=jQuery(widgetRef).attr("data-jlike-client");
-			obj["content_id"]=jQuery(widgetRef).attr("data-jlike-contentid");
-			obj["assigned_by"]=jQuery(widgetRef).attr("data-jlike-assigned_by");
-			obj["assigned_to"]=jQuery(widgetRef).attr("data-jlike-assigned_to");
+			obj["url"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-url");
+			obj["cont_id"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-cont-id");
+			obj["type"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-type");
+			obj["subtype"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-subtype");
+			obj["client"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-client");
+			obj["content_id"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-contentid");
+			obj["assigned_by"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_by");
+			obj["assigned_to"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_to");
 
 			obj["state"]=1;
 
@@ -143,9 +135,9 @@ EkstepEditor.basePlugin.extend({
 			}
 
 			/**Create/Edit Todo**/
-			jQuery('.live').addClass('disabled');
+			EkstepEditorAPI.jQuery('.live').addClass('disabled');
 			hasCreatedTodo = true;
-			jQuery(widgetRef).jltodos({obj:obj,action: 'createTodo'});
+			EkstepEditorAPI.jQuery(widgetRef).jltodos({obj:obj,action: 'createTodo'});
 		},
         ctrl.cancel = function() {
             EkstepEditorAPI.jQuery('.ui.modal').modal('hide');
