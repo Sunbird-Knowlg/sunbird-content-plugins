@@ -1,372 +1,368 @@
-<style>
-.assetbrowser_footer {
-    /*margin: 8px;*/
-}
-
-.imagescrollWindow {
-    margin-top: 30px;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-bottom: 10px;
-    overflow: scroll;
-    height: 320px;
-}
-
-.audioscrollwindow {
-    height: 388px;
-    overflow: scroll;
-    margin-top: 10px;
-}
-
-.fa-2x-custom {
-    color: aliceblue;
-    margin-right: 10px;
-    margin-left: 2px;
-    font-size: 2em;
-}
-
-.fa-2x-custom:hover {
-    color: white;
-}
-
-.fa-image-selected {
-    color: #3899ec;
-    margin-right: 10px;
-    margin-left: 2px;
-    font-size: 2em;
-}
-
-.faloading {
-    position: fixed;
-    top: 250px;
-    left: 360px;
-}
-
-.audio-tag {
-    text-align: center;
-    background-color: rgb(250, 250, 250);
-}
-
-.audioitem {
-    border: 1px dotted #ccc;
-    cursor: pointer;
-    position: relative;
-    margin-bottom: 10px;
-    background-color: #fafafa;
-}
-
-.audioOverlay {
-    background-color: hsl(200, 100%, 43%);
-    opacity: 0.7;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    text-align: center;
-}
-
-.faAudioCheck {
-    margin-top: 12px;
-    color: white;
-}
-
-.assetbrowser_searchBox {
-    width: 100%;
-}
-
-#assetArea2 {
-    width: 20%;
-}
-
-.templatebrowser_main {
-    /*margin: 0px !important;*/
-    overflow-y: auto;
-    min-height: 300px !important;
-    max-height: 300px !important;
-}
-
-.ui.modal.ui.form {
-	min-height: 550px !important;
-}
-
-.templatebrowser_thumbnail {
-    margin-top: 20px;
-    cursor: pointer;
-    position: relative;
-    max-width: 140px;
-}
-
-.templatecard {
-    margin-bottom: 5px !important;
-    height: 175px !important;
-}
-
-.template_header {
-    background-color: #3899ec !important;
-}
-
-.template_header h4 {
-    padding: 0px;
-    margin: 0px;
-    color: #fff;
-}
-
-.template_header .remove {
-    float: right;
-    margin-top: -21px;
-    color: #fff;
-}
-
-/*.tab_menu {
+<script type="text/ng-template" ng-app="assetbrowserapp" ng-controller="browsercontroller as $ctrl" id="partials/assetbrowser.html">
+    <style>
+    .assetbrowser_footer {
+        /*margin: 8px;*/
+    }
+    
+    .imagescrollWindow {
+        margin-top: 30px;
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        overflow: scroll;
+        height: 320px;
+    }
+    
+    .audioscrollwindow {
+        height: 388px;
+        overflow: scroll;
+        margin-top: 10px;
+    }
+    
+    .fa-2x-custom {
+        color: aliceblue;
+        margin-right: 10px;
+        margin-left: 2px;
+        font-size: 2em;
+    }
+    
+    .fa-2x-custom:hover {
+        color: white;
+    }
+    
+    .fa-image-selected {
+        color: #3899ec;
+        margin-right: 10px;
+        margin-left: 2px;
+        font-size: 2em;
+    }
+    
+    .faloading {
+        position: fixed;
+        top: 250px;
+        left: 360px;
+    }
+    
+    .audio-tag {
+        text-align: center;
+        background-color: rgb(250, 250, 250);
+    }
+    
+    .audioitem {
+        border: 1px dotted #ccc;
+        cursor: pointer;
+        position: relative;
+        margin-bottom: 10px;
+        background-color: #fafafa;
+    }
+    
+    .audioOverlay {
+        background-color: hsl(200, 100%, 43%);
+        opacity: 0.7;
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        text-align: center;
+    }
+    
+    .faAudioCheck {
+        margin-top: 12px;
+        color: white;
+    }
+    
+    .assetbrowser_searchBox {
+        width: 100%;
+    }
+    
+    #assetArea2 {
+        width: 20%;
+    }
+    
+    .templatebrowser_main {
+        margin: 0px !important;
+        overflow-y: auto;
+        min-height: 300px !important;
+        max-height: 300px !important;
+    }
+    
+    .ui.modal.ui.form {
+        min-height: 550px !important;
+    }
+    
+    .templatebrowser_thumbnail {
+        margin-top: 20px;
+        cursor: pointer;
+        position: relative;
+        max-width: 140px;
+    }
+    
+    .templatecard {
+        margin-bottom: 5px !important;
+        height: 175px !important;
+    }
+    
+    .template_header {
+        background-color: #3899ec !important;
+    }
+    
+    .template_header h4 {
+        padding: 0px;
+        margin: 0px;
+        color: #fff;
+    }
+    
+    .template_header .remove {
+        float: right;
+        margin-top: -21px;
+        color: #fff;
+    }
+    /*.tab_menu {
     margin-left: 10px !important;
     margin-right: 10px !important;
     margin-top: 0px !important;
     margin-bottom: 0px !important;
 }*/
-
-.asset_thumbnail {
-    height: 140px !important;
-    width: 140px !important;
-    max-height: 140px !important;
-    max-width: 140px !important;
-}
-
-.cardcontent {
-    font-size: 10px !important;
-    font-weight: 100 !important;
-    overflow-wrap: break-word;
-    overflow: hidden;
-}
-</style>
-
-<div class="assetbrowser ui modal ui form" >
-	<i class="close icon"></i>
-	<div class="header"><i class="{{ ($ctrl.plugin =='image') ? 'image':'file audio outline'}} icon"></i>Select {{ ($ctrl.plugin =='image') ? 'Image':'Audio'}}</div>
-	<div class="content">
-		<div class="ui pointing secondary menu">
-		    <a ng-if="$ctrl.plugin == 'image'" id="myAssetsTab" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab()">My Images</a>
-		    <a ng-if="$ctrl.plugin == 'image'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab()">All Image</a>
-		    <a ng-if="$ctrl.plugin == 'audio'" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab()">My Audio</a>
-			<a  ng-if="$ctrl.plugin == 'audio'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab()">All Audio</a>
-		    <a id="uploadtab" class="item" data-tab="third" ng-click="$ctrl.assetUpload()">Upload</a>
-		</div>
-		<div class="uploadingAsset ui tab active" data-tab="first" >
-			<div class="content" ng-if="$ctrl.plugin == 'image'">
-				<div class="column">
-					<div class="column">
-						<div class="ui icon input assetbrowser_searchBox">
-							<input ng-model="$ctrl.query" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
-							<i class="circular search link icon inverted"></i>
-						</div>
-					</div>
-				</div>
-				<div class="clearfix">&nbsp;</div>
-				<div class="ui grid templatebrowser_main">
-					<i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
-					<div id="assetArea1" ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
-						<div class="four column row templatebrowser_thumbnail">
-							<div class="ui card templatecard" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected}" data-html="<div class='header'>Details</div><div class='content'><div class='ui bulleted list'><div class='item'>Name:{{image.name}}</div><div class='item'>Size:{{image.sizeinbytes}}</div><div class='item'>Type:{{image.mimeType}}</div><div class='item'>License:{{image.license}}</div>">
-								<a class="item" ng-show="$ctrl.selected_images[$index].selected">
-									<div class="floating ui blue label">
-										<span><i class="fa fa-check" aria-hidden="true"></i></span>
-									</div>
-								</a>
-								<div class="ui small image">
-									<img class="asset_thumbnail" data_id="{{image.identifier}}" src="{{image.downloadUrl}}">
-								</div>
-								<div class="content cardcontent">
-									<div class="header">{{image.name}}</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="content" ng-if="$ctrl.plugin =='audio'">
-				<div class="ui grid">
-					<div class="column">
-						<div class="ui icon input assetbrowser_searchBox">
-							<input ng-model="$ctrl.query" placeholder="Search Audio..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
-							<i class="circular search link icon inverted"></i>
-						</div>
-					</div>
-				</div>
-				<div class="clearfix">&nbsp;</div>
-				<div class="ui grid templatebrowser_main">
-					<div id="assetArea2" ng-show="$ctrl.audioList.length > 0" ng-repeat="audio in $ctrl.audioList track by $index">
-						<div class="ten column row">
-							<div class="audioitem" ng-click="$ctrl.AudioSource(audio.downloadUrl,audio.identifier, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}">
-								<audio style="max-width: 85%;" controls id="audio-{{$index}}" ng-src="{{audio.downloadUrl}}" width="120" height="120"></audio>
-								<div class="audio-tag">{{audio.identifier}}</div>
-								<div class="audioOverlay" ng-show="$ctrl.selected_audios[$index].selected">
-									<i class="fa fa-check-square-o fa-2x faAudioCheck" aria-hidden="true"></i>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="ui tab" data-tab="second" >
-			<div class="content" ng-if="$ctrl.plugin == 'image'">
-				<div class="column">
-					<div class="column">
-						<div class="ui icon input assetbrowser_searchBox">
-							<input ng-model="$ctrl.query" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
-							<i class="circular search link icon inverted"></i>
-						</div>
-					</div>
-				</div>
-				<div class="clearfix">&nbsp;</div>
-				<div class="ui grid templatebrowser_main">
-					<i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
-					<div id="assetArea1" ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
-						<div class="four column row templatebrowser_thumbnail">
-							<div class="ui card templatecard" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected}" data-html="<div class='header'>Details</div><div class='content'><div class='ui bulleted list'><div class='item'>Name:{{image.name}}</div><div class='item'>Size:{{image.sizeinbytes}}</div><div class='item'>Type:{{image.mimeType}}</div><div class='item'>License:{{image.license}}</div>">
-								<a class="item" ng-show="$ctrl.selected_images[$index].selected">
-									<div class="floating ui blue label">
-										<span><i class="fa fa-check" aria-hidden="true"></i></span>
-									</div>
-								</a>
-								<div class="ui small image">
-									<img class="asset_thumbnail" data_id="{{image.identifier}}" src="{{image.downloadUrl}}">
-								</div>
-								<div class="content cardcontent">
-									<div class="header">{{image.name}}</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="content" ng-if="$ctrl.plugin =='audio'">
-				<div class="ui grid">
-					<div class="column">
-						<div class="ui icon input assetbrowser_searchBox">
-							<input ng-model="$ctrl.query" placeholder="Search Audio..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
-							<i class="circular search link icon inverted"></i>
-						</div>
-					</div>
-				</div>
-				<div class="clearfix">&nbsp;</div>
-				<div class="ui grid templatebrowser_main">
-					<div id="assetArea2" ng-show="$ctrl.audioList.length > 0" ng-repeat="audio in $ctrl.audioList track by $index">
-						<div class="ten column row">
-							<div class="audioitem" ng-click="$ctrl.AudioSource(audio.downloadUrl,audio.identifier, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}">
-								<audio style="max-width: 85%;" controls id="audio-{{$index}}" ng-src="{{audio.downloadUrl}}" width="120" height="120"></audio>
-								<div class="audio-tag">{{audio.identifier}}</div>
-								<div class="audioOverlay" ng-show="$ctrl.selected_audios[$index].selected">
-									<i class="fa fa-check-square-o fa-2x faAudioCheck" aria-hidden="true"></i>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="ui tab" data-tab="third" >
-			<div class="content">
-				<div class="ui two column divided grid">
-					<div class="row ui form">
-						<div class="column">
-							<div class="ui two column divided grid" ng-if="$ctrl.plugin =='audio'" ng-hide="$ctrl.upload || $ctrl.record">
-							  	 <div class="row center aligned">
-								  	<div class="column" ng-click="$ctrl.upload = true; $ctrl.record=false;">
-								  		<p><i class="huge upload icon"></i></p>
-								  		UPLOAD
-								  	</div>
-								  	<div class="ui vertical divider">or</div>
-									<div class="column" ng-click="$ctrl.upload = false; $ctrl.record=true;">
-										<p><i class="huge record icon"></i></p>
-										RECORD
-								  	</div>
-							  	</div>
-							</div>
-							<div ng-show="$ctrl.record">
-								Recording functionality not available
-							</div>
-							<div class="required field" ng-if="$ctrl.upload" ng-hide="$ctrl.editMetaFlag">
-								<label for="assetfile" title="Enter asset caption">Select file</label>
-								<input class="cropit-image-input" id="assetfile" type="file" name="assetfile" accept="{{$ctrl.allowedMimeTypes.join(', ')}}" data-validate="assetfile" />
-							</div>
-							<div class="ui info message" ng-if="$ctrl.upload" ng-hide="$ctrl.editMetaFlag">
-								<ul class="list">
-									<li>Allowed file types are: {{$ctrl.fileTypes}}</li>
-									<li>Maximum allowed file size: {{$ctrl.fileSize}}</li>
-								</ul>
-							</div>
-							<div ng-show="$ctrl.editMetaFlag" class="field">
-								<img ng-src="{{$ctrl.selectedImgSrc}}" height="140px"/>
-							</div>
-							<div class="grouped required fields">
-								<label for="ccByContribution" >Copyright & License:</label>
-								<p>I understand and confirm that all lessons/assets created through the authoring tool or uploaded on the Ekstep platform shall be available for free and public use without limitations on the Ekstep platform (portal,applications and any other end user interface that Ekstep platform would enable) and will be licensed under<!--@Todo add policy link --> <a href="#" target="_blank">CC-BY 4.0</a></p>
-								<div class="field">
-									<div class="ui radio checkbox">
-										<input id="ccByContribution1" name="ccByContribution" type="radio" ng-click="$ctrl.setPublic()" value="Creative Commons Attribution (CC BY)">
-										<label for="ccByContribution1" ng-click="$ctrl.setPublic()">Yes, make it available to everyone</label>
-									</div>
-								</div>
-								<div class="field">
-									<div class="ui radio checkbox">
-										<input id="ccByContribution2" name="ccByContribution" type="radio" ng-click="$ctrl.setPrivate()" value="">
-										<label for="ccByContribution2"  ng-click="$ctrl.setPrivate()">No, don't share with anyone</label>
-									</div>
-								</div>
-							</div>
-						</div>
-						<div class="column">
-							<div class="required field">
-								<label for="assetName" title="Enter asset caption">Asset Caption</label>
-								<input id="assetName" type="text" name="assetName" ng-model="$ctrl.assetMeta.name" placeholder="Enter asset caption" data-validate="assetName" />
-							</div>
-
-							<div class="field">
-								<label for="keywords" title="Tags">Tags</label>
-								<input id="keywords" type="text"  name="keywords" ng-model="$ctrl.keywordsText" data-validate="keywords">
-							 </div>
-
-							<div class="field" ng-hide="$ctrl.hideField">
-								<label for="language" title="Choose Language">Language</label>
-								<select id="language" class="ui dropdown" ng-model="$ctrl.languageText" {{$ctrl.asset.requiredField}} name="language" ng-options="lang for lang in $ctrl.asset.language" data-validate="language" >
-									<option value="">All</option>
-								</select>
-							</div>
-
-							<div class="{{$ctrl.asset.requiredField}} field removeError" ng-hide="$ctrl.hideField">
-								<label for="creator" title="Creator">Creator</label>
-								<input id="creator" type="text" ng-model="$ctrl.assetMeta.creator" {{$ctrl.asset.requiredField}} name="creator" placeholder="Enter Name" data-validate="creator" >
-							</div>
-
-							<div class="{{$ctrl.asset.requiredField}} field removeError" ng-hide="$ctrl.hideField">
-								<label for="copyright" title="Enter Copyright">Copyright</label>
-								<input type="text" id="copyright" ng-model="$ctrl.assetMeta.copyright" {{$ctrl.asset.requiredField}} name="copyright" data-validate="copyright" >
-							</div>
-
-							<div ng-show="$ctrl.optional">
-								<a ng-show="$ctrl.hideField" ng-click="$ctrl.viewMore()">More <i class="caret down icon"></i></a>
-
-								<a ng-show="!$ctrl.hideField" ng-click="$ctrl.setPrivate()">Less <i class="caret up icon"></i></a>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-   </div>
-    <div class="actions">
-        <i ng-show="$ctrl.uploadingAsset" class="big spinner loading icon"></i>
-        <div class="ui buttons">
-            <button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
-            <div class="or"></div>
-            <div ng-switch="$ctrl.buttonToShow">
-            	<button ng-switch-when="select" class="ui blue button" ng-disabled="$ctrl.selectBtnDisable" ng-click="$ctrl.select()" type="button">Select</button>
-	
-	            <button ng-switch-when="upload" class="ui blue button submit button" ng-click="$ctrl.doUpload()"  type="button" ng-disabled="$ctrl.uploadingAsset">Upload and Use</button>
-
-            	<button ng-switch-when="save" class="ui blue button submit button" ng-click="$ctrl.doUpload();" type="button">Save</button>
+    
+    .asset_thumbnail {
+        height: 140px !important;
+        width: 140px !important;
+        max-height: 140px !important;
+        max-width: 140px !important;
+    }
+    
+    .cardcontent {
+        font-size: 10px !important;
+        font-weight: 100 !important;
+        overflow-wrap: break-word;
+        overflow: hidden;
+    }
+    </style>
+    <div class="assetbrowser ui form">
+        <i class="close icon"></i>
+        <div class="header"><i class="{{ ($ctrl.plugin =='image') ? 'image':'file audio outline'}} icon"></i>Select {{ ($ctrl.plugin =='image') ? 'Image':'Audio'}}</div>
+        <div class="content">
+            <div class="ui pointing secondary menu">
+                <a ng-if="$ctrl.plugin == 'image'" id="myAssetsTab" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab()">My Images</a>
+                <a ng-if="$ctrl.plugin == 'image'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab()">All Image</a>
+                <a ng-if="$ctrl.plugin == 'audio'" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab()">My Audio</a>
+                <a ng-if="$ctrl.plugin == 'audio'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab()">All Audio</a>
+                <a id="uploadtab" class="item" data-tab="third" ng-click="$ctrl.assetUpload()">Upload</a>
             </div>
-        </div>	
+            <div class="uploadingAsset ui tab active" data-tab="first">
+                <div class="content" ng-if="$ctrl.plugin == 'image'">
+                    <div class="column">
+                        <div class="column">
+                            <div class="ui icon input assetbrowser_searchBox">
+                                <input ng-model="$ctrl.query" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
+                                <i class="circular search link icon inverted"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <div class="ui grid templatebrowser_main">
+                        <i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
+                        <div id="assetArea1" ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
+                            <div class="four column row templatebrowser_thumbnail">
+                                <div class="ui card templatecard" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected}" data-html="<div class='header'>Details</div><div class='content'><div class='ui bulleted list'><div class='item'>Name:{{image.name}}</div><div class='item'>Size:{{image.sizeinbytes}}</div><div class='item'>Type:{{image.mimeType}}</div><div class='item'>License:{{image.license}}</div>">
+                                    <a class="item" ng-show="$ctrl.selected_images[$index].selected">
+                                        <div class="floating ui blue label">
+                                            <span><i class="fa fa-check" aria-hidden="true"></i></span>
+                                        </div>
+                                    </a>
+                                    <div class="ui small image">
+                                        <img class="asset_thumbnail" data_id="{{image.identifier}}" src="{{image.downloadUrl}}">
+                                    </div>
+                                    <div class="content cardcontent">
+                                        <div class="header">{{image.name}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content" ng-if="$ctrl.plugin =='audio'">
+                    <div class="ui grid">
+                        <div class="column">
+                            <div class="ui icon input assetbrowser_searchBox">
+                                <input ng-model="$ctrl.query" placeholder="Search Audio..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
+                                <i class="circular search link icon inverted"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <div class="ui grid templatebrowser_main">
+                        <div id="assetArea2" ng-show="$ctrl.audioList.length > 0" ng-repeat="audio in $ctrl.audioList track by $index">
+                            <div class="ten column row">
+                                <div class="audioitem" ng-click="$ctrl.AudioSource(audio.downloadUrl,audio.identifier, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}">
+                                    <audio style="max-width: 85%;" controls id="audio-{{$index}}" ng-src="{{audio.downloadUrl}}" width="120" height="120"></audio>
+                                    <div class="audio-tag">{{audio.identifier}}</div>
+                                    <div class="audioOverlay" ng-show="$ctrl.selected_audios[$index].selected">
+                                        <i class="fa fa-check-square-o fa-2x faAudioCheck" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui tab" data-tab="second">
+                <div class="content" ng-if="$ctrl.plugin == 'image'">
+                    <div class="column">
+                        <div class="column">
+                            <div class="ui icon input assetbrowser_searchBox">
+                                <input ng-model="$ctrl.query" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
+                                <i class="circular search link icon inverted"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <div class="ui grid templatebrowser_main">
+                        <i class="fa fa-spinner fa-pulse fa-5x fa-fw faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
+                        <div id="assetArea1" ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
+                            <div class="four column row templatebrowser_thumbnail">
+                                <div class="ui card templatecard" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected}" data-html="<div class='header'>Details</div><div class='content'><div class='ui bulleted list'><div class='item'>Name:{{image.name}}</div><div class='item'>Size:{{image.sizeinbytes}}</div><div class='item'>Type:{{image.mimeType}}</div><div class='item'>License:{{image.license}}</div>">
+                                    <a class="item" ng-show="$ctrl.selected_images[$index].selected">
+                                        <div class="floating ui blue label">
+                                            <span><i class="fa fa-check" aria-hidden="true"></i></span>
+                                        </div>
+                                    </a>
+                                    <div class="ui small image">
+                                        <img class="asset_thumbnail" data_id="{{image.identifier}}" src="{{image.downloadUrl}}">
+                                    </div>
+                                    <div class="content cardcontent">
+                                        <div class="header">{{image.name}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content" ng-if="$ctrl.plugin =='audio'">
+                    <div class="ui grid">
+                        <div class="column">
+                            <div class="ui icon input assetbrowser_searchBox">
+                                <input ng-model="$ctrl.query" placeholder="Search Audio..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
+                                <i class="circular search link icon inverted"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clearfix">&nbsp;</div>
+                    <div class="ui grid templatebrowser_main">
+                        <div id="assetArea2" ng-show="$ctrl.audioList.length > 0" ng-repeat="audio in $ctrl.audioList track by $index">
+                            <div class="ten column row">
+                                <div class="audioitem" ng-click="$ctrl.AudioSource(audio.downloadUrl,audio.identifier, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}">
+                                    <audio style="max-width: 85%;" controls id="audio-{{$index}}" ng-src="{{audio.downloadUrl}}" width="120" height="120"></audio>
+                                    <div class="audio-tag">{{audio.identifier}}</div>
+                                    <div class="audioOverlay" ng-show="$ctrl.selected_audios[$index].selected">
+                                        <i class="fa fa-check-square-o fa-2x faAudioCheck" aria-hidden="true"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui tab" data-tab="third">
+                <div class="content">
+                    <div class="ui two column divided grid">
+                        <div class="row ui form">
+                            <div class="column">
+                                <div class="ui two column divided grid" ng-if="$ctrl.plugin =='audio'" ng-hide="$ctrl.upload || $ctrl.record">
+                                    <div class="row center aligned">
+                                        <div class="column" ng-click="$ctrl.upload = true; $ctrl.record=false;">
+                                            <p><i class="huge upload icon"></i></p>
+                                            UPLOAD
+                                        </div>
+                                        <div class="ui vertical divider">or</div>
+                                        <div class="column" ng-click="$ctrl.upload = false; $ctrl.record=true;">
+                                            <p><i class="huge record icon"></i></p>
+                                            RECORD
+                                        </div>
+                                    </div>
+                                </div>
+                                <div ng-show="$ctrl.record">
+                                    Recording functionality not available
+                                </div>
+                                <div class="required field" ng-if="$ctrl.upload" ng-hide="$ctrl.editMetaFlag">
+                                    <label for="assetfile" title="Enter asset caption">Select file</label>
+                                    <input class="cropit-image-input" id="assetfile" type="file" name="assetfile" accept="{{$ctrl.allowedMimeTypes.join(', ')}}" data-validate="assetfile" />
+                                </div>
+                                <div class="ui info message" ng-if="$ctrl.upload" ng-hide="$ctrl.editMetaFlag">
+                                    <ul class="list">
+                                        <li>Allowed file types are: {{$ctrl.fileTypes}}</li>
+                                        <li>Maximum allowed file size: {{$ctrl.fileSize}}</li>
+                                    </ul>
+                                </div>
+                                <div ng-show="$ctrl.editMetaFlag" class="field">
+                                    <img ng-src="{{$ctrl.selectedImgSrc}}" height="140px" />
+                                </div>
+                                <div class="grouped required fields">
+                                    <label for="ccByContribution">Copyright & License:</label>
+                                    <p>I understand and confirm that all lessons/assets created through the authoring tool or uploaded on the Ekstep platform shall be available for free and public use without limitations on the Ekstep platform (portal,applications and any other end user interface that Ekstep platform would enable) and will be licensed under
+                                        <!--@Todo add policy link --><a href="#" target="_blank">CC-BY 4.0</a></p>
+                                    <div class="field">
+                                        <div class="ui radio checkbox">
+                                            <input id="ccByContribution1" name="ccByContribution" type="radio" ng-click="$ctrl.setPublic()" value="Creative Commons Attribution (CC BY)">
+                                            <label for="ccByContribution1" ng-click="$ctrl.setPublic()">Yes, make it available to everyone</label>
+                                        </div>
+                                    </div>
+                                    <div class="field">
+                                        <div class="ui radio checkbox">
+                                            <input id="ccByContribution2" name="ccByContribution" type="radio" ng-click="$ctrl.setPrivate()" value="">
+                                            <label for="ccByContribution2" ng-click="$ctrl.setPrivate()">No, don't share with anyone</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column">
+                                <div class="required field">
+                                    <label for="assetName" title="Enter asset caption">Asset Caption</label>
+                                    <input id="assetName" type="text" name="assetName" ng-model="$ctrl.assetMeta.name" placeholder="Enter asset caption" data-validate="assetName" />
+                                </div>
+                                <div class="field">
+                                    <label for="keywords" title="Tags">Tags</label>
+                                    <input id="keywords" type="text" name="keywords" ng-model="$ctrl.keywordsText" data-validate="keywords">
+                                </div>
+                                <div class="field" ng-hide="$ctrl.hideField">
+                                    <label for="language" title="Choose Language">Language</label>
+                                    <select id="language" class="ui dropdown" ng-model="$ctrl.languageText" {{$ctrl.asset.requiredField}} name="language" ng-options="lang for lang in $ctrl.asset.language" data-validate="language">
+                                        <option value="">All</option>
+                                    </select>
+                                </div>
+                                <div class="{{$ctrl.asset.requiredField}} field removeError" ng-hide="$ctrl.hideField">
+                                    <label for="creator" title="Creator">Creator</label>
+                                    <input id="creator" type="text" ng-model="$ctrl.assetMeta.creator" {{$ctrl.asset.requiredField}} name="creator" placeholder="Enter Name" data-validate="creator">
+                                </div>
+                                <div class="{{$ctrl.asset.requiredField}} field removeError" ng-hide="$ctrl.hideField">
+                                    <label for="copyright" title="Enter Copyright">Copyright</label>
+                                    <input type="text" id="copyright" ng-model="$ctrl.assetMeta.copyright" {{$ctrl.asset.requiredField}} name="copyright" data-validate="copyright">
+                                </div>
+                                <div ng-show="$ctrl.optional">
+                                    <a ng-show="$ctrl.hideField" ng-click="$ctrl.viewMore()">More <i class="caret down icon"></i></a>
+                                    <a ng-show="!$ctrl.hideField" ng-click="$ctrl.setPrivate()">Less <i class="caret up icon"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="clearfix">&nbsp;</div>
+        <div class="ui grid">
+            <div class="right floated four wide column">
+                <i ng-show="$ctrl.uploadingAsset" class="big spinner loading icon"></i>
+                <div class="ui buttons">
+                    <button id="closePopUp" class="ui orange button" ng-click="closeThisDialog()" type="button">Cancel</button>
+                    <div class="or"></div>
+                    <div ng-switch="$ctrl.buttonToShow">
+                        <button ng-switch-when="select" class="ui blue button" ng-disabled="$ctrl.selectBtnDisable" ng-click="$ctrl.select()" type="button">Select</button>
+                        <button ng-switch-when="upload" class="ui blue button submit button" ng-click="$ctrl.doUpload()" type="button" ng-disabled="$ctrl.uploadingAsset">Upload and Use</button>
+                        <button ng-switch-when="save" class="ui blue button submit button" ng-click="$ctrl.doUpload();" type="button">Save</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</div>
+</script>
