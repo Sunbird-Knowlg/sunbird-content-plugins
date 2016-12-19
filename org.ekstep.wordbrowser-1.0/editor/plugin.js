@@ -130,7 +130,7 @@ EkstepEditor.basePlugin.extend({
         }
 
         ctrl.cancel = function() {
-           $('.ui.modal').modal('hide');
+           EkstepEditor.jQuery('.ui.modal').modal('hide');
         };
 
 
