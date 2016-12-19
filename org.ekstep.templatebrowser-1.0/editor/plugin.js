@@ -38,7 +38,7 @@ EkstepEditor.basePlugin.extend({
             }
         };
 
-        requestObj.request.filters.name = _.isUndefined(searchText) ? [] : [searchText];        
+        requestObj.request.filters.name = EkstepEditorAPI._.isUndefined(searchText) ? [] : [searchText];        
         iservice.http.post(EkstepEditor.config.baseURL + '/api/search/v2/search', requestObj, requestHeaders, callback);
     },
     browserCallback: function(ctrl, injector, data) {
@@ -51,12 +51,12 @@ EkstepEditor.basePlugin.extend({
         ctrl.error = false;
 
         ctrl.closeWindow = function() {
-            $('.ui.modal').modal('hide');
+            EkstepEditorAPI.jQuery('.ui.modal').modal('hide');
         };
 
         ctrl.search = function() {
             dynamicText = [];
-            var search = $('#templateSearch').val();
+            var search = EkstepEditorAPI.jQuery('#templateSearch').val();
             search && data.instance.getTemplates(search, ctrl.getTemplatesCallback);
         };
 
@@ -75,8 +75,8 @@ EkstepEditor.basePlugin.extend({
         data.instance.getTemplates(null, ctrl.getTemplatesCallback);
 
         ctrl.initPopup = function(item) {
-            _.forEach(item, function(obj, index) {
-                $('#templatebrowser-' + index).popup({
+            EkstepEditorAPI._.forEach(item, function(obj, index) {
+                EkstepEditorAPI.jQuery('#templatebrowser-' + index).popup({
                     hoverable: true,
                     position: 'right center'
                 });
@@ -84,16 +84,16 @@ EkstepEditor.basePlugin.extend({
         };
 
         ctrl.templateSelected = function(identifier, index) {
-            templateData = _.find(ctrl.templates, function(obj) {
+            templateData = EkstepEditorAPI._.find(ctrl.templates, function(obj) {
                 return obj.identifier === identifier
             });
-            if (!_.isUndefined(ctrl.lastSelected)) ctrl.template[ctrl.lastSelected] = false;
+            if (!EkstepEditorAPI._.isUndefined(ctrl.lastSelected)) ctrl.template[ctrl.lastSelected] = false;
             ctrl.lastSelected = index;
         };
 
         ctrl.save = function() {
             console.log('templateData', templateData);
-            if (!_.isUndefined(ctrl.lastSelected)) data.instance.callback && data.instance.callback(templateData);
+            if (!EkstepEditorAPI._.isUndefined(ctrl.lastSelected)) data.instance.callback && data.instance.callback(templateData);
             ctrl.closeWindow();
         };
     }

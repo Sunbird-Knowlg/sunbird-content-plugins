@@ -38,12 +38,12 @@ EkstepEditor.basePlugin.extend({
     refreshComponents: function(event, stage) {
         var instance = this;
         var setData = undefined;
-        _.forEach(instance.stageMeta, function(obj) {
+        EkstepEditorAPI._.forEach(instance.stageMeta, function(obj) {
             if (obj.id === stage.stageId) setData = obj.component;
         });
 
-        if (!_.isUndefined(setData)) instance.updateStage(setData);
-        if (_.isUndefined(setData)) instance.hideComponent();
+        if (!EkstepEditorAPI._.isUndefined(setData)) instance.updateStage(setData);
+        if (EkstepEditorAPI._.isUndefined(setData)) instance.hideComponent();
     },
     hideComponent: function(data) {
         var scope = EkstepEditorAPI.getAngularScope();
