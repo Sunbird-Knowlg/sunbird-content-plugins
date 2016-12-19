@@ -39,19 +39,30 @@
         {
                 "id": "circle",
                 "type": "image",
-                "toolTip": "Add Circle",
-                "title": "Circle",
+                "toolTip": "Add Word",
+                "title": "Word browser",
                 "iconImage": "assets/circle.png",
                 "onclick": {
                     "id": "org.ekstep.akshara-editor:wordbrowser:open"
+                   
+                }
+            },
+        {
+                "id": "circle",
+                "type": "image",
+                "toolTip": "Add Akshara",
+                "title": "Akshara browser",
+                "iconImage": "assets/circle.png",
+                "onclick": {
+                    "id": "org.ekstep.akshara-editor:aksharabrowser:open"
                    
                 }
             }]
         }
 
     ],
-        "config": [
-        {
+
+"configManifest": [{
             "propertyName": "color",
             "title": "Grid Color",
             "description": "Choose a color from the color picker",
@@ -81,8 +92,14 @@
             "description": "Choose a  from the browser",
             "dataType": "wordbrowser",
             "required": true
-        }
-    ],
+        },
+        {
+            "propertyName": "aksharaBrowser",
+            "title": "Akshara Browser",
+            "description": "Choose a  from the browser",
+            "dataType": "aksharabrowser",
+            "required": true
+        }],
         "help": {
             "src": "editor/help.md",
             "dataType": "text"

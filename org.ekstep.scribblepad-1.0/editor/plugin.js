@@ -43,7 +43,7 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         var dataList = { "radius": "radius", "opacity": "opacity", "stroke": "stroke", "stroke-width": "stroke-width", "scaleX": "scaleX", "scaleY": "scaleY" };
         if (instance) {
-            _.forEach(dataList, function(val, key) {
+            EkstepEditorAPI._.forEach(dataList, function(val, key) {
                 instance.attributes[key] = instance.editorObj.get(val);
             })
         }

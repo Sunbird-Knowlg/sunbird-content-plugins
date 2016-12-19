@@ -2,7 +2,8 @@ EkstepEditor.basePlugin.extend({
     type: "grid",
     initialize: function() {
         var instance = this;
-        EkstepEditorAPI.addEventListener(instance.manifest.id + ":wordbrowser:open", this.openBrowser, this);
+        EkstepEditorAPI.addEventListener(instance.manifest.id + ":wordbrowser:open", this.openWordBrowser, this);
+        EkstepEditorAPI.addEventListener(instance.manifest.id + ":aksharabrowser:open", this.openAksharaBrowser, this);
     },
     newInstance: function() {
         var props = this.convertToFabric(this.attributes);
@@ -34,16 +35,33 @@ console.log(this.editorObj);
     },
      /**    
     *      
-    * open asset browser to get image data. 
-    * @memberof image
+    * open word browser to get word data. 
+    * @memberof akshara
     * 
     */
-    openBrowser: function() {
+    openWordBrowser: function() {
         console.log("=========================here======================");
         var instance = this;
         EkstepEditorAPI.dispatchEvent('org.ekstep.wordbrowser:show', {
-            type: 'wordbrowser',
-            search_filter: {}
+            type: 'image',
+            search_filter: {},
+            callback : function(data) { this.onConfigChange('word', data) }
+        });
+    },
+
+      /**    
+    *      
+    * open akshara browser to get akshara data. 
+    * @memberof akshara
+    * 
+    */
+    openAksharaBrowser: function() {
+        console.log("=========================here======================");
+        var instance = this;
+        EkstepEditorAPI.dispatchEvent('org.ekstep.aksharabrowser:show', {
+            type: 'image',
+            search_filter: {},
+            callback : function(data) { this.onConfigChange('akshara', data) }
         });
     },
     onConfigChange: function(key, value) {
@@ -54,7 +72,7 @@ console.log(this.editorObj);
             case 'color':
                 this.editorObj.setFill(value);
                 this.attributes.fill = value;
-                _.forEach(this.editorObj._objects, function(obj) {
+                EkstepEditorAPI._.forEach(this.editorObj._objects, function(obj) {
                     obj.setFill(value)
                 })
                 break;
@@ -66,7 +84,7 @@ console.log(this.editorObj);
                 break;
         }
         if(key === 'rows' || key === 'columns') {
-            _.forEachRight(this.editorObj._objects, function(obj, index) {
+            EkstepEditorAPI._.forEachRight(this.editorObj._objects, function(obj, index) {
                 instance.editorObj.remove(obj)    
             })
             var padding = 5;
