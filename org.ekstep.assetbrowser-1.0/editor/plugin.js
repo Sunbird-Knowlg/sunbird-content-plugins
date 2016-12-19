@@ -50,10 +50,10 @@ EkstepEditor.basePlugin.extend({
             }
         });
 
-        if (data.type == "audio") {
-            console.log('initialize audio recorder');
-           instance.initAudioRecorder();
-        }
+        // if (data.type == "audio") {
+        //     console.log('initialize audio recorder');
+        //    instance.initAudioRecorder();
+        // }
         
     },
     stopCurrentPlayAudio :function ()
@@ -98,10 +98,10 @@ EkstepEditor.basePlugin.extend({
             }
         };
 
-        _.isUndefined(searchText) ? null : requestObj.request.filters.name = [searchText];
-        _.isUndefined (owner) ? null : requestObj.request.filters.owner = owner;
-        allowableFilter = _.omit(this.search_filter, ['mediaType', 'license', 'limit']);
-        _.merge(requestObj.request.filters, allowableFilter);
+        EkstepEditorAPI._.isUndefined(searchText) ? null : requestObj.request.filters.name = [searchText];
+        EkstepEditorAPI._.isUndefined (owner) ? null : requestObj.request.filters.owner = owner;
+        allowableFilter = EkstepEditorAPI._.omit(this.search_filter, ['mediaType', 'license', 'limit']);
+        EkstepEditorAPI._.merge(requestObj.request.filters, allowableFilter);
 
         console.log(requestObj);
 
@@ -156,9 +156,9 @@ EkstepEditor.basePlugin.extend({
             return true;
         }
     },
-    initAudioRecorder: function() {
+    /*initAudioRecorder: function() {
         var instance = this;
-        jQuery("#audio-record-btn").prop("disabled", true);
+        EkstepEditorAPI.jQuery("#audio-record-btn").prop("disabled", true);
         instance.showUserMediaError("Permissions have not been granted to use your microphone, allow the page access to your devices in order for the audio record to work. Also, reload the page after giving permissions.");
         var constraints = window.constraints = {
           audio: false,
@@ -177,8 +177,8 @@ EkstepEditor.basePlugin.extend({
 
             if (input != undefined)
             {
-                jQuery("#audio-record-btn").prop("disabled", false);
-                jQuery("#rec-error-msg").hide();
+                EkstepEditorAPI.jQuery("#audio-record-btn").prop("disabled", false);
+                EkstepEditorAPI.jQuery("#rec-error-msg").hide();
             }
 
             instance.recorder = new Recorder(input, {
@@ -202,14 +202,14 @@ EkstepEditor.basePlugin.extend({
         }
     },
     showUserMediaError: function(msg, error) {
-        jQuery("#rec-error-msg").show();
-        jQuery("#rec-error-msg-text").html(msg);
+        EkstepEditorAPI.jQuery("#rec-error-msg").show();
+        EkstepEditorAPI.jQuery("#rec-error-msg-text").html(msg);
 
         alert(msg);
         if (typeof error !== 'undefined') {
             console.error(error);
         }
-    },
+    },*/
     /**
     *   @memberof assetBrowser
     *   angular controller for popup service as callback
@@ -299,7 +299,7 @@ EkstepEditor.basePlugin.extend({
                 ctrl.loadingAudio = false;
                 ctrl.audioList = [];
                 ctrl.initPopup(res.data.result.content);
-                _.forEach(res.data.result.content, function(obj, index) {
+                EkstepEditorAPI._.forEach(res.data.result.content, function(obj, index) {
                     ctrl.audioList.push({ downloadUrl: trustResource(obj.downloadUrl), identifier: obj.identifier, name:obj.name, mimeType:obj.mimeType, license:obj.license });
                 });
             } else {
@@ -340,7 +340,7 @@ EkstepEditor.basePlugin.extend({
 
             imageTabSelected = true;
             audioTabSelected = false;
-            ctrl.selectBtnDisable = _.isUndefined(lastSelectedImage) ? true : false;
+            ctrl.selectBtnDisable = EkstepEditorAPI._.isUndefined(lastSelectedImage) ? true : false;
             ctrl.buttonToShow = 'select';
 
             (searchText === "") ? searchText = undefined: null;
@@ -359,7 +359,7 @@ EkstepEditor.basePlugin.extend({
                 ctrl.loadingImage = true;
             imageTabSelected = true;
             audioTabSelected = false;
-            ctrl.selectBtnDisable = _.isUndefined(lastSelectedImage) ? true : false;
+            ctrl.selectBtnDisable = EkstepEditorAPI._.isUndefined(lastSelectedImage) ? true : false;
             ctrl.buttonToShow = 'select';
 
             (searchText === "") ? searchText = undefined: null;
@@ -383,7 +383,7 @@ EkstepEditor.basePlugin.extend({
         ctrl.audioTab = function() {
             audioTabSelected = true;
             imageTabSelected = false;
-            ctrl.selectBtnDisable = _.isUndefined(lastSelectedAudio) ? true : false;
+            ctrl.selectBtnDisable = EkstepEditorAPI._.isUndefined(lastSelectedAudio) ? true : false;
             ctrl.buttonToShow = 'select';
         };
 
@@ -430,7 +430,7 @@ EkstepEditor.basePlugin.extend({
         };
 
         ctrl.toggleImageCheck = function($index) {
-            if (!_.isUndefined(lastSelectedImage)) {
+            if (!EkstepEditorAPI._.isUndefined(lastSelectedImage)) {
                 ctrl.selected_images[lastSelectedImage].selected = false;
             }
             lastSelectedImage = $index;
@@ -451,7 +451,7 @@ EkstepEditor.basePlugin.extend({
         };
 
         ctrl.toggleAudioCheck = function($index) {
-            if (!_.isUndefined(lastSelectedAudio)) {
+            if (!EkstepEditorAPI._.isUndefined(lastSelectedAudio)) {
                 ctrl.selected_audios[lastSelectedAudio].selected = false;
                 audioElem = document.getElementById('audio-' + lastSelectedAudio);
                 audioElem.pause();
@@ -471,7 +471,7 @@ EkstepEditor.basePlugin.extend({
         };
 
         ctrl.convertToBytes = function(bytes) {
-            if(_.isUndefined(bytes)) return " N/A";
+            if(EkstepEditorAPI._.isUndefined(bytes)) return " N/A";
             bytes = parseInt(bytes);
             var precision = 1;
             var units = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'],
@@ -496,10 +496,10 @@ EkstepEditor.basePlugin.extend({
         EkstepEditor.assessmentService.getLanguages(function(err, resp) {
             if (!err && resp.statusText == "OK") {
                 var assetlanguages = {};
-                _.forEach(resp.data.result.languages, function(lang) {
+                EkstepEditorAPI._.forEach(resp.data.result.languages, function(lang) {
                     assetlanguages[lang.code] = lang.name;
                 });
-                ctrl.asset.language = _.values(assetlanguages);
+                ctrl.asset.language = EkstepEditorAPI._.values(assetlanguages);
                 EkstepEditorAPI.getAngularScope().safeApply();
             }
         });
@@ -544,7 +544,7 @@ EkstepEditor.basePlugin.extend({
 
 
             /** Convert language into array **/
-            if ((!_.isUndefined(ctrl.languageText)) && (ctrl.languageText) != null) {
+            if ((!EkstepEditorAPI._.isUndefined(ctrl.languageText)) && (ctrl.languageText) != null) {
                 content.language = [ctrl.languageText];
             }
             else {
@@ -552,7 +552,7 @@ EkstepEditor.basePlugin.extend({
             }
 
             /** Convert keywords in to array **/
-            if ((!_.isUndefined(ctrl.keywordsText)) && (ctrl.keywordsText) != null) {
+            if ((!EkstepEditorAPI._.isUndefined(ctrl.keywordsText)) && (ctrl.keywordsText) != null) {
                 content.keywords = ctrl.keywordsText.split(",");
             }
             else {
@@ -563,7 +563,7 @@ EkstepEditor.basePlugin.extend({
             var requestObj = {};
             angular.forEach(content, function(value, key) {
 
-                if ((_.isUndefined(value) || value == null || value == "") && key != 'body'){
+                if ((EkstepEditorAPI._.isUndefined(value) || value == null || value == "") && key != 'body'){
                     delete content[key];
                 }
 
