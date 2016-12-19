@@ -6,20 +6,23 @@ $.fn.jltodos = function(options){
 		"<div class='item' data-jlike-todoid='<%= id %>'>",
 				"<i class='large info circle icon image'></i>",
 				"<div class='content'>",
-					"<div class='header'><%= sender_msg %></div>",
-					"<div class='description'>Resolved on <%= formatDate(created) %></div>",
+					"<div class=''><%= sender_msg %></div>",
+					"<div><small style='opacity:.5;'>Reprted on 2 days ago</small></div>",
 				"</div>",
 		"</div>"],
-		no_data_msg:"No record found."
+		no_data_msg:"No record found.",
+		outTempRender: null
 	};
 
 	var templates = {};
+	var outTempRender = '';
 
 	// Merge options into defaults and also override default options if already exist in default
-	 $.extend(defaults, options);
+	$.extend(defaults, options);
 
 	templates.todo = "";
 
+	outTempRender = defaults.outTempRender;
 	if (defaults.tempRender != "")
 	{
 		templates.todo = (defaults.tempRender).join("");
@@ -69,81 +72,81 @@ $.fn.jltodos = function(options){
 
 	function init(obj, element)
 	{
-		//~ jQuery.ajax({
-			//~ url: "localhost/Community-Portal-Joomla-Gourav/src/index.php?option=com_api&app=jlike&resource=init&format=raw",
-			//~ headers: {
-				//~ 'x-auth':'session'
-			//~ },
-			//~ type: "POST",
-			//~ data: obj,
-			//~ async:false,
-			//~ success:function(result){
-				//~ if (result.success == true)
-				//~ {
-					//~ element.attr("data-jlike-contentid", result.data.content_id);
-					//~ obj['content_id'] = result.data.content_id;
-					//~ //renderTodos(obj, element);
-				//~ }
-			//~ },
-			//~ error:function(){
-				//~ console.log("Error");
-			//~ }
-		//~ });
+		/*EkstepEditorAPI.jQuery.ajax({
+			url: "localhost/Community-Portal-Joomla-Gourav/src/index.php?option=com_api&app=jlike&resource=init&format=raw",
+			headers: {
+				'x-auth':'session'
+			},
+			type: "POST",
+			data: obj,
+			async:false,
+			success:function(result){
+				if (result.success == true)
+				{
+					element.attr("data-jlike-contentid", result.data.content_id);
+					obj['content_id'] = result.data.content_id;
+					//renderTodos(obj, element);
+				}
+			},
+			error:function(){
+				console.log("Error");
+			}
+		});*/
 	}
 
 	function createTodo(obj){
-		//~ jQuery.ajax({
-			//~ url: 'localhost/Community-Portal-Joomla-Gourav/src/index.php?option=com_api&app=jlike&resource=todos&format=raw',
-			//~ headers: {
-				//~ 'x-auth':'session'
-			//~ },
-			//~ data:obj,
-			//~ type: 'POST',
-			//~ success: function(data) {
-				//~ if(data.success == true){
-					//~ //jQuery('input[name="'+name+'"]').each(function(){
-						//~ //jQuery(this).attr("data-jlike-id", data.id);
-					//~ //});
-				//~ }
-			//~ },
-			//~ error: function(err) {
-				//~ console.log(err);
-			//~ }
-		//~ });
+		/*EkstepEditorAPI.jQuery.ajax({
+			url: 'localhost/Community-Portal-Joomla-Gourav/src/index.php?option=com_api&app=jlike&resource=todos&format=raw',
+			headers: {
+				'x-auth':'session'
+			},
+			data:obj,
+			type: 'POST',
+			success: function(data) {
+				if(data.success == true){
+					//EkstepEditorAPI.jQuery('input[name="'+name+'"]').each(function(){
+						//EkstepEditorAPI.jQuery(this).attr("data-jlike-id", data.id);
+					//});
+				}
+			},
+			error: function(err) {
+				console.log(err);
+			}
+		});*/
 	}
 
 	 function deleteTodo(id){
-		//~ jQuery.ajax({
-			//~ url:'localhost/Community-Portal-Joomla-Gourav/src/index.php?option=com_api&app=jlike&resource=todos&format=raw&id=' + id,
-			//~ headers: {
-				//~ 'x-auth':'session'
-			//~ },
-			//~ type: 'DELETE',
-			//~ success: function(data) {
-				//~ tdl.renderAllTasks();
-			//~ },
-		  //~ error: function(err) {
-			//~ console.log(err);
-			//~ }
-		//~ });
+		/*EkstepEditorAPI.jQuery.ajax({
+			url:'localhost/Community-Portal-Joomla-Gourav/src/index.php?option=com_api&app=jlike&resource=todos&format=raw&id=' + id,
+			headers: {
+				'x-auth':'session'
+			},
+			type: 'DELETE',
+			success: function(data) {
+				tdl.renderAllTasks();
+			},
+		  error: function(err) {
+			console.log(err);
+			}
+		});*/
 	}
 
 	function renderTodos(obj, addhtmlto)
 	{
-		//~ jQuery.ajax({
-			//~ url: 'localhost/Community-Portal-Joomla-Gourav/src/index.php?option=com_api&app=jlike&resource=todos&format=raw',
-			//~ headers: {
-				//~ 'x-auth':'session'
-			//~ },
-			//~ type: 'GET',
-			//~ data:obj,
-			//~ async:false,
-			//~ beforeSend: function ()
-			//~ {
-				//jQuery('#renderTodos').button('loading');
-			//~ },
-			//~ success: function(result1)
-			//~ {
+		/*EkstepEditorAPI.jQuery.ajax({
+			url: 'localhost/Community-Portal-Joomla-Gourav/src/index.php?option=com_api&app=jlike&resource=todos&format=raw',
+			headers: {
+				'x-auth':'session'
+			},
+			type: 'GET',
+			data:obj,
+			async:false,
+			beforeSend: function ()
+			{
+				//~ //jQuery('#renderTodos').button('loading');
+			},
+			success: function(result1)
+			{ */
 				result = {"data":{"result":[{"id":"145","asset_id":"407","ordering":"144","state":"1","checked_out":"0","checked_out_time":"0000-00-00 00:00:00","created_by":"80","sender_msg":"Harmful or dangerous content","created":"2016-12-13 16:12:59","content_id":"3627","created_date":"0000-00-00 00:00:00","start_date":"0000-00-00 00:00:00","due_date":"0000-00-00 00:00:00","status":"C","title":"","type":"todos","context":"reviewer","system_generated":"1","parent_id":"0","list_id":"0","modified_date":"0000-00-00 00:00:00","modified_by":"0","can_override":"0","overriden":"0","params":"","todo_list_id":"0","ideal_time":"0","content_title":"tesst","content_url":"index.php?option=com_ekcontent&view=content&id=3103","editor":null,"status_title":"COM_JLIKE_COMPLETED","assigned_by":{"id":"80","name":"Madhuchandra R","profile_link":"http:\/\/localhost\/Community-Portal-Joomla-Gourav\/src\/index.php\/my-profile\/80-madhuchandra-r","avatar":"http:\/\/localhost\/Community-Portal-Joomla-Gourav\/src\/media\/com_easysocial\/defaults\/avatars\/user\/medium.png"},"assigned_to":{"id":"381","name":"gourav_test","profile_link":"http:\/\/localhost\/Community-Portal-Joomla-Gourav\/src\/index.php\/my-profile\/381-gourav-test","avatar":"http:\/\/localhost\/Community-Portal-Joomla-Gourav\/src\/media\/com_easysocial\/defaults\/avatars\/user\/medium.png"}},{"id":"145","asset_id":"407","ordering":"144","state":"1","checked_out":"0","checked_out_time":"0000-00-00 00:00:00","created_by":"80","sender_msg":"test","created":"2016-12-13 16:12:59","content_id":"3627","created_date":"0000-00-00 00:00:00","start_date":"0000-00-00 00:00:00","due_date":"0000-00-00 00:00:00","status":"C","title":"","type":"todos","context":"reviewer","system_generated":"1","parent_id":"0","list_id":"0","modified_date":"0000-00-00 00:00:00","modified_by":"0","can_override":"0","overriden":"0","params":"","todo_list_id":"0","ideal_time":"0","content_title":"tesst","content_url":"index.php?option=com_ekcontent&view=content&id=3103","editor":null,"status_title":"COM_JLIKE_COMPLETED","assigned_by":{"id":"80","name":"Madhuchandra R","profile_link":"http:\/\/localhost\/Community-Portal-Joomla-Gourav\/src\/index.php\/my-profile\/80-madhuchandra-r","avatar":"http:\/\/localhost\/Community-Portal-Joomla-Gourav\/src\/media\/com_easysocial\/defaults\/avatars\/user\/medium.png"},"assigned_to":{"id":"381","name":"gourav_test","profile_link":"http:\/\/localhost\/Community-Portal-Joomla-Gourav\/src\/index.php\/my-profile\/381-gourav-test","avatar":"http:\/\/localhost\/Community-Portal-Joomla-Gourav\/src\/media\/com_easysocial\/defaults\/avatars\/user\/medium.png"}}],"total":"2"},"success":true};
 				var markup = null;
 
@@ -155,7 +158,7 @@ $.fn.jltodos = function(options){
 
 					if (rows != undefined)
 					{
-						var compiled = _.template(templates.todo);
+						var compiled = EkstepEditorAPI._.template(templates.todo);
 						rows.forEach(function(item, idx, array){
 							markup += compiled(item);
 						});
@@ -164,20 +167,28 @@ $.fn.jltodos = function(options){
 
 				if (markup == null)
 				{
-					jQuery(element).html(defaults.no_data_msg);
+					EkstepEditorAPI.jQuery(element).html(defaults.no_data_msg);
 				}
 				else
 				{
-					jQuery(element).html(markup);
+					if (outTempRender != null)
+					{
+						EkstepEditorAPI.jQuery(element).html(outTempRender);
+						EkstepEditorAPI.jQuery('#reportedIssue').html(markup);
+					}
+					else
+					{
+						EkstepEditorAPI.jQuery(element).html(markup);
+					}
 				}
-			//~ },
-			//~ error: function(err) {
-				//~ console.log(err);
-			//~ }
-		//~ });
+			/*},
+			error: function(err) {
+				console.log(err);
+			}
+		});*/
 	}
 }
-})( jQuery );
+})( EkstepEditorAPI.jQuery );
 
 // @Hack/ Remove this hack
 function formatDate(dateString)
