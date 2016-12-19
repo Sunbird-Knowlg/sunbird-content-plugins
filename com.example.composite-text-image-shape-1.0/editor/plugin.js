@@ -8,7 +8,7 @@ EkstepEditor.basePlugin.extend({
     shape: undefined,
     image: undefined,
     newInstance: function() {
-        var props = _.merge({
+        var props = EkstepEditorAPI._.merge({
                         fill: "rgb(255,255,255)",
                         stroke: "rgb(7,7,7)",
                         strokeDashArray: [5, 5],
@@ -51,7 +51,7 @@ EkstepEditor.basePlugin.extend({
             lockScalingY: true
         }
         if (instance.children.length === 0) {
-            this.text = EkstepEditorAPI.instantiatePlugin('org.ekstep.text', _.cloneDeep(_.merge(lock, instance.data.text, instance.config.text)), instance, {
+            this.text = EkstepEditorAPI.instantiatePlugin('org.ekstep.text', EkstepEditorAPI._.cloneDeep(EkstepEditorAPI._.merge(lock, instance.data.text, instance.config.text)), instance, {
                 selected: function(instance) {},
                 deselected: function(instance) {},
                 onConfigChange: function(key, value) {
@@ -59,14 +59,14 @@ EkstepEditor.basePlugin.extend({
                     this.parent.config.text[key] = value;
                 }
             });
-            this.shape = EkstepEditorAPI.instantiatePlugin('org.ekstep.shape', _.cloneDeep(_.merge(lock, instance.data.shape, instance.config.shape)), instance, {
+            this.shape = EkstepEditorAPI.instantiatePlugin('org.ekstep.shape', EkstepEditorAPI._.cloneDeep(EkstepEditorAPI._.merge(lock, instance.data.shape, instance.config.shape)), instance, {
                 onConfigChange: function(key, value) {
                     this._super(key, value);
                     this.parent.config.shape[key] = value;
                 }
             });
             instance.data.image.assetMedia.src = EkstepEditor.config.absURL + instance.relativeURL(instance.data.image.assetMedia.src);
-            this.image = EkstepEditorAPI.instantiatePlugin('org.ekstep.image', _.cloneDeep(_.merge(lock, instance.data.image, instance.config.image)), instance);
+            this.image = EkstepEditorAPI.instantiatePlugin('org.ekstep.image', EkstepEditorAPI._.cloneDeep(EkstepEditorAPI._.merge(lock, instance.data.image, instance.config.image)), instance);
         }
     },
     addChild: function(plugin) {
@@ -81,7 +81,7 @@ EkstepEditor.basePlugin.extend({
                         instance.data.image.asset = data.asset;
                         EkstepEditorAPI.getCanvas().remove(plugin.editorObj);
                         instance.removeChild(plugin);
-                        instance.image = EkstepEditorAPI.instantiatePlugin('org.ekstep.image', _.cloneDeep(_.merge({
+                        instance.image = EkstepEditorAPI.instantiatePlugin('org.ekstep.image', EkstepEditorAPI._.cloneDeep(EkstepEditorAPI._.merge({
                             lockMovementX: true,
                             lockMovementY: true,
                             lockScalingX: true,
@@ -102,15 +102,15 @@ EkstepEditor.basePlugin.extend({
         return this.children[2].getMedia();
     },
     getData: function() {
-        var data = _.cloneDeep(this.data);
-        data.text = _.merge(data.text, this.text.getRendererDimensions(), {id: this.text.id});
-        data.shape = _.merge(data.shape, this.shape.getRendererDimensions(), {id: this.shape.id});
-        data.image = _.merge(data.image, this.image.getRendererDimensions(), {id: this.image.id});
+        var data = EkstepEditorAPI._.cloneDeep(this.data);
+        data.text = EkstepEditorAPI._.merge(data.text, this.text.getRendererDimensions(), {id: this.text.id});
+        data.shape = EkstepEditorAPI._.merge(data.shape, this.shape.getRendererDimensions(), {id: this.shape.id});
+        data.image = EkstepEditorAPI._.merge(data.image, this.image.getRendererDimensions(), {id: this.image.id});
         delete data.image.assetMedia;
         return data;
     },
     getConfig: function() {
-        var config = _.cloneDeep(this.config);
+        var config = EkstepEditorAPI._.cloneDeep(this.config);
         config.text.fontSize = this.children[0].updateFontSize(config.text.fontSize, false);
         return config;
     }

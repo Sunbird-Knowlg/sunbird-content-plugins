@@ -33,7 +33,7 @@ EkstepEditor.basePlugin.extend({
      */
     invoke: function(event, data) {
         var instance = this;
-        if (EkstepEditor.jQuery("#" + data.id).attr("colorpicker") != "added") {
+        if (EkstepEditorAPI.jQuery("#" + data.id).attr("colorpicker") != "added") {
            this.picker[data.id] = new jscolor(document.getElementById(data.id), {
                 valueElement: null,
                 onFineChange: function() {
@@ -41,7 +41,7 @@ EkstepEditor.basePlugin.extend({
                 }
             });
 
-            EkstepEditor.jQuery("#" + data.id).attr("colorpicker", "added");
+            EkstepEditorAPI.jQuery("#" + data.id).attr("colorpicker", "added");
         }
         if (data && data.color) {
             this.picker[data.id].fromString(data.color);
