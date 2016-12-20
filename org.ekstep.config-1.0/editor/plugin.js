@@ -66,6 +66,21 @@ EkstepEditor.basePlugin.extend({
         this.selectedPluginId = data.id;
         var plugin = EkstepEditorAPI.getPluginInstance(data.id);
         this.setToolBarPosition();
+        var angScope = EkstepEditorAPI.getAngularScope();
+        if(angScope.showConfigContainer){
+            switch (angScope.configHeaderText) {
+                case 'Configuration':
+                    instance.showConfig();
+                    break;
+                case 'Properties':
+                    instance.showProperties();
+                    break;    
+                case 'Help':
+                    instance.showHelp();
+                    break;    
+            }
+        }
+        
     },
     objectUnselected: function(event, data) {
         if (data.id == this.selectedPluginId) {
@@ -88,7 +103,7 @@ EkstepEditor.basePlugin.extend({
      */
     showConfig: function(event, data) {
         var instance = this;
-        this.pluginConfigManifest = EkstepEditorAPI._.clone(EkstepEditorAPI.getCurrentObject().getPluginConfig());
+        this.pluginConfigManifest = EkstepEditorAPI._.clone(EkstepEditorAPI.getCurrentObject().getConfigManifest());
         this.configData = EkstepEditorAPI._.clone(EkstepEditorAPI.getCurrentObject().getConfig());
         if (EkstepEditorAPI._.isUndefined(this.pluginConfigManifest)) {
             this.pluginConfigManifest = [];
