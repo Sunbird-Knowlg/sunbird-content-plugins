@@ -23,7 +23,7 @@
 }
 
 .config-toolbar-content {
-    height: 420px;
+    max-height: 420px;
     overflow-y: auto;
     overflow-x: hidden;
 }
@@ -64,7 +64,7 @@ input[type=range].config-slider::-webkit-slider-runnable-track {
   cursor: pointer;
   background: #3899ec;
   border-radius: 5px;
-  border: 0.2px solid #010101;
+  /*border: 0.2px solid #010101;*/
 }
 input[type=range].config-slider::-webkit-slider-thumb {
   box-shadow: 0.9px 0.9px 1px #000031, 0px 0px 0.9px #00004b;
@@ -85,7 +85,7 @@ input[type=range].config-slider::-moz-range-track {
   cursor: pointer;
   background: #3899ec;
   border-radius: 5px;
-  border: 0.2px solid #010101;
+  /*border: 0.2px solid #010101;*/
 }
 input[type=range].config-slider::-moz-range-thumb {
   box-shadow: 0.9px 0.9px 1px #000031, 0px 0px 0.9px #00004b;

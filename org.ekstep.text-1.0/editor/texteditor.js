@@ -35,6 +35,7 @@ var textEditor = (function() {
         $editor.hide();
         $doneBtn.hide();
         EkstepEditorAPI.jQuery("#toolbarOptions").show();
+        EkstepEditorAPI.jQuery("#plugin-toolbar-container").show();
     }
 
     function showEditor(id) {
@@ -96,7 +97,7 @@ var textEditor = (function() {
         $buttonGrp.append($doneBtn);
         //$buttonGrp.css({position:'absolute', 'top': $editor.offset().top+$editor.height()/2+64,'left': $editor.offset().left+22})
         $buttonGrp.show();
-        setTimeout(function() { EkstepEditorAPI.jQuery("#toolbarOptions").hide(); }, 600);
+        setTimeout(function() { EkstepEditorAPI.jQuery("#toolbarOptions").hide(); EkstepEditorAPI.jQuery("#plugin-toolbar-container").hide(); }, 600);
     }
 
     function hideEditor() {

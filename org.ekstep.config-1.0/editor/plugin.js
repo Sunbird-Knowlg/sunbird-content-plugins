@@ -53,7 +53,7 @@ EkstepEditor.basePlugin.extend({
         });
 
         this.canvasOffset = EkstepEditorAPI.jQuery('#canvas').offset();
-        //EkstepEditorAPI.jQuery("#plugin-toolbar-container").draggable()
+        EkstepEditorAPI.jQuery("#plugin-toolbar-container").draggable({containment: "parent",cursor: "move"})
     },
     /**
      * Place config toolbar on top of plugin, based on its location
@@ -121,7 +121,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI._.forEach(instance.pluginConfigManifest, function(config) {
             instance._invoke(config, instance.configData)
         })
-        this.animateToolbar("Configuration");
+        this.setToolBarContainerLocation("Configuration");
         /*
         semantic ui apply
          */
@@ -213,7 +213,7 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         EkstepEditorAPI.getCurrentObject().getHelp(function(helpText) {
             EkstepEditorAPI.jQuery("#pluginHelpContent").html(micromarkdown.parse(helpText));
-            instance.animateToolbar("Help");
+            instance.setToolBarContainerLocation("Help");
         });
     },
     /**
@@ -229,7 +229,7 @@ EkstepEditor.basePlugin.extend({
         angScope.safeApply(function() {
             angScope.pluginProperties = properties;
         });
-        this.animateToolbar("Properties");
+        this.setToolBarContainerLocation("Properties");
     },
     /**
      * * This method called when object:moving or object:scaling events is fired 
@@ -244,9 +244,14 @@ EkstepEditor.basePlugin.extend({
             var plugin = EkstepEditorAPI.getPluginInstance(data.id);
             if (!EkstepEditorAPI._.isUndefined(plugin)) {
                 this.setToolBarPosition();
+                var containerLeft = this.canvasOffset.left + plugin.editorObj.left + plugin.editorObj.getWidth() + 30;
+                var maxLeft = this.canvasOffset.left + EkstepEditorAPI.jQuery("#canvas").width() + 5;
+                var minLeft = this.canvasOffset.left + EkstepEditorAPI.jQuery("#toolbarOptions").width()+5;
+                if (containerLeft > maxLeft) { containerLeft = maxLeft;}
+                if (containerLeft < minLeft) {containerLeft = minLeft;}
                 EkstepEditorAPI.jQuery('#plugin-toolbar-container').offset({
-                    top: (this.canvasOffset.top + plugin.editorObj.top),
-                    left: (this.canvasOffset.left + plugin.editorObj.left + plugin.editorObj.getWidth() + 10)
+                    top: (this.canvasOffset.top),
+                    left: containerLeft
                 });
             } else {
                 EkstepEditorAPI.jQuery('#toolbarOptions').hide();
@@ -257,7 +262,7 @@ EkstepEditor.basePlugin.extend({
             }
         }
     },
-    animateToolbar: function(title) {
+    setToolBarContainerLocation: function(title) {
         var instance = this;
         var angScope = EkstepEditorAPI.getAngularScope();
         var selectedPluginObj = EkstepEditorAPI.getPluginInstance(instance.selectedPluginId).editorObj;
@@ -265,8 +270,8 @@ EkstepEditor.basePlugin.extend({
             angScope.showConfigContainer = true;
             angScope.configHeaderText = title;
             angScope.configStyle = {
-                'top': (instance.canvasOffset.top + selectedPluginObj.top - 10),
-                'left': (instance.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() + 10)
+                'top': instance.canvasOffset.top,
+                'left': (instance.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() + 30)
             }
         });
     },
@@ -294,7 +299,7 @@ EkstepEditor.basePlugin.extend({
             var canvasRight = this.canvasOffset.left + EkstepEditorAPI.jQuery("#canvas").width() - EkstepEditorAPI.jQuery("#toolbarOptions").width();
             /* toolbar location reset based on object location*/
             if(topPosition < this.canvasOffset.top){
-                topPosition = this.canvasOffset.top + selectedPluginObj.top + selectedPluginObj.height;
+                topPosition = this.canvasOffset.top + selectedPluginObj.top + selectedPluginObj.height + 16;
             }
             if (leftPosition < this.canvasOffset.left) { leftPosition = this.canvasOffset.left; }
             if (leftPosition > canvasRight) { leftPosition = canvasRight; }
