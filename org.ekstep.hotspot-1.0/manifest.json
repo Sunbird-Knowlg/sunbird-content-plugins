@@ -17,7 +17,7 @@
             "type": "icon",
             "toolTip": "Add Hotspot",
             "title": "Hotspot",
-            "iconClass": "bullseye icon",
+            "iconClass": "large icon-hotspot icon",
             "onclick": {
                 "id": "org.ekstep.hotspot:create",
                 "data": {

@@ -17,7 +17,7 @@
             "type": "icon",
             "toolTip": "Add Image",
             "title": "Image",
-            "iconClass": "image icon",
+            "iconClass": "large icon-media icon",
             "onclick": {
                 "id": "org.ekstep.image:assetbrowser:open"
             }

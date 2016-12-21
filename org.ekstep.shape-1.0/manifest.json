@@ -17,13 +17,13 @@
             "type": "icon",
             "toolTip": "Add Shapes",
             "title": "Shapes",
-            "iconClass": "pie chart icon",
+            "iconClass": "large icon-rectangle icon",
             "submenu": [{
                 "id": "rectangle",
                 "type": "icon",
                 "toolTip": "Add Rectangle",
                 "title": "Rectangle",
-                "iconClass": "cube icon",
+                "iconClass": "icon-rectangle icon",
                 "onclick": {
                     "id": "org.ekstep.shape:create",
                     "data": {
@@ -43,7 +43,7 @@
                 "type": "icon",
                 "toolTip": "Add Circle",
                 "title": "Circle",
-                "iconClass": "circle icon",
+                "iconClass": "icon-circle icon",
                 "onclick": {
                     "id": "org.ekstep.shape:create",
                     "data": {
@@ -63,7 +63,7 @@
                 "type": "icon",
                 "toolTip": "Add Rounded Rectangle",
                 "title": "Rounded Rectangle",
-                "iconClass": "square icon",
+                "iconClass": "icon-rounded icon",
                 "onclick": {
                     "id": "org.ekstep.shape:create",
                     "data": {

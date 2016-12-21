@@ -13,7 +13,7 @@
             "type": "icon",
             "toolTip": "Add Stage",
             "title": "Stage",
-            "iconClass": "desktop icon",            
+            "iconClass": "large icon-newstage icon",            
             "submenu": [{
                 "id": "beginning",
                 "type": "icon",

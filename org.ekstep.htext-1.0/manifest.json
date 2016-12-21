@@ -20,7 +20,7 @@
             "type": "icon",
             "toolTip": "Add Readalong",
             "title": "Readalong",
-            "iconClass": "music icon",
+            "iconClass": "large icon-record icon",
             "onclick": {
                 "id": "org.ekstep.htext:create",
                 "data": {

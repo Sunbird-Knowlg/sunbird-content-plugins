@@ -14,9 +14,9 @@
             "id": "scribblepad",
             "category": "main",
             "type": "icon",
-            "toolTip": "Add scribblepad",
+            "toolTip": "Add Scribblepad",
             "title": "scribblepad",
-            "iconClass": "paint brush icon",
+            "iconClass": "large icon-scribble icon",
             "onclick": {
                 "id": "org.ekstep.scribblepad:create",
                 "data": {

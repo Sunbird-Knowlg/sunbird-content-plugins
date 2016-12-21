@@ -3,7 +3,7 @@
     "ver": "1.0",
     "shortId": "assessment",
     "author": "Santhosh Vasabhaktula",
-    "title": "Assessment Plugin",
+    "title": "Question Set Plugin",
     "description": "",
     "publishedDate": "",
     "editor": {
@@ -15,9 +15,9 @@
             "id": "assessment",
             "category": "main",
             "type": "icon",
-            "toolTip": "Add Assessment",
-            "title": "Assessment",
-            "iconClass": "browser icon",
+            "toolTip": "Add Question Set",
+            "title": "Question Set",
+            "iconClass": "large icon-Questions icon",
             "onclick": {
                 "id": "org.ekstep.assessment:showPopup",
                 "data": {}
