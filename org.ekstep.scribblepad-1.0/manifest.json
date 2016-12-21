@@ -16,7 +16,7 @@
             "type": "icon",
             "toolTip": "Add Scribblepad",
             "title": "scribblepad",
-            "iconClass": "large icon-scribble icon",
+            "iconClass": "icon-scribble icon",
             "onclick": {
                 "id": "org.ekstep.scribblepad:create",
                 "data": {

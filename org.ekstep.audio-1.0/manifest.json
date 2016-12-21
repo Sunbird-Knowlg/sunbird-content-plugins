@@ -17,7 +17,7 @@
             "type": "icon",
             "toolTip": "Add Audio",
             "title": "Audio",
-            "iconClass": "large icon-audio icon",
+            "iconClass": "icon-audio icon",
             "onclick": {
                 "id": "org.ekstep.audio:assetbrowser:open"
             }

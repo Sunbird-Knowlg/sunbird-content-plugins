@@ -14,7 +14,7 @@
             "type": "icon",
             "toolTip": "Add Activity",
             "title": "Activity",
-            "iconClass": "large icon-Activity icon",
+            "iconClass": "icon-Activity icon",
             "onclick": {
                 "id": "org.ekstep.templatebrowser:show"
             }

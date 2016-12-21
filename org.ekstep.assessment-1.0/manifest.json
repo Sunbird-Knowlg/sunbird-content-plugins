@@ -17,7 +17,7 @@
             "type": "icon",
             "toolTip": "Add Question Set",
             "title": "Question Set",
-            "iconClass": "large icon-Questions icon",
+            "iconClass": "icon-Questions icon",
             "onclick": {
                 "id": "org.ekstep.assessment:showPopup",
                 "data": {}

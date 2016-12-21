@@ -17,7 +17,7 @@
             "type": "icon",
             "toolTip": "Add Shapes",
             "title": "Shapes",
-            "iconClass": "large icon-rectangle icon",
+            "iconClass": "icon-rectangle icon",
             "submenu": [{
                 "id": "rectangle",
                 "type": "icon",

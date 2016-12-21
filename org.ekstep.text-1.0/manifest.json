@@ -18,7 +18,7 @@
             "type": "icon",
             "toolTip": "Add Text",
             "title": "Text",
-            "iconClass": "large icon-Text icon",
+            "iconClass": "icon-Text icon",
             "onclick": {
                 "id": "org.ekstep.text:create",
                 "data": {
