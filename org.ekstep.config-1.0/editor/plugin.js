@@ -43,7 +43,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("config:show", this.showConfig, this);
         EkstepEditorAPI.addEventListener("stage:unselect", this.stageUnselect, this);
         EkstepEditorAPI.addEventListener("config:help", this.showHelp, this);
-        EkstepEditorAPI.addEventListener("config:properties", this.showProperties, this);
+        EkstepEditorAPI.addEventListener("config:properties", this.showEvents, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:colorpicker", this.showColorPicker, this);
         EkstepEditorAPI.addEventListener("object:modified", this.objectModified, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:invoke", this.invoke, this);
@@ -72,8 +72,8 @@ EkstepEditor.basePlugin.extend({
                 case 'Configuration':
                     instance.showConfig();
                     break;
-                case 'Properties':
-                    instance.showProperties();
+                case 'Events':
+                    instance.showEvents();
                     break;    
                 case 'Help':
                     instance.showHelp();
@@ -129,8 +129,12 @@ EkstepEditor.basePlugin.extend({
             EkstepEditorAPI.jQuery(".ui.dropdown").each(function() {
                 EkstepEditorAPI.jQuery(this).dropdown();
             })
+            //EkstepEditorAPI.jQuery(".ui.accordion").accordion();
         }, 500);
-
+        var properties = EkstepEditorAPI.getCurrentObject().getProperties();
+        angScope.safeApply(function() {
+            angScope.pluginProperties = properties;
+        });
     },
     /**
      * This is called on stage unselect event fired 
@@ -223,13 +227,9 @@ EkstepEditor.basePlugin.extend({
      * @param  data {Object}
      * @memberof Config
      */
-    showProperties: function(event, data) {
-        var properties = EkstepEditorAPI.getCurrentObject().getProperties();
-        var angScope = EkstepEditorAPI.getAngularScope();
-        angScope.safeApply(function() {
-            angScope.pluginProperties = properties;
-        });
-        this.setToolBarContainerLocation("Properties");
+    showEvents: function(event, data) {
+        
+        this.setToolBarContainerLocation("Events");
     },
     /**
      * * This method called when object:moving or object:scaling events is fired 
