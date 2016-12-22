@@ -239,7 +239,7 @@
 				<div class="asset_item_container">			
 					<div class="ui grid">
 						<div class="three wide column" ng-show="$ctrl.audioList.length > 0" ng-repeat="audio in $ctrl.audioList track by $index">
-							<div class="audioitem infopopover" ng-click="$ctrl.AudioSource(audio.downloadUrl,audio.identifier, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}" data-html="<b>{{audio.name}}</b> <br/> License: {{audio.license}}">
+							<div class="audioitem infopopover" ng-click="$ctrl.AudioSource(audio, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}" data-html="<b>{{audio.name}}</b> <br/> License: {{audio.license}}">
 								<audio controls id="audio-{{$index}}" ng-src="{{audio.downloadUrl}}" width="120" height="120"></audio>
 								<div class="audio-tag">{{audio.name}}</div>
 								<div class="audioOverlay" ng-show="$ctrl.selected_audios[$index].selected">

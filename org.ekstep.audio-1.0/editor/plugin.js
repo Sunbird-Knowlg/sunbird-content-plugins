@@ -26,17 +26,8 @@ EkstepEditor.basePlugin.extend({
     * @memberof audio
     */
     newInstance: function() {
-        if (!this.attributes.x) 
-        {
-            this.attributes.x = 20;
-            this.attributes.y = 20;
-            this.attributes.w = 40;
-            this.attributes.h = 40;
-            this.percentToPixel(this.attributes);
-        }
         var instance = this;
         var _parent = this.parent;
-        this.parent = undefined;
         var props = this.convertToFabric(this.attributes);
         delete props.width;
         delete props.height;
