@@ -17,7 +17,7 @@
             "type": "icon",
             "toolTip": "Add Shapes",
             "title": "Shapes",
-            "iconClass": "icon-rectangle icon",
+            "iconClass": "icon-shape icon",
             "submenu": [{
                 "id": "rectangle",
                 "type": "icon",
@@ -63,7 +63,7 @@
                 "type": "icon",
                 "toolTip": "Add Rounded Rectangle",
                 "title": "Rounded Rectangle",
-                "iconClass": "icon-rounded icon",
+                "iconClass": "icon-roundedrect icon",
                 "onclick": {
                     "id": "org.ekstep.shape:create",
                     "data": {
