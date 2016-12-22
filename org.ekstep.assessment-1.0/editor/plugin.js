@@ -37,9 +37,21 @@ EkstepEditor.basePlugin.extend({
         instance.percentToPixel(attr);
         var props = instance.convertToFabric(attr);
         instance.editorObj = new fabric.Rect(props);
-        sets["sets"] = ques;
+
+        // TODO : Refactring of the objects
+        sets[attr[0].question.identifier] = ques;
         ctrl["items"] = sets;
+        ctrl["item_sets"] = [{
+            "count": attr[attr.length - 1].total_items,
+            "id": attr[0].question.identifier
+        }]
         instance.setData(Object.assign(ctrl, attr[attr.length - 1]));
+
+        // TODO :setconfig should not be hard-coded
+        instance.setConfig({
+            "type": "items",
+            "var": "item"
+        });
         delete instance.attributes;
 
     },
@@ -64,8 +76,8 @@ EkstepEditor.basePlugin.extend({
     * 
     */
     openAssessmentBrowser: function(event, callback) {
-        var instance = this, data = [];
-        var callback = function(items,config) {
+        var instance = this,data = [];
+        var callback = function(items, config) {
             data.push(items);
             data[0].push(config);
             EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', data);
