@@ -1,6 +1,7 @@
+<script type="text/ng-template" ng-app="readalongapp" ng-controller="readalongcontroller as $ctrl" id="htext">
 <style type="text/css">
 #syncBox {
-  background-color: #ffffff;
+  backgroundcolor: #ffffff;
   width: 100%;
   float: left;
   margin-top: 10px;
@@ -134,7 +135,7 @@
   color: #ccc;
 }
 </style>
-<div class="ui modal large">
+<div class="ui modal large active" style="top: 10% !important;">
     <div class="content">
         <div class="ui mini three steps">
             <div class="{{$ctrl.showText ? 'active': ''}} step">
@@ -171,6 +172,7 @@
                             <div class="field">
                                 <label>Audio</label>
                                 <button class="ui button" ng-click="$ctrl.selectAudio()"><span ng-show="!$ctrl.audioSelected">Select</span><span ng-show="$ctrl.audioSelected">Change</span> Audio</button>
+                                <div class="right floated ui blue labels" ng-show="$ctrl.audioSelected"><a class="ui label">{{$ctrl.name}}.mp3</a></div>
                             </div>
                         </div>
                     </div>
@@ -244,7 +246,7 @@
         <div class="ui buttons" ng-if="$ctrl.showText">
             <button class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
             <div class="or"></div>
-            <button class="ui blue button" type="button" ng-click="$ctrl.finalText()" ng-disabled="!$ctrl.readalongText">NEXT</button>
+            <button class="ui blue button" type="button" ng-click="$ctrl.finalText()" ng-disabled="!$ctrl.showNext">NEXT</button>
         </div>
         <div class="ui buttons" ng-if="!$ctrl.showText">
             <button class="ui orange button" ng-click="$ctrl.showText = true;" type="button">Edit Text & Audio</button>
