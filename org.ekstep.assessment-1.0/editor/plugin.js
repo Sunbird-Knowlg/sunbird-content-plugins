@@ -31,6 +31,7 @@ EkstepEditor.basePlugin.extend({
             attr.w = attr.h = 90;
         }
         for (var i = 0; i < attr.length - 1; i++) {
+            attr[i].question.options = JSON.parse(attr[i].question.options)
             ques.push(attr[i].question);
             instance.addMediatoManifest(attr[i].question.media);
         }
