@@ -7,7 +7,7 @@ $.fn.jltodos = function(options){
 				"<i class='large info circle icon image'></i>",
 				"<div class='content'>",
 					"<div class=''><%= sender_msg %></div>",
-					"<div><small style='opacity:.5;'>Resolved on <%= moment(created).fromNow() %></small></div>",
+					"<div><small style='opacity:.5;'>Resolved on <%= moment(modified_date).fromNow() %></small></div>",
 				"</div>",
 		"</div>"],
 		no_data_msg:"No record found.",

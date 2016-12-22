@@ -62,9 +62,9 @@ EkstepEditor.basePlugin.extend({
 
 			EkstepEditorAPI.jQuery("#pageLevelTodos").jltodos();
 
-			obj["content_id"]=jQuery(widgetRef).attr("data-jlike-contentid");
-			obj["assigned_by"]=jQuery(widgetRef).attr("data-jlike-assigned_by");
-			obj["assigned_to"]=jQuery(widgetRef).attr("data-jlike-assigned_to");
+			obj["content_id"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-contentid");
+			obj["assigned_by"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_by");
+			obj["assigned_to"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_to");
 			obj["state"]=1;
 			obj["status"] = "I";
 
