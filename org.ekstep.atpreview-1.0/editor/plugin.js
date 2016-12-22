@@ -32,6 +32,10 @@ EkstepEditor.basePlugin.extend({
      */
     initialize: function() {
         EkstepEditorAPI.addEventListener("atpreview:show", this.initPreview, this);
+        var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.atpreview-1.0/editor/popup.html';
+        setTimeout(function() {
+            EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
+        }, 1000);
     },
     /**
      *
@@ -40,33 +44,35 @@ EkstepEditor.basePlugin.extend({
      *   @memberof atPreview
      */
     initPreview: function(event, data) {
-        var instance = this;
         this.contentBody = data.contentBody;
-        this.loadResource('editor/popup.html', 'html', function(err, response) {
-            instance.showPreview(err, response);
-        });
+        this.showPreview();
     },
-    /**
-     *   @param err {Object}
-     *   @param data {String} HTML template
+    /**     
      *   @memberof atPreview
      */
-    showPreview: function(err, data) {
+    showPreview: function() {
         console.log(this.previewURL);
         var instance = this;
-        var popupConfig = { template: data};
-        var popupService = EkstepEditorAPI.getService('popup');
         var contentService = EkstepEditorAPI.getService('content');
         var meta = EkstepEditorAPI.getService('content').getContentMeta(EkstepEditorAPI.globalContext.contentId);
+        var modalController = function($scope) {
+            setTimeout(function() {
+                var previewContentIframe = EkstepEditorAPI.jQuery('#previewContentIframe')[0];
+                previewContentIframe.src = instance.previewURL;
+                meta.contentMeta = _.isUndefined(meta.contentMeta) ? null : meta.contentMeta;
+                previewContentIframe.onload = function() {
+                    previewContentIframe.contentWindow.setContentData(meta.contentMeta, instance.contentBody, { "showStartPage": true, "showEndPage": true });
+                };
+            }, 100);
+        };
 
-        popupService.open(popupConfig, function() {
-            var previewContentIframe = EkstepEditorAPI.jQuery('#previewContentIframe')[0];
-            previewContentIframe.src = instance.previewURL;
-            meta.contentMeta = EkstepEditorAPI._.isUndefined(meta.contentMeta) ? null : meta.contentMeta;
-            previewContentIframe.onload = function() {                
-                previewContentIframe.contentWindow.setContentData(meta.contentMeta, instance.contentBody, { "showStartPage": true, "showEndPage": true });
-            };
+        EkstepEditorAPI.getService('popup').open({
+            template: 'partials_org.ekstep.atpreview.html',
+            controller: ['$scope', modalController],
+            showClose: false,
+            width: 900
         });
+
     }
 });
 

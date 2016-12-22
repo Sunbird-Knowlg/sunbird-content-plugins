@@ -7,6 +7,10 @@
     "description": "",
     "publishedDate": "",
     "editor": {
-        "main": "editor/plugin.js"
+        "main": "editor/plugin.js",
+        "dependencies": [
+            {"type": "js", "src": "editor/recorder/bower_components/wavesurfer.js/dist/wavesurfer.min.js"},
+            {"type": "js", "src": "editor/recorder/dist/angular-audio-recorder.js"}
+        ]
     }
 }

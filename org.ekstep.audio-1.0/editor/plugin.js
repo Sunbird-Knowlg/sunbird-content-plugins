@@ -42,13 +42,6 @@ EkstepEditor.basePlugin.extend({
         delete props.height;
         var media = this.media[this.attributes.asset];
         media.src = EkstepEditor.mediaManager.getMediaOriginURL(media.src);
-        var imageURL = EkstepEditorAPI.globalContext.useProxyForURL ? "image/get/" + encodeURIComponent(media.src) : media.src;
-        fabric.Image.fromURL(imageURL, function(img) {
-            instance.editorObj = img;
-            instance.parent = _parent;
-            instance.editorObj.scaleToWidth(props.w);
-            instance.postInit();
-        }, props);
     },
     /**    
     *      

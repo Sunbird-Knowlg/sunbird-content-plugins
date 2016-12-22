@@ -1,32 +1,35 @@
-<style>
-.preview-bgimage {
-    position: relative;
-    height: 450px;
-    width: 100%;
-    padding: 0px;
-    background-size: 900px 450px;
-    background: url("https://dev.ekstep.in/assets/public/authoring-tool/dev/images/editor-frame.1f4229d1.png") no-repeat center 0;
-}
-
-.preview-iframe {
-    position: absolute;
-    height: 336px;
-    width: 591px;
-    padding: 0px;
-    top: 7px;
-    left: 145px;
-    border: 0px;
-}
-
-#previewContentIframe {
-	border: 0px;
-}
-</style>
-<div class="ui basic modal">
-    <div class="ui four column centered grid">
-        <div class="preview-bgimage"></div>
-        <div class="preview-iframe">
-            <iframe id="previewContentIframe" width=100% height=100% ></iframe>
-        </div>
+<script type="text/ng-template" id="partials_org.ekstep.atpreview.html">
+    <style>
+    .preview-bgimage {
+        position: relative;
+        height: 450px;
+        width: 100%;
+        left: 25%;
+        padding: 0px;
+        background-size: 900px 450px;
+        background: url("https://dev.ekstep.in/assets/public/authoring-tool/dev/images/editor-frame.1f4229d1.png") no-repeat center 0;
+    }
+    
+    .preview-iframe {
+        position: absolute;
+        height: 48.2%;
+        width: 45%;
+        padding: 0px;
+        top: 14%;
+        left: 30%;
+        border: none !important;
+    }
+    
+    .ngdialog-content {
+        background: none !important;
+    }
+    
+    #previewContentIframe {
+        border: 0px;
+    }
+    </style>
+    <div class="preview-bgimage"></div>
+    <div class="preview-iframe">
+        <iframe id="previewContentIframe" width=100% height=100%></iframe>
     </div>
-</div>
+</script>
