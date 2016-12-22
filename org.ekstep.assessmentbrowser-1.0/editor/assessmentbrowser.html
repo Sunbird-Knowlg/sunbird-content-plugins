@@ -101,7 +101,7 @@
                             <div class="field">
                                 <div class="ui fluid labeled input">
                                     <div class="ui label">Concepts</div>
-                                    <input type="text" placeholder="Concepts" class="fluid" id="assessmentConceptSelector" ng-click="$ctrl.showConceptSelector()">
+                                    <input type="text" placeholder="Concepts" ng-model="$ctrl.activityOptions.concepts" class="fluid" id="assessmentConceptSelector" ng-click="$ctrl.showConceptSelector()" selectable="false" readonly>
                                 </div>
                             </div>
                             <div class="field">
@@ -120,7 +120,7 @@
                 <div class="five fields">
                     <div class="field">
                         <div class="ui corner labeled input">
-                            <input name="title" ng-model="activityOptions.title" type="text" placeholder="Assessment Title" autocomplete="off">
+                            <input name="title" ng-model="$ctrl.activityOptions.title" type="text" placeholder="Assessment Title" autocomplete="off">
                             <div class="ui corner label">
                                 <i class="asterisk icon"></i>
                             </div>
@@ -216,7 +216,7 @@
         <div class="ui buttons" ng-if="!$ctrl.isFiltersShown">
             <button id="closePopUp" class="ui orange button" ng-click="$ctrl.isFiltersShown = !$ctrl.isFiltersShown" type="button">Add More Questions</button>
             <div class="or"></div>
-            <button id="selectanduse" class="ui blue button" ng-click="$ctrl.addItemActivity()" ng-disabled="activityOptionsForm.$invalid || !activityOptions.title || !$ctrl.cart.items.length" type="button">Add Assessment</button>
+            <button id="selectanduse" class="ui blue button" ng-click="$ctrl.addItemActivity()" ng-disabled="!$ctrl.activityOptions.title || !$ctrl.cart.items.length" type="button">Add Assessment</button>
         </div>
     </div>
 </div>

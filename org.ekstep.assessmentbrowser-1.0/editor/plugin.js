@@ -89,13 +89,15 @@ EkstepEditor.basePlugin.extend({
             'qlevel': '',
             'type': '',
             'language': 'English',
-            'gradeLevel': ''
+            'gradeLevel': '',
+            'conceptIds': []
         };
         ctrl.activityOptions = {
             title: "",
             shuffle: false,
             showImmediateFeedback: true,
-            myQuestions: false
+            myQuestions: false,
+            concepts: '(0) Concepts'
         };
 
         EkstepEditorAPI.getService('assessmentService').getLanguages(function(err, resp) {
@@ -170,6 +172,9 @@ EkstepEditor.basePlugin.extend({
                             if (value.length) {
                                 data.request.filters.type = value;
                             }
+                            break;
+                        case "concepts":
+                            data.request.filters.concepts = value;
                             break;
                     }
                 }
@@ -285,7 +290,7 @@ EkstepEditor.basePlugin.extend({
 
         ctrl.addItemActivity = function() {
             if (!EkstepEditorAPI._.isUndefined(instance.callback)) {
-                instance.callback(ctrl.cart.items);
+                instance.callback(ctrl.cart.items, ctrl.activityOptions);
                 ctrl.cancel();
             }
         }
@@ -299,7 +304,13 @@ EkstepEditor.basePlugin.extend({
             element: 'assessmentConceptSelector',
             selectedConcepts: [], // All composite keys except mediaType
             callback: function(data) {
-                console.log('concepts data received - ', data);
+                ctrl.activityOptions.concepts = '('+data.length+') concepts selected';
+                ctrl.activity.concepts = _.map(data, function(concept) {
+                    return concept.id;
+                });
+                EkstepEditorAPI.getAngularScope().safeApply();
+                ctrl.searchQuestions();
+                console.log('concepts data received - ', ctrl.activity.concepts);
             }
         });
     }
