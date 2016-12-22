@@ -105,16 +105,23 @@
 
 </style>
 
-<div class="assetbrowser ui modal active ui form" style="top: 10% !important">
-	<i class="close icon" ng-click="closeThisDialog()"></i>
+<div class="assetbrowser ui modal active ui form" style="top: 10%;">
 	<div class="header" ng-switch="$ctrl.plugin">
-		<span ng-hide="$ctrl.uploadView">
-			<span ng-switch-when="image"><i class="image icon"></i> Select file</span>
-			<span ng-switch-when="audio"><i class="file audio outline icon"></i> Select Audio</span>
-		</span>
-
-		<span ng-if="$ctrl.uploadView && $ctrl.plugin == 'image'"><i class="upload icon"></i> Upload and use</span>
-		<span ng-if="$ctrl.uploadView && $ctrl.plugin == 'audio'"><i class="upload icon"></i> Upload/ Record</span>
+		<div class="ui two column grid">
+			<div class="row">
+			  	<div class="column">
+					<span ng-hide="$ctrl.uploadView">
+						<span ng-switch-when="image"><i class="image icon"></i> Select file</span>
+						<span ng-switch-when="audio"><i class="file audio outline icon"></i> Select Audio</span>
+					</span>
+					<span ng-if="$ctrl.uploadView && $ctrl.plugin == 'image'"><i class="upload icon"></i> Upload and use</span>
+					<span ng-if="$ctrl.uploadView && $ctrl.plugin == 'audio'"><i class="upload icon"></i> Upload/ Record</span>
+				</div>
+				<div class="column" style="text-align: right;">
+					<i class="cursor-pointer close icon" ng-click="closeThisDialog()"></i>
+				</div>
+			</div>
+		</div>
 	</div>
 	<div class="content" ng-hide="$ctrl.uploadView">
 		<div class="ui pointing secondary menu">
@@ -139,7 +146,7 @@
 						<i class="huge spinner loading icon faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
 						<div ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
 							<div class="column templatebrowser_thumbnail">
-								<div class="ui small images templatecard infopopover" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected}" data-html="<b>{{image.name}}</b> | {{image.mimeType}} | License: {{image.license}}">
+								<div class="ui small images templatecard infopopover" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected}" data-html="<b>{{image.name}}</b> <br/> License: {{image.license}}">
 									<a class="item" ng-show="$ctrl.selected_images[$index].selected">
 										<div class="floating ui blue label">
 											<i class="ui icon check" aria-hidden="true"></i>
@@ -171,7 +178,7 @@
 				<div class="asset_item_container">
 					<div class="ui grid">
 						<div class="three wide column" ng-show="$ctrl.audioList.length > 0" ng-repeat="audio in $ctrl.audioList track by $index">
-							<div class="audioitem infopopover" ng-click="$ctrl.AudioSource(audio.downloadUrl,audio.identifier, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}" data-html="<b>{{audio.name}}</b> | {{audio.mimeType}} | License: {{audio.license}}">
+							<div class="audioitem infopopover" ng-click="$ctrl.AudioSource(audio, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}" data-html="<b>{{audio.name}}</b> <br/> License: {{audio.license}}">
 								<audio controls id="audio-{{$index}}" ng-src="{{audio.downloadUrl}}" width="120" height="120"></audio>
 								<div class="audio-tag">{{audio.name}}</div>
 								<div class="audioOverlay" ng-show="$ctrl.selected_audios[$index].selected">
@@ -201,7 +208,7 @@
 					<i class="huge spinner loading icon faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
 					<div ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
 						<div class="column templatebrowser_thumbnail">
-							<div class="ui small images templatecard infopopover" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected}" data-html="<b>{{image.name}}</b> | {{image.mimeType}} | License:{{image.license}} ">
+							<div class="ui small images templatecard infopopover" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected}" data-html="<b>{{image.name}}</b> <br/> License:{{image.license}} ">
 								<a class="item" ng-show="$ctrl.selected_images[$index].selected">
 									<div class="floating ui blue label">
 										<span><i class="ui icon check" aria-hidden="true"></i></span>
@@ -232,7 +239,7 @@
 				<div class="asset_item_container">			
 					<div class="ui grid">
 						<div class="three wide column" ng-show="$ctrl.audioList.length > 0" ng-repeat="audio in $ctrl.audioList track by $index">
-							<div class="audioitem infopopover" ng-click="$ctrl.AudioSource(audio.downloadUrl,audio.identifier, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}" data-html="<b>{{audio.name}}</b> | {{audio.mimeType}} | License: {{audio.license}}">
+							<div class="audioitem infopopover" ng-click="$ctrl.AudioSource(audio.downloadUrl,audio.identifier, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}" data-html="<b>{{audio.name}}</b> <br/> License: {{audio.license}}">
 								<audio controls id="audio-{{$index}}" ng-src="{{audio.downloadUrl}}" width="120" height="120"></audio>
 								<div class="audio-tag">{{audio.name}}</div>
 								<div class="audioOverlay" ng-show="$ctrl.selected_audios[$index].selected">

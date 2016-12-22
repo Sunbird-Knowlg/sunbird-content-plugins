@@ -3,7 +3,7 @@ angular.module('assetbrowserapp', ['angularAudioRecorder']).config(['recorderSer
         recorderServiceProvider.forceSwf(false);
         
         // @todo change this to correct path
-        var lameJsUrl = 'https://localhost:3000/plugins/org.ekstep.assetbrowser-1.0/editor/recorder/lib2/lame.min.js';
+        var lameJsUrl = 'http://localhost:3000/plugins/org.ekstep.assetbrowser-1.0/editor/recorder/lib2/lame.min.js';
         var config = {lameJsUrl:lameJsUrl, bitRate: 92};
 
       recorderServiceProvider.withMp3Conversion(true, config);
@@ -214,13 +214,13 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             return true;
         }
 
-        ctrl.AudioSource = function(url, id, $index) {
+        ctrl.AudioSource = function(audio, $index) {
             var audioElem;
             document.getElementById('audio-' + $index).play();
-            audiodata.asset = id;
+            audiodata.asset = audio.identifier;
             audiodata.assetMedia = {
                 id: audiodata.asset,
-                src: url.toString(),
+                src: audio.downloadUrl.toString(),
                 type: 'audio'
             }
             ctrl.selectBtnDisable = false;
@@ -260,15 +260,16 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         }
 
         ctrl.select = function() {
-            if (imagedata && imagedata.asset) {
-                instance.cb(imagedata);
+            if (assetdata && assetdata.asset && instance.mediaType == "image") {
+                instance.cb(assetdata);
                 ctrl.cancel();
             }
 
-            if (audiodata && audiodata.asset) {
-                //instance.cb(audiodata);
-                console.log('audiodata', audiodata);
-                EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { type: 'audio', stageId: EkstepEditorAPI.getCurrentStage().id ,title: audiodata.asset });
+            if (audiodata && audiodata.asset && instance.mediaType == "audio") {
+                console.log("audiodata")
+                console.log(audiodata);
+                EkstepEditorAPI.dispatchEvent("stagedecorator:addcomponent", { component: 'audio', title: audiodata.asset });
+                instance.cb(audiodata);
                 ctrl.cancel();
             }
         }

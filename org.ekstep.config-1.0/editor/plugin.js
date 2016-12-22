@@ -52,8 +52,8 @@ EkstepEditor.basePlugin.extend({
             angScope.contextToolbar = instance.manifest.editor.data.toolbars;
         });
 
-        this.canvasOffset = EkstepEditor.jQuery('#canvas').offset();
-        //EkstepEditor.jQuery("#plugin-toolbar-container").draggable()
+        this.canvasOffset = EkstepEditorAPI.jQuery('#canvas').offset();
+        EkstepEditorAPI.jQuery("#plugin-toolbar-container").draggable({containment: "parent",cursor: "move"})
     },
     /**
      * Place config toolbar on top of plugin, based on its location
@@ -66,10 +66,25 @@ EkstepEditor.basePlugin.extend({
         this.selectedPluginId = data.id;
         var plugin = EkstepEditorAPI.getPluginInstance(data.id);
         this.setToolBarPosition();
+        var angScope = EkstepEditorAPI.getAngularScope();
+        if(angScope.showConfigContainer){
+            switch (angScope.configHeaderText) {
+                case 'Configuration':
+                    instance.showConfig();
+                    break;
+                case 'Properties':
+                    instance.showProperties();
+                    break;    
+                case 'Help':
+                    instance.showHelp();
+                    break;    
+            }
+        }
+        
     },
     objectUnselected: function(event, data) {
         if (data.id == this.selectedPluginId) {
-            EkstepEditor.jQuery('#toolbarOptions').hide();
+            EkstepEditorAPI.jQuery('#toolbarOptions').hide();
             var angScope = EkstepEditorAPI.getAngularScope();
             angScope.safeApply(function() {
                 angScope.showConfigContainer = false;
@@ -88,9 +103,9 @@ EkstepEditor.basePlugin.extend({
      */
     showConfig: function(event, data) {
         var instance = this;
-        this.pluginConfigManifest = _.clone(EkstepEditorAPI.getCurrentObject().getPluginConfig());
-        this.configData = _.clone(EkstepEditorAPI.getCurrentObject().getConfig());
-        if (_.isUndefined(this.pluginConfigManifest)) {
+        this.pluginConfigManifest = EkstepEditorAPI._.clone(EkstepEditorAPI.getCurrentObject().getConfigManifest());
+        this.configData = EkstepEditorAPI._.clone(EkstepEditorAPI.getCurrentObject().getConfig());
+        if (EkstepEditorAPI._.isUndefined(this.pluginConfigManifest)) {
             this.pluginConfigManifest = [];
             EkstepEditorAPI.getCurrentObject().renderConfig();
         }
@@ -103,16 +118,16 @@ EkstepEditor.basePlugin.extend({
             }, true);
 
         });
-        _.forEach(instance.pluginConfigManifest, function(config) {
+        EkstepEditorAPI._.forEach(instance.pluginConfigManifest, function(config) {
             instance._invoke(config, instance.configData)
         })
-        this.animateToolbar("Configuration");
+        this.setToolBarContainerLocation("Configuration");
         /*
         semantic ui apply
          */
         setTimeout(function() {
-            EkstepEditor.jQuery(".ui.dropdown").each(function() {
-                EkstepEditor.jQuery(this).dropdown();
+            EkstepEditorAPI.jQuery(".ui.dropdown").each(function() {
+                EkstepEditorAPI.jQuery(this).dropdown();
             })
         }, 500);
 
@@ -124,7 +139,7 @@ EkstepEditor.basePlugin.extend({
      * @memberof Config
      */
     stageUnselect: function(data) {
-        EkstepEditor.jQuery('#toolbarOptions').hide();
+        EkstepEditorAPI.jQuery('#toolbarOptions').hide();
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
             angScope.showConfigContainer = false;
@@ -145,9 +160,9 @@ EkstepEditor.basePlugin.extend({
         }
         if (config.dataType === 'rangeslider') {
             setTimeout(function() {
-                EkstepEditor.jQuery('#' + config.propertyName).on("change mouseclick", function() {
-                    EkstepEditor.jQuery('#' + config.propertyName + 'label').html($(this).val());
-                    instance.onConfigChange(config.propertyName, $(this).val());
+                EkstepEditorAPI.jQuery('#' + config.propertyName).on("change mouseclick", function() {
+                    EkstepEditorAPI.jQuery('#' + config.propertyName + 'label').html(EkstepEditorAPI.jQuery(this).val());
+                    instance.onConfigChange(config.propertyName, EkstepEditorAPI.jQuery(this).val());
                 });
             }, 500);
         }
@@ -161,11 +176,11 @@ EkstepEditor.basePlugin.extend({
      */
     updateConfig: function(newValue, oldValue) {
         var instance = this;
-        var changedValues = _.reduce(oldValue, function(result, value, key) {
-            return _.isEqual(value, newValue[key]) ?
+        var changedValues = EkstepEditorAPI._.reduce(oldValue, function(result, value, key) {
+            return EkstepEditorAPI._.isEqual(value, newValue[key]) ?
                 result : result.concat(key);
         }, []);
-        _.forEach(changedValues, function(cv) {
+        EkstepEditorAPI._.forEach(changedValues, function(cv) {
             instance.onConfigChange(cv, newValue[cv]);
         })
     },
@@ -197,8 +212,8 @@ EkstepEditor.basePlugin.extend({
     showHelp: function(event, data) {
         var instance = this;
         EkstepEditorAPI.getCurrentObject().getHelp(function(helpText) {
-            EkstepEditor.jQuery("#pluginHelpContent").html(micromarkdown.parse(helpText));
-            instance.animateToolbar("Help");
+            EkstepEditorAPI.jQuery("#pluginHelpContent").html(micromarkdown.parse(helpText));
+            instance.setToolBarContainerLocation("Help");
         });
     },
     /**
@@ -214,7 +229,7 @@ EkstepEditor.basePlugin.extend({
         angScope.safeApply(function() {
             angScope.pluginProperties = properties;
         });
-        this.animateToolbar("Properties");
+        this.setToolBarContainerLocation("Properties");
     },
     /**
      * * This method called when object:moving or object:scaling events is fired 
@@ -227,14 +242,19 @@ EkstepEditor.basePlugin.extend({
         if (data && data.id) {
             this.selectedPlugin = data.id;
             var plugin = EkstepEditorAPI.getPluginInstance(data.id);
-            if (!_.isUndefined(plugin)) {
+            if (!EkstepEditorAPI._.isUndefined(plugin)) {
                 this.setToolBarPosition();
-                EkstepEditor.jQuery('#plugin-toolbar-container').offset({
-                    top: (this.canvasOffset.top + plugin.editorObj.top),
-                    left: (this.canvasOffset.left + plugin.editorObj.left + plugin.editorObj.getWidth() + 10)
+                var containerLeft = this.canvasOffset.left + plugin.editorObj.left + plugin.editorObj.getWidth() + 30;
+                var maxLeft = this.canvasOffset.left + EkstepEditorAPI.jQuery("#canvas").width() + 5;
+                var minLeft = this.canvasOffset.left + EkstepEditorAPI.jQuery("#toolbarOptions").width()+5;
+                if (containerLeft > maxLeft) { containerLeft = maxLeft;}
+                if (containerLeft < minLeft) {containerLeft = minLeft;}
+                EkstepEditorAPI.jQuery('#plugin-toolbar-container').offset({
+                    top: (this.canvasOffset.top),
+                    left: containerLeft
                 });
             } else {
-                EkstepEditor.jQuery('#toolbarOptions').hide();
+                EkstepEditorAPI.jQuery('#toolbarOptions').hide();
                 var angScope = EkstepEditorAPI.getAngularScope();
                 angScope.safeApply(function() {
                     angScope.showConfigContainer = false;
@@ -242,7 +262,7 @@ EkstepEditor.basePlugin.extend({
             }
         }
     },
-    animateToolbar: function(title) {
+    setToolBarContainerLocation: function(title) {
         var instance = this;
         var angScope = EkstepEditorAPI.getAngularScope();
         var selectedPluginObj = EkstepEditorAPI.getPluginInstance(instance.selectedPluginId).editorObj;
@@ -250,8 +270,8 @@ EkstepEditor.basePlugin.extend({
             angScope.showConfigContainer = true;
             angScope.configHeaderText = title;
             angScope.configStyle = {
-                'top': (instance.canvasOffset.top + selectedPluginObj.top - 10),
-                'left': (instance.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() + 10)
+                'top': instance.canvasOffset.top,
+                'left': (instance.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() + 30)
             }
         });
     },
@@ -275,13 +295,16 @@ EkstepEditor.basePlugin.extend({
             var selectedPluginObj = EkstepEditorAPI.getPluginInstance(this.selectedPluginId).editorObj;
             var topPosition = this.canvasOffset.top + selectedPluginObj.top - this.margin.top;
             var leftPosition = this.canvasOffset.left + selectedPluginObj.left + selectedPluginObj.getWidth() / 2 - this.margin.left;
-            var canvasBottom = this.canvasOffset.top + EkstepEditor.jQuery("#canvas").height() - EkstepEditor.jQuery("#toolbarOptions").height()
-            var canvasRight = this.canvasOffset.left + EkstepEditor.jQuery("#canvas").width() - EkstepEditor.jQuery("#toolbarOptions").width();
-            if (topPosition < this.canvasOffset.top) { topPosition = this.canvasOffset.top; }
+            var canvasBottom = this.canvasOffset.top + EkstepEditorAPI.jQuery("#canvas").height() - EkstepEditorAPI.jQuery("#toolbarOptions").height()
+            var canvasRight = this.canvasOffset.left + EkstepEditorAPI.jQuery("#canvas").width() - EkstepEditorAPI.jQuery("#toolbarOptions").width();
+            /* toolbar location reset based on object location*/
+            if(topPosition < this.canvasOffset.top){
+                topPosition = this.canvasOffset.top + selectedPluginObj.top + selectedPluginObj.height + 16;
+            }
             if (leftPosition < this.canvasOffset.left) { leftPosition = this.canvasOffset.left; }
             if (leftPosition > canvasRight) { leftPosition = canvasRight; }
             if (topPosition > canvasBottom) { topPosition = canvasBottom; }
-            EkstepEditor.jQuery('#toolbarOptions').css({
+            EkstepEditorAPI.jQuery('#toolbarOptions').css({
                 position: 'absolute',
                 display: 'block',
                 top: topPosition,

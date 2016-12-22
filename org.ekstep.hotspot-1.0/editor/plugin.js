@@ -15,7 +15,7 @@ EkstepEditor.basePlugin.extend({
      *   creates new plugin instance with Hotspot shape
      */
     newInstance: function() {
-        this.attributes.opacity = _.isUndefined(this.attributes.opacity) ? 0.4 : this.attributes.opacity;
+        this.attributes.opacity = EkstepEditorAPI._.isUndefined(this.attributes.opacity) ? 0.4 : this.attributes.opacity;
         var props = this.convertToFabric(this.attributes);
         if (this.attributes.type === 'roundrect') {
             this.editorObj = new fabric.Rect(props);
@@ -33,7 +33,7 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         var dataList = { "stroke-width": "stroke-width", "scaleX": "scaleX", "scaleY": "scaleY" };
         if (this) {
-            _.forEach(dataList, function(val, key) {
+            EkstepEditorAPI._.forEach(dataList, function(val, key) {
                 instance.attributes[key] = instance.editorObj.get(val);
             })
             this.attributes.radius = this.editorObj.rx;

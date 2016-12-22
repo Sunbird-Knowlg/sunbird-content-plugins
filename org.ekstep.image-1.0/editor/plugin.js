@@ -76,8 +76,12 @@ EkstepEditor.basePlugin.extend({
         return cp;
     },
     onConfigChange: function(key, value) {
-        EkstepEditorAPI.dispatchEvent('delete:invoke');
-        EkstepEditorAPI.dispatchEvent(this.manifest.id + ':create', value)
+        switch (key) {
+            case "asset":
+                EkstepEditorAPI.dispatchEvent('delete:invoke');
+                EkstepEditorAPI.dispatchEvent(this.manifest.id + ':create', value)
+                break;
+        }
     }
 });
 //# sourceURL=imageplugin.js

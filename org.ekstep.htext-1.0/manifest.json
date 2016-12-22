@@ -3,7 +3,7 @@
     "ver": "1.0",
     "shortId": "htext",
     "author": "Kartheek Palla",
-    "title": "Readalong Plugin",
+    "title": "Read-along Plugin",
     "description": "",
     "publishedDate": "",
     "editor": {
@@ -18,9 +18,9 @@
             "id": "htext",
             "category": "main",
             "type": "icon",
-            "toolTip": "Add Readalong",
-            "title": "Readalong",
-            "iconClass": "music icon",
+            "toolTip": "Add Read-along",
+            "title": "Read-along",
+            "iconClass": "icon-readalong icon",
             "onclick": {
                 "id": "org.ekstep.htext:create",
                 "data": {
@@ -39,12 +39,12 @@
             }
         }],
         "configManifest": [{
-            "propertyName": "highlightcolor",
+            "propertyName": "highlight",
             "title": "Highlight Color",
             "description": "Choose a color from the color picker to highlight the text",
             "dataType": "colorpicker",
             "required": true,
-            "defaultValue": "#000000"
+            "defaultValue": "#FFFF00"
         }, {
             "propertyName": "autoplay",
             "title": "Autoplay ",
@@ -52,6 +52,52 @@
             "dataType": "boolean",
             "required": true,
             "defaultValue": false
+        },{
+            "propertyName": "color",
+            "title": "Fill color",
+            "description": "Choose a color from the color picker",
+            "dataType": "colorpicker",
+            "required": true,
+            "defaultValue": "rgb(255,0,0)"
+        },{
+            "propertyName": "font",
+            "dataType": "group",
+            "description": "Choose fontweight and fontstyle",
+            "config": [{
+                "propertyName": "fontweight",
+                "title": "Font Weight",
+                "toolTip": "Bold",
+                "description": "Select font size for the text",
+                "dataType": "icon",
+                "iconClass": "bold icon",
+                "required": true,
+                "defaultValue": false
+            }, {
+                "propertyName": "fontstyle",
+                "title": "Font Style",
+                "toolTip": "Italic",
+                "description": "Select font style for the text",
+                "dataType": "icon",
+                "iconClass": "italic icon",
+                "required": true,
+                "defaultValue": false
+            }]
+        }, {
+            "propertyName": "fontfamily",
+            "title": "Font Family",
+            "description": "Select font family for the text",
+            "dataType": "select",
+            "range": ["Arial", "Courier", "Georgia", "Helvetica", "Monospace", "Sans-serif", "Serif", "Tahoma", "Times", "Trebuchet MS", "Verdana", "NotoSansKannada", "NotoSansGujarati", "NotoSansBengali", "NotoSansGurmukhi", "NotoSansOriya", "NotoSansDevanagari", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu", "NotoSansMalayalam"],
+            "required": true,
+            "defaultValue": "Arial"
+        }, {
+            "propertyName": "fontsize",
+            "title": "Font Size",
+            "description": "Select font size for the text",
+            "dataType": "select",
+            "range": [18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 54, 60, 66, 72, 80, 88, 96],
+            "required": true,
+            "defaultValue": 18
         }]
     }
 }

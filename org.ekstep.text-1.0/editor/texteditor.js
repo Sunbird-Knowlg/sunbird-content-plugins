@@ -14,12 +14,12 @@ fabric.ITextbox.fromObject = function(object) {
 fabric.ITextbox.instances = [];
 
 var textEditor = (function() {
-    var $editor = EkstepEditor.jQuery("#authoringTextEditor"),
-        $doneBtn = EkstepEditor.jQuery("#authoringTextEditorBtn"),
-        $cancelBtn = EkstepEditor.jQuery("#authoringTextEditorCancel"),
-        $btnGrpParent = EkstepEditor.jQuery('<div>',{style:"margin-top: 6px; margin-right: 6px;"}) 
-        $buttonGrp = EkstepEditor.jQuery('<div>', { class: 'ui buttons', id: 'texteditorBtnGrp', style:"float: right;" });
-    $orBtn = EkstepEditor.jQuery('<div>', { class: 'or' });
+    var $editor = EkstepEditorAPI.jQuery("#authoringTextEditor"),
+        $doneBtn = EkstepEditorAPI.jQuery("#authoringTextEditorBtn"),
+        $cancelBtn = EkstepEditorAPI.jQuery("#authoringTextEditorCancel"),
+        $btnGrpParent = EkstepEditorAPI.jQuery('<div>',{style:"margin-top: 6px; margin-right: 6px;"}) 
+        $buttonGrp = EkstepEditorAPI.jQuery('<div>', { class: 'ui buttons', id: 'texteditorBtnGrp', style:"float: right;" });
+    $orBtn = EkstepEditorAPI.jQuery('<div>', { class: 'or' });
     pluginId = undefined,
         editorText = undefined;
 
@@ -34,28 +34,29 @@ var textEditor = (function() {
         $cancelBtn.hide();
         $editor.hide();
         $doneBtn.hide();
-        EkstepEditor.jQuery("#toolbarOptions").show();
+        EkstepEditorAPI.jQuery("#toolbarOptions").show();
+        EkstepEditorAPI.jQuery("#plugin-toolbar-container").show();
     }
 
     function showEditor(id) {
         pluginId = id;
         editorText = EkstepEditorAPI.getPluginInstance(pluginId).editorObj.text;
         if (!$editor.length) {
-            var form = EkstepEditor.jQuery("<div>", { class: "ui form", id: "textEditorContainer", style:"margin-left: 10px; margin-top: 10px;" });
+            var form = EkstepEditorAPI.jQuery("<div>", { class: "ui form", id: "textEditorContainer", style:"margin-left: 10px; margin-top: 10px;" });
             form.css({
-                "top": EkstepEditor.jQuery("canvas").offset().top,
-                "left": EkstepEditor.jQuery("canvas").offset().left,
+                "top": EkstepEditorAPI.jQuery("canvas").offset().top,
+                "left": EkstepEditorAPI.jQuery("canvas").offset().left,
                 "position": "absolute"
             });
-            var field = EkstepEditor.jQuery("<div>", { class: "field" });
+            var field = EkstepEditorAPI.jQuery("<div>", { class: "field" });
             form.appendTo("body");
             field.appendTo(form)
-            EkstepEditor.jQuery(document.createElement("textarea"))
+            EkstepEditorAPI.jQuery(document.createElement("textarea"))
                 .text(editorText)
                 .attr({ "id": "authoringTextEditor", "placeholder": "Add text here", "rows": 12 })
                 .css({ "width": "30.5em" })
                 .appendTo(field);
-            $editor = EkstepEditor.jQuery("#authoringTextEditor");
+            $editor = EkstepEditorAPI.jQuery("#authoringTextEditor");
             $btnGrpParent.insertAfter($editor);
             $btnGrpParent.append($buttonGrp);
         } else {
@@ -63,14 +64,14 @@ var textEditor = (function() {
         }
 
         if (!$doneBtn.length) {
-            $doneBtn = EkstepEditor.jQuery("<button>",{text: 'Done',id: 'authoringTextEditorBtn', class: 'ui primary button'})
+            $doneBtn = EkstepEditorAPI.jQuery("<button>",{text: 'Done',id: 'authoringTextEditorBtn', class: 'ui primary button'})
                 .click(function() {
                     _commonBtnClickAction();
                     if ($editor.val().trim().length) {
                         EkstepEditorAPI.getPluginInstance(pluginId).editorObj.text = $editor.val();
                         EkstepEditorAPI.render();
                         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getPluginInstance(pluginId).editorObj });
-                        EkstepEditor.jQuery("#toolbarOptions").show();
+                        EkstepEditorAPI.jQuery("#toolbarOptions").show();
                     } else {
                         _removeObject();
                     }
@@ -81,7 +82,7 @@ var textEditor = (function() {
         }
 
         if (!$cancelBtn.length) {
-            $cancelBtn = EkstepEditor.jQuery('<button>',{text: 'Cancel',id: 'authoringTextEditorCancel', class: 'ui secondary button'})
+            $cancelBtn = EkstepEditorAPI.jQuery('<button>',{text: 'Cancel',id: 'authoringTextEditorCancel', class: 'ui secondary button'})
                 .click(function() {
                     _commonBtnClickAction();
                     if (!editorText.trim().length) {
@@ -96,7 +97,7 @@ var textEditor = (function() {
         $buttonGrp.append($doneBtn);
         //$buttonGrp.css({position:'absolute', 'top': $editor.offset().top+$editor.height()/2+64,'left': $editor.offset().left+22})
         $buttonGrp.show();
-        setTimeout(function() { EkstepEditor.jQuery("#toolbarOptions").hide(); }, 600);
+        setTimeout(function() { EkstepEditorAPI.jQuery("#toolbarOptions").hide(); EkstepEditorAPI.jQuery("#plugin-toolbar-container").hide(); }, 600);
     }
 
     function hideEditor() {

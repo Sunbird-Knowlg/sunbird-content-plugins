@@ -1,9 +1,7 @@
 **Content Editor Help**
 
-***Hotspot plugin***
-
-An area on a computer screen which can be clicked to activate a function, especially an image or piece of text acting as a hyperlink.
-
+***Read-along plugin***
+Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime perferendis iste repellat accusantium, ut doloribus eaque possimus sapiente. Sed, iste.
 
 ---
 ***Change color***
