@@ -1,7 +1,7 @@
 {
     "id": "org.ekstep.assessment",
     "ver": "1.0",
-    "shortId": "assessment",
+    "shortId": "quiz",
     "author": "Santhosh Vasabhaktula",
     "title": "Question Set Plugin",
     "description": "",
@@ -19,8 +19,7 @@
             "title": "Question Set",
             "iconClass": "icon-Questions icon",
             "onclick": {
-                "id": "org.ekstep.assessment:showPopup",
-                "data": {}
+                "id": "org.ekstep.assessment:showPopup"
             }
         }]
     }
