@@ -31,7 +31,7 @@ EkstepEditor.basePlugin.extend({
             attr.w = attr.h = 90;
         }
         for (var i = 0; i < attr.length - 1; i++) {
-            attr[i].question.options = JSON.parse(attr[i].question.options)
+            attr[i] = instance.cleanObject(attr[i]);
             ques.push(attr[i].question);
             instance.addMediatoManifest(attr[i].question.media);
         }
@@ -69,6 +69,21 @@ EkstepEditor.basePlugin.extend({
                 });
             }
         }
+    },
+    cleanObject: function(item) {
+        if (!_.isUndefined(item.question.options)) {
+            item.question.options = !_.isObject(item.question.options) ? JSON.parse(item.question.options) : item.question.options;
+            return item;
+        } else if (!_.isUndefined(item.question.lhs_options)) {
+            item.question.lhs_options = !_.isObject(item.question.lhs_options) ? JSON.parse(item.question.lhs_options) : item.question.lhs_options;
+            item.question.rhs_options = !_.isObject(item.question.rhs_options) ? JSON.parse(item.question.rhs_options) : item.question.rhs_options;
+            return item;
+        } else {
+            item.question.model = !_.isObject(item.question.model) ? JSON.parse(item.question.model) : item.question.model;
+            item.question.answer = !_.isObject(item.question.answer) ? JSON.parse(item.question.answer) : item.question.answer;
+            return item;
+        }
+
     },
     /**    
     *      

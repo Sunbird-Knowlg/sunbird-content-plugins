@@ -135,7 +135,7 @@ $.fn.jltodos = function(options){
 			headers: {
 				'x-auth':'session'
 			},
-			type: 'GET',
+			type: 'POST',
 			data:obj,
 			async:false,
 			beforeSend: function ()
