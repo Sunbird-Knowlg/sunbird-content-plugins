@@ -485,10 +485,10 @@ EkstepEditor.basePlugin.extend({
                 ctrl.cancel();
             }
 
-            if (audiodata && audiodata.asset && audioTabSelected) {
+            if (audiodata && audiodata.asset) {
                 //instance.cb(audiodata);
                 console.log('audiodata', audiodata);
-                EkstepEditorAPI.dispatchEvent("stagedecorator:addcomponent", { component: 'audio', title: audiodata.asset });
+                EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { stageId: EkstepEditorAPI.getCurrentStage().id, type: 'audio', title: audiodata.asset });
                 ctrl.cancel();
             }
         }
