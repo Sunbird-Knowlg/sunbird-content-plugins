@@ -25,10 +25,7 @@ EkstepEditor.basePlugin.extend({
         setTimeout(function() {
             var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.assetbrowser-1.0/editor/assetBrowser.html';
             var controllerPath = EkstepEditor.config.pluginRepo + '/org.ekstep.assetbrowser-1.0/editor/assetbrowserapp.js';
-
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
-
-
         }, 1000);
     },
     /**

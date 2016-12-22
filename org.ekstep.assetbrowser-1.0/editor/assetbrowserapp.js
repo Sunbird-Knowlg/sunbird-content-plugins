@@ -260,14 +260,15 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         }
 
         ctrl.select = function() {
-            if (assetdata && assetdata.asset && instance.mediaType == "image") {
-                instance.cb(assetdata);
+            if (imagedata && imagedata.asset) {
+                instance.cb(imagedata);
                 ctrl.cancel();
             }
 
-            if (audiodata && audiodata.asset && instance.mediaType == "audio") {
-                console.log(audiodata);
-                EkstepEditorAPI.dispatchEvent("stagedecorator:addcomponent", { component: 'audio', title: audiodata.asset });
+            if (audiodata && audiodata.asset) {
+                //instance.cb(audiodata);
+                console.log('audiodata', audiodata);
+                EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { type: 'audio', stageId: EkstepEditorAPI.getCurrentStage().id ,title: audiodata.asset });
                 ctrl.cancel();
             }
         }
