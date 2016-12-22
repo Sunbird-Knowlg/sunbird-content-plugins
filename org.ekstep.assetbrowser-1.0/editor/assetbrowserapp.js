@@ -1,17 +1,23 @@
 'use strict';
+angular.module('assetbrowserapp', ['angularAudioRecorder']).config(['recorderServiceProvider', function(recorderServiceProvider){
+        recorderServiceProvider.forceSwf(false);
+        
+        // @todo change this to correct path
+        var lameJsUrl = 'https://localhost:3000/plugins/org.ekstep.assetbrowser-1.0/editor/recorder/lib2/lame.min.js';
+        var config = {lameJsUrl:lameJsUrl, bitRate: 92};
 
-angular.module('assetbrowserapp', [])
-    .controller('browsercontroller', ['$scope','$injector', 'instance', function($scope ,$injector, instance) {
+      recorderServiceProvider.withMp3Conversion(true, config);
+  }]);
+angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$injector', 'instance', function($scope ,$injector, instance) {
         var audiodata = {},
             assetMedia,
-            imagedata = {},
+            assetdata = {},
             searchText,
             lastSelectedAudio,
             lastSelectedImage,
             audioTabSelected = false,
             imageTabSelected = true,
             ctrl = this;
-        //mainScope = EkstepEditorAPI.getAngularScope();
 
         var $sce = $injector.get('$sce');
         ctrl.selected_images = {};
@@ -64,8 +70,9 @@ angular.module('assetbrowserapp', [])
         }
 
         function imageAssetCb(err, res) {
-            if (res && res.data.result.content) {
-                ctrl.loadingImage = false;
+            ctrl.loadingImage = false;
+
+            if (res && res.data.result.content) {    
                 ctrl.imageList = res.data.result.content;
                 ctrl.initPopup(res.data.result.content);
             } else {
@@ -79,12 +86,16 @@ angular.module('assetbrowserapp', [])
             if (res && res.data.result.content) {
                 ctrl.loadingAudio = false;
                 ctrl.audioList = [];
+                ctrl.initPopup(res.data.result.content);
                 _.forEach(res.data.result.content, function(obj, index) {
-                    ctrl.audioList.push({ downloadUrl: trustResource(obj.downloadUrl), identifier: obj.identifier });
+                    ctrl.audioList.push({ downloadUrl: trustResource(obj.downloadUrl), identifier: obj.identifier, name:obj.name, mimeType:obj.mimeType, license:obj.license });
                 });
             } else {
                 ctrl.audioList = [];
             };
+
+            if (res.data.result.count == 0) {
+            }
 
             EkstepEditorAPI.getAngularScope().safeApply();
         };
@@ -101,10 +112,6 @@ angular.module('assetbrowserapp', [])
         }
 
         ctrl.myAssetTab = function() {
-            /*imageTabSelected = false;
-            audioTabSelected = false;       
-            */
-
             var callback,
                 searchText = ctrl.query;
             ctrl.selectBtnDisable = false;
@@ -147,9 +154,6 @@ angular.module('assetbrowserapp', [])
         }
 
         ctrl.uploadClick = function() {
-            // ctrl.plugin = 'upload';
-            //  console.log('Uploa');
-
             setTimeout(function() {
                 $('#uploadtab').trigger('click');
             }, 100);
@@ -179,7 +183,6 @@ angular.module('assetbrowserapp', [])
             callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
             ctrl.selectBtnDisable = true;
 
-            console.log(ctrl.tabSelected);
             if (ctrl.tabSelected == "my") {
                 callback && instance.getAsset(searchText, instance.mediaType, ctrl.owner, callback);
             } else {
@@ -193,9 +196,9 @@ angular.module('assetbrowserapp', [])
         };
 
         ctrl.ImageSource = function(event, $index) {
-            imagedata.asset = event.target.attributes.data_id.value;
-            imagedata.assetMedia = {
-                id: imagedata.asset,
+            assetdata.asset = event.target.attributes.data_id.value;
+            assetdata.assetMedia = {
+                id: assetdata.asset,
                 src: event.target.attributes.src.value,
                 type: 'image'
             }
@@ -225,6 +228,7 @@ angular.module('assetbrowserapp', [])
         };
 
         ctrl.toggleAudioCheck = function($index) {
+            var audioElem;
             if (!_.isUndefined(lastSelectedAudio)) {
                 ctrl.selected_audios[lastSelectedAudio].selected = false;
                 audioElem = document.getElementById('audio-' + lastSelectedAudio);
@@ -236,13 +240,14 @@ angular.module('assetbrowserapp', [])
         };
 
         ctrl.initPopup = function(item) {
-            _.forEach(item, function(obj, index) {
-                $('#assetbrowser-' + index).popup({
-                    hoverable: true,
-                    position: 'right center'
-                });
-                obj.sizeinbytes = ctrl.convertToBytes(obj.size);
-            });
+            setTimeout(function(){
+                $('.infopopover')
+                  .popup({
+                    inline: true,
+                    position: 'bottom center',
+                  })
+                ;
+            },100)
         };
 
         ctrl.convertToBytes = function(bytes) {
@@ -255,14 +260,13 @@ angular.module('assetbrowserapp', [])
         }
 
         ctrl.select = function() {
-            if (imagedata && imagedata.asset && imageTabSelected) {
-                instance.cb(imagedata);
+            if (assetdata && assetdata.asset && instance.mediaType == "image") {
+                instance.cb(assetdata);
                 ctrl.cancel();
             }
 
-            if (audiodata && audiodata.asset && audioTabSelected) {
-                //instance.cb(audiodata);
-                console.log('audiodata', audiodata);
+            if (audiodata && audiodata.asset && instance.mediaType == "audio") {
+                console.log(audiodata);
                 EkstepEditorAPI.dispatchEvent("stagedecorator:addcomponent", { component: 'audio', title: audiodata.asset });
                 ctrl.cancel();
             }
@@ -280,7 +284,6 @@ angular.module('assetbrowserapp', [])
         });
 
         ctrl.setPublic = function() {
-            console.log(1);
             ctrl.assetMeta.license = "Creative Commons Attribution (CC BY)";
             ctrl.asset.requiredField = 'required';
             ctrl.hideField = false;
@@ -293,7 +296,6 @@ angular.module('assetbrowserapp', [])
         }
 
         ctrl.setPrivate = function() {
-            console.log(2);
             delete ctrl.assetMeta.license;
             ctrl.asset.requiredField = '';
             ctrl.optional = true;
@@ -309,14 +311,24 @@ angular.module('assetbrowserapp', [])
 
             EkstepEditorAPI.getAngularScope().safeApply();
 
-            $.each($('#assetfile')[0].files, function(i, file) {
-                data.append('file', file);
-                ctrl.assetMeta.mimeType = file.type;
 
-                // @Todo for audio
+            if (ctrl.record == true) {           
+                var dataurl = $('#recorded-audio-mainAudio').attr('src');
+                var file = ctrl.urltoFile(dataurl,'audio.mp3');
+
+                ctrl.assetMeta.mimeType = 'audio/mp3';
                 ctrl.assetMeta.mediaType = instance.mediaType;
-            });
+                data.append('file', file);
+            }
+            else {
+                $.each($('#assetfile')[0].files, function(i, file) {
+                    data.append('file', file);
+                    ctrl.assetMeta.mimeType = file.type;
 
+                    // @Todo for audio
+                    ctrl.assetMeta.mediaType = instance.mediaType;
+                });
+            }
 
             /** Convert language into array **/
             if ((!_.isUndefined(ctrl.languageText)) && (ctrl.languageText) != null) {
@@ -332,7 +344,6 @@ angular.module('assetbrowserapp', [])
                 delete content.keywords;
             }
 
-            console.log(content);
             var requestObj = {};
             angular.forEach(content, function(value, key) {
 
@@ -352,6 +363,16 @@ angular.module('assetbrowserapp', [])
             });
         }
 
+
+        ctrl.urltoFile = function(dataurl, filename){
+            var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+                bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+            while(n--){
+                u8arr[n] = bstr.charCodeAt(n);
+            }
+            return new File([u8arr], filename, {type:mime});
+        }
+
         ctrl.uploadFile = function(resp, data) {
             $.ajax({
                 // @Todo Use the correct URL
@@ -367,16 +388,16 @@ angular.module('assetbrowserapp', [])
                 success: function(resp) {
                     console.log('response');
                     console.log(resp);
-                    imagedata.asset = resp.result.node_id;
-                    imagedata.assetMedia = resp;
-                    imagedata.assetMedia.id = resp.result.node_id;
-                    imagedata.assetMedia.src = resp.result.content_url;
-                    imagedata.assetMedia.type = instance.mediaType;
+                    assetdata.asset = resp.result.node_id;
+                    assetdata.assetMedia = resp;
+                    assetdata.assetMedia.id = resp.result.node_id;
+                    assetdata.assetMedia.src = resp.result.content_url;
+                    assetdata.assetMedia.type = instance.mediaType;
 
                     console.log("Passing data");
-                    console.log(imagedata.assetMedia);
+                    console.log(assetdata.assetMedia);
 
-                    instance.cb(imagedata);
+                    instance.cb(assetdata);
                     ctrl.uploadingAsset = false;
                     alert((instance.mediaType).charAt(0).toUpperCase() + (instance.mediaType).slice(1) + ' successfully uploaded');
                     ctrl.cancel();
@@ -409,7 +430,7 @@ angular.module('assetbrowserapp', [])
                                 prompt: 'Please select Copyright & License'
                             }]
                         },
-                        assetName: {
+                        assetName: {    
                             identifier: 'assetName',
                             rules: [{
                                 type: 'empty',
@@ -453,13 +474,21 @@ angular.module('assetbrowserapp', [])
                         },
                     },
                     onSuccess: function(event, fields) {
-                        // Validate file if not editing meta data
-                        var validateFile = instance.fileValidation('assetfile', ctrl.allowedFileSize, ctrl.allowedMimeTypes);
+                        if (ctrl.record == true)
+                        {
+                            // @Todo file size validation for recorded file
+                            ctrl.uploadAsset(event, fields);    
+                        }
+                        else
+                        {
+                            // Validate file if not editing meta data
+                            var validateFile = instance.fileValidation('assetfile', ctrl.allowedFileSize, ctrl.allowedMimeTypes);
 
-                        if (validateFile) {
-                            ctrl.uploadAsset(event, fields);
-                        } else {
-                            return false;
+                            if (validateFile) {
+                                ctrl.uploadAsset(event, fields);
+                            } else {
+                                return false;
+                            }
                         }
                     },
                     onFailure: function(formErrors, fields) {
@@ -467,6 +496,10 @@ angular.module('assetbrowserapp', [])
                         return false;
                     }
                 });
+        }
+
+        ctrl.switchToUpload = function(){
+            ctrl.uploadView = true;
         }
 
         setTimeout(function() {

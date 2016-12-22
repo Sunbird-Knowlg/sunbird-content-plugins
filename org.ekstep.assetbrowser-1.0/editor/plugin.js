@@ -25,7 +25,10 @@ EkstepEditor.basePlugin.extend({
         setTimeout(function() {
             var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.assetbrowser-1.0/editor/assetBrowser.html';
             var controllerPath = EkstepEditor.config.pluginRepo + '/org.ekstep.assetbrowser-1.0/editor/assetbrowserapp.js';
+
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
+
+
         }, 1000);
     },
     /**
@@ -39,7 +42,6 @@ EkstepEditor.basePlugin.extend({
         this.cb = data.callback;
         this.mediaType = data.type;
         this.search_filter = data.search_filter;
-        this.mediaType = 'image';
         EkstepEditorAPI.getService('popup').open({
             template: 'partials/assetbrowser.html',
             controller: 'browsercontroller',
@@ -52,12 +54,6 @@ EkstepEditor.basePlugin.extend({
             width: 900,
             showClose: false,
         });
-        //this.loadResource('editor/assetBrowser.html', 'html', function(err, response) {
-        //instance.showAssetBrowser(err, response);
-        //});
-
-        // $('.ui.dropdown').dropdown();
-        // $('.menu .item').tab();
     },
 
     /**
@@ -80,7 +76,6 @@ EkstepEditor.basePlugin.extend({
                 "filters": {
                     "mediaType": [mediaType],
                     "license": ["Creative Commons Attribution (CC BY)"],
-                    "name": [],
                 },
                 "limit":30
             }
@@ -93,15 +88,12 @@ EkstepEditor.basePlugin.extend({
             }
         };
 
-        _.isUndefined(searchText) ? null : requestObj.request.filters.name = [searchText];
+        _.isUndefined(searchText) ? null : requestObj.request.query = searchText;
         _.isUndefined (owner) ? null : requestObj.request.filters.owner = owner;
         allowableFilter = _.omit(this.search_filter, ['mediaType', 'license', 'limit']);
         _.merge(requestObj.request.filters, allowableFilter);
 
-        console.log(requestObj);
-
         iservice.http.post(EkstepEditor.config.baseURL + '/api/search/v2/search', requestObj, requestHeaders, cb);
-
     },
     /**
     *   invokes popup service to show the popup window

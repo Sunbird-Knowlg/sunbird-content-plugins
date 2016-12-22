@@ -90,26 +90,38 @@
 }
 
 .audio-tag {
+	overflow: hidden;
     text-align: left;
     padding-left: 12px; 
 }
+
+.cursor-pointer{
+	cursor: pointer;
+}
+
+.centered {
+	text-align: center;
+}
+
 </style>
 
 <div class="assetbrowser ui modal active ui form" style="top: 10% !important">
-	<i class="close icon"></i>
+	<i class="close icon" ng-click="closeThisDialog()"></i>
 	<div class="header" ng-switch="$ctrl.plugin">
 		<span ng-hide="$ctrl.uploadView">
 			<span ng-switch-when="image"><i class="image icon"></i> Select file</span>
 			<span ng-switch-when="audio"><i class="file audio outline icon"></i> Select Audio</span>
 		</span>
-		<span ng-if="$ctrl.uploadView"><i class="upload icon"></i> Upload and use</span>
+
+		<span ng-if="$ctrl.uploadView && $ctrl.plugin == 'image'"><i class="upload icon"></i> Upload and use</span>
+		<span ng-if="$ctrl.uploadView && $ctrl.plugin == 'audio'"><i class="upload icon"></i> Upload/ Record</span>
 	</div>
 	<div class="content" ng-hide="$ctrl.uploadView">
 		<div class="ui pointing secondary menu">
 		    <a ng-if="$ctrl.plugin == 'image'" id="myAssetsTab" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab()">My images</a>
-		    <a ng-if="$ctrl.plugin == 'image'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab()">All image</a>
+		    <a id="allImagesTab" ng-if="$ctrl.plugin == 'image'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab()">All image</a>
 		    <a ng-if="$ctrl.plugin == 'audio'" class="active item" data-tab="first" ng-click="$ctrl.myAssetTab()">My audio</a>
-			<a  ng-if="$ctrl.plugin == 'audio'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab()">All audio</a>
+			<a id="allAudioTab" ng-if="$ctrl.plugin == 'audio'" class="item" data-tab="second" ng-click="$ctrl.allAssetTab()">All audio</a>
 		</div>
 		<div class="uploadingAsset ui tab active" data-tab="first" >
 			<div class="content" ng-if="$ctrl.plugin == 'image'">
@@ -125,22 +137,26 @@
 				<div class="asset_item_container">
 					<div class="ui grid">
 						<i class="huge spinner loading icon faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
-						<div ng-sho	w="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
+						<div ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
 							<div class="column templatebrowser_thumbnail">
 								<div class="ui small images templatecard infopopover" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected}" data-html="<b>{{image.name}}</b> | {{image.mimeType}} | License: {{image.license}}">
 									<a class="item" ng-show="$ctrl.selected_images[$index].selected">
 										<div class="floating ui blue label">
-											<span><i class="ui icon check" aria-hidden="true"></i></span>
+											<i class="ui icon check" aria-hidden="true"></i>
 										</div>
 									</a>
 									<div class="ui image">
-										<img class="asset_thumbnail" data_id="{{image.identifier}}" src="{{image.downloadUrl}}">
+										<img class="asset_thumbnail" data_id="{{image.identifier}}" src="{{image.downloadUrl}}" />
 									</div>
 								</div>
 							</div>
 						</div>
+						<div class="twelve wide column" ng-show="$ctrl.imageList.length == 0">
+							<span>No result found, Click here browse in <a href="#" onclick="$('#allImagesTab').trigger('click');">All images</a></span>
+						</div>
 					</div>
 				</div>
+
 			</div>
 			<div class="content" ng-if="$ctrl.plugin =='audio'">
 				<div class="ui grid">
@@ -162,6 +178,9 @@
 									<i class="fa fa-check-square-o fa-2x faAudioCheck" aria-hidden="true"></i>
 								</div>
 							</div>
+						</div>
+						<div class="twelve wide column" ng-show="$ctrl.audioList.length == 0">
+							<span>No result found, Click here browse in <a href="#" onclick="$('#allAudioTab').trigger('click');">All Audios</a></span>
 						</div>
 					</div>
 				</div>
@@ -194,6 +213,10 @@
 							</div>
 						</div>
 					</div>
+
+					<div class="twelve wide column" ng-show="$ctrl.imageList.length ==0">
+						<span>No result found</span>
+					</div>
 				</div>
 			</div>
 			<div class="content" ng-if="$ctrl.plugin =='audio'">
@@ -217,6 +240,9 @@
 								</div>
 							</div>
 						</div>
+						<div class="twelve wide column" ng-show="$ctrl.audioList.length == 0">
+							<span>No result found</span>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -225,8 +251,8 @@
    <div class="actions" ng-hide="$ctrl.uploadView" ng-switch="$ctrl.buttonToShow">
 		<div class="ui grid">
 			<div class="three wide column" style="text-align: left;">
-				<i ng-show="$ctrl.uploadingAsset" class="big spinner loading icon"></i>
-				<button class="ui blue button" ng-click="$ctrl.switchToUpload()" type="button">Upload and Use</button>
+				<button class="ui blue button" ng-click="$ctrl.switchToUpload()" type="button">
+				{{$ctrl.plugin=='image' ? 'Upload and use': 'Upload/ Record'}}</button>
 			</div>
 			<div class="nine wide column" style="text-align: right;">
 				<div class="ui buttons">
@@ -237,13 +263,6 @@
 			</div>
 		</div>
 	</div>
-<!--     <div class="ui grid ui button" ng-hide="$ctrl.uploadView" ng-switch="$ctrl.buttonToShow">
-		<i ng-show="$ctrl.uploadingAsset" class="big spinner loading icon"></i>
-		<button class="ui blue button submit button" ng-click="$ctrl.switchToUpload()" type="button">Upload and Use {{$ctrl.plugin}}</button>
-		<button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
-		<div class="or"></div>
-		<button ng-switch-when="select" class="ui blue button" ng-disabled="$ctrl.selectBtnDisable" ng-click="$ctrl.select()" type="button">Select</button>
-    </div> -->
 	<div class="content" ng-show="$ctrl.uploadView">
 		<div class="ui two column divided grid">
 			<div class="row ui form">
@@ -256,28 +275,73 @@
 						  	</div>
 						  	<div class="ui vertical divider">or</div>
 							<div class="column" ng-click="$ctrl.upload = false; $ctrl.record=true;">
-								<p><i class="huge record icon"></i></p>
+								<p><i class="huge unmute icon"></i></p>
 								RECORD
 						  	</div>
 					  	</div>
 					</div>
 					<div ng-show="$ctrl.record">
 
-						<div class="recordarea" style="text-align: center;">
-							<button ng-click="$ctrl.startRecording(this);" id="startRecording" class="startRecordingBtn">
-								<i class="fa fa-dot-circle-o" aria-hidden="true"></i>
-							<span>Start Recording</span></button>
-						</div>
+						<ng-audio-recorder id="mainAudio" audio-model="recorded" show-player="false" time-limit="timeLimit">
+						    <div ng-if="recorder.isAvailable">
+
+						        <div ng-if="recorder.status.isDenied === true" style="color: red;">
+						            You need to grant permission for this application to use your microphone.
+						        </div>
+
+						        <div class="centered" ng-hide="recorder.status.isRecording">
+									<i class="ui icon selected radio huge blue cursor-pointer" ng-click="recorder.startRecord()"></i>
+									<p><b>Start Recording</b></p>
+								</div>
+
+								<div class="centered">
+							        <div style="max-width: 600px" style="position: relative;">
+							            <div ng-show="recorder.status.isConverting">
+							                Please wait while your recording is processed.
+							            </div>
+
+							            <div ng-show="recorder.isHtml5 && recorder.status.isRecording">
+							                <ng-audio-recorder-analyzer></ng-audio-recorder-analyzer>
+							            </div>
+							            <br/>
+
+							            <div ng-show="!recorder.status.isRecording && recorder.audioModel">
+							                <ng-audio-recorder-wave-view wave-color="yellow" bar-color="red"></ng-audio-recorder-wave-view>
+							            </div>
+							        </div>
+
+							        <span ng-hide="recorder.status.isRecording === false">
+										<i class="ui icon stop circle outline red huge cursor-pointer"
+										 ng-click="recorder.stopRecord()"
+										 ></i>
+										 <span><b>STOP</b></span>
+									 </span>
+
+									<span ng-hide="recorder.status.isRecording || !recorder.audioModel">
+								        <i class="ui icon {{recorder.status.isStopped || recorder.status.isPaused ? 'play' : 'pause'}} circle huge blue"
+								        ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()"
+								        ></i>
+								        <span><b>{{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}} </b></span>
+									</span>	
+						   		</div>
+						    </div>
+
+						    <div ng-if="!recorder.isAvailable">
+						        Your browser does not support this feature natively, please use latest version of <a
+						            href="https://www.google.com/chrome/browser" target="_blank">Google Chrome</a> or <a
+						            href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Mozilla Firefox</a>. If you're on
+						        Safari or Internet Explorer, you can install <a href="https://get.adobe.com/flashplayer/">Adobe Flash</a> to
+						        use this feature.
+						    </div>
+						</ng-audio-recorder>
 					</div>
 					<div class="required field" ng-if="$ctrl.upload" ng-hide="$ctrl.editMetaFlag">
 						<label for="assetfile" title="Enter asset caption">Select file</label>
 						<input class="cropit-image-input" id="assetfile" type="file" name="assetfile" accept="{{$ctrl.allowedMimeTypes.join(', ')}}" data-validate="assetfile" />
 					</div>
 					<div class="ui info message" ng-if="$ctrl.upload" ng-hide="$ctrl.editMetaFlag">
-						<ul class="list">
-							<li>Allowed file types are: {{$ctrl.fileTypes}}</li>
-							<li>Maximum allowed file size: {{$ctrl.fileSize}}</li>
-						</ul>
+						<p>Allowed file types are: {{$ctrl.fileTypes}}</p>
+						<p>Maximum allowed file size: {{$ctrl.fileSize}}</p>
 					</div>
 					<div ng-show="$ctrl.editMetaFlag" class="field">
 						<img ng-src="{{$ctrl.selectedImgSrc}}" height="140px"/>
@@ -330,15 +394,16 @@
 					</div>
 
 					<div ng-show="$ctrl.optional">
-						<a ng-show="$ctrl.hideField" ng-click="$ctrl.viewMore()">More <i class="caret down icon"></i></a>
+						<a href="#" ng-show="$ctrl.hideField" ng-click="$ctrl.viewMore()">More <i class="caret down icon"></i></a>
 
-						<a ng-show="!$ctrl.hideField" ng-click="$ctrl.setPrivate()">Less <i class="caret up icon"></i></a>
+						<a href="#" ng-show="!$ctrl.hideField" ng-click="$ctrl.setPrivate()">Less <i class="caret up icon"></i></a>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="actions" ng-show="$ctrl.uploadView">
+		<i ng-show="$ctrl.uploadingAsset" class="big spinner loading icon"></i>
 		<div class="ui buttons">
             <button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
             <div class="or"></div>
