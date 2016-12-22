@@ -20,7 +20,7 @@
             "type": "icon",
             "toolTip": "Add Read-along",
             "title": "Read-along",
-            "iconClass": "icon-record icon",
+            "iconClass": "icon-readalong icon",
             "onclick": {
                 "id": "org.ekstep.htext:create",
                 "data": {

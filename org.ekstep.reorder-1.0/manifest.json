@@ -17,22 +17,20 @@
 			"state": "HIDE",
 			"submenu": [{
 				"id": "sendtofront",
-				"type": "image",
-				"toolTip": "Send to front",
-				"title": "Bring Front",
-				"iconImage": "assets/bring-front.png",
-				"iconClass": "",
+				"type": "icon",
+				"toolTip": "Bring to front",
+				"title": "Bring to front",
+				"iconClass": "icon-bringfront icon",
 				"onclick": {
 					"id": "reorder:sendtofront",
 					"data": {}
 				}
 			},{
 				"id": "sendtoback",
-				"type": "image",
+				"type": "icon",
 				"toolTip": "Send to back",
-				"title": "Send Back",
-				"iconImage": "assets/send-back.png",
-				"iconClass": "",
+				"title": "Send to back",
+				"iconClass": "icon-sendback icon",
 				"onclick": {
 					"id": "reorder:sendtoback",
 					"data": {}
