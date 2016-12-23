@@ -56,7 +56,7 @@
     padding-bottom: 100%
 }
 
-.assetbrowser .templatecard{ 
+.assetbrowser .templatecard{
    border: 1px dotted #ccc;
     cursor: pointer;
     position: relative;
@@ -92,7 +92,7 @@
 .audio-tag {
 	overflow: hidden;
     text-align: left;
-    padding-left: 12px; 
+    padding-left: 12px;
 }
 
 .cursor-pointer{
@@ -236,7 +236,7 @@
 					</div>
 				</div>
 				<div class="clearfix">&nbsp;</div>
-				<div class="asset_item_container">			
+				<div class="asset_item_container">
 					<div class="ui grid">
 						<div class="three wide column" ng-show="$ctrl.audioList.length > 0" ng-repeat="audio in $ctrl.audioList track by $index">
 							<div class="audioitem infopopover" ng-click="$ctrl.AudioSource(audio.downloadUrl,audio.identifier, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}" data-html="<b>{{audio.name}}</b> <br/> License: {{audio.license}}">
@@ -280,7 +280,7 @@
 						  		<p><i class="huge upload icon"></i></p>
 						  		UPLOAD
 						  	</div>
-						  	<div class="ui vertical divider">or</div>
+						  	<div class="ui vertical divider"></div>
 							<div class="column" ng-click="$ctrl.upload = false; $ctrl.record=true;">
 								<p><i class="huge unmute icon"></i></p>
 								RECORD
@@ -295,12 +295,6 @@
 						        <div ng-if="recorder.status.isDenied === true" style="color: red;">
 						            You need to grant permission for this application to use your microphone.
 						        </div>
-
-						        <div class="centered" ng-hide="recorder.status.isRecording">
-									<i class="ui icon selected radio huge blue cursor-pointer" ng-click="recorder.startRecord()"></i>
-									<p><b>Start Recording</b></p>
-								</div>
-
 								<div class="centered">
 							        <div style="max-width: 600px" style="position: relative;">
 							            <div ng-show="recorder.status.isConverting">
@@ -317,20 +311,24 @@
 							            </div>
 							        </div>
 
-							        <span ng-hide="recorder.status.isRecording === false">
+									<span ng-hide="recorder.status.isRecording === false">
 										<i class="ui icon stop circle outline red huge cursor-pointer"
 										 ng-click="recorder.stopRecord()"
 										 ></i>
 										 <span><b>STOP</b></span>
 									 </span>
-
 									<span ng-hide="recorder.status.isRecording || !recorder.audioModel">
-								        <i class="ui icon {{recorder.status.isStopped || recorder.status.isPaused ? 'play' : 'pause'}} circle huge blue"
-								        ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()"
-								        ></i>
-								        <span><b>{{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}} </b></span>
-									</span>	
+										<i class="ui icon {{recorder.status.isStopped || recorder.status.isPaused ? 'play' : 'pause'}} circle huge blue"
+										ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()"
+										></i>
+										<span></br><b>{{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}} </b></span>
+									</span>
+									</br>
 						   		</div>
+						   		<div class="centered" ng-hide="recorder.status.isRecording">
+									<i class="ui icon selected radio huge blue cursor-pointer" ng-click="recorder.startRecord()"></i>
+									<p><b>Start Recording</b></p>
+								</div>
 						    </div>
 
 						    <div ng-if="!recorder.isAvailable">
@@ -346,7 +344,7 @@
 						<label for="assetfile" title="Enter asset caption">Select file</label>
 						<input class="cropit-image-input" id="assetfile" type="file" name="assetfile" accept="{{$ctrl.allowedMimeTypes.join(', ')}}" data-validate="assetfile" />
 					</div>
-					<div class="ui info message" ng-if="$ctrl.upload" ng-hide="$ctrl.editMetaFlag">
+					<div class="ui info message mini message" ng-if="$ctrl.upload" ng-hide="$ctrl.editMetaFlag">
 						<p>Allowed file types are: {{$ctrl.fileTypes}}</p>
 						<p>Maximum allowed file size: {{$ctrl.fileSize}}</p>
 					</div>
@@ -357,7 +355,7 @@
 					<div class="clearfix">&nbsp;</div>
 					<div class="grouped required fields">
 						<label for="ccByContribution" >Copyright & License:</label>
-						<p>I understand and confirm that all lessons/assets created through the authoring tool or uploaded on the Ekstep platform shall be available for free and public use without limitations on the Ekstep platform (portal,applications and any other end user interface that Ekstep platform would enable) and will be licensed under<!--@Todo add policy link --> <a href="#" target="_blank">CC-BY 4.0</a></p>
+						<p class="ui mini message">I understand and confirm that all lessons/assets created through the authoring tool or uploaded on the Ekstep platform shall be available for free and public use without limitations on the Ekstep platform (portal,applications and any other end user interface that Ekstep platform would enable) and will be licensed under<!--@Todo add policy link --> <a href="#" target="_blank">CC-BY 4.0</a></p>
 						<div class="field">
 							<div class="ui radio checkbox">
 								<input id="ccByContribution1" name="ccByContribution" type="radio" ng-click="$ctrl.setPublic()" value="Creative Commons Attribution (CC BY)">
