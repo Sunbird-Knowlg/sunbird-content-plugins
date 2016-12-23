@@ -34,11 +34,13 @@ EkstepEditor.basePlugin.extend({
     },
     addChild: function(plugin) {
         this.children.push(plugin);
+        if(plugin.editorObj) {
         this.canvas.add(plugin.editorObj);
         this.canvas.setActiveObject(plugin.editorObj);
         this.canvas.trigger('object:selected', { target: plugin.editorObj });
         this.setThumbnail();
         EkstepEditorAPI.dispatchEvent('object:modified', { id: plugin.id });
+    }
     },
     setThumbnail: function() {
         /*
