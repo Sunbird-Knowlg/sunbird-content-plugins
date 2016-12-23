@@ -89,7 +89,7 @@ EkstepEditor.basePlugin.extend({
                     break;
             }
         }
-
+        this.restoreOnObjectSelect();
     },
     objectUnselected: function(event, data) {
         if (data.id == this.selectedPluginId) {
@@ -244,6 +244,7 @@ EkstepEditor.basePlugin.extend({
             angScope.currentObjectActions = [];
         });
         this.setToolBarContainerLocation("Actions");
+        this.highlightTargetObject();
         this.updateActions();
     },
     /**
@@ -346,7 +347,7 @@ EkstepEditor.basePlugin.extend({
         setTimeout(function () {
             EkstepEditorAPI.jQuery("#actionTargetDropdown").dropdown('restore defaults');
             EkstepEditorAPI.jQuery("#actionTypeDropdown").dropdown('restore defaults');        
-        },500)
+        },500);
     },
     removeAction: function(event, data) {
         if (data.index > -1) {
@@ -362,6 +363,29 @@ EkstepEditor.basePlugin.extend({
                 angScope.currentObjectActions = events[0].event.action;
             });
         }
+    },
+    highlightTargetObject: function () {
+        var instance = this;
+        EkstepEditorAPI.jQuery("#actionTargetDropdown").parent().one('click', function () {
+            EkstepEditorAPI.jQuery("#actionTargetDropdown").nextAll(".menu.transition").find(".item").mouseover(function (event) {
+            var id = EkstepEditorAPI.jQuery(event.target).text();
+                var editorObj = EkstepEditorAPI.getPluginInstance(id).editorObj;
+                var left = instance.canvasOffset.left+ editorObj.left-5;
+                var top = instance.canvasOffset.top+ editorObj.top-5;
+                EkstepEditorAPI.jQuery("#objectPointer")
+                .show().offset({'left':left,'top':top})
+                .css({'height': editorObj.getHeight()+10, 'width': editorObj.getWidth() +10});
+            }) ;
+            EkstepEditorAPI.jQuery(this).mouseleave(function () {
+               EkstepEditorAPI.jQuery("#objectPointer").hide();
+            });
+        });
+    },
+    restoreOnObjectSelect: function () {
+        setTimeout(function () {
+            EkstepEditorAPI.jQuery("#actionTargetDropdown").dropdown('restore defaults');
+            EkstepEditorAPI.jQuery("#actionTypeDropdown").dropdown('restore defaults');        
+        },500);
     }
 
 });
