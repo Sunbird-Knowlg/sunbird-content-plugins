@@ -26,13 +26,9 @@ EkstepEditor.basePlugin.extend({
     * @memberof audio
     */
     newInstance: function() {
-        var instance = this;
-        var _parent = this.parent;
-        var props = this.convertToFabric(this.attributes);
-        delete props.width;
-        delete props.height;
         var media = this.media[this.attributes.asset];
         media.src = EkstepEditor.mediaManager.getMediaOriginURL(media.src);
+        EkstepEditor.mediaManager.addMedia(media);
     },
     /**    
     *      
