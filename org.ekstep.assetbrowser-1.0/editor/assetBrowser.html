@@ -159,7 +159,7 @@
 							</div>
 						</div>
 						<div class="twelve wide column" ng-show="$ctrl.imageList.length == 0">
-							<span>No result found, Click here browse in <a href="#" onclick="$('#allImagesTab').trigger('click');">All images</a></span>
+							<span>No result found. <a href="#" onclick="$('#allImagesTab').trigger('click');">Click here</a> to search in All images</span>
 						</div>
 					</div>
 				</div>
@@ -187,7 +187,7 @@
 							</div>
 						</div>
 						<div class="twelve wide column" ng-show="$ctrl.audioList.length == 0">
-							<span>No result found, Click here browse in <a href="#" onclick="$('#allAudioTab').trigger('click');">All Audios</a></span>
+							<span>No result found. <a href="#" onclick="$('#allAudioTab').trigger('click');">Click here</a> to search in All audios</span>
 						</div>
 					</div>
 				</div>
@@ -222,7 +222,7 @@
 					</div>
 
 					<div class="twelve wide column" ng-show="$ctrl.imageList.length ==0">
-						<span>No result found</span>
+						<span>No result found. </span>
 					</div>
 				</div>
 			</div>
@@ -239,7 +239,7 @@
 				<div class="asset_item_container">
 					<div class="ui grid">
 						<div class="three wide column" ng-show="$ctrl.audioList.length > 0" ng-repeat="audio in $ctrl.audioList track by $index">
-							<div class="audioitem infopopover" ng-click="$ctrl.AudioSource(audio.downloadUrl,audio.identifier, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}" data-html="<b>{{audio.name}}</b> <br/> License: {{audio.license}}">
+							<div class="audioitem infopopover" ng-click="$ctrl.AudioSource(audio, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}" data-html="<b>{{audio.name}}</b> <br/> License: {{audio.license}}">
 								<audio controls id="audio-{{$index}}" ng-src="{{audio.downloadUrl}}" width="120" height="120"></audio>
 								<div class="audio-tag">{{audio.name}}</div>
 								<div class="audioOverlay" ng-show="$ctrl.selected_audios[$index].selected">
@@ -248,7 +248,7 @@
 							</div>
 						</div>
 						<div class="twelve wide column" ng-show="$ctrl.audioList.length == 0">
-							<span>No result found</span>
+							<span>No result found. </span>
 						</div>
 					</div>
 				</div>
