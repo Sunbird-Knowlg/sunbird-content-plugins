@@ -19,6 +19,7 @@
 
 .faAudioCheck {
     /*margin-top: 12px;*/
+    margin-top: 32px;
     color: white;
 }
 
@@ -288,10 +289,8 @@
 					  	</div>
 					</div>
 					<div ng-show="$ctrl.record">
-
 						<ng-audio-recorder id="mainAudio" audio-model="recorded" show-player="false" time-limit="timeLimit">
 						    <div ng-if="recorder.isAvailable">
-
 						        <div ng-if="recorder.status.isDenied === true" style="color: red;">
 						            You need to grant permission for this application to use your microphone.
 						        </div>
@@ -317,18 +316,25 @@
 										 ></i>
 										 <span><b>STOP</b></span>
 									 </span>
-									<span ng-hide="recorder.status.isRecording || !recorder.audioModel">
-										<i class="ui icon {{recorder.status.isStopped || recorder.status.isPaused ? 'play' : 'pause'}} circle huge blue"
-										ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()"
-										></i>
-										<span></br><b>{{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}} </b></span>
-									</span>
-									</br>
+									<div class="ui grid">
+										<div class="row ">
+											<div class="six centered wide column" ng-hide="recorder.status.isRecording">
+												<i class="ui icon selected radio huge blue cursor-pointer" ng-click="recorder.startRecord()"></i>
+												<b class="pull-left">Start Recording</b>
+											</div>
+											<div class="six wide column" ng-hide="recorder.status.isRecording || !recorder.audioModel">
+												<i class="ui icon {{recorder.status.isStopped || recorder.status.isPaused ? 'play' : 'pause'}} circle huge blue"
+												ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()" style="text-align: right;"
+												></i>
+												<span></br><b>{{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}} </b></span>
+											</div>
+										</div>
+									</div>
 						   		</div>
-						   		<div class="centered" ng-hide="recorder.status.isRecording">
+						   		<!--<div class="centered" ng-hide="recorder.status.isRecording">
 									<i class="ui icon selected radio huge blue cursor-pointer" ng-click="recorder.startRecord()"></i>
 									<p><b>Start Recording</b></p>
-								</div>
+								</div>-->
 						    </div>
 
 						    <div ng-if="!recorder.isAvailable">
