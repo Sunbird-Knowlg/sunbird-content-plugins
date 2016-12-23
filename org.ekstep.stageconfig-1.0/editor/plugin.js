@@ -43,16 +43,19 @@ EkstepEditor.basePlugin.extend({
     },
     showStageComponents: function(stage) {
         var instance = this;
+        var items = [];
         _.forEach(stage.components, function(component) {
-            instance.scope.stageAttachments[component.type] = {};
-            instance.scope.stageAttachments[component.type].show = true;
-            if (component.title) instance.scope.stageAttachments[component.type].title = component.title;
+            items.push(component);
+            instance.scope.stageAttachments[component.type] = {};            
+            instance.scope.stageAttachments[component.type].items = items;
+            instance.scope.stageAttachments[component.type].show = true;            
         });
     },
     hideStageComponents: function(stage) {
         var instance = this;
         _.forEach(stage.components, function(component, index) {
             instance.scope.stageAttachments[component.type] = {};
+            instance.scope.stageAttachments[component.type].items = [];
             instance.scope.stageAttachments[component.type].show = false;
         });
     }
