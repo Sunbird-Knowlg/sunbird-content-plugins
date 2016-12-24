@@ -26,13 +26,9 @@ EkstepEditor.basePlugin.extend({
     * @memberof audio
     */
     newInstance: function() {
-        var instance = this;
-        var _parent = this.parent;
-        var props = this.convertToFabric(this.attributes);
-        delete props.width;
-        delete props.height;
         var media = this.media[this.attributes.asset];
         media.src = EkstepEditor.mediaManager.getMediaOriginURL(media.src);
+        EkstepEditor.mediaManager.addMedia(media);
     },
     /**    
     *      
@@ -62,6 +58,9 @@ EkstepEditor.basePlugin.extend({
     onConfigChange: function(key, value) {
         EkstepEditorAPI.dispatchEvent('delete:invoke');
         EkstepEditorAPI.dispatchEvent(this.manifest.id + ':create', value)
+    },
+    render: function(canvas){
+        //do nothing, since there is no editorObj
     }
 });
 //# sourceURL=audioplugin.js
