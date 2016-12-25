@@ -26,9 +26,8 @@ EkstepEditor.basePlugin.extend({
     // Add assesment to the stage
     newInstance: function() {
         var instance = this,attr = instance.attributes, ques = [],sets = {},ctrl = {};
-        if (isNaN(attr.x)) {
-            attr.x = attr.y = 5;
-            attr.w = attr.h = 90;
+        if (isNaN(attr.w)) {
+            attr.w = attr.h = 70;
         }
         for (var i = 0; i < attr.length - 1; i++) {
             attr[i] = instance.cleanObject(attr[i]);
@@ -37,8 +36,9 @@ EkstepEditor.basePlugin.extend({
         }
         instance.percentToPixel(attr);
         var props = instance.convertToFabric(attr);
-        instance.editorObj = new fabric.Rect(props);
-
+        var count = attr[attr.length - 1].total_items;
+        var max_score = attr[attr.length - 1].max_score;
+        instance.editorObj = instance.editiorPage(props, count, max_score);
         // TODO : Refactring of the objects
         sets[attr[0].question.identifier] = ques;
         ctrl["items"] = sets;
@@ -84,6 +84,18 @@ EkstepEditor.basePlugin.extend({
             return item;
         }
 
+    },
+
+    /*Display of Maxscore and question count on the editor page */
+
+    editiorPage: function(props, count, max_score) {
+        props.fill = "#EDC06D";
+        var rect = new fabric.Rect(props);
+        var qTittle = new fabric.Text("QUESTION SET", {fontSize: 30, fill:'black', textDecoration:'underline', top: 80, left: 150} );
+        var qCount = new fabric.Text("QUESTION COUNT : " + count, {fontSize: 20,fill:'black',top: 120,left: 150});
+        var max_score = new fabric.Text("MAX_SCORE : "+max_score, {fontSize: 20, fill:'black', top: 150,left: 150,});
+        var fabricGroup = new fabric.Group([rect, qTittle, qCount, max_score], {left: 110, top: 50});
+        return fabricGroup;
     },
     /**    
     *      

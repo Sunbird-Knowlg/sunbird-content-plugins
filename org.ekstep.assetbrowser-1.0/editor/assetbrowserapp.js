@@ -268,7 +268,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             if (audiodata && audiodata.asset && instance.mediaType == "audio") {
                 console.log("audiodata")
                 console.log(audiodata);
-                EkstepEditorAPI.dispatchEvent("stagedecorator:addcomponent", { component: 'audio', title: audiodata.asset });
+                EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { stageId: EkstepEditorAPI.getCurrentStage().id,type: 'audio', title: audiodata.asset });
                 instance.cb(audiodata);
                 ctrl.cancel();
             }
