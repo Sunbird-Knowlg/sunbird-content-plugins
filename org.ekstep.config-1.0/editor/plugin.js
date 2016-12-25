@@ -45,7 +45,7 @@ EkstepEditor.basePlugin.extend({
         "show": "Show",
         "hide": "Hide"
     },
-    stageActionsList: [{ "link": "Link To" }],
+    stageActionsList: { "link": "Link To" },
     /**
      * 
      * The events are registred which are used to update the selected editor object
@@ -349,7 +349,11 @@ EkstepEditor.basePlugin.extend({
     },
     addAction: function(event, data) {
         if (data.command && data.asset) {
-            EkstepEditorAPI.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'type': 'command', 'command': data.command, 'asset': data.asset }] });
+            if (this.stageActionsList[data.command]) {
+                EkstepEditorAPI.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'type': 'command', 'command': 'transitionTo', 'asset': 'theme', 'value': data.asset }] });
+            } else{
+                EkstepEditorAPI.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'type': 'command', 'command': data.command, 'asset': data.asset }] });
+            }
         }
         this.updateActions();
         setTimeout(function() {
@@ -367,15 +371,15 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         var angScope = EkstepEditorAPI.getAngularScope();
         var events = EkstepEditorAPI.getCurrentObject().event;
+        var eventsActionList = [];
         if (events && events.length) {
-            var eventsActionList = [];
             EkstepEditorAPI._.forEach(events, function(e) {
                 if (e.action && e.action.length) { eventsActionList.push(e.action[0]) }
             })
-            angScope.safeApply(function() {
-                angScope.currentObjectActions = eventsActionList;
-            });
         }
+        angScope.safeApply(function() {
+            angScope.currentObjectActions = eventsActionList;
+        });
     },
     highlightTargetObject: function() {
         var instance = this;
@@ -383,11 +387,13 @@ EkstepEditor.basePlugin.extend({
             EkstepEditorAPI.jQuery("#actionTargetDropdown").nextAll(".menu.transition").find(".item").mouseover(function(event) {
                 var id = EkstepEditorAPI.jQuery(event.target).text();
                 var editorObj = EkstepEditorAPI.getPluginInstance(id).editorObj;
-                var left = instance.canvasOffset.left + editorObj.left - 5;
-                var top = instance.canvasOffset.top + editorObj.top - 5;
-                EkstepEditorAPI.jQuery("#objectPointer")
-                    .show().offset({ 'left': left, 'top': top })
-                    .css({ 'height': editorObj.getHeight() + 10, 'width': editorObj.getWidth() + 10 });
+                if (editorObj) {
+                    var left = instance.canvasOffset.left + editorObj.left - 5;
+                    var top = instance.canvasOffset.top + editorObj.top - 5;
+                    EkstepEditorAPI.jQuery("#objectPointer")
+                        .show().offset({ 'left': left, 'top': top })
+                        .css({ 'height': editorObj.getHeight() + 10, 'width': editorObj.getWidth() + 10 });
+                }
             });
             EkstepEditorAPI.jQuery(this).mouseleave(function() {
                 EkstepEditorAPI.jQuery("#objectPointer").hide();
@@ -403,34 +409,65 @@ EkstepEditor.basePlugin.extend({
     updateTargetOptions: function() {
         var instance = this;
         var angScope = EkstepEditorAPI.getAngularScope();
+
+        EkstepEditorAPI.jQuery("#actionTypeDropdown:not(.addChange)").on('change', function(e) {
+            angScope.safeApply(function() {
+                angScope.actionTargetObjects = [];
+            });
+
+            var selectedOption = EkstepEditorAPI.jQuery(this).val().split(':')[1];
+            if (instance.visibleActionsList[selectedOption]) {
+                instance.setVisibleObjects();
+            }
+            if (instance.playableActionsList[selectedOption]) {
+                instance.setPlayableObjects();
+            }
+            if (instance.stageActionsList[selectedOption]) {
+                instance.setStageObjects();
+            }
+            setTimeout(function() {
+                EkstepEditorAPI.jQuery("#actionTargetDropdown").dropdown('clear');
+            }, 500);
+        }).addClass('addChange');
+
+    },
+    setVisibleObjects: function() {
+        var angScope = EkstepEditorAPI.getAngularScope();
+        var pluginInstanceIds = [];
+        var pluginInstances = EkstepEditorAPI.getAllPluginInstanceByTypes(EkstepEditorAPI.getCurrentObject().id, ['org.ekstep.audio'], false);
+        EkstepEditorAPI._.forEach(pluginInstances, function(pi) {
+            pluginInstanceIds[pi.id] = pi.id;
+        })
+        angScope.safeApply(function() {
+            angScope.actionTargetObjects = pluginInstanceIds;
+        });
+    },
+    setPlayableObjects: function() {
+        var pluginInstances = EkstepEditorAPI.getAllPluginInstanceByTypes(EkstepEditorAPI.getCurrentObject().id, ['org.ekstep.audio'], true);
+        var optionsList = [];
+        EkstepEditorAPI._.forEach(pluginInstances, function(pi) {
+            if (pi.media) {
+                var mediaObj = pi.media[Object.keys(pi.media)[0]];
+                optionsList[mediaObj.src] = mediaObj.id;
+            }
+        });
+        var angScope = EkstepEditorAPI.getAngularScope();
+        angScope.safeApply(function() {
+            angScope.actionTargetObjects = optionsList;
+        });
+    },
+    setStageObjects: function() {
         var stageOptions = [];
         EkstepEditorAPI._.forEach(EkstepEditorAPI._.clone(EkstepEditorAPI.getAllStages(), true), function(stage, i) {
             var stageKey = 'Slide ' + (i + 1);
-            stageOptions.push({ stageKey: stage.id })
+            stageOptions[stage.id] = stageKey;
         });
-        EkstepEditorAPI.jQuery("#actionTypeDropdown:not(.addChange)").on('change', function(e) {
-            angScope.safeApply(function() {
-                    angScope.actionTargetObjects = [];
-            });
-            
-            var selectedOption = EkstepEditorAPI.jQuery(this).val().split(':')[1];
-            if (instance.visibleActionsList[selectedOption]) {
-                instance.setPlayableObjects();
-            }
-            if (instance.playableActionsList[selectedOption]) {
-                
-            }
-        }).addClass('addChange');
-        setTimeout(function() {
-            EkstepEditorAPI.jQuery("#actionTypeDropdown").dropdown('clear');
-        }, 500);
-    },
-    setPlayableObjects : function () {
+        delete stageOptions[EkstepEditorAPI.getCurrentStage().id];
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
-                angScope.actionTargetObjects = EkstepEditorAPI.getAllPluginInstanceIds(EkstepEditorAPI.getCurrentObject().id);
+            angScope.actionTargetObjects = stageOptions;
         });
     }
 
 });
-//# sourceURL=configplugin.j
+//# sourceURL=configplugin.js
