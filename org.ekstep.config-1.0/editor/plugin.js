@@ -28,6 +28,24 @@ EkstepEditor.basePlugin.extend({
      * @memberof Config
      */
     configData: undefined,
+    allActionsList: {
+        "show": "Show",
+        "hide": "Hide",
+        "play": "Play",
+        "pause": "Pause",
+        "stop": "Stop",
+        "link": "Link To"
+    },
+    playableActionsList: {
+        "play": "Play",
+        "pause": "Pause",
+        "stop": "Stop"
+    },
+    visibleActionsList: {
+        "show": "Show",
+        "hide": "Hide"
+    },
+    stageActionsList: [{ "link": "Link To" }],
     /**
      * 
      * The events are registred which are used to update the selected editor object
@@ -43,7 +61,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("config:show", this.showConfig, this);
         EkstepEditorAPI.addEventListener("stage:unselect", this.stageUnselect, this);
         EkstepEditorAPI.addEventListener("config:help", this.showHelp, this);
-        EkstepEditorAPI.addEventListener("config:events", this.showEvents, this);
+        EkstepEditorAPI.addEventListener("config:actions", this.showActions, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:colorpicker", this.showColorPicker, this);
         EkstepEditorAPI.addEventListener("object:modified", this.objectModified, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:invoke", this.invoke, this);
@@ -82,14 +100,13 @@ EkstepEditor.basePlugin.extend({
                     instance.showConfig();
                     break;
                 case 'Actions':
-                    instance.showEvents();
+                    instance.showActions();
                     break;
                 case 'Help':
                     instance.showHelp();
                     break;
             }
         }
-        this.restoreOnObjectSelect();
     },
     objectUnselected: function(event, data) {
         if (data.id == this.selectedPluginId) {
@@ -236,16 +253,18 @@ EkstepEditor.basePlugin.extend({
      * @param  data {Object}
      * @memberof Config
      */
-    showEvents: function(event, data) {
+    showActions: function(event, data) {
         var instance = this;
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
-            angScope.pluginInstanceIds = EkstepEditorAPI.getAllPluginInstanceIds(EkstepEditorAPI.getCurrentObject().id);
             angScope.currentObjectActions = [];
+            angScope.allActionsList = instance.allActionsList;
         });
         this.setToolBarContainerLocation("Actions");
         this.highlightTargetObject();
         this.updateActions();
+        this.updateTargetOptions();
+        this.restoreOnObjectSelect();
     },
     /**
      * * This method called when object:moving or object:scaling events is fired 
@@ -330,63 +349,88 @@ EkstepEditor.basePlugin.extend({
     },
     addAction: function(event, data) {
         if (data.command && data.asset) {
-            if (!EkstepEditorAPI.getCurrentObject().events) {
-                var event = {
-                    'event': {
-                        'type': 'click',
-                        'action': [{ 'type': 'command', 'command': data.command, 'asset': data.asset }]
-                    }
-                };
-                EkstepEditorAPI.getCurrentObject().addEvent(event);
-            } else if (EkstepEditorAPI.getCurrentObject().events.length && EkstepEditorAPI.getCurrentObject().events[0].event) {
-                EkstepEditorAPI.getCurrentObject().events[0].event.action.push({ 'type': 'command', 'command': data.command, 'asset': data.asset })
-            }
-
+            EkstepEditorAPI.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'type': 'command', 'command': data.command, 'asset': data.asset }] });
         }
         this.updateActions();
-        setTimeout(function () {
+        setTimeout(function() {
             EkstepEditorAPI.jQuery("#actionTargetDropdown").dropdown('restore defaults');
-            EkstepEditorAPI.jQuery("#actionTypeDropdown").dropdown('restore defaults');        
-        },500);
+            EkstepEditorAPI.jQuery("#actionTypeDropdown").dropdown('restore defaults');
+        }, 500);
     },
     removeAction: function(event, data) {
         if (data.index > -1) {
-            EkstepEditorAPI.getCurrentObject().events[0].event.action.splice(parseInt(data.index), 1);
+            EkstepEditorAPI.getCurrentObject().event.splice(parseInt(data.index), 1);
             this.updateActions();
         }
     },
     updateActions: function() {
+        var instance = this;
         var angScope = EkstepEditorAPI.getAngularScope();
-        var events = EkstepEditorAPI.getCurrentObject().events;
-        if (events && events.length && events[0].event && events[0].event.action && events[0].event.action.length) {
+        var events = EkstepEditorAPI.getCurrentObject().event;
+        if (events && events.length) {
+            var eventsActionList = [];
+            EkstepEditorAPI._.forEach(events, function(e) {
+                if (e.action && e.action.length) { eventsActionList.push(e.action[0]) }
+            })
             angScope.safeApply(function() {
-                angScope.currentObjectActions = events[0].event.action;
+                angScope.currentObjectActions = eventsActionList;
             });
         }
     },
-    highlightTargetObject: function () {
+    highlightTargetObject: function() {
         var instance = this;
-        EkstepEditorAPI.jQuery("#actionTargetDropdown").parent().one('click', function () {
-            EkstepEditorAPI.jQuery("#actionTargetDropdown").nextAll(".menu.transition").find(".item").mouseover(function (event) {
-            var id = EkstepEditorAPI.jQuery(event.target).text();
+        EkstepEditorAPI.jQuery("#actionTargetDropdown").parent().one('click', function() {
+            EkstepEditorAPI.jQuery("#actionTargetDropdown").nextAll(".menu.transition").find(".item").mouseover(function(event) {
+                var id = EkstepEditorAPI.jQuery(event.target).text();
                 var editorObj = EkstepEditorAPI.getPluginInstance(id).editorObj;
-                var left = instance.canvasOffset.left+ editorObj.left-5;
-                var top = instance.canvasOffset.top+ editorObj.top-5;
+                var left = instance.canvasOffset.left + editorObj.left - 5;
+                var top = instance.canvasOffset.top + editorObj.top - 5;
                 EkstepEditorAPI.jQuery("#objectPointer")
-                .show().offset({'left':left,'top':top})
-                .css({'height': editorObj.getHeight()+10, 'width': editorObj.getWidth() +10});
-            }) ;
-            EkstepEditorAPI.jQuery(this).mouseleave(function () {
-               EkstepEditorAPI.jQuery("#objectPointer").hide();
+                    .show().offset({ 'left': left, 'top': top })
+                    .css({ 'height': editorObj.getHeight() + 10, 'width': editorObj.getWidth() + 10 });
+            });
+            EkstepEditorAPI.jQuery(this).mouseleave(function() {
+                EkstepEditorAPI.jQuery("#objectPointer").hide();
             });
         });
     },
-    restoreOnObjectSelect: function () {
-        setTimeout(function () {
-            EkstepEditorAPI.jQuery("#actionTargetDropdown").dropdown('restore defaults');
-            EkstepEditorAPI.jQuery("#actionTypeDropdown").dropdown('restore defaults');        
-        },500);
+    restoreOnObjectSelect: function() {
+        setTimeout(function() {
+            EkstepEditorAPI.jQuery("#actionTargetDropdown").dropdown('clear');
+            EkstepEditorAPI.jQuery("#actionTypeDropdown").dropdown('clear');
+        }, 500);
+    },
+    updateTargetOptions: function() {
+        var instance = this;
+        var angScope = EkstepEditorAPI.getAngularScope();
+        var stageOptions = [];
+        EkstepEditorAPI._.forEach(EkstepEditorAPI._.clone(EkstepEditorAPI.getAllStages(), true), function(stage, i) {
+            var stageKey = 'Slide ' + (i + 1);
+            stageOptions.push({ stageKey: stage.id })
+        });
+        EkstepEditorAPI.jQuery("#actionTypeDropdown:not(.addChange)").on('change', function(e) {
+            angScope.safeApply(function() {
+                    angScope.actionTargetObjects = [];
+            });
+            
+            var selectedOption = EkstepEditorAPI.jQuery(this).val().split(':')[1];
+            if (instance.visibleActionsList[selectedOption]) {
+                instance.setPlayableObjects();
+            }
+            if (instance.playableActionsList[selectedOption]) {
+                
+            }
+        }).addClass('addChange');
+        setTimeout(function() {
+            EkstepEditorAPI.jQuery("#actionTypeDropdown").dropdown('clear');
+        }, 500);
+    },
+    setPlayableObjects : function () {
+        var angScope = EkstepEditorAPI.getAngularScope();
+        angScope.safeApply(function() {
+                angScope.actionTargetObjects = EkstepEditorAPI.getAllPluginInstanceIds(EkstepEditorAPI.getCurrentObject().id);
+        });
     }
 
 });
-//# sourceURL=configplugin.js
+//# sourceURL=configplugin.j
