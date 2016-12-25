@@ -3,7 +3,7 @@
     "ver": "1.0",
     "shortId": "templatebrowser",
     "author": "Sunil A S",
-    "title": "Template Browser",
+    "title": "Activity Browser",
     "description": "",
     "publishedDate": "",
     "editor": {
@@ -12,9 +12,9 @@
             "id": "templatebrowser",
             "category": "main",
             "type": "icon",
-            "toolTip": "Add Template",
-            "title": "Template",
-            "iconClass": "block layout icon",
+            "toolTip": "Add Activity",
+            "title": "Activity",
+            "iconClass": "icon-activity icon",
             "onclick": {
                 "id": "org.ekstep.templatebrowser:show"
             }

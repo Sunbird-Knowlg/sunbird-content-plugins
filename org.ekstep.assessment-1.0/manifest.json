@@ -1,9 +1,9 @@
 {
     "id": "org.ekstep.assessment",
     "ver": "1.0",
-    "shortId": "assessment",
+    "shortId": "quiz",
     "author": "Santhosh Vasabhaktula",
-    "title": "Assessment Plugin",
+    "title": "Question Set Plugin",
     "description": "",
     "publishedDate": "",
     "editor": {
@@ -15,12 +15,11 @@
             "id": "assessment",
             "category": "main",
             "type": "icon",
-            "toolTip": "Add Assessment",
-            "title": "Assessment",
-            "iconClass": "browser icon",
+            "toolTip": "Add Question Set",
+            "title": "Question Set",
+            "iconClass": "icon-questions icon",
             "onclick": {
-                "id": "org.ekstep.assessment:showPopup",
-                "data": {}
+                "id": "org.ekstep.assessment:showPopup"
             }
         }]
     }

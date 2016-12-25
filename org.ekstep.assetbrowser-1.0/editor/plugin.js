@@ -22,6 +22,14 @@ EkstepEditor.basePlugin.extend({
     */
     initialize: function() {
         EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.initPreview, this);
+        setTimeout(function() {
+            var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.assetbrowser-1.0/editor/assetBrowser.html';
+            var controllerPath = EkstepEditor.config.pluginRepo + '/org.ekstep.assetbrowser-1.0/editor/assetbrowserapp.js';
+
+            EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
+
+
+        }, 1000);
     },
     /**
     *   load html template to show the popup
@@ -34,37 +42,20 @@ EkstepEditor.basePlugin.extend({
         this.cb = data.callback;
         this.mediaType = data.type;
         this.search_filter = data.search_filter;
-        this.audio_context = undefined;
-        this.recorder = undefined;
-
-        this.loadResource('editor/assetBrowser.html', 'html', function(err, response) {
-            instance.showAssetBrowser(err, response);
-        });
-
-        // Stop audio on close popup
-        EkstepEditorAPI.jQuery(".assetbrowser.ui.modal").modal({
-            onHidden:function(){
-                if (data.type == "audio") {
-                    instance.stopCurrentPlayAudio();
+        EkstepEditorAPI.getService('popup').open({
+            template: 'partials/assetbrowser.html',
+            controller: 'browsercontroller',
+            controllerAs: '$ctrl',
+            resolve: {
+                'instance': function() {
+                    return instance;
                 }
-            }
+            },
+            width: 900,
+            showClose: false,
         });
+    },
 
-        // if (data.type == "audio") {
-        //     console.log('initialize audio recorder');
-        //    instance.initAudioRecorder();
-        // }
-        
-    },
-    stopCurrentPlayAudio :function ()
-    {
-        EkstepEditorAPI.jQuery('.assetbrowser audio').each(function(){
-            /*Stop playing*/
-            this.pause();
-            /*Reset time*/
-            this.currentTime = 0;
-        });
-    },
     /**
     *   get asset from Learning platfrom
     *   @param {String} name of the asset
@@ -85,7 +76,6 @@ EkstepEditor.basePlugin.extend({
                 "filters": {
                     "mediaType": [mediaType],
                     "license": ["Creative Commons Attribution (CC BY)"],
-                    "name": [],
                 },
                 "limit":30
             }
@@ -98,15 +88,12 @@ EkstepEditor.basePlugin.extend({
             }
         };
 
-        EkstepEditorAPI._.isUndefined(searchText) ? null : requestObj.request.filters.name = [searchText];
-        EkstepEditorAPI._.isUndefined (owner) ? null : requestObj.request.filters.owner = owner;
-        allowableFilter = EkstepEditorAPI._.omit(this.search_filter, ['mediaType', 'license', 'limit']);
-        EkstepEditorAPI._.merge(requestObj.request.filters, allowableFilter);
-
-        console.log(requestObj);
+        _.isUndefined(searchText) ? null : requestObj.request.query = searchText;
+        _.isUndefined (owner) ? null : requestObj.request.filters.owner = owner;
+        allowableFilter = _.omit(this.search_filter, ['mediaType', 'license', 'limit']);
+        _.merge(requestObj.request.filters, allowableFilter);
 
         iservice.http.post(EkstepEditor.config.baseURL + '/api/search/v2/search', requestObj, requestHeaders, cb);
-
     },
     /**
     *   invokes popup service to show the popup window
@@ -115,7 +102,7 @@ EkstepEditor.basePlugin.extend({
     *   @memberof assetBrowser
     */
     showAssetBrowser: function(err, data) {
-        EkstepEditorAPI.getService('popup').open({ template: data, data: { instance: this } }, this.browserController);
+
     },
     /**
     *   File size and mime type validation
@@ -128,8 +115,8 @@ EkstepEditor.basePlugin.extend({
         /*Check for browser support for all File API*/
         if (window.File && window.FileList && window.Blob) {
             /*Get file size and file type*/
-            var fsize = EkstepEditorAPI.jQuery('#' + fieldId)[0].files[0].size;
-            var ftype = EkstepEditorAPI.jQuery('#' + fieldId)[0].files[0].type;
+            var fsize = $('#' + fieldId)[0].files[0].size;
+            var ftype = $('#' + fieldId)[0].files[0].type;
 
             /*Check file size*/
             if (fsize > allowedFileSize) {
@@ -138,594 +125,23 @@ EkstepEditor.basePlugin.extend({
             }
 
             /*Check mime type*/
-            if (ftype){
+            if (ftype) {
                 if ($.inArray(ftype, allowedMimeTypes) == -1) {
                     alert("File type is not allowed!");
                     return false;
                 }
             }
             /*If no file type is detected, return true*/
-            else{
+            else {
                 return true;
             }
 
             return true;
         }
         /*If no browser suppoer for File apis, return true*/
-        else{
+        else {
             return true;
         }
-    },
-    /*initAudioRecorder: function() {
-        var instance = this;
-        EkstepEditorAPI.jQuery("#audio-record-btn").prop("disabled", true);
-        instance.showUserMediaError("Permissions have not been granted to use your microphone, allow the page access to your devices in order for the audio record to work. Also, reload the page after giving permissions.");
-        var constraints = window.constraints = {
-          audio: false,
-          video: true
-        };
-
-        navigator.getUserMedia = ( navigator.getUserMedia ||
-                       navigator.webkitGetUserMedia ||
-                       navigator.mozGetUserMedia ||
-                       navigator.msGetUserMedia);
-
-        window.URL = window.URL || window.webkitURL;
-
-        navigator.getUserMedia({ audio: true }, function(stream) {
-            var input = instance.audio_context.createMediaStreamSource(stream);
-
-            if (input != undefined)
-            {
-                EkstepEditorAPI.jQuery("#audio-record-btn").prop("disabled", false);
-                EkstepEditorAPI.jQuery("#rec-error-msg").hide();
-            }
-
-            instance.recorder = new Recorder(input, {
-              numChannels: 1
-            });
-
-            // The important thing is to save a reference to the MediaStreamAudioSourceNode
-            // thus, *window*.source or any other object reference will do
-            window.source = instance.audio_context.createMediaStreamSource(stream);
-        },instance.handleUserMediaError
-        );
-    },
-    handleUserMediaError: function(error) {
-        if (error.name === 'ConstraintNotSatisfiedError')
-        {
-            instance.showUserMediaError("COM_EKCONTENT_AUDIO_REC_RESOLUTION_ERROR_FIRST" + constraints.video.width.exact + 'x' +constraints.video.width.exact + "COM_EKCONTENT_AUDIO_REC_RESOLUTION_ERROR");
-        }
-        else if (error.name === 'PermissionDeniedError')
-        {
-            instance.showUserMediaError("Permissions have not been granted to use your microphone, allow the page access to your devices in order for the audio record to work. Also, reload the page after giving permissions.");
-        }
-    },
-    showUserMediaError: function(msg, error) {
-        EkstepEditorAPI.jQuery("#rec-error-msg").show();
-        EkstepEditorAPI.jQuery("#rec-error-msg-text").html(msg);
-
-        alert(msg);
-        if (typeof error !== 'undefined') {
-            console.error(error);
-        }
-    },*/
-    /**
-    *   @memberof assetBrowser
-    *   angular controller for popup service as callback
-    *   @param ctrl {Object} popupController object
-    *   @param scope {Object} popupController scope object
-    *   @param resolvedData {Object} data passed to popup config
-    *   @memberof assetBrowser
-    */
-    browserController: function(ctrl, $injector, resolvedData) {
-        var audiodata = {},
-			assetMedia,
-            imagedata = {},
-            searchText,
-            instance = resolvedData.instance,
-            lastSelectedAudio,
-            lastSelectedImage,
-            audioTabSelected = false,
-            imageTabSelected = true;
-        var $sce = $injector.get('$sce');
-        ctrl.selected_images = {};
-        ctrl.selected_audios = {};
-        ctrl.selectBtnDisable = true;
-        ctrl.buttonToShow = 'select';
-        ctrl.loadingImage = true;
-        ctrl.uploadView = false;
-        ctrl.languagecode = 'en';
-        ctrl.record = true;
-        ctrl.uploadView = true;
-        ctrl.owner = 'amolg';
-        ctrl.asset = {
-            'requiredField':'',
-        };
-        ctrl.hideField = false;
-        ctrl.keywordsText;
-        ctrl.languageText = "English";
-        ctrl.optional = true;
-        ctrl.uploadingAsset = false;
-        ctrl.assetId = undefined;
-        ctrl.tabSelected = "my";
-        ctrl.uploadView = false;
-        ctrl.assetMeta = {
-			'body': '',
-            'name': '',
-            'keywords': [],
-            'creator': '',
-            'status': 'Draft',
-            'owner': 'amolg',
-            'code': "org.ekstep"+ Math.random(),
-            'mimeType': "",
-            'mediaType': "",
-            'contentType': "Asset",
-            'osId': "org.ekstep.quiz.app",
-            'copyright': "",
-            'sources': "",
-            'publisher': ""
-        };
-
-        ctrl.loadingAudio = true;
-        ctrl.plugin = instance.mediaType;
-        ctrl.upload =  (instance.mediaType == 'image') ? true: false;
-        ctrl.fileTypes = (instance.mediaType == "image") ? "jpeg, jpg, png, svg" : "mp3, mp4, mpeg, ogg, wav, webm";
-        ctrl.fileSize = (instance.mediaType == "image") ? '1 MB' : '6 MB';
-
-        if (instance.mediaType == 'image') {
-            ctrl.allowedFileSize = (1 * 1024 * 1024);
-            ctrl.allowedMimeTypes = ['image/jpeg','image/jpg','image/png','image/svg+xml'];
-        }
-        else if (instance.mediaType == 'audio') {
-            ctrl.allowedFileSize = (6 * 1024 * 1024);
-            ctrl.allowedMimeTypes = ['audio/mp3','audio/mp4','audio/mpeg','audio/ogg','audio/webm','audio/x-wav','audio/wav'];
-        }
-
-        function imageAssetCb(err, res) {
-            if (res && res.data.result.content) {
-                ctrl.loadingImage = false;
-                ctrl.imageList = res.data.result.content;
-                ctrl.initPopup(res.data.result.content);
-            } else {
-                ctrl.imageList = [];
-            };
-
-            EkstepEditorAPI.getAngularScope().safeApply();
-        };
-
-        function audioAssetCb(err, res) {
-            if (res && res.data.result.content) {
-                ctrl.loadingAudio = false;
-                ctrl.audioList = [];
-                ctrl.initPopup(res.data.result.content);
-                EkstepEditorAPI._.forEach(res.data.result.content, function(obj, index) {
-                    ctrl.audioList.push({ downloadUrl: trustResource(obj.downloadUrl), identifier: obj.identifier, name:obj.name, mimeType:obj.mimeType, license:obj.license });
-                });
-            } else {
-                ctrl.audioList = [];
-            };
-
-            document.addEventListener('play', function(e){
-                var audios = document.getElementsByTagName('audio');
-                for(var i = 0, len = audios.length; i < len;i++){
-                    if(audios[i] != e.target){
-                        audios[i].pause();
-                    }
-                }
-            }, true);
-
-            EkstepEditorAPI.getAngularScope().safeApply();
-        };
-
-        function trustResource(src) {
-            return $sce.trustAsResourceUrl(src);
-        }
-
-        //load image on opening window
-        if (instance.mediaType == 'image') {
-            instance.getAsset(undefined, instance.mediaType, ctrl.owner, imageAssetCb);
-        }
-        else{
-            instance.getAsset(undefined, instance.mediaType, ctrl.owner, audioAssetCb);   
-        }
-
-        ctrl.myAssetTab = function(){
-            var callback,
-                searchText = ctrl.query;
-                ctrl.selectBtnDisable = false;
-                ctrl.buttonToShow = 'select';
-                ctrl.tabSelected = "my";
-                ctrl.loadingImage = true;
-
-            imageTabSelected = true;
-            audioTabSelected = false;
-            ctrl.selectBtnDisable = EkstepEditorAPI._.isUndefined(lastSelectedImage) ? true : false;
-            ctrl.buttonToShow = 'select';
-
-            (searchText === "") ? searchText = undefined: null;
-            callback = (instance.mediaType === "image") ? imageAssetCb : callback;
-            callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
-            callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
-            ctrl.selectBtnDisable = true;
-
-            callback && instance.getAsset(searchText, instance.mediaType, ctrl.owner, callback);
-        }
-
-        ctrl.allAssetTab = function() {
-            var callback,
-                searchText = ctrl.query;
-                ctrl.tabSelected = "all";
-                ctrl.loadingImage = true;
-            imageTabSelected = true;
-            audioTabSelected = false;
-            ctrl.selectBtnDisable = EkstepEditorAPI._.isUndefined(lastSelectedImage) ? true : false;
-            ctrl.buttonToShow = 'select';
-
-            (searchText === "") ? searchText = undefined: null;
-            callback = (instance.mediaType === "image") ? imageAssetCb : callback;
-            callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
-            callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
-            ctrl.selectBtnDisable = true;
-
-            callback && instance.getAsset(searchText, instance.mediaType, undefined, callback); 
-        }
-
-        ctrl.uploadClick = function(){
-            // ctrl.plugin = 'upload';
-          //  console.log('Uploa');
-
-            setTimeout(function(){
-                EkstepEditorAPI.jQuery('#uploadtab').trigger('click');
-            }, 100);
-        }
-
-        ctrl.audioTab = function() {
-            audioTabSelected = true;
-            imageTabSelected = false;
-            ctrl.selectBtnDisable = EkstepEditorAPI._.isUndefined(lastSelectedAudio) ? true : false;
-            ctrl.buttonToShow = 'select';
-        };
-
-        ctrl.assetUpload = function() {
-            ctrl.buttonToShow = 'upload';
-            imageTabSelected = false;
-            audioTabSelected = false;
-        };
-
-        ctrl.search = function() {
-            var callback,
-                searchText;
-
-            searchText = ctrl.query;
-            (searchText === "") ? searchText = undefined: null;
-            callback = (instance.mediaType === "image") ? imageAssetCb : callback;
-            callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
-            callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
-            ctrl.selectBtnDisable = true;
-
-            console.log(ctrl.tabSelected);
-            if (ctrl.tabSelected == "my"){
-                callback && instance.getAsset(searchText, instance.mediaType, ctrl.owner, callback);
-            }
-            else{
-                callback && instance.getAsset(searchText, instance.mediaType, undefined, callback);
-            }
-            
-        }
-
-        ctrl.cancel = function() {
-            EkstepEditorAPI.jQuery('.ui.modal').modal('hide');
-        };
-
-        ctrl.ImageSource = function(event, $index) {
-            imagedata.asset = event.target.attributes.data_id.value;
-            imagedata.assetMedia = {
-                id: imagedata.asset,
-                src: event.target.attributes.src.value,
-                type: 'image'
-            }
-            ctrl.selectBtnDisable = false;
-            ctrl.toggleImageCheck($index);
-        };
-
-        ctrl.toggleImageCheck = function($index) {
-            if (!EkstepEditorAPI._.isUndefined(lastSelectedImage)) {
-                ctrl.selected_images[lastSelectedImage].selected = false;
-            }
-            lastSelectedImage = $index;
-            return true;
-        }
-
-        ctrl.AudioSource = function(url, id, $index) {
-            var audioElem;
-            document.getElementById('audio-' + $index).play();
-            audiodata.asset = id;
-            audiodata.assetMedia = {
-                id: audiodata.asset,
-                src: url.toString(),
-                type: 'audio'
-            }
-            ctrl.selectBtnDisable = false;
-            ctrl.toggleAudioCheck($index);
-        };
-
-        ctrl.toggleAudioCheck = function($index) {
-            if (!EkstepEditorAPI._.isUndefined(lastSelectedAudio)) {
-                ctrl.selected_audios[lastSelectedAudio].selected = false;
-                audioElem = document.getElementById('audio-' + lastSelectedAudio);
-                audioElem.pause();
-                audioElem.currentTime = 0.0;
-            }
-            lastSelectedAudio = $index;
-            return true;
-        };
-
-        ctrl.initPopup = function(item) {
-            setTimeout(function(){
-                EkstepEditorAPI.jQuery('.infopopover').popup({
-                    hoverable: true,
-                    position: 'right center'
-                });
-            },100)
-        };
-
-        ctrl.convertToBytes = function(bytes) {
-            if(EkstepEditorAPI._.isUndefined(bytes)) return " N/A";
-            bytes = parseInt(bytes);
-            var precision = 1;
-            var units = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'],
-                number = Math.floor(Math.log(bytes) / Math.log(1024));
-            return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) + ' ' + units[number];
-        }
-
-        ctrl.select = function() {
-            if (imagedata && imagedata.asset && imageTabSelected) {
-                instance.cb(imagedata);
-                ctrl.cancel();
-            }
-
-            if (audiodata && audiodata.asset && audioTabSelected) {
-                //instance.cb(audiodata);
-                console.log('audiodata', audiodata);
-                EkstepEditorAPI.dispatchEvent("stagedecorator:addcomponent", { component: 'audio', title: audiodata.asset });
-                ctrl.cancel();
-            }
-        }
-
-        EkstepEditor.assessmentService.getLanguages(function(err, resp) {
-            if (!err && resp.statusText == "OK") {
-                var assetlanguages = {};
-                EkstepEditorAPI._.forEach(resp.data.result.languages, function(lang) {
-                    assetlanguages[lang.code] = lang.name;
-                });
-                ctrl.asset.language = EkstepEditorAPI._.values(assetlanguages);
-                EkstepEditorAPI.getAngularScope().safeApply();
-            }
-        });
-
-        ctrl.setPublic = function(){
-            console.log(1);
-            ctrl.assetMeta.license ="Creative Commons Attribution (CC BY)";
-            ctrl.asset.requiredField = 'required';
-            ctrl.hideField = false;
-            ctrl.optional = false;
-        }
-
-        ctrl.viewMore = function(){
-            EkstepEditorAPI.jQuery('.removeError').each(function(){ EkstepEditorAPI.jQuery(this).removeClass('error')});
-            ctrl.hideField = false;
-        }
-
-        ctrl.setPrivate = function(){
-            console.log(2);
-            delete ctrl.assetMeta.license;
-            ctrl.asset.requiredField = '';
-            ctrl.optional = true;
-            ctrl.hideField = true;
-        }
-
-        ctrl.uploadAsset = function(event, fields){
-            var requestObj,
-                content = ctrl.assetMeta,
-                data = new FormData();
-            
-            ctrl.uploadingAsset = true;
-
-            EkstepEditorAPI.getAngularScope().safeApply();
-
-            $.each(EkstepEditorAPI.jQuery('#assetfile')[0].files, function(i, file) {
-                data.append('file', file);
-                ctrl.assetMeta.mimeType = file.type;
-
-                // @Todo for audio
-                ctrl.assetMeta.mediaType = instance.mediaType;
-            });
-
-
-            /** Convert language into array **/
-            if ((!EkstepEditorAPI._.isUndefined(ctrl.languageText)) && (ctrl.languageText) != null) {
-                content.language = [ctrl.languageText];
-            }
-            else {
-                delete content.language;
-            }
-
-            /** Convert keywords in to array **/
-            if ((!EkstepEditorAPI._.isUndefined(ctrl.keywordsText)) && (ctrl.keywordsText) != null) {
-                content.keywords = ctrl.keywordsText.split(",");
-            }
-            else {
-                delete content.keywords;
-            }
-
-            console.log(content);
-            var requestObj = {};
-            angular.forEach(content, function(value, key) {
-
-                if ((EkstepEditorAPI._.isUndefined(value) || value == null || value == "") && key != 'body'){
-                    delete content[key];
-                }
-
-            }, null);
-
-            console.log(content);
-
-            // Create the content for asset
-            EkstepEditor.assetService.saveAsset(ctrl.assetId, content, function(err, resp) {
-                if (resp) {
-                    ctrl.uploadFile(resp, data);
-                }
-            });
-        }
-
-        ctrl.uploadFile = function (resp, data){
-            $.ajax({
-                // @Todo Use the correct URL
-                url:EkstepEditor.config.baseURL + "/api/learning/v2/content/upload/" + resp.data.result.node_id,
-                type: 'POST',
-                contentType:false,
-                data: data,
-                cache: false,
-                processData: false,
-                beforeSend : function(request) {
-                    request.setRequestHeader("user-id", "mahesh");
-                },
-                success: function (resp) {
-                    console.log('response');
-                    console.log(resp);
-                    imagedata.asset = resp.result.node_id;
-                    imagedata.assetMedia = resp;
-                    imagedata.assetMedia.id = resp.result.node_id;
-                    imagedata.assetMedia.src = resp.result.content_url;
-                    imagedata.assetMedia.type = instance.mediaType;
-                    
-                    console.log("Passing data");
-                    console.log(imagedata.assetMedia);
-
-                    instance.cb(imagedata);
-                    ctrl.uploadingAsset = false;
-                    alert((instance.mediaType).charAt(0).toUpperCase() + (instance.mediaType).slice(1) + ' successfully uploaded');
-                    ctrl.cancel();
-                },
-                complete:function()
-                {
-                    ctrl.uploadingAsset = false;
-                },
-                error:function()
-                {
-                    alert('Error in Uploading image, please try again!');
-                }
-            });
-        }
-
-		ctrl.doUpload = function(mediaType) {
-            EkstepEditorAPI.jQuery('.ui.form')
-              .form({
-                inline : true,
-                fields: {
-                  assetfile: {
-                    identifier  : 'assetfile',
-                    rules: [
-                      {
-                        type   : 'empty',
-                        prompt: 'Please select file'
-                      }
-                    ]
-                  },
-                  ccByContribution: {
-                    identifier : 'ccByContribution',
-                    rules: [
-                        {
-                            type : 'checked',
-                            prompt: 'Please select Copyright & License'
-                        }
-                    ]
-                  },
-                  assetName : {
-                    identifier : 'assetName',
-                    rules : [
-                        {
-                            type : 'empty',
-                            prompt: 'Please enter asset caption'
-                        }
-                    ]
-                  },
-
-                  keywords : {
-                    identifier : 'keywords',
-                    optional : true,
-                    rules : [
-                        {
-                            type : 'empty',
-                            prompt: 'Please enter enter tags'
-                        }
-                    ]
-                  },
-
-                  language : {
-                    identifier : 'language',
-                    optional:true,
-                    rules : [
-                        {
-                            type : 'empty',
-                        }
-                    ]
-                  },
-
-                  creator : {
-                    identifier : 'creator',
-                    optional: ctrl.optional,
-                    rules : [
-                        {
-                            type : 'empty',
-                            prompt: 'Please enter creator name'
-                        }
-                    ]
-                  },
-
-                  copyright : {
-                    identifier : 'copyright',
-                    optional: ctrl.optional,
-                    rules : [
-                        {
-                            type : 'empty',
-                            prompt: 'Please enter copyright details'
-                        }
-                    ]
-                  },
-                },
-                onSuccess: function (event, fields){
-                    // Validate file if not editing meta data
-                    var validateFile = instance.fileValidation('assetfile', ctrl.allowedFileSize, ctrl.allowedMimeTypes);
-
-                    if (validateFile) {
-                         ctrl.uploadAsset(event, fields);
-                    }
-                    else {
-                        return false;
-                    }
-                },
-                onFailure: function (formErrors, fields){
-                    console.log("fields validation failed");
-                    return false;
-                }
-              });
-		}
-
-        ctrl.switchToUpload = function(){
-            ctrl.uploadView = true;
-        }
-
-        setTimeout(function(){
-            EkstepEditorAPI.jQuery('.assetbrowser .menu .item').tab();
-            EkstepEditorAPI.jQuery('.assetbrowser .ui.dropdown').dropdown();
-            EkstepEditorAPI.jQuery('.assetbrowser .ui.radio.checkbox').checkbox();
-        }, 100); 
-    
-     ctrl.startRecording = function(){
-        console.log("11");
-     }
     }
 });
 //# sourceURL=assetbrowserplugin.js

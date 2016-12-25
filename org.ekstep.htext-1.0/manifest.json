@@ -3,7 +3,7 @@
     "ver": "1.0",
     "shortId": "htext",
     "author": "Kartheek Palla",
-    "title": "Readalong Plugin",
+    "title": "Read-along Plugin",
     "description": "",
     "publishedDate": "",
     "editor": {
@@ -18,9 +18,9 @@
             "id": "htext",
             "category": "main",
             "type": "icon",
-            "toolTip": "Add Readalong",
-            "title": "Readalong",
-            "iconClass": "music icon",
+            "toolTip": "Add Read-along",
+            "title": "Read-along",
+            "iconClass": "icon-readalong icon",
             "onclick": {
                 "id": "org.ekstep.htext:create",
                 "data": {

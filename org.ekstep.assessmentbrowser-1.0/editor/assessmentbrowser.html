@@ -1,3 +1,4 @@
+<script type="text/ng-template" ng-app="assessmentbrowserapp" ng-controller="assessmentbrowsercontroller as $ctrl" id="assessmentbrowser">
 <style type="text/css">
 .filters-container {
     padding: 8px 10px 4px 18px;
@@ -15,8 +16,12 @@
 .grid .items .item:hover{
     background: #f1f1f1;   
 }
+.verticalcenter{
+    display: flex;
+    align-items: center;
+}
 </style>
-<div class="ui modal large">
+<div class="ui modal large active" style="top: 5%;">
     <div class="content">
         <div class="ui mini three steps">
             <div class="{{$ctrl.isFiltersShown ? 'active': ''}} step">
@@ -101,11 +106,11 @@
                             <div class="field">
                                 <div class="ui fluid labeled input">
                                     <div class="ui label">Concepts</div>
-                                    <input type="text" placeholder="Concepts" class="fluid" id="assessmentConceptSelector" ng-click="$ctrl.showConceptSelector()">
+                                    <input type="text" placeholder="Concepts" ng-model="$ctrl.activityOptions.concepts" class="fluid" id="assessmentConceptSelector" ng-click="$ctrl.showConceptSelector()" selectable="false" readonly>
                                 </div>
                             </div>
                             <div class="field">
-                                <div class="ui toggle checkbox">
+                                <div class="ui toggle checkbox verticalcenter">
                                     <input type="checkbox" ng-model="$ctrl.activityOptions.myQuestions" ng-change="$ctrl.searchQuestions()">
                                     <label>My Questions</label>
                                 </div>
@@ -120,7 +125,7 @@
                 <div class="five fields">
                     <div class="field">
                         <div class="ui corner labeled input">
-                            <input name="title" ng-model="activityOptions.title" type="text" placeholder="Assessment Title" autocomplete="off">
+                            <input name="title" ng-model="$ctrl.activityOptions.title" type="text" placeholder="Assessment Title" autocomplete="off">
                             <div class="ui corner label">
                                 <i class="asterisk icon"></i>
                             </div>
@@ -140,13 +145,13 @@
                         </div>
                     </div>
                     <div class="field">
-                        <div class="ui toggle checkbox">
+                        <div class="ui toggle checkbox verticalcenter">
                             <input type="checkbox" ng-model="$ctrl.activityOptions.showImmediateFeedback">
                             <label>Show Immediate Feedback</label>
                         </div>
                     </div>
                     <div class="field">
-                        <div class="ui toggle checkbox">
+                        <div class="ui toggle checkbox verticalcenter">
                             <input type="checkbox" ng-model="$ctrl.activityOptions.shuffle">
                             <label>Shuffle Questions</label>
                         </div>
@@ -177,13 +182,13 @@
                         </div>
                     </div>
                     <div class="ui large divided items" ng-show="!$ctrl.isFiltersShown">
-                        <div class="item select" ng-repeat="cartItem in $ctrl.cart.items" ng-click="$ctrl.cart.remove(cartItem)">
-                            <div class="middle aligned content">
+                            <div class="item select" ng-repeat="cartItem in $ctrl.cart.items">
+                                <div class="middle aligned content" ng-click="$ctrl.previewItem(cartItem, true);">
                                 <div class="header">{{ cartItem.question.question }}</div>
                                 <div class="meta">{{cartItem.question.type}} | {{ cartItem.question.qlevel}} | {{ cartItem.question.title }}</div>
                                 <div class="description">{{ cartItem.question.description }}</div>
                             </div>
-                            <div class="ui checkbox" ng-class="item.isSelected ? 'checked' : '' ">
+                            <div class="ui checkbox" ng-class="item.isSelected ? 'checked' : '' " ng-click="$ctrl.cart.remove(cartItem)">
                                 <input type="checkbox" checked="" name="check">
                                 <label></label>
                             </div>
@@ -216,7 +221,7 @@
         <div class="ui buttons" ng-if="!$ctrl.isFiltersShown">
             <button id="closePopUp" class="ui orange button" ng-click="$ctrl.isFiltersShown = !$ctrl.isFiltersShown" type="button">Add More Questions</button>
             <div class="or"></div>
-            <button id="selectanduse" class="ui blue button" ng-click="$ctrl.addItemActivity()" ng-disabled="activityOptionsForm.$invalid || !activityOptions.title || !$ctrl.cart.items.length" type="button">Add Assessment</button>
+            <button id="selectanduse" class="ui blue button" ng-click="$ctrl.addItemActivity()" ng-disabled="!$ctrl.activityOptions.title || !$ctrl.cart.items.length" type="button">Add Assessment</button>
         </div>
     </div>
 </div>

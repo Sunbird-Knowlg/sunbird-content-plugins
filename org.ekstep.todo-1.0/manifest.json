@@ -9,7 +9,8 @@
         "main": "editor/plugin.js",
         "dependencies": [
             {"type": "js", "src": "editor/todos.jQuery.js"},
-            {"type": "css", "src": "editor/todo.css"}
+            {"type": "css", "src": "editor/todo.css"},
+            {"type": "js", "src": "editor/moment.js"}
         ]
     }
 }
