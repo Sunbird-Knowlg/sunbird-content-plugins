@@ -48,6 +48,6 @@ EkstepEditor.basePlugin.extend({
         };
 
         _.isUndefined(searchText) ? null : (requestObj.request.filters.name = [searchText]);
-        iservice.http.post(EkstepEditor.serviceURL.searchServiceBaseUrl + 'v2/search', requestObj, requestHeaders, callback);
+        iservice.http.post(EkstepEditor.config.baseURL + '/api/search/v2/search', requestObj, requestHeaders, callback);
     }
 });
