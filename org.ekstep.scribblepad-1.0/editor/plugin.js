@@ -25,7 +25,7 @@ EkstepEditor.basePlugin.extend({
             this.editorObj = new fabric.Rect(props);
             this.addMedia({
                 id: "org.ekstep.scribblepad.eraser",
-                src: "http://localhost:3000/plugins/org.ekstep.scribblepad-1.0/assets/Eraser.png",
+                src: EkstepEditor.config.baseURL + "/assets/public/content/1460624453530trash.png",
                 assetId: "org.ekstep.scribblepad.eraser",
                 type: "image",
                 preload: true
