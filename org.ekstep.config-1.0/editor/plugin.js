@@ -350,9 +350,9 @@ EkstepEditor.basePlugin.extend({
     addAction: function(event, data) {
         if (data.command && data.asset) {
             if (this.stageActionsList[data.command]) {
-                EkstepEditorAPI.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'type': 'command', 'command': 'transitionTo', 'asset': 'theme', 'value': data.asset }] });
+                EkstepEditorAPI.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': 'transitionTo', 'asset': 'theme', 'value': data.asset }] });
             } else{
-                EkstepEditorAPI.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'type': 'command', 'command': data.command, 'asset': data.asset }] });
+                EkstepEditorAPI.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': data.command, 'asset': data.asset }] });
             }
         }
         this.updateActions();
@@ -383,7 +383,7 @@ EkstepEditor.basePlugin.extend({
     },
     highlightTargetObject: function() {
         var instance = this;
-        EkstepEditorAPI.jQuery("#actionTargetDropdown").parent().one('click', function() {
+        EkstepEditorAPI.jQuery("#actionTargetDropdown:not(.addClick)").parent().on('click', function() {
             EkstepEditorAPI.jQuery("#actionTargetDropdown").nextAll(".menu.transition").find(".item").mouseover(function(event) {
                 var id = EkstepEditorAPI.jQuery(event.target).text();
                 var editorObj = EkstepEditorAPI.getPluginInstance(id).editorObj;
@@ -398,7 +398,7 @@ EkstepEditor.basePlugin.extend({
             EkstepEditorAPI.jQuery(this).mouseleave(function() {
                 EkstepEditorAPI.jQuery("#objectPointer").hide();
             });
-        });
+        }).addClass("addClick");
     },
     restoreOnObjectSelect: function() {
         setTimeout(function() {
