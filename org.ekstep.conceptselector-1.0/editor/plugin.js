@@ -87,7 +87,6 @@ EkstepEditor.basePlugin.extend({
     initConceptBrowser: function(event, data) {
         var instance = this;
         if(instance.selectors.indexOf(data.element) == -1) {
-            instance.selectors.push(data.element);
             setTimeout(function(){
 				EkstepEditorAPI.jQuery('#' + data.element).treePicker({
 					data: instance.conceptData,
@@ -97,11 +96,6 @@ EkstepEditor.basePlugin.extend({
 					  data.callback(nodes);
 					},
 					/**displayFormat: function(picked) { return "Concepts ("+picked.length+" selected)"; },**/
-					onClose: function() {
-						instance.selectors = EkstepEditorAPI._.remove(instance.selectors, function(n) {
-							return n != data.element;
-						});
-					},
 					minSearchQueryLength: 1
 				});
             }, 1000);
