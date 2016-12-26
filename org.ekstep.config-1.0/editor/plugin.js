@@ -448,7 +448,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI._.forEach(pluginInstances, function(pi) {
             if (pi.media) {
                 var mediaObj = pi.media[Object.keys(pi.media)[0]];
-                optionsList[mediaObj.src] = mediaObj.id;
+                optionsList[mediaObj.id] = mediaObj.id;
             }
         });
         var angScope = EkstepEditorAPI.getAngularScope();
