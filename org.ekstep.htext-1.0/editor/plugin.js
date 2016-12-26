@@ -62,9 +62,6 @@ EkstepEditor.basePlugin.extend({
      */
     loadHtml: function(parentInstance, attrs) {
         var instance = this;
-        // this.loadResource('editor/htext.html', 'html', function(err, response) {
-        //     instance.openHtextPopup(err, response, parentInstance, attrs);
-        // });
         EkstepEditorAPI.getService('popup').open({
             template: 'htext',
             controller: 'readalongcontroller',
@@ -82,133 +79,51 @@ EkstepEditor.basePlugin.extend({
         });
 
     },
-    /**    
-    *   invokes popup service to show the popup window
-    *   @param err {Object} err when loading template async
-    *   @param data {String} template HTML 
-    *   @param instance 
-    *   @param attrs attributes
-    *   @memberof Htext
-    */
-    openHtextPopup: function(err, data, instance, attrs) {
-        EkstepEditorAPI.getService('popup').open({ template: data, data: { instance: instance, attrs: attrs } }, this.controllerCallback);
-    },
-    /**
-    *   angular controller for popup service as callback
-    *   @param ctrl {Object} popupController object
-    *   @param scope {Object} popupController scope object
-    *   @param resolvedData {Object} data passed to uib config
-    *   @memberof Htext
-    */
-    controllerCallback: function(ctrl, scope, data) {
-        // var instance = data.instance,
-        //     karaoke;
-        // ctrl.readalongText = '';
-        // ctrl.showText = true;
-        // ctrl.audioSelected = false;
-
-        // ctrl.name = '10';
-        // ctrl.downloadurl = 'https://dev.ekstep.in/assets/public/content/18_1466489408404.mp3';
-        // ctrl.identifier = 'do_20076106';
-
-        // karaoke = new Karaoke();
-        // if(data.attrs){
-        //     ctrl.readalongText = data.attrs.attributes.__text;
-        //     timings = !EkstepEditorAPI._.isEmpty(data.attrs.attributes.timings) ? EkstepEditorAPI._.split(data.attrs.attributes.timings, ',') : '';
-        //     wordTimes = [];
-        //     words = [];
-        //     wordsArr = EkstepEditorAPI._.split(data.attrs.attributes.__text, ' ');
-        //     wordIdx = 0;
-        //     EkstepEditorAPI._.each(timings, function(key, value) {
-        //         wordIdx += 1;
-        //         words.push({
-        //             word: wordsArr[value],
-        //             stepNo: (parseFloat(key / 1000).toFixed(1)) * 10,
-        //             wordIdx: wordIdx
-        //         });
-        //         wordTimes.push(parseFloat(key / 1000).toFixed(1));
-        //     }); 
-        //     karaoke.audioObj.url = ctrl.downloadurl;
-        //     karaoke.audioObj.wordMap = words;
-        //     karaoke.audioObj.wordTimes = wordTimes;
-        //     karaoke.audioObj.highlightColor = data.attrs.attributes.highlight;
-        //     ctrl.autoplay = data.attrs.attributes.autoplay;
-        // }else{
-        //     karaoke.audioObj.url = ctrl.downloadurl;
-        //     karaoke.audioObj.wordMap = ctrl.wordMap ? ctrl.wordMap : '';
-        //     karaoke.audioObj.wordTimes = ctrl.wordTimes ? ctrl.wordTimes : '';
-        //     karaoke.audioObj.highlightColor = instance.highlightColor ? instance.highlightColor : '';
-        // }
-
-        // var slider = EkstepEditorAPI.jQuery('#syncSlider').slider({
-        //     min: 1,
-        //     max: 3,
-        //     value: 1,
-        //     step: 1,
-        //     change: karaoke.changePlaybackRate
-        // });
-        // EkstepEditorAPI.jQuery('#syncStart').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.startSync, karaoke));
-        // EkstepEditorAPI.jQuery('#pick-hcolor').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.setColor, karaoke));
-        // EkstepEditorAPI.jQuery('#stopAudio').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.stopAudio, karaoke));
-        // EkstepEditorAPI.jQuery('.slideStep').bind('drop', EkstepEditorAPI.jQuery.proxy(karaoke.handleWordDrop, karaoke));
-        // EkstepEditorAPI.jQuery('#syncMark').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.markWords, karaoke));
-        // EkstepEditorAPI.jQuery('#sync-play').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.playSyncedLayer, karaoke));
-        // EkstepEditorAPI.jQuery('#sync-pause').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.pauseAudio, karaoke));
-        // window.karaoke = karaoke;
-        // karaoke.initPlayer();
-
-        // ctrl.selectAudio = function(value) {
-        //     ctrl.audioSelected = true;
-        // }
-
-        // ctrl.finalText = function() {
-        //     ctrl.showText = false;
-        //     var text = EkstepEditorAPI.jQuery('#readalongText').val().trim(),
-        //         textArray = text.split(' '),
-        //         str = '';
-        //     if (text.length > 0) {
-        //         ctrl.showText = false;
-        //     }
-        //     EkstepEditorAPI._.forEach(textArray, function(text, key) {
-        //         key = key + 1;
-        //         str += '<span class="word" id="word-' + key + '">' + text + ' </span>';
-        //     });
-        //     EkstepEditorAPI.jQuery('#main-text-block').html(str);
-        // }
-
-        // ctrl.addReadAlong = function() {
-        //     if (ctrl.readalongText && karaoke.audioObj.wordTimes.length > 0) {
-        //         instance.addMedia({
-        //             id: ctrl.name,
-        //             src: ctrl.downloadurl,
-        //             type: 'audio'
-        //         });
-        //         instance.editorObj.text = instance.attributes.__text = ctrl.readalongText;
-        //         instance.attributes.autoplay = ctrl.autoplay;
-        //         EkstepEditorAPI.render();
-        //         EkstepEditorAPI.dispatchEvent('object:modified', { target: instance.editorObj });
-        //         instance.attributes.highlight = karaoke.audioObj.highlightColor ? karaoke.audioObj.highlightColor : karaoke.highlightColor;
-        //         timings = [];
-        //         EkstepEditorAPI._.each(karaoke.audioObj.wordTimes, function(n) {
-        //             timings.push(parseInt(n * 1000));
-        //         });
-        //         instance.attributes.timings = timings.join();
-        //         instance.attributes.audio = ctrl.name;
-        //     } else {
-        //         instance.editorObj.remove();
-        //         EkstepEditorAPI.render();
-        //     }
-        //     EkstepEditorAPI.jQuery('.ui.modal').modal('hide');
-
-        // };
-
-        // ctrl.cancel = function() {
-        //     if (ctrl.readalongText == "" || karaoke.audioObj.wordTimes.length <= 0) {
-        //         instance.editorObj.remove();
-        //         EkstepEditorAPI.render();
-        //     }
-        //     EkstepEditorAPI.jQuery('.ui.modal').modal('hide');
-        // };
+    invokeKaraoke: function(audioSrc, attrs){
+        var karaoke = new Karaoke();
+        karaoke.audioObj.url = audioSrc;
+        if(attrs){
+            var timings = !EkstepEditorAPI._.isEmpty(attrs.attributes.timings) ? EkstepEditorAPI._.split(attrs.attributes.timings, ',') : '',
+                wordTimes = [],
+                words = [],
+                wordsArr = EkstepEditorAPI._.split(attrs.attributes.__text, ' '),
+                wordIdx = 0;
+            EkstepEditorAPI._.each(timings, function(key, value) {
+                wordIdx += 1;
+                words.push({
+                    word: wordsArr[value],
+                    stepNo: (parseFloat(key / 1000).toFixed(1)) * 10,
+                    wordIdx: wordIdx
+                });
+                wordTimes.push(parseFloat(key / 1000).toFixed(1));
+            }); 
+            karaoke.audioObj.url = audioSrc;
+            karaoke.audioObj.wordMap = words;
+            karaoke.audioObj.wordTimes = wordTimes;
+            karaoke.audioObj.highlightColor = attrs.attributes.highlight;
+        }else{
+            karaoke.audioObj.url = audioSrc;
+            karaoke.audioObj.wordMap = '';
+            karaoke.audioObj.wordTimes = '';
+            karaoke.audioObj.highlightColor = '';
+        }
+        var slider = EkstepEditorAPI.jQuery('#syncSlider').slider({
+            min: 1,
+            max: 3,
+            value: 1,
+            step: 1,
+            change: karaoke.changePlaybackRate
+        });
+        EkstepEditorAPI.jQuery('#syncStart').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.startSync, karaoke));
+        EkstepEditorAPI.jQuery('#pick-hcolor').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.setColor, karaoke));
+        EkstepEditorAPI.jQuery('#stopAudio').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.stopAudio, karaoke));
+        EkstepEditorAPI.jQuery('.slideStep').bind('drop', EkstepEditorAPI.jQuery.proxy(karaoke.handleWordDrop, karaoke));
+        EkstepEditorAPI.jQuery('#syncMark').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.markWords, karaoke));
+        EkstepEditorAPI.jQuery('#sync-play').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.playSyncedLayer, karaoke));
+        EkstepEditorAPI.jQuery('#sync-pause').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.pauseAudio, karaoke));
+        window.karaoke = karaoke;
+        karaoke.initPlayer();
+        return karaoke;
     },
     /**
      * This method overridden from Ekstepeditor.basePlugin and here we double click event is added
