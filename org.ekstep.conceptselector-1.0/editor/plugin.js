@@ -88,21 +88,23 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         if(instance.selectors.indexOf(data.element) == -1) {
             instance.selectors.push(data.element);
-            EkstepEditorAPI.jQuery('#' + data.element).treePicker({
-                data: instance.conceptData,
-                name: 'Concepts',
-                picked:  data.selectedConcepts,
-                onSubmit: function(nodes) {
-                  data.callback(nodes);
-                },
-                /**displayFormat: function(picked) { return "Concepts ("+picked.length+" selected)"; },**/
-                onClose: function() {
-                    instance.selectors = EkstepEditorAPI._.remove(instance.selectors, function(n) {
-                        return n != data.element;
-                    });
-                },
-                minSearchQueryLength: 1
-            });
+            setTimeout(function(){
+				EkstepEditorAPI.jQuery('#' + data.element).treePicker({
+					data: instance.conceptData,
+					name: 'Concepts',
+					picked:  data.selectedConcepts,
+					onSubmit: function(nodes) {
+					  data.callback(nodes);
+					},
+					/**displayFormat: function(picked) { return "Concepts ("+picked.length+" selected)"; },**/
+					onClose: function() {
+						instance.selectors = EkstepEditorAPI._.remove(instance.selectors, function(n) {
+							return n != data.element;
+						});
+					},
+					minSearchQueryLength: 1
+				});
+            }, 1000);
         }
     }
 });
