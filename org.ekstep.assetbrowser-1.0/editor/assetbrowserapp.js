@@ -3,7 +3,7 @@ angular.module('assetbrowserapp', ['angularAudioRecorder']).config(['recorderSer
         recorderServiceProvider.forceSwf(false);
         
         // @todo change this to correct path
-        var lameJsUrl = 'http://localhost:3000/plugins/org.ekstep.assetbrowser-1.0/editor/recorder/lib2/lame.min.js';
+        var lameJsUrl = EkstepEditor.config.baseURL + '/content-plugins/org.ekstep.assetbrowser-1.0/editor/recorder/lib2/lame.min.js';
         var config = {lameJsUrl:lameJsUrl, bitRate: 92};
 
       recorderServiceProvider.withMp3Conversion(true, config);
