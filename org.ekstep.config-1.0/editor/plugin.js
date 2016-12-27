@@ -223,6 +223,10 @@ EkstepEditor.basePlugin.extend({
     onConfigChange: function(key, value) {
         EkstepEditorAPI.getCurrentObject().__proto__.__proto__.onConfigChange(key, value);
         EkstepEditorAPI.getCurrentObject().onConfigChange(key, value);
+
+        if (key === 'autoplay') {
+            this.toggleEventToStage(value);
+        }
     },
     /**
      * This is lifecycle method called when object saves the all the config data at a time
@@ -467,7 +471,23 @@ EkstepEditor.basePlugin.extend({
         angScope.safeApply(function() {
             angScope.actionTargetObjects = stageOptions;
         });
-    }
+    },
 
+    toggleEventToStage: function (flag) {
+        var currentStage = EkstepEditorAPI.getCurrentStage();
+        var eventIndex = -1;
+        if(currentStage.event){
+            _.forEach(currentStage.event, function (e,i) {
+                if(e.action[0].asset === EkstepEditorAPI.getCurrentObject().id){
+                    eventIndex = i;
+                }
+            })
+        }
+        if (flag === true && eventIndex === -1) {
+            currentStage.addEvent({ 'type': 'enter', 'action': [{ 'id': UUID(), 'type': 'command', 'command': 'play', 'asset': EkstepEditorAPI.getCurrentObject().id }] })
+        } else if(flag === false && eventIndex !== -1){
+            currentStage.event.splice(eventIndex, 1);
+        }
+    }
 });
 //# sourceURL=configplugin.js
