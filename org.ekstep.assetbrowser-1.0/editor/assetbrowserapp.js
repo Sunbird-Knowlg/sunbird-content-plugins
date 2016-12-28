@@ -3,16 +3,16 @@ angular.module('assetbrowserapp', ['angularAudioRecorder']).config(['recorderSer
         recorderServiceProvider.forceSwf(false);
         
         // @todo change this to correct path
-        if(EkstepEditorAPI._.isUndefined(window.contetInfo.baseURL)){
-            var lameJsUrl = window.contetInfo.baseURL + EkstepEditor.config.pluginRepo + '/org.ekstep.assetbrowser-1.0/editor/recorder/lib2/lame.min.js';
+        if(EkstepEditorAPI._.isUndefined(window.contetInfo)){
+            var lameJsUrl =  EkstepEditor.config.pluginRepo + '/org.ekstep.assetbrowser-1.0/editor/recorder/lib2/lame.min.js';
         }
         else{
-            var lameJsUrl = EkstepEditor.config.pluginRepo + '/org.ekstep.assetbrowser-1.0/editor/recorder/lib2/lame.min.js';
+            var lameJsUrl = window.contetInfo.baseURL + EkstepEditor.config.pluginRepo + '/org.ekstep.assetbrowser-1.0/editor/recorder/lib2/lame.min.js';
         }
         
         var config = {lameJsUrl:lameJsUrl, bitRate: 92};
 
-      recorderServiceProvider.withMp3Conversion(true);
+      recorderServiceProvider.withMp3Conversion(true, config);
   }]);
 angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$injector', 'instance', function($scope ,$injector, instance) {
         var audiodata = {},
@@ -33,7 +33,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         ctrl.loadingImage = true;
         ctrl.uploadView = false;
         ctrl.languagecode = 'en';
-        ctrl.owner = window.contetInfo.user.id;
+        ctrl.owner = EkstepEditorAPI._.isUndefined(window.contetInfo) ? 'amolg' : window.contetInfo.user.id;
         ctrl.asset = {
             'requiredField': '',
         };
@@ -50,7 +50,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             'keywords': [],
             'creator': '',
             'status': 'Draft',
-            'owner': window.contetInfo.user.id,
+            'owner': EkstepEditorAPI._.isUndefined(window.contetInfo) ? 'amolg' : window.contetInfo.user.id,
             'code': "org.ekstep" + Math.random(),
             'mimeType': "",
             'mediaType': "",
