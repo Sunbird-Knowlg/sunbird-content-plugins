@@ -31,7 +31,9 @@ EkstepEditor.basePlugin.extend({
             attributes.w = attributes.h = 70;
         }
         for (var i = 0; i < attributes.length - 1; i++) {
-            attributes[i] = instance.parseObject(attributes[i]);            
+            if (!_.isUndefined(attributes[i].question)) {
+                attributes[i].question = instance.parseObject(attributes[i].question);
+            }
             question.push(attributes[i].question);
             templateIds.push(attributes[i].question.template_id);
             instance.addMediatoManifest(attributes[i].question.media);
@@ -41,6 +43,7 @@ EkstepEditor.basePlugin.extend({
             if (!_.isUndefined(templateIds[index])) {
                 EkstepEditor.assessmentService.getTemplate(templateIds[index], function(err, res) {
                     if (res) {
+                        console.info("response",res);
                         resCount = resCount + 1;
                         console.info(resCount,"resCount");
                         console.info(templateIds.length,"lenght");
@@ -83,33 +86,25 @@ EkstepEditor.basePlugin.extend({
         instance.setData(Object.assign(controller, templateObj));
     },
     parseObject: function(item) {
-        if (!_.isUndefined(item.question.options)) {
-            item.question.options = !_.isObject(item.question.options) ? JSON.parse(item.question.options) : item.question.options;
-            return item;
-        } else if (!_.isUndefined(item.question.lhs_options) && !_.isUndefined(item.question.rhs_options)) {
-            item.question.lhs_options = !_.isObject(item.question.lhs_options) ? JSON.parse(item.question.lhs_options) : item.question.lhs_options;
-            item.question.rhs_options = !_.isObject(item.question.rhs_options) ? JSON.parse(item.question.rhs_options) : item.question.rhs_options;
-            return item;
-        } else if (!_.isUndefined(item.question.model) && !_.isUndefined(item.question.answer)) {
-            item.question.model = !_.isObject(item.question.model) ? JSON.parse(item.question.model) : item.question.model;
-            item.question.answer = !_.isObject(item.question.answer) ? JSON.parse(item.question.answer) : item.question.answer;
-            return item;
-        } else {
-            console.warn("Selected item is not valid",item);
-            return item;
-        }
+        $.each(item, function(key, value) {
+            if (key === 'options' || key === "lhs_options" || key === 'rhs_options' || key === 'model' || key === 'answer' || key === 'media') {
+                item[key] = !_.isObject(item[key]) ? JSON.parse(item[key]) : item[key];
+            }
+        });
+        return item;
     },
     // get media asset and add those asset to the manifest
     addMediatoManifest: function(media) {
         var instance = this;
         if (!_.isUndefined(media)) {
-            media = !_.isObject(media) ? JSON.parse(media) : media;
-            if (media.length > 0) {
+            if (_.isArray(media)) {
                 media.forEach(function(ele, index) {
                     if (!_.isNull(media[index].id)) {
                         instance.addMedia(media[index]);
                     }
                 });
+            } else {
+                instance.addMedia(media);
             }
         }
     },
