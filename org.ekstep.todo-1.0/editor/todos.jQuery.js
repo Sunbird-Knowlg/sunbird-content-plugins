@@ -72,7 +72,7 @@ $.fn.jltodos = function(options){
 	function init(obj, element)
 	{
 		EkstepEditorAPI.jQuery.ajax({
-			url: "index.php?option=com_api&app=jlike&resource=init&format=raw",
+			url: EkstepEditor.config.baseURL+"/index.php?option=com_api&app=jlike&resource=init&format=raw",
 			headers: {
 				'x-auth':'session'
 			},
@@ -95,7 +95,7 @@ $.fn.jltodos = function(options){
 
 	function createTodo(obj){
 		EkstepEditorAPI.jQuery.ajax({
-			url: 'index.php?option=com_api&app=jlike&resource=todos&format=raw',
+			url: EkstepEditor.config.baseURL+'/index.php?option=com_api&app=jlike&resource=todos&format=raw',
 			headers: {
 				'x-auth':'session'
 			},
@@ -131,7 +131,7 @@ $.fn.jltodos = function(options){
 	function renderTodos(obj, addhtmlto)
 	{
 		EkstepEditorAPI.jQuery.ajax({
-			url: 'index.php?option=com_api&app=jlike&resource=todos&format=raw',
+			url: EkstepEditor.config.baseURL+'/index.php?option=com_api&app=jlike&resource=todos&format=raw',
 			headers: {
 				'x-auth':'session'
 			},
