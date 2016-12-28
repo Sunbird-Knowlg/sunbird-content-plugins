@@ -28,5 +28,8 @@
             "dataType": "assessmentbrowser",
             "required": true
         }]
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
     }
 }
