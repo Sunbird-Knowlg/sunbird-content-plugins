@@ -76,6 +76,11 @@ EkstepEditor.basePlugin.extend({
             },
             width: 900,
             showClose: false,
+        }, function(){
+            if(!instance.editorObj.__text){
+                instance.editorObj.remove();
+                EkstepEditorAPI.render();
+            }
         });
 
     },
@@ -106,6 +111,7 @@ EkstepEditor.basePlugin.extend({
             karaoke.audioObj.wordMap = '';
             karaoke.audioObj.wordTimes = '';
             karaoke.audioObj.highlightColor = '';
+            EkstepEditorAPI.jQuery("#jplayerSync").data('jPlayer', "");
         }
         var slider = EkstepEditorAPI.jQuery('#syncSlider').slider({
             min: 1,
@@ -114,6 +120,7 @@ EkstepEditor.basePlugin.extend({
             step: 1,
             change: karaoke.changePlaybackRate
         });
+        EkstepEditorAPI.jQuery('#changeaudio').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.res, karaoke));
         EkstepEditorAPI.jQuery('#syncStart').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.startSync, karaoke));
         EkstepEditorAPI.jQuery('#pick-hcolor').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.setColor, karaoke));
         EkstepEditorAPI.jQuery('#stopAudio').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.stopAudio, karaoke));

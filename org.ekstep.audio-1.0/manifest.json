@@ -28,6 +28,7 @@
             "description": "Choose a  from the browser",
             "dataType": "audiobrowser",
             "required": true
-        }]
+        }],
+        "playable": true
     }
 }

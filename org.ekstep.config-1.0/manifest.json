@@ -15,7 +15,7 @@
         "data": {
         	"toolbars": [
         		{"show": true, "iconClass": "setting icon", "onclick": { "id": "config:show", "data": {}}},
-        		{"show": true, "iconClass": "tasks icon", "onclick": {"id": "config:properties", "data": {}}},
+        		{"show": true, "iconClass": "tasks icon", "onclick": {"id": "config:actions", "data": {}}},
         		{"show": true, "iconClass": "question icon", "onclick": {"id": "config:help", "data": {}}},
                 {"show": true, "iconClass": "thumbs outline up icon", "onclick": {}}
         	]

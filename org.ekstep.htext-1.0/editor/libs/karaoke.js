@@ -109,6 +109,17 @@
         return this.scrolled = 1;
     };
 
+    Karaoke.prototype.reset = function() {
+        this.audioObj = {
+            wordMap: [],
+            wordTimes: [],
+            url: ""
+        };
+        $("#jplayerSync").jPlayer( "destroy" );
+        $("#jplayerSync").unbind($.jPlayer.event.loadedmetadata);
+        $("#slideTbl").html('');
+    };
+
     Karaoke.prototype.splitwords = function(element) {
         var splitted, text, textArray;
         text = $(element).find('.text-box')[0].innerText.replace(/\s*$/, "");
@@ -488,3 +499,4 @@
         }
     };
 }(window.jQuery, window, document));
+//# sourceURL=karaokeplugin.js

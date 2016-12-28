@@ -26,89 +26,105 @@ EkstepEditor.basePlugin.extend({
     
     // Add assesment to the stage
     newInstance: function() {
-        var instance = this,attr = instance.attributes, ques = [],sets = {},ctrl = {},template ={};
-        if (isNaN(attr.w)) {
-            attr.w = attr.h = 70;
+        var instance = this,attributes = instance.attributes,templateArray =[],question=[],templateIds=[],resCount =0;
+        if (isNaN(attributes.w)) {
+            attributes.w = attributes.h = 70;
         }
-        for (var i = 0; i < attr.length - 1; i++) {
-            attr[i] = instance.cleanObject(attr[i]);
-            ques.push(attr[i].question);
-            instance.addMediatoManifest(attr[i].question.media);
-            // TODO : Refactor of getting template code
-            if (!_.isUndefined(attr[i].question.template_id)) {
-                EkstepEditor.assessmentService.getTemplate(attr[i].question.template_id, function(err, res) {                    
-                    template = instance.xmltojsonTempl(res);
-                    console.info("Template Data:", template);
-                    instance.addMediatoManifest(template.manifest.media);
-                });
+        for (var i = 0; i < attributes.length - 1; i++) {
+            if (!_.isUndefined(attributes[i].question)) {
+                attributes[i].question = instance.parseObject(attributes[i].question);
             }
+            question.push(attributes[i].question);
+            templateIds.push(attributes[i].question.template_id);
+            instance.addMediatoManifest(attributes[i].question.media);
         }
-        instance.percentToPixel(attr);
-        var props = instance.convertToFabric(attr),
-        itemArray = attr.length -1, 
-        count = attr[itemArray].total_items +"/" + itemArray,
-        max_score = attr[itemArray].max_score,
-        title = attr[itemArray].title;
-        instance.editorObj = instance.showProperties(props,title, count, max_score);
-        sets[attr[0].question.identifier] = ques;
-        ctrl["items"] = sets;
-        ctrl["item_sets"] = [{"count": attr[itemArray].total_items,"id": attr[0].question.identifier}];
-        instance.setData(Object.assign(ctrl, attr[itemArray]));
-        // TODO :setconfig should not be hard-coded
-        instance.setConfig({"type": "items","var": "item"});
-        delete instance.attributes;
-
-    },
-     // parsing of the items
-    cleanObject: function(item) {
-        if (!_.isUndefined(item.question.options)) {
-            item.question.options = !_.isObject(item.question.options) ? JSON.parse(item.question.options) : item.question.options;
-            return item;
-        } else if (!_.isUndefined(item.question.lhs_options) && !_.isUndefined(item.question.rhs_options)) {
-            item.question.lhs_options = !_.isObject(item.question.lhs_options) ? JSON.parse(item.question.lhs_options) : item.question.lhs_options;
-            item.question.rhs_options = !_.isObject(item.question.rhs_options) ? JSON.parse(item.question.rhs_options) : item.question.rhs_options;
-            return item;
-        } else if (!_.isUndefined(item.question.model) && !_.isUndefined(item.question.answer)) {
-            item.question.model = !_.isObject(item.question.model) ? JSON.parse(item.question.model) : item.question.model;
-            item.question.answer = !_.isObject(item.question.answer) ? JSON.parse(item.question.answer) : item.question.answer;
-            return item;
-        } else {
-            console.warn("Selected item is not valid",item);
-            return item;
-        }
-
-    },
-    // get media asset and add those asset to the manifest
-    addMediatoManifest: function(arryAttr) {
-        var asset, instance = this;
-        if (!_.isUndefined(arryAttr)) {
-           asset = !_.isObject(arryAttr) ? JSON.parse(arryAttr) : arryAttr;
-            if (asset.length > 0) {
-                asset.forEach(function(ele, index) {
-                    if (!_.isNull(asset[index].id)) {
-                        instance.addMedia(asset[index]);
+        templateIds = _.uniq(templateIds);
+        for (var index = 0; index < templateIds.length; index++) {
+            if (!_.isUndefined(templateIds[index])) {
+                EkstepEditor.assessmentService.getTemplate(templateIds[index], function(err, res) {
+                    if (res) {
+                        console.info("response",res);
+                        resCount = resCount + 1;
+                        console.info(resCount,"resCount");
+                        console.info(templateIds.length,"lenght");
+                        templateArray.push(instance.xml2json(res));
+                        if (resCount == templateIds.length) {
+                            instance.setQuizdata(question, attributes, templateArray);
+                        }
+                    } else {
+                        console.error("Template Response is faild:", err);
                     }
                 });
             }
         }
+        instance.percentToPixel(attributes);
+        var props = instance.convertToFabric(attributes),
+        itemLength = attributes.length -1, 
+        count = attributes[itemLength].total_items +"/" + itemLength,
+        maxscore = attributes[itemLength].max_score,
+        title = attributes[itemLength].title;
+        instance.editorObj = instance.showProperties(props,title, count, maxscore);
+        instance.setConfig({"type": "items","var": "item"});
+        delete instance.attributes;
     },
-    xmltojsonTempl : function(res){
-         var data, x2js = new X2JS({attributePrefix: 'none'});
-          if (!_.isNull(res)) {
-                    data = x2js.xml_str2json(res.data.result.content.body);
-                    return data.theme;
+    setQuizdata: function(question,attributes,templateArray) {
+        console.info(templateArray,"templateArray")
+        var instance = this, questionSets = {}, configItem ={},controller = {},templates=[],templateObj={};
+        templateArray.forEach(function(element, index) {
+            if (!_.isNull(element)) {
+                templates.push(element.template);
+                if (!_.isUndefined(element.manifest)) {
+                    instance.addMediatoManifest(element.manifest.media);
                 }
-
+            }
+        });
+        templateObj["template"] = templates;
+        questionSets[attributes[0].question.identifier] = question;
+        configItem["items"] = questionSets;
+        configItem["item_sets"] = [{"count": attributes[attributes.length -1].total_items,"id": attributes[0].question.identifier}];
+        controller["controller"] = Object.assign(configItem,attributes[attributes.length -1]);
+        instance.setData(Object.assign(controller, templateObj));
     },
-    /*Display of Maxscore and question count on the editor page */
-
-    showProperties: function(props, title, count, max_score) {
+    parseObject: function(item) {
+        $.each(item, function(key, value) {
+            if (key === 'options' || key === "lhs_options" || key === 'rhs_options' || key === 'model' || key === 'answer' || key === 'media') {
+                item[key] = !_.isObject(item[key]) ? JSON.parse(item[key]) : item[key];
+            }
+        });
+        return item;
+    },
+    // get media asset and add those asset to the manifest
+    addMediatoManifest: function(media) {
+        var instance = this;
+        if (!_.isUndefined(media)) {
+            if (_.isArray(media)) {
+                media.forEach(function(ele, index) {
+                    if (!_.isNull(media[index].id)) {
+                        instance.addMedia(media[index]);
+                    }
+                });
+            } else {
+                instance.addMedia(media);
+            }
+        }
+    },
+    xml2json: function(res) {
+        var data, x2js = new X2JS({
+            attributePrefix: 'none'
+        });
+        if (!_.isNull(res)) {
+            data = x2js.xml_str2json(res.data.result.content.body);
+            console.info(data);
+            return data.theme;
+        }
+    },
+    showProperties: function(props, qTittle, qCount, maxscore) {
         props.fill = "#EDC06D";
-        var rect = new fabric.Rect(props),
-        qTittle = new fabric.Text(title, {fontSize: 30, fill:'black',textAlign:'center',textDecoration:'underline', top: 80, left: 150} ),
-        qCount = new fabric.Text("QUESTIONS : " + count, {fontSize: 20,fill:'black',top: 120,left: 150}),
-        max_score = new fabric.Text("TOTAL MARKS : "+max_score, {fontSize: 20, fill:'black', top: 150,left: 150,}),
-        fabricGroup = new fabric.Group([rect, qTittle, qCount, max_score], {left: 110, top: 50});
+        var rect = new fabric.Rect(props);
+        qTittle = new fabric.Text(qTittle, {fontSize: 30, fill:'black',textAlign:'center',textDecoration:'underline', top: 80, left: 150} );
+        qCount = new fabric.Text("QUESTIONS : " + qCount, {fontSize: 20,fill:'black',top: 120,left: 150});
+        maxscore = new fabric.Text("TOTAL MARKS : "+maxscore, {fontSize: 20, fill:'black', top: 150,left: 150,});
+        fabricGroup = new fabric.Group([rect, qTittle, qCount, maxscore], {left: 110, top: 50});
         return fabricGroup;
     },
     /**    

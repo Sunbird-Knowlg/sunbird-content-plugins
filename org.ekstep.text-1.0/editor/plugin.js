@@ -75,7 +75,13 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     dblClickHandler: function() {
-        textEditor.showEditor(EkstepEditorAPI.getEditorObject().id);
+        var leftSt = EkstepEditorAPI.jQuery("#canvas").offset().left + EkstepEditorAPI.getCurrentObject().editorObj.left;
+        var leftEnd = leftSt + EkstepEditorAPI.getCurrentObject().editorObj.width;
+        var topSt = EkstepEditorAPI.jQuery("#canvas").offset().top + EkstepEditorAPI.getCurrentObject().editorObj.top;
+        var topEnd = topSt + EkstepEditorAPI.getCurrentObject().editorObj.height;
+        if(event.clientX > leftSt && event.clientX < leftEnd && event.clientY > topSt && event.clientY < topEnd){
+            textEditor.showEditor(EkstepEditorAPI.getEditorObject().id);
+        }
     },
     /**
      * This method is called when the stage:unselect event is fired,
