@@ -69,6 +69,15 @@ angular.module('readalongapp', [])
 
         ctrl.addReadAlong = function() {
             if (ctrl.readalongText && karaoke.audioObj.wordTimes.length > 0) {
+                var childrenIndex = '';
+                var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes();
+                if(attrs){
+                    _.forEach(mediaArr, function(val, key){
+                        if(!_.isUndefined(val.media) && val.media[attrs.attributes.audio]){ 
+                            EkstepEditorAPI.getCurrentStage().children.splice(key, 1);
+                        }
+                    });
+                }
                 instance.editorObj.text = instance.attributes.__text = ctrl.readalongText;
                 instance.attributes.autoplay = ctrl.autoplay;
                 EkstepEditorAPI.render();
@@ -80,15 +89,11 @@ angular.module('readalongapp', [])
                 });
                 instance.attributes.timings = timings.join();
                 instance.attributes.audio = ctrl.name;
-                var eventIndex = -1;
                 _.forEach(instance.event, function (e,i) {
                     if(e.action[0].asset === instance.id){
-                        eventIndex = i;
+                        instance.event.splice(i, 1);
                     }
                 })
-                if(eventIndex !== -1){
-                    instance.event.splice(eventIndex, 1);
-                }
                 instance.addEvent({ 'type':'click', 'action' : [{'type':'command', 'command' : 'togglePlay' , 'asset': instance.id}]});
             } else {
                 instance.editorObj.remove();

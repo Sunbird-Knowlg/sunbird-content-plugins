@@ -35,6 +35,7 @@ EkstepEditor.basePlugin.extend({
      */
     initialize: function() {
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
+        EkstepEditorAPI.addEventListener("delete:invoked", this.deleteObject, this);
         setTimeout(function() {
             var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.htext-1.0/editor/htext.html';
             var controllerPath = EkstepEditor.config.pluginRepo + '/org.ekstep.htext-1.0/editor/readalongapp.js';
@@ -76,18 +77,18 @@ EkstepEditor.basePlugin.extend({
             },
             width: 900,
             showClose: false,
-        }, function(){
-            if(!instance.editorObj.__text){
+        }, function() {
+            if (!instance.editorObj.__text) {
                 instance.editorObj.remove();
                 EkstepEditorAPI.render();
             }
         });
 
     },
-    invokeKaraoke: function(audioSrc, attrs){
+    invokeKaraoke: function(audioSrc, attrs) {
         var karaoke = new Karaoke();
         karaoke.audioObj.url = audioSrc;
-        if(attrs){
+        if (attrs) {
             var timings = !EkstepEditorAPI._.isEmpty(attrs.attributes.timings) ? EkstepEditorAPI._.split(attrs.attributes.timings, ',') : '',
                 wordTimes = [],
                 words = [],
@@ -101,12 +102,12 @@ EkstepEditor.basePlugin.extend({
                     wordIdx: wordIdx
                 });
                 wordTimes.push(parseFloat(key / 1000).toFixed(1));
-            }); 
+            });
             karaoke.audioObj.url = audioSrc;
             karaoke.audioObj.wordMap = words;
             karaoke.audioObj.wordTimes = wordTimes;
             karaoke.audioObj.highlightColor = attrs.attributes.highlight;
-        }else{
+        } else {
             karaoke.audioObj.url = audioSrc;
             karaoke.audioObj.wordMap = '';
             karaoke.audioObj.wordTimes = '';
@@ -164,7 +165,7 @@ EkstepEditor.basePlugin.extend({
         var leftEnd = leftSt + EkstepEditorAPI.getCurrentObject().editorObj.width;
         var topSt = EkstepEditorAPI.jQuery("#canvas").offset().top + EkstepEditorAPI.getCurrentObject().editorObj.top;
         var topEnd = topSt + EkstepEditorAPI.getCurrentObject().editorObj.height;
-        if(event.clientX > leftSt && event.clientX < leftEnd && event.clientY > topSt && event.clientY < topEnd){
+        if (event.clientX > leftSt && event.clientX < leftEnd && event.clientY > topSt && event.clientY < topEnd) {
             pluginId = EkstepEditorAPI.getEditorObject().id;;
             currentInstance.loadHtml(currentInstance, EkstepEditorAPI.getPluginInstance(pluginId));
         }
@@ -216,7 +217,7 @@ EkstepEditor.basePlugin.extend({
         config.highlight = this.attributes.highlight;
         config.autoplay = this.attributes.autoplay || false;
         config.color = this.attributes.color || this.attributes.fill;
-        config.fontfamily = this.attributes.fontFamily; 
+        config.fontfamily = this.attributes.fontFamily;
         config.fontsize = this.attributes.fontSize;
         config.fontweight = this.attributes.fontweight || false;
         config.fontstyle = this.attributes.fontstyle || false;
@@ -291,6 +292,17 @@ EkstepEditor.basePlugin.extend({
             data.fontSize = fontSize;
         };
         return retData;
+    },
+    deleteObject: function(event, data) {
+        if (!_.isUndefined(data.editorObj.audio)) {
+            var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes();
+            _.forEach(mediaArr, function(val, key) {
+                if (!_.isUndefined(val.media) && val.media[data.editorObj.audio]) {
+                    EkstepEditorAPI.getCurrentStage().children.splice(key, 1);
+                    EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', {'asset': data.editorObj.audio});
+                }
+            });
+        }
     }
 });
 //# sourceURL=readalongplugin.js
