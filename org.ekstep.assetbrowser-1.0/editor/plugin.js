@@ -88,10 +88,10 @@ EkstepEditor.basePlugin.extend({
             }
         };
 
-        _.isUndefined(searchText) ? null : requestObj.request.query = searchText;
-        _.isUndefined (owner) ? null : requestObj.request.filters.owner = owner;
-        allowableFilter = _.omit(this.search_filter, ['mediaType', 'license', 'limit']);
-        _.merge(requestObj.request.filters, allowableFilter);
+        EkstepEditorAPI._.isUndefined(searchText) ? null : requestObj.request.query = searchText;
+        EkstepEditorAPI._.isUndefined (owner) ? null : requestObj.request.filters.owner = owner;
+        allowableFilter = EkstepEditorAPI._.omit(this.search_filter, ['mediaType', 'license', 'limit']);
+        EkstepEditorAPI._.merge(requestObj.request.filters, allowableFilter);
 
         iservice.http.post(EkstepEditor.config.baseURL + '/api/search/v2/search', requestObj, requestHeaders, cb);
     },
@@ -115,8 +115,8 @@ EkstepEditor.basePlugin.extend({
         /*Check for browser support for all File API*/
         if (window.File && window.FileList && window.Blob) {
             /*Get file size and file type*/
-            var fsize = $('#' + fieldId)[0].files[0].size;
-            var ftype = $('#' + fieldId)[0].files[0].type;
+            var fsize = EkstepEditorAPI.jQuery('#' + fieldId)[0].files[0].size;
+            var ftype = EkstepEditorAPI.jQuery('#' + fieldId)[0].files[0].type;
 
             /*Check file size*/
             if (fsize > allowedFileSize) {
@@ -126,7 +126,7 @@ EkstepEditor.basePlugin.extend({
 
             /*Check mime type*/
             if (ftype) {
-                if ($.inArray(ftype, allowedMimeTypes) == -1) {
+                if (EkstepEditorAPI.jQuery.inArray(ftype, allowedMimeTypes) == -1) {
                     alert("File type is not allowed!");
                     return false;
                 }
