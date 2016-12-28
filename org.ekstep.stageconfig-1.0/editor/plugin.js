@@ -5,6 +5,7 @@ EkstepEditor.basePlugin.extend({
     initialize: function() {
         EkstepEditorAPI.addEventListener(this.manifest.id + ":addcomponent", this.register, this);
         EkstepEditorAPI.addEventListener("stage:afterselect", this.showComponents, this);
+        EkstepEditorAPI.addEventListener(this.manifest.id + ":remove", this.removeAudio, this);
     },
     register: function(event, data) {
         (this.getStageIndex(data) === -1) ? this.stageConfig.push({ stageId: data.stageId, components: [data] }): this.registerToStage(data);
@@ -49,8 +50,20 @@ EkstepEditor.basePlugin.extend({
     },
     showStageComponents: function(stage) {
         var instance = this;
-        var items = [];
+        var items = []
+            assetArr = [];
+        var evants = EkstepEditorAPI.getCurrentStage().event;
+        _.forEach(evants, function(event){
+            if(event.type === 'enter'){
+                assetArr.push(event.action[0].asset); 
+            }
+        });
         _.forEach(stage.components, function(component) {
+            if(_.indexOf(assetArr, component.title) != -1){
+                component.autoplay = true;
+            }else{
+                component.autoplay = false;
+            }
             items.push(component);
             instance.scope.stageAttachments[component.type] = {};            
             instance.scope.stageAttachments[component.type].items = items;
@@ -63,6 +76,11 @@ EkstepEditor.basePlugin.extend({
             instance.scope.stageAttachments[component.type] = {};
             instance.scope.stageAttachments[component.type].items = [];
             instance.scope.stageAttachments[component.type].show = false;
+        });
+    },
+    removeAudio: function(event, data){
+        _.remove(this.scope.stageAttachments['audio'].items, function(item) {
+           return data.asset === item.title;
         });
     }
 });

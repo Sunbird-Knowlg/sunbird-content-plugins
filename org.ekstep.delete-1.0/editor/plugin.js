@@ -8,6 +8,7 @@ EkstepEditor.basePlugin.extend({
 	},
 	deleteObject: function(event, data) {
 		var id = EkstepEditorAPI.getEditorObject().id;
+		EkstepEditorAPI.dispatchEvent('delete:invoked',{'editorObj':EkstepEditorAPI.getCurrentObject().attributes});
 		EkstepEditorAPI.getCanvas().remove(EkstepEditorAPI.getEditorObject());
 		EkstepEditorAPI.dispatchEvent('object:modified', {id: id});
 	},

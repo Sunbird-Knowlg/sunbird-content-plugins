@@ -67,6 +67,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("org.ekstep.config:invoke", this.invoke, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:addAction", this.addAction, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:removeAction", this.removeAction, this);
+        EkstepEditorAPI.addEventListener("org.ekstep.config:toggleStageEvent", this.toggleEventToStage,this);
 
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
@@ -225,7 +226,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.getCurrentObject().onConfigChange(key, value);
 
         if (key === 'autoplay') {
-            this.toggleEventToStage(value);
+            this.toggleEventToStage('', {'flag':value,'id':EkstepEditorAPI.getCurrentObject().id});
         }
     },
     /**
@@ -473,19 +474,19 @@ EkstepEditor.basePlugin.extend({
         });
     },
 
-    toggleEventToStage: function (flag) {
+    toggleEventToStage: function (event, data) {
         var currentStage = EkstepEditorAPI.getCurrentStage();
         var eventIndex = -1;
         if(currentStage.event){
             _.forEach(currentStage.event, function (e,i) {
-                if(e.action[0].asset === EkstepEditorAPI.getCurrentObject().id){
+                if(e.action[0].asset === data.id){
                     eventIndex = i;
                 }
             })
         }
-        if (flag === true && eventIndex === -1) {
-            currentStage.addEvent({ 'type': 'enter', 'action': [{ 'id': UUID(), 'type': 'command', 'command': 'play', 'asset': EkstepEditorAPI.getCurrentObject().id }] })
-        } else if(flag === false && eventIndex !== -1){
+        if (data.flag === true && eventIndex === -1) {
+            currentStage.addEvent({ 'type': 'enter', 'action': [{ 'id': UUID(), 'type': 'command', 'command': 'play', 'asset': data.id }] })
+        } else if(data.flag === false && eventIndex !== -1){
             currentStage.event.splice(eventIndex, 1);
         }
     }
