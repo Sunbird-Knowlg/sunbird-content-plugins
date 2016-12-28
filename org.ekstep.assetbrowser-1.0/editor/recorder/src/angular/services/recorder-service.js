@@ -10,12 +10,9 @@ angular.module('angularAudioRecorder.services')
         /*this path is relative to the dist path:*/
         swfUrl = scriptPath + '../lib/recorder.swf',
         utils,
-        mp3Covert = false,
-        mp3Config = {bitRate: 92, lameJsUrl: scriptPath + '../lib/lame.min.js'}
+        mp3Covert = true,
+        mp3Config = {bitRate: 92, lameJsUrl: scriptPath + '../libs/lame.min.js'}
         ;
-
-        console.log('mp3Config');
-        console.log(mp3Config);
 
       var swfHandlerConfig = {
         isAvailable: false,

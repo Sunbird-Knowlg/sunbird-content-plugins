@@ -89,7 +89,7 @@ EkstepEditor.basePlugin.extend({
         };
 
         EkstepEditorAPI._.isUndefined(searchText) ? null : requestObj.request.query = searchText;
-        EkstepEditorAPI._.isUndefined (owner) ? null : requestObj.request.filters.owner = owner;
+        EkstepEditorAPI._.isUndefined (owner) ? null : requestObj.request.owner = owner;
         allowableFilter = EkstepEditorAPI._.omit(this.search_filter, ['mediaType', 'license', 'limit']);
         EkstepEditorAPI._.merge(requestObj.request.filters, allowableFilter);
 
