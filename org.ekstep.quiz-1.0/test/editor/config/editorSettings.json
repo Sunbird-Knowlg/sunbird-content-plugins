@@ -1,0 +1,5 @@
+{
+    "plugins": {
+        "org.ekstep.assessmentbrowser": "1.0"
+    }
+}
