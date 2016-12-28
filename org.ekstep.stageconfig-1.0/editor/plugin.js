@@ -23,6 +23,12 @@ EkstepEditor.basePlugin.extend({
     showComponents: function() {
         this.hideAll();
         this.showAll();
+        //FIXME: Find a proper place to update currentStage
+        var instance = this;
+        instance.scope.safeApply(function() {
+            instance.scope.currentStage = EkstepEditorAPI.getCurrentStage();
+        });
+
     },
     hideAll: function() {
         var instance = this;
