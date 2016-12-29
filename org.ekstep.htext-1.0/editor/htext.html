@@ -262,7 +262,7 @@
             <div class="ui buttons" ng-if="$ctrl.showText">
                 <button class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
                 <div class="or"></div>
-                <button class="ui blue button" type="button" ng-click="$ctrl.finalText()" ng-disabled="!$ctrl.showNext">NEXT</button>
+                <button class="ui blue button" type="button" ng-click="$ctrl.finalText()" ng-disabled="!$ctrl.name || !$ctrl.readalongText">NEXT</button>
             </div>
             <div class="ui buttons" ng-if="!$ctrl.showText">
                 <button class="ui orange button" ng-click="$ctrl.showText = true;" type="button">Edit Text & Audio</button>

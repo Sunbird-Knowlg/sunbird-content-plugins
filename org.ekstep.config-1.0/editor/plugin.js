@@ -68,7 +68,8 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("org.ekstep.config:addAction", this.addAction, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:removeAction", this.removeAction, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:toggleStageEvent", this.toggleEventToStage,this);
-
+        EkstepEditorAPI.addEventListener("config:properties", this.showProperties,this);
+        
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
             angScope.contextToolbar = instance.manifest.editor.data.toolbars;
@@ -92,7 +93,6 @@ EkstepEditor.basePlugin.extend({
     objectSelected: function(event, data) {
         var instance = this;
         this.selectedPluginId = data.id;
-        var plugin = EkstepEditorAPI.getPluginInstance(data.id);
         this.setToolBarPosition();
         var angScope = EkstepEditorAPI.getAngularScope();
         // if (angScope.showConfigContainer) {
@@ -158,10 +158,6 @@ EkstepEditor.basePlugin.extend({
                 })
                 //EkstepEditorAPI.jQuery(".ui.accordion").accordion();
         }, 500);
-        var properties = EkstepEditorAPI.getCurrentObject().getProperties();
-        angScope.safeApply(function() {
-            angScope.pluginProperties = properties;
-        });
     },
     /**
      * This is called on stage unselect event fired 
@@ -473,7 +469,6 @@ EkstepEditor.basePlugin.extend({
             angScope.actionTargetObjects = stageOptions;
         });
     },
-
     toggleEventToStage: function (event, data) {
         var currentStage = EkstepEditorAPI.getCurrentStage();
         var eventIndex = -1;
@@ -489,6 +484,14 @@ EkstepEditor.basePlugin.extend({
         } else if(data.flag === false && eventIndex !== -1){
             currentStage.event.splice(eventIndex, 1);
         }
+    },
+    showProperties: function (event, data) {
+        var angScope = EkstepEditorAPI.getAngularScope();
+        var properties = EkstepEditorAPI.getCurrentObject().getProperties();
+        angScope.safeApply(function() {
+            angScope.pluginProperties = properties;
+        });
+        this.setToolBarContainerLocation("Properties");
     }
 });
 //# sourceURL=configplugin.js

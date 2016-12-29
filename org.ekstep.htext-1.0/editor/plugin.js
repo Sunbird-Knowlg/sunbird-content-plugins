@@ -36,6 +36,7 @@ EkstepEditor.basePlugin.extend({
     initialize: function() {
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
         EkstepEditorAPI.addEventListener("delete:invoked", this.deleteObject, this);
+        EkstepEditorAPI.addEventListener("org.ekstep.htext:showpopup", this.loadHtml, this);
         setTimeout(function() {
             var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.htext-1.0/editor/htext.html';
             var controllerPath = EkstepEditor.config.pluginRepo + '/org.ekstep.htext-1.0/editor/readalongapp.js';
@@ -52,7 +53,15 @@ EkstepEditor.basePlugin.extend({
         var props = this.convertToFabric(this.attributes);
         delete props.__text;
         this.editorObj = new fabric.ITextbox(this.attributes.__text, props);
-        this.loadHtml(this);
+        var instance = this;
+        EkstepEditorAPI._.forEach(this.event, function (val, key) {
+            if(_.isObject(val.action) && val.action.asset === instance.id){
+                instance.event.splice(key, 1);
+            }else if(_.isArray(val.action) && val.action[0].asset === instance.id){
+                instance.event.splice(key, 1);
+            }
+        })
+        this.addEvent({ 'type':'click', 'action' : [{'type':'command', 'command' : 'togglePlay' , 'asset': this.id}]});
         currentInstance = this;
     },
     /**        
@@ -61,7 +70,7 @@ EkstepEditor.basePlugin.extend({
      *   @param attrs attributes
      *   @memberof Htext
      */
-    loadHtml: function(parentInstance, attrs) {
+    loadHtml: function() {
         var instance = this;
         EkstepEditorAPI.getService('popup').open({
             template: 'htext',
@@ -70,16 +79,13 @@ EkstepEditor.basePlugin.extend({
             resolve: {
                 'instance': function() {
                     return instance;
-                },
-                'attrs': function() {
-                    return attrs;
                 }
             },
             width: 900,
             showClose: false,
             className: 'ngdialog-theme-plain'
         }, function() {
-            if (!instance.editorObj.__text) {
+            if(!EkstepEditorAPI._.isUndefined(instance.editorObj) && !instance.editorObj.__text) {
                 instance.editorObj.remove();
                 EkstepEditorAPI.render();
             }
@@ -167,8 +173,7 @@ EkstepEditor.basePlugin.extend({
         var topSt = EkstepEditorAPI.jQuery("#canvas").offset().top + EkstepEditorAPI.getCurrentObject().editorObj.top;
         var topEnd = topSt + EkstepEditorAPI.getCurrentObject().editorObj.height;
         if (event.clientX > leftSt && event.clientX < leftEnd && event.clientY > topSt && event.clientY < topEnd) {
-            pluginId = EkstepEditorAPI.getEditorObject().id;;
-            currentInstance.loadHtml(currentInstance, EkstepEditorAPI.getPluginInstance(pluginId));
+            currentInstance.loadHtml();
         }
     },
     /**
@@ -296,10 +301,10 @@ EkstepEditor.basePlugin.extend({
         return retData;
     },
     deleteObject: function(event, data) {
-        if (!_.isUndefined(data.editorObj.audio)) {
+        if (!EkstepEditorAPI._.isUndefined(data.editorObj.audio)) {
             var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes();
-            _.forEach(mediaArr, function(val, key) {
-                if (!_.isUndefined(val.media) && val.media[data.editorObj.audio]) {
+            EkstepEditorAPI._.forEach(mediaArr, function(val, key) {
+                if (!EkstepEditorAPI._.isUndefined(val.media) && val.media[data.editorObj.audio]) {
                     EkstepEditorAPI.getCurrentStage().children.splice(key, 1);
                     EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', {'asset': data.editorObj.audio});
                 }

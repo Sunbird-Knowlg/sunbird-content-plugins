@@ -51,11 +51,18 @@ EkstepEditor.basePlugin.extend({
     showStageComponents: function(stage) {
         var instance = this;
         var items = []
-            assetArr = [];
+            assetArr = [],
+            htextArr = [];
         var evants = EkstepEditorAPI.getCurrentStage().event;
         _.forEach(evants, function(event){
             if(event.type === 'enter'){
                 assetArr.push(event.action[0].asset); 
+            }
+        });
+        var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes();
+        _.forEach(mediaArr, function(val, key) {
+            if(val.manifest.shortId === 'htext'){
+                htextArr[key] = val.attributes.audio;
             }
         });
         _.forEach(stage.components, function(component) {
@@ -63,6 +70,11 @@ EkstepEditor.basePlugin.extend({
                 component.autoplay = true;
             }else{
                 component.autoplay = false;
+            }
+            if(_.indexOf(htextArr, component.title) != -1){
+                component.showClose = true;
+            }else{
+                component.showClose = false;
             }
             items.push(component);
             instance.scope.stageAttachments[component.type] = {};            
