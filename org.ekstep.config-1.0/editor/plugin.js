@@ -95,19 +95,19 @@ EkstepEditor.basePlugin.extend({
         var plugin = EkstepEditorAPI.getPluginInstance(data.id);
         this.setToolBarPosition();
         var angScope = EkstepEditorAPI.getAngularScope();
-        if (angScope.showConfigContainer) {
-            switch (angScope.configHeaderText) {
-                case 'Configuration':
-                    instance.showConfig();
-                    break;
-                case 'Actions':
-                    instance.showActions();
-                    break;
-                case 'Help':
-                    instance.showHelp();
-                    break;
-            }
-        }
+        // if (angScope.showConfigContainer) {
+        //     switch (angScope.configHeaderText) {
+        //         case 'Configuration':
+        //             instance.showConfig();
+        //             break;
+        //         case 'Actions':
+        //             instance.showActions();
+        //             break;
+        //         case 'Help':
+        //             instance.showHelp();
+        //             break;
+        //     }
+        // }
     },
     objectUnselected: function(event, data) {
         if (data.id == this.selectedPluginId) {

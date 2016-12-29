@@ -53,6 +53,7 @@ EkstepEditor.basePlugin.extend({
             },
             width: 900,
             showClose: false,
+            className: 'ngdialog-theme-plain'
         });
     },
 

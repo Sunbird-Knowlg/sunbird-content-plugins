@@ -23,7 +23,8 @@ EkstepEditor.basePlugin.extend({
                 }
             },
             showClose: false,
-            width: 900
+            width: 900,
+            className: 'ngdialog-theme-plain'
         });
     },
     getTemplates: function(searchText, callback) {

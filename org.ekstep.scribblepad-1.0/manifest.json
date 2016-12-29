@@ -8,7 +8,6 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-            { "type": "plugin", "plugin": "org.ekstep.colorpicker", "ver": "1.0" }
         ],
         "menu": [{
             "id": "scribblepad",
