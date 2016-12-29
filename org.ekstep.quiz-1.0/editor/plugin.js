@@ -25,64 +25,67 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener(this.manifest.id + ":renderQuiz", this.renderQuiz, this);
     },
     newInstance: function() {
-        console.info(this, "this");
-        if (!this.attributes.w) {
-            this.attributes.w = this.attributes.h = 70;
+        var instance = this;
+        if (!instance.attributes.w) {
+            instance.attributes.w = instance.attributes.h = 80;
         }
-        this.percentToPixel(this.attributes);
-        var props = this.convertToFabric(this.attributes),questionnaire = this.data.questionnaire,count = questionnaire.total_items;
-        var templateIds = this.getTemplateIds(questionnaire.items);
-        this.addMediatoManifest(this.getQuestionmedia(questionnaire.items));
-        var templateArray = [],templates = [],resCount = 0,tempaltesLength = templateIds.length,instance = this;
+        instance.percentToPixel(instance.attributes);
+        var props = instance.convertToFabric(instance.attributes),
+        questionnaire = instance.data.questionnaire, 
+        count = questionnaire.total_items + '/' + instance.get(questionnaire.items),
+        templateIds = instance.get(questionnaire.items,"templateId");
+        instance.get(questionnaire.items,"media").forEach( function(element, index) {
+           instance.addMediatoManifest(element);
+        });
+        var templateArray = [],templates = [],resCount = 0,tempaltesLength = templateIds.length;
         if (_.isUndefined(this.data.template)) {
             for (var index = 0; index < tempaltesLength; index++) {
                 if (!_.isUndefined(templateIds[index])) {
                     EkstepEditor.assessmentService.getTemplate(templateIds[index], function(err, res) {
-                        if (res) {
-                            // TODO : need to refactor of this API Call it  should not be a count .
-                            // map for the TemplateArray
-                            // handling of the try and catch block
-                            resCount = resCount + 1;
-                            templateArray.push(instance.xml2json(res));
-                            if (resCount == tempaltesLength) {
-                                templateArray.forEach(function(element, index) {
-                                    if (!_.isNull(element)) {
-                                        templates.push(element.template);
-                                        if (!_.isUndefined(element.manifest)) {
-                                            instance.addMediatoManifest(element.manifest.media);
+                        try {
+                            if (!err && res) {
+                                resCount++;
+                                templateArray.push(instance.xml2json(res));
+                                if (resCount == tempaltesLength) {
+                                    templateArray.forEach(function(element, index) {
+                                        if (!_.isNull(element)) {
+                                            templates.push(element.template);
+                                            if (!_.isUndefined(element.manifest)) {
+                                                instance.addMediatoManifest(element.manifest.media);
+                                            }
                                         }
-                                    }
-                                });
-                                instance.data.template = templates;
+                                    });
+                                    instance.data.template = templates;
+                                }
+                            }else{
+                               throw Error(res);
                             }
-                        } else {
-                            console.error("Template Response is faild:", err);
                         }
+                        catch(err){
+                            console.warn("Template is invalid Please choose the another Template",err);
+                        } 
                     });
                 }
             }
         }
-    this.editorObj = this.showProperties(props, questionnaire.title, count, questionnaire.max_score);
+      instance.editorObj = instance.showProperties(props, questionnaire.title, count, questionnaire.max_score);
     },
-    getTemplateIds: function(items) {
-        var templateIds = [],question = [];
+    get: function(items, type) {
+        // it returns the Unique templateId || media of the questions || length of the question
+        var question = [], media = [];
         for (var key in items) {
             question = items[key];
         }
-        var questionLenght = question.length;
-        for (var i = 0; i < questionLenght; i++) {
-            templateIds.push(question[i].template_id);
-        }
-        return _.uniq(templateIds);
-    },
-    getQuestionmedia: function(items) {
-        var media = [],question = [];
-        for (var key in items) {
-            question = items[key];
-        }
-        var questionLenght = question.length;
-        for (var i = 0; i < questionLenght; i++) {
-           return question[i].media;
+        if (type === "templateId") {
+            return _.uniq(_.filter(_.map(question, "template_id"), Boolean));
+
+        } else if (type === 'media') {
+            for (var i = 0; i < question.length; i++) {
+                media.push(question[i].media);
+            }
+            return media;
+        } else {
+            return question.length;
         }
     },
     renderQuiz: function(event, assessmentData) {
@@ -96,15 +99,16 @@ EkstepEditor.basePlugin.extend({
         instance.setQuizdata(question, assessmentData.config);
     },
     setQuizdata: function(question, attributes) {
-        var instance = this, questionSets = {}, configItem ={},controller = {},templates=[],templateObj={},_assessmentData={};
+        // constuction of the questionnaire
+        var instance = this, questionSets = {}, configItem = {},questionnaire = {},_assessmentData = {};
         questionSets[question[0].identifier] = question;
         configItem["items"] = questionSets;
         configItem["item_sets"] = [{"count": attributes.total_items,"id": question[0].identifier}];
-        controller["questionnaire"] = Object.assign(configItem, attributes);
+        questionnaire["questionnaire"] = Object.assign(configItem, attributes);
         var configData = {__cdata : JSON.stringify({"type": "items","var": "item"})};
-        var dataObj = {__cdata : JSON.stringify(controller)};
+        var dataObj = {__cdata : JSON.stringify(questionnaire)};
         instance.setConfig({"type": "items","var": "item"});
-        instance.setData(controller);
+        instance.setData(questionnaire);
         _assessmentData["data"] = dataObj;
         _assessmentData["config"] = configData;
         EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', _assessmentData);
@@ -118,6 +122,7 @@ EkstepEditor.basePlugin.extend({
         return item;
     },
     addMediatoManifest: function(media) {
+        // it will add the all media to the manifest
         var instance = this;
         if (!_.isUndefined(media)) {
             if (_.isArray(media)) {
@@ -142,12 +147,12 @@ EkstepEditor.basePlugin.extend({
     },
     showProperties: function(props, qTittle, qCount, maxscore) {
         // Display the all properties on the editor
-        props.fill = "#EDC06D";
+        props.fill = "#87CEFA";
         var rect = new fabric.Rect(props);
-        qTittle = new fabric.Text(qTittle, {fontSize: 30, fill:'black',textAlign:'center',textDecoration:'underline', top: 80, left: 150} );
-        qCount = new fabric.Text("QUESTIONS : " + qCount, {fontSize: 20,fill:'black',top: 120,left: 150});
-        maxscore = new fabric.Text("TOTAL MARKS : "+maxscore, {fontSize: 20, fill:'black', top: 150,left: 150,});
-        fabricGroup = new fabric.Group([rect, qTittle, qCount, maxscore], {left: 110, top: 50});
+        qTittle = new fabric.Text("TITLE :"+ qTittle.toUpperCase(), {fontSize: 25, fill:'black',textAlign:'center',textDecoration:'underline', top: 80, left: 160} );
+        qCount = new fabric.Text("QUESTIONS : " + qCount, {fontSize: 20,fill:'black',top: 120,left: 160});
+        maxscore = new fabric.Text("TOTAL MARKS : "+maxscore, {fontSize: 20, fill:'black', top: 150,left: 160,});
+        fabricGroup = new fabric.Group([rect, qTittle, qCount, maxscore], {left: 90, top: 40});
         return fabricGroup;
     },
     /**    
