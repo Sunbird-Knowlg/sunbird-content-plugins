@@ -77,6 +77,7 @@ EkstepEditor.basePlugin.extend({
             },
             width: 900,
             showClose: false,
+            className: 'ngdialog-theme-plain'
         }, function() {
             if (!instance.editorObj.__text) {
                 instance.editorObj.remove();
@@ -232,8 +233,9 @@ EkstepEditor.basePlugin.extend({
         attributes.font = this.editorObj.get('fontFamily');
         attributes['__text'] = this.editorObj.get('text');
         attributes.fontsize = this.updateFontSize(this.editorObj.get('fontSize'), false);
-        var fontWeight = EkstepEditorAPI._.isUndefined(this.editorObj.get("fontWeight")) ? "" : this.editorObj.get("fontWeight");
-        var fontStyle = EkstepEditorAPI._.isUndefined(this.editorObj.get("fontStyle")) ? "" : this.editorObj.get("fontStyle");
+        var fontWeight = EkstepEditorAPI._.isUndefined(this.editorObj.get("fontWeight")) ? "" : (this.editorObj.get("fontWeight") === "bold" ? "bold" : "");
+        var fontStyle = EkstepEditorAPI._.isUndefined(this.editorObj.get("fontStyle")) ? "" : (this.editorObj.get("fontStyle") === "italic" ? "italic" : "");
+
         attributes.weight = (fontWeight + ' ' + fontStyle).trim();
         return attributes;
     },
