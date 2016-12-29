@@ -14,7 +14,7 @@ EkstepEditor.basePlugin.extend({
      * @member {String} type
      * @memberof assessment
      */
-     type: "org.ekstep.quiz",
+     type: "org.ekstep.quiz",    
     /**
     *  
     * Registers events.
@@ -22,65 +22,92 @@ EkstepEditor.basePlugin.extend({
     */
     initialize: function() {
         EkstepEditorAPI.addEventListener(this.manifest.id + ":showPopup", this.openAssessmentBrowser, this);
+        EkstepEditorAPI.addEventListener(this.manifest.id + ":renderQuiz", this.renderQuiz, this);
     },
-    
-    // Add assesment to the stage
     newInstance: function() {
-        var instance = this,attributes = instance.attributes,templateArray =[],question=[],templateIds=[],resCount =0;
-        if (isNaN(attributes.w)) {
-            attributes.w = attributes.h = 70;
+        console.info(this, "this");
+        if (!this.attributes.w) {
+            this.attributes.w = this.attributes.h = 70;
         }
-        for (var i = 0; i < attributes.length - 1; i++) {
-            if (!_.isUndefined(attributes[i].question)) {
-                attributes[i].question = instance.parseObject(attributes[i].question);
-            }
-            question.push(attributes[i].question);
-            templateIds.push(attributes[i].question.template_id);
-            instance.addMediatoManifest(attributes[i].question.media);
-        }
-        templateIds = _.uniq(templateIds);
-        for (var index = 0; index < templateIds.length; index++) {
-            if (!_.isUndefined(templateIds[index])) {
-                EkstepEditor.assessmentService.getTemplate(templateIds[index], function(err, res) {
-                    if (res) {
-                        // TODO : need to refactor of this API Call it  should not be a count .
-                        resCount = resCount + 1;
-                        templateArray.push(instance.xml2json(res));
-                        if (resCount == templateIds.length) {
-                            instance.setQuizdata(question, attributes, templateArray);
+        this.percentToPixel(this.attributes);
+        var props = this.convertToFabric(this.attributes),questionnaire = this.data.questionnaire,count = questionnaire.total_items;
+        var templateIds = this.getTemplateIds(questionnaire.items);
+        this.addMediatoManifest(this.getQuestionmedia(questionnaire.items));
+        var templateArray = [],templates = [],resCount = 0,tempaltesLength = templateIds.length,instance = this;
+        if (_.isUndefined(this.data.template)) {
+            for (var index = 0; index < tempaltesLength; index++) {
+                if (!_.isUndefined(templateIds[index])) {
+                    EkstepEditor.assessmentService.getTemplate(templateIds[index], function(err, res) {
+                        if (res) {
+                            // TODO : need to refactor of this API Call it  should not be a count .
+                            // map for the TemplateArray
+                            // handling of the try and catch block
+                            resCount = resCount + 1;
+                            templateArray.push(instance.xml2json(res));
+                            if (resCount == tempaltesLength) {
+                                templateArray.forEach(function(element, index) {
+                                    if (!_.isNull(element)) {
+                                        templates.push(element.template);
+                                        if (!_.isUndefined(element.manifest)) {
+                                            instance.addMediatoManifest(element.manifest.media);
+                                        }
+                                    }
+                                });
+                                instance.data.template = templates;
+                            }
+                        } else {
+                            console.error("Template Response is faild:", err);
                         }
-                    } else {
-                        console.error("Template Response is faild:", err);
-                    }
-                });
-            }
-        }
-        instance.percentToPixel(attributes);
-        var props = instance.convertToFabric(attributes),
-        itemLength = attributes.length -1, 
-        count = attributes[itemLength].total_items +"/" + itemLength,
-        maxscore = attributes[itemLength].max_score,
-        title = attributes[itemLength].title;
-        instance.editorObj = instance.showProperties(props,title, count, maxscore);
-        instance.setConfig({"type": "items","var": "item"});
-        delete instance.attributes;
-    },
-    setQuizdata: function(question,attributes,templateArray) {
-        var instance = this, questionSets = {}, configItem ={},controller = {},templates=[],templateObj={};
-        templateArray.forEach(function(element, index) {
-            if (!_.isNull(element)) {
-                templates.push(element.template);
-                if (!_.isUndefined(element.manifest)) {
-                    instance.addMediatoManifest(element.manifest.media);
+                    });
                 }
             }
+        }
+    this.editorObj = this.showProperties(props, questionnaire.title, count, questionnaire.max_score);
+    },
+    getTemplateIds: function(items) {
+        var templateIds = [],question = [];
+        for (var key in items) {
+            question = items[key];
+        }
+        var questionLenght = question.length;
+        for (var i = 0; i < questionLenght; i++) {
+            templateIds.push(question[i].template_id);
+        }
+        return _.uniq(templateIds);
+    },
+    getQuestionmedia: function(items) {
+        var media = [],question = [];
+        for (var key in items) {
+            question = items[key];
+        }
+        var questionLenght = question.length;
+        for (var i = 0; i < questionLenght; i++) {
+           return question[i].media;
+        }
+    },
+    renderQuiz: function(event, assessmentData) {
+        var instance = this,question = [];
+        _.each(assessmentData.items, function(item) {
+            if (!_.isUndefined(item.question)) {
+                item.question = instance.parseObject(item.question);
+            }
+            question.push(item.question);
         });
-        templateObj["template"] = templates;
-        questionSets[attributes[0].question.identifier] = question;
+        instance.setQuizdata(question, assessmentData.config);
+    },
+    setQuizdata: function(question, attributes) {
+        var instance = this, questionSets = {}, configItem ={},controller = {},templates=[],templateObj={},_assessmentData={};
+        questionSets[question[0].identifier] = question;
         configItem["items"] = questionSets;
-        configItem["item_sets"] = [{"count": attributes[attributes.length -1].total_items,"id": attributes[0].question.identifier}];
-        controller["controller"] = Object.assign(configItem,attributes[attributes.length -1]);
-        instance.setData(Object.assign(controller, templateObj));
+        configItem["item_sets"] = [{"count": attributes.total_items,"id": question[0].identifier}];
+        controller["questionnaire"] = Object.assign(configItem, attributes);
+        var configData = {__cdata : JSON.stringify({"type": "items","var": "item"})};
+        var dataObj = {__cdata : JSON.stringify(controller)};
+        instance.setConfig({"type": "items","var": "item"});
+        instance.setData(controller);
+        _assessmentData["data"] = dataObj;
+        _assessmentData["config"] = configData;
+        EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', _assessmentData);
     },
     parseObject: function(item) {
         $.each(item, function(key, value) {
@@ -91,7 +118,6 @@ EkstepEditor.basePlugin.extend({
         return item;
     },
     addMediatoManifest: function(media) {
-        // Adding all media to the manifest.
         var instance = this;
         if (!_.isUndefined(media)) {
             if (_.isArray(media)) {
@@ -111,7 +137,6 @@ EkstepEditor.basePlugin.extend({
         });
         if (!_.isNull(res)) {
             data = x2js.xml_str2json(res.data.result.content.body);
-            console.info(data);
             return data.theme;
         }
     },
@@ -132,11 +157,10 @@ EkstepEditor.basePlugin.extend({
     * 
     */
     openAssessmentBrowser: function(event, callback) {
-        var instance = this,set = [];
+        var instance = this;
         var callback = function(items, config) {
-            items.push(config);
-            set.push(items);
-            EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', set);
+            var set = {items: items, config: config};
+            EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':renderQuiz', set);
         };
         EkstepEditorAPI.dispatchEvent("org.ekstep.assessmentbrowser:show", callback);
     }

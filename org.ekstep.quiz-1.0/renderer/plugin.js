@@ -22,7 +22,7 @@ Plugin.extend({
         this._plginData = JSON.parse(data.data.__cdata);
 
         // Init the item controller
-        this.initController();
+        this.initquestionnaire();
 
         // Invoke templates to templateMap
         this.invokeTemplate();
@@ -51,7 +51,7 @@ Plugin.extend({
       embedData["var-item"] = this._plginConfig.var || "item";
       PluginManager.invoke('embed', embedData, this, this._stage, this._theme);
     },
-    initController: function() {
+    initquestionnaire: function() {
         var controllerName = this._plginConfig.var;
         var assessmentid = (Renderer.theme._currentStage + "_assessment");
         // var assessmentid = (this._stage._id + "_assessment");
@@ -61,7 +61,7 @@ Plugin.extend({
         var initialized = (stageController != undefined);
         if (!initialized) {
             var controllerData = {};
-            controllerData.__cdata = this._plginData.controller;
+            controllerData.__cdata = this._plginData.questionnaire;
             controllerData.type = this._plginConfig.type;
             controllerData.name = assessmentid;
             controllerData.id = assessmentid;
