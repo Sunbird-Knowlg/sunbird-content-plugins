@@ -71,7 +71,8 @@ EkstepEditor.basePlugin.extend({
             template: 'partials_org.ekstep.atpreview.html',
             controller: ['$scope', modalController],
             showClose: false,
-            width: 900
+            width: 900,
+            className: 'ngdialog-theme-plain'
         });
 
     }
