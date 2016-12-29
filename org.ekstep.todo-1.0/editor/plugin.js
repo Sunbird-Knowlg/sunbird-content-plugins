@@ -109,7 +109,7 @@ EkstepEditor.basePlugin.extend({
 				ctrl.save(widgetRef, status, id, todotext);
 			}, 300);
 		},
-		ctrl.save = function(widgetRef, status, id, todotext, callback = function() { ctrl.getTodos();})
+		ctrl.save = function(widgetRef, status, id, todotext)
 		{
 			var obj = {};
 
@@ -134,7 +134,7 @@ EkstepEditor.basePlugin.extend({
 
 			EkstepEditorAPI.jQuery(widgetRef).jltodos({obj:obj,action: 'createTodo'});
 
-			callback();
+			ctrl.getTodos();
 		}
     }
 });
