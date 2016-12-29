@@ -22,20 +22,7 @@
             "title": "Read-along",
             "iconClass": "icon-readalong icon",
             "onclick": {
-                "id": "org.ekstep.htext:create",
-                "data": {
-                    "__text": "",
-                    "x": 10,
-                    "y": 20,
-                    "fontFamily": "Arial",
-                    "fontSize": 18,
-                    "minWidth": 20,
-                    "w": 35,
-                    "maxWidth": 500,
-                    "fill": "#000000",
-                    "fontStyle": "normal",
-                    "fontWeight": "normal"
-                }
+                "id": "org.ekstep.htext:showpopup"
             }
         }],
         "configManifest": [{

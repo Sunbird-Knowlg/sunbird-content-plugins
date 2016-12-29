@@ -1,53 +1,53 @@
 'use strict';
 
 angular.module('readalongapp', [])
-    .controller('readalongcontroller', ['$scope', '$injector', 'instance', 'attrs', function($scope, $injector, instance, attrs) {
+    .controller('readalongcontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
         var karaoke,
             media,
             ctrl = this;
         ctrl.readalongText = '';
+        ctrl.audioObj = '';
+        ctrl.audioChanged = false;
+        ctrl.oldAudioName = '';
         ctrl.showText = true;
         ctrl.audioSelected = false;
-        ctrl.showNext = false;
         ctrl.name = '';
         ctrl.highlightColor = '#FFFF00';
-        if(attrs){
+        if(!EkstepEditorAPI._.isUndefined(instance.editorObj)){
             var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes('',['org.ekstep.audio'], true);
-            _.map(mediaArr, function(val, key){
-                if(val.media[attrs.attributes.audio]){ 
-                    media = val.media[attrs.attributes.audio];
+            EkstepEditorAPI._.map(mediaArr, function(val, key){
+                if(val.media[instance.attributes.audio]){ 
+                    media = val.media[instance.attributes.audio];
                 }
             });
             ctrl.downloadurl = !EkstepEditorAPI._.isUndefined(media) ?  media.src : '';
-            ctrl.showNext = true;
             ctrl.audioSelected = true;
-            ctrl.readalongText = attrs.attributes.__text;
-            ctrl.autoplay = attrs.attributes.autoplay;
-            ctrl.name = attrs.attributes.audio;
-            ctrl.highlightColor = attrs.attributes.highlight;
+            ctrl.readalongText = instance.attributes.__text;
+            ctrl.autoplay = instance.attributes.autoplay;
+            ctrl.name = instance.attributes.audio;
+            ctrl.highlightColor = instance.attributes.highlight;
             EkstepEditorAPI.getAngularScope().safeApply();
             setTimeout(function(){
-                karaoke = instance.invokeKaraoke(ctrl.downloadurl, attrs);
+                karaoke = instance.invokeKaraoke(ctrl.downloadurl, instance);
             }, 1000);
         }
-
         ctrl.selectAudio = function(value) {
             EkstepEditorAPI.dispatchEvent('org.ekstep.assetbrowser:show', {
                 type: 'audio',
                 search_filter: {},
                 callback: function(data) { 
-                    ctrl.name = '';
-                    ctrl.downloadurl = '';
-                    ctrl.identifier = '';
+                    ctrl.audioObj = '';
+                    ctrl.oldAudioName = ctrl.name;
                     if(karaoke)
                         karaoke.reset();
-                    EkstepEditorAPI.dispatchEvent('org.ekstep.audio:create', data)
                     ctrl.name = data.assetMedia.id;
                     ctrl.downloadurl = data.assetMedia.src;
                     ctrl.identifier = data.assetMedia.id;
+                    ctrl.audioObj = data;
                     karaoke = instance.invokeKaraoke(ctrl.downloadurl);
                     ctrl.audioSelected = true;
-                    ctrl.showNext = true;
+                    if(!EkstepEditorAPI._.isUndefined(instance.editorObj))
+                        ctrl.audioChanged = true;
                     EkstepEditorAPI.getAngularScope().safeApply();
                 }
             });
@@ -60,7 +60,7 @@ angular.module('readalongapp', [])
             if (text.length > 0) {
                 ctrl.showText = false;
             }
-            _.forEach(textArray, function(text, key) {
+            EkstepEditorAPI._.forEach(textArray, function(text, key) {
                 key = key + 1;
                 str += '<span class="word" id="word-' + key + '">' + text + ' </span>';
             });
@@ -68,20 +68,9 @@ angular.module('readalongapp', [])
         }
 
         ctrl.addReadAlong = function() {
-            if (ctrl.readalongText && karaoke.audioObj.wordTimes.length > 0) {
-                var childrenIndex = '';
-                var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes();
-                if(attrs){
-                    _.forEach(mediaArr, function(val, key){
-                        if(!_.isUndefined(val.media) && val.media[attrs.attributes.audio]){ 
-                            EkstepEditorAPI.getCurrentStage().children.splice(key, 1);
-                        }
-                    });
-                }
+            if(!EkstepEditorAPI._.isUndefined(instance.editorObj)){
                 instance.editorObj.text = instance.attributes.__text = ctrl.readalongText;
                 instance.attributes.autoplay = ctrl.autoplay;
-                EkstepEditorAPI.render();
-                EkstepEditorAPI.dispatchEvent('object:modified', { target: instance.editorObj });
                 instance.attributes.highlight = ctrl.highlightColor;
                 var timings = [];
                 EkstepEditorAPI._.each(karaoke.audioObj.wordTimes, function(n) {
@@ -89,24 +78,58 @@ angular.module('readalongapp', [])
                 });
                 instance.attributes.timings = timings.join();
                 instance.attributes.audio = ctrl.name;
-                _.forEach(instance.event, function (e,i) {
+                EkstepEditorAPI._.forEach(instance.event, function (e,i) {
                     if(e.action[0].asset === instance.id){
                         instance.event.splice(i, 1);
                     }
                 })
                 instance.addEvent({ 'type':'click', 'action' : [{'type':'command', 'command' : 'togglePlay' , 'asset': instance.id}]});
-            } else {
-                instance.editorObj.remove();
-                EkstepEditorAPI.render();
+                if(ctrl.audioChanged && ctrl.oldAudioName != ''){
+                    var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes();
+                    if(ctrl.name != ctrl.oldAudioName){
+                        EkstepEditorAPI._.forEach(mediaArr, function(val, key){
+                            if(!EkstepEditorAPI._.isUndefined(val.media) && val.media[ctrl.oldAudioName]){ 
+                                EkstepEditorAPI.getCurrentStage().children.splice(key, 1);
+                            }
+                        });
+                    }
+                    EkstepEditorAPI.dispatchEvent('org.ekstep.audio:create', ctrl.audioObj)
+                    EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', {'asset': ctrl.oldAudioName});
+                }
+            }else{
+                if (ctrl.readalongText && karaoke.audioObj.wordTimes.length > 0) {
+                    var timings = [];
+                    EkstepEditorAPI._.each(karaoke.audioObj.wordTimes, function(n) {
+                        timings.push(parseInt(n * 1000));
+                    });
+                    EkstepEditorAPI.dispatchEvent("org.ekstep.htext:create", {
+                        "__text": ctrl.readalongText,
+                        "x": 10,
+                        "y": 20,
+                        "fontFamily": "Arial",
+                        "fontSize": 18,
+                        "minWidth": 20,
+                        "w": 35,
+                        "maxWidth": 500,
+                        "fill": "#000000",
+                        "fontStyle": "normal",
+                        "fontWeight": "normal",
+                        "stroke": "rgba(255, 255, 255, 0)",
+                        "strokeWidth": 1,
+                        "opacity": 1,
+                        "audio": ctrl.name,
+                        "timings": timings.join(),
+                        "autoplay": ctrl.autoplay,
+                        "highlight": ctrl.highlightColor,
+                    });
+                    EkstepEditorAPI.dispatchEvent('org.ekstep.audio:create', ctrl.audioObj)
+                    EkstepEditorAPI.render();
+                }
             }
             $scope.closeThisDialog();
         };
 
         ctrl.cancel = function() {
-            if(!attrs){
-                instance.editorObj.remove();
-                EkstepEditorAPI.render();
-            }
             $scope.closeThisDialog();
         };
     }]);
