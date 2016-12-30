@@ -1,10 +1,15 @@
 'use strict';
 angular.module('assetbrowserapp', ['angularAudioRecorder']).config(['recorderServiceProvider', function(recorderServiceProvider){
+        
+        console.log("recorderServiceProvider");
+
         recorderServiceProvider.forceSwf(false);
         var lameJsUrl = window.location.origin + EkstepEditor.config.pluginRepo + '/org.ekstep.assetbrowser-1.0/editor/recorder/lib2/lame.min.js';
         var config = {lameJsUrl:lameJsUrl, bitRate: 92};
 
+        console.log(config);
         recorderServiceProvider.withMp3Conversion(true, config);
+        console.log(recorderServiceProvider);
   }]);
 angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$injector', 'instance', function($scope ,$injector, instance) {
         var audiodata = {},

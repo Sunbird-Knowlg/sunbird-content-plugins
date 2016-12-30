@@ -27,6 +27,7 @@ angular.module('assessmentbrowserapp', [])
             myQuestions: false,
             concepts: '(0) Concepts'
         };
+        ctrl.context = EkstepEditorAPI.getAngularScope().context;
 
         EkstepEditorAPI.getService('assessmentService').getLanguages(function(err, resp) {
             if (!err && resp.statusText == "OK") {
