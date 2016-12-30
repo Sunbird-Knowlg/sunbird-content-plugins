@@ -1,22 +1,16 @@
 <script type="text/ng-template" id="partials_org.ekstep.atpreview.html">
     <style>
     .preview-bgimage {
-        position: fixed;
-        height: 450px;
-        top: 120px;
-        width: 707px;
-        left: 400px;
-        padding: 0px;
-        background-size: 900px 450px;
-        background: url(/assets/public/authoring-tool/dev/images/editor-frame.1f4229d1.png) no-repeat center 0, url(https://dev.ekstep.in/assets/public/authoring-tool/dev/images/editor-frame.1f4229d1.png) no-repeat center 0;
+        height: 375px;
+        width: 726px;
+        background-size: 726px 375px;
+        background: url(images/editor-frame.png) no-repeat center 0;
     }
     
     .preview-iframe {
         position: fixed;
         height: 336px;
-        width: 563px;
-        top: 141px;
-        left: 463px;
+        width: 564px;
         border: none !important;
     }
     
@@ -28,8 +22,10 @@
         border: 0px;
     }
     </style>
-    <div class="preview-bgimage"></div>
-    <div class="preview-iframe">
-        <iframe id="previewContentIframe" width=100% height=100%></iframe>
+    <div style="display: flex; align-items: center; justify-content: center;">
+        <div class="preview-bgimage"></div>
+        <div class="preview-iframe">
+            <iframe id="previewContentIframe" width=100% height=100%></iframe>
+        </div>
     </div>
 </script>
