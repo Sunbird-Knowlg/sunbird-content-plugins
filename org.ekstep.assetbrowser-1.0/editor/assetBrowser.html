@@ -419,10 +419,17 @@
 	</div>
 	<div class="actions" ng-show="$ctrl.uploadView">
 		<i ng-show="$ctrl.uploadingAsset" class="big spinner loading icon"></i>
-		<div class="ui buttons">
-            <button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
-            <div class="or"></div>
-            <button class="ui blue button submit button" ng-click="$ctrl.doUpload()" type="button">Upload and Use</button>
+		<div class="ui grid">
+			<div class="three wide column" style="text-align: left;">
+				<button class="ui labeled icon button" ng-click="$ctrl.uploadView=false"><i class="left chevron icon"></i>Back</button>
+			</div>
+			<div class="nine wide column" style="text-align: right;">
+				<div class="ui buttons">
+					<button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+					<div class="or"></div>
+					<button class="ui blue button submit button" ng-click="$ctrl.doUpload()" type="button">Upload and Use</button>
+				</div>
+			</div>
 		</div>
 	</div>
 </div>
