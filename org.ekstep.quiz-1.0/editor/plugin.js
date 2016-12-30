@@ -26,9 +26,11 @@ EkstepEditor.basePlugin.extend({
     },
     newInstance: function() {
         var instance = this;
-        if (!instance.attributes.w) {
+        /*if (!instance.attributes.w) {
             instance.attributes.w = instance.attributes.h = 80;
-        }
+        }*/
+        instance.attributes.w = instance.attributes.h = 80;
+        instance.attributes.x = 10; instance.attributes.y =5;
         instance.percentToPixel(instance.attributes);
         var props = instance.convertToFabric(instance.attributes),
         questionnaire = instance.data.questionnaire, 
@@ -37,8 +39,7 @@ EkstepEditor.basePlugin.extend({
         instance.get(questionnaire.items,"media").forEach( function(element, index) {
            instance.addMediatoManifest(element);
         });
-        var templateArray = [],templates = [],resCount = 0,tempaltesLength = templateIds.length;
-        if (_.isUndefined(this.data.template)) {
+        var templateArray = [], templates = [], resCount = 0, tempaltesLength = templateIds.length;
             for (var index = 0; index < tempaltesLength; index++) {
                 if (!_.isUndefined(templateIds[index])) {
                     EkstepEditor.assessmentService.getTemplate(templateIds[index], function(err, res) {
@@ -46,27 +47,29 @@ EkstepEditor.basePlugin.extend({
                             if (!err && res) {
                                 resCount++;
                                 templateArray.push(instance.xml2json(res));
-                                if (resCount == tempaltesLength) {
-                                    templateArray.forEach(function(element, index) {
-                                        if (!_.isNull(element)) {
-                                            templates.push(element.template);
-                                            if (!_.isUndefined(element.manifest)) {
-                                                instance.addMediatoManifest(element.manifest.media);
-                                            }
-                                        }
-                                    });
-                                    instance.data.template = templates;
-                                }
-                            }else{
-                               throw Error(res);
+                            } else {
+                                throw Error(res);
                             }
+
+                        } catch (err) {
+                            resCount++;
+                            console.warn("Invalid Template", err);
                         }
-                        catch(err){
-                            console.warn("Template is invalid Please choose the another Template",err);
-                        } 
-                    });
-                }
+                       
+                     if (resCount == tempaltesLength) {
+                        templateArray.forEach(function(element, index) {
+                            if (!_.isNull(element)) {
+                                templates.push(element.template);
+                                if (!_.isUndefined(element.manifest)) {
+                                    instance.addMediatoManifest(element.manifest.media);
+                                }
+                            }
+                        });
+                       instance.data.template = templates;
+                    }
+                });
             }
+            
         }
       instance.editorObj = instance.showProperties(props, questionnaire.title, count, questionnaire.max_score);
     },
@@ -149,10 +152,10 @@ EkstepEditor.basePlugin.extend({
         // Display the all properties on the editor
         props.fill = "#87CEFA";
         var rect = new fabric.Rect(props);
-        qTittle = new fabric.Text("TITLE :"+ qTittle.toUpperCase(), {fontSize: 25, fill:'black',textAlign:'center',textDecoration:'underline', top: 80, left: 160} );
-        qCount = new fabric.Text("QUESTIONS : " + qCount, {fontSize: 20,fill:'black',top: 120,left: 160});
-        maxscore = new fabric.Text("TOTAL MARKS : "+maxscore, {fontSize: 20, fill:'black', top: 150,left: 160,});
-        fabricGroup = new fabric.Group([rect, qTittle, qCount, maxscore], {left: 90, top: 40});
+        qTittle = new fabric.Text(qTittle.toUpperCase(), {fontSize: 25, fill:'black',textAlign:'center',textDecoration:'underline', top: 90, left: 250} );
+        qCount = new fabric.Text("QUESTIONS : " + qCount, {fontSize: 20,fill:'black',top: 130,left: 250});
+        maxscore = new fabric.Text("TOTAL MARKS : "+maxscore, {fontSize: 20, fill:'black', top: 160,left: 250,});
+        fabricGroup = new fabric.Group([rect, qTittle, qCount, maxscore], {left: 85, top: 40});
         return fabricGroup;
     },
     /**    
