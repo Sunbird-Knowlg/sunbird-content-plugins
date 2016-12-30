@@ -421,7 +421,7 @@
 		<i ng-show="$ctrl.uploadingAsset" class="big spinner loading icon"></i>
 		<div class="ui grid">
 			<div class="three wide column" style="text-align: left;">
-				<button class="ui labeled icon button" ng-click="$ctrl.uploadView=false"><i class="left chevron icon"></i>Back</button>
+				<button class="ui grey button" ng-click="$ctrl.uploadView=false; $ctrl.plugin=='image' ? '' : $ctrl.upload = false; $ctrl.record=false;">Back</button>
 			</div>
 			<div class="nine wide column" style="text-align: right;">
 				<div class="ui buttons">
