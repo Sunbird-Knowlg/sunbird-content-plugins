@@ -208,7 +208,7 @@
     </div>
     <div class="actions">
         <a href="" target="_blank">
-            <button class="ui blue left floated button">Create A Question</button>
+            <button class="ui blue left floated button" ng-href="{{context.createItemLink}}" target="_blank">Create A Question</button>
         </a>
         <div class="ui label" ng-show="$ctrl.cart.items.length">
             <a class="ui grey circular label">{{$ctrl.cart.items.length}}</a> Questions added
