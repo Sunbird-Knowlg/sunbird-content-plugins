@@ -65,7 +65,7 @@ EkstepEditor.basePlugin.extend({
     *   @memberof assetBrowser
     *
     */
-    getAsset: function(searchText, mediaType, owner, cb) {
+    getAsset: function(searchText, mediaType, portalOwner, cb) {
         var instance = this,
             iservice = new EkstepEditor.iService(),
             requestObj,
@@ -76,7 +76,8 @@ EkstepEditor.basePlugin.extend({
             "request": {
                 "filters": {
                     "mediaType": [mediaType],
-                    "license": ["Creative Commons Attribution (CC BY)"],
+                    "contentType":"Asset",
+                    "status": new Array("Live","Review","Draft")
                 },
                 "limit":30
             }
@@ -89,12 +90,22 @@ EkstepEditor.basePlugin.extend({
             }
         };
 
-        EkstepEditorAPI._.isUndefined(searchText) ? null : requestObj.request.query = searchText;
-        EkstepEditorAPI._.isUndefined (owner) ? null : requestObj.request.owner = owner;
-        allowableFilter = EkstepEditorAPI._.omit(this.search_filter, ['mediaType', 'license', 'limit']);
+        EkstepEditorAPI._.isUndefined(searchText) ? null : requestObj.request.query = searchText;        
+        
+        // Public assets only
+        if (EkstepEditorAPI._.isUndefined(portalOwner)){
+            requestObj.request.filters.license = "Creative Commons Attribution (CC BY)";
+            allowableFilter = EkstepEditorAPI._.omit(this.search_filter, ['mediaType', 'license', 'limit']);    
+        }
+        else{
+        // All assets
+            requestObj.request.filters.portalOwner = portalOwner;
+            allowableFilter = EkstepEditorAPI._.omit(this.search_filter, ['mediaType', 'limit', 'portalOwner']);       
+        }
+        
         EkstepEditorAPI._.merge(requestObj.request.filters, allowableFilter);
 
-        iservice.http.post(EkstepEditor.config.baseURL + '/api/search/v2/search', requestObj, requestHeaders, cb);
+        iservice.http.post(EkstepEditor.config.baseURL + '/api/search/v2/search_filter', requestObj, requestHeaders, cb);
     },
     /**
     *   invokes popup service to show the popup window

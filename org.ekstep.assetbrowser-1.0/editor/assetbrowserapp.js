@@ -1,15 +1,11 @@
 'use strict';
 angular.module('assetbrowserapp', ['angularAudioRecorder']).config(['recorderServiceProvider', function(recorderServiceProvider){
         
-        console.log("recorderServiceProvider");
-
         recorderServiceProvider.forceSwf(false);
         var lameJsUrl = window.location.origin + EkstepEditor.config.pluginRepo + '/org.ekstep.assetbrowser-1.0/editor/recorder/lib2/lame.min.js';
         var config = {lameJsUrl:lameJsUrl, bitRate: 92};
 
-        console.log(config);
         recorderServiceProvider.withMp3Conversion(true, config);
-        console.log(recorderServiceProvider);
   }]);
 angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$injector', 'instance', function($scope ,$injector, instance) {
         var audiodata = {},
@@ -30,7 +26,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         ctrl.loadingImage = true;
         ctrl.uploadView = false;
         ctrl.languagecode = 'en';
-        ctrl.owner = EkstepEditorAPI._.isUndefined(window.context) ? '' : window.context.user.id;
+        ctrl.portalOwner = EkstepEditorAPI._.isUndefined(window.context) ? '' : window.context.user.id;
         ctrl.asset = {
             'requiredField': '',
         };
@@ -47,7 +43,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             'keywords': [],
             'creator': '',
             'status': 'Draft',
-            'owner': EkstepEditorAPI._.isUndefined(window.context) ? '' : window.context.user.id,
+            'portalOwner': EkstepEditorAPI._.isUndefined(window.context) ? '' : window.context.user.id,
             'code': "org.ekstep" + Math.random(),
             'mimeType': "",
             'mediaType': "",
@@ -109,9 +105,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 
         //load image on opening window
         if (instance.mediaType == 'image') {
-            instance.getAsset(undefined, instance.mediaType, ctrl.owner, imageAssetCb);
+            instance.getAsset(undefined, instance.mediaType, ctrl.portalOwner, imageAssetCb);
         } else {
-            instance.getAsset(undefined, instance.mediaType, ctrl.owner, audioAssetCb);
+            instance.getAsset(undefined, instance.mediaType, ctrl.portalOwner, audioAssetCb);
         }
 
         ctrl.myAssetTab = function() {
@@ -133,7 +129,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
             ctrl.selectBtnDisable = true;
 
-            callback && instance.getAsset(searchText, instance.mediaType, ctrl.owner, callback);
+            callback && instance.getAsset(searchText, instance.mediaType, ctrl.portalOwner, callback);
         }
 
         ctrl.allAssetTab = function() {
@@ -187,7 +183,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             ctrl.selectBtnDisable = true;
 
             if (ctrl.tabSelected == "my") {
-                callback && instance.getAsset(searchText, instance.mediaType, ctrl.owner, callback);
+                callback && instance.getAsset(searchText, instance.mediaType, ctrl.portalOwner, callback);
             } else {
                 callback && instance.getAsset(searchText, instance.mediaType, undefined, callback);
             }
