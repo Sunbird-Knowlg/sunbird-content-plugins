@@ -91,13 +91,16 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             if (res && res.data.result.content) {
                 ctrl.loadingAudio = false;
                 ctrl.audioList = [];
-                ctrl.initPopup(res.data.result.content);
                 EkstepEditorAPI._.forEach(res.data.result.content, function(obj, index) {
                     ctrl.audioList.push({ downloadUrl: trustResource(obj.downloadUrl), identifier: obj.identifier, name:obj.name, mimeType:obj.mimeType, license:obj.license });
                 });
+
+                ctrl.initPopup(res.data.result.content);
             } else {
                 ctrl.audioList = [];
             };
+
+            EkstepEditorAPI.getAngularScope().safeApply();
         };
 
         function trustResource(src) {
