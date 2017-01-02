@@ -98,11 +98,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             } else {
                 ctrl.audioList = [];
             };
-
-            if (res.data.result.count == 0) {
-            }
-
-            EkstepEditorAPI.getAngularScope().safeApply();
         };
 
         function trustResource(src) {
@@ -242,6 +237,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             document.getElementById('audio-' + $index).play();
             audiodata.asset = audio.identifier;
             audiodata.assetMedia = {
+                name: audio.name,
                 id: audiodata.asset,
                 src: audio.downloadUrl.toString(),
                 type: 'audio'
