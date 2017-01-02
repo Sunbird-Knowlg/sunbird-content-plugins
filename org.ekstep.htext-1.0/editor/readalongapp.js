@@ -96,6 +96,7 @@ angular.module('readalongapp', [])
                     EkstepEditorAPI.dispatchEvent('org.ekstep.audio:create', ctrl.audioObj)
                     EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', {'asset': ctrl.oldAudioName});
                 }
+                EkstepEditorAPI.render();
             }else{
                 if (ctrl.readalongText && karaoke.audioObj.wordTimes.length > 0) {
                     var timings = [];

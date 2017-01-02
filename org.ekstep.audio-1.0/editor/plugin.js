@@ -35,7 +35,8 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { 
             stageId: EkstepEditorAPI.getCurrentStage().id,
             type: 'audio', 
-            title: media.id
+            title: media.name,
+            id: media.id
         });
     },
     /**    

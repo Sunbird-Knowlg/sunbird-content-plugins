@@ -66,12 +66,12 @@ EkstepEditor.basePlugin.extend({
             }
         });
         _.forEach(stage.components, function(component) {
-            if(_.indexOf(assetArr, component.title) != -1){
+            if(_.indexOf(assetArr, component.id) != -1){
                 component.autoplay = true;
             }else{
                 component.autoplay = false;
             }
-            if(_.indexOf(htextArr, component.title) != -1){
+            if(_.indexOf(htextArr, component.id) != -1){
                 component.showClose = true;
             }else{
                 component.showClose = false;
@@ -91,8 +91,18 @@ EkstepEditor.basePlugin.extend({
         });
     },
     removeAudio: function(event, data){
-        _.remove(this.scope.stageAttachments['audio'].items, function(item) {
-           return data.asset === item.title;
+        var instance = this;
+        _.forEach(instance.stageConfig, function(stage, key) {
+            if(stage.stageId === instance.scope.currentStage.id){
+                _.forEach(stage.components, function(com, key){
+                    if(data.asset === com.id){
+                        stage.components.splice(key, 1);
+                        _.remove(instance.scope.stageAttachments['audio'].items, function(item) {
+                           return data.asset === item.id;
+                        });
+                    }
+                });
+            }
         });
     }
 });
