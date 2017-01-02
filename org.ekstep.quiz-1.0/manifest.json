@@ -27,6 +27,20 @@
             "description": "Choose a  from the browser",
             "dataType": "assessmentbrowser",
             "required": true
+        },
+        {
+            "propertyName": "shuffle",
+            "title": "Shuffle",
+            "description": "Shuffle of the Questions",
+            "dataType": "boolean",
+            "required": true
+        },
+        {
+            "propertyName": "showImmediateFeedback",
+            "title": "ShowImmediate feedback",
+            "description": "Show the feedback popup",
+            "dataType": "boolean",
+            "required": true
         }]
     },
     "renderer": {
