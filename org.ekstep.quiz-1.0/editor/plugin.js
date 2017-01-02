@@ -158,6 +158,43 @@ EkstepEditor.basePlugin.extend({
         fabricGroup = new fabric.Group([rect, qTittle, qCount, maxscore], {left: 85, top: 40});
         return fabricGroup;
     },
+    onConfigChange: function(key, value) {
+        if (!_.isUndefined(value)) {
+            switch (key) {
+                case 'shuffle':
+                    this.config.shuffle = value;
+                    this.data.questionnaire.shuffle = value;
+                    break;
+                case 'display':
+                    this.config.total_items = value;
+                    this.data.questionnaire.total_items = value;
+                    break;
+                case 'showImmediateFeedback':
+                    this.config.showImmediateFeedback = value;
+                    this.data.questionnaire.showImmediateFeedback = value;
+                    break;
+                case 'max_score':
+                    this.config.max_score = value;
+                    this.data.questionnaire.max_score = value;
+                    break;
+            }
+
+        }
+        EkstepEditorAPI.render();
+        EkstepEditorAPI.dispatchEvent('object:modified', {
+            target: EkstepEditorAPI.getEditorObject()
+        });
+
+    },
+    getConfig: function() {
+        var config = this._super();
+        config.shuffle = this.data.questionnaire.shuffle;
+        config.display = this.data.questionnaire.total_items;
+        config.feedbackPopu = this.data.questionnaire.showImmediateFeedback;
+        config.max_score = this.data.questionnaire.max_score;
+        return config;
+        
+    },
     /**    
     *      
     * open assessment browser to get assessment data. 
