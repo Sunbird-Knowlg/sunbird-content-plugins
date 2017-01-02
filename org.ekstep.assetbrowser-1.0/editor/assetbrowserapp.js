@@ -29,7 +29,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         ctrl.selected_audios = {};
         ctrl.selectBtnDisable = true;
         ctrl.buttonToShow = 'select';
-        ctrl.loadingImage = true;
         ctrl.uploadView = false;
         ctrl.languagecode = 'en';
         ctrl.portalOwner = EkstepEditorAPI._.isUndefined(window.context) ? '' : window.context.user.id;
@@ -60,7 +59,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             'publisher': ""
         };
 
-        ctrl.loadingAudio = true;
+        ctrl.loading = 'active';
         ctrl.plugin = instance.mediaType;
         ctrl.upload = (instance.mediaType == 'image') ? true : false;
         ctrl.fileTypes = (instance.mediaType == "image") ? "jpeg, jpg, png, svg" : "mp3, mp4, mpeg, ogg, wav, webm";
@@ -75,8 +74,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         }
 
         function imageAssetCb(err, res) {
-            ctrl.loadingImage = false;
-
             if (res && res.data.result.content) {    
                 ctrl.imageList = res.data.result.content;
                 ctrl.initPopup(res.data.result.content);
@@ -84,12 +81,14 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                 ctrl.imageList = [];
             };
 
+            // Hide loader
+            hideLoader();
+            
             EkstepEditorAPI.getAngularScope().safeApply();
         };
 
         function audioAssetCb(err, res) {
             if (res && res.data.result.content) {
-                ctrl.loadingAudio = false;
                 ctrl.audioList = [];
                 EkstepEditorAPI._.forEach(res.data.result.content, function(obj, index) {
                     ctrl.audioList.push({ downloadUrl: trustResource(obj.downloadUrl), identifier: obj.identifier, name:obj.name, mimeType:obj.mimeType, license:obj.license });
@@ -99,6 +98,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             } else {
                 ctrl.audioList = [];
             };
+
+            // Hide loader
+            hideLoader();
 
             EkstepEditorAPI.getAngularScope().safeApply();
         };
@@ -117,10 +119,13 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         ctrl.myAssetTab = function() {
             var callback,
                 searchText = ctrl.query;
+
+            // Show loader
+            showLoader();
+
             ctrl.selectBtnDisable = false;
             ctrl.buttonToShow = 'select';
             ctrl.tabSelected = "my";
-            ctrl.loadingImage = true;
 
             imageTabSelected = true;
             audioTabSelected = false;
@@ -139,8 +144,11 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         ctrl.allAssetTab = function() {
             var callback,
                 searchText = ctrl.query;
+
+            // Show loader
+            showLoader();
+
             ctrl.tabSelected = "all";
-            ctrl.loadingImage = true;
             imageTabSelected = true;
             audioTabSelected = false;
             ctrl.selectBtnDisable = EkstepEditorAPI._.isUndefined(lastSelectedImage) ? true : false;
@@ -153,7 +161,17 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             ctrl.selectBtnDisable = true;
 
             callback && instance.getAsset(searchText, instance.mediaType, undefined, callback);
+        }
 
+        function showLoader(){
+            // Just add class active to loader element
+            ctrl.loading = 'active';
+        }
+
+
+        function hideLoader() {
+            // Just remove class active form loader element
+            ctrl.loading = '';
         }
 
         ctrl.uploadButton = function(){

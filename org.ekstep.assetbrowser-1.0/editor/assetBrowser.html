@@ -137,6 +137,7 @@
 		</div>
 		<div class="uploadingAsset ui tab active" data-tab="first" >
 			<div class="content" ng-if="$ctrl.plugin == 'image'">
+				<div class="ui big loader {{$ctrl.loading}}"></div>
 				<div class="column">
 					<div class="column">
 						<div class="ui icon input assetbrowser_searchBox">
@@ -148,7 +149,6 @@
 				<div class="clearfix">&nbsp;</div>
 				<div class="asset_item_container">
 					<div class="ui grid">
-						<i class="huge spinner loading icon faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
 						<div ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
 							<div class="column templatebrowser_thumbnail">
 								<div class="ui small images templatecard infopopover" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected}" data-html="<b>{{image.name}}</b> <br/> License: {{image.license}}">
@@ -171,6 +171,7 @@
 
 			</div>
 			<div class="content" ng-if="$ctrl.plugin =='audio'">
+				<div class="ui big loader {{$ctrl.loading}}"></div>
 				<div class="ui grid">
 					<div class="column">
 						<div class="ui icon input assetbrowser_searchBox">
@@ -200,6 +201,7 @@
 		</div>
 		<div class="ui tab" data-tab="second" >
 			<div class="content" ng-if="$ctrl.plugin == 'image'">
+				<div class="ui big loader {{$ctrl.loading}}"></div>
 				<div class="column">
 					<div class="column">
 						<div class="ui icon input assetbrowser_searchBox">
@@ -210,7 +212,6 @@
 				</div>
 				<div class="clearfix">&nbsp;</div>
 				<div class="ui grid asset_item_container">
-					<i class="huge spinner loading icon faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
 					<div ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
 						<div class="column templatebrowser_thumbnail">
 							<div class="ui small images templatecard infopopover" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected}" data-html="<b>{{image.name}}</b> <br/> License:{{image.license}} ">
@@ -232,6 +233,7 @@
 				</div>
 			</div>
 			<div class="content" ng-if="$ctrl.plugin =='audio'">
+				<div class="ui big loader {{$ctrl.loading}}"></div>
 				<div class="ui grid">
 					<div class="column">
 						<div class="ui icon input assetbrowser_searchBox">
