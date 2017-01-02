@@ -19,6 +19,12 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             ctrl = this;
 
         var $sce = $injector.get('$sce');
+        ctrl.file = {
+            "infoShow": false,
+            "name":"",
+            "size":0
+        };
+
         ctrl.selected_images = {};
         ctrl.selected_audios = {};
         ctrl.selectBtnDisable = true;
@@ -150,6 +156,24 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 
             callback && instance.getAsset(searchText, instance.mediaType, undefined, callback);
 
+        }
+
+        ctrl.uploadButton = function(){
+            if (instance.mediaType == "image"){
+                ctrl.uploadBtnDisabled = false;
+            }
+            else {
+                if (ctrl.record == true) {
+                    ctrl.uploadBtnDisabled = true; 
+                }
+                else if (ctrl.upload == false) {
+                    ctrl.uploadBtnDisabled = true;
+                }
+                else{
+                    ctrl.uploadBtnDisabled = false;
+                }
+            }
+            
         }
 
         ctrl.uploadClick = function() {
@@ -303,22 +327,57 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             ctrl.hideField = true;
         }
 
+        ctrl.showFileInfo = function(){
+            ctrl.file.infoShow = true;
+            ctrl.file.name = 'audio_'+Date.now()+'.mp3';
+            var file;
+            setTimeout(function()
+             { 
+                    var dataurl = EkstepEditorAPI.jQuery('#recorded-audio-mainAudio').attr('src');
+                    file = ctrl.urltoFile(dataurl,ctrl.file.name);
+                    EkstepEditorAPI.jQuery("#fileSize").text(ctrl.formatBytes(file.size, 0));
+            }, 1);
+        }
+
+        ctrl.formatBytes = function (bytes,decimals) {
+           if(bytes == 0) return '0 Byte';
+           var k = 1000;
+           var dm = decimals + 1 || 3;
+           var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+           var i = Math.floor(Math.log(bytes) / Math.log(k));
+           return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+        }
+
+        ctrl.onRecordStart = function (){
+            ctrl.file.infoShow = false;
+            ctrl.showfileInfoBlock = false;
+            ctrl.uploadBtnDisabled = true;
+        }
+
+        ctrl.onConversionComplete = function(){
+            ctrl.uploadBtnDisabled = false;
+            ctrl.showFileInfo();
+        }
+
         ctrl.uploadAsset = function(event, fields) {
             var requestObj,
                 content = ctrl.assetMeta,
                 data = new FormData();
 
-            ctrl.uploadingAsset = true;
-
             EkstepEditorAPI.getAngularScope().safeApply();
-
 
             if (ctrl.record == true) {           
                 var dataurl = EkstepEditorAPI.jQuery('#recorded-audio-mainAudio').attr('src');
-                var file = ctrl.urltoFile(dataurl,'audio.mp3');
+                var file = ctrl.urltoFile(dataurl, ctrl.file.name);
 
                 ctrl.assetMeta.mimeType = 'audio/mp3';
                 ctrl.assetMeta.mediaType = instance.mediaType;
+
+                if (file.size > ctrl.allowedFileSize) {
+                    alert('File size is higher than the allowed size!');
+                    return false;
+                }
+
                 data.append('file', file);
             }
             else {
@@ -359,6 +418,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             // Create the content for asset
             EkstepEditor.assetService.saveAsset(ctrl.assetId, content, function(err, resp) {
                 if (resp) {
+                    ctrl.uploadingAsset = true;
                     ctrl.uploadFile(resp, data);
                 }
             });
@@ -501,6 +561,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 
         ctrl.switchToUpload = function(){
             ctrl.uploadView = true;
+            ctrl.uploadButton();
         }
 
         setTimeout(function() {

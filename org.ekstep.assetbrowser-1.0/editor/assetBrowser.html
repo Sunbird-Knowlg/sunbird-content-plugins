@@ -110,7 +110,7 @@
 
 </style>
 
-<div class="assetbrowser ui modal active ui form" style="top: 10%;">
+<div class="assetbrowser ui modal active ui form" style="top: 5%;">
 	<div class="header" ng-switch="$ctrl.plugin">
 		<div class="ui two column grid">
 			<div class="row">
@@ -281,19 +281,19 @@
 				<div class="column">
 					<div class="ui two column divided grid" ng-if="$ctrl.plugin =='audio'" ng-hide="$ctrl.upload || $ctrl.record">
 					  	 <div class="row center aligned">
-						  	<div class="column" ng-click="$ctrl.upload = true; $ctrl.record=false;">
+						  	<div class="column" ng-click="$ctrl.upload = true; $ctrl.record=false; $ctrl.uploadButton()">
 						  		<p><i class="huge upload icon"></i></p>
 						  		UPLOAD
 						  	</div>
 						  	<div class="ui vertical divider"></div>
-							<div class="column" ng-click="$ctrl.upload = false; $ctrl.record=true;">
+							<div class="column" ng-click="$ctrl.upload = false; $ctrl.record=true; $ctrl.uploadButton()">
 								<p><i class="huge unmute icon"></i></p>
 								RECORD
 						  	</div>
 					  	</div>
 					</div>
 					<div ng-show="$ctrl.record">
-						<ng-audio-recorder id="mainAudio" audio-model="recorded" show-player="false" time-limit="timeLimit">
+						<ng-audio-recorder id="mainAudio" audio-model="recorded" show-player="false" time-limit="timeLimit"  on-record-start="$ctrl.onRecordStart()" on-conversion-complete="$ctrl.onConversionComplete();">
 						    <div ng-if="recorder.isAvailable">
 						        <div ng-if="recorder.status.isDenied === true" style="color: red;">
 						            You need to grant permission for this application to use your microphone.
@@ -330,25 +330,28 @@
 												<i class="ui icon {{recorder.status.isStopped || recorder.status.isPaused ? 'play' : 'pause'}} circle huge blue"
 												ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()" style="text-align: right;"
 												></i>
-												<span></br><b>{{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}} </b></span>
+												<span><br><b>{{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}} </b></span>
 											</div>
 										</div>
 									</div>
 						   		</div>
-						   		<!--<div class="centered" ng-hide="recorder.status.isRecording">
-									<i class="ui icon selected radio huge blue cursor-pointer" ng-click="recorder.startRecord()"></i>
-									<p><b>Start Recording</b></p>
-								</div>-->
 						    </div>
 
 						    <div ng-if="!recorder.isAvailable">
 						        Your browser does not support this feature natively, please use latest version of <a
 						            href="https://www.google.com/chrome/browser" target="_blank">Google Chrome</a> or <a
-						            href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Mozilla Firefox</a>. If you're on
-						        Safari or Internet Explorer, you can install <a href="https://get.adobe.com/flashplayer/">Adobe Flash</a> to
+						            href="https://www.mozilla.org/en-US/firefox/new/" target="_blank">Mozilla Firefox</a>. If you're on Safari or Internet Explorer, you can install <a href="https://get.adobe.com/flashplayer/">Adobe Flash</a> to
 						        use this feature.
 						    </div>
 						</ng-audio-recorder>
+
+						<div class="ui-grid" ng-show="$ctrl.file.infoShow" style="margin-top: 5px;">
+							<span>{{$ctrl.file.name}}</span> | <b id="fileSize"></b>
+						</div>
+
+						<div class="ui info message mini message">
+							<p>Maximum allowed file size: {{$ctrl.fileSize}}</p>
+						</div>
 					</div>
 					<div class="required field" ng-if="$ctrl.upload" ng-hide="$ctrl.editMetaFlag">
 						<label for="assetfile" title="Enter asset caption">Select file</label>
@@ -418,16 +421,16 @@
 		</div>
 	</div>
 	<div class="actions" ng-show="$ctrl.uploadView">
-		<i ng-show="$ctrl.uploadingAsset" class="big spinner loading icon"></i>
 		<div class="ui grid">
 			<div class="three wide column" style="text-align: left;">
 				<button class="ui grey button" ng-click="$ctrl.uploadView=false; $ctrl.plugin=='image' ? '' : $ctrl.upload = false; $ctrl.record=false;">Back</button>
 			</div>
 			<div class="nine wide column" style="text-align: right;">
+				<i ng-show="$ctrl.uploadingAsset" class="big spinner loading icon"></i>
 				<div class="ui buttons">
 					<button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
 					<div class="or"></div>
-					<button class="ui blue button submit button" ng-click="$ctrl.doUpload()" type="button">Upload and Use</button>
+					<button class="ui blue button submit button" ng-disabled="$ctrl.uploadBtnDisabled" ng-click="$ctrl.doUpload()" type="button">Upload and Use</button>
 				</div>
 			</div>
 		</div>
