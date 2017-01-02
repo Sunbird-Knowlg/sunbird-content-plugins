@@ -1,0 +1,26 @@
+{
+    "id": "org.ekstep.viewecml",
+    "ver": "1.0",
+    "author": "Anshu Narayan",
+    "title": "viewecml Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            { "type": "js", "src": "editor/libs/dist/E2EConverter.js" }
+        ],
+        "menu": [{
+            "id": "viewecml",
+            "category": "main",
+            "type": "icon",
+            "toolTip": "View ECML",
+            "title": "View ECML",
+            "iconClass": "file code outline icon",
+            "onclick": {
+                "id": "org.ekstep.viewecml:show",
+                "data": {}
+            }
+        }]
+    }
+}
