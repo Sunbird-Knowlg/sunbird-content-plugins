@@ -96,6 +96,10 @@
     padding-left: 12px;
 }
 
+i.play.icon:before, i.pause.icon:before{
+	background: white !important;
+}
+
 .cursor-pointer{
 	cursor: pointer;
 }
@@ -297,42 +301,47 @@
 					<div ng-show="$ctrl.record">
 						<ng-audio-recorder id="mainAudio" audio-model="recorded" show-player="false" time-limit="timeLimit"  on-record-start="$ctrl.onRecordStart()" on-conversion-complete="$ctrl.onConversionComplete();">
 						    <div ng-if="recorder.isAvailable">
-						        <div ng-if="recorder.status.isDenied === true" style="color: red;">
+						        <div ng-if="recorder.status.isDenied === true" style="color:red;">
 						            You need to grant permission for this application to use your microphone.
 						        </div>
-								<div class="centered">
-							        <div style="max-width: 600px" style="position: relative;">
+								<div class="centered" style="min-height: 210px;">
+							        <div style="max-width: 500px" style="position: relative;">
 							            <div ng-show="recorder.status.isConverting">
 							                Please wait while your recording is processed.
 							            </div>
-
 							            <div ng-show="recorder.isHtml5 && recorder.status.isRecording">
 							                <ng-audio-recorder-analyzer></ng-audio-recorder-analyzer>
 							            </div>
 							            <br/>
-
 							            <div ng-show="!recorder.status.isRecording && recorder.audioModel">
-							                <ng-audio-recorder-wave-view wave-color="yellow" bar-color="red"></ng-audio-recorder-wave-view>
+							                <ng-audio-recorder-wave-view wave-color="#b1e8ff" bar-color="#31ADE0"></ng-audio-recorder-wave-view>
 							            </div>
 							        </div>
 
-									<span ng-hide="recorder.status.isRecording === false">
-										<i class="ui icon stop circle outline red huge cursor-pointer"
-										 ng-click="recorder.stopRecord()"
-										 ></i>
-										 <span><b>STOP</b></span>
+									<div class="row" style="position: absolute;top: 52px;left: 0;right: 0;z-index: 1000;margin-left: auto;margin-right: auto;">
+										<div class="twelve wide column" ng-hide="recorder.status.isRecording || !recorder.audioModel">
+											<i class="ui icon circle {{recorder.status.isStopped || recorder.status.isPaused ? 'play' : 'pause'}} huge blue cursor-pointer"
+											ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()"></i>
+											<!--
+											<span><br><b>{{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}} </b></span>
+											-->
+										</div>
+									</div>
+
+									<span class="cursor-pointer" ng-hide="recorder.status.isRecording === false" ng-click="recorder.stopRecord()">
+										<i class="ui icon stop circle outline red big"></i><b>STOP</b>
 									 </span>
 									<div class="ui grid">
-										<div class="row ">
-											<div class="six centered wide column" ng-hide="recorder.status.isRecording">
-												<i class="ui icon selected radio huge blue cursor-pointer" ng-click="recorder.startRecord()"></i>
-												<b class="pull-left">Start Recording</b>
-											</div>
-											<div class="six wide column" ng-hide="recorder.status.isRecording || !recorder.audioModel">
-												<i class="ui icon {{recorder.status.isStopped || recorder.status.isPaused ? 'play' : 'pause'}} circle huge blue"
-												ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()" style="text-align: right;"
-												></i>
-												<span><br><b>{{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}} </b></span>
+										<div class="row">
+											<div class="twelve centered wide column" ng-hide="recorder.status.isRecording">
+												<div id="replaceRecord" class="cursor-pointer" ng-click="recorder.startRecord()">
+													<i class="ui icon selected radio huge blue"></i>
+													<p><b>START RECORDING</b></p>
+												</div>
+
+												<div id="replaceRecordDiv" class="cursor-pointer" style="display: none;" ng-click="recorder.startRecord()">
+													<i class="ui icon retweet"></i><b>REPLACE</b>
+												</div>
 											</div>
 										</div>
 									</div>

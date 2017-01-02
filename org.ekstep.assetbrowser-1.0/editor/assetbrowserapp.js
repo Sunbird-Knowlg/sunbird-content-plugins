@@ -75,7 +75,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 
         function imageAssetCb(err, res) {
             if (res && res.data.result.content) {    
+                console.log(res.data);
                 ctrl.imageList = res.data.result.content;
+
                 ctrl.initPopup(res.data.result.content);
             } else {
                 ctrl.imageList = [];
@@ -83,7 +85,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 
             // Hide loader
             hideLoader();
-            
+
             EkstepEditorAPI.getAngularScope().safeApply();
         };
 
@@ -348,11 +350,14 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             ctrl.file.infoShow = true;
             ctrl.file.name = 'audio_'+Date.now()+'.mp3';
             var file;
-            setTimeout(function()
-             { 
-                    var dataurl = EkstepEditorAPI.jQuery('#recorded-audio-mainAudio').attr('src');
+            setTimeout(function() { 
+                var dataurl = EkstepEditorAPI.jQuery('#recorded-audio-mainAudio').attr('src');
+
+                if (!EkstepEditorAPI._.isUndefined(dataurl)) {
                     file = ctrl.urltoFile(dataurl,ctrl.file.name);
-                    EkstepEditorAPI.jQuery("#fileSize").text(ctrl.formatBytes(file.size, 0));
+                }
+
+                EkstepEditorAPI.jQuery("#fileSize").text(ctrl.formatBytes(file.size));
             }, 1);
         }
 
@@ -366,14 +371,20 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         }
 
         ctrl.onRecordStart = function (){
+            ctrl.replaceRecord = false;
             ctrl.file.infoShow = false;
             ctrl.showfileInfoBlock = false;
             ctrl.uploadBtnDisabled = true;
+
+            EkstepEditorAPI.jQuery("#replaceRecord").hide();
+            EkstepEditorAPI.jQuery("#replaceRecordDiv").hide();
         }
 
         ctrl.onConversionComplete = function(){
             ctrl.uploadBtnDisabled = false;
             ctrl.showFileInfo();
+
+            EkstepEditorAPI.jQuery("#replaceRecordDiv").show();
         }
 
         ctrl.uploadAsset = function(event, fields) {
