@@ -34,15 +34,15 @@
             <div class="{{!$ctrl.isFiltersShown ? 'active': ''}} step">
                 <i class="setting icon"></i>
                 <div class="content">
-                    <div class="title">Configure Assessment</div>
-                    <div class="description">Enter assessment title and configure defaults</div>
+                    <div class="title">Configure Question Set</div>
+                    <div class="description">Enter question set title and configure defaults</div>
                 </div>
             </div>
             <div class="step">
                 <i class="browser icon"></i>
                 <div class="content">
-                    <div class="title">Add Assessment</div>
-                    <div class="description">Add assessment to the content</div>
+                    <div class="title">Add Question Set</div>
+                    <div class="description">Add question set to the content</div>
                 </div>
             </div>
         </div>
@@ -125,7 +125,7 @@
                 <div class="five fields">
                     <div class="field">
                         <div class="ui corner labeled input">
-                            <input name="title" ng-model="$ctrl.activityOptions.title" type="text" placeholder="Assessment Title" autocomplete="off">
+                            <input name="title" ng-model="$ctrl.activityOptions.title" type="text" placeholder="Question Set Title" autocomplete="off">
                             <div class="ui corner label">
                                 <i class="asterisk icon"></i>
                             </div>
@@ -221,7 +221,7 @@
         <div class="ui buttons" ng-if="!$ctrl.isFiltersShown">
             <button id="closePopUp" class="ui orange button" ng-click="$ctrl.isFiltersShown = !$ctrl.isFiltersShown" type="button">Add More Questions</button>
             <div class="or"></div>
-            <button id="selectanduse" class="ui blue button" ng-click="$ctrl.addItemActivity()" ng-disabled="!$ctrl.activityOptions.title || !$ctrl.cart.items.length" type="button">Add Assessment</button>
+            <button id="selectanduse" class="ui blue button" ng-click="$ctrl.addItemActivity()" ng-disabled="!$ctrl.activityOptions.title || !$ctrl.cart.items.length" type="button">Add Question Set</button>
         </div>
     </div>
 </div>
