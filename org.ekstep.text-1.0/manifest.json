@@ -40,7 +40,7 @@
         }],
         "configManifest": [{
             "propertyName": "color",
-            "title": "Fill color",
+            "title": "Font color",
             "description": "Choose a color from the color picker",
             "dataType": "colorpicker",
             "required": true,
