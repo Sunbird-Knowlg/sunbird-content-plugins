@@ -190,7 +190,7 @@ EkstepEditor.basePlugin.extend({
         var config = this._super();
         config.shuffle = this.data.questionnaire.shuffle;
         config.display = this.data.questionnaire.total_items;
-        config.feedbackPopu = this.data.questionnaire.showImmediateFeedback;
+        config.showImmediateFeedback = this.data.questionnaire.showImmediateFeedback;
         config.max_score = this.data.questionnaire.max_score;
         return config;
         
