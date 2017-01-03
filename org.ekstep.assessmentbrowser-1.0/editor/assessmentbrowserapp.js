@@ -18,7 +18,7 @@ angular.module('assessmentbrowserapp', [])
             'type': '',
             'language': 'English',
             'gradeLevel': '',
-            'conceptIds': []            
+            'conceptIds': []
         };
         ctrl.activityOptions = {
             title: "",

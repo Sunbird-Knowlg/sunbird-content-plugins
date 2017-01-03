@@ -202,7 +202,25 @@ i.play.icon:before, i.pause.icon:before{
 			<div class="content" ng-if="$ctrl.plugin =='audio'">
 				<div class="ui big loader {{$ctrl.loading}}"></div>
 				<div class="ui grid">
-					<div class="column">
+					<div class="two wide column">
+						<div id="audioDropDown" class="ui floating labeled icon dropdown button audio">
+						  <i class="filter icon"></i>
+						  <span class="text">All</span>
+						  <div class="menu">
+							<div class="item" data-value='all'>
+							  <span class="text">All</span>
+							</div>
+							<div class="divider"></div>
+							<div class="item"data-value="audio">
+							  <span class="text">Audio</span>
+							</div>
+							<div class="item" data-value="voice">
+							  <span class="text">Voice</span>
+							</div>
+						  </div>
+						</div>
+					</div>
+					<div class="ten wide column">
 						<div class="ui icon input assetbrowser_searchBox">
 							<input ng-model="$ctrl.query" placeholder="Search Audio..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
 							<i class="circular search link icon inverted" ng-click="$ctrl.search()"></i>
@@ -312,7 +330,7 @@ i.play.icon:before, i.pause.icon:before{
 				<div class="column">
 					<div class="ui two column divided grid" ng-if="$ctrl.plugin =='audio'" ng-hide="$ctrl.upload || $ctrl.record">
 					  	 <div class="row center aligned">
-						  	<div class="column" ng-click="$ctrl.upload = true; $ctrl.record=false; $ctrl.uploadButton()">
+						  	<div class="column" ng-click="$ctrl.upload = true; $ctrl.record=false; $ctrl.audioType='audio'; $ctrl.uploadButton()">
 						  		<p><i class="huge upload icon"></i></p>
 						  		UPLOAD
 						  	</div>
@@ -434,6 +452,14 @@ i.play.icon:before, i.pause.icon:before{
 						<label for="language" title="Choose Language">Language</label>
 						<select id="language" class="ui dropdown" ng-model="$ctrl.languageText" {{$ctrl.asset.requiredField}} name="language" ng-options="lang for lang in $ctrl.asset.language" data-validate="language" >
 							<option value="">All</option>
+						</select>
+					</div>
+
+					<div class="field" ng-hide="$ctrl.hideField" >
+						<label for="audioType" title="Choose Audio Type">Audio Type</label>
+						<select id="audioType" class="ui dropdown" ng-model="$ctrl.audioType" name="audioType">
+							<option value="audio">Audio</option>
+							<option value="voice">Voice</option>
 						</select>
 					</div>
 

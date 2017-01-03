@@ -1,6 +1,6 @@
 'use strict';
 angular.module('assetbrowserapp', ['angularAudioRecorder']).config(['recorderServiceProvider', function(recorderServiceProvider){
-        
+
         recorderServiceProvider.forceSwf(false);
         var lameJsUrl = window.location.origin + EkstepEditor.config.pluginRepo + '/org.ekstep.assetbrowser-1.0/editor/recorder/lib2/lame.min.js';
         var config = {lameJsUrl:lameJsUrl, bitRate: 92};
@@ -43,6 +43,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         ctrl.uploadingAsset = false;
         ctrl.assetId = undefined;
         ctrl.tabSelected = "my";
+        ctrl.audioType = "audio";
         ctrl.assetMeta = {
             'body': '',
             'name': '',
@@ -75,7 +76,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         }
 
         function imageAssetCb(err, res) {
-            if (res && res.data.result.content) {    
+            if (res && res.data.result.content) {
                 ctrl.imageList = [];
 
                 EkstepEditorAPI._.forEach(res.data.result.content, function(obj, index) {
@@ -83,7 +84,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                         ctrl.imageList.push(obj);
                     }
                 });
-
                 ctrl.initPopup(res.data.result.content);
             } else {
                 ctrl.imageList = [];
@@ -98,15 +98,15 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         function audioAssetCb(err, res) {
             if (res && res.data.result.content) {
                 ctrl.audioList = [];
-                
+
                 EkstepEditorAPI._.forEach(res.data.result.content, function(obj, index) {
                     if (!EkstepEditorAPI._.isUndefined(obj.downloadUrl)){
                         ctrl.audioList.push({ downloadUrl: trustResource(obj.downloadUrl), identifier: obj.identifier, name:obj.name, mimeType:obj.mimeType, license:obj.license });
                     }
                 });
-                
+
                 ctrl.initPopup(res.data.result.content);
-                
+
             } else {
                 ctrl.audioList = [];
             };
@@ -123,10 +123,20 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 
         //load image on opening window
         if (instance.mediaType == 'image') {
-            instance.getAsset(undefined, instance.mediaType, ctrl.portalOwner, imageAssetCb);
+            instance.getAsset(undefined, new Array(instance.mediaType), ctrl.portalOwner, imageAssetCb);
         } else {
-            instance.getAsset(undefined, instance.mediaType, ctrl.portalOwner, audioAssetCb);
+            instance.getAsset(undefined, new Array('audio','voice'), ctrl.portalOwner, audioAssetCb);
         }
+
+		setTimeout(function() {
+            EkstepEditorAPI.jQuery('#audioDropDown')
+			  .dropdown({
+				onChange: function(value, text, $selectedItem) {
+					var selectedValue = value != 'all' ? new Array(value) : new Array('audio','voice');
+					instance.getAsset(undefined, selectedValue, ctrl.portalOwner, audioAssetCb);
+				}
+			});
+        }, 1000);
 
         ctrl.myAssetTab = function() {
             var callback,
@@ -149,9 +159,24 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
             callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
             ctrl.selectBtnDisable = true;
-
-            callback && instance.getAsset(searchText, instance.mediaType, ctrl.portalOwner, callback);
+            var mediaType = ctrl.getMediaType();
+            callback && instance.getAsset(searchText, mediaType, ctrl.portalOwner, callback);
         }
+
+        ctrl.getMediaType = function(){
+			if (instance.mediaType === "image"){
+				return new Array(instance.mediaType);
+			}else{
+				if ((EkstepEditorAPI.jQuery('#audioDropDown').dropdown('get value') == '') || (EkstepEditorAPI.jQuery('#audioDropDown').dropdown('get value') == 'all')){
+					return new Array('audio','voice')
+				}else if (EkstepEditorAPI.jQuery('#audioDropDown').dropdown('get value') =='voice'){
+					return new Array('voice');
+				}
+				else{
+					return new Array(instance.mediaType);
+				}
+			}
+		}
 
         ctrl.allAssetTab = function() {
             var callback,
@@ -172,14 +197,14 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
             ctrl.selectBtnDisable = true;
 
-            callback && instance.getAsset(searchText, instance.mediaType, undefined, callback);
+            var mediaType = instance.mediaType != "image" ? new Array('audio','voice') : new Array(instance.mediaType);
+            callback && instance.getAsset(searchText, mediaType, undefined, callback);
         }
 
         function showLoader(){
             // Just add class active to loader element
             ctrl.loading = 'active';
         }
-
 
         function hideLoader() {
             // Just remove class active form loader element
@@ -192,16 +217,20 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             }
             else {
                 if (ctrl.record == true) {
-                    ctrl.uploadBtnDisabled = true; 
+					ctrl.audioType="voice";
+                    ctrl.uploadBtnDisabled = true;
                 }
                 else if (ctrl.upload == false) {
                     ctrl.uploadBtnDisabled = true;
                 }
                 else{
+					ctrl.audioType="audio";
                     ctrl.uploadBtnDisabled = false;
                 }
             }
-            
+
+			EkstepEditorAPI.getAngularScope().safeApply();
+
         }
 
         ctrl.uploadClick = function() {
@@ -235,9 +264,11 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             ctrl.selectBtnDisable = true;
 
             if (ctrl.tabSelected == "my") {
-                callback && instance.getAsset(searchText, instance.mediaType, ctrl.portalOwner, callback);
+				 var mediaType = ctrl.getMediaType();
+                callback && instance.getAsset(searchText, mediaType, ctrl.portalOwner, callback);
             } else {
-                callback && instance.getAsset(searchText, instance.mediaType, undefined, callback);
+				var mediaType = instance.mediaType != "image" ? new Array('audio','voice') : new Array(instance.mediaType);
+                callback && instance.getAsset(searchText, mediaType, undefined, callback);
             }
 
         }
@@ -360,7 +391,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             ctrl.file.infoShow = true;
             ctrl.file.name = 'audio_'+Date.now()+'.mp3';
             var file;
-            setTimeout(function() { 
+
+            setTimeout(function() {
                 var dataurl = EkstepEditorAPI.jQuery('#recorded-audio-mainAudio').attr('src');
 
                 if (!EkstepEditorAPI._.isUndefined(dataurl)) {
@@ -404,12 +436,12 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 
             EkstepEditorAPI.getAngularScope().safeApply();
 
-            if (ctrl.record == true) {           
+            if (ctrl.record == true) {
                 var dataurl = EkstepEditorAPI.jQuery('#recorded-audio-mainAudio').attr('src');
                 var file = ctrl.urltoFile(dataurl, ctrl.file.name);
 
                 ctrl.assetMeta.mimeType = 'audio/mp3';
-                ctrl.assetMeta.mediaType = instance.mediaType;
+                ctrl.assetMeta.mediaType = ctrl.audioType;
 
                 if (file.size > ctrl.allowedFileSize) {
                     alert('File size is higher than the allowed size!');
@@ -424,7 +456,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                     ctrl.assetMeta.mimeType = file.type;
 
                     // @Todo for audio
-                    ctrl.assetMeta.mediaType = instance.mediaType;
+                    ctrl.assetMeta.mediaType = instance.mediaType != 'audio' ? instance.mediaType : ctrl.audioType;
                 });
             }
 
@@ -529,7 +561,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                                 prompt: 'Please select Copyright & License'
                             }]
                         },
-                        assetName: {    
+                        assetName: {
                             identifier: 'assetName',
                             rules: [{
                                 type: 'empty',
@@ -576,7 +608,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                         if (ctrl.record == true)
                         {
                             // @Todo file size validation for recorded file
-                            ctrl.uploadAsset(event, fields);    
+                            ctrl.uploadAsset(event, fields);
                         }
                         else
                         {

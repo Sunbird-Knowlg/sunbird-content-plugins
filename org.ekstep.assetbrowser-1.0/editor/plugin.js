@@ -74,7 +74,7 @@ EkstepEditor.basePlugin.extend({
         requestObj = {
             "request": {
                 "filters": {
-                    "mediaType": [mediaType],
+                    "mediaType": mediaType,
                     "contentType":"Asset",
                     "status": new Array("Live","Review","Draft")
                 },
@@ -89,19 +89,19 @@ EkstepEditor.basePlugin.extend({
             }
         };
 
-        EkstepEditorAPI._.isUndefined(searchText) ? null : requestObj.request.query = searchText;        
-        
+        EkstepEditorAPI._.isUndefined(searchText) ? null : requestObj.request.query = searchText;
+
         // Public assets only
         if (EkstepEditorAPI._.isUndefined(portalOwner)){
             requestObj.request.filters.license = "Creative Commons Attribution (CC BY)";
-            allowableFilter = EkstepEditorAPI._.omit(this.search_filter, ['mediaType', 'license', 'limit']);    
+            allowableFilter = EkstepEditorAPI._.omit(this.search_filter, ['mediaType', 'license', 'limit']);
         }
         else{
         // All assets
             requestObj.request.filters.portalOwner = portalOwner;
-            allowableFilter = EkstepEditorAPI._.omit(this.search_filter, ['mediaType', 'limit', 'portalOwner']);       
+            allowableFilter = EkstepEditorAPI._.omit(this.search_filter, ['mediaType', 'limit', 'portalOwner']);
         }
-        
+
         EkstepEditorAPI._.merge(requestObj.request.filters, allowableFilter);
 
         iservice.http.post(EkstepEditor.config.baseURL + '/api/search/v2/search', requestObj, requestHeaders, cb);
