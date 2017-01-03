@@ -29,8 +29,10 @@ EkstepEditor.basePlugin.extend({
         /*if (!instance.attributes.w) {
             instance.attributes.w = instance.attributes.h = 80;
         }*/
+        // Removes unwanted config properties(visible,stroke etc.) for the quiz plugin
+        delete instance.configManifest;
         instance.attributes.w = instance.attributes.h = 80;
-        instance.attributes.x = 10; instance.attributes.y =5;
+        instance.attributes.x = 10; instance.attributes.y = 5;
         instance.percentToPixel(instance.attributes);
         var props = instance.convertToFabric(instance.attributes),
         questionnaire = instance.data.questionnaire, 
@@ -165,7 +167,7 @@ EkstepEditor.basePlugin.extend({
                     this.config.shuffle = value;
                     this.data.questionnaire.shuffle = value;
                     break;
-                case 'display':
+                case 'total_items':
                     this.config.total_items = value;
                     this.data.questionnaire.total_items = value;
                     break;
@@ -177,6 +179,9 @@ EkstepEditor.basePlugin.extend({
                     this.config.max_score = value;
                     this.data.questionnaire.max_score = value;
                     break;
+                case 'title':
+                    this.config.title = value;
+                    this.data.questionnaire.title = value;    
             }
 
         }
@@ -189,9 +194,10 @@ EkstepEditor.basePlugin.extend({
     getConfig: function() {
         var config = this._super();
         config.shuffle = this.data.questionnaire.shuffle;
-        config.display = this.data.questionnaire.total_items;
+        config.total_items = this.data.questionnaire.total_items;
         config.showImmediateFeedback = this.data.questionnaire.showImmediateFeedback;
         config.max_score = this.data.questionnaire.max_score;
+        config.title = this.data.questionnaire.title;
         return config;
         
     },

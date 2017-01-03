@@ -29,18 +29,43 @@
             "required": true
         },
         {
+            "propertyName": "title",
+            "title": "Assessment Title",
+            "description": "Assessment Title",
+            "dataType": "input",
+            "valueType":"text",
+            "required": true
+        },
+        {
             "propertyName": "shuffle",
-            "title": "Shuffle",
+            "title": "Shuffle Questions",
             "description": "Shuffle of the Questions",
             "dataType": "boolean",
             "required": true
         },
         {
             "propertyName": "showImmediateFeedback",
-            "title": "ShowImmediate feedback",
+            "title": "Show Immediate Feedback",
             "description": "Show the feedback popup",
             "dataType": "boolean",
             "required": true
+        },
+        {
+            "propertyName": "total_items",
+            "title": "Display",
+            "description": "Toal marks to display",
+            "dataType": "input",
+            "valueType":"number",
+            "required": true
+        },
+        {
+            "propertyName": "max_score",
+            "title": "Total Marks",
+            "description": "Toal marks to display",
+            "dataType": "input",
+            "valueType":"number",
+            "required": true
+            
         }]
     },
     "renderer": {
