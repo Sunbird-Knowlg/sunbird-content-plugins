@@ -8,12 +8,12 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnSelected, this);
     },
     sendToFront: function(event, data) {
-        EkstepEditorAPI.getCanvas().bringToFront(EkstepEditorAPI.getEditorObject());
+        EkstepEditorAPI.getCanvas().bringForward(EkstepEditorAPI.getEditorObject());
         EkstepEditorAPI.render();
         EkstepEditorAPI.dispatchEvent('object:modified', {id: EkstepEditorAPI.getEditorObject().id});
     },
     sendToBack: function(event, data) {
-        EkstepEditorAPI.getCanvas().sendToBack(EkstepEditorAPI.getEditorObject());
+        EkstepEditorAPI.getCanvas().sendBackwards(EkstepEditorAPI.getEditorObject());
         EkstepEditorAPI.render();
         EkstepEditorAPI.dispatchEvent('object:modified', {id: EkstepEditorAPI.getEditorObject().id});
     },

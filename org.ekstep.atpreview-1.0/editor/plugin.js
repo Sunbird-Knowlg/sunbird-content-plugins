@@ -57,14 +57,14 @@ EkstepEditor.basePlugin.extend({
         var contentService = EkstepEditorAPI.getService('content');
         var meta = EkstepEditorAPI.getService('content').getContentMeta(EkstepEditorAPI.globalContext.contentId);
         var modalController = function($scope) {
-            setTimeout(function() {
+            $scope.$on('ngDialog.opened', function() {                
                 var previewContentIframe = EkstepEditorAPI.jQuery('#previewContentIframe')[0];
                 previewContentIframe.src = instance.previewURL;
                 meta.contentMeta = _.isUndefined(meta.contentMeta) ? null : meta.contentMeta;
                 previewContentIframe.onload = function() {
                     previewContentIframe.contentWindow.setContentData(meta.contentMeta, instance.contentBody, { "showStartPage": true, "showEndPage": true });
                 };
-            }, 100);
+            });
         };
 
         EkstepEditorAPI.getService('popup').open({

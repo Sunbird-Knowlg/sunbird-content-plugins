@@ -1,5 +1,29 @@
 <script type="text/ng-template" ng-app="assetbrowserapp" ng-controller="browsercontroller as $ctrl" id="partials/assetbrowser.html">
 <style>
+audio::-internal-media-controls-download-button {
+   display:none !important;
+}
+
+audio::-webkit-media-controls-enclosure {
+   overflow:hidden !important;
+}
+
+audio::-webkit-media-controls-panel {
+   width: calc(100% + 30px) !important; /* Adjust as needed */
+}
+
+.ui.modal {
+   position: inherit !important;
+   top: 0 !important;
+}
+
+.ngdialog-content {
+   top: 5% !important;
+   width: 100% !important;    
+   position: absolute !important;            
+   background: none !important;
+}
+
 .faloading {
     position: fixed;
     top: 250px;
@@ -96,6 +120,10 @@
     padding-left: 12px;
 }
 
+i.play.icon:before, i.pause.icon:before{
+	background: white !important;
+}
+
 .cursor-pointer{
 	cursor: pointer;
 }
@@ -110,13 +138,13 @@
 
 </style>
 
-<div class="assetbrowser ui modal active ui form" style="top: 5%;">
+<div class="assetbrowser ui modal active ui form">
 	<div class="header" ng-switch="$ctrl.plugin">
 		<div class="ui two column grid">
 			<div class="row">
 			  	<div class="column">
 					<span ng-hide="$ctrl.uploadView">
-						<span ng-switch-when="image"><i class="image icon"></i> Select file</span>
+						<span ng-switch-when="image"><i class="image icon"></i> Select Image</span>
 						<span ng-switch-when="audio"><i class="file audio outline icon"></i> Select Audio</span>
 					</span>
 					<span ng-if="$ctrl.uploadView && $ctrl.plugin == 'image'"><i class="upload icon"></i> Upload and use</span>
@@ -137,18 +165,18 @@
 		</div>
 		<div class="uploadingAsset ui tab active" data-tab="first" >
 			<div class="content" ng-if="$ctrl.plugin == 'image'">
+				<div class="ui big loader {{$ctrl.loading}}"></div>
 				<div class="column">
 					<div class="column">
 						<div class="ui icon input assetbrowser_searchBox">
 							<input ng-model="$ctrl.query" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
-							<i class="circular search link icon inverted"></i>
+							<i class="circular search link icon inverted" ng-click="$ctrl.search()"></i>
 						</div>
 					</div>
 				</div>
 				<div class="clearfix">&nbsp;</div>
 				<div class="asset_item_container">
 					<div class="ui grid">
-						<i class="huge spinner loading icon faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
 						<div ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
 							<div class="column templatebrowser_thumbnail">
 								<div class="ui small images templatecard infopopover" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected}" data-html="<b>{{image.name}}</b> <br/> License: {{image.license}}">
@@ -171,6 +199,7 @@
 
 			</div>
 			<div class="content" ng-if="$ctrl.plugin =='audio'">
+				<div class="ui big loader {{$ctrl.loading}}"></div>
 				<div class="ui grid">
 					<div class="two wide column">
 						<div id="audioDropDown" class="ui floating labeled icon dropdown button audio">
@@ -193,7 +222,7 @@
 					<div class="ten wide column">
 						<div class="ui icon input assetbrowser_searchBox">
 							<input ng-model="$ctrl.query" placeholder="Search Audio..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
-							<i class="circular search link icon inverted"></i>
+							<i class="circular search link icon inverted" ng-click="$ctrl.search()"></i>
 						</div>
 					</div>
 				</div>
@@ -218,17 +247,17 @@
 		</div>
 		<div class="ui tab" data-tab="second" >
 			<div class="content" ng-if="$ctrl.plugin == 'image'">
+				<div class="ui big loader {{$ctrl.loading}}"></div>
 				<div class="column">
 					<div class="column">
 						<div class="ui icon input assetbrowser_searchBox">
 							<input ng-model="$ctrl.query" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
-							<i class="circular search link icon inverted"></i>
+							<i class="circular search link icon inverted" ng-click="$ctrl.search()"></i>
 						</div>
 					</div>
 				</div>
 				<div class="clearfix">&nbsp;</div>
 				<div class="ui grid asset_item_container">
-					<i class="huge spinner loading icon faloading" ng-show="$ctrl.loadingImage" aria-hidden="true"></i>
 					<div ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
 						<div class="column templatebrowser_thumbnail">
 							<div class="ui small images templatecard infopopover" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected}" data-html="<b>{{image.name}}</b> <br/> License:{{image.license}} ">
@@ -250,11 +279,12 @@
 				</div>
 			</div>
 			<div class="content" ng-if="$ctrl.plugin =='audio'">
+				<div class="ui big loader {{$ctrl.loading}}"></div>
 				<div class="ui grid">
 					<div class="column">
 						<div class="ui icon input assetbrowser_searchBox">
 							<input ng-model="$ctrl.query" placeholder="Search Audio..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
-							<i class="circular search link icon inverted"></i>
+							<i class="circular search link icon inverted" ng-click="$ctrl.search()"></i>
 						</div>
 					</div>
 				</div>
@@ -313,42 +343,47 @@
 					<div ng-show="$ctrl.record">
 						<ng-audio-recorder id="mainAudio" audio-model="recorded" show-player="false" time-limit="timeLimit"  on-record-start="$ctrl.onRecordStart()" on-conversion-complete="$ctrl.onConversionComplete();">
 						    <div ng-if="recorder.isAvailable">
-						        <div ng-if="recorder.status.isDenied === true" style="color: red;">
+						        <div ng-if="recorder.status.isDenied === true" style="color:red;">
 						            You need to grant permission for this application to use your microphone.
 						        </div>
-								<div class="centered">
-							        <div style="max-width: 600px" style="position: relative;">
+								<div class="centered" style="min-height: 210px;">
+							        <div style="max-width: 500px" style="position: relative;">
 							            <div ng-show="recorder.status.isConverting">
 							                Please wait while your recording is processed.
 							            </div>
-
 							            <div ng-show="recorder.isHtml5 && recorder.status.isRecording">
 							                <ng-audio-recorder-analyzer></ng-audio-recorder-analyzer>
 							            </div>
 							            <br/>
-
 							            <div ng-show="!recorder.status.isRecording && recorder.audioModel">
-							                <ng-audio-recorder-wave-view wave-color="yellow" bar-color="red"></ng-audio-recorder-wave-view>
+							                <ng-audio-recorder-wave-view wave-color="#b1e8ff" bar-color="#31ADE0"></ng-audio-recorder-wave-view>
 							            </div>
 							        </div>
 
-									<span ng-hide="recorder.status.isRecording === false">
-										<i class="ui icon stop circle outline red huge cursor-pointer"
-										 ng-click="recorder.stopRecord()"
-										 ></i>
-										 <span><b>STOP</b></span>
+									<div class="row" style="position: absolute;top: 52px;left: 0;right: 0;z-index: 1000;margin-left: auto;margin-right: auto;">
+										<div class="twelve wide column" ng-hide="recorder.status.isRecording || !recorder.audioModel">
+											<i class="ui icon circle {{recorder.status.isStopped || recorder.status.isPaused ? 'play' : 'pause'}} huge blue cursor-pointer"
+											ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()"></i>
+											<!--
+											<span><br><b>{{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}} </b></span>
+											-->
+										</div>
+									</div>
+
+									<span class="cursor-pointer" ng-hide="recorder.status.isRecording === false" ng-click="recorder.stopRecord()">
+										<i class="ui icon stop circle outline red big"></i><b>STOP</b>
 									 </span>
 									<div class="ui grid">
-										<div class="row ">
-											<div class="six centered wide column" ng-hide="recorder.status.isRecording">
-												<i class="ui icon selected radio huge blue cursor-pointer" ng-click="recorder.startRecord()"></i>
-												<b class="pull-left">Start Recording</b>
-											</div>
-											<div class="six wide column" ng-hide="recorder.status.isRecording || !recorder.audioModel">
-												<i class="ui icon {{recorder.status.isStopped || recorder.status.isPaused ? 'play' : 'pause'}} circle huge blue"
-												ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()" style="text-align: right;"
-												></i>
-												<span><br><b>{{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}} </b></span>
+										<div class="row">
+											<div class="twelve centered wide column" ng-hide="recorder.status.isRecording">
+												<div id="replaceRecord" class="cursor-pointer" ng-click="recorder.startRecord()">
+													<i class="ui icon selected radio huge blue"></i>
+													<p><b>START RECORDING</b></p>
+												</div>
+
+												<div id="replaceRecordDiv" class="cursor-pointer" style="display: none;" ng-click="recorder.startRecord()">
+													<i class="ui icon retweet"></i><b>REPLACE</b>
+												</div>
 											</div>
 										</div>
 									</div>
@@ -386,7 +421,7 @@
 					<div class="clearfix">&nbsp;</div>
 					<div class="grouped required fields">
 						<label for="ccByContribution" >Copyright & License:</label>
-						<p class="licenseMessage">I understand and confirm that all lessons/assets created through the authoring tool or uploaded on the Ekstep platform shall be available for free and public use without limitations on the Ekstep platform (portal,applications and any other end user interface that Ekstep platform would enable) and will be licensed under<!--@Todo add policy link --> <a href="#" target="_blank">CC-BY 4.0</a></p>
+						<p class="licenseMessage">I understand and confirm that all lessons/assets created through the authoring tool or uploaded on the Ekstep platform shall be available for free and public use without limitations on the Ekstep platform (portal,applications and any other end user interface that Ekstep platform would enable) and will be licensed under <a href="{{$ctrl.context.artLink}}" target="_blank">CC-BY 4.0</a></p>
 						<div class="field">
 							<div class="ui radio checkbox">
 								<input id="ccByContribution1" name="ccByContribution" type="radio" ng-click="$ctrl.setPublic()" value="Creative Commons Attribution (CC BY)">

@@ -24,7 +24,7 @@
                     "__text": "",
                     "x": 10,
                     "y": 20,
-                    "fontFamily": "Arial",
+                    "fontFamily": "Verdana",
                     "fontSize": 18,
                     "minWidth": 20,
                     "w": 35,
@@ -40,7 +40,7 @@
         }],
         "configManifest": [{
             "propertyName": "color",
-            "title": "Fill color",
+            "title": "Font color",
             "description": "Choose a color from the color picker",
             "dataType": "colorpicker",
             "required": true,

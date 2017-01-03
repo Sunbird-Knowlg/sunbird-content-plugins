@@ -18,7 +18,7 @@
 			"submenu": [{
 				"id": "sendtofront",
 				"type": "icon",
-				"toolTip": "Bring to front",
+				"toolTip": "Bring forward",
 				"title": "Bring to front",
 				"iconClass": "icon-bringfront icon",
 				"onclick": {
@@ -28,7 +28,7 @@
 			},{
 				"id": "sendtoback",
 				"type": "icon",
-				"toolTip": "Send to back",
+				"toolTip": "Send backward",
 				"title": "Send to back",
 				"iconClass": "icon-sendback icon",
 				"onclick": {

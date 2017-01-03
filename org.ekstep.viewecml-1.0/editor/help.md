@@ -1,7 +1,8 @@
 **Content Editor Help**
 
-***Hollow Circle***
+***ViewECML plugin***
 
+Using this plugin you can view ECML on your selected stage.
 
 ***Are you a developer?***
 
