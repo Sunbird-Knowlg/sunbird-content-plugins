@@ -76,8 +76,13 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 
         function imageAssetCb(err, res) {
             if (res && res.data.result.content) {    
-                console.log(res.data);
-                ctrl.imageList = res.data.result.content;
+                ctrl.imageList = [];
+
+                EkstepEditorAPI._.forEach(res.data.result.content, function(obj, index) {
+                    if (!EkstepEditorAPI._.isUndefined(obj.downloadUrl)){
+                        ctrl.imageList.push(obj);
+                    }
+                });
 
                 ctrl.initPopup(res.data.result.content);
             } else {
@@ -93,11 +98,15 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         function audioAssetCb(err, res) {
             if (res && res.data.result.content) {
                 ctrl.audioList = [];
+                
                 EkstepEditorAPI._.forEach(res.data.result.content, function(obj, index) {
-                    ctrl.audioList.push({ downloadUrl: trustResource(obj.downloadUrl), identifier: obj.identifier, name:obj.name, mimeType:obj.mimeType, license:obj.license });
+                    if (!EkstepEditorAPI._.isUndefined(obj.downloadUrl)){
+                        ctrl.audioList.push({ downloadUrl: trustResource(obj.downloadUrl), identifier: obj.identifier, name:obj.name, mimeType:obj.mimeType, license:obj.license });
+                    }
                 });
-
+                
                 ctrl.initPopup(res.data.result.content);
+                
             } else {
                 ctrl.audioList = [];
             };
