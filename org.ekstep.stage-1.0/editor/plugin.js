@@ -27,7 +27,10 @@ EkstepEditor.basePlugin.extend({
             w: 720,
             h: 405,
             id: this.id
-        };        
+        };
+        if (_.isUndefined(this.params)) {
+            this.addParam('instructions', '');
+        }
     },
     setCanvas: function(canvas) {
         this.canvas = canvas;
