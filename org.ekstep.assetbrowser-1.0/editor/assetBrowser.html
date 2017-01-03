@@ -1,5 +1,33 @@
 <script type="text/ng-template" ng-app="assetbrowserapp" ng-controller="browsercontroller as $ctrl" id="partials/assetbrowser.html">
 <style>
+audio::-internal-media-controls-download-button {
+   display:none !important;
+}
+
+audio::-webkit-media-controls-enclosure {
+   overflow:hidden !important;
+}
+
+audio::-webkit-media-controls-panel {
+   width: calc(100% + 30px) !important; /* Adjust as needed */
+}
+
+.ui.modal {
+   position: inherit !important;
+   top: 0 !important;
+}
+
+.ngdialog-content {
+   top: 10% !important;
+   width: 100% !important;
+   margin: auto !important;
+   padding: 0 !important;
+   position: absolute !important;    
+   vertical-align: middle !important;
+   height: 100% !important;
+   background: none !important;
+}
+
 .faloading {
     position: fixed;
     top: 250px;
@@ -114,7 +142,7 @@ i.play.icon:before, i.pause.icon:before{
 
 </style>
 
-<div class="assetbrowser ui modal active ui form" style="top: 5%;">
+<div class="assetbrowser ui modal active ui form">
 	<div class="header" ng-switch="$ctrl.plugin">
 		<div class="ui two column grid">
 			<div class="row">
