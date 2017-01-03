@@ -76,12 +76,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         }
 
         function imageAssetCb(err, res) {
-<<<<<<< HEAD
-            ctrl.loadingImage = false;
-
-            if (res && res.data.result.content) {
-                ctrl.imageList = res.data.result.content;
-=======
             if (res && res.data.result.content) {
                 ctrl.imageList = [];
 
@@ -90,8 +84,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                         ctrl.imageList.push(obj);
                     }
                 });
-
->>>>>>> eb760234d4c6b6a67f9bcbbe0a808e4849e08952
                 ctrl.initPopup(res.data.result.content);
             } else {
                 ctrl.imageList = [];
@@ -204,20 +196,15 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
             callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
             ctrl.selectBtnDisable = true;
-<<<<<<< HEAD
-			var mediaType = instance.mediaType != "image" ? new Array('audio','voice') : new Array(instance.mediaType);
-            callback && instance.getAsset(searchText, mediaType, undefined, callback);
-=======
 
-            callback && instance.getAsset(searchText, instance.mediaType, undefined, callback);
+            var mediaType = instance.mediaType != "image" ? new Array('audio','voice') : new Array(instance.mediaType);
+            callback && instance.getAsset(searchText, mediaType, undefined, callback);
         }
 
         function showLoader(){
             // Just add class active to loader element
             ctrl.loading = 'active';
         }
-
->>>>>>> eb760234d4c6b6a67f9bcbbe0a808e4849e08952
 
         function hideLoader() {
             // Just remove class active form loader element
