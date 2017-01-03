@@ -75,6 +75,7 @@ audio::-webkit-media-controls-panel {
     right: 0;
     margin: auto !important;
 }
+
 .assetbrowser .ui.image{
 	position: relative;
     overflow: hidden;
@@ -90,6 +91,8 @@ audio::-webkit-media-controls-panel {
 
 .assetbrowser .ui.floating.label {
     top: 0;
+	padding: 6px;
+    right: -7px;
 }
 
  .assetbrowser .ui.images .image, .ui.images img, .ui.images svg {
@@ -105,19 +108,16 @@ audio::-webkit-media-controls-panel {
 
 .audioitem {
     border: 1px dotted #ccc;
-    cursor: pointer;
-    text-align:center;
-    padding-top:2px;
+    position: relative !important;
 }
 
 .audioitem audio{
-	width: 164px;
+	width: 100%;
 }
 
 .audio-tag {
 	overflow: hidden;
-    text-align: left;
-    padding-left: 12px;
+    padding-left: 5px;
 }
 
 i.play.icon:before, i.pause.icon:before{
@@ -135,6 +135,7 @@ i.play.icon:before, i.pause.icon:before{
 .licenseMessage {
 	font-size: 11px;
 }
+
 
 </style>
 
@@ -180,11 +181,11 @@ i.play.icon:before, i.pause.icon:before{
 						<div ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
 							<div class="column templatebrowser_thumbnail">
 								<div class="ui small images templatecard infopopover" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected}" data-html="<b>{{image.name}}</b> <br/> License: {{image.license}}">
-									<a class="item" ng-show="$ctrl.selected_images[$index].selected">
+ 									<a class="item" ng-show="$ctrl.selected_images[$index].selected">
 										<div class="floating ui blue label">
 											<i class="ui icon check" aria-hidden="true"></i>
 										</div>
-									</a>
+									</a> 
 									<div class="ui image">
 										<img class="asset_thumbnail" data_id="{{image.identifier}}" src="{{image.downloadUrl}}" />
 									</div>
@@ -275,11 +276,11 @@ i.play.icon:before, i.pause.icon:before{
 					<div class="ui grid">
 						<div class="three wide column" ng-show="$ctrl.audioList.length > 0" ng-repeat="audio in $ctrl.audioList track by $index">
 							<div class="audioitem infopopover" ng-click="$ctrl.AudioSource(audio, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected};" id="{{audio.identifier}}" src="{{audio.downloadUrl}}" data-html="<b>{{audio.name}}</b> <br/> License: {{audio.license}}">
-								<audio controls id="audio-{{$index}}" ng-src="{{audio.downloadUrl}}" width="120" height="120"></audio>
+								<audio controls id="audio-{{$index}}" ng-src="{{audio.downloadUrl}}" width="100%" height="120"></audio>
 								<div class="audio-tag">{{audio.name}}</div>
-								<div class="audioOverlay" ng-show="$ctrl.selected_audios[$index].selected">
+								<span class="audioOverlay" ng-show="$ctrl.selected_audios[$index].selected">
 									<i class="fa fa-check-square-o fa-2x faAudioCheck" aria-hidden="true"></i>
-								</div>
+								</span>
 							</div>
 						</div>
 						<div class="twelve wide column" ng-show="$ctrl.audioList.length == 0">
@@ -352,9 +353,9 @@ i.play.icon:before, i.pause.icon:before{
 										</div>
 									</div>
 
-									<span class="cursor-pointer" ng-hide="recorder.status.isRecording === false" ng-click="recorder.stopRecord()">
-										<i class="ui icon stop circle outline red big"></i><b>STOP</b>
-									 </span>
+									<div class="cursor-pointer" ng-hide="recorder.status.isRecording === false" ng-click="recorder.stopRecord()">
+										<><i class="ui icon stop circle outline red big"></i>STOP</b>
+									 </div>
 									<div class="ui grid">
 										<div class="row">
 											<div class="twelve centered wide column" ng-hide="recorder.status.isRecording">
