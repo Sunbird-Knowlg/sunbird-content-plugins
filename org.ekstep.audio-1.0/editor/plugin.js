@@ -21,6 +21,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener(instance.manifest.id + ":assetbrowser:open", this.openBrowser, this);
         EkstepEditorAPI.addEventListener(instance.manifest.id + ":removeAudio", this.removeAudio, this);
         EkstepEditorAPI.addEventListener(instance.manifest.id + ":toggleAudio", this.toggleAudio, this);
+        EkstepEditorAPI.addEventListener(instance.manifest.id + ":jplayerInit", this.jplayerInit, this);
     },
     /**
      * 
@@ -36,7 +37,8 @@ EkstepEditor.basePlugin.extend({
             stageId: EkstepEditorAPI.getCurrentStage().id,
             type: 'audio', 
             title: media.name,
-            id: media.id
+            id: media.id,
+            url: media.src
         });
     },
     /**    
@@ -75,25 +77,54 @@ EkstepEditor.basePlugin.extend({
         var htextArr = [], 
             audioArr = [];
         var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes();
-        _.forEach(mediaArr, function(val, key) {
+        EkstepEditorAPI._.forEach(mediaArr, function(val, key) {
             if(val.manifest.shortId === 'htext'){
                 htextArr[key] = val.attributes.audio;
             }else if(val.manifest.shortId === 'audio'){
                 audioArr[key] = val.attributes.asset;
             }
         });
-        if(_.indexOf(htextArr, data.asset) === -1){
-            EkstepEditorAPI.getCurrentStage().children.splice(_.indexOf(audioArr, data.asset), 1);
+        if(EkstepEditorAPI._.indexOf(htextArr, data.asset) === -1){
+            EkstepEditorAPI.getCurrentStage().children.splice(EkstepEditorAPI._.indexOf(audioArr, data.asset), 1);
             EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', data);
         }
     },
     toggleAudio: function(event, data){
         var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes();
-        _.forEach(mediaArr, function(val, key) {
-            if (!_.isUndefined(val.media) && val.media[data.asset]) {
+        EkstepEditorAPI._.forEach(mediaArr, function(val, key) {
+            if (!EkstepEditorAPI._.isUndefined(val.media) && val.media[data.asset]) {
                 EkstepEditorAPI.dispatchEvent('org.ekstep.config:toggleStageEvent', {'flag': data.autoplay, 'id':data.asset});
             }
         }); 
+    },
+    jplayerInit: function(event, data){
+        var id = data.id;
+        EkstepEditorAPI.jQuery("#"+id).jPlayer({
+            swfPath: 'js/jplayer/',
+            supplied: 'mp3',
+            solution: 'html, flash',
+            preload: 'auto',
+            wmode: 'window',
+            ready: function() {
+                EkstepEditorAPI.jQuery(this).jPlayer("setMedia", {
+                    mp3: data.url
+                }).jPlayer('play');
+            },
+            play: function() {
+                EkstepEditorAPI.jQuery(this).addClass('pause');
+            },
+            pause: function() {
+                EkstepEditorAPI.jQuery(this).removeClass('pause');
+            },
+            stop: function() {
+                EkstepEditorAPI.jQuery(this).removeClass('pause');
+            }
+        });
+        if(!EkstepEditorAPI.jQuery("#"+id).hasClass('pause')){
+            EkstepEditorAPI.jQuery("#"+id).jPlayer('play');
+        }else{
+            EkstepEditorAPI.jQuery("#"+id).jPlayer('pause');
+        }
     }
 });
 //# sourceURL=audioplugin.js

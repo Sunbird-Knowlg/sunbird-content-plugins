@@ -12,12 +12,12 @@ EkstepEditor.basePlugin.extend({
         this.showComponents();
     },
     registerToStage: function(data) {
-        _.forEach(this.stageConfig, function(stage) {
+        EkstepEditorAPI._.forEach(this.stageConfig, function(stage) {
             if (stage.stageId === data.stageId) stage.components.push(data);
         });
     },
     getStageIndex: function(data) {
-        return _.findIndex(this.stageConfig, function(stage) {
+        return EkstepEditorAPI._.findIndex(this.stageConfig, function(stage) {
             return data.stageId === stage.stageId;
         });
     },
@@ -33,14 +33,14 @@ EkstepEditor.basePlugin.extend({
     },
     hideAll: function() {
         var instance = this;
-        _.forEach(this.stageConfig, function(stage) {
+        EkstepEditorAPI._.forEach(this.stageConfig, function(stage) {
             instance.hideStageComponents(stage);
             instance.scope.safeApply();
         });
     },
     showAll: function() {
         var instance = this;
-        _.forEach(this.stageConfig, function(stage, index) {
+        EkstepEditorAPI._.forEach(this.stageConfig, function(stage, index) {
             if (stage.stageId === EkstepEditorAPI.getCurrentStage().id) {
                 instance.showStageComponents(stage);
                 instance.scope.safeApply();
@@ -54,24 +54,28 @@ EkstepEditor.basePlugin.extend({
             assetArr = [],
             htextArr = [];
         var evants = EkstepEditorAPI.getCurrentStage().event;
-        _.forEach(evants, function(event){
+        EkstepEditorAPI._.forEach(evants, function(event){
             if(event.type === 'enter'){
-                assetArr.push(event.action[0].asset); 
+                if(EkstepEditorAPI._.isArray(event)){
+                    assetArr.push(event.action[0].asset); 
+                }else{
+                    assetArr.push(event.action.asset);
+                }
             }
         });
         var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes();
-        _.forEach(mediaArr, function(val, key) {
+        EkstepEditorAPI._.forEach(mediaArr, function(val, key) {
             if(val.manifest.shortId === 'htext'){
                 htextArr[key] = val.attributes.audio;
             }
         });
-        _.forEach(stage.components, function(component) {
-            if(_.indexOf(assetArr, component.id) != -1){
+        EkstepEditorAPI._.forEach(stage.components, function(component) {
+            if(EkstepEditorAPI._.indexOf(assetArr, component.id) != -1){
                 component.autoplay = true;
             }else{
                 component.autoplay = false;
             }
-            if(_.indexOf(htextArr, component.id) != -1){
+            if(EkstepEditorAPI._.indexOf(htextArr, component.id) != -1){
                 component.showClose = true;
             }else{
                 component.showClose = false;
@@ -84,7 +88,7 @@ EkstepEditor.basePlugin.extend({
     },
     hideStageComponents: function(stage) {
         var instance = this;
-        _.forEach(stage.components, function(component, index) {
+        EkstepEditorAPI._.forEach(stage.components, function(component, index) {
             instance.scope.stageAttachments[component.type] = {};
             instance.scope.stageAttachments[component.type].items = [];
             instance.scope.stageAttachments[component.type].show = false;
@@ -92,12 +96,12 @@ EkstepEditor.basePlugin.extend({
     },
     removeAudio: function(event, data){
         var instance = this;
-        _.forEach(instance.stageConfig, function(stage, key) {
+        EkstepEditorAPI._.forEach(instance.stageConfig, function(stage, key) {
             if(stage.stageId === instance.scope.currentStage.id){
-                _.forEach(stage.components, function(com, key){
+                EkstepEditorAPI._.forEach(stage.components, function(com, key){
                     if(data.asset === com.id){
                         stage.components.splice(key, 1);
-                        _.remove(instance.scope.stageAttachments['audio'].items, function(item) {
+                        EkstepEditorAPI._.remove(instance.scope.stageAttachments['audio'].items, function(item) {
                            return data.asset === item.id;
                         });
                     }

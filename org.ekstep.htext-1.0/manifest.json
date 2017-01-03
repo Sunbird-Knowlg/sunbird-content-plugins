@@ -34,7 +34,7 @@
             "defaultValue": "#FFFF00"
         },{
             "propertyName": "color",
-            "title": "Fill color",
+            "title": "Font color",
             "description": "Choose a color from the color picker",
             "dataType": "colorpicker",
             "required": true,
@@ -69,7 +69,7 @@
             "dataType": "select",
             "range": ["Arial", "Courier", "Georgia", "Helvetica", "Monospace", "Sans-serif", "Serif", "Tahoma", "Times", "Trebuchet MS", "Verdana", "NotoSansKannada", "NotoSansGujarati", "NotoSansBengali", "NotoSansGurmukhi", "NotoSansOriya", "NotoSansDevanagari", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu", "NotoSansMalayalam"],
             "required": true,
-            "defaultValue": "Arial"
+            "defaultValue": "Verdana"
         }, {
             "propertyName": "fontsize",
             "title": "Font Size",

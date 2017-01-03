@@ -23,6 +23,16 @@ EkstepEditor.basePlugin.extend({
             case 'ellipse':
                 props.rx = props.w / 2;
                 props.ry = props.h / 2;
+                this.manifest.editor.configManifest.push({
+                    "propertyName": "radius",
+                    "title": "Radius",
+                    "placeholder": "Radius",
+                    "description": "Input radius for the ellipse",
+                    "dataType": "input",
+                    "valueType": "number",
+                    "required": false,
+                    "defaultValue": 64
+                });                
                 this.editorObj = new fabric.Ellipse(props);
                 break;
             case 'roundrect':
@@ -77,7 +87,10 @@ EkstepEditor.basePlugin.extend({
         var config = this._super();
         config.color = this.attributes.fill;
         if (this.attributes.type == 'roundrect') {
-            config.radius = 10;
+            config.radius = this.editorObj.rx;
+        }
+        if (this.attributes.type == 'ellipse') {
+            config.radius = this.editorObj.rx;
         }
         return config;
     }
