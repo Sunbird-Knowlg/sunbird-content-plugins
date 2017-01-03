@@ -25,6 +25,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             "size":0
         };
 
+        ctrl.context = window.context;
         ctrl.selected_images = {};
         ctrl.selected_audios = {};
         ctrl.selectBtnDisable = true;
