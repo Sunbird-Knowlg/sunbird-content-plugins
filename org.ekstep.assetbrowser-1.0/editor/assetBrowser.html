@@ -330,7 +330,7 @@ i.play.icon:before, i.pause.icon:before{
 				<div class="column">
 					<div class="ui two column divided grid" ng-if="$ctrl.plugin =='audio'" ng-hide="$ctrl.upload || $ctrl.record">
 					  	 <div class="row center aligned">
-						  	<div class="column" ng-click="$ctrl.upload = true; $ctrl.record=false; $ctrl.audioType='audio'; $ctrl.uploadButton()">
+						  	<div class="column" ng-click="$ctrl.upload = true; $ctrl.record=false; $ctrl.uploadButton()">
 						  		<p><i class="huge upload icon"></i></p>
 						  		UPLOAD
 						  	</div>
@@ -371,9 +371,8 @@ i.play.icon:before, i.pause.icon:before{
 										</div>
 									</div>
 
-									<div class="cursor-pointer" ng-hide="recorder.status.isRecording === false" ng-click="recorder.stopRecord()">
-										<><i class="ui icon stop circle outline red big"></i>STOP</b>
-									 </div>
+									<div class="cursor-pointer" ng-hide="recorder.status.isRecording === false" ng-click="recorder.stopRecord()"><i class="ui icon stop circle outline red big"></i>STOP</b>
+									</div>
 									<div class="ui grid">
 										<div class="row">
 											<div class="twelve centered wide column" ng-hide="recorder.status.isRecording">
@@ -450,17 +449,18 @@ i.play.icon:before, i.pause.icon:before{
 
 					<div class="field" ng-hide="$ctrl.hideField">
 						<label for="language" title="Choose Language">Language</label>
-						<select id="language" class="ui dropdown" ng-model="$ctrl.languageText" {{$ctrl.asset.requiredField}} name="language" ng-options="lang for lang in $ctrl.asset.language" data-validate="language" >
+						<select id="language" class="" ng-model="$ctrl.languageText" {{$ctrl.asset.requiredField}} name="language" ng-options="lang for lang in $ctrl.asset.language" data-validate="language" >
 							<option value="">All</option>
 						</select>
 					</div>
 
-					<div class="field" ng-hide="$ctrl.hideField" >
-						<label for="audioType" title="Choose Audio Type">Audio Type</label>
-						<select id="audioType" class="ui dropdown" ng-model="$ctrl.audioType" name="audioType">
-							<option value="audio">Audio</option>
-							<option value="voice">Voice</option>
-						</select>
+					<div ng-if="$ctrl.plugin == 'audio'">
+						<div class="field" ng-hide="$ctrl.hideField">
+							<label for="audioType" title="Choose Audio Type">Audio Type</label>
+							<select id="audioType" class="" ng-model="$ctrl.audioType" ng-options="i.value as i.label for i in $ctrl.voiceOption">
+							</select>
+						</div>
+						<div class="clearfix"></div>
 					</div>
 
 					<div class="{{$ctrl.asset.requiredField}} field removeError" ng-hide="$ctrl.hideField">

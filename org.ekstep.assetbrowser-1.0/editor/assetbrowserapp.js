@@ -25,6 +25,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             "size":0
         };
 
+        ctrl.audioType = "audio";
+        ctrl.voiceOption = [{label:"Audio", value:"audio"}, {label:"Voice", value:"voice"}];
+
         ctrl.context = window.context;
         ctrl.selected_images = {};
         ctrl.selected_audios = {};
@@ -43,7 +46,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         ctrl.uploadingAsset = false;
         ctrl.assetId = undefined;
         ctrl.tabSelected = "my";
-        ctrl.audioType = "audio";
         ctrl.assetMeta = {
             'body': '',
             'name': '',
@@ -230,7 +232,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             }
 
 			EkstepEditorAPI.getAngularScope().safeApply();
-
         }
 
         ctrl.uploadClick = function() {
