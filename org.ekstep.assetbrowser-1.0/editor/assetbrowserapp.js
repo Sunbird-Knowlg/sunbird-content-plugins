@@ -134,8 +134,10 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             EkstepEditorAPI.jQuery('#audioDropDown')
 			  .dropdown({
 				onChange: function(value, text, $selectedItem) {
+					searchText = ctrl.query;
+					(searchText === "") ? searchText = undefined: null;
 					var selectedValue = value != 'all' ? new Array(value) : new Array('audio','voice');
-					instance.getAsset(undefined, selectedValue, ctrl.portalOwner, audioAssetCb);
+					instance.getAsset(searchText, selectedValue, ctrl.portalOwner, audioAssetCb);
 				}
 			});
         }, 1000);
