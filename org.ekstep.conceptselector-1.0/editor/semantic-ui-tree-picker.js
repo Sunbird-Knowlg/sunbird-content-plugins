@@ -251,10 +251,17 @@ var conceptModal;
                     node.addClass('picked');
                 }
                 if (!node.hasClass('childless')) {
-                    $(head).on('click', function(e) {
-                        node.toggleClass('opened');
-                        return content.slideToggle();
-                    });
+					if (!head.hasClass('selectable')){
+						$(head).on('click', function(e) {
+							node.toggleClass('opened');
+							return content.slideToggle();
+						});
+					}else{
+						$('>.icon', head).on('click', function(e) {
+							node.toggleClass('opened');
+							return content.slideToggle();
+						});
+					}
                 }
                 return updatePickedIds();
             });
