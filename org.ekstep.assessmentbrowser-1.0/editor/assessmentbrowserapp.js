@@ -29,33 +29,45 @@ angular.module('assessmentbrowserapp', [])
         };
         ctrl.context = EkstepEditorAPI.getAngularScope().context;
 
-        EkstepEditorAPI.getService('assessmentService').getLanguages(function(err, resp) {
-            if (!err && resp.statusText == "OK") {
+        EkstepEditorAPI.getService('assessmentService').getLanguages(function(err, respLan) {
+            if (!err && respLan.statusText == "OK") {
                 var assessmentlanguages = {};
-                EkstepEditorAPI._.forEach(resp.data.result.languages, function(lang) {
+                EkstepEditorAPI._.forEach(respLan.data.result.languages, function(lang) {
                     assessmentlanguages[lang.code] = lang.name;
                 });
                 ctrl.assessment.language = EkstepEditorAPI._.values(assessmentlanguages);
-                EkstepEditorAPI.getAngularScope().safeApply();
-            }
-        });
-
-        EkstepEditorAPI.getService('assessmentService').getDefinations(function(err, resp) {
-            if (!err && resp.statusText == "OK") {
-                EkstepEditorAPI._.forEach(resp.data.result.definition_node.properties, function(prop) {
-                    switch (prop.propertyName) {
-                        case "qlevel":
-                            ctrl.assessment.qlevel = prop.range;
-                            break;
-                        case "gradeLevel":
-                            ctrl.assessment.gradeLevel = prop.range;
-                            break;
-                        case "type":
-                            ctrl.assessment.type = prop.range;
-                            break;
+                EkstepEditorAPI.getService('assessmentService').getDefinations(function(err, resp) {
+                    if (!err && resp.statusText == "OK") {
+                        var questionTypes = {};
+                        EkstepEditorAPI._.forEach(resp.data.result.definition_node.properties, function(prop) {
+                            switch (prop.propertyName) {
+                                case "qlevel":
+                                    ctrl.assessment.qlevel = prop.range;
+                                    break;
+                                case "gradeLevel":
+                                    ctrl.assessment.gradeLevel = prop.range;
+                                    break;
+                                case "type":
+                                    ctrl.assessment.type = prop.range;
+                                    break;
+                            }
+                        });
+                        EkstepEditorAPI.getService('assessmentService').getResourceBundles(function(err, resourceResp) {
+                            if (!err && resourceResp.statusText == "OK") {
+                                EkstepEditorAPI._.forEach(ctrl.assessment.type, function(data) {
+                                    if (resourceResp.data.result.en[data] == undefined) {
+                                        questionTypes[data] = data;
+                                    } else {
+                                        questionTypes[data] = resourceResp.data.result.en[data];
+                                    }
+                                });
+                                ctrl.assessment.type = questionTypes;
+                                EkstepEditorAPI.getAngularScope().safeApply();
+                            }
+                        });
+                        EkstepEditorAPI.jQuery('.ui.dropdown').dropdown({ useLabels: false });
                     }
                 });
-                EkstepEditorAPI.jQuery('.ui.dropdown').dropdown({ useLabels: false });
             }
         });
 
@@ -229,7 +241,7 @@ angular.module('assessmentbrowserapp', [])
         }
 
         ctrl.cancel = function() {
-           $scope.closeThisDialog();
+            $scope.closeThisDialog();
         };
 
         ctrl.searchQuestions();
@@ -237,7 +249,7 @@ angular.module('assessmentbrowserapp', [])
             element: 'assessmentConceptSelector',
             selectedConcepts: [], // All composite keys except mediaType
             callback: function(data) {
-                ctrl.activityOptions.concepts = '('+data.length+') concepts selected';
+                ctrl.activityOptions.concepts = '(' + data.length + ') concepts selected';
                 ctrl.activity.concepts = _.map(data, function(concept) {
                     return concept.id;
                 });
@@ -247,3 +259,4 @@ angular.module('assessmentbrowserapp', [])
             }
         });
     }]);
+//# sourceURL=assessmentbrowserapp.js
