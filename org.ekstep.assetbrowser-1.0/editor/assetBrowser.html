@@ -41,12 +41,6 @@ audio::-webkit-media-controls-panel {
     text-align: center;
 }
 
-.faAudioCheck {
-    /*margin-top: 12px;*/
-    margin-top: 32px;
-    color: white;
-}
-
 .assetbrowser_searchBox {
     width: 100%;
 }
@@ -109,6 +103,7 @@ audio::-webkit-media-controls-panel {
 .audioitem {
     border: 1px dotted #ccc;
     position: relative !important;
+    cursor: pointer;
 }
 
 .audioitem audio{
@@ -136,6 +131,21 @@ i.play.icon:before, i.pause.icon:before{
 	font-size: 11px;
 }
 
+.assetbrowser .checkContainer {
+    /*margin-top: 12px;*/
+    position: relative;
+}
+
+.assetbrowser .checkIcon{
+    position: absolute;
+    left: 0;
+    right: 0;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    color: white;
+    top: 10px;	
+}
 
 </style>
 
@@ -235,7 +245,9 @@ i.play.icon:before, i.pause.icon:before{
 								<audio controls id="audio-{{$index}}" ng-src="{{audio.downloadUrl}}" width="120" height="120"></audio>
 								<div class="audio-tag">{{audio.name}}</div>
 								<div class="audioOverlay" ng-show="$ctrl.selected_audios[$index].selected">
-									<i class="ui icon check circle big faAudioCheck" aria-hidden="true"></i>
+									<div class="checkContainer">
+										<i class="ui icon check circle big checkIcon" aria-hidden="true"></i>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -297,7 +309,9 @@ i.play.icon:before, i.pause.icon:before{
 								<audio controls id="audio-{{$index}}" ng-src="{{audio.downloadUrl}}" width="100%" height="120"></audio>
 								<div class="audio-tag">{{audio.name}}</div>
 								<span class="audioOverlay" ng-show="$ctrl.selected_audios[$index].selected">
-									<i class="ui icon check circle big faAudioCheck" aria-hidden="true"></i>
+									<div class="checkContainer">
+										<i class="ui icon check circle big checkIcon" aria-hidden="true"></i>
+									</div>
 								</span>
 							</div>
 						</div>
