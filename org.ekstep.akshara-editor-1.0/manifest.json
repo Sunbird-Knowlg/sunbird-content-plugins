@@ -1,6 +1,7 @@
 {
     "id": "org.ekstep.akshara-editor",
     "ver": "1.0",
+    "shortId": "memorygame",
     "author": "Swati Singh",
     "title": "Grid Plugin",
     "description": "",
@@ -8,97 +9,64 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-            { "type": "plugin", "plugin": "org.ekstep.colorpicker", "ver": "1.0" },
-            { "type": "plugin", "plugin": "org.ekstep.wordbrowser", "ver": "1.0" }
+            { "type": "plugin", "plugin": "org.ekstep.colorpicker", "ver": "1.0" }
         ],
         "menu": [{
-            "id": "grid",
+            "id": "ak_editor",
             "category": "main",
-            "type": "image",
-            "toolTip": "Add Grid",
+            "type": "icon",
+            "toolTip": "Akshara Teaching",
             "title": "Grid",
             "iconClass": "pie chart icon",
-            "submenu": [{
-                "id": "grids",
-                "type": "image",
-                "toolTip": "Add grid",
-                "title": "Rectangle",
-                "iconImage": "assets/rectangle.png",
-                "onclick": {
+           "onclick": {
                     "id": "org.ekstep.akshara-editor:create",
                     "data": {
-                        "type": "rect",
-                        "x": 10,
-                        "y": 20,
-                        "fill": "#FFFF00",
-                        "rows": 4,
-                        "columns": 4
+                        "rows": 2,
+                        "columns": 4,
+                        "fill": "#008000",
+                        "x":10,
+                        "y": 10,
+                        "w": 80,
+                        "h": 80,
+                        "frontFaceColor": "#008000",
+                        "backFaceColor": "#002b80",
+                        "textColor": "#ffffff",
+                        "fixRows": true
+                       
                     }
                 }
-            },
-        {
-                "id": "circle",
-                "type": "image",
-                "toolTip": "Add Word",
-                "title": "Word browser",
-                "iconImage": "assets/circle.png",
-                "onclick": {
-                    "id": "org.ekstep.akshara-editor:wordbrowser:open"
-                   
-                }
-            },
-        {
-                "id": "circle",
-                "type": "image",
-                "toolTip": "Add Akshara",
-                "title": "Akshara browser",
-                "iconImage": "assets/circle.png",
-                "onclick": {
-                    "id": "org.ekstep.akshara-editor:aksharabrowser:open"
-                   
-                }
-            }]
         }
 
     ],
 
-"configManifest": [{
-            "propertyName": "color",
-            "title": "Grid Color",
+        "configManifest": [{
+            "propertyName": "frontFaceColor",
+            "title": "Front Face Color",
             "description": "Choose a color from the color picker",
             "dataType": "colorpicker",
             "required": true,
-            "defaultValue": "rgb(255,0,0)"
-        }, {
-            "propertyName": "rows",
-            "title": "Rows",
-            "description": "Select number of rows for grid",
-            "dataType": "select",
-            "range": [2,3,4,5],
+            "defaultValue": "#008000"
+        },{
+            "propertyName": "backFaceColor",
+            "title": "Back Face Color",
+            "description": "Choose a color from the color picker",
+            "dataType": "colorpicker",
             "required": true,
-            "defaultValue": 2
-        }, {
-            "propertyName": "columns",
-            "title": "Columns",
-            "description": "Select number of columns for grid",
-            "dataType": "select",
-            "range": [2,3,4,5],
+            "defaultValue": "#002b80"
+        },{
+            "propertyName": "textColor",
+            "title": "Text Color",
+            "description": "Choose a color from the color picker",
+            "dataType": "colorpicker",
             "required": true,
-            "defaultValue": 4
-        },
-        {
-            "propertyName": "wordBrowser",
-            "title": "Word Browser",
-            "description": "Choose a  from the browser",
-            "dataType": "wordbrowser",
-            "required": true
-        },
-        {
-            "propertyName": "aksharaBrowser",
-            "title": "Akshara Browser",
-            "description": "Choose a  from the browser",
-            "dataType": "aksharabrowser",
-            "required": true
+            "defaultValue": "#FFFFFF"
+        }, {
+            "propertyName": "fixRows",
+            "title": "Fix Row",
+            "description": "Select true or false for fixing the row",
+            "dataType": "boolean",
+            "required": false,
+            "defaultValue": true
         }],
         "help": {
             "src": "editor/help.md",

@@ -67,9 +67,9 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("org.ekstep.config:invoke", this.invoke, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:addAction", this.addAction, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:removeAction", this.removeAction, this);
-        EkstepEditorAPI.addEventListener("org.ekstep.config:toggleStageEvent", this.toggleEventToStage,this);
-        EkstepEditorAPI.addEventListener("config:properties", this.showProperties,this);
-        
+        EkstepEditorAPI.addEventListener("org.ekstep.config:toggleStageEvent", this.toggleEventToStage, this);
+        EkstepEditorAPI.addEventListener("config:properties", this.showProperties, this);
+
         var angScope = EkstepEditorAPI.getAngularScope();
         angScope.safeApply(function() {
             angScope.contextToolbar = instance.manifest.editor.data.toolbars;
@@ -92,22 +92,28 @@ EkstepEditor.basePlugin.extend({
      */
     objectSelected: function(event, data) {
         var instance = this;
+        if (this.selectedPluginId != data.id) {
+            this.selectedPluginId = data.id;
+            var angScope = EkstepEditorAPI.getAngularScope();
+            if (angScope.showConfigContainer) {
+                switch (angScope.configHeaderText) {
+                    case 'Configuration':
+                        instance.showConfig();
+                        break;
+                    case 'Actions':
+                        instance.showActions();
+                        break;
+                    case 'Properties':
+                        instance.showProperties();
+                        break;
+                    case 'Help':
+                        instance.showHelp();
+                        break;
+                }
+            }
+        }
         this.selectedPluginId = data.id;
         this.setToolBarPosition();
-        var angScope = EkstepEditorAPI.getAngularScope();
-        // if (angScope.showConfigContainer) {
-        //     switch (angScope.configHeaderText) {
-        //         case 'Configuration':
-        //             instance.showConfig();
-        //             break;
-        //         case 'Actions':
-        //             instance.showActions();
-        //             break;
-        //         case 'Help':
-        //             instance.showHelp();
-        //             break;
-        //     }
-        // }
     },
     objectUnselected: function(event, data) {
         if (data.id == this.selectedPluginId) {
@@ -220,9 +226,8 @@ EkstepEditor.basePlugin.extend({
     onConfigChange: function(key, value) {
         EkstepEditorAPI.getCurrentObject().__proto__.__proto__.onConfigChange(key, value);
         EkstepEditorAPI.getCurrentObject().onConfigChange(key, value);
-
         if (key === 'autoplay') {
-            this.toggleEventToStage('', {'flag':value,'id':EkstepEditorAPI.getCurrentObject().id});
+            this.toggleEventToStage('', { 'flag': value, 'id': EkstepEditorAPI.getCurrentObject().id });
         }
     },
     /**
@@ -352,7 +357,7 @@ EkstepEditor.basePlugin.extend({
         if (data.command && data.asset) {
             if (this.stageActionsList[data.command]) {
                 EkstepEditorAPI.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': 'transitionTo', 'asset': 'theme', 'value': data.asset }] });
-            } else{
+            } else {
                 EkstepEditorAPI.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': data.command, 'asset': data.asset }] });
             }
         }
@@ -469,23 +474,23 @@ EkstepEditor.basePlugin.extend({
             angScope.actionTargetObjects = stageOptions;
         });
     },
-    toggleEventToStage: function (event, data) {
+    toggleEventToStage: function(event, data) {
         var currentStage = EkstepEditorAPI.getCurrentStage();
         var eventIndex = -1;
-        if(currentStage.event){
-            _.forEach(currentStage.event, function (e,i) {
-                if(e.action[0].asset === data.id){
+        if (currentStage.event) {
+            _.forEach(currentStage.event, function(e, i) {
+                if (e.action[0].asset === data.id) {
                     eventIndex = i;
                 }
             })
         }
         if (data.flag === true && eventIndex === -1) {
             currentStage.addEvent({ 'type': 'enter', 'action': [{ 'id': UUID(), 'type': 'command', 'command': 'play', 'asset': data.id }] })
-        } else if(data.flag === false && eventIndex !== -1){
+        } else if (data.flag === false && eventIndex !== -1) {
             currentStage.event.splice(eventIndex, 1);
         }
     },
-    showProperties: function (event, data) {
+    showProperties: function(event, data) {
         var angScope = EkstepEditorAPI.getAngularScope();
         var properties = EkstepEditorAPI.getCurrentObject().getProperties();
         angScope.safeApply(function() {
