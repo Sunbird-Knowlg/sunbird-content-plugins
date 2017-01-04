@@ -56,6 +56,7 @@
             return $(this).prop('id', 'word-' + (idx + 1));
         });
         var wordLength = 0;
+        $('#addLesson').attr('disabled', 'disabled');
         $(document).unbind('keypress');
         $(document).keypress((function(_this) {
             return function(e) {
@@ -71,6 +72,7 @@
                         }
                         word = $("#word-" + self.wordIdx, _this.textBox).text();
                         play_time = $("#jplayerSync").data("jPlayer").status.currentTime;
+                        $('#addLesson').removeAttr('disabled');
                         return self.addWordTimes(word, play_time);
                     } else {
                         return $('.word', _this.textBox).css('background-color', '');
@@ -294,6 +296,7 @@
             $("#word-" + this.wordIdx, this.text_box).css('background-color', this.highlightColor);
             word = $("#word-" + this.wordIdx, this.text_box).text();
             play_time = $("#jplayerSync").data("jPlayer").status.currentTime;
+            $('#addLesson').removeAttr('disabled');
             return this.addWordTimes(word, play_time);
         } else {
             return $('.word', this.text_box).css('background-color', '');
@@ -483,6 +486,7 @@
 
         if (this.audioObj.wordMap) {
             $('#sync-play', this.$el).css('display', 'inline-block');
+            $('#addLesson').removeAttr('disabled');
             //$('.sync-play-disable', this.$el).css('display', 'none');
         }
     };
