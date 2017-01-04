@@ -14,26 +14,26 @@
     width: 480px;
 }
 .grid .items .item:hover{
-    background: #f1f1f1;   
+    background: #f1f1f1;
 }
 .verticalcenter{
     display: flex;
     align-items: center;
 }
 
-.ui.modal {
+.assessmentbrowser.ui.modal{
     position: inherit !important;
     top: 0 !important;
 }
 
 .ngdialog-content {
     top: 10% !important;
-    width: 100% !important;    
-    position: absolute !important;            
+    width: 100% !important;
+    position: absolute !important;
     background: none !important;
 }
 </style>
-<div class="ui modal large active" style="top: 5%;">
+<div class="assessmentbrowser ui modal large active" style="top: 5%;">
     <div class="content">
         <div class="ui mini three steps">
             <div class="{{$ctrl.isFiltersShown ? 'active': ''}} step">
