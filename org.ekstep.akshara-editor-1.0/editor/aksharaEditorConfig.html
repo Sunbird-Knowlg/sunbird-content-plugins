@@ -1,0 +1,249 @@
+<script type="text/ng-template" ng-app="aksharaEditorapp" ng-controller="aksharaEditorController as $ctrl" id="akshara-editor">
+    <style type="text/css">
+    .textWrapper {
+        font-size: 26px;
+        overflow-x: auto;
+        white-space: nowrap;
+        background-color: #efefef;
+        height: 75px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .helptext {
+        color: #ccc;
+    }
+    
+    .words-list {
+        width: 22%;
+        float: left;
+        margin: 4px;
+    }
+    
+    .panel {
+        margin-bottom: 20px;
+        background-color: #fff;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    }
+    
+    .panel-heading {
+        border: 0px;
+        color: #000;
+        background: #BAD9D4;
+        padding: 20px 15px;
+    }
+    
+    .panel-body {
+        padding: 15px;
+    }
+    
+    #div1 {
+        float: left;
+        width: 200px;
+        margin: 10px;
+        padding: 10px;
+        border: solid;
+    }
+    
+    .dragDiv {
+        margin: 20px;
+    }
+    </style>
+    <div class="ui modal large active" style="top: 10% !important;">
+        <div class="content">
+            <div class="ui mini four steps">
+                <div class="{{$ctrl.isAksharaBrowser ? 'active': ''}} step">
+                    <i class="checkmark box icon"></i>
+                    <div class="content">
+                        <div class="title">Akshara browser</div>
+                        <div class="description">select language and akshara</div>
+                    </div>
+                </div>
+                <div class="{{$ctrl.isWordBrowser ? 'active': ''}} step">
+                    <i class="browser icon"></i>
+                    <div class="content">
+                        <div class="title">Word Browser</div>
+                        <div class="description">Selects words</div>
+                    </div>
+                </div>
+                <div class="{{$ctrl.isGameLevel ? 'active': ''}} step">
+                    <i class="music icon"></i>
+                    <div class="content">
+                        <div class="title">Game Level</div>
+                        <div class="description">Select and reorder game levels</div>
+                    </div>
+                </div>
+                <div class="step">
+                    <i class="music icon"></i>
+                    <div class="content">
+                        <div class="title">Final</div>
+                        <div class="description"></div>
+                    </div>
+                </div>
+            </div>
+            <div ng-show="$ctrl.isAksharaBrowser">
+                <div class="ui two column horizontally padded grid">
+                    <div class="eight wide column">
+                        <div class="row" style="margin-bottom: 10px;">
+                            <!--        <span >Language</span>
+                                    <select  ng-model="$ctrl.languageSelected" ng-options="lang for lang in $ctrl.language" ng-change="$ctrl.searchAksharas($ctrl.languageSelected)">
+                                        <option value="">
+                                            All
+                                        </option>
+                                    </select> -->
+                            <div class="column">
+                                <div class="field">
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">Language</div>
+                                        <select class="ui fluid dropdown " ng-model="$ctrl.languageSelected" ng-options="lang.code as lang.name for lang in $ctrl.language" ng-change="$ctrl.searchAksharas($ctrl.languageSelected)">
+                                            <option value="">
+                                                All
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="height: 284px; overflow-y: scroll;">
+                            <div class="ui large divided items" ng-show="!$ctrl.isFiltersShown">
+                                <div class="words-list select" ng-repeat="akshara in $ctrl.aksharas">
+                                    <div class="panel ">
+                                        <div class="panel-heading ">
+                                            <h4>{{akshara.varna}}</h4>
+                                            <span>
+                               <i class="fa pull-right fa-lg akshara-select " aria-hidden="true "
+                                ng-class="$ctrl.isSelected[akshara.identifier] ? 'fa-check-square-o' : 'fa-square-o' " ng-click="$ctrl.toggleAksharaSelection(akshara.identifier, akshara) ">
+                             
+                                </i>
+                                </span>
+                                        </div>
+                                        <div class="panel-body ">
+                                            <!-- <span class="pull-left ">
+                                                                                    {{akshara.type}}
+                                                                                </span> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 10px;">
+                            <div class="column">
+                                <div class="field">
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">Repetition</div>
+                                        <input type="number" name="repetition" ng-model="$ctrl.noOfRepetition" min="1">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="four wide column right floated">
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
+                        <br/> 1) Remaining essentially unchanged.
+                        <br/> 2) It was popularised in the 1960s with the release of Letraset sheets containing
+                        <br/> 3) Lorem Ipsum passages, and more recently with desktop publishing software like Aldus
+                        <br/>PageMaker including versions of Lorem Ipsum
+                    </div>
+                </div>
+            </div>
+            <div ng-show="$ctrl.isWordBrowser">
+                <div class="row">
+                    <div class="ui column horizontally padded grid">
+                        <span style="color: red" ng-show="$ctrl.lessWordSelected">Selected words per akshara should be more than  {{$ctrl.selectedProperty.repetition}}</span>
+                    </div>
+                </div>
+                <div class="ui two column horizontally padded grid">
+                    <div class="eight wide column" style="height: 284px; overflow-y: scroll;">
+                        <div class="ui large divided items" ng-show="!$ctrl.isFiltersShown">
+                            <div class="words-list select" ng-repeat="word in $ctrl.words">
+                                <div class="panel ">
+                                    <div class="panel-heading ">
+                                        <h4>{{word.lemma}}</h4>
+                                        <span>
+                               <i class="fa pull-right fa-lg akshara-select " aria-hidden="true "
+                                ng-class="$ctrl.isSelected[word.identifier] ? 'fa-check-square-o' : 'fa-square-o' " ng-click="$ctrl.toggleWordSelection(word.identifier, word) ">
+                             
+                                </i>
+                                </span>
+                                        <div class="info " ng-if="word.pronunciations.length">
+                                            <span class="audio-player ">
+                                                <audio controls="controls " >
+                                                <source ng-src="{{word.pronunciations[0] | trustUrl}} "/>
+                                                </audio>
+                                    </span>
+                                        </div>
+                                    </div>
+                                    <div class="panel-body ">
+                                       <!--  <span class="pull-left " ng-if="word.pos.length ">
+                                       {{word.pos[0]}}
+                                                                           </span> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="four wide column right floated" >
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
+                        <br/> 1) Remaining essentially unchanged.
+                        <br/> 2) It was popularised in the 1960s with the release of Letraset sheets containing
+                        <br/> 3) Lorem Ipsum passages, and more recently with desktop publishing software like Aldus
+                        <br/>PageMaker including versions of Lorem Ipsum
+                    </div>
+                </div>
+            </div>
+            <div ng-show="$ctrl.isGameLevel">
+                <div class="ui two column horizontally padded grid">
+                    <div class="four wide column" >
+                        <!-- <div ng-repeat="levelData in $ctrl.levelMetaData">
+                       <span data-id="{{levelData.level}}" x-lvl-draggable="true" x-lvl-drop-target="true" x-on-drop="onLevelDragDrop(dragEl, dropEl)"/>
+                            {{levelData.level}}
+                       </span>
+                   </div> -->
+                        <!-- <ul ui-on-Drop="onDrop($event,$data,$ctrl.levelMetaData)">
+    <li ui-draggable="true" drag="levelData" on-drop-success="dropSuccessHandler($event,$index,$ctrl.levelMetaData)" ng-repeat="levelData in $ctrl.levelMetaData track by $index">
+        {{levelData.level}}
+    </li>
+</ul> -->
+                        <!-- <div id="div1" ondrop="drop(event)" ondragover="allowDrop(event)">
+  <div class="dragDiv" draggable="true" ondragstart="drag(event)" id="{{levelData.level}}" width="88" height="31" ng-repeat="levelData in $ctrl.levelMetaData">
+      drag this {{levelData.level}} <input type="checkbox" name="">
+  </div>
+</div> -->
+                        <div id="div1">
+                            <div ng-repeat="levelData in $ctrl.levelMetaData track by $index">
+                                <div class="dragDiv" data-id="{{levelData.level}}" x-lvl-draggable="true" x-lvl-drop-target="true" x-on-drop="$ctrl.onLevelDragDrop(dragEl, dropEl)">{{levelData.level}}
+                                    <input type="checkbox" name="" ng-click="$ctrl.addGamelevel(levelData)" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="eight wide column right floated" >
+                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
+                        <br/> 1) Remaining essentially unchanged.
+                        <br/> 2) It was popularised in the 1960s with the release of Letraset sheets containing
+                        <br/> 3) Lorem Ipsum passages, and more recently with desktop publishing software like Aldus
+                        <br/>PageMaker including versions of Lorem Ipsum
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui buttons" ng-if="$ctrl.isAksharaBrowser">
+                <button class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+                <div class="or"></div>
+                <button class="ui blue button" type="button" ng-disabled="$ctrl.selectedAksharas.length == 0" ng-click="$ctrl.getWords()">NEXT</button>
+            </div>
+            <div class="ui buttons" ng-if="$ctrl.isWordBrowser">
+                <button class="ui orange button" ng-click="$ctrl.Editakshara()" type="button">Edit Akshara</button>
+                <div class="or"></div>
+                <button class="ui blue button" type="button" ng-click="$ctrl.addWords()" ng-disabled="$ctrl.selectedWords.length == 0">Next</button>
+            </div>
+            <div class="ui buttons" ng-if="$ctrl.isGameLevel">
+                <button class="ui orange button" ng-click="$ctrl.EditWord()" type="button">Edit Words</button>
+                <div class="or"></div>
+                <button class="ui blue button" type="button" ng-click="$ctrl.addtoLesson()">Add to Lesson</button>
+            </div>
+        </div>
+    </div>
