@@ -98,6 +98,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         };
 
         function audioAssetCb(err, res) {
+
             if (res && res.data.result.content) {
                 ctrl.audioList = [];
 
@@ -326,6 +327,11 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         };
 
         ctrl.initPopup = function(item) {
+            // Remove existing popover
+            EkstepEditorAPI.jQuery('.ui.popup').each(function(){
+                EkstepEditorAPI.jQuery(this).remove();
+            });
+
             setTimeout(function(){
                 EkstepEditorAPI.jQuery('.infopopover')
                   .popup({

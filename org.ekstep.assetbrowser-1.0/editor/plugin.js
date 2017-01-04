@@ -78,7 +78,7 @@ EkstepEditor.basePlugin.extend({
                     "contentType":"Asset",
                     "status": new Array("Live","Review","Draft")
                 },
-                "limit":30
+                "limit":150
             }
         };
 
