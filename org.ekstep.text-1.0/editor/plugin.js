@@ -216,6 +216,13 @@ EkstepEditor.basePlugin.extend({
             data.fontSize = fontSize;
         };
         return retData;
+    },
+    getConfigManifest: function () {
+        var config = this._super();
+        EkstepEditorAPI._.remove(config, function (c) {
+            return c.propertyName === 'stroke';
+        })
+        return config;
     }
 });
 //# sourceURL=textplugin.js
