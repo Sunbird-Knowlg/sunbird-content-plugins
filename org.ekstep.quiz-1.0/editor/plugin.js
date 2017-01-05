@@ -26,13 +26,10 @@ EkstepEditor.basePlugin.extend({
     },
     newInstance: function() {
         var instance = this;
-        /*if (!instance.attributes.w) {
-            instance.attributes.w = instance.attributes.h = 80;
-        }*/
         // Removes unwanted config properties(visible,stroke etc.) for the quiz plugin
         delete instance.configManifest;
         instance.attributes.w = instance.attributes.h = 80;
-        instance.attributes.x = 10; instance.attributes.y = 5;
+        instance.attributes.x = 11; instance.attributes.y = 7;
         instance.percentToPixel(instance.attributes);
         var props = instance.convertToFabric(instance.attributes),
         questionnaire = instance.data.questionnaire, 
@@ -73,7 +70,16 @@ EkstepEditor.basePlugin.extend({
             }
             
         }
-      instance.editorObj = instance.showProperties(props, questionnaire.title, count, questionnaire.max_score);
+        var _parent = this.parent;
+        this.parent = undefined;
+        var quizDetails = instance.showProperties(questionnaire.title, count, questionnaire.max_score);
+        var quizImage = EkstepEditor.config.absURL+"/plugins/org.ekstep.quiz-1.0/editor/assets/QuizImage.png";
+        fabric.Image.fromURL(quizImage, function(img) {
+          var group = new fabric.Group([img, quizDetails]);
+           instance.editorObj =  group;
+           instance.parent = _parent; 
+           instance.postInit();
+        },props);
     },
     get: function(items, type) {
         // it returns the Unique templateId || media of the questions || length of the question
@@ -150,14 +156,13 @@ EkstepEditor.basePlugin.extend({
             return data.theme;
         }
     },
-    showProperties: function(props, qTittle, qCount, maxscore) {
+    showProperties: function(qTittle, qCount, maxscore) {
         // Display the all properties on the editor
-        props.fill = "#87CEFA";
-        var rect = new fabric.Rect(props);
-        qTittle = new fabric.Text(qTittle.toUpperCase(), {fontSize: 25, fill:'black',textAlign:'center',textDecoration:'underline', top: 90, left: 250} );
-        qCount = new fabric.Text("QUESTIONS : " + qCount, {fontSize: 20,fill:'black',top: 130,left: 250});
-        maxscore = new fabric.Text("TOTAL MARKS : "+maxscore, {fontSize: 20, fill:'black', top: 160,left: 250,});
-        fabricGroup = new fabric.Group([rect, qTittle, qCount, maxscore], {left: 85, top: 40});
+        var instance = this;
+        qTittle = new fabric.Text(qTittle.toUpperCase(), {fontSize: 15, fill:'black',textAlign:'center', top: 32, left: 105} );
+        qCount = new fabric.Text(qCount +" Questions,", {fontSize: 12,fill:'black',top: 49,left: 105});
+        maxscore = new fabric.Text(maxscore + " Marks", {fontSize: 12, fill:'black', top: 49,left: 180,});
+        fabricGroup = new fabric.Group([qTittle, qCount, maxscore]);
         return fabricGroup;
     },
     onConfigChange: function(key, value) {
