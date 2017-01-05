@@ -451,7 +451,7 @@ EkstepEditor.basePlugin.extend({
     setStageObjects: function() {
         var stageOptions = [];
         EkstepEditorAPI._.forEach(EkstepEditorAPI._.clone(EkstepEditorAPI.getAllStages(), true), function(stage, i) {
-            var stageKey = 'Slide ' + (i + 1);
+            var stageKey = 'Stage ' + (i + 1);
             stageOptions[stage.id] = stageKey;
         });
         delete stageOptions[EkstepEditorAPI.getCurrentStage().id];
