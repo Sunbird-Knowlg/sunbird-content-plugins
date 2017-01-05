@@ -44,7 +44,8 @@
         width: 200px;
         margin: 10px;
         padding: 10px;
-        border: solid;
+        border: solid 2px;
+        border-color: #C0C0C0;
     }
     
     .dragDiv {
@@ -55,7 +56,7 @@
         <div class="content">
             <div class="ui mini four steps">
                 <div class="{{$ctrl.isAksharaBrowser ? 'active': ''}} step">
-                    <i class="checkmark box icon"></i>
+                    <i class="browser icon"></i>
                     <div class="content">
                         <div class="title">Akshara browser</div>
                         <div class="description">select language and akshara</div>
@@ -69,14 +70,14 @@
                     </div>
                 </div>
                 <div class="{{$ctrl.isGameLevel ? 'active': ''}} step">
-                    <i class="music icon"></i>
+                    <i class="game icon"></i>
                     <div class="content">
                         <div class="title">Game Level</div>
                         <div class="description">Select and reorder game levels</div>
                     </div>
                 </div>
                 <div class="step">
-                    <i class="music icon"></i>
+                    <i class="game icon"></i>
                     <div class="content">
                         <div class="title">Final</div>
                         <div class="description"></div>
@@ -220,11 +221,10 @@
                         </div>
                     </div>
                     <div class="eight wide column right floated" >
-                        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting,
-                        <br/> 1) Remaining essentially unchanged.
-                        <br/> 2) It was popularised in the 1960s with the release of Letraset sheets containing
-                        <br/> 3) Lorem Ipsum passages, and more recently with desktop publishing software like Aldus
-                        <br/>PageMaker including versions of Lorem Ipsum
+                        <div >
+                            <img src="{{$ctrl.selectedLevelPath}}" style="max-width: 350px; padding-left: 20px;">
+                        </div>
+                        <div><span style="padding-left: 40px; font-weight: bold;">{{$ctrl.selectedLevelText}}</span></div>
                     </div>
                 </div>
             </div>
