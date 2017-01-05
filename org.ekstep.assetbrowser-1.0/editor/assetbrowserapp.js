@@ -533,6 +533,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         }  
 
         ctrl.uploadFile = function(resp, data) {
+            var assetName = resp.config.data.request.content.name;
             EkstepEditorAPI.jQuery.ajax({
                 // @Todo Use the correct URL
                 url: EkstepEditor.config.baseURL + "/api/learning/v2/content/upload/" + resp.data.result.node_id,
@@ -549,6 +550,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                     console.log(resp);
                     assetdata.asset = resp.result.node_id;
                     assetdata.assetMedia = resp;
+                    assetdata.assetMedia.name = assetName;
                     assetdata.assetMedia.id = resp.result.node_id;
                     assetdata.assetMedia.src = resp.result.content_url;
                     assetdata.assetMedia.type = instance.mediaType;

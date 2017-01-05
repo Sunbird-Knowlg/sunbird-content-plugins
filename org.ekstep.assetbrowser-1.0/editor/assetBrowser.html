@@ -12,7 +12,7 @@ audio::-webkit-media-controls-panel {
    width: calc(100% + 30px) !important; /* Adjust as needed */
 }
 
-.ui.modal {
+.assetbrowser {
    position: inherit !important;
    top: 0 !important;
 }
@@ -124,10 +124,6 @@ i.play.icon:before, i.pause.icon:before{
 	cursor: pointer;
 }
 
-.centered {
-	text-align: center;
-}
-
 .licenseMessage {
 	font-size: 11px;
 }
@@ -148,6 +144,21 @@ i.play.icon:before, i.pause.icon:before{
     top: 10px;	
 }
 
+.assetbrowser .center-aligned{
+	text-align: center;
+}
+
+.assetbrowser .playContainer{
+	position: absolute;top: 52px;left: 0;right: 0;z-index: 1000;margin-left: auto;margin-right: auto;
+}
+
+.assetbrowser .recordContainer{
+	min-height: 210px;
+}
+
+.assetbrowser .waveContainer{
+	max-width: 500px; position: relative;
+}
 </style>
 
 <div class="assetbrowser ui modal active ui form">
@@ -162,7 +173,7 @@ i.play.icon:before, i.pause.icon:before{
 					<span ng-if="$ctrl.uploadView && $ctrl.plugin == 'image'"><i class="upload icon"></i> Upload and use</span>
 					<span ng-if="$ctrl.uploadView && $ctrl.plugin == 'audio'"><i class="upload icon"></i> Upload/ Record</span>
 				</div>
-				<div class="column" style="text-align: right;">
+				<div class="column right aligned">
 					<i class="cursor-pointer close icon" ng-click="closeThisDialog()"></i>
 				</div>
 			</div>
@@ -326,11 +337,11 @@ i.play.icon:before, i.pause.icon:before{
    </div>
    <div class="actions" ng-hide="$ctrl.uploadView" ng-switch="$ctrl.buttonToShow">
 		<div class="ui grid">
-			<div class="three wide column" style="text-align: left;">
+			<div class="three wide column left aligned">
 				<button class="ui blue button" ng-click="$ctrl.switchToUpload()" type="button">
 				{{$ctrl.plugin=='image' ? 'Upload and use': 'Upload/ Record'}}</button>
 			</div>
-			<div class="nine wide column" style="text-align: right;">
+			<div class="nine wide column right aligned">
 				<div class="ui buttons">
 					<button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
 					<div class="or"></div>
@@ -359,11 +370,11 @@ i.play.icon:before, i.pause.icon:before{
 					<div ng-show="$ctrl.record">
 						<ng-audio-recorder id="mainAudio" audio-model="recorded" show-player="false" time-limit="timeLimit"  on-record-start="$ctrl.onRecordStart()" on-conversion-complete="$ctrl.onConversionComplete();">
 						    <div ng-if="recorder.isAvailable">
-						        <div ng-if="recorder.status.isDenied === true" style="color:red;">
+						        <div ng-if="recorder.status.isDenied === true" class="ui negative message">
 						            You need to grant permission for this application to use your microphone.
 						        </div>
-								<div class="centered" style="min-height: 210px;">
-							        <div style="max-width: 500px" style="position: relative;">
+								<div class="center aligned recordContainer">
+							        <div class="waveContainer">
 							            <div ng-show="recorder.status.isConverting">
 							                Please wait while your recording is processed.
 							            </div>
@@ -376,27 +387,24 @@ i.play.icon:before, i.pause.icon:before{
 							            </div>
 							        </div>
 
-									<div class="row" style="position: absolute;top: 52px;left: 0;right: 0;z-index: 1000;margin-left: auto;margin-right: auto;">
-										<div class="twelve wide column" ng-hide="recorder.status.isRecording || !recorder.audioModel">
+									<div class="row playContainer">
+										<div class="twelve wide column center-aligned" ng-hide="recorder.status.isRecording || !recorder.audioModel">
 											<i class="ui icon circle {{recorder.status.isStopped || recorder.status.isPaused ? 'play' : 'pause'}} huge blue cursor-pointer"
 											ng-click="recorder.status.isPlaying ? recorder.playbackPause() : recorder.playbackResume()"></i>
-											<!--
-											<span><br><b>{{recorder.status.isStopped || recorder.status.isPaused ? 'Play' : 'Pause'}} </b></span>
-											-->
 										</div>
 									</div>
 
-									<div class="cursor-pointer" ng-hide="recorder.status.isRecording === false" ng-click="recorder.stopRecord()"><i class="ui icon stop circle outline red big"></i>STOP</b>
+									<div class="cursor-pointer center aligned center-aligned" ng-hide="recorder.status.isRecording === false" ng-click="recorder.stopRecord()"><i class="ui icon stop circle outline red big"></i>STOP</b>
 									</div>
 									<div class="ui grid">
 										<div class="row">
-											<div class="twelve centered wide column" ng-hide="recorder.status.isRecording">
+											<div class="twelve center aligned  wide column" ng-hide="recorder.status.isRecording">
 												<div id="replaceRecord" class="cursor-pointer" ng-click="recorder.startRecord()">
 													<i class="ui icon selected radio huge blue"></i>
 													<p><b>START RECORDING</b></p>
 												</div>
 
-												<div id="replaceRecordDiv" class="cursor-pointer" style="display: none;" ng-click="recorder.startRecord()">
+												<div id="replaceRecordDiv" class="cursor-pointer hide" ng-click="recorder.startRecord()">
 													<i class="ui icon retweet"></i><b>REPLACE</b>
 												</div>
 											</div>
@@ -413,7 +421,7 @@ i.play.icon:before, i.pause.icon:before{
 						    </div>
 						</ng-audio-recorder>
 
-						<div class="ui-grid" ng-show="$ctrl.file.infoShow" style="margin-top: 5px;">
+						<div class="ui-grid" ng-show="$ctrl.file.infoShow">
 							<span>{{$ctrl.file.name}}</span> | <b id="fileSize"></b>
 						</div>
 
@@ -499,10 +507,10 @@ i.play.icon:before, i.pause.icon:before{
 	</div>
 	<div class="actions" ng-show="$ctrl.uploadView">
 		<div class="ui grid">
-			<div class="three wide column" style="text-align: left;">
+			<div class="three wide column left aligned">
 				<button class="ui grey button" ng-click="$ctrl.uploadView=false; $ctrl.plugin=='image' ? '' : $ctrl.upload = false; $ctrl.record=false;">Back</button>
 			</div>
-			<div class="nine wide column" style="text-align: right;">
+			<div class="nine wide column right aligned">
 				<i ng-show="$ctrl.uploadingAsset" class="big spinner loading icon"></i>
 				<div class="ui buttons">
 					<button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
