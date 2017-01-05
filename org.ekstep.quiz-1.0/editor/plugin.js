@@ -167,28 +167,35 @@ EkstepEditor.basePlugin.extend({
     },
     onConfigChange: function(key, value) {
         if (!_.isUndefined(value)) {
+        var ItemLenght =  this.get(this.data.questionnaire.items);    
             switch (key) {
-                case 'shuffle':
-                    this.config.shuffle = value;
-                    this.data.questionnaire.shuffle = value;
+                case 'title':
+                    this.config.title = value;
+                    this.data.questionnaire.title = value;
+                    // this is to update the fabric text(title) group value.
+                    this.editorObj._objects[1]._objects[0].text = value.toUpperCase();
                     break;
                 case 'total_items':
                     this.config.total_items = value;
                     this.data.questionnaire.total_items = value;
+                     // this is to update the fabric text(Question) group value.
+                    this.editorObj._objects[1]._objects[1].text = value + "/" + ItemLenght + "Questions,"; 
+                    break;
+                case 'max_score':
+                    this.config.max_score = value;
+                    this.data.questionnaire.max_score = value;
+                     // this is to update the fabric text(max_score) group value.
+                    this.editorObj._objects[1]._objects[2].text = value + "Marks"; 
+                    break;
+                case 'shuffle':
+                    this.config.shuffle = value;
+                    this.data.questionnaire.shuffle = value;
                     break;
                 case 'showImmediateFeedback':
                     this.config.showImmediateFeedback = value;
                     this.data.questionnaire.showImmediateFeedback = value;
                     break;
-                case 'max_score':
-                    this.config.max_score = value;
-                    this.data.questionnaire.max_score = value;
-                    break;
-                case 'title':
-                    this.config.title = value;
-                    this.data.questionnaire.title = value;    
             }
-
         }
         EkstepEditorAPI.render();
         EkstepEditorAPI.dispatchEvent('object:modified', {
