@@ -73,7 +73,7 @@ EkstepEditor.basePlugin.extend({
         var _parent = this.parent;
         this.parent = undefined;
         var quizDetails = instance.showProperties(questionnaire.title, count, questionnaire.max_score);
-        var quizImage = EkstepEditor.config.absURL+"/plugins/org.ekstep.quiz-1.0/editor/assets/QuizImage.png";
+        var quizImage = EkstepEditor.config.absURL+"/content-plugins/org.ekstep.quiz-1.0/editor/assets/QuizImage.png";
         fabric.Image.fromURL(quizImage, function(img) {
           var group = new fabric.Group([img, quizDetails]);
            instance.editorObj =  group;
