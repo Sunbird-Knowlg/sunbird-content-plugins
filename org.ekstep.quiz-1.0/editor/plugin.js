@@ -160,8 +160,8 @@ EkstepEditor.basePlugin.extend({
         // Display the all properties on the editor
         var instance = this;
         qTittle = new fabric.Text(qTittle.toUpperCase(), {fontSize: 15, fill:'black',textAlign:'center', top: 32, left: 105} );
-        qCount = new fabric.Text("QUESTIONS : " + qCount, {fontSize: 10,fill:'black',top: 49,left: 105});
-        maxscore = new fabric.Text("TOTAL MARKS : "+maxscore, {fontSize: 10, fill:'black', top: 49,left: 190,});
+        qCount = new fabric.Text(qCount +" Questions,", {fontSize: 12,fill:'black',top: 49,left: 105});
+        maxscore = new fabric.Text(maxscore + " Marks", {fontSize: 12, fill:'black', top: 49,left: 180,});
         fabricGroup = new fabric.Group([qTittle, qCount, maxscore]);
         return fabricGroup;
     },
