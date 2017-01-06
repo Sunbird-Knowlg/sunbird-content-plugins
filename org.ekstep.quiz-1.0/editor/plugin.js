@@ -60,7 +60,7 @@ EkstepEditor.basePlugin.extend({
         }
         var _parent = this.parent;
         this.parent = undefined;
-        var quizImage = EkstepEditor.config.absURL+"/plugins/org.ekstep.quiz-1.0/editor/assets/QuizImage.png";
+        var quizImage = EkstepEditor.config.absURL+"/content-plugins/org.ekstep.quiz-1.0/editor/assets/QuizImage.png";
         fabric.Image.fromURL(quizImage, function(img) {
            var count = questionnaire.total_items + '/' + instance.getItmes(questionnaire.items); 
            var quizDetails = instance.getPropsForEditor(questionnaire.title, count, questionnaire.max_score); 
