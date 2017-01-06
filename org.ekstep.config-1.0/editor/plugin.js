@@ -464,8 +464,14 @@ EkstepEditor.basePlugin.extend({
         var eventIndex = -1;
         if (currentStage.event) {
             _.forEach(currentStage.event, function(e, i) {
-                if (e.action[0].asset === data.id) {
-                    eventIndex = i;
+                if(EkstepEditorAPI._.isArray(e.action)){
+                    if (e.action[0].asset === data.id) {
+                        eventIndex = i;
+                    }
+                }else if(EkstepEditorAPI._.isObject(e.action)){
+                    if (e.action.asset === data.id) {
+                        eventIndex = i;
+                    }
                 }
             })
         }

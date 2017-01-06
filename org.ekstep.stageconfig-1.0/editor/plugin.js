@@ -98,7 +98,7 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         EkstepEditorAPI._.forEach(instance.stageConfig, function(stage, key) {
             if(stage.stageId === instance.scope.currentStage.id){
-                var components = _.clone(stage.components);
+                var components = EkstepEditorAPI._.clone(stage.components);
                 EkstepEditorAPI._.forEach(components, function(com, key){
                     if(data.asset === com.id){
                         stage.components.splice(key, 1);
