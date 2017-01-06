@@ -35,7 +35,6 @@ var textEditor = (function() {
         $editor.hide();
         $doneBtn.hide();
         EkstepEditorAPI.jQuery("#toolbarOptions").show();
-        EkstepEditorAPI.jQuery("#plugin-toolbar-container").show();
     }
 
     function showEditor(id) {
@@ -97,7 +96,11 @@ var textEditor = (function() {
         $buttonGrp.append($doneBtn);
         //$buttonGrp.css({position:'absolute', 'top': $editor.offset().top+$editor.height()/2+64,'left': $editor.offset().left+22})
         $buttonGrp.show();
-        setTimeout(function() { EkstepEditorAPI.jQuery("#toolbarOptions").hide(); EkstepEditorAPI.jQuery("#plugin-toolbar-container").hide(); }, 600);
+        setTimeout(function() { EkstepEditorAPI.jQuery("#toolbarOptions").hide();  }, 600);
+        var angScope = EkstepEditorAPI.getAngularScope();
+        angScope.safeApply(function () {
+          angScope.configStyle = "";           
+        });
     }
 
     function hideEditor() {
@@ -105,7 +108,10 @@ var textEditor = (function() {
         $buttonGrp.hide();
         $doneBtn.hide();
         $cancelBtn.hide();
-        EkstepEditorAPI.jQuery("#plugin-toolbar-container").attr('style', '');
+        var angScope = EkstepEditorAPI.getAngularScope();
+        angScope.safeApply(function () {
+          angScope.configStyle = "";           
+        });
     }
     return {
         showEditor: showEditor,

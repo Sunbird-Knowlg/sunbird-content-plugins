@@ -93,7 +93,7 @@ EkstepEditor.basePlugin.extend({
     objectSelected: function(event, data) {
         var instance = this;
         if (this.selectedPluginId != data.id) {
-           var angScope = EkstepEditorAPI.getAngularScope();
+            var angScope = EkstepEditorAPI.getAngularScope();
             angScope.safeApply(function() {
                 angScope.showConfigContainer = false;
             });
@@ -145,10 +145,7 @@ EkstepEditor.basePlugin.extend({
         semantic ui apply
          */
         setTimeout(function() {
-            EkstepEditorAPI.jQuery(".ui.dropdown").each(function() {
-                    EkstepEditorAPI.jQuery(this).dropdown();
-                })
-                //EkstepEditorAPI.jQuery(".ui.accordion").accordion();
+            EkstepEditorAPI.jQuery("#plugin-toolbar-container .ui.dropdown").dropdown();
         }, 500);
     },
     /**
@@ -210,10 +207,12 @@ EkstepEditor.basePlugin.extend({
      * @memberof Config
      */
     onConfigChange: function(key, value) {
-        EkstepEditorAPI.getCurrentObject().__proto__.__proto__.onConfigChange(key, value);
-        EkstepEditorAPI.getCurrentObject().onConfigChange(key, value);
-        if (key === 'autoplay') {
-            this.toggleEventToStage('', { 'flag': value, 'id': EkstepEditorAPI.getCurrentObject().id });
+        if (!EkstepEditorAPI._.isUndefined(value)) {
+            EkstepEditorAPI.getCurrentObject().__proto__.__proto__.onConfigChange(key, value);
+            EkstepEditorAPI.getCurrentObject().onConfigChange(key, value);
+            if (key === 'autoplay') {
+                this.toggleEventToStage('', { 'flag': value, 'id': EkstepEditorAPI.getCurrentObject().id });
+            }
         }
     },
     /**
@@ -269,7 +268,7 @@ EkstepEditor.basePlugin.extend({
         if (data && data.id) {
             this.selectedPlugin = data.id;
             var plugin = EkstepEditorAPI.getPluginInstance(data.id);
-            if (!EkstepEditorAPI._.isUndefined(plugin)) {
+            if (!EkstepEditorAPI._.isUndefined(plugin) && !EkstepEditorAPI._.isUndefined(plugin.editorObj)) {
                 this.setToolBarPosition();
                 var containerLeft = this.canvasOffset.left + plugin.editorObj.left + plugin.editorObj.getWidth() + 30;
                 var maxLeft = this.canvasOffset.left + EkstepEditorAPI.jQuery("#canvas").width() + 5;
