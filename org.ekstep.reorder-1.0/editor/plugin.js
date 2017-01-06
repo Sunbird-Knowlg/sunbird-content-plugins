@@ -9,11 +9,13 @@ EkstepEditor.basePlugin.extend({
     },
     sendToFront: function(event, data) {
         EkstepEditorAPI.getCanvas().bringForward(EkstepEditorAPI.getEditorObject());
-        EkstepEditorAPI.render();
+        EkstepEditorAPI.getCurrentStage().updateZIndex();
+        EkstepEditorAPI.render();        
         EkstepEditorAPI.dispatchEvent('object:modified', {id: EkstepEditorAPI.getEditorObject().id});
     },
     sendToBack: function(event, data) {
         EkstepEditorAPI.getCanvas().sendBackwards(EkstepEditorAPI.getEditorObject());
+        EkstepEditorAPI.getCurrentStage().updateZIndex();
         EkstepEditorAPI.render();
         EkstepEditorAPI.dispatchEvent('object:modified', {id: EkstepEditorAPI.getEditorObject().id});
     },
