@@ -1,10 +1,5 @@
 EkstepEditor.basePlugin.extend({
     type: "ak_editor",
-    /**
-     * @member currentInstance
-     * @memberof Htext
-     */
-    currentInstance: undefined,
     initialize: function() {
         setTimeout(function() {
             var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.akshara-editor-1.0/editor/aksharaEditorConfig.html';
@@ -41,14 +36,13 @@ EkstepEditor.basePlugin.extend({
 
         this.editorObj = new fabric.Group(rects);
         console.log(this.editorObj);
-        currentInstance = this;
         this.loadHtml(this);
     },
 
     addObjectsToFabrics: function(){
         var instance = this;
         console.log("inside add to fabric");
-        if(!_.isUndefined(this.editorObj) && this.editorObj._objects){     
+        if(!EkstepEditorAPI._.isUndefined(this.editorObj) && this.editorObj._objects){     
             EkstepEditorAPI._.forEachRight(this.editorObj._objects, function(obj, index) {
                 instance.editorObj.remove(obj)
             })
@@ -83,79 +77,90 @@ EkstepEditor.basePlugin.extend({
 
     },
 
-
-
-  /**
-     * This method overridden from Ekstepeditor.basePlugin and here we double click event is added
-     * @memberof Htext
-     */
-    selected: function(instance) {
-        fabric.util.addListener(fabric.document, 'dblclick', this.dblClickHandler);
-    },
-    /**
-     * This method overridden from Ekstepeditor.basePlugin and here we double click event is removed
-     * @memberof Htext
-     */
-    deselected: function(instance, options, event) {
-        fabric.util.removeListener(fabric.document, 'dblclick', this.dblClickHandler);
-    },
-    /**
-     * This method is called when the object:unselected event is fired
-     * It will remove the double click event for the canvas
-     * @memberof Htext
-     */
-    objectUnselected: function(event, data) {
-        fabric.util.removeListener(fabric.document, 'dblclick', this.loadHtml);
-    },
-    /**
-     * This method is callback for double click event which will call the textEditor to show the ediotor to add or modify text.
-     * @param event {Object} event
-     * @memberof Htext
-     */
-    dblClickHandler: function(event) {
-        var leftSt = EkstepEditorAPI.jQuery("#canvas").offset().left + EkstepEditorAPI.getCurrentObject().editorObj.left;
-        var leftEnd = leftSt + EkstepEditorAPI.getCurrentObject().editorObj.width;
-        var topSt = EkstepEditorAPI.jQuery("#canvas").offset().top + EkstepEditorAPI.getCurrentObject().editorObj.top;
-        var topEnd = topSt + EkstepEditorAPI.getCurrentObject().editorObj.height;
-        if (event.clientX > leftSt && event.clientX < leftEnd && event.clientY > topSt && event.clientY < topEnd) {
-            currentInstance.loadHtml();
-        }
-    },
-
-
-
-
-
     /*########## Method to all default media which is required in akshara teaching template ######*/
     addDefaultMedia: function(){
-            this.addMedia({
+
+        var defaultMediaAssests = [{
                 id: "goodjob_image",
                 src: "https://ekstep-public.s3-ap-southeast-1.amazonaws.com/content/do_10097663/artifact/goodjob_1483016659770.png",
                 assetId: "goodjob_image",
                 type: "image",
                 preload: true
-            });
-            this.addMedia({
+            },{
                 id: "submit_image",
                 src: "https://ekstep-public.s3-ap-southeast-1.amazonaws.com/content/do_10097796/artifact/submit_1483351199308.png",
                 assetId: "submit_image",
                 type: "image",
                 preload: true
-            });
-            this.addMedia({
+            },
+            {
                 id: "submit_disabled_image",
                 src: "https://ekstep-public.s3-ap-southeast-1.amazonaws.com/content/do_10097800/artifact/submit_disabled_1483351751249.png",
                 assetId: "submit_disabled_image",
                 type: "image",
                 preload: true
-            });
-            this.addMedia({
+            },
+            {
                 id: "icon_sound_image",
                 src: "https://ekstep-public.s3-ap-southeast-1.amazonaws.com/content/do_10097802/artifact/icon_sound_1483351957879.png",
                 assetId: "icon_sound_image",
                 type: "image",
                 preload: true
+            },
+            {
+               id: "tiles",
+               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/TilesPlugin.js",
+               assetId: "tiles",
+               type: "plugin",
+               preload: true
+           },
+           {
+               id: "tile",
+               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/TilePlugin.js",
+               assetId: "tile",
+               type: "plugin",
+               preload: true
+           },
+           {
+               id: "cmtf",
+               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/customMtfPlugin.js",
+               assetId: "cmtf",
+               type: "plugin",
+               preload: true
+           },
+           {
+               id: "coptions",
+               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/customOptionsPlugin.js",
+               assetId: "coptions",
+               type: "plugin",
+               preload: true
+           },
+           {
+               id: "coption",
+               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/customOptionPlugin.js",
+               assetId: "coption",
+               type: "plugin",
+               preload: true
+           },
+           {
+               id: "audiManager",
+               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/audiManager.js",
+               assetId: "audiManager",
+               type: "js",
+               preload: true
+           }
+
+        ];
+
+        var ins = this;
+        
+        EkstepEditorAPI._.forEach(defaultMediaAssests, function(defaultMedia) {
+            console.log(defaultMedia);
+        ins.addMedia(defaultMedia);
             });
+
+
+          
     },
 
     /*########## Method to open the modal ######*/
@@ -246,10 +251,16 @@ EkstepEditor.basePlugin.extend({
             }
         };
 
-        _.isUndefined(searchText) ? null : requestObj.request.filters = searchText;
+        EkstepEditorAPI._.isUndefined(searchText) ? null : requestObj.request.filters = searchText;
 
         iservice.http.post(EkstepEditor.config.baseURL + '/api/language/v2/language/search', requestObj, requestHeaders, function(err,res){
-                cb(err,res,varna);
+            cb(err,res,varna);
+                /*var startRes = res;
+                var requestObj
+                iservice.http.post(EkstepEditor.config.baseURL + '/api/language/v2/language/search', requestObj, requestHeaders, function(err,res){
+                    var conRes = res;
+                    cb(err,startRes,conRes,varna);
+                });*/
         });
 
     },

@@ -98,7 +98,8 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         EkstepEditorAPI._.forEach(instance.stageConfig, function(stage, key) {
             if(stage.stageId === instance.scope.currentStage.id){
-                EkstepEditorAPI._.forEach(stage.components, function(com, key){
+                var components = _.clone(stage.components);
+                EkstepEditorAPI._.forEach(components, function(com, key){
                     if(data.asset === com.id){
                         stage.components.splice(key, 1);
                         EkstepEditorAPI._.remove(instance.scope.stageAttachments['audio'].items, function(item) {

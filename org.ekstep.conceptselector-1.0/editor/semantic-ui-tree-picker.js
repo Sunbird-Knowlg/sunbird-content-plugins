@@ -122,7 +122,7 @@ var conceptModal;
             updatePickedNodes();
             tree = renderTree(nodes, {
                 height: '300px',
-                overflowY: 'scroll'
+                overflowY: 'auto'
             });
             tabs.tree.html(tree);
             return initializeNodeList(tree);
@@ -163,7 +163,7 @@ var conceptModal;
                 });
                 list = renderList(foundNodes, {
                     height: '400px',
-                    overflowY: 'scroll'
+                    overflowY: 'auto'
                 });
                 $('.menu .item', modal).removeClass('active');
                 tabs.search.show().html(list);
@@ -186,7 +186,7 @@ var conceptModal;
             var list;
             list = renderList(picked, {
                 height: '400px',
-                overflowY: 'scroll'
+                overflowY: 'auto'
             });
             $('.menu .item', modal).removeClass('active');
             $('.menu .picked', modal).addClass('active');
@@ -251,10 +251,17 @@ var conceptModal;
                     node.addClass('picked');
                 }
                 if (!node.hasClass('childless')) {
-                    $(head).on('click', function(e) {
-                        node.toggleClass('opened');
-                        return content.slideToggle();
-                    });
+					if (!head.hasClass('selectable')){
+						$(head).on('click', function(e) {
+							node.toggleClass('opened');
+							return content.slideToggle();
+						});
+					}else{
+						$('>.icon', head).on('click', function(e) {
+							node.toggleClass('opened');
+							return content.slideToggle();
+						});
+					}
                 }
                 return updatePickedIds();
             });

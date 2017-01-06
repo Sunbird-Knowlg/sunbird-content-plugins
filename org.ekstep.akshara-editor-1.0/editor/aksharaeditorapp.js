@@ -16,31 +16,41 @@ angular.module('aksharaEditorapp', [])
         ctrl.lessWordSelected = false;
         ctrl.selectedGameLevels = [];
         ctrl.noOfRepetition = 1;
+        ctrl.selectedLevelPath = "";
+        ctrl.selectedLevelText = "";
 
         ctrl.levelMetaData = [{
             "selected": false,
+            "path":"/plugins/org.ekstep.akshara-editor-1.0/assets/level-1.png",
             "level": "Level1",
+            "levelText" : "Level 1 : Audio, Text to Text, Audio, Image.",
             "tiles": {
                 "one": ["audio", "text"],
                 "two": ["text", "image", "audio"]
             }
         }, {
             "selected": false,
+            "path":"/plugins/org.ekstep.akshara-editor-1.0/assets/level-2.png",
             "level": "Level2",
+            "levelText" : "Level 2 : Audio, Text to Audio, Text.",
             "tiles": {
                 "one": ["audio", "text"],
                 "two": ["audio", "text"]
             }
         }, {
             "selected": false,
+            "path":"/plugins/org.ekstep.akshara-editor-1.0/assets/level-3.png",
             "level": "Level3",
+            "levelText" : "Level 3 : Audio, Text to Text.",
             "tiles": {
                 "one": ["text", "audio"],
                 "two": ["text"]
             }
         }, {
             "selected": false,
+            "path":"/plugins/org.ekstep.akshara-editor-1.0/assets/level-4.png",
             "level": "Level4",
+            "levelText" : "Level 4 : Text to Audio.",
             "tiles": {
                 "one": ["text"],
                 "two": ["audio"]
@@ -51,6 +61,7 @@ angular.module('aksharaEditorapp', [])
         /*########## Language Callback method which will be called after language api call ######*/
         function languageCb(err, res) {
             ctrl.language = res.data.result.languages;
+            EkstepEditorAPI.getAngularScope().safeApply();
         }
 
         instance.getLanguages(undefined, languageCb); //Call Method to get Languages
@@ -98,7 +109,7 @@ angular.module('aksharaEditorapp', [])
             if (words.length)
                 ctrl.updateWords(words, varna);
             else {
-                ctrl.selectedAksharas = _.reject(ctrl.selectedAksharas, function(o) {
+                ctrl.selectedAksharas = EkstepEditorAPI._.reject(ctrl.selectedAksharas, function(o) {
                     return o.varna == varna;
                 });
                 ctrl.updateSelectedAksharas();
@@ -108,15 +119,42 @@ angular.module('aksharaEditorapp', [])
             EkstepEditorAPI.getAngularScope().safeApply();
         };
 
+        /*############# Method to get selected words ###############*/
+
+        ctrl.getSelectedAksharas = function(){
+            ctrl.selectedAksharas = [];
+            for (var i = 0; i < ctrl.aksharas.length; i++) {
+                if(ctrl.isSelected[ctrl.aksharas[i].identifier] == 'akshara-selected'){
+                    ctrl.selectedAksharas.push(ctrl.aksharas[i]);
+                }
+            }
+            console.log("selectedAksharas", ctrl.selectedAksharas);
+        }
+
+           /*############# Method to get selected aksharas ###############*/
+
+        ctrl.getSelectedWords = function(){
+            ctrl.selectedWords = [];
+            for (var i = 0; i < ctrl.words.length; i++) {
+                if(ctrl.isSelected[ctrl.words[i].identifier] == 'word-selected'){
+                    ctrl.selectedWords.push(ctrl.words[i]);
+                }
+            }
+            console.log("selectedWords", ctrl.selectedWords);
+        }
+
+
         /*########## Method to prepare proper query object and making Words api call ######*/
         ctrl.getWords = function() {
+            instance.aksharas = ctrl.aksharas;
             ctrl.aksharaWords = {};
             ctrl.aksharaWords.words = [];
             ctrl.words = [];
             ctrl.akSelected;
+            
             ctrl.updateSelectedAksharas();
             ctrl.selectedProperty.repetition = ctrl.noOfRepetition;
-            _.each(ctrl.selectedAksharas, function(obj) {
+            EkstepEditorAPI._.each(ctrl.selectedAksharas, function(obj) {
                 var serachText = {};
                 serachText.language_id = [ctrl.languageSelected];
                 serachText.objectType = ["Word"];
@@ -131,6 +169,7 @@ angular.module('aksharaEditorapp', [])
 
         /*########## Method to make akshara api call with selected languagae ######*/
         ctrl.searchAksharas = function(languageSelected) {
+            instance.lanSelected = languageSelected;
             instance.getAksharas(languageSelected, aksharaCb);
         }
 
@@ -140,11 +179,12 @@ angular.module('aksharaEditorapp', [])
         ctrl.toggleWordSelection = function(identifier, word) {
             if (ctrl.isSelected[identifier] == 'word-selected') {
                 ctrl.isSelected[identifier] = "";
-                ctrl.selectedWords.splice(word, 1);
+               // ctrl.selectedWords.splice(word, 1);
             } else {
                 ctrl.isSelected[identifier] = 'word-selected';
-                ctrl.selectedWords.push(word);
+               // ctrl.selectedWords.push(word);
             }
+            ctrl.getSelectedWords();
 
         };
 
@@ -152,11 +192,12 @@ angular.module('aksharaEditorapp', [])
         ctrl.toggleAksharaSelection = function(identifier, akshara) {
             if (ctrl.isSelected[identifier] == 'akshara-selected') {
                 ctrl.isSelected[identifier] = "";
-                ctrl.selectedAksharas.splice(akshara, 1);
+              //  ctrl.selectedAksharas.splice(akshara, 1);
             } else {
                 ctrl.isSelected[identifier] = 'akshara-selected';
-                ctrl.selectedAksharas.push(akshara);
+              //  ctrl.selectedAksharas.push(akshara);
             }
+            ctrl.getSelectedAksharas();
         };
 
 
@@ -190,7 +231,7 @@ angular.module('aksharaEditorapp', [])
 
         /*########## Method to add all media related to each word ######*/
         ctrl.updateMedia = function() {
-            _.each(ctrl.selectedProperty.aksharas, function(obj) {
+            EkstepEditorAPI._.each(ctrl.selectedProperty.aksharas, function(obj) {
                 instance.addMedia({
                     id: obj.audioAsset,
                     src: obj.audioSrc,
@@ -198,7 +239,7 @@ angular.module('aksharaEditorapp', [])
                     type: "sound",
                     preload: true
                 });
-                _.each(ctrl.selectedProperty.words[obj.text].one, function(o) {
+                EkstepEditorAPI._.each(ctrl.selectedProperty.words[obj.text].one, function(o) {
                     instance.addMedia({
                         id: o.imageAsset,
                         src: o.imageSrc,
@@ -214,7 +255,7 @@ angular.module('aksharaEditorapp', [])
                         preload: true
                     });
                 });
-                _.each(ctrl.selectedProperty.words[obj.text].two, function(o) {
+                EkstepEditorAPI._.each(ctrl.selectedProperty.words[obj.text].two, function(o) {
                     instance.addMedia({
                         id: o.imageAsset,
                         src: o.imageSrc,
@@ -325,13 +366,13 @@ angular.module('aksharaEditorapp', [])
 
         /*########## Method to add content to stage ######*/
         ctrl.addtoLesson = function() {
-            var configObj = {};
-            ctrl.updateGamelevel();
-            ctrl.selectedProperty.gameLevels = ctrl.selectedGameLevels;
-            configObj = ctrl.selectedProperty;
-            instance.selectedProperty = configObj;
-            instance.addObjectsToFabrics();
-            ctrl.cancel();
+                var configObj = {};
+                ctrl.updateGamelevel();
+                ctrl.selectedProperty.gameLevels = ctrl.selectedGameLevels;
+                configObj = ctrl.selectedProperty;
+                instance.selectedProperty = configObj;
+                instance.addObjectsToFabrics();
+                ctrl.cancel();
         }
 
         /*########## Method to dismiss the modal ######*/
@@ -344,18 +385,26 @@ angular.module('aksharaEditorapp', [])
 
         /*################## Method to select game levels ##########*/
         ctrl.addGamelevel = function(gameLevelObj) {
-                for (var i = 0; i < ctrl.levelMetaData.length; i++) {
-                    if (ctrl.levelMetaData[i].level == gameLevelObj.level) {
-                       ctrl.levelMetaData[i].selected = !ctrl.levelMetaData[i].selected;
-                    }
+            if(gameLevelObj.selected){
+                ctrl.selectedLevelPath = "";
+                ctrl.selectedLevelText = "";
+            }else{
+                ctrl.selectedLevelPath = gameLevelObj.path;
+                ctrl.selectedLevelText = gameLevelObj.levelText;
+                
+            }
+            for (var i = 0; i < ctrl.levelMetaData.length; i++) {
+                if (ctrl.levelMetaData[i].level == gameLevelObj.level) {
+                    ctrl.levelMetaData[i].selected = !ctrl.levelMetaData[i].selected;
                 }
+            }
         }
 
 
         /*################## Method to get selected game levels ##########*/
         ctrl.updateGamelevel = function() {
-                for (var i = 0; i < ctrl.levelMetaData.length; i++) {
-                if(ctrl.levelMetaData[i].selected){
+            for (var i = 0; i < ctrl.levelMetaData.length; i++) {
+                if (ctrl.levelMetaData[i].selected) {
                     ctrl.selectedGameLevels.push(ctrl.levelMetaData[i]);
                 }
             }
@@ -390,7 +439,7 @@ angular.module('aksharaEditorapp', [])
         }
 
         ctrl.getLevelIndexById = function(levelId) {
-            return _.findIndex(ctrl.levelMetaData, function(level) {
+            return EkstepEditorAPI._.findIndex(ctrl.levelMetaData, function(level) {
                 return level.level == levelId;
             });
         }

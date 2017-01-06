@@ -105,6 +105,7 @@ var textEditor = (function() {
         $buttonGrp.hide();
         $doneBtn.hide();
         $cancelBtn.hide();
+        EkstepEditorAPI.jQuery("#plugin-toolbar-container").attr('style', '');
     }
     return {
         showEditor: showEditor,

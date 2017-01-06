@@ -72,5 +72,8 @@
             "src": "editor/help.md",
             "dataType": "text"
         } 
+    },
+    "renderer": {
+        "main": "renderer/MemoryGamePlugin.js"
     }
 }

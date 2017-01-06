@@ -123,7 +123,14 @@ angular.module('readalongapp', [])
                         "autoplay": ctrl.autoplay,
                         "highlight": ctrl.highlightColor,
                     });
-                    EkstepEditorAPI.dispatchEvent('org.ekstep.audio:create', ctrl.audioObj)
+                    var audioArr = [];
+                    var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes('', ['org.ekstep.audio'], true);
+                    EkstepEditorAPI._.forEach(mediaArr, function(val, key) {
+                        audioArr[key] = val.attributes.asset;
+                    });
+                    if(EkstepEditorAPI._.indexOf(audioArr, ctrl.audioObj.asset) === -1){
+                        EkstepEditorAPI.dispatchEvent('org.ekstep.audio:create', ctrl.audioObj);
+                    }
                     EkstepEditorAPI.render();
                 }
             }
