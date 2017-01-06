@@ -36,7 +36,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { 
             stageId: EkstepEditorAPI.getCurrentStage().id,
             type: 'audio', 
-            title: media.name,
+            title: (EkstepEditorAPI._.isUndefined(media.name)) ? media.id : media.name,
             id: media.id,
             url: media.src
         });
