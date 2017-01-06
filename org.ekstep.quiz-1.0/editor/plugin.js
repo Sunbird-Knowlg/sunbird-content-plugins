@@ -28,19 +28,17 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         // Removes unwanted config properties(visible,stroke etc.) for the quiz plugin
         delete instance.configManifest;
-        instance.attributes.w = instance.attributes.h = 80;
-        instance.attributes.x = 11; instance.attributes.y = 7;
+        instance.attributes.w = instance.attributes.h = 80; instance.attributes.x = 9; instance.attributes.y = 7;
         instance.percentToPixel(instance.attributes);
-        var props = instance.convertToFabric(instance.attributes),
-        questionnaire = instance.data.questionnaire, 
-        count = questionnaire.total_items + '/' + instance.get(questionnaire.items),
-        templateIds = instance.get(questionnaire.items,"templateId");
-        instance.get(questionnaire.items,"media").forEach( function(element, index) {
+        var questionnaire = instance.data.questionnaire;
+        var templateIds = instance.getItmes(questionnaire.items,"templateId");
+        instance.getItmes(questionnaire.items,"media").forEach( function(element, index) {
            instance.addMediatoManifest(element);
         });
-        var templateArray = [], templates = [], resCount = 0, tempaltesLength = templateIds.length;
+        var templateArray = [], resCount = 0, tempaltesLength = templateIds.length;
             for (var index = 0; index < tempaltesLength; index++) {
                 if (!_.isUndefined(templateIds[index])) {
+                    // get Template based on ID and push all templates response to arrray.
                     EkstepEditor.assessmentService.getTemplate(templateIds[index], function(err, res) {
                         try {
                             if (!err && res) {
@@ -49,39 +47,29 @@ EkstepEditor.basePlugin.extend({
                             } else {
                                 throw Error(res);
                             }
-
                         } catch (err) {
                             resCount++;
                             console.warn("Invalid Template", err);
                         }
-                       
                      if (resCount == tempaltesLength) {
-                        templateArray.forEach(function(element, index) {
-                            if (!_.isNull(element)) {
-                                templates.push(element.template);
-                                if (!_.isUndefined(element.manifest)) {
-                                    instance.addMediatoManifest(element.manifest.media);
-                                }
-                            }
-                        });
-                       instance.data.template = templates;
+                        // From templateArray update all template to quiz data object
+                       instance.data.template = instance.getTemplateData(templateArray);
                     }
                 });
             }
-            
         }
         var _parent = this.parent;
         this.parent = undefined;
-        var quizDetails = instance.showProperties(questionnaire.title, count, questionnaire.max_score);
-        var quizImage = EkstepEditor.config.absURL+"/content-plugins/org.ekstep.quiz-1.0/editor/assets/QuizImage.png";
+        var quizImage = EkstepEditor.config.absURL+"/plugins/org.ekstep.quiz-1.0/editor/assets/QuizImage.png";
         fabric.Image.fromURL(quizImage, function(img) {
-          var group = new fabric.Group([img, quizDetails]);
-           instance.editorObj =  group;
+           var count = questionnaire.total_items + '/' + instance.getItmes(questionnaire.items); 
+           var quizDetails = instance.getPropsForEditor(questionnaire.title, count, questionnaire.max_score); 
+           instance.editorObj =  new fabric.Group([img, quizDetails]);
            instance.parent = _parent; 
            instance.postInit();
-        },props);
+        },instance.convertToFabric(instance.attributes));
     },
-    get: function(items, type) {
+    getItmes: function(items, type) {
         // it returns the Unique templateId || media of the questions || length of the question
         var question = [], media = [];
         for (var key in items) {
@@ -99,32 +87,46 @@ EkstepEditor.basePlugin.extend({
             return question.length;
         }
     },
+    getTemplateData: function(templateArray) {
+        // Iterate through the TemplateArray and return the templates
+        var instance = this, templates = [];
+        templateArray.forEach(function(element, index) {
+            if (!_.isNull(element)) {
+                templates.push(element.template);
+                if (!_.isUndefined(element.manifest)) {
+                    instance.addMediatoManifest(element.manifest.media);
+                }
+            }
+        });
+        return templates
+    },
     renderQuiz: function(event, assessmentData) {
+        // assessmentData is the object of config and items
         var instance = this,question = [];
         _.each(assessmentData.items, function(item) {
             if (!_.isUndefined(item.question)) {
-                item.question = instance.parseObject(item.question);
+                item.question = instance.parseItem(item.question);
             }
             question.push(item.question);
         });
         instance.setQuizdata(question, assessmentData.config);
     },
-    setQuizdata: function(question, attributes) {
-        // constuction of the questionnaire
-        var instance = this, questionSets = {}, configItem = {},questionnaire = {},_assessmentData = {};
+    setQuizdata: function(question, config) {
+        // This function will do construction of the questionary Object
+        // config is the configrations of the controller(shuffle,totl_items,title etc.,)
+        var instance = this, questionSets = {}, _assessmentData = {}, controller = {"questionnaire": {}};
         questionSets[question[0].identifier] = question;
-        configItem["items"] = questionSets;
-        configItem["item_sets"] = [{"count": attributes.total_items,"id": question[0].identifier}];
-        questionnaire["questionnaire"] = Object.assign(configItem, attributes);
-        var configData = {__cdata : JSON.stringify({"type": "items","var": "item"})};
-        var dataObj = {__cdata : JSON.stringify(questionnaire)};
+        controller.questionnaire["items"] = questionSets;
+        controller.questionnaire["item_sets"] = [{"count": config.total_items,"id": question[0].identifier}]        
+        controller["questionnaire"] = Object.assign(controller.questionnaire, config);
         instance.setConfig({"type": "items","var": "item"});
-        instance.setData(questionnaire);
-        _assessmentData["data"] = dataObj;
-        _assessmentData["config"] = configData;
+        instance.setData(controller);
+        _assessmentData["data"] = {__cdata : JSON.stringify(controller)};
+        _assessmentData["config"] = {__cdata : JSON.stringify({"type": "items","var": "item"})};
         EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', _assessmentData);
     },
-    parseObject: function(item) {
+    parseItem: function(item) {
+        // this function is restricted to parse the few keys
         $.each(item, function(key, value) {
             if (key === 'options' || key === "lhs_options" || key === 'rhs_options' || key === 'model' || key === 'answer' || key === 'media') {
                 item[key] = !_.isObject(item[key]) ? JSON.parse(item[key]) : item[key];
@@ -133,7 +135,7 @@ EkstepEditor.basePlugin.extend({
         return item;
     },
     addMediatoManifest: function(media) {
-        // it will add the all media to the manifest
+        /*it will add the all media to the manifest*/
         var instance = this;
         if (!_.isUndefined(media)) {
             if (_.isArray(media)) {
@@ -156,8 +158,8 @@ EkstepEditor.basePlugin.extend({
             return data.theme;
         }
     },
-    showProperties: function(qTittle, qCount, maxscore) {
-        // Display the all properties on the editor
+    getPropsForEditor: function(qTittle, qCount, maxscore) {
+       /* Display the all properties(title,count and maxscore) on the editor*/
         var instance = this;
         qTittle = new fabric.Text(qTittle.toUpperCase(), {fontSize: 15, fill:'black',textAlign:'center', top: 32, left: 105} );
         qCount = new fabric.Text(qCount +" Questions,", {fontSize: 12,fill:'black',top: 49,left: 105});
@@ -166,25 +168,25 @@ EkstepEditor.basePlugin.extend({
         return fabricGroup;
     },
     onConfigChange: function(key, value) {
+       /* TODO : value is updating to data object this will be removed later once quiz canvas renderer is got update
+        presentely the quiz canvas rendere all config data is adding to data object so.*/
+
         if (!_.isUndefined(value)) {
-        var ItemLenght =  this.get(this.data.questionnaire.items);    
+        var ItemLenght =  this.getItmes(this.data.questionnaire.items);    
             switch (key) {
                 case 'title':
                     this.config.title = value;
                     this.data.questionnaire.title = value;
-                    // this is to update the fabric text(title) group value.
                     this.editorObj._objects[1]._objects[0].text = value.toUpperCase();
                     break;
                 case 'total_items':
                     this.config.total_items = value;
                     this.data.questionnaire.total_items = value;
-                     // this is to update the fabric text(Question) group value.
                     this.editorObj._objects[1]._objects[1].text = value + "/" + ItemLenght + "Questions,"; 
                     break;
                 case 'max_score':
                     this.config.max_score = value;
                     this.data.questionnaire.max_score = value;
-                     // this is to update the fabric text(max_score) group value.
                     this.editorObj._objects[1]._objects[2].text = value + "Marks"; 
                     break;
                 case 'shuffle':
@@ -201,7 +203,6 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.dispatchEvent('object:modified', {
             target: EkstepEditorAPI.getEditorObject()
         });
-
     },
     getConfig: function() {
         var config = this._super();
@@ -211,7 +212,6 @@ EkstepEditor.basePlugin.extend({
         config.max_score = this.data.questionnaire.max_score;
         config.title = this.data.questionnaire.title;
         return config;
-        
     },
     /**    
     *      
@@ -222,8 +222,8 @@ EkstepEditor.basePlugin.extend({
     openAssessmentBrowser: function(event, callback) {
         var instance = this;
         var callback = function(items, config) {
-            var set = {items: items, config: config};
-            EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':renderQuiz', set);
+            var assessmentData = {items: items, config: config};
+            EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':renderQuiz', assessmentData);
         };
         EkstepEditorAPI.dispatchEvent("org.ekstep.assessmentbrowser:show", callback);
     }
