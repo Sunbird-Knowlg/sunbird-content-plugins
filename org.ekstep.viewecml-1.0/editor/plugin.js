@@ -20,8 +20,10 @@ EkstepEditor.basePlugin.extend({
      *
      */
     initialize: function() {
+        Prism.plugins.NormalizeWhitespace.setDefaults({
+          'break-lines': 80
+        });
         converter = new E2EConverter();
-
         EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.initViewECML, this);
         var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.viewecml-1.0/editor/ECMLbrowser.html';
         setTimeout(function() {
@@ -80,9 +82,12 @@ EkstepEditor.basePlugin.extend({
 
         ctrl.previewLoad = function() {
             var jsondata = EkstepEditor.stageManager.toECML();
-
-            ctrl.contentBody = converter.buildECML(jsondata, true);
-            EkstepEditorAPI.getAngularScope().safeApply();
+            ctrl.contentBody = converter.buildECML(jsondata, true)
+            EkstepEditorAPI.getAngularScope().safeApply(function(){
+                setTimeout(function() {
+                    Prism.highlightElement(EkstepEditorAPI.jQuery("#xmlBody")[0]);
+                }, 100);
+            });
 
             // var iService = new EkstepEditor.iService();
             // iService.http.post('ecml', { data: jsondata }, null,  function(err, resp) {

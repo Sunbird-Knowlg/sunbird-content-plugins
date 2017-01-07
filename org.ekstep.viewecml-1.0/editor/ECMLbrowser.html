@@ -4,7 +4,6 @@
     margin-top: 20px;    
     height: 420px;
 }
-
 </style>
 <div class="ui modal active" style="top: 10% !important">
     <div class="header">
@@ -23,7 +22,7 @@
     </div>
     <div class="content">
         <div class="ui grid ECMLbrowser_content">
-            <pre><code class="xml" id="xmlBody">{{$ctrl.contentBody}}</code></pre>
+            <pre class="line-numbers language-markup" style="width:100%;"><code class="language-markup" id="xmlBody">{{$ctrl.contentBody}}</code></pre>
         </div>
         <div id="hiddenXmlBody" style="display: none;">{{$ctrl.contentBody}}</div>
     </div>
