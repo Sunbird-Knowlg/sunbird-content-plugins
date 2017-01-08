@@ -159,6 +159,7 @@ EkstepEditor.basePlugin.extend({
         props = EkstepEditorAPI._.omitBy(props, EkstepEditorAPI._.isNaN);
         delete props.__text;
         props.text = this.editorObj.text;
+        this.pixelToPercent(props);
         return props;
     },
     /**
