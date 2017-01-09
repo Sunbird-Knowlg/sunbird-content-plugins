@@ -53,14 +53,7 @@ EkstepEditor.basePlugin.extend({
         var props = this.convertToFabric(this.attributes);
         delete props.__text;
         this.editorObj = new fabric.ITextbox(this.attributes.__text, props);
-        var instance = this;
-        EkstepEditorAPI._.forEach(this.event, function (val, key) {
-            if(_.isObject(val.action) && val.action.asset === instance.id){
-                instance.event.splice(key, 1);
-            }else if(_.isArray(val.action) && val.action[0].asset === instance.id){
-                instance.event.splice(key, 1);
-            }
-        })
+        delete this.event;
         this.addEvent({ 'type':'click', 'action' : [{'type':'command', 'command' : 'togglePlay' , 'asset': this.id}]});
         currentInstance = this;
     },
@@ -160,7 +153,7 @@ EkstepEditor.basePlugin.extend({
      * @memberof Htext
      */
     objectUnselected: function(event, data) {
-        fabric.util.removeListener(fabric.document, 'dblclick', this.loadHtml);
+        fabric.util.removeListener(fabric.document, 'dblclick', this.dblClickHandler);
     },
     /**
      * This method is callback for double click event which will call the textEditor to show the ediotor to add or modify text.
@@ -310,6 +303,22 @@ EkstepEditor.basePlugin.extend({
                 }
             });
         }
-    }
+    },
+    getConfigManifest: function () {
+        var config = this._super();
+        EkstepEditorAPI._.remove(config, function (c) {
+            return c.propertyName === 'stroke';
+        })
+        return config;
+    },
+    getCopy: function() {
+       var assetId = this.attributes.audio;
+       var assetMedia = EkstepEditorAPI.getMedia(assetId);
+       var hasAudioOnSameStage = _.find(EkstepEditorAPI.getCurrentStage().children, function(child){
+           return child.id === assetId;
+       });
+       if(_.isUndefined(hasAudioOnSameStage)) EkstepEditorAPI.instantiatePlugin('org.ekstep.audio',{'asset': assetId, 'assetMedia': assetMedia} , EkstepEditorAPI.getCurrentStage());
+       return this._super()
+   }
 });
 //# sourceURL=readalongplugin.js

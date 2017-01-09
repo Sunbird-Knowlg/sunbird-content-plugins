@@ -25,28 +25,20 @@ EkstepEditor.basePlugin.extend({
     * Adds image to stage
     * @memberof image
     */
-    newInstance: function() {
-        if (!this.attributes.x) 
-        {
-            this.attributes.x = 20;
-            this.attributes.y = 20;
-            this.attributes.w = 40;
-            this.attributes.h = 40;
-            this.percentToPixel(this.attributes);
-        }
+    newInstance: function() {                        
         var instance = this;
         var _parent = this.parent;
         this.parent = undefined;
         var props = this.convertToFabric(this.attributes);
-        delete props.width;
-        delete props.height;
+        //delete props.width;
+        //delete props.height;
         var media = this.media[this.attributes.asset];
         media.src = EkstepEditor.mediaManager.getMediaOriginURL(media.src);
         var imageURL = EkstepEditorAPI.globalContext.useProxyForURL ? "image/get/" + encodeURIComponent(media.src) : media.src;
         fabric.Image.fromURL(imageURL, function(img) {
             instance.editorObj = img;
             instance.parent = _parent;
-            instance.editorObj.scaleToWidth(props.w);
+            //instance.editorObj.scaleToWidth(props.w);
             instance.postInit();
         }, props);
     },
@@ -61,7 +53,13 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',
             search_filter: {}, // All composite keys except mediaType
-            callback: function(data) { EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', data) }
+            callback: function(data) { 
+                data.x = 20;
+                data.y = 20;
+                data.w = 50;
+                data.h = 50;
+                EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', data) 
+            }
         });
     },
     /**
