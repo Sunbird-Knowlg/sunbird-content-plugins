@@ -333,7 +333,7 @@ EkstepEditor.basePlugin.extend({
             EkstepEditorAPI.jQuery('#toolbarOptions').css({
                 position: 'absolute',
                 display: 'block',
-                top: topPosition,
+                top: topPosition - 15,
                 left: leftPosition - 5
             })
         }
