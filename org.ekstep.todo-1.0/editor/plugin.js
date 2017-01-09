@@ -9,20 +9,14 @@
  */
 
 EkstepEditor.basePlugin.extend({
-	contentloaded: false,
     initialize: function() {
 		this.initData();
-		EkstepEditorAPI.addEventListener("stage:afterselect", this.controllerCallback, this);
-		EkstepEditorAPI.addEventListener("content:onload", function(){ instance.contentloaded = true}, this);
+		EkstepEditorAPI.addEventListener("stage:select", this.controllerCallback, this);
     },
     initData: function(){
 		var instance = this;
 	},
     controllerCallback: function(event, data) {
-		if(!instance.contentloaded)
-		{
-			return;
-		}
 		ctrl = this;
 		/*TODO*/
 		setTimeout(function(){
