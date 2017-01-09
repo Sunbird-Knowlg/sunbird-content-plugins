@@ -19,6 +19,7 @@ Plugin.extend({
     _maxRepeatIndex:0,
     _roundIndex:0,
     _textPlugin: undefined,
+    _contPattern: undefined,
     initPlugin: function(data) {
         // var a={
         //     type: "command",
@@ -50,12 +51,13 @@ Plugin.extend({
             tempData.data= "gameData";
             this.initController(data);
             this.addTemplates();
-            this.addGameElements();
+            this.addGameElements(data);
             // this.invokeTemplate(data,tempData);
             var controller = this._stage._stageController;
             // var controller = this._stage.getController(model);;
             
             if (controller) {
+                this._contPattern= "data."+ data.id;
                 this._controller = controller;
                 this.resetLevelIndex();
                 this.resetRepeatIndex();
@@ -418,7 +420,7 @@ Plugin.extend({
         }else if(this._controller.quesIndex == 1){
             this._controller.quesIndex = 2;
         }
-        var cInstance= audiManager.getContManager().getControllerInstance("data.gameData");
+        var cInstance= audiManager.getContManager().getControllerInstance(this._contPattern);
         var akshras= this._controller.getModelValue("aksharas");
         var words= this._controller.getModelValue("words");
         var it1;
@@ -676,11 +678,11 @@ Plugin.extend({
         PluginManager.invoke('embed', embedData, this._stage, this._stage, this._theme);
     },
     initController: function(data,contData) {
-
+        console.log("before controllerId:", data);
         var controllerName = "data";
-        var controllerId = "gameData";
+        var controllerId = data.id;
         var stageController = this._theme._controllerMap[controllerId];
-
+        console.log("controllerId" +  controllerId);
         // Check if the controller is already initialized, if yes, skip the init
         var initialized = (stageController != undefined);
         if (!initialized) {
@@ -692,7 +694,7 @@ Plugin.extend({
 
             this._theme.addController(controllerData);
             stageController = this._theme._controllerMap[controllerId];
-            
+            console.log("Controller initialized:", stageController);
         }
 
         if (stageController) {
@@ -701,7 +703,7 @@ Plugin.extend({
             this._stage._stageController.next();
         }
     },
-    addGameElements: function(){
+    addGameElements: function(data){
         var gameStatus={
         "x": 10,
         "y": 0,
@@ -796,7 +798,7 @@ Plugin.extend({
             "embed": {}
         }
         assessGroup.embed["template-name"]= "mtf_assessment_one";
-        assessGroup.embed["var-data"]= "gameData";
+        assessGroup.embed["var-data"]= data.id;
     var assessGroupOne= {
             "id": "assess_group_one",
             "x": 12,
@@ -807,7 +809,7 @@ Plugin.extend({
             "embed": {}
         }
         assessGroupOne.embed["template-name"]= "mtf_assessment_two";
-        assessGroupOne.embed["var-data"]= "gameData";
+        assessGroupOne.embed["var-data"]= data.id;
     var submitBtnGrp= {
             "id": "submit_btn_group",
             "x": 0,

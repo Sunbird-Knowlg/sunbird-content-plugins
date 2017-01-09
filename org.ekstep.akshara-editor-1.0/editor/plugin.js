@@ -1,6 +1,7 @@
 EkstepEditor.basePlugin.extend({
     type: "ak_editor",
     initialize: function() {
+        EkstepEditorAPI.addEventListener("org.ekstep.akshara-editor:showpopup", this.loadHtml, this);
         setTimeout(function() {
             var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.akshara-editor-1.0/editor/aksharaEditorConfig.html';
             var controllerPath = EkstepEditor.config.pluginRepo + '/org.ekstep.akshara-editor-1.0/editor/aksharaeditorapp.js';
@@ -9,10 +10,13 @@ EkstepEditor.basePlugin.extend({
     },
     newInstance: function() {
         delete this.configManifest;
-      
-        var props = this.convertToFabric(this.attributes);
-        var rows = props.rows;
-        var columns = props.columns;
+        var props = this.convertToFabric(this.attributes.attr.__cdata);
+        var att= JSON.parse(props);
+        this.updateAttributes(att);
+        if(this.attributes.frontFaceColor)
+            att.frontFaceColor= this.attributes.frontFaceColor;
+        var rows = att.rows;
+        var columns = att.columns;
         var padding = 5;
         var gridWidth = (500 - (padding * (columns - 1))) / columns;
         var gridHeight = (300 - (padding * (rows - 1))) / rows;
@@ -26,56 +30,34 @@ EkstepEditor.basePlugin.extend({
                     id: UUID(),
                     left: left,
                     top: top,
-                    fill: "#fff",
+                    fill: att.frontFaceColor,
                     width: gridWidth,
                     height: gridHeight
                 });
-                rects.push(rect);
-            }
+                rects.push(rect);            }
         }
 
         this.editorObj = new fabric.Group(rects);
-        console.log(this.editorObj);
-        this.loadHtml(this);
+        currentInstance = this;
     },
 
-    addObjectsToFabrics: function(){
-        var instance = this;
-        console.log("inside add to fabric");
-        if(!EkstepEditorAPI._.isUndefined(this.editorObj) && this.editorObj._objects){     
-            EkstepEditorAPI._.forEachRight(this.editorObj._objects, function(obj, index) {
-                instance.editorObj.remove(obj)
-            })
-        }
-            console.log("New fabric group created:" ,this.attributes);
-            //this.editorObj = new fabric.Group();
-            var props = this.convertToFabric(this.attributes);
-            var rows = props.rows;
-            var columns = props.columns;
-            var padding = 5;
-            var gridWidth = (500 - (padding * (columns - 1))) / columns;
-            var gridHeight = (300 - (padding * (rows - 1))) / rows;
-            var rects = [];
-             for (var y = 0; y < rows; y++) {
-                for (var x = 0; x < columns; x++) {
-                    var left = x * (gridWidth + padding) + 110;
-                    var top = y * (gridHeight + padding) + 52.5;
-                    var rect = new fabric.Rect({
-                        id: UUID(),
-                        left: left,
-                        top: top,
-                        fill: props.fill,
-                        width: gridWidth,
-                        height: gridHeight
-                    });
-                    rects.push(rect);
-                }
-            }
-            this.editorObj.initialize(rects);
-            EkstepEditorAPI.render();
-        console.log("New fabric group initialization:", this.editorObj);
+    updateAttributes: function(att){     
+        this.attributes.x= att.x;
+        this.attributes.y= att.y;
+        this.attributes.w= att.w;
+        this.attributes.h= att.h;
+        if(EkstepEditorAPI._.isUndefined(this.attributes.frontFaceColor))
+            this.attributes.frontFaceColor= att.frontFaceColor;
+        if(EkstepEditorAPI._.isUndefined(this.attributes.backFaceColor))
+            this.attributes.backFaceColor= att.backFaceColor;
+        if(EkstepEditorAPI._.isUndefined(this.attributes.textColor))
+            this.attributes.textColor= att.textColor;
+        if(EkstepEditorAPI._.isUndefined(this.attributes.fixRows))
+            this.attributes.fixRows= att.fixRows;
 
     },
+
+    
 
     /*########## Method to all default media which is required in akshara teaching template ######*/
     addDefaultMedia: function(){
@@ -298,35 +280,16 @@ EkstepEditor.basePlugin.extend({
                 this.attributes.fixRows = value;
                 break;
         }
-        if (key === 'rows' || key === 'columns') {
-            EkstepEditorAPI._.forEachRight(this.editorObj._objects, function(obj, index) {
-                instance.editorObj.remove(obj)
-            })
-            var padding = 5;
-            var gridWidth = (500 - (padding * (instance.attributes.columns - 1))) / instance.attributes.columns;
-            var gridHeight = (300 - (padding * (instance.attributes.rows - 1))) / instance.attributes.rows;
-            var rects = [];
-            for (var y = 0; y < instance.attributes.rows; y++) {
-                for (var x = 0; x < instance.attributes.columns; x++) {
-                    rects.push(new fabric.Rect({
-                        left: x * (gridWidth + padding) + 110,
-                        top: y * (gridHeight + padding) + 52.5,
-                        fill: instance.attributes.fill,
-                        width: gridWidth,
-                        height: gridHeight
-                    }));
-                }
-            }
-            this.editorObj.initialize(rects);
-        }
+        
         EkstepEditorAPI.render();
+        EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
     },
 
     /*########## Method to get the configurations ######*/
     getConfig: function() {
         var config = {};
-        if(this.selectedProperty){
-        config = this.selectedProperty;
+        if(!EkstepEditorAPI._.isUndefined(this.config)){
+            config = this.config;
         }
            config.frontFaceColor = this.attributes.frontFaceColor;
            config.backFaceColor= this.attributes.backFaceColor;

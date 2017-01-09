@@ -3,7 +3,7 @@
 angular.module('aksharaEditorapp', [])
     .controller('aksharaEditorController', ['$scope', '$injector', 'instance', 'attrs', function($scope, $injector, instance, attrs) {
 
-        ctrl = this;
+        var ctrl = this;
         ctrl.isAksharaBrowser = true;
         ctrl.isWordBrowser = false;
         ctrl.isGameLevel = false;
@@ -413,7 +413,7 @@ console.log("selectedProperty" , ctrl.selectedProperty);
                     cols = 3;
                 }
             }
-
+            ctrl.cols= cols;
             instance.attributes.columns = cols;
 
 
@@ -427,13 +427,29 @@ console.log("selectedProperty" , ctrl.selectedProperty);
             ctrl.selectedProperty.gameLevels = ctrl.selectedGameLevels;
             configObj = ctrl.selectedProperty;
             instance.selectedProperty = configObj;
-            instance.addObjectsToFabrics();
+            var configData= {};
+                    configData["config"]= {__cdata : JSON.stringify(instance.selectedProperty)};
+                    configData["attr"]= {__cdata : JSON.stringify({
+                        "rows": 2,
+                        "columns": ctrl.cols,
+                        "fill": "#008000",
+                        "x":10,
+                        "y": 10,
+                        "w": 80,
+                        "h": 80,
+                        "frontFaceColor": "#008000",
+                        "backFaceColor": "#002b80",
+                        "textColor": "#ffffff",
+                        "fixRows": true
+                       
+                    })};
+            EkstepEditorAPI.dispatchEvent("org.ekstep.akshara-editor:create", configData);
+            EkstepEditorAPI.render();
             ctrl.cancel();
         }
 
         /*########## Method to dismiss the modal ######*/
         ctrl.cancel = function() {
-
             $scope.closeThisDialog();
         }
 

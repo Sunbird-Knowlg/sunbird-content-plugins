@@ -19,21 +19,7 @@
             "title": "Grid",
             "iconClass": "pie chart icon",
            "onclick": {
-                    "id": "org.ekstep.akshara-editor:create",
-                    "data": {
-                        "rows": 2,
-                        "columns": 4,
-                        "fill": "#008000",
-                        "x":10,
-                        "y": 10,
-                        "w": 80,
-                        "h": 80,
-                        "frontFaceColor": "#008000",
-                        "backFaceColor": "#002b80",
-                        "textColor": "#ffffff",
-                        "fixRows": true
-                       
-                    }
+                    "id": "org.ekstep.akshara-editor:showpopup"
                 }
         }
 
