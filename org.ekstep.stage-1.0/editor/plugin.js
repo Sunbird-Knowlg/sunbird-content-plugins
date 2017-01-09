@@ -75,7 +75,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.refreshStages();
     },
     modified: function(event, data) {
-        //EkstepEditorAPI.getCurrentStage().updateZIndex(); //moved to object re-order plugin.
+        EkstepEditorAPI.getCurrentStage().updateZIndex(); 
         EkstepEditorAPI.getCurrentStage().setThumbnail();
         EkstepEditorAPI.refreshStages();
         this.enableSave();        
