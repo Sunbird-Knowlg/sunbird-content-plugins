@@ -153,7 +153,7 @@ EkstepEditor.basePlugin.extend({
      * @memberof Htext
      */
     objectUnselected: function(event, data) {
-        fabric.util.removeListener(fabric.document, 'dblclick', this.loadHtml);
+        fabric.util.removeListener(fabric.document, 'dblclick', this.dblClickHandler);
     },
     /**
      * This method is callback for double click event which will call the textEditor to show the ediotor to add or modify text.
