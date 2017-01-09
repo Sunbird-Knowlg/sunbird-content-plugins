@@ -80,6 +80,7 @@ EkstepEditor.basePlugin.extend({
         attr['opacity'] = 0.3;
         attr.stroke = '#663300';
         attr.thickness = 2;
+        attr['z-index'] = 999;
         return attr;
     },
     /**
