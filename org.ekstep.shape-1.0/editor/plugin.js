@@ -69,7 +69,14 @@ EkstepEditor.basePlugin.extend({
                 this.attributes.fill = value;
                 break;
             case 'radius':
+                if (this.attributes.type == 'ellipse') {
+                    this.editorObj.set({ 'w': value * 2 });
+                    this.editorObj.set({ 'h': value * 2 });
+                    this.attributes.w = value * 2;
+                    this.attributes.h = value * 2;
+                }
                 this.editorObj.set({ 'rx': value });
+                this.editorObj.set({ 'ry': value });
                 this.attributes.radius = value;
                 break;
         }
