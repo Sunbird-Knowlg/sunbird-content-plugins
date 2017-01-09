@@ -52,6 +52,7 @@ EkstepEditor.basePlugin.extend({
     newInstance: function() {
         var props = this.convertToFabric(this.attributes);
         delete props.__text;
+        props.editable = false; // added to disable inline editing of exiting content
         this.editorObj = new fabric.ITextbox(this.attributes.__text, props);
         delete this.event;
         this.addEvent({ 'type':'click', 'action' : [{'type':'command', 'command' : 'togglePlay' , 'asset': this.id}]});
