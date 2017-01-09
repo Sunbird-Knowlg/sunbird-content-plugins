@@ -17,7 +17,7 @@
             "type": "icon",
             "toolTip": "Akshara Teaching",
             "title": "Grid",
-            "iconClass": "pie chart icon",
+            "iconClass": "book icon",
            "onclick": {
                     "id": "org.ekstep.akshara-editor:showpopup"
                 }
