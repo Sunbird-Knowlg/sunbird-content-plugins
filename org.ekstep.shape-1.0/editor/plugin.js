@@ -31,7 +31,8 @@ EkstepEditor.basePlugin.extend({
                     "dataType": "input",
                     "valueType": "number",
                     "required": false,
-                    "defaultValue": 64
+                    "defaultValue": 64,
+                    "minimumValue": 0
                 });                
                 this.editorObj = new fabric.Ellipse(props);
                 break;
@@ -44,7 +45,8 @@ EkstepEditor.basePlugin.extend({
                     "dataType": "input",
                     "valueType": "number",
                     "required": false,
-                    "defaultValue": 10
+                    "defaultValue": 10,
+                    "minimumValue": 0
                 });
                 this.editorObj = new fabric.Rect(props);
                 break;
