@@ -11,8 +11,10 @@ EkstepEditor.basePlugin.extend({
         this.props.x = this.props.y += 3;                    
         var props = _.clone(this.props);
         this.percentToPixel(props);     
-        props = this.convertToFabric(props);                                     
-        fabric.Image.fromURL('/app/images/unsupportedplugin.png', function(img) {            
+        props = this.convertToFabric(props);
+        var host = EkstepEditor.config.absURL;
+        var imgSrc = EkstepEditor.config.pluginRepo + "/org.ekstep.unsupported-1.0/assets/unsupportedplugin.png";                                    
+        fabric.Image.fromURL((host + imgSrc), function(img) {            
             instance.editorObj = img;
             instance.parent = _parent;
             instance.postInit();            
