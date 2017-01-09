@@ -53,10 +53,10 @@ EkstepEditor.basePlugin.extend({
         var items = []
             assetArr = [],
             htextArr = [];
-        var evants = EkstepEditorAPI.getCurrentStage().event;
-        EkstepEditorAPI._.forEach(evants, function(event){
+        var events = EkstepEditorAPI.getCurrentStage().event;
+        EkstepEditorAPI._.forEach(events, function(event){
             if(event.type === 'enter'){
-                if(EkstepEditorAPI._.isArray(event)){
+                if(EkstepEditorAPI._.isArray(event.action)){
                     assetArr.push(event.action[0].asset); 
                 }else{
                     assetArr.push(event.action.asset);
