@@ -88,7 +88,7 @@ angular.module('assessmentbrowserapp', [])
             };
             if (ctrl.activityOptions.myQuestions) {
                 ctrl.isMyQuestions = true;
-                data.request.filters.owner = "";
+                data.request.filters.owner = EkstepEditorAPI._.isUndefined(ctrl.context) ? '' : ctrl.context.user.id;
             } else {
                 ctrl.isMyQuestions = false;
             }
