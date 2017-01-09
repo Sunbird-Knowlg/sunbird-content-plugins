@@ -22,7 +22,6 @@ EkstepEditor.basePlugin.extend({
     
     initialize: function() {
         EkstepEditorAPI.addEventListener("colorpicker:state", this.invoke, this);
-        EkstepEditorAPI.addEventListener("colorpicker:update", this.updateColor, this);
     },
     /**
      * The method is used to initiate the colorpicker
@@ -43,6 +42,7 @@ EkstepEditor.basePlugin.extend({
                 showButtons: false,
                 containerClassName: 'awesome',
                 clickoutFiresChange: false,
+                showButtons: true,
                 change: function(color) { 
                     data.callback(data.id, color.toHexString());
                 },
@@ -63,9 +63,9 @@ EkstepEditor.basePlugin.extend({
                 ],
                 maxSelectionSize: 10,
                 hideAfterPaletteSelect:true,
-                // move: function(tinycolor) { 
-                //     data.callback(data.id, tinycolor.toHexString());
-                // },
+                move: function(tinycolor) { 
+                    data.callback(data.id, tinycolor.toHexString());
+                },
             });
 
             EkstepEditorAPI.jQuery("#" + data.id).attr("colorpicker", "added");
