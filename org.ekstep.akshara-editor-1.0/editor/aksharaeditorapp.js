@@ -21,36 +21,36 @@ angular.module('aksharaEditorapp', [])
 
         ctrl.levelMetaData = [{
             "selected": false,
-            "path":"/plugins/org.ekstep.akshara-editor-1.0/assets/level-1.png",
+            "path": "/plugins/org.ekstep.akshara-editor-1.0/assets/level-1.png",
             "level": "Level1",
-            "levelText" : "Level 1 : Audio, Text to Text, Audio, Image.",
+            "levelText": "Level 1 : Audio, Text to Text, Audio, Image.",
             "tiles": {
                 "one": ["audio", "text"],
                 "two": ["text", "image", "audio"]
             }
         }, {
             "selected": false,
-            "path":"/plugins/org.ekstep.akshara-editor-1.0/assets/level-2.png",
+            "path": "/plugins/org.ekstep.akshara-editor-1.0/assets/level-2.png",
             "level": "Level2",
-            "levelText" : "Level 2 : Audio, Text to Audio, Text.",
+            "levelText": "Level 2 : Audio, Text to Audio, Text.",
             "tiles": {
                 "one": ["audio", "text"],
                 "two": ["audio", "text"]
             }
         }, {
             "selected": false,
-            "path":"/plugins/org.ekstep.akshara-editor-1.0/assets/level-3.png",
+            "path": "/plugins/org.ekstep.akshara-editor-1.0/assets/level-3.png",
             "level": "Level3",
-            "levelText" : "Level 3 : Audio, Text to Text.",
+            "levelText": "Level 3 : Audio, Text to Text.",
             "tiles": {
                 "one": ["text", "audio"],
                 "two": ["text"]
             }
         }, {
             "selected": false,
-            "path":"/plugins/org.ekstep.akshara-editor-1.0/assets/level-4.png",
+            "path": "/plugins/org.ekstep.akshara-editor-1.0/assets/level-4.png",
             "level": "Level4",
-            "levelText" : "Level 4 : Text to Audio.",
+            "levelText": "Level 4 : Text to Audio.",
             "tiles": {
                 "one": ["text"],
                 "two": ["audio"]
@@ -85,29 +85,63 @@ angular.module('aksharaEditorapp', [])
         };
 
         /*########## Update words array by adding akashara to each object ######*/
-        ctrl.updateWords = function(words, ak) {
-            for (var i = 0; i < words.length; i++) {
+        ctrl.updateWords = function(strtwords, contwords, ak) {
+            var obj = {};
+            obj.startwords = [];
+            obj.containswords = [];
+            obj.akshara = ak;
+            for (var i = 0; i < strtwords.length; i++) {
+                strtwords[i].akshara = ak;
+                strtwords[i].isStartWith = true;
+                strtwords[i].isSelected = false;
+                obj.startwords.push(strtwords[i]);
+            }
+            for (var i = 0; i < contwords.length; i++) {
+                contwords[i].akshara = ak;
+                contwords[i].isStartWith = false;
+                contwords[i].isSelected = false;
+                obj.containswords.push(contwords[i]);
+            }
+            ctrl.words.push(obj);
+
+            /*for (var i = 0; i < words.length; i++) {
                 words[i].akshara = ak;
                 ctrl.words.push(words[i]);
-            }
+            }*/
         }
 
         /*########## Word Callback method which will be called after Words api call ######*/
-        function wordAssetCb(err, res, varna) {
+        function wordAssetCb(err, startRes, containsRes, varna) {
             ctrl.isAksharaBrowser = false;
             ctrl.isWordBrowser = true;
             ctrl.isGameLevel = false;
-
-            var words = [];
-            if (res && res.data.result.words) {
+            // var words = [];
+            var startwords = [];
+            var containswords = [];
+            /*if (res && res.data.result.words) {
                 ctrl.loadingImage = false;
 
                 words = res.data.result.words;
             } else {
                 words = [];
+            };*/
+            if (startRes && startRes.data.result.words) {
+                ctrl.loadingImage = false;
+
+                startwords = startRes.data.result.words;
+            } else {
+                startwords = [];
             };
-            if (words.length)
-                ctrl.updateWords(words, varna);
+            if (containsRes && containsRes.data && containsRes.data.result.words) {
+                ctrl.loadingImage = false;
+
+                containswords = containsRes.data.result.words;
+            } else {
+                containswords = [];
+            };
+            if (startwords.length || containswords.length)
+                ctrl.updateWords(startwords, containswords, varna);
+            // ctrl.updateWords(words, varna);
             else {
                 ctrl.selectedAksharas = EkstepEditorAPI._.reject(ctrl.selectedAksharas, function(o) {
                     return o.varna == varna;
@@ -115,30 +149,42 @@ angular.module('aksharaEditorapp', [])
                 ctrl.updateSelectedAksharas();
             }
             var obj = {};
-            ctrl.aksharaWords.words.push(obj);
+            //  ctrl.aksharaWords.words.push(obj);
             EkstepEditorAPI.getAngularScope().safeApply();
         };
 
         /*############# Method to get selected words ###############*/
 
-        ctrl.getSelectedAksharas = function(){
+        ctrl.getSelectedAksharas = function() {
             ctrl.selectedAksharas = [];
             for (var i = 0; i < ctrl.aksharas.length; i++) {
-                if(ctrl.isSelected[ctrl.aksharas[i].identifier] == 'akshara-selected'){
+                if (ctrl.isSelected[ctrl.aksharas[i].identifier] == 'akshara-selected') {
                     ctrl.selectedAksharas.push(ctrl.aksharas[i]);
                 }
             }
             console.log("selectedAksharas", ctrl.selectedAksharas);
         }
 
-           /*############# Method to get selected aksharas ###############*/
+        /*############# Method to get selected aksharas ###############*/
 
-        ctrl.getSelectedWords = function(){
+        ctrl.getSelectedWords = function() {
             ctrl.selectedWords = [];
             for (var i = 0; i < ctrl.words.length; i++) {
-                if(ctrl.isSelected[ctrl.words[i].identifier] == 'word-selected'){
+
+                /*if(ctrl.isSelected[ctrl.words[i].identifier] == 'word-selected'){
                     ctrl.selectedWords.push(ctrl.words[i]);
+                }*/
+                for (var j = 0; j < ctrl.words[i].startwords.length; j++) {
+                    if (ctrl.words[i].startwords[j].isSelected) {
+                        ctrl.selectedWords.push(ctrl.words[i].startwords[j]);
+                    }
                 }
+                for (var j = 0; j < ctrl.words[i].containswords.length; j++) {
+                    if (ctrl.words[i].containswords[j].isSelected) {
+                        ctrl.selectedWords.push(ctrl.words[i].containswords[j]);
+                    }
+                }
+
             }
             console.log("selectedWords", ctrl.selectedWords);
         }
@@ -147,11 +193,10 @@ angular.module('aksharaEditorapp', [])
         /*########## Method to prepare proper query object and making Words api call ######*/
         ctrl.getWords = function() {
             instance.aksharas = ctrl.aksharas;
-            ctrl.aksharaWords = {};
-            ctrl.aksharaWords.words = [];
+            ctrl.aksharaWords = [];
             ctrl.words = [];
             ctrl.akSelected;
-            
+
             ctrl.updateSelectedAksharas();
             ctrl.selectedProperty.repetition = ctrl.noOfRepetition;
             EkstepEditorAPI._.each(ctrl.selectedAksharas, function(obj) {
@@ -177,13 +222,14 @@ angular.module('aksharaEditorapp', [])
 
         /*########## Method to update selected words array as user select and unselect the words in word browser ######*/
         ctrl.toggleWordSelection = function(identifier, word) {
-            if (ctrl.isSelected[identifier] == 'word-selected') {
+           /* if (ctrl.isSelected[identifier] == 'word-selected') {
                 ctrl.isSelected[identifier] = "";
-               // ctrl.selectedWords.splice(word, 1);
+                // ctrl.selectedWords.splice(word, 1);
             } else {
                 ctrl.isSelected[identifier] = 'word-selected';
-               // ctrl.selectedWords.push(word);
-            }
+                // ctrl.selectedWords.push(word);
+            }*/
+            word.isSelected = !word.isSelected;
             ctrl.getSelectedWords();
 
         };
@@ -192,10 +238,10 @@ angular.module('aksharaEditorapp', [])
         ctrl.toggleAksharaSelection = function(identifier, akshara) {
             if (ctrl.isSelected[identifier] == 'akshara-selected') {
                 ctrl.isSelected[identifier] = "";
-              //  ctrl.selectedAksharas.splice(akshara, 1);
+                //  ctrl.selectedAksharas.splice(akshara, 1);
             } else {
                 ctrl.isSelected[identifier] = 'akshara-selected';
-              //  ctrl.selectedAksharas.push(akshara);
+                //  ctrl.selectedAksharas.push(akshara);
             }
             ctrl.getSelectedAksharas();
         };
@@ -209,7 +255,7 @@ angular.module('aksharaEditorapp', [])
             for (var i = 0; i < ctrl.selectedProperty.aksharas.length; i++) {
                 var ak = ctrl.selectedProperty.aksharas[i].text;
                 if (!angular.isUndefined(ctrl.selectedProperty.words[ak])) {
-                    if (ctrl.selectedProperty.words[ak].one.length < ctrl.selectedProperty.repetition) {
+                    if ((ctrl.selectedProperty.words[ak].one.length) < ctrl.selectedProperty.repetition) {
                         counter++;
                     }
                 } else {
@@ -217,6 +263,8 @@ angular.module('aksharaEditorapp', [])
                 }
 
             }
+console.log("selectedProperty" , ctrl.selectedProperty);
+
             if (counter > 0) {
                 ctrl.lessWordSelected = true;
             } else {
@@ -295,25 +343,33 @@ angular.module('aksharaEditorapp', [])
             ctrl.selectedProperty.words = {};
             var count = 1;
             angular.forEach(ctrl.selectedWords, function(value, key) {
-                var word = {};
-                word.text = value.lemma;
-                word.audioSrc = value.pronunciations != undefined && value.pronunciations[0] != undefined ? value.pronunciations[0] : "";
-                word.imageSrc = value.pictures != undefined && value.pictures[0] != undefined ? value.pictures[0] : "";
-                word.id = count;
-                word.imageAsset = value.identifier + "_image" + count;
-                word.audioAsset = value.identifier + "_audio" + count;
-                count++;
-                if (EkstepEditorAPI._.isUndefined(ctrl.selectedProperty.words[value.akshara])) {
-                    var obj = {};
-                    obj.one = [];
-                    obj.two = [];
-                    obj.one.push(word);
-                    ctrl.selectedProperty.words[value.akshara] = obj;
-                } else {
-                    ctrl.selectedProperty.words[value.akshara].one.push(word);
-                }
-
-            });
+                    var word = {};
+                    word.text = value.lemma;
+                    word.audioSrc = value.pronunciations != undefined && value.pronunciations[0] != undefined ? value.pronunciations[0] : "";
+                    word.imageSrc = value.pictures != undefined && value.pictures[0] != undefined ? value.pictures[0] : "";
+                    word.id = count;
+                    word.imageAsset = value.identifier + "_image" + count;
+                    word.audioAsset = value.identifier + "_audio" + count;
+                    count++;
+                    if (EkstepEditorAPI._.isUndefined(ctrl.selectedProperty.words[value.akshara])) {
+                        var obj = {};
+                        obj.one = [];
+                        obj.two = [];
+                        if(value.isStartWith){
+                            obj.one.push(word);
+                        }else{
+                            obj.two.push(word);
+                        }
+                        ctrl.selectedProperty.words[value.akshara] = obj;
+                    } else {
+                        if(value.isStartWith){
+                            ctrl.selectedProperty.words[value.akshara].one.push(word);
+                        }else{
+                            ctrl.selectedProperty.words[value.akshara].two.push(word);
+                        }
+                        
+                    }
+                })
         }
 
 
@@ -366,13 +422,13 @@ angular.module('aksharaEditorapp', [])
 
         /*########## Method to add content to stage ######*/
         ctrl.addtoLesson = function() {
-                var configObj = {};
-                ctrl.updateGamelevel();
-                ctrl.selectedProperty.gameLevels = ctrl.selectedGameLevels;
-                configObj = ctrl.selectedProperty;
-                instance.selectedProperty = configObj;
-                instance.addObjectsToFabrics();
-                ctrl.cancel();
+            var configObj = {};
+            ctrl.updateGamelevel();
+            ctrl.selectedProperty.gameLevels = ctrl.selectedGameLevels;
+            configObj = ctrl.selectedProperty;
+            instance.selectedProperty = configObj;
+            instance.addObjectsToFabrics();
+            ctrl.cancel();
         }
 
         /*########## Method to dismiss the modal ######*/
@@ -385,13 +441,13 @@ angular.module('aksharaEditorapp', [])
 
         /*################## Method to select game levels ##########*/
         ctrl.addGamelevel = function(gameLevelObj) {
-            if(gameLevelObj.selected){
+            if (gameLevelObj.selected) {
                 ctrl.selectedLevelPath = "";
                 ctrl.selectedLevelText = "";
-            }else{
+            } else {
                 ctrl.selectedLevelPath = gameLevelObj.path;
                 ctrl.selectedLevelText = gameLevelObj.levelText;
-                
+
             }
             for (var i = 0; i < ctrl.levelMetaData.length; i++) {
                 if (ctrl.levelMetaData[i].level == gameLevelObj.level) {

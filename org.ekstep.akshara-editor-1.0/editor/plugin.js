@@ -254,13 +254,17 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI._.isUndefined(searchText) ? null : requestObj.request.filters = searchText;
 
         iservice.http.post(EkstepEditor.config.baseURL + '/api/language/v2/language/search', requestObj, requestHeaders, function(err,res){
-            cb(err,res,varna);
-                /*var startRes = res;
-                var requestObj
+            //cb(err,res,varna);
+            console.log("---------------------lemma--------------------");
+            console.log(requestObj);
+                var startRes = res;
+                requestObj.request.filters.lemma.value = requestObj.request.filters.lemma.startsWith;
+                delete requestObj.request.filters.lemma.startsWith;
                 iservice.http.post(EkstepEditor.config.baseURL + '/api/language/v2/language/search', requestObj, requestHeaders, function(err,res){
-                    var conRes = res;
+                  // var conRes = res;
+                    var conRes = {};
                     cb(err,startRes,conRes,varna);
-                });*/
+                });
         });
 
     },
