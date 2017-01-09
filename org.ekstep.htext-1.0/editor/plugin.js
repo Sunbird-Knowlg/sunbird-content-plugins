@@ -64,22 +64,22 @@ EkstepEditor.basePlugin.extend({
      *   @memberof Htext
      */
     loadHtml: function() {
-        var instance = this;
+        currentInstance = this;
         EkstepEditorAPI.getService('popup').open({
             template: 'htext',
             controller: 'readalongcontroller',
             controllerAs: '$ctrl',
             resolve: {
                 'instance': function() {
-                    return instance;
+                    return currentInstance;
                 }
             },
             width: 900,
             showClose: false,
             className: 'ngdialog-theme-plain'
         }, function() {
-            if(!EkstepEditorAPI._.isUndefined(instance.editorObj) && !instance.editorObj.__text) {
-                instance.editorObj.remove();
+            if(!EkstepEditorAPI._.isUndefined(currentInstance.editorObj) && !currentInstance.editorObj.__text) {
+                currentInstance.editorObj.remove();
                 EkstepEditorAPI.render();
             }
         });
@@ -138,6 +138,7 @@ EkstepEditor.basePlugin.extend({
      * @memberof Htext
      */
     selected: function(instance) {
+        currentInstance = EkstepEditorAPI.getCurrentObject();
         fabric.util.addListener(fabric.document, 'dblclick', this.dblClickHandler);
     },
     /**
