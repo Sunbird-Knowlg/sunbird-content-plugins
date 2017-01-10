@@ -103,7 +103,6 @@ Plugin.extend({
         var instance = this;
         this._self.on('click', function(event) { 
             instance._parent.flipTile(instance);
-            console.log("clicked tile :", instance);
             var data = {
                 type: event.type,
                 x: event.stageX,
@@ -204,8 +203,6 @@ Plugin.extend({
             }
         }
         d.fontsize= fontsize;
-        console.log("font size:"+ fontsize);
-        console.log("inside renderText : ",data );
         PluginManager.invoke('text', d, this, this._stage, this._theme);
     },
     addTileIcon: function(){
