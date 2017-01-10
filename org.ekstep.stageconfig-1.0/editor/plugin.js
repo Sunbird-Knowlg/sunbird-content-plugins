@@ -4,7 +4,7 @@ EkstepEditor.basePlugin.extend({
     scope: EkstepEditorAPI.getAngularScope(),
     initialize: function() {
         EkstepEditorAPI.addEventListener(this.manifest.id + ":addcomponent", this.register, this);
-        EkstepEditorAPI.addEventListener("stage:afterselect", this.showComponents, this);
+        EkstepEditorAPI.addEventListener("stage:select", this.showComponents, this);
         EkstepEditorAPI.addEventListener(this.manifest.id + ":remove", this.removeAudio, this);
     },
     register: function(event, data) {
@@ -22,8 +22,11 @@ EkstepEditor.basePlugin.extend({
         });
     },
     showComponents: function() {
+        var instance = this;
         this.hideAll();
-        this.showAll();
+        setTimeout(function(){
+            instance.showAll();
+        },500)
         //FIXME: Find a proper place to update currentStage
         var instance = this;
         instance.scope.safeApply(function() {
