@@ -849,7 +849,7 @@ Plugin.extend({
               "w": 100,
               "h": 10,
               "font": "Verdana",
-              "fontsize": 50,
+              "fontsize": 100,
               "align": "center",
               "color": "#4c4c4c",
               "model": "data.question",
@@ -921,7 +921,7 @@ Plugin.extend({
                     "w": 100,
                     "h": 100,
                     "font": "Verdana",
-                    "fontsize": 200,
+                    "fontsize": 400,
                     "align": "center",
                     "color": "#000",
                     "model": "option.value.text",
@@ -939,7 +939,7 @@ Plugin.extend({
               "w": 100,
               "h": 10,
               "font": "Verdana",
-              "fontsize": 50,
+              "fontsize": 100,
               "align": "center",
               "color": "#4c4c4c",
               "model": "data.question",
@@ -1003,7 +1003,7 @@ Plugin.extend({
                     "w": 100,
                     "h": 100,
                     "font": "Verdana",
-                    "fontsize": "200",
+                    "fontsize": 400,
                     "align": "center",
                     "color": "#000",
                     "model": "option.value.text",
@@ -1030,4 +1030,3 @@ Plugin.extend({
 
     }
 });
-
