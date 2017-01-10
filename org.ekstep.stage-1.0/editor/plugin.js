@@ -42,7 +42,9 @@ EkstepEditor.basePlugin.extend({
         this.canvas.setActiveObject(plugin.editorObj);
         this.canvas.trigger('object:selected', { target: plugin.editorObj });
         this.setThumbnail();
-        EkstepEditorAPI.dispatchEvent('object:modified', { id: plugin.id });
+        if(!EkstepEditor.stageManager.contentLoading) {
+            EkstepEditorAPI.dispatchEvent('object:modified', { id: plugin.id });
+        }
     }
         this.enableSave();        
     },
@@ -67,7 +69,9 @@ EkstepEditor.basePlugin.extend({
         });
     },
     render: function(canvas) {
-        EkstepEditorAPI._.forEach(EkstepEditorAPI._.sortBy(this.children, [function(o) { return o.getAttribute('z-index'); }]), function(plugin) {
+        canvas.clear();
+        this.children = EkstepEditorAPI._.sortBy(this.children, [function(o) { return o.getAttribute('z-index'); }]);
+        EkstepEditorAPI._.forEach(this.children, function(plugin) {
             plugin.render(canvas);
         });
         canvas.renderAll();
