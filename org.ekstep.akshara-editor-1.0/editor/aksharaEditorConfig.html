@@ -270,7 +270,8 @@
                         <div id="div1">
                             <div ng-repeat="levelData in $ctrl.levelMetaData track by $index">
                                 <div class="dragDiv" data-id="{{levelData.level}}" x-lvl-draggable="true" x-lvl-drop-target="true" x-on-drop="$ctrl.onLevelDragDrop(dragEl, dropEl)">{{levelData.level}}
-                                    <input type="checkbox" name="" ng-click="$ctrl.addGamelevel(levelData)" />
+                                    <input type="checkbox" name="" ng-model="levelData.selected" ng-click="$ctrl.addGamelevel(levelData)" /> 
+                                   
                                 </div>
                             </div>
                         </div>
