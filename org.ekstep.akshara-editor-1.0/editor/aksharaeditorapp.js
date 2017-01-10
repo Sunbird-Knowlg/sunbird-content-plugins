@@ -90,6 +90,12 @@ angular.module('aksharaEditorapp', [])
             obj.startwords = [];
             obj.containswords = [];
             obj.akshara = ak;
+            obj.isLessWords  = false;
+            
+            if(strtwords.length < ctrl.noOfRepetition){
+                console.log("less word");
+               obj.isLessWords = true;
+            }
             for (var i = 0; i < strtwords.length; i++) {
                 strtwords[i].akshara = ak;
                 strtwords[i].isStartWith = true;

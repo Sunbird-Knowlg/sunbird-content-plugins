@@ -55,6 +55,9 @@
     .dragDiv {
         margin: 20px;
     }
+    .error-msg{
+        color: red;
+    }
     </style>
     <div class="ui modal large active" style="top: 10% !important;">
         <div class="content">
@@ -111,7 +114,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row" style="height: 284px; overflow-y: scroll;">
+                        <div class="row" style="height: 400px; overflow-y: scroll; padding-top:20px;">
                             <div class="ui large divided items" ng-show="!$ctrl.isFiltersShown">
                                 <div class="words-list select" ng-repeat="akshara in $ctrl.aksharas">
                                     <div class="panel ">
@@ -156,12 +159,12 @@
             <div ng-show="$ctrl.isWordBrowser">
                 <div class="row">
                     <div class="ui column horizontally padded grid">
-                        <span style="color: red" ng-show="$ctrl.lessWordSelected">Selected words per akshara should be more than  {{$ctrl.selectedProperty.repetition}}</span>
+                        <span class="error-msg" ng-show="$ctrl.lessWordSelected">Selected words per akshara should be more than  {{$ctrl.selectedProperty.repetition}}</span>
                     </div>
                 </div>
                 <div class="ui two column horizontally padded grid">
                     <div class="eight wide column">
-                        <div class="row" style="height: 284px; overflow-y: scroll;">
+                        <div class="row" style="height: 500px; overflow-y: scroll;">
                             <div class="ui large divided items" ng-show="!$ctrl.isFiltersShown">
                                 <div class="words-div select" ng-repeat="word in $ctrl.words">
                                     <!--  <div class="panel ">
@@ -192,7 +195,8 @@
                                             <h1>{{word.akshara}}</h1>
                                         </div>
                                         <div class="ten wide column">
-                                        <div class="row">
+                                            <div class="row" style="width: 100%" >
+                                            <div ng-show="word.isLessWords"><span class="error-msg">Not enough no of words present for this akshara</span></div>
                                             <div class="words-list" ng-repeat="stWord in word.startwords">
                                                 <div class="panel ">
                                                     <div class="panel-heading ">
