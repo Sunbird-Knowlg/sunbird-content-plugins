@@ -21,7 +21,7 @@ angular.module('aksharaEditorapp', [])
 
         ctrl.levelMetaData = [{
             "selected": false,
-            "path": "/plugins/org.ekstep.akshara-editor-1.0/assets/level-1.png",
+            "path": "/content-plugins/org.ekstep.akshara-editor-1.0/assets/level-1.png",
             "level": "Level1",
             "levelText": "Level 1 : Audio, Text to Text, Audio, Image.",
             "tiles": {
@@ -30,7 +30,7 @@ angular.module('aksharaEditorapp', [])
             }
         }, {
             "selected": false,
-            "path": "/plugins/org.ekstep.akshara-editor-1.0/assets/level-2.png",
+            "path": "/content-plugins/org.ekstep.akshara-editor-1.0/assets/level-2.png",
             "level": "Level2",
             "levelText": "Level 2 : Audio, Text to Audio, Text.",
             "tiles": {
@@ -39,7 +39,7 @@ angular.module('aksharaEditorapp', [])
             }
         }, {
             "selected": false,
-            "path": "/plugins/org.ekstep.akshara-editor-1.0/assets/level-3.png",
+            "path": "/content-plugins/org.ekstep.akshara-editor-1.0/assets/level-3.png",
             "level": "Level3",
             "levelText": "Level 3 : Audio, Text to Text.",
             "tiles": {
@@ -48,7 +48,7 @@ angular.module('aksharaEditorapp', [])
             }
         }, {
             "selected": false,
-            "path": "/plugins/org.ekstep.akshara-editor-1.0/assets/level-4.png",
+            "path": "/content-plugins/org.ekstep.akshara-editor-1.0/assets/level-4.png",
             "level": "Level4",
             "levelText": "Level 4 : Text to Audio.",
             "tiles": {
