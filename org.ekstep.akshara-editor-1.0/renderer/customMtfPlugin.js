@@ -99,7 +99,7 @@ Plugin.extend({
                     //  index.push(opt.index);
                     // });
                     var options = item.rhs_options;
-                    console.log("options", options);
+                    // console.log("options", options);
                     if (_.isArray(options)) {
                         _.each(options ,function(opt) {
 
