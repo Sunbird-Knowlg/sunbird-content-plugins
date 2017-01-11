@@ -45,7 +45,6 @@
     
     #div1 {
         float: left;
-        width: 200px;
         margin: 10px;
         padding: 10px;
         border: solid 2px;
@@ -55,7 +54,8 @@
     .dragDiv {
         margin: 20px;
     }
-    .error-msg{
+    
+    .error-msg {
         color: red;
     }
     </style>
@@ -107,22 +107,22 @@
                                         <div class="ui label">Language</div>
                                         <select class="ui fluid dropdown " ng-model="$ctrl.languageSelected" ng-options="lang.code as lang.name for lang in $ctrl.language" ng-change="$ctrl.searchAksharas($ctrl.languageSelected)">
                                             <option value="">
-                                                All
+                                                Select Language
                                             </option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="row" style="height: 400px; overflow-y: scroll; padding-top:20px;">
+                        <div class="row" style="height: 50vh; overflow-y: scroll; padding-top:20px;">
                             <div class="ui large divided items" ng-show="!$ctrl.isFiltersShown">
                                 <div class="words-list select" ng-repeat="akshara in $ctrl.aksharas">
                                     <div class="panel ">
-                                        <div class="panel-heading ">
+                                        <div class="panel-heading " ng-click="$ctrl.toggleAksharaSelection(akshara.identifier, akshara) ">
                                             <h4>{{akshara.varna}}</h4>
                                             <span>
                                <i class="fa pull-right fa-lg akshara-select " aria-hidden="true "
-                                ng-class="$ctrl.isSelected[akshara.identifier] ? 'fa-check-square-o' : 'fa-square-o' " ng-click="$ctrl.toggleAksharaSelection(akshara.identifier, akshara) ">
+                                ng-class="$ctrl.isSelected[akshara.identifier] ? 'fa-check-square-o' : 'fa-square-o' " >
                              
                                 </i>
                                 </span>
@@ -157,14 +157,14 @@
                 </div>
             </div>
             <div ng-show="$ctrl.isWordBrowser">
-                <div class="row">
+                <div class="row" style="margin-top: 10px;">
                     <div class="ui column horizontally padded grid">
-                        <span class="error-msg" ng-show="$ctrl.lessWordSelected">Selected words per akshara should be more than  {{$ctrl.selectedProperty.repetition}}</span>
+                        <span class="error-msg" ng-show="$ctrl.lessWordSelected">Selected words per akshara should be atleast {{$ctrl.selectedProperty.repetition}}</span>
                     </div>
                 </div>
-                <div class="ui two column horizontally padded grid">
+                <div class="ui two column horizontally padded grid" style="margin-top: 10px;">
                     <div class="eight wide column">
-                        <div class="row" style="height: 500px; overflow-y: scroll;">
+                        <div class="row" style="height: 60vh; overflow-y: scroll;">
                             <div class="ui large divided items" ng-show="!$ctrl.isFiltersShown">
                                 <div class="words-div select" ng-repeat="word in $ctrl.words">
                                     <!--  <div class="panel ">
@@ -195,59 +195,59 @@
                                             <h1>{{word.akshara}}</h1>
                                         </div>
                                         <div class="ten wide column">
-                                            <div class="row" style="width: 100%" >
-                                            <div ng-show="word.isLessWords"><span class="error-msg">Not enough no of words present for this akshara</span></div>
-                                            <div class="words-list" ng-repeat="stWord in word.startwords">
-                                                <div class="panel ">
-                                                    <div class="panel-heading ">
-                                                        <h4>{{stWord.lemma}}</h4>
-                                                        <span>
+                                            <div class="row">
+                                                <div ng-show="word.isLessWords"><span class="error-msg">Not enough no of words present for this akshara</span></div>
+                                                <div class="words-list" ng-repeat="stWord in word.startwords">
+                                                    <div class="panel ">
+                                                        <div class="panel-heading " ng-click="$ctrl.toggleWordSelection(stWord.identifier, stWord) ">
+                                                            <h4>{{stWord.lemma}}</h4>
+                                                            <span>
                                                      <i class="fa pull-right fa-lg akshara-select " aria-hidden="true "
-                                                     ng-class="stWord.isSelected ? 'fa-check-square-o' : 'fa-square-o' " ng-click="$ctrl.toggleWordSelection(stWord.identifier, stWord) ">
+                                                     ng-class="stWord.isSelected ? 'fa-check-square-o' : 'fa-square-o' " >
                                                       </i>
                                                 </span>
-                                                        <div class="info " ng-if="stWord.pronunciations.length">
-                                                            <span class="audio-player ">
+                                                            <div class="info " ng-if="stWord.pronunciations.length">
+                                                                <span class="audio-player ">
                                                     <audio controls="controls " >
                                                     <source ng-src="{{stWord.pronunciations[0] | trustUrl}} "/>
                                                     </audio>
                                                     </span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="panel-body ">
-                                                        <span class="pull-left " ng-if="stWord.pos.length ">
+                                                        <div class="panel-body ">
+                                                            <span class="pull-left " ng-if="stWord.pos.length ">
                                                          {{stWord.pos[0]}}
                                                         </span>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                           </div> 
-                                           <div class="row">
-                                            <div class="words-list" ng-repeat=" cntWord in word.containswords">
-                                                <div class="panel ">
-                                                    <div class="panel-heading ">
-                                                        <h4>{{cntWord.lemma}}</h4>
-                                                        <span>
+                                            <div class="row">
+                                                <div class="words-list" ng-repeat=" cntWord in word.containswords">
+                                                    <div class="panel ">
+                                                        <div class="panel-heading ">
+                                                            <h4>{{cntWord.lemma}}</h4>
+                                                            <span>
                                                    <i class="fa pull-right fa-lg akshara-select " aria-hidden="true "
                                                     ng-class="cntWord.isSelected ? 'fa-check-square-o' : 'fa-square-o' " ng-click="$ctrl.toggleWordSelection(cntWord.identifier, cntWord) ">
                                                  
                                                     </i>
                                                 </span>
-                                                        <div class="info " ng-if="cntWord.pronunciations.length">
-                                                            <span class="audio-player ">
+                                                            <div class="info " ng-if="cntWord.pronunciations.length">
+                                                                <span class="audio-player ">
                                                     <audio controls="controls">
                                                     <source ng-src="{{cntWord.pronunciations[0] | trustUrl}} "/>
                                                     </audio>
                                                     </span>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="panel-body ">
-                                                        <span class="pull-left " ng-if="cntWord.pos.length ">
+                                                        <div class="panel-body ">
+                                                            <span class="pull-left " ng-if="cntWord.pos.length ">
                                                             {{cntWord.pos[0]}}
                                                         </span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
                                             </div>
                                         </div>
                                     </div>
@@ -266,17 +266,23 @@
             </div>
             <div ng-show="$ctrl.isGameLevel">
                 <div class="ui two column horizontally padded grid">
-                    <div class="four wide column">
+                    <div class="five wide column">
                         <div id="div1">
                             <div ng-repeat="levelData in $ctrl.levelMetaData track by $index">
-                                <div class="dragDiv" data-id="{{levelData.level}}" x-lvl-draggable="true" x-lvl-drop-target="true" x-on-drop="$ctrl.onLevelDragDrop(dragEl, dropEl)">{{levelData.level}}
+                                <div class="dragDiv" data-id="{{levelData.level}}" x-lvl-draggable="true" x-lvl-drop-target="true" x-on-drop="$ctrl.onLevelDragDrop(dragEl, dropEl)">
+                                
+                                    <!-- <div class="ui checkbox" >
+                                        <label>{{levelData.levelText}}</label>
+                                        <input type="checkbox" name="" ng-model="levelData.selected">
+                                    </div> -->
                                     <input type="checkbox" name="" ng-model="levelData.selected" ng-click="$ctrl.addGamelevel(levelData)" /> 
-                                   
+                                    {{levelData.levelText}}
+                                    
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="eight wide column right floated">
+                    <div class="seven wide column right floated">
                         <div>
                             <img src="{{$ctrl.selectedLevelPath}}" style="max-width: 350px; padding-left: 20px;">
                         </div>

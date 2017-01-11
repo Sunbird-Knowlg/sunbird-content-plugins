@@ -137,7 +137,6 @@ EkstepEditor.basePlugin.extend({
         var ins = this;
         
         EkstepEditorAPI._.forEach(defaultMediaAssests, function(defaultMedia) {
-            console.log(defaultMedia);
         ins.addMedia(defaultMedia);
             });
 
@@ -237,8 +236,6 @@ EkstepEditor.basePlugin.extend({
 
         iservice.http.post(EkstepEditor.config.baseURL + '/api/language/v2/language/search', requestObj, requestHeaders, function(err,res){
             //cb(err,res,varna);
-            console.log("---------------------lemma--------------------");
-            console.log(requestObj);
                 var startRes = res;
                 requestObj.request.filters.lemma.value = requestObj.request.filters.lemma.startsWith;
                 delete requestObj.request.filters.lemma.startsWith;
