@@ -93,7 +93,6 @@ angular.module('aksharaEditorapp', [])
             obj.isLessWords  = false;
 
             if(strtwords.length < ctrl.noOfRepetition){
-                console.log("less word");
                obj.isLessWords = true;
             }
             for (var i = 0; i < strtwords.length; i++) {
@@ -168,7 +167,6 @@ angular.module('aksharaEditorapp', [])
                     ctrl.selectedAksharas.push(ctrl.aksharas[i]);
                 }
             }
-            console.log("selectedAksharas", ctrl.selectedAksharas);
         }
 
         /*############# Method to get selected aksharas ###############*/
@@ -192,7 +190,6 @@ angular.module('aksharaEditorapp', [])
                 }
 
             }
-            console.log("selectedWords", ctrl.selectedWords);
         }
 
 
@@ -269,7 +266,6 @@ angular.module('aksharaEditorapp', [])
                 }
 
             }
-console.log("selectedProperty" , ctrl.selectedProperty);
 
             if (counter > 0) {
                 ctrl.lessWordSelected = true;
