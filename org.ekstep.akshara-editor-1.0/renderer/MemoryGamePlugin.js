@@ -51,7 +51,7 @@ Plugin.extend({
             tempData.data= "gameData";
             this.initController(data);
             this.addTemplates();
-            this.addGameElements(data);
+            
             // this.invokeTemplate(data,tempData);
             var controller = this._stage._stageController;
             // var controller = this._stage.getController(model);;
@@ -126,6 +126,7 @@ Plugin.extend({
                 }
                PluginManager.invoke('tiles', data, this, this._stage, this._theme);
                 this.createPopup();
+                this.addGameElements(data);
 
             }
         }
@@ -289,14 +290,14 @@ Plugin.extend({
         
         if(((instance._self.children.length>1 && !instance._self.children[1].visible) || (instance._self.children.length ==1 && instance._self.children[0].graphics._fill.style == defaultColor)) && !obj.selected){
             if(instance._value.audioAsset && instance._value.alphaSound){
-                audiManager.getAudiManager().stopAll();
+                // audiManager.getAudiManager().stopAll();
                 audiManager.getAudiManager().play({asset: instance._value.alphaSound, stageId: this._stage._id, delay: 1500});
                 audiManager.getAudiManager().play({asset: instance._value.audioAsset, stageId: this._stage._id});
             }else if(instance._value.audioAsset){
-                audiManager.getAudiManager().stopAll();
+                // audiManager.getAudiManager().stopAll();
                 audiManager.getAudiManager().play({asset: instance._value.audioAsset, stageId: this._stage._id});
             }else if(instance._value.alphaSound){
-                audiManager.getAudiManager().stopAll();
+                // audiManager.getAudiManager().stopAll();
                 audiManager.getAudiManager().play({asset: instance._value.alphaSound, stageId: this._stage._id});
             }
             
@@ -705,8 +706,8 @@ Plugin.extend({
     },
     addGameElements: function(data){
         var gameStatus={
-        "x": 10,
-        "y": 5,
+        "x": 0,
+        "y": -10,
         "w": 90,
         "h": 12,
         "id": "game_status",
@@ -717,7 +718,7 @@ Plugin.extend({
             "w": 10,
             "h": 100,
             "font": "Verdana",
-            "fontsize": 75,
+            "fontsize": 100,
             "align": "center",
             "color": "#4c4c4c",
             "__text": "Round: "
@@ -728,7 +729,7 @@ Plugin.extend({
             "w": 5,
             "h": 100,
             "font": "Verdana",
-            "fontsize": 75,
+            "fontsize": 100,
             "align": "center",
             "color": "#4c4c4c",
             "weight": "bold",
@@ -740,7 +741,7 @@ Plugin.extend({
             "w": 10,
             "h": 100,
             "font": "Verdana",
-            "fontsize": 75,
+            "fontsize": 100,
             "align": "center",
             "color": "#4c4c4c",
             "__text": "Level: "
@@ -751,7 +752,7 @@ Plugin.extend({
             "w": 5,
             "h": 100,
             "font": "Verdana",
-            "fontsize": 75,
+            "fontsize": 100,
             "align": "center",
             "color": "#4c4c4c",
             "weight": "bold",
@@ -763,7 +764,7 @@ Plugin.extend({
             "w": 10,
             "h": 100,
             "font": "Verdana",
-            "fontsize": 75,
+            "fontsize": 100,
             "align": "center",
             "color": "#4c4c4c",
             "__text": "Repetition: "
@@ -774,7 +775,7 @@ Plugin.extend({
             "w": 5,
             "h": 100,
             "font": "Verdana",
-            "fontsize": 75,
+            "fontsize": 100,
             "align": "center",
             "color": "#4c4c4c",
             "weight": "bold",
@@ -829,7 +830,7 @@ Plugin.extend({
               }
             ]
         }
-        PluginManager.invoke('g', gameStatus, this._stage, this._stage, this._theme);
+        PluginManager.invoke('g', gameStatus, this, this._stage, this._theme);
         PluginManager.invoke('g', assessGroup, this._stage, this._stage, this._theme);
         PluginManager.invoke('g', assessGroupOne, this._stage, this._stage, this._theme);
         PluginManager.invoke('g', submitBtnGrp, this._stage, this._stage, this._theme);
