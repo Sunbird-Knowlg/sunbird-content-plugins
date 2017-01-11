@@ -274,55 +274,11 @@ angular.module('aksharaEditorapp', [])
                 ctrl.isAksharaBrowser = false;
                 ctrl.isWordBrowser = false;
                 ctrl.isGameLevel = true;
-                ctrl.updateMedia();
             }
 
         }
 
-        /*########## Method to add all media related to each word ######*/
-        ctrl.updateMedia = function() {
-            EkstepEditorAPI._.each(ctrl.selectedProperty.aksharas, function(obj) {
-                instance.addMedia({
-                    id: obj.audioAsset,
-                    src: obj.audioSrc,
-                    assetId: obj.audioAsset,
-                    type: "sound",
-                    preload: true
-                });
-                EkstepEditorAPI._.each(ctrl.selectedProperty.words[obj.text].one, function(o) {
-                    instance.addMedia({
-                        id: o.imageAsset,
-                        src: o.imageSrc,
-                        assetId: o.imageAsset,
-                        type: "image",
-                        preload: true
-                    });
-                    instance.addMedia({
-                        id: o.audioAsset,
-                        assetId: o.audioAsset,
-                        src: o.audioSrc,
-                        type: "sound",
-                        preload: true
-                    });
-                });
-                EkstepEditorAPI._.each(ctrl.selectedProperty.words[obj.text].two, function(o) {
-                    instance.addMedia({
-                        id: o.imageAsset,
-                        src: o.imageSrc,
-                        assetId: o.imageAsset,
-                        type: "image",
-                        preload: true
-                    });
-                    instance.addMedia({
-                        id: o.audioAsset,
-                        src: o.audioSrc,
-                        assetId: o.audioAsset,
-                        type: "sound",
-                        preload: true
-                    });
-                });
-            });
-        }
+        
 
 
         /*########## Method to switch to select akshara tab ######*/

@@ -21,7 +21,7 @@ EkstepEditor.basePlugin.extend({
         var gridWidth = (500 - (padding * (columns - 1))) / columns;
         var gridHeight = (300 - (padding * (rows - 1))) / rows;
         var rects = [];
-        this.addDefaultMedia();
+        this.addAllMedia();
         for (var y = 0; y < rows; y++) {
             for (var x = 0; x < columns; x++) {
                 var left = x * (gridWidth + padding) + 110;
@@ -58,10 +58,9 @@ EkstepEditor.basePlugin.extend({
     },
 
     
-
-    /*########## Method to all default media which is required in akshara teaching template ######*/
-    addDefaultMedia: function(){
-
+    /*########## Method to add all default media and medias related to each word ######*/
+    addAllMedia: function(){
+        var data= this.config;
         var defaultMediaAssests = [{
                 id: "goodjob_image",
                 src: "https://ekstep-public.s3-ap-southeast-1.amazonaws.com/content/do_10097663/artifact/goodjob_1483016659770.png",
@@ -91,54 +90,100 @@ EkstepEditor.basePlugin.extend({
             },
             {
                id: "tiles",
-               src: EkstepEditor.config.absURL +"/content-plugins/org.ekstep.akshara-editor-1.0/renderer/TilesPlugin.js",
+               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/TilesPlugin.js",
                assetId: "tiles",
                type: "plugin",
                preload: true
            },
            {
                id: "tile",
-               src: EkstepEditor.config.absURL +"/content-plugins/org.ekstep.akshara-editor-1.0/renderer/TilePlugin.js",
+               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/TilePlugin.js",
                assetId: "tile",
                type: "plugin",
                preload: true
            },
            {
                id: "cmtf",
-               src: EkstepEditor.config.absURL +"/content-plugins/org.ekstep.akshara-editor-1.0/renderer/customMtfPlugin.js",
+               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/customMtfPlugin.js",
                assetId: "cmtf",
                type: "plugin",
                preload: true
            },
            {
                id: "coptions",
-               src: EkstepEditor.config.absURL +"/content-plugins/org.ekstep.akshara-editor-1.0/renderer/customOptionsPlugin.js",
+               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/customOptionsPlugin.js",
                assetId: "coptions",
                type: "plugin",
                preload: true
            },
            {
                id: "coption",
-               src: EkstepEditor.config.absURL +"/content-plugins/org.ekstep.akshara-editor-1.0/renderer/customOptionPlugin.js",
+               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/customOptionPlugin.js",
                assetId: "coption",
                type: "plugin",
                preload: true
            },
            {
                id: "audiManager",
-               src: EkstepEditor.config.absURL +"/content-plugins/org.ekstep.akshara-editor-1.0/renderer/audiManager.js",
+               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/audiManager.js",
                assetId: "audiManager",
                type: "js",
                preload: true
            }
 
         ];
+        EkstepEditorAPI._.each(data.aksharas, function(obj) {
+            var akMedia= {
+                id: obj.audioAsset,
+                src: obj.audioSrc,
+                assetId: obj.audioAsset,
+                type: "sound",
+                preload: true
+            }
+            defaultMediaAssests.push(akMedia);
+            EkstepEditorAPI._.each(data.words[obj.text].one, function(o) {
+                var wimgMedia= {
+                    id: o.imageAsset,
+                    src: o.imageSrc,
+                    assetId: o.imageAsset,
+                    type: "image",
+                    preload: true
+                }
+                defaultMediaAssests.push(wimgMedia);
+                var waudMedia= {
+                    id: o.audioAsset,
+                    assetId: o.audioAsset,
+                    src: o.audioSrc,
+                    type: "sound",
+                    preload: true
+                }
+                defaultMediaAssests.push(waudMedia);
+            });
+            EkstepEditorAPI._.each(data.words[obj.text].two, function(o) {
+                var wimgMedia= {
+                    id: o.imageAsset,
+                    src: o.imageSrc,
+                    assetId: o.imageAsset,
+                    type: "image",
+                    preload: true
+                }
+                defaultMediaAssests.push(wimgMedia);
+                var waudMedia= {
+                    id: o.audioAsset,
+                    src: o.audioSrc,
+                    assetId: o.audioAsset,
+                    type: "sound",
+                    preload: true
+                }
+                defaultMediaAssests.push(waudMedia);
+            });
+        });
+
 
         var ins = this;
-        
         EkstepEditorAPI._.forEach(defaultMediaAssests, function(defaultMedia) {
-        ins.addMedia(defaultMedia);
-            });
+            ins.addMedia(defaultMedia);
+        });
 
 
           
