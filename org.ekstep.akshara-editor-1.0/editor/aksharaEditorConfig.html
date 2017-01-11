@@ -54,6 +54,9 @@
     .dragDiv {
         margin: 20px;
     }
+    .cursor-pointer{
+        cursor: pointer;
+    }
     
     .error-msg {
         color: red;
@@ -118,7 +121,7 @@
                             <div class="ui large divided items" ng-show="!$ctrl.isFiltersShown">
                                 <div class="words-list select" ng-repeat="akshara in $ctrl.aksharas">
                                     <div class="panel ">
-                                        <div class="panel-heading " ng-click="$ctrl.toggleAksharaSelection(akshara.identifier, akshara) ">
+                                        <div class="panel-heading cursor-pointer" ng-click="$ctrl.toggleAksharaSelection(akshara.identifier, akshara) ">
                                             <h4>{{akshara.varna}}</h4>
                                             <span>
                                <i class="fa pull-right fa-lg akshara-select " aria-hidden="true "
@@ -199,7 +202,7 @@
                                                 <div ng-show="word.isLessWords"><span class="error-msg">Not enough no of words present for this akshara</span></div>
                                                 <div class="words-list" ng-repeat="stWord in word.startwords">
                                                     <div class="panel ">
-                                                        <div class="panel-heading " ng-click="$ctrl.toggleWordSelection(stWord.identifier, stWord) ">
+                                                        <div class="panel-heading cursor-pointer" ng-click="$ctrl.toggleWordSelection(stWord.identifier, stWord) ">
                                                             <h4>{{stWord.lemma}}</h4>
                                                             <span>
                                                      <i class="fa pull-right fa-lg akshara-select " aria-hidden="true "
@@ -225,11 +228,11 @@
                                             <div class="row">
                                                 <div class="words-list" ng-repeat=" cntWord in word.containswords">
                                                     <div class="panel ">
-                                                        <div class="panel-heading ">
+                                                        <div class="panel-heading cursor-pointer" ng-click="$ctrl.toggleWordSelection(cntWord.identifier, cntWord) ">
                                                             <h4>{{cntWord.lemma}}</h4>
                                                             <span>
                                                    <i class="fa pull-right fa-lg akshara-select " aria-hidden="true "
-                                                    ng-class="cntWord.isSelected ? 'fa-check-square-o' : 'fa-square-o' " ng-click="$ctrl.toggleWordSelection(cntWord.identifier, cntWord) ">
+                                                    ng-class="cntWord.isSelected ? 'fa-check-square-o' : 'fa-square-o' " >
                                                  
                                                     </i>
                                                 </span>

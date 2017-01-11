@@ -20,7 +20,16 @@ EkstepEditor.basePlugin.extend({
         var padding = 5;
         var gridWidth = (500 - (padding * (columns - 1))) / columns;
         var gridHeight = (300 - (padding * (rows - 1))) / rows;
+        this.attributes.__text = "Round: x    Level: y   Repetition: n";
+        var textProps = {
+            "x":110,
+                        "y": 12,
+                        "fontSize": 24
+        }
+        textProps = this.convertToFabric(textProps);
+        var textDet = new fabric.Text(this.attributes.__text, textProps);
         var rects = [];
+        rects.push(textDet);
         this.addDefaultMedia();
         for (var y = 0; y < rows; y++) {
             for (var x = 0; x < columns; x++) {
@@ -261,10 +270,13 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         switch (key) {
             case 'frontFaceColor':
-                this.editorObj.setFill(value);
+              //  this.editorObj.setFill(value);
                 this.attributes.frontFaceColor = value;
                 EkstepEditorAPI._.forEach(this.editorObj._objects, function(obj) {
-                    obj.setFill(value)
+                    if(obj.id){
+                        obj.setFill(value)
+                    }
+                    
                 })
                 break;
             case 'backFaceColor':
