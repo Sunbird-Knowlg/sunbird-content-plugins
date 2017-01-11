@@ -79,7 +79,7 @@ EkstepEditor.basePlugin.extend({
             showClose: false,
             className: 'ngdialog-theme-plain'
         }, function() {
-            if(!EkstepEditorAPI._.isUndefined(currentInstance.editorObj) && !currentInstance.editorObj.__text) {
+            if(!EkstepEditorAPI._.isUndefined(currentInstance.editorObj) && !currentInstance.editorObj.text) {
                 currentInstance.editorObj.remove();
                 EkstepEditorAPI.render();
             }
