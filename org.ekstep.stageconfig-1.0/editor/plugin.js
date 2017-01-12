@@ -100,7 +100,7 @@ EkstepEditor.basePlugin.extend({
     removeAudio: function(event, data){
         var instance = this;
         EkstepEditorAPI._.forEach(instance.stageConfig, function(stage, key) {
-            if(stage.stageId === instance.scope.currentStage.id){
+            if(stage.stageId === EkstepEditorAPI.getCurrentStage().id){
                 var components = EkstepEditorAPI._.clone(stage.components);
                 EkstepEditorAPI._.forEach(components, function(com, key){
                     if(data.asset === com.id){
@@ -108,6 +108,7 @@ EkstepEditor.basePlugin.extend({
                         EkstepEditorAPI._.remove(instance.scope.stageAttachments['audio'].items, function(item) {
                            return data.asset === item.id;
                         });
+                        return false;
                     }
                 });
             }
