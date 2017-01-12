@@ -33,49 +33,42 @@ EkstepEditor.basePlugin.extend({
         instance.attributes.y = 7;
         instance.percentToPixel(instance.attributes);
         var questionnaire = instance.data.questionnaire;
-        var templateIds = instance.getItmes(questionnaire.items, "templateId");
-        instance.getItmes(questionnaire.items, "media").forEach(function(element, index) {
+        var templateIds = instance.getItems(questionnaire.items, "templateId");
+        instance.getItems(questionnaire.items, "media").forEach(function(element, index) {
             instance.addMediatoManifest(element);
         });
         var templateArray = [],
-            resCount = 0,
-            tempaltesLength = templateIds.length;
-        if(EkstepEditorAPI._.isUndefined(instance.data.template) || instance.data.template.length == 0) {
-            for (var index = 0; index < tempaltesLength; index++) {
-                if (!_.isUndefined(templateIds[index])) {
-                    // get Template based on ID and push all templates response to arrray.
-                    EkstepEditor.assessmentService.getTemplate(templateIds[index], function(err, res) {
-                        try {
-                            if (!err && res) {
-                                resCount++;
-                                templateArray.push(instance.xml2json(res));
-                            } else {
-                                throw Error(res);
-                            }
-                        } catch (err) {
-                            resCount++;
-                            console.warn("Invalid Template", err);
+            templatesLength = templateIds.length;
+        if (EkstepEditorAPI._.isUndefined(instance.data.template) || instance.data.template.length == 0) {
+            for (var index in templateIds) {
+                // get Template based on ID and push all templates response to arrray.
+                EkstepEditor.assessmentService.getTemplate(templateIds[index], function(err, res) {
+                    try {
+                        if (res.status == 200) {
+                            templateArray.push(instance.convert(res));
+                        } else {
+                            throw Error(err);
                         }
-                        if (resCount == tempaltesLength) {
-                            // From templateArray update all template to quiz data object
-                            instance.data.template = instance.getTemplateData(templateArray);
-                        }
-                    });
-                }
+                    } catch (err) {
+                        instance.showpopupMessage();
+                        console.warn("Invalid Template",err);
+                    }
+                    instance.data.template = instance.getTemplateData(templateArray);
+                });
             }
         }
         var _parent = this.parent;
         this.parent = undefined;
         var quizImage = EkstepEditor.config.absURL + "/content-plugins/org.ekstep.quiz-1.0/editor/assets/QuizImage.png";
         fabric.Image.fromURL(quizImage, function(img) {
-            var count = questionnaire.total_items + '/' + instance.getItmes(questionnaire.items);
+            var count = questionnaire.total_items + '/' + instance.getItems(questionnaire.items);
             var quizDetails = instance.getPropsForEditor(questionnaire.title, count, questionnaire.max_score);
             instance.editorObj = new fabric.Group([img, quizDetails]);
             instance.parent = _parent;
             instance.postInit();
         }, instance.convertToFabric(instance.attributes));
     },
-    getItmes: function(items, type) {
+    getItems: function(items, type) {
         // it returns the Unique templateId || media of the questions || length of the question
         var question = [],
             media = [];
@@ -84,7 +77,6 @@ EkstepEditor.basePlugin.extend({
         }
         if (type === "templateId") {
             return _.uniq(_.filter(_.map(question, "template_id"), Boolean));
-
         } else if (type === 'media') {
             for (var i = 0; i < question.length; i++) {
                 media.push(question[i].media);
@@ -100,13 +92,13 @@ EkstepEditor.basePlugin.extend({
             templates = [];
         templateArray.forEach(function(element, index) {
             if (!_.isNull(element)) {
-                templates.push(element.template);
+                _.isArray(element.template) ? $.merge(templates, element.template) : templates.push(element.template);
                 if (!_.isUndefined(element.manifest)) {
                     instance.addMediatoManifest(element.manifest.media);
                 }
             }
         });
-        return templates
+        return templates.filter(Boolean);
     },
     renderQuiz: function(event, assessmentData) {
         // assessmentData is the object of config and items
@@ -119,6 +111,12 @@ EkstepEditor.basePlugin.extend({
             question.push(item.question);
         });
         instance.setQuizdata(question, assessmentData.config);
+    },
+    showpopupMessage: function() {
+        EkstepEditorAPI.getService('popup').open({
+            showClose: false,
+            template: EkstepEditor.config.absURL + "/content-plugins/org.ekstep.quiz-1.0/editor/warning.html"
+        });
     },
     setQuizdata: function(question, config) {
         // This function will do construction of the questionary Object
@@ -161,21 +159,29 @@ EkstepEditor.basePlugin.extend({
             }
         }
     },
-    xml2json: function(res) {
+    convert: function(res) {
+        // It will verfies response is XML or JSON format and then returns the valid theme data
         var data, x2js = new X2JS({
             attributePrefix: 'none'
         });
         if (!_.isNull(res)) {
-            data = x2js.xml_str2json(res.data.result.content.body);
-            return data.theme;
+            // if res is json
+            if (res.data.result.content.body.lastIndexOf('{', 0) === 0) {
+                data = JSON.parse(res.data.result.content.body);
+                return data.theme;
+            } else {
+                data = x2js.xml_str2json(res.data.result.content.body);
+                return data.theme;
+            }
         }
+
     },
     getPropsForEditor: function(qTittle, qCount, maxscore) {
         /* Display the all properties(title,count and maxscore) on the editor*/
         var instance = this;
         qTittle = new fabric.Text(qTittle.toUpperCase(), { fontSize: 15, fill: 'black', textAlign: 'center', top: 32, left: 105 });
-        qCount = new fabric.Text(qCount + " Questions,", { fontSize: 12, fill: 'black', top: 49, left: 105 });
-        maxscore = new fabric.Text(maxscore + " Marks", { fontSize: 12, fill: 'black', top: 49, left: 180, });
+        qCount = new fabric.Text(qCount + "  Questions,", { fontSize: 12, fill: 'black', top: 49, left: 105 });
+        maxscore = new fabric.Text(maxscore + " Marks", { fontSize: 12, fill: 'black', top: 49, left: 190, });
         fabricGroup = new fabric.Group([qTittle, qCount, maxscore]);
         return fabricGroup;
     },
@@ -184,7 +190,7 @@ EkstepEditor.basePlugin.extend({
          presentely the quiz canvas rendere all config data is adding to data object so.*/
 
         if (!_.isUndefined(value)) {
-            var ItemLenght = this.getItmes(this.data.questionnaire.items);
+            var ItemLenght = this.getItems(this.data.questionnaire.items);
             switch (key) {
                 case 'title':
                     this.config.title = value;
