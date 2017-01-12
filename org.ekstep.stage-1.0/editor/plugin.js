@@ -69,7 +69,7 @@ EkstepEditor.basePlugin.extend({
         });
     },
     render: function(canvas) {
-        canvas.clear();
+        EkstepEditor.stageManager.clearCanvas(canvas);
         this.children = EkstepEditorAPI._.sortBy(this.children, [function(o) { return o.getAttribute('z-index'); }]);
         EkstepEditorAPI._.forEach(this.children, function(plugin) {
             plugin.render(canvas);

@@ -30,7 +30,7 @@ EkstepEditor.basePlugin.extend({
      */
     newInstance: function() {
         var media = this.media[this.attributes.asset];
-        this.id = media.id;
+        //this.id = media.id;
         media.src = EkstepEditor.mediaManager.getMediaOriginURL(media.src);
         EkstepEditor.mediaManager.addMedia(media);
         EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { 
