@@ -36,7 +36,7 @@ EkstepEditor.basePlugin.extend({
         var templateIds = instance.getItems(questionnaire.items, "templateId");
         instance.getItems(questionnaire.items, "media").forEach(function(element, index) {
             instance.addMediatoManifest(element);
-        });
+        });        
         var templateArray = [],
             templatesLength = templateIds.length;
         if (EkstepEditorAPI._.isUndefined(instance.data.template) || instance.data.template.length == 0) {
@@ -57,9 +57,10 @@ EkstepEditor.basePlugin.extend({
                 });
             }
         }
-        var _parent = this.parent;
+        var _parent = this.parent; 
         this.parent = undefined;
-        var quizImage = EkstepEditor.config.absURL + "/content-plugins/org.ekstep.quiz-1.0/editor/assets/QuizImage.png";
+        var path = EkstepEditorAPI.globalContext.useProxyForURL ? "/plugins/" : "/content-plugins/";
+        var quizImage = EkstepEditor.config.absURL+path+"org.ekstep.quiz-1.0/editor/assets/QuizImage.png";
         fabric.Image.fromURL(quizImage, function(img) {
             var count = questionnaire.total_items + '/' + instance.getItems(questionnaire.items);
             var quizDetails = instance.getPropsForEditor(questionnaire.title, count, questionnaire.max_score);
@@ -113,9 +114,10 @@ EkstepEditor.basePlugin.extend({
         instance.setQuizdata(question, assessmentData.config);
     },
     showpopupMessage: function() {
+       var path = EkstepEditorAPI.globalContext.useProxyForURL ? "/plugins/" : "/content-plugins/"; 
         EkstepEditorAPI.getService('popup').open({
             showClose: false,
-            template: EkstepEditor.config.absURL + "/content-plugins/org.ekstep.quiz-1.0/editor/warning.html"
+            template: EkstepEditor.config.absURL+path+"org.ekstep.quiz-1.0/editor/warning.html"
         });
     },
     setQuizdata: function(question, config) {
