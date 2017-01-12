@@ -20,6 +20,8 @@ Plugin.extend({
     _roundIndex:0,
     _textPlugin: undefined,
     _contPattern: undefined,
+    _assessStartEvent: undefined,
+    _noOfClicks: undefined,
     initPlugin: function(data) {
         // var a={
         //     type: "command",
@@ -39,6 +41,7 @@ Plugin.extend({
         this._offsetY = 0;
         this._memory_values =[];
         this._memory_tiles =[];
+        this._noOfClicks= 0;
         var model = data.config.__cdata;
         if (model) {
             var tempData = {};
@@ -127,6 +130,8 @@ Plugin.extend({
                PluginManager.invoke('tiles', data, this, this._stage, this._theme);
                 this.createPopup();
                 this.addGameElements(data);
+                var instance= this;
+                this._assessStartEvent = TelemetryService.assess("eks.aksharaTeaching.01", "LIT", "EASY", {stageId: instance._stage._currentState.stage.id, subtype: " "});      
 
             }
         }
@@ -300,7 +305,7 @@ Plugin.extend({
                 // audiManager.getAudiManager().stopAll();
                 audiManager.getAudiManager().play({asset: instance._value.alphaSound, stageId: this._stage._id});
             }
-            
+            this._noOfClicks += 1;
             var tileshape= instance._self.children[0];
             var tile_w= tileshape.width;
             var tile_h= tileshape.height;
@@ -340,6 +345,14 @@ Plugin.extend({
                             var ins= this;
                             var overLayObj= PluginManager.getPluginObject("overlayPopup");
                             var popupObj= PluginManager.getPluginObject("gdjobimg");
+                            if ( ins._assessStartEvent) {
+                               var data = {
+                                    "pass": true,
+                                    "res": [{"Round": ins._roundIndex +1,"Level": ins._levelIndex +1,"Repetition": ins._repeatIndex +1, "No of clicks": ins._noOfClicks}],
+                                   "qdesc": "Akshara Teaching"
+                               };
+                               TelemetryService.assessEnd(ins._assessStartEvent, data);
+                           }
                             setTimeout(showPopup,1000);
                             function showPopup(){
                                 overLayObj._self.visible= true;

@@ -105,10 +105,7 @@ Plugin.extend({
             instance._parent.flipTile(instance);
             var data = {
                 type: event.type,
-                x: event.stageX,
-                y: event.stageY,
-                optionTag: "MemoryGameAkshara"
-
+                pos: [{x: event.stageX,y: event.stageY}]
             }
             if(instance._value.text)
             data.text= instance._value.text;
