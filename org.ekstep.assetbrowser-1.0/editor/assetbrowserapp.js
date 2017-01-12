@@ -573,6 +573,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         }
 
         ctrl.doUpload = function(mediaType) {
+            var fromThisPlugin = true;
+
             EkstepEditorAPI.jQuery('.ui.form')
                 .form({
                     inline: true,
@@ -635,7 +637,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                         },
                     },
                     onSuccess: function(event, fields) {
-                        if (ctrl.record == true)
+                        if (fromThisPlugin) { //to avoid ui form success callback being called on sucess of '.ui.form' anywhere from main html page
+                        if (ctrl.record == true )
                         {
                             // @Todo file size validation for recorded file
                             ctrl.uploadAsset(event, fields);
@@ -651,7 +654,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                                 return false;
                             }
                         }
-                    },
+                        fromThisPlugin = false;
+                    }
+                },
                     onFailure: function(formErrors, fields) {
                         console.log("fields validation failed");
                         return false;
