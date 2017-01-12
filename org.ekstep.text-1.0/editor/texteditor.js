@@ -43,8 +43,8 @@ var textEditor = (function() {
         if (!$editor.length) {
             var form = EkstepEditorAPI.jQuery("<div>", { class: "ui form", id: "textEditorContainer", style:"margin-left: 10px; margin-top: 10px;" });
             form.css({
-                "top": EkstepEditorAPI.jQuery("canvas").offset().top,
-                "left": EkstepEditorAPI.jQuery("canvas").offset().left,
+                "top": EkstepEditorAPI.jQuery("#canvas").offset().top,
+                "left": EkstepEditorAPI.jQuery("#canvas").offset().left,
                 "position": "absolute"
             });
             var field = EkstepEditorAPI.jQuery("<div>", { class: "field" });
