@@ -32,6 +32,9 @@ EkstepEditor.basePlugin.extend({
             this.addParam('instructions', '');
         }
     },
+    getOnClick: function() {
+        return { id: 'stage:select', data: { stageId: this.id, prevStageId: EkstepEditorAPI.getCurrentStage().id } };
+    },
     setCanvas: function(canvas) {
         this.canvas = canvas;
     },
