@@ -96,50 +96,7 @@ EkstepEditor.basePlugin.extend({
                 assetId: "icon_sound_image",
                 type: "image",
                 preload: true
-            },
-            {
-               id: "tiles",
-               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/TilesPlugin.js",
-               assetId: "tiles",
-               type: "plugin",
-               preload: true
-           },
-           {
-               id: "tile",
-               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/TilePlugin.js",
-               assetId: "tile",
-               type: "plugin",
-               preload: true
-           },
-           {
-               id: "cmtf",
-               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/customMtfPlugin.js",
-               assetId: "cmtf",
-               type: "plugin",
-               preload: true
-           },
-           {
-               id: "coptions",
-               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/customOptionsPlugin.js",
-               assetId: "coptions",
-               type: "plugin",
-               preload: true
-           },
-           {
-               id: "coption",
-               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/customOptionPlugin.js",
-               assetId: "coption",
-               type: "plugin",
-               preload: true
-           },
-           {
-               id: "audiManager",
-               src: EkstepEditor.config.absURL +"/plugins/org.ekstep.akshara-editor-1.0/renderer/audiManager.js",
-               assetId: "audiManager",
-               type: "js",
-               preload: true
-           }
-
+            }
         ];
         EkstepEditorAPI._.each(data.aksharas, function(obj) {
             var akMedia= {
