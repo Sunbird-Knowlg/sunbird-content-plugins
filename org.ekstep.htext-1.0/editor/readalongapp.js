@@ -14,12 +14,7 @@ angular.module('readalongapp', [])
         ctrl.name = '';
         ctrl.highlightColor = '#FFFF00';
         if(!EkstepEditorAPI._.isUndefined(instance.editorObj)){
-            var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes('',['org.ekstep.audio'], true);
-            EkstepEditorAPI._.map(mediaArr, function(val, key){
-                if(val.media[instance.attributes.audio]){ 
-                    media = val.media[instance.attributes.audio];
-                }
-            });
+            media = EkstepEditorAPI.getMedia(instance.editorObj.audio)
             ctrl.downloadurl = !EkstepEditorAPI._.isUndefined(media) ?  media.src : '';
             ctrl.audioSelected = true;
             ctrl.readalongText = instance.attributes.__text;
@@ -36,6 +31,7 @@ angular.module('readalongapp', [])
                 type: 'audio',
                 search_filter: {},
                 callback: function(data) { 
+                    data.assetMedia.preload = true;
                     ctrl.audioObj = '';
                     ctrl.oldAudioName = ctrl.name;
                     if(karaoke)
@@ -85,16 +81,18 @@ angular.module('readalongapp', [])
                 })
                 instance.addEvent({ 'type':'click', 'action' : [{'type':'command', 'command' : 'togglePlay' , 'asset': instance.id}]});
                 if(ctrl.audioChanged && ctrl.oldAudioName != ''){
-                    var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes();
-                    if(ctrl.name != ctrl.oldAudioName){
-                        EkstepEditorAPI._.forEach(mediaArr, function(val, key){
-                            if(!EkstepEditorAPI._.isUndefined(val.media) && val.media[ctrl.oldAudioName]){ 
-                                EkstepEditorAPI.getCurrentStage().children.splice(key, 1);
-                            }
+                    if(!EkstepEditorAPI._.isUndefined(ctrl.audioObj.assetMedia)){
+                        EkstepEditor.mediaManager.addMedia(ctrl.audioObj.assetMedia);
+                        EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', {'asset': ctrl.oldAudioName});
+                        EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { 
+                            stageId: EkstepEditorAPI.getCurrentStage().id,
+                            type: 'audio', 
+                            title: (EkstepEditorAPI._.isUndefined(ctrl.audioObj.assetMedia.name)) ? ctrl.audioObj.assetMedia.id : ctrl.audioObj.assetMedia.name,
+                            id: ctrl.audioObj.assetMedia.id,
+                            url: ctrl.audioObj.assetMedia.src
                         });
                     }
-                    EkstepEditorAPI.dispatchEvent('org.ekstep.audio:create', ctrl.audioObj)
-                    EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', {'asset': ctrl.oldAudioName});
+                   // EkstepEditorAPI.dispatchEvent('org.ekstep.audio:create', ctrl.audioObj)
                 }
                 EkstepEditorAPI.render();
             }else{
@@ -123,15 +121,8 @@ angular.module('readalongapp', [])
                         "timings": timings.join(),
                         "autoplay": ctrl.autoplay,
                         "highlight": ctrl.highlightColor,
+                        "audioObj":  ctrl.audioObj
                     });
-                    var audioArr = [];
-                    var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes('', ['org.ekstep.audio'], true);
-                    EkstepEditorAPI._.forEach(mediaArr, function(val, key) {
-                        audioArr[key] = val.attributes.asset;
-                    });
-                    if(EkstepEditorAPI._.indexOf(audioArr, ctrl.audioObj.asset) === -1){
-                        EkstepEditorAPI.dispatchEvent('org.ekstep.audio:create', ctrl.audioObj);
-                    }
                     EkstepEditorAPI.render();
                 }
             }
