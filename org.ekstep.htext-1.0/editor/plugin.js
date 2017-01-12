@@ -53,7 +53,8 @@ EkstepEditor.basePlugin.extend({
         var props = this.convertToFabric(this.attributes);
         if(EkstepEditorAPI._.isUndefined(EkstepEditorAPI.getMedia(this.attributes.audio))){
             var audioObj =  !EkstepEditorAPI._.isUndefined(this.attributes.audioObj) ? this.attributes.audioObj.assetMedia : undefined;
-            audioObj.src = EkstepEditor.mediaManager.getMediaOriginURL(audioObj.src);
+            if(!EkstepEditorAPI._.isUndefined(audioObj))
+                audioObj.src = EkstepEditor.mediaManager.getMediaOriginURL(audioObj.src);
         }else{
             var audioObj = EkstepEditorAPI.getMedia(this.attributes.audio);
             audioObj.src = EkstepEditor.mediaManager.getMediaOriginURL(audioObj.src);
