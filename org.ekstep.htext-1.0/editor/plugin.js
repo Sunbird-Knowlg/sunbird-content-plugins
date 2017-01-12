@@ -51,6 +51,10 @@ EkstepEditor.basePlugin.extend({
      */
     newInstance: function() {
         var props = this.convertToFabric(this.attributes);
+        if(!EkstepEditorAPI._.isUndefined(this.attributes.isReadAlongAutoPlay)){
+            this.attributes.autoplay = this.attributes.isReadAlongAutoPlay;
+            delete this.attributes.isReadAlongAutoPlay;
+        }
         if(EkstepEditorAPI._.isUndefined(EkstepEditorAPI.getMedia(this.attributes.audio))){
             var audioObj =  !EkstepEditorAPI._.isUndefined(this.attributes.audioObj) ? this.attributes.audioObj.assetMedia : undefined;
             if(!EkstepEditorAPI._.isUndefined(audioObj))
