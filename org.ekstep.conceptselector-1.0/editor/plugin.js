@@ -57,6 +57,35 @@ EkstepEditor.basePlugin.extend({
 														subConcept.id   = concepts.identifier;
 														subConcept.name = concepts.name;
 														subConcept.selectable = "selectable";
+														subConcepstChild = [];
+
+														EkstepEditorAPI._.forEach(concepts.children, function(value) {
+															var microConcept = {};
+															EkstepEditorAPI._.forEach(resp.data.result.concepts, function(subConcepts) {
+																if (value == subConcepts.identifier)
+																{
+																	microConcept.id   = subConcepts.identifier;
+																	microConcept.name = subConcepts.name;
+																	microConcept.selectable = "selectable";
+																	microSubConcepstChild = [];
+																	EkstepEditorAPI._.forEach(concepts.children, function(value) {
+																		var subMicroConcept = {};
+																		EkstepEditorAPI._.forEach(resp.data.result.concepts, function(subConcepts) {
+																			if (value == subConcepts.identifier)
+																			{
+																				subMicroConcept.id   = subConcepts.identifier;
+																				subMicroConcept.name = subConcepts.name;
+																				subMicroConcept.selectable = "selectable";
+																				microSubConcepstChild.push(subMicroConcept);
+																			}
+																		});
+																	});
+																	microConcept.nodes = microSubConcepstChild;
+																	subConcepstChild.push(microConcept);
+																}
+															});
+														});
+														subConcept.nodes = subConcepstChild;
 														conceptChild.push(subConcept);
 													}
 												});
