@@ -556,6 +556,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                     assetdata.assetMedia.type = instance.mediaType;
 
                     console.log("Passing data");
+                    delete assetdata.assetMedia.params;
+                    delete assetdata.assetMedia.result;
                     console.log(assetdata.assetMedia);
 
                     instance.cb(assetdata);
