@@ -45,6 +45,9 @@ EkstepEditor.basePlugin.extend({
      */
     initPreview: function(event, data) {
         this.contentBody = data.contentBody;
+        if(data.currentStage){
+            this.contentBody.theme.startStage = EkstepEditorAPI.getCurrentStage().id;
+        }
         this.showPreview();
     },
     /**     

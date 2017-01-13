@@ -11,7 +11,7 @@ Plugin.extend({
         var value=undefined;
         this.value = undefined;
         // this._data = this._stage.getModelValue(model);
-        console.log("inside tiles,",data);
+        // console.log("inside tiles,",data);
         this._data = this._stage._stageController._data;
         this._data.words = this._parent._controller.getModelValue("words");
         this._data.aksharas = this._parent._controller.getModelValue("aksharas");
@@ -171,7 +171,7 @@ Plugin.extend({
     },
     renderTableLayout: function(value) {
         //Creating Grid and invoking each tile
-        console.log("inside renderTableLayout,",this);
+        // console.log("inside renderTableLayout,",this);
         var cols = undefined;
         var rows = undefined;
         var count = value.length;

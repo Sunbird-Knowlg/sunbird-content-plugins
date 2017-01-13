@@ -31,7 +31,8 @@ EkstepEditor.basePlugin.extend({
                     "dataType": "input",
                     "valueType": "number",
                     "required": false,
-                    "defaultValue": 64
+                    "defaultValue": 64,
+                    "minimumValue": 0
                 });                
                 this.editorObj = new fabric.Ellipse(props);
                 break;
@@ -44,7 +45,8 @@ EkstepEditor.basePlugin.extend({
                     "dataType": "input",
                     "valueType": "number",
                     "required": false,
-                    "defaultValue": 10
+                    "defaultValue": 10,
+                    "minimumValue": 0
                 });
                 this.editorObj = new fabric.Rect(props);
                 break;
@@ -69,7 +71,14 @@ EkstepEditor.basePlugin.extend({
                 this.attributes.fill = value;
                 break;
             case 'radius':
+                if (this.attributes.type == 'ellipse') {
+                    this.editorObj.set({ 'w': value * 2 });
+                    this.editorObj.set({ 'h': value * 2 });
+                    this.attributes.w = value * 2;
+                    this.attributes.h = value * 2;
+                }
                 this.editorObj.set({ 'rx': value });
+                this.editorObj.set({ 'ry': value });
                 this.attributes.radius = value;
                 break;
         }

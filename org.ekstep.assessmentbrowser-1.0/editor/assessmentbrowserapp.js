@@ -129,16 +129,18 @@ angular.module('assessmentbrowserapp', [])
                         ctrl.isItemAvailable = false;
                     } else {
                         EkstepEditorAPI._.forEach(resp.data.result.items, function(value) {
-                            item = {};
-                            item.question = value;
-                            if (EkstepEditorAPI._.findIndex(ctrl.cart.items, function(i) {
-                                    return i.question.identifier === value.identifier
-                                }) === -1) {
-                                item.isSelected = false;
-                            } else {
-                                item.isSelected = true;
+                            if(!EkstepEditorAPI._.isUndefined(value.template_id)){
+                                item = {};
+                                item.question = value;
+                                if (EkstepEditorAPI._.findIndex(ctrl.cart.items, function(i) {
+                                        return i.question.identifier === value.identifier
+                                    }) === -1) {
+                                    item.isSelected = false;
+                                } else {
+                                    item.isSelected = true;
+                                }
+                                ctrl.items.push(item);
                             }
-                            ctrl.items.push(item);
                         });
                         ctrl.previewItem(ctrl.items[0]);
                     }

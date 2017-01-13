@@ -217,6 +217,7 @@ EkstepEditor.basePlugin.extend({
             retData.fontSize = fontSize;
             data.fontSize = fontSize;
         };
+        delete retData.lineHeight // line height set to default value 
         return retData;
     },
     getConfigManifest: function () {

@@ -30,15 +30,23 @@ EkstepEditor.basePlugin.extend({
         var _parent = this.parent;
         this.parent = undefined;
         var props = this.convertToFabric(this.attributes);
-        //delete props.width;
-        //delete props.height;
+        if(this.attributes.from == 'plugin') {
+            delete props.width; // To maintain aspect ratio 
+            delete props.height;
+        }
+        //
+        //
         var media = this.media[this.attributes.asset];
         media.src = EkstepEditor.mediaManager.getMediaOriginURL(media.src);
         var imageURL = EkstepEditorAPI.globalContext.useProxyForURL ? "image/get/" + encodeURIComponent(media.src) : media.src;
         fabric.Image.fromURL(imageURL, function(img) {
             instance.editorObj = img;
             instance.parent = _parent;
-            //instance.editorObj.scaleToWidth(props.w);
+            if(instance.attributes.from == 'plugin') {
+                instance.editorObj.scaleToWidth(props.w);
+                delete instance.attributes.from;
+            }
+            //
             instance.postInit();
         }, props);
     },
@@ -58,6 +66,7 @@ EkstepEditor.basePlugin.extend({
                 data.y = 20;
                 data.w = 50;
                 data.h = 50;
+                data.from = 'plugin';
                 EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', data) 
             }
         });

@@ -103,13 +103,9 @@ Plugin.extend({
         var instance = this;
         this._self.on('click', function(event) { 
             instance._parent.flipTile(instance);
-            console.log("clicked tile :", instance);
             var data = {
                 type: event.type,
-                x: event.stageX,
-                y: event.stageY,
-                optionTag: "MemoryGameAkshara"
-
+                pos: [{x: event.stageX,y: event.stageY}]
             }
             if(instance._value.text)
             data.text= instance._value.text;
@@ -170,19 +166,20 @@ Plugin.extend({
         }
     },
     renderText: function(data,isAlpha) {
+        
         var d={};
         d.$t = data.text;
         //data.$t = data.text;
         var padx = 0;
         var pady = 0;
         var imagehight= 0;
-        var fontsize= 600;
+        var fontsize= 500;
         if (data.text && data.text.length == 1) {
-            fontsize= 1200;
+            fontsize= 800;
         }
         if(data.imageAsset || data.imageAsset === ""){
             imagehight= 65;
-            fontsize= 600;
+            fontsize= 400;
         }   
         d.x = padx;
         d.y = pady+imagehight;
@@ -198,8 +195,11 @@ Plugin.extend({
         d.color = color;
         if(isAlpha){
             d.$t = data.alphabet;
-            d.fontsize= 1100;
+            if(d.$t.length == 1){
+                fontsize= 500;
+            }
         }
+        d.fontsize= fontsize;
         PluginManager.invoke('text', d, this, this._stage, this._theme);
     },
     addTileIcon: function(){
@@ -266,4 +266,3 @@ Plugin.extend({
     }
     
 });
-

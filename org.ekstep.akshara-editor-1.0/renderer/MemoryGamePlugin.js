@@ -20,6 +20,8 @@ Plugin.extend({
     _roundIndex:0,
     _textPlugin: undefined,
     _contPattern: undefined,
+    _assessStartEvent: undefined,
+    _noOfClicks: undefined,
     initPlugin: function(data) {
         // var a={
         //     type: "command",
@@ -39,6 +41,7 @@ Plugin.extend({
         this._offsetY = 0;
         this._memory_values =[];
         this._memory_tiles =[];
+        this._noOfClicks= 0;
         var model = data.config.__cdata;
         if (model) {
             var tempData = {};
@@ -51,7 +54,7 @@ Plugin.extend({
             tempData.data= "gameData";
             this.initController(data);
             this.addTemplates();
-            this.addGameElements(data);
+            
             // this.invokeTemplate(data,tempData);
             var controller = this._stage._stageController;
             // var controller = this._stage.getController(model);;
@@ -126,6 +129,9 @@ Plugin.extend({
                 }
                PluginManager.invoke('tiles', data, this, this._stage, this._theme);
                 this.createPopup();
+                this.addGameElements(data);
+                var instance= this;
+                this._assessStartEvent = TelemetryService.assess("eks.aksharaTeaching.01", "LIT", "EASY", {stageId: instance._stage._currentState.stage.id, subtype: " "});      
 
             }
         }
@@ -289,17 +295,17 @@ Plugin.extend({
         
         if(((instance._self.children.length>1 && !instance._self.children[1].visible) || (instance._self.children.length ==1 && instance._self.children[0].graphics._fill.style == defaultColor)) && !obj.selected){
             if(instance._value.audioAsset && instance._value.alphaSound){
-                audiManager.getAudiManager().stopAll();
+                // audiManager.getAudiManager().stopAll();
                 audiManager.getAudiManager().play({asset: instance._value.alphaSound, stageId: this._stage._id, delay: 1500});
                 audiManager.getAudiManager().play({asset: instance._value.audioAsset, stageId: this._stage._id});
             }else if(instance._value.audioAsset){
-                audiManager.getAudiManager().stopAll();
+                // audiManager.getAudiManager().stopAll();
                 audiManager.getAudiManager().play({asset: instance._value.audioAsset, stageId: this._stage._id});
             }else if(instance._value.alphaSound){
-                audiManager.getAudiManager().stopAll();
+                // audiManager.getAudiManager().stopAll();
                 audiManager.getAudiManager().play({asset: instance._value.alphaSound, stageId: this._stage._id});
             }
-            
+            this._noOfClicks += 1;
             var tileshape= instance._self.children[0];
             var tile_w= tileshape.width;
             var tile_h= tileshape.height;
@@ -339,6 +345,14 @@ Plugin.extend({
                             var ins= this;
                             var overLayObj= PluginManager.getPluginObject("overlayPopup");
                             var popupObj= PluginManager.getPluginObject("gdjobimg");
+                            if ( ins._assessStartEvent) {
+                               var data = {
+                                    "pass": true,
+                                    "res": [{"Round": ins._roundIndex +1,"Level": ins._levelIndex +1,"Repetition": ins._repeatIndex +1, "No of clicks": ins._noOfClicks}],
+                                   "qdesc": "Akshara Teaching"
+                               };
+                               TelemetryService.assessEnd(ins._assessStartEvent, data);
+                           }
                             setTimeout(showPopup,1000);
                             function showPopup(){
                                 overLayObj._self.visible= true;
@@ -519,13 +533,13 @@ Plugin.extend({
         var popupObj= PluginManager.getPluginObject("gdjobimg");
         var ins= this;
         popupObj._self.on('click', function(event) {
-            console.log("After popup click");
-            console.log("Round Index :" +ins._roundIndex);
-            console.log("Level Index :" +ins._levelIndex);
-            console.log("Repeat Index :" +ins._repeatIndex);
-            console.log("controller Round Index :" +ins._controller.roundIndex);
-            console.log("controler Level Index :" +ins._controller.levelIndex);
-            console.log("controller Repeat Index :" +ins._controller.repeatIndex);
+            // console.log("After popup click");
+            // console.log("Round Index :" +ins._roundIndex);
+            // console.log("Level Index :" +ins._levelIndex);
+            // console.log("Repeat Index :" +ins._repeatIndex);
+            // console.log("controller Round Index :" +ins._controller.roundIndex);
+            // console.log("controler Level Index :" +ins._controller.levelIndex);
+            // console.log("controller Repeat Index :" +ins._controller.repeatIndex);
             //This block of code executes when you click on the success image
             if(ins._controller.repeatIndex < ins._maxRepeatIndex){
                 var isResetRepeat= false;
@@ -543,7 +557,7 @@ Plugin.extend({
                             ins._controller.repeatIndex= 0;
                         }
                         hidePopup();
-                        console.log("reload stage 1");
+                        // console.log("reload stage 1");
                         reloadStage(); 
                     }
                 }else{
@@ -566,7 +580,7 @@ Plugin.extend({
                         }
                         ins._controller.isMTF= false;
                         hidePopup();
-                        console.log("reload stage 2");
+                        // console.log("reload stage 2");
                         reloadStage(); 
                         
                     }else{
@@ -587,7 +601,7 @@ Plugin.extend({
                         else{
                             ins._controller.repeatIndex= ins._maxRepeatIndex;
                         }
-                        console.log("reload stage 3");
+                        // console.log("reload stage 3");
                         reloadStage(); 
              
                     }else{
@@ -609,7 +623,7 @@ Plugin.extend({
                             else{
                                 ins._controller.repeatIndex= ins._maxRepeatIndex;
                             }
-                            console.log("reload stage 4");
+                            // console.log("reload stage 4");
                             reloadStage();
                         }else{
                            
@@ -632,13 +646,13 @@ Plugin.extend({
             } 
 
             function reloadStage(){
-                console.log("Before stage reload");
-                console.log("Round Index :" +ins._roundIndex);
-                console.log("Level Index :" +ins._levelIndex);
-                console.log("Repeat Index :" +ins._repeatIndex);
-                console.log("controller Round Index :" +ins._controller.roundIndex);
-                console.log("controler Level Index :" +ins._controller.levelIndex);
-                console.log("controller Repeat Index :" +ins._controller.repeatIndex);
+                // console.log("Before stage reload");
+                // console.log("Round Index :" +ins._roundIndex);
+                // console.log("Level Index :" +ins._levelIndex);
+                // console.log("Repeat Index :" +ins._repeatIndex);
+                // console.log("controller Round Index :" +ins._controller.roundIndex);
+                // console.log("controler Level Index :" +ins._controller.levelIndex);
+                // console.log("controller Repeat Index :" +ins._controller.repeatIndex);
                 
     
                 var a={};
@@ -655,8 +669,8 @@ Plugin.extend({
         });
     },
     updateGameStatus: function(){
-        console.log("-------------------------------"+ this._roundIndex + "  "+ "---" +this._levelIndex + "  ----" + this._repeatIndex);
-        console.log("-------------------------------"+ this._controller.roundIndex + "  "+ "---" +this._controller.levelIndex + "  ----" + this._controller.repeatIndex);
+        // console.log("-------------------------------"+ this._roundIndex + "  "+ "---" +this._levelIndex + "  ----" + this._repeatIndex);
+        // console.log("-------------------------------"+ this._controller.roundIndex + "  "+ "---" +this._controller.levelIndex + "  ----" + this._controller.repeatIndex);
         PluginManager.getPluginObject("game_level")._self.text= this._levelIndex +1;
         PluginManager.getPluginObject("game_round")._self.text= this._roundIndex +1;
         PluginManager.getPluginObject("game_repeat")._self.text= this._repeatIndex +1;
@@ -678,11 +692,11 @@ Plugin.extend({
         PluginManager.invoke('embed', embedData, this._stage, this._stage, this._theme);
     },
     initController: function(data,contData) {
-        console.log("before controllerId:", data);
+        // console.log("before controllerId:", data);
         var controllerName = "data";
         var controllerId = data.id;
         var stageController = this._theme._controllerMap[controllerId];
-        console.log("controllerId" +  controllerId);
+        // console.log("controllerId" +  controllerId);
         // Check if the controller is already initialized, if yes, skip the init
         var initialized = (stageController != undefined);
         if (!initialized) {
@@ -694,7 +708,7 @@ Plugin.extend({
 
             this._theme.addController(controllerData);
             stageController = this._theme._controllerMap[controllerId];
-            console.log("Controller initialized:", stageController);
+            // console.log("Controller initialized:", stageController);
         }
 
         if (stageController) {
@@ -705,8 +719,8 @@ Plugin.extend({
     },
     addGameElements: function(data){
         var gameStatus={
-        "x": 10,
-        "y": 0,
+        "x": 0,
+        "y": -10,
         "w": 90,
         "h": 12,
         "id": "game_status",
@@ -717,23 +731,21 @@ Plugin.extend({
             "w": 10,
             "h": 100,
             "font": "Verdana",
-            "fontsize": 50,
+            "fontsize": 100,
             "align": "center",
             "color": "#4c4c4c",
-            "valign": "middle",
             "__text": "Round: "
           },
           {
-            "x": 8,
+            "x": 10,
             "y": 0,
             "w": 5,
             "h": 100,
             "font": "Verdana",
-            "fontsize": 50,
+            "fontsize": 100,
             "align": "center",
             "color": "#4c4c4c",
             "weight": "bold",
-            "valign": "middle",
             "id": "game_round"
           },
           {
@@ -742,23 +754,21 @@ Plugin.extend({
             "w": 10,
             "h": 100,
             "font": "Verdana",
-            "fontsize": 50,
+            "fontsize": 100,
             "align": "center",
             "color": "#4c4c4c",
-            "valign": "middle",
             "__text": "Level: "
           },
           {
-            "x": 28,
+            "x": 30,
             "y": 0,
             "w": 5,
             "h": 100,
             "font": "Verdana",
-            "fontsize": 50,
+            "fontsize": 100,
             "align": "center",
             "color": "#4c4c4c",
             "weight": "bold",
-            "valign": "middle",
             "id": "game_level"
           },
           {
@@ -767,23 +777,21 @@ Plugin.extend({
             "w": 10,
             "h": 100,
             "font": "Verdana",
-            "fontsize": 50,
+            "fontsize": 100,
             "align": "center",
             "color": "#4c4c4c",
-            "valign": "middle",
             "__text": "Repetition: "
           },
           {
-            "x": 51,
+            "x": 53,
             "y": 0,
             "w": 5,
             "h": 100,
             "font": "Verdana",
-            "fontsize": 50,
+            "fontsize": 100,
             "align": "center",
             "color": "#4c4c4c",
             "weight": "bold",
-            "valign": "middle",
             "id": "game_repeat"
           }
         ]
@@ -835,7 +843,7 @@ Plugin.extend({
               }
             ]
         }
-        PluginManager.invoke('g', gameStatus, this._stage, this._stage, this._theme);
+        PluginManager.invoke('g', gameStatus, this, this._stage, this._theme);
         PluginManager.invoke('g', assessGroup, this._stage, this._stage, this._theme);
         PluginManager.invoke('g', assessGroupOne, this._stage, this._stage, this._theme);
         PluginManager.invoke('g', submitBtnGrp, this._stage, this._stage, this._theme);
@@ -849,7 +857,7 @@ Plugin.extend({
               "w": 100,
               "h": 10,
               "font": "Verdana",
-              "fontsize": 50,
+              "fontsize": 100,
               "align": "center",
               "color": "#4c4c4c",
               "model": "data.question",
@@ -921,7 +929,7 @@ Plugin.extend({
                     "w": 100,
                     "h": 100,
                     "font": "Verdana",
-                    "fontsize": 200,
+                    "fontsize": 400,
                     "align": "center",
                     "color": "#000",
                     "model": "option.value.text",
@@ -939,7 +947,7 @@ Plugin.extend({
               "w": 100,
               "h": 10,
               "font": "Verdana",
-              "fontsize": 50,
+              "fontsize": 100,
               "align": "center",
               "color": "#4c4c4c",
               "model": "data.question",
@@ -1003,7 +1011,7 @@ Plugin.extend({
                     "w": 100,
                     "h": 100,
                     "font": "Verdana",
-                    "fontsize": "200",
+                    "fontsize": 400,
                     "align": "center",
                     "color": "#000",
                     "model": "option.value.text",
@@ -1030,4 +1038,3 @@ Plugin.extend({
 
     }
 });
-

@@ -4,7 +4,7 @@ EkstepEditor.basePlugin.extend({
     scope: EkstepEditorAPI.getAngularScope(),
     initialize: function() {
         EkstepEditorAPI.addEventListener(this.manifest.id + ":addcomponent", this.register, this);
-        EkstepEditorAPI.addEventListener("stage:afterselect", this.showComponents, this);
+        EkstepEditorAPI.addEventListener("stage:select", this.showComponents, this);
         EkstepEditorAPI.addEventListener(this.manifest.id + ":remove", this.removeAudio, this);
     },
     register: function(event, data) {
@@ -22,8 +22,11 @@ EkstepEditor.basePlugin.extend({
         });
     },
     showComponents: function() {
+        var instance = this;
         this.hideAll();
-        this.showAll();
+        setTimeout(function(){
+            instance.showAll();
+        },500)
         //FIXME: Find a proper place to update currentStage
         var instance = this;
         instance.scope.safeApply(function() {
@@ -97,7 +100,7 @@ EkstepEditor.basePlugin.extend({
     removeAudio: function(event, data){
         var instance = this;
         EkstepEditorAPI._.forEach(instance.stageConfig, function(stage, key) {
-            if(stage.stageId === instance.scope.currentStage.id){
+            if(stage.stageId === EkstepEditorAPI.getCurrentStage().id){
                 var components = EkstepEditorAPI._.clone(stage.components);
                 EkstepEditorAPI._.forEach(components, function(com, key){
                     if(data.asset === com.id){
@@ -105,6 +108,7 @@ EkstepEditor.basePlugin.extend({
                         EkstepEditorAPI._.remove(instance.scope.stageAttachments['audio'].items, function(item) {
                            return data.asset === item.id;
                         });
+                        return false;
                     }
                 });
             }

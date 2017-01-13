@@ -51,11 +51,32 @@ EkstepEditor.basePlugin.extend({
      */
     newInstance: function() {
         var props = this.convertToFabric(this.attributes);
+        if(EkstepEditorAPI._.isUndefined(EkstepEditorAPI.getMedia(this.attributes.audio))){
+            var audioObj =  !EkstepEditorAPI._.isUndefined(this.attributes.audioObj) ? this.attributes.audioObj.assetMedia : undefined;
+            if(!EkstepEditorAPI._.isUndefined(audioObj))
+                audioObj.src = EkstepEditor.mediaManager.getMediaOriginURL(audioObj.src);
+        }else{
+            var audioObj = EkstepEditorAPI.getMedia(this.attributes.audio);
+            audioObj.src = EkstepEditor.mediaManager.getMediaOriginURL(audioObj.src);
+            if(EkstepEditorAPI._.isUndefined(audioObj.preload))
+                audioObj.preload = true;
+        }
+        delete this.attributes.audioObj;
         delete props.__text;
         props.editable = false; // added to disable inline editing of exiting content
         this.editorObj = new fabric.ITextbox(this.attributes.__text, props);
         delete this.event;
         this.addEvent({ 'type':'click', 'action' : [{'type':'command', 'command' : 'togglePlay' , 'asset': this.id}]});
+        if(!EkstepEditorAPI._.isUndefined(audioObj)){
+            EkstepEditor.mediaManager.addMedia(audioObj);
+            EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { 
+                stageId: EkstepEditorAPI.getCurrentStage().id,
+                type: 'audio', 
+                title: (EkstepEditorAPI._.isUndefined(audioObj.name)) ? audioObj.id : audioObj.name,
+                id: audioObj.id,
+                url: audioObj.src
+            });
+        }
         currentInstance = this;
     },
     /**        
@@ -79,7 +100,7 @@ EkstepEditor.basePlugin.extend({
             showClose: false,
             className: 'ngdialog-theme-plain'
         }, function() {
-            if(!EkstepEditorAPI._.isUndefined(currentInstance.editorObj) && !currentInstance.editorObj.__text) {
+            if(!EkstepEditorAPI._.isUndefined(currentInstance.editorObj) && !currentInstance.editorObj.text) {
                 currentInstance.editorObj.remove();
                 EkstepEditorAPI.render();
             }
@@ -293,17 +314,12 @@ EkstepEditor.basePlugin.extend({
             retData.fontSize = fontSize;
             data.fontSize = fontSize;
         };
+        delete retData.lineHeight // line height set to default value 
         return retData;
     },
     deleteObject: function(event, data) {
         if (!EkstepEditorAPI._.isUndefined(data.editorObj.audio)) {
-            var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes();
-            EkstepEditorAPI._.forEach(mediaArr, function(val, key) {
-                if (!EkstepEditorAPI._.isUndefined(val.media) && val.media[data.editorObj.audio]) {
-                    EkstepEditorAPI.getCurrentStage().children.splice(key, 1);
-                    EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', {'asset': data.editorObj.audio});
-                }
-            });
+            EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', {'asset': data.editorObj.audio});
         }
     },
     getConfigManifest: function () {
@@ -312,15 +328,6 @@ EkstepEditor.basePlugin.extend({
             return c.propertyName === 'stroke';
         })
         return config;
-    },
-    getCopy: function() {
-       var assetId = this.attributes.audio;
-       var assetMedia = EkstepEditorAPI.getMedia(assetId);
-       var hasAudioOnSameStage = _.find(EkstepEditorAPI.getCurrentStage().children, function(child){
-           return child.id === assetId;
-       });
-       if(_.isUndefined(hasAudioOnSameStage)) EkstepEditorAPI.instantiatePlugin('org.ekstep.audio',{'asset': assetId, 'assetMedia': assetMedia} , EkstepEditorAPI.getCurrentStage());
-       return this._super()
-   }
+    }
 });
 //# sourceURL=readalongplugin.js

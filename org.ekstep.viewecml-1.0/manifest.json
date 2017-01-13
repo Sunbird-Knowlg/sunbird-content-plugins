@@ -13,16 +13,6 @@
             { "type": "js", "src": "editor/libs/prism/prism.js" }
         ],
         "menu": [{
-            "id": "viewecml",
-            "category": "main",
-            "type": "icon",
-            "toolTip": "View ECML",
-            "title": "View ECML",
-            "iconClass": "file code outline icon",
-            "onclick": {
-                "id": "org.ekstep.viewecml:show",
-                "data": {}
-            }
         }]
     }
 }

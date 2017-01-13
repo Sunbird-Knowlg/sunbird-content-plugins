@@ -487,6 +487,7 @@
         if (this.audioObj.wordMap) {
             $('#sync-play', this.$el).css('display', 'inline-block');
             $('#addLesson').removeAttr('disabled');
+            $('#sync-pause').css('display', 'none');
             //$('.sync-play-disable', this.$el).css('display', 'none');
         }
     };
