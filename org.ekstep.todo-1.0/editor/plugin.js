@@ -32,7 +32,7 @@ EkstepEditor.basePlugin.extend({
 			{
 				if(!EkstepEditorAPI._.isUndefined(window.context.content_id) && window.context.content_id != "")
 				{
-					obj["url"]      = "index.php?option=com_ekcontent&view=content&id="+window.context.content_id;
+					obj["url"]      = window.context.todoUrl;
 					obj["status"]   = "i";
 					obj["type"]     = "todos";
 					obj["subtype"]  = "reviewer#"+data.stageId;
