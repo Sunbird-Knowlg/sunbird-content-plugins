@@ -38,7 +38,7 @@ EkstepEditor.basePlugin.extend({
 					obj["subtype"]  = "reviewer#"+data.stageId;
 					obj["client"]   = "content.jlike_ekcontent";
 					obj["cont_id"]  = window.context.id;
-					obj["title"]    = EkstepEditorAPI.getService('content').getContentMeta(obj["cont_id"]).contentMeta.name;
+					obj["title"]    = EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).contentMeta.name;
 
 					outTempRender = '<table class="ui small compact celled definition table"><tbody id="reportedIssue"></tbody></tbody>';
 
