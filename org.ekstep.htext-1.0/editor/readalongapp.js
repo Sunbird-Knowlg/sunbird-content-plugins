@@ -105,7 +105,7 @@ angular.module('readalongapp', [])
                         "__text": ctrl.readalongText,
                         "x": 10,
                         "y": 20,
-                        "fontFamily": "Verdana",
+                        "fontFamily": "Sans-serif",
                         "fontSize": 18,
                         "minWidth": 20,
                         "w": 35,
