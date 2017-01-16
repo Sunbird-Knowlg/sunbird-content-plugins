@@ -536,7 +536,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             var assetName = resp.config.data.request.content.name;
             EkstepEditorAPI.jQuery.ajax({
                 // @Todo Use the correct URL
-                url: EkstepEditor.config.baseURL + "/api/learning/v2/content/upload/" + resp.data.result.node_id,
+                url: EkstepEditor.config.baseURL + EkstepEditor.config.apislug + "/learning/v2/content/upload/" + resp.data.result.node_id,
                 type: 'POST',
                 contentType: false,
                 data: data,
