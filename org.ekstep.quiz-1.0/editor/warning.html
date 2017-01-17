@@ -1,15 +1,15 @@
 <div class="ui grid">
     <div class="two column wide">
         <div class="header">
-            <h4>Warning: Template not found </h4>
-            <h5><i class="warning sign icon outline big yellow icon"></i>Question set can not be added to the stage</h5>
+            <center>
+                <h4><i class="warning sign icon outline big yellow icon"></i>{{header}} </h4>
+                <h5 style="text-align: center;font-size: 17px;color: #5f5c5c; display: inline;" class="meta">{{errorMessage}}</h5>
+                <p>{{invalidQuestioncount}}</p>
+            </center>
         </div>
-        <div class="actions">
-            <!--  <button class="ui inverted yellow button" ng-click="closeThisDialog()">No</button>
-            <button class="ui inverted green button" ng-click="closeThisDialog()">Remove</button> -->
-            <div class="ui buttons right floated">
-                <button class="ui orange button" ng-click="closeThisDialog()">Close</button>
-            </div>
+        <div style="margin-left: 120px; margin-top : 17px">
+            <button class="ui  primary button" ng-click=callClear()>Yes</button>
+            <button class="ui  secondary orange button" ng-click=dontClear()>Cancel</button>
         </div>
     </div>
 </div>

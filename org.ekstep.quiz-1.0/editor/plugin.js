@@ -28,37 +28,52 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         // Removes unwanted config properties(visible,stroke etc.) for the quiz plugin
         delete instance.configManifest;
-        instance.attributes.w = instance.attributes.h = 80;
+        instance.attributes.w = 80;
+        instance.attributes.h = 85;
         instance.attributes.x = 9;
-        instance.attributes.y = 7;
+        instance.attributes.y = 6;
         instance.percentToPixel(instance.attributes);
         var questionnaire = instance.data.questionnaire;
         var templateIds = instance.getItems(questionnaire.items, "templateId");
         instance.getItems(questionnaire.items, "media").forEach(function(element, index) {
             instance.addMediatoManifest(element);
         });        
+        var _parent = this.parent;
+        this.parent = undefined;
         var templateArray = [],
-            templatesLength = templateIds.length;
+            errorTemplateurl = [],
+            resCount = 0;
         if (EkstepEditorAPI._.isUndefined(instance.data.template) || instance.data.template.length == 0) {
             for (var index in templateIds) {
                 // get Template based on ID and push all templates response to arrray.
                 EkstepEditor.assessmentService.getTemplate(templateIds[index], function(err, res) {
                     try {
-                        if (res.status == 200) {
+                        if (res) {
+                            resCount++;
                             templateArray.push(instance.convert(res));
                         } else {
+                            resCount++;
+                            errorTemplateurl.push(err.config.url);
                             throw Error(err);
                         }
                     } catch (err) {
-                        instance.showpopupMessage();
-                        console.warn("Invalid Template",err);
+                        console.warn("Invalid Template", err);
+                    }
+                    if (resCount >= _.size(templateIds)) {
+                        instance.showpopupMessage(templateIds, errorTemplateurl, _parent);
+                        if (_.size(errorTemplateurl) === 0) {
+                            instance.showQuizbgImage(questionnaire, _parent);
+                        }
                     }
                     instance.data.template = instance.getTemplateData(templateArray);
                 });
             }
+        } else {
+            instance.showQuizbgImage(questionnaire, _parent);
         }
-        var _parent = this.parent; 
-        this.parent = undefined;
+    },
+    showQuizbgImage: function(questionnaire, _parent) {
+        var instance = this;
         var path = EkstepEditorAPI.globalContext.useProxyForURL ? "/plugins/" : "/content-plugins/";
         var quizImage = EkstepEditor.config.absURL+path+"org.ekstep.quiz-1.0/editor/assets/QuizImage.png";
         fabric.Image.fromURL(quizImage, function(img) {
@@ -79,9 +94,9 @@ EkstepEditor.basePlugin.extend({
         if (type === "templateId") {
             return _.uniq(_.filter(_.map(question, "template_id"), Boolean));
         } else if (type === 'media') {
-            for (var i = 0; i < question.length; i++) {
-                media.push(question[i].media);
-            }
+            question.forEach( function(element, index) {
+               media.push(element.media);
+            });
             return media;
         } else {
             return question.length;
@@ -89,8 +104,7 @@ EkstepEditor.basePlugin.extend({
     },
     getTemplateData: function(templateArray) {
         // Iterate through the TemplateArray and return the templates
-        var instance = this,
-            templates = [];
+        var instance = this, templates = [];
         templateArray.forEach(function(element, index) {
             if (!_.isNull(element)) {
                 _.isArray(element.template) ? $.merge(templates, element.template) : templates.push(element.template);
@@ -113,15 +127,62 @@ EkstepEditor.basePlugin.extend({
         });
         instance.setQuizdata(question, assessmentData.config);
     },
-    showpopupMessage: function() {
-       var path = EkstepEditorAPI.globalContext.useProxyForURL ? "/plugins/" : "/content-plugins/"; 
-        EkstepEditorAPI.getService('popup').open({
-            showClose: false,
-            template: EkstepEditor.config.absURL+path+"org.ekstep.quiz-1.0/editor/warning.html"
+    showpopupMessage: function(templateIds, errTempurl, _parent) {
+        var instance = this, errTemplateids = [];
+        var questionnaire = instance.data.questionnaire;
+        for (id in templateIds) {
+            for (errId in errTempurl) {
+                if (errTempurl[errId].indexOf(templateIds[id]) > -1) {
+                    errTemplateids.push(templateIds[id]);
+                }
+            }
+        }
+        if (_.size(errTemplateids) === _.size(errTempurl) && _.size(errTemplateids) > 0) {
+            var path = EkstepEditorAPI.globalContext.useProxyForURL ? "/plugins/" : "/content-plugins/";
+            EkstepEditorAPI.getService('popup').open({
+                showClose: false,
+                template: EkstepEditor.config.absURL + path + "org.ekstep.quiz-1.0/editor/warning.html",
+                controller: ['$scope', function($scope) {
+                    $scope.callClear = function() {
+                        instance.clearItem(questionnaire, errTemplateids,function(){
+                            instance.showQuizbgImage(questionnaire, _parent);
+                        });
+                        $scope.closeThisDialog();
+                    },
+                    $scope.dontClear = function() {
+                        $scope.closeThisDialog();
+                    },
+                    $scope.header = "Clean up invalid questions";
+                    $scope.errorMessage = "Would you like to clean the question set ?";
+                    $scope.invalidQuestioncount = instance.getInvlidQuestioncount(questionnaire,errTemplateids); 
+                   /* $scope.errTemplate = instance.getInvalidquestionTitles(questionnaire, errTemplateids);*/
+                }]
+            });
+        }
+    },
+    clearItem: function(questionnaire, errTemplateids, cb) {
+        // It will clear the item if the item has invalid template_id
+        console.info("Error Template_id List:", errTemplateids);
+        var setId = questionnaire.item_sets[0].id;
+        questionnaire.items[setId].forEach(function(element, index) {
+            errTemplateids.includes(element.template_id) ? delete questionnaire.items[setId][index] : console.info("Item is not deleted");
         });
+        questionnaire.items[setId] = _.filter(questionnaire.items[setId], Boolean);
+        questionnaire.item_sets[0].count = questionnaire.items[setId].length;
+        questionnaire.total_items = questionnaire.item_sets[0].count;
+        cb();
+    },
+    getInvlidQuestioncount: function(questionnaire, errTemplateids) {
+        // To display the total count of invalid questions on the warning popup .
+        var setId = questionnaire.item_sets[0].id;
+        var invalidItemcount = 0;
+        questionnaire.items[setId].forEach(function(element, index) {
+            errTemplateids.includes(element.template_id) ? invalidItemcount++ : console.info("Not presetn");
+        });
+        return invalidItemcount + " out of " + questionnaire.total_items + " questions will be removed. "
     },
     setQuizdata: function(question, config) {
-        // This function will do construction of the questionary Object
+        // This function will do construction of the questionnaire Object
         // config is the configrations of the controller(shuffle,totl_items,title etc.,)
         var instance = this,
             questionSets = {},
@@ -152,7 +213,7 @@ EkstepEditor.basePlugin.extend({
         if (!_.isUndefined(media)) {
             if (_.isArray(media)) {
                 media.forEach(function(ele, index) {
-                    if (!_.isNull(media[index].id)) {
+                    if (!_.isNull(media[index].id) && !_.isNull(media[index].src)) {
                         instance.addMedia(media[index]);
                     }
                 });
@@ -192,7 +253,7 @@ EkstepEditor.basePlugin.extend({
          presentely the quiz canvas rendere all config data is adding to data object so.*/
 
         if (!_.isUndefined(value)) {
-            var ItemLenght = this.getItems(this.data.questionnaire.items);
+            var itemLength = this.getItems(this.data.questionnaire.items);
             switch (key) {
                 case 'title':
                     this.config.title = value;
@@ -202,7 +263,7 @@ EkstepEditor.basePlugin.extend({
                 case 'total_items':
                     this.config.total_items = value;
                     this.data.questionnaire.total_items = value;
-                    this.editorObj._objects[1]._objects[1].text = value + "/" + ItemLenght + "Questions,";
+                    this.editorObj._objects[1]._objects[1].text = value + "/" + itemLength + "Questions,";
                     break;
                 case 'max_score':
                     this.config.max_score = value;
