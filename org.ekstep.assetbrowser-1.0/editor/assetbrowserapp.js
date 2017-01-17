@@ -328,12 +328,12 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 
         ctrl.initPopup = function(item) {
             // Remove existing popover
-            EkstepEditorAPI.jQuery('.ui.popup').each(function(){
+            EkstepEditorAPI.jQuery('.assetbrowser .ui.popup').each(function(){
                 EkstepEditorAPI.jQuery(this).remove();
             });
 
             setTimeout(function(){
-                EkstepEditorAPI.jQuery('.infopopover')
+                EkstepEditorAPI.jQuery('.assetbrowser .infopopover')
                   .popup({
                     inline: true,
                     position: 'bottom center',
