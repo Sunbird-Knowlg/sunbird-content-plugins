@@ -152,8 +152,8 @@ EkstepEditor.basePlugin.extend({
                     $scope.dontClear = function() {
                         $scope.closeThisDialog();
                     },
-                    $scope.header = "Clean up invalid questions";
-                    $scope.errorMessage = "Would you like to clean the question set ?";
+                    $scope.header = "Clean-up Question Set";
+                    $scope.errorMessage = "There are few invalid questions in the question set being created. Would you like to remove the questions?";
                     $scope.invalidQuestioncount = instance.getInvlidQuestioncount(questionnaire,errTemplateids); 
                    /* $scope.errTemplate = instance.getInvalidquestionTitles(questionnaire, errTemplateids);*/
                 }]
