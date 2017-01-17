@@ -54,7 +54,6 @@ EkstepEditor.basePlugin.extend({
      *   @memberof atPreview
      */
     showPreview: function() {        
-        this.previewURL = EkstepEditorAPI.globalContext.useProxyForURL ? this.previewURL : '/assets/public/preview/dev/preview.html?webview=true';
         console.log(this.previewURL);
         var instance = this;
         var contentService = EkstepEditorAPI.getService('content');
