@@ -214,10 +214,13 @@ EkstepEditor.basePlugin.extend({
             if (_.isArray(media)) {
                 media.forEach(function(ele, index) {
                     if (!_.isNull(media[index].id) && !_.isNull(media[index].src)) {
+                        // Adding the preload property to the media
+                        media[index].preload = "true";
                         instance.addMedia(media[index]);
                     }
                 });
             } else {
+                media.preload = "true";
                 instance.addMedia(media);
             }
         }
