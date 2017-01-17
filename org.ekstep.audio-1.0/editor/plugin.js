@@ -29,17 +29,21 @@ EkstepEditor.basePlugin.extend({
      * @memberof audio
      */
     newInstance: function() {
-        var media = this.media[this.attributes.asset];
+        var media = this.media ? this.media[this.attributes.asset] : undefined;
         //this.id = media.id;
-        media.src = EkstepEditor.mediaManager.getMediaOriginURL(media.src);
-        EkstepEditor.mediaManager.addMedia(media);
-        EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { 
-            stageId: EkstepEditorAPI.getCurrentStage().id,
-            type: 'audio', 
-            title: (EkstepEditorAPI._.isUndefined(media.name)) ? media.id : media.name,
-            id: media.id,
-            url: media.src
-        });
+        if (media && media.src) {
+            media.src = EkstepEditor.mediaManager.getMediaOriginURL(media.src);
+            EkstepEditor.mediaManager.addMedia(media);
+            EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { 
+                stageId: EkstepEditorAPI.getCurrentStage().id,
+                type: 'audio', 
+                title: (EkstepEditorAPI._.isUndefined(media.name)) ? media.id : media.name,
+                id: media.id,
+                url: media.src
+            });
+        } else {
+            this.parent = undefined;
+        }
     },
     /**    
      *      
