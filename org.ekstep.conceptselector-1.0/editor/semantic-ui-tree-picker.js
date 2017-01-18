@@ -157,10 +157,17 @@ var conceptModal;
         };
         showSearch = function(query) {
             var foundNodes, list;
+            var formatedNodes = [];
             if (query !== null && query.length >= config.minSearchQueryLength) {
                 foundNodes = recursiveNodeSearch(nodes, function(node) {
                     return node.name && node.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
                 });
+                EkstepEditorAPI._.forEach(foundNodes, function(value) {
+                    if(value.selectable === 'selectable'){
+                        formatedNodes.push(value);
+                    }
+                });
+                foundNodes = formatedNodes;
                 list = renderList(foundNodes, {
                     height: '400px',
                     overflowY: 'auto'
