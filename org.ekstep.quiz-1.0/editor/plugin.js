@@ -261,17 +261,17 @@ EkstepEditor.basePlugin.extend({
                 case 'title':
                     this.config.title = value;
                     this.data.questionnaire.title = value;
-                    this.editorObj._objects[1]._objects[0].text = value.toUpperCase();
+                    this.editorObj._objects[1]._objects[0].setText(value.toUpperCase());
                     break;
                 case 'total_items':
                     this.config.total_items = value;
                     this.data.questionnaire.total_items = value;
-                    this.editorObj._objects[1]._objects[1].text = value + "/" + itemLength + "Questions,";
+                    this.editorObj._objects[1]._objects[1].setText(value + "/" + itemLength + "Questions,");
                     break;
                 case 'max_score':
                     this.config.max_score = value;
                     this.data.questionnaire.max_score = value;
-                    this.editorObj._objects[1]._objects[2].text = value + "Marks";
+                    this.editorObj._objects[1]._objects[2].setText(value + "Marks");
                     break;
                 case 'shuffle':
                     this.config.shuffle = value;
