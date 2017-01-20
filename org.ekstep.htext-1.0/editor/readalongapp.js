@@ -82,7 +82,7 @@ angular.module('readalongapp', [])
                 instance.addEvent({ 'type':'click', 'action' : [{'type':'command', 'command' : 'togglePlay' , 'asset': instance.id}]});
                 if(ctrl.audioChanged && ctrl.oldAudioName != ''){
                     if(!EkstepEditorAPI._.isUndefined(ctrl.audioObj.assetMedia)){
-                        EkstepEditor.mediaManager.addMedia(ctrl.audioObj.assetMedia);
+                        instance.addMedia(ctrl.audioObj.assetMedia);
                         EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', {'asset': ctrl.oldAudioName});
                         EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { 
                             stageId: EkstepEditorAPI.getCurrentStage().id,

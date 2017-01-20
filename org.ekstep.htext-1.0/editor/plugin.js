@@ -72,7 +72,7 @@ EkstepEditor.basePlugin.extend({
         delete this.event;
         this.addEvent({ 'type':'click', 'action' : [{'type':'command', 'command' : 'togglePlay' , 'asset': this.id}]});
         if(!EkstepEditorAPI._.isUndefined(audioObj)){
-            EkstepEditor.mediaManager.addMedia(audioObj);
+            this.addMedia(audioObj);
             EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { 
                 stageId: EkstepEditorAPI.getCurrentStage().id,
                 type: 'audio', 
