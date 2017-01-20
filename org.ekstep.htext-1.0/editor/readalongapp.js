@@ -14,7 +14,7 @@ angular.module('readalongapp', [])
         ctrl.name = '';
         ctrl.highlightColor = '#FFFF00';
         if(!EkstepEditorAPI._.isUndefined(instance.editorObj)){
-            media = EkstepEditorAPI.getMedia(instance.editorObj.audio)
+            media = EkstepEditorAPI.getCurrentObject().media[instance.editorObj.audio];
             ctrl.downloadurl = !EkstepEditorAPI._.isUndefined(media) ?  media.src : '';
             ctrl.audioSelected = true;
             ctrl.readalongText = instance.attributes.__text;
