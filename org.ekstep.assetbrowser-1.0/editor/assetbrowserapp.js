@@ -367,7 +367,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         }
 
         EkstepEditor.assessmentService.getLanguages(function(err, resp) {
-            if (!err && resp.statusText == "OK") {
+            if (!err && resp.status == 200) {
                 var assetlanguages = {};
                 EkstepEditorAPI._.forEach(resp.data.result.languages, function(lang) {
                     assetlanguages[lang.code] = lang.name;
