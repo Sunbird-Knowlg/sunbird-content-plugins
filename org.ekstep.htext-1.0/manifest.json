@@ -8,6 +8,10 @@
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
         "dependencies": [
             { "type": "js", "src": "editor/libs/karaoke.js" },
             { "type": "js", "src": "editor/libs/jquery.scrollTo.js" },

@@ -1,24 +1,39 @@
-**Content Editor Help**
+**Hotspot**
 
-***Hotspot plugin***
-
-An area on a computer screen which can be clicked to activate a function, especially an image or piece of text acting as a hyperlink.
-
+Hotspot acts like an invisible button. Place it on top of an image, shape, text or anywhere on the stage and attach actions to it.
 
 ---
-***Change color***
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa quidem enim molestias impedit qui delectus ex quod itaque blanditiis asperiores.
+***Actions***
 
-***Lorem ipsum.***
+Objects on a stage can perform various actions in the content player when user clicks on them. Each action requires a target object to complete the action. Please ensure the target object is present before adding an action.
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, veniam!
+Currently supported actions are
 
-***Pro tip***
+***Show / Hide*** 
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus provident eius sapiente culpa cupiditate totam itaque quia vitae praesentium, error illum inventore ipsa quidem a laboriosam mollitia voluptatum esse voluptatem.
+1. Before adding this action, please ensure the target object (shape, image, or scribble pad) is present on the stage. You can set the target object to be invisible.
+
+1. When adding this action, hover mouse over listed objects in the 'Target' dropdown. It will highlight the object with dotted line border on the stage. 
+
+1. Select the target object which will SHOW / HIDE when the child taps on this shape in the content player.
+
+***Play / Pause / Stop*** 
+
+1. Before adding this action, please ensure the target audio is added to the stage. 
+
+1. When adding this action, select audio from the target objects listed in dropdown.
+
+1. Select the target object which will be PLAY / PAUSE / STOP when the child taps on this shape in the content player.
+
+***Link To*** 
+
+1. Before adding this action, please ensure there are at least two stages in the lesson.
+
+1. When adding this action, select the stage number from target object list.
+
+1. When child taps on the shape, lesson will jump to selected stage. 
 
 ***Are you a developer?***
 
-Refer to our Plugin API documentation to get started.
-<a href="http://community.ekstep.org/content-editor/developers" target="_blank">http://community.ekstep.org/content-editor/developers</a>
+To get started visit [EkStep Developer Community](https://community.ekstep.in/developers)

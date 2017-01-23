@@ -7,6 +7,10 @@
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
         "dependencies": [
             {"type": "plugin", "plugin": "org.ekstep.assessmentbrowser", "ver": "1.0"}
         ],
