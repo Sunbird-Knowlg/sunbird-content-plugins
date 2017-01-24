@@ -217,6 +217,9 @@ EkstepEditor.basePlugin.extend({
                     this.config.showImmediateFeedback = value;
                     this.data.questionnaire.showImmediateFeedback = value;
                     break;
+                case 'optionShuffle':
+                   this.config.optionShuffle = value;
+                   this.data.questionnaire.optionShuffle = value;    
             }
         }
         EkstepEditorAPI.render();
@@ -231,6 +234,7 @@ EkstepEditor.basePlugin.extend({
         config.showImmediateFeedback = this.data.questionnaire.showImmediateFeedback;
         config.max_score = this.data.questionnaire.max_score;
         config.title = this.data.questionnaire.title;
+        config.optionShuffle = this.data.questionnaire.optionShuffle;
         return config;
     },
     /**    
