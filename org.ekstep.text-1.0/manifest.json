@@ -24,7 +24,7 @@
                     "__text": "",
                     "x": 10,
                     "y": 20,
-                    "fontFamily": "Verdana",
+                    "fontFamily": "Sans-serif",
                     "fontSize": 18,
                     "minWidth": 20,
                     "w": 35,
@@ -76,7 +76,7 @@
             "dataType": "select",
             "range": ["Arial", "Courier", "Georgia", "Helvetica", "Monospace", "Sans-serif", "Serif", "Tahoma", "Times", "Trebuchet MS", "Verdana", "NotoSansKannada", "NotoSansGujarati", "NotoSansBengali", "NotoSansGurmukhi", "NotoSansOriya", "NotoSansDevanagari", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu", "NotoSansMalayalam"],
             "required": true,
-            "defaultValue": "Arial"
+            "defaultValue": "Sans-serif"
         }, {
             "propertyName": "fontsize",
             "title": "Font Size",

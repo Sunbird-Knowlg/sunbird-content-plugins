@@ -14,7 +14,7 @@ angular.module('readalongapp', [])
         ctrl.name = '';
         ctrl.highlightColor = '#FFFF00';
         if(!EkstepEditorAPI._.isUndefined(instance.editorObj)){
-            media = EkstepEditorAPI.getMedia(instance.editorObj.audio)
+            media = EkstepEditorAPI.getCurrentObject().media[instance.editorObj.audio];
             ctrl.downloadurl = !EkstepEditorAPI._.isUndefined(media) ?  media.src : '';
             ctrl.audioSelected = true;
             ctrl.readalongText = instance.attributes.__text;
@@ -82,7 +82,7 @@ angular.module('readalongapp', [])
                 instance.addEvent({ 'type':'click', 'action' : [{'type':'command', 'command' : 'togglePlay' , 'asset': instance.id}]});
                 if(ctrl.audioChanged && ctrl.oldAudioName != ''){
                     if(!EkstepEditorAPI._.isUndefined(ctrl.audioObj.assetMedia)){
-                        EkstepEditor.mediaManager.addMedia(ctrl.audioObj.assetMedia);
+                        instance.addMedia(ctrl.audioObj.assetMedia);
                         EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', {'asset': ctrl.oldAudioName});
                         EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { 
                             stageId: EkstepEditorAPI.getCurrentStage().id,
@@ -105,7 +105,7 @@ angular.module('readalongapp', [])
                         "__text": ctrl.readalongText,
                         "x": 10,
                         "y": 20,
-                        "fontFamily": "Verdana",
+                        "fontFamily": "Sans-serif",
                         "fontSize": 18,
                         "minWidth": 20,
                         "w": 35,

@@ -51,6 +51,10 @@ EkstepEditor.basePlugin.extend({
      */
     newInstance: function() {
         var props = this.convertToFabric(this.attributes);
+        if(!EkstepEditorAPI._.isUndefined(this.attributes.isReadAlongAutoPlay)){
+            this.attributes.autoplay = this.attributes.isReadAlongAutoPlay;
+            delete this.attributes.isReadAlongAutoPlay;
+        }
         if(EkstepEditorAPI._.isUndefined(EkstepEditorAPI.getMedia(this.attributes.audio))){
             var audioObj =  !EkstepEditorAPI._.isUndefined(this.attributes.audioObj) ? this.attributes.audioObj.assetMedia : undefined;
             if(!EkstepEditorAPI._.isUndefined(audioObj))
@@ -68,6 +72,7 @@ EkstepEditor.basePlugin.extend({
         delete this.event;
         this.addEvent({ 'type':'click', 'action' : [{'type':'command', 'command' : 'togglePlay' , 'asset': this.id}]});
         if(!EkstepEditorAPI._.isUndefined(audioObj)){
+            this.addMedia(audioObj);
             EkstepEditor.mediaManager.addMedia(audioObj);
             EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { 
                 stageId: EkstepEditorAPI.getCurrentStage().id,

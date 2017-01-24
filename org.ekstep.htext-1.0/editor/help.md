@@ -1,22 +1,15 @@
-**Content Editor Help**
+**Read Along**
 
-***Read-along plugin***
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Maxime perferendis iste repellat accusantium, ut doloribus eaque possimus sapiente. Sed, iste.
+Read-along text will highlight the words as the audio for the sentence is being played. Please follow instructions in the read-along wizard to create one.
 
----
-***Change color***
+***Autoplay***
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Culpa quidem enim molestias impedit qui delectus ex quod itaque blanditiis asperiores.
-
-***Lorem ipsum.***
-
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Delectus, veniam!
+Set the Read-along text to autoplay and it will automatically start as the child navigates to this stage.
 
 ***Pro tip***
 
-Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus provident eius sapiente culpa cupiditate totam itaque quia vitae praesentium, error illum inventore ipsa quidem a laboriosam mollitia voluptatum esse voluptatem.
+Change the text styling options to make the read-along text stand out from regular text. This will prompt the child to interact with it.
 
 ***Are you a developer?***
 
-Refer to our Plugin API documentation to get started.
-<a href="http://community.ekstep.org/content-editor/developers" target="_blank">http://community.ekstep.org/content-editor/developers</a>
+To get started visit [EkStep Developer Community](https://community.ekstep.in/developers)

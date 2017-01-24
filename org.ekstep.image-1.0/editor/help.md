@@ -1,16 +1,14 @@
-**Shape**
+**Image**
 
-You can add various shapes to a stage. E.g. Rectangle, Rounded rectangle and Circle.
+Browse and add images to your stage. EkStep offers a library of images contributed by the community of users.
+
+You can contribute to the library by uploading your images under Creative Commons license. 
 
 ---
 
-***Change color***
+***Image browser***
 
-You can change color of the selected shape, using the color picker.
-
-***Change roundness***
-
-You can change the roundness of the rectangle, by updating the roundness in config window of shape plugin.
+Use the image browser to replace the current selected image with another image
 
 ***Visibility***
 
@@ -34,7 +32,7 @@ Currently supported actions are
 
 1. When adding this action, hover mouse over listed objects in the 'Target' dropdown. It will highlight the object with dotted line border on the stage. 
 
-1. Select the target object which will SHOW / HIDE when the child taps on this shape in the content player.
+1. Select the target object which will SHOW / HIDE when the child taps on this image in the content player.
 
 ***Play / Pause / Stop*** 
 
@@ -42,7 +40,7 @@ Currently supported actions are
 
 1. When adding this action, select audio from the target objects listed in dropdown.
 
-1. Select the target object which will be PLAY / PAUSE / STOP when the child taps on this shape in the content player.
+1. Select the target object which will be PLAY / PAUSE / STOP when the child taps on this image in the content player.
 
 ***Link To*** 
 
@@ -50,16 +48,14 @@ Currently supported actions are
 
 1. When adding this action, select the stage number from target object list.
 
-1. When child taps on the shape, lesson will jump to selected stage. 
+1. When child taps on the image, lesson will jump to selected stage. 
 
 
 ***Pro tip***
 
-You can use a combination of shapes and create a different shape. 
-
-You can draw a line by changing dimensions of a rectangle.
+* Make images interactive by attaching actions to an image.
+* Teach using images by explaining parts of an image using a hotspot. 
 
 ***Are you a developer?***
 
 To get started visit [EkStep Developer Community](https://community.ekstep.in/developers)
-

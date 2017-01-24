@@ -11,19 +11,7 @@
             { "type": "plugin", "plugin": "org.ekstep.spectrum", "ver": "1.0" }
         ],
         "menu": [{
-                "id": "ak_editor",
-                "category": "main",
-                "type": "icon",
-                "toolTip": "Akshara Teaching",
-                "title": "Grid",
-                "iconClass": "book icon",
-                "onclick": {
-                    "id": "org.ekstep.akshara-editor:showpopup"
-                }
-            }
-
-        ],
-
+        }],
         "configManifest": [{
             "propertyName": "frontFaceColor",
             "title": "Front Face Color",

@@ -27,48 +27,16 @@ EkstepEditor.basePlugin.extend({
 		EkstepEditor.conceptService.getConceptsTree(function(err, resp) {
 			if (!err && resp.statusText == "OK") {
 				EkstepEditorAPI._.forEach(resp.data.result.domains, function(value) {
-					var domain = {};
-					domain.id   = value.identifier;
-					domain.name = value.name;
-					domainChild = [];
-					EkstepEditorAPI._.forEach(value.children, function(DomainChildren) {
-						var child = {};
-						EkstepEditorAPI._.forEach(resp.data.result.dimensions, function(value) {
-							if (DomainChildren == value.identifier)
-							{
-								child.id   = value.identifier;
-								child.name = value.name;
-								domainChild.push(child);
-								dimensionChild = [];
-								EkstepEditorAPI._.forEach(value.children, function(value) {
-									var concept = {};
-									EkstepEditorAPI._.forEach(resp.data.result.concepts, function(concepts) {
-										if (value == concepts.identifier)
-										{
-											concept.id   = concepts.identifier;
-											concept.name = concepts.name;
-											concept.selectable = "selectable";
-											conceptChild = [];
-											EkstepEditorAPI._.forEach(concepts.children, function(value) {
-													var subConcept = {};
-												EkstepEditorAPI._.forEach(resp.data.result.concepts, function(concepts) {
-													if (value == concepts.identifier)
-													{
-														subConcept.id   = concepts.identifier;
-														subConcept.name = concepts.name;
-														subConcept.selectable = "selectable";
-														conceptChild.push(subConcept);
-													}
-												});
-											});
-											concept.nodes = conceptChild;
-											dimensionChild.push(concept);
-										}
-									});
-								});
-								child.nodes = dimensionChild;
-							}
-						});
+					var domain   = {};
+					domain.id    = value.identifier;
+					domain.name  = value.name;
+					var domainChild = [];
+					EkstepEditorAPI._.forEach(getChild(value.identifier, resp.data.result.dimensions), function(value) {
+						var dimension   = {};
+						dimension.id    = value.id;
+						dimension.name  = value.name;
+						dimension.nodes = getChild(value.id, resp.data.result.concepts);
+						domainChild.push(dimension);
 					});
 					domain.nodes = domainChild;
 					domains.push(domain);
@@ -76,6 +44,23 @@ EkstepEditor.basePlugin.extend({
 				EkstepEditorAPI.getAngularScope().safeApply();
 			}
 		});
+
+		function getChild(id, resp){
+			var childArray=[];
+			EkstepEditorAPI._.forEach(resp, function(value) {
+				if(value.parent != undefined){
+					if(value.parent[0] == id){
+						var child = {};
+						child.id   = value.identifier;
+						child.name = value.name;
+						child.selectable = "selectable";
+						child.nodes = getChild(value.identifier, resp);
+						childArray.push(child);
+					}
+				}
+			});
+			return childArray;
+		}
         this.conceptData = domains;
     },
     /**

@@ -32,13 +32,13 @@ EkstepEditor.basePlugin.extend({
 			{
 				if(!EkstepEditorAPI._.isUndefined(window.context.content_id) && window.context.content_id != "")
 				{
-					obj["url"]      = window.context.todoUrl;
-					obj["status"]   = "i";
+					obj["url"]      = "index.php?option=com_ekcontent&view=content&id="+window.context.id;
+					obj["status"]   = "I";
 					obj["type"]     = "todos";
 					obj["subtype"]  = "reviewer#"+data.stageId;
 					obj["client"]   = "content.jlike_ekcontent";
-					obj["cont_id"]  = window.context.content_id;
-					obj["title"]    = EkstepEditorAPI.getService('content').getContentMeta(obj["cont_id"]).contentMeta.name;
+					obj["cont_id"]  = window.context.id;
+					obj["title"]    = EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).contentMeta.name;
 
 					outTempRender = '<table class="ui small compact celled definition table"><tbody id="reportedIssue"></tbody></tbody>';
 

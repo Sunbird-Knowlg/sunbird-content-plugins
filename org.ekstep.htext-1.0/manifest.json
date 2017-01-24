@@ -8,6 +8,10 @@
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
         "dependencies": [
             { "type": "js", "src": "editor/libs/karaoke.js" },
             { "type": "js", "src": "editor/libs/jquery.scrollTo.js" },
@@ -69,7 +73,7 @@
             "dataType": "select",
             "range": ["Arial", "Courier", "Georgia", "Helvetica", "Monospace", "Sans-serif", "Serif", "Tahoma", "Times", "Trebuchet MS", "Verdana", "NotoSansKannada", "NotoSansGujarati", "NotoSansBengali", "NotoSansGurmukhi", "NotoSansOriya", "NotoSansDevanagari", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu", "NotoSansMalayalam"],
             "required": true,
-            "defaultValue": "Verdana"
+            "defaultValue": "Sans-serif"
         }, {
             "propertyName": "fontsize",
             "title": "Font Size",
