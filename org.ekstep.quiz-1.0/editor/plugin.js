@@ -33,7 +33,6 @@ EkstepEditor.basePlugin.extend({
         instance.attributes.y = 7;
         instance.percentToPixel(instance.attributes);
         var questionnaire = instance.data.questionnaire;
-        questionnaire.optionShuffle = true;
         var templateIds = instance.getItems(questionnaire.items, "templateId");
         instance.getItems(questionnaire.items, "media").forEach(function(element, index) {
             instance.addMediatoManifest(element);
@@ -235,7 +234,7 @@ EkstepEditor.basePlugin.extend({
         config.showImmediateFeedback = this.data.questionnaire.showImmediateFeedback;
         config.max_score = this.data.questionnaire.max_score;
         config.title = this.data.questionnaire.title;
-        config.optionShuffle = this.data.questionnaire.optionShuffle;
+        config.optionShuffle = _.isUndefined(this.data.questionnaire.optionShuffle) ? true : this.data.questionnaire.optionShuffle ;
         return config;
     },
     /**    
