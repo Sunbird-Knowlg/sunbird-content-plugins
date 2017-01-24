@@ -33,6 +33,7 @@ EkstepEditor.basePlugin.extend({
         instance.attributes.y = 7;
         instance.percentToPixel(instance.attributes);
         var questionnaire = instance.data.questionnaire;
+        questionnaire.optionShuffle = true;
         var templateIds = instance.getItems(questionnaire.items, "templateId");
         instance.getItems(questionnaire.items, "media").forEach(function(element, index) {
             instance.addMediatoManifest(element);
