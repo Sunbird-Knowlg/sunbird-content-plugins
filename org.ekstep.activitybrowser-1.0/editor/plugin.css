@@ -1,0 +1,32 @@
+/*This file is for styles used in the activity browser*/
+
+.activity-browser-modal {
+    top: 4% !important;
+}
+
+.activity-browser-content {
+    height: 400px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.activity-browser-content-loader {
+    width: 100%;
+    height: 300px;
+}
+
+.activity-browser-close-icon-container {
+    text-align: right;
+    cursor: pointer;
+}
+
+.activity-browser-cards {
+    margin-top: .3em !important;
+}
+
+.activity-browser-center {
+    display: block;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
+
