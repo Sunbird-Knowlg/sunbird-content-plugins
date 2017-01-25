@@ -29,7 +29,7 @@ angular.module('activityBrowserApp', [])
                     }
                 }
             };
-            EkstepEditorAPI.getService('activityService').getActivities(data, function(err, resp) {
+            EkstepEditorAPI.getService('searchService').search(data, function(err, resp) {
                 ctrl.loading = false;
                 EkstepEditorAPI.getAngularScope().safeApply();
                 if (err) {
