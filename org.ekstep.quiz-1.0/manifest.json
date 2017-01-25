@@ -49,7 +49,7 @@
         },
         {
             "propertyName": "optionShuffle",
-            "title": "Option Shuffle",
+            "title": "Shuffle Options",
             "description": "Shuffle the options",
             "dataType": "boolean",            
             "required": true            
