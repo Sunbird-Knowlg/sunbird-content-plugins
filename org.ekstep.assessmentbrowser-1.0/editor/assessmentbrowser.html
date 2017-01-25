@@ -96,7 +96,7 @@
                             <div class="field">
                                 <div class="ui fluid labeled input">
                                     <div class="ui label">Question Type</div>
-                                    <select multiple="" class="ui fluid dropdown search" ng-model="$ctrl.activity.type" ng-options="type for type in $ctrl.assessment.type" ng-change="$ctrl.searchQuestions()">
+                                    <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.type" ng-options="type for type in $ctrl.assessment.type" ng-change="$ctrl.searchQuestions()">
                                         <option value="">
                                             Type
                                         </option>
@@ -108,7 +108,7 @@
                             <div class="field">
                                 <div class="ui fluid labeled input">
                                     <div class="ui label">&emsp;Grade&nbsp;&nbsp;&nbsp;</div>
-                                    <select multiple="" class="ui fluid dropdown search" ng-model="$ctrl.activity.gradeLevel" ng-options="grade for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="$ctrl.searchQuestions()">
+                                    <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.gradeLevel" ng-options="grade for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="$ctrl.searchQuestions()">
                                         <option value="">
                                             Grade
                                         </option>

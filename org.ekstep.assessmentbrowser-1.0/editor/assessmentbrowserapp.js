@@ -65,7 +65,7 @@ angular.module('assessmentbrowserapp', [])
                                 EkstepEditorAPI.getAngularScope().safeApply();
                             }
                         });
-                        EkstepEditorAPI.jQuery('.ui.dropdown').dropdown({ useLabels: false });
+                        EkstepEditorAPI.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});
                     }
                 });
             }
@@ -188,17 +188,14 @@ angular.module('assessmentbrowserapp', [])
             EkstepEditorAPI.getAngularScope().safeApply();
         };
 
-        ctrl.previewLoad = function() {
-            setTimeout(function() {
-                itemIframe = EkstepEditor.jQuery('#itemIframe')[0];
-                if (itemIframe.src == "")
-                    itemIframe.src = instance.previewURL;
-                itemIframe.addEventListener('load', function() {
-                    itemIframe.contentWindow.setContentData(null, ctrl.itemPreviewContent, config);
-                });
-            }, 2000);
-        };
-        ctrl.previewLoad();
+        $scope.$on('ngDialog.opened', function (e, $dialog) {
+            itemIframe = EkstepEditor.jQuery('#itemIframe')[0];
+            if (itemIframe.src == "")
+                itemIframe.src = instance.previewURL;
+            itemIframe.addEventListener('load', function() {
+                itemIframe.contentWindow.setContentData(null, ctrl.itemPreviewContent, config);
+            });
+        });
         ctrl.previewItem = function(item) {
             EkstepEditorAPI.getService('assessmentService').getItem(item.question.identifier, function(err, resp) {
                 if (!err && resp.statusText == "OK") {
