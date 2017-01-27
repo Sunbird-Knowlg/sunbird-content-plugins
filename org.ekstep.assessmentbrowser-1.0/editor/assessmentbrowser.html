@@ -32,18 +32,21 @@
     position: absolute !important;
     background: none !important;
 }
+.assessment-browser-content{
+    height: 500px;
+}
 </style>
 <div class="assessmentbrowser ui modal large active" style="top: 5%;">
-    <div class="content">
+    <div class="content assessment-browser-content">
         <div class="ui mini three steps">
-            <div class="{{$ctrl.isFiltersShown ? 'active': ''}} step">
+            <div class="{{$ctrl.isAdvanceOptionOpen ? 'active': ''}} step">
                 <i class="checkmark box icon"></i>
                 <div class="content">
                     <div class="title">Pick Questions</div>
                     <div class="description">Search and select questions</div>
                 </div>
             </div>
-            <div class="{{!$ctrl.isFiltersShown ? 'active': ''}} step">
+            <div class="{{!$ctrl.isAdvanceOptionOpen ? 'active': ''}} step">
                 <i class="setting icon"></i>
                 <div class="content">
                     <div class="title">Configure Question Set</div>
@@ -58,7 +61,7 @@
                 </div>
             </div>
         </div>
-        <div ng-show="$ctrl.isFiltersShown" class="filters-container">
+        <div ng-show="$ctrl.isAdvanceOptionOpen" class="filters-container" ng-if="!$ctrl.errorMessage">
             <div class="ui form">
                 <div class="field">
                     <div class="ui fluid icon input">
@@ -132,7 +135,7 @@
                 </div>
             </div>
         </div>
-        <div ng-show="!$ctrl.isFiltersShown" class="filters-container">
+        <div ng-show="!$ctrl.isAdvanceOptionOpen" class="filters-container">
             <div class="ui form">
                 <div class="five fields">
                     <div class="field">
@@ -177,10 +180,16 @@
                 <div class="ui text loader">Just one second, We're fetching that content for you.</div>
             </div>
         </div>
-        <div ng-show="($ctrl.isFiltersShown && $ctrl.items.length) || (!$ctrl.isFiltersShown && $ctrl.cart.items.length)">
+        <div ng-if="$ctrl.errorMessage" class="ui negative message">
+            <div class="header">
+                We're sorry!
+            </div>
+            <p>Unable to fetch the Questions! Please try again later!</p>
+        </div>
+        <div ng-show="($ctrl.isAdvanceOptionOpen && $ctrl.items.length) || (!$ctrl.isAdvanceOptionOpen && $ctrl.cart.items.length)">
             <div class="ui two column horizontally padded grid" ng-show="!$ctrl.itemsLoading">
                 <div class="column" style="width: 480px;height: 284px; overflow-y: scroll;">
-                    <div class="ui large divided items" ng-show="$ctrl.isFiltersShown">
+                    <div class="ui large divided items" ng-show="$ctrl.isAdvanceOptionOpen">
                         <div class="item select" ng-repeat="item in $ctrl.items" ng-click=" item.isSelected ? $ctrl.cart.remove(item) : $ctrl.cart.add(item); $event.stopPropagation()">
                             <div class="middle aligned content">
                                 <div class="header">{{ item.question.question }}</div>
@@ -193,7 +202,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="ui large divided items" ng-show="!$ctrl.isFiltersShown">
+                    <div class="ui large divided items" ng-show="!$ctrl.isAdvanceOptionOpen">
                             <div class="item select" ng-repeat="cartItem in $ctrl.cart.items">
                                 <div class="middle aligned content" ng-click="$ctrl.previewItem(cartItem, true);">
                                 <div class="header">{{ cartItem.question.question }}</div>
@@ -213,7 +222,7 @@
                 </div>
             </div>
         </div>
-        <div class="ui center aligned segment" ng-show="($ctrl.items && !$ctrl.items.length) && $ctrl.isFiltersShown">
+        <div class="ui center aligned segment" ng-show="($ctrl.items && !$ctrl.items.length) && $ctrl.isAdvanceOptionOpen">
             No Data Found
             <br> Redefine your search filters!
         </div>
@@ -225,13 +234,13 @@
         <div class="ui label" ng-show="$ctrl.cart.items.length">
             <a class="ui grey circular label">{{$ctrl.cart.items.length}}</a> Questions added
         </div>
-        <div class="ui buttons" ng-if="$ctrl.isFiltersShown">
+        <div class="ui buttons" ng-if="$ctrl.isAdvanceOptionOpen">
             <button class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
             <div class="or"></div>
             <button class="ui blue button" ng-click="$ctrl.addActivityOptions()" ng-disabled="!$ctrl.cart.items.length" type="button">NEXT</button>
         </div>
-        <div class="ui buttons" ng-if="!$ctrl.isFiltersShown">
-            <button id="closePopUp" class="ui orange button" ng-click="$ctrl.isFiltersShown = !$ctrl.isFiltersShown" type="button">Add More Questions</button>
+        <div class="ui buttons" ng-if="!$ctrl.isAdvanceOptionOpen">
+            <button id="closePopUp" class="ui orange button" ng-click="$ctrl.isAdvanceOptionOpen = !$ctrl.isAdvanceOptionOpen" type="button">Add More Questions</button>
             <div class="or"></div>
             <button id="selectanduse" class="ui blue button" ng-click="$ctrl.addItemActivity()" ng-disabled="!$ctrl.activityOptions.title || !$ctrl.cart.items.length" type="button">Add Question Set</button>
         </div>
