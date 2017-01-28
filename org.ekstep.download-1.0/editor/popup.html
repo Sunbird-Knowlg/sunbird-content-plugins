@@ -1,0 +1,31 @@
+<script type="text/ng-template" id="partials_org.ekstep.download.html">
+<style>
+.dwContent .ngdialog-content{
+	background: transparent!important;
+}
+</style>
+	<div class="ui page {{isSending}} dimmer">
+		<div class="content" ng-show="!isLoading">
+		  <div class="center">
+			<h2 class="ui icon header" style="color: green!important;" ng-show="status">
+			  <i class="ct_download_msg checkmark icon"></i>
+			  {{getMessage}}
+			</h2>
+			<h2 class="ui icon header" style="color: red!important;" ng-show="!status">
+			  <i class="ct_download_msg warning sign icon"></i>
+				{{getMessage}}
+			</h2>
+		  </div>
+		</div>
+		<div class="content" ng-show="isLoading == true">
+			<div class="center">
+				<div class="ui big text loader">
+					<h2><i class="mail outline icon"></i>
+						Sending email, please wait....
+					</h2>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+</script>
