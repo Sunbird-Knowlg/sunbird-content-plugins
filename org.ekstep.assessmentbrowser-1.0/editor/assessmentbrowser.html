@@ -32,12 +32,12 @@
     position: absolute !important;
     background: none !important;
 }
-.assessment-browser-content{
-    height: 500px;
+.assessment-browser-error{
+    height: 350px;
 }
 </style>
 <div class="assessmentbrowser ui modal large active" style="top: 5%;">
-    <div class="content assessment-browser-content">
+    <div class="content">
         <div class="ui mini three steps">
             <div class="{{$ctrl.isAdvanceOptionOpen ? 'active': ''}} step">
                 <i class="checkmark box icon"></i>
@@ -180,11 +180,13 @@
                 <div class="ui text loader">Just one second, We're fetching that content for you.</div>
             </div>
         </div>
-        <div ng-if="$ctrl.errorMessage" class="ui negative message">
-            <div class="header">
-                We're sorry!
+        <div ng-if="$ctrl.errorMessage" class=" assessment-browser-error">
+            <div class="ui negative message">
+                <div class="header">
+                    We're sorry!
+                </div>
+                <p>Unable to fetch the Questions! Please try again later!</p>
             </div>
-            <p>Unable to fetch the Questions! Please try again later!</p>
         </div>
         <div ng-show="($ctrl.isAdvanceOptionOpen && $ctrl.items.length) || (!$ctrl.isAdvanceOptionOpen && $ctrl.cart.items.length)">
             <div class="ui two column horizontally padded grid" ng-show="!$ctrl.itemsLoading">
