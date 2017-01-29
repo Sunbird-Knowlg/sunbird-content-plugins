@@ -15,7 +15,7 @@ EkstepEditor.basePlugin.extend({
     type: 'collaborator',
     /**
      *   registers events
-     *   @memberof atPreview
+     *   @memberof collaborator
      *
      */
     initialize: function() {
@@ -29,7 +29,7 @@ EkstepEditor.basePlugin.extend({
      *
      *   @param event {Object} event object from event bus.
      *   @param data {Object} ecml
-     *   @memberof addCollaborator
+     *   @memberof collaborator
      */
     addCollaborator: function(event, data) {
         setTimeout(function() {
@@ -81,6 +81,9 @@ EkstepEditor.basePlugin.extend({
             className: 'ngdialog-theme-plain'
         });
     },
+    /**
+     *   @memberof collaborator
+     */
     getUrlLink: function() {
         var instance = this;
         EkstepEditorAPI.jQuery("#copyTarget").select();
@@ -88,12 +91,15 @@ EkstepEditor.basePlugin.extend({
         try {
             var successful = document.execCommand('copy');
 
-            if (successful) instance.copyAnswer = 'Copied!';
-            else instance.copyAnswer = 'Unable to copy!';
+            successful ? instance.copyAnswer = 'Copied!' : instance.copyAnswer = 'Unable to copy!';
+
         } catch (err) {
             instance.copyAnswer = 'Unsupported Browser!';
         }
     },
+    /**
+     *   @memberof collaborator
+     */
     sendInvites: function() {
         var instance = this;
         EkstepEditorAPI.jQuery('#colInviteForm')
@@ -124,6 +130,12 @@ EkstepEditor.basePlugin.extend({
                 }
             });
     },
+    /**
+     *
+     *   @param event {Object} event object.
+     *   @param data {Object} data
+     *   @memberof collaborator
+     */
     notifyUser: function(event, fields) {
         var instance = this;
         instance.loading = 'active';
@@ -165,6 +177,9 @@ EkstepEditor.basePlugin.extend({
             });
         }, 500);
     },
+    /**
+     *   @memberof collaborator
+     */
     collaboratorsInfo: function() {
         var instance = this;
 
