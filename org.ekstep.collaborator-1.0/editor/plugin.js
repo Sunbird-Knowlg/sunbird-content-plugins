@@ -26,7 +26,7 @@ EkstepEditor.basePlugin.extend({
         }, 1000);
     },
     /**
-     *
+     *   Load userlist to add collaborators
      *   @param event {Object} event object from event bus.
      *   @param data {Object} ecml
      *   @memberof collaborator
@@ -55,6 +55,7 @@ EkstepEditor.basePlugin.extend({
         this.showPreview();
     },
     /**
+     *   load html template to show the popup
      *   @memberof collaborator
      */
     showPreview: function() {
@@ -82,6 +83,7 @@ EkstepEditor.basePlugin.extend({
         });
     },
     /**
+     *   function to copy content preview link
      *   @memberof collaborator
      */
     getUrlLink: function() {
@@ -96,6 +98,7 @@ EkstepEditor.basePlugin.extend({
         }
     },
     /**
+     *   form validation
      *   @memberof collaborator
      */
     sendInvites: function() {
@@ -129,7 +132,7 @@ EkstepEditor.basePlugin.extend({
             });
     },
     /**
-     *
+     *   send notification email to collaborators
      *   @param event {Object} event object.
      *   @param data {Object} data
      *   @memberof collaborator
@@ -176,6 +179,7 @@ EkstepEditor.basePlugin.extend({
         }, 500);
     },
     /**
+     *   get already invited collaborators info
      *   @memberof collaborator
      */
     collaboratorsInfo: function() {
