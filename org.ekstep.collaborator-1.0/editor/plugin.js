@@ -90,9 +90,7 @@ EkstepEditor.basePlugin.extend({
 
         try {
             var successful = document.execCommand('copy');
-
             successful ? instance.copyAnswer = 'Copied!' : instance.copyAnswer = 'Unable to copy!';
-
         } catch (err) {
             instance.copyAnswer = 'Unsupported Browser!';
         }
