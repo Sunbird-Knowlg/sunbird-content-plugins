@@ -32,27 +32,26 @@ EkstepEditor.basePlugin.extend({
      *   @memberof addCollaborator
      */
     addCollaborator: function(event, data) {
-		setTimeout(function() {
-			EkstepEditorAPI.jQuery('#colUsersDropdown')
-			  .dropdown({
-				apiSettings: {
-				  url: EkstepEditor.config.baseURL+'/index.php?option=com_ekcontent&task=contentform.getUsersToInvite&id='+window.context.id+'&isEditor=true&search={query}',
-				  cache:false
-				},
-				saveRemoteData:false,
-				fields: {
-				  remoteValues : 'results',
-				  values       : 'values',
-				  name         : 'name',
-				  text         : 'text',
-				  value        : 'value'
-				},
-				forceSelection:false
-			  })
-			;
-		}, 1000);
+        setTimeout(function() {
+            EkstepEditorAPI.jQuery('#colUsersDropdown')
+                .dropdown({
+                    apiSettings: {
+                        url: EkstepEditor.config.baseURL + '/index.php?option=com_ekcontent&task=contentform.getUsersToInvite&id=' + window.context.id + '&isEditor=true&search={query}',
+                        cache: false
+                    },
+                    saveRemoteData: false,
+                    fields: {
+                        remoteValues: 'results',
+                        values: 'values',
+                        name: 'name',
+                        text: 'text',
+                        value: 'value'
+                    },
+                    forceSelection: false
+                });
+        }, 1000);
 
-		this.collaboratorsInfo();
+        this.collaboratorsInfo();
         this.showPreview();
     },
     /**
@@ -61,17 +60,17 @@ EkstepEditor.basePlugin.extend({
     showPreview: function() {
         var instance = this;
         var modalController = function($scope) {
-            $scope.getUrlLink      = instance.getUrlLink;
+            $scope.getUrlLink = instance.getUrlLink;
             $scope.viewContentLink = window.context.viewContentLink;
-            $scope.sendInvites     = instance.sendInvites;
-            instance.copyAnswer    = 'Copy';
-            $scope.copyAnswer      = instance.copyAnswer;
-            $scope.notifyUser      = instance.notifyUser;
-            $scope.contentId       = window.context.id;
-            $scope.collaborators   = instance.collaborators;
-            $scope.loading         = instance.loading;
-            $scope.isLoading       = instance.isLoading;
-            $scope.isError         = instance.isError;
+            $scope.sendInvites = instance.sendInvites;
+            instance.copyAnswer = 'Copy';
+            $scope.copyAnswer = instance.copyAnswer;
+            $scope.notifyUser = instance.notifyUser;
+            $scope.contentId = window.context.id;
+            $scope.collaborators = instance.collaborators;
+            $scope.loading = instance.loading;
+            $scope.isLoading = instance.isLoading;
+            $scope.isError = instance.isError;
         };
 
         EkstepEditorAPI.getService('popup').open({
@@ -82,116 +81,113 @@ EkstepEditor.basePlugin.extend({
             className: 'ngdialog-theme-plain'
         });
     },
-    getUrlLink: function(){
-		var instance = this;
-		EkstepEditorAPI.jQuery("#copyTarget").select();
+    getUrlLink: function() {
+        var instance = this;
+        EkstepEditorAPI.jQuery("#copyTarget").select();
 
-		try {
-			var successful = document.execCommand('copy');
+        try {
+            var successful = document.execCommand('copy');
 
-			if(successful) instance.copyAnswer = 'Copied!';
-			else instance.copyAnswer = 'Unable to copy!';
-		} catch (err) {
-			instance.copyAnswer = 'Unsupported Browser!';
-		}
-	},
-	sendInvites: function(){
-		var instance = this;
-		EkstepEditorAPI.jQuery('#colInviteForm')
-			.form({
-				inline: true,
-				fields: {
-					inviteUsers: {
-						identifier: 'inviteUsers',
-						rules: [{
-							type: 'empty',
-							prompt: 'Please select usernames'
-						}]
-					},
-					invite_msg: {
-						identifier: 'invite_msg',
-						rules: [{
-							type: 'empty',
-							prompt: 'Invite message should not be blank'
-						}]
-					},
-				},
-				onSuccess: function(event, fields) {
-					instance.notifyUser(event, fields);
-				},
-				onFailure: function(formErrors, fields) {
-					console.log("fields validation failed");
-					return false;
-				}
-		});
-	},
-	notifyUser: function(event, fields) {
-		var instance = this;
-		instance.loading    = 'active';
-		instance.isLoading  = true;
-		instance.isError    = false;
-		EkstepEditorAPI.getAngularScope().safeApply();
+            if (successful) instance.copyAnswer = 'Copied!';
+            else instance.copyAnswer = 'Unable to copy!';
+        } catch (err) {
+            instance.copyAnswer = 'Unsupported Browser!';
+        }
+    },
+    sendInvites: function() {
+        var instance = this;
+        EkstepEditorAPI.jQuery('#colInviteForm')
+            .form({
+                inline: true,
+                fields: {
+                    inviteUsers: {
+                        identifier: 'inviteUsers',
+                        rules: [{
+                            type: 'empty',
+                            prompt: 'Please select usernames'
+                        }]
+                    },
+                    invite_msg: {
+                        identifier: 'invite_msg',
+                        rules: [{
+                            type: 'empty',
+                            prompt: 'Invite message should not be blank'
+                        }]
+                    },
+                },
+                onSuccess: function(event, fields) {
+                    instance.notifyUser(event, fields);
+                },
+                onFailure: function(formErrors, fields) {
+                    console.log("fields validation failed");
+                    return false;
+                }
+            });
+    },
+    notifyUser: function(event, fields) {
+        var instance = this;
+        instance.loading = 'active';
+        instance.isLoading = true;
+        instance.isError = false;
+        EkstepEditorAPI.getAngularScope().safeApply();
 
-		setTimeout(function() {
-			EkstepEditorAPI.jQuery.ajax({
-				url: EkstepEditor.config.baseURL+'/index.php?option=com_ekcontent&task=contentform.inviteUsers',
-				headers: {
-					'x-auth':'session'
-				},
-				type: "POST",
-				data: fields,
-				async:false,
-				success:function(result){
-					if (result == true)
-					{
-						instance.isLoading  = false;
-						EkstepEditorAPI.jQuery('.collaborator_msg').transition('drop');
+        setTimeout(function() {
+            EkstepEditorAPI.jQuery.ajax({
+                url: EkstepEditor.config.baseURL + '/index.php?option=com_ekcontent&task=contentform.inviteUsers',
+                headers: {
+                    'x-auth': 'session'
+                },
+                type: "POST",
+                data: fields,
+                async: false,
+                success: function(result) {
+                    if (result == true) {
+                        instance.isLoading = false;
+                        EkstepEditorAPI.jQuery('.collaborator_msg').transition('drop');
 
-						EkstepEditorAPI.getAngularScope().safeApply();
-						setTimeout(function() {
-							instance.closeThisDialog();
-						}, 1000);
-					}
-					else
-					{
-						instance.isError    = true;
-						EkstepEditorAPI.jQuery('.collaborator_msg').transition('drop');
-						EkstepEditorAPI.getAngularScope().safeApply();
-						setTimeout(function() {
-							instance.loading = '';
-							EkstepEditorAPI.getAngularScope().safeApply();
-						}, 1000);
-					}
-				},
-				error:function(){
-					console.log("Error");
-				}
-			});
-		}, 500);
-	},
-	collaboratorsInfo: function(){
-		var instance = this;
+                        EkstepEditorAPI.getAngularScope().safeApply();
+                        setTimeout(function() {
+                            instance.closeThisDialog();
+                        }, 1000);
+                    } else {
+                        instance.isError = true;
+                        EkstepEditorAPI.jQuery('.collaborator_msg').transition('drop');
+                        EkstepEditorAPI.getAngularScope().safeApply();
+                        setTimeout(function() {
+                            instance.loading = '';
+                            EkstepEditorAPI.getAngularScope().safeApply();
+                        }, 1000);
+                    }
+                },
+                error: function() {
+                    console.log("Error");
+                }
+            });
+        }, 500);
+    },
+    collaboratorsInfo: function() {
+        var instance = this;
 
-		EkstepEditorAPI.jQuery.ajax({
-			url: EkstepEditor.config.baseURL+'/index.php?option=com_api&app=ekcontent&resource=collaborator&format=raw',
-			headers: {
-				'x-auth':'session'
-			},
-			type: "GET",
-			data: {id:window.context.id},
-			async:false,
-			success:function(results){
-				if (results){
-					instance.collaborators = results.result.collaborators;
-				}else{
-					instance.collaborators = null;
-				}
-			},
-			error:function(){
-				console.log("Error");
-			}
-		});
-	}
+        EkstepEditorAPI.jQuery.ajax({
+            url: EkstepEditor.config.baseURL + '/index.php?option=com_api&app=ekcontent&resource=collaborator&format=raw',
+            headers: {
+                'x-auth': 'session'
+            },
+            type: "GET",
+            data: { id: window.context.id },
+            async: false,
+            success: function(results) {
+                if (results) {
+                    instance.collaborators = results.result.collaborators;
+                } else {
+                    instance.collaborators = null;
+                }
+            },
+            error: function() {
+                console.log("Error");
+            }
+        });
+    }
 });
 
 //# sourceURL=collaboratorplugin.js
