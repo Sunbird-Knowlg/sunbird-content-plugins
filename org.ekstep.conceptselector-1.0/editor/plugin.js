@@ -25,7 +25,7 @@ EkstepEditor.basePlugin.extend({
     initData: function() {
 		var domains = [];
 		EkstepEditor.conceptService.getConceptsTree(function(err, resp) {
-			if (!err && resp.statusText == "OK") {
+			if (!err && resp.data && resp.data.result && EkstepEditorAPI._.isArray(resp.data.result.domains)) {
 				EkstepEditorAPI._.forEach(resp.data.result.domains, function(value) {
 					var domain   = {};
 					domain.id    = value.identifier;
