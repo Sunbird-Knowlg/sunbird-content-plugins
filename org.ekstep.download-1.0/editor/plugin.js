@@ -34,15 +34,33 @@ EkstepEditor.basePlugin.extend({
     downloadContent: function() {
         var instance = this;
         instance.isSending = 'active';
-        instance.isLoading = true;
+        instance.isLoading = false;
         instance.isSuccess = false;
+        instance.isDownloading = true;
 
         var modalController = function($scope) {
             $scope.isSending = instance.isSending;
             $scope.isLoading = instance.isLoading;
             $scope.isSuccess = instance.isSuccess;
+            $scope.isDownloading = instance.isDownloading;
             $scope.cntName = EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).contentMeta.name;
-            instance.sendEmail($scope);
+            instance.getDownloadUrl(function(downloadUrl) {
+                if (downloadUrl) {
+                    $scope.isLoading = true;
+                    $scope.isDownloading = false;
+                    EkstepEditorAPI.getAngularScope().safeApply();
+                    setTimeout(function() {
+                        instance.sendEmail($scope, downloadUrl);
+                    }, 1000);
+                } else {
+                    $scope.isLoading = false;
+                    $scope.isDownloading = false;
+                    $scope.status = false;
+                    $scope.getMessage = 'Content is not ready to download, please try again later';
+                    EkstepEditorAPI.jQuery('.ct_download_msg').transition('drop');
+                    EkstepEditorAPI.getAngularScope().safeApply();
+                }
+            });
         };
 
         EkstepEditorAPI.getService('popup').open({
@@ -54,39 +72,42 @@ EkstepEditor.basePlugin.extend({
             className: 'ngdialog-theme-plain dwContent'
         });
     },
-    sendEmail: function($scope) {
+    getDownloadUrl: function(callback) {
+        var fileName = (EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).contentMeta.name).toLowerCase();
+        EkstepEditor.contentService.downloadContent(window.context.content_id, fileName, function(err, resp) {
+            if (!err && resp.data.responseCode == "OK") {
+                callback(resp.data.result.ECAR_URL);
+            } else {
+                callback(false);
+            }
+        });
+    },
+    sendEmail: function($scope, data) {
         EkstepEditorAPI.jQuery.ajax({
-            url: EkstepEditor.config.baseURL + '/index.php?option=com_ekcontent&task=content.downloadContent',
+            url: EkstepEditor.config.baseURL + '/index.php?option=com_api&app=ekcontent&resource=download&format=raw',
             headers: {
                 'x-auth': 'session'
             },
             type: "POST",
             data: {
-                cntIdentifier: window.context.content_id,
-                cntName: EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).contentMeta.name
+                downloadUrl: data,
+                name: EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).contentMeta.name
             },
             success: function(results) {
                 $scope.isLoading = false;
-                $scope.status = (results.status == 'success') ? true : false;
-                $scope.getMessage = results.msg;
+                $scope.status = (results.responseCode == 'OK') ? true : false;
+                $scope.getMessage = results.result;
                 EkstepEditorAPI.jQuery('.ct_download_msg').transition('drop');
                 EkstepEditorAPI.getAngularScope().safeApply();
-                setTimeout(function() {
-                    $scope.closeThisDialog();
-                }, 1000);
             },
             error: function() {
                 $scope.isLoading = false;
                 $scope.status = false;
-                $scope.getMessage = 'Unable to download content, please try again later';
+                $scope.getMessage = 'Unable to send email, please try again later';
                 EkstepEditorAPI.jQuery('.ct_download_msg').transition('drop');
                 EkstepEditorAPI.getAngularScope().safeApply();
-                setTimeout(function() {
-                    $scope.closeThisDialog();
-                }, 1000);
             }
         });
     },
 });
-
 //# sourceURL=downloadplugin.js
