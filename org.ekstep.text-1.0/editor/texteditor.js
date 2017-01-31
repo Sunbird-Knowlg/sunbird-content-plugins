@@ -98,7 +98,7 @@ var textEditor = (function() {
         $buttonGrp.show();
         setTimeout(function() { EkstepEditorAPI.jQuery("#toolbarOptions").hide();  }, 600);
         var angScope = EkstepEditorAPI.getAngularScope();
-        angScope.safeApply(function () {
+        EkstepEditorAPI.ngSafeApply(angScope, function () {
           angScope.configStyle = "";           
         });
     }
@@ -109,7 +109,7 @@ var textEditor = (function() {
         $doneBtn.hide();
         $cancelBtn.hide();
         var angScope = EkstepEditorAPI.getAngularScope();
-        angScope.safeApply(function () {
+        EkstepEditorAPI.ngSafeApply(angScope, function () {
           angScope.configStyle = "";           
         });
     }

@@ -71,7 +71,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("config:properties", this.showProperties, this);
 
         var angScope = EkstepEditorAPI.getAngularScope();
-        angScope.safeApply(function() {
+        EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.contextToolbar = instance.manifest.editor.data.toolbars;
         });
 
@@ -94,7 +94,7 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         if (this.selectedPluginId != data.id) {
             var angScope = EkstepEditorAPI.getAngularScope();
-            angScope.safeApply(function() {
+            EkstepEditorAPI.ngSafeApply(angScope, function() {
                 angScope.showConfigContainer = false;
             });
         }
@@ -105,7 +105,7 @@ EkstepEditor.basePlugin.extend({
         if (data.id == this.selectedPluginId) {
             EkstepEditorAPI.jQuery('#toolbarOptions').hide();
             var angScope = EkstepEditorAPI.getAngularScope();
-            angScope.safeApply(function() {
+            EkstepEditorAPI.ngSafeApply(angScope, function() {
                 angScope.showConfigContainer = false;
             });
         }
@@ -129,7 +129,7 @@ EkstepEditor.basePlugin.extend({
             EkstepEditorAPI.getCurrentObject().renderConfig();
         }
         var angScope = EkstepEditorAPI.getAngularScope();
-        angScope.safeApply(function() {
+        EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.pluginConfig = instance.pluginConfigManifest;
             angScope.configData = instance.configData;
             angScope.$watch('configData', function(newValue, oldValue) {
@@ -157,7 +157,7 @@ EkstepEditor.basePlugin.extend({
     stageUnselect: function(data) {
         EkstepEditorAPI.jQuery('#toolbarOptions').hide();
         var angScope = EkstepEditorAPI.getAngularScope();
-        angScope.safeApply(function() {
+        EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.showConfigContainer = false;
         });
     },
@@ -247,7 +247,7 @@ EkstepEditor.basePlugin.extend({
     showActions: function(event, data) {
         var instance = this;
         var angScope = EkstepEditorAPI.getAngularScope();
-        angScope.safeApply(function() {
+        EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.currentObjectActions = [];
             angScope.allActionsList = instance.allActionsList;
         });
@@ -282,7 +282,7 @@ EkstepEditor.basePlugin.extend({
             } else {
                 EkstepEditorAPI.jQuery('#toolbarOptions').hide();
                 var angScope = EkstepEditorAPI.getAngularScope();
-                angScope.safeApply(function() {
+                EkstepEditorAPI.ngSafeApply(angScope, function() {
                     angScope.showConfigContainer = false;
                 });
             }
@@ -292,7 +292,7 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         var angScope = EkstepEditorAPI.getAngularScope();
         var selectedPluginObj = EkstepEditorAPI.getPluginInstance(instance.selectedPluginId).editorObj;
-        angScope.safeApply(function() {
+        EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.showConfigContainer = true;
             angScope.configHeaderText = title;
             angScope.configStyle = {
@@ -368,7 +368,7 @@ EkstepEditor.basePlugin.extend({
                 if (e.action && e.action.length) { eventsActionList.push(e.action[0]) }
             })
         }
-        angScope.safeApply(function() {
+        EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.currentObjectActions = eventsActionList;
         });
     },
@@ -402,7 +402,7 @@ EkstepEditor.basePlugin.extend({
         var angScope = EkstepEditorAPI.getAngularScope();
 
         EkstepEditorAPI.jQuery("#actionTypeDropdown:not(.addChange)").on('change', function(e) {
-            angScope.safeApply(function() {
+            EkstepEditorAPI.ngSafeApply(angScope, function() {
                 angScope.actionTargetObjects = [];
             });
 
@@ -429,7 +429,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI._.forEach(pluginInstances, function(pi) {
             pluginInstanceIds[pi.id] = pi.id;
         })
-        angScope.safeApply(function() {
+        EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.actionTargetObjects = pluginInstanceIds;
         });
     },
@@ -443,7 +443,7 @@ EkstepEditor.basePlugin.extend({
             }
         });
         var angScope = EkstepEditorAPI.getAngularScope();
-        angScope.safeApply(function() {
+        EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.actionTargetObjects = optionsList;
         });
     },
@@ -455,7 +455,7 @@ EkstepEditor.basePlugin.extend({
         });
         delete stageOptions[EkstepEditorAPI.getCurrentStage().id];
         var angScope = EkstepEditorAPI.getAngularScope();
-        angScope.safeApply(function() {
+        EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.actionTargetObjects = stageOptions;
         });
     },
@@ -484,7 +484,7 @@ EkstepEditor.basePlugin.extend({
     showProperties: function(event, data) {
         var angScope = EkstepEditorAPI.getAngularScope();
         var properties = EkstepEditorAPI.getCurrentObject().getProperties();
-        angScope.safeApply(function() {
+        EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.pluginProperties = properties;
         });
         this.setToolBarContainerLocation("Properties");

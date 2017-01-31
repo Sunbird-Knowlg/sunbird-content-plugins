@@ -41,7 +41,7 @@ EkstepEditor.basePlugin.extend({
 					domain.nodes = domainChild;
 					domains.push(domain);
 				});
-				EkstepEditorAPI.getAngularScope().safeApply();
+				EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
 			}
 		});
 
