@@ -52,7 +52,7 @@
             "title": "Shuffle Options",
             "description": "Shuffle the options",
             "dataType": "boolean",            
-            "required": true            
+            "required": true 
         },
         {
             "propertyName": "showImmediateFeedback",

@@ -20,4 +20,4 @@ We suggest you select a large number of questions, set the question set to show 
 
 ***Are you a developer?***
 
-To get started visit [EkStep Developer Community](https://community.ekstep.in/developers)
+To get started visit <a href="https://community.ekstep.in/developers" target="_blank">EkStep Developer Community</a>

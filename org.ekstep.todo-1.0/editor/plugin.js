@@ -1,11 +1,10 @@
-/**
- *
+
+ /**
  * Plugin to get todos form community portal
- * @class todos
+ * @class Todo
+ * @constructor
  * @extends EkstepEditor.basePlugin
- *
  * @author Gourav More <gourav_m@tekditechnologies.com>
- * @listens
  */
 
 EkstepEditor.basePlugin.extend({
