@@ -217,7 +217,7 @@ angular.module('assessmentbrowserapp', [])
                 itemIframe.contentWindow.setContentData(null, ctrl.itemPreviewContent, config);
             });
         });
-        
+      
         ctrl.previewItem = function(item) {
             EkstepEditorAPI.getService('assessmentService').getItem(item.question.identifier, function(err, resp) {
                 if (!err) {

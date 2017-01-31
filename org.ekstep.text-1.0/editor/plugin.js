@@ -75,7 +75,7 @@ EkstepEditor.basePlugin.extend({
      * This method is callback for double click event which will call the textEditor to show the ediotor to add or modify text.
      * @memberof Text
      */
-    dblClickHandler: function() {
+    dblClickHandler: function(event) {
         var leftSt = EkstepEditorAPI.jQuery("#canvas").offset().left + EkstepEditorAPI.getCurrentObject().editorObj.left;
         var leftEnd = leftSt + EkstepEditorAPI.getCurrentObject().editorObj.width;
         var topSt = EkstepEditorAPI.jQuery("#canvas").offset().top + EkstepEditorAPI.getCurrentObject().editorObj.top;
