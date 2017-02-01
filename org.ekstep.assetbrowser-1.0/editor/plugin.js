@@ -23,8 +23,8 @@ EkstepEditor.basePlugin.extend({
     initialize: function() {
         EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.initPreview, this);
         setTimeout(function() {
-            var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.assetbrowser-1.0/editor/assetBrowser.html';
-            var controllerPath = EkstepEditor.config.pluginRepo + '/org.ekstep.assetbrowser-1.0/editor/assetbrowserapp.js';
+            var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.assetbrowser-1.0/editor/assetBrowser.html';
+            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.assetbrowser-1.0/editor/assetbrowserapp.js';
 
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
 
@@ -104,7 +104,7 @@ EkstepEditor.basePlugin.extend({
 
         EkstepEditorAPI._.merge(requestObj.request.filters, allowableFilter);
 
-        iservice.http.post(EkstepEditor.config.baseURL + EkstepEditor.config.apislug + '/search/v2/search', requestObj, requestHeaders, cb);
+        iservice.http.post(EkstepEditorAPI.baseURL + EkstepEditor.config.apislug + '/search/v2/search', requestObj, requestHeaders, cb);
     },
     /**
     *   invokes popup service to show the popup window
