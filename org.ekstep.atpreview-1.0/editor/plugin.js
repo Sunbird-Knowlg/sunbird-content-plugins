@@ -32,10 +32,8 @@ EkstepEditor.basePlugin.extend({
      */
     initialize: function() {
         EkstepEditorAPI.addEventListener("atpreview:show", this.initPreview, this);
-        var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.atpreview-1.0/editor/popup.html';
-        setTimeout(function() {
-            EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
-        }, 1000);
+        var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.atpreview-1.0/editor/popup.html';
+        EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
     },
     /**
      *

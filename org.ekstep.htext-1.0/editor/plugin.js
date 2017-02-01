@@ -38,8 +38,8 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("delete:invoked", this.deleteObject, this);
         EkstepEditorAPI.addEventListener("org.ekstep.htext:showpopup", this.loadHtml, this);
         setTimeout(function() {
-            var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.htext-1.0/editor/htext.html';
-            var controllerPath = EkstepEditor.config.pluginRepo + '/org.ekstep.htext-1.0/editor/readalongapp.js';
+            var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.htext-1.0/editor/htext.html';
+            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.htext-1.0/editor/readalongapp.js';
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
 

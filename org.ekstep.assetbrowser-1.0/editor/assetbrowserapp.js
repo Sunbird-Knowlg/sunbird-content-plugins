@@ -95,7 +95,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             // Hide loader
             hideLoader();
 
-            EkstepEditorAPI.ngSafeApply(angScope);
+            EkstepEditorAPI.ngSafeApply($scope);
         };
 
         function audioAssetCb(err, res) {
@@ -118,7 +118,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             // Hide loader
             hideLoader();
 
-            EkstepEditorAPI.ngSafeApply(angScope);
+            EkstepEditorAPI.ngSafeApply($scope);
         };
 
         function trustResource(src) {
@@ -537,7 +537,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             var assetName = resp.config.data.request.content.name;
             EkstepEditorAPI.jQuery.ajax({
                 // @Todo Use the correct URL
-                url: EkstepEditorAPI.baseURL + EkstepEditor.config.apislug + "/learning/v2/content/upload/" + resp.data.result.node_id,
+
+                url: EkstepEditorAPI.baseURL + EkstepEditorAPI.apislug + "/learning/v2/content/upload/" + resp.data.result.node_id,
                 type: 'POST',
                 contentType: false,
                 data: data,
