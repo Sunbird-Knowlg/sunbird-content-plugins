@@ -34,8 +34,8 @@ EkstepEditor.basePlugin.extend({
     initialize: function() {
         EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.loadHtml, this);
         setTimeout(function() {
-            var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.assessmentbrowser-1.0/editor/assessmentbrowser.html';
-            var controllerPath = EkstepEditor.config.pluginRepo + '/org.ekstep.assessmentbrowser-1.0/editor/assessmentbrowserapp.js';
+            var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.assessmentbrowser-1.0/editor/assessmentbrowser.html';
+            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.assessmentbrowser-1.0/editor/assessmentbrowserapp.js';
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
 
