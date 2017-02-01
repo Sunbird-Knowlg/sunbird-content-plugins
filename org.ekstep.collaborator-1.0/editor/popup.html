@@ -8,6 +8,14 @@
 				  <i class="collaborator_msg checkmark icon"></i>
 				 Invitation sent Successfully!
 				</h2>
+				<div class="ui grid">
+					<div class="six wide right floated column">
+						<div class="ui green ok button"  ng-click="this.closeThisDialog()">
+						  <i class="checkmark icon"></i>
+						  Ok
+						</div>
+					</div>
+				</div>
 			  </div>
 			</div>
 			<div class="content" ng-show="isError==true">
@@ -16,6 +24,14 @@
 				  <i class="collaborator_msg warning sign icon"></i>
 					Something went wrong please try again later
 				</h2>
+				<div class="ui grid">
+					<div class="six wide right floated column">
+						<div class="ui red ok button"  ng-click="loading = ''">
+						  <i class="checkmark icon"></i>
+						  Ok
+						</div>
+					</div>
+				</div>
 			  </div>
 			</div>
 		</div>

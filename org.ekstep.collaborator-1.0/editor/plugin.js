@@ -33,7 +33,7 @@ EkstepEditor.basePlugin.extend({
         this.showPreview(function() {
             EkstepEditorAPI.jQuery('#colUsersDropdown').dropdown({
                 apiSettings: {
-                    url: EkstepEditor.config.baseURL + 'index.php?option=com_ekcontent&task=contentform.getUsersToInvite&id=' + window.context.id + '&isEditor=true&search={query}',
+                    url: 'http://localhost/ek/index.php?option=com_ekcontent&task=contentform.getUsersToInvite&id=' + window.context.id + '&isEditor=true&search={query}',
                     cache: true
                 },
                 saveRemoteData: true,
@@ -139,7 +139,7 @@ EkstepEditor.basePlugin.extend({
     notifyUser: function(event, fields) {
         var instance = this;
         EkstepEditorAPI.jQuery.ajax({
-            url: EkstepEditor.config.baseURL + '/index.php?option=com_ekcontent&task=contentform.inviteUsers',
+            url: 'http://localhost/ek/index.php?option=com_ekcontent&task=contentform.inviteUsers',
             headers: {
                 'x-auth': 'session'
             },
@@ -157,17 +157,10 @@ EkstepEditor.basePlugin.extend({
                     instance.isLoading = false;
                     EkstepEditorAPI.jQuery('.collaborator_msg').transition('drop');
                     EkstepEditorAPI.getAngularScope().safeApply();
-                    setTimeout(function() {
-                        instance.closeThisDialog();
-                    }, 1000);
                 } else {
                     instance.isError = true;
                     EkstepEditorAPI.jQuery('.collaborator_msg').transition('drop');
                     EkstepEditorAPI.getAngularScope().safeApply();
-                    setTimeout(function() {
-                        instance.loading = '';
-                        EkstepEditorAPI.getAngularScope().safeApply();
-                    }, 1000);
                 }
             },
             error: function() {
@@ -183,7 +176,7 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
 
         EkstepEditorAPI.jQuery.ajax({
-            url: EkstepEditor.config.baseURL + '/index.php?option=com_api&app=ekcontent&resource=collaborator&format=raw',
+            url: 'http://localhost/ek/index.php?option=com_api&app=ekcontent&resource=collaborator&format=raw',
             headers: {
                 'x-auth': 'session'
             },
