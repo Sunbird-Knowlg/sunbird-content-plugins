@@ -21,7 +21,7 @@ angular.module('readalongapp', [])
             ctrl.autoplay = instance.attributes.autoplay;
             ctrl.name = instance.attributes.audio;
             ctrl.highlightColor = instance.attributes.highlight;
-            EkstepEditorAPI.getAngularScope().safeApply();
+            EkstepEditorAPI.ngSafeApply($scope);
             setTimeout(function(){
                 karaoke = instance.invokeKaraoke(ctrl.downloadurl, instance);
             }, 1000);
@@ -44,7 +44,7 @@ angular.module('readalongapp', [])
                     ctrl.audioSelected = true;
                     if(!EkstepEditorAPI._.isUndefined(instance.editorObj))
                         ctrl.audioChanged = true;
-                    EkstepEditorAPI.getAngularScope().safeApply();
+                    EkstepEditorAPI.ngSafeApply($scope);
                 }
             });
         };
