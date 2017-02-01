@@ -21,9 +21,7 @@ EkstepEditor.basePlugin.extend({
     initialize: function() {
         EkstepEditorAPI.addEventListener("collaborator:add", this.addCollaborator, this);
         var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.collaborator-1.0/editor/popup.html';
-        setTimeout(function() {
-            EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
-        }, 1000);
+        EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
     },
     /**
      *   Load userlist to add collaborators
@@ -32,33 +30,30 @@ EkstepEditor.basePlugin.extend({
      *   @memberof collaborator
      */
     addCollaborator: function(event, data) {
-        setTimeout(function() {
-            EkstepEditorAPI.jQuery('#colUsersDropdown')
-                .dropdown({
-                    apiSettings: {
-                        url: EkstepEditor.config.baseURL + '/index.php?option=com_ekcontent&task=contentform.getUsersToInvite&id=' + window.context.id + '&isEditor=true&search={query}',
-                        cache: false
-                    },
-                    saveRemoteData: false,
-                    fields: {
-                        remoteValues: 'results',
-                        values: 'values',
-                        name: 'name',
-                        text: 'text',
-                        value: 'value'
-                    },
-                    forceSelection: false
-                });
-        }, 1000);
-
+        this.showPreview(function() {
+            EkstepEditorAPI.jQuery('#colUsersDropdown').dropdown({
+                apiSettings: {
+                    url: EkstepEditor.config.baseURL + 'index.php?option=com_ekcontent&task=contentform.getUsersToInvite&id=' + window.context.id + '&isEditor=true&search={query}',
+                    cache: true
+                },
+                saveRemoteData: true,
+                fields: {
+                    remoteValues: 'results',
+                    values: 'values',
+                    name: 'name',
+                    text: 'text',
+                    value: 'value'
+                },
+                forceSelection: false
+            });
+        });
         this.collaboratorsInfo();
-        this.showPreview();
     },
     /**
      *   load html template to show the popup
      *   @memberof collaborator
      */
-    showPreview: function() {
+    showPreview: function(callback) {
         var instance = this;
         var modalController = function($scope) {
             $scope.getUrlLink = instance.getUrlLink;
@@ -72,6 +67,10 @@ EkstepEditor.basePlugin.extend({
             $scope.loading = instance.loading;
             $scope.isLoading = instance.isLoading;
             $scope.isError = instance.isError;
+
+            $scope.$on('ngDialog.opened', function(e, $dialog) {
+                callback();
+            });
         };
 
         EkstepEditorAPI.getService('popup').open({
@@ -139,44 +138,42 @@ EkstepEditor.basePlugin.extend({
      */
     notifyUser: function(event, fields) {
         var instance = this;
-        instance.loading = 'active';
-        instance.isLoading = true;
-        instance.isError = false;
-        EkstepEditorAPI.getAngularScope().safeApply();
-
-        setTimeout(function() {
-            EkstepEditorAPI.jQuery.ajax({
-                url: EkstepEditor.config.baseURL + '/index.php?option=com_ekcontent&task=contentform.inviteUsers',
-                headers: {
-                    'x-auth': 'session'
-                },
-                type: "POST",
-                data: fields,
-                async: false,
-                success: function(result) {
-                    if (result == true) {
-                        instance.isLoading = false;
-                        EkstepEditorAPI.jQuery('.collaborator_msg').transition('drop');
-
+        EkstepEditorAPI.jQuery.ajax({
+            url: EkstepEditor.config.baseURL + '/index.php?option=com_ekcontent&task=contentform.inviteUsers',
+            headers: {
+                'x-auth': 'session'
+            },
+            type: "POST",
+            data: fields,
+            async: false,
+            beforeSend: function() {
+                instance.loading = 'active';
+                instance.isLoading = true;
+                instance.isError = false;
+                EkstepEditorAPI.getAngularScope().safeApply();
+            },
+            success: function(result) {
+                if (result == true) {
+                    instance.isLoading = false;
+                    EkstepEditorAPI.jQuery('.collaborator_msg').transition('drop');
+                    EkstepEditorAPI.getAngularScope().safeApply();
+                    setTimeout(function() {
+                        instance.closeThisDialog();
+                    }, 1000);
+                } else {
+                    instance.isError = true;
+                    EkstepEditorAPI.jQuery('.collaborator_msg').transition('drop');
+                    EkstepEditorAPI.getAngularScope().safeApply();
+                    setTimeout(function() {
+                        instance.loading = '';
                         EkstepEditorAPI.getAngularScope().safeApply();
-                        setTimeout(function() {
-                            instance.closeThisDialog();
-                        }, 1000);
-                    } else {
-                        instance.isError = true;
-                        EkstepEditorAPI.jQuery('.collaborator_msg').transition('drop');
-                        EkstepEditorAPI.getAngularScope().safeApply();
-                        setTimeout(function() {
-                            instance.loading = '';
-                            EkstepEditorAPI.getAngularScope().safeApply();
-                        }, 1000);
-                    }
-                },
-                error: function() {
-                    console.log("Error");
+                    }, 1000);
                 }
-            });
-        }, 500);
+            },
+            error: function() {
+                console.log("Error");
+            }
+        });
     },
     /**
      *   get already invited collaborators info
