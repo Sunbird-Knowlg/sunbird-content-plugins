@@ -94,7 +94,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             // Hide loader
             hideLoader();
 
-            EkstepEditorAPI.getAngularScope().safeApply();
+            EkstepEditorAPI.ngSafeApply($scope);
         };
 
         function audioAssetCb(err, res) {
@@ -117,7 +117,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             // Hide loader
             hideLoader();
 
-            EkstepEditorAPI.getAngularScope().safeApply();
+            EkstepEditorAPI.ngSafeApply($scope);
         };
 
         function trustResource(src) {
@@ -234,7 +234,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                 }
             }
 
-			EkstepEditorAPI.getAngularScope().safeApply();
+			EkstepEditorAPI.ngSafeApply($scope);
         }
 
         ctrl.uploadClick = function() {
@@ -373,7 +373,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                     assetlanguages[lang.code] = lang.name;
                 });
                 ctrl.asset.language = EkstepEditorAPI._.values(assetlanguages);
-                EkstepEditorAPI.getAngularScope().safeApply();
+                EkstepEditorAPI.ngSafeApply($scope);
             }
         });
 
@@ -447,7 +447,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                 content = ctrl.assetMeta,
                 data = new FormData();
 
-            EkstepEditorAPI.getAngularScope().safeApply();
+            EkstepEditorAPI.ngSafeApply($scope);
 
             if (ctrl.record == true) {
                /* var dataurl = EkstepEditorAPI.jQuery('#recorded-audio-mainAudio').attr('src');
@@ -536,7 +536,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             var assetName = resp.config.data.request.content.name;
             EkstepEditorAPI.jQuery.ajax({
                 // @Todo Use the correct URL
-                url: EkstepEditor.config.baseURL + EkstepEditor.config.apislug + "/learning/v2/content/upload/" + resp.data.result.node_id,
+                url: EkstepEditorAPI.baseURL + EkstepEditorAPI.apislug + "/learning/v2/content/upload/" + resp.data.result.node_id,
                 type: 'POST',
                 contentType: false,
                 data: data,
