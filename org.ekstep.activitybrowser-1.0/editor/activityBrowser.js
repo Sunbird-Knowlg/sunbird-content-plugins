@@ -1,8 +1,9 @@
 'use strict';
 angular.module('activityBrowserApp', [])
     .controller('activityBrowserCtrl', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
-        var ctrl = this;
-
+        var ctrl = this,
+        angScope = EkstepEditorAPI.getAngularScope();
+        
         ctrl.usePluginBtnDisable = true;
         ctrl.selectedActivity = {};
         ctrl.errorLoadingActivities = false;
@@ -19,7 +20,7 @@ angular.module('activityBrowserApp', [])
             ctrl.loading = true;
             ctrl.errorLoadingActivities = false;
             ctrl.noActivities = false;
-            EkstepEditorAPI.getAngularScope().safeApply();
+            EkstepEditorAPI.ngSafeApply(angScope);
             var data = {
                 "request": {
                     "filters": {
@@ -31,7 +32,7 @@ angular.module('activityBrowserApp', [])
             };
             EkstepEditorAPI.getService('searchService').search(data, function(err, resp) {
                 ctrl.loading = false;
-                EkstepEditorAPI.getAngularScope().safeApply();
+                EkstepEditorAPI.ngSafeApply(angScope);
                 if (err) {
                     ctrl.errorLoadingActivities = true;
                     return
