@@ -74,6 +74,16 @@ Plugin.extend({
             this._stage._stageControllerName = controllerName;
             this._stage._stageController = stageController;
             this._stage._stageController.next();
+            var stageKey = this._stage.getStagestateKey();
+            if (typeof this._theme.getParam === "function") {
+                this._stage._currentState = this._theme.getParam(stageKey);
+                if (_.isUndefined(this._stage._currentState)) {
+                    this._stage.setParam(this._stage._type, {
+                        id: Renderer.theme._currentStage,
+                        stateId: stageKey
+                    });
+                }
+            }
         }
     }
 });

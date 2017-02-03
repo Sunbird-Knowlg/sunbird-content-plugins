@@ -48,6 +48,13 @@
             "required": true
         },
         {
+            "propertyName": "optionShuffle",
+            "title": "Shuffle Options",
+            "description": "Shuffle the options",
+            "dataType": "boolean",            
+            "required": true 
+        },
+        {
             "propertyName": "showImmediateFeedback",
             "title": "Show Immediate Feedback",
             "description": "Show the feedback popup",

@@ -23,4 +23,4 @@ Place scribble pad over a shape, an image or a text to teach tracing of shapes, 
 
 ***Are you a developer?***
 
-To get started visit [EkStep Developer Community](https://community.ekstep.in/developers)
+To get started visit <a href="https://community.ekstep.in/developers" target="_blank">EkStep Developer Community</a>

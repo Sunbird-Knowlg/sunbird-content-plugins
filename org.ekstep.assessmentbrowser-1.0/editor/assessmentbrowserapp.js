@@ -7,8 +7,9 @@ angular.module('assessmentbrowserapp', [])
             ctrl = this,
             itemIframe;
 
-        ctrl.isFiltersShown = true;
+        ctrl.isAdvanceOptionOpen = true;
         ctrl.isMyQuestions = false;
+        ctrl.errorMessage = false;
         ctrl.languagecode = 'en';
         ctrl.activePreviewItem = '';
         ctrl.assessment = {};
@@ -29,15 +30,17 @@ angular.module('assessmentbrowserapp', [])
         };
         ctrl.context = EkstepEditorAPI.getAngularScope().context;
 
+        //get languages from languages api
         EkstepEditorAPI.getService('assessmentService').getLanguages(function(err, respLan) {
-            if (!err && respLan.statusText == "OK") {
+            if (!err) {
                 var assessmentlanguages = {};
                 EkstepEditorAPI._.forEach(respLan.data.result.languages, function(lang) {
                     assessmentlanguages[lang.code] = lang.name;
                 });
                 ctrl.assessment.language = EkstepEditorAPI._.values(assessmentlanguages);
-                EkstepEditorAPI.getService('assessmentService').getDefinations(function(err, resp) {
-                    if (!err && resp.statusText == "OK") {
+                //get questiontype, grade and difficulty dropdown values from definitions api
+                EkstepEditorAPI.getService('assessmentService').getDefinitions(function(err, resp) {
+                    if (!err) {
                         var questionTypes = {};
                         EkstepEditorAPI._.forEach(resp.data.result.definition_node.properties, function(prop) {
                             switch (prop.propertyName) {
@@ -52,8 +55,9 @@ angular.module('assessmentbrowserapp', [])
                                     break;
                             }
                         });
+                        //get question type full defination from resource bundles api
                         EkstepEditorAPI.getService('assessmentService').getResourceBundles(function(err, resourceResp) {
-                            if (!err && resourceResp.statusText == "OK") {
+                            if (!err) {
                                 EkstepEditorAPI._.forEach(ctrl.assessment.type, function(data) {
                                     if (resourceResp.data.result.en[data] == undefined) {
                                         questionTypes[data] = data;
@@ -63,11 +67,23 @@ angular.module('assessmentbrowserapp', [])
                                 });
                                 ctrl.assessment.type = questionTypes;
                                 EkstepEditorAPI.getAngularScope().safeApply();
+                            }else{
+                                ctrl.errorMessage = true;
+                                EkstepEditorAPI.getAngularScope().safeApply();
+                                return;
                             }
                         });
-                        EkstepEditorAPI.jQuery('.ui.dropdown').dropdown({ useLabels: false });
+                        EkstepEditorAPI.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});
+                    }else{
+                        ctrl.errorMessage = true;
+                        EkstepEditorAPI.getAngularScope().safeApply();
+                        return;
                     }
                 });
+            }else{
+                ctrl.errorMessage = true;
+                EkstepEditorAPI.getAngularScope().safeApply();
+                return;
             }
         });
 
@@ -92,6 +108,7 @@ angular.module('assessmentbrowserapp', [])
             } else {
                 ctrl.isMyQuestions = false;
             }
+            // setting filters values and title to request data
             EkstepEditorAPI._.forEach(activity, function(value, key) {
                 if (value) {
                     switch (key) {
@@ -120,8 +137,9 @@ angular.module('assessmentbrowserapp', [])
                     }
                 }
             });
+            // get Questions from questions api
             EkstepEditorAPI.getService('assessmentService').getQuestions(data, function(err, resp) {
-                if (!err && resp.statusText == "OK") {
+                if (!err) {
                     ctrl.itemsLoading = false;
                     var item;
                     ctrl.items = [];
@@ -148,6 +166,9 @@ angular.module('assessmentbrowserapp', [])
                     EkstepEditorAPI.getAngularScope().safeApply();
                 } else {
                     ctrl.itemsLoading = false;
+                    ctrl.errorMessage = true;
+                    EkstepEditorAPI.getAngularScope().safeApply();
+                    return;
                 }
             });
         };
@@ -179,7 +200,7 @@ angular.module('assessmentbrowserapp', [])
         };
 
         ctrl.addActivityOptions = function() {
-            ctrl.isFiltersShown = false;
+            ctrl.isAdvanceOptionOpen = false;
             ctrl.activityOptions.total_items = ctrl.cart.items.length;
             ctrl.activityOptions.max_score = ctrl.activityOptions.total_items;
             ctrl.activityOptions.range = EkstepEditorAPI._.times(ctrl.activityOptions.total_items).splice(1);
@@ -188,20 +209,18 @@ angular.module('assessmentbrowserapp', [])
             EkstepEditorAPI.getAngularScope().safeApply();
         };
 
-        ctrl.previewLoad = function() {
-            setTimeout(function() {
-                itemIframe = EkstepEditor.jQuery('#itemIframe')[0];
-                if (itemIframe.src == "")
-                    itemIframe.src = instance.previewURL;
-                itemIframe.addEventListener('load', function() {
-                    itemIframe.contentWindow.setContentData(null, ctrl.itemPreviewContent, config);
-                });
-            }, 2000);
-        };
-        ctrl.previewLoad();
+        $scope.$on('ngDialog.opened', function (e, $dialog) {
+            itemIframe = EkstepEditor.jQuery('#itemIframe')[0];
+            if (itemIframe.src == "")
+                itemIframe.src = instance.previewURL;
+            itemIframe.addEventListener('load', function() {
+                itemIframe.contentWindow.setContentData(null, ctrl.itemPreviewContent, config);
+            });
+        });
+      
         ctrl.previewItem = function(item) {
             EkstepEditorAPI.getService('assessmentService').getItem(item.question.identifier, function(err, resp) {
-                if (!err && resp.statusText == "OK") {
+                if (!err) {
                     item = resp.data.result.assessment_item ? resp.data.result.assessment_item : item;
                     ctrl.itemPreviewLoading = true;
                     ctrl.itemPreviewDisplay = "";
@@ -209,7 +228,7 @@ angular.module('assessmentbrowserapp', [])
                     var templateRef = item.template_id ? item.template_id : item.template;
                     if (templateRef) {
                         EkstepEditorAPI.getService('assessmentService').getTemplate(templateRef, function(err, response) {
-                            if (!err && response.statusText == "OK") {
+                            if (!err) {
                                 var x2js = new X2JS({ attributePrefix: 'none', enableToStringFunc: false });
                                 var templateJson = x2js.xml_str2json(response.data.result.content.body);
                                 ctrl.itemPreviewContent = assessmentBrowserUtil.getQuestionPreviwContent(templateJson, item);
@@ -221,7 +240,9 @@ angular.module('assessmentbrowserapp', [])
                                 ctrl.itemPreviewContent = { "error": 'Preview could not be shown.' };
                                 ctrl.itemPreviewDisplay = ctrl.itemPreviewContent.error;
                                 ctrl.itemPreviewLoading = false;
+                                ctrl.errorMessage = true;
                                 EkstepEditorAPI.getAngularScope().safeApply();
+                                return;
                             }
                         });
                     } else {
@@ -230,6 +251,10 @@ angular.module('assessmentbrowserapp', [])
                         ctrl.itemPreviewLoading = false;
                         EkstepEditorAPI.getAngularScope().safeApply();
                     }
+                }else{
+                    ctrl.errorMessage = true;
+                    EkstepEditorAPI.getAngularScope().safeApply();
+                    return;
                 }
             });
 
