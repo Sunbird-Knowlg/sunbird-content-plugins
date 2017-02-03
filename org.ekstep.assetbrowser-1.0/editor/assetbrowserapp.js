@@ -2,7 +2,7 @@
 angular.module('assetbrowserapp', ['angularAudioRecorder']).config(['recorderServiceProvider', function(recorderServiceProvider){
 
         recorderServiceProvider.forceSwf(false);
-        var lameJsUrl = window.location.origin + EkstepEditor.config.pluginRepo + '/org.ekstep.assetbrowser-1.0/editor/recorder/lib2/lame.min.js';
+        var lameJsUrl = window.location.origin + EkstepEditorAPI.getPluginRepo() + '/org.ekstep.assetbrowser-1.0/editor/recorder/lib2/lame.min.js';
         var config = {lameJsUrl:lameJsUrl, bitRate: 92};
 
         recorderServiceProvider.withMp3Conversion(true, config);
@@ -16,6 +16,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             lastSelectedImage,
             audioTabSelected = false,
             imageTabSelected = true,
+            angScope = EkstepEditorAPI.getAngularScope(),
             ctrl = this;
 
         var $sce = $injector.get('$sce');
@@ -234,7 +235,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                 }
             }
 
-			EkstepEditorAPI.ngSafeApply($scope);
+            EkstepEditorAPI.ngSafeApply(angScope);
         }
 
         ctrl.uploadClick = function() {
@@ -373,7 +374,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                     assetlanguages[lang.code] = lang.name;
                 });
                 ctrl.asset.language = EkstepEditorAPI._.values(assetlanguages);
-                EkstepEditorAPI.ngSafeApply($scope);
+                EkstepEditorAPI.ngSafeApply(angScope);
             }
         });
 
@@ -447,7 +448,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                 content = ctrl.assetMeta,
                 data = new FormData();
 
-            EkstepEditorAPI.ngSafeApply($scope);
+            EkstepEditorAPI.ngSafeApply(angScope);
 
             if (ctrl.record == true) {
                /* var dataurl = EkstepEditorAPI.jQuery('#recorded-audio-mainAudio').attr('src');
@@ -536,6 +537,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             var assetName = resp.config.data.request.content.name;
             EkstepEditorAPI.jQuery.ajax({
                 // @Todo Use the correct URL
+
                 url: EkstepEditorAPI.baseURL + EkstepEditorAPI.apislug + "/learning/v2/content/upload/" + resp.data.result.node_id,
                 type: 'POST',
                 contentType: false,
