@@ -61,7 +61,7 @@ angular.module('aksharaEditorapp', [])
         /*########## Language Callback method which will be called after language api call ######*/
         function languageCb(err, res) {
             ctrl.language = res.data.result.languages;
-            EkstepEditorAPI.getAngularScope().safeApply();
+            EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
         }
 
         instance.getLanguages(undefined, languageCb); //Call Method to get Languages
@@ -81,7 +81,7 @@ angular.module('aksharaEditorapp', [])
             } else {
                 ctrl.aksharas = [];
             };
-            EkstepEditorAPI.getAngularScope().safeApply();
+            EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
         };
 
         /*########## Update words array by adding akashara to each object ######*/
@@ -155,7 +155,7 @@ angular.module('aksharaEditorapp', [])
             }
             var obj = {};
             //  ctrl.aksharaWords.words.push(obj);
-            EkstepEditorAPI.getAngularScope().safeApply();
+            EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
         };
 
         /*############# Method to get selected words ###############*/
@@ -278,7 +278,7 @@ angular.module('aksharaEditorapp', [])
 
         }
 
-        
+
 
 
         /*########## Method to switch to select akshara tab ######*/
@@ -325,7 +325,7 @@ angular.module('aksharaEditorapp', [])
                         }else{
                             ctrl.selectedProperty.words[value.akshara].two.push(word);
                         }
-                        
+
                     }
                 })
         }
@@ -399,7 +399,7 @@ angular.module('aksharaEditorapp', [])
                         "backFaceColor": "#002b80",
                         "textColor": "#ffffff",
                         "fixRows": true
-                       
+
                     })};
             EkstepEditorAPI.dispatchEvent("org.ekstep.akshara-editor:create", configData);
             EkstepEditorAPI.render();
@@ -465,7 +465,7 @@ angular.module('aksharaEditorapp', [])
                     if (i === destIdx) ctrl.levelMetaData[destIdx] = src;
                 }
             }
-            EkstepEditorAPI.getAngularScope().safeApply();
+            EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
         }
 
         ctrl.getLevelIndexById = function(levelId) {
