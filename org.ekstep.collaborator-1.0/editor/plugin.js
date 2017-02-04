@@ -33,7 +33,7 @@ EkstepEditor.basePlugin.extend({
         this.showPreview(function() {
             EkstepEditorAPI.jQuery('#colUsersDropdown').dropdown({
                 apiSettings: {
-                    url: EkstepEditor.config.baseURL+'/index.php?option=com_ekcontent&task=contentform.getUsersToInvite&id=' + window.context.id + '&isEditor=true&search={query}',
+                    url: EkstepEditorAPI.baseURL+'/index.php?option=com_ekcontent&task=contentform.getUsersToInvite&id=' + window.context.id + '&isEditor=true&search={query}',
                     cache: true
                 },
                 saveRemoteData: true,
@@ -139,7 +139,7 @@ EkstepEditor.basePlugin.extend({
     notifyUser: function(event, fields) {
         var instance = this;
         EkstepEditorAPI.jQuery.ajax({
-            url: EkstepEditor.config.baseURL+'/index.php?option=com_ekcontent&task=contentform.inviteUsers',
+            url: EkstepEditorAPI.baseURL+'/index.php?option=com_ekcontent&task=contentform.inviteUsers',
             headers: {
                 'x-auth': 'session'
             },
@@ -150,17 +150,17 @@ EkstepEditor.basePlugin.extend({
                 instance.loading = 'active';
                 instance.isLoading = true;
                 instance.isError = false;
-                EkstepEditorAPI.getAngularScope().safeApply();
+                EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
             },
             success: function(result) {
                 if (result == true) {
                     instance.isLoading = false;
                     EkstepEditorAPI.jQuery('.collaborator_msg').transition('drop');
-                    EkstepEditorAPI.getAngularScope().safeApply();
+                    EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
                 } else {
                     instance.isError = true;
                     EkstepEditorAPI.jQuery('.collaborator_msg').transition('drop');
-                    EkstepEditorAPI.getAngularScope().safeApply();
+                    EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
                 }
             },
             error: function() {
@@ -176,7 +176,7 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
 
         EkstepEditorAPI.jQuery.ajax({
-            url: EkstepEditor.config.baseURL+'/index.php?option=com_api&app=ekcontent&resource=collaborator&format=raw',
+            url: EkstepEditorAPI.baseURL+'/index.php?option=com_api&app=ekcontent&resource=collaborator&format=raw',
             headers: {
                 'x-auth': 'session'
             },
