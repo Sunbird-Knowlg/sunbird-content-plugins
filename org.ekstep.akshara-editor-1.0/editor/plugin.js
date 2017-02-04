@@ -3,8 +3,8 @@ EkstepEditor.basePlugin.extend({
     initialize: function() {
         EkstepEditorAPI.addEventListener("org.ekstep.akshara-editor:showpopup", this.loadHtml, this);
         setTimeout(function() {
-            var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.akshara-editor-1.0/editor/aksharaEditorConfig.html';
-            var controllerPath = EkstepEditor.config.pluginRepo + '/org.ekstep.akshara-editor-1.0/editor/aksharaeditorapp.js';
+            var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.akshara-editor-1.0/editor/aksharaEditorConfig.html';
+            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.akshara-editor-1.0/editor/aksharaeditorapp.js';
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
     },
@@ -50,7 +50,7 @@ EkstepEditor.basePlugin.extend({
         currentInstance = this;
     },
 
-    updateAttributes: function(att){     
+    updateAttributes: function(att){
         this.attributes.x= att.x;
         this.attributes.y= att.y;
         this.attributes.w= att.w;
@@ -66,7 +66,7 @@ EkstepEditor.basePlugin.extend({
 
     },
 
-    
+
     /*########## Method to add all default media and medias related to each word ######*/
     addAllMedia: function(){
         var data= this.config;
@@ -152,7 +152,7 @@ EkstepEditor.basePlugin.extend({
         });
 
 
-          
+
     },
 
     /*########## Method to open the modal ######*/
@@ -190,7 +190,7 @@ EkstepEditor.basePlugin.extend({
                 "user-id" : "rayuluv"
             }
         };
-        iservice.http.get(EkstepEditor.config.baseURL + '/api/learning/v1/language', requestHeaders, cb);
+        iservice.http.get(EkstepEditorAPI.baseURL + '/api/learning/v1/language', requestHeaders, cb);
 
     },
 
@@ -207,9 +207,9 @@ EkstepEditor.basePlugin.extend({
                 "content-type": "application/json"
             }
         };
-        iservice.http.get(EkstepEditor.config.baseURL + '/api/language/v1/language/dictionary/varna/Vowel/list/' + data, requestHeaders, function(err,res){
+        iservice.http.get(EkstepEditorAPI.baseURL + '/api/language/v1/language/dictionary/varna/Vowel/list/' + data, requestHeaders, function(err,res){
             var resp1 = res;
-            iservice.http.get(EkstepEditor.config.baseURL + '/api/language/v1/language/dictionary/varna/Consonant/list/' + data, requestHeaders, function(err,res){
+            iservice.http.get(EkstepEditorAPI.baseURL + '/api/language/v1/language/dictionary/varna/Consonant/list/' + data, requestHeaders, function(err,res){
                 cb(err, res, resp1);
             });
         });
@@ -245,12 +245,12 @@ EkstepEditor.basePlugin.extend({
 
         EkstepEditorAPI._.isUndefined(searchText) ? null : requestObj.request.filters = searchText;
 
-        iservice.http.post(EkstepEditor.config.baseURL + '/api/language/v2/language/search', requestObj, requestHeaders, function(err,res){
+        iservice.http.post(EkstepEditorAPI.baseURL + '/api/language/v2/language/search', requestObj, requestHeaders, function(err,res){
             //cb(err,res,varna);
                 var startRes = res;
                 requestObj.request.filters.lemma.value = requestObj.request.filters.lemma.startsWith;
                 delete requestObj.request.filters.lemma.startsWith;
-                iservice.http.post(EkstepEditor.config.baseURL + '/api/language/v2/language/search', requestObj, requestHeaders, function(err,res){
+                iservice.http.post(EkstepEditorAPI.baseURL + '/api/language/v2/language/search', requestObj, requestHeaders, function(err,res){
                   // var conRes = res;
                     var conRes = {};
                     cb(err,startRes,conRes,varna);
@@ -278,7 +278,7 @@ EkstepEditor.basePlugin.extend({
                     if(obj.id){
                         obj.setFill(value)
                     }
-                    
+
                 })
                 break;
             case 'backFaceColor':
@@ -291,7 +291,7 @@ EkstepEditor.basePlugin.extend({
                 this.attributes.fixRows = value;
                 break;
         }
-        
+
         EkstepEditorAPI.render();
         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
     },
@@ -308,6 +308,6 @@ EkstepEditor.basePlugin.extend({
            config.fixRows= this.attributes.fixRows;
         return config;
     },
-  
+
 });
 //# sourceURL=aksharaplugin.js

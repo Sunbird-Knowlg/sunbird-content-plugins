@@ -29,16 +29,15 @@ EkstepEditor.basePlugin.extend({
         },500)
         //FIXME: Find a proper place to update currentStage
         var instance = this;
-        instance.scope.safeApply(function() {
+        EkstepEditorAPI.ngSafeApply(instance.scope, function() {
             instance.scope.currentStage = EkstepEditorAPI.getCurrentStage();
         });
-
     },
     hideAll: function() {
         var instance = this;
         EkstepEditorAPI._.forEach(this.stageConfig, function(stage) {
             instance.hideStageComponents(stage);
-            instance.scope.safeApply();
+            EkstepEditorAPI.ngSafeApply(instance.scope);
         });
     },
     showAll: function() {
@@ -46,7 +45,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI._.forEach(this.stageConfig, function(stage, index) {
             if (stage.stageId === EkstepEditorAPI.getCurrentStage().id) {
                 instance.showStageComponents(stage);
-                instance.scope.safeApply();
+                EkstepEditorAPI.ngSafeApply(instance.scope);
                 return;
             }
         });

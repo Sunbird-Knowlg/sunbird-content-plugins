@@ -66,23 +66,23 @@ angular.module('assessmentbrowserapp', [])
                                     }
                                 });
                                 ctrl.assessment.type = questionTypes;
-                                EkstepEditorAPI.getAngularScope().safeApply();
+                                EkstepEditorAPI.ngSafeApply($scope);
                             }else{
                                 ctrl.errorMessage = true;
-                                EkstepEditorAPI.getAngularScope().safeApply();
+                                EkstepEditorAPI.ngSafeApply($scope);
                                 return;
                             }
                         });
                         EkstepEditorAPI.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});
                     }else{
                         ctrl.errorMessage = true;
-                        EkstepEditorAPI.getAngularScope().safeApply();
+                        EkstepEditorAPI.ngSafeApply($scope);
                         return;
                     }
                 });
             }else{
                 ctrl.errorMessage = true;
-                EkstepEditorAPI.getAngularScope().safeApply();
+                EkstepEditorAPI.ngSafeApply($scope);
                 return;
             }
         });
@@ -163,11 +163,11 @@ angular.module('assessmentbrowserapp', [])
                         ctrl.previewItem(ctrl.items[0]);
                     }
                     ctrl.totalItems = ctrl.items.length;
-                    EkstepEditorAPI.getAngularScope().safeApply();
+                    EkstepEditorAPI.ngSafeApply($scope);
                 } else {
                     ctrl.itemsLoading = false;
                     ctrl.errorMessage = true;
-                    EkstepEditorAPI.getAngularScope().safeApply();
+                    EkstepEditorAPI.ngSafeApply($scope);
                     return;
                 }
             });
@@ -185,7 +185,7 @@ angular.module('assessmentbrowserapp', [])
                 var itemIndex = this.getItemIndex(item);
                 ctrl.items[itemIndex].isSelected = true;
                 ctrl.previewItem(item, true);
-                EkstepEditorAPI.getAngularScope().safeApply();
+                EkstepEditorAPI.ngSafeApply($scope);
             },
             "remove": function(item) {
                 EkstepEditorAPI._.remove(this.items, function(cartItem) {
@@ -195,7 +195,7 @@ angular.module('assessmentbrowserapp', [])
                 if (itemIndex != -1) ctrl.items[itemIndex].isSelected = false;
                 ctrl.activityOptions.total_items = this.items.length;
                 EkstepEditorAPI.jQuery('.displayCount .text').html(ctrl.activityOptions.total_items);
-                EkstepEditorAPI.getAngularScope().safeApply();
+                EkstepEditorAPI.ngSafeApply($scope);
             }
         };
 
@@ -206,7 +206,7 @@ angular.module('assessmentbrowserapp', [])
             ctrl.activityOptions.range = EkstepEditorAPI._.times(ctrl.activityOptions.total_items).splice(1);
             ctrl.activityOptions.range.push(ctrl.activityOptions.total_items);
             EkstepEditorAPI.jQuery('.displayCount .text').html(ctrl.activityOptions.total_items);
-            EkstepEditorAPI.getAngularScope().safeApply();
+            EkstepEditorAPI.ngSafeApply($scope);
         };
 
         $scope.$on('ngDialog.opened', function (e, $dialog) {
@@ -235,13 +235,13 @@ angular.module('assessmentbrowserapp', [])
                                 ctrl.itemPreviewDisplay = !EkstepEditorAPI._.isUndefined(ctrl.itemPreviewContent.error) ? ctrl.itemPreviewContent.error : '';
                                 ctrl.itemPreviewLoading = false;
                                 itemIframe.contentWindow.location.reload();
-                                EkstepEditorAPI.getAngularScope().safeApply();
+                                EkstepEditorAPI.ngSafeApply($scope);
                             } else {
                                 ctrl.itemPreviewContent = { "error": 'Preview could not be shown.' };
                                 ctrl.itemPreviewDisplay = ctrl.itemPreviewContent.error;
                                 ctrl.itemPreviewLoading = false;
                                 ctrl.errorMessage = true;
-                                EkstepEditorAPI.getAngularScope().safeApply();
+                                EkstepEditorAPI.ngSafeApply($scope);
                                 return;
                             }
                         });
@@ -249,11 +249,11 @@ angular.module('assessmentbrowserapp', [])
                         ctrl.itemPreviewContent = { "error": 'Item does not have a template selected.' };
                         ctrl.itemPreviewDisplay = ctrl.itemPreviewContent.error;
                         ctrl.itemPreviewLoading = false;
-                        EkstepEditorAPI.getAngularScope().safeApply();
+                        EkstepEditorAPI.ngSafeApply($scope);
                     }
                 }else{
                     ctrl.errorMessage = true;
-                    EkstepEditorAPI.getAngularScope().safeApply();
+                    EkstepEditorAPI.ngSafeApply($scope);
                     return;
                 }
             });
@@ -280,7 +280,7 @@ angular.module('assessmentbrowserapp', [])
                 ctrl.activity.concepts = _.map(data, function(concept) {
                     return concept.id;
                 });
-                EkstepEditorAPI.getAngularScope().safeApply();
+                EkstepEditorAPI.ngSafeApply($scope);
                 ctrl.searchQuestions();
                 console.log('concepts data received - ', ctrl.activity.concepts);
             }
