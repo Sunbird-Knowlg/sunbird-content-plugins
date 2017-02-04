@@ -14,8 +14,8 @@ EkstepEditor.basePlugin.extend({
     initialize: function() {
         EkstepEditorAPI.addEventListener("org.ekstep.activitybrowser:showpopup", this.loadBrowser, this);
         setTimeout(function() {
-            var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.activitybrowser-1.0/editor/activityBrowser.html';
-            var controllerPath = EkstepEditor.config.pluginRepo + '/org.ekstep.activitybrowser-1.0/editor/activityBrowser.js';
+            var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.activitybrowser-1.0/editor/activityBrowser.html';
+            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.activitybrowser-1.0/editor/activityBrowser.js';
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
 

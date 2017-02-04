@@ -282,8 +282,9 @@ EkstepEditor.basePlugin.extend({
                     this.data.questionnaire.showImmediateFeedback = value;
                     break;
                 case 'optionShuffle':
-                   this.config.optionShuffle = value;
-                   this.data.questionnaire.optionShuffle = value;    
+                    this.config.optionShuffle = value;
+                    this.data.questionnaire.optionShuffle = value;
+                    break;
             }
         }
         EkstepEditorAPI.render();

@@ -25,7 +25,7 @@ EkstepEditor.basePlugin.extend({
         });
         converter = new E2EConverter();
         EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.initViewECML, this);
-        var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.viewecml-1.0/editor/ECMLbrowser.html';
+        var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.viewecml-1.0/editor/ECMLbrowser.html';
         setTimeout(function() {
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
         }, 1000);
@@ -75,7 +75,6 @@ EkstepEditor.basePlugin.extend({
      *   angular controller for popup service as callback
      */
     controllerCallback: function($scope, data) {
-        console.log(data);
         var ctrl = this;
         var ecmldata;
         ctrl.contentBody = "ECML Content";
@@ -83,7 +82,7 @@ EkstepEditor.basePlugin.extend({
         ctrl.previewLoad = function() {
             var jsondata = EkstepEditor.stageManager.toECML();
             ctrl.contentBody = converter.buildECML(jsondata, true)
-            EkstepEditorAPI.getAngularScope().safeApply(function(){
+            EkstepEditorAPI.ngSafeApply($scope, function(){
                 setTimeout(function() {
                     Prism.highlightElement(EkstepEditorAPI.jQuery("#xmlBody")[0]);
                 }, 100);

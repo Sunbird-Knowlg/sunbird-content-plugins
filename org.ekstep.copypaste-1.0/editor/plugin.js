@@ -31,7 +31,7 @@ EkstepEditor.basePlugin.extend({
      *   @memberof copyPaste
      */
     copyItem: function() {
-        this.clipboard = EkstepEditorAPI.getCurrentObject();
+        this.clipboard = EkstepEditorAPI.getCurrentObject() ? EkstepEditorAPI.getCurrentObject() : EkstepEditorAPI.getCurrentGroup();
         EkstepEditorAPI.updateContextMenu({ id: 'paste', state: 'SHOW', data: {} });
     },
     /**
@@ -41,7 +41,13 @@ EkstepEditor.basePlugin.extend({
      *   @memberof copyPaste
      */
     pasteItem: function() {
-        if (this.clipboard) EkstepEditorAPI.cloneInstance(this.clipboard);
+        if (_.isArray(this.clipboard)) {
+            EkstepEditorAPI.getCanvas().discardActiveGroup();
+            this.clipboard.forEach(function(instance){
+                EkstepEditorAPI.cloneInstance(instance);
+            });
+        }
+        else EkstepEditorAPI.cloneInstance(this.clipboard);
         this.clipboard = undefined;
         EkstepEditorAPI.updateContextMenu({ id: 'paste', state: 'HIDE', data: {} });
     },

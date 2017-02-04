@@ -32,21 +32,21 @@ EkstepEditor.basePlugin.extend({
      *
      */
     initialize: function() {
-        EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.loadHtml, this);
+        EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.showAssessmentBrowser, this);
         setTimeout(function() {
-            var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.assessmentbrowser-1.0/editor/assessmentbrowser.html';
-            var controllerPath = EkstepEditor.config.pluginRepo + '/org.ekstep.assessmentbrowser-1.0/editor/assessmentbrowserapp.js';
+            var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.assessmentbrowser-1.0/editor/assessmentbrowser.html';
+            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.assessmentbrowser-1.0/editor/assessmentbrowserapp.js';
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
 
     },
     /**        
-     *   load html template to show the popup
+     *   invokes popup service to show the popup window
      *   @param event {Object} event
      *   @param callback {Function} callback to be fired when data is available.
      *   @memberof assessmentBrowser
      */
-    loadHtml: function(event, callback) {
+    showAssessmentBrowser: function(event, callback) {
         var instance = this;
         this.callback = callback;
         // this.loadResource('editor/assessmentbrowser.html', 'html', function(err, response) {
@@ -66,36 +66,6 @@ EkstepEditor.basePlugin.extend({
             className: 'ngdialog-theme-plain'
         });
 
-    },
-    /**    
-    *   invokes popup service to show the popup window
-    *   @param err {Object} err when loading template async
-    *   @param data {String} template HTML 
-    *   @memberof assessmentBrowser
-    */
-    showAssessmentBrowser: function(err, data) {
-        var instance = this,
-            popupConfig;
-
-        popupConfig = {
-            template: data,            
-            data: { instance: instance }           
-        };
-
-        EkstepEditorAPI.getService('popup').open(popupConfig, instance.controllerCallback);
-    },
-
-    /**
-    *   angular controller for popup service as callback
-    *   @param ctrl {Object} popupController object
-    *   @param scope {Object} popupController scope object
-    *   @param resolvedData {Object} data passed to uib config
-    *   @memberof assetBrowser
-    */
-
-    controllerCallback: function(ctrl, scope, data) {
-        
     }
-
 });
 //# sourceURL=assessmentbrowserplugin.js
