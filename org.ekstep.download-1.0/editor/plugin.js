@@ -48,7 +48,7 @@ EkstepEditor.basePlugin.extend({
                 if (downloadUrl) {
                     $scope.isLoading = true;
                     $scope.isDownloading = false;
-                    EkstepEditorAPI.getAngularScope().safeApply();
+                    EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
                     setTimeout(function() {
                         instance.sendEmail($scope, downloadUrl);
                     }, 1000);
@@ -58,7 +58,7 @@ EkstepEditor.basePlugin.extend({
                     $scope.status = false;
                     $scope.getMessage = 'Content is not ready to download, please try again later';
                     EkstepEditorAPI.jQuery('.ct_download_msg').transition('drop');
-                    EkstepEditorAPI.getAngularScope().safeApply();
+                    EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
                 }
             });
         };
@@ -84,7 +84,7 @@ EkstepEditor.basePlugin.extend({
     },
     sendEmail: function($scope, data) {
         EkstepEditorAPI.jQuery.ajax({
-            url: EkstepEditor.config.baseURL + '/index.php?option=com_api&app=ekcontent&resource=download&format=raw',
+            url: EkstepEditorAPI.baseURL + '/index.php?option=com_api&app=ekcontent&resource=download&format=raw',
             headers: {
                 'x-auth': 'session'
             },
@@ -98,14 +98,14 @@ EkstepEditor.basePlugin.extend({
                 $scope.status = (results.responseCode == 'OK') ? true : false;
                 $scope.getMessage = results.result;
                 EkstepEditorAPI.jQuery('.ct_download_msg').transition('drop');
-                EkstepEditorAPI.getAngularScope().safeApply();
+                EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
             },
             error: function() {
                 $scope.isLoading = false;
                 $scope.status = false;
                 $scope.getMessage = 'Unable to send email, please try again later';
                 EkstepEditorAPI.jQuery('.ct_download_msg').transition('drop');
-                EkstepEditorAPI.getAngularScope().safeApply();
+                EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
             }
         });
     },
