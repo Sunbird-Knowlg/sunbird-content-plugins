@@ -377,8 +377,9 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.jQuery("#actionTargetDropdown:not(.addClick)").parent().on('click', function() {
             EkstepEditorAPI.jQuery("#actionTargetDropdown").nextAll(".menu.transition").find(".item").mouseover(function(event) {
                 var id = EkstepEditorAPI.jQuery(event.target).text();
-                var editorObj = EkstepEditorAPI.getPluginInstance(id).editorObj;
-                if (editorObj) {
+                var pluginInstance = EkstepEditorAPI.getPluginInstance(id);
+                if (pluginInstance && pluginInstance['editorObj']) {
+                    var editorObj = pluginInstance['editorObj'];
                     var left = instance.canvasOffset.left + editorObj.left - 5;
                     var top = instance.canvasOffset.top + editorObj.top - 5;
                     EkstepEditorAPI.jQuery("#objectPointer")
