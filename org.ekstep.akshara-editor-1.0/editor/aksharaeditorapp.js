@@ -61,7 +61,7 @@ angular.module('aksharaEditorapp', [])
         /*########## Language Callback method which will be called after language api call ######*/
         function languageCb(err, res) {
             ctrl.language = res.data.result.languages;
-            EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
+            $scope.$safeApply();
         }
 
         instance.getLanguages(undefined, languageCb); //Call Method to get Languages
@@ -81,7 +81,7 @@ angular.module('aksharaEditorapp', [])
             } else {
                 ctrl.aksharas = [];
             };
-            EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
+            $scope.$safeApply();
         };
 
         /*########## Update words array by adding akashara to each object ######*/
@@ -155,7 +155,7 @@ angular.module('aksharaEditorapp', [])
             }
             var obj = {};
             //  ctrl.aksharaWords.words.push(obj);
-            EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
+            $scope.$safeApply();
         };
 
         /*############# Method to get selected words ###############*/
@@ -465,7 +465,7 @@ angular.module('aksharaEditorapp', [])
                     if (i === destIdx) ctrl.levelMetaData[destIdx] = src;
                 }
             }
-            EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
+            $scope.$safeApply();
         }
 
         ctrl.getLevelIndexById = function(levelId) {

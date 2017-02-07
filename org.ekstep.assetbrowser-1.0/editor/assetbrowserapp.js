@@ -95,7 +95,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             // Hide loader
             hideLoader();
 
-            EkstepEditorAPI.ngSafeApply($scope);
+            $scope.$safeApply();
         };
 
         function audioAssetCb(err, res) {
@@ -118,7 +118,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             // Hide loader
             hideLoader();
 
-            EkstepEditorAPI.ngSafeApply($scope);
+            $scope.$safeApply();
         };
 
         function trustResource(src) {
@@ -235,7 +235,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                 }
             }
 
-            EkstepEditorAPI.ngSafeApply(angScope);
+            $scope.$safeApply();
         }
 
         ctrl.uploadClick = function() {
@@ -374,7 +374,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                     assetlanguages[lang.code] = lang.name;
                 });
                 ctrl.asset.language = EkstepEditorAPI._.values(assetlanguages);
-                EkstepEditorAPI.ngSafeApply(angScope);
+                $scope.$safeApply();
             }
         });
 
@@ -448,7 +448,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                 content = ctrl.assetMeta,
                 data = new FormData();
 
-            EkstepEditorAPI.ngSafeApply(angScope);
+            $scope.$safeApply();
 
             if (ctrl.record == true) {
                /* var dataurl = EkstepEditorAPI.jQuery('#recorded-audio-mainAudio').attr('src');
