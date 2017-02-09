@@ -4,6 +4,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("unsupported:invoke", this.showUnsupported, this);
     },
     props: {x: 0, y: 0, w: 40, h: 40, r: 0},
+    hasDims: false,
     newInstance: function() {
         var instance = this;
         var _parent = this.parent; 
@@ -23,6 +24,7 @@ EkstepEditor.basePlugin.extend({
             props.y = data.y;
             props.w = data.w;
             props.h = data.h;
+            this.hasDims = true;
         }
         this.percentToPixel(props);
         return this.convertToFabric(props);
@@ -31,6 +33,13 @@ EkstepEditor.basePlugin.extend({
         this.setData(data.data);
     },
     toECML: function() {
+        if(this.hasDims) {
+            this.pixelToPercent(this.attributes);
+            this.data.data.x =  this.attributes.x;
+            this.data.data.y =  this.attributes.y;
+            this.data.data.w =  this.attributes.w;
+            this.data.data.h =  this.attributes.h;
+        }
         return this.data.data;
     },
     getConfig: function () {
