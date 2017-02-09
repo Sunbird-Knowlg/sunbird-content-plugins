@@ -8,17 +8,24 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         var _parent = this.parent; 
         this.parent = undefined;
-        this.props.x = this.props.y += 3;                    
-        var props = _.clone(this.props);
-        this.percentToPixel(props);     
-        props = this.convertToFabric(props);
-        var host = EkstepEditor.config.absURL;
-        var imgSrc = EkstepEditor.config.pluginRepo + "/org.ekstep.unsupported-1.0/assets/unsupportedplugin.png";                                    
-        fabric.Image.fromURL((host + imgSrc), function(img) {            
+        var props = this.setImageDimensions(this.data.data);        
+        var imgSrc = EkstepEditorAPI.absURL + EkstepEditorAPI.getPluginRepo() + "/org.ekstep.unsupported-1.0/assets/unsupportedplugin.png";
+        fabric.Image.fromURL(imgSrc, function(img) {
             instance.editorObj = img;
             instance.parent = _parent;
             instance.postInit();            
         },props);        
+    },
+    setImageDimensions: function(data) {
+        var props = _.clone(this.props);
+        if (_.has(data, ['x']) && _.has(data, ['w'])) {
+            props.x = data.x;
+            props.y = data.y;
+            props.w = data.w;
+            props.h = data.h;
+        }
+        this.percentToPixel(props);
+        return this.convertToFabric(props);
     },
     fromECML: function(data) {
         this.setData(data.data);
