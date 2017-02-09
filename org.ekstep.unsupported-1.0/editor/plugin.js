@@ -20,10 +20,11 @@ EkstepEditor.basePlugin.extend({
     setImageDimensions: function(data) {
         var props = _.clone(this.props);
         if (_.has(data, ['x']) && _.has(data, ['w'])) {
-            props.x = data.x;
-            props.y = data.y;
-            props.w = data.w;
-            props.h = data.h;
+            this.attributes.x = props.x = data.x;
+            this.attributes.y = props.y = data.y;
+            this.attributes.w = props.w = data.w;
+            this.attributes.h = props.h = data.h;
+            this.percentToPixel(this.attributes);
             this.hasDims = true;
         }
         this.percentToPixel(props);
@@ -34,11 +35,12 @@ EkstepEditor.basePlugin.extend({
     },
     toECML: function() {
         if(this.hasDims) {
-            this.pixelToPercent(this.attributes);
-            this.data.data.x =  this.attributes.x;
-            this.data.data.y =  this.attributes.y;
-            this.data.data.w =  this.attributes.w;
-            this.data.data.h =  this.attributes.h;
+            var attr = _.clone(this.attributes);
+            this.pixelToPercent(attr);
+            this.data.data.x =  attr.x;
+            this.data.data.y =  attr.y;
+            this.data.data.w =  attr.w;
+            this.data.data.h =  attr.h;
         }
         return this.data.data;
     },
