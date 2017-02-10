@@ -1,0 +1,12 @@
+{
+	"id": "org.ekstep.developer",
+	"ver": "1.0",
+	"author": "Harishkumar Gangula",
+    "title": "Developer Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+    	"main": "editor/plugin.js",
+		"menu": []
+    }
+}
