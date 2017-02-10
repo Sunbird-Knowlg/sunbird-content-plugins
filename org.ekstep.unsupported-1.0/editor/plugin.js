@@ -4,26 +4,44 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("unsupported:invoke", this.showUnsupported, this);
     },
     props: {x: 0, y: 0, w: 40, h: 40, r: 0},
+    hasDims: false,
     newInstance: function() {
         var instance = this;
         var _parent = this.parent; 
         this.parent = undefined;
-        this.props.x = this.props.y += 3;                    
-        var props = _.clone(this.props);
-        this.percentToPixel(props);     
-        props = this.convertToFabric(props);
-        var host = EkstepEditor.config.absURL;
-        var imgSrc = EkstepEditor.config.pluginRepo + "/org.ekstep.unsupported-1.0/assets/unsupportedplugin.png";                                    
-        fabric.Image.fromURL((host + imgSrc), function(img) {            
+        var props = this.setImageDimensions(this.data.data);        
+        var imgSrc = EkstepEditorAPI.absURL + EkstepEditorAPI.getPluginRepo() + "/org.ekstep.unsupported-1.0/assets/unsupportedplugin.png";
+        fabric.Image.fromURL(imgSrc, function(img) {
             instance.editorObj = img;
             instance.parent = _parent;
             instance.postInit();            
         },props);        
     },
+    setImageDimensions: function(data) {
+        var props = _.clone(this.props);
+        if (_.has(data, ['x']) && _.has(data, ['w'])) {
+            this.attributes.x = props.x = data.x;
+            this.attributes.y = props.y = data.y;
+            this.attributes.w = props.w = data.w;
+            this.attributes.h = props.h = data.h;
+            this.percentToPixel(this.attributes);
+            this.hasDims = true;
+        }
+        this.percentToPixel(props);
+        return this.convertToFabric(props);
+    },
     fromECML: function(data) {
         this.setData(data.data);
     },
     toECML: function() {
+        if(this.hasDims) {
+            var attr = _.clone(this.attributes);
+            this.pixelToPercent(attr);
+            this.data.data.x =  attr.x;
+            this.data.data.y =  attr.y;
+            this.data.data.w =  attr.w;
+            this.data.data.h =  attr.h;
+        }
         return this.data.data;
     },
     getConfig: function () {

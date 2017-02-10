@@ -20,7 +20,7 @@ angular.module('activityBrowserApp', [])
             ctrl.loading = true;
             ctrl.errorLoadingActivities = false;
             ctrl.noActivities = false;
-            EkstepEditorAPI.ngSafeApply(angScope);
+            $scope.$safeApply();
             var data = {
                 "request": {
                     "filters": {
@@ -32,7 +32,7 @@ angular.module('activityBrowserApp', [])
             };
             EkstepEditorAPI.getService('searchService').search(data, function(err, resp) {
                 ctrl.loading = false;
-                EkstepEditorAPI.ngSafeApply(angScope);
+                $scope.$safeApply();
                 if (err) {
                     ctrl.errorLoadingActivities = true;
                     return
