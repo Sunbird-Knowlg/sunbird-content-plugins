@@ -7,6 +7,10 @@
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
         "menu": [{
             "id": "stage",
             "category": "main",

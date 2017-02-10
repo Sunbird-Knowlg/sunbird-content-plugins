@@ -15,6 +15,7 @@ EkstepEditor.basePlugin.extend({
     },
     createStage: function(event, data) {
         EkstepEditorAPI.instantiatePlugin(this.manifest.id, data);
+        EkstepEditorAPI.dispatchEvent('config:showSettingsTab');
     },
     newInstance: function() {
         this.onclick = { id: 'stage:select', data: { stageId: this.id } };
@@ -33,6 +34,7 @@ EkstepEditor.basePlugin.extend({
         }
     },
     getOnClick: function() {
+        EkstepEditorAPI.dispatchEvent('config:showSettingsTab');
         return { id: 'stage:select', data: { stageId: this.id, prevStageId: EkstepEditorAPI.getCurrentStage().id } };
     },
     setCanvas: function(canvas) {
@@ -112,6 +114,14 @@ EkstepEditor.basePlugin.extend({
     },
     enableSave: function() {
         EkstepEditorAPI.getAngularScope().enableSave();        
-    }
+    },
+    getConfigManifest: function () {
+        var config = {};
+        var angScope = EkstepEditorAPI.getAngularScope();
+        EkstepEditorAPI.ngSafeApply(angScope, function() {
+            angScope.stageConfigStatus = true;
+        });
+        return config;
+    },
 });
 //# sourceURL=stageplugin.js
