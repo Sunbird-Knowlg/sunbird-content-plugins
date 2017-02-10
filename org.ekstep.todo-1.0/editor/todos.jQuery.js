@@ -71,8 +71,9 @@ $.fn.jltodos = function(options){
 
 	function init(obj, element)
 	{
+		// @var localUrl = 'http://ttpllt16.local:81/ekstep-nilesh/src';
 		EkstepEditorAPI.jQuery.ajax({
-			url: EkstepEditorAPI.baseURL+"/index.php?option=com_api&app=jlike&resource=init&format=raw",
+			url: EkstepEditorAPI.baseURL + "/index.php?option=com_api&app=jlike&resource=init&format=raw",
 			headers: {
 				'x-auth':'session'
 			},
@@ -94,6 +95,7 @@ $.fn.jltodos = function(options){
 	}
 
 	function createTodo(obj){
+		// @var localUrl = 'http://ttpllt16.local:81/ekstep-nilesh/src';
 		EkstepEditorAPI.jQuery.ajax({
 			url: EkstepEditorAPI.baseURL+'/index.php?option=com_api&app=jlike&resource=todos&format=raw',
 			headers: {
@@ -130,6 +132,7 @@ $.fn.jltodos = function(options){
 
 	function renderTodos(obj, addhtmlto)
 	{
+		// @var localUrl = 'http://ttpllt16.local:81/ekstep-nilesh/src';
 		EkstepEditorAPI.jQuery.ajax({
 			url: EkstepEditorAPI.baseURL+'/index.php?option=com_api&app=jlike&resource=todos&format=raw',
 			headers: {
