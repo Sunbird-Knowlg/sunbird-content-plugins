@@ -53,7 +53,11 @@ EkstepEditor.basePlugin.extend({
                             resCount++;
                            //  If response body comes as undefined then move that res to errorTemplateurl
                             if (!_.isUndefined(res.data.result.content)) {
-                                _.isUndefined(res.data.result.content.body) ? errorTemplateurl.push(res.config.url) : templateArray.push(instance.convert(res));
+                                if(res.data.result.content.body){
+                                    templateArray.push(instance.convert(res));
+                                }else{
+                                    errorTemplateurl.push(res.config.url)
+                                }
                             } else {
                                 errorTemplateurl.push(res.config.url);
                             }
