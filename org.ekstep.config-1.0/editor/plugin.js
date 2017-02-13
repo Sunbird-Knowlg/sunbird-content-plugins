@@ -113,6 +113,9 @@ EkstepEditor.basePlugin.extend({
                 angScope.showConfigContainer = false;
                 angScope.stageConfigStatus = EkstepEditorAPI.getCurrentObject() ? false : true;
             });
+            if(!EkstepEditorAPI.getCurrentObject()){
+                this.showSettingsTab();
+            }
         }
     },
     /**
