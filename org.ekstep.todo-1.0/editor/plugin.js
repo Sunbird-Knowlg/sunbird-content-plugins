@@ -91,6 +91,9 @@ EkstepEditor.basePlugin.extend({
 			setTimeout(function(){
 				ctrl.save(widgetRef, status, id, todotext, context);
 			}, 300);
+
+			jQuery("#" + id).prop("disabled", true);
+			jQuery("#todoWrapper" + id).hide(1000);
 		},
 		ctrl.save = function(widgetRef, status, id, todotext, context)
 		{
@@ -107,7 +110,7 @@ EkstepEditor.basePlugin.extend({
 			obj["assigned_by"]= EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_by");
 			obj["assigned_to"]= EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_to");
 			obj["state"]      = 1;
-			obj["status"]     = "C";
+			obj["status"]     = status;
 
 			EkstepEditorAPI.jQuery(widgetRef).jltodos({obj:obj,action: 'createTodo'});
 		}
