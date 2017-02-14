@@ -1,0 +1,8 @@
+.contributed-plugins-list{
+    height: 300px;
+    width: 100%;
+    margin-top: 20px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+    
