@@ -215,7 +215,7 @@ EkstepEditor.basePlugin.extend({
      * @memberof Config
      */
     onConfigChange: function(key, value) {
-        if (!EkstepEditorAPI._.isUndefined(value)) {
+        if (!EkstepEditorAPI._.isUndefined(value) && EkstepEditorAPI.getCurrentObject()) {
             EkstepEditorAPI.getCurrentObject().__proto__.__proto__.onConfigChange(key, value);
             EkstepEditorAPI.getCurrentObject().onConfigChange(key, value);
             if (key === 'autoplay') {
