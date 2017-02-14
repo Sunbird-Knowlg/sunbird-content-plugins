@@ -397,6 +397,7 @@ http://viima.github.io/jquery-comments/*/
 .jquery-comments ul.main li.comment .comment-wrapper {
 	border-top: 1px solid #DDD;
 	overflow: hidden;
+	padding-left: 0px; /*Added by TJ*/
 }
 
 .jquery-comments ul.main > li.comment:first-child > .comment-wrapper {

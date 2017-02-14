@@ -132,7 +132,7 @@ EkstepEditor.basePlugin.extend({
 					var widget = '';
 					widget += '<div class="todo-wrapper ui segments" id="todoWrapper'+result.data.result[i].id+'"  style="background-color:#fff; margin-bottom: 5px; padding: 5px"></br>';
 						widget += '<div class="row">';
-							widget += '<label class="left floated" style="padding-left:12px">';
+							widget += '<label class="left floated" style="padding-left:0px">';
 								widget += result.data.result[i].sender_msg;
 							widget += '</label>';
 							widget += '<span class="right floated" style="margin-left: 74px">';
