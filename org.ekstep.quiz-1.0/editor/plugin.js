@@ -24,6 +24,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener(this.manifest.id + ":showPopup", this.openAssessmentBrowser, this);
         EkstepEditorAPI.addEventListener(this.manifest.id + ":renderQuiz", this.renderQuiz, this);
     },
+    mediaObj: {},
     newInstance: function() {
         var instance = this;
         // Removes unwanted config properties(visible,stroke etc.) for the quiz plugin
@@ -32,12 +33,15 @@ EkstepEditor.basePlugin.extend({
         instance.attributes.h = 85;
         instance.attributes.x = 9;
         instance.attributes.y = 6;
+        instance.addMediaFromConfig();
         instance.percentToPixel(instance.attributes);
         var questionnaire = instance.data.questionnaire;
         var templateIds = instance.getItems(questionnaire.items, "templateId");
-        instance.getItems(questionnaire.items, "media").forEach(function(element, index) {
-            instance.addMediatoManifest(element);
-        });        
+        if (_.isUndefined(this.config.media)) {
+                instance.getItems(questionnaire.items, "media").forEach(function(element, index) {
+                instance.addMediatoManifest(element);
+            }); 
+        }       
         var _parent = this.parent;
         this.parent = undefined;
         var templateArray = [],
@@ -192,7 +196,8 @@ EkstepEditor.basePlugin.extend({
         controller.questionnaire["items"] = questionSets;
         controller.questionnaire["item_sets"] = [{ "count": config.total_items, "id": question[0].identifier }]
         controller["questionnaire"] = Object.assign(controller.questionnaire, config);
-        instance.setConfig({ "type": "items", "var": "item" });
+        instance.addConfig("type", "items");
+        instance.addConfig("var", "item");
         instance.setData(controller);
         _assessmentData["data"] = { __cdata: JSON.stringify(controller) };
         _assessmentData["config"] = { __cdata: JSON.stringify({ "type": "items", "var": "item" }) };
@@ -217,12 +222,29 @@ EkstepEditor.basePlugin.extend({
                         // Adding the preload property to the media
                         media[index].preload = "true";
                         instance.addMedia(media[index]);
+                        instance.addMediaToConfig(media[index]);
                     }
                 });
             } else {
                 media.preload = "true";
                 instance.addMedia(media);
+                instance.addMediaToConfig(media);
             }
+        }
+    },
+    addMediaToConfig: function (media) {
+        if (media.src) {
+            EkstepEditor.mediaManager.getMediaOriginURL(media.src);
+            this.mediaObj[media.id] = media;        
+            this.addConfig("media", this.mediaObj);
+        }
+    },
+    addMediaFromConfig: function () {
+        var instance = this;
+        if(!_.isUndefined(this.config.media)) {
+            _.forIn(this.config.media, function(value, key) {
+                instance.addMedia(value);
+            });
         }
     },
     convert: function(res) {
