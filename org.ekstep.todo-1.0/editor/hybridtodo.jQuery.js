@@ -24,10 +24,8 @@ $.fn.hybridtodo = function(options){
 
 	function getTodosAndComments(obj)
 	{
-		var localUrl = 'http://ttpllt16.local:81/ekstep-nilesh/src/';
 		jQuery.ajax({
-			// @url: EkstepEditorAPI.baseURL + 'index.php?option=com_api&app=jlike&resource=hybridtodos&format=raw',
-			url: localUrl + 'index.php?option=com_api&app=jlike&resource=hybridtodos&format=raw',
+			url: EkstepEditorAPI.baseURL + '/index.php?option=com_api&app=jlike&resource=hybridtodos&format=raw',
 			headers: {
 				'x-auth':'session'
 			},
@@ -48,7 +46,7 @@ $.fn.hybridtodo = function(options){
 
 	function createTodo(obj){
 		jQuery.ajax({
-			url: EkstepEditorAPI.baseURL + 'index.php?option=com_api&app=jlike&resource=hybridtodos&format=raw',
+			url: EkstepEditorAPI.baseURL + '/index.php?option=com_api&app=jlike&resource=hybridtodos&format=raw',
 			headers: {
 				'x-auth':'session'
 			},
@@ -125,7 +123,7 @@ $.fn.hybridtodo = function(options){
 
 				jQuery.ajax({
 					type: 'POST',
-					url: EkstepEditorAPI.baseURL + "index.php?option=com_api&app=jlike&resource=annotations&format=raw",
+					url: EkstepEditorAPI.baseURL + "/index.php?option=com_api&app=jlike&resource=annotations&format=raw",
 					headers: {
 						'x-auth':'session'
 					},
@@ -150,7 +148,7 @@ $.fn.hybridtodo = function(options){
 				commentJSON.context = div.attr('data-jlike-context');
 				jQuery.ajax({
 					type: 'delete',
-					url: EkstepEditorAPI.baseURL + "index.php?option=com_api&app=jlike&resource=annotations&format=raw&id="+commentJSON.annotation_id,
+					url: EkstepEditorAPI.baseURL + "/index.php?option=com_api&app=jlike&resource=annotations&format=raw&id="+commentJSON.annotation_id,
 					headers: {
 						'x-auth':'session'
 					},
@@ -169,13 +167,12 @@ $.fn.hybridtodo = function(options){
 				commentJSON.context = div.attr('data-jlike-context');
 				jQuery.ajax({
 					type: 'POST',
-					url: EkstepEditorAPI.baseURL + "index.php?option=com_api&app=jlike&resource=annotations&format=raw&annotation_id="+commentJSON.annotation_id,
+					url: EkstepEditorAPI.baseURL + "/index.php?option=com_api&app=jlike&resource=annotations&format=raw&annotation_id="+commentJSON.annotation_id,
 					headers: {
 						'x-auth':'session'
 					},
 					data: commentJSON,
 					success: function(comment) {
-						// loadComments(div);
 						var dataresultarray = comment.data.results;
 						success(dataresultarray);
 					},

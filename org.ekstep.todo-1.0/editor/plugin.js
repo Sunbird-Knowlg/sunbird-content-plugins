@@ -31,10 +31,10 @@ EkstepEditor.basePlugin.extend({
 
 			if (!EkstepEditorAPI._.isUndefined(window.context))
 			{
+				obj["status"]   = "";
 				if(!EkstepEditorAPI._.isUndefined(window.context.content_id) && window.context.content_id != "")
 				{
 					obj["url"]      = "index.php?option=com_ekcontent&view=content&id="+window.context.id;
-					obj["status"]   = "I";
 					obj["type"]     = "todos";
 					obj["subtype"]  = "reviewer#"+data.stageId;
 					obj["client"]   = "content.jlike_ekcontent";
@@ -56,19 +56,22 @@ EkstepEditor.basePlugin.extend({
 					obj["assigned_by"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_by");
 					obj["assigned_to"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_to");
 					obj["state"]=1;
-					obj["status"] = "C";
 
-					ctrl.getTodos(widgetRef, obj, "#pageLevelResolvedTodos");
 					obj["status"] = "I";
 					ctrl.getTodos(widgetRef, obj, "#pageLevelTodos");
+
+					obj["status"] = "C";
+					ctrl.getTodos(widgetRef, obj, "#pageLevelResolvedTodos");
 				}
 			}
 		}
 
 		ctrl.getTodos = function(widgetRef, obj, todoThreadsWrapperDiv)
 		{
+			var status = ''
+			status = obj["status"];
 			EkstepEditorAPI.jQuery(widgetRef).hybridtodo({obj:obj, action:'getTodosAndComments', callback: function(result){
-					ctrl.renderHybridTodos(result, obj, todoThreadsWrapperDiv);
+					ctrl.renderHybridTodos(result, status, todoThreadsWrapperDiv);
 				}
 			});
 		}
@@ -109,12 +112,9 @@ EkstepEditor.basePlugin.extend({
 			EkstepEditorAPI.jQuery(widgetRef).jltodos({obj:obj,action: 'createTodo'});
 		}
 
-		ctrl.renderHybridTodos = function(result, obj, todoThreadsWrapperDiv)
+		ctrl.renderHybridTodos = function(result, status, todoThreadsWrapperDiv)
 		{
 			var disabledAttr, readOnly, buttonName;
-			buttonName   = obj["status"] == "I" ? 'Resolve' : 'Resolved';
-			disabledAttr = obj["status"] == "C" ? 'disabled' : '';
-			readOnly     = obj["status"] == "I" ? false : true;
 
 			if (result.success == true)
 			{
@@ -125,14 +125,18 @@ EkstepEditor.basePlugin.extend({
 				/*Pagination end*/
 				for (var i = 0; i < result.data.result.length; i++)
 				{
+					todoStatus   = result.data.result[i].status;
+					buttonName   = result.data.result[i].status == "I" ? 'Resolve' : 'Resolved';
+					disabledAttr = result.data.result[i].status == "I" ? '' : 'disabled';
+					readOnly     = result.data.result[i].status == "I" ? false : true;
 					var widget = '';
 					widget += '<div class="todo-wrapper ui segments" id="todoWrapper'+result.data.result[i].id+'"  style="background-color:#fff; margin-bottom: 5px; padding: 5px"></br>';
 						widget += '<div class="row">';
-							widget += '<span class="left floated" style="padding-left:12px">';
+							widget += '<label class="left floated" style="padding-left:12px">';
 								widget += result.data.result[i].sender_msg;
-							widget += '</span>';
+							widget += '</label>';
 							widget += '<span class="right floated" style="margin-left: 74px">';
-								widget += '<button type="button" class="mini ui black basic button right floated" id="'+result.data.result[i].id+'" data-jlike-id="'+result.data.result[i].id+'"  data-ek-todomsg="'+result.data.result[i].sender_msg+'" data-jlike-context="'+result.data.result[i].context+'" onClick="ctrl.updateStatus(this)" '+disabledAttr+'>'+buttonName+'</button>';
+								widget += '<button type="button" class="ui tiny icon button right floated basic" id="'+result.data.result[i].id+'" data-jlike-id="'+result.data.result[i].id+'"  data-ek-todomsg="'+result.data.result[i].sender_msg+'" data-jlike-context="'+result.data.result[i].context+'" onClick="ctrl.updateStatus(this)" '+disabledAttr+'>'+buttonName+'</button>';
 							widget += '</span>';
 						widget += '</div>';
 
@@ -141,14 +145,13 @@ EkstepEditor.basePlugin.extend({
 							widget += 'data-jlike-type="annotations" ';
 							widget += 'data-jlike-subtype="com_ekcontent.reviewers" ';
 							widget += 'data-jlike-context="reviewer#todo#'+result.data.result[i].id+'" ';
-							widget += 'data-jlike-url="'+obj['url']+'" ';
+							//widget += 'data-jlike-url="'+obj['url']+'" ';
 							widget += 'data-jlike-limitstart="0" ';
 							widget += 'data-jlike-limit="2" ';
 							if(readOnly) widget += 'data-jlike-readonly="'+readOnly+'" ';
 							widget += 'data-jlike-contentid="'+result.data.result[i].content_id+'" ';
 							widget += 'data-jlike-ordering="annotation_date" >';
 						widget += '</div>';
-						//widget += '<div class="ui vertical segment"></div>';
 					widget += '</div>';
 
 					for (var c = 0; c < result.data.result[i].comments.length; c++)
