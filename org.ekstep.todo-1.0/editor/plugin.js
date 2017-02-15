@@ -177,9 +177,10 @@ EkstepEditor.basePlugin.extend({
 			}
 			else
 			{
-				var hideDiv = '';
-				hideDiv     = todoThreadsWrapperDiv.substring(1, todoThreadsWrapperDiv.length);
-				EkstepEditorAPI.jQuery("."+hideDiv).hide();
+				var emptyMessage = '';
+				jQuery(todoThreadsWrapperDiv).html('');
+				emptyMessage = todoThreadsWrapperDiv === '#pageLevelTodos' ? 'No Todo' : 'No issue(s)';
+				EkstepEditorAPI.jQuery(todoThreadsWrapperDiv).html(emptyMessage);
 			}
 		}
     }
