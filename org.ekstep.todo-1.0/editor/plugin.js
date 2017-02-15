@@ -112,7 +112,7 @@ EkstepEditor.basePlugin.extend({
 			obj["state"]      = 1;
 			obj["status"]     = status;
 
-			EkstepEditorAPI.jQuery(widgetRef).jltodos({obj:obj,action: 'createTodo'});
+			EkstepEditorAPI.jQuery(widgetRef).hybridtodo({obj:obj,action: 'createTodo'});
 		}
 
 		ctrl.renderHybridTodos = function(result, status, todoThreadsWrapperDiv)

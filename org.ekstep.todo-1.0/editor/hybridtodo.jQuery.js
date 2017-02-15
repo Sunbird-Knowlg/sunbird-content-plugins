@@ -31,9 +31,6 @@ $.fn.hybridtodo = function(options){
 			},
 			type: 'GET',
 			data:obj,
-			beforeSend: function ()
-			{
-			},
 			success: function(result)
 			{
 				defaults.callback.call(this, result);
@@ -46,7 +43,7 @@ $.fn.hybridtodo = function(options){
 
 	function createTodo(obj){
 		jQuery.ajax({
-			url: EkstepEditorAPI.baseURL + '/index.php?option=com_api&app=jlike&resource=hybridtodos&format=raw',
+			url: EkstepEditorAPI.baseURL + '/index.php?option=com_api&app=jlike&resource=todos&format=raw',
 			headers: {
 				'x-auth':'session'
 			},
