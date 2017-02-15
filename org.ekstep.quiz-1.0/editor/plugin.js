@@ -25,6 +25,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener(this.manifest.id + ":renderQuiz", this.renderQuiz, this);
     },
     mediaObj: {},
+    hasTemplateMedia: true,
     newInstance: function() {
         var instance = this;
         // Removes unwanted config properties(visible,stroke etc.) for the quiz plugin
@@ -38,6 +39,7 @@ EkstepEditor.basePlugin.extend({
         var questionnaire = instance.data.questionnaire;
         var templateIds = instance.getItems(questionnaire.items, "templateId");
         if (_.isUndefined(this.config.media)) {
+                instance.hasTemplateMedia = false;
                 instance.getItems(questionnaire.items, "media").forEach(function(element, index) {
                 instance.addMediatoManifest(element);
             }); 
@@ -47,7 +49,7 @@ EkstepEditor.basePlugin.extend({
         var templateArray = [],
             errorTemplateurl = [],
             resCount = 0;
-        if (EkstepEditorAPI._.isUndefined(instance.data.template) || instance.data.template.length == 0 || EkstepEditorAPI._.isUndefined(this.config.media)) {
+        if (EkstepEditorAPI._.isUndefined(instance.data.template) || instance.data.template.length == 0 || !instance.hasTemplateMedia) {
             for (var index in templateIds) {
                 // get Template based on ID and push all templates response to arrray.
                 EkstepEditor.assessmentService.getTemplate(templateIds[index], function(err, res) {
