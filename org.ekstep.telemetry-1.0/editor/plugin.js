@@ -6,19 +6,16 @@ EkstepEditor.basePlugin.extend({
 		var instance = this;
 		this.registerEvents(this.pluginLifeCycleEvent.mappedEvents, this.pluginLifeCycleEvent);
 		this.registerEvents(this.interactEvent.mappedEvents, this.interactEvent);
-		this.registerEvents(this.errorEvent.mappedEvents, this.errorEvent);
-		window.addEventListener('beforeunload', function() {
-			instance.endEvent.listen();
-		});		
+		this.registerEvents(this.errorEvent.mappedEvents, this.errorEvent);			
 	},
 	pluginLifeCycleEvent: {
-		mappedEvents: ['ce:telemetry:plugin:lifecycle'],
+		mappedEvents: ['ce:plugin:lifecycle'],
 		listen: function(event, data) {
 			EkstepEditorAPI.getService('telemetry').pluginLifeCycle(data);
 		}
 	},
 	interactEvent: {
-		mappedEvents: ['ce:telemetry:plugin:interact'],
+		mappedEvents: ['ce:plugin:interact'],
 		listen: function(event, data) {
 			EkstepEditorAPI.getService('telemetry').interact(data);
 		}
@@ -30,7 +27,7 @@ EkstepEditor.basePlugin.extend({
 		}
 	},
 	errorEvent: {
-		mappedEvents: ['ce:telemetry:error'],
+		mappedEvents: ['ce:error'],
 		listen: function(event, data) {
 			EkstepEditorAPI.getService('telemetry').error(data);
 		}
