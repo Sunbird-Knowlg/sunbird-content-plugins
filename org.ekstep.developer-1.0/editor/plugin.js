@@ -16,7 +16,7 @@ EkstepEditor.basePlugin.extend({
     loadPlugin: function(event, data) {
         var scope = EkstepEditorAPI.getAngularScope();
         var pluginArray = data.plugin.split("-");
-        EkstepEditor.pluginManager.loadContribPlugin(pluginArray[0], pluginArray[1], function(err, resp) {
+        EkstepEditor.localPluginUtil.loadContribPlugin(pluginArray[0], pluginArray[1], function(err, resp) {
             if (err) {
                 scope.contributedPluginMessageClass = "error";
                 scope.contributedPluginMessage = "Unable to load Plugin";
@@ -34,14 +34,14 @@ EkstepEditor.basePlugin.extend({
     },
     listPlugins: function(event, data) {
         var scope = EkstepEditorAPI.getAngularScope();
-        scope.contributedPlugins = [];
+        scope.localPlugins = [];
         scope.contributedPluginMessageClass = "";
         scope.contributedPluginMessage = "";
         EkstepEditorAPI.jQuery.ajax({
             type: 'GET',
             url: EkstepEditor.config.contribURL+"list",
             beforeSend: function() {
-                scope.loadingContributedPlugins = true;
+                scope.localPluginsPlugins = true;
                 EkstepEditorAPI.ngSafeApply(scope, function() {});
             },
             success: function(data) {
@@ -50,7 +50,7 @@ EkstepEditor.basePlugin.extend({
                     scope.contributedPluginMessage = "No plugins found.";
                 }
                 if(EkstepEditorAPI._.isArray(data)){
-                    scope.contributedPlugins = data;
+                    scope.localPlugins = data;
                 }
                 EkstepEditorAPI.ngSafeApply(scope, function() {});
             },
