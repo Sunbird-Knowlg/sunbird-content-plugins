@@ -9,7 +9,7 @@ $.fn.hybridtodo = function(options){
 
 	if (defaults.action == "getTodosAndComments")
 	{
-		getTodosAndComments(defaults.obj);
+		getTodosAndComments(defaults.apiRequestParams);
 	}
 
 	if (defaults.action == "renderHybridTodos")
@@ -19,10 +19,10 @@ $.fn.hybridtodo = function(options){
 	}
 	if (defaults.action == "createTodo")
 	{
-		createTodo(defaults.obj);
+		createTodo(defaults.apiPostParams);
 	}
 
-	function getTodosAndComments(obj)
+	function getTodosAndComments(apiRequestParams)
 	{
 		jQuery.ajax({
 			url: EkstepEditorAPI.baseURL + '/index.php?option=com_api&app=jlike&resource=hybridtodos&format=raw',
@@ -30,7 +30,7 @@ $.fn.hybridtodo = function(options){
 				'x-auth':'session'
 			},
 			type: 'GET',
-			data:obj,
+			data:apiRequestParams,
 			success: function(result)
 			{
 				defaults.callback.call(this, result);
@@ -41,13 +41,13 @@ $.fn.hybridtodo = function(options){
 		});
 	}
 
-	function createTodo(obj){
+	function createTodo(apiPostParams){
 		jQuery.ajax({
 			url: EkstepEditorAPI.baseURL + '/index.php?option=com_api&app=jlike&resource=todos&format=raw',
 			headers: {
 				'x-auth':'session'
 			},
-			data:obj,
+			data:apiPostParams,
 			type: 'POST',
 			success: function(data) {
 				if(data.success == true){
