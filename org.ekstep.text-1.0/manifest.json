@@ -71,6 +71,53 @@
                 "defaultValue": false
             }]
         }, {
+            "propertyName": "textalignment",
+            "title": "Align",
+            "dataType": "groupToggle",
+            "description": "Select text align",
+            "config": [{
+                "propertyName": "horizontaltextalign",
+                "title": "Horizontal Align",
+                "toolTip": "Horizontal Align",
+                "dataType": "groupToggle",
+                "iconClass": "resize horizontal",
+                "description": "Select horizontal text align",
+                "config": [{
+                    "id": "textalignleft",
+                    "propertyName": "textalign",
+                    "propertyValue": "left",
+                    "title": "Text Align Left",
+                    "toolTip": "Left",
+                    "description": "Align text to left",
+                    "dataType": "icon",
+                    "iconClass": "align left icon",
+                    "required": true,
+                    "defaultValue": false
+                }, {
+                    "id": "textaligncenter",
+                    "propertyName": "textalign",
+                    "propertyValue": "center",
+                    "title": "Text Align Center",
+                    "toolTip": "Center",
+                    "description": "Align text to center",
+                    "dataType": "icon",
+                    "iconClass": "align center icon",
+                    "required": true,
+                    "defaultValue": false
+                }, {
+                    "id": "textalignright",
+                    "propertyName": "textalign",
+                    "propertyValue": "right",
+                    "title": "Text Align Right",
+                    "toolTip": "Right",
+                    "description": "Align text to right",
+                    "dataType": "icon",
+                    "iconClass": "align right icon",
+                    "required": true,
+                    "defaultValue": false
+                }]
+            }]
+        }, {
             "propertyName": "fontfamily",
             "title": "Font Family",
             "description": "Select font family for the text",

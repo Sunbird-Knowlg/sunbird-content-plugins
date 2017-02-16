@@ -177,6 +177,7 @@ EkstepEditor.basePlugin.extend({
      */
     _invoke: function(config, configData) {
         var instance = this;
+        var fontSizeConfig, counter = 0;
         configData = configData || {};
         if (config.dataType === 'colorpicker') {
             var eventData = { id: config.propertyName, callback: this.onConfigChange, color: configData[config.propertyName] };
@@ -187,6 +188,76 @@ EkstepEditor.basePlugin.extend({
                 EkstepEditorAPI.jQuery('#' + config.propertyName).on("change mouseclick", function() {
                     EkstepEditorAPI.jQuery('#' + config.propertyName + 'label').html(EkstepEditorAPI.jQuery(this).val());
                     instance.onConfigChange(config.propertyName, EkstepEditorAPI.jQuery(this).val());
+                });
+            }, 500);
+        }
+        if (config.dataType === 'addselect') {
+            setTimeout(function() {
+                EkstepEditorAPI._.forEach(instance.pluginConfigManifest, function(config, index) {
+                    if(config.propertyName === "fontsize"){
+                        fontSizeConfig = config;
+                        EkstepEditorAPI._.forEach(fontSizeConfig.range, function(value) {
+                            if(instance.configData.fontsize === parseInt(value)){
+                                counter++;
+                            }
+                        });
+                        if(counter === 0){
+                            fontSizeConfig.range.push(instance.configData.fontsize);
+                        }
+                        /*EkstepEditorAPI.jQuery('#' + config.propertyName).parent().dropdown({
+                            allowAdditions: true
+                        }).dropdown('set text', instance.configData.fontsize);*/
+                    }
+                });
+                EkstepEditorAPI.jQuery('#' + config.propertyName).parent().dropdown({
+                    allowAdditions: true,
+                    action: function(text, value, element){
+                        if (isNaN(parseInt(text, 10)) || parseInt(text, 10) < fontSizeConfig.minValue || parseInt(text, 10) > fontSizeConfig.maxValue) {
+                            instance.configData.fontsize = fontSizeConfig.defaultValue;
+                            instance.onConfigChange(fontSizeConfig.propertyName, fontSizeConfig.defaultValue);
+                            EkstepEditorAPI.jQuery('#' + fontSizeConfig.propertyName).parent().dropdown('set text', fontSizeConfig.defaultValue);
+                        } else {
+                            instance.configData.fontsize = parseInt(text);
+                            counter = 0;
+                            EkstepEditorAPI._.forEach(fontSizeConfig.range, function(rangeValue) {
+                                if(instance.configData.fontsize === parseInt(rangeValue)){
+                                    counter++;
+                                }
+                            });
+                            if(counter === 0){
+                                fontSizeConfig.range.push(instance.configData.fontsize);
+                            }
+                            instance.onConfigChange(config.propertyName, parseInt(text));
+                            EkstepEditorAPI.jQuery('#' + config.propertyName).parent().dropdown('set text', parseInt(text));
+                        }
+                    }
+                });
+            }, 1000);
+        }
+        if (config.dataType === 'groupToggle') {
+            setTimeout(function() {
+                var angScope = EkstepEditorAPI.getAngularScope();
+                EkstepEditorAPI.jQuery('.popup-button2').popup({
+                    popup : EkstepEditorAPI.jQuery('.custom.popup'),
+                    on : 'click',
+                    position: 'bottom left'
+                });
+                EkstepEditorAPI.ngSafeApply(angScope, function() {
+                    angScope.textAlignClick = function(conf, ddObj, configDataObj){
+                        var configList;
+                        if(conf) configList = conf.config;
+                        else configList = config.config;
+                        console.log(configDataObj);
+                        EkstepEditorAPI._.forEach(configList, function(configObj, index) {
+                            if(configObj.id === ddObj.id){
+                                if((configDataObj[configObj.propertyName] === ddObj.propertyValue) && (configDataObj[configObj.propertyName] !== configList[0].propertyValue)){
+                                    configDataObj[configObj.propertyName] = configList[0].propertyValue; 
+                                } else {
+                                    configDataObj[configObj.propertyName] = ddObj.propertyValue; 
+                                }
+                            } 
+                        });
+                    };
                 });
             }, 500);
         }
