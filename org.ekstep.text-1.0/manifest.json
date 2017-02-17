@@ -82,7 +82,7 @@
                 "dataType": "groupToggle",
                 "iconClass": "resize horizontal",
                 "description": "Select horizontal text align",
-                "config": [{
+                "subconfig": [{
                     "id": "textalignleft",
                     "propertyName": "textalign",
                     "propertyValue": "left",

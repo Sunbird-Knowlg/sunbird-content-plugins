@@ -138,24 +138,6 @@ EkstepEditor.basePlugin.extend({
                 this.editorObj.setTextAlign(value);
                 this.attributes.textalign = value;
                 break;
-            /*case "textalignleft":
-                this.editorObj.setTextAlign(value ? "left" : "left");
-                this.attributes.textalignleft = value;
-                this.attributes.textaligncenter = false;
-                this.attributes.textalignright = false;
-                break;
-            case "textaligncenter":
-                this.editorObj.setTextAlign(value ? "center" : "left");
-                this.attributes.textalignleft = false;
-                this.attributes.textaligncenter = value;
-                this.attributes.textalignright = false;
-                break;
-            case "textalignright":
-                this.editorObj.setTextAlign(value ? "right" : "left");
-                this.attributes.textalignleft = false;
-                this.attributes.textaligncenter = false;
-                this.attributes.textalignright = value;
-                break;*/
         }
         EkstepEditorAPI.render();
         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
@@ -172,9 +154,6 @@ EkstepEditor.basePlugin.extend({
         config.fontweight = this.attributes.fontweight || false;
         config.fontstyle = this.attributes.fontstyle || false;
         config.textalign = this.attributes.textalign || 'left';
-        /*config.textalignleft = this.attributes.textalignleft || false;
-        config.textaligncenter = this.attributes.textaligncenter || false;
-        config.textalignright = this.attributes.textalignright || false;*/
         return config;
     },
     /**
