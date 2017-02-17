@@ -8,15 +8,8 @@
 	"editor": {
 		"main": "editor/plugin.js",
 		"menu": [{
-			"id": "reorder",
-			"category": "context",
-			"type": "icon",
-			"toolTip": "Re-order",
-			"title": "Reorder",
-			"iconClass": "sort icon",
-			"state": "HIDE",
-			"submenu": [{
 				"id": "sendtofront",
+				"category": "context",
 				"type": "icon",
 				"toolTip": "Bring forward",
 				"title": "Bring to front",
@@ -27,6 +20,7 @@
 				}
 			},{
 				"id": "sendtoback",
+				"category": "context",
 				"type": "icon",
 				"toolTip": "Send backward",
 				"title": "Send to back",
@@ -36,6 +30,5 @@
 					"data": {}
 				}
 			}]
-		}]
 	}
 }

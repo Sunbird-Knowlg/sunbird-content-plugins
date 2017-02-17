@@ -15,7 +15,6 @@ EkstepEditor.basePlugin.extend({
     },
     createStage: function(event, data) {
         EkstepEditorAPI.instantiatePlugin(this.manifest.id, data);
-        EkstepEditorAPI.dispatchEvent('config:showSettingsTab');
     },
     newInstance: function() {
         this.onclick = { id: 'stage:select', data: { stageId: this.id } };
@@ -34,7 +33,6 @@ EkstepEditor.basePlugin.extend({
         }
     },
     getOnClick: function() {
-        EkstepEditorAPI.dispatchEvent('config:showSettingsTab');
         return { id: 'stage:select', data: { stageId: this.id, prevStageId: EkstepEditorAPI.getCurrentStage().id } };
     },
     setCanvas: function(canvas) {

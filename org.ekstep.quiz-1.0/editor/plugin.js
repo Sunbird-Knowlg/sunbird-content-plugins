@@ -37,6 +37,7 @@ EkstepEditor.basePlugin.extend({
         instance.addMediaFromConfig();
         instance.percentToPixel(instance.attributes);
         var questionnaire = instance.data.questionnaire;
+        instance.data.questionnaire.optionShuffle =  _.isUndefined(questionnaire.optionShuffle) ? true : questionnaire.optionShuffle ;
         var templateIds = instance.getItems(questionnaire.items, "templateId");
         if (_.isUndefined(this.config.media)) {
                 instance.hasTemplateMedia = false;
@@ -56,7 +57,16 @@ EkstepEditor.basePlugin.extend({
                     try {
                         if (res) {
                             resCount++;
-                            templateArray.push(instance.convert(res));
+                           //  If response body comes as undefined then move that res to errorTemplateurl
+                            if (!_.isUndefined(res.data.result.content)) {
+                                if(res.data.result.content.body){
+                                    templateArray.push(instance.convert(res));
+                                }else{
+                                    errorTemplateurl.push(res.config.url)
+                                }
+                            } else {
+                                errorTemplateurl.push(res.config.url);
+                            }
                         } else {
                             resCount++;
                             errorTemplateurl.push(err.config.url);
@@ -66,7 +76,7 @@ EkstepEditor.basePlugin.extend({
                         console.warn("Invalid Template", err);
                     }
                     if (resCount >= _.size(templateIds)) {
-                        instance.showpopupMessage(templateIds, errorTemplateurl, _parent);
+                        instance.showpopupMessage(templateIds, _.uniq(errorTemplateurl), _parent);
                         if (_.size(errorTemplateurl) === 0) {
                             instance.showQuizbgImage(questionnaire, _parent);
                         }
@@ -323,7 +333,7 @@ EkstepEditor.basePlugin.extend({
         config.showImmediateFeedback = this.data.questionnaire.showImmediateFeedback;
         config.max_score = this.data.questionnaire.max_score;
         config.title = this.data.questionnaire.title;
-        config.optionShuffle = _.isUndefined(this.data.questionnaire.optionShuffle) ? true : this.data.questionnaire.optionShuffle ;
+        config.optionShuffle = this.data.questionnaire.optionShuffle;
         return config;
     },
     /**    
