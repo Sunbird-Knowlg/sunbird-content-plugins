@@ -100,7 +100,6 @@ EkstepEditor.basePlugin.extend({
             angScope.showConfigContainer = true;
         });
         this.showSettingsTab(event, data);
-        this.showConfig(event, data);
         EkstepEditorAPI.jQuery('.sidebarConfig .item').removeClass('active');
         EkstepEditorAPI.jQuery('#settingsTab').addClass('active');
         EkstepEditorAPI.jQuery('.sidebarConfigDiv').removeClass('active');
@@ -113,9 +112,6 @@ EkstepEditor.basePlugin.extend({
                 angScope.showConfigContainer = false;
                 angScope.stageConfigStatus = EkstepEditorAPI.getCurrentObject() ? false : true;
             });
-            if(!EkstepEditorAPI.getCurrentObject()){
-                this.showSettingsTab();
-            }
         }
     },
     /**
@@ -140,9 +136,11 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.pluginConfig = instance.pluginConfigManifest;
             angScope.configData = instance.configData;
-            angScope.$watch('configData', function(newValue, oldValue) {
-                instance.updateConfig(newValue, oldValue);
-            }, true);
+            if(EkstepEditorAPI.getCurrentObject()){
+                angScope.$watch('configData', function(newValue, oldValue) {
+                    instance.updateConfig(newValue, oldValue);
+                }, true);
+            }
             angScope.stageConfigStatus = EkstepEditorAPI.getCurrentObject() ? false : true;
         });
         EkstepEditorAPI._.forEach(instance.pluginConfigManifest, function(config) {
@@ -215,7 +213,7 @@ EkstepEditor.basePlugin.extend({
      * @memberof Config
      */
     onConfigChange: function(key, value) {
-        if (!EkstepEditorAPI._.isUndefined(value)) {
+        if (!EkstepEditorAPI._.isUndefined(value) && EkstepEditorAPI.getCurrentObject()) {
             EkstepEditorAPI.getCurrentObject().__proto__.__proto__.onConfigChange(key, value);
             EkstepEditorAPI.getCurrentObject().onConfigChange(key, value);
             if (key === 'autoplay') {
