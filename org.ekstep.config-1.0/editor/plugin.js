@@ -175,7 +175,6 @@ EkstepEditor.basePlugin.extend({
      */
     _invoke: function(config, configData) {
         var instance = this;
-        var fontSizeConfig, counter = 0; // fontSizeConfig variable is used to store the font size config object.
         configData = configData || {};
         if (config.dataType === 'colorpicker') {
             var eventData = { id: config.propertyName, callback: this.onConfigChange, color: configData[config.propertyName] };
@@ -190,29 +189,30 @@ EkstepEditor.basePlugin.extend({
             }, 500);
         }
         if (config.dataType === 'groupToggle') {
-            var angScope = EkstepEditorAPI.getAngularScope();
-            EkstepEditorAPI.jQuery('.popup-button2').popup({
-                popup : EkstepEditorAPI.jQuery('.custom.popup'),
-                on : 'click',
-                position: 'bottom left'
-            });
-            EkstepEditorAPI.ngSafeApply(angScope, function() {
-                angScope.textAlignClick = function(conf, ddObj, configDataObj){
-                    var configList;
-                    if(conf) configList = conf.config;
-                    else configList = config.config;
-                    console.log(configDataObj);
-                    EkstepEditorAPI._.forEach(configList, function(configObj, index) {
-                        if(configObj.id === ddObj.id){
-                            if((configDataObj[configObj.propertyName] === ddObj.propertyValue) && (configDataObj[configObj.propertyName] !== configList[0].propertyValue)){
-                                configDataObj[configObj.propertyName] = configList[0].propertyValue; 
-                            } else {
-                                configDataObj[configObj.propertyName] = ddObj.propertyValue; 
-                            }
-                        } 
-                    });
-                };
-            });
+            setTimeout(function() {
+                var angScope = EkstepEditorAPI.getAngularScope();
+                EkstepEditorAPI.jQuery('.popup-button2').popup({
+                    popup : EkstepEditorAPI.jQuery('.custom.popup'),
+                    on : 'click',
+                    position: 'bottom left'
+                });
+                EkstepEditorAPI.ngSafeApply(angScope, function() {
+                    angScope.textAlignClick = function(conf, ddObj, configDataObj){
+                        var configList;
+                        if(conf) configList = conf.subconfig;
+                        else configList = config.subconfig;
+                        EkstepEditorAPI._.forEach(configList, function(configObj, index) {
+                            if(configObj.id === ddObj.id){
+                                if((configDataObj[configObj.propertyName] === ddObj.propertyValue) && (configDataObj[configObj.propertyName] !== configList[0].propertyValue)){
+                                    configDataObj[configObj.propertyName] = configList[0].propertyValue; 
+                                } else {
+                                    configDataObj[configObj.propertyName] = ddObj.propertyValue; 
+                                }
+                            } 
+                        });
+                    };
+                });
+            }, 500);
         }
 
     },
