@@ -31,6 +31,7 @@ EkstepEditor.basePlugin.extend({
         return this.convertToFabric(props);
     },
     fromECML: function(data) {
+        data.data.id = data.data.id || data.data.pluginId;
         this.setData(data.data);
     },
     toECML: function() {
@@ -43,6 +44,10 @@ EkstepEditor.basePlugin.extend({
             this.data.data.h =  attr.h;
         }
         return this.data.data;
+    },
+    getCopy: function () {
+        var instance = this;        
+        return { data: { data :_.cloneDeep(this.toECML()), pluginId: instance.data.id } };
     },
     getConfig: function () {
     	
