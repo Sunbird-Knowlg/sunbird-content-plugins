@@ -67,38 +67,36 @@
                     <div class="ui text loader">Just one second, We're fetching activities for you.</div>
                 </div>
             </div>
-            <div class="ui grid">
-                <div class="ui four Stackable special cards activity-browser-cards" ng-show="$ctrl.activitiesList.length > 0" id="activity-cards">
-                    <div class="ui link card" ng-repeat="activity in $ctrl.activitiesList track by $index">
-                        <div class="blurring dimmable image">
-                            <div class="ui dimmer">
-                                <div class="content">
-                                    <div class="center">
-                                        <div class="ui tiny inverted header" title="{{activity.name}}">{{activity.name | limitTo:20}}<span ng-if="activity.name.length > 20">...</span></div>
-                                        <p title="{{activity.description}}">{{activity.description | limitTo:30}}<span ng-if="activity.description.length > 30">...</span></p>
-                                    </div>
+            <div class="ui four stackable special cards activity-browser-cards" ng-show="$ctrl.activitiesList.length > 0" id="activity-cards">
+                <div class="ui link card" ng-repeat="activity in $ctrl.activitiesList track by $index">
+                    <div class="blurring dimmable image">
+                        <div class="ui dimmer">
+                            <div class="content">
+                                <div class="center">
+                                    <div class="ui tiny inverted header" title="{{activity.name}}">{{activity.name | limitTo:20}}<span ng-if="activity.name.length > 20">...</span></div>
+                                    <p title="{{activity.description}}">{{activity.description | limitTo:30}}<span ng-if="activity.description.length > 30">...</span></p>
                                 </div>
                             </div>
-                            <img ng-src="{{activity.appIcon || $ctrl.defaultActivityImage}}">
                         </div>
-                        <div class="content">
-                            <a class="header" title="{{activity.name}}" style="display: inline;">{{activity.name | limitTo:12}}<span ng-if="activity.name.length > 12">...</span></a>
-                            <span class="right floated">
+                        <img ng-src="{{activity.appIcon || $ctrl.defaultActivityImage}}">
+                    </div>
+                    <div class="content">
+                        <a class="header" title="{{activity.name}}" style="display: inline;">{{activity.name | limitTo:12}}<span ng-if="activity.name.length > 12">...</span></a>
+                        <span class="right floated">
                                 <a class="header" ng-click="$ctrl.addPlugin(activity)">ADD<i class="plus icon"></i></a>    
                             </span>
-                        </div>
                     </div>
                 </div>
-                <div class="ui huge info message activity-browser-center" ng-show="$ctrl.noActivities">
-                    <p>No activities found.</p>
+            </div>
+            <div class="ui huge info message activity-browser-center" ng-show="$ctrl.noActivities">
+                <p>No activities found.</p>
+            </div>
+            <div ng-if="$ctrl.errorLoadingActivities" class="ui negative message activity-browser-center">
+                <div class="header">
+                    We're sorry!
                 </div>
-                <div ng-if="$ctrl.errorLoadingActivities" class="ui negative message activity-browser-center">
-                    <div class="header">
-                        We're sorry!
-                    </div>
-                    <p>There's an error while fetching activities, <a href ng-click="$ctrl.getActivities()">Click here</a> to try again.
-                    </p>
-                </div>
+                <p>There's an error while fetching activities, <a href ng-click="$ctrl.getActivities()">Click here</a> to try again.
+                </p>
             </div>
         </div>
     </div>
