@@ -113,6 +113,7 @@ EkstepEditor.basePlugin.extend({
      */
 
     onConfigChange: function(key, value) {
+        console.log(key, value);
         switch (key) {
             case "fontweight":
                 this.editorObj.setFontWeight(value ? "bold" : "normal");
@@ -244,7 +245,20 @@ EkstepEditor.basePlugin.extend({
             var fontSize = this.updateFontSize(data.fontsize, true);
             retData.fontSize = fontSize;
             data.fontSize = fontSize;
-        };
+        }
+        if(data.textalignleft){
+            retData.textAlign = "left";
+            data.textAlign = "left";
+        } else if(data.textaligncenter){
+            retData.textAlign = "center";
+            data.textAlign = "center";
+        } else if(data.textalignright){
+            retData.textAlign = "right";
+            data.textAlign = "right";
+        } else {
+            retData.textAlign = "left";
+            data.textAlign = "left";
+        }
         delete retData.lineHeight // line height set to default value 
         return retData;
     },

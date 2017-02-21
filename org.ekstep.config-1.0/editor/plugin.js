@@ -204,7 +204,13 @@ EkstepEditor.basePlugin.extend({
                             var instance = this;
                             EkstepEditorAPI._.forEach(configs.subconfig, function(subConfigObj, subIndex) {
                                 if(subConfigObj.propertyName !== instance.id){
-                                    configData[subConfig.propertyName] = false; 
+                                    configData[subConfigObj.propertyName] = false; 
+                                } 
+                                if(configs.subconfig.length === subIndex + 1){
+                                    var angScope = EkstepEditorAPI.getAngularScope();
+                                    EkstepEditorAPI.ngSafeApply(angScope, function() {
+                                        angScope.configData = configData;
+                                    });
                                 }
                             });
                         });
