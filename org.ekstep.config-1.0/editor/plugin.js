@@ -190,27 +190,25 @@ EkstepEditor.basePlugin.extend({
         }
         if (config.dataType === 'groupToggle') {
             setTimeout(function() {
-                var angScope = EkstepEditorAPI.getAngularScope();
-                EkstepEditorAPI.jQuery('.popup-button2').popup({
-                    popup : EkstepEditorAPI.jQuery('.custom.popup'),
-                    on : 'click',
-                    position: 'bottom left'
+                EkstepEditorAPI._.forEach(config.config, function(config, index) {
+                    EkstepEditorAPI.jQuery('#' + config.propertyName).popup({
+                        popup : EkstepEditorAPI.jQuery('#' + config.propertyName + index),
+                        on : 'click',
+                        position: 'bottom left'
+                    });
                 });
-                EkstepEditorAPI.ngSafeApply(angScope, function() {
-                    angScope.textAlignClick = function(conf, ddObj, configDataObj){
-                        var configList;
-                        if(conf) configList = conf.subconfig;
-                        else configList = config.subconfig;
-                        EkstepEditorAPI._.forEach(configList, function(configObj, index) {
-                            if(configObj.id === ddObj.id){
-                                if((configDataObj[configObj.propertyName] === ddObj.propertyValue) && (configDataObj[configObj.propertyName] !== configList[0].propertyValue)){
-                                    configDataObj[configObj.propertyName] = configList[0].propertyValue; 
-                                } else {
-                                    configDataObj[configObj.propertyName] = ddObj.propertyValue; 
+                EkstepEditorAPI._.forEach(config.config, function(configList, index) {
+                    var configs = configList;
+                    EkstepEditorAPI._.forEach(configList.subconfig, function(subConfig, subIndex) {
+                        EkstepEditorAPI.jQuery('#' + subConfig.propertyName).on('click', function(e) {
+                            var instance = this;
+                            EkstepEditorAPI._.forEach(configs.subconfig, function(subConfigObj, subIndex) {
+                                if(subConfigObj.propertyName !== instance.id){
+                                    configData[subConfig.propertyName] = false; 
                                 }
-                            } 
+                            });
                         });
-                    };
+                    });
                 });
             }, 500);
         }

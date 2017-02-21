@@ -111,6 +111,7 @@ EkstepEditor.basePlugin.extend({
      * <br/>It will update the fontweight, fontstyle, fontfamily,fontsize and color of the plugin
      * @memberof Text
      */
+
     onConfigChange: function(key, value) {
         switch (key) {
             case "fontweight":
@@ -134,9 +135,29 @@ EkstepEditor.basePlugin.extend({
                 this.editorObj.setFill(value);
                 this.attributes.color = value;
                 break;
-            case "textalign":
-                this.editorObj.setTextAlign(value);
-                this.attributes.textalign = value;
+            case "textalignleft":
+                if (value) {
+                    this.editorObj.setTextAlign("left");                
+                    this.attributes.textaligncenter = false;
+                    this.attributes.textalignright = false;
+                }
+                this.attributes.textalignleft = value;
+                break;
+            case "textaligncenter":
+                if (value) {
+                    this.editorObj.setTextAlign("center");
+                    this.attributes.textalignleft = false;
+                    this.attributes.textalignright = false;
+                }
+                this.attributes.textaligncenter = value;
+                break;
+            case "textalignright":
+                if (value) {
+                    this.editorObj.setTextAlign("right");
+                    this.attributes.textalignleft = false;
+                    this.attributes.textaligncenter = false;
+                }
+                this.attributes.textalignright = value;
                 break;
         }
         EkstepEditorAPI.render();
@@ -153,7 +174,9 @@ EkstepEditor.basePlugin.extend({
         config.fontsize = this.attributes.fontSize;
         config.fontweight = this.attributes.fontweight || false;
         config.fontstyle = this.attributes.fontstyle || false;
-        config.textalign = this.attributes.textalign || 'left';
+        config.textalignleft = this.attributes.textalignleft || false;
+        config.textaligncenter = this.attributes.textaligncenter || false;
+        config.textalignright = this.attributes.textalignright || false;
         return config;
     },
     /**
