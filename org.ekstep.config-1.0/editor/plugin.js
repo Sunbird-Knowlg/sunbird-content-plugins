@@ -192,7 +192,7 @@ EkstepEditor.basePlugin.extend({
         if (config.dataType === 'inputSelect') {
             setTimeout(function() {
                 EkstepEditorAPI._.forEach(instance.pluginConfigManifest, function(config, index) {
-                    if(config.propertyName === "fontsize"){
+                    if(config.dataType === 'inputSelect'){
                         fontSizeConfig = config;
                         EkstepEditorAPI._.forEach(fontSizeConfig.range, function(value) {
                             if(instance.configData.fontsize === parseInt(value)){
@@ -204,7 +204,7 @@ EkstepEditor.basePlugin.extend({
                         }
                     }
                 });
-                EkstepEditorAPI.jQuery('#' + config.propertyName).parent().dropdown({
+                EkstepEditorAPI.jQuery('#' + config.propertyName).dropdown({
                     allowAdditions: true,
                     action: function(text, value, element){
                         if (isNaN(parseInt(text, 10)) || parseInt(text, 10) < fontSizeConfig.minValue || parseInt(text, 10) > fontSizeConfig.maxValue) {
