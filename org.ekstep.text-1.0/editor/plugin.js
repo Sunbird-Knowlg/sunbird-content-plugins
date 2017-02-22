@@ -155,7 +155,7 @@ EkstepEditor.basePlugin.extend({
     getConfig: function() {
         var config = this._super();
         config.color = this.attributes.color || this.attributes.fill;
-        config.colorRGBA = this.config.colorRGBA;
+        config.colorRGBA = this.config.colorRGBA || config.color;
         config.fontfamily = this.attributes.fontFamily; 
         config.fontsize = this.attributes.fontSize;
         config.fontweight = this.attributes.fontweight || false;

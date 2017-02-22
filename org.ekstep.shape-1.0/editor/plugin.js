@@ -185,7 +185,7 @@ EkstepEditor.basePlugin.extend({
     getConfig: function() {
         var config = this._super();
         config.color = this.attributes.fill;       
-        config.colorRGBA = this.config.colorRGBA;
+        config.colorRGBA = this.config.colorRGBA || config.color;
         if (this.attributes.type == 'roundrect') {
             config.radius = this.editorObj.rx;
         }
