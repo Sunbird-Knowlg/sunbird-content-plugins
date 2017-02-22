@@ -44,7 +44,9 @@ EkstepEditor.basePlugin.extend({
                 clickoutFiresChange: false,
                 showButtons: true,
                 change: function(color) { 
-                    data.callback(data.id, color.toHexString());
+                    data.callback('color', color.toHexString());
+                    data.callback('colorRGBA', color.toRgb());
+                    data.callback('opacity', color.getAlpha());
                 },
                 showPaletteOnly: true,
                 togglePaletteOnly: true,
@@ -64,7 +66,9 @@ EkstepEditor.basePlugin.extend({
                 maxSelectionSize: 10,
                 hideAfterPaletteSelect:true,
                 move: function(tinycolor) { 
-                    data.callback(data.id, tinycolor.toHexString());
+                    data.callback('color', tinycolor.toHexString());
+                    data.callback('colorRGBA', tinycolor.toRgb());
+                    data.callback('opacity', tinycolor.getAlpha());
                 },
             });
 
