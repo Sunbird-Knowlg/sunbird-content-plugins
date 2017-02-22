@@ -183,7 +183,7 @@ EkstepEditor.basePlugin.extend({
                 });
             }, 500);
         }
-        if (config.dataType === 'addselect') {
+        if (config.dataType === 'inputSelect') {
             setTimeout(function() {
                 EkstepEditorAPI._.forEach(instance.pluginConfigManifest, function(config, index) {
                     if(config.propertyName === "fontsize"){
@@ -196,9 +196,6 @@ EkstepEditor.basePlugin.extend({
                         if(counter === 0){
                             fontSizeConfig.range.push(instance.configData.fontsize);
                         }
-                        /*EkstepEditorAPI.jQuery('#' + config.propertyName).parent().dropdown({
-                            allowAdditions: true
-                        }).dropdown('set text', instance.configData.fontsize);*/
                     }
                 });
                 EkstepEditorAPI.jQuery('#' + config.propertyName).parent().dropdown({
