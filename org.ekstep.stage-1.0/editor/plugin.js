@@ -112,6 +112,14 @@ EkstepEditor.basePlugin.extend({
     },
     enableSave: function() {
         EkstepEditorAPI.getAngularScope().enableSave();        
-    }
+    },
+    getConfigManifest: function () {
+        var config = {};
+        var angScope = EkstepEditorAPI.getAngularScope();
+        EkstepEditorAPI.ngSafeApply(angScope, function() {
+            angScope.stageConfigStatus = true;
+        });
+        return config;
+    },
 });
 //# sourceURL=stageplugin.js

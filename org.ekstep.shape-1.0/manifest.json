@@ -30,6 +30,7 @@
                         "x": 10,
                         "y": 20,
                         "fill": "#FFFF00",
+                        "colorRGBA": "rgba(255,255,0,1)",
                         "w": 14,
                         "h": 25,
                         "stroke": "rgba(255, 255, 255, 0)",
@@ -50,6 +51,7 @@
                         "x": 15,
                         "y": 15,
                         "fill": "#00FF00",
+                        "colorRGBA": "rgba(0,255,0,1)",
                         "w": 18,
                         "h": 32,
                         "stroke": "rgba(255, 255, 255, 0)",
@@ -70,6 +72,7 @@
                         "x": 20,
                         "y": 20,
                         "fill": "#FF0000",
+                        "colorRGBA": "rgba(255,0,0,1)",
                         "w": 14,
                         "h": 25,
                         "radius": 10,
@@ -78,10 +81,76 @@
                         "opacity": 1
                     }
                 }
+            }, {
+                "id": "star",
+                "type": "icon",
+                "toolTip": "Add Star",
+                "title": "Star",
+                "iconClass": "star icon",
+                "onclick": {
+                    "id": "org.ekstep.shape:create",
+                    "data": {
+                        "type": "star",
+                        "x": 20,
+                        "y": 20,
+                        "fill": "#FF0000",
+                        "colorRGBA": "rgba(255,0,0,1)",
+                        "w": 14,
+                        "h": 25,
+                        "corners": 5,
+                        "stroke": "rgba(255, 255, 255, 0)",
+                        "strokeWidth": 1,
+                        "opacity": 1
+                    }
+                }
+            }, {
+                "id": "polygon",
+                "type": "icon",
+                "toolTip": "Add Polygon",
+                "title": "Polygon",
+                "iconClass": "first order icon",
+                "onclick": {
+                    "id": "org.ekstep.shape:create",
+                    "data": {
+                        "type": "polygon",
+                        "x": 20,
+                        "y": 20,
+                        "fill": "#FF0000",
+                        "colorRGBA": "rgba(255,0,0,1)",
+                        "w": 14,
+                        "h": 25,
+                        "sides": 5,
+                        "stroke": "rgba(255, 255, 255, 0)",
+                        "strokeWidth": 1,
+                        "opacity": 1
+                    }
+                }
+            }, {
+                "id": "trapezium",
+                "type": "icon",
+                "toolTip": "Add Trapezium",
+                "title": "Trapezium",
+                "iconClass": "road icon",
+                "onclick": {
+                    "id": "org.ekstep.shape:create",
+                    "data": {
+                        "type": "trapezium",
+                        "x": 20,
+                        "y": 20,
+                        "fill": "#FF0000",
+                        "colorRGBA": "rgba(255,0,0,1)",
+                        "w": 14,
+                        "h": 25,
+                        "sides": 5,
+                        "stroke": "rgba(255, 255, 255, 0)",
+                        "strokeWidth": 1,
+                        "opacity": 1
+                    }
+                }
             }]
         }],
         "configManifest": [{
-            "propertyName": "color",
+            "propertyName": "colorRGBA",
             "title": "Fill Color",
             "description": "Choose a color from the color picker",
             "dataType": "colorpicker",

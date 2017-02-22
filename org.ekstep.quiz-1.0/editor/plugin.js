@@ -24,6 +24,8 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener(this.manifest.id + ":showPopup", this.openAssessmentBrowser, this);
         EkstepEditorAPI.addEventListener(this.manifest.id + ":renderQuiz", this.renderQuiz, this);
     },
+    mediaObj: {},
+    hasTemplateMedia: true,
     newInstance: function() {
         var instance = this;
         // Removes unwanted config properties(visible,stroke etc.) for the quiz plugin
@@ -32,25 +34,39 @@ EkstepEditor.basePlugin.extend({
         instance.attributes.h = 85;
         instance.attributes.x = 9;
         instance.attributes.y = 6;
+        instance.addMediaFromConfig();
         instance.percentToPixel(instance.attributes);
         var questionnaire = instance.data.questionnaire;
+        instance.data.questionnaire.optionShuffle =  _.isUndefined(questionnaire.optionShuffle) ? true : questionnaire.optionShuffle ;
         var templateIds = instance.getItems(questionnaire.items, "templateId");
-        instance.getItems(questionnaire.items, "media").forEach(function(element, index) {
-            instance.addMediatoManifest(element);
-        });        
+        if (_.isUndefined(this.config.media)) {
+                instance.hasTemplateMedia = false;
+                instance.getItems(questionnaire.items, "media").forEach(function(element, index) {
+                instance.addMediatoManifest(element);
+            }); 
+        }       
         var _parent = this.parent;
         this.parent = undefined;
         var templateArray = [],
             errorTemplateurl = [],
             resCount = 0;
-        if (EkstepEditorAPI._.isUndefined(instance.data.template) || instance.data.template.length == 0) {
+        if ((EkstepEditorAPI._.isUndefined(instance.data.template) || instance.data.template.length == 0 || !instance.hasTemplateMedia) && _.size(templateIds) >0) {
             for (var index in templateIds) {
                 // get Template based on ID and push all templates response to arrray.
                 EkstepEditor.assessmentService.getTemplate(templateIds[index], function(err, res) {
                     try {
                         if (res) {
                             resCount++;
-                            templateArray.push(instance.convert(res));
+                           //  If response body comes as undefined then move that res to errorTemplateurl
+                            if (!_.isUndefined(res.data.result.content)) {
+                                if(res.data.result.content.body){
+                                    templateArray.push(instance.convert(res));
+                                }else{
+                                    errorTemplateurl.push(res.config.url)
+                                }
+                            } else {
+                                errorTemplateurl.push(res.config.url);
+                            }
                         } else {
                             resCount++;
                             errorTemplateurl.push(err.config.url);
@@ -60,7 +76,7 @@ EkstepEditor.basePlugin.extend({
                         console.warn("Invalid Template", err);
                     }
                     if (resCount >= _.size(templateIds)) {
-                        instance.showpopupMessage(templateIds, errorTemplateurl, _parent);
+                        instance.showpopupMessage(templateIds, _.uniq(errorTemplateurl), _parent);
                         if (_.size(errorTemplateurl) === 0) {
                             instance.showQuizbgImage(questionnaire, _parent);
                         }
@@ -192,7 +208,8 @@ EkstepEditor.basePlugin.extend({
         controller.questionnaire["items"] = questionSets;
         controller.questionnaire["item_sets"] = [{ "count": config.total_items, "id": question[0].identifier }]
         controller["questionnaire"] = Object.assign(controller.questionnaire, config);
-        instance.setConfig({ "type": "items", "var": "item" });
+        instance.addConfig("type", "items");
+        instance.addConfig("var", "item");
         instance.setData(controller);
         _assessmentData["data"] = { __cdata: JSON.stringify(controller) };
         _assessmentData["config"] = { __cdata: JSON.stringify({ "type": "items", "var": "item" }) };
@@ -217,12 +234,29 @@ EkstepEditor.basePlugin.extend({
                         // Adding the preload property to the media
                         media[index].preload = "true";
                         instance.addMedia(media[index]);
+                        instance.addMediaToConfig(media[index]);
                     }
                 });
             } else {
                 media.preload = "true";
                 instance.addMedia(media);
+                instance.addMediaToConfig(media);
             }
+        }
+    },
+    addMediaToConfig: function (media) {
+        if (media.src) {
+            EkstepEditor.mediaManager.getMediaOriginURL(media.src);
+            this.mediaObj[media.id] = media;        
+            this.addConfig("media", this.mediaObj);
+        }
+    },
+    addMediaFromConfig: function () {
+        var instance = this;
+        if(!_.isUndefined(this.config.media)) {
+            _.forIn(this.config.media, function(value, key) {
+                instance.addMedia(value);
+            });
         }
     },
     convert: function(res) {
@@ -299,7 +333,7 @@ EkstepEditor.basePlugin.extend({
         config.showImmediateFeedback = this.data.questionnaire.showImmediateFeedback;
         config.max_score = this.data.questionnaire.max_score;
         config.title = this.data.questionnaire.title;
-        config.optionShuffle = _.isUndefined(this.data.questionnaire.optionShuffle) ? true : this.data.questionnaire.optionShuffle ;
+        config.optionShuffle = this.data.questionnaire.optionShuffle;
         return config;
     },
     /**    
