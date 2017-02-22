@@ -113,7 +113,6 @@ EkstepEditor.basePlugin.extend({
      */
 
     onConfigChange: function(key, value) {
-        console.log(key, value);
         switch (key) {
             case "fontweight":
                 this.editorObj.setFontWeight(value ? "bold" : "normal");

@@ -208,9 +208,7 @@ EkstepEditor.basePlugin.extend({
                                 } 
                                 if(configs.subconfig.length === subIndex + 1){
                                     var angScope = EkstepEditorAPI.getAngularScope();
-                                    EkstepEditorAPI.ngSafeApply(angScope, function() {
-                                        angScope.configData = configData;
-                                    });
+                                    EkstepEditorAPI.ngSafeApply(angScope);
                                 }
                             });
                         });
