@@ -18,6 +18,11 @@ EkstepEditor.basePlugin.extend({
      *
      */
     newInstance: function() {
+        if (this.attributes.colorRGBA) {
+            this.config.colorRGBA = this.attributes.colorRGBA;
+            delete this.attributes.colorRGBA;        
+        }
+
         var props = this.convertToFabric(this.attributes);
         switch (this.attributes.type) {
             case 'ellipse':
@@ -101,7 +106,10 @@ EkstepEditor.basePlugin.extend({
 
             default:
         }
-        if (this.editorObj) this.editorObj.setFill(props.fill);
+        if (this.editorObj) {
+            //if (props.fill) this.editorObj.setFill(props.fill);
+            if (this.config.colorRGBA) this.editorObj.setFill(this.config.colorRGBA);
+        }
     },
     /**
      *
@@ -115,6 +123,10 @@ EkstepEditor.basePlugin.extend({
             case 'color':
                 this.editorObj.setFill(value);
                 this.attributes.fill = value;
+                break;
+            case 'colorRGBA':                
+                this.editorObj.setFill(this.toRGBAFormat(value));                
+                this.config.colorRGBA = this.toRGBAFormat(value);
                 break;
             case 'radius':
                 if (this.attributes.type == 'ellipse') {
@@ -172,7 +184,8 @@ EkstepEditor.basePlugin.extend({
      */
     getConfig: function() {
         var config = this._super();
-        config.color = this.attributes.fill;
+        config.color = this.attributes.fill;       
+        config.colorRGBA = this.config.colorRGBA;
         if (this.attributes.type == 'roundrect') {
             config.radius = this.editorObj.rx;
         }
@@ -218,6 +231,10 @@ EkstepEditor.basePlugin.extend({
 
         // Other convex polygons
         "trapezium" : [{"x":25,"y":0},{"x":75,"y":0},{"x":100,"y":100},{"x":0,"y":100}]
+    },
+    toRGBAFormat: function(rgbaObject) {
+        if(typeof rgbaObject === "object") return "rgba("+rgbaObject.r+","+rgbaObject.g+","+rgbaObject.b+","+rgbaObject.a+")"
+        else return rgbaObject;
     }
 });
 //# sourceURL=shapeplugin.js
