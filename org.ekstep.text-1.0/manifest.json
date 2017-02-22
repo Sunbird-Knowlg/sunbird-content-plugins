@@ -72,7 +72,7 @@
                 "defaultValue": false
             }]
         }, {
-            "propertyName": "textHorizontalAlign",
+            "propertyName": "align",
             "title": "Align Text",
             "dataType": "buttonToggle",
             "description": "Select text alignment",

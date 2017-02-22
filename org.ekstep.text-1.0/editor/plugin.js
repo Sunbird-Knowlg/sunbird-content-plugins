@@ -141,9 +141,9 @@ EkstepEditor.basePlugin.extend({
                 this.editorObj.setFill(value);
                 this.attributes.color = value;
                 break;
-            case "textHorizontalAlign":
-                this.editorObj.setTextAlign(value);                
-                this.attributes.textHorizontalAlign = value;
+            case "align":
+                this.editorObj.setTextAlign(value);       
+                this.attributes.align = value;
                 break;
             case "colorRGBA":
                 this.editorObj.setFill(this.toRGBAFormat(value));                
@@ -165,7 +165,7 @@ EkstepEditor.basePlugin.extend({
         config.fontsize = this.attributes.fontSize;
         config.fontweight = this.attributes.fontweight || false;
         config.fontstyle = this.attributes.fontstyle || false;
-        config.textHorizontalAlign = this.attributes.textHorizontalAlign || 'left';
+        config.align = this.attributes.align || 'left';
         return config;
     },
     /**
@@ -234,10 +234,10 @@ EkstepEditor.basePlugin.extend({
             retData.fontSize = fontSize;
             data.fontSize = fontSize;
         }
-        if(data.textHorizontalAlign){
-            retData.textHorizontalAlign = data.textHorizontalAlign;
-            retData.textAlign = data.textHorizontalAlign;
-            data.textAlign = data.textHorizontalAlign;
+        if(data.align) {
+            retData.textAlign = data.align;
+            retData.align = data.align;
+            data.align = data.align;
         }
         delete retData.lineHeight // line height set to default value 
         return retData;
