@@ -37,7 +37,7 @@
                     "strokeWidth": 1,
                     "opacity": 1,
                     "editable": false,
-                    "lineHeight": 1.3 
+                    "lineHeight": 1.3
                 }
             }
         }],
@@ -72,46 +72,33 @@
                 "defaultValue": false
             }]
         }, {
-            "propertyName": "textalignment",
-            "title": "Align",
-            "dataType": "groupToggle",
-            "description": "Select text align",
-            "config": [{
-                "propertyName": "horizontaltextalign",
-                "title": "Horizontal Align",
-                "toolTip": "Horizontal Align",
-                "dataType": "groupToggle",
-                "iconClass": "resize horizontal",
-                "description": "Select horizontal text align",
-                "subconfig": [{
-                    "propertyName": "textalignleft",
-                    "title": "Text Align Left",
-                    "toolTip": "Left",
-                    "description": "Align text to left",
-                    "dataType": "icon",
-                    "iconClass": "align left icon",
-                    "required": true,
-                    "defaultValue": false
-                }, {
-                    "propertyName": "textaligncenter",
-                    "title": "Text Align Center",
-                    "toolTip": "Center",
-                    "description": "Align text to center",
-                    "dataType": "icon",
-                    "iconClass": "align center icon",
-                    "required": true,
-                    "defaultValue": false
-                }, {
-                    "propertyName": "textalignright",
-                    "title": "Text Align Right",
-                    "toolTip": "Right",
-                    "description": "Align text to right",
-                    "dataType": "icon",
-                    "iconClass": "align right icon",
-                    "required": true,
-                    "defaultValue": false
-                }]
-            }]
+            "propertyName": "textHorizontalAlign",
+            "title": "Align Text",
+            "dataType": "buttonToggle",
+            "description": "Select text alignment",
+            "options": [{
+                "value": "left",
+                "title": "Text Align Left",
+                "toolTip": "Left",
+                "description": "Align text to left",
+                "dataType": "icon",
+                "iconClass": "align left icon"
+            }, {
+                "value": "center",
+                "title": "Text Align Center",
+                "toolTip": "Center",
+                "description": "Align text to center",
+                "dataType": "icon",
+                "iconClass": "align center icon"
+            }, {
+                "value": "right",
+                "title": "Text Align Right",
+                "toolTip": "Right",
+                "description": "Align text to right",
+                "dataType": "icon",
+                "iconClass": "align right icon"
+            }],
+            "defaultValue": "left"
         }, {
             "propertyName": "fontfamily",
             "title": "Font Family",

@@ -188,34 +188,6 @@ EkstepEditor.basePlugin.extend({
                 });
             }, 500);
         }
-        if (config.dataType === 'groupToggle') {
-            setTimeout(function() {
-                EkstepEditorAPI._.forEach(config.config, function(config, index) {
-                    EkstepEditorAPI.jQuery('#' + config.propertyName).popup({
-                        popup : EkstepEditorAPI.jQuery('#' + config.propertyName + index),
-                        on : 'click',
-                        position: 'bottom left'
-                    });
-                });
-                EkstepEditorAPI._.forEach(config.config, function(configList, index) {
-                    var configs = configList;
-                    EkstepEditorAPI._.forEach(configList.subconfig, function(subConfig, subIndex) {
-                        EkstepEditorAPI.jQuery('#' + subConfig.propertyName).on('click', function(e) {
-                            var instance = this;
-                            EkstepEditorAPI._.forEach(configs.subconfig, function(subConfigObj, subIndex) {
-                                if(subConfigObj.propertyName !== instance.id){
-                                    configData[subConfigObj.propertyName] = false; 
-                                } 
-                                if(configs.subconfig.length === subIndex + 1){
-                                    var angScope = EkstepEditorAPI.getAngularScope();
-                                    EkstepEditorAPI.ngSafeApply(angScope);
-                                }
-                            });
-                        });
-                    });
-                });
-            }, 500);
-        }
 
     },
     /**

@@ -141,29 +141,9 @@ EkstepEditor.basePlugin.extend({
                 this.editorObj.setFill(value);
                 this.attributes.color = value;
                 break;
-            case "textalignleft":
-                if (value) {
-                    this.editorObj.setTextAlign("left");                
-                    this.attributes.textaligncenter = false;
-                    this.attributes.textalignright = false;
-                }
-                this.attributes.textalignleft = value;
-                break;
-            case "textaligncenter":
-                if (value) {
-                    this.editorObj.setTextAlign("center");
-                    this.attributes.textalignleft = false;
-                    this.attributes.textalignright = false;
-                }
-                this.attributes.textaligncenter = value;
-                break;
-            case "textalignright":
-                if (value) {
-                    this.editorObj.setTextAlign("right");
-                    this.attributes.textalignleft = false;
-                    this.attributes.textaligncenter = false;
-                }
-                this.attributes.textalignright = value;
+            case "textHorizontalAlign":
+                this.editorObj.setTextAlign(value);                
+                this.attributes.textHorizontalAlign = value;
                 break;
             case "colorRGBA":
                 this.editorObj.setFill(this.toRGBAFormat(value));                
@@ -185,9 +165,7 @@ EkstepEditor.basePlugin.extend({
         config.fontsize = this.attributes.fontSize;
         config.fontweight = this.attributes.fontweight || false;
         config.fontstyle = this.attributes.fontstyle || false;
-        config.textalignleft = this.attributes.textalignleft || false;
-        config.textaligncenter = this.attributes.textaligncenter || false;
-        config.textalignright = this.attributes.textalignright || false;
+        config.textHorizontalAlign = this.attributes.textHorizontalAlign || 'left';
         return config;
     },
     /**
@@ -256,18 +234,10 @@ EkstepEditor.basePlugin.extend({
             retData.fontSize = fontSize;
             data.fontSize = fontSize;
         }
-        if(data.textalignleft){
-            retData.textAlign = "left";
-            data.textAlign = "left";
-        } else if(data.textaligncenter){
-            retData.textAlign = "center";
-            data.textAlign = "center";
-        } else if(data.textalignright){
-            retData.textAlign = "right";
-            data.textAlign = "right";
-        } else {
-            retData.textAlign = "left";
-            data.textAlign = "left";
+        if(data.textHorizontalAlign){
+            retData.textHorizontalAlign = data.textHorizontalAlign;
+            retData.textAlign = data.textHorizontalAlign;
+            data.textAlign = data.textHorizontalAlign;
         }
         delete retData.lineHeight // line height set to default value 
         return retData;
