@@ -206,6 +206,9 @@ EkstepEditor.basePlugin.extend({
                 });
                 EkstepEditorAPI.jQuery('#' + config.propertyName).dropdown({
                     allowAdditions: true,
+                    className: {
+                        dropdown: 'ui search dropdown'
+                    },
                     action: function(text, value, element){
                         if (isNaN(parseInt(text, 10)) || parseInt(text, 10) < fontSizeConfig.minValue || parseInt(text, 10) > fontSizeConfig.maxValue) {
                             instance.configData.fontsize = fontSizeConfig.defaultValue;
