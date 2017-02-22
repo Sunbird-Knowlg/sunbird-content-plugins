@@ -30,6 +30,7 @@
                     "w": 35,
                     "maxWidth": 500,
                     "fill": "#000000",
+                    "colorRGBA": "rgba(0,0,0,1)",
                     "fontStyle": "normal",
                     "fontWeight": "normal",
                     "stroke": "rgba(255, 255, 255, 0)",
@@ -41,7 +42,7 @@
             }
         }],
         "configManifest": [{
-            "propertyName": "color",
+            "propertyName": "colorRGBA",
             "title": "Font color",
             "description": "Choose a color from the color picker",
             "dataType": "colorpicker",
