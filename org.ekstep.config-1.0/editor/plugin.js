@@ -102,7 +102,7 @@ EkstepEditor.basePlugin.extend({
         this.showSettingsTab(event, data);
         EkstepEditorAPI.jQuery('.sidebarConfig .item').removeClass('active');
         EkstepEditorAPI.jQuery('#settingsTab').addClass('active');
-        EkstepEditorAPI.jQuery('.sidebarConfigDiv').removeClass('active');
+        EkstepEditorAPI.jQuery('.sidebarContent').removeClass('active');
         EkstepEditorAPI.jQuery('#settingsContent').addClass('active');
     },
     objectUnselected: function(event, data) {
@@ -112,6 +112,8 @@ EkstepEditor.basePlugin.extend({
                 angScope.showConfigContainer = false;
                 angScope.stageConfigStatus = EkstepEditorAPI.getCurrentObject() ? false : true;
             });
+            if(!EkstepEditorAPI.getCurrentObject())
+                this.showSettingsTab(event, data);
         }
     },
     /**
@@ -502,11 +504,11 @@ EkstepEditor.basePlugin.extend({
         //this.setToolBarContainerLocation("Properties");
     },
     showSettingsTab: function(event, data) {
-        EkstepEditorAPI.jQuery("#configMenu .ui.button").removeClass('active');
-        EkstepEditorAPI.jQuery("#configMenu #settingsMenu").addClass('active');
+        EkstepEditorAPI.jQuery("#configMenu .ui.button").removeClass('active grey');
+        EkstepEditorAPI.jQuery("#configMenu #settingsMenu").addClass('active grey');
         EkstepEditorAPI.jQuery('.sidebarConfig .item').removeClass('active');
         EkstepEditorAPI.jQuery('#settingsTab').addClass('active');
-        EkstepEditorAPI.jQuery('.sidebarConfigDiv').removeClass('active');
+        EkstepEditorAPI.jQuery('.sidebarContent').removeClass('active');
         EkstepEditorAPI.jQuery('#settingsContent').addClass('active');
         this.showConfig(event, data);
         var angScope = EkstepEditorAPI.getAngularScope();
@@ -517,11 +519,11 @@ EkstepEditor.basePlugin.extend({
         });
     },
     showHelpTab: function(event, data) {
-        EkstepEditorAPI.jQuery("#configMenu .ui.button").removeClass('active');
-        EkstepEditorAPI.jQuery("#configMenu #helpMenu").addClass('active');
+        EkstepEditorAPI.jQuery("#configMenu .ui.button").removeClass('active grey');
+        EkstepEditorAPI.jQuery("#configMenu #helpMenu").addClass('active grey');
         EkstepEditorAPI.jQuery('.sidebarHelp .item').removeClass('active');
         EkstepEditorAPI.jQuery('#helpTab').addClass('active');
-        EkstepEditorAPI.jQuery('.sidebarHelpDiv').removeClass('active');
+        EkstepEditorAPI.jQuery('.sidebarContent').removeClass('active');
         EkstepEditorAPI.jQuery('#helpContent').addClass('active');
         this.showHelp(event, data);
         var angScope = EkstepEditorAPI.getAngularScope();
@@ -532,8 +534,8 @@ EkstepEditor.basePlugin.extend({
         });
     },
     showCommentsTab: function(event, data) {
-        EkstepEditorAPI.jQuery("#configMenu .ui.button").removeClass('active');
-        EkstepEditorAPI.jQuery("#configMenu #commentsMenu").addClass('active');
+        EkstepEditorAPI.jQuery("#configMenu .ui.button").removeClass('active grey');
+        EkstepEditorAPI.jQuery("#configMenu #commentsMenu").addClass('active grey');
         var angScope = EkstepEditorAPI.getAngularScope();
         EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.showSettingContainer = false;
