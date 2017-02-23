@@ -175,7 +175,6 @@ EkstepEditor.basePlugin.extend({
      */
     _invoke: function(config, configData) {
         var instance = this;
-        var fontSizeConfig, counter = 0;
         configData = configData || {};
         if (config.dataType === 'colorpicker') {
             var eventData = { id: config.propertyName, callback: this.onConfigChange, color: configData[config.propertyName] };
@@ -190,13 +189,8 @@ EkstepEditor.basePlugin.extend({
             }, 500);
         }
         if (config.dataType === 'inputSelect') {
-            EkstepEditorAPI._.forEach(config.range, function(value) {
-                if(instance.configData.fontsize === parseInt(value)){
-                    counter++;
-                }
-            });
-            if(counter === 0){
-                config.range.push(instance.configData.fontsize);
+            if(_.indexOf(config.range, parseInt(instance.configData[config.propertyName]))){
+                config.range.push(instance.configData[config.propertyName]);
             }
             setTimeout(function() { 
                 EkstepEditorAPI.jQuery('#' + config.propertyName).dropdown({
@@ -206,19 +200,13 @@ EkstepEditor.basePlugin.extend({
                     },
                     action: function(text, value, element){
                         if (isNaN(parseInt(text, 10)) || parseInt(text, 10) < config.minValue || parseInt(text, 10) > config.maxValue) {
-                            instance.configData.fontsize = config.defaultValue;
+                            instance.configData[config.propertyName] = config.defaultValue;
                             instance.onConfigChange(config.propertyName, config.defaultValue);
                             EkstepEditorAPI.jQuery('#' + config.propertyName).parent().dropdown('set text', config.defaultValue);
                         } else {
-                            instance.configData.fontsize = parseInt(text);
-                            counter = 0;
-                            EkstepEditorAPI._.forEach(config.range, function(rangeValue) {
-                                if(instance.configData.fontsize === parseInt(rangeValue)){
-                                    counter++;
-                                }
-                            });
-                            if(counter === 0){
-                                config.range.push(instance.configData.fontsize);
+                            instance.configData[config.propertyName] = parseInt(text);
+                            if(_.indexOf(config.range, parseInt(instance.configData[config.propertyName]))){
+                                config.range.push(instance.configData[config.propertyName]);
                             }
                             instance.onConfigChange(config.propertyName, parseInt(text));
                             EkstepEditorAPI.jQuery('#' + config.propertyName).parent().dropdown('set text', parseInt(text));
