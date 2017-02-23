@@ -190,7 +190,33 @@ EkstepEditor.basePlugin.extend({
                 });
             }, 500);
         }
-
+        if (config.dataType === 'inputSelect') {
+            if(_.indexOf(config.range, parseInt(instance.configData[config.propertyName]))){
+                config.range.push(instance.configData[config.propertyName]);
+            }
+            setTimeout(function() { 
+                EkstepEditorAPI.jQuery('#' + config.propertyName).dropdown({
+                    allowAdditions: true,
+                    className: {
+                        dropdown: 'ui search dropdown'
+                    },
+                    action: function(text, value, element){
+                        if (isNaN(parseInt(text, 10)) || parseInt(text, 10) < config.minValue || parseInt(text, 10) > config.maxValue) {
+                            instance.configData[config.propertyName] = config.defaultValue;
+                            instance.onConfigChange(config.propertyName, config.defaultValue);
+                            EkstepEditorAPI.jQuery('#' + config.propertyName).parent().dropdown('set text', config.defaultValue);
+                        } else {
+                            instance.configData[config.propertyName] = parseInt(text);
+                            if(_.indexOf(config.range, parseInt(instance.configData[config.propertyName]))){
+                                config.range.push(instance.configData[config.propertyName]);
+                            }
+                            instance.onConfigChange(config.propertyName, parseInt(text));
+                            EkstepEditorAPI.jQuery('#' + config.propertyName).parent().dropdown('set text', parseInt(text));
+                        }
+                    }
+                });
+            }, 1000);
+        }
     },
     /**
      * This method gets the old and new config data and compares the both and calls the onConfigChange method with the key and value of new value
