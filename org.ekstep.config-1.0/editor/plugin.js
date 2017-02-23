@@ -190,40 +190,35 @@ EkstepEditor.basePlugin.extend({
             }, 500);
         }
         if (config.dataType === 'inputSelect') {
-            setTimeout(function() {
-                EkstepEditorAPI._.forEach(instance.pluginConfigManifest, function(config, index) {
-                    if(config.dataType === 'inputSelect'){
-                        fontSizeConfig = config;
-                        EkstepEditorAPI._.forEach(fontSizeConfig.range, function(value) {
-                            if(instance.configData.fontsize === parseInt(value)){
-                                counter++;
-                            }
-                        });
-                        if(counter === 0){
-                            fontSizeConfig.range.push(instance.configData.fontsize);
-                        }
-                    }
-                });
+            EkstepEditorAPI._.forEach(config.range, function(value) {
+                if(instance.configData.fontsize === parseInt(value)){
+                    counter++;
+                }
+            });
+            if(counter === 0){
+                config.range.push(instance.configData.fontsize);
+            }
+            setTimeout(function() { 
                 EkstepEditorAPI.jQuery('#' + config.propertyName).dropdown({
                     allowAdditions: true,
                     className: {
                         dropdown: 'ui search dropdown'
                     },
                     action: function(text, value, element){
-                        if (isNaN(parseInt(text, 10)) || parseInt(text, 10) < fontSizeConfig.minValue || parseInt(text, 10) > fontSizeConfig.maxValue) {
-                            instance.configData.fontsize = fontSizeConfig.defaultValue;
-                            instance.onConfigChange(fontSizeConfig.propertyName, fontSizeConfig.defaultValue);
-                            EkstepEditorAPI.jQuery('#' + fontSizeConfig.propertyName).parent().dropdown('set text', fontSizeConfig.defaultValue);
+                        if (isNaN(parseInt(text, 10)) || parseInt(text, 10) < config.minValue || parseInt(text, 10) > config.maxValue) {
+                            instance.configData.fontsize = config.defaultValue;
+                            instance.onConfigChange(config.propertyName, config.defaultValue);
+                            EkstepEditorAPI.jQuery('#' + config.propertyName).parent().dropdown('set text', config.defaultValue);
                         } else {
                             instance.configData.fontsize = parseInt(text);
                             counter = 0;
-                            EkstepEditorAPI._.forEach(fontSizeConfig.range, function(rangeValue) {
+                            EkstepEditorAPI._.forEach(config.range, function(rangeValue) {
                                 if(instance.configData.fontsize === parseInt(rangeValue)){
                                     counter++;
                                 }
                             });
                             if(counter === 0){
-                                fontSizeConfig.range.push(instance.configData.fontsize);
+                                config.range.push(instance.configData.fontsize);
                             }
                             instance.onConfigChange(config.propertyName, parseInt(text));
                             EkstepEditorAPI.jQuery('#' + config.propertyName).parent().dropdown('set text', parseInt(text));
