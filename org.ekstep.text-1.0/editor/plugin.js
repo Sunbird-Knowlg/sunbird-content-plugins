@@ -117,6 +117,7 @@ EkstepEditor.basePlugin.extend({
      * <br/>It will update the fontweight, fontstyle, fontfamily,fontsize and color of the plugin
      * @memberof Text
      */
+
     onConfigChange: function(key, value) {
         switch (key) {
             case "fontweight":
@@ -140,6 +141,10 @@ EkstepEditor.basePlugin.extend({
                 this.editorObj.setFill(value);
                 this.attributes.color = value;
                 break;
+            case "align":
+                this.editorObj.setTextAlign(value);       
+                this.attributes.align = value;
+                break;
             case "colorRGBA":
                 this.editorObj.setFill(this.toRGBAFormat(value));                
                 this.config.colorRGBA = this.toRGBAFormat(value);
@@ -160,6 +165,7 @@ EkstepEditor.basePlugin.extend({
         config.fontsize = this.attributes.fontSize;
         config.fontweight = this.attributes.fontweight || false;
         config.fontstyle = this.attributes.fontstyle || false;
+        config.align = this.attributes.align || 'left';
         return config;
     },
     /**
@@ -227,7 +233,11 @@ EkstepEditor.basePlugin.extend({
             var fontSize = this.updateFontSize(data.fontsize, true);
             retData.fontSize = fontSize;
             data.fontSize = fontSize;
-        };
+        }
+        if(data.align) {
+            retData.textAlign = data.align;
+            retData.align = data.align;
+        }
         delete retData.lineHeight // line height set to default value 
         return retData;
     },
