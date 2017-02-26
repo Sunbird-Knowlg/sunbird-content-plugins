@@ -569,6 +569,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                 },
                 complete: function() {
                     ctrl.uploadingAsset = false;
+                    ctrl.uploadBtnDisabled = false;
                 },
                 error: function() {
                     alert('Error in Uploading image, please try again!');
@@ -641,6 +642,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                         },
                     },
                     onSuccess: function(event, fields) {
+                        ctrl.uploadBtnDisabled = true;
                         if (fromThisPlugin) { //to avoid ui form success callback being called on sucess of '.ui.form' anywhere from main html page
                         if (ctrl.record == true )
                         {
@@ -655,14 +657,17 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                             if (validateFile) {
                                 ctrl.uploadAsset(event, fields);
                             } else {
+                                ctrl.uploadBtnDisabled = false;
                                 return false;
                             }
                         }
                         fromThisPlugin = false;
+                        ctrl.uploadBtnDisabled = false;
                     }
                 },
                     onFailure: function(formErrors, fields) {
                         console.log("fields validation failed");
+                        ctrl.uploadBtnDisabled = false;
                         return false;
                     }
                 });
