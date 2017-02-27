@@ -28,7 +28,7 @@ EkstepEditor.basePlugin.extend({
             case 'ellipse':
                 props.rx = props.w / 2;
                 props.ry = props.h / 2;
-                this.manifest.editor.configManifest.push({
+                /*this.manifest.editor.configManifest.push({
                     "propertyName": "radius",
                     "title": "Radius",
                     "placeholder": "Radius",
@@ -38,7 +38,7 @@ EkstepEditor.basePlugin.extend({
                     "required": false,
                     "defaultValue": 64,
                     "minimumValue": 0
-                });
+                });*/
                 this.editorObj = new fabric.Ellipse(props);
                 break;
 
