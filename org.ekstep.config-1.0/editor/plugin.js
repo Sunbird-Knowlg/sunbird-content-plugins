@@ -63,7 +63,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("config:help", this.showHelp, this);
         EkstepEditorAPI.addEventListener("config:actions", this.showActions, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:colorpicker", this.showColorPicker, this);
-        EkstepEditorAPI.addEventListener("object:modified", this.objectModified, this);
+        //EkstepEditorAPI.addEventListener("object:modified", this.objectModified, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:invoke", this.invoke, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:addAction", this.addAction, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:removeAction", this.removeAction, this);
@@ -85,7 +85,11 @@ EkstepEditor.basePlugin.extend({
             stop: function() {
                 EkstepEditorAPI.jQuery("#plugin-toolbar-container").css('height', 'auto');
             }
-        })
+        });
+
+        angScope.$watch('configData', function(newValue, oldValue) {
+            instance.updateConfig(newValue, oldValue);
+        }, true);        
     },
     /**
      * Place config toolbar on top of plugin, based on its location
@@ -138,11 +142,6 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.pluginConfig = instance.pluginConfigManifest;
             angScope.configData = instance.configData;
-            if(EkstepEditorAPI.getCurrentObject()){
-                angScope.$watch('configData', function(newValue, oldValue) {
-                    instance.updateConfig(newValue, oldValue);
-                }, true);
-            }
             angScope.stageConfigStatus = EkstepEditorAPI.getCurrentObject() ? false : true;
         });
         EkstepEditorAPI._.forEach(instance.pluginConfigManifest, function(config) {
