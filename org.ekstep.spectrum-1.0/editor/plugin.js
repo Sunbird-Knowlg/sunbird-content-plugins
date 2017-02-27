@@ -37,16 +37,14 @@ EkstepEditor.basePlugin.extend({
            this.picker[data.id] = EkstepEditorAPI.jQuery("#" +data.id).spectrum({
                 color: "#FF0000",
                 showInput: true,
-                showAlpha: true,
+                showAlpha: false,
                 preferredFormat: "hex",
                 showButtons: false,
                 containerClassName: 'awesome',
                 clickoutFiresChange: false,
                 showButtons: true,
                 change: function(color) { 
-                    data.callback('color', color.toHexString());
-                    data.callback('colorRGBA', color.toRgb());
-                    data.callback('opacity', color.getAlpha());
+                    data.callback(data.id, color.toHexString());
                 },
                 showPaletteOnly: true,
                 togglePaletteOnly: true,
@@ -66,9 +64,7 @@ EkstepEditor.basePlugin.extend({
                 maxSelectionSize: 10,
                 hideAfterPaletteSelect:true,
                 move: function(tinycolor) { 
-                    data.callback('color', tinycolor.toHexString());
-                    data.callback('colorRGBA', tinycolor.toRgb());
-                    data.callback('opacity', tinycolor.getAlpha());
+                    data.callback(data.id, tinycolor.toHexString());
                 },
             });
 
