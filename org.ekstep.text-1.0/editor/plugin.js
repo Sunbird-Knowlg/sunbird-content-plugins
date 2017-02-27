@@ -41,11 +41,6 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     newInstance: function() {
-        if (this.attributes.colorRGBA) {
-            this.config.colorRGBA = this.attributes.colorRGBA;
-            delete this.attributes.colorRGBA;        
-        }
-
         var props = this.convertToFabric(this.attributes);
         delete props.__text;
         props.editable = false; // added to disable inline editing of exiting content
@@ -53,7 +48,6 @@ EkstepEditor.basePlugin.extend({
         if (this.attributes.__text == '') {
             textEditor.showEditor(this.id);
         }
-        if (this.config.colorRGBA) this.editorObj.setFill(this.config.colorRGBA);
     },
     /**
      * This method overridden from Ekstepeditor.basePlugin and here we double click event is added
@@ -145,10 +139,6 @@ EkstepEditor.basePlugin.extend({
                 this.editorObj.setTextAlign(value);       
                 this.attributes.align = value;
                 break;
-            case "colorRGBA":
-                this.editorObj.setFill(this.toRGBAFormat(value));                
-                this.config.colorRGBA = this.toRGBAFormat(value);
-                break;
         }
         EkstepEditorAPI.render();
         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
@@ -160,7 +150,6 @@ EkstepEditor.basePlugin.extend({
     getConfig: function() {
         var config = this._super();
         config.color = this.attributes.color || this.attributes.fill;
-        config.colorRGBA = this.config.colorRGBA || config.color;
         config.fontfamily = this.attributes.fontFamily; 
         config.fontsize = this.attributes.fontSize;
         config.fontweight = this.attributes.fontweight || false;
@@ -247,10 +236,6 @@ EkstepEditor.basePlugin.extend({
             return c.propertyName === 'stroke';
         })
         return config;
-    },
-    toRGBAFormat: function(rgbaObject) {
-        if(typeof rgbaObject === "object") return "rgba("+rgbaObject.r+","+rgbaObject.g+","+rgbaObject.b+","+rgbaObject.a+")"
-        else return rgbaObject;
     }
 });
 //# sourceURL=textplugin.js
