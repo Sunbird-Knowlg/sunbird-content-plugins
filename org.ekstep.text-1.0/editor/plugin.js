@@ -238,6 +238,7 @@ EkstepEditor.basePlugin.extend({
             retData.textAlign = data.align;
             retData.align = data.align;
         }
+        if (data.r) retData.angle = data.r;
         delete retData.lineHeight // line height set to default value 
         return retData;
     },
