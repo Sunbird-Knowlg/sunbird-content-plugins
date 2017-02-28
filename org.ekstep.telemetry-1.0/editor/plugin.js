@@ -1,45 +1,43 @@
 'use strict';
 
 EkstepEditor.basePlugin.extend({
-	type: 'telemetry',
-	initialize: function() {
-		var instance = this;
-		this.registerEvents(this.pluginLifeCycleEvent.mappedEvents, this.pluginLifeCycleEvent);
-		this.registerEvents(this.interactEvent.mappedEvents, this.interactEvent);
-		this.registerEvents(this.errorEvent.mappedEvents, this.errorEvent);			
-	},
-	pluginLifeCycleEvent: {
-		mappedEvents: ['ce:plugin:lifecycle'],
-		listen: function(event, data) {
-			EkstepEditorAPI.getService('telemetry').pluginLifeCycle(data);
-		}
-	},
-	interactEvent: {
-		mappedEvents: ['ce:plugin:interact'],
-		listen: function(event, data) {
-			EkstepEditorAPI.getService('telemetry').interact(data);
-		}
-	},
-	endEvent: {
-		mappedEvents: [],
-		listen: function() {
-			EkstepEditorAPI.getService('telemetry').end();
-		}
-	},
-	errorEvent: {
-		mappedEvents: ['ce:error'],
-		listen: function(event, data) {
-			EkstepEditorAPI.getService('telemetry').error(data);
-		}
-	},
-	registerEvents: function(eventArray, scope) {
-		var instance = this;
-		_.forEach(eventArray, function(event){
-			instance.addEventListener(event, scope);
-		});
-	},
-	addEventListener: function (event, scope) {
-		EkstepEditorAPI.addEventListener(event, scope.listen, scope);
-	}
+    type: 'org.ekstep.telemetry',
+    objectInteractEventList: [
+        'object:selected',
+        'object:modified',
+        'object:unselected',
+        'object:added',
+        'object:removed',
+        'object:moving',
+        'object:scaling'
+    ],
+    stageInteractEventList: [
+        'stage:delete',
+        'stage:duplicate',
+        'stage:select',
+        'stage:reorder'
+    ],
+    initialize: function() {
+        var instance = this;
+        this.addEventListener('content:onload', function() {
+            instance.registerEvents(instance.objectInteractEventList, instance.objectInteractEvent);
+            instance.registerEvents(instance.stageInteractEventList, instance.stageInteractEvent);
+        });
+    },
+    registerEvents: function(eventArray, scope) {
+        var instance = this;
+        _.forEach(eventArray, function(event) {
+            instance.addEventListener(event, scope);
+        });
+    },
+    addEventListener: function(event, callback) {
+        EkstepEditorAPI.addEventListener(event, callback, this);
+    },
+    objectInteractEvent: function(event, data) {
+        if (data) EkstepEditorAPI.getService('telemetry').interact({ "type": "canvasInteract", "subtype": event.type, "target": "canvas", "targetid": data.type, "objectid": data.id, "stage": EkstepEditorAPI.getCurrentStage().id });
+    },
+    stageInteractEvent: function(event, data) {
+        if (data) EkstepEditorAPI.getService('telemetry').interact({ "type": "stageInteract", "subtype": event.type, "target": "stage", "targetid": data.stageId, "objectid": data.stageId, "stage": EkstepEditorAPI.getCurrentStage().id });
+    }
 });
 //# sourceURL=telemetryPlugin.js
