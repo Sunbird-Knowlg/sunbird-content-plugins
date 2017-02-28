@@ -3,19 +3,6 @@
 EkstepEditor.basePlugin.extend({
     type: 'org.ekstep.telemetry',
     service: undefined,
-    objectInteractEventList: [
-        'object:selected',
-        'object:modified',
-        'object:unselected',
-        'object:added',
-        'object:removed'
-    ],
-    stageInteractEventList: [
-        'stage:delete',
-        'stage:duplicate',
-        'stage:select',
-        'stage:reorder'
-    ],
     initialize: function() {
         this.service = EkstepEditorAPI.getService('telemetry');
         EkstepEditorAPI.addEventListener('content:onload', this.registerEvents, this);
@@ -24,18 +11,18 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         EkstepEditorAPI.addEventListener('object:selected', function(event, data) {
             if(data && data.id && data.id != '') {
-                instance.interactEvent('selected', '', 'plugin', data.type, data.id);
+                instance.interactEvent('select', '', 'plugin', data.type, data.ver, data.id);
             }
         }, this);
         EkstepEditorAPI.addEventListener('object:modified', function(event, data) {
             if(data && data.id && data.id != '') {
                 console.log('event', event);
-                instance.interactEvent('modify', '', 'plugin', data.type, data.id);
+                instance.interactEvent('modify', '', 'plugin', data.type, data.ver, data.id);
             }
         }, this);
         EkstepEditorAPI.addEventListener('object:unselected', function(event, data) {
             if(data && data.id && data.id != '') {
-                instance.interactEvent('unselected', '', 'plugin', data.type, data.id);
+                instance.interactEvent('unselect', '', 'plugin', data.type, data.ver, data.id);
             }
         }, this);
         
@@ -55,27 +42,27 @@ EkstepEditor.basePlugin.extend({
         }, this);
         EkstepEditorAPI.addEventListener('stage:delete', function(event, data) {
             if(data && data.stageId && data.stageId != '') {
-                instance.interactEvent('click', 'delete', 'plugin', 'org.ekstep.stage', data.stageId);
+                instance.interactEvent('click', 'delete', 'plugin', 'org.ekstep.stage', '1.0', data.stageId);
             }
         }, this);
         EkstepEditorAPI.addEventListener('stage:duplicate', function(event, data) {
             if(data && data.stageId && data.stageId != '') {
-                instance.interactEvent('duplicate', '', 'plugin', 'org.ekstep.stage', data.stageId);
+                instance.interactEvent('duplicate', '', 'plugin', 'org.ekstep.stage', '1.0', data.stageId);
             }
         }, this);
         EkstepEditorAPI.addEventListener('stage:select', function(event, data) {
             if(data && data.stageId && data.stageId != '') {
-                instance.interactEvent('selected', '', 'plugin', 'org.ekstep.stage', data.stageId);
+                instance.interactEvent('select', '', 'plugin', 'org.ekstep.stage', '1.0', data.stageId);
             }
         }, this);
         EkstepEditorAPI.addEventListener('stage:reorder', function(event, data) {
             if(data && data.stageId && data.stageId != '') {
-                instance.interactEvent('modify', 'reorder', 'stage', 'org.ekstep.stage', data.stageId);
+                instance.interactEvent('modify', 'reorder', 'stage', 'org.ekstep.stage', '1.0', data.stageId);
             }
         }, this);
     },
-    interactEvent: function(type, subtype, target, targetId, objectId) {
-        this.service.interact({ "type": type, "subtype": subtype, "target": target, "targetid": targetId, "objectid": objectId, "stage": EkstepEditorAPI.getCurrentStage().id })
+    interactEvent: function(type, subtype, target, pluginid, pluginver, objectId) {
+        this.service.interact({ "type": type, "subtype": subtype, "target": target, "pluginid": pluginid, "pluginver": pluginver, "objectid": objectId, "stage": EkstepEditorAPI.getCurrentStage().id })
     }
 });
 //# sourceURL=telemetryPlugin.js
