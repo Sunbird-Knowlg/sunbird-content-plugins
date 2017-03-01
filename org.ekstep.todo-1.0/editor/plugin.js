@@ -144,6 +144,8 @@ EkstepEditor.basePlugin.extend({
 
 		ctrl.renderHybridTodos = function(result, status, todoThreadsWrapperDiv)
 		{
+			// Clear todo html when I choose next stage
+			jQuery(todoThreadsWrapperDiv).html('');
 			/**
 			 * disabledAttr = If todo is resolved then disabled resolve todo button
 			 * readOnly     = Hide comment box if todo is already resolved
@@ -158,8 +160,8 @@ EkstepEditor.basePlugin.extend({
 				var hideDiv = '';
 				hideDiv     = todoThreadsWrapperDiv.substring(1, todoThreadsWrapperDiv.length);
 				EkstepEditorAPI.jQuery("."+hideDiv).show();
-				// If any resolved/unresolved todo found then hide empty message
-				EkstepEditorAPI.jQuery('#noIssueFound').addClass('hide');
+				// If API return data then hide empty message
+				EkstepEditorAPI.jQuery('#noIssueFound').hide();
 				/*Pagination end*/
 				for (var i = 0; i < result.data.result.length; i++)
 				{
@@ -239,7 +241,7 @@ EkstepEditor.basePlugin.extend({
 				jQuery(todoThreadsWrapperDiv).html('');
 
 				// Prepare empty message
-				var emptyMessage = '<div class="ui grid"><div id="noIssueFound" class="ui one column stackable center aligned page grid"><i class="fa fa-comments-o fa-2x" aria-hidden="true"></i><br>No issues found</div></div>';
+				var emptyMessage = '<div class="ui grid" id="noIssueFound" style="padding-top: 22px;"><div class="ui one column stackable center aligned page grid"><i class="fa fa-comments-o fa-2x" aria-hidden="true"></i><br>No issues found</div></div>';
 
 				// Append
 				EkstepEditorAPI.jQuery(todoThreadsWrapperDiv).html(emptyMessage);
