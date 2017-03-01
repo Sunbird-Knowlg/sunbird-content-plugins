@@ -59,7 +59,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("object:selected", this.objectSelected, this);
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
         EkstepEditorAPI.addEventListener("config:show", this.showConfig, this);
-        EkstepEditorAPI.addEventListener("stage:unselect", this.stageUnselect, this);
+        EkstepEditorAPI.addEventListener("stage:render:complete", this.stageSelect, this);
         EkstepEditorAPI.addEventListener("config:help", this.showHelp, this);
         EkstepEditorAPI.addEventListener("config:actions", this.showActions, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:colorpicker", this.showColorPicker, this);
@@ -69,27 +69,20 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("org.ekstep.config:removeAction", this.removeAction, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:toggleStageEvent", this.toggleEventToStage, this);
         EkstepEditorAPI.addEventListener("config:properties", this.showProperties, this);
-        EkstepEditorAPI.addEventListener("config:showSettingsTab", this.showSettingsTab, this);
-        EkstepEditorAPI.addEventListener("config:showHelpTab", this.showHelpTab, this);
-        EkstepEditorAPI.addEventListener("config:showCommentsTab", this.showCommentsTab, this);
+        EkstepEditorAPI.addEventListener("config:settings:show", this.showSettingsTab, this);
+        EkstepEditorAPI.addEventListener("config:help:show", this.showHelpTab, this);
+        EkstepEditorAPI.addEventListener("config:comments:show", this.showCommentsTab, this);
 
         var angScope = EkstepEditorAPI.getAngularScope();
         EkstepEditorAPI.ngSafeApply(angScope, function() {
-            angScope.contextToolbar = instance.manifest.editor.data.toolbars;
-        });
-
-        this.canvasOffset = EkstepEditorAPI.jQuery('#canvas').offset();
-        EkstepEditorAPI.jQuery("#plugin-toolbar-container").draggable({
-            containment: "document",
-            cursor: "move",
-            stop: function() {
-                EkstepEditorAPI.jQuery("#plugin-toolbar-container").css('height', 'auto');
-            }
+            angScope.selectedConfigCategory = 'settings';
+            angScope.stageConfigStatus = false;
         });
 
         angScope.$watch('configData', function(newValue, oldValue) {
             instance.updateConfig(newValue, oldValue);
-        }, true);        
+        }, true);  
+        this.showSettingsTab();      
     },
     /**
      * Place config toolbar on top of plugin, based on its location
@@ -101,24 +94,21 @@ EkstepEditor.basePlugin.extend({
         this.selectedPluginId = data.id;
         var angScope = EkstepEditorAPI.getAngularScope();
         EkstepEditorAPI.ngSafeApply(angScope, function() {
-            angScope.showConfigContainer = true;
+            angScope.selectedConfigCategory = 'settings';
         });
         this.showSettingsTab(event, data);
-        EkstepEditorAPI.jQuery('.sidebarConfig .item').removeClass('active');
-        EkstepEditorAPI.jQuery('#settingsTab').addClass('active');
-        EkstepEditorAPI.jQuery('.sidebarContent').removeClass('active');
-        EkstepEditorAPI.jQuery('#settingsContent').addClass('active');
     },
     objectUnselected: function(event, data) {
         if(this.selectedPluginId == data.id){
             var angScope = EkstepEditorAPI.getAngularScope();
             EkstepEditorAPI.ngSafeApply(angScope, function() {
-                angScope.showConfigContainer = false;
-                angScope.stageConfigStatus = EkstepEditorAPI.getCurrentObject() ? false : true;
+                angScope.selectedConfigCategory = 'settings';
             });
-            if(!EkstepEditorAPI.getCurrentObject())
-                this.showSettingsTab(event, data);
+            this.showSettingsTab(event, data);
         }
+    },
+    stageSelect: function(event, data) {
+        this.showSettingsTab(event, data);
     },
     /**
      *  Show configuration
@@ -240,11 +230,12 @@ EkstepEditor.basePlugin.extend({
      * @memberof Config
      */
     onConfigChange: function(key, value) {
-        if (!EkstepEditorAPI._.isUndefined(value) && EkstepEditorAPI.getCurrentObject()) {
-            EkstepEditorAPI.getCurrentObject().__proto__.__proto__.onConfigChange(key, value);
-            EkstepEditorAPI.getCurrentObject().onConfigChange(key, value);
+        var plugin = EkstepEditorAPI.getCurrentObject() ? EkstepEditorAPI.getCurrentObject() : EkstepEditorAPI.getCurrentStage();
+        if (!EkstepEditorAPI._.isUndefined(value) && plugin) {
+            plugin._onConfigChange(key, value);
+            plugin.onConfigChange(key, value);
             if (key === 'autoplay') {
-                this.toggleEventToStage('', { 'flag': value, 'id': EkstepEditorAPI.getCurrentObject().id });
+                this.toggleEventToStage('', { 'flag': value, 'id': plugin.id });
             }
         }
     },
@@ -529,43 +520,24 @@ EkstepEditor.basePlugin.extend({
         //this.setToolBarContainerLocation("Properties");
     },
     showSettingsTab: function(event, data) {
-        EkstepEditorAPI.jQuery("#configMenu .ui.button").removeClass('active grey');
-        EkstepEditorAPI.jQuery("#configMenu #settingsMenu").addClass('active grey');
-        EkstepEditorAPI.jQuery('.sidebarConfig .item').removeClass('active');
-        EkstepEditorAPI.jQuery('#settingsTab').addClass('active');
-        EkstepEditorAPI.jQuery('.sidebarContent').removeClass('active');
-        EkstepEditorAPI.jQuery('#settingsContent').addClass('active');
         this.showConfig(event, data);
         var angScope = EkstepEditorAPI.getAngularScope();
         EkstepEditorAPI.ngSafeApply(angScope, function() {
-            angScope.showSettingContainer = true;
-            angScope.showHelpContainer = false;
-            angScope.showCommentsContainer = false;
+            angScope.selectedConfigCategory = 'settings';
+            angScope.selectedConfig = 'customize';
         });
     },
     showHelpTab: function(event, data) {
-        EkstepEditorAPI.jQuery("#configMenu .ui.button").removeClass('active grey');
-        EkstepEditorAPI.jQuery("#configMenu #helpMenu").addClass('active grey');
-        EkstepEditorAPI.jQuery('.sidebarHelp .item').removeClass('active');
-        EkstepEditorAPI.jQuery('#helpTab').addClass('active');
-        EkstepEditorAPI.jQuery('.sidebarContent').removeClass('active');
-        EkstepEditorAPI.jQuery('#helpContent').addClass('active');
         this.showHelp(event, data);
         var angScope = EkstepEditorAPI.getAngularScope();
         EkstepEditorAPI.ngSafeApply(angScope, function() {
-            angScope.showSettingContainer = false;
-            angScope.showHelpContainer = true;
-            angScope.showCommentsContainer = false;
+            angScope.selectedConfigCategory = 'help';
         });
     },
     showCommentsTab: function(event, data) {
-        EkstepEditorAPI.jQuery("#configMenu .ui.button").removeClass('active grey');
-        EkstepEditorAPI.jQuery("#configMenu #commentsMenu").addClass('active grey');
         var angScope = EkstepEditorAPI.getAngularScope();
         EkstepEditorAPI.ngSafeApply(angScope, function() {
-            angScope.showSettingContainer = false;
-            angScope.showHelpContainer = false;
-            angScope.showCommentsContainer = true;
+            angScope.selectedConfigCategory = 'comments';
         });
     }
 });

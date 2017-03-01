@@ -29,9 +29,7 @@ EkstepEditor.basePlugin.extend({
             h: 405,
             id: this.id
         };
-        if (_.isUndefined(this.params)) {
-            this.addParam('instructions', '');
-        }
+        this.addConfig('instructions', this.getParam('instructions') || '');
     },
     getOnClick: function() {
         return { id: 'stage:select', data: { stageId: this.id, prevStageId: EkstepEditorAPI.getCurrentStage().id } };
@@ -76,6 +74,7 @@ EkstepEditor.basePlugin.extend({
             plugin.render(canvas);
         });
         canvas.renderAll();
+        EkstepEditorAPI.dispatchEvent('stage:render:complete', { stageId: this.id });
         this.thumbnail = canvas.toDataURL('png');
         EkstepEditorAPI.refreshStages();
     },
@@ -111,13 +110,28 @@ EkstepEditor.basePlugin.extend({
     enableSave: function() {
         EkstepEditorAPI.getAngularScope().enableSave();        
     },
-    getConfigManifest: function () {
-        var config = {};
-        var angScope = EkstepEditorAPI.getAngularScope();
-        EkstepEditorAPI.ngSafeApply(angScope, function() {
-            angScope.stageConfigStatus = true;
-        });
+    getConfigManifest: function() {
+        return this.manifest.editor.configManifest;
+    },
+    getConfig: function() {
+        var config = this._super();
+        config.genieControls = EkstepEditorAPI.getAngularScope().showGenieControls;
         return config;
     },
+    onConfigChange: function(key, value) {
+        switch (key) {
+            case "instructions":
+                this.addParam('instructions', value);
+                break;
+            case "genieControls":
+                if(value !== EkstepEditorAPI.getAngularScope().showGenieControls) {
+                    var angScope = EkstepEditorAPI.getAngularScope();
+                    EkstepEditorAPI.ngSafeApply(angScope, function() {
+                        angScope.toggleGenieControl();
+                    });
+                }
+                break;
+        }
+    }
 });
 //# sourceURL=stageplugin.js

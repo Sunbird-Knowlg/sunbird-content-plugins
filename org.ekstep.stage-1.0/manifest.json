@@ -55,6 +55,21 @@
                     "data": { "position": "beforeCurrent" }
                 }
             }]
+        }],
+        "configManifest": [{
+            "propertyName": "genieControls",
+            "title": "Show Genie Controls",
+            "description": "Toggle genie controls",
+            "dataType": "boolean",
+            "required": true,
+            "defaultValue": true
+        }, {
+            "propertyName": "instructions",
+            "title": "Teacher Instructions",
+            "description": "Teacher Instructions",
+            "dataType": "textarea",
+            "required": true,
+            "defaultValue": ""
         }]
     }    
 }
