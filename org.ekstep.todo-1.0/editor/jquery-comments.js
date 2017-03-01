@@ -92,6 +92,10 @@
             readOnly: false,
             defaultNavigationSortKey: 'newest',
 
+            // TJ
+            enableNavigationOnTop: false,
+            disabledNoCommentIcon: false,
+
             // Colors
             highlightColor: '#2793e6',
             deleteButtonColor: '#C9302C',
@@ -454,9 +458,12 @@
 
             // Case: main level comment
             } else {
-				// @Hack by Nilesh
-                // @commentList.prepend(commentEl); //Original code
-                commentList.append(commentEl);
+				// TJ
+                if (this.options.enableNavigationOnTop) {
+                    commentList.append(commentEl);
+                } else {
+                    commentList.append(commentEl);
+                }
             }
         },
 
@@ -1193,8 +1200,11 @@
                 noCommentsIcon.css('background-image', 'url("'+this.options.noCommentsIconURL+'")');
                 noCommentsIcon.addClass('image');
             }
-            noComments.prepend($('<br/>')).prepend(noCommentsIcon);
-            commentsContainer.append(noComments);
+            // TJ
+            if (!this.options.disabledNoCommentIcon) {
+                noComments.prepend($('<br/>')).prepend(noCommentsIcon);
+                commentsContainer.append(noComments);
+            }
 
             // Attachments
             if(this.options.enableAttachments) {

@@ -158,6 +158,8 @@ EkstepEditor.basePlugin.extend({
 				var hideDiv = '';
 				hideDiv     = todoThreadsWrapperDiv.substring(1, todoThreadsWrapperDiv.length);
 				EkstepEditorAPI.jQuery("."+hideDiv).show();
+				// If any resolved/unresolved todo found then hide empty message
+				EkstepEditorAPI.jQuery('#noIssueFound').addClass('hide');
 				/*Pagination end*/
 				for (var i = 0; i < result.data.result.length; i++)
 				{
@@ -166,15 +168,34 @@ EkstepEditor.basePlugin.extend({
 					disabledAttr = result.data.result[i].status == "I" ? '' : 'disabled';
 					readOnly     = result.data.result[i].status == "I" ? false : true;
 					var widget = '';
-					widget += '<div class="todo-wrapper ui segments" id="todoWrapper'+result.data.result[i].id+'"  style="background-color:#fff; margin-bottom: 5px; padding: 5px"></br>';
-						widget += '<div class="row">';
-							widget += '<label class="left floated" style="padding-left:12px">';
+					widget += '<div class="todo-wrapper " id="todoWrapper'+result.data.result[i].id+'"  style="background-color:#fff; margin-bottom: 5px; padding: 5px">';
+						widget += '<div clss="ui grid">';
+							widget += '<div class="ui three column grid row">';
+								widget += ' <div class="three wide column user-avatar">';
+									widget += '<img src="'+result.data.result[i].assigned_by.avatar+'" class="ui avatar image" style="width:33px; height:33px">';
+								widget += '</div>';
+								widget += ' <div class="six wide column" id="reviewerInfoHolder">';
+									widget += '<div class="row reviewer-name">';
+										widget += '<a class="reviewer-name" href="'+result.data.result[i].assigned_by.profile_link+'">'+result.data.result[i].assigned_by.name+'</a>';
+									widget += '</div>';
+									widget += '<div class="row">';
+										widget += '<time>'+moment(result.data.result[i].created).format('HH:mm, DD/MM/YYYY');+'</time>';
+									widget += '</div>';
+								widget += '</div>';
+								widget += ' <div class="one wide column right floated">';
+									widget += '<button type="button" class="ui tiny icon button right floated basic" id="'+result.data.result[i].id+'" data-jlike-id="'+result.data.result[i].id+'"  data-ek-todomsg="'+result.data.result[i].sender_msg+'" data-jlike-context="'+result.data.result[i].context+'" onClick="ctrl.updateStatus(this)" '+disabledAttr+'>'+buttonName+'</button>';
+								widget += '</div>';
+							widget += '</div>';
+						widget += '</div>';
+
+						widget += '<div class="row" id="todoTitle">';
+							widget += '<span class="row four wide column">'+result.data.result[i].title+'</span>';
+						widget += '</div>';
+						widget += '<div class="row todo-comment">';
+							widget += '<label class="left floated">';
 								widget += result.data.result[i].sender_msg;
 							widget += '</label>';
-							widget += '<span class="right floated" style="margin-left: 74px">';
-								widget += '<button type="button" class="ui tiny icon button right floated basic" id="'+result.data.result[i].id+'" data-jlike-id="'+result.data.result[i].id+'"  data-ek-todomsg="'+result.data.result[i].sender_msg+'" data-jlike-context="'+result.data.result[i].context+'" onClick="ctrl.updateStatus(this)" '+disabledAttr+'>'+buttonName+'</button>';
-							widget += '</span>';
-						widget += '</div>';
+						widget += '</div></br>';
 
 						widget += '<div id="todoThreadId'+result.data.result[i].id+'" class="list-unstyled" ';
 							widget += 'data-jlike-client="content.jlike_ekcontent" ';
@@ -208,18 +229,19 @@ EkstepEditor.basePlugin.extend({
 					});
 				}
 			}
-			else
+			// Error handling or show empty message if API returns false
+			// status == 'I' means Incomplete/unresolved todo
+			else if (result.success == false && status == 'I')
 			{
-				// Show empty message in case either APIs return empty data or API may fails
 				var emptyMessage = '';
 
-				// Clear html
+				// Clear div html
 				jQuery(todoThreadsWrapperDiv).html('');
 
-				// Prepare empty message based on status = Unresolved/resolved
-				emptyMessage = todoThreadsWrapperDiv === '#pageLevelTodos' ? 'No Todo' : 'No issue(s)';
+				// Prepare empty message
+				var emptyMessage = '<div class="ui grid"><div id="noIssueFound" class="ui one column stackable center aligned page grid"><i class="fa fa-comments-o fa-2x" aria-hidden="true"></i><br>No issues found</div></div>';
 
-				// Append empty message
+				// Append
 				EkstepEditorAPI.jQuery(todoThreadsWrapperDiv).html(emptyMessage);
 			}
 		}
