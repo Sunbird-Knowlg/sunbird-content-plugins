@@ -1,6 +1,6 @@
 /**
- * plugin is used to create or modifiy the readalong text in editor
- * @class Htext
+ * plugin is used to create or modifiy the word meaning text in editor
+ * @class wordinfotext
  * @extends EkstepEditor.basePlugin
  * @author Kartheek Palla <kartheekp@ilimi.in>
  */
@@ -9,9 +9,9 @@ EkstepEditor.basePlugin.extend({
     /**
      * This expains the type of the plugin 
      * @member {String} type
-     * @memberof Htext
+     * @memberof wordinfotext
      */
-    type: "htext",
+    type: "wordinfotext",
     /**
      * Magic Number is used to calculate the from and to ECML conversion 
      * @member {Number} magicNumber
@@ -26,150 +26,125 @@ EkstepEditor.basePlugin.extend({
     editorWidth: 720,
     /**
      * @member currentInstance
-     * @memberof Htext
+     * @memberof wordinfotext
      */
     currentInstance: undefined,
     cb: undefined,
     text:undefined,
     /**
      * registers events
-     * @memberof Htext
+     * @memberof wordinfotext
      */
     initialize: function() {
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
         EkstepEditorAPI.addEventListener("delete:invoked", this.deleteObject, this);
-        EkstepEditorAPI.addEventListener("org.ekstep.htext:showpopup", this.loadHtml, this);
+        EkstepEditorAPI.addEventListener("org.ekstep.wordinfotext:showpopup", this.loadHtml, this);
         setTimeout(function() {
-            var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.htext-1.0/editor/htext.html';
-            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.htext-1.0/editor/readalongapp.js';
+            var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.wordinfotext-1.0/editor/wordinfotext.html';
+            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.wordinfotext-1.0/editor/wordinfotextapp.js';
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
-
     },
     /**
      * This method used to create the text fabric object and assigns it to editor of the instance
      * convertToFabric is used to convert attributes to fabric properties 
-     * @memberof Htext
+     * @memberof wordinfotext
      */
     // newInstance: function() {
-    //     var props = this.convertToFabric(this.attributes);
-    //     if(!EkstepEditorAPI._.isUndefined(this.attributes.isReadAlongAutoPlay)){
-    //         this.attributes.autoplay = this.attributes.isReadAlongAutoPlay;
-    //         delete this.attributes.isReadAlongAutoPlay;
+    //     var instance = this;
+    //     if(EkstepEditorAPI._.isUndefined(instance.data.selectedPluginid) && EkstepEditorAPI._.isUndefined(instance.attributes.__text)){
+    //         this.attributes = {
+    //             "__text": instance.data.selectedSentence,
+    //             "x": 72,
+    //             "y": 81,
+    //             "fontFamily": "Sans-serif",
+    //             "fontSize": 18,
+    //             "minWidth": 20,
+    //             "w": 252,
+    //             "maxWidth": 500,
+    //             "fill": "#000000",
+    //             "fontStyle": "normal",
+    //             "fontWeight": "normal",
+    //             "stroke": "rgba(255, 255, 255, 0)",
+    //             "strokeWidth": 1,
+    //             "opacity": 1,
+    //             "editable": false
+    //         };
+    //     }else if(!EkstepEditorAPI._.isUndefined(instance.data.selectedPluginid)){
+    //         var selectedText = EkstepEditorAPI.getPluginInstance(instance.data.selectedPluginid);
+    //         this.attributes = selectedText.attributes;   
     //     }
-    //     if(EkstepEditorAPI._.isUndefined(EkstepEditorAPI.getMedia(this.attributes.audio))){
-    //         var audioObj =  !EkstepEditorAPI._.isUndefined(this.attributes.audioObj) ? this.attributes.audioObj.assetMedia : undefined;
-    //         if(!EkstepEditorAPI._.isUndefined(audioObj))
-    //             audioObj.src = EkstepEditor.mediaManager.getMediaOriginURL(audioObj.src);
+    //     if(!EkstepEditorAPI._.isUndefined(instance.data.words)){
+    //         this.attributes.words = instance.data.words.join();
+    //         var selectedWords = instance.data.words;
     //     }else{
-    //         var audioObj = EkstepEditorAPI.getMedia(this.attributes.audio);
-    //         audioObj.src = EkstepEditor.mediaManager.getMediaOriginURL(audioObj.src);
-    //         if(EkstepEditorAPI._.isUndefined(audioObj.preload))
-    //             audioObj.preload = true;
+    //         var selectedWords = instance.attributes.words.split(',');
     //     }
-    //     delete this.attributes.audioObj;
-    //     delete props.__text;
-    //     props.editable = false; // added to disable inline editing of exiting content
-    //     this.editorObj = new fabric.ITextbox(this.attributes.__text, props);
-    //     delete this.event;
-    //     this.addEvent({ 'type':'click', 'action' : [{'type':'command', 'command' : 'togglePlay' , 'asset': this.id}]});
-    //     if(!EkstepEditorAPI._.isUndefined(audioObj)){
-    //         this.addMedia(audioObj);
-    //         EkstepEditor.mediaManager.addMedia(audioObj);
-    //         EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { 
-    //             stageId: EkstepEditorAPI.getCurrentStage().id,
-    //             type: 'audio', 
-    //             title: (EkstepEditorAPI._.isUndefined(audioObj.name)) ? audioObj.id : audioObj.name,
-    //             id: audioObj.id,
-    //             url: audioObj.src
+    //     var props = this.convertToFabric(instance.attributes);
+    //     delete instance.data.selectedSentence;
+    //     delete instance.data.words;
+    //     delete instance.data.selectedPluginid;
+    //     instance.editorObj = new fabric.ITextbox(instance.attributes.__text, props);
+    //     if(!EkstepEditorAPI._.isUndefined(selectedText)){
+    //         EkstepEditorAPI.getCanvas().remove(selectedText.editorObj);
+    //     }
+
+    //     if(!EkstepEditorAPI._.isUndefined(selectedText)){
+    //         _.forEach(selectedWords, function(value, key) {
+    //             EkstepEditorAPI.getCurrentStage().addEvent({
+    //                 'type': value+ '_click',
+    //                 'action': [{ 'type': 'command', 'command': 'toggleShow', 'asset': value + '_info' },
+    //                     //{ 'type': 'command', 'command': 'HIDEHTMLELEMENTS', 'asset': value + '_info' },
+    //                 ]
+    //             });
     //         });
+    //         this.attributes.wordfontcolor = "#0000FF";
+    //         this.attributes.wordhighlightcolor = "#FFFF00";
+    //         this.attributes.wordunderlinecolor = "#0000FF";
     //     }
-    //     currentInstance = this;
+    //     var image = {
+    //             "id": "popupTint",
+    //             "src": "https://dev.ekstep.in/assets/public/content/PopupTint_1460636175572.png",
+    //             "type": "image",
+    //             "assetId": "domain_38606"
+    //         }
+    //     image.src = EkstepEditor.mediaManager.getMediaOriginURL(image.src);
+    //     instance.addMedia(image);
+    //     currentInstance = instance;
     // },
     /**        
      *   load html template into the popup
      *   @param parentInstance 
      *   @param attrs attributes
-     *   @memberof Htext
+     *   @memberof wordinfotext
      */
     loadHtml: function(event, data) {
         currentInstance = this;
         this.cb = data.callback;
         this.text = this.attributes.__text = data.textObj.editorObj.text;
         this.attributes = data.textObj.config;
-        if(data.textObj.config.type == "htext")
+        if(data.textObj.config.type == "wordinfo")
             this.editorObj = data.textObj.editorObj;
         EkstepEditorAPI.getService('popup').open({
-            template: 'htext',
-            controller: 'readalongcontroller',
+            template: 'wordinfotext',
+            controller: 'wordinfotextcontroller',
             controllerAs: '$ctrl',
             resolve: {
                 'instance': function() {
                     return currentInstance;
-                }
+                },
             },
             width: 900,
             showClose: false,
             className: 'ngdialog-theme-plain'
         }, function() {
-            if(!EkstepEditorAPI._.isUndefined(currentInstance.editorObj) && !currentInstance.editorObj.text) {
-                currentInstance.editorObj.remove();
-                EkstepEditorAPI.render();
-            }
+
         });
 
     },
-    invokeKaraoke: function(audioSrc, attrs) {
-        var karaoke = new Karaoke();
-        karaoke.audioObj.url = audioSrc;
-        if (attrs) {
-            var timings = !EkstepEditorAPI._.isEmpty(attrs.attributes.timings) ? EkstepEditorAPI._.split(attrs.attributes.timings, ',') : '',
-                wordTimes = [],
-                words = [],
-                wordsArr = EkstepEditorAPI._.split(attrs.attributes.__text, ' '),
-                wordIdx = 0;
-            EkstepEditorAPI._.each(timings, function(key, value) {
-                wordIdx += 1;
-                words.push({
-                    word: wordsArr[value],
-                    stepNo: (parseFloat(key / 1000).toFixed(1)) * 10,
-                    wordIdx: wordIdx
-                });
-                wordTimes.push(parseFloat(key / 1000).toFixed(1));
-            });
-            karaoke.audioObj.url = audioSrc;
-            karaoke.audioObj.wordMap = words;
-            karaoke.audioObj.wordTimes = wordTimes;
-            karaoke.audioObj.highlightColor = attrs.attributes.highlight;
-        } else {
-            karaoke.audioObj.url = audioSrc;
-            karaoke.audioObj.wordMap = '';
-            karaoke.audioObj.wordTimes = '';
-            karaoke.audioObj.highlightColor = '';
-            EkstepEditorAPI.jQuery("#jplayerSync").data('jPlayer', "");
-        }
-        var slider = EkstepEditorAPI.jQuery('#syncSlider').slider({
-            min: 1,
-            max: 3,
-            value: 1,
-            step: 1,
-            change: karaoke.changePlaybackRate
-        });
-        EkstepEditorAPI.jQuery('#changeaudio').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.res, karaoke));
-        EkstepEditorAPI.jQuery('#syncStart').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.startSync, karaoke));
-        EkstepEditorAPI.jQuery('#pick-hcolor').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.setColor, karaoke));
-        EkstepEditorAPI.jQuery('#stopAudio').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.stopAudio, karaoke));
-        EkstepEditorAPI.jQuery('.slideStep').bind('drop', EkstepEditorAPI.jQuery.proxy(karaoke.handleWordDrop, karaoke));
-        EkstepEditorAPI.jQuery('#syncMark').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.markWords, karaoke));
-        EkstepEditorAPI.jQuery('#sync-play').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.playSyncedLayer, karaoke));
-        EkstepEditorAPI.jQuery('#sync-pause').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.pauseAudio, karaoke));
-        window.karaoke = karaoke;
-        karaoke.initPlayer();
-        return karaoke;
-    },
     /**
      * This method overridden from Ekstepeditor.basePlugin and here we double click event is added
-     * @memberof Htext
+     * @memberof wordinfotext
      */
     selected: function(instance) {
         currentInstance = EkstepEditorAPI.getCurrentObject();
@@ -177,7 +152,7 @@ EkstepEditor.basePlugin.extend({
     },
     /**
      * This method overridden from Ekstepeditor.basePlugin and here we double click event is removed
-     * @memberof Htext
+     * @memberof wordinfotext
      */
     deselected: function(instance, options, event) {
         fabric.util.removeListener(fabric.document, 'dblclick', this.dblClickHandler);
@@ -185,7 +160,7 @@ EkstepEditor.basePlugin.extend({
     /**
      * This method is called when the object:unselected event is fired
      * It will remove the double click event for the canvas
-     * @memberof Htext
+     * @memberof wordinfotext
      */
     objectUnselected: function(event, data) {
         fabric.util.removeListener(fabric.document, 'dblclick', this.dblClickHandler);
@@ -193,7 +168,7 @@ EkstepEditor.basePlugin.extend({
     /**
      * This method is callback for double click event which will call the textEditor to show the ediotor to add or modify text.
      * @param event {Object} event
-     * @memberof Htext
+     * @memberof wordinfotext
      */
     dblClickHandler: function(event) {
         var leftSt = EkstepEditorAPI.jQuery("#canvas").offset().left + EkstepEditorAPI.getCurrentObject().editorObj.left;
@@ -211,12 +186,6 @@ EkstepEditor.basePlugin.extend({
      */
     onConfigChange: function(key, value) {
         switch (key) {
-            case "highlight":
-                this.attributes.highlight = value;
-                break;
-            case "autoplay":
-                this.attributes.autoplay = value;
-                break;
             case "fontweight":
                 this.editorObj.setFontWeight(value ? "bold" : "normal");
                 this.attributes.fontweight = value;
@@ -238,19 +207,29 @@ EkstepEditor.basePlugin.extend({
                 this.editorObj.setFill(value);
                 this.attributes.color = value;
                 break;
+            case "wordfontcolor":
+                this.attributes.wordfontcolor = value;
+                break;
+            case "wordhighlightcolor":
+                this.attributes.wordhighlightcolor = value;
+                break;
+            case "wordunderlinecolor":
+                this.attributes.wordunderlinecolor = value;
+                break;
         }
         EkstepEditorAPI.render();
         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
     },
     /**
      * This method overridden from Ekstepeditor.basePlugin and it will provide the config of this plugin
-     * @memberof Htext
+     * @memberof wordinfotext
      */
     getConfig: function() {
         var config = this._super();
-        config.highlight = this.attributes.highlight;
-        config.autoplay = this.attributes.autoplay || false;
         config.color = this.attributes.color || this.attributes.fill;
+        config.wordfontcolor = this.attributes.wordfontcolor;
+        config.wordhighlightcolor = this.attributes.wordhighlightcolor;
+        config.wordunderlinecolor = this.attributes.wordunderlinecolor;
         config.fontfamily = this.attributes.fontFamily;
         config.fontsize = this.attributes.fontSize;
         config.fontweight = this.attributes.fontweight || false;
@@ -259,7 +238,7 @@ EkstepEditor.basePlugin.extend({
     },
     /**
      * This method overridden from Ekstepeditor.basePlugin and this will provide attributes to generate content for Genie
-     * @memberof Htext
+     * @memberof wordinfotext
      */
     getAttributes: function() {
         var attributes = EkstepEditorAPI._.omit(EkstepEditorAPI._.clone(this.attributes), ['top', 'left', 'width', 'height', 'fontFamily', 'fontfamily', 'fontSize', 'fontstyle', 'fontweight', 'scaleX', 'scaleY']);
@@ -274,7 +253,7 @@ EkstepEditor.basePlugin.extend({
     },
     /**
      * This method is used to convert font size when we are doing from or to conversion based on the flag 
-     * @memberof Htext
+     * @memberof wordinfotext
      * @param {Number} initFontSize  This is font size need to be converted
      * @param {Boolean} The flag  It provides the flag on conversion to ecml or from ecml with values false, true 
      * @return {Number} fontsize The fontsize is converted font size
@@ -299,7 +278,7 @@ EkstepEditor.basePlugin.extend({
      * <br/>Here font weight , style and size to be converted to fabric 
      * @param {Object} data This data provided by either api or on creation of new instance
      * @return {Object} retData retData is fabric form of data used to create fabric text object
-     * @memberof Htext
+     * @memberof wordinfotext
      */
     convertToFabric: function(data) {
         var retData = EkstepEditorAPI._.clone(data);
@@ -331,15 +310,15 @@ EkstepEditor.basePlugin.extend({
     },
     deleteObject: function(event, data) {
         if (!EkstepEditorAPI._.isUndefined(data.editorObj.audio)) {
-            EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', {'asset': data.editorObj.audio});
+            EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', { 'asset': data.editorObj.audio });
         }
     },
-    getConfigManifest: function () {
+    getConfigManifest: function() {
         var config = this._super();
-        EkstepEditorAPI._.remove(config, function (c) {
+        EkstepEditorAPI._.remove(config, function(c) {
             return c.propertyName === 'stroke';
         })
         return config;
     }
 });
-//# sourceURL=readalongplugin.js
+//# sourceURL=wordinfotextplugin.js

@@ -1,7 +1,7 @@
 {
     "id": "org.ekstep.text",
     "ver": "1.0",
-    "shortId": "text",
+    "shortId": "org.ekstep.text",
     "author": "Santhosh Vasabhaktula",
     "title": "Text Plugin",
     "description": "",
@@ -12,7 +12,7 @@
             { "type": "js", "src": "editor/texteditor.js" }
         ],
         "menu": [{
-            "id": "text",
+            "id": "org.ekstep.text",
             "category": "main",
             "type": "icon",
             "toolTip": "Add Text",
@@ -42,6 +42,64 @@
             }
         }],
         "configManifest": [{
+            "propertyName": "textType",
+            "title": "Add feature",
+            "dataType": "buttonToggle",
+            "description": "Text",
+            "options": [{
+                "value": "text",
+                "title": "Text",
+                "toolTip": "Text",
+                "description": "Text",
+                "dataType": "icon",
+                "iconClass": "icon-text icon"
+            }, {
+                "value": "readalong",
+                "title": "Add Readalong",
+                "toolTip": "Readalong",
+                "description": "Readalong",
+                "dataType": "icon",
+                "iconClass": "icon-readalong icon",
+                "suboptions": [{
+                    "value": "htextEdit",
+                    "title": "Edit",
+                    "toolTip": "Edit Readalong",
+                    "description": "Edit Readalong",
+                    "dataType": "icon",
+                    "iconClass": "edit icon"
+                },{
+                    "value": "htextDelete",
+                    "title": "Delete",
+                    "toolTip": "Delete Readalong",
+                    "description": "Delete Readalong",
+                    "dataType": "icon",
+                    "iconClass": "trash icon"
+                }]
+            }, {
+                "value": "wordinfo",
+                "title": "Add Wordinfo",
+                "toolTip": "Wordinfo",
+                "description": "Wordinfo",
+                "dataType": "icon",
+                "iconClass": "file word outline icon",
+                "suboptions": [{
+                    "value": "wordinfoEdit",
+                    "title": "Edit",
+                    "toolTip": "Edit Wordinfo",
+                    "description": "Edit Wordinfo",
+                    "dataType": "icon",
+                    "iconClass": "edit icon"
+                },{
+                    "value": "wordinfoDelete",
+                    "title": "Delete",
+                    "toolTip": "Delete Wordinfo",
+                    "description": "Delete Wordinfo",
+                    "dataType": "icon",
+                    "iconClass": "trash icon"
+                }]
+            }],
+            "defaultValue": "text"
+        }, {
             "propertyName": "colorRGBA",
             "title": "Font color",
             "description": "Choose a color from the color picker",
@@ -135,6 +193,9 @@
             "fontStyle": "normal",
             "fontWeight": "normal"
         }
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
     }
 
 }

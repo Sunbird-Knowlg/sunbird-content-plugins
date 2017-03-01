@@ -1,0 +1,97 @@
+<script type="text/ng-template" ng-app="wordinfotextapp" ng-controller="wordinfotextcontroller as $ctrl" id="wordinfotext">
+<div class="ui modal large active wordinfo-modal">
+    <div class="header">
+        <div class="ui two column grid">
+            <div class="row">
+                <div class="column">
+                    <span>Word Info Popup</span>
+                </div>
+                <div class="column wordinfo-modal-close">
+                    <i class="cursor-pointer close icon" ng-click="closeThisDialog()"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="content">
+        <!-- <div class="ui mini one steps">
+            <div class="{{$ctrl.keywords.length <= 0 ? 'active': ''}} step">
+                <i class="checkmark box icon"></i>
+                    <div class="title">Select Words</div>
+                    <div class="description">Select/Unselect words</div>
+                </div>
+            </div>
+        </div> -->
+        <div class="ui segment wordinfo-loading" ng-show="$ctrl.loading">
+            <div class="ui active inverted dimmer">
+                <div class="ui text loader">Just one second, We're fetching that content for you.</div>
+            </div>
+        </div>
+        <div ng-if="$ctrl.errorLoadingKeywords" class="ui negative message wordinfo-browser-content">
+            <div class="header">
+                We're sorry!
+            </div>
+            <p>There's an error while fetching kaywords, <a href ng-click="$ctrl.getKeywords()">Click here</a> to try again.
+            </p>
+        </div>
+        <!-- <div class="ui grid container" ng-if="$ctrl.keywords.length <= 0 && !$ctrl.errorLoadingKeywords && !$ctrl.loading">
+            <div class="one column row">
+                <div class="column textHeight" ng-show="$ctrl.keywords.length == 0 && $ctrl.noKeywords">
+                    {{$ctrl.selectedSentence}}
+                </div>
+            </div>
+            <div class="two column row">
+                <div class="column wordinfo-leftContent">
+                    <div class="ui middle aligned list" ng-show="!$ctrl.showTypeownText">
+                        <div class="item" style="padding: 8px;" ng-repeat="(key, value) in $ctrl.textList" ng-click="$ctrl.selectSentence(key, value);">
+                            <div class="textWraper" ng-class="$ctrl.selectedSentenceIndex == key ? 'slectedText': ''">{{value}}</div>
+                        </div>
+                    </div>
+                    <div class="ui form" ng-show="$ctrl.showTypeownText && !$ctrl.noKeywords">
+                        <div class="field" id="editorDiv">
+                            <textarea ng-model="$ctrl.selectedSentence" ng-click="$ctrl.selectedSentenceIndex == ''" rows="9" placeholder="Add text here"></textarea>
+                        </div>
+                    </div>
+                    <div class="ui huge info message" ng-show="$ctrl.keywords.length == 0 && $ctrl.showTypeownText && $ctrl.noKeywords">
+                        <p>No Keywords found.</p>
+                    </div>
+                </div>
+                <div class="column wordinfo-rightContent">
+                    Let’s create a sentence with word definition from Word Duniya! <br/><br/>
+                    Select a text from the slide or type a new text to see words that have definition in Word Duniya.<br/><br/>
+                    The words you chose in next step will be highlighted in the text. When a child taps on it, the word definition popup appears on the screen.
+                </div>
+            </div>
+        </div> -->
+        <div class="ui grid container" ng-if="!$ctrl.loading">
+            <div class="one column row">
+                <div class="column textHeight">
+                    {{$ctrl.selectedSentence}}
+                </div>
+            </div>
+            <div class="two column row">
+                <div class="column wordinfo-leftContent">
+                    <a class="ui large label" ng-class="$ctrl.slectedWords.indexOf(word) > -1 ? 'teal' : '' " ng-repeat="word in $ctrl.keywords track by $index" ng-click="$ctrl.selectWords($index, word, $event)" ng-show="$ctrl.keywords.length > 0">{{word}}</a>
+                </div>
+                <div class="column wordinfo-rightContent">
+                    Let’s create a sentence with word definition from Word Duniya! <br/><br/>
+                    Select a text from the slide or type a new text to see words that have definition in Word Duniya.<br/><br/>
+                    The words you chose in next step will be highlighted in the text. When a child taps on it, the word definition popup appears on the screen.
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="actions">
+        <!-- <button class="ui left floated primary button" tabindex="0" ng-show="$ctrl.keywords.length <= 0 && !$ctrl.showTypeownText" ng-click="$ctrl.showTextbox()">Add your own</button>
+        <button class="ui left floated primary button" ng-if="$ctrl.getObjectLength() && $ctrl.showTypeownText" ng-click="$ctrl.showAvailableSentences()">Show available</button> -->
+        <!-- <div class="ui buttons" ng-if="$ctrl.keywords.length <= 0">
+            <button class="ui orange button" ng-click="closeThisDialog()" type="button">Cancel</button>
+            <div class="or"></div>
+            <button class="ui blue button" type="button" ng-click="$ctrl.getKeywords()" ng-disabled="$ctrl.useBtnDsable && $ctrl.selectedSentence.length <= 0">Next</button>
+        </div> -->
+        <div class="ui buttons" ng-if="$ctrl.keywords.length > 0">
+            <button class="ui orange button" ng-click="closeThisDialog()" type="button">Cancel</button>
+            <div class="or"></div>
+            <button class="ui blue button" type="button" ng-click="$ctrl.addToLesson()" ng-disabled="$ctrl.slectedWords.length <= 0">Add To Lesson</button>
+        </div>
+    </div>
+</div>
