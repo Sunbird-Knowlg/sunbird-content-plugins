@@ -160,7 +160,7 @@ EkstepEditor.basePlugin.extend({
 				var hideDiv = '';
 				hideDiv     = todoThreadsWrapperDiv.substring(1, todoThreadsWrapperDiv.length);
 				EkstepEditorAPI.jQuery("."+hideDiv).show();
-				// If API return data then hide empty message
+				// If API fails to return data then hide empty message
 				EkstepEditorAPI.jQuery('#noIssueFound').hide();
 				/*Pagination end*/
 				for (var i = 0; i < result.data.result.length; i++)

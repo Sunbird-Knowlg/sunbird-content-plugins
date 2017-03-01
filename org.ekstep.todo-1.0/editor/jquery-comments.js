@@ -92,7 +92,7 @@
             readOnly: false,
             defaultNavigationSortKey: 'newest',
 
-            // TJ
+            // TJ : config to show/hide no comment icon
             enableNavigationOnTop: false,
             disabledNoCommentIcon: false,
 
@@ -458,7 +458,7 @@
 
             // Case: main level comment
             } else {
-				// TJ
+				// TJ : to show comment box either on top or down
                 if (this.options.enableNavigationOnTop) {
                     commentList.append(commentEl);
                 } else {
@@ -1200,7 +1200,7 @@
                 noCommentsIcon.css('background-image', 'url("'+this.options.noCommentsIconURL+'")');
                 noCommentsIcon.addClass('image');
             }
-            // TJ
+            // TJ: to show/hide no comment icon
             if (!this.options.disabledNoCommentIcon) {
                 noComments.prepend($('<br/>')).prepend(noCommentsIcon);
                 commentsContainer.append(noComments);
