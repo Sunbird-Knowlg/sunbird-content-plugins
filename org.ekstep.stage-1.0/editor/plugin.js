@@ -10,6 +10,7 @@ EkstepEditor.basePlugin.extend({
     initialize: function() {
         EkstepEditorAPI.addEventListener("stage:create", this.createStage, this);
         EkstepEditorAPI.addEventListener("object:modified", this.modified, this);
+        EkstepEditorAPI.addEventListener("stage:modified", this.modified, this);
         EkstepEditorAPI.addEventListener("object:selected", this.objectSelected, this);
         EkstepEditorAPI.addEventListener("object:removed", this.objectRemoved, this);
     },
@@ -41,14 +42,11 @@ EkstepEditor.basePlugin.extend({
     addChild: function(plugin) {
         this.children.push(plugin);
         if(plugin.editorObj) {
-        this.canvas.add(plugin.editorObj);
-        this.canvas.setActiveObject(plugin.editorObj);
-        this.canvas.trigger('object:selected', { target: plugin.editorObj });
-        this.setThumbnail();
-        if(!EkstepEditor.stageManager.contentLoading) {
-            EkstepEditorAPI.dispatchEvent('object:modified', { id: plugin.id });
+            this.canvas.add(plugin.editorObj);
+            this.canvas.setActiveObject(plugin.editorObj);
+            this.setThumbnail();
+            EkstepEditorAPI.dispatchEvent('stage:modified', { id: plugin.id });
         }
-    }
         this.enableSave();        
     },
     setThumbnail: function() {

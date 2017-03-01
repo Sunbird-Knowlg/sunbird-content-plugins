@@ -67,7 +67,7 @@
                     <div class="ui text loader">Just one second, We're fetching activities for you.</div>
                 </div>
             </div>
-            <div class="ui four stackable special cards activity-browser-cards" ng-show="$ctrl.activitiesList.length > 0" id="activity-cards">
+            <div class="ui five stackable special cards activity-browser-cards" ng-show="$ctrl.activitiesList.length > 0" id="activity-cards">
                 <div class="ui link card" ng-repeat="activity in $ctrl.activitiesList track by $index">
                     <div class="blurring dimmable image">
                         <div class="ui dimmer">
@@ -80,10 +80,10 @@
                         </div>
                         <img ng-src="{{activity.appIcon || $ctrl.defaultActivityImage}}">
                     </div>
-                    <div class="content">
-                        <a class="header" title="{{activity.name}}" style="display: inline;">{{activity.name | limitTo:12}}<span ng-if="activity.name.length > 12">...</span></a>
+                    <div class="content activity-title-content">
+                        <b class="sub-header" title="{{activity.name}}" style="display: inline;">{{activity.name | limitTo:12}}<span ng-if="activity.name.length > 12">...</span></b>
                         <span class="right floated">
-                                <a class="header" ng-click="$ctrl.addPlugin(activity)">ADD<i class="plus icon"></i></a>    
+                                <a class="sub-header" ng-click="$ctrl.addPlugin(activity)">ADD<i class="plus icon"></i></a>    
                             </span>
                     </div>
                 </div>
