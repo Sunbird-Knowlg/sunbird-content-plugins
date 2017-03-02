@@ -15,17 +15,6 @@
         "dependencies": [
             {"type": "css", "src": "editor/plugin.css"}
         ],
-        "menu": [{
-            "id": "wordinfotext",
-            "category": "main",
-            "type": "icon",
-            "toolTip": "Add Word Info Popup",
-            "title": "WordDuniya Text",
-            "iconClass": "file word outline icon",
-            "onclick": {
-                "id": "org.ekstep.wordinfotext:showpopup"
-            }
-        }],
         "configManifest": [{
             "propertyName": "color",
             "title": "Font color",

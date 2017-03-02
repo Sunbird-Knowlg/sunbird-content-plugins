@@ -18,17 +18,6 @@
             { "type": "js", "src": "editor/libs/jquery.jplayer.min.js" },
             { "type": "css", "src": "editor/css/jquery-ui.css" }
         ],
-        "menu": [{
-            "id": "htext",
-            "category": "main",
-            "type": "icon",
-            "toolTip": "Add Read-along",
-            "title": "Read-along",
-            "iconClass": "icon-readalong icon",
-            "onclick": {
-                "id": "org.ekstep.htext:showpopup"
-            }
-        }],
         "configManifest": [{
             "propertyName": "highlight",
             "title": "Highlight Color",

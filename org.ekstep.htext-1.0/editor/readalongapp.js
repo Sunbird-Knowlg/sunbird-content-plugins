@@ -11,14 +11,14 @@ angular.module('readalongapp', [])
         ctrl.oldAudioName = '';
         ctrl.showText = true;
         ctrl.audioSelected = false;
+        ctrl.autoplay = false;
         ctrl.name = '';
         ctrl.highlightColor = '#FFFF00';
         if(!EkstepEditorAPI._.isUndefined(instance.editorObj)){
-            media = instance.attributes.audioObj.assetMedia;
+            media = instance.attributes.audioObj;
             ctrl.audioObj = instance.attributes.audioObj;
             ctrl.downloadurl = !EkstepEditorAPI._.isUndefined(media) ?  media.src : '';
             ctrl.audioSelected = true;
-            ctrl.readalongText = instance.attributes.__text;
             ctrl.autoplay = instance.attributes.autoplay;
             ctrl.name = instance.attributes.audio;
             ctrl.highlightColor = instance.attributes.highlight;
@@ -40,7 +40,7 @@ angular.module('readalongapp', [])
                     ctrl.name = data.assetMedia.id;
                     ctrl.downloadurl = data.assetMedia.src;
                     ctrl.identifier = data.assetMedia.id;
-                    ctrl.audioObj = data;
+                    ctrl.audioObj = data.assetMedia;
                     karaoke = instance.invokeKaraoke(ctrl.downloadurl);
                     ctrl.audioSelected = true;
                     if(!EkstepEditorAPI._.isUndefined(instance.editorObj))

@@ -13,7 +13,6 @@ Plugin.extend({
 
         switch (data.textType) {
             case 'readalong':
-                console.log('readalong');
                 this._data = data;
                 var data = _.clone(this._data);
                 data.id = _.uniqueId('htext');
@@ -25,9 +24,8 @@ Plugin.extend({
                 PluginManager.invoke('htext', data, instance._parent, instance._stage, instance._theme);
                 break;
             case 'wordinfo':
-                console.log('wordinfo');
                 var wordsArr = this._plginConfig.words.split(',');//_.split(data.words, ',');
-                var text = this._plginConfig.text;
+                var text = data.__text;
                 var exp = data.w * (1920 / 100);
                 var width = 720 * data.w / 100;
                 var fontsize = parseInt(Math.round(data.fontsize * (width / exp)).toString());
@@ -86,7 +84,6 @@ Plugin.extend({
                 this.registerEvents(data.id);
                 break;
             default:
-                console.log('text');
                 PluginManager.invoke('text', data, instance._parent, instance._stage, instance._theme);
                 break;
         }
