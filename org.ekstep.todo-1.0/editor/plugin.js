@@ -1,10 +1,9 @@
-
  /**
- * Plugin to get todos form community portal
+ * Plugin to get todos from community portal
  * @class Todo
  * @constructor
  * @extends EkstepEditor.basePlugin
- * @author Gourav More <gourav_m@tekditechnologies.com>
+ * @author Nilesh More <nilesh_m@tekditechnologies.com>
  */
 
 EkstepEditor.basePlugin.extend({
@@ -17,123 +16,212 @@ EkstepEditor.basePlugin.extend({
 	},
     controllerCallback: function(event, data) {
 		ctrl = this;
-		/*TODO*/
 		setTimeout(function(){
-			ctrl.getTodos();
+			ctrl.initializeTodoWidget();
 		}, 3000);
 
-		ctrl.getTodos = function()
+		ctrl.initializeTodoWidget = function ()
 		{
-			var obj = {};
+			var requestParams = {};
 			var widgetRef;
 
 			if (!EkstepEditorAPI._.isUndefined(window.context))
 			{
 				if(!EkstepEditorAPI._.isUndefined(window.context.content_id) && window.context.content_id != "")
 				{
-					obj["url"]      = "index.php?option=com_ekcontent&view=content&id="+window.context.id;
-					obj["status"]   = "I";
-					obj["type"]     = "todos";
-					obj["subtype"]  = "reviewer#"+data.stageId;
-					obj["client"]   = "content.jlike_ekcontent";
-					obj["cont_id"]  = window.context.id;
-					obj["title"]    = EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).contentMeta.name;
+					// Content url
+					requestParams["url"]      = "index.php?option=com_ekcontent&view=content&id="+window.context.id;
+					requestParams["type"]     = "todos";
 
-					outTempRender = '<table class="ui small compact celled definition table"><tbody id="reportedIssue"></tbody></tbody>';
+					// Stage id
+					requestParams["subtype"]  = "reviewer#"+data.stageId;
+					requestParams["client"]   = "content.jlike_ekcontent";
 
-					var tempRender = [
-						'<tr>',
-						  '<td class="collapsing">',
-							'<div class="ui fitted slider checkbox todoCheck">',
-							  "<input type='checkbox' id='todo<%= id %>' data-jlike-id='<%= id %>' name='todo<%= id %>' data-ek-todomsg='<%= sender_msg %>'><label></label>",
-							'</div>',
-						 '</td>',
-						  '<td><%= sender_msg %><div><small style="opacity:.5;">Reprted on <%= moment(created).fromNow() %></small></div></td>',
-						'</tr>',
-					];
+					// Content id
+					requestParams["cont_id"]  = window.context.id;
+
+					// Content title
+					requestParams["title"]    = EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).contentMeta.name;
 
 					widgetRef = EkstepEditorAPI.jQuery("#pageLevelTodos");
 
 					/**Update widget attribute as per page**/
-					EkstepEditorAPI.jQuery(widgetRef).attr('data-jlike-url', obj["url"]);
-					EkstepEditorAPI.jQuery(widgetRef).attr('data-jlike-status', obj["status"]);
-					EkstepEditorAPI.jQuery(widgetRef).attr('data-jlike-type', obj["type"]);
-					EkstepEditorAPI.jQuery(widgetRef).attr('data-jlike-subtype', obj["subtype"]);
-					EkstepEditorAPI.jQuery(widgetRef).attr('data-jlike-client', obj["client"]);
-					EkstepEditorAPI.jQuery(widgetRef).attr('data-jlike-cont-id', obj["cont_id"] );
-					EkstepEditorAPI.jQuery(widgetRef).attr('data-jlike-title', obj["title"]);
+					EkstepEditorAPI.jQuery(widgetRef).attr('data-jlike-url', requestParams["url"]);
+					EkstepEditorAPI.jQuery(widgetRef).attr('data-jlike-status', requestParams["status"]);
+					EkstepEditorAPI.jQuery(widgetRef).attr('data-jlike-type', requestParams["type"]);
+					EkstepEditorAPI.jQuery(widgetRef).attr('data-jlike-subtype', requestParams["subtype"]);
+					EkstepEditorAPI.jQuery(widgetRef).attr('data-jlike-client', requestParams["client"]);
+					EkstepEditorAPI.jQuery(widgetRef).attr('data-jlike-cont-id', requestParams["cont_id"] );
+					EkstepEditorAPI.jQuery(widgetRef).attr('data-jlike-title', requestParams["title"]);
 
-					EkstepEditorAPI.jQuery("#pageLevelTodos").jltodos();
+					requestParams["content_id"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-contentid");
+					requestParams["assigned_by"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_by");
+					requestParams["assigned_to"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_to");
 
-					obj["content_id"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-contentid");
-					obj["assigned_by"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_by");
-					obj["assigned_to"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_to");
-					obj["state"]=1;
-					obj["status"] = "I";
+					// State 1 = Publish
+					requestParams["state"]=1;
 
-					/**Render todos**/
-					EkstepEditorAPI.jQuery("#pageLevelTodos").jltodos({obj:obj, action:'renderTodos', tempRender:tempRender, outTempRender:outTempRender});
+					// Status I = Incomplete(Unresolved todo)
+					requestParams["status"] = "I";
+					ctrl.getTodos(widgetRef, requestParams, "#pageLevelTodos");
 
-					obj["status"] = "C";
-					/**Render resovled todos**/
-					EkstepEditorAPI.jQuery("#pageLevelResolvedTodos").addClass('ui relaxed divided list');
-					EkstepEditorAPI.jQuery("#pageLevelResolvedTodos").jltodos({obj:obj, action:'renderTodos'});
-
-					EkstepEditorAPI.jQuery('.checkbox.todoCheck')
-					  .checkbox({
-						onChecked: function() {
-						  ctrl.updateStatus(this);
-						}
-					  })
-					;
+					// Status C = Complete(resolved todo)
+					requestParams["status"] = "C";
+					ctrl.getTodos(widgetRef, requestParams, "#pageLevelResolvedTodos");
 				}
 			}
 		}
 
+		/**
+		 * WidgetRef = widget id
+		 * apiRequestParams  = APIs request params
+		 * todoThreadsWrapperDiv = to append widget
+		 **/
+		ctrl.getTodos = function(widgetRef, apiRequestParams, todoThreadsWrapperDiv)
+		{
+			var status = ''
+			status     = apiRequestParams["status"];
+			EkstepEditorAPI.jQuery(widgetRef).hybridtodo({apiRequestParams:apiRequestParams, action:'getTodosAndComments', callback: function(result){
+					ctrl.renderHybridTodos(result, status, todoThreadsWrapperDiv);
+				}
+			});
+		}
+
+		// Function to initilize widget when creator click on resolve button
 		ctrl.updateStatus = function(ref)
 		{
-			var widgetRef = EkstepEditorAPI.jQuery('#pageLevelTodos');
+			var widgetRef, status, id, todotext, context;
 
-			var status  = 'I';
+			// Status C = resolved todo
+			status = 'C';
 
-			if ((ref).checked == true){
-				status = 'C';
-			}
+			// Id = joomla todo id. Todotext = todo title. content = joomla subtype
+			id       = EkstepEditorAPI.jQuery(ref).attr("data-jlike-id");
+			todotext = EkstepEditorAPI.jQuery(ref).attr("data-ek-todomsg");
+			context  = EkstepEditorAPI.jQuery(ref).attr("data-jlike-context");
 
-			id=EkstepEditorAPI.jQuery(ref).attr("data-jlike-id");
-			todotext=EkstepEditorAPI.jQuery(ref).attr("data-ek-todomsg");
+			widgetRef = EkstepEditorAPI.jQuery("#todoThreadId"+ parseInt(id));
 
 			/**Update todo status**/
 			setTimeout(function(){
-				ctrl.save(widgetRef, status, id, todotext);
+				ctrl.save(widgetRef, status, id, todotext, context);
 			}, 300);
+
+			jQuery("#" + id).prop("disabled", true);
+			jQuery("#todoWrapper" + id).hide(1000);
 		},
-		ctrl.save = function(widgetRef, status, id, todotext)
+
+		ctrl.save = function(widgetRef, status, id, todotext, context)
 		{
-			var obj = {};
+			var apiPostParams = {};
 
-			obj['id']=id;
-			obj["sender_msg"]=todotext;
+			// Joomla id
+			apiPostParams['id'] = id;
 
-			obj["url"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-url");
-			obj["cont_id"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-cont-id");
-			obj["type"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-type");
-			obj["subtype"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-subtype");
-			obj["client"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-client");
-			obj["content_id"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-contentid");
-			obj["assigned_by"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_by");
-			obj["assigned_to"]=EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_to");
+			// Todo title
+			apiPostParams["sender_msg"] = todotext;
 
-			obj["state"]=1;
+			// Content url
+			apiPostParams["url"] = EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-url");
+			apiPostParams["cont_id"] = EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-cont-id");
+			apiPostParams["type"] = 'todos'
 
-			if (status != null  && status != undefined)
+			// Joomla subtype along with stage Id
+			apiPostParams["subtype"] = context
+			apiPostParams["client"] = EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-client");
+			apiPostParams["content_id"] = EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-contentid");
+			apiPostParams["assigned_by"]= EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_by");
+			apiPostParams["assigned_to"]= EkstepEditorAPI.jQuery(widgetRef).attr("data-jlike-assigned_to");
+
+			// State 1 = Publish
+			apiPostParams["state"] = 1;
+
+			// Status C = complete
+			apiPostParams["status"] = "C";
+
+			EkstepEditorAPI.jQuery(widgetRef).hybridtodo({apiPostParams:apiPostParams,action: 'createTodo'});
+		}
+
+		ctrl.renderHybridTodos = function(result, status, todoThreadsWrapperDiv)
+		{
+			/**
+			 * disabledAttr = If todo is resolved then disabled resolve todo button
+			 * readOnly     = Hide comment box if todo is already resolved
+			 * buttonName   = Resolve/Resolved based on todo status
+			 **/
+
+			var disabledAttr, readOnly, buttonName;
+
+			if (result.success == true)
 			{
-				obj["status"] = status;
+				EkstepEditorAPI.jQuery(todoThreadsWrapperDiv).html('');
+				var hideDiv = '';
+				hideDiv     = todoThreadsWrapperDiv.substring(1, todoThreadsWrapperDiv.length);
+				EkstepEditorAPI.jQuery("."+hideDiv).show();
+				/*Pagination end*/
+				for (var i = 0; i < result.data.result.length; i++)
+				{
+					todoStatus   = result.data.result[i].status;
+					buttonName   = result.data.result[i].status == "I" ? 'Resolve' : 'Resolved';
+					disabledAttr = result.data.result[i].status == "I" ? '' : 'disabled';
+					readOnly     = result.data.result[i].status == "I" ? false : true;
+					var widget = '';
+					widget += '<div class="todo-wrapper ui segments" id="todoWrapper'+result.data.result[i].id+'"  style="background-color:#fff; margin-bottom: 5px; padding: 5px"></br>';
+						widget += '<div class="row">';
+							widget += '<label class="left floated" style="padding-left:12px">';
+								widget += result.data.result[i].sender_msg;
+							widget += '</label>';
+							widget += '<span class="right floated" style="margin-left: 74px">';
+								widget += '<button type="button" class="ui tiny icon button right floated basic" id="'+result.data.result[i].id+'" data-jlike-id="'+result.data.result[i].id+'"  data-ek-todomsg="'+result.data.result[i].sender_msg+'" data-jlike-context="'+result.data.result[i].context+'" onClick="ctrl.updateStatus(this)" '+disabledAttr+'>'+buttonName+'</button>';
+							widget += '</span>';
+						widget += '</div>';
+
+						widget += '<div id="todoThreadId'+result.data.result[i].id+'" class="list-unstyled" ';
+							widget += 'data-jlike-client="content.jlike_ekcontent" ';
+							widget += 'data-jlike-type="annotations" ';
+							widget += 'data-jlike-subtype="com_ekcontent.reviewers" ';
+							widget += 'data-jlike-context="reviewer#todo#'+result.data.result[i].id+'" ';
+							widget += 'data-jlike-limitstart="0" ';
+							widget += 'data-jlike-limit="2" ';
+							if(readOnly) widget += 'data-jlike-readonly="'+readOnly+'" ';
+							widget += 'data-jlike-contentid="'+result.data.result[i].content_id+'" ';
+							widget += 'data-jlike-ordering="annotation_date" >';
+						widget += '</div>';
+					widget += '</div>';
+
+					for (var c = 0; c < result.data.result[i].comments.length; c++)
+					{
+						result.data.result[i].comments[c].user_name = result.data.result[i].comments[c].user.name;
+						result.data.result[i].comments[c].user_id = result.data.result[i].comments[c].user.id;
+						result.data.result[i].comments[c].profile_picture_url = result.data.result[i].comments[c].user.avatar;
+						result.data.result[i].comments[c].profile_url = result.data.result[i].comments[c].user.profile_link;
+						result.data.result[i].comments[c].created =  moment(result.data.result[i].comments[c].annotation_date).format('HH:mm, MMM Do YYYY');
+					}
+
+					// Append widget data
+					result.data.result[i].status == "I" ? EkstepEditorAPI.jQuery(todoThreadsWrapperDiv).append(widget) : EkstepEditorAPI.jQuery(todoThreadsWrapperDiv).append(widget);
+
+					jQuery("#todoThreadId"+ result.data.result[i].id).hybridtodo({
+						arrData:result.data.result[i].comments,
+						action:'renderHybridTodos',
+						userProfile:result.data.userinfo
+					});
+				}
 			}
+			else
+			{
+				// Show empty message in case either APIs return empty data or API may fails
+				var emptyMessage = '';
 
-			EkstepEditorAPI.jQuery(widgetRef).jltodos({obj:obj,action: 'createTodo'});
+				// Clear html
+				jQuery(todoThreadsWrapperDiv).html('');
 
-			ctrl.getTodos();
+				// Prepare empty message based on status = Unresolved/resolved
+				emptyMessage = todoThreadsWrapperDiv === '#pageLevelTodos' ? 'No Todo' : 'No issue(s)';
+
+				// Append empty message
+				EkstepEditorAPI.jQuery(todoThreadsWrapperDiv).html(emptyMessage);
+			}
 		}
     }
 });

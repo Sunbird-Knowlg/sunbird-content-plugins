@@ -37,7 +37,7 @@ EkstepEditor.basePlugin.extend({
            this.picker[data.id] = EkstepEditorAPI.jQuery("#" +data.id).spectrum({
                 color: "#FF0000",
                 showInput: true,
-                showAlpha: true,
+                showAlpha: false,
                 preferredFormat: "hex",
                 showButtons: false,
                 containerClassName: 'awesome',

@@ -21,7 +21,7 @@ angular.module('readalongapp', [])
             ctrl.autoplay = instance.attributes.autoplay;
             ctrl.name = instance.attributes.audio;
             ctrl.highlightColor = instance.attributes.highlight;
-            EkstepEditorAPI.ngSafeApply($scope);
+            $scope.$safeApply();
             setTimeout(function(){
                 karaoke = instance.invokeKaraoke(ctrl.downloadurl, instance);
             }, 1000);
@@ -44,7 +44,7 @@ angular.module('readalongapp', [])
                     ctrl.audioSelected = true;
                     if(!EkstepEditorAPI._.isUndefined(instance.editorObj))
                         ctrl.audioChanged = true;
-                    EkstepEditorAPI.ngSafeApply($scope);
+                    $scope.$safeApply();
                 }
             });
         };
@@ -132,4 +132,8 @@ angular.module('readalongapp', [])
         ctrl.cancel = function() {
             $scope.closeThisDialog();
         };
+
+        ctrl.generateTelemetry = function(data) {
+          if (data) EkstepEditorAPI.getService('telemetry').interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", "stage": EkstepEditorAPI.getCurrentStage().id })
+        }
     }]);

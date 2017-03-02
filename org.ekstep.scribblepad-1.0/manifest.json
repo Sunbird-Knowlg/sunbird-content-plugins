@@ -50,6 +50,6 @@
         }
     },
     "renderer": {
-        "main": "renderer/plugin.js"
+        "main": "renderer/scribblepadplugin.js"
     }
 }

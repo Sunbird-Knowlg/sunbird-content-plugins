@@ -1,41 +1,43 @@
 {
-	"id": "org.ekstep.reorder",
-	"ver": "1.0",
-	"author": "Santhosh Vasabhaktula",
+    "id": "org.ekstep.reorder",
+    "ver": "1.0",
+    "author": "Santhosh Vasabhaktula",
     "title": "Re-order Plugin",
     "description": "",
     "publishedDate": "",
-	"editor": {
-		"main": "editor/plugin.js",
-		"menu": [{
-			"id": "reorder",
-			"category": "context",
-			"type": "icon",
-			"toolTip": "Re-order",
-			"title": "Reorder",
-			"iconClass": "sort icon",
-			"state": "HIDE",
-			"submenu": [{
-				"id": "sendtofront",
-				"type": "icon",
-				"toolTip": "Bring forward",
-				"title": "Bring to front",
-				"iconClass": "icon-bringfront icon",
-				"onclick": {
-					"id": "reorder:sendtofront",
-					"data": {}
-				}
-			},{
-				"id": "sendtoback",
-				"type": "icon",
-				"toolTip": "Send backward",
-				"title": "Send to back",
-				"iconClass": "icon-sendback icon",
-				"onclick": {
-					"id": "reorder:sendtoback",
-					"data": {}
-				}
-			}]
-		}]
-	}
+    "editor": {
+        "main": "editor/plugin.js",
+        "menu": [{
+            "id": "reorder",
+            "category": "context",
+            "type": "icon",
+            "toolTip": "Re-order",
+            "title": "Reorder",
+            "iconClass": "sort icon",
+            "state": "HIDE",
+            "submenu": [{
+                "id": "sendtofront",
+                "category": "context",
+                "type": "icon",
+                "toolTip": "Bring forward",
+                "title": "Bring to front",
+                "iconClass": "icon-bringfront icon",
+                "onclick": {
+                    "id": "reorder:sendtofront",
+                    "data": {}
+                }
+            }, {
+                "id": "sendtoback",
+                "category": "context",
+                "type": "icon",
+                "toolTip": "Send backward",
+                "title": "Send to back",
+                "iconClass": "icon-sendback icon",
+                "onclick": {
+                    "id": "reorder:sendtoback",
+                    "data": {}
+                }
+            }]
+        }]
+    }
 }

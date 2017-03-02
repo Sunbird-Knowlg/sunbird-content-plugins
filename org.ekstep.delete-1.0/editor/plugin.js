@@ -13,19 +13,21 @@ EkstepEditor.basePlugin.extend({
     	EkstepEditorAPI.dispatchEvent('object:modified', {id: id});
     },*/
     deleteObject: function(event, data) {
-        var editorObjs = EkstepEditorAPI.getEditorGroup() ? EkstepEditorAPI.getEditorGroup() : EkstepEditorAPI.getEditorObject();
-        var id, instance = this;
-        if (_.isArray(editorObjs._objects)) {            
+        var activeGroup = EkstepEditorAPI.getEditorGroup(), activeObject = EkstepEditorAPI.getEditorObject(), id, instance = this;
+
+        if (activeObject) {
+            instance.remove(activeObject);
+        } else if (activeGroup) {
             EkstepEditorAPI.getCanvas().discardActiveGroup();
-            editorObjs._objects.forEach(function(object) {
+            activeGroup.getObjects().forEach(function(object) {
                 instance.remove(object);
             });
-        } else instance.remove(editorObjs);
+        }
     },
     remove: function(object) {
         EkstepEditorAPI.dispatchEvent('delete:invoked', { 'editorObj': EkstepEditorAPI.getPluginInstance(object.id).attributes });
         EkstepEditorAPI.getCanvas().remove(object);
-        EkstepEditorAPI.dispatchEvent('object:modified', { id: object.id });
+        EkstepEditorAPI.dispatchEvent('stage:modified', { id: object.id });
     },
     objectSelected: function(event, data) {
         EkstepEditorAPI.updateContextMenu({ id: 'delete', state: 'SHOW', data: {} });

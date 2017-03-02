@@ -82,7 +82,7 @@ EkstepEditor.basePlugin.extend({
         ctrl.previewLoad = function() {
             var jsondata = EkstepEditor.stageManager.toECML();
             ctrl.contentBody = converter.buildECML(jsondata, true)
-            EkstepEditorAPI.ngSafeApply($scope, function(){
+            $scope.$safeApply(function(){
                 setTimeout(function() {
                     Prism.highlightElement(EkstepEditorAPI.jQuery("#xmlBody")[0]);
                 }, 100);
@@ -91,7 +91,7 @@ EkstepEditor.basePlugin.extend({
             // var iService = new EkstepEditor.iService();
             // iService.http.post('ecml', { data: jsondata }, null,  function(err, resp) {
             //     ctrl.contentBody = resp.data;
-            //     EkstepEditorAPI.getAngularScope().safeApply();
+            //     $scope.$safeApply();
             // });
         };
         ctrl.previewLoad();
