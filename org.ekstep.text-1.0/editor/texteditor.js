@@ -65,6 +65,10 @@ var textEditor = (function() {
         if (!$doneBtn.length) {
             $doneBtn = EkstepEditorAPI.jQuery("<button>",{text: 'Done',id: 'authoringTextEditorBtn', class: 'ui primary button'})
                 .click(function() {
+                    EkstepEditor.telemetryService.interact({ 
+                        "type": "click", "subtype": "done", "target": "addString", "pluginid": "", "pluginver": '', "objectid": "", 
+                        "stage": EkstepEditorAPI.getCurrentStage().id 
+                    });
                     _commonBtnClickAction();
                     if ($editor.val().trim().length) {
                         EkstepEditorAPI.getPluginInstance(pluginId).editorObj.text = $editor.val();
@@ -83,6 +87,10 @@ var textEditor = (function() {
         if (!$cancelBtn.length) {
             $cancelBtn = EkstepEditorAPI.jQuery('<button>',{text: 'Cancel',id: 'authoringTextEditorCancel', class: 'ui secondary button'})
                 .click(function() {
+                    EkstepEditor.telemetryService.interact({ 
+                        "type": "click", "subtype": "cancel", "target": "cancelTextEditor", "pluginid": "", "pluginver": '', "objectid": "", 
+                        "stage": EkstepEditorAPI.getCurrentStage().id 
+                    });
                     _commonBtnClickAction();
                     if (!editorText.trim().length) {
                         _removeObject();

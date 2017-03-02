@@ -54,9 +54,13 @@ angular.module('activityBrowserApp', [])
             EkstepEditorAPI.getService('searchService').search(data, function(err, resp) {
                 ctrl.loading = false;
                 $scope.$safeApply();
+                EkstepEditor.telemetryService.interact({ 
+                    "type": "click", "subtype": "search", "target": "searchActivityCard", "pluginid": "", "pluginver": '', "objectid": "", 
+                    "stage": EkstepEditorAPI.getCurrentStage().id 
+                });
                 if (err) {
                     ctrl.errorLoadingActivities = true;
-                    return
+                    return;
                 }
                 if (resp.data.result.count <= 0) {
                     ctrl.noActivities = true;
@@ -64,11 +68,15 @@ angular.module('activityBrowserApp', [])
                 }
                 ctrl.activitiesList = resp.data.result.content;
                 applyDimmerToCard();
-            })
-        }
+            });
+        };
         ctrl.addPlugin = function(activity) {
             EkstepEditorAPI.loadPlugin(activity.code, activity.semanticVersion);
             $scope.closeThisDialog();
+            EkstepEditor.telemetryService.interact({ 
+                "type": "click", "subtype": "add", "target": "addedActivityCard", "pluginid": "", "pluginver": '', "objectid": "", 
+                "stage": EkstepEditorAPI.getCurrentStage().id 
+            });
         }
         ctrl.getActivities();
         EkstepEditorAPI.dispatchEvent('org.ekstep.conceptselector:init', {
@@ -94,6 +102,14 @@ angular.module('activityBrowserApp', [])
         setTimeout(function () {
             EkstepEditorAPI.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});    
         },1000);
+
+        ctrl.closeActivityBrowserDialog = function() {
+            $scope.closeThisDialog();
+            EkstepEditor.telemetryService.interact({ 
+                "type": "click", "subtype": "close", "target": "closeActivityBrowser", "pluginid": "", "pluginver": '', "objectid": "", 
+                "stage": EkstepEditorAPI.getCurrentStage().id 
+            });
+        };
         
 
     }]);
