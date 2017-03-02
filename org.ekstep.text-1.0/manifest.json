@@ -1,7 +1,7 @@
 {
     "id": "org.ekstep.text",
     "ver": "1.0",
-    "shortId": "org.ekstep.text",
+    "shortId": "text",
     "author": "Santhosh Vasabhaktula",
     "title": "Text Plugin",
     "description": "",
@@ -12,7 +12,7 @@
             { "type": "js", "src": "editor/texteditor.js" }
         ],
         "menu": [{
-            "id": "org.ekstep.text",
+            "id": "text",
             "category": "main",
             "type": "icon",
             "toolTip": "Add Text",
@@ -30,7 +30,6 @@
                     "w": 35,
                     "maxWidth": 500,
                     "fill": "#000000",
-                    "colorRGBA": "rgba(0,0,0,1)",
                     "fontStyle": "normal",
                     "fontWeight": "normal",
                     "stroke": "rgba(255, 255, 255, 0)",
@@ -42,65 +41,7 @@
             }
         }],
         "configManifest": [{
-            "propertyName": "textType",
-            "title": "Add feature",
-            "dataType": "buttonToggle",
-            "description": "Text",
-            "options": [{
-                "value": "text",
-                "title": "Text",
-                "toolTip": "Text",
-                "description": "Text",
-                "dataType": "icon",
-                "iconClass": "icon-text icon"
-            }, {
-                "value": "readalong",
-                "title": "Add Readalong",
-                "toolTip": "Readalong",
-                "description": "Readalong",
-                "dataType": "icon",
-                "iconClass": "icon-readalong icon",
-                "suboptions": [{
-                    "value": "htextEdit",
-                    "title": "Edit",
-                    "toolTip": "Edit Readalong",
-                    "description": "Edit Readalong",
-                    "dataType": "icon",
-                    "iconClass": "edit icon"
-                },{
-                    "value": "htextDelete",
-                    "title": "Delete",
-                    "toolTip": "Delete Readalong",
-                    "description": "Delete Readalong",
-                    "dataType": "icon",
-                    "iconClass": "trash icon"
-                }]
-            }, {
-                "value": "wordinfo",
-                "title": "Add Wordinfo",
-                "toolTip": "Wordinfo",
-                "description": "Wordinfo",
-                "dataType": "icon",
-                "iconClass": "file word outline icon",
-                "suboptions": [{
-                    "value": "wordinfoEdit",
-                    "title": "Edit",
-                    "toolTip": "Edit Wordinfo",
-                    "description": "Edit Wordinfo",
-                    "dataType": "icon",
-                    "iconClass": "edit icon"
-                },{
-                    "value": "wordinfoDelete",
-                    "title": "Delete",
-                    "toolTip": "Delete Wordinfo",
-                    "description": "Delete Wordinfo",
-                    "dataType": "icon",
-                    "iconClass": "trash icon"
-                }]
-            }],
-            "defaultValue": "text"
-        }, {
-            "propertyName": "colorRGBA",
+            "propertyName": "color",
             "title": "Font color",
             "description": "Choose a color from the color picker",
             "dataType": "colorpicker",
@@ -193,9 +134,6 @@
             "fontStyle": "normal",
             "fontWeight": "normal"
         }
-    },
-    "renderer": {
-        "main": "renderer/plugin.js"
     }
 
 }

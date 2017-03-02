@@ -86,4 +86,8 @@ angular.module('readalongapp', [])
             instance.cb();
             $scope.closeThisDialog();
         };
+
+        ctrl.generateTelemetry = function(data) {
+          if (data) EkstepEditorAPI.getService('telemetry').interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", "stage": EkstepEditorAPI.getCurrentStage().id })
+        }
     }]);

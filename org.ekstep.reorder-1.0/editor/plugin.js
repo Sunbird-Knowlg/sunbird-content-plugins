@@ -18,10 +18,10 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.dispatchEvent('object:modified', {id: EkstepEditorAPI.getEditorObject().id});
     },
     objectSelected: function(event, data) {
-        EkstepEditorAPI.updateContextMenus([{ id: 'sendtofront', state: 'SHOW', data: {}}, { id: 'sendtoback', state: 'SHOW', data: {}}]);
+        EkstepEditorAPI.updateContextMenu({ id: 'reorder', state: 'SHOW', data: {}});
     },
     objectUnSelected: function(event, data) {
-        EkstepEditorAPI.updateContextMenus([{ id: 'sendtofront', state: 'HIDE', data: {}}, { id: 'sendtoback', state: 'SHOW', data: {}}]);
+        EkstepEditorAPI.updateContextMenu({ id: 'reorder', state: 'HIDE', data: {}});
     }
 });
 //# sourceURL=reorderplugin.js

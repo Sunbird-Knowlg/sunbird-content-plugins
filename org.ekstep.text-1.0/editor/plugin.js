@@ -13,7 +13,7 @@ EkstepEditor.basePlugin.extend({
      * @member {String} type
      * @memberof Text
      */
-    type: "org.ekstep.text",
+    type: "text",
     /**
      * Magic Number is used to calculate the from and to ECML conversion 
      * @member {Number} magicNumber
@@ -41,12 +41,6 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     newInstance: function() {
-        this.config.type = "text";
-        if (this.attributes.colorRGBA) {
-            this.config.colorRGBA = this.attributes.colorRGBA;
-            delete this.attributes.colorRGBA;        
-        }
-
         var props = this.convertToFabric(this.attributes);
         delete props.__text;
         props.editable = false; // added to disable inline editing of exiting content
@@ -54,7 +48,6 @@ EkstepEditor.basePlugin.extend({
         if (this.attributes.__text == '') {
             textEditor.showEditor(this.id);
         }
-        if (this.config.colorRGBA) this.editorObj.setFill(this.config.colorRGBA);
     },
     /**
      * This method overridden from Ekstepeditor.basePlugin and here we double click event is added
@@ -146,114 +139,6 @@ EkstepEditor.basePlugin.extend({
                 this.editorObj.setTextAlign(value);       
                 this.attributes.align = value;
                 break;
-            case "colorRGBA":
-                this.editorObj.setFill(this.toRGBAFormat(value));                
-                this.config.colorRGBA = this.toRGBAFormat(value);
-                break;
-            case "textType":
-                switch (value) {
-                    case "readalong":
-                        var instance = this;
-                        EkstepEditorAPI.dispatchEvent('org.ekstep.htext:showpopup', {
-                            textObj: EkstepEditorAPI.getCurrentObject(),
-                            callback: function(data) { 
-                                if(!EkstepEditorAPI._.isUndefined(data)){
-                                    instance.attributes.__text = instance.editorObj.text = data.text;
-                                    instance.config.type = "htext"
-                                    instance.config.text = data.text;
-                                    instance.config.audio = data.audio;
-                                    instance.config.timings = data.timings;
-                                    instance.config.highlight = data.highlight;
-                                    instance.config.audioObj = data.audioObj;
-                                    instance.config.autoplay = data.autoplay;
-                                    instance.attributes.textType = value;
-                                    var audioObj =  data.audioObj.assetMedia;
-                                    if(!EkstepEditorAPI._.isUndefined(audioObj))
-                                        audioObj.src = EkstepEditor.mediaManager.getMediaOriginURL(audioObj.src);
-                                    instance.addMedia(audioObj);
-                                }else{
-                                    instance.attributes.textType = 'text';
-                                    EkstepEditorAPI.dispatchEvent('config:show');
-                                }
-                            }
-                        });
-                        break;
-                    case "wordinfo":
-                        var instance = this;
-                        EkstepEditorAPI.dispatchEvent('org.ekstep.wordinfotext:showpopup', {
-                            textObj: EkstepEditorAPI.getCurrentObject(),
-                            callback: function(data, templateData) { 
-                                if(!EkstepEditorAPI._.isUndefined(data)){
-                                    instance.data = templateData;
-                                    instance.attributes.__text = data.text;
-                                    instance.editorObj.text = data.text;
-                                    instance.config.type = "wordinfo"
-                                    instance.config.text = data.text;
-                                    instance.config.words = data.words;
-                                    instance.config.wordfontcolor = data.wordfontcolor;
-                                    instance.config.wordhighlightcolor = data.wordhighlightcolor;
-                                    instance.config.wordunderlinecolor = data.wordunderlinecolor;
-                                    instance.attributes.textType = value;
-                                    var image = {
-                                        "id": "popupTint",
-                                        "src": "https://dev.ekstep.in/assets/public/content/PopupTint_1460636175572.png",
-                                        "type": "image",
-                                        "assetId": "domain_38606"
-                                    }
-                                    image.src = EkstepEditor.mediaManager.getMediaOriginURL(image.src);
-                                    instance.addMedia(image);
-                                }else{
-                                    instance.attributes.textType = 'text';
-                                    EkstepEditorAPI.dispatchEvent('config:show');
-                                }
-                            }
-                        });
-                        break;
-                    default:
-                        this.attributes.textType = 'text';
-                        break;
-                }
-                break;
-            case "htextEdit":
-                var instance = this;
-                EkstepEditorAPI.dispatchEvent('org.ekstep.htext:showpopup', {
-                    textObj: EkstepEditorAPI.getCurrentObject(),
-                    callback: function(data) {
-
-                    }
-                });
-                break;
-            case "htextDelete":
-                var instance = this;
-                this.attributes.textType = 'text';
-                instance.config.type = "text";
-                delete instance.config.audio;
-                delete instance.config.timings;
-                delete instance.config.highlight;
-                delete instance.config.audioObj;
-                delete instance.config.autoplay;
-                EkstepEditorAPI.dispatchEvent('config:show');
-                break;
-            case "wordinfoEdit":
-                var instance = this;
-                EkstepEditorAPI.dispatchEvent('org.ekstep.wordinfotext:showpopup', {
-                    textObj: EkstepEditorAPI.getCurrentObject(),
-                    callback: function(data, templateData) {
-
-                    }
-                });
-                break;
-            case "wordinfoDelete":
-                var instance = this;
-                this.attributes.textType = 'text';
-                instance.config.type = "text";
-                delete instance.data;
-                delete instance.config.words;
-                delete instance.config.wordfontcolor;
-                delete instance.config.wordhighlightcolor;
-                delete instance.config.wordunderlinecolor;
-                EkstepEditorAPI.dispatchEvent('config:show');
-                break;
         }
         EkstepEditorAPI.render();
         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
@@ -265,17 +150,11 @@ EkstepEditor.basePlugin.extend({
     getConfig: function() {
         var config = this._super();
         config.color = this.attributes.color || this.attributes.fill;
-        config.colorRGBA = this.config.colorRGBA || config.color;
         config.fontfamily = this.attributes.fontFamily; 
         config.fontsize = this.attributes.fontSize;
         config.fontweight = this.attributes.fontweight || false;
         config.fontstyle = this.attributes.fontstyle || false;
         config.align = this.attributes.align || 'left';
-        config.textType = this.attributes.textType || 'text';
-        config.htextEdit = undefined;
-        config.htextDelete = undefined;
-        config.wordinfoEdit = undefined;
-        config.wordinfoDelete = undefined;
         return config;
     },
     /**
@@ -357,10 +236,6 @@ EkstepEditor.basePlugin.extend({
             return c.propertyName === 'stroke';
         })
         return config;
-    },
-    toRGBAFormat: function(rgbaObject) {
-        if(typeof rgbaObject === "object") return "rgba("+rgbaObject.r+","+rgbaObject.g+","+rgbaObject.b+","+rgbaObject.a+")"
-        else return rgbaObject;
     }
 });
 //# sourceURL=textplugin.js
