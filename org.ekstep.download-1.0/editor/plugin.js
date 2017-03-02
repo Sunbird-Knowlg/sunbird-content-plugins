@@ -70,7 +70,7 @@ EkstepEditor.basePlugin.extend({
     },
     getDownloadUrl: function(callback) {
         var fileName = (EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).contentMeta.name).toLowerCase();
-        EkstepEditor.contentService.downloadContent(window.context.content_id, fileName, function(err, resp) {
+        EkstepEditorAPI.getService('content').downloadContent(window.context.content_id, fileName, function(err, resp) {
             if (!err && resp.data.responseCode == "OK") {
                 callback(resp.data.result.ECAR_URL);
             } else {
