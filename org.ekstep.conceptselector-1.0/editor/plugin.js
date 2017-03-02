@@ -77,7 +77,7 @@ EkstepEditor.basePlugin.extend({
         var instance = instance || this;
         offset = offset || 0;
         limit = limit || instance.limit;
-        EkstepEditor.conceptService.getConcepts(function(err, resp) {
+        EkstepEditor.conceptService.getConcepts(offset, limit, function(err, resp) {
             if (!err && resp.data && resp.data.result && EkstepEditorAPI._.isArray(resp.data.result.concepts)) {
                 EkstepEditorAPI._.forEach(resp.data.result.concepts, function(value) {
                     instance.concepts.push(value);
@@ -88,7 +88,7 @@ EkstepEditor.basePlugin.extend({
                     instance.getConcept(offset, limit, instance, callback);
                 } else callback(instance);
             }
-        }, offset, limit);
+        });
     },
     /**
      *
