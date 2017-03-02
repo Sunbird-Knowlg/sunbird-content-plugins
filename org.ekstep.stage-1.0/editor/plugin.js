@@ -41,21 +41,13 @@ EkstepEditor.basePlugin.extend({
         this.children.push(plugin);
         if(plugin.editorObj) {
             this.canvas.add(plugin.editorObj);
-            this.canvas.setActiveObject(plugin.editorObj);
-            this.setThumbnail();
-            EkstepEditorAPI.dispatchEvent('stage:modified', { id: plugin.id });
+            this.canvas.setActiveObject(plugin.editorObj);            
+            if (!EkstepEditor.stageManager.contentLoading) EkstepEditorAPI.dispatchEvent('stage:modified', { id: plugin.id });
         }
         this.enableSave();        
     },
-    setThumbnail: function() {
-        /*
-        var thumbnailCanvas = document.getElementById("thumbnailCanvas");
-        var ctx = thumbnailCanvas.getContext("2d");
-        ctx.drawImage(this.canvas.getElement(), 0, 0, 160, 90);
-        this.thumbnail = thumbnailCanvas.toDataURL({format: 'jpeg', quality: 0.8});
-        */
-        this.thumbnail = this.canvas.toDataURL({format: 'jpeg', quality: 0.1});
-        
+    setThumbnail: function(thumbnail) {
+        this.thumbnail = thumbnail || this.canvas.toDataURL({format: 'jpeg', quality: 0.1});        
     },
     updateZIndex: function() {
         var instance = this;
@@ -67,7 +59,7 @@ EkstepEditor.basePlugin.extend({
             }
         });
     },
-    render: function(canvas) {
+    render: function(canvas, thumbnail) {
         EkstepEditor.stageManager.clearCanvas(canvas);
         this.children = EkstepEditorAPI._.sortBy(this.children, [function(o) { return o.getAttribute('z-index'); }]);
         EkstepEditorAPI._.forEach(this.children, function(plugin) {
@@ -75,7 +67,7 @@ EkstepEditor.basePlugin.extend({
         });
         canvas.renderAll();
         EkstepEditorAPI.dispatchEvent('stage:render:complete', { stageId: this.id });
-        this.thumbnail = canvas.toDataURL({format: 'jpeg', quality: 0.1});
+        this.setThumbnail(thumbnail);
         EkstepEditorAPI.refreshStages();
     },
     modified: function(event, data) {
@@ -94,16 +86,16 @@ EkstepEditor.basePlugin.extend({
     objectRemoved: function(event, data) {
         this.currentObject = undefined;
     },
-    destroyOnLoad: function(childCount, canvas, cb) {
+    destroyOnLoad: function(childCount, canvas, thumbnail, cb) {
         var instance = this;
         if(childCount == instance.children.length) {
             canvas.clear();
-            instance.render(canvas);
+            instance.render(canvas, thumbnail);
             $('#' + instance.id).remove();
             cb();
         } else {
             setTimeout(function() {
-                instance.destroyOnLoad(childCount, canvas, cb);
+                instance.destroyOnLoad(childCount, canvas, thumbnail, cb);
             }, 1000);
         }
     },
