@@ -19,8 +19,8 @@ audio::-webkit-media-controls-panel {
 
 .ngdialog-content {
    top: 5% !important;
-   width: 100% !important;    
-   position: absolute !important;            
+   width: 100% !important;
+   position: absolute !important;
    background: none !important;
 }
 
@@ -141,7 +141,7 @@ i.play.icon:before, i.pause.icon:before{
     margin-left: auto;
     margin-right: auto;
     color: white;
-    top: 10px;	
+    top: 10px;
 }
 
 .assetbrowser .center-aligned{
@@ -207,7 +207,7 @@ i.play.icon:before, i.pause.icon:before{
 										<div class="floating ui blue label">
 											<i class="ui icon check" aria-hidden="true"></i>
 										</div>
-									</a> 
+									</a>
 									<div class="ui image">
 										<img class="asset_thumbnail" data_id="{{image.identifier}}" src="{{image.downloadUrl}}" />
 									</div>
@@ -515,7 +515,7 @@ i.play.icon:before, i.pause.icon:before{
 				<div class="ui buttons">
 					<button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
 					<div class="or"></div>
-					<button class="ui blue button submit button" ng-disabled="$ctrl.uploadBtnDisabled" ng-click="$ctrl.doUpload()" type="button">Upload and Use</button>
+					<button class="ui blue button submit button" ng-disabled="$ctrl.uploadBtnDisabled" ng-click="$ctrl.doUpload(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'uploadAndUseAssetBrowserButton'})" type="button">Upload and Use</button>
 				</div>
 			</div>
 		</div>
