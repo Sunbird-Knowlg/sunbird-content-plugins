@@ -129,6 +129,7 @@ EkstepEditor.basePlugin.extend({
     initConceptBrowser: function(event, data) {
         var instance = this;
         if (instance.selectors.indexOf(data.element) == -1) {
+            /**This is needed to get updated conceptData**/
             setTimeout(function() {
                 EkstepEditorAPI.jQuery('#' + data.element).treePicker({
                     data: instance.conceptData,
