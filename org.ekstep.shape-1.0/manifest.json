@@ -29,7 +29,7 @@
                         "type": "rect",
                         "x": 10,
                         "y": 20,
-                        "fill": "#FFFF00",
+                        "fill": "#FFFF00",                        
                         "w": 14,
                         "h": 25,
                         "stroke": "rgba(255, 255, 255, 0)",
@@ -49,7 +49,7 @@
                         "type": "ellipse",
                         "x": 15,
                         "y": 15,
-                        "fill": "#00FF00",
+                        "fill": "#00FF00",                        
                         "w": 18,
                         "h": 32,
                         "stroke": "rgba(255, 255, 255, 0)",
@@ -69,10 +69,73 @@
                         "type": "roundrect",
                         "x": 20,
                         "y": 20,
-                        "fill": "#FF0000",
+                        "fill": "#FF0000",                        
                         "w": 14,
                         "h": 25,
                         "radius": 10,
+                        "stroke": "rgba(255, 255, 255, 0)",
+                        "strokeWidth": 1,
+                        "opacity": 1
+                    }
+                }
+            }, {
+                "id": "star",
+                "type": "icon",
+                "toolTip": "Add Star",
+                "title": "Star",
+                "iconClass": "star icon",
+                "onclick": {
+                    "id": "org.ekstep.shape:create",
+                    "data": {
+                        "type": "star",
+                        "x": 20,
+                        "y": 20,
+                        "fill": "#FF0000",                        
+                        "w": 14,
+                        "h": 25,
+                        "corners": 5,
+                        "stroke": "rgba(255, 255, 255, 0)",
+                        "strokeWidth": 1,
+                        "opacity": 1
+                    }
+                }
+            }, {
+                "id": "polygon",
+                "type": "icon",
+                "toolTip": "Add Polygon",
+                "title": "Polygon",
+                "iconClass": "first order icon",
+                "onclick": {
+                    "id": "org.ekstep.shape:create",
+                    "data": {
+                        "type": "polygon",
+                        "x": 20,
+                        "y": 20,
+                        "fill": "#FF0000",                        
+                        "w": 14,
+                        "h": 25,
+                        "sides": 5,
+                        "stroke": "rgba(255, 255, 255, 0)",
+                        "strokeWidth": 1,
+                        "opacity": 1
+                    }
+                }
+            }, {
+                "id": "trapezium",
+                "type": "icon",
+                "toolTip": "Add Trapezium",
+                "title": "Trapezium",
+                "iconClass": "road icon",
+                "onclick": {
+                    "id": "org.ekstep.shape:create",
+                    "data": {
+                        "type": "trapezium",
+                        "x": 20,
+                        "y": 20,
+                        "fill": "#FF0000",                        
+                        "w": 14,
+                        "h": 25,
+                        "sides": 5,
                         "stroke": "rgba(255, 255, 255, 0)",
                         "strokeWidth": 1,
                         "opacity": 1

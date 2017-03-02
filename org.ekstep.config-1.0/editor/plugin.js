@@ -59,30 +59,30 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("object:selected", this.objectSelected, this);
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
         EkstepEditorAPI.addEventListener("config:show", this.showConfig, this);
-        EkstepEditorAPI.addEventListener("stage:unselect", this.stageUnselect, this);
+        EkstepEditorAPI.addEventListener("stage:render:complete", this.stageSelect, this);
         EkstepEditorAPI.addEventListener("config:help", this.showHelp, this);
         EkstepEditorAPI.addEventListener("config:actions", this.showActions, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:colorpicker", this.showColorPicker, this);
-        EkstepEditorAPI.addEventListener("object:modified", this.objectModified, this);
+        //EkstepEditorAPI.addEventListener("object:modified", this.objectModified, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:invoke", this.invoke, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:addAction", this.addAction, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:removeAction", this.removeAction, this);
         EkstepEditorAPI.addEventListener("org.ekstep.config:toggleStageEvent", this.toggleEventToStage, this);
         EkstepEditorAPI.addEventListener("config:properties", this.showProperties, this);
+        EkstepEditorAPI.addEventListener("config:settings:show", this.showSettingsTab, this);
+        EkstepEditorAPI.addEventListener("config:help:show", this.showHelpTab, this);
+        EkstepEditorAPI.addEventListener("config:comments:show", this.showCommentsTab, this);
 
         var angScope = EkstepEditorAPI.getAngularScope();
         EkstepEditorAPI.ngSafeApply(angScope, function() {
-            angScope.contextToolbar = instance.manifest.editor.data.toolbars;
+            angScope.selectedConfigCategory = 'settings';
+            angScope.stageConfigStatus = false;
         });
 
-        this.canvasOffset = EkstepEditorAPI.jQuery('#canvas').offset();
-        EkstepEditorAPI.jQuery("#plugin-toolbar-container").draggable({
-            containment: "document",
-            cursor: "move",
-            stop: function() {
-                EkstepEditorAPI.jQuery("#plugin-toolbar-container").css('height', 'auto');
-            }
-        })
+        angScope.$watch('configData', function(newValue, oldValue) {
+            instance.updateConfig(newValue, oldValue);
+        }, true);  
+        this.showSettingsTab();      
     },
     /**
      * Place config toolbar on top of plugin, based on its location
@@ -91,24 +91,24 @@ EkstepEditor.basePlugin.extend({
      * @memberof Config
      */
     objectSelected: function(event, data) {
-        var instance = this;
-        if (this.selectedPluginId != data.id) {
-            var angScope = EkstepEditorAPI.getAngularScope();
-            EkstepEditorAPI.ngSafeApply(angScope, function() {
-                angScope.showConfigContainer = false;
-            });
-        }
         this.selectedPluginId = data.id;
-        this.setToolBarPosition();
+        var angScope = EkstepEditorAPI.getAngularScope();
+        EkstepEditorAPI.ngSafeApply(angScope, function() {
+            angScope.selectedConfigCategory = 'settings';
+        });
+        this.showSettingsTab(event, data);
     },
     objectUnselected: function(event, data) {
-        if (data.id == this.selectedPluginId) {
-            EkstepEditorAPI.jQuery('#toolbarOptions').hide();
+        if(this.selectedPluginId == data.id){
             var angScope = EkstepEditorAPI.getAngularScope();
             EkstepEditorAPI.ngSafeApply(angScope, function() {
-                angScope.showConfigContainer = false;
+                angScope.selectedConfigCategory = 'settings';
             });
+            this.showSettingsTab(event, data);
         }
+    },
+    stageSelect: function(event, data) {
+        this.showSettingsTab(event, data);
     },
     /**
      *  Show configuration
@@ -122,31 +122,28 @@ EkstepEditor.basePlugin.extend({
      */
     showConfig: function(event, data) {
         var instance = this;
-        this.pluginConfigManifest = EkstepEditorAPI._.clone(EkstepEditorAPI.getCurrentObject().getConfigManifest());
-        this.configData = EkstepEditorAPI._.clone(EkstepEditorAPI.getCurrentObject().getConfig());
+        this.pluginConfigManifest = EkstepEditorAPI._.clone(EkstepEditorAPI.getCurrentObject() ? EkstepEditorAPI.getCurrentObject().getConfigManifest() : EkstepEditorAPI.getCurrentStage().getConfigManifest());
+        this.configData = EkstepEditorAPI._.clone(EkstepEditorAPI.getCurrentObject() ? EkstepEditorAPI.getCurrentObject().getConfig() : EkstepEditorAPI.getCurrentStage().getConfig());
         if (EkstepEditorAPI._.isUndefined(this.pluginConfigManifest)) {
             this.pluginConfigManifest = [];
-            EkstepEditorAPI.getCurrentObject().renderConfig();
+            EkstepEditorAPI.getCurrentObject() ? EkstepEditorAPI.getCurrentObject().renderConfig() : EkstepEditorAPI.getCurrentStage().renderConfig();
         }
         var angScope = EkstepEditorAPI.getAngularScope();
         EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.pluginConfig = instance.pluginConfigManifest;
             angScope.configData = instance.configData;
-            angScope.$watch('configData', function(newValue, oldValue) {
-                instance.updateConfig(newValue, oldValue);
-            }, true);
-
+            angScope.stageConfigStatus = EkstepEditorAPI.getCurrentObject() ? false : true;
         });
         EkstepEditorAPI._.forEach(instance.pluginConfigManifest, function(config) {
             instance._invoke(config, instance.configData)
-        })
-        this.setToolBarContainerLocation("Configuration");
+        });
+        //this.setToolBarContainerLocation("Configuration");
         /*
         semantic ui apply
          */
-        setTimeout(function() {
-            EkstepEditorAPI.jQuery("#plugin-toolbar-container .ui.dropdown").dropdown();
-        }, 500);
+        // setTimeout(function() {
+        //     EkstepEditorAPI.jQuery("#plugin-toolbar-container .ui.dropdown").dropdown();
+        // }, 500);
     },
     /**
      * This is called on stage unselect event fired 
@@ -182,7 +179,33 @@ EkstepEditor.basePlugin.extend({
                 });
             }, 500);
         }
-
+        if (config.dataType === 'inputSelect') {
+            if(_.indexOf(config.range, parseInt(instance.configData[config.propertyName]))){
+                config.range.push(instance.configData[config.propertyName]);
+            }
+            setTimeout(function() { 
+                EkstepEditorAPI.jQuery('#' + config.propertyName).dropdown({
+                    allowAdditions: true,
+                    className: {
+                        dropdown: 'ui search dropdown'
+                    },
+                    action: function(text, value, element){
+                        if (isNaN(parseInt(text, 10)) || parseInt(text, 10) < config.minValue || parseInt(text, 10) > config.maxValue) {
+                            instance.configData[config.propertyName] = config.defaultValue;
+                            instance.onConfigChange(config.propertyName, config.defaultValue);
+                            EkstepEditorAPI.jQuery('#' + config.propertyName).parent().dropdown('set text', config.defaultValue);
+                        } else {
+                            instance.configData[config.propertyName] = parseInt(text);
+                            if(_.indexOf(config.range, parseInt(instance.configData[config.propertyName]))){
+                                config.range.push(instance.configData[config.propertyName]);
+                            }
+                            instance.onConfigChange(config.propertyName, parseInt(text));
+                            EkstepEditorAPI.jQuery('#' + config.propertyName).parent().dropdown('set text', parseInt(text));
+                        }
+                    }
+                });
+            }, 1000);
+        }
     },
     /**
      * This method gets the old and new config data and compares the both and calls the onConfigChange method with the key and value of new value
@@ -207,11 +230,12 @@ EkstepEditor.basePlugin.extend({
      * @memberof Config
      */
     onConfigChange: function(key, value) {
-        if (!EkstepEditorAPI._.isUndefined(value)) {
-            EkstepEditorAPI.getCurrentObject().__proto__.__proto__.onConfigChange(key, value);
-            EkstepEditorAPI.getCurrentObject().onConfigChange(key, value);
+        var plugin = EkstepEditorAPI.getCurrentObject() ? EkstepEditorAPI.getCurrentObject() : EkstepEditorAPI.getCurrentStage();
+        if (!EkstepEditorAPI._.isUndefined(value) && plugin) {
+            plugin._onConfigChange(key, value);
+            plugin.onConfigChange(key, value);
             if (key === 'autoplay') {
-                this.toggleEventToStage('', { 'flag': value, 'id': EkstepEditorAPI.getCurrentObject().id });
+                this.toggleEventToStage('', { 'flag': value, 'id': plugin.id });
             }
         }
     },
@@ -232,10 +256,15 @@ EkstepEditor.basePlugin.extend({
      */
     showHelp: function(event, data) {
         var instance = this;
-        EkstepEditorAPI.getCurrentObject().getHelp(function(helpText) {
-            EkstepEditorAPI.jQuery("#pluginHelpContent").html(micromarkdown.parse(helpText));
-            instance.setToolBarContainerLocation("Help");
-        });
+        if(EkstepEditorAPI.getCurrentObject()){
+            EkstepEditorAPI.getCurrentObject().getHelp(function(helpText) {
+                EkstepEditorAPI.jQuery("#pluginHelpContent").html(micromarkdown.parse(helpText));
+            });
+        }else{
+            EkstepEditorAPI.getCurrentStage().getHelp(function(helpText) {
+                EkstepEditorAPI.jQuery("#pluginHelpContent").html(micromarkdown.parse(helpText));
+            });
+        }
     },
     /**
      * This method called when config:properties event is fired  
@@ -251,7 +280,7 @@ EkstepEditor.basePlugin.extend({
             angScope.currentObjectActions = [];
             angScope.allActionsList = instance.allActionsList;
         });
-        this.setToolBarContainerLocation("Actions");
+        //this.setToolBarContainerLocation("Actions");
         this.highlightTargetObject();
         this.updateActions();
         this.updateTargetOptions();
@@ -377,8 +406,9 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.jQuery("#actionTargetDropdown:not(.addClick)").parent().on('click', function() {
             EkstepEditorAPI.jQuery("#actionTargetDropdown").nextAll(".menu.transition").find(".item").mouseover(function(event) {
                 var id = EkstepEditorAPI.jQuery(event.target).text();
-                var editorObj = EkstepEditorAPI.getPluginInstance(id).editorObj;
-                if (editorObj) {
+                var pluginInstance = EkstepEditorAPI.getPluginInstance(id);
+                if (pluginInstance && pluginInstance['editorObj']) {
+                    var editorObj = pluginInstance['editorObj'];
                     var left = instance.canvasOffset.left + editorObj.left - 5;
                     var top = instance.canvasOffset.top + editorObj.top - 5;
                     EkstepEditorAPI.jQuery("#objectPointer")
@@ -483,11 +513,32 @@ EkstepEditor.basePlugin.extend({
     },
     showProperties: function(event, data) {
         var angScope = EkstepEditorAPI.getAngularScope();
-        var properties = EkstepEditorAPI.getCurrentObject().getProperties();
+        var properties = EkstepEditorAPI.getCurrentObject() ? EkstepEditorAPI.getCurrentObject().getProperties() : EkstepEditorAPI.getCurrentStage().getProperties();
         EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.pluginProperties = properties;
         });
-        this.setToolBarContainerLocation("Properties");
+        //this.setToolBarContainerLocation("Properties");
+    },
+    showSettingsTab: function(event, data) {
+        this.showConfig(event, data);
+        var angScope = EkstepEditorAPI.getAngularScope();
+        EkstepEditorAPI.ngSafeApply(angScope, function() {
+            angScope.selectedConfigCategory = 'settings';
+            angScope.selectedConfig = 'customize';
+        });
+    },
+    showHelpTab: function(event, data) {
+        this.showHelp(event, data);
+        var angScope = EkstepEditorAPI.getAngularScope();
+        EkstepEditorAPI.ngSafeApply(angScope, function() {
+            angScope.selectedConfigCategory = 'help';
+        });
+    },
+    showCommentsTab: function(event, data) {
+        var angScope = EkstepEditorAPI.getAngularScope();
+        EkstepEditorAPI.ngSafeApply(angScope, function() {
+            angScope.selectedConfigCategory = 'comments';
+        });
     }
 });
 //# sourceURL=configplugin.js

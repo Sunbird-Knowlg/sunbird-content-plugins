@@ -2,37 +2,58 @@
 angular.module('activityBrowserApp', [])
     .controller('activityBrowserCtrl', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
         var ctrl = this,
-        angScope = EkstepEditorAPI.getAngularScope();
-        
-        ctrl.usePluginBtnDisable = true;
-        ctrl.selectedActivity = {};
+            angScope = EkstepEditorAPI.getAngularScope();
+
         ctrl.errorLoadingActivities = false;
         ctrl.activitiesList = [];
         ctrl.noActivities = false;
         ctrl.loading = false;
         ctrl.defaultActivityImage = EkstepEditorAPI.getPluginRepo() + "/org.ekstep.activitybrowser-1.0/assets/default-activity.png";
-        ctrl.selectActivity = function($index, activity) {
-            ctrl.selectedActivity = activity;
-            ctrl.selectedActivityIndex = $index;
-            ctrl.usePluginBtnDisable = false;
-        }
+        ctrl.activityOptions = {
+            searchQuery: "",
+            conceptsPlaceHolder: '(0) Concepts',
+            concepts: {},
+            categories: {}
+
+        };
+        ctrl.categories = {
+            "core": "core",
+            "learning": "learning",
+            "literacy": "literacy",
+            "math": "math",
+            "science": "science",
+            "time": "time",
+            "wordnet": "wordnet",
+            "game": "game",
+            "mcq": "mcq",
+            "mtf": "mtf",
+            "ftb": "ftb"
+        };
+
+
         ctrl.getActivities = function() {
             ctrl.loading = true;
             ctrl.errorLoadingActivities = false;
             ctrl.noActivities = false;
-            EkstepEditorAPI.ngSafeApply(angScope);
+            ctrl.activitiesList = [];
+            $scope.$safeApply();
             var data = {
                 "request": {
+                    "query": ctrl.activityOptions.searchQuery,
                     "filters": {
                         "objectType": ["Content"],
                         "contentType": ["plugin"],
-                        "status": ["Live"]
-                    }
+                        "status": ["live"],
+                        "concepts": ctrl.activityOptions.concepts,
+                        "category": ctrl.activityOptions.categories
+                    },
+                    "sort_by": { "lastUpdatedOn": "desc" },
+                    "limit": 200
                 }
             };
             EkstepEditorAPI.getService('searchService').search(data, function(err, resp) {
                 ctrl.loading = false;
-                EkstepEditorAPI.ngSafeApply(angScope);
+                $scope.$safeApply();
                 if (err) {
                     ctrl.errorLoadingActivities = true;
                     return
@@ -42,12 +63,37 @@ angular.module('activityBrowserApp', [])
                     return;
                 }
                 ctrl.activitiesList = resp.data.result.content;
-
+                applyDimmerToCard();
             })
         }
-        ctrl.usePlugin = function() {
-            EkstepEditorAPI.loadPlugin(ctrl.selectedActivity.code, ctrl.selectedActivity.semanticVersion);
+        ctrl.addPlugin = function(activity) {
+            EkstepEditorAPI.loadPlugin(activity.code, activity.semanticVersion);
             $scope.closeThisDialog();
         }
         ctrl.getActivities();
+        EkstepEditorAPI.dispatchEvent('org.ekstep.conceptselector:init', {
+            element: 'activityConceptSelector',
+            selectedConcepts: [], // All composite keys except mediaType
+            callback: function(data) {
+                ctrl.activityOptions.conceptsPlaceHolder = '(' + data.length + ') concepts selected';
+                ctrl.activityOptions.concepts = _.map(data, function(concept) {
+                    return concept.id;
+                });
+                $scope.$safeApply();
+                ctrl.getActivities();
+            }
+        });
+
+        function applyDimmerToCard() {
+            setTimeout(function() {
+                EkstepEditorAPI.jQuery("#activity-cards .image").dimmer({
+                    on: 'hover'
+                });
+            }, 500);
+        }
+        setTimeout(function () {
+            EkstepEditorAPI.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});    
+        },1000);
+        
+
     }]);

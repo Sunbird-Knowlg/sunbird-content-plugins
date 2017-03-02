@@ -35,7 +35,8 @@
                     "stroke": "rgba(255, 255, 255, 0)",
                     "strokeWidth": 1,
                     "opacity": 1,
-                    "editable": false
+                    "editable": false,
+                    "lineHeight": 1.3
                 }
             }
         }],
@@ -70,6 +71,34 @@
                 "defaultValue": false
             }]
         }, {
+            "propertyName": "align",
+            "title": "Align Text",
+            "dataType": "buttonToggle",
+            "description": "Select text alignment",
+            "options": [{
+                "value": "left",
+                "title": "Text Align Left",
+                "toolTip": "Left",
+                "description": "Align text to left",
+                "dataType": "icon",
+                "iconClass": "align left icon"
+            }, {
+                "value": "center",
+                "title": "Text Align Center",
+                "toolTip": "Center",
+                "description": "Align text to center",
+                "dataType": "icon",
+                "iconClass": "align center icon"
+            }, {
+                "value": "right",
+                "title": "Text Align Right",
+                "toolTip": "Right",
+                "description": "Align text to right",
+                "dataType": "icon",
+                "iconClass": "align right icon"
+            }],
+            "defaultValue": "left"
+        }, {
             "propertyName": "fontfamily",
             "title": "Font Family",
             "description": "Select font family for the text",
@@ -81,7 +110,9 @@
             "propertyName": "fontsize",
             "title": "Font Size",
             "description": "Select font size for the text",
-            "dataType": "select",
+            "dataType": "inputSelect",
+            "minValue": 6,
+            "maxValue": 400,
             "range": [18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 54, 60, 66, 72, 80, 88, 96],
             "required": true,
             "defaultValue": 18

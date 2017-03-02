@@ -10,6 +10,7 @@ EkstepEditor.basePlugin.extend({
     initialize: function() {
         EkstepEditorAPI.addEventListener("stage:create", this.createStage, this);
         EkstepEditorAPI.addEventListener("object:modified", this.modified, this);
+        EkstepEditorAPI.addEventListener("stage:modified", this.modified, this);
         EkstepEditorAPI.addEventListener("object:selected", this.objectSelected, this);
         EkstepEditorAPI.addEventListener("object:removed", this.objectRemoved, this);
     },
@@ -28,9 +29,7 @@ EkstepEditor.basePlugin.extend({
             h: 405,
             id: this.id
         };
-        if (_.isUndefined(this.params)) {
-            this.addParam('instructions', '');
-        }
+        this.addConfig('instructions', this.getParam('instructions') || '');
     },
     getOnClick: function() {
         return { id: 'stage:select', data: { stageId: this.id, prevStageId: EkstepEditorAPI.getCurrentStage().id } };
@@ -41,14 +40,11 @@ EkstepEditor.basePlugin.extend({
     addChild: function(plugin) {
         this.children.push(plugin);
         if(plugin.editorObj) {
-        this.canvas.add(plugin.editorObj);
-        this.canvas.setActiveObject(plugin.editorObj);
-        this.canvas.trigger('object:selected', { target: plugin.editorObj });
-        this.setThumbnail();
-        if(!EkstepEditor.stageManager.contentLoading) {
-            EkstepEditorAPI.dispatchEvent('object:modified', { id: plugin.id });
+            this.canvas.add(plugin.editorObj);
+            this.canvas.setActiveObject(plugin.editorObj);
+            this.setThumbnail();
+            EkstepEditorAPI.dispatchEvent('stage:modified', { id: plugin.id });
         }
-    }
         this.enableSave();        
     },
     setThumbnail: function() {
@@ -78,6 +74,7 @@ EkstepEditor.basePlugin.extend({
             plugin.render(canvas);
         });
         canvas.renderAll();
+        EkstepEditorAPI.dispatchEvent('stage:render:complete', { stageId: this.id });
         this.thumbnail = canvas.toDataURL('png');
         EkstepEditorAPI.refreshStages();
     },
@@ -112,6 +109,29 @@ EkstepEditor.basePlugin.extend({
     },
     enableSave: function() {
         EkstepEditorAPI.getAngularScope().enableSave();        
+    },
+    getConfigManifest: function() {
+        return this.manifest.editor.configManifest;
+    },
+    getConfig: function() {
+        var config = this._super();
+        config.genieControls = EkstepEditorAPI.getAngularScope().showGenieControls;
+        return config;
+    },
+    onConfigChange: function(key, value) {
+        switch (key) {
+            case "instructions":
+                this.addParam('instructions', value);
+                break;
+            case "genieControls":
+                if(value !== EkstepEditorAPI.getAngularScope().showGenieControls) {
+                    var angScope = EkstepEditorAPI.getAngularScope();
+                    EkstepEditorAPI.ngSafeApply(angScope, function() {
+                        angScope.toggleGenieControl();
+                    });
+                }
+                break;
+        }
     }
 });
 //# sourceURL=stageplugin.js
