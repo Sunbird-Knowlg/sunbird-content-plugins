@@ -21,9 +21,7 @@ EkstepEditor.basePlugin.extend({
     initialize: function() {
         EkstepEditorAPI.addEventListener("download:content", this.downloadContent, this);
         var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.download-1.0/editor/popup.html';
-        setTimeout(function() {
-            EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
-        }, 1000);
+        EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
     },
     /**
      *
@@ -49,9 +47,7 @@ EkstepEditor.basePlugin.extend({
                     $scope.isLoading = true;
                     $scope.isDownloading = false;
                     EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
-                    setTimeout(function() {
-                        instance.sendEmail($scope, downloadUrl);
-                    }, 1000);
+                    instance.sendEmail($scope, downloadUrl);
                 } else {
                     $scope.isLoading = false;
                     $scope.isDownloading = false;
