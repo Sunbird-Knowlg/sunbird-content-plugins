@@ -78,7 +78,7 @@ EkstepEditor.basePlugin.extend({
             controller: ['$scope', modalController],
             showClose: false,
             width: 900,
-            className: 'ngdialog-theme-plain'
+            className: 'ngdialog-theme-default'
         });
     },
     /**
