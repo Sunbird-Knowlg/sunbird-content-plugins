@@ -18,6 +18,10 @@ You can turn this OFF and the child will move forward to the next question in th
 
 We suggest you select a large number of questions, set the question set to show a subset of those questions in shuffled order. This will help you create a practice quiz.
 
+Please don't add any other drawing on the stage, where you are adding Quiz. 
+
+You can add a background image or shape, if you want to set a background for quiz.
+
 ***Are you a developer?***
 
 To get started visit <a href="https://community.ekstep.in/developers" target="_blank">EkStep Developer Community</a>
