@@ -11,8 +11,21 @@
 EkstepEditor.basePlugin.extend({
     conceptData: undefined,
     callback: undefined,
+    /**
+     * set default limit to search API
+     * @memberof conceptselector
+     */
     limit: 200,
+    /**
+     * Selected concept array
+     * @memberof conceptselector
+     */
     selectors: [],
+    /**
+     *
+     * Concepts data for concept tree
+     * @memberof conceptselector
+     */
     concepts: [],
     /**
      *
@@ -21,23 +34,36 @@ EkstepEditor.basePlugin.extend({
      */
     initialize: function() {
         var instance = this;
+
+        /**Get concept data**/
         instance.getConcept(0, instance.limit, instance, function() { instance.initData(instance); });
         EkstepEditorAPI.addEventListener(instance.manifest.id + ":init", this.initConceptBrowser, this);
     },
+    /**
+     *
+     * Registers events.
+     * @memberof conceptselector
+     */
     initData: function(instance) {
         var instance = instance || this;
         var domains = [];
-        EkstepEditor.conceptService.getConceptsTree(function(err, resp) {
+
+        /**Get domains and dimensions data**/
+        EkstepEditorAPI.getService('concept').getConceptsTree(function(err, resp) {
             if (!err && resp.data && resp.data.result && EkstepEditorAPI._.isArray(resp.data.result.domains)) {
                 EkstepEditorAPI._.forEach(resp.data.result.domains, function(value) {
                     var domain = {};
                     domain.id = value.identifier;
                     domain.name = value.name;
                     var domainChild = [];
+
+                    /**Get domain child**/
                     EkstepEditorAPI._.forEach(getChild(value.identifier, resp.data.result.dimensions), function(value) {
                         var dimension = {};
                         dimension.id = value.id;
                         dimension.name = value.name;
+
+                        /**Get dimension child**/
                         dimension.nodes = getChild(value.id, instance.concepts);
                         domainChild.push(dimension);
                     });
@@ -47,6 +73,7 @@ EkstepEditor.basePlugin.extend({
             }
         });
 
+        /**Get child recursively**/
         function getChild(id, resp) {
             var childArray = [];
             EkstepEditorAPI._.forEach(resp, function(value) {
@@ -56,6 +83,8 @@ EkstepEditor.basePlugin.extend({
                         child.id = value.identifier;
                         child.name = value.name;
                         child.selectable = "selectable";
+
+                        /**Get concept child recursively**/
                         child.nodes = getChild(value.identifier, resp);
                         childArray.push(child);
                     }
@@ -63,6 +92,7 @@ EkstepEditor.basePlugin.extend({
             });
             return childArray;
         }
+        /**Set Concept data**/
         this.conceptData = domains;
     },
     /**
@@ -77,7 +107,7 @@ EkstepEditor.basePlugin.extend({
         var instance = instance || this;
         offset = offset || 0;
         limit = limit || instance.limit;
-        EkstepEditor.conceptService.getConcepts(offset, limit, function(err, resp) {
+        EkstepEditorAPI.getService('concept').getConcepts(offset, limit, function(err, resp) {
             if (!err && resp.data && resp.data.result && EkstepEditorAPI._.isArray(resp.data.result.concepts)) {
                 EkstepEditorAPI._.forEach(resp.data.result.concepts, function(value) {
                     instance.concepts.push(value);
