@@ -194,7 +194,7 @@ EkstepEditor.basePlugin.extend({
 					result.data.result[i].buttonName   = result.data.result[i].status == "I" ? 'Resolve' : 'Resolved';
 					// Button disabled or not
 					result.data.result[i].disabledAttr = result.data.result[i].status == "I" ? '' : 'disabled';
-					// Thread should be readonly if todo is resolved
+					// Resolved todo thread should be readonly
 					result.data.result[i].readOnly     = result.data.result[i].status == "I" ? false : true;
 
 					for (var c = 0; c < result.data.result[i].comments.length; c++)
@@ -206,6 +206,7 @@ EkstepEditor.basePlugin.extend({
 						result.data.result[i].comments[c].created =  moment(result.data.result[i].comments[c].annotation_date).format('HH:mm, MMM Do YYYY');
 					}
 
+					// HTML markup
 					var markup   = '';
 					var todoData = result.data.result[i];
 					// Join todo template data
@@ -237,7 +238,7 @@ EkstepEditor.basePlugin.extend({
 				// Prepare empty message
 				var emptyMessage = '<div class="ui grid" id="noIssueFound" style="padding-top: 22px;"><div class="ui one column stackable center aligned page grid"><i class="fa fa-comments-o fa-2x" aria-hidden="true"></i><br>No issues found</div></div>';
 
-				// Append
+				// Append empty message
 				EkstepEditorAPI.jQuery(todoThreadsWrapperDiv).html(emptyMessage);
 			}
 		}

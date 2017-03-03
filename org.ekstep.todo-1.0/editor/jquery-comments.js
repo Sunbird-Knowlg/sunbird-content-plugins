@@ -462,7 +462,7 @@
                 if (this.options.enableNavigationOnTop) {
                     commentList.append(commentEl);
                 } else {
-                    commentList.append(commentEl);
+                    commentList.prepend(commentEl);
                 }
             }
         },
