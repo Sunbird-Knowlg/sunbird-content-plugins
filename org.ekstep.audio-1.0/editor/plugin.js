@@ -11,6 +11,8 @@
  */
 
 EkstepEditor.basePlugin.extend({
+    audioData: undefined,
+    name: undefined,
     /**
      *  
      * Registers events.
@@ -29,18 +31,22 @@ EkstepEditor.basePlugin.extend({
      * @memberof audio
      */
     newInstance: function() {
+        var instance = this;
         var media = this.media ? this.media[this.attributes.asset] : undefined;
         //this.id = media.id;
         if (media && media.src) {
             media.src = EkstepEditor.mediaManager.getMediaOriginURL(media.src);
             EkstepEditor.mediaManager.addMedia(media);
-            EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { 
+            this.audioData = {
                 stageId: EkstepEditorAPI.getCurrentStage().id,
-                type: 'audio', 
+                type: 'audio',
                 title: (EkstepEditorAPI._.isUndefined(media.name)) ? media.id : media.name,
-                id: media.id,
+                assetId: media.id,
+                id: instance.id,
                 url: media.src
-            });
+            }
+            this.name = this.audioData.title;
+            EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", this.audioData);
         } else {
             this.parent = undefined;
         }
@@ -78,32 +84,21 @@ EkstepEditor.basePlugin.extend({
         //do nothing, since there is no editorObj
     },
     removeAudio: function(event, data) {
-        var htextArr = [], 
-            audioArr = [];
-        var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes();
-        EkstepEditorAPI._.forEach(mediaArr, function(val, key) {
-            if(val.manifest.shortId === 'htext'){
-                htextArr[key] = val.attributes.audio;
-            }else if(val.manifest.shortId === 'audio'){
-                audioArr[key] = val.attributes.asset;
-            }
-        });
-        if(EkstepEditorAPI._.indexOf(htextArr, data.asset) === -1){
-            EkstepEditorAPI.getCurrentStage().children.splice(EkstepEditorAPI._.indexOf(audioArr, data.asset), 1);
-            EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', data);
-        }
+        var instance = EkstepEditorAPI.getPluginInstance(data.id);
+        instance.remove();
+        EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', data);
     },
-    toggleAudio: function(event, data){
+    toggleAudio: function(event, data) {
         var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes();
         EkstepEditorAPI._.forEach(mediaArr, function(val, key) {
             if (!EkstepEditorAPI._.isUndefined(val.media) && val.media[data.asset]) {
-                EkstepEditorAPI.dispatchEvent('org.ekstep.config:toggleStageEvent', {'flag': data.autoplay, 'id':data.asset});
+                EkstepEditorAPI.dispatchEvent('org.ekstep.config:toggleStageEvent', { 'flag': data.autoplay, 'id': data.asset });
             }
-        }); 
+        });
     },
-    jplayerInit: function(event, data){
+    jplayerInit: function(event, data) {
         var id = data.id;
-        EkstepEditorAPI.jQuery("#"+id).jPlayer({
+        EkstepEditorAPI.jQuery("#" + id).jPlayer({
             swfPath: 'js/jplayer/',
             supplied: 'mp3',
             solution: 'html, flash',
@@ -124,10 +119,10 @@ EkstepEditor.basePlugin.extend({
                 EkstepEditorAPI.jQuery(this).removeClass('pause');
             }
         });
-        if(!EkstepEditorAPI.jQuery("#"+id).hasClass('pause')){
-            EkstepEditorAPI.jQuery("#"+id).jPlayer('play');
-        }else{
-            EkstepEditorAPI.jQuery("#"+id).jPlayer('pause');
+        if (!EkstepEditorAPI.jQuery("#" + id).hasClass('pause')) {
+            EkstepEditorAPI.jQuery("#" + id).jPlayer('play');
+        } else {
+            EkstepEditorAPI.jQuery("#" + id).jPlayer('pause');
         }
     }
 });

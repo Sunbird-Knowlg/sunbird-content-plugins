@@ -381,7 +381,7 @@ EkstepEditor.basePlugin.extend({
     setVisibleObjects: function() {
         var angScope = EkstepEditorAPI.getAngularScope();
         var pluginInstanceIds = [];
-        var pluginInstances = EkstepEditorAPI.getAllPluginInstanceByTypes(EkstepEditorAPI.getCurrentObject().id, ['org.ekstep.audio'], false);
+        var pluginInstances = EkstepEditorAPI.getStagePluginInstances(EkstepEditorAPI.getCurrentStage().id, null, ['org.ekstep.audio'], [EkstepEditorAPI.getCurrentObject().id]);
         EkstepEditorAPI._.forEach(pluginInstances, function(pi) {
             pluginInstanceIds[pi.id] = pi.id;
         })
@@ -390,7 +390,7 @@ EkstepEditor.basePlugin.extend({
         });
     },
     setPlayableObjects: function() {
-        var pluginInstances = EkstepEditorAPI.getAllPluginInstanceByTypes(EkstepEditorAPI.getCurrentObject().id, ['org.ekstep.audio'], true);
+        var pluginInstances = EkstepEditorAPI.getStagePluginInstances(EkstepEditorAPI.getCurrentStage().id, ['org.ekstep.audio'], null, [EkstepEditorAPI.getCurrentObject().id]);
         var optionsList = [];
         EkstepEditorAPI._.forEach(pluginInstances, function(pi) {
             if (pi.media) {
