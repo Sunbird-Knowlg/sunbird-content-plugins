@@ -67,7 +67,7 @@ angular.module('activityBrowserApp', [])
             });
         };
         ctrl.addPlugin = function(activity) {
-            EkstepEditorAPI.loadPlugin(activity.code, activity.semanticVersion);
+            EkstepEditorAPI.loadAndInitPlugin(activity.code, activity.semanticVersion);
             $scope.closeThisDialog();
         }
         ctrl.getActivities();
