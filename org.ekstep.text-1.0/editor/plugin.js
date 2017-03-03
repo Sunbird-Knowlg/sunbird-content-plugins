@@ -83,6 +83,7 @@ EkstepEditor.basePlugin.extend({
         if(event.clientX > leftSt && event.clientX < leftEnd && event.clientY > topSt && event.clientY < topEnd){
             textEditor.showEditor(EkstepEditorAPI.getEditorObject().id);
         }
+        textEditor.generateTelemetry({type: 'click', subtype: 'doubleClick', target: 'textEditor'});
     },
     /**
      * This method is called when the stage:unselect event is fired,
