@@ -1,7 +1,7 @@
 <script type="text/ng-template" ng-app="readalongapp" ng-controller="readalongcontroller as $ctrl" id="htext">
     <style type="text/css">
     #syncBox {
-        backgroundcolor: #ffffff;
+        background-color: #ffffff;
         width: 100%;
         float: left;
         margin-top: 10px;
@@ -84,6 +84,7 @@
     #tdSlider #syncSlider {
         margin-top: 10px;
         background-color: #317bca;
+        width: 180px;
     }
     
     #syncSlider .ui-slider-handle {
@@ -248,11 +249,13 @@
                         <div class="ui three wide column">
                             <div id="tdSlider">
                                 <label>Playback rate</label>
-                                <div id="syncSlider"></div>
+                                <div >
+                                    <input type="range" id="syncSlider" name="syncSlider" value="1" min="1" max="3">
+                                </div>
                                 <div class="ui-slider-legend">
-                                    <p class="audioRate" style="width: 75px;">Normal</p>
-                                    <p class="audioRate" style="width: 75px;">Slow</p>
-                                    <p class="audioRate" style="width: 75px;">Slower</p>
+                                    <p class="audioRate" style="width: 62px;">Normal</p>
+                                    <p class="audioRate" style="width: 62px;">Slow</p>
+                                    <p class="audioRate" style="width: 62px;">Slower</p>
                                 </div>
                             </div>
                         </div>

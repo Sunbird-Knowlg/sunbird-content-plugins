@@ -9,9 +9,7 @@ angular.module('wordinfotextapp', []).controller('wordinfotextcontroller', ['$sc
     ctrl.slectedWords = [];
     ctrl.prevSlectedWords = [];
     ctrl.loading = false;
-    ctrl.isThisWordSlected = false;
     ctrl.noKeywords = false;
-    ctrl.step1 = true;
     ctrl.errorLoadingKeywords = false;
     ctrl.template = {"id": "infoTemplate",
                     "g": {
@@ -64,6 +62,7 @@ angular.module('wordinfotextapp', []).controller('wordinfotextcontroller', ['$sc
                 $scope.$safeApply();
                 return;
             } else {
+                ctrl.showTypeownText = false;
                 EkstepEditorAPI._.forEach(response.data.result, function(value, key) {
                     ctrl.keywords.push(key);
                     $scope.$safeApply();
@@ -108,15 +107,10 @@ angular.module('wordinfotextapp', []).controller('wordinfotextcontroller', ['$sc
         });
     }
 
-    ctrl.showAvailableSentences = function() {
-        ctrl.showTypeownText = false;
+    ctrl.showTextbox = function() {
+        ctrl.showTypeownText = true;
         ctrl.noKeywords = false;
-        $scope.$safeApply();
-    }
-
-    ctrl.getObjectLength = function() {
-        return Object.keys(ctrl.textList).length > 0 ? true : false;
-    }
+    };
 
     if (!EkstepEditorAPI._.isUndefined(instance.editorObj)) {
         ctrl.selectedSentence = instance.attributes.__text;

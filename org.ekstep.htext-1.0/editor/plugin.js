@@ -103,13 +103,7 @@ EkstepEditor.basePlugin.extend({
             karaoke.audioObj.highlightColor = '';
             EkstepEditorAPI.jQuery("#jplayerSync").data('jPlayer', "");
         }
-        var slider = EkstepEditorAPI.jQuery('#syncSlider').slider({
-            min: 1,
-            max: 3,
-            value: 1,
-            step: 1,
-            change: karaoke.changePlaybackRate
-        });
+        EkstepEditorAPI.jQuery('#syncSlider').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.changePlaybackRate, karaoke));
         EkstepEditorAPI.jQuery('#changeaudio').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.res, karaoke));
         EkstepEditorAPI.jQuery('#syncStart').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.startSync, karaoke));
         EkstepEditorAPI.jQuery('#pick-hcolor').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.setColor, karaoke));
