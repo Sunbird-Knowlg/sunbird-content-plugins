@@ -13,6 +13,17 @@ angular.module('wordinfotextapp', []).controller('wordinfotextcontroller', ['$sc
     ctrl.noKeywords = false;
     ctrl.step1 = true;
     ctrl.errorLoadingKeywords = false;
+    ctrl.template = {"id": "infoTemplate",
+                    "g": {
+                        "x": "0",
+                        "y": "0",
+                        "w": "100",
+                        "h": "100",
+                        "image": { "asset": "popupTint", "x": "0", "y": "0", "w": "100", "h": "100", "visible": "true", "id": "popup-Tint" },
+                        "text": [{ "x": "25", "y": "25", "w": "50", "h": "9", "visible": "true", "editable": "true", "model": "word.lemma", "weight": "normal", "font": "helvetica", "color": "rgb(0,0,0)", "fontsize": "75", "align": "left", "z-index": "1", "id": "lemma" }, { "x": "25", "y": "35", "w": "50", "h": "40", "visible": "true", "editable": "true", "model": "word.gloss", "weight": "normal", "font": "helvetica", "color": "rgb(0,0,0)", "fontsize": "43", "align": "left", "z-index": "2", "id": "gloss" }],
+                        "shape": { "x": "20", "y": "20", "w": "60", "h": "60", "visible": "true", "editable": "true", "type": "roundrect", "radius": "10", "opacity": "1", "fill": "#45b3a5", "stroke-width": "1", "z-index": "0", "id": "textBg" }
+                        }
+                    };
 
     ctrl.selectWords = function($index, word, $event) {
         if (EkstepEditorAPI._.indexOf(ctrl.slectedWords, word) != -1) {
@@ -82,25 +93,7 @@ angular.module('wordinfotextapp', []).controller('wordinfotextcontroller', ['$sc
                 });
                 var configData = {
                     "controller": dictionary,
-                    "template": {
-                        "id": "infoTemplate",
-                        "g": {
-                            "x": "0",
-                            "y": "0",
-                            "w": "100",
-                            "h": "100",
-                            "image": { "asset": "popupTint", "x": "0", "y": "0", "w": "100", "h": "100", "visible": "true", "id": "popup-Tint" },
-                            "text": [{ "x": "25", "y": "25", "w": "50", "h": "9", "visible": "true", "editable": "true", "model": "word.lemma", "weight": "normal", "font": "helvetica", "color": "rgb(0,0,0)", "fontsize": "75", "align": "left", "z-index": "1", "id": "lemma" }, { "x": "25", "y": "35", "w": "50", "h": "40", "visible": "true", "editable": "true", "model": "word.gloss", "weight": "normal", "font": "helvetica", "color": "rgb(0,0,0)", "fontsize": "43", "align": "left", "z-index": "2", "id": "gloss" }],
-                            "shape": { "x": "20", "y": "20", "w": "60", "h": "60", "visible": "true", "editable": "true", "type": "roundrect", "radius": "10", "opacity": "1", "fill": "#45b3a5", "stroke-width": "1", "z-index": "0", "id": "textBg" },
-                            "event": {
-                                "type": "click",
-                                "action": [
-                                    { "type": "command", "command": "SHOWHTMLELEMENTS", "asset": "textBg" },
-                                    { "type": "command", "command": "hide" , "parent": "true" }
-                                ]
-                            }
-                        }
-                    }
+                    "template": ctrl.template
                 };
                 var dataArr = {
                     "text" : ctrl.selectedSentence,

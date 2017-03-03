@@ -50,25 +50,35 @@
                 "title": "Readalong",
                 "description": "Readalong",
                 "state": true,
-                "checkboxShow": false,
+                "showStatus": false,
                 "onclick": {
                     "id": "org.ekstep.text:readalong:show"
                 },
-                "checkboxonclick": {
-                    "id": "org.ekstep.text:delete:enhancement"
-                }      
+                "suboptions":[{
+                    "toolTip": "Delete",
+                    "dataType": "icon",
+                    "iconClass": "trash icon",
+                    "onclick": {
+                        "id": "org.ekstep.text:delete:enhancement"
+                    }      
+                }]
             },{
                 "value": "wordinfo",
                 "title": "Wordinfo",
                 "description": "Wordinfo",
                 "state": true,
-                "checkboxShow": false,
+                "showStatus": false,
                 "onclick": {
                     "id": "org.ekstep.text:wordinfo:show"
                 },
-                "checkboxonclick": {
-                    "id": "org.ekstep.text:delete:enhancement"
-                } 
+                "suboptions":[{
+                    "toolTip": "Delete",
+                    "dataType": "icon",
+                    "iconClass": "trash icon",
+                    "onclick": {
+                        "id": "org.ekstep.text:delete:enhancement"
+                    }      
+                }]
             }],
             "defaultValue": "text"
         },{

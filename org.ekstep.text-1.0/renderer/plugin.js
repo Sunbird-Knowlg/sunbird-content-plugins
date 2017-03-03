@@ -131,6 +131,7 @@ Plugin.extend({
             embedData["var-word"] = "dictionary."+value;
             embedData["z-index"] = 1000;
             embedData["visible"] = false;
+            embedData.event = { 'type': 'click', 'action' : [{'type':'command', 'command' : 'SHOWHTMLELEMENTS' , 'asset': "textBg"}, {'type':'command', 'command' : 'hide' , 'asset': value+'_info'}]};
             PluginManager.invoke('embed', embedData, instance._stage, instance._stage, instance._theme);
         });
     },

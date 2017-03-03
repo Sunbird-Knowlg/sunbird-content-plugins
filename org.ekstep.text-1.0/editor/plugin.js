@@ -67,7 +67,6 @@ EkstepEditor.basePlugin.extend({
                 this.config.audioObj = audioObj;
                 this.addMedia(audioObj);
             }else{
-                this.attributes.autoplay = this.config.autoplay;
                 this.addMedia(this.config.audioObj);
             }
             this.manifest.editor.playable = true;
@@ -362,7 +361,7 @@ EkstepEditor.basePlugin.extend({
                         var prop =  textObj.manifest.editor.configManifest[_.findIndex(textObj.manifest.editor.configManifest, function(value, key){
                             return value.propertyName == 'textType';
                         })];
-                        prop.options[0].checkboxShow = false;
+                        prop.options[0].showStatus = false;
                         prop.options[1].state = true;
                         delete textObj.config.audio;
                         delete textObj.config.timings;
@@ -384,7 +383,7 @@ EkstepEditor.basePlugin.extend({
                         var prop =  textObj.manifest.editor.configManifest[_.findIndex(textObj.manifest.editor.configManifest, function(value, key){
                             return value.propertyName == 'textType';
                         })];
-                        prop.options[1].checkboxShow = false;
+                        prop.options[1].showStatus = false;
                         prop.options[0].state = true;
                         textObj.attributes.textType = 'text';
                         delete textObj.data;
@@ -398,24 +397,10 @@ EkstepEditor.basePlugin.extend({
             }],
             showClose: false
         },function() {
-            EkstepEditorAPI.getAngularScope().$safeApply(function(){
-                var prop =  EkstepEditorAPI.getCurrentObject().manifest.editor.configManifest[_.findIndex(EkstepEditorAPI.getCurrentObject().manifest.editor.configManifest, function(value, key){
-                    return value.propertyName == 'textType';
-                })];
-                prop.options[0].checkboxShow = true;
-                prop.options[1].checkboxShow = true;
-            });
         });
     },
     addReadalongconfigManifest: function(instance){
         instance.manifest.editor.configManifest.push({
-            "propertyName": "autoplay",
-            "title": "Auto play",
-            "description": "Set the element's playability",
-            "dataType": "boolean",
-            "required": true,
-            "defaultValue": false
-        },{
             "propertyName": "highlight",
             "title": "Highlight Color",
             "description": "Choose a color from the color picker to highlight the text",
@@ -426,7 +411,7 @@ EkstepEditor.basePlugin.extend({
         var prop =  instance.manifest.editor.configManifest[_.findIndex(instance.manifest.editor.configManifest, function(value, key){
             return value.propertyName == 'textType';
         })];
-        prop.options[0].checkboxShow = true;
+        prop.options[0].showStatus = true;
         prop.options[1].state = false;
     },
     addWordinfoconfigManifest: function(instance){
@@ -456,7 +441,7 @@ EkstepEditor.basePlugin.extend({
          var prop =  instance.manifest.editor.configManifest[_.findIndex(instance.manifest.editor.configManifest, function(value, key){
             return value.propertyName == 'textType';
         })];
-        prop.options[1].checkboxShow = true;
+        prop.options[1].showStatus = true;
         prop.options[0].state = false;
     }
 });
