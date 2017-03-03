@@ -27,7 +27,7 @@ EkstepEditor.basePlugin.extend({
     remove: function(object) {
         EkstepEditorAPI.dispatchEvent('delete:invoked', { 'editorObj': EkstepEditorAPI.getPluginInstance(object.id).attributes });
         EkstepEditorAPI.getCanvas().remove(object);
-        EkstepEditorAPI.dispatchEvent('object:modified', { id: object.id });
+        EkstepEditorAPI.dispatchEvent('stage:modified', { id: object.id });
     },
     objectSelected: function(event, data) {
         EkstepEditorAPI.updateContextMenu({ id: 'delete', state: 'SHOW', data: {} });

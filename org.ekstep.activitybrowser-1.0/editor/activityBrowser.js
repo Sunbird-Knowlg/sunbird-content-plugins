@@ -56,7 +56,7 @@ angular.module('activityBrowserApp', [])
                 $scope.$safeApply();
                 if (err) {
                     ctrl.errorLoadingActivities = true;
-                    return
+                    return;
                 }
                 if (resp.data.result.count <= 0) {
                     ctrl.noActivities = true;
@@ -64,10 +64,10 @@ angular.module('activityBrowserApp', [])
                 }
                 ctrl.activitiesList = resp.data.result.content;
                 applyDimmerToCard();
-            })
-        }
+            });
+        };
         ctrl.addPlugin = function(activity) {
-            EkstepEditorAPI.loadPlugin(activity.code, activity.semanticVersion);
+            EkstepEditorAPI.loadAndInitPlugin(activity.code, activity.semanticVersion);
             $scope.closeThisDialog();
         }
         ctrl.getActivities();
@@ -94,6 +94,16 @@ angular.module('activityBrowserApp', [])
         setTimeout(function () {
             EkstepEditorAPI.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});    
         },1000);
+
+        ctrl.generateTelemetry = function(data) {
+            if(data){
+                EkstepEditor.telemetryService.interact({ 
+                    "type": data.type, "subtype": data.subtype, "target": data.target, 
+                    "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", 
+                    "stage": EkstepEditorAPI.getCurrentStage().id 
+                });
+            }
+        };
         
 
     }]);

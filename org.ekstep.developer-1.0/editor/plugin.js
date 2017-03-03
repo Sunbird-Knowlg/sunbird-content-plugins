@@ -4,11 +4,21 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("org.ekstep.developer:getPlugins", this.listPlugins, this);
         EkstepEditorAPI.addEventListener("org.ekstep.developer:updateLocalServerPath", this.updateLocalServerPath, this);
         
-        EkstepEditorAPI.jQuery('#addPlugin').popup({ on: 'click', popup: EkstepEditorAPI.jQuery("#addPluginContainer"), position: 'bottom center' });
         var scope = EkstepEditorAPI.getAngularScope();
-        if (!scope.localServerPath) {
-            EkstepEditor.config.contribURL = scope.localServerPath = "https://localhost:8081/";
-            
+        scope.localServerPath = scope.localServerPath || EkstepEditor.hostRepo.basePath;
+        scope.configMenus = scope.configMenus || [];
+        if (scope.developerMode) {
+            scope.configMenus.push({
+                "id": "developer",
+                "category": "config",
+                "type": "icon",
+                "toolTip": "Developer",
+                "title": "Developers",
+                "iconClass": "code icon",
+                "onclick": {
+                    "id": "config:developer:show"
+                }
+            });    
         }
         scope.localServerPathEdit = false;
         EkstepEditorAPI.ngSafeApply(scope, function() {});
@@ -16,21 +26,7 @@ EkstepEditor.basePlugin.extend({
     loadPlugin: function(event, data) {
         var scope = EkstepEditorAPI.getAngularScope();
         var pluginArray = data.plugin.split("-");
-        EkstepEditor.localPluginUtil.loadContribPlugin(pluginArray[0], pluginArray[1], function(err, resp) {
-            if (err) {
-                scope.contributedPluginMessageClass = "error";
-                scope.contributedPluginMessage = "Unable to load Plugin";
-            } else {
-                scope.contributedPluginMessageClass = "success";
-                scope.contributedPluginMessage = resp;
-            }
-            setTimeout(function() {
-                scope.contributedPluginMessageClass = "";
-                scope.contributedPluginMessage = undefined;
-                EkstepEditorAPI.ngSafeApply(scope, function() {});
-            }, 2000);
-            EkstepEditorAPI.ngSafeApply(scope, function() {});
-        });
+        EkstepEditorAPI.loadAndInitPlugin(pluginArray[0], pluginArray[1]);
     },
     listPlugins: function(event, data) {
         var scope = EkstepEditorAPI.getAngularScope();
@@ -39,7 +35,7 @@ EkstepEditor.basePlugin.extend({
         scope.contributedPluginMessage = "";
         EkstepEditorAPI.jQuery.ajax({
             type: 'GET',
-            url: EkstepEditor.config.contribURL+"list",
+            url: EkstepEditor.hostRepo.basePath+"/list",
             beforeSend: function() {
                 scope.localPluginsPlugins = true;
                 EkstepEditorAPI.ngSafeApply(scope, function() {});
@@ -53,6 +49,7 @@ EkstepEditor.basePlugin.extend({
                     scope.localPlugins = data;
                 }
                 EkstepEditorAPI.ngSafeApply(scope, function() {});
+                //EkstepEditor.stageManager.reloadStages();
             },
             error: function(err) {
                 scope.contributedPluginMessageClass = "error";
@@ -67,7 +64,7 @@ EkstepEditor.basePlugin.extend({
     },
     updateLocalServerPath: function (event, data) {
         var scope = EkstepEditorAPI.getAngularScope();
-        EkstepEditor.config.contribURL = scope.localServerPath;
+        EkstepEditor.hostRepo.basePath = data.path;
         scope.localServerPathEdit = false;
         EkstepEditorAPI.ngSafeApply(scope, function() {});
         this.listPlugins();

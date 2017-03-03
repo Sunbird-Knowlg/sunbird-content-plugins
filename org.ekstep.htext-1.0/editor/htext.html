@@ -145,7 +145,7 @@
                         <span><i class="icon-readalong icon"></i> Read-along</span>
                     </div>
                     <div class="column" style="text-align: right; cursor: pointer;">
-                        <i class="cursor-pointer close icon" ng-click="closeThisDialog()"></i>
+                        <i class="cursor-pointer close icon" ng-click="closeThisDialog(); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeButton'})"></i>
                     </div>
                 </div>
             </div>
@@ -181,11 +181,12 @@
                             <div class="ui form">
                                 <div class="field">
                                     <label>Text</label>
-                                    <textarea ng-model="$ctrl.readalongText" rows="9" id="readalongText" placeholder="Add text here" style="width: 30.5em;"></textarea>
+                                    <textarea ng-model="$ctrl.readalongText" rows="9" id="readalongText" placeholder="Add text here" style="width: 30.5em;" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'textArea'})"></textarea>
                                 </div>
                                 <div class="field">
                                     <label>Audio</label>
-                                    <button class="ui button" ng-click="$ctrl.selectAudio()" id="changeaudio"><span ng-show="!$ctrl.audioSelected">Select</span><span ng-show="$ctrl.audioSelected">Change</span> Audio</button>
+                                    <button class="ui button" ng-click="$ctrl.selectAudio();
+                                    $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'selectAudioButton'})" id="changeaudio"><span ng-show="!$ctrl.audioSelected">Select</span><span ng-show="$ctrl.audioSelected">Change</span> Audio</button>
                                     <div class="ui big label" ng-show="$ctrl.audioSelected">
                                         <i class="music icon"></i>{{$ctrl.name}}
                                     </div>
@@ -234,14 +235,14 @@
                     <div class="row">
                         <div class="ui one wide column" style="margin-right: 45px;">
                             <div id="syncHeader">
-                                <button class="huge ui button" id="syncStart">Sync</button>
-                                <button class="huge ui button" id="stopAudio">Stop</button>
+                                <button class="huge ui button" id="syncStart" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'syncAudioButton'})">Sync</button>
+                                <button class="huge ui button" id="stopAudio" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'stopAudioButton'})">Stop</button>
                             </div>
                         </div>
                         <div class="ui two wide column">
                             <div>
-                                <button class="huge ui button" id="sync-play">Preview</button>
-                                <button class="huge ui button" id="sync-pause">Pause</button>
+                                <button class="huge ui button" id="sync-play" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'previewAudioButton'})">Preview</button>
+                                <button class="huge ui button" id="sync-pause" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'pauseAudioButton'})">Pause</button>
                             </div>
                         </div>
                         <div class="ui three wide column">
@@ -256,7 +257,7 @@
                             </div>
                         </div>
                         <div class="ui five wide column">
-                            <button class="huge ui button" id="syncMark">Click to Mark (or) Use SpaceBar</button>
+                            <button class="huge ui button" id="syncMark" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'markAudioButton'})">Click to Mark (or) Use SpaceBar</button>
                         </div>
                         <div id="jplayerSync"></div>
                     </div>
@@ -265,14 +266,14 @@
         </div>
         <div class="actions">
             <div class="ui buttons" ng-if="$ctrl.showText">
-                <button class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+                <button class="ui orange button" ng-click="$ctrl.cancel(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'cancelButton'})" type="button">Cancel</button>
                 <div class="or"></div>
-                <button class="ui blue button" type="button" ng-click="$ctrl.finalText()" ng-disabled="!$ctrl.name || !$ctrl.readalongText">NEXT</button>
+                <button class="ui blue button" type="button" ng-click="$ctrl.finalText(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'nextButton'})" ng-disabled="!$ctrl.name || !$ctrl.readalongText">NEXT</button>
             </div>
             <div class="ui buttons" ng-if="!$ctrl.showText">
-                <button class="ui orange button" ng-click="$ctrl.showText = true;" type="button">Edit Text & Audio</button>
+                <button class="ui orange button" ng-click="$ctrl.showText = true; $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'editTextAudioButton'})" type="button">Edit Text & Audio</button>
                 <div class="or"></div>
-                <button class="ui blue button" id="addLesson" type="button" ng-click="$ctrl.addReadAlong()" disabled="disabled">Add To Lesson</button>
+                <button class="ui blue button" id="addLesson" type="button" ng-click="$ctrl.addReadAlong(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'addToLessonButton'})" disabled="disabled">Add To Lesson</button>
             </div>
         </div>
     </div>
