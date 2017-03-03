@@ -127,8 +127,7 @@ angular.module('wordinfotextapp', []).controller('wordinfotextcontroller', ['$sc
 
     if (!EkstepEditorAPI._.isUndefined(instance.editorObj)) {
         ctrl.selectedSentence = instance.attributes.__text;
-        ctrl.slectedWords = instance.attributes.words.split(',');
-        ctrl.prevSlectedWords = instance.attributes.words.split(',');
+        ctrl.prevSlectedWords = ctrl.slectedWords = !EkstepEditorAPI._.isUndefined(instance.config.words) ? instance.config.words.split(',') : [];
         $scope.$safeApply();
     } 
 }]);

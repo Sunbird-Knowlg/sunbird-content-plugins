@@ -68,12 +68,12 @@
                     {{$ctrl.selectedSentence}}
                 </div>
             </div>
-            <div class="ui huge info message" ng-show="$ctrl.keywords.length == 0 && $ctrl.showTypeownText && $ctrl.noKeywords">
-                <p>No Keywords found.</p>
-            </div>
             <div class="two column row">
                 <div class="column wordinfo-leftContent">
                     <a class="ui large label" ng-class="$ctrl.slectedWords.indexOf(word) > -1 ? 'teal' : '' " ng-repeat="word in $ctrl.keywords track by $index" ng-click="$ctrl.selectWords($index, word, $event)" ng-show="$ctrl.keywords.length > 0">{{word}}</a>
+                    <div class="ui huge info message" ng-show="$ctrl.keywords.length == 0 && $ctrl.noKeywords">
+                        <p>No Keywords found.</p>
+                    </div>
                 </div>
                 <div class="column wordinfo-rightContent">
                     Let’s create a sentence with word definition from Word Duniya! <br/><br/>

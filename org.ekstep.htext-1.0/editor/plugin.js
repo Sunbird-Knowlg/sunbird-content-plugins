@@ -49,8 +49,9 @@ EkstepEditor.basePlugin.extend({
     loadHtml: function(event, data) {
         currentInstance = this;
         this.cb = data.callback;
+        this.attributes = data.textObj.attributes;
         this.attributes.__text = data.textObj.editorObj.text;
-        this.attributes = data.textObj.config;
+        this.config = data.textObj.config;
         if(data.textObj.attributes.textType == "readalong")
             this.editorObj = data.textObj.editorObj;
         EkstepEditorAPI.getService('popup').open({
@@ -77,7 +78,7 @@ EkstepEditor.basePlugin.extend({
         var karaoke = new Karaoke();
         karaoke.audioObj.url = audioSrc;
         if (attrs) {
-            var timings = !EkstepEditorAPI._.isEmpty(attrs.attributes.timings) ? EkstepEditorAPI._.split(attrs.attributes.timings, ',') : '',
+            var timings = !EkstepEditorAPI._.isEmpty(attrs.config.timings) ? EkstepEditorAPI._.split(attrs.config.timings, ',') : '',
                 wordTimes = [],
                 words = [],
                 wordsArr = EkstepEditorAPI._.split(attrs.attributes.__text, ' '),
@@ -94,7 +95,7 @@ EkstepEditor.basePlugin.extend({
             karaoke.audioObj.url = audioSrc;
             karaoke.audioObj.wordMap = words;
             karaoke.audioObj.wordTimes = wordTimes;
-            karaoke.audioObj.highlightColor = attrs.attributes.highlight;
+            karaoke.audioObj.highlightColor = attrs.config.highlight;
         } else {
             karaoke.audioObj.url = audioSrc;
             karaoke.audioObj.wordMap = '';

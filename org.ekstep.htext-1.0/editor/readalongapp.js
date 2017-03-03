@@ -15,13 +15,13 @@ angular.module('readalongapp', [])
         ctrl.name = '';
         ctrl.highlightColor = '#FFFF00';
         if(!EkstepEditorAPI._.isUndefined(instance.editorObj)){
-            media = instance.attributes.audioObj;
-            ctrl.audioObj = instance.attributes.audioObj;
+            media = instance.config.audioObj;
+            ctrl.audioObj = instance.config.audioObj;
             ctrl.downloadurl = !EkstepEditorAPI._.isUndefined(media) ?  media.src : '';
             ctrl.audioSelected = true;
-            ctrl.autoplay = instance.attributes.autoplay;
-            ctrl.name = instance.attributes.audio;
-            ctrl.highlightColor = instance.attributes.highlight;
+            ctrl.autoplay = instance.config.autoplay;
+            ctrl.name = instance.config.audio;
+            ctrl.highlightColor = instance.config.highlight;
             $scope.$safeApply();
             setTimeout(function(){
                 karaoke = instance.invokeKaraoke(ctrl.downloadurl, instance);
