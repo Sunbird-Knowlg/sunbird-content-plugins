@@ -73,6 +73,8 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("config:settings:show", this.showSettingsTab, this);
         EkstepEditorAPI.addEventListener("config:help:show", this.showHelpTab, this);
         EkstepEditorAPI.addEventListener("config:comments:show", this.showCommentsTab, this);
+        EkstepEditorAPI.addEventListener("config:developer:show", this.showdeveloperTab, this);
+        
 
         var angScope = EkstepEditorAPI.getAngularScope();
         EkstepEditorAPI.ngSafeApply(angScope, function() {
@@ -480,6 +482,13 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.selectedConfigCategory = 'comments';
         });
+    },
+    showdeveloperTab: function(event, data) {
+        var angScope = EkstepEditorAPI.getAngularScope();
+        EkstepEditorAPI.ngSafeApply(angScope, function() {
+            angScope.selectedConfigCategory = 'developer';
+        });
+        EkstepEditorAPI.dispatchEvent("org.ekstep.developer:getPlugins");
     }
 });
 //# sourceURL=configplugin.js
