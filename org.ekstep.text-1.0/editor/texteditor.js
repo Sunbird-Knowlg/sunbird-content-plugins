@@ -37,6 +37,16 @@ var textEditor = (function() {
         EkstepEditorAPI.jQuery("#toolbarOptions").show();
     }
 
+    function generateTelemetry(data) {
+        if(data){
+            EkstepEditor.telemetryService.interact({ 
+                "type": data.type, "subtype": data.subtype, "target": data.target, 
+                "pluginid": "org.ekstep.text", "pluginver": "1.0", "objectid": "", 
+                "stage": EkstepEditorAPI.getCurrentStage().id 
+            });
+        }
+    }
+
     function showEditor(id) {
         pluginId = id;
         editorText = EkstepEditorAPI.getPluginInstance(pluginId).editorObj.text;
@@ -65,6 +75,7 @@ var textEditor = (function() {
         if (!$doneBtn.length) {
             $doneBtn = EkstepEditorAPI.jQuery("<button>",{text: 'Done',id: 'authoringTextEditorBtn', class: 'ui primary button'})
                 .click(function() {
+                    generateTelemetry({type: 'click', subtype: 'done', target: 'addString'});
                     _commonBtnClickAction();
                     if ($editor.val().trim().length) {
                         EkstepEditorAPI.getPluginInstance(pluginId).editorObj.text = $editor.val();
@@ -83,6 +94,7 @@ var textEditor = (function() {
         if (!$cancelBtn.length) {
             $cancelBtn = EkstepEditorAPI.jQuery('<button>',{text: 'Cancel',id: 'authoringTextEditorCancel', class: 'ui secondary button'})
                 .click(function() {
+                    generateTelemetry({type: 'click', subtype: 'cancel', target: 'cancelTextEditor'});
                     _commonBtnClickAction();
                     if (!editorText.trim().length) {
                         _removeObject();
@@ -115,6 +127,7 @@ var textEditor = (function() {
     }
     return {
         showEditor: showEditor,
-        hide: hideEditor
-    }
+        hide: hideEditor,
+        generateTelemetry: generateTelemetry
+    };
 })();
