@@ -38,7 +38,7 @@ EkstepEditor.basePlugin.extend({
     loadHtml: function(event, data) {
         currentInstance = this;
         this.cb = data.callback;
-        this.text = this.attributes.__text = data.textObj.editorObj.text;
+        this.attributes.__text = data.textObj.editorObj.text;
         this.attributes = data.textObj.config;
         if(data.textObj.attributes.textType == "wordinfo")
             this.editorObj = data.textObj.editorObj;

@@ -2,9 +2,8 @@
 
 angular.module('wordinfotextapp', []).controller('wordinfotextcontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
     var ctrl = this;
-    ctrl.selectedSentence = instance.text;
+    ctrl.selectedSentence = instance.attributes.__text;
     ctrl.showTypeownText = false;
-    ctrl.useBtnDsable = true;
     ctrl.textList = {};
     ctrl.keywords = [];
     ctrl.slectedWords = [];
@@ -14,7 +13,6 @@ angular.module('wordinfotextapp', []).controller('wordinfotextcontroller', ['$sc
     ctrl.noKeywords = false;
     ctrl.step1 = true;
     ctrl.errorLoadingKeywords = false;
-
 
     ctrl.selectWords = function($index, word, $event) {
         if (EkstepEditorAPI._.indexOf(ctrl.slectedWords, word) != -1) {
@@ -104,32 +102,6 @@ angular.module('wordinfotextapp', []).controller('wordinfotextcontroller', ['$sc
                         }
                     }
                 };
-                // if (!EkstepEditorAPI._.isUndefined(instance.editorObj)) {
-                //     instance.data = data;
-                //     instance.editorObj.text = instance.attributes.__text = ctrl.selectedSentence;
-                //     instance.attributes.words = ctrl.slectedWords.join();
-                //     var stageEvnts = EkstepEditorAPI.getCurrentStage().event;
-                //     EkstepEditorAPI._.forEach(ctrl.prevSlectedWords, function(word) {
-                //         var index = EkstepEditorAPI._.map(stageEvnts, function(value) {
-                //             return value.type === word + '_click';
-                //         });
-                //         EkstepEditorAPI.getCurrentStage().event.splice(parseInt(index), 1);
-                //     });
-                //     EkstepEditorAPI._.forEach(ctrl.slectedWords, function(value, key) {
-                //         EkstepEditorAPI.getCurrentStage().addEvent({
-                //             'type': value + '_click',
-                //             'action': [{ 'type': 'command', 'command': 'toggleShow', 'asset': value + '_info' },
-                //                 //{ 'type': 'command', 'command': 'HIDEHTMLELEMENTS', 'asset': value + '_info' },
-                //             ]
-                //         });
-                //     });
-                //     EkstepEditorAPI.render();
-                // } else {
-                //     data.selectedSentence = ctrl.selectedSentence;
-                //     data.selectedPluginid = ctrl.selectedSentenceIndex;
-                //     wordinfotextData["data"] = { __cdata: JSON.stringify(data) };
-                //     EkstepEditorAPI.dispatchEvent("org.ekstep.wordinfotext:create", wordinfotextData);
-                // }
                 var dataArr = {
                     "text" : ctrl.selectedSentence,
                     "words": ctrl.slectedWords.join(),
@@ -154,14 +126,10 @@ angular.module('wordinfotextapp', []).controller('wordinfotextcontroller', ['$sc
     }
 
     if (!EkstepEditorAPI._.isUndefined(instance.editorObj)) {
-        //ctrl.showTypeownText = true;
-        //ctrl.useBtnDsable = true;
         ctrl.selectedSentence = instance.attributes.__text;
         ctrl.slectedWords = instance.attributes.words.split(',');
         ctrl.prevSlectedWords = instance.attributes.words.split(',');
         $scope.$safeApply();
-    } else {
-        //ctrl.getALlTextInCurrentStage();
-    }
+    } 
 }]);
 //# sourceURL=wordinfotextapp.js

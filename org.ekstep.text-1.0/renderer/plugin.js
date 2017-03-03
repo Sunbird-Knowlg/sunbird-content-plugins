@@ -21,6 +21,18 @@ Plugin.extend({
                 data.highlight = this._plginConfig.highlight;
                 data.visible = true;
                 data.event = { 'type':'click', 'action' : {'type':'command', 'command' : 'togglePlay' , 'asset': data.id}};
+                if(data.autoplay){
+                    if(_.isUndefined(instance._stage.events.event)){
+                        var event = [];
+                        event.push({ 'type':'enter', 'action' : {'type':'command', 'command' : 'togglePlay' , 'asset': data.id}});
+                        instance._stage.events.event = event;
+                    }else{
+                        instance._stage.events.event.push({ 'type':'enter', 'action' : {'type':'command', 'command' : 'togglePlay' , 'asset': data.id}});
+                    }
+                    if(_.isUndefined(instance._stage._data.events)){
+                        instance._stage._data.events = {'event': event}
+                    }
+                }
                 PluginManager.invoke('htext', data, instance._parent, instance._stage, instance._theme);
                 break;
             case 'wordinfo':
@@ -68,15 +80,23 @@ Plugin.extend({
                 this._self = new createjs.DOMElement(div);
                 this._self.x = dims.x;
                 this._self.y = dims.y;
-
-                var event = [];
-                _.forEach(wordsArr, function(value, key) {
-                    event.push({ 'type': value+'_click', 'action' : [{'type':'command', 'command' : 'show' , 'asset': value+'_info'}, {'type':'command', 'command' : 'HIDEHTMLELEMENTS' , 'asset': value+'_info'}]});
-                });
-                instance._stage.events.event = event;
+                if(_.isUndefined(instance._stage.events.event)){
+                    var event = [];
+                    _.forEach(wordsArr, function(value, key) {
+                        event.push({ 'type': value+'_click', 'action' : [{'type':'command', 'command' : 'show' , 'asset': value+'_info'}, {'type':'command', 'command' : 'HIDEHTMLELEMENTS' , 'asset': value+'_info'}]});
+                    });
+                    instance._stage.events.event = event;
+                }else{
+                    _.forEach(wordsArr, function(value, key) {
+                        instance._stage.events.event.push({ 'type': value+'_click', 'action' : [{'type':'command', 'command' : 'show' , 'asset': value+'_info'}, {'type':'command', 'command' : 'HIDEHTMLELEMENTS' , 'asset': value+'_info'}]});
+                    });
+                }
                 if(_.isUndefined(instance._stage._data.events)){
                     instance._stage._data.events = {'event': event}
                 }
+                // else{
+                //     instance._stage._data.events.event = event;
+                // }
                 this.invokeController();
                 this.invokeTemplate();
                 //Invoke the embed plugin to start rendering the templates

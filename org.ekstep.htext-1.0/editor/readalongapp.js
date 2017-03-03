@@ -5,7 +5,7 @@ angular.module('readalongapp', [])
         var karaoke,
             media,
             ctrl = this;
-        ctrl.readalongText = instance.text;
+        ctrl.readalongText = instance.attributes.__text;
         ctrl.audioObj = '';
         ctrl.audioChanged = false;
         ctrl.oldAudioName = '';

@@ -62,11 +62,14 @@
                 </div>
             </div>
         </div> -->
-        <div class="ui grid container" ng-if="!$ctrl.loading">
+        <div class="ui grid container" ng-if="!$ctrl.loading && !$ctrl.errorLoadingKeywords">
             <div class="one column row">
                 <div class="column textHeight">
                     {{$ctrl.selectedSentence}}
                 </div>
+            </div>
+            <div class="ui huge info message" ng-show="$ctrl.keywords.length == 0 && $ctrl.showTypeownText && $ctrl.noKeywords">
+                <p>No Keywords found.</p>
             </div>
             <div class="two column row">
                 <div class="column wordinfo-leftContent">
@@ -88,10 +91,10 @@
             <div class="or"></div>
             <button class="ui blue button" type="button" ng-click="$ctrl.getKeywords()" ng-disabled="$ctrl.useBtnDsable && $ctrl.selectedSentence.length <= 0">Next</button>
         </div> -->
-        <div class="ui buttons" ng-if="$ctrl.keywords.length > 0">
+        <div class="ui buttons" >
             <button class="ui orange button" ng-click="closeThisDialog()" type="button">Cancel</button>
             <div class="or"></div>
-            <button class="ui blue button" type="button" ng-click="$ctrl.addToLesson()" ng-disabled="$ctrl.slectedWords.length <= 0">Add To Lesson</button>
+            <button class="ui blue button" type="button" ng-click="$ctrl.addToLesson()" ng-disabled="$ctrl.slectedWords.length <= 0 || $ctrl.errorLoadingKeywords">Add To Lesson</button>
         </div>
     </div>
 </div>

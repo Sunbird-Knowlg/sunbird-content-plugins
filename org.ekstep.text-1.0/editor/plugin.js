@@ -65,10 +65,12 @@ EkstepEditor.basePlugin.extend({
                 if(EkstepEditorAPI._.isUndefined(audioObj.preload))
                     audioObj.preload = true;
                 this.config.audioObj = audioObj;
+                this.addMedia(audioObj);
             }else{
                 this.attributes.autoplay = this.config.autoplay;
                 this.addMedia(this.config.audioObj);
             }
+            this.manifest.editor.playable = true;
             this.addReadalongconfigManifest(this);
         }else if(!EkstepEditorAPI._.isUndefined(this.attributes.words) || this.attributes.textType === 'wordinfo'){
             this.attributes.textType = "wordinfo";
@@ -295,7 +297,6 @@ EkstepEditor.basePlugin.extend({
             callback: function(data) { 
                 if(!EkstepEditorAPI._.isUndefined(data)){
                     textObj.attributes.__text = textObj.editorObj.text = data.text;
-                    textObj.config.text = data.text;
                     textObj.config.audio = data.audio;
                     textObj.config.timings = data.timings;
                     textObj.config.highlight = data.highlight;
@@ -303,6 +304,7 @@ EkstepEditor.basePlugin.extend({
                     textObj.config.autoplay = data.autoplay;
                     textObj.attributes.autoplay = data.autoplay;
                     textObj.attributes.textType = 'readalong';
+                    textObj.manifest.editor.playable = true;
                     var audioObj =  data.audioObj;
                     if(!EkstepEditorAPI._.isUndefined(audioObj))
                         audioObj.src = EkstepEditor.mediaManager.getMediaOriginURL(audioObj.src);
@@ -315,6 +317,7 @@ EkstepEditor.basePlugin.extend({
         });
     },
     showWordInfo: function(){
+        var instance = this;
         var textObj = EkstepEditorAPI.getCurrentObject();
         EkstepEditorAPI.dispatchEvent('org.ekstep.wordinfotext:showpopup', {
             textObj: textObj,
@@ -335,7 +338,7 @@ EkstepEditor.basePlugin.extend({
                     }
                     image.src = EkstepEditor.mediaManager.getMediaOriginURL(image.src);
                     textObj.addMedia(image);
-                    
+                    instance.addWordinfoconfigManifest(textObj);
                     EkstepEditorAPI.dispatchEvent("config:show");
                 }
             }
@@ -350,6 +353,7 @@ EkstepEditor.basePlugin.extend({
                     $scope.closeThisDialog();
                     var textObj = EkstepEditorAPI.getCurrentObject();
                     if(textObj.attributes.textType == 'readalong'){
+                        textObj.manifest.editor.playable = false;
                         textObj.attributes.textType = "text";
                         textObj.manifest.editor.configManifest.splice(_.findIndex(textObj.manifest.editor.configManifest, function(value, key){
                                     return value.propertyName == 'highlight';
@@ -393,7 +397,13 @@ EkstepEditor.basePlugin.extend({
             }],
             showClose: false
         },function() {
-            
+            EkstepEditorAPI.getAngularScope().$safeApply(function(){
+                var prop =  EkstepEditorAPI.getCurrentObject().manifest.editor.configManifest[_.findIndex(EkstepEditorAPI.getCurrentObject().manifest.editor.configManifest, function(value, key){
+                    return value.propertyName == 'textType';
+                })];
+                prop.options[0].checkboxShow = true;
+                prop.options[1].checkboxShow = true;
+            });
         });
     },
     addReadalongconfigManifest: function(instance){
