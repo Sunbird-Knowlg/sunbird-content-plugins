@@ -404,7 +404,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             ctrl.file.name = 'audio_'+Date.now()+'.mp3';
             file = ctrl.blobToFile(window.mp3Blob, ctrl.file.name);
             EkstepEditorAPI.jQuery("#fileSize").text(ctrl.formatBytes(file.size));
-            
+
             //file = ctrl.urltoFile(dataurl,ctrl.file.name);
             // setTimeout(function() {
             //     var dataurl = EkstepEditorAPI.jQuery('#recorded-audio-mainAudio').attr('src');
@@ -531,7 +531,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 
             var file = new File([theBlob], fileName, {type: theBlob.type, lastModified: Date.now()});
             return file;
-        }  
+        }
 
         ctrl.uploadFile = function(resp, data) {
             var assetName = resp.config.data.request.content.name;
@@ -671,6 +671,10 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         ctrl.switchToUpload = function(){
             ctrl.uploadView = true;
             ctrl.uploadButton();
+        }
+
+        ctrl.generateTelemetry = function(data) {
+          if (data) EkstepEditorAPI.getService('telemetry').interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", "stage": EkstepEditorAPI.getCurrentStage().id })
         }
 
         setTimeout(function() {
