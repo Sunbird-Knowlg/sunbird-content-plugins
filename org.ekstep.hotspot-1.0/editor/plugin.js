@@ -19,6 +19,7 @@ EkstepEditor.basePlugin.extend({
         var props = this.convertToFabric(this.attributes);
         if (this.attributes.type === 'roundrect') {
             this.editorObj = new fabric.Rect(props);
+            this.editorObj.hasRotatingPoint = true;
         }
     },
     onRemove: function(event) {

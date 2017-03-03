@@ -25,6 +25,7 @@ EkstepEditor.basePlugin.extend({
         props.fill = this.attributes.fill;        
         if (this.attributes.type === 'roundrect') {
             this.editorObj = new fabric.Rect(props);
+            this.editorObj.hasRotatingPoint = true;
             this.addMedia({
                 id: "org.ekstep.scribblepad.eraser",
                 src: host + "/assets/public/content/1460624453530trash.png",
