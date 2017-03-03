@@ -666,6 +666,11 @@ http://viima.github.io/jquery-comments/*/
 }
 
 /* TJ*/
+.todo-wrapper{
+	background-color:#fff;
+	margin-bottom: 5px;
+	padding: 5px;
+}
 .user-avatar{
 	padding-top: 13px;
 }
