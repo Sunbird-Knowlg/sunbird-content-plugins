@@ -41,7 +41,7 @@ var textEditor = (function() {
         if(data){
             EkstepEditor.telemetryService.interact({ 
                 "type": data.type, "subtype": data.subtype, "target": data.target, 
-                "pluginid": "", "pluginver": "", "objectid": "", 
+                "pluginid": "org.ekstep.text", "pluginver": "1.0", "objectid": "", 
                 "stage": EkstepEditorAPI.getCurrentStage().id 
             });
         }
