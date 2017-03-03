@@ -180,6 +180,9 @@ EkstepEditor.basePlugin.extend({
 				"</div>"
 			];
 
+			// Join todo template data
+			todoTemplate = (todoTemplate).join("");
+
 			// Initially clear empty/non empty data
 			EkstepEditorAPI.jQuery(todoThreadsWrapperDiv).html('');
 
@@ -209,8 +212,6 @@ EkstepEditor.basePlugin.extend({
 					// HTML markup
 					var markup   = '';
 					var todoData = result.data.result[i];
-					// Join todo template data
-					todoTemplate = (todoTemplate).join("");
 					// Compile _ js template data
 					var compiled = _.template(todoTemplate);
 					// Bind todo data with compiled template
