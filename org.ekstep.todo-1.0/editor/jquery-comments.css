@@ -680,6 +680,7 @@ http://viima.github.io/jquery-comments/*/
 }
 .todo-comment{
 	padding-top: 10px;
+	padding-left: 44px;
 }
 .reviewer-name{
 	color: inherit;
@@ -687,9 +688,11 @@ http://viima.github.io/jquery-comments/*/
 }
 #todoTitle {
 	padding-top: 10px;
+	padding-left: 44px;
 	color:#009FDA;
 }
 #reviewerInfoHolder{
 	padding-left: inherit;
+	padding-left: 4px;
 	color: inherit;
 }

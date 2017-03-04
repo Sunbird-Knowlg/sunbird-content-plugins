@@ -154,8 +154,8 @@ EkstepEditor.basePlugin.extend({
 				"<div class='todo-wrapper' id='todoWrapper<%= id %>'>",
 					"<div clss='ui grid'>",
 						"<div class='ui three column grid row'>",
-							"<div class='three wide column user-avatar'>",
-								"<img src='<%= assigned_by.avatar %>' class='ui avatar image' style='width:33px; height:33px'>",
+							"<div class='two wide column user-avatar'>",
+								"<img src='<%= assigned_by.avatar %>' class='ui avatar image' style='width:33px; height:33px;max-width:inherit'>",
 							"</div>",
 							"<div class='six wide column' id='reviewerInfoHolder'>",
 								"<div class='row reviewer-name'>",
@@ -176,7 +176,7 @@ EkstepEditor.basePlugin.extend({
 				"<div class='row todo-comment'>",
 					"<label class='left floated'><%= sender_msg %></label>",
 				"</div></br>",
-				"<div id='todoThreadId<%= id %>' class='list-unstyled' data-jlike-client='content.jlike_ekcontent' data-jlike-type='annotations' data-jlike-subtype='com_ekcontent.reviewers' data-jlike-context='reviewer#todo#<%= id %>' data-jlike-limitstart='0' data-jlike-limit='2' <% if (readOnly){ %> data-jlike-readonly='<%= readOnly %><% } %>' data-jlike-contentid='<%= content_id %>' data-jlike-ordering='annotation_date'></div>",
+				"<div id='todoThreadId<%= id %>' class='list-unstyled' data-jlike-client='content.jlike_ekcontent' data-jlike-type='annotations' data-jlike-subtype='com_ekcontent.reviewers' data-jlike-context='reviewer#todo#<%= id %>' data-jlike-limitstart='0' data-jlike-limit='2' <% if (readOnly){ %> data-jlike-readonly='<%= readOnly %>'<% } %> data-jlike-contentid='<%= content_id %>' data-jlike-ordering='annotation_date'></div>",
 				"</div>"
 			];
 
