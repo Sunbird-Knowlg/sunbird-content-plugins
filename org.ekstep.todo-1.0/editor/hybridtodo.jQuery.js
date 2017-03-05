@@ -85,6 +85,10 @@ $.fn.hybridtodo = function(options){
 			enableEditing: false,
 			readOnly: isReadOnly,
 
+			// Config to disabled no comment icon
+			enableNavigationOnTop: true,
+			disabledNoCommentIcon: true,
+
 			/*Field mapping*/
 			fieldMappings: {
 				id: 'annotation_id',
@@ -96,7 +100,8 @@ $.fn.hybridtodo = function(options){
 				createdByCurrentUser: 'is_mine',
 			},
 			timeFormatter: function(time) {
-				return moment(time).format('HH:mm, MMM Do YYYY');
+				// Date format = time, date/month/year
+				return moment(time).format('HH:mm, DD/MM/YYYY');
 			},
 
 			// Pass options

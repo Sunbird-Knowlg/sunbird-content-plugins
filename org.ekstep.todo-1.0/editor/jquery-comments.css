@@ -664,3 +664,35 @@ http://viima.github.io/jquery-comments/*/
 .jquery-comments.read-only .actions {
 	display: none;
 }
+
+/* TJ*/
+.todo-wrapper{
+	background-color:#fff;
+	margin-bottom: 5px;
+	padding: 5px;
+}
+.user-avatar{
+	padding-top: 13px;
+}
+.user-avatar-link{
+	width:33px;
+	height:33px;
+}
+.todo-comment{
+	padding-top: 10px;
+	padding-left: 44px;
+}
+.reviewer-name{
+	color: inherit;
+	font-weight: bold;
+}
+#todoTitle {
+	padding-top: 10px;
+	padding-left: 44px;
+	color:#009FDA;
+}
+#reviewerInfoHolder{
+	padding-left: inherit;
+	padding-left: 4px;
+	color: inherit;
+}

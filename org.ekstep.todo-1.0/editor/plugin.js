@@ -102,13 +102,11 @@ EkstepEditor.basePlugin.extend({
 
 			widgetRef = EkstepEditorAPI.jQuery("#todoThreadId"+ parseInt(id));
 
-			/**Update todo status**/
-			setTimeout(function(){
-				ctrl.save(widgetRef, status, id, todotext, context);
-			}, 300);
+			// Update todo status
+			ctrl.save(widgetRef, status, id, todotext, context);
 
-			jQuery("#" + id).prop("disabled", true);
-			jQuery("#todoWrapper" + id).hide(1000);
+			EkstepEditorAPI.jQuery("#" + id).prop("disabled", true);
+			EkstepEditorAPI.jQuery("#todoWrapper" + id).hide(1000);
 		},
 
 		ctrl.save = function(widgetRef, status, id, todotext, context)
@@ -142,52 +140,65 @@ EkstepEditor.basePlugin.extend({
 			EkstepEditorAPI.jQuery(widgetRef).hybridtodo({apiPostParams:apiPostParams,action: 'createTodo'});
 		}
 
+		/**
+		 * Function to render hybrid todo
+		 * @params result - api result
+		 * @staus staus   - todo status
+		 * @todoThreadsWrapperDiv - thread wrapper div
+		 **/
 		ctrl.renderHybridTodos = function(result, status, todoThreadsWrapperDiv)
 		{
-			/**
-			 * disabledAttr = If todo is resolved then disabled resolve todo button
-			 * readOnly     = Hide comment box if todo is already resolved
-			 * buttonName   = Resolve/Resolved based on todo status
-			 **/
+			// Todo template. DOM manipulation by underscore js
+			var todoTemplate =
+			[
+				"<div class='todo-wrapper' id='todoWrapper<%= id %>'>",
+					"<div clss='ui grid'>",
+						"<div class='ui three column grid row'>",
+							"<div class='two wide column user-avatar'>",
+								"<img src='<%= assigned_by.avatar %>' class='ui avatar image' style='width:33px; height:33px;max-width:inherit'>",
+							"</div>",
+							"<div class='six wide column' id='reviewerInfoHolder'>",
+								"<div class='row reviewer-name'>",
+									"<a class='reviewer-name' href='<%= assigned_by.profile_link %>'><%= assigned_by.name %></a>",
+								"</div>",
+								"<div class='row'>",
+									"<time><%= moment(created).format('HH:mm, DD/MM/YYYY') %></time>",
+								"</div>",
+							"</div>",
+						"<div class='one wide column right floated'>",
+							"<button type='button' class='ui tiny icon button right floated basic' id='<%= id %>' data-jlike-id='<%= id %>' data-ek-todomsg='<%= sender_msg %>' data-jlike-context='<%= context %>' onClick='ctrl.updateStatus(this)' <%= disabledAttr %>><%= buttonName %></button>",
+						"</div>",
+					"</div>",
+				"</div>",
+				"<div class='row' id='todoTitle'>",
+					"<span class='row four wide column'><%= title %></span>",
+				"</div>",
+				"<div class='row todo-comment'>",
+					"<label class='left floated'><%= sender_msg %></label>",
+				"</div></br>",
+				"<div id='todoThreadId<%= id %>' class='list-unstyled' data-jlike-client='content.jlike_ekcontent' data-jlike-type='annotations' data-jlike-subtype='com_ekcontent.reviewers' data-jlike-context='reviewer#todo#<%= id %>' data-jlike-limitstart='0' data-jlike-limit='2' <% if (readOnly){ %> data-jlike-readonly='<%= readOnly %>'<% } %> data-jlike-contentid='<%= content_id %>' data-jlike-ordering='annotation_date'></div>",
+				"</div>"
+			];
 
-			var disabledAttr, readOnly, buttonName;
+			// Join todo template data
+			todoTemplate = (todoTemplate).join("");
 
+			// Initially clear empty/non empty data
+			EkstepEditorAPI.jQuery(todoThreadsWrapperDiv).html('');
+
+			// If apis return data
 			if (result.success == true)
 			{
-				EkstepEditorAPI.jQuery(todoThreadsWrapperDiv).html('');
-				var hideDiv = '';
-				hideDiv     = todoThreadsWrapperDiv.substring(1, todoThreadsWrapperDiv.length);
-				EkstepEditorAPI.jQuery("."+hideDiv).show();
-				/*Pagination end*/
+				// Hide empty message
+				EkstepEditorAPI.jQuery('#noIssueFound').hide();
 				for (var i = 0; i < result.data.result.length; i++)
 				{
-					todoStatus   = result.data.result[i].status;
-					buttonName   = result.data.result[i].status == "I" ? 'Resolve' : 'Resolved';
-					disabledAttr = result.data.result[i].status == "I" ? '' : 'disabled';
-					readOnly     = result.data.result[i].status == "I" ? false : true;
-					var widget = '';
-					widget += '<div class="todo-wrapper ui segments" id="todoWrapper'+result.data.result[i].id+'"  style="background-color:#fff; margin-bottom: 5px; padding: 5px"></br>';
-						widget += '<div class="row">';
-							widget += '<label class="left floated" style="padding-left:12px">';
-								widget += result.data.result[i].sender_msg;
-							widget += '</label>';
-							widget += '<span class="right floated" style="margin-left: 74px">';
-								widget += '<button type="button" class="ui tiny icon button right floated basic" id="'+result.data.result[i].id+'" data-jlike-id="'+result.data.result[i].id+'"  data-ek-todomsg="'+result.data.result[i].sender_msg+'" data-jlike-context="'+result.data.result[i].context+'" onClick="ctrl.updateStatus(this)" '+disabledAttr+'>'+buttonName+'</button>';
-							widget += '</span>';
-						widget += '</div>';
-
-						widget += '<div id="todoThreadId'+result.data.result[i].id+'" class="list-unstyled" ';
-							widget += 'data-jlike-client="content.jlike_ekcontent" ';
-							widget += 'data-jlike-type="annotations" ';
-							widget += 'data-jlike-subtype="com_ekcontent.reviewers" ';
-							widget += 'data-jlike-context="reviewer#todo#'+result.data.result[i].id+'" ';
-							widget += 'data-jlike-limitstart="0" ';
-							widget += 'data-jlike-limit="2" ';
-							if(readOnly) widget += 'data-jlike-readonly="'+readOnly+'" ';
-							widget += 'data-jlike-contentid="'+result.data.result[i].content_id+'" ';
-							widget += 'data-jlike-ordering="annotation_date" >';
-						widget += '</div>';
-					widget += '</div>';
+					// Todo button name = resolve/resolved
+					result.data.result[i].buttonName   = result.data.result[i].status == "I" ? 'Resolve' : 'Resolved';
+					// Button disabled or not
+					result.data.result[i].disabledAttr = result.data.result[i].status == "I" ? '' : 'disabled';
+					// Resolved todo thread should be readonly
+					result.data.result[i].readOnly     = result.data.result[i].status == "I" ? false : true;
 
 					for (var c = 0; c < result.data.result[i].comments.length; c++)
 					{
@@ -198,9 +209,18 @@ EkstepEditor.basePlugin.extend({
 						result.data.result[i].comments[c].created =  moment(result.data.result[i].comments[c].annotation_date).format('HH:mm, MMM Do YYYY');
 					}
 
-					// Append widget data
-					result.data.result[i].status == "I" ? EkstepEditorAPI.jQuery(todoThreadsWrapperDiv).append(widget) : EkstepEditorAPI.jQuery(todoThreadsWrapperDiv).append(widget);
+					// HTML markup
+					var markup   = '';
+					var todoData = result.data.result[i];
+					// Compile _ js template data
+					var compiled = _.template(todoTemplate);
+					// Bind todo data with compiled template
+					markup += compiled(todoData);
 
+					// Append widget data
+					result.data.result[i].status == "I" ? EkstepEditorAPI.jQuery(todoThreadsWrapperDiv).append(markup) : EkstepEditorAPI.jQuery(todoThreadsWrapperDiv).append(markup);
+
+					// Render comment box
 					jQuery("#todoThreadId"+ result.data.result[i].id).hybridtodo({
 						arrData:result.data.result[i].comments,
 						action:'renderHybridTodos',
@@ -208,16 +228,16 @@ EkstepEditor.basePlugin.extend({
 					});
 				}
 			}
-			else
+			// Error handling/show empty message. status == 'I' means Incomplete/unresolved todo
+			else if (result.success == false && status == 'I')
 			{
-				// Show empty message in case either APIs return empty data or API may fails
 				var emptyMessage = '';
 
-				// Clear html
+				// Clear div html
 				jQuery(todoThreadsWrapperDiv).html('');
 
-				// Prepare empty message based on status = Unresolved/resolved
-				emptyMessage = todoThreadsWrapperDiv === '#pageLevelTodos' ? 'No Todo' : 'No issue(s)';
+				// Prepare empty message
+				var emptyMessage = '<div class="ui grid" id="noIssueFound" style="padding-top: 22px;"><div class="ui one column stackable center aligned page grid"><i class="fa fa-comments-o fa-2x" aria-hidden="true"></i><br>No issues found</div></div>';
 
 				// Append empty message
 				EkstepEditorAPI.jQuery(todoThreadsWrapperDiv).html(emptyMessage);

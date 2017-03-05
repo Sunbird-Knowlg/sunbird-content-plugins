@@ -92,6 +92,10 @@
             readOnly: false,
             defaultNavigationSortKey: 'newest',
 
+            // TJ : config to show/hide no comment icon
+            enableNavigationOnTop: false,
+            disabledNoCommentIcon: false,
+
             // Colors
             highlightColor: '#2793e6',
             deleteButtonColor: '#C9302C',
@@ -454,9 +458,12 @@
 
             // Case: main level comment
             } else {
-				// @Hack by Nilesh
-                // @commentList.prepend(commentEl); //Original code
-                commentList.append(commentEl);
+				// TJ : to show comment box either on top or down
+                if (this.options.enableNavigationOnTop) {
+                    commentList.append(commentEl);
+                } else {
+                    commentList.prepend(commentEl);
+                }
             }
         },
 
@@ -1193,8 +1200,11 @@
                 noCommentsIcon.css('background-image', 'url("'+this.options.noCommentsIconURL+'")');
                 noCommentsIcon.addClass('image');
             }
-            noComments.prepend($('<br/>')).prepend(noCommentsIcon);
-            commentsContainer.append(noComments);
+            // TJ: to show/hide no comment icon
+            if (!this.options.disabledNoCommentIcon) {
+                noComments.prepend($('<br/>')).prepend(noCommentsIcon);
+                commentsContainer.append(noComments);
+            }
 
             // Attachments
             if(this.options.enableAttachments) {
