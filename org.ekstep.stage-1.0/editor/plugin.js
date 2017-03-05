@@ -75,7 +75,7 @@ EkstepEditor.basePlugin.extend({
         });
         canvas.renderAll();
         EkstepEditorAPI.dispatchEvent('stage:render:complete', { stageId: this.id });
-        this.thumbnail = canvas.toDataURL('png');
+        this.thumbnail = canvas.toDataURL({format: 'jpeg', quality: 0.1});
         EkstepEditorAPI.refreshStages();
     },
     modified: function(event, data) {

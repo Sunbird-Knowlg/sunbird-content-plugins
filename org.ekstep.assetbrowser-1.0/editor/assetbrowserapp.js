@@ -67,12 +67,12 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         ctrl.loading = 'active';
         ctrl.plugin = instance.mediaType;
         ctrl.upload = (instance.mediaType == 'image') ? true : false;
-        ctrl.fileTypes = (instance.mediaType == "image") ? "jpeg, jpg, png, svg" : "mp3, mp4, mpeg, ogg, wav, webm";
+        ctrl.fileTypes = (instance.mediaType == "image") ? "jpeg, jpg, png" : "mp3, mp4, mpeg, ogg, wav, webm";
         ctrl.fileSize = (instance.mediaType == "image") ? '1 MB' : '6 MB';
 
         if (instance.mediaType == 'image') {
             ctrl.allowedFileSize = (1 * 1024 * 1024);
-            ctrl.allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/svg+xml'];
+            ctrl.allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
         } else if (instance.mediaType == 'audio') {
             ctrl.allowedFileSize = (6 * 1024 * 1024);
             ctrl.allowedMimeTypes = ['audio/mp3', 'audio/mp4', 'audio/mpeg', 'audio/ogg', 'audio/webm', 'audio/x-wav', 'audio/wav'];
@@ -569,6 +569,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                 },
                 complete: function() {
                     ctrl.uploadingAsset = false;
+                    ctrl.uploadBtnDisabled = false;
                 },
                 error: function() {
                     alert('Error in Uploading image, please try again!');
@@ -641,6 +642,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                         },
                     },
                     onSuccess: function(event, fields) {
+                        ctrl.uploadBtnDisabled = true;
                         if (fromThisPlugin) { //to avoid ui form success callback being called on sucess of '.ui.form' anywhere from main html page
                         if (ctrl.record == true )
                         {
@@ -655,14 +657,17 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                             if (validateFile) {
                                 ctrl.uploadAsset(event, fields);
                             } else {
+                                ctrl.uploadBtnDisabled = false;
                                 return false;
                             }
                         }
                         fromThisPlugin = false;
+                        ctrl.uploadBtnDisabled = false;
                     }
                 },
                     onFailure: function(formErrors, fields) {
                         console.log("fields validation failed");
+                        ctrl.uploadBtnDisabled = false;
                         return false;
                     }
                 });

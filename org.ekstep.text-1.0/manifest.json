@@ -1,7 +1,7 @@
 {
     "id": "org.ekstep.text",
     "ver": "1.0",
-    "shortId": "text",
+    "shortId": "org.ekstep.text",
     "author": "Santhosh Vasabhaktula",
     "title": "Text Plugin",
     "description": "",
@@ -12,7 +12,7 @@
             { "type": "js", "src": "editor/texteditor.js" }
         ],
         "menu": [{
-            "id": "text",
+            "id": "org.ekstep.text",
             "category": "main",
             "type": "icon",
             "toolTip": "Add Text",
@@ -41,13 +41,54 @@
             }
         }],
         "configManifest": [{
+            "propertyName": "textType",
+            "title": "Text Enhancement",
+            "dataType": "featureButtonToggle",
+            "description": "Text Enhancement",
+            "options": [{
+                "value": "readalong",
+                "title": "Readalong",
+                "description": "Readalong",
+                "state": true,
+                "status": "HIDE",
+                "onclick": {
+                    "id": "org.ekstep.text:readalong:show"
+                },
+                "suboptions":[{
+                    "toolTip": "Delete",
+                    "dataType": "icon",
+                    "iconClass": "trash icon",
+                    "onclick": {
+                        "id": "org.ekstep.text:delete:enhancement"
+                    }      
+                }]
+            },{
+                "value": "wordinfo",
+                "title": "Wordinfo",
+                "description": "Wordinfo",
+                "state": true,
+                "status": "HIDE",
+                "onclick": {
+                    "id": "org.ekstep.text:wordinfo:show"
+                },
+                "suboptions":[{
+                    "toolTip": "Delete",
+                    "dataType": "icon",
+                    "iconClass": "trash icon",
+                    "onclick": {
+                        "id": "org.ekstep.text:delete:enhancement"
+                    }      
+                }]
+            }],
+            "defaultValue": "text"
+        },{
             "propertyName": "color",
             "title": "Font color",
             "description": "Choose a color from the color picker",
             "dataType": "colorpicker",
             "required": true,
             "defaultValue": "rgb(255,0,0)"
-        }, {
+        },{
             "propertyName": "font",
             "dataType": "group",
             "description": "Choose fontweight and fontstyle",
@@ -134,6 +175,8 @@
             "fontStyle": "normal",
             "fontWeight": "normal"
         }
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
     }
-
 }
