@@ -5,22 +5,23 @@ angular.module('readalongapp', [])
         var karaoke,
             media,
             ctrl = this;
-        ctrl.readalongText = '';
+        ctrl.readalongText = instance.attributes.__text;
         ctrl.audioObj = '';
         ctrl.audioChanged = false;
         ctrl.oldAudioName = '';
         ctrl.showText = true;
         ctrl.audioSelected = false;
+        ctrl.autoplay = false;
         ctrl.name = '';
         ctrl.highlightColor = '#FFFF00';
-        if(!EkstepEditorAPI._.isUndefined(instance.editorObj)){
-            media = EkstepEditorAPI.getCurrentObject().media[instance.editorObj.audio];
+        if(!EkstepEditorAPI._.isUndefined(instance.editorObj) && !EkstepEditorAPI._.isUndefined(instance.config.audioObj)){
+            media = instance.config.audioObj;
+            ctrl.audioObj = instance.config.audioObj;
             ctrl.downloadurl = !EkstepEditorAPI._.isUndefined(media) ?  media.src : '';
             ctrl.audioSelected = true;
-            ctrl.readalongText = instance.attributes.__text;
-            ctrl.autoplay = instance.attributes.autoplay;
-            ctrl.name = instance.attributes.audio;
-            ctrl.highlightColor = instance.attributes.highlight;
+            ctrl.autoplay = instance.config.autoplay;
+            ctrl.name = instance.config.audio;
+            ctrl.highlightColor = instance.config.highlight;
             $scope.$safeApply();
             setTimeout(function(){
                 karaoke = instance.invokeKaraoke(ctrl.downloadurl, instance);
@@ -39,7 +40,7 @@ angular.module('readalongapp', [])
                     ctrl.name = data.assetMedia.id;
                     ctrl.downloadurl = data.assetMedia.src;
                     ctrl.identifier = data.assetMedia.id;
-                    ctrl.audioObj = data;
+                    ctrl.audioObj = data.assetMedia;
                     karaoke = instance.invokeKaraoke(ctrl.downloadurl);
                     ctrl.audioSelected = true;
                     if(!EkstepEditorAPI._.isUndefined(instance.editorObj))
@@ -64,72 +65,25 @@ angular.module('readalongapp', [])
         }
 
         ctrl.addReadAlong = function() {
-            if(!EkstepEditorAPI._.isUndefined(instance.editorObj)){
-                instance.editorObj.text = instance.attributes.__text = ctrl.readalongText;
-                instance.attributes.autoplay = ctrl.autoplay;
-                instance.attributes.highlight = ctrl.highlightColor;
-                var timings = [];
-                EkstepEditorAPI._.each(karaoke.audioObj.wordTimes, function(n) {
-                    timings.push(parseInt(n * 1000));
-                });
-                instance.attributes.timings = timings.join();
-                instance.attributes.audio = ctrl.name;
-                EkstepEditorAPI._.forEach(instance.event, function (e,i) {
-                    if(e.action[0].asset === instance.id){
-                        instance.event.splice(i, 1);
-                    }
-                })
-                instance.addEvent({ 'type':'click', 'action' : [{'type':'command', 'command' : 'togglePlay' , 'asset': instance.id}]});
-                if(ctrl.audioChanged && ctrl.oldAudioName != ''){
-                    if(!EkstepEditorAPI._.isUndefined(ctrl.audioObj.assetMedia)){
-                        instance.addMedia(ctrl.audioObj.assetMedia);
-                        EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', {'asset': ctrl.oldAudioName});
-                        EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { 
-                            stageId: EkstepEditorAPI.getCurrentStage().id,
-                            type: 'audio', 
-                            title: (EkstepEditorAPI._.isUndefined(ctrl.audioObj.assetMedia.name)) ? ctrl.audioObj.assetMedia.id : ctrl.audioObj.assetMedia.name,
-                            id: ctrl.audioObj.assetMedia.id,
-                            url: ctrl.audioObj.assetMedia.src
-                        });
-                    }
-                   // EkstepEditorAPI.dispatchEvent('org.ekstep.audio:create', ctrl.audioObj)
-                }
-                EkstepEditorAPI.render();
-            }else{
-                if (ctrl.readalongText && karaoke.audioObj.wordTimes.length > 0) {
-                    var timings = [];
-                    EkstepEditorAPI._.each(karaoke.audioObj.wordTimes, function(n) {
-                        timings.push(parseInt(n * 1000));
-                    });
-                    EkstepEditorAPI.dispatchEvent("org.ekstep.htext:create", {
-                        "__text": ctrl.readalongText,
-                        "x": 10,
-                        "y": 20,
-                        "fontFamily": "Sans-serif",
-                        "fontSize": 18,
-                        "minWidth": 20,
-                        "w": 35,
-                        "maxWidth": 500,
-                        "fill": "#000000",
-                        "fontStyle": "normal",
-                        "fontWeight": "normal",
-                        "stroke": "rgba(255, 255, 255, 0)",
-                        "strokeWidth": 1,
-                        "opacity": 1,
-                        "editable": false,
-                        "audio": ctrl.name,
-                        "timings": timings.join(),
-                        "autoplay": ctrl.autoplay,
-                        "highlight": ctrl.highlightColor,
-                        "audioObj":  ctrl.audioObj
-                    });
-                    EkstepEditorAPI.render();
-                }
+            var timings = [];
+            EkstepEditorAPI._.each(karaoke.audioObj.wordTimes, function(n) {
+                timings.push(parseInt(n * 1000));
+            });
+            var dataArr = {
+                "text" : ctrl.readalongText,
+                "audio": ctrl.name,
+                "timings": timings.join(),
+                "autoplay": ctrl.autoplay,
+                "highlight": ctrl.highlightColor,
+                "audioObj":  ctrl.audioObj
             }
+            instance.cb(dataArr);
+
             $scope.closeThisDialog();
         };
 
         ctrl.cancel = function() {
+            instance.cb();
             $scope.closeThisDialog();
         };
 
