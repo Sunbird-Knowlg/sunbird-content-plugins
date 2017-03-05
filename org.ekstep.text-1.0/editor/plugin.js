@@ -36,7 +36,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("org.ekstep.text:readalong:show", this.showReadalong, this);
         EkstepEditorAPI.addEventListener("org.ekstep.text:wordinfo:show", this.showWordInfo, this);
         EkstepEditorAPI.addEventListener("org.ekstep.text:delete:enhancement", this.deleteEnhancement, this);
-        EkstepEditorAPI.getService('popup').loadNgModules(EkstepEditorAPI.getPluginRepo() + '/org.ekstep.text-1.0/editor/deleteconfirmDialog.html');
+        EkstepEditorAPI.getService('popup').loadNgModules(EkstepEditorAPI.getPluginRepo() + '/org.ekstep.text-1.0/editor/deleteConfirmationDialog.html');
     },
     /**
      * This method used to create the text fabric object and assigns it to editor of the instance
@@ -52,8 +52,9 @@ EkstepEditor.basePlugin.extend({
         if (this.attributes.__text == '') {
             textEditor.showEditor(this.id);
         }
-        if(!EkstepEditorAPI._.isUndefined(this.attributes.timings) || this.attributes.textType === 'readalong'){
-            if(EkstepEditorAPI._.isUndefined(this.attributes.textType)){
+
+        if (!EkstepEditorAPI._.isUndefined(this.attributes.timings) || this.attributes.textType === 'readalong') {
+            if (EkstepEditorAPI._.isUndefined(this.attributes.textType)) {
                 this.attributes.textType = "readalong";
                 this.config.text = this.attributes.__text;
                 this.config.audio = this.attributes.audio;
@@ -62,17 +63,14 @@ EkstepEditor.basePlugin.extend({
                 this.config.autoplay = this.attributes.autoplay;
                 var audioObj = EkstepEditorAPI.getMedia(this.attributes.audio);
                 audioObj.src = EkstepEditor.mediaManager.getMediaOriginURL(audioObj.src);
-                if(EkstepEditorAPI._.isUndefined(audioObj.preload))
+                if (EkstepEditorAPI._.isUndefined(audioObj.preload))
                     audioObj.preload = true;
                 this.config.audioObj = audioObj;
-                this.addMedia(audioObj);
-            }else{
-                this.addMedia(this.config.audioObj);
             }
+            this.addMedia(this.config.audioObj);
             this.manifest.editor.playable = true;
             this.addReadalongconfigManifest(this);
-        }else if(!EkstepEditorAPI._.isUndefined(this.attributes.words) || this.attributes.textType === 'wordinfo'){
-            this.attributes.textType = "wordinfo";
+        } else if (!EkstepEditorAPI._.isUndefined(this.attributes.words) || this.attributes.textType === 'wordinfo') {
             var image = {
                 "id": "popupTint",
                 "src": EkstepEditor.mediaManager.getMediaOriginURL("https://dev.ekstep.in/assets/public/content/PopupTint_1460636175572.png"),
@@ -81,8 +79,8 @@ EkstepEditor.basePlugin.extend({
             }
             this.addMedia(image);
             this.addWordinfoconfigManifest(this);
-        }else{
-            this.attributes.textType = "text";  
+        } else {
+            this.attributes.textType = "text";
         }
     },
     /**
@@ -116,10 +114,10 @@ EkstepEditor.basePlugin.extend({
         var leftEnd = leftSt + EkstepEditorAPI.getCurrentObject().editorObj.width;
         var topSt = EkstepEditorAPI.jQuery("#canvas").offset().top + EkstepEditorAPI.getCurrentObject().editorObj.top;
         var topEnd = topSt + EkstepEditorAPI.getCurrentObject().editorObj.height;
-        if(event.clientX > leftSt && event.clientX < leftEnd && event.clientY > topSt && event.clientY < topEnd){
+        if (event.clientX > leftSt && event.clientX < leftEnd && event.clientY > topSt && event.clientY < topEnd) {
             textEditor.showEditor(EkstepEditorAPI.getEditorObject().id);
         }
-        textEditor.generateTelemetry({type: 'click', subtype: 'doubleClick', target: 'textEditor'});
+        textEditor.generateTelemetry({ type: 'click', subtype: 'doubleClick', target: 'textEditor' });
     },
     /**
      * This method is called when the stage:unselect event is fired,
@@ -173,7 +171,7 @@ EkstepEditor.basePlugin.extend({
                 this.attributes.color = value;
                 break;
             case "align":
-                this.editorObj.setTextAlign(value);       
+                this.editorObj.setTextAlign(value);
                 this.attributes.align = value;
                 break;
             case "highlight":
@@ -202,7 +200,7 @@ EkstepEditor.basePlugin.extend({
     getConfig: function() {
         var config = this._super();
         config.color = this.attributes.color || this.attributes.fill;
-        config.fontfamily = this.attributes.fontFamily; 
+        config.fontfamily = this.attributes.fontFamily;
         config.fontsize = this.attributes.fontSize;
         config.fontweight = this.attributes.fontweight || false;
         config.fontstyle = this.attributes.fontstyle || false;
@@ -275,27 +273,32 @@ EkstepEditor.basePlugin.extend({
             retData.fontSize = fontSize;
             data.fontSize = fontSize;
         }
-        if(data.align) {
+        if (data.align) {
             retData.textAlign = data.align;
             retData.align = data.align;
         }
         delete retData.lineHeight // line height set to default value 
         return retData;
     },
-    getConfigManifest: function () {
+    getConfigManifest: function() {
         var config = this._super();
-        EkstepEditorAPI._.remove(config, function (c) {
+        EkstepEditorAPI._.remove(config, function(c) {
             return c.propertyName === 'stroke';
         })
         return config;
     },
-    showReadalong: function(){
+    /**
+     * This method is used show readalong popup
+     * <br/> it will update text pluin into htext(readalong) plugin
+     * @memberof Text
+     */
+    showReadalong: function() {
         var instance = this;
         var textObj = EkstepEditorAPI.getCurrentObject();
         EkstepEditorAPI.dispatchEvent('org.ekstep.htext:showpopup', {
             textObj: textObj,
-            callback: function(data) { 
-                if(!EkstepEditorAPI._.isUndefined(data)){
+            callback: function(data) {
+                if (!EkstepEditorAPI._.isUndefined(data)) {
                     textObj.attributes.__text = textObj.editorObj.text = data.text;
                     textObj.config.audio = data.audio;
                     textObj.config.timings = data.timings;
@@ -305,8 +308,8 @@ EkstepEditor.basePlugin.extend({
                     textObj.attributes.autoplay = data.autoplay;
                     textObj.attributes.textType = 'readalong';
                     textObj.manifest.editor.playable = true;
-                    var audioObj =  data.audioObj;
-                    if(!EkstepEditorAPI._.isUndefined(audioObj))
+                    var audioObj = data.audioObj;
+                    if (!EkstepEditorAPI._.isUndefined(audioObj))
                         audioObj.src = EkstepEditor.mediaManager.getMediaOriginURL(audioObj.src);
                     textObj.addMedia(audioObj);
                     instance.addReadalongconfigManifest(textObj);
@@ -316,15 +319,20 @@ EkstepEditor.basePlugin.extend({
             }
         });
     },
-    showWordInfo: function(){
+    /**
+     * This method is used show wordinfo popup
+     * <br/> it will update text pluin into wordinfo plugin
+     * @memberof Text
+     */
+    showWordInfo: function() {
         var instance = this;
         var textObj = EkstepEditorAPI.getCurrentObject();
         EkstepEditorAPI.dispatchEvent('org.ekstep.wordinfotext:showpopup', {
             textObj: textObj,
-            callback: function(data, templateData) { 
-                if(!EkstepEditorAPI._.isUndefined(data)){
+            callback: function(data, templateData) {
+                if (!EkstepEditorAPI._.isUndefined(data)) {
                     textObj.data = templateData;
-                    textObj.attributes.__text = textObj.editorObj.text= data.text;;
+                    textObj.attributes.__text = textObj.editorObj.text = data.text;;
                     textObj.config.words = data.words;
                     textObj.config.wordfontcolor = data.wordfontcolor;
                     textObj.config.wordhighlightcolor = data.wordhighlightcolor;
@@ -340,28 +348,33 @@ EkstepEditor.basePlugin.extend({
                     textObj.addMedia(image);
                     instance.addWordinfoconfigManifest(textObj);
                     EkstepEditorAPI.dispatchEvent("config:show");
+                    EkstepEditorAPI.render();
                 }
             }
         });
     },
-    deleteEnhancement: function(){
+    /**
+     * This method is used delete readalong/wordinfo setting and reset to text plugin
+     * @memberof Text
+     */
+    deleteEnhancement: function() {
         EkstepEditorAPI.getService('popup').open({
-            template: 'deleteconfirmDialog',
+            template: 'deleteConfirmationDialog',
             controller: ['$scope', function($scope) {
-                $scope.warningMessage =  EkstepEditorAPI.getCurrentObject().attributes.textType == 'readalong' ? 'Readalong' : 'Wordinfo';
+                $scope.warningMessage = EkstepEditorAPI.getCurrentObject().attributes.textType == 'readalong' ? 'Readalong' : 'Wordinfo';
                 $scope.delete = function() {
                     $scope.closeThisDialog();
                     var textObj = EkstepEditorAPI.getCurrentObject();
-                    if(textObj.attributes.textType == 'readalong'){
+                    if (textObj.attributes.textType == 'readalong') {
                         textObj.manifest.editor.playable = false;
-                        textObj.attributes.textType = "text";
-                        textObj.manifest.editor.configManifest.splice(_.findIndex(textObj.manifest.editor.configManifest, function(value, key){
-                                    return value.propertyName == 'highlight';
-                                }), 1);
-                        var prop =  textObj.manifest.editor.configManifest[_.findIndex(textObj.manifest.editor.configManifest, function(value, key){
+                        //deleting readlong configarations from text configManifest
+                        EkstepEditorAPI._.reject(textObj.manifest.editor.configManifest, { propertyName: 'highlight' });
+                        var prop = textObj.manifest.editor.configManifest[EkstepEditorAPI._.findIndex(textObj.manifest.editor.configManifest, function(value, key) {
                             return value.propertyName == 'textType';
                         })];
-                        prop.options[0].showStatus = false;
+                        // updating status value to hide delete button
+                        prop.options[0].status = "HIDE";
+                        // updating state to show wordinfo button
                         prop.options[1].state = true;
                         delete textObj.config.audio;
                         delete textObj.config.timings;
@@ -369,37 +382,39 @@ EkstepEditor.basePlugin.extend({
                         delete textObj.config.audioObj;
                         delete textObj.config.autoplay;
                         delete textObj.attributes.autoplay;
-                        EkstepEditorAPI.render();
-                    }else{
-                        textObj.manifest.editor.configManifest.splice(_.findIndex(textObj.manifest.editor.configManifest, function(value, key){
-                                    return value.propertyName == 'wordfontcolor';
-                                }), 1);
-                        textObj.manifest.editor.configManifest.splice(_.findIndex(textObj.manifest.editor.configManifest, function(value, key){
-                                    return value.propertyName == 'wordhighlightcolor';
-                                }), 1);
-                        textObj.manifest.editor.configManifest.splice(_.findIndex(textObj.manifest.editor.configManifest, function(value, key){
-                                    return value.propertyName == 'wordunderlinecolor';
-                                }), 1);
-                        var prop =  textObj.manifest.editor.configManifest[_.findIndex(textObj.manifest.editor.configManifest, function(value, key){
+                    } else {
+                        //deleting wordinfo configarations from text configManifest
+                        EkstepEditorAPI._.reject(textObj.manifest.editor.configManifest, { propertyName: 'wordfontcolor' });
+                        EkstepEditorAPI._.reject(textObj.manifest.editor.configManifest, { propertyName: 'wordhighlightcolor' });
+                        EkstepEditorAPI._.reject(textObj.manifest.editor.configManifest, { propertyName: 'wordunderlinecolor' });
+
+                        var prop = textObj.manifest.editor.configManifest[EkstepEditorAPI._.findIndex(textObj.manifest.editor.configManifest, function(value, key) {
                             return value.propertyName == 'textType';
                         })];
-                        prop.options[1].showStatus = false;
+                        // updating status value to hide delete button
+                        prop.options[1].status = "HIDE";
+                        // updating state to show reaalong button
                         prop.options[0].state = true;
-                        textObj.attributes.textType = 'text';
                         delete textObj.data;
                         delete textObj.config.words;
                         delete textObj.config.wordfontcolor;
                         delete textObj.config.wordhighlightcolor;
                         delete textObj.config.wordunderlinecolor;
                     }
+                    textObj.attributes.textType = "text";
                     EkstepEditorAPI.dispatchEvent("config:show");
+                    EkstepEditorAPI.render();
                 }
             }],
             showClose: false
-        },function() {
-        });
+        }, function() {});
     },
-    addReadalongconfigManifest: function(instance){
+    /**
+     * This method is used to add readalong configarations to configManifest
+     * @memberof Text
+     */
+    addReadalongconfigManifest: function(instance) {
+        //updating readlong configarations in text configManifest
         instance.manifest.editor.configManifest.push({
             "propertyName": "highlight",
             "title": "Highlight Color",
@@ -408,13 +423,21 @@ EkstepEditor.basePlugin.extend({
             "required": true,
             "defaultValue": "#FFFF00"
         });
-        var prop =  instance.manifest.editor.configManifest[_.findIndex(instance.manifest.editor.configManifest, function(value, key){
+        //getting textType config basedon index
+        var prop = instance.manifest.editor.configManifest[EkstepEditorAPI._.findIndex(instance.manifest.editor.configManifest, function(value, key) {
             return value.propertyName == 'textType';
         })];
-        prop.options[0].showStatus = true;
+        // updating status value to show delete button
+        prop.options[0].status = "SHOW";
+        // updating state to hide wordinfo button
         prop.options[1].state = false;
     },
-    addWordinfoconfigManifest: function(instance){
+    /**
+     * This method is used to add wordinfo configarations to configManifest
+     * @memberof Text
+     */
+    addWordinfoconfigManifest: function(instance) {
+        //updating wordinfo configarations in text configManifest
         instance.manifest.editor.configManifest.push({
             "propertyName": "wordfontcolor",
             "title": "Word Font Color",
@@ -422,14 +445,14 @@ EkstepEditor.basePlugin.extend({
             "dataType": "colorpicker",
             "required": true,
             "defaultValue": "#0000FF"
-        },{
+        }, {
             "propertyName": "wordhighlightcolor",
             "title": "Word Highlight Color",
             "description": "Choose a color from the color picker to highlight the selected word",
             "dataType": "colorpicker",
             "required": true,
             "defaultValue": "#FFFF00"
-        },{
+        }, {
             "propertyName": "wordunderlinecolor",
             "title": "Word Underline Color",
             "description": "Choose a color from the color picker to underline the selected word",
@@ -437,11 +460,13 @@ EkstepEditor.basePlugin.extend({
             "required": true,
             "defaultValue": "#0000FF"
         });
-        EkstepEditorAPI.render();
-         var prop =  instance.manifest.editor.configManifest[_.findIndex(instance.manifest.editor.configManifest, function(value, key){
+        //getting textType config basedon index
+        var prop = instance.manifest.editor.configManifest[EkstepEditorAPI._.findIndex(instance.manifest.editor.configManifest, function(value, key) {
             return value.propertyName == 'textType';
         })];
-        prop.options[1].showStatus = true;
+        // updating status value to show delete button
+        prop.options[1].status = "SHOW";
+        // updating state to hide readalong button
         prop.options[0].state = false;
     }
 });

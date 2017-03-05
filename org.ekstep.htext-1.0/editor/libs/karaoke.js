@@ -492,10 +492,12 @@
         }
     };
 
-    Karaoke.prototype.changePlaybackRate = function(event, ui) {
+    Karaoke.prototype.changePlaybackRate = function() {
+        //getting slider selected value and assigning to variable
         var value = EkstepEditorAPI.jQuery('#syncSlider').val();
         $('.ui-slider-legend p').css('color', 'black');
         $('.ui-slider-legend p:eq(' + (value - 1) + ')').css('color', 'grey');
+        //basedon user selection we are changing playbackrate of audio
         if (parseInt(value) === 2) {
             return $("#jplayerSync").jPlayer('option', 'playbackRate', 0.7);
         } else if (parseInt(value) === 3) {

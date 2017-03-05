@@ -43,14 +43,14 @@
         "configManifest": [{
             "propertyName": "textType",
             "title": "Text Enhancement",
-            "dataType": "advancebuttonToggle",
+            "dataType": "featureButtonToggle",
             "description": "Text Enhancement",
             "options": [{
                 "value": "readalong",
                 "title": "Readalong",
                 "description": "Readalong",
                 "state": true,
-                "showStatus": false,
+                "status": "HIDE",
                 "onclick": {
                     "id": "org.ekstep.text:readalong:show"
                 },
@@ -67,7 +67,7 @@
                 "title": "Wordinfo",
                 "description": "Wordinfo",
                 "state": true,
-                "showStatus": false,
+                "status": "HIDE",
                 "onclick": {
                     "id": "org.ekstep.text:wordinfo:show"
                 },
