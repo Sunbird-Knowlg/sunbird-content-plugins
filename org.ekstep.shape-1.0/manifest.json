@@ -153,6 +153,16 @@
             "dataType": "colorpicker",
             "required": true,
             "defaultValue": "#000000"
+        },{
+            "propertyName": "opacity",
+            "title": "Transparency",
+            "description": "Set the transparency for element",
+            "dataType": "rangeslider",
+            "labelSuffix": "%",
+            "required": true,
+            "defaultValue": 100,
+            "minimumValue": 0,
+            "maximumValue": 100
         }],
         "help": {
             "src": "editor/help.md",
