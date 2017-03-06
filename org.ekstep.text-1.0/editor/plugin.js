@@ -114,9 +114,9 @@ EkstepEditor.basePlugin.extend({
         var leftEnd = leftSt + EkstepEditorAPI.getCurrentObject().editorObj.width;
         var topSt = EkstepEditorAPI.jQuery("#canvas").offset().top + EkstepEditorAPI.getCurrentObject().editorObj.top;
         var topEnd = topSt + EkstepEditorAPI.getCurrentObject().editorObj.height;
-        if (event.clientX > leftSt && event.clientX < leftEnd && event.clientY > topSt && event.clientY < topEnd) {
+        //if (event.clientX > leftSt && event.clientX < leftEnd && event.clientY > topSt && event.clientY < topEnd) {
             textEditor.showEditor(EkstepEditorAPI.getEditorObject().id);
-        }
+        //}
         textEditor.generateTelemetry({ type: 'click', subtype: 'doubleClick', target: 'textEditor' });
     },
     /**
@@ -277,6 +277,7 @@ EkstepEditor.basePlugin.extend({
             retData.textAlign = data.align;
             retData.align = data.align;
         }
+        if (data.rotate) retData.angle = data.rotate;
         delete retData.lineHeight // line height set to default value 
         return retData;
     },

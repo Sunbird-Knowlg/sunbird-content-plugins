@@ -143,6 +143,9 @@
                 }
             }]
         }],
+        "behaviour": {
+            "rotatable": true
+        },
         "configManifest": [{
             "propertyName": "color",
             "title": "Fill Color",
