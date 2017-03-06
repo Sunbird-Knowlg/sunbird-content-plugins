@@ -78,7 +78,7 @@ angular.module('readalongapp', [])
                 "audioObj":  ctrl.audioObj
             }
             instance.cb(dataArr);
-
+            $(document).unbind('keypress');
             $scope.closeThisDialog();
         };
 
