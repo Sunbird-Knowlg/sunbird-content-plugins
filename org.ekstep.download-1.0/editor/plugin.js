@@ -41,7 +41,7 @@ EkstepEditor.basePlugin.extend({
             $scope.isLoading = instance.isLoading;
             $scope.isSuccess = instance.isSuccess;
             $scope.isDownloading = instance.isDownloading;
-            $scope.cntName = EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).contentMeta.name;
+            $scope.cntName = EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).name;
             instance.getDownloadUrl(function(downloadUrl) {
                 if (downloadUrl) {
                     $scope.isLoading = true;
@@ -69,7 +69,7 @@ EkstepEditor.basePlugin.extend({
         });
     },
     getDownloadUrl: function(callback) {
-        var fileName = (EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).contentMeta.name).toLowerCase();
+        var fileName = (EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).name).toLowerCase();
         EkstepEditorAPI.getService('content').downloadContent(window.context.content_id, fileName, function(err, resp) {
             if (!err && resp.data.responseCode == "OK") {
                 callback(resp.data.result.ECAR_URL);
@@ -87,7 +87,7 @@ EkstepEditor.basePlugin.extend({
             type: "POST",
             data: {
                 downloadUrl: data,
-                name: EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).contentMeta.name
+                name: EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).name
             },
             success: function(results) {
                 $scope.isLoading = false;
