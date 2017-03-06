@@ -45,12 +45,13 @@
         },
         "configManifest": [{
             "propertyName": "textType",
-            "title": "Text Enhancement",
+            "title": "Enable Interactive features",
             "dataType": "featureButtonToggle",
             "description": "Text Enhancement",
             "options": [{
                 "value": "readalong",
-                "title": "Readalong",
+                "title": "Read-along",
+                "toolTip": "Read-along",
                 "description": "Readalong",
                 "state": true,
                 "status": "HIDE",
@@ -67,7 +68,8 @@
                 }]
             },{
                 "value": "wordinfo",
-                "title": "Wordinfo",
+                "title": "Word Info",
+                "toolTip": "Word Info",
                 "description": "Wordinfo",
                 "state": true,
                 "status": "HIDE",
