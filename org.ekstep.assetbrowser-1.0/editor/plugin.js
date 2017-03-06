@@ -76,6 +76,7 @@ EkstepEditor.basePlugin.extend({
                 "filters": {
                     "mediaType": mediaType,
                     "contentType":"Asset",
+                    "compatibilityLevel": {"min": 1, "max": 2},
                     "status": new Array("Live","Review","Draft")
                 },
                 "limit":50
