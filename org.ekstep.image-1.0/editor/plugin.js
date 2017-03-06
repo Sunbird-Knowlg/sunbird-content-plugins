@@ -42,7 +42,6 @@ EkstepEditor.basePlugin.extend({
             var imageURL = EkstepEditorAPI.globalContext.useProxyForURL ? "image/get/" + encodeURIComponent(media.src) : media.src;
             fabric.Image.fromURL(imageURL, function(img) {
                 instance.editorObj = img;
-                instance.editorObj.hasRotatingPoint = true;
                 instance.parent = _parent;
                 if (instance.attributes.from == 'plugin') {
                     instance.editorObj.scaleToWidth(props.w);

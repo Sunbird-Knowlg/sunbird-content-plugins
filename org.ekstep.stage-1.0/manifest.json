@@ -15,7 +15,7 @@
             "id": "stage",
             "category": "main",
             "type": "icon",
-            "toolTip": "Add Stage",
+            "toolTip": "Add Slide",
             "title": "Stage",
             "iconClass": "icon-newstage icon",            
             "submenu": [{

@@ -101,7 +101,6 @@ EkstepEditor.basePlugin.extend({
 
             default:
         }
-        this.editorObj.hasRotatingPoint = true;
         if (this.editorObj) this.editorObj.setFill(props.fill);
     },
     /**

@@ -49,7 +49,6 @@ EkstepEditor.basePlugin.extend({
         delete props.__text;
         props.editable = false; // added to disable inline editing of exiting content
         this.editorObj = new fabric.ITextbox(this.attributes.__text, props);
-        this.editorObj.hasRotatingPoint = true;
         if (this.attributes.__text == '') {
             textEditor.showEditor(this.id);
         }
