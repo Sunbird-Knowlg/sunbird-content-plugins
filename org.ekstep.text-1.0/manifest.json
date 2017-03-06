@@ -40,6 +40,9 @@
                 }
             }
         }],
+        "behaviour": {
+            "rotatable": true
+        },
         "configManifest": [{
             "propertyName": "textType",
             "title": "Text Enhancement",

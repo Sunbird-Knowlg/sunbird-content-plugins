@@ -41,7 +41,7 @@ EkstepEditor.basePlugin.extend({
 					requestParams["cont_id"]  = window.context.id;
 
 					// Content title
-					requestParams["title"]    = EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).contentMeta.name;
+					requestParams["title"]    = EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).name;
 
 					widgetRef = EkstepEditorAPI.jQuery("#pageLevelTodos");
 

@@ -26,6 +26,9 @@
                 "id": "org.ekstep.image:assetbrowser:open"
             }
         }],
+        "behaviour": {
+            "rotatable": true
+        },
         "configManifest": [{
             "propertyName": "imageBrowser",
             "title": "Image Browser",
