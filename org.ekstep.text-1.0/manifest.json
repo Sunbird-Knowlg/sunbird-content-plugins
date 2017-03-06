@@ -122,21 +122,21 @@
             "options": [{
                 "value": "left",
                 "title": "Text Align Left",
-                "toolTip": "Left",
+                "toolTip": "Left Align",
                 "description": "Align text to left",
                 "dataType": "icon",
                 "iconClass": "align left icon"
             }, {
                 "value": "center",
                 "title": "Text Align Center",
-                "toolTip": "Center",
+                "toolTip": "Center Align",
                 "description": "Align text to center",
                 "dataType": "icon",
                 "iconClass": "align center icon"
             }, {
                 "value": "right",
                 "title": "Text Align Right",
-                "toolTip": "Right",
+                "toolTip": "Right Align",
                 "description": "Align text to right",
                 "dataType": "icon",
                 "iconClass": "align right icon"
