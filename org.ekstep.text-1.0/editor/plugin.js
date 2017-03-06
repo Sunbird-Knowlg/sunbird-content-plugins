@@ -468,6 +468,20 @@ EkstepEditor.basePlugin.extend({
         prop.options[1].status = "SHOW";
         // updating state to hide readalong button
         prop.options[0].state = false;
-    }
+    },
+    getMedia: function(){
+        var instance = this;
+        switch(instance.attributes.textType){
+            case 'text':
+                return {};
+                break;
+            case 'readalong':
+                return instance._super();
+                break;
+            case 'wordinfo':
+                return instance._super();
+                break;
+        } 
+    }   
 });
 //# sourceURL=textplugin.js

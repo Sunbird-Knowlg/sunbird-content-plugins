@@ -38,13 +38,21 @@ Plugin.extend({
             case 'wordinfo':
                 var wordsArr = this._plginConfig.words.split(',');//_.split(data.words, ',');
                 var text = data.__text;
-                var exp = data.w * (1920 / 100);
-                var width = 720 * data.w / 100;
-                var fontsize = parseInt(Math.round(data.fontsize * (width / exp)).toString());
+                var fontsize = data.fontsize;
+                if (isFinite(fontsize)) {
+                    if (data.w) {
+                        var exp = parseFloat(1920 * data.w / 100);
+                        var cw = this._parent.dimensions().w;
+                        var width = parseFloat(cw * data.w / 100);
+                        var scale = parseFloat(width / exp);
+                        fontsize = parseFloat(fontsize * scale);
+                        fontsize = fontsize + 'px';
+                    }
+                }
                 data.__text  = _.map(text.split(' '), function(word) {
                     var index = _.indexOf(wordsArr, word)
                     if (index != -1) {
-                        return "<a style='font-weight:bold; cursor:pointer; font-size:"+(parseInt(fontsize)+2)+"px; color:"+instance._plginConfig.wordfontcolor+"; background:"+instance._plginConfig.wordhighlightcolor+"; border-bottom: 1px solid "+instance._plginConfig.wordunderlinecolor+";' data-event='" + word + "_click'>" + word + "</a>";
+                        return "<a style='font-weight:bold; cursor:pointer; font-size:"+fontsize+"; color:"+instance._plginConfig.wordfontcolor+"; background:"+instance._plginConfig.wordhighlightcolor+"; border-bottom: 1px solid "+instance._plginConfig.wordunderlinecolor+";' data-event='" + word + "_click'>" + word + "</a>";
                     } else {
                         return word;
                     }
@@ -62,10 +70,10 @@ Plugin.extend({
                 if (data.style)
                     div.setAttribute("style", data.style);
                 div.id = data.id;
-                div.style.fontSize = fontsize+ 'px';
-                div.style.width = (dims.w + (wordsArr.length * 2)) + 'px';
+                div.style.width = dims.w + 'px';
                 div.style.height = dims.h + 'px';
                 div.style.position = 'absolute';
+                div.style.fontSize = fontsize;
                 div.style.fontFamily = data.font;
                 div.style.fontWeight = this._plginConfig.fontweight ? "bold" : "normal";
                 div.style.fontStyle = this._plginConfig.fontstyle ?  "italic" : "normal";
