@@ -89,12 +89,9 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', data);
     },
     toggleAudio: function(event, data) {
-        var mediaArr = EkstepEditorAPI.getAllPluginInstanceByTypes();
-        EkstepEditorAPI._.forEach(mediaArr, function(val, key) {
-            if (!EkstepEditorAPI._.isUndefined(val.media) && val.media[data.asset]) {
-                EkstepEditorAPI.dispatchEvent('org.ekstep.config:toggleStageEvent', { 'flag': data.autoplay, 'id': data.asset });
-            }
-        });
+        var instance = EkstepEditorAPI.getPluginInstance(data.id);
+        instance.config.autoplay = data.autoplay;
+        EkstepEditorAPI.dispatchEvent('org.ekstep.config:toggleStageEvent', { 'flag': data.autoplay, 'id': data.assetId });
     },
     jplayerInit: function(event, data) {
         var id = data.id;
