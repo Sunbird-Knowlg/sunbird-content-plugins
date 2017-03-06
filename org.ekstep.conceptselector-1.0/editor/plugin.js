@@ -110,7 +110,7 @@ EkstepEditor.basePlugin.extend({
         offset = offset || 0;
         limit = limit || instance.limit;
 
-        var data = { "request": { "filters": { "objectType": ["Concept"] }, "offset": offset, "limit": limit } };
+        var data = { "request": { "filters": { "objectType": ["Concept"] }, "offset": offset, "limit": instance.limit } };
 
         EkstepEditorAPI.getService('searchService').search(data, function(err, resp) {
             if (!err && resp.data && resp.data.result && EkstepEditorAPI._.isArray(resp.data.result.concepts)) {
