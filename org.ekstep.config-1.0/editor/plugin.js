@@ -86,6 +86,7 @@ EkstepEditor.basePlugin.extend({
         angScope.$watch('configData', function(newValue, oldValue) {
             instance.updateConfig(newValue, oldValue);
         }, true);  
+        this.canvasOffset = $("#canvas").offset();
     },
     /**
      * Place config toolbar on top of plugin, based on its location
