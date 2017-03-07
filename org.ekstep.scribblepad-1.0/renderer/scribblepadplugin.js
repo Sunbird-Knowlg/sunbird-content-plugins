@@ -8,8 +8,6 @@ Plugin.extend({
         this._self = new createjs.Container();
         this._self.x = dims.x;
         this._self.y = dims.y;
-        if (data.opacity)
-            this._self.alpha = data.opacity;
         var data = _.extend(_.clone(this._data), {x: 0, y: 0, w: 100, h: 100, 'z-index': 0});
         data.id = _.uniqueId('scribble');
         var eraserW = (this._parent.dimensions().w * 3.89)/dims.w;
