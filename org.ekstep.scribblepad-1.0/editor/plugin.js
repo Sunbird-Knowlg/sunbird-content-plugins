@@ -77,7 +77,6 @@ EkstepEditor.basePlugin.extend({
         var attr = this._super();
         delete attr.strokeDashArray;
         attr['stroke-width'] = 1;
-        attr['opacity'] = 0.3;
         attr.stroke = '#663300';
         attr.thickness = 2;
         attr['z-index'] = 999;
@@ -93,6 +92,7 @@ EkstepEditor.basePlugin.extend({
     getConfig: function() {
         var config = this._super();
         config.color = this.attributes.fill;
+        config.opacity = this.attributes.opacity * 100;
         return config;
     }
 });
