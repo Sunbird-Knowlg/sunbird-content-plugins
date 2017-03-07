@@ -36,9 +36,6 @@
                 "type": "image"
             }]
         }],
-        "behaviour": {
-            "rotatable": true
-        },
         "configManifest": [{
             "propertyName": "color",
             "title": "Fill color",
