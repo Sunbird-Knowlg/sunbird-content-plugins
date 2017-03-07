@@ -24,7 +24,7 @@
                     "__text": "",
                     "x": 10,
                     "y": 20,
-                    "fontFamily": "Sans-serif",
+                    "fontFamily": "NotoSans",
                     "fontSize": 18,
                     "minWidth": 20,
                     "w": 35,
@@ -149,9 +149,9 @@
             "title": "Font Family",
             "description": "Select font family for the text",
             "dataType": "select",
-            "range": ["Arial", "Courier", "Georgia", "Helvetica", "Monospace", "Sans-serif", "Serif", "Tahoma", "Times", "Trebuchet MS", "Verdana", "NotoSansKannada", "NotoSansGujarati", "NotoSansBengali", "NotoSansGurmukhi", "NotoSansOriya", "NotoSansDevanagari", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu", "NotoSansMalayalam"],
+            "range": ["Arial", "Courier", "Georgia", "Helvetica", "Monospace", "Sans-serif", "Serif", "Tahoma", "Times", "Trebuchet MS", "Verdana", "NotoSans", "NotoSansKannada", "NotoSansGujarati", "NotoSansBengali", "NotoSansGurmukhi", "NotoSansOriya", "NotoSansDevanagari", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu", "NotoSansMalayalam"],
             "required": true,
-            "defaultValue": "Sans-serif"
+            "defaultValue": "NotoSans"
         }, {
             "propertyName": "fontsize",
             "title": "Font Size",
@@ -171,7 +171,7 @@
             "__text": "",
             "x": 10,
             "y": 20,
-            "fontFamily": "Arial",
+            "fontFamily": "NotoSans",
             "fontSize": 18,
             "minWidth": 20,
             "w": 35,
