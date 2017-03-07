@@ -9,6 +9,8 @@
  */
 EkstepEditor.basePlugin.extend({
     type: "shape",
+    _points: undefined,
+    shapeType: undefined,
     initialize: function() {},
     /**
      *
@@ -34,6 +36,7 @@ EkstepEditor.basePlugin.extend({
                     "defaultValue": 64,
                     "minimumValue": 0
                 });*/
+                this.shapeType = 'ellipse';
                 this.editorObj = new fabric.Ellipse(props);
                 break;
 
@@ -49,10 +52,12 @@ EkstepEditor.basePlugin.extend({
                     "defaultValue": 10,
                     "minimumValue": 0
                 });
+                this.shapeType = 'roundrect';
                 this.editorObj = new fabric.Rect(props);
                 break;
 
             case 'rect':
+                this.shapeType = 'rect';
                 this.editorObj = new fabric.Rect(props);
                 break;
 
@@ -71,8 +76,8 @@ EkstepEditor.basePlugin.extend({
                 });
 
                 var corners = props.corners;
-                var shape = corners + "star";
-                this.drawShape(shape, props);
+                this.shapeType = corners + "star";
+                this.drawShape(this.shapeType, props);
                 break;
 
             case 'polygon':
@@ -90,13 +95,13 @@ EkstepEditor.basePlugin.extend({
                 });
 
                 var sides = props.sides;
-                var shape = sides + "polygon";
-                this.drawShape(shape, props);
+                this.shapeType = sides + "polygon";
+                this.drawShape(this.shapeType, props);
                 break;
 
             case 'trapezium':
-                var shape = "trapezium";
-                this.drawShape(shape, props);
+                this.shapeType = "trapezium";
+                this.drawShape(this.shapeType, props);
                 break;
 
             default:
@@ -185,14 +190,24 @@ EkstepEditor.basePlugin.extend({
         if (this.attributes.sides) {
             config.sides = this.attributes.sides;
         }
-        this.config.points = this.editorObj.get('points');
+        config.points = this.shapes[this.shapeType];
         return config;
     },
 
     drawShape: function(shape, props) {
-        var points = this.shapes[shape];
-        props.strokeLineJoin = 'bevil';
-        this.editorObj = new fabric.Polygon(points, props, false);
+        this._points = _.cloneDeep(this.shapes[shape]);
+        this.toPixel(this._points);
+        props.strokeLineJoin = 'bevil';        
+        this.editorObj = new fabric.Polygon(this._points, props);
+    },
+
+    toPixel: function(points) {
+        var instance = this;
+        if(points) points.forEach(function(p) {
+           p.x = ((instance.attributes.w * p.x) / 100);
+           p.y = ((instance.attributes.h * p.y) / 100);
+        });
+        return points
     },
 
     changed: function(instance, options, event) {
