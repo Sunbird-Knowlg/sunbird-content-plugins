@@ -183,7 +183,7 @@ EkstepEditor.basePlugin.extend({
             }, 500);
         }
         if (config.dataType === 'inputSelect') {
-            if(_.indexOf(config.range, parseInt(instance.configData[config.propertyName]))){
+            if(!_.includes(config.range, parseInt(instance.configData[config.propertyName]))){
                 config.range.push(instance.configData[config.propertyName]);
             }
             setTimeout(function() { 
@@ -199,7 +199,7 @@ EkstepEditor.basePlugin.extend({
                             EkstepEditorAPI.jQuery('#' + config.propertyName).parent().dropdown('set text', config.defaultValue);
                         } else {
                             instance.configData[config.propertyName] = parseInt(text);
-                            if(_.indexOf(config.range, parseInt(instance.configData[config.propertyName]))){
+                            if(!_.includes(config.range, parseInt(instance.configData[config.propertyName]))){
                                 config.range.push(instance.configData[config.propertyName]);
                             }
                             instance.onConfigChange(config.propertyName, parseInt(text));
