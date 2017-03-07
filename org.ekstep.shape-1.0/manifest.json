@@ -135,7 +135,6 @@
                         "fill": "#FF0000",                        
                         "w": 14,
                         "h": 25,
-                        "sides": 5,
                         "stroke": "rgba(255, 255, 255, 0)",
                         "strokeWidth": 1,
                         "opacity": 1
