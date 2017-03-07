@@ -36,7 +36,7 @@ EkstepEditor.basePlugin.extend({
         //this.id = media.id;
         if (media && media.src) {
             media.src = EkstepEditor.mediaManager.getMediaOriginURL(media.src);
-            EkstepEditor.mediaManager.addMedia(media);
+            this.addMedia(media);
             this.audioData = {
                 stageId: EkstepEditorAPI.getCurrentStage().id,
                 type: 'audio',

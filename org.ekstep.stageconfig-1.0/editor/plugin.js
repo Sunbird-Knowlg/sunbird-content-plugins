@@ -23,10 +23,10 @@ EkstepEditor.basePlugin.extend({
         });
     },
     addComponents: function(stageId) {
-        var instance = this;
-        if (!this.stageAudios[stageId]) this.stageAudios[stageId] = [];
+        var instance = this;        
         var audios = EkstepEditorAPI.getStagePluginInstances(stageId, ["org.ekstep.audio"]);
-        _.each(audios, function(audio) {
+        if (audios.length) this.stageAudios[stageId] = this.stageAudios[stageId] ? this.stageAudios[stageId] : [];
+        _.each(audios, function(audio) {            
             instance.stageAudios[stageId].push(audio.audioData);
         })
     },
