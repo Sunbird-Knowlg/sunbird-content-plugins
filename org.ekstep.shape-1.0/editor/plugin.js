@@ -195,6 +195,15 @@ EkstepEditor.basePlugin.extend({
         this.editorObj = new fabric.Polygon(points, props, false);
     },
 
+    changed: function(instance, options, event) {
+        if(instance.attributes.type == 'roundrect') {
+            instance.editorObj.setWidth(instance.editorObj.getWidth() - instance.editorObj.getStrokeWidth());
+            instance.editorObj.setHeight(instance.editorObj.getHeight() - instance.editorObj.getStrokeWidth());
+            instance.editorObj.setScaleX(1);
+            instance.editorObj.setScaleY(1);
+        }
+    },
+
     shapes: {
 
         // Star shapes
