@@ -362,7 +362,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.getService('popup').open({
             template: 'deleteConfirmationDialog',
             controller: ['$scope', function($scope) {
-                $scope.warningMessage = EkstepEditorAPI.getCurrentObject().attributes.textType == 'readalong' ? 'Readalong' : 'Wordinfo';
+                $scope.warningMessage = EkstepEditorAPI.getCurrentObject().attributes.textType == 'readalong' ? 'Read-Along' : 'Word Info Popup';
                 $scope.delete = function() {
                     $scope.closeThisDialog();
                     var textObj = EkstepEditorAPI.getCurrentObject();
@@ -407,6 +407,7 @@ EkstepEditor.basePlugin.extend({
                     EkstepEditorAPI.render();
                 }
             }],
+            width: 900,
             showClose: false
         }, function() {});
     },
@@ -418,7 +419,7 @@ EkstepEditor.basePlugin.extend({
         //updating readlong configarations in text configManifest
         instance.manifest.editor.configManifest.push({
             "propertyName": "highlight",
-            "title": "Highlight Color",
+            "title": "Read-along Highlight Color",
             "description": "Choose a color from the color picker to highlight the text",
             "dataType": "colorpicker",
             "required": true,
@@ -441,7 +442,7 @@ EkstepEditor.basePlugin.extend({
         //updating wordinfo configarations in text configManifest
         instance.manifest.editor.configManifest.push({
             "propertyName": "wordfontcolor",
-            "title": "Word Font Color",
+            "title": "Word Color",
             "description": "Choose a color from the color picker to highlight the font color of selected word",
             "dataType": "colorpicker",
             "required": true,
