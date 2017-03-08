@@ -415,7 +415,7 @@ EkstepEditor.basePlugin.extend({
                     EkstepEditorAPI.render();
                 }
             }],
-            width: 900,
+            width: 520,
             showClose: false
         }, function() {});
     },
