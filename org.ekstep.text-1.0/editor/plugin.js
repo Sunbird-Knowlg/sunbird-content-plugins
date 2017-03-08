@@ -36,6 +36,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("org.ekstep.text:readalong:show", this.showReadalong, this);
         EkstepEditorAPI.addEventListener("org.ekstep.text:wordinfo:show", this.showWordInfo, this);
         EkstepEditorAPI.addEventListener("org.ekstep.text:delete:enhancement", this.deleteEnhancement, this);
+        EkstepEditorAPI.addEventListener("org.ekstep.text:modified", this.dblClickHandler, this);
         EkstepEditorAPI.getService('popup').loadNgModules(EkstepEditorAPI.getPluginRepo() + '/org.ekstep.text-1.0/editor/deleteConfirmationDialog.html');
     },
     /**
@@ -110,13 +111,20 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     dblClickHandler: function(event) {
+        var bounds  = EkstepEditorAPI.getCurrentObject().editorObj.getBoundingRect();
         var leftSt = EkstepEditorAPI.jQuery("#canvas").offset().left + EkstepEditorAPI.getCurrentObject().editorObj.left;
         var leftEnd = leftSt + EkstepEditorAPI.getCurrentObject().editorObj.width;
         var topSt = EkstepEditorAPI.jQuery("#canvas").offset().top + EkstepEditorAPI.getCurrentObject().editorObj.top;
         var topEnd = topSt + EkstepEditorAPI.getCurrentObject().editorObj.height;
-        //if (event.clientX > leftSt && event.clientX < leftEnd && event.clientY > topSt && event.clientY < topEnd) {
+        if (_.isObject(bounds)){
+            leftSt = EkstepEditorAPI.jQuery("#canvas").offset().left + bounds.left;
+            eftEnd = leftSt + bounds.width;
+            topSt = EkstepEditorAPI.jQuery("#canvas").offset().top + bounds.top;
+            topEnd = topSt + bounds.height;
+        }
+        if (event.clientX > leftSt && event.clientX < leftEnd && event.clientY > topSt && event.clientY < topEnd) {
             textEditor.showEditor(EkstepEditorAPI.getEditorObject().id);
-        //}
+        }
         textEditor.generateTelemetry({ type: 'click', subtype: 'doubleClick', target: 'textEditor' });
     },
     /**
