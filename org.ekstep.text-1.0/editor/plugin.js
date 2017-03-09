@@ -147,6 +147,7 @@ EkstepEditor.basePlugin.extend({
         var fontWeight = EkstepEditorAPI._.isUndefined(this.editorObj.get("fontWeight")) ? "" : (this.editorObj.get("fontWeight") === "bold" ? "bold" : "");
         var fontStyle = EkstepEditorAPI._.isUndefined(this.editorObj.get("fontStyle")) ? "" : (this.editorObj.get("fontStyle") === "italic" ? "italic" : "");
         attributes.weight = (fontWeight + ' ' + fontStyle).trim();
+        attributes["z-index"] = attributes.textType === "wordinfo" ?  1000 : attributes["z-index"];
         return attributes;
     },
     /**
