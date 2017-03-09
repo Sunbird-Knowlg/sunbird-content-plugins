@@ -11,8 +11,11 @@ Plugin.extend({
         if(!_.isUndefined(data.data))
             this._plginData = JSON.parse(data.data.__cdata);
         
-        var pid = data.id;
-        delete data.id;
+        var pid = data._id || data.id;
+        if(data.id) {
+            data._id = pid;    
+            delete data.id;
+        }
         this.id = _.uniqueId('org.ekstep.text');
         switch (data.textType) {
             case 'readalong':
