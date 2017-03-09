@@ -10,28 +10,23 @@ Plugin.extend({
         this._plginConfig = JSON.parse(data.config.__cdata);
         if(!_.isUndefined(data.data))
             this._plginData = JSON.parse(data.data.__cdata);
-
+        
+        var pid = data.id;
+        delete data.id;
+        this.id = _.uniqueId('org.ekstep.text');
         switch (data.textType) {
             case 'readalong':
                 this._data = data;
                 var data = _.clone(this._data);
-                data.id = _.uniqueId('htext');
+                data.id = pid;
                 data.timings = this._plginConfig.timings;
                 data.audio = this._plginConfig.audio;
                 data.highlight = this._plginConfig.highlight;
-                data.visible = true;
-                data.event = { 'type':'click', 'action' : {'type':'command', 'command' : 'togglePlay' , 'asset': data.id}};
-                if(data.autoplay){
-                    if(_.isUndefined(instance._stage.events.event)){
-                        var event = [];
-                        event.push({ 'type':'enter', 'action' : {'type':'command', 'command' : 'togglePlay' , 'asset': data.id}});
-                        instance._stage.events.event = event;
-                    }else{
-                        instance._stage.events.event.push({ 'type':'enter', 'action' : {'type':'command', 'command' : 'togglePlay' , 'asset': data.id}});
-                    }
-                    if(_.isUndefined(instance._stage._data.events)){
-                        instance._stage._data.events = {'event': event}
-                    }
+                var event = { 'type':'click', 'action' : {'type':'command', 'command' : 'togglePlay' , 'asset': data.id}};
+                if(_.isUndefined(data.event)){
+                    data.event = event;
+                }else{
+                    data.event.push(event);
                 }
                 PluginManager.invoke('htext', data, instance._parent, instance._stage, instance._theme);
                 break;
@@ -65,7 +60,7 @@ Plugin.extend({
                 }
                 this._data = data;
                 var data = _.clone(this._data);
-                data.id = _.uniqueId('wordinfo');
+                data.id = pid;
                 div = document.createElement('div');
                 if (data.style)
                     div.setAttribute("style", data.style);
@@ -102,9 +97,7 @@ Plugin.extend({
                 if(_.isUndefined(instance._stage._data.events)){
                     instance._stage._data.events = {'event': event}
                 }
-                // else{
-                //     instance._stage._data.events.event = event;
-                // }
+                
                 this.invokeController();
                 this.invokeTemplate();
                 //Invoke the embed plugin to start rendering the templates
@@ -112,6 +105,9 @@ Plugin.extend({
                 this.registerEvents(data.id);
                 break;
             default:
+                this._data = data;
+                var data = _.clone(this._data);
+                data.id = pid;
                 PluginManager.invoke('text', data, instance._parent, instance._stage, instance._theme);
                 break;
         }
