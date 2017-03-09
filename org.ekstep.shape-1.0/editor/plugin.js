@@ -104,6 +104,16 @@ EkstepEditor.basePlugin.extend({
                 this.drawShape(this.shapeType, props);
                 break;
 
+            case 'rarrow':
+                this.shapeType = "rarrow";
+                this.drawShape(this.shapeType, props);
+                break;
+
+            case 'harrow':
+                this.shapeType = "harrow";
+                this.drawShape(this.shapeType, props);
+                break;
+
             default:
         }
         if (this.editorObj) this.editorObj.setFill(props.fill);
@@ -241,7 +251,11 @@ EkstepEditor.basePlugin.extend({
         "10polygon": [{"x":100,"y":50},{"x":90.5,"y":79.4},{"x":65.5,"y":100},{"x":34.5,"y":100},{"x":9.5,"y":79.4},{"x":0,"y":50},{"x":9.5,"y":20.6},{"x":34.5,"y":0},{"x":65.5,"y":0},{"x":90.5,"y":20.6}],
 
         // Other convex polygons
-        "trapezium" : [{"x":25,"y":0},{"x":75,"y":0},{"x":100,"y":100},{"x":0,"y":100}]
+        "trapezium" : [{"x":25,"y":0},{"x":75,"y":0},{"x":100,"y":100},{"x":0,"y":100}],
+        "rarrow" : [{"x":0,"y":25},{"x":75,"y":25},{"x":75,"y":0},{"x":100,"y":50},{"x":75,"y":100},{"x":75,"y":75},{"x":0,"y":75}],
+
+        "harrow" : [{"x":0,"y":50}, {"x":25,"y":0}, {"x":25,"y":25}, {"x":75,"y":25}, {"x":75,"y":0}, {"x":100,"y":50}, {"x":75,"y":100}, {"x":75,"y":75}, {"x":25,"y":75}, {"x":25,"y":100}]
+
     }
 });
 //# sourceURL=shapeplugin.js
