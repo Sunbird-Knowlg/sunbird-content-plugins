@@ -8,3 +8,7 @@
 .contributed-plugins-list.no-plugins{
     height: 0px !important;
 }
+.local-plugin-label{
+    width: 14em;
+    word-wrap: break-word;
+}
