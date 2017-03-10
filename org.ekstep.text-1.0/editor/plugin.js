@@ -72,14 +72,12 @@ EkstepEditor.basePlugin.extend({
             this.manifest.editor.playable = true;
             this.addReadalongconfigManifest(this);
         } else if (!EkstepEditorAPI._.isUndefined(this.attributes.words) || this.attributes.textType === 'wordinfo') {
-            var host = EkstepEditorAPI.globalContext.useProxyForURL ? EkstepEditor.config.baseURL : EkstepEditor.config.absURL;
-            var image = {
+            this.addMedia({
                 "id": "org.ekstep.text.popuptint",
                 "src": EkstepEditorAPI.absURL + EkstepEditorAPI.getPluginRepo() + "/" + this.manifest.id + '-' + this.manifest.ver +"/assets/popuptint.png",
                 "type": "image",
                 "assetId": "org.ekstep.text.popuptint"
-            }
-            this.addMedia(image);
+            });
             this.addWordinfoconfigManifest(this);
         } else {
             this.attributes.textType = "text";
@@ -349,14 +347,12 @@ EkstepEditor.basePlugin.extend({
                     textObj.config.wordhighlightcolor = data.wordhighlightcolor;
                     textObj.config.wordunderlinecolor = data.wordunderlinecolor;
                     textObj.attributes.textType = 'wordinfo';
-                    var image = {
+                    textObj.addMedia({
                         "id": "org.ekstep.text.popuptint",
                         "src": EkstepEditorAPI.absURL + EkstepEditorAPI.getPluginRepo() + "/" + instance.manifest.id + '-' + instance.manifest.ver +"/assets/popuptint.png",
                         "type": "image",
                         "assetId": "org.ekstep.text.popuptint"
-                    }
-                    image.src = EkstepEditor.mediaManager.getMediaOriginURL(image.src);
-                    textObj.addMedia(image);
+                    });
                     instance.addWordinfoconfigManifest(textObj);
                     EkstepEditorAPI.dispatchEvent("config:show");
                     EkstepEditorAPI.render();
