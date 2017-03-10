@@ -8,8 +8,7 @@
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
-        "dependencies": [
-        ],
+        "dependencies": [],
         "menu": [{
             "id": "shape",
             "category": "main",
@@ -29,7 +28,7 @@
                         "type": "rect",
                         "x": 10,
                         "y": 20,
-                        "fill": "#FFFF00",                        
+                        "fill": "#FFFF00",
                         "w": 14,
                         "h": 25,
                         "stroke": "rgba(255, 255, 255, 0)",
@@ -49,7 +48,7 @@
                         "type": "ellipse",
                         "x": 15,
                         "y": 15,
-                        "fill": "#00FF00",                        
+                        "fill": "#00FF00",
                         "w": 18,
                         "h": 32,
                         "stroke": "rgba(255, 255, 255, 0)",
@@ -69,7 +68,7 @@
                         "type": "roundrect",
                         "x": 20,
                         "y": 20,
-                        "fill": "#FF0000",                        
+                        "fill": "#FF0000",
                         "w": 14,
                         "h": 25,
                         "radius": 10,
@@ -90,7 +89,7 @@
                         "type": "star",
                         "x": 20,
                         "y": 20,
-                        "fill": "#FF0000",                        
+                        "fill": "#FF0000",
                         "w": 14,
                         "h": 25,
                         "corners": 5,
@@ -111,7 +110,7 @@
                         "type": "polygon",
                         "x": 20,
                         "y": 20,
-                        "fill": "#FF0000",                        
+                        "fill": "#FF0000",
                         "w": 14,
                         "h": 25,
                         "sides": 5,
@@ -132,8 +131,48 @@
                         "type": "trapezium",
                         "x": 20,
                         "y": 20,
-                        "fill": "#FF0000",                        
+                        "fill": "#FF0000",
                         "w": 14,
+                        "h": 25,
+                        "stroke": "rgba(255, 255, 255, 0)",
+                        "strokeWidth": 1,
+                        "opacity": 1
+                    }
+                }
+            }, {
+                "id": "rarrow",
+                "type": "icon",
+                "toolTip": "Add Arrow",
+                "title": "Arrow",
+                "iconClass": "long right arrow icon",
+                "onclick": {
+                    "id": "org.ekstep.shape:create",
+                    "data": {
+                        "type": "rarrow",
+                        "x": 20,
+                        "y": 20,
+                        "fill": "#000000",
+                        "w": 30,
+                        "h": 25,
+                        "stroke": "rgba(255, 255, 255, 0)",
+                        "strokeWidth": 1,
+                        "opacity": 1
+                    }
+                }
+            }, {
+                "id": "harrow",
+                "type": "icon",
+                "toolTip": "Add double arrow",
+                "title": "Double Arrow",
+                "iconClass": "resize horizontal icon",
+                "onclick": {
+                    "id": "org.ekstep.shape:create",
+                    "data": {
+                        "type": "harrow",
+                        "x": 20,
+                        "y": 20,
+                        "fill": "#000000",
+                        "w": 30,
                         "h": 25,
                         "stroke": "rgba(255, 255, 255, 0)",
                         "strokeWidth": 1,
@@ -152,6 +191,16 @@
             "dataType": "colorpicker",
             "required": true,
             "defaultValue": "#000000"
+        }, {
+            "propertyName": "opacity",
+            "title": "Transparency",
+            "description": "Set the transparency for element",
+            "dataType": "rangeslider",
+            "labelSuffix": "%",
+            "required": true,
+            "defaultValue": 100,
+            "minimumValue": 0,
+            "maximumValue": 100
         }],
         "help": {
             "src": "editor/help.md",

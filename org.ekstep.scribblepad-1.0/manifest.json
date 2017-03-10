@@ -36,9 +36,6 @@
                 "type": "image"
             }]
         }],
-        "behaviour": {
-            "rotatable": true
-        },
         "configManifest": [{
             "propertyName": "color",
             "title": "Fill color",
@@ -46,6 +43,16 @@
             "dataType": "colorpicker",
             "required": true,
             "defaultValue": "#3399FF"
+        },{
+            "propertyName": "opacity",
+            "title": "Transparency",
+            "description": "Set the transparency for element",
+            "dataType": "rangeslider",
+            "labelSuffix": "%",
+            "required": true,
+            "defaultValue": 30,
+            "minimumValue": 0,
+            "maximumValue": 100
         }],
         "help": {
             "src": "editor/help.md",

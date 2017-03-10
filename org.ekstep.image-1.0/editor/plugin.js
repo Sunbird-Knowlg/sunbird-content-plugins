@@ -34,9 +34,9 @@ EkstepEditor.basePlugin.extend({
             delete props.width; // To maintain aspect ratio 
             delete props.height;
         }
-        //
-        //
+        
         var media = this.media ? this.media[this.attributes.asset] : undefined;
+        if (!(media && media.src)) throw new Error('media source is missing!');                               
         if (media && media.src) {
             media.src = EkstepEditor.mediaManager.getMediaOriginURL(media.src);
             var imageURL = EkstepEditorAPI.globalContext.useProxyForURL ? "image/get/" + encodeURIComponent(media.src) : media.src;

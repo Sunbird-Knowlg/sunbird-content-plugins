@@ -59,6 +59,7 @@ angular.module('wordinfotextapp', []).controller('wordinfotextcontroller', ['$sc
             var count = Object.keys(response.data.result).length;
             if (count <= 0) {
                 ctrl.noKeywords = true;
+                ctrl.showTypeownText = false;
                 $scope.$safeApply();
                 return;
             } else {

@@ -24,7 +24,7 @@
                     "__text": "",
                     "x": 10,
                     "y": 20,
-                    "fontFamily": "Sans-serif",
+                    "fontFamily": "NotoSans",
                     "fontSize": 18,
                     "minWidth": 20,
                     "w": 35,
@@ -45,12 +45,13 @@
         },
         "configManifest": [{
             "propertyName": "textType",
-            "title": "Text Enhancement",
+            "title": "Enable Interactive features",
             "dataType": "featureButtonToggle",
             "description": "Text Enhancement",
             "options": [{
                 "value": "readalong",
-                "title": "Readalong",
+                "title": "Read-along",
+                "toolTip": "Read-along",
                 "description": "Readalong",
                 "state": true,
                 "status": "HIDE",
@@ -67,7 +68,8 @@
                 }]
             },{
                 "value": "wordinfo",
-                "title": "Wordinfo",
+                "title": "Word Info",
+                "toolTip": "Word Info",
                 "description": "Wordinfo",
                 "state": true,
                 "status": "HIDE",
@@ -122,21 +124,21 @@
             "options": [{
                 "value": "left",
                 "title": "Text Align Left",
-                "toolTip": "Left",
+                "toolTip": "Left Align",
                 "description": "Align text to left",
                 "dataType": "icon",
                 "iconClass": "align left icon"
             }, {
                 "value": "center",
                 "title": "Text Align Center",
-                "toolTip": "Center",
+                "toolTip": "Center Align",
                 "description": "Align text to center",
                 "dataType": "icon",
                 "iconClass": "align center icon"
             }, {
                 "value": "right",
                 "title": "Text Align Right",
-                "toolTip": "Right",
+                "toolTip": "Right Align",
                 "description": "Align text to right",
                 "dataType": "icon",
                 "iconClass": "align right icon"
@@ -147,9 +149,9 @@
             "title": "Font Family",
             "description": "Select font family for the text",
             "dataType": "select",
-            "range": ["Arial", "Courier", "Georgia", "Helvetica", "Monospace", "Sans-serif", "Serif", "Tahoma", "Times", "Trebuchet MS", "Verdana", "NotoSansKannada", "NotoSansGujarati", "NotoSansBengali", "NotoSansGurmukhi", "NotoSansOriya", "NotoSansDevanagari", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu", "NotoSansMalayalam"],
+            "range": ["Arial", "Courier", "Georgia", "Helvetica", "Monospace", "Sans-serif", "Serif", "Tahoma", "Times", "Trebuchet MS", "Verdana", "NotoSans", "NotoSansKannada", "NotoSansGujarati", "NotoSansBengali", "NotoSansGurmukhi", "NotoSansOriya", "NotoSansDevanagari", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu", "NotoSansMalayalam"],
             "required": true,
-            "defaultValue": "Sans-serif"
+            "defaultValue": "NotoSans"
         }, {
             "propertyName": "fontsize",
             "title": "Font Size",
@@ -169,7 +171,7 @@
             "__text": "",
             "x": 10,
             "y": 20,
-            "fontFamily": "Arial",
+            "fontFamily": "NotoSans",
             "fontSize": 18,
             "minWidth": 20,
             "w": 35,
@@ -180,6 +182,6 @@
         }
     },
     "renderer": {
-        "main": "renderer/plugin.js"
+        "main": "renderer/supertextplugin.js"
     }
 }

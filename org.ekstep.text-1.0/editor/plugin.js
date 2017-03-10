@@ -36,6 +36,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("org.ekstep.text:readalong:show", this.showReadalong, this);
         EkstepEditorAPI.addEventListener("org.ekstep.text:wordinfo:show", this.showWordInfo, this);
         EkstepEditorAPI.addEventListener("org.ekstep.text:delete:enhancement", this.deleteEnhancement, this);
+        EkstepEditorAPI.addEventListener("org.ekstep.text:modified", this.dblClickHandler, this);
         EkstepEditorAPI.getService('popup').loadNgModules(EkstepEditorAPI.getPluginRepo() + '/org.ekstep.text-1.0/editor/deleteConfirmationDialog.html');
     },
     /**
@@ -110,13 +111,20 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     dblClickHandler: function(event) {
+        var bounds  = EkstepEditorAPI.getCurrentObject().editorObj.getBoundingRect();
         var leftSt = EkstepEditorAPI.jQuery("#canvas").offset().left + EkstepEditorAPI.getCurrentObject().editorObj.left;
         var leftEnd = leftSt + EkstepEditorAPI.getCurrentObject().editorObj.width;
         var topSt = EkstepEditorAPI.jQuery("#canvas").offset().top + EkstepEditorAPI.getCurrentObject().editorObj.top;
         var topEnd = topSt + EkstepEditorAPI.getCurrentObject().editorObj.height;
-        //if (event.clientX > leftSt && event.clientX < leftEnd && event.clientY > topSt && event.clientY < topEnd) {
+        if (_.isObject(bounds)){
+            leftSt = EkstepEditorAPI.jQuery("#canvas").offset().left + bounds.left;
+            eftEnd = leftSt + bounds.width;
+            topSt = EkstepEditorAPI.jQuery("#canvas").offset().top + bounds.top;
+            topEnd = topSt + bounds.height;
+        }
+        if (event.clientX > leftSt && event.clientX < leftEnd && event.clientY > topSt && event.clientY < topEnd) {
             textEditor.showEditor(EkstepEditorAPI.getEditorObject().id);
-        //}
+        }
         textEditor.generateTelemetry({ type: 'click', subtype: 'doubleClick', target: 'textEditor' });
     },
     /**
@@ -139,6 +147,7 @@ EkstepEditor.basePlugin.extend({
         var fontWeight = EkstepEditorAPI._.isUndefined(this.editorObj.get("fontWeight")) ? "" : (this.editorObj.get("fontWeight") === "bold" ? "bold" : "");
         var fontStyle = EkstepEditorAPI._.isUndefined(this.editorObj.get("fontStyle")) ? "" : (this.editorObj.get("fontStyle") === "italic" ? "italic" : "");
         attributes.weight = (fontWeight + ' ' + fontStyle).trim();
+        attributes["z-index"] = attributes.textType === "wordinfo" ?  1000 : attributes["z-index"];
         return attributes;
     },
     /**
@@ -362,7 +371,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.getService('popup').open({
             template: 'deleteConfirmationDialog',
             controller: ['$scope', function($scope) {
-                $scope.warningMessage = EkstepEditorAPI.getCurrentObject().attributes.textType == 'readalong' ? 'Readalong' : 'Wordinfo';
+                $scope.warningMessage = EkstepEditorAPI.getCurrentObject().attributes.textType == 'readalong' ? 'Read-Along' : 'Word Info Popup';
                 $scope.delete = function() {
                     $scope.closeThisDialog();
                     var textObj = EkstepEditorAPI.getCurrentObject();
@@ -407,6 +416,7 @@ EkstepEditor.basePlugin.extend({
                     EkstepEditorAPI.render();
                 }
             }],
+            width: 520,
             showClose: false
         }, function() {});
     },
@@ -418,7 +428,7 @@ EkstepEditor.basePlugin.extend({
         //updating readlong configarations in text configManifest
         instance.manifest.editor.configManifest.push({
             "propertyName": "highlight",
-            "title": "Highlight Color",
+            "title": "Read-along Highlight Color",
             "description": "Choose a color from the color picker to highlight the text",
             "dataType": "colorpicker",
             "required": true,
@@ -441,7 +451,7 @@ EkstepEditor.basePlugin.extend({
         //updating wordinfo configarations in text configManifest
         instance.manifest.editor.configManifest.push({
             "propertyName": "wordfontcolor",
-            "title": "Word Font Color",
+            "title": "Word Color",
             "description": "Choose a color from the color picker to highlight the font color of selected word",
             "dataType": "colorpicker",
             "required": true,
@@ -469,6 +479,20 @@ EkstepEditor.basePlugin.extend({
         prop.options[1].status = "SHOW";
         // updating state to hide readalong button
         prop.options[0].state = false;
-    }
+    },
+    getMedia: function(){
+        var instance = this;
+        switch(instance.attributes.textType){
+            case 'text':
+                return {};
+                break;
+            case 'readalong':
+                return instance._super();
+                break;
+            case 'wordinfo':
+                return instance._super();
+                break;
+        } 
+    }   
 });
 //# sourceURL=textplugin.js

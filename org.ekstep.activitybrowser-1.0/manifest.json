@@ -16,7 +16,7 @@
             "type": "icon",
             "toolTip": "Add Activity",
             "title": "Activity Browser",
-            "iconClass": "list layout icon",
+            "iconClass": "icon-activity icon",
             "onclick": {
                 "id": "org.ekstep.activitybrowser:showpopup"
             }

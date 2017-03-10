@@ -9,6 +9,8 @@
  */
 EkstepEditor.basePlugin.extend({
     type: "shape",
+    _points: undefined,
+    shapeType: undefined,
     initialize: function() {},
     /**
      *
@@ -34,6 +36,7 @@ EkstepEditor.basePlugin.extend({
                     "defaultValue": 64,
                     "minimumValue": 0
                 });*/
+                this.shapeType = 'ellipse';
                 this.editorObj = new fabric.Ellipse(props);
                 break;
 
@@ -49,10 +52,12 @@ EkstepEditor.basePlugin.extend({
                     "defaultValue": 10,
                     "minimumValue": 0
                 });
+                this.shapeType = 'roundrect';
                 this.editorObj = new fabric.Rect(props);
                 break;
 
             case 'rect':
+                this.shapeType = 'rect';
                 this.editorObj = new fabric.Rect(props);
                 break;
 
@@ -71,8 +76,8 @@ EkstepEditor.basePlugin.extend({
                 });
 
                 var corners = props.corners;
-                var shape = corners + "star";
-                this.drawShape(shape, props);
+                this.shapeType = corners + "star";
+                this.drawShape(this.shapeType, props);
                 break;
 
             case 'polygon':
@@ -90,13 +95,23 @@ EkstepEditor.basePlugin.extend({
                 });
 
                 var sides = props.sides;
-                var shape = sides + "polygon";
-                this.drawShape(shape, props);
+                this.shapeType = sides + "polygon";
+                this.drawShape(this.shapeType, props);
                 break;
 
             case 'trapezium':
-                var shape = "trapezium";
-                this.drawShape(shape, props);
+                this.shapeType = "trapezium";
+                this.drawShape(this.shapeType, props);
+                break;
+
+            case 'rarrow':
+                this.shapeType = "rarrow";
+                this.drawShape(this.shapeType, props);
+                break;
+
+            case 'harrow':
+                this.shapeType = "harrow";
+                this.drawShape(this.shapeType, props);
                 break;
 
             default:
@@ -185,14 +200,33 @@ EkstepEditor.basePlugin.extend({
         if (this.attributes.sides) {
             config.sides = this.attributes.sides;
         }
-        this.config.points = this.editorObj.get('points');
+        config.points = this.shapes[this.shapeType];
         return config;
     },
 
     drawShape: function(shape, props) {
-        var points = this.shapes[shape];
-        props.strokeLineJoin = 'bevil';
-        this.editorObj = new fabric.Polygon(points, props, false);
+        this._points = _.cloneDeep(this.shapes[shape]);
+        this.toPixel(this._points);
+        props.strokeLineJoin = 'bevil';        
+        this.editorObj = new fabric.Polygon(this._points, props);
+    },
+
+    toPixel: function(points) {
+        var instance = this;
+        if(points) points.forEach(function(p) {
+           p.x = ((instance.attributes.w * p.x) / 100);
+           p.y = ((instance.attributes.h * p.y) / 100);
+        });
+        return points
+    },
+
+    changed: function(instance, options, event) {
+        if(instance.attributes.type == 'roundrect') {
+            instance.editorObj.setWidth(instance.editorObj.getWidth() - instance.editorObj.getStrokeWidth());
+            instance.editorObj.setHeight(instance.editorObj.getHeight() - instance.editorObj.getStrokeWidth());
+            instance.editorObj.setScaleX(1);
+            instance.editorObj.setScaleY(1);
+        }
     },
 
     shapes: {
@@ -217,7 +251,11 @@ EkstepEditor.basePlugin.extend({
         "10polygon": [{"x":100,"y":50},{"x":90.5,"y":79.4},{"x":65.5,"y":100},{"x":34.5,"y":100},{"x":9.5,"y":79.4},{"x":0,"y":50},{"x":9.5,"y":20.6},{"x":34.5,"y":0},{"x":65.5,"y":0},{"x":90.5,"y":20.6}],
 
         // Other convex polygons
-        "trapezium" : [{"x":25,"y":0},{"x":75,"y":0},{"x":100,"y":100},{"x":0,"y":100}]
+        "trapezium" : [{"x":25,"y":0},{"x":75,"y":0},{"x":100,"y":100},{"x":0,"y":100}],
+        "rarrow" : [{"x":0,"y":25},{"x":75,"y":25},{"x":75,"y":0},{"x":100,"y":50},{"x":75,"y":100},{"x":75,"y":75},{"x":0,"y":75}],
+
+        "harrow" : [{"x":0,"y":50}, {"x":25,"y":0}, {"x":25,"y":25}, {"x":75,"y":25}, {"x":75,"y":0}, {"x":100,"y":50}, {"x":75,"y":100}, {"x":75,"y":75}, {"x":25,"y":75}, {"x":25,"y":100}]
+
     }
 });
 //# sourceURL=shapeplugin.js

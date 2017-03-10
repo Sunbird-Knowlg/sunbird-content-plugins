@@ -16,7 +16,6 @@ EkstepEditor.basePlugin.extend({
         }, this);
         EkstepEditorAPI.addEventListener('object:modified', function(event, data) {
             if(data && data.id && data.id != '') {
-                console.log('event', event);
                 instance.interactEvent('modify', '', 'plugin', data.type, data.ver, data.id);
             }
         }, this);
@@ -34,7 +33,6 @@ EkstepEditor.basePlugin.extend({
         }, this);
 
         EkstepEditorAPI.addEventListener('stage:removed', function(event, data) {
-            console.log('stage delete', data);
             if(data && data.stageId && data.stageId != '') {
                 var plugin = EkstepEditorAPI.getPluginInstance(data.stageId);
                 this.service.pluginLifeCycle({type: 'remove', pluginid: plugin.manifest.id, pluginver: plugin.manifest.ver, objectid: plugin.id, assetid: plugin.getAttribute('asset'), stage: plugin.id, containerid: "", containerplugin: ""});

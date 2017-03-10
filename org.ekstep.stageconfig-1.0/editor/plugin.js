@@ -23,10 +23,10 @@ EkstepEditor.basePlugin.extend({
         });
     },
     addComponents: function(stageId) {
-        var instance = this;
-        if (!this.stageAudios[stageId]) this.stageAudios[stageId] = [];
+        var instance = this;        
         var audios = EkstepEditorAPI.getStagePluginInstances(stageId, ["org.ekstep.audio"]);
-        _.each(audios, function(audio) {
+        if (audios.length) this.stageAudios[stageId] = this.stageAudios[stageId] ? this.stageAudios[stageId] : [];
+        _.each(audios, function(audio) {            
             instance.stageAudios[stageId].push(audio.audioData);
         })
     },
@@ -49,24 +49,10 @@ EkstepEditor.basePlugin.extend({
     },
     showStageComponents: function(stageId) {
         var instance = this;
-        var items = [],
-            assetArr = [];
-        var events = EkstepEditorAPI.getStage(stageId).event;
-        EkstepEditorAPI._.forEach(events, function(event) {
-            if (event.type === 'enter') {
-                if (EkstepEditorAPI._.isArray(event.action)) {
-                    assetArr.push(event.action[0].asset);
-                } else {
-                    assetArr.push(event.action.asset);
-                }
-            }
-        });
+        var items = [];
         EkstepEditorAPI._.forEach(this.stageAudios[stageId], function(component) {
-            if (EkstepEditorAPI._.indexOf(assetArr, component.id) != -1) {
-                component.autoplay = true;
-            } else {
-                component.autoplay = false;
-            }
+            var plugin = EkstepEditorAPI.getPluginInstance(component.id);
+            component.autoplay =  plugin.config.autoplay;
             items.push(component);
         });
         EkstepEditorAPI.ngSafeApply(instance.scope, function() {

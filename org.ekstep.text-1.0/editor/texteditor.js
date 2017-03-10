@@ -6,6 +6,17 @@ fabric.ITextbox = fabric.util.createClass(fabric.Textbox, fabric.Observable, {
     },
     _measureText: function(ctx, text, lineIndex, charOffset) {
         return ctx.measureText(text).width;
+    },
+    _measureLine: function(ctx, lineIndex) {
+        var line = this._textLines[lineIndex],
+            width = ctx.measureText(line).width,
+            additionalSpace = 0, charCount, finalWidth;
+        if (this.charSpacing !== 0) {
+            charCount = line.split('').length;
+            additionalSpace = (charCount - 1) * this._getWidthOfCharSpacing();
+        }
+        finalWidth = width + additionalSpace;
+        return finalWidth > 0 ? finalWidth : 0;
     }
 });
 fabric.ITextbox.fromObject = function(object) {

@@ -10,41 +10,47 @@ Plugin.extend({
         this._plginConfig = JSON.parse(data.config.__cdata);
         if(!_.isUndefined(data.data))
             this._plginData = JSON.parse(data.data.__cdata);
-
+        
+        var pid = data._id || data.id;
+        if(data.id) {
+            data._id = pid;    
+            delete data.id;
+        }
+        this.id = _.uniqueId('org.ekstep.text');
         switch (data.textType) {
             case 'readalong':
                 this._data = data;
                 var data = _.clone(this._data);
-                data.id = _.uniqueId('htext');
+                data.id = pid;
                 data.timings = this._plginConfig.timings;
                 data.audio = this._plginConfig.audio;
                 data.highlight = this._plginConfig.highlight;
-                data.visible = true;
-                data.event = { 'type':'click', 'action' : {'type':'command', 'command' : 'togglePlay' , 'asset': data.id}};
-                if(data.autoplay){
-                    if(_.isUndefined(instance._stage.events.event)){
-                        var event = [];
-                        event.push({ 'type':'enter', 'action' : {'type':'command', 'command' : 'togglePlay' , 'asset': data.id}});
-                        instance._stage.events.event = event;
-                    }else{
-                        instance._stage.events.event.push({ 'type':'enter', 'action' : {'type':'command', 'command' : 'togglePlay' , 'asset': data.id}});
-                    }
-                    if(_.isUndefined(instance._stage._data.events)){
-                        instance._stage._data.events = {'event': event}
-                    }
+                var event = { 'type':'click', 'action' : {'type':'command', 'command' : 'togglePlay' , 'asset': data.id}};
+                if(_.isUndefined(data.event)){
+                    data.event = event;
+                }else{
+                    data.event.push(event);
                 }
                 PluginManager.invoke('htext', data, instance._parent, instance._stage, instance._theme);
                 break;
             case 'wordinfo':
                 var wordsArr = this._plginConfig.words.split(',');//_.split(data.words, ',');
                 var text = data.__text;
-                var exp = data.w * (1920 / 100);
-                var width = 720 * data.w / 100;
-                var fontsize = parseInt(Math.round(data.fontsize * (width / exp)).toString());
+                var fontsize = data.fontsize;
+                if (isFinite(fontsize)) {
+                    if (data.w) {
+                        var exp = parseFloat(1920 * data.w / 100);
+                        var cw = this._parent.dimensions().w;
+                        var width = parseFloat(cw * data.w / 100);
+                        var scale = parseFloat(width / exp);
+                        fontsize = parseFloat(fontsize * scale);
+                        fontsize = fontsize + 'px';
+                    }
+                }
                 data.__text  = _.map(text.split(' '), function(word) {
                     var index = _.indexOf(wordsArr, word)
                     if (index != -1) {
-                        return "<a style='font-weight:bold; cursor:pointer; font-size:"+(parseInt(fontsize)+2)+"px; color:"+instance._plginConfig.wordfontcolor+"; background:"+instance._plginConfig.wordhighlightcolor+"; border-bottom: 1px solid "+instance._plginConfig.wordunderlinecolor+";' data-event='" + word + "_click'>" + word + "</a>";
+                        return "<a style='font-weight:bold; cursor:pointer; font-size:"+fontsize+"; color:"+instance._plginConfig.wordfontcolor+"; background:"+instance._plginConfig.wordhighlightcolor+"; border-bottom: 1px solid "+instance._plginConfig.wordunderlinecolor+";' data-event='" + word + "_click'>" + word + "</a>";
                     } else {
                         return word;
                     }
@@ -57,15 +63,15 @@ Plugin.extend({
                 }
                 this._data = data;
                 var data = _.clone(this._data);
-                data.id = _.uniqueId('wordinfo');
+                data.id = pid;
                 div = document.createElement('div');
                 if (data.style)
                     div.setAttribute("style", data.style);
                 div.id = data.id;
-                div.style.fontSize = fontsize+ 'px';
-                div.style.width = (dims.w + (wordsArr.length * 2)) + 'px';
+                div.style.width = dims.w + 'px';
                 div.style.height = dims.h + 'px';
                 div.style.position = 'absolute';
+                div.style.fontSize = fontsize;
                 div.style.fontFamily = data.font;
                 div.style.fontWeight = this._plginConfig.fontweight ? "bold" : "normal";
                 div.style.fontStyle = this._plginConfig.fontstyle ?  "italic" : "normal";
@@ -94,9 +100,7 @@ Plugin.extend({
                 if(_.isUndefined(instance._stage._data.events)){
                     instance._stage._data.events = {'event': event}
                 }
-                // else{
-                //     instance._stage._data.events.event = event;
-                // }
+                
                 this.invokeController();
                 this.invokeTemplate();
                 //Invoke the embed plugin to start rendering the templates
@@ -104,6 +108,9 @@ Plugin.extend({
                 this.registerEvents(data.id);
                 break;
             default:
+                this._data = data;
+                var data = _.clone(this._data);
+                data.id = pid;
                 PluginManager.invoke('text', data, instance._parent, instance._stage, instance._theme);
                 break;
         }
