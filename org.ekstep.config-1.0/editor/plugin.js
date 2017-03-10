@@ -189,6 +189,7 @@ EkstepEditor.basePlugin.extend({
             setTimeout(function() { 
                 EkstepEditorAPI.jQuery('#' + config.propertyName).dropdown({
                     allowAdditions: true,
+                    forceSelection: false,
                     className: {
                         dropdown: 'ui search dropdown'
                     },
