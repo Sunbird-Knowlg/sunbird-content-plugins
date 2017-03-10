@@ -37,7 +37,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("org.ekstep.text:wordinfo:show", this.showWordInfo, this);
         EkstepEditorAPI.addEventListener("org.ekstep.text:delete:enhancement", this.deleteEnhancement, this);
         EkstepEditorAPI.addEventListener("org.ekstep.text:modified", this.dblClickHandler, this);
-        EkstepEditorAPI.getService('popup').loadNgModules(EkstepEditorAPI.getPluginRepo() + '/org.ekstep.text-1.0/editor/deleteConfirmationDialog.html');
+        EkstepEditorAPI.getService('popup').loadNgModules(EkstepEditorAPI.getPluginRepo() + '/' + this.manifest.id + '-' + this.manifest.ver +'/editor/delete_confirmation_dialog.html');
     },
     /**
      * This method used to create the text fabric object and assigns it to editor of the instance
@@ -72,11 +72,12 @@ EkstepEditor.basePlugin.extend({
             this.manifest.editor.playable = true;
             this.addReadalongconfigManifest(this);
         } else if (!EkstepEditorAPI._.isUndefined(this.attributes.words) || this.attributes.textType === 'wordinfo') {
+            var host = EkstepEditorAPI.globalContext.useProxyForURL ? EkstepEditor.config.baseURL : EkstepEditor.config.absURL;
             var image = {
-                "id": "popupTint",
-                "src": EkstepEditor.mediaManager.getMediaOriginURL("https://dev.ekstep.in/assets/public/content/PopupTint_1460636175572.png"),
+                "id": "org.ekstep.text.popuptint",
+                "src": EkstepEditorAPI.absURL + EkstepEditorAPI.getPluginRepo() + "/" + this.manifest.id + '-' + this.manifest.ver +"/assets/popuptint.png",
                 "type": "image",
-                "assetId": "domain_38606"
+                "assetId": "org.ekstep.text.popuptint"
             }
             this.addMedia(image);
             this.addWordinfoconfigManifest(this);
@@ -349,10 +350,10 @@ EkstepEditor.basePlugin.extend({
                     textObj.config.wordunderlinecolor = data.wordunderlinecolor;
                     textObj.attributes.textType = 'wordinfo';
                     var image = {
-                        "id": "popupTint",
-                        "src": EkstepEditor.mediaManager.getMediaOriginURL("https://dev.ekstep.in/assets/public/content/PopupTint_1460636175572.png"),
+                        "id": "org.ekstep.text.popuptint",
+                        "src": EkstepEditorAPI.absURL + EkstepEditorAPI.getPluginRepo() + "/" + instance.manifest.id + '-' + instance.manifest.ver +"/assets/popuptint.png",
                         "type": "image",
-                        "assetId": "domain_38606"
+                        "assetId": "org.ekstep.text.popuptint"
                     }
                     image.src = EkstepEditor.mediaManager.getMediaOriginURL(image.src);
                     textObj.addMedia(image);

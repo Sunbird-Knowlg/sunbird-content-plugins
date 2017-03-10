@@ -20,12 +20,13 @@ EkstepEditor.basePlugin.extend({
      * @memberof wordinfotext
      */
     initialize: function() {
+        var instance = this;
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
         EkstepEditorAPI.addEventListener("delete:invoked", this.deleteObject, this);
         EkstepEditorAPI.addEventListener("org.ekstep.wordinfotext:showpopup", this.loadHtml, this);
         setTimeout(function() {
-            var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.wordinfotext-1.0/editor/wordinfotext.html';
-            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.wordinfotext-1.0/editor/wordinfotextapp.js';
+            var templatePath = EkstepEditorAPI.getPluginRepo() + '/' + instance.manifest.id + '-' + instance.manifest.ver +'/editor/wordinfotext.html';
+            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/' + instance.manifest.id + '-' + instance.manifest.ver +'/editor/wordinfotextapp.js';
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
     },

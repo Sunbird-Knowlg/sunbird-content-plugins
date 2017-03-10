@@ -48,9 +48,9 @@ Plugin.extend({
                     }
                 }
                 data.__text  = _.map(text.split(' '), function(word) {
-                    var index = _.indexOf(wordsArr, word)
+                    var index = _.indexOf(wordsArr, word.toLowerCase());
                     if (index != -1) {
-                        return "<a style='font-weight:bold; cursor:pointer; font-size:"+fontsize+"; color:"+instance._plginConfig.wordfontcolor+"; background:"+instance._plginConfig.wordhighlightcolor+"; border-bottom: 1px solid "+instance._plginConfig.wordunderlinecolor+";' data-event='" + word + "_click'>" + word + "</a>";
+                        return "<a style='font-weight:bold; cursor:pointer; font-size:"+fontsize+"; color:"+instance._plginConfig.wordfontcolor+"; background:"+instance._plginConfig.wordhighlightcolor+"; border-bottom: 1px solid "+instance._plginConfig.wordunderlinecolor+";' data-event='" + word.toLowerCase() + "_click'>" + word + "</a>";
                     } else {
                         return word;
                     }

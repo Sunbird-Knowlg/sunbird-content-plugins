@@ -36,12 +36,13 @@ EkstepEditor.basePlugin.extend({
      * @memberof Htext
      */
     initialize: function() {
+        var instance = this;
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
         EkstepEditorAPI.addEventListener("delete:invoked", this.deleteObject, this);
         EkstepEditorAPI.addEventListener("org.ekstep.htext:showpopup", this.loadHtml, this);
         setTimeout(function() {
-            var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.htext-1.0/editor/htext.html';
-            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.htext-1.0/editor/readalongapp.js';
+            var templatePath = EkstepEditorAPI.getPluginRepo() + '/' + instance.manifest.id + '-' + instance.manifest.ver +'/editor/htext.html';
+            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/' + instance.manifest.id + '-' + instance.manifest.ver +'/editor/readalongapp.js';
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
 
