@@ -48,6 +48,9 @@ EkstepEditor.basePlugin.extend({
     newInstance: function() {
         var props = this.convertToFabric(this.attributes);
         delete props.__text;
+        if(EkstepEditorAPI._.isUndefined(this.attributes.__text)){
+            this.attributes.__text = '';
+        }
         props.editable = false; // added to disable inline editing of exiting content
         this.editorObj = new fabric.ITextbox(this.attributes.__text, props);
         if (this.attributes.__text == '') {
