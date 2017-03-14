@@ -78,7 +78,6 @@ EkstepEditor.basePlugin.extend({
         delete attr.strokeDashArray;
         attr['stroke-width'] = 1;
         attr.thickness = 2;
-        attr['z-index'] = 999;
         return attr;
     },
     /**
