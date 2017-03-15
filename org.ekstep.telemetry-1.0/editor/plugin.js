@@ -28,14 +28,14 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener('object:removed', function(event, data) {
             if(data && data.id && data.id != '') {
                 var plugin = EkstepEditorAPI.getPluginInstance(data.id);
-                this.service.pluginLifeCycle({type: 'remove', pluginid: plugin.manifest.id, pluginver: plugin.manifest.ver, objectid: plugin.id, assetid: plugin.getAttribute('asset'), stage: EkstepEditorAPI.getCurrentStage().id, containerid: "", containerplugin: ""});
+                instance.service.pluginLifeCycle({type: 'remove', pluginid: plugin.manifest.id, pluginver: plugin.manifest.ver, objectid: plugin.id, assetid: plugin.getAttribute('asset'), stage: EkstepEditorAPI.getCurrentStage().id, containerid: "", containerplugin: ""});
             }
         }, this);
 
         EkstepEditorAPI.addEventListener('stage:removed', function(event, data) {
             if(data && data.stageId && data.stageId != '') {
                 var plugin = EkstepEditorAPI.getPluginInstance(data.stageId);
-                this.service.pluginLifeCycle({type: 'remove', pluginid: plugin.manifest.id, pluginver: plugin.manifest.ver, objectid: plugin.id, assetid: plugin.getAttribute('asset'), stage: plugin.id, containerid: "", containerplugin: ""});
+                instance.service.pluginLifeCycle({type: 'remove', pluginid: plugin.manifest.id, pluginver: plugin.manifest.ver, objectid: plugin.id, assetid: plugin.getAttribute('asset'), stage: plugin.id, containerid: "", containerplugin: ""});
             }
         }, this);
         EkstepEditorAPI.addEventListener('stage:delete', function(event, data) {
@@ -57,6 +57,13 @@ EkstepEditor.basePlugin.extend({
             if(data && data.stageId && data.stageId != '') {
                 instance.interactEvent('modify', 'reorder', 'stage', 'org.ekstep.stage', '1.0', data.stageId);
             }
+        }, this);
+        EkstepEditorAPI.addEventListener('plugin:load', function(event, data) {
+            if(data) instance.service.pluginLifeCycle({ type: 'load', pluginid: data.plugin, pluginver: data.version, objectid: "", stage: "", containerid: "", containerplugin: "" });
+        }, this);
+        EkstepEditorAPI.addEventListener('plugin:add', function(event, data) {
+            var stageId = EkstepEditorAPI.getCurrentStage() ? EkstepEditorAPI.getCurrentStage().id : "";
+            if(data) instance.service.pluginLifeCycle({ type: 'add', pluginid: data.plugin, pluginver: data.version, objectid: data.instanceId, stage: stageId, containerid: "", containerplugin: "" });
         }, this);
     },
     interactEvent: function(type, subtype, target, pluginid, pluginver, objectId) {
