@@ -51,7 +51,7 @@ EkstepEditor.basePlugin.extend({
         var data = { "request": { "filters": { "objectType": ["Dimension", "Domain"] } } };
 
         /**Get domains and dimensions data**/
-        EkstepEditorAPI.getService('searchService').search(data, function(err, resp) {
+        EkstepEditorAPI.getService('search').search(data, function(err, resp) {
             if (!err && resp.data && resp.data.result && EkstepEditorAPI._.isArray(resp.data.result.domains)) {
                 EkstepEditorAPI._.forEach(resp.data.result.domains, function(value) {
                     var domain = {};
@@ -112,7 +112,7 @@ EkstepEditor.basePlugin.extend({
 
         var data = { "request": { "filters": { "objectType": ["Concept"] }, "offset": offset, "limit": instance.limit } };
 
-        EkstepEditorAPI.getService('searchService').search(data, function(err, resp) {
+        EkstepEditorAPI.getService('search').search(data, function(err, resp) {
             if (!err && resp.data && resp.data.result && EkstepEditorAPI._.isArray(resp.data.result.concepts)) {
                 EkstepEditorAPI._.forEach(resp.data.result.concepts, function(value) {
                     instance.concepts.push(value);

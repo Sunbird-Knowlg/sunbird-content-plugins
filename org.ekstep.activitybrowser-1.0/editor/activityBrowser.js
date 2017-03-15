@@ -51,7 +51,7 @@ angular.module('activityBrowserApp', [])
                     "limit": 200
                 }
             };
-            EkstepEditorAPI.getService('searchService').search(data, function(err, resp) {
+            EkstepEditorAPI.getService('search').search(data, function(err, resp) {
                 ctrl.loading = false;
                 $scope.$safeApply();
                 if (err) {

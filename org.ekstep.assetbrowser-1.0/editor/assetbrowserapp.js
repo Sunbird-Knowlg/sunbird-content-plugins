@@ -367,7 +367,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             }
         }
 
-        EkstepEditor.assessmentService.getLanguages(function(err, resp) {
+        EkstepEditorAPI.getService('language').getLanguages(function(err, resp) {
             if (!err && resp.data && resp.data.result && EkstepEditorAPI._.isArray(resp.data.result.languages)) {
                 var assetlanguages = {};
                 EkstepEditorAPI._.forEach(resp.data.result.languages, function(lang) {
@@ -404,17 +404,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             ctrl.file.name = 'audio_'+Date.now()+'.mp3';
             file = ctrl.blobToFile(window.mp3Blob, ctrl.file.name);
             EkstepEditorAPI.jQuery("#fileSize").text(ctrl.formatBytes(file.size));
-
-            //file = ctrl.urltoFile(dataurl,ctrl.file.name);
-            // setTimeout(function() {
-            //     var dataurl = EkstepEditorAPI.jQuery('#recorded-audio-mainAudio').attr('src');
-
-            //     if (!EkstepEditorAPI._.isUndefined(dataurl)) {
-            //         file = ctrl.urltoFile(dataurl,ctrl.file.name);
-            //     }
-
-            //     EkstepEditorAPI.jQuery("#fileSize").text(ctrl.formatBytes(file.size));
-            // }, 1);
         }
 
         ctrl.formatBytes = function (bytes,decimals) {
@@ -451,12 +440,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             $scope.$safeApply();
 
             if (ctrl.record == true) {
-               /* var dataurl = EkstepEditorAPI.jQuery('#recorded-audio-mainAudio').attr('src');
-                var file = ctrl.urltoFile(dataurl, ctrl.file.name);
-
-                ctrl.assetMeta.mimeType = 'audio/mp3';
-                ctrl.assetMeta.mediaType = ctrl.audioType;
-                */
                 var file;
                 file = ctrl.blobToFile(window.mp3Blob, ctrl.file.name);
 
@@ -505,7 +488,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             console.log(content);
 
             // Create the content for asset
-            EkstepEditor.assetService.saveAsset(ctrl.assetId, content, function(err, resp) {
+            EkstepEditorAPI.getService('asset').saveAsset(ctrl.assetId, content, function(err, resp) {
                 if (resp) {
                     ctrl.uploadingAsset = true;
                     ctrl.uploadFile(resp, data);
@@ -513,22 +496,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             });
         }
 
-
-        /*ctrl.urltoFile = function(dataurl, filename){
-            var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-                bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-            while(n--){
-                u8arr[n] = bstr.charCodeAt(n);
-            }
-            return new File([u8arr], filename, {type:mime});
-        }*/
-
        ctrl.blobToFile = function(theBlob, fileName){
-            //A Blob() is almost a File() - it's just missing the two properties below which we will add
-            // theBlob.lastModifiedDate = new Date();
-            // theBlob.name = fileName;
-            //return theBlob;
-
             var file = new File([theBlob], fileName, {type: theBlob.type, lastModified: Date.now()});
             return file;
         }
