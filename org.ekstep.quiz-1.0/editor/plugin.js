@@ -53,7 +53,7 @@ EkstepEditor.basePlugin.extend({
         if ((EkstepEditorAPI._.isUndefined(instance.data.template) || instance.data.template.length == 0 || !instance.hasTemplateMedia) && _.size(templateIds) >0) {
             for (var index in templateIds) {
                 // get Template based on ID and push all templates response to arrray.
-                EkstepEditor.assessmentService.getTemplate(templateIds[index], function(err, res) {
+                EkstepEditorAPI.getService('assessment').getTemplate(templateIds[index], function(err, res) {
                     try {
                         if (res) {
                             resCount++;

@@ -31,7 +31,7 @@ angular.module('assessmentbrowserapp', [])
         ctrl.context = EkstepEditorAPI.getAngularScope().context;
 
         //get languages from languages api
-        EkstepEditorAPI.getService('assessmentService').getLanguages(function(err, respLan) {
+        EkstepEditorAPI.getService('language').getLanguages(function(err, respLan) {
             if (!err) {
                 var assessmentlanguages = {};
                 EkstepEditorAPI._.forEach(respLan.data.result.languages, function(lang) {
@@ -39,7 +39,7 @@ angular.module('assessmentbrowserapp', [])
                 });
                 ctrl.assessment.language = EkstepEditorAPI._.values(assessmentlanguages);
                 //get questiontype, grade and difficulty dropdown values from definitions api
-                EkstepEditorAPI.getService('assessmentService').getDefinitions(function(err, resp) {
+                EkstepEditorAPI.getService('meta').getDefinitions('AssessmentItem', function(err, resp) {
                     if (!err) {
                         var questionTypes = {};
                         EkstepEditorAPI._.forEach(resp.data.result.definition_node.properties, function(prop) {
@@ -56,7 +56,7 @@ angular.module('assessmentbrowserapp', [])
                             }
                         });
                         //get question type full defination from resource bundles api
-                        EkstepEditorAPI.getService('assessmentService').getResourceBundles(function(err, resourceResp) {
+                        EkstepEditorAPI.getService('meta').getResourceBundles(ctrl.languagecode, function(err, resourceResp) {
                             if (!err) {
                                 EkstepEditorAPI._.forEach(ctrl.assessment.type, function(data) {
                                     if (resourceResp.data.result.en[data] == undefined) {
@@ -138,7 +138,7 @@ angular.module('assessmentbrowserapp', [])
                 }
             });
             // get Questions from questions api
-            EkstepEditorAPI.getService('assessmentService').getQuestions(data, function(err, resp) {
+            EkstepEditorAPI.getService('assessment').getQuestions(data, function(err, resp) {
                 if (!err) {
                     ctrl.itemsLoading = false;
                     var item;
@@ -219,7 +219,7 @@ angular.module('assessmentbrowserapp', [])
         });
       
         ctrl.previewItem = function(item) {
-            EkstepEditorAPI.getService('assessmentService').getItem(item.question.identifier, function(err, resp) {
+            EkstepEditorAPI.getService('assessment').getItem(item.question.identifier, function(err, resp) {
                 if (!err) {
                     item = resp.data.result.assessment_item ? resp.data.result.assessment_item : item;
                     ctrl.itemPreviewLoading = true;
@@ -227,7 +227,7 @@ angular.module('assessmentbrowserapp', [])
                     ctrl.activePreviewItem = item.identifier;
                     var templateRef = item.template_id ? item.template_id : item.template;
                     if (templateRef) {
-                        EkstepEditorAPI.getService('assessmentService').getTemplate(templateRef, function(err, response) {
+                        EkstepEditorAPI.getService('assessment').getTemplate(templateRef, function(err, response) {
                             if (!err) {
                                 var x2js = new X2JS({ attributePrefix: 'none', enableToStringFunc: false });
                                 var templateJson = x2js.xml_str2json(response.data.result.content.body);

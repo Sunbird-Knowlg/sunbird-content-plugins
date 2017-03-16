@@ -49,7 +49,7 @@ angular.module('wordinfotextapp', []).controller('wordinfotextcontroller', ['$sc
                 "content": ctrl.selectedSentence
             }
         };
-        EkstepEditorAPI.getService('languageService').getKeyWords(requestData, function(err, response) {
+        EkstepEditorAPI.getService('language').getKeyWords(requestData, function(err, response) {
             ctrl.loading = false;
             if (err) {
                 ctrl.errorLoadingKeywords = true;
@@ -81,7 +81,7 @@ angular.module('wordinfotextapp', []).controller('wordinfotextcontroller', ['$sc
                 }
             }
         };
-        EkstepEditorAPI.getService('searchService').search(requestData, function(err, response) {
+        EkstepEditorAPI.getService('search').search(requestData, function(err, response) {
             if (!err) {
                 var dictionary = {},
                     wordinfotextData = {};
