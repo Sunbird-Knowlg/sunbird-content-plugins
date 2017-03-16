@@ -1,7 +1,7 @@
 /**
- * The purpose of {@link Spectrum} is used to add color to other plugin objects
+ * The purpose of {@link colorpicker} is used to add color to other plugin objects
  *
- * @class Spectrum
+ * @class colorpicker
  * @extends EkstepEditor.basePlugin
  *
  * @author Chetan Sachdev <chetan.sachdev@tarento.com>
@@ -10,13 +10,13 @@ EkstepEditor.basePlugin.extend({
     /**
      * This expains the type of the plugin 
      * @member {String} type
-     * @memberof Spectrum
+     * @memberof colorpicker
      */
-    type: "spectrum",
+    type: "colorpicker",
     /**
      * This contains the life cycle  methods of colorpicker
      * @member {undefined|Array} picker
-     * @memberof Spectrum
+     * @memberof colorpicker
      */
     picker: [],
     
@@ -28,7 +28,7 @@ EkstepEditor.basePlugin.extend({
      * it has the callback method which will be called on change of the color
      * @param  {Object} event
      * @param  {Object} data
-     * @memberof Spectrum 
+     * @memberof colorpicker 
      */
     invoke: function(event, data) {
         var instance = this;
@@ -79,4 +79,4 @@ EkstepEditor.basePlugin.extend({
         }
     }
 });
-//# sourceURL=spectrumplugin.js
+//# sourceURL=colorpickerplugin.js

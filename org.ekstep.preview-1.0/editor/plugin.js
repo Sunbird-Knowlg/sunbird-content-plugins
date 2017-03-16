@@ -1,7 +1,7 @@
 /**
  * 
  * plugin for preview stage contents
- * @class atPreview
+ * @class Preview
  * @extends EkstepEditor.basePlugin
  * @author Sunil A S <sunils@ilimi.in>
  * @listens atpreview:show
@@ -9,37 +9,37 @@
 EkstepEditor.basePlugin.extend({
     /**
      *   @member type {String} plugin title
-     *   @memberof atPreview
+     *   @memberof preview
      *
      */
-    type: 'atpreview',
+    type: 'preview',
     /**
      *   @member previewURL {String} reverse proxy URL
-     *   @memberof atPreview
+     *   @memberof Preview
      *
      */
     previewURL: 'preview/preview.html?webview=true',
     /**
      *   @member contentBody {Object} content body for preview
-     *   @memberof atPreview
+     *   @memberof Preview
      *
      */
     contentBody: undefined,
     /**
      *   registers events
-     *   @memberof atPreview
+     *   @memberof preview
      *
      */
     initialize: function() {
         EkstepEditorAPI.addEventListener("atpreview:show", this.initPreview, this);
-        var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.atpreview-1.0/editor/popup.html';
+        var templatePath = EkstepEditorAPI.getPluginRepo() + '/' + this.manifest.id + '-' + this.manifest.ver +'/editor/popup.html';
         EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
     },
     /**
      *
      *   @param event {Object} event object from event bus.
      *   @param data {Object} ecml
-     *   @memberof atPreview
+     *   @memberof preview
      */
     initPreview: function(event, data) {
         this.contentBody = data.contentBody;
@@ -49,7 +49,7 @@ EkstepEditor.basePlugin.extend({
         this.showPreview();
     },
     /**     
-     *   @memberof atPreview
+     *   @memberof preview
      */
     showPreview: function() {        
         console.log(this.previewURL);
@@ -68,7 +68,7 @@ EkstepEditor.basePlugin.extend({
         };
 
         EkstepEditorAPI.getService('popup').open({
-            template: 'partials_org.ekstep.atpreview.html',
+            template: 'partials_org.ekstep.preview.html',
             controller: ['$scope', modalController],
             showClose: false,
             width: 900,
@@ -78,4 +78,4 @@ EkstepEditor.basePlugin.extend({
     }
 });
 
-//# sourceURL=atpreviewplugin.js
+//# sourceURL=previewplugin.js
