@@ -5,7 +5,7 @@ EkstepEditor.basePlugin.extend({
     service: undefined,
     initialize: function() {
         this.service = EkstepEditorAPI.getService('telemetry');
-        EkstepEditorAPI.addEventListener('content:onload', this.registerEvents, this);
+        EkstepEditorAPI.addEventListener('content:load:complete', this.registerEvents, this);
     },
     registerEvents: function() {
         var instance = this;
