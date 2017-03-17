@@ -306,7 +306,7 @@ EkstepEditor.basePlugin.extend({
     showReadalong: function() {
         var instance = this;
         var textObj = EkstepEditorAPI.getCurrentObject();
-        EkstepEditorAPI.dispatchEvent('org.ekstep.htext:showpopup', {
+        EkstepEditorAPI.dispatchEvent('org.ekstep.readalongbrowser:showpopup', {
             textObj: textObj,
             callback: function(data) {
                 if (!EkstepEditorAPI._.isUndefined(data)) {
@@ -338,7 +338,7 @@ EkstepEditor.basePlugin.extend({
     showWordInfo: function() {
         var instance = this;
         var textObj = EkstepEditorAPI.getCurrentObject();
-        EkstepEditorAPI.dispatchEvent('org.ekstep.wordinfotext:showpopup', {
+        EkstepEditorAPI.dispatchEvent('org.ekstep.wordinfobrowser:showpopup', {
             textObj: textObj,
             callback: function(data, templateData) {
                 if (!EkstepEditorAPI._.isUndefined(data)) {

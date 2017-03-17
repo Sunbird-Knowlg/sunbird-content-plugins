@@ -1,6 +1,6 @@
 /**
  * plugin is used to create or modifiy the readalong text in editor
- * @class Htext
+ * @class readalongbrowser
  * @extends EkstepEditor.basePlugin
  * @author Kartheek Palla <kartheekp@ilimi.in>
  */
@@ -9,40 +9,40 @@ EkstepEditor.basePlugin.extend({
     /**
      * This expains the type of the plugin 
      * @member {String} type
-     * @memberof Htext
+     * @memberof readalongbrowser
      */
-    type: "htext",
+    type: "readalongbrowser",
     /**
      * Magic Number is used to calculate the from and to ECML conversion 
      * @member {Number} magicNumber
-     * @memberof Text
+     * @memberof readalongbrowser
      */
     magicNumber: 1920,
     /**
      * Editor Width is used to calculate the from and to ECML conversion 
      * @member {Number} editorWidth
-     * @memberof Text
+     * @memberof readalongbrowser
      */
     editorWidth: 720,
     /**
      * @member currentInstance
-     * @memberof Htext
+     * @memberof readalongbrowser
      */
     currentInstance: undefined,
     cb: undefined,
     text:undefined,
     /**
      * registers events
-     * @memberof Htext
+     * @memberof readalongbrowser
      */
     initialize: function() {
         var instance = this;
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
         EkstepEditorAPI.addEventListener("delete:invoked", this.deleteObject, this);
-        EkstepEditorAPI.addEventListener("org.ekstep.htext:showpopup", this.loadHtml, this);
+        EkstepEditorAPI.addEventListener(instance.manifest.id + ":showpopup", this.loadHtml, this);
         setTimeout(function() {
-            var templatePath = EkstepEditorAPI.getPluginRepo() + '/' + instance.manifest.id + '-' + instance.manifest.ver +'/editor/htext.html';
-            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/' + instance.manifest.id + '-' + instance.manifest.ver +'/editor/readalongapp.js';
+            var templatePath = EkstepEditorAPI.getPluginRepo() + '/' + instance.manifest.id + '-' + instance.manifest.ver +'/editor/readalongbrowser.html';
+            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/' + instance.manifest.id + '-' + instance.manifest.ver +'/editor/readalongbrowserapp.js';
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
 
@@ -56,8 +56,8 @@ EkstepEditor.basePlugin.extend({
         if(data.textObj.attributes.textType == "readalong")
             this.editorObj = data.textObj.editorObj;
         EkstepEditorAPI.getService('popup').open({
-            template: 'htext',
-            controller: 'readalongcontroller',
+            template: 'readalongbrowser',
+            controller: 'readalongbrowsercontroller',
             controllerAs: '$ctrl',
             resolve: {
                 'instance': function() {
@@ -118,4 +118,4 @@ EkstepEditor.basePlugin.extend({
         return karaoke;
     },
 });
-//# sourceURL=readalongplugin.js
+//# sourceURL=readalongbrowserplugin.js

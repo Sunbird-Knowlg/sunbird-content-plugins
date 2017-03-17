@@ -1,6 +1,6 @@
 /**
  * plugin is used to create or modifiy the word meaning text in editor
- * @class wordinfotext
+ * @class wordinfobrowser
  * @extends EkstepEditor.basePlugin
  * @author Kartheek Palla <kartheekp@ilimi.in>
  */
@@ -9,24 +9,24 @@ EkstepEditor.basePlugin.extend({
     /**
      * This expains the type of the plugin 
      * @member {String} type
-     * @memberof wordinfotext
+     * @memberof wordinfobrowser
      */
-    type: "wordinfotext",
+    type: "wordinfobrowser",
     currentInstance: undefined,
     cb: undefined,
     text:undefined,
     /**
      * registers events
-     * @memberof wordinfotext
+     * @memberof wordinfobrowser
      */
     initialize: function() {
         var instance = this;
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
         EkstepEditorAPI.addEventListener("delete:invoked", this.deleteObject, this);
-        EkstepEditorAPI.addEventListener("org.ekstep.wordinfotext:showpopup", this.loadHtml, this);
+        EkstepEditorAPI.addEventListener(instance.manifest.id + ":showpopup", this.loadHtml, this);
         setTimeout(function() {
-            var templatePath = EkstepEditorAPI.getPluginRepo() + '/' + instance.manifest.id + '-' + instance.manifest.ver +'/editor/wordinfotext.html';
-            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/' + instance.manifest.id + '-' + instance.manifest.ver +'/editor/wordinfotextapp.js';
+            var templatePath = EkstepEditorAPI.getPluginRepo() + '/' + instance.manifest.id + '-' + instance.manifest.ver +'/editor/wordinfobrowser.html';
+            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/' + instance.manifest.id + '-' + instance.manifest.ver +'/editor/wordinfobrowserapp.js';
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
     },
@@ -34,7 +34,7 @@ EkstepEditor.basePlugin.extend({
      *   load html template into the popup
      *   @param parentInstance 
      *   @param attrs attributes
-     *   @memberof wordinfotext
+     *   @memberof wordinfobrowser
      */
     loadHtml: function(event, data) {
         currentInstance = this;
@@ -45,8 +45,8 @@ EkstepEditor.basePlugin.extend({
         if(data.textObj.attributes.textType == "wordinfo")
             this.editorObj = data.textObj.editorObj;
         EkstepEditorAPI.getService('popup').open({
-            template: 'wordinfotext',
-            controller: 'wordinfotextcontroller',
+            template: 'wordinfobrowser',
+            controller: 'wordinfobrowsercontroller',
             controllerAs: '$ctrl',
             resolve: {
                 'instance': function() {
@@ -62,4 +62,4 @@ EkstepEditor.basePlugin.extend({
 
     }
 });
-//# sourceURL=wordinfotextplugin.js
+//# sourceURL=wordinfobrowserplugin.js

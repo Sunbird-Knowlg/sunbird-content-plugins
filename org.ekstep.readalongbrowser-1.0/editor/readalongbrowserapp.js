@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('readalongapp', [])
-    .controller('readalongcontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
+angular.module('readalongbrowserapp', [])
+    .controller('readalongbrowsercontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
         var karaoke,
             media,
             ctrl = this;

@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('wordinfotextapp', []).controller('wordinfotextcontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
+angular.module('wordinfobrowserapp', []).controller('wordinfobrowsercontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
     var ctrl = this;
     ctrl.selectedSentence = instance.attributes.__text;
     ctrl.showTypeownText = false;
@@ -119,4 +119,4 @@ angular.module('wordinfotextapp', []).controller('wordinfotextcontroller', ['$sc
         $scope.$safeApply();
     } 
 }]);
-//# sourceURL=wordinfotextapp.js
+//# sourceURL=wordinfobrowserapp.js
