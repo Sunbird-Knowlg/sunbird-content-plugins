@@ -34,7 +34,11 @@ Plugin.extend({
                 PluginManager.invoke('htext', data, instance._parent, instance._stage, instance._theme);
                 break;
             case 'wordinfo':
-                var wordsArr = this._plginConfig.words.split(',');//_.split(data.words, ',');
+                this._data = data;
+                var data = _.clone(this._data);
+                data.id = pid;
+                data['z-index'] = 1000;
+                var wordsArr = this._plginConfig.words.split(',');
                 var text = data.__text;
                 var fontsize = data.fontsize;
                 if (isFinite(fontsize)) {
@@ -48,9 +52,10 @@ Plugin.extend({
                     }
                 }
                 data.__text  = _.map(text.split(' '), function(word) {
-                    var index = _.indexOf(wordsArr, word.toLowerCase());
+                    var tempWord = word.replace(/[^a-zA-Z 0-9]+/g,'');
+                    var index = _.indexOf(wordsArr, tempWord.toLowerCase());
                     if (index != -1) {
-                        return "<a style='font-weight:bold; cursor:pointer; font-size:"+fontsize+"; color:"+instance._plginConfig.wordfontcolor+"; background:"+instance._plginConfig.wordhighlightcolor+"; border-bottom: 1px solid "+instance._plginConfig.wordunderlinecolor+";' data-event='" + word.toLowerCase() + "_click'>" + word + "</a>";
+                        return "<a style='font-weight:bold; cursor:pointer; font-size:"+fontsize+"; color:"+instance._plginConfig.wordfontcolor+"; background:"+instance._plginConfig.wordhighlightcolor+"; border-bottom: 1px solid "+instance._plginConfig.wordunderlinecolor+";' data-event='" + tempWord.toLowerCase() + "_click'>" + word + "</a>";
                     } else {
                         return word;
                     }
@@ -61,9 +66,6 @@ Plugin.extend({
                 if (div) {
                     jQuery("#" + data.id).remove();
                 }
-                this._data = data;
-                var data = _.clone(this._data);
-                data.id = pid;
                 div = document.createElement('div');
                 if (data.style)
                     div.setAttribute("style", data.style);
@@ -83,7 +85,6 @@ Plugin.extend({
 
                 jQuery("#" + data.id).append(data.__text);
                 this._div = div;
-                //this._self = new createjs.Container();
                 this._self = new createjs.DOMElement(div);
                 this._self.x = dims.x;
                 this._self.y = dims.y;
@@ -117,12 +118,16 @@ Plugin.extend({
         }
     },
     invokeController: function() {
-        var controllerData = {};
-        controllerData.__cdata = this._plginData.controller;
-        controllerData.type = "data";
-        controllerData.name = "dictionary";
-        controllerData.id = "dictionary";
-        this._theme.addController(controllerData);
+        if(_.has(this._theme._controllerMap, this._plginData.controller.id)){
+            _.extend( this._theme._controllerMap[this._plginData.controller.id]["_data"], this._plginData.controller.data);
+        }else{
+            var controllerData = {};
+            controllerData.__cdata = this._plginData.controller.data;
+            controllerData.type = "data";
+            controllerData.id = this._plginData.controller.id;
+            controllerData.name = this._plginData.controller.id;
+            this._theme.addController(controllerData);
+        }
     },
     invokeTemplate: function() {
         this._theme._templateMap[this._plginData.template.id] = this._plginData.template;
@@ -137,10 +142,10 @@ Plugin.extend({
             embedData["stroke"] = "white";
             embedData["template-name"] = instance._plginData.template.id;
             embedData["var-word"] = "dictionary."+value;
-            embedData["z-index"] = 1000;
+            embedData["z-index"] = 1001;
             embedData["visible"] = false;
             embedData.event = { 'type': 'click', 'action' : [{'type':'command', 'command' : 'SHOWHTMLELEMENTS' , 'asset': "textBg"}, {'type':'command', 'command' : 'hide' , 'asset': value+'_info'}]};
-            PluginManager.invoke('embed', embedData, instance._stage, instance._stage, instance._theme);
+            PluginManager.invoke('embed', embedData, instance._parent, instance._stage, instance._theme);
         });
     },
     registerEvents: function(id) {

@@ -83,8 +83,7 @@ angular.module('wordinfobrowserapp', []).controller('wordinfobrowsercontroller',
         };
         EkstepEditorAPI.getService('search').search(requestData, function(err, response) {
             if (!err) {
-                var dictionary = {},
-                    wordinfotextData = {};
+                var dictionary = {};
                 EkstepEditorAPI._.forEach(response.data.result.words, function(w) {
                     dictionary[w.lemma] = {
                         lemma: w.lemma,
@@ -92,7 +91,10 @@ angular.module('wordinfobrowserapp', []).controller('wordinfobrowsercontroller',
                     }
                 });
                 var configData = {
-                    "controller": dictionary,
+                    "controller": { 
+                        "id" : "dictionary", 
+                        "data" : dictionary
+                    },
                     "template": ctrl.template
                 };
                 var dataArr = {
