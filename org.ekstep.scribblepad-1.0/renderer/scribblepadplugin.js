@@ -2,7 +2,7 @@ Plugin.extend({
     _type: 'org.ekstep.scribblepad',
     _render: true,
     _isContainer: true,
-    initPlugin: function(data) { 
+    initPlugin: function(data) {
         var pid = data._id || data.id;
         if(data.id) {
             data._id = pid;    
@@ -21,7 +21,7 @@ Plugin.extend({
         var eraserH = (this._parent.dimensions().h * 6.91)/dims.h;
         var children = {
             "scribble": data,
-            "image": { x: 100 - eraserW, y: 0, w: eraserW, h: eraserH, 'z-index': 1, asset: "org.ekstep.scribblepad.eraser", event: { type: "click", action: { asset: data.id, command: "erase", type: "command" } }}
+            "image": { x: 100 - eraserW, y: 0, w: eraserW, h: eraserH, 'z-index': 1000, asset: "org.ekstep.scribblepad.eraser", event: { type: "click", action: { asset: data.id, command: "erase", type: "command" } }}
         }
         this.invokeChildren(children, this, this._stage, this._theme);
     }
