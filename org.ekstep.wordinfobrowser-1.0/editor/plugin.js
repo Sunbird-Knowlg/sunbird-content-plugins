@@ -25,8 +25,8 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("delete:invoked", this.deleteObject, this);
         EkstepEditorAPI.addEventListener(instance.manifest.id + ":showpopup", this.loadHtml, this);
         setTimeout(function() {
-            var templatePath = EkstepEditorAPI.getPluginRepo() + '/' + instance.manifest.id + '-' + instance.manifest.ver +'/editor/wordinfobrowser.html';
-            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/' + instance.manifest.id + '-' + instance.manifest.ver +'/editor/wordinfobrowserapp.js';
+            var templatePath = EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/wordinfobrowser.html");
+            var controllerPath = EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/wordinfobrowserapp.js");
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
     },
