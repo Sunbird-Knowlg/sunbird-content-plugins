@@ -12,10 +12,11 @@ EkstepEditor.basePlugin.extend({
      * @memberof activityBrowser
      */
     initialize: function() {
+        var instance = this;
         EkstepEditorAPI.addEventListener("org.ekstep.activitybrowser:showpopup", this.loadBrowser, this);
         setTimeout(function() {
-            var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.activitybrowser-1.0/editor/activityBrowser.html';
-            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.activitybrowser-1.0/editor/activityBrowser.js';
+            var templatePath = EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/activityBrowser.html");
+            var controllerPath = EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/activityBrowser.js"); 
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
 
