@@ -8,7 +8,7 @@ angular.module('activityBrowserApp', [])
         ctrl.activitiesList = [];
         ctrl.noActivities = false;
         ctrl.loading = false;
-        ctrl.defaultActivityImage = EkstepEditorAPI.getPluginRepo() + "/org.ekstep.activitybrowser-1.0/assets/default-activity.png";
+        ctrl.defaultActivityImage = EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/default-activity.png");
         ctrl.activityOptions = {
             searchQuery: "",
             conceptsPlaceHolder: '(0) Concepts',
