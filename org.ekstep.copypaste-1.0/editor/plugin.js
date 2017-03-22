@@ -19,10 +19,19 @@ EkstepEditor.basePlugin.extend({
      */
     clipboard: undefined,
     initialize: function() {
+        var instance = this;
         EkstepEditorAPI.addEventListener('copy:copyItem', this.copyItem, this);
         EkstepEditorAPI.addEventListener('paste:pasteItem', this.pasteItem, this);
         EkstepEditorAPI.addEventListener("object:selected", this.objectSelected, this);
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnSelected, this);
+
+        EkstepEditorAPI.registerKeyboardCommand('ctrl+c', function() {
+            instance.copyItem();
+        });
+
+        EkstepEditorAPI.registerKeyboardCommand('ctrl+v', function() {
+            instance.pasteItem();
+        });
     },
     /**
      *
@@ -32,7 +41,9 @@ EkstepEditor.basePlugin.extend({
      */
     copyItem: function() {
         this.clipboard = EkstepEditorAPI.getCurrentObject() ? EkstepEditorAPI.getCurrentObject() : EkstepEditorAPI.getCurrentGroup();
-        EkstepEditorAPI.updateContextMenu({ id: 'paste', state: 'SHOW', data: {} });
+        if(this.clipboard) {
+            EkstepEditorAPI.updateContextMenu({ id: 'paste', state: 'SHOW', data: {} });
+        }
     },
     /**
      *
@@ -41,15 +52,17 @@ EkstepEditor.basePlugin.extend({
      *   @memberof copyPaste
      */
     pasteItem: function() {
-        if (_.isArray(this.clipboard)) {
-            EkstepEditorAPI.getCanvas().discardActiveGroup();
-            this.clipboard.forEach(function(instance){
-                EkstepEditorAPI.cloneInstance(instance);
-            });
+        if(this.clipboard) {
+            if (_.isArray(this.clipboard)) {
+                EkstepEditorAPI.getCanvas().discardActiveGroup();
+                this.clipboard.forEach(function(instance){
+                    EkstepEditorAPI.cloneInstance(instance);
+                });
+            }
+            else EkstepEditorAPI.cloneInstance(this.clipboard);
+            this.clipboard = undefined;
+            EkstepEditorAPI.updateContextMenu({ id: 'paste', state: 'HIDE', data: {} });
         }
-        else EkstepEditorAPI.cloneInstance(this.clipboard);
-        this.clipboard = undefined;
-        EkstepEditorAPI.updateContextMenu({ id: 'paste', state: 'HIDE', data: {} });
     },
     /**
      *

@@ -2,16 +2,14 @@ EkstepEditor.basePlugin.extend({
     type: "delete",
     picker: undefined,
     initialize: function() {
+        var instance = this;
         EkstepEditorAPI.addEventListener("delete:invoke", this.deleteObject, this);
         EkstepEditorAPI.addEventListener("object:selected", this.objectSelected, this);
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnSelected, this);
+        EkstepEditorAPI.registerKeyboardCommand('del', function() {
+            instance.deleteObject();
+        });
     },
-    /*deleteObject: function(event, data) {
-    	var id = EkstepEditorAPI.getEditorObject().id;
-    	EkstepEditorAPI.dispatchEvent('delete:invoked',{'editorObj':EkstepEditorAPI.getCurrentObject().attributes});
-    	EkstepEditorAPI.getCanvas().remove(EkstepEditorAPI.getEditorObject());
-    	EkstepEditorAPI.dispatchEvent('object:modified', {id: id});
-    },*/
     deleteObject: function(event, data) {
         var activeGroup = EkstepEditorAPI.getEditorGroup(), activeObject = EkstepEditorAPI.getEditorObject(), id, instance = this;
 
