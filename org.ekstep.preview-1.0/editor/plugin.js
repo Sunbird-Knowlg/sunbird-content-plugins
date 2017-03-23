@@ -55,7 +55,7 @@ EkstepEditor.basePlugin.extend({
         console.log(this.previewURL);
         var instance = this;
         var contentService = EkstepEditorAPI.getService('content');
-        var meta = EkstepEditorAPI.getService('content').getContentMeta(EkstepEditorAPI.globalContext.contentId);
+        var meta = EkstepEditorAPI.getService('content').getContentMeta(EkstepEditorAPI.getContext('contentId'));
         var modalController = function($scope) {
             $scope.$on('ngDialog.opened', function() {                
                 var previewContentIframe = EkstepEditorAPI.jQuery('#previewContentIframe')[0];

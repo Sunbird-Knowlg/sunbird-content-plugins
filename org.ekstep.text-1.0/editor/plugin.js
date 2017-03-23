@@ -31,13 +31,15 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     initialize: function() {
+        var instance = this;
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
         EkstepEditorAPI.addEventListener("stage:unselect", this.stageUnselect, this);
         EkstepEditorAPI.addEventListener("org.ekstep.text:readalong:show", this.showReadalong, this);
         EkstepEditorAPI.addEventListener("org.ekstep.text:wordinfo:show", this.showWordInfo, this);
         EkstepEditorAPI.addEventListener("org.ekstep.text:delete:enhancement", this.deleteEnhancement, this);
         EkstepEditorAPI.addEventListener("org.ekstep.text:modified", this.dblClickHandler, this);
-        EkstepEditorAPI.getService('popup').loadNgModules(EkstepEditorAPI.getPluginRepo() + '/' + this.manifest.id + '-' + this.manifest.ver +'/editor/delete_confirmation_dialog.html');
+        var templatePath = EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/delete_confirmation_dialog.html");
+        EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
     },
     /**
      * This method used to create the text fabric object and assigns it to editor of the instance
@@ -75,9 +77,10 @@ EkstepEditor.basePlugin.extend({
             this.manifest.editor.playable = true;
             this.addReadalongconfigManifest(this);
         } else if (!EkstepEditorAPI._.isUndefined(this.attributes.words) || this.attributes.textType === 'wordinfo') {
+            var instance = this;
             this.addMedia({
                 "id": "org.ekstep.text.popuptint",
-                "src": EkstepEditorAPI.absURL + EkstepEditorAPI.getPluginRepo() + "/" + this.manifest.id + '-' + this.manifest.ver +"/assets/popuptint.png",
+                "src": EkstepEditorAPI.getConfig('absURL') + EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
                 "type": "image",
                 "assetId": "org.ekstep.text.popuptint"
             });
@@ -351,7 +354,7 @@ EkstepEditor.basePlugin.extend({
                     textObj.attributes.textType = 'wordinfo';
                     textObj.addMedia({
                         "id": "org.ekstep.text.popuptint",
-                        "src": EkstepEditorAPI.absURL + EkstepEditorAPI.getPluginRepo() + "/" + instance.manifest.id + '-' + instance.manifest.ver +"/assets/popuptint.png",
+                        "src": EkstepEditorAPI.getConfig('absURL') + EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
                         "type": "image",
                         "assetId": "org.ekstep.text.popuptint"
                     });

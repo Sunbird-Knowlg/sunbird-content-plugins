@@ -90,7 +90,7 @@ EkstepEditor.basePlugin.extend({
     },
     showQuizbgImage: function(questionnaire, _parent) {
         var instance = this;
-        var path = EkstepEditorAPI.globalContext.useProxyForURL ? "/plugins/" : "/content-plugins/";
+        var path = EkstepEditorAPI.getConfig('useProxyForURL') ? "/plugins/" : "/content-plugins/";
         var quizImage = EkstepEditor.config.absURL+path+"org.ekstep.quiz-1.0/editor/assets/QuizImage.png";
         fabric.Image.fromURL(quizImage, function(img) {
             var count = questionnaire.total_items + '/' + instance.getItems(questionnaire.items);
@@ -154,7 +154,7 @@ EkstepEditor.basePlugin.extend({
             }
         }
         if (_.size(errTemplateids) === _.size(errTempurl) && _.size(errTemplateids) > 0) {
-            var path = EkstepEditorAPI.globalContext.useProxyForURL ? "/plugins/" : "/content-plugins/";
+            var path = EkstepEditorAPI.getConfig('useProxyForURL') ? "/plugins/" : "/content-plugins/";
             EkstepEditorAPI.getService('popup').open({
                 showClose: false,
                 template: EkstepEditor.config.absURL + path + "org.ekstep.quiz-1.0/editor/warning.html",
