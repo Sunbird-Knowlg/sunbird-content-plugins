@@ -25,7 +25,7 @@ EkstepEditor.basePlugin.extend({
         });
         converter = new E2EConverter();
         EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.initViewECML, this);
-        var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.viewecml-1.0/editor/ECMLbrowser.html';
+        var templatePath = EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/ECMLbrowser.html");
         setTimeout(function() {
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
         }, 1000);

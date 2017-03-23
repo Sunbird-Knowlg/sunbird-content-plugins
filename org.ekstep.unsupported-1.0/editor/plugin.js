@@ -10,7 +10,7 @@ EkstepEditor.basePlugin.extend({
         var _parent = this.parent; 
         this.parent = undefined;
         var props = this.setImageDimensions(this.data.data);        
-        var imgSrc = EkstepEditorAPI.absURL + EkstepEditorAPI.getPluginRepo() + "/org.ekstep.unsupported-1.0/assets/unsupportedplugin.png";
+        var imgSrc = EkstepEditorAPI.getConfig('absURL') + EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "assets/unsupportedplugin.png");
         fabric.Image.fromURL(imgSrc, function(img) {
             instance.editorObj = img;
             instance.parent = _parent;

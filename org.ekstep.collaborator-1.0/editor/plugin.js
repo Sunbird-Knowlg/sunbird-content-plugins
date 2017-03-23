@@ -20,7 +20,7 @@ EkstepEditor.basePlugin.extend({
      */
     initialize: function() {
         EkstepEditorAPI.addEventListener("collaborator:add", this.addCollaborator, this);
-        var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.collaborator-1.0/editor/popup.html';
+        var templatePath = EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/popup.html");
         EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
     },
     /**

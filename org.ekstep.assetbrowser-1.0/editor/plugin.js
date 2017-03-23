@@ -23,8 +23,8 @@ EkstepEditor.basePlugin.extend({
     initialize: function() {
         EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.initPreview, this);
         setTimeout(function() {
-            var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.assetbrowser-1.0/editor/assetBrowser.html';
-            var controllerPath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.assetbrowser-1.0/editor/assetbrowserapp.js';
+            var templatePath = EkstepEditorAPI.resolvePluginResource("org.ekstep.assetbrowser", "1.0", "editor/assetBrowser.html");
+            var controllerPath = EkstepEditorAPI.resolvePluginResource("org.ekstep.assetbrowser", "1.0", "editor/assetbrowserapp.js");
 
             EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
 

@@ -20,7 +20,7 @@ EkstepEditor.basePlugin.extend({
      */
     initialize: function() {
         EkstepEditorAPI.addEventListener("download:content", this.downloadContent, this);
-        var templatePath = EkstepEditorAPI.getPluginRepo() + '/org.ekstep.download-1.0/editor/popup.html';
+        var templatePath = EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/popup.html");
         EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
     },
     /**
