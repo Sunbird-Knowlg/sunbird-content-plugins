@@ -69,8 +69,8 @@ EkstepEditor.basePlugin.extend({
         });
     },
     getDownloadUrl: function(callback) {
-        var fileName = (EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).name).toLowerCase();
-        EkstepEditorAPI.getService('content').downloadContent(window.context.content_id, fileName, function(err, resp) {
+        var fileName = (EkstepEditorAPI.getService('content').getContentMeta(EkstepEditorAPI.getContext('contentId')).name).toLowerCase();
+        EkstepEditorAPI.getService('content').downloadContent(EkstepEditorAPI.getContext('contentId'), fileName, function(err, resp) {
             if (!err && resp.data.responseCode == "OK") {
                 callback(resp.data.result.ECAR_URL);
             } else {
@@ -80,7 +80,7 @@ EkstepEditor.basePlugin.extend({
     },
     sendEmail: function($scope, data) {
         EkstepEditorAPI.jQuery.ajax({
-            url: EkstepEditorAPI.baseURL + '/index.php?option=com_api&app=ekcontent&resource=download&format=raw',
+            url: EkstepEditorAPI.getConfig('baseURL') + '/index.php?option=com_api&app=ekcontent&resource=download&format=raw',
             headers: {
                 'x-auth': 'session'
             },

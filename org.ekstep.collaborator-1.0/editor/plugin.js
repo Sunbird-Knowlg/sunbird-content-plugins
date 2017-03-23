@@ -33,7 +33,7 @@ EkstepEditor.basePlugin.extend({
         this.showPreview(function() {
             EkstepEditorAPI.jQuery('#colUsersDropdown').dropdown({
                 apiSettings: {
-                    url: EkstepEditorAPI.baseURL+'/index.php?option=com_ekcontent&task=contentform.getUsersToInvite&id=' + window.context.id + '&isEditor=true&search={query}',
+                    url: EkstepEditorAPI.getConfig('baseURL')+'/index.php?option=com_ekcontent&task=contentform.getUsersToInvite&id=' + window.context.id + '&isEditor=true&search={query}',
                     cache: true
                 },
                 saveRemoteData: true,
@@ -139,7 +139,7 @@ EkstepEditor.basePlugin.extend({
     notifyUser: function(event, fields) {
         var instance = this;
         EkstepEditorAPI.jQuery.ajax({
-            url: EkstepEditorAPI.baseURL+'/index.php?option=com_ekcontent&task=contentform.inviteUsers',
+            url: EkstepEditorAPI.getConfig('baseURL')+'/index.php?option=com_ekcontent&task=contentform.inviteUsers',
             headers: {
                 'x-auth': 'session'
             },
@@ -176,7 +176,7 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
 
         EkstepEditorAPI.jQuery.ajax({
-            url: EkstepEditorAPI.baseURL+'/index.php?option=com_api&app=ekcontent&resource=collaborator&format=raw',
+            url: EkstepEditorAPI.getConfig('baseURL')+'/index.php?option=com_api&app=ekcontent&resource=collaborator&format=raw',
             headers: {
                 'x-auth': 'session'
             },
