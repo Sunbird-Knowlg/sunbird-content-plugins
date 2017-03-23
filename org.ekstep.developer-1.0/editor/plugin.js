@@ -25,8 +25,10 @@ EkstepEditor.basePlugin.extend({
     },
     loadPlugin: function(event, data) {
         var scope = EkstepEditorAPI.getAngularScope();
-        var pluginArray = data.plugin.split("-");
-        EkstepEditorAPI.loadAndInitPlugin(pluginArray[0], pluginArray[1]);
+        var idx = data.plugin.lastIndexOf("-");
+        var pluginId = data.plugin.substr(0, idx);
+        var pluginVer = data.plugin.substr(idx + 1, data.plugin.length);
+        EkstepEditorAPI.loadAndInitPlugin(pluginId, pluginVer, (new Date()).getTime());
     },
     listPlugins: function(event, data) {
         var scope = EkstepEditorAPI.getAngularScope();
