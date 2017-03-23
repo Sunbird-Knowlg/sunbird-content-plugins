@@ -18,7 +18,7 @@ EkstepEditor.basePlugin.extend({
     */
     newInstance: function() {
         var props = this.convertToFabric(this.attributes),
-        host = EkstepEditorAPI.globalContext.useProxyForURL ? EkstepEditor.config.baseURL : EkstepEditor.config.absURL;
+        host = EkstepEditorAPI.getConfig('useProxyForURL') ? EkstepEditorAPI.getConfig('baseURL') : EkstepEditorAPI.getConfig('absURL');
         props.stroke = 1;
         props.strokeWidth = 2;
         props.strokeDashArray = [5, 5];
