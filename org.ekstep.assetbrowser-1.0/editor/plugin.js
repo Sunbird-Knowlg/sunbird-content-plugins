@@ -105,7 +105,7 @@ EkstepEditor.basePlugin.extend({
 
         EkstepEditorAPI._.merge(requestObj.request.filters, allowableFilter);
 
-        iservice.http.post(EkstepEditorAPI.getConfig('baseURL') + EkstepEditorAPI.apislug + '/search/v2/search', requestObj, requestHeaders, cb);
+        iservice.http.post(EkstepEditorAPI.getConfig('baseURL') + EkstepEditorAPI.getConfig('apislug') + '/search/v2/search', requestObj, requestHeaders, cb);
     },
     /**
     *   invokes popup service to show the popup window

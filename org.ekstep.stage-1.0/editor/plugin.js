@@ -45,7 +45,6 @@ EkstepEditor.basePlugin.extend({
             this.setThumbnail();
             EkstepEditorAPI.dispatchEvent('stage:modified', { id: plugin.id });
         }
-        this.enableSave();        
     },
     setThumbnail: function() {
         /*
@@ -82,7 +81,6 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.getCurrentStage().updateZIndex(); 
         EkstepEditorAPI.getCurrentStage().setThumbnail();
         EkstepEditorAPI.refreshStages();
-        this.enableSave();        
     },
     objectSelected: function(event, data) {
         if(!EkstepEditorAPI._.isUndefined(this.currentObject) && this.currentObject !== data.id) {
@@ -106,9 +104,6 @@ EkstepEditor.basePlugin.extend({
                 instance.destroyOnLoad(childCount, canvas, cb);
             }, 1000);
         }
-    },
-    enableSave: function() {
-        EkstepEditorAPI.getAngularScope().enableSave();        
     },
     getConfigManifest: function() {
         return this.manifest.editor.configManifest;
