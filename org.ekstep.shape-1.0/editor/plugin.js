@@ -140,8 +140,8 @@ EkstepEditor.basePlugin.extend({
                 break;
             case 'sides':
                 var sides = value;
-                var shape = sides + "polygon";
-                var points = this.shapes[shape];
+                this.shapeType = sides + "polygon";
+                var points = this.shapes[this.shapeType];
                 this.attributes.sides = sides;
 
                 this.editorObj.set({
@@ -151,8 +151,8 @@ EkstepEditor.basePlugin.extend({
                 break;
             case 'corners':
                 var corners = value;
-                var shape = corners + "star";
-                var points = this.shapes[shape];
+                this.shapeType = corners + "star";
+                var points = this.shapes[this.shapeType];
                 this.attributes.corners = corners;
 
                 this.editorObj.set({
@@ -201,6 +201,7 @@ EkstepEditor.basePlugin.extend({
 
     toPixel: function(points) {
         var instance = this;
+        /* istanbul ignore else */
         if(points) points.forEach(function(p) {
            p.x = ((instance.attributes.w * p.x) / 100);
            p.y = ((instance.attributes.h * p.y) / 100);
