@@ -25,17 +25,6 @@ EkstepEditor.basePlugin.extend({
             case 'ellipse':
                 props.rx = props.w / 2;
                 props.ry = props.h / 2;
-                /*this.manifest.editor.configManifest.push({
-                    "propertyName": "radius",
-                    "title": "Radius",
-                    "placeholder": "Radius",
-                    "description": "Input radius for the ellipse",
-                    "dataType": "input",
-                    "valueType": "number",
-                    "required": false,
-                    "defaultValue": 64,
-                    "minimumValue": 0
-                });*/
                 this.shapeType = 'ellipse';
                 this.editorObj = new fabric.Ellipse(props);
                 break;
@@ -113,9 +102,8 @@ EkstepEditor.basePlugin.extend({
                 this.shapeType = "harrow";
                 this.drawShape(this.shapeType, props);
                 break;
-
-            default:
         }
+        /* istanbul ignore else */
         if (this.editorObj) this.editorObj.setFill(props.fill);
     },
     /**

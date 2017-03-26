@@ -16,32 +16,32 @@ module.exports = function(config) {
         files: [
             // bower:js
             'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/content-editor/scripts/external.min.js',
-            'test/baseSpec.js',
+            //'test/external.min.js',
+            'test/bootstrap-html.js',
             'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/content-editor/scripts/script.min.js',
-            'plugins/**/editor/*.js',
-
+            //'test/script.min.js',
+            'test/bootstrap-editor.js',
+            //'**/editor/**/*.js',
             // 'plugins/org.ekstep.test-1.0/editor/*.js', // if you want to test your editor plugin only
             // 'plugins/org.ekstep.test-1.0/test/*.js',  // include test directory for your specific plugin
             // fixtures - include as required, below patterns cover the core plugins
-            { pattern: 'plugins/**/*.json', watched: true, served: true, included: false },
-            { pattern: 'plugins/**/*.md', watched: true, served: true, included: false },
-            { pattern: 'plugins/**/*.css', watched: true, served: true, included: false },
-            { pattern: 'plugins/**/*.html', watched: true, served: true, included: false },
-            { pattern: 'app/preview/**', watched: true, served: true, included: false }
+            { pattern: '**/*.md', watched: true, served: true, included: false },
+            { pattern: '**/*.css', watched: true, served: true, included: false },
+            { pattern: '**/*.html', watched: true, served: true, included: false },
+            { pattern: '**/*.json', watched: true, served: true, included: false },
+            { pattern: '**/*.js', watched: true, served: true, included: false },
+            '**/test/editor/*.js'
         ],
 
 
         // list of files to exclude
-        exclude: ['plugins/coverage/**', 'plugins/**/renderer/**'],
+        exclude: ['coverage/**', '**/renderer/**'],
 
 
         // preprocess matching files before serving them to the browser
         // available preprocessors: https://npmjs.org/browse/keyword/karma-preprocessor
         preprocessors: {
-            'plugins/**/!(lib)/!(*.spec).js': ['coverage']
-        },
-        proxies: {
-            '/plugins/': '/base/plugins/'
+            '**/editor/!(*.spec).js': ['coverage']
         },
         // test results reporter to use
         // possible values: 'dots', 'progress'
@@ -63,7 +63,7 @@ module.exports = function(config) {
 
 
         // enable / disable watching file and executing tests whenever any file changes
-        autoWatch: true,
+        autoWatch: false,
 
 
         // start these browsers
@@ -75,7 +75,7 @@ module.exports = function(config) {
 
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
-        singleRun: false,
+        singleRun: true,
 
         // Concurrency level
         // how many browser should be started simultaneous
@@ -83,8 +83,9 @@ module.exports = function(config) {
 
         coverageReporter: {
             reporters: [
-                { type: 'html', dir: 'plugins/coverage/' },
-                { type: 'text-summary' }
+                { type: 'html', dir: 'coverage/' },
+                { type: 'text-summary' },
+                { type: 'cobertura' }
             ],
         }
     })

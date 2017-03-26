@@ -1,17 +1,11 @@
 'use strict';
-
+/*
 describe('org.ekstep.scribblepad', function() {
     var $scope,
         plugin,
         pluginInstance,
         pluginTitle = 'org.ekstep.scribblepad';
 
-    beforeEach(function() {
-        EkstepEditor.config = {
-            defaultSettings: 'base/plugins/org.ekstep.scribblepad-1.0/test/editor/config/editorSettings.json',
-            pluginRepo: 'http://localhost:9876/base/plugins',
-        }
-    });
     beforeEach(module('editorApp'));
 
     beforeEach(inject(function($rootScope, $controller) {
@@ -70,3 +64,4 @@ describe('org.ekstep.scribblepad', function() {
     });
 
 });
+*/
