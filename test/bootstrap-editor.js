@@ -15,7 +15,7 @@ var testConfig = {
 }
 
 var $scope = {
-	$safeApply: function() {},
+	$safeApply: function(cb) { cb()},
 	$watch: function() {}
 }
 
@@ -24,11 +24,21 @@ var $document = {
 }
 
 ContentTestFramework = {
+	initialized: false,
+	cleanUp: function() {
+		EkstepEditor.stageManager.stages = [];
+	},
 	init: function(cb, plugins) {
+		ContentTestFramework.cleanUp();
+		
 		jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 		console.log('####### Initializing Content Editor Framework #######');
 		if(plugins) testConfig.plugins = plugins;
 		EkstepEditor.init(testContext, testConfig, $scope, $document, function() {
+			if(!ContentTestFramework.initialized) {
+				EkstepEditor.stageManager.registerEvents();
+				ContentTestFramework.initialized = true;
+			}
 			console.log('####### Content Editor Framework Initialized #######');
 			cb();
 		});
@@ -76,13 +86,13 @@ ContentTestFramework = {
 	select: function(objectId) {
 		var object = EkstepEditorAPI._.find(EkstepEditorAPI.getCanvas().getObjects(), {id: objectId});
 		EkstepEditorAPI.getCanvas().setActiveObject(object);
-		EkstepEditorAPI.getCanvas().trigger('object:selected', {target: object});
+		//EkstepEditorAPI.getCanvas().fire('object:selected', {target: object});
 		object.fire('selected', {});
 	},
 	unselect: function(objectId) {
 		var object = EkstepEditorAPI._.find(EkstepEditorAPI.getCanvas().getObjects(), {id: objectId});
-		EkstepEditorAPI.getCanvas().setActiveObject(null);
-		EkstepEditorAPI.getCanvas().fire('selection:cleared', {target: object});
+		EkstepEditorAPI.getCanvas().discardActiveObject({});
+		//EkstepEditorAPI.getCanvas().fire('selection:cleared', {target: object});
 		object.fire('deselected', {});
 	}
 }

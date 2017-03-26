@@ -100,6 +100,7 @@ EkstepEditor.basePlugin.extend({
             $('#' + instance.id).remove();
             cb();
         } else {
+            /* istanbul ignore next. Difficult to test */
             setTimeout(function() {
                 instance.destroyOnLoad(childCount, canvas, cb);
             }, 1000);
