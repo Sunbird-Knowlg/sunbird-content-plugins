@@ -5,7 +5,7 @@ describe('Shape plugin', function() {
     var stage1, stage2, stageId, rect1, rect2;
 
     beforeAll(function(done) {
-        ContentTestFramework.init(function() {
+        ContentEditorTestFramework.init(function() {
             stage1 = EkstepEditorAPI.instantiatePlugin('org.ekstep.stage');
             stageId = stage1.id;
             EkstepEditorAPI.loadPlugin('org.ekstep.shape', '1.0');
@@ -24,7 +24,7 @@ describe('Shape plugin', function() {
         it('should test getOnClick function', function() {
             var currentStageId = EkstepEditorAPI.getCurrentStage().id;
             var onclick = stage1.getOnClick();
-            ContentTestFramework.validateObject(onclick, {
+            ContentEditorTestFramework.validateObject(onclick, {
                 'id': 'stage:select', 'data.stageId': stage1.id, 'data.prevStageId': currentStageId
             });
         });
@@ -59,7 +59,7 @@ describe('Shape plugin', function() {
 
         it('should test object selection and deselection', function() {
 
-            ContentTestFramework.select(rect1.id);
+            ContentEditorTestFramework.select(rect1.id);
             expect(stage2.canvas.getActiveObject().id).toBe(rect1.id);
         });
 

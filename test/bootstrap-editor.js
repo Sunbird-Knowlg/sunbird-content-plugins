@@ -23,21 +23,21 @@ var $document = {
 	on: function() {}
 }
 
-ContentTestFramework = {
+ContentEditorTestFramework = {
 	initialized: false,
 	cleanUp: function() {
 		EkstepEditor.stageManager.stages = [];
 	},
 	init: function(cb, plugins) {
-		ContentTestFramework.cleanUp();
+		ContentEditorTestFramework.cleanUp();
 		
 		jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 		console.log('####### Initializing Content Editor Framework #######');
 		if(plugins) testConfig.plugins = plugins;
 		EkstepEditor.init(testContext, testConfig, $scope, $document, function() {
-			if(!ContentTestFramework.initialized) {
+			if(!ContentEditorTestFramework.initialized) {
 				EkstepEditor.stageManager.registerEvents();
-				ContentTestFramework.initialized = true;
+				ContentEditorTestFramework.initialized = true;
 			}
 			console.log('####### Content Editor Framework Initialized #######');
 			cb();
