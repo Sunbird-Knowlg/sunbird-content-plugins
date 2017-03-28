@@ -2,6 +2,7 @@
     "id": "org.ekstep.audio",
     "ver": "1.0",
     "shortId": "audio",
+    "displayName": "Audio",
     "author": "Amol Ghatol",
     "title": "Audio Plugin",
     "description": "",

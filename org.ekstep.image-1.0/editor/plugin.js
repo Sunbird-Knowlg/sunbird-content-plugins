@@ -11,6 +11,7 @@
  */
 
 EkstepEditor.basePlugin.extend({
+    name: "Image",
     /**
     *  
     * Registers events.
@@ -38,6 +39,7 @@ EkstepEditor.basePlugin.extend({
         var media = this.media ? this.media[this.attributes.asset] : undefined;
         if (!(media && media.src)) throw new Error('media source is missing!');                               
         if (media && media.src) {
+            this.name = this.attributes.asset;
             media.src = EkstepEditorAPI.getMediaReverseProxyURL(media.src);
             var imageURL = EkstepEditorAPI.getConfig('useProxyForURL') ? "image/get/" + encodeURIComponent(media.src) : media.src;
             fabric.Image.fromURL(imageURL, function(img) {
@@ -91,6 +93,9 @@ EkstepEditor.basePlugin.extend({
                 EkstepEditorAPI.dispatchEvent(this.manifest.id + ':create', value)
                 break;
         }
+    },
+    getDisplayName: function () {
+         return this.name;
     }
 });
 //# sourceURL=imageplugin.js

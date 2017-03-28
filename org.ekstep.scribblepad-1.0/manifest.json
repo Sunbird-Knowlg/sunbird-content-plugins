@@ -4,6 +4,7 @@
     "author": "Santhosh Vasabhaktula",
     "title": "Scribblepad Plugin",
     "description": "",
+    "displayName": "Scribble",
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",

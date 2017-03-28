@@ -121,6 +121,9 @@ EkstepEditor.basePlugin.extend({
         } else {
             EkstepEditorAPI.jQuery("#" + id).jPlayer('pause');
         }
+    },
+    getDisplayName: function () {
+         return this.name;
     }
 });
 //# sourceURL=audioplugin.js

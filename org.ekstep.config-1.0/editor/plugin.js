@@ -298,11 +298,12 @@ EkstepEditor.basePlugin.extend({
         }
     },
     addAction: function(event, data) {
+        var angScope = EkstepEditorAPI.getAngularScope();
         if (data.command && data.asset) {
             if (this.stageActionsList[data.command]) {
-                EkstepEditorAPI.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': 'transitionTo', 'asset': 'theme', 'value': data.asset }] });
+                EkstepEditorAPI.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': 'transitionTo', 'asset': 'theme', 'value': data.asset, name: angScope.actionTargetObjects[data.asset] }] });
             } else {
-                EkstepEditorAPI.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': data.command, 'asset': data.asset }] });
+                EkstepEditorAPI.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': data.command, 'asset': data.asset, name: angScope.actionTargetObjects[data.asset] }] });
             }
         }
         this.updateActions();
@@ -335,12 +336,12 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         EkstepEditorAPI.jQuery("#actionTargetDropdown:not(.addClick)").parent().on('click', function() {
             EkstepEditorAPI.jQuery("#actionTargetDropdown").nextAll(".menu.transition").find(".item").mouseover(function(event) {
-                var id = EkstepEditorAPI.jQuery(event.target).text();
+                var id = EkstepEditorAPI.jQuery(event.target).attr("data-value").split(":")[1];
                 var pluginInstance = EkstepEditorAPI.getPluginInstance(id);
                 if (pluginInstance && pluginInstance['editorObj']) {
                     var editorObj = pluginInstance['editorObj'];
                     var left = instance.canvasOffset.left + editorObj.left - 5;
-                    var top = instance.canvasOffset.top + editorObj.top - 5;
+                    var top = instance.canvasOffset.top + editorObj.top ;
                     EkstepEditorAPI.jQuery("#objectPointer")
                         .show().offset({ 'left': left, 'top': top })
                         .css({ 'height': editorObj.getHeight() + 10, 'width': editorObj.getWidth() + 10 });
@@ -385,9 +386,13 @@ EkstepEditor.basePlugin.extend({
     setVisibleObjects: function() {
         var angScope = EkstepEditorAPI.getAngularScope();
         var pluginInstanceIds = [];
-        var pluginInstances = EkstepEditorAPI.getStagePluginInstances(EkstepEditorAPI.getCurrentStage().id, null, ['org.ekstep.audio'], [EkstepEditorAPI.getCurrentObject().id]);
+        var pluginInstances = EkstepEditorAPI.getStagePluginInstances(EkstepEditorAPI.getCurrentStage().id, null, ['org.ekstep.audio', 'org.ekstep.image'], [EkstepEditorAPI.getCurrentObject().id]);
         EkstepEditorAPI._.forEach(pluginInstances, function(pi) {
-            pluginInstanceIds[pi.id] = pi.id;
+            pluginInstanceIds[pi.id] = pi.getDisplayName() + " ("+pi['id'].substr(0,15)+"..."+")";
+        })
+        var imageInstances = EkstepEditorAPI.getStagePluginInstances(EkstepEditorAPI.getCurrentStage().id, ['org.ekstep.image'], null, [EkstepEditorAPI.getCurrentObject().id]);
+        EkstepEditorAPI._.forEach(imageInstances, function(pi) {
+            pluginInstanceIds[pi.id] = pi.getDisplayName();
         })
         EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.actionTargetObjects = pluginInstanceIds;
@@ -399,7 +404,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI._.forEach(pluginInstances, function(pi) {
             if (pi.media) {
                 var mediaObj = pi.media[Object.keys(pi.media)[0]];
-                optionsList[mediaObj.id] = mediaObj.id;
+                optionsList[mediaObj.id] = pi.getDisplayName();
             }
         });
         var angScope = EkstepEditorAPI.getAngularScope();
