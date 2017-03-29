@@ -50,7 +50,7 @@ var textEditor = (function() {
 
     function generateTelemetry(data) {
         if(data){
-            EkstepEditor.telemetryService.interact({ 
+            EkstepEditorAPI.getService(ServiceConstants.TELEMETRY_SERVICE).interact({ 
                 "type": data.type, "subtype": data.subtype, "target": data.target, 
                 "pluginid": "org.ekstep.text", "pluginver": "1.0", "objectid": "", 
                 "stage": EkstepEditorAPI.getCurrentStage().id 

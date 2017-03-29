@@ -66,7 +66,7 @@ EkstepEditor.basePlugin.extend({
     */
     getAsset: function(searchText, mediaType, portalOwner, cb) {
         var instance = this,
-            iservice = new EkstepEditor.iService(),
+            iservice = new org.ekstep.services.iService(),
             requestObj,
             requestHeaders,
             allowableFilter;
