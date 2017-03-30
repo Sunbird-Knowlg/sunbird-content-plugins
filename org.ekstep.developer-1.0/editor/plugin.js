@@ -37,7 +37,7 @@ EkstepEditor.basePlugin.extend({
         scope.contributedPluginMessage = "";
         EkstepEditorAPI.jQuery.ajax({
             type: 'GET',
-            url: EkstepEditor.hostRepo.basePath+"/list",
+            url: EkstepEditorAPI.getHostRepoBasePath()+"/list",
             beforeSend: function() {
                 scope.localPluginsPlugins = true;
                 EkstepEditorAPI.ngSafeApply(scope, function() {});
