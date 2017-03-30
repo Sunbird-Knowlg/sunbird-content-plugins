@@ -5,7 +5,7 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("org.ekstep.developer:updateLocalServerPath", this.updateLocalServerPath, this);
         
         var scope = EkstepEditorAPI.getAngularScope();
-        scope.localServerPath = scope.localServerPath || EkstepEditor.hostRepo.basePath;
+        scope.localServerPath = scope.localServerPath || EkstepEditorAPI.getHostRepoBasePath();
         scope.configMenus = scope.configMenus || [];
         if (scope.developerMode) {
             scope.configMenus.push({
@@ -37,7 +37,7 @@ EkstepEditor.basePlugin.extend({
         scope.contributedPluginMessage = "";
         EkstepEditorAPI.jQuery.ajax({
             type: 'GET',
-            url: EkstepEditor.hostRepo.basePath+"/list",
+            url: EkstepEditorAPI.getHostRepoBasePath()+"/list",
             beforeSend: function() {
                 scope.localPluginsPlugins = true;
                 EkstepEditorAPI.ngSafeApply(scope, function() {});
@@ -66,7 +66,7 @@ EkstepEditor.basePlugin.extend({
     },
     updateLocalServerPath: function (event, data) {
         var scope = EkstepEditorAPI.getAngularScope();
-        EkstepEditor.hostRepo.basePath = data.path;
+        EkstepEditorAPI.setHostRepoBasePath(data.path);
         scope.localServerPathEdit = false;
         EkstepEditorAPI.ngSafeApply(scope, function() {});
         this.listPlugins();
