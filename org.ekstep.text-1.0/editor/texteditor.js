@@ -90,6 +90,7 @@ var textEditor = (function() {
                     _commonBtnClickAction();
                     if ($editor.val().trim().length) {
                         EkstepEditorAPI.getPluginInstance(pluginId).editorObj.text = $editor.val();
+                        EkstepEditorAPI.getPluginInstance(pluginId).config.text = $editor.val();
                         EkstepEditorAPI.render();
                         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getPluginInstance(pluginId).editorObj });
                         EkstepEditorAPI.jQuery("#toolbarOptions").show();
@@ -119,7 +120,6 @@ var textEditor = (function() {
         $buttonGrp.append($doneBtn);
         //$buttonGrp.css({position:'absolute', 'top': $editor.offset().top+$editor.height()/2+64,'left': $editor.offset().left+22})
         $buttonGrp.show();
-        setTimeout(function() { EkstepEditorAPI.jQuery("#toolbarOptions").hide();  }, 600);
         var angScope = EkstepEditorAPI.getAngularScope();
         EkstepEditorAPI.ngSafeApply(angScope, function () {
           angScope.configStyle = "";           

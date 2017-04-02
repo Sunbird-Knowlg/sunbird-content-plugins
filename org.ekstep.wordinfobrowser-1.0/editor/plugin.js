@@ -40,7 +40,6 @@ EkstepEditor.basePlugin.extend({
         currentInstance = this;
         this.cb = data.callback;
         this.attributes = data.textObj.attributes;
-        this.attributes.__text = data.textObj.editorObj.text;
         this.config = data.textObj.config;
         if(data.textObj.attributes.textType == "wordinfo")
             this.editorObj = data.textObj.editorObj;
