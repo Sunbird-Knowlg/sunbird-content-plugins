@@ -41,7 +41,7 @@ EkstepEditor.basePlugin.extend({
         this.children.push(plugin);
         if(plugin.editorObj) {
             this.canvas.add(plugin.editorObj);
-            this.canvas.setActiveObject(plugin.editorObj);
+            if(plugin.editorObj.selectable) this.canvas.setActiveObject(plugin.editorObj);
             this.setThumbnail();
             EkstepEditorAPI.dispatchEvent('stage:modified', { id: plugin.id });
         }
