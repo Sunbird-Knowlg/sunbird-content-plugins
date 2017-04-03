@@ -1,0 +1,18 @@
+<script type="text/ng-template" id="org.ekstep.config/partials/properties.html">
+    <div ng-controller="org.ekstep.config:configController">
+        <table class="ui table">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="(propKey, propValue) in pluginProperties">
+                    <td>{{propKey}}</td>
+                    <td>{{propValue}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</script>

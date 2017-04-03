@@ -1,0 +1,49 @@
+<script type="text/ng-template" id="org.ekstep.config/partials/events.html">
+    <div ng-controller="org.ekstep.config:configController">
+        <h5 class="ui header">On click</h5>
+        <button class="ui tiny circular twitter icon button right floated show-action-form-btn" id="showActionFormBtn" ng-click="showActionForm = !showActionForm" ng-init="showActionForm = false;">
+            <i class="plus icon"></i>
+        </button>        
+        <!-- <div class="ui divided items">
+  <div class="item" ng-if="!configData.visible">
+    <select class="ui inline dropdown" ng-model="selectedEventElement" ng-options="pi as pi for pi in pluginInstanceIds"></select>
+  </div>
+</div> -->
+        <div class="ui divider"></div>
+        <div class="ui segment" ng-show="showActionForm">
+            <div id="addActionForm">
+                <form class="ui form">
+                    <div class="field">
+                        <select class="ui  dropdown" ng-model="selectedActionType" id="actionTypeDropdown" ng-options="key as value for (key , value) in allActionsList">
+                            <option value="">select action</option>
+                        </select>
+                    </div>
+                    <div class="field">        
+                        <select class="ui  dropdown" ng-model="selectedActionTarget" ng-options="key as value for (key , value) in actionTargetObject" id="actionTargetDropdown">
+                            <option value="">select target</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <button class="ui primary tiny button" ng-disabled="selectedObject.stage || !selectedActionTarget" ng-click="addAction({'command': selectedActionType, 'asset': selectedActionTarget}); showActionForm = false;" id="addActionBtn">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>        
+        <table class="ui selectable small table" ng-if="currentObject.actions">
+            <thead>
+                <tr>
+                    <th>Action</th>
+                    <th>Target</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="action in currentObjectActions track by $index">
+                    <td>{{action.command}}</td>
+                    <td>{{action.asset | limitTo: 15}}</td>
+                    <td><i class="delete icon link" ng-click="removeAction({index : $index})"></i></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</script>

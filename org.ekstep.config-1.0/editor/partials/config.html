@@ -1,0 +1,103 @@
+<script type="text/ng-template" id="org.ekstep.config/partials/config.html">
+    <div ng-controller="org.ekstep.config:configController">
+        <div ng-repeat="config in pluginConfig">
+            <div ng-switch on="config.dataType">
+                <div class="ui divider" ng-if="$index != 0"></div>
+                <div class="ui form" ng-switch-when="colorpicker">
+                    <div class="field">
+                        <label ng-if="config.title">{{config.title}}</label>
+                        <input type="text" class="basic" id="{{config.propertyName}}" id="{{config.propertyName}}" ng-click="fireSidebarTelemetry({id: config.propertyName}, config.dataType)" />
+                        <!-- <div class="jscolor" style="width:25px;height:25px; min-width: 20px; min-height: 20px;border-radius: 5px;border: 1px solid rgba(49, 38, 38, 0.34);" id="{{config.propertyName}}" ng-click="fireEvent({'id':'colorpicker:show', 'data': {}})"></div> -->
+                    </div>
+                </div>
+                <div class="ui form" ng-switch-when="input">
+                    <div class="field">
+                        <label ng-if="config.title">{{config.title}}</label>
+                        <input type="{{config.valueType || text}}" placeholder="{{config.placeholder}}" ng-model="configData[config.propertyName]" min="{{config.minimumValue}}" max="{{config.maximumValue}}" id="{{config.propertyName}}" ng-if="config.valueType == 'number'" onkeypress="return event.charCode>= 48" ng-click="fireSidebarTelemetry({id: config.propertyName}, config.dataType)" />
+                        <input type="{{config.valueType || text}}" placeholder="{{config.placeholder}}" ng-model="configData[config.propertyName]" id="{{config.propertyName}}" ng-if="config.valueType != 'number'" ng-click="fireSidebarTelemetry({id: config.propertyName}, config.dataType)" />
+                    </div>
+                </div>
+                <div class="ui form" ng-switch-when="textarea">
+                    <div class="field">
+                        <label ng-if="config.title">{{config.title}}</label>
+                        <textarea rows="6" ng-maxlength="1000" ng-model="configData[config.propertyName]" id="{{config.propertyName}}" ng-click="fireSidebarTelemetry({id: config.propertyName}, config.dataType)"></textarea>
+                    </div>
+                </div>
+                <div class="ui form" ng-switch-when="select">
+                    <div class="field">
+                        <label ng-if="config.title">{{config.title}}</label>
+                        <select class="ui dropdown" ng-model="configData[config.propertyName]" ng-options="val for val in config.range" ng-change="fireSidebarTelemetry({id: config.propertyName}, config.dataType)">
+                        </select>
+                    </div>
+                </div>
+                <div class="ui form" ng-switch-when="inputSelect">
+                    <div class="field">
+                        <label ng-if="config.title">{{config.title}}</label>
+                        <select ng-model="configData[config.propertyName]" ng-options="val for val in config.range" id="{{config.propertyName}}" ng-change="fireSidebarTelemetry({id: config.propertyName}, config.dataType)">
+                        </select>
+                    </div>
+                </div>
+                <div class="ui form" ng-switch-when="imagebrowser">
+                    <div class="field">
+                        <label ng-if="config.title">{{config.title}}</label>
+                        <i class="browser icon link" ng-click="fireEvent({'id':'org.ekstep.config:invoke', 'data': {'type': config.dataType}}); fireSidebarTelemetry({id: config.propertyName}, config.dataType)"></i>
+                    </div>
+                </div>
+                <div class="ui icon buttons" ng-switch-when="group">
+                    <label ng-if="config.title">{{config.title}}</label>
+                    <button class="ui button {{configData[dd.propertyName] ? 'primary': ''}}" ng-repeat="dd in config.config" ng-click="configData[dd.propertyName] = !configData[dd.propertyName]; fireSidebarTelemetry({id: config.propertyName}, config.dataType)" data-tooltip="{{dd.toolTip}}">
+                        <div ng-switch on="dd.dataType">
+                            <span ng-if="dd.text" ng-switch-when="text" class="{{dd.textClass}}" style="{{dd.textStyle}}">{{dd.text}}</span>
+                            <i class="{{dd.iconClass}} " ng-if="dd.iconClass" style="{{dd.iconStyle}}" ng-switch-when="icon"></i>
+                        </div>
+                    </button>
+                </div>
+                <div class="ui icon buttons" ng-switch-when="buttonToggle">
+                    <label ng-if="config.title">{{config.title}}</label>
+                    <button class="ui button {{configData[config.propertyName] === option.value ? 'primary': ''}}" ng-repeat="option in config.options" ng-click="configData[config.propertyName] = option.value; fireSidebarTelemetry({id: config.propertyName}, config.dataType)" data-tooltip="{{option.toolTip}}">
+                        <div ng-switch on="option.dataType">
+                            <i class="{{option.iconClass}} " ng-if="option.iconClass" style="{{option.iconStyle}}" ng-switch-when="icon"></i>
+                        </div>
+                    </button>
+                </div>
+                <div class="ui form" ng-switch-when="rangeslider">
+                    <div class="field">
+                        <label ng-if="config.title">{{config.title}}</label>
+                        <div>
+                            <div class="ui label right floated">
+                                {{configData[config.propertyName]}}{{config.labelSuffix}}
+                            </div>
+                            <input type="range" id="{{config.propertyName}}" min="{{config.minimumValue}}" max="{{config.maximumValue}}" value="{{config.defaultValue}}" class="config-slider" ng-model="configData[config.propertyName]" ng-init="configData[config.propertyName] = configData[config.propertyName] || config.defaultValue" ng-click="fireSidebarTelemetry({id: config.propertyName}, config.dataType)">
+                        </div>
+                    </div>
+                </div>
+                <div class="ui form" ng-switch-when="boolean">
+                    <div class="field">
+                        <label ng-if="config.title">{{config.title}}</label>
+                        <div class="ui toggle checkbox">
+                            <input name="{{config.propertyName}}" type="checkbox" ng-model="configData[config.propertyName]" ng-click="fireSidebarTelemetry({id: config.propertyName}, config.dataType);">
+                            <label></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui form" ng-switch-when="button">
+                    <div class="field">
+                        {{config.onclick}}
+                        <label ng-if="config.title">{{config.title}}</label>
+                        <button class="ui button" ng-click="fireEvent(config.onclick); fireSidebarTelemetry({id: config.propertyName}, config.dataType)">{{configData[config.PropertyName]}}</button>
+                    </div>
+                </div>
+                <div class="ui form" ng-switch-when="featureButtonToggle">
+                    <div class="field">
+                        <label ng-if="config.title">{{config.title}}</label>
+                        <span ng-repeat="option in config.options" ng-if="option.state">
+                <button class="ui icon button" ng-if="option.status === 'SHOW'" ng-repeat="suboption in option.suboptions" ng-click="fireEvent(suboption.onclick)" data-tooltip="{{suboption.toolTip}}">
+                    <i class="{{suboption.iconClass}} "></i>
+                </button>
+                <div class="ui grey button {{option.status === 'SHOW' ? 'primary': ''}}" ng-click="fireEvent(option.onclick)">{{option.title}}</div>
+            </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+</script>

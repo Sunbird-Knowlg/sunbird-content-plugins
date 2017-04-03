@@ -42,6 +42,15 @@
             "onclick": {
                 "id": "config:comments:show"
             }
+        }],
+        "config": [{
+            "type": "custom",
+            "template": [
+                { "id": "org.ekstep.config/partials/config.html", "path": "editor/partials/config.html", "tab": "customise" },
+                { "id": "org.ekstep.config/partials/events.html", "path": "editor/partials/events.html", "tab": "events" },
+                { "id": "org.ekstep.config/partials/properties.html", "path": "editor/partials/properties.html", "tab": "properties" }
+            ],
+            "controller": [{ "path": "editor/config-controller.js" }]
         }]
     }
 }
