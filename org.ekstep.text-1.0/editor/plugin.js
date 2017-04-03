@@ -268,7 +268,6 @@ EkstepEditor.basePlugin.extend({
         if (data.y) retData.top = data.y;
         if (data.w) retData.width = data.w;
         if (data.h) retData.height = data.h;
-        if (data.radius) retData.rx = data.radius;
         if (data.color) retData.fill = data.color;
         if (data.weight && EkstepEditorAPI._.includes(data.weight, 'bold')) {
             retData.fontWeight = "bold";
