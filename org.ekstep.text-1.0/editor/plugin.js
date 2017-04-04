@@ -81,7 +81,7 @@ EkstepEditor.basePlugin.extend({
             var instance = this;
             this.addMedia({
                 "id": "org.ekstep.text.popuptint",
-                "src": EkstepEditorAPI.getConfig('absURL') + EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
+                "src": EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
                 "type": "image",
                 "assetId": "org.ekstep.text.popuptint"
             });
@@ -359,7 +359,7 @@ EkstepEditor.basePlugin.extend({
         textObj.attributes.textType = 'wordinfo';
         textObj.addMedia({
             "id": "org.ekstep.text.popuptint",
-            "src": EkstepEditorAPI.getConfig('absURL') + EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
+            "src": EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
             "type": "image",
             "assetId": "org.ekstep.text.popuptint"
         });
