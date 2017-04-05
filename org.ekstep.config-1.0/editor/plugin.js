@@ -155,6 +155,9 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.ngSafeApply(angScope, function() {
             angScope.pluginConfig = instance.pluginConfigManifest;
             angScope.configData = instance.configData;
+            angScope.updateConfig = function(prop) {
+                instance.onConfigChange(prop, angScope.configData[prop]);
+            }
         });
         EkstepEditorAPI._.forEach(instance.pluginConfigManifest, function(config) {
             instance._invoke(config, instance.configData)

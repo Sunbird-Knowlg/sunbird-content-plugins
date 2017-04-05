@@ -41,7 +41,7 @@ EkstepEditor.basePlugin.extend({
         this.children.push(plugin);
         if(plugin.editorObj) {
             this.canvas.add(plugin.editorObj);
-            this.canvas.setActiveObject(plugin.editorObj);
+            if(plugin.editorObj.selectable) this.canvas.setActiveObject(plugin.editorObj);
             this.setThumbnail();
             EkstepEditorAPI.dispatchEvent('stage:modified', { id: plugin.id });
         }
@@ -128,6 +128,12 @@ EkstepEditor.basePlugin.extend({
                 }
                 break;
         }
+    },
+    updateThumbnail: function() {
+        $('<canvas>').attr({ id: this.id }).css({ width: '720px', height: '405px' }).appendTo('#thumbnailCanvasContainer');
+        canvas = new fabric.Canvas(this.id, { backgroundColor: "#FFFFFF", preserveObjectStacking: true, width: 720, height: 405 });
+        this.render(canvas);
+        ecEditor.jQuery('#' + this.id).remove();
     }
 });
 //# sourceURL=stageplugin.js

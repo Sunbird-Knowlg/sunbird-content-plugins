@@ -11,6 +11,7 @@ fabric.ITextbox = fabric.util.createClass(fabric.Textbox, fabric.Observable, {
         var line = this._textLines[lineIndex],
             width = ctx.measureText(line).width,
             additionalSpace = 0, charCount, finalWidth;
+        /* istanbul ignore next*/
         if (this.charSpacing !== 0) {
             charCount = line.split('').length;
             additionalSpace = (charCount - 1) * this._getWidthOfCharSpacing();
@@ -19,6 +20,7 @@ fabric.ITextbox = fabric.util.createClass(fabric.Textbox, fabric.Observable, {
         return finalWidth > 0 ? finalWidth : 0;
     }
 });
+/* istanbul ignore next*/
 fabric.ITextbox.fromObject = function(object) {
     return new fabric.ITextbox(object.text, fabric.util.object.clone(object));
 };
@@ -90,6 +92,7 @@ var textEditor = (function() {
                     _commonBtnClickAction();
                     if ($editor.val().trim().length) {
                         EkstepEditorAPI.getPluginInstance(pluginId).editorObj.text = $editor.val();
+                        EkstepEditorAPI.getPluginInstance(pluginId).config.text = $editor.val();
                         EkstepEditorAPI.render();
                         EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getPluginInstance(pluginId).editorObj });
                         EkstepEditorAPI.jQuery("#toolbarOptions").show();
@@ -107,6 +110,7 @@ var textEditor = (function() {
                 .click(function() {
                     generateTelemetry({type: 'click', subtype: 'cancel', target: 'cancelTextEditor'});
                     _commonBtnClickAction();
+                    /* istanbul ignore next*/
                     if (!editorText.trim().length) {
                         _removeObject();
                     }
@@ -119,7 +123,6 @@ var textEditor = (function() {
         $buttonGrp.append($doneBtn);
         //$buttonGrp.css({position:'absolute', 'top': $editor.offset().top+$editor.height()/2+64,'left': $editor.offset().left+22})
         $buttonGrp.show();
-        setTimeout(function() { EkstepEditorAPI.jQuery("#toolbarOptions").hide();  }, 600);
         var angScope = EkstepEditorAPI.getAngularScope();
         EkstepEditorAPI.ngSafeApply(angScope, function () {
           angScope.configStyle = "";           
