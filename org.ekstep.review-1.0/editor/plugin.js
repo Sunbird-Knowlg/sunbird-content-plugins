@@ -19,14 +19,18 @@ EkstepEditor.basePlugin.extend({
      *   @memberof review
      */
     initialize: function() {
-		EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.loadHtml, this);
-		EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.getContent, this);
-		EkstepEditorAPI.addEventListener(this.manifest.id + ":showDialog", this.showDialog, this);
+        /**Add event listeners**/
+        EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.loadHtml, this);
+        EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.getContent, this);
+        EkstepEditorAPI.addEventListener(this.manifest.id + ":showDialog", this.showDialog, this);
 
+        /**load html templates**/
         var templatePath = EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/review.html");
         var controllerPath = EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/reviewapp.js");
-        EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
         var ngModuleTemplatePath = EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/editMetaDialog.html");
+
+        /**get ngModule service**/
+        EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
         EkstepEditorAPI.getService('popup').loadNgModules(ngModuleTemplatePath);
     },
     /**
@@ -51,9 +55,15 @@ EkstepEditor.basePlugin.extend({
             className: 'ngdialog-theme-default'
         });
     },
-    showDialog: function(event, data){
-		var instance = this;
-		var modalController = function($scope) {
+    /**
+     *   load html template to show the dialogbox
+     *   @param event {Object} event
+     *   @param data {Object} data
+     *   @memberof review
+     */
+    showDialog: function(event, data) {
+        var instance = this;
+        var modalController = function($scope) {
             $scope.dialogMainText = data.dialogMainText;
             $scope.dialogSubtext = data.dialogSubtext;
             $scope.isRedirect = data.isRedirect;
@@ -67,9 +77,13 @@ EkstepEditor.basePlugin.extend({
             width: 500,
             className: 'ngdialog-theme-default'
         });
-	},
-	redirectToEditMeta: function() {
-			window.location.href = window.context.editMetaLink;
+    },
+    /**
+     *   redirect to edit metadata form
+     *   @memberof review
+     */
+    redirectToEditMeta: function() {
+        window.location.href = window.context.editMetaLink;
     },
     /**
      *   Get the content

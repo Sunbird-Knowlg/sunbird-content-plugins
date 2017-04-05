@@ -1,31 +1,34 @@
 <script type="text/ng-template" id="partials/editMetaDialog.html">
     <style>
-    .meta-dialog .dialog-inner-container{
+    .meta-dialog .dialog-inner-container {
         padding: 30px 10px 25px 0px;
     }
-
+    
     .meta-dialog .display-inline {
         display: inline;
     }
-
-    .meta-dialog .text-container{
-        text-align: center;margin: 10px;font-size: 17px;color: #5f5c5c; display: inline;
+    
+    .meta-dialog .text-container {
+        text-align: center;
+        margin: 10px;
+        font-size: 17px;
+        color: #5f5c5c;
+        display: inline;
     }
-
-    .meta-dialog .subtext-container{
+    
+    .meta-dialog .subtext-container {
         margin-left: 10px;
     }
-
+    
     .meta-dialog .margin-left {
         margin-left: 139px;
     }
     </style>
-
     <div class="meta-dialog ui dialog-outer-container">
         <div class="dialog-inner-container">
             <div class="ui grid">
                 <div class="two wide column">
-					<i class="huge remove circle outline big red icon" ng-show="{{isError}}"></i>
+                    <i class="huge remove circle outline big red icon" ng-show="{{isError}}"></i>
                     <i class="huge warning sign yellow icon" ng-show="{{!isError && isRedirect}}"></i>
                     <i class="huge check circle outline big green icon" ng-show="{{!isError && !isRedirect}}"></i>
                 </div>
