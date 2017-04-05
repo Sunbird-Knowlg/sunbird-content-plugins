@@ -1,0 +1,34 @@
+{
+    "id": "org.ekstep.review",
+    "ver": "1.0",
+    "author": "",
+    "type": "widget",
+    "title": "review Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "menu": [{
+            "id": "review",
+            "category": "main",
+            "type": "icon",
+            "toolTip": "Add interactivevideo",
+            "title": "Question Set",
+            "iconClass": "video play outline icon",
+            "onclick": {
+                "id": "org.ekstep.review:show"
+            }
+        }],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "configManifest": []
+    },
+    "renderer": {
+        "main": "renderer/plugin.js",
+        "dependencies": [
+            { "type": "css", "src": "renderer/assets/css/interactivevideo.css" }
+        ]
+    }
+}
