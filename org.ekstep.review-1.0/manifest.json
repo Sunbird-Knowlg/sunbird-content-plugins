@@ -8,17 +8,7 @@
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
-        "menu": [{
-            "id": "review",
-            "category": "main",
-            "type": "icon",
-            "toolTip": "Add interactivevideo",
-            "title": "Question Set",
-            "iconClass": "video play outline icon",
-            "onclick": {
-                "id": "org.ekstep.review:show"
-            }
-        }],
+        "menu": [],
         "help": {
             "src": "editor/help.md",
             "dataType": "text"
