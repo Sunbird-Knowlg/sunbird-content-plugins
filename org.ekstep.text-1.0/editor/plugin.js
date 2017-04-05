@@ -307,11 +307,11 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     showReadalong: function() {
-        currentInstance = this;
+        var instance = this;
         var textObj = EkstepEditorAPI.getCurrentObject();
         EkstepEditorAPI.dispatchEvent('org.ekstep.readalongbrowser:showpopup', {
             textObj: textObj,
-            callback: currentInstance.convertTexttoReadalong
+            callback: instance.convertTexttoReadalong
         });
     },
     convertTexttoReadalong: function(data){
@@ -340,11 +340,11 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     showWordInfo: function() {
-        currentInstance = this;
+        var instance = this;
         var textObj = EkstepEditorAPI.getCurrentObject();
         EkstepEditorAPI.dispatchEvent('org.ekstep.wordinfobrowser:showpopup', {
             textObj: textObj,
-            callback: currentInstance.convertTexttoWordinfo
+            callback: instance.convertTexttoWordinfo
         });
     },
     convertTexttoWordinfo: function(data, templateData){
