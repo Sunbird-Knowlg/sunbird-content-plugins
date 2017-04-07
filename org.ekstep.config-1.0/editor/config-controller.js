@@ -17,6 +17,7 @@ angular.module('editorApp')
         $scope.pluginConfig = undefined;
         $scope.configData = undefined;
         $scope.actionTargetObject = {};
+        $scope.customTemplates = [];
 
         $scope.allActionsList = {
             "show": "Show",

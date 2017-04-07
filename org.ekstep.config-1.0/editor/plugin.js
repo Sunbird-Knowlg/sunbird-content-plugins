@@ -27,8 +27,7 @@ EkstepEditor.basePlugin.extend({
     updateConfig: function(event, data) {
         var instance = this;
         var changedValues = EkstepEditorAPI._.reduce(data.oldValue, function(result, value, key) {
-            return EkstepEditorAPI._.isEqual(value, data.newValue[key]) ?
-                result : result.concat(key);
+            return EkstepEditorAPI._.isEqual(value, data.newValue[key]) ? result : result.concat(key);
         }, []);
         EkstepEditorAPI._.forEach(changedValues, function(cv) {
             instance.onConfigChange(cv, data.newValue[cv]);
@@ -51,25 +50,6 @@ EkstepEditor.basePlugin.extend({
             if (key === 'autoplay') {
                 this.toggleEventToStage('', { 'flag': value, 'id': plugin.id });
             }
-        }
-    },
-    /**
-     * This method called when config:help event is fired  
-     * <br/> It will show the help data for the selected plugin 
-     * @param  event {Object}
-     * @param  data {Object}
-     *  @memberof Config
-     */
-    showHelp: function(event, data) {
-        var instance = this;
-        if (EkstepEditorAPI.getCurrentObject()) {
-            EkstepEditorAPI.getCurrentObject().getHelp(function(helpText) {
-                EkstepEditorAPI.jQuery("#pluginHelpContent").html(micromarkdown.parse(helpText));
-            });
-        } else {
-            EkstepEditorAPI.getCurrentStage().getHelp(function(helpText) {
-                EkstepEditorAPI.jQuery("#pluginHelpContent").html(micromarkdown.parse(helpText));
-            });
         }
     },
     invoke: function(event, data) {

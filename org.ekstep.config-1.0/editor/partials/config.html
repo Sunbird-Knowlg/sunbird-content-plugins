@@ -2,14 +2,16 @@
     <div ng-controller="org.ekstep.config:configController">
         <div ng-repeat="config in pluginConfig">
             <div ng-switch on="config.dataType">
-                <div class="ui divider" ng-if="$index != 0"></div>
+                <div class="ui divider" ng-show="$index != 0"></div>
                 <div class="ui form" ng-switch-when="colorpicker">
                     <div class="field">
                         <label ng-if="config.title">{{config.title}}</label>
-                        <input type="text" class="basic" id="{{config.propertyName}}" id="{{config.propertyName}}" ng-click="fireSidebarTelemetry({id: config.propertyName}, config.dataType)" />
-                        <!-- <div class="jscolor" style="width:25px;height:25px; min-width: 20px; min-height: 20px;border-radius: 5px;border: 1px solid rgba(49, 38, 38, 0.34);" id="{{config.propertyName}}" ng-click="fireEvent({'id':'colorpicker:show', 'data': {}})"></div> -->
+                        <ui-colorpicker></ui-colorpicker>
+                        <!--<input type="text" class="basic" id="{{config.propertyName}}" id="{{config.propertyName}}" ng-click="fireSidebarTelemetry({id: config.propertyName}, config.dataType)" /> -->
+                        <!-- <div class="jscolor" style="width:25px;height:25px; min-width: 20px; min-height: 20px;border-radius: 5px;border: 1px solid rgba(49, 38, 38, 0.34);" id="{{config.propertyName}}" ng-click="fireEvent({'id':'colorpicker:show', 'data': {}})"></div> -->                        
                     </div>
                 </div>
+                <div class="ui form" ng-if='config.type == "custom_template"' compilehtml="config.template"></div>
                 <div class="ui form" ng-switch-when="input">
                     <div class="field">
                         <label ng-if="config.title">{{config.title}}</label>
@@ -26,7 +28,7 @@
                 <div class="ui form" ng-switch-when="select">
                     <div class="field">
                         <label ng-if="config.title">{{config.title}}</label>
-                        <select class="ui dropdown" ng-model="configData[config.propertyName]" ng-options="val for val in config.range" ng-change="fireSidebarTelemetry({id: config.propertyName}, config.dataType)">
+                        <select class="ui dropdown" id="__config_select" ng-model="configData[config.propertyName]" ng-options="val for val in config.range" ng-change="fireSidebarTelemetry({id: config.propertyName}, config.dataType)">
                         </select>
                     </div>
                 </div>

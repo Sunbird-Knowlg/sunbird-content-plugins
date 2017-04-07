@@ -1,0 +1,9 @@
+angular.module('editorApp')
+.controller('org.ekstep.text:config-controller', ['$scope', function($scope) {
+    $scope.setFont = function(font) {
+    	$scope.config['fontfamily'] = font;    	
+    	org.ekstep.contenteditor.api.getCurrentObject().onConfigChange('fontfamily', font);
+    	org.ekstep.contenteditor.api.jQuery('#__config_select').dropdown('set selected', 'string:'+font);
+    	alert('Font has been changed to '+ font);
+    }
+}]);
