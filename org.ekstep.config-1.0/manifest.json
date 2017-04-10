@@ -20,7 +20,8 @@
             "title": "Settings",
             "iconClass": "settings icon",
             "onclick": {
-                "id": "config:settings:show"
+                "id": "config:settings:show",
+                "data": { "sidebarId": "settings" }
             }
         },{
             "id": "help",
@@ -30,7 +31,8 @@
             "title": "Help",
             "iconClass": "help icon",
             "onclick": {
-                "id": "config:help:show"
+                "id": "config:help:show",
+                "data": { "sidebarId": "help" }
             }
         },{
             "id": "comments",
@@ -40,18 +42,18 @@
             "title": "Comments",
             "iconClass": "comments icon",
             "onclick": {
-                "id": "config:comments:show"
+                "id": "config:comments:show",
+                "data": { "sidebarId": "comments" }
             }
         }],
-        "config": [{
-            "type": "custom",
-            "category": "settings",
-            "template": [
-                { "id": "org.ekstep.config/partials/config.html", "path": "editor/partials/config.html", "tab": "customise" },
-                { "id": "org.ekstep.config/partials/events.html", "path": "editor/partials/events.html", "tab": "events" },
-                { "id": "org.ekstep.config/partials/properties.html", "path": "editor/partials/properties.html", "tab": "properties" }
-            ],
-            "controller": [{ "path": "editor/config-controller.js" }]
+        "sidebar": [{
+            "id": "settings",
+            "template": [{ "path": "editor/partials/sidebarSettingTemplate.html" }],
+            "controller": [{ "path": "editor/sidebar-settings-controller.js" }]
+        },
+        {
+            "id": "help",
+            "template": [{ "path": "editor/partials/sidebarHelpTemplate.html" }]
         }]
     }
 }

@@ -13,11 +13,16 @@ angular.module('editorApp')
         };
 
         var stageActionsList = { "link": "Link To" };
+        var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.config");
 
         $scope.pluginConfig = undefined;
         $scope.configData = undefined;
         $scope.actionTargetObject = {};
         $scope.customTemplates = [];
+        $scope.settingsCategory = {};
+        $scope.selectedObject = { stage: true };
+        $scope.currentObject = {};
+        $scope.currentObjectActions = [];
 
         $scope.allActionsList = {
             "show": "Show",
@@ -28,6 +33,38 @@ angular.module('editorApp')
             "link": "Link To"
         };
 
+        $scope.$watch('configData', function(newValue, oldValue) {
+            org.ekstep.contenteditor.api.dispatchEvent("config:updateValue", { newValue: newValue, oldValue: oldValue });
+        }, true);
+
+        $('.sidebarConfig .item, .sidebarHelp .item').tab({
+            history: false
+        });
+
+        $scope.showSettingsTab = function(event, data) {
+            switch ($scope.settingsCategory.selected) {
+                case 'properties':
+                    $scope.showProperties(event, data);
+                    break;
+                case 'actions':
+                    $scope.showActions(event, data);
+                    break;
+                default:
+                    $scope.showConfig(event, data);
+            }
+        };
+
+        $scope.showProperties = function(event, data) {
+            var properties = org.ekstep.contenteditor.api.getCurrentObject() ? org.ekstep.contenteditor.api.getCurrentObject().getProperties() : org.ekstep.contenteditor.api.getCurrentStage().getProperties();
+            $scope.pluginProperties = properties;
+            $scope.settingsCategory.selected = 'properties';
+        };
+
+
+        $scope.fireEvent = function(event) {
+            org.ekstep.contenteditor.api.dispatchEvent(event.id, event.data);
+        };
+
 
         $scope.showActions = function() {
             $scope.currentObjectActions = [];
@@ -35,17 +72,11 @@ angular.module('editorApp')
             $scope.settingsCategory.selected = 'actions';
             $scope.highlightTargetObject();
             $scope.updateActions();
-            //$scope.updateTargetOptions();
             $scope.restoreOnObjectSelect();
         };
 
-        $scope.showCustomize = function(event, data) {
-            $scope.showConfig();
-            $scope.$safeApply();
-        };
-
-
         $scope.showConfig = function() {
+            $scope.settingsCategory.selected = 'customize';
             var pluginConfigManifest = org.ekstep.contenteditor.api._.clone(org.ekstep.contenteditor.api.getCurrentObject() ? org.ekstep.contenteditor.api.getCurrentObject().getConfigManifest() : org.ekstep.contenteditor.api.getCurrentStage().getConfigManifest());
             $scope.pluginConfig = pluginConfigManifest;
             $scope.configData = org.ekstep.contenteditor.api._.clone(org.ekstep.contenteditor.api.getCurrentObject() ? org.ekstep.contenteditor.api.getCurrentObject().getConfig() : org.ekstep.contenteditor.api.getCurrentStage().getConfig());
@@ -104,11 +135,27 @@ angular.module('editorApp')
                                 org.ekstep.contenteditor.api.dispatchEvent('config:on:change', config.propertyName, parseInt(text));
                                 org.ekstep.contenteditor.api.jQuery('#' + config.propertyName).parent().dropdown('set text', parseInt(text));
                             }
+                            $scope.$safeApply();
                         }
                     });
-                }, 1000);
+                }, 200);
             }
         };
+
+        org.ekstep.contenteditor.api.jQuery("#actionTypeDropdown").on('change', function(e) {
+            $scope.actionTargetObject = {};
+            var selectedOption = org.ekstep.contenteditor.api.jQuery(this).val().split(':')[1];
+            if (visibleActionsList[selectedOption]) {
+                $scope.setVisibleObjects();
+            }
+            if (playableActionsList[selectedOption]) {
+                $scope.setPlayableObjects();
+            }
+            if (stageActionsList[selectedOption]) {
+                $scope.setStageObjects();
+            }
+            org.ekstep.contenteditor.api.jQuery("#actionTargetDropdown").dropdown('clear');
+        });
 
         $scope.addAction = function(data) {
             if (data.command && data.asset) {
@@ -125,15 +172,15 @@ angular.module('editorApp')
             }, 500);
         };
 
-        $scope.updateActions = function() {            
+        $scope.updateActions = function() {
             var events = org.ekstep.contenteditor.api.getCurrentObject().event;
             var eventsActionList = [];
             if (events && events.length) {
                 org.ekstep.contenteditor.api._.forEach(events, function(e) {
                     if (e.action && e.action.length) { eventsActionList.push(e.action[0]) }
                 })
-            };            
-            if(eventsActionList.length) {
+            };
+            if (eventsActionList.length) {
                 $scope.currentObject.actions = true;
                 $scope.currentObjectActions = eventsActionList;
             } else {
@@ -164,23 +211,7 @@ angular.module('editorApp')
             }).addClass("addClick");
         };
 
-        org.ekstep.contenteditor.api.jQuery("#actionTypeDropdown:not(.addChange)").on('change', function(e) {
-            $scope.actionTargetObject = {};
 
-            var selectedOption = org.ekstep.contenteditor.api.jQuery(this).val().split(':')[1];
-            if (visibleActionsList[selectedOption]) {
-                $scope.setVisibleObjects();
-            }
-            if (playableActionsList[selectedOption]) {
-                $scope.setPlayableObjects();
-            }
-            if (stageActionsList[selectedOption]) {
-                $scope.setStageObjects();
-            }
-            setTimeout(function() {
-                org.ekstep.contenteditor.api.jQuery("#actionTargetDropdown").dropdown('clear');
-            }, 500);
-        }).addClass('addChange');
 
         $scope.setVisibleObjects = function() {
             var pluginInstanceIds = {};
@@ -229,58 +260,58 @@ angular.module('editorApp')
             }
         };
 
-        $scope.refreshConfig = function(event, data) {
-            switch ($scope.configCategory.selected) {
-                case 'comments':
-                    $scope.showCommentsTab(event, data);
-                    break;
-                case 'help':
-                    $scope.showHelpTab(event, data);
-                    break;
-                default:
-                    $scope.showSettingsTab(event, data);
-            }
-            $scope.$safeApply();
-        };
-
-        
         $scope.objectSelected = function(event, data) {
             $scope.selectedPluginId = data.id;
-            $scope.configCategory.selected = 'settings';
             $scope.selectedObject.stage = false;
             $scope.updateActions();
-            $scope.refreshConfig(event, data);
+            $scope.showSettingsTab(event, data);
         };
 
         $scope.objectUnselected = function(event, data) {
             if ($scope.selectedPluginId == data.id) {
-                $scope.configCategory.selected = 'settings';
-                $scope.selectedObject.stage = true; 
-                $scope.updateActions();               
-                $scope.refreshConfig(event, data);
+                $scope.selectedObject.stage = true;
+                $scope.updateActions();
+                $scope.showSettingsTab(event, data);
             }
         };
 
         $scope.stageSelect = function(event, data) {
             $scope.selectedObject.stage = true;
-            $scope.refreshConfig(event, data);
+            $scope.showSettingsTab(event, data);
         };
 
-        (function($scope) {
-            if (!org.ekstep.contenteditor.sidebarManager.configControllerRegistered) {
-                org.ekstep.contenteditor.sidebarManager.configControllerRegistered = true;
-                $scope.$watch('configData', function(newValue, oldValue) {
-                    org.ekstep.contenteditor.api.dispatchEvent("config:updateValue", { newValue: newValue, oldValue: oldValue });
-                }, true);
-                org.ekstep.contenteditor.api.addEventListener("object:selected", $scope.objectSelected, $scope);
-                org.ekstep.contenteditor.api.addEventListener("object:unselected", $scope.objectUnselected, $scope);
-                org.ekstep.contenteditor.api.addEventListener("config:show", $scope.refreshConfig, $scope);
-                org.ekstep.contenteditor.api.addEventListener("stage:render:complete", $scope.stageSelect, $scope);
-                org.ekstep.contenteditor.api.addEventListener("config:settings:show", $scope.showSettingsTab, $scope);                
-                org.ekstep.contenteditor.api.addEventListener("config:comments:show", $scope.showCommentsTab, $scope);
-                org.ekstep.contenteditor.api.addEventListener('config:show:actions', $scope.showActions, $scope);
-                org.ekstep.contenteditor.api.addEventListener("config:show:customise", $scope.showConfig, $scope);
-            }
-        })($scope);
+        $scope.showdeveloperTab = function(event, data) {
+            $scope.configCategory.selected = 'developer';
+            org.ekstep.contenteditor.api.dispatchEvent("org.ekstep.developer:getPlugins");
+        };
+        $scope.showHelpTab = function(event, data) {
+            $scope.configCategory.selected = 'help'; 
+            $scope.showHelp(event, data);
+            $scope.$safeApply();                         
+        }
 
+        $scope.showHelp = function(event, data) {
+            if (org.ekstep.contenteditor.api.getCurrentObject()) {
+                org.ekstep.contenteditor.api.getCurrentObject().getHelp(function(helpText) {
+                    org.ekstep.contenteditor.api.jQuery("#pluginHelpContent").html(micromarkdown.parse(helpText));
+                });
+            } else {
+                org.ekstep.contenteditor.api.getCurrentStage().getHelp(function(helpText) {
+                    org.ekstep.contenteditor.api.jQuery("#pluginHelpContent").html(micromarkdown.parse(helpText));
+                });
+            }            
+        };
+
+        org.ekstep.contenteditor.api.addEventListener("config:developer:show", $scope.showdeveloperTab, $scope);
+        org.ekstep.contenteditor.api.addEventListener("config:help:show", $scope.showHelpTab, $scope);
+        org.ekstep.contenteditor.api.addEventListener("object:selected", $scope.objectSelected, $scope);
+        org.ekstep.contenteditor.api.addEventListener("object:unselected", $scope.objectUnselected, $scope);
+        org.ekstep.contenteditor.api.addEventListener("config:show", $scope.showSettingsTab, $scope);
+        org.ekstep.contenteditor.api.addEventListener("stage:render:complete", $scope.stageSelect, $scope);
+        org.ekstep.contenteditor.api.addEventListener("config:settings:show", $scope.showSettingsTab, $scope);
+        org.ekstep.contenteditor.api.addEventListener("config:comments:show", $scope.showCommentsTab, $scope);
+        org.ekstep.contenteditor.api.addEventListener('config:show:actions', $scope.showActions, $scope);
+        org.ekstep.contenteditor.api.addEventListener("config:show:customise", $scope.showConfig, $scope);
+
+        $scope.showConfig();
     }]);

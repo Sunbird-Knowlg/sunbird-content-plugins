@@ -148,8 +148,7 @@
         },{
             "type": "custom_template",
             "controllerURL": "editor/config-controller.js",
-            "templateURL": "editor/configTemplate.html",
-            "template": ""
+            "templateURL": "editor/configTemplate.html"
         },{
             "propertyName": "fontfamily",
             "title": "Font Family",
