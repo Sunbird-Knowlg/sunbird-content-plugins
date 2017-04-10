@@ -48,12 +48,12 @@
         }],
         "sidebar": [{
             "id": "settings",
-            "template": [{ "path": "editor/partials/sidebarSettingTemplate.html" }],
-            "controller": [{ "path": "editor/sidebar-settings-controller.js" }]
+            "templateURL": "editor/partials/sidebarSettingTemplate.html",
+            "controllerURL": "editor/sidebar-settings-controller.js"
         },
         {
             "id": "help",
-            "template": [{ "path": "editor/partials/sidebarHelpTemplate.html" }]
+            "templateURL": "editor/partials/sidebarHelpTemplate.html"
         }]
     }
 }
