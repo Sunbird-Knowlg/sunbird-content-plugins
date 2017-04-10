@@ -98,7 +98,7 @@ angular.module('activityBrowserApp', [])
 
         ctrl.generateTelemetry = function(data) {
             if(data){
-                EkstepEditor.telemetryService.interact({ 
+                org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).interact({ 
                     "type": data.type, "subtype": data.subtype, "target": data.target, 
                     "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", 
                     "stage": EkstepEditorAPI.getCurrentStage().id 
