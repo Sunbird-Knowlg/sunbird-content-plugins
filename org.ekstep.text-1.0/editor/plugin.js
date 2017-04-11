@@ -81,7 +81,7 @@ EkstepEditor.basePlugin.extend({
             var instance = this;
             this.addMedia({
                 "id": "org.ekstep.text.popuptint",
-                "src": EkstepEditorAPI.getConfig('absURL') + EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
+                "src": EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
                 "type": "image",
                 "assetId": "org.ekstep.text.popuptint"
             });
@@ -307,11 +307,11 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     showReadalong: function() {
-        currentInstance = this;
+        var instance = this;
         var textObj = EkstepEditorAPI.getCurrentObject();
         EkstepEditorAPI.dispatchEvent('org.ekstep.readalongbrowser:showpopup', {
             textObj: textObj,
-            callback: currentInstance.convertTexttoReadalong
+            callback: instance.convertTexttoReadalong
         });
     },
     convertTexttoReadalong: function(data){
@@ -340,11 +340,11 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     showWordInfo: function() {
-        currentInstance = this;
+        var instance = this;
         var textObj = EkstepEditorAPI.getCurrentObject();
         EkstepEditorAPI.dispatchEvent('org.ekstep.wordinfobrowser:showpopup', {
             textObj: textObj,
-            callback: currentInstance.convertTexttoWordinfo
+            callback: instance.convertTexttoWordinfo
         });
     },
     convertTexttoWordinfo: function(data, templateData){
@@ -359,7 +359,7 @@ EkstepEditor.basePlugin.extend({
         textObj.attributes.textType = 'wordinfo';
         textObj.addMedia({
             "id": "org.ekstep.text.popuptint",
-            "src": EkstepEditorAPI.getConfig('absURL') + EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
+            "src": EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
             "type": "image",
             "assetId": "org.ekstep.text.popuptint"
         });

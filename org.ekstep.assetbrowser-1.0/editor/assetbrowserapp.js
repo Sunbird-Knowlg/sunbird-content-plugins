@@ -67,12 +67,12 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         ctrl.loading = 'active';
         ctrl.plugin = instance.mediaType;
         ctrl.upload = (instance.mediaType == 'image') ? true : false;
-        ctrl.fileTypes = (instance.mediaType == "image") ? "jpeg, jpg, png, gif" : "mp3, mp4, mpeg, ogg, wav, webm";
-        ctrl.fileSize = (instance.mediaType == "image") ? '3 MB' : '6 MB';
+        ctrl.fileTypes = (instance.mediaType == "image") ? "jpeg, jpg, png" : "mp3, mp4, mpeg, ogg, wav, webm";
+        ctrl.fileSize = (instance.mediaType == "image") ? '1 MB' : '6 MB';
 
         if (instance.mediaType == 'image') {
-            ctrl.allowedFileSize = (3 * 1024 * 1024);
-            ctrl.allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+            ctrl.allowedFileSize = (1 * 1024 * 1024);
+            ctrl.allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
         } else if (instance.mediaType == 'audio') {
             ctrl.allowedFileSize = (6 * 1024 * 1024);
             ctrl.allowedMimeTypes = ['audio/mp3', 'audio/mp4', 'audio/mpeg', 'audio/ogg', 'audio/webm', 'audio/x-wav', 'audio/wav'];
