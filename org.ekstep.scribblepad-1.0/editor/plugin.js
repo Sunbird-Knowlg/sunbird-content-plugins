@@ -17,8 +17,7 @@ EkstepEditor.basePlugin.extend({
     *   @memberof scribblePad
     */
     newInstance: function() {
-        var props = this.convertToFabric(this.attributes),
-        host = EkstepEditorAPI.getConfig('useProxyForURL') ? EkstepEditorAPI.getConfig('baseURL') : EkstepEditorAPI.getConfig('absURL');
+        var props = this.convertToFabric(this.attributes);
         props.stroke = 1;
         props.strokeWidth = 2;
         props.strokeDashArray = [5, 5];
@@ -27,7 +26,7 @@ EkstepEditor.basePlugin.extend({
             this.editorObj = new fabric.Rect(props);
             this.addMedia({
                 id: "org.ekstep.scribblepad.eraser",
-                src: host + "/assets/public/content/1460624453530trash.png",
+                src: "/assets/public/content/1460624453530trash.png",
                 assetId: "org.ekstep.scribblepad.eraser",
                 type: "image",
                 preload: true
