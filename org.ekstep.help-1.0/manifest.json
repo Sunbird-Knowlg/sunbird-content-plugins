@@ -1,0 +1,31 @@
+{
+    "id": "org.ekstep.help",
+    "ver": "1.0",
+    "displayName": "Help",
+    "author": "Sunil A S",
+    "title": "Help Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",        
+        "dependencies": [
+            {"type": "js", "src": "editor/libs/micromarkdown.min.js"}
+        ],
+        "menu": [{
+            "id": "help",
+            "category": "config",
+            "type": "icon",
+            "toolTip": "Help",
+            "title": "Help",
+            "iconClass": "help icon",
+            "onclick": {
+                "id": "config:help:show",
+                "data": { "sidebarId": "help" }
+            }
+        }],
+        "sidebar": [{
+            "id": "help",
+            "templateURL": "editor/partials/sidebarHelpTemplate.html"
+        }]
+    }
+}

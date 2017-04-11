@@ -8,8 +8,7 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-            {"type": "js", "src": "editor/libs/jquery-ui.min.js"},
-            {"type": "js", "src": "editor/libs/micromarkdown.min.js"},
+            {"type": "js", "src": "editor/libs/jquery-ui.min.js"},            
             {"type": "css", "src": "editor/config.css"}
 		],
         "menu": [{
@@ -23,37 +22,11 @@
                 "id": "config:settings:show",
                 "data": { "sidebarId": "settings" }
             }
-        },{
-            "id": "help",
-            "category": "config",
-            "type": "icon",
-            "toolTip": "Help",
-            "title": "Help",
-            "iconClass": "help icon",
-            "onclick": {
-                "id": "config:help:show",
-                "data": { "sidebarId": "help" }
-            }
-        },{
-            "id": "comments",
-            "category": "config",
-            "type": "icon",
-            "toolTip": "Comments",
-            "title": "Comments",
-            "iconClass": "comments icon",
-            "onclick": {
-                "id": "config:comments:show",
-                "data": { "sidebarId": "comments" }
-            }
         }],
         "sidebar": [{
             "id": "settings",
             "templateURL": "editor/partials/sidebarSettingTemplate.html",
             "controllerURL": "editor/sidebar-settings-controller.js"
-        },
-        {
-            "id": "help",
-            "templateURL": "editor/partials/sidebarHelpTemplate.html"
         }]
     }
 }

@@ -8,6 +8,10 @@
     "editor": {
     	"main": "editor/plugin.js",
         "dependencies":[{"type": "css", "src": "editor/developer.css"}],
-		"menu": []
+		"menu": [],
+        "sidebar": [{
+            "id": "developer",
+            "templateURL": "editor/partials/sidebarDeveloperTemplate.html"
+        }]
     }
 }

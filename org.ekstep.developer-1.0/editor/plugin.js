@@ -16,7 +16,8 @@ EkstepEditor.basePlugin.extend({
                 "title": "Developers",
                 "iconClass": "code icon",
                 "onclick": {
-                    "id": "config:developer:show"
+                    "id": "config:developer:show",
+                    "data": { sidebarId: "developer" }
                 }
             });    
         }

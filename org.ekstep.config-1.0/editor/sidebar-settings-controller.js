@@ -284,26 +284,8 @@ angular.module('editorApp')
             $scope.configCategory.selected = 'developer';
             org.ekstep.contenteditor.api.dispatchEvent("org.ekstep.developer:getPlugins");
         };
-        $scope.showHelpTab = function(event, data) {
-            $scope.configCategory.selected = 'help'; 
-            $scope.showHelp(event, data);
-            $scope.$safeApply();                         
-        }
 
-        $scope.showHelp = function(event, data) {
-            if (org.ekstep.contenteditor.api.getCurrentObject()) {
-                org.ekstep.contenteditor.api.getCurrentObject().getHelp(function(helpText) {
-                    org.ekstep.contenteditor.api.jQuery("#pluginHelpContent").html(micromarkdown.parse(helpText));
-                });
-            } else {
-                org.ekstep.contenteditor.api.getCurrentStage().getHelp(function(helpText) {
-                    org.ekstep.contenteditor.api.jQuery("#pluginHelpContent").html(micromarkdown.parse(helpText));
-                });
-            }            
-        };
-
-        org.ekstep.contenteditor.api.addEventListener("config:developer:show", $scope.showdeveloperTab, $scope);
-        org.ekstep.contenteditor.api.addEventListener("config:help:show", $scope.showHelpTab, $scope);
+        org.ekstep.contenteditor.api.addEventListener("config:developer:show", $scope.showdeveloperTab, $scope);        
         org.ekstep.contenteditor.api.addEventListener("object:selected", $scope.objectSelected, $scope);
         org.ekstep.contenteditor.api.addEventListener("object:unselected", $scope.objectUnselected, $scope);
         org.ekstep.contenteditor.api.addEventListener("config:show", $scope.showSettingsTab, $scope);
