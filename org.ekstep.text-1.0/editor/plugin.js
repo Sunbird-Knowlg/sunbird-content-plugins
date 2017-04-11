@@ -50,19 +50,20 @@ EkstepEditor.basePlugin.extend({
     newInstance: function() {
         var props = this.convertToFabric(this.attributes);
         delete props.__text;
-        if(EkstepEditorAPI._.isUndefined(this.attributes.__text)){
-            this.attributes.__text = '';
-        }
+        if(EkstepEditorAPI._.isUndefined(this.config.text))
+            this.config.text = EkstepEditorAPI._.isUndefined(this.attributes.__text) ? "" : this.attributes.__text; 
+        if(!EkstepEditorAPI._.isUndefined(this.attributes.__text))
+            delete this.attributes.__text;
+
         props.editable = false; // added to disable inline editing of exiting content
-        this.editorObj = new fabric.ITextbox(this.attributes.__text, props);
-        if (this.attributes.__text == '') {
+        this.editorObj = new fabric.ITextbox(this.config.text, props);
+        if (this.config.text == '') {
             textEditor.showEditor(this.id);
         }
 
         if (!EkstepEditorAPI._.isUndefined(this.attributes.timings) || this.attributes.textType === 'readalong') {
             if (EkstepEditorAPI._.isUndefined(this.attributes.textType)) {
                 this.attributes.textType = "readalong";
-                this.config.text = this.attributes.__text;
                 this.config.audio = this.attributes.audio;
                 this.config.timings = this.attributes.timings;
                 this.config.highlight = this.attributes.highlight;
@@ -127,6 +128,7 @@ EkstepEditor.basePlugin.extend({
             topSt = EkstepEditorAPI.jQuery("#canvas").offset().top + bounds.top;
             topEnd = topSt + bounds.height;
         }
+        /* istanbul ignore next*/
         if (event.clientX > leftSt && event.clientX < leftEnd && event.clientY > topSt && event.clientY < topEnd) {
             textEditor.showEditor(EkstepEditorAPI.getEditorObject().id);
         }
@@ -147,7 +149,6 @@ EkstepEditor.basePlugin.extend({
     getAttributes: function() {
         var attributes = EkstepEditorAPI._.omit(EkstepEditorAPI._.clone(this.attributes), ['top', 'left', 'width', 'height', 'fontFamily', 'fontfamily', 'fontSize', 'fontstyle', 'fontweight', 'scaleX', 'scaleY']);
         attributes.font = this.editorObj.get('fontFamily');
-        attributes['__text'] = this.editorObj.get('text');
         attributes.fontsize = this.updateFontSize(this.editorObj.get('fontSize'), false);
         var fontWeight = EkstepEditorAPI._.isUndefined(this.editorObj.get("fontWeight")) ? "" : (this.editorObj.get("fontWeight") === "bold" ? "bold" : "");
         var fontStyle = EkstepEditorAPI._.isUndefined(this.editorObj.get("fontStyle")) ? "" : (this.editorObj.get("fontStyle") === "italic" ? "italic" : "");
@@ -267,7 +268,6 @@ EkstepEditor.basePlugin.extend({
         if (data.y) retData.top = data.y;
         if (data.w) retData.width = data.w;
         if (data.h) retData.height = data.h;
-        if (data.radius) retData.rx = data.radius;
         if (data.color) retData.fill = data.color;
         if (data.weight && EkstepEditorAPI._.includes(data.weight, 'bold')) {
             retData.fontWeight = "bold";
@@ -307,31 +307,32 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     showReadalong: function() {
-        var instance = this;
+        currentInstance = this;
         var textObj = EkstepEditorAPI.getCurrentObject();
         EkstepEditorAPI.dispatchEvent('org.ekstep.readalongbrowser:showpopup', {
             textObj: textObj,
-            callback: function(data) {
-                if (!EkstepEditorAPI._.isUndefined(data)) {
-                    textObj.attributes.__text = textObj.editorObj.text = data.text;
-                    textObj.config.audio = data.audio;
-                    textObj.config.timings = data.timings;
-                    textObj.config.highlight = data.highlight;
-                    textObj.config.audioObj = data.audioObj;
-                    textObj.config.autoplay = data.autoplay;
-                    textObj.attributes.autoplay = data.autoplay;
-                    textObj.attributes.textType = 'readalong';
-                    textObj.manifest.editor.playable = true;
-                    var audioObj = data.audioObj;
-                    if (!EkstepEditorAPI._.isUndefined(audioObj))
-                        audioObj.src = EkstepEditor.mediaManager.getMediaOriginURL(audioObj.src);
-                    textObj.addMedia(audioObj);
-                    instance.addReadalongconfigManifest(textObj);
-                    EkstepEditorAPI.dispatchEvent("config:show");
-                    EkstepEditorAPI.render();
-                }
-            }
+            callback: currentInstance.convertTexttoReadalong
         });
+    },
+    convertTexttoReadalong: function(data){
+        var textObj = EkstepEditorAPI.getCurrentObject();
+        var instance = EkstepEditorAPI.getPluginInstance(textObj.id);
+        textObj.config.text = textObj.editorObj.text = data.text;
+        textObj.config.audio = data.audio;
+        textObj.config.timings = data.timings;
+        textObj.config.highlight = data.highlight;
+        textObj.config.audioObj = data.audioObj;
+        textObj.config.autoplay = data.autoplay;
+        textObj.attributes.autoplay = data.autoplay;
+        textObj.attributes.textType = 'readalong';
+        textObj.manifest.editor.playable = true;
+        var audioObj = data.audioObj;
+        if (!EkstepEditorAPI._.isUndefined(audioObj))
+            audioObj.src = EkstepEditor.mediaManager.getMediaOriginURL(audioObj.src);
+        textObj.addMedia(audioObj);
+        instance.addReadalongconfigManifest(textObj);
+        EkstepEditorAPI.dispatchEvent("config:show");
+        EkstepEditorAPI.render();
     },
     /**
      * This method is used show wordinfo popup
@@ -339,31 +340,32 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     showWordInfo: function() {
-        var instance = this;
+        currentInstance = this;
         var textObj = EkstepEditorAPI.getCurrentObject();
         EkstepEditorAPI.dispatchEvent('org.ekstep.wordinfobrowser:showpopup', {
             textObj: textObj,
-            callback: function(data, templateData) {
-                if (!EkstepEditorAPI._.isUndefined(data)) {
-                    textObj.data = templateData;
-                    textObj.attributes.__text = textObj.editorObj.text = data.text;;
-                    textObj.config.words = data.words;
-                    textObj.config.wordfontcolor = data.wordfontcolor;
-                    textObj.config.wordhighlightcolor = data.wordhighlightcolor;
-                    textObj.config.wordunderlinecolor = data.wordunderlinecolor;
-                    textObj.attributes.textType = 'wordinfo';
-                    textObj.addMedia({
-                        "id": "org.ekstep.text.popuptint",
-                        "src": EkstepEditorAPI.getConfig('absURL') + EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
-                        "type": "image",
-                        "assetId": "org.ekstep.text.popuptint"
-                    });
-                    instance.addWordinfoconfigManifest(textObj);
-                    EkstepEditorAPI.dispatchEvent("config:show");
-                    EkstepEditorAPI.render();
-                }
-            }
+            callback: currentInstance.convertTexttoWordinfo
         });
+    },
+    convertTexttoWordinfo: function(data, templateData){
+        var textObj = EkstepEditorAPI.getCurrentObject();
+        var instance = EkstepEditorAPI.getPluginInstance(textObj.id);
+        textObj.data = templateData;
+        textObj.config.text = textObj.editorObj.text = data.text;;
+        textObj.config.words = data.words;
+        textObj.config.wordfontcolor = data.wordfontcolor;
+        textObj.config.wordhighlightcolor = data.wordhighlightcolor;
+        textObj.config.wordunderlinecolor = data.wordunderlinecolor;
+        textObj.attributes.textType = 'wordinfo';
+        textObj.addMedia({
+            "id": "org.ekstep.text.popuptint",
+            "src": EkstepEditorAPI.getConfig('absURL') + EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
+            "type": "image",
+            "assetId": "org.ekstep.text.popuptint"
+        });
+        instance.addWordinfoconfigManifest(textObj);
+        EkstepEditorAPI.dispatchEvent("config:show");
+        EkstepEditorAPI.render();
     },
     /**
      * This method is used delete readalong/wordinfo setting and reset to text plugin
@@ -420,7 +422,7 @@ EkstepEditor.basePlugin.extend({
             }],
             width: 520,
             showClose: false
-        }, function() {});
+        });
     },
     /**
      * This method is used to add readalong configarations to configManifest
@@ -484,17 +486,11 @@ EkstepEditor.basePlugin.extend({
     },
     getMedia: function(){
         var instance = this;
-        switch(instance.attributes.textType){
-            case 'text':
-                return {};
-                break;
-            case 'readalong':
-                return instance._super();
-                break;
-            case 'wordinfo':
-                return instance._super();
-                break;
-        } 
-    }   
+        if(instance.attributes.textType === 'text'){
+            return {};
+        }else{
+            return instance._super();
+        }
+    }  
 });
 //# sourceURL=textplugin.js

@@ -16,7 +16,8 @@ var testConfig = {
 
 var $scope = {
 	$safeApply: function(cb) { cb()},
-	$watch: function() {}
+	$watch: function() {},
+	refreshToolbar: function() {}
 }
 
 var $document = {
@@ -26,7 +27,7 @@ var $document = {
 ContentEditorTestFramework = {
 	initialized: false,
 	cleanUp: function() {
-		EkstepEditor.stageManager.stages = [];
+		org.ekstep.contenteditor.stageManager.stages = [];
 	},
 	init: function(cb, plugins) {
 		ContentEditorTestFramework.cleanUp();
@@ -34,9 +35,9 @@ ContentEditorTestFramework = {
 		jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 		console.log('####### Initializing Content Editor Framework #######');
 		if(plugins) testConfig.plugins = plugins;
-		EkstepEditor.init(testContext, testConfig, $scope, $document, function() {
+		org.ekstep.contenteditor.init(testContext, testConfig, $scope, $document, function() {
 			if(!ContentEditorTestFramework.initialized) {
-				EkstepEditor.stageManager.registerEvents();
+				org.ekstep.contenteditor.stageManager.registerEvents();
 				ContentEditorTestFramework.initialized = true;
 			}
 			console.log('####### Content Editor Framework Initialized #######');
@@ -44,37 +45,37 @@ ContentEditorTestFramework = {
 		});
 	},
 	getFabricObject: function(objectId, canvas) {
-		return EkstepEditorAPI._.find(canvas.getObjects(), {id: objectId});
+		return ecEditor._.find(canvas.getObjects(), {id: objectId});
 	},
 	objectsEqual: function(editorObj, fabricObj) {
 		expect(editorObj).toBe(fabricObj);
 	},
 	validateObject: function(object, map) {
-		EkstepEditorAPI._.forIn(map, function(value, key) {
-			expect(EkstepEditorAPI._.get(object, key)).toBe(value);
+		ecEditor._.forIn(map, function(value, key) {
+			expect(ecEditor._.get(object, key)).toBe(value);
 		});
 	},
 	resize: function(objectId, scaleX, scaleY) {
-		var object = EkstepEditorAPI._.find(EkstepEditorAPI.getCanvas().getObjects(), {id: objectId});
+		var object = ecEditor._.find(ecEditor.getCanvas().getObjects(), {id: objectId});
 		object.set({scaleX: scaleX, scaleY: scaleY});
-		EkstepEditorAPI.getCanvas().fire('object:modified', {target: object});
+		ecEditor.getCanvas().fire('object:modified', {target: object});
 		object.fire('modified', {});
 	},
 	moveTo: function(objectId, x, y) {
-		var object = EkstepEditorAPI._.find(EkstepEditorAPI.getCanvas().getObjects(), {id: objectId});
+		var object = ecEditor._.find(ecEditor.getCanvas().getObjects(), {id: objectId});
 		object.set({left: x, top: y});
-		EkstepEditorAPI.getCanvas().fire('object:modified', {target: object});
+		ecEditor.getCanvas().fire('object:modified', {target: object});
 		object.fire('modified', {});
 	},
 	rotate: function(objectId, angle) {
-		var object = EkstepEditorAPI._.find(EkstepEditorAPI.getCanvas().getObjects(), {id: objectId});
+		var object = ecEditor._.find(ecEditor.getCanvas().getObjects(), {id: objectId});
 		object.set({angle: angle});
-		EkstepEditorAPI.getCanvas().fire('object:modified', {target: object});
+		ecEditor.getCanvas().fire('object:modified', {target: object});
 		object.fire('modified', {});
 	},
 	resizing: function(objectId, scaleX, scaleY) {
-		var object = EkstepEditorAPI._.find(EkstepEditorAPI.getCanvas().getObjects(), {id: objectId});
-		EkstepEditorAPI.getCanvas().fire('object:scaling', {target: object});
+		var object = ecEditor._.find(ecEditor.getCanvas().getObjects(), {id: objectId});
+		ecEditor.getCanvas().fire('object:scaling', {target: object});
 		object.fire('resizing', {});
 	},
 	moving: function(objectId, x, y) {
@@ -84,14 +85,14 @@ ContentEditorTestFramework = {
 
 	},
 	select: function(objectId) {
-		var object = EkstepEditorAPI._.find(EkstepEditorAPI.getCanvas().getObjects(), {id: objectId});
-		EkstepEditorAPI.getCanvas().setActiveObject(object);
-		//EkstepEditorAPI.getCanvas().fire('object:selected', {target: object});
+		var object = ecEditor._.find(ecEditor.getCanvas().getObjects(), {id: objectId});
+		ecEditor.getCanvas().setActiveObject(object);
+		//ecEditor.getCanvas().fire('object:selected', {target: object});
 		object.fire('selected', {});
 	},
 	unselect: function(objectId) {
-		var object = EkstepEditorAPI._.find(EkstepEditorAPI.getCanvas().getObjects(), {id: objectId});
-		EkstepEditorAPI.getCanvas().discardActiveObject({});
+		var object = ecEditor._.find(ecEditor.getCanvas().getObjects(), {id: objectId});
+		ecEditor.getCanvas().discardActiveObject({});
 		//EkstepEditorAPI.getCanvas().fire('selection:cleared', {target: object});
 		object.fire('deselected', {});
 	}

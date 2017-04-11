@@ -2,7 +2,7 @@
 
 angular.module('wordinfobrowserapp', []).controller('wordinfobrowsercontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
     var ctrl = this;
-    ctrl.selectedSentence = instance.attributes.__text;
+    ctrl.selectedSentence = instance.config.text;
     ctrl.showTypeownText = false;
     ctrl.textList = {};
     ctrl.keywords = [];
@@ -116,7 +116,7 @@ angular.module('wordinfobrowserapp', []).controller('wordinfobrowsercontroller',
     };
 
     if (!EkstepEditorAPI._.isUndefined(instance.editorObj)) {
-        ctrl.selectedSentence = instance.attributes.__text;
+        ctrl.selectedSentence = instance.config.text;
         ctrl.prevSlectedWords = ctrl.slectedWords = !EkstepEditorAPI._.isUndefined(instance.config.words) ? instance.config.words.split(',') : [];
         $scope.$safeApply();
     } 
