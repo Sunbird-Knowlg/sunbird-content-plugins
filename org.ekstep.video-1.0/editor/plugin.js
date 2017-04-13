@@ -18,7 +18,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         //var imageURL = "/assets/public/content/do_1122156236916490241183/artifact/maxresdefault_387_1491164926_1491165001510.png";
         // TODO: Comment out the above line and uncomment the below line before upload to dev
         var imageURL = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'assets/maxresdefault.png');
-        //imageURL = ecEditor.getConfig('useProxyForURL') ? "image/get/" + encodeURIComponent(imageURL) : imageURL;
+        imageURL = ecEditor.getConfig('useProxyForURL') ? "image/get/" + encodeURIComponent(imageURL) : imageURL;
         fabric.Image.fromURL(imageURL, function(img) {
             instance.editorObj = img;
             instance.parent = _parent;
