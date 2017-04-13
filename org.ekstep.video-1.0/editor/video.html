@@ -1,0 +1,79 @@
+<script type="text/ng-template" id="videoPreviewDialog">
+    <style type="text/css">
+    .video-modal{
+        top: 10% !important
+    }
+    .container{
+        margin: 10px !important:
+     }
+    .ui.grid .column.video-leftContent {
+        height: 200px;
+        padding-top: 10px !important;
+     }
+    .ui.grid .column.video-rightContent {
+        color: #aaa;
+        font-size: 13px;
+        font-style: italic;
+        padding-top: 35px !important;
+    }
+    #previewMessage, #errorMessage{
+        height: 200px !important;
+        text-align: center;
+        padding-top: 70px;
+    }
+    </style>
+    <div class="ui modal small active video-modal">
+        <div class="header">
+            <div class="ui two column grid">
+                <div class="row">
+                    <div class="column">
+                        <span><i class="video play icon"></i> Add Video</span>
+                    </div>
+                    <div class="column" style="text-align: right; cursor: pointer;">
+                        <i class="cursor-pointer close icon" ng-click="closeThisDialog(); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeButton'})"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content video-content">
+            <div class="ui fluid action input">
+                <input type="text" ng-keyup="$event.keyCode == 13 && videoUrl !== '' && previewVideo()" placeholder="Paste video url here..." ng-model="videoUrl">
+                <div class="ui blue button" ng-click="previewVideo()">Go</div>
+            </div>
+            <div class="ui grid container">
+                <div class="two column row">
+                    <div class="column video-leftContent" style="width: 65% !important">
+                        <div ng-show="messageDiv">
+                            <div class="ui segment" class="ui" id="previewMessage" ng-if="show == 'message'" style="height: 200px !important">
+                               <div class="ui text">Preview will come here</div>
+                            </div>
+                            <div class="ui segment" id="errorMessage" ng-if="show == 'error'" style="height: 200px !important">
+                                <div class="ui text">ERROR. Please check your url</div>
+                            </div>
+                            <div class="ui segment" ng-if="show == 'loader'" style="height: 200px !important">
+                                <div class="ui active inverted dimmer">
+                                    <div class="ui text loader">Just one second, We're loading the video for you.</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-show="!messageDiv" id="previewVideo"></div>
+                    </div>
+                    <div class="column video-rightContent" style="width: 35% !important">
+                        <p>
+                            1. Please upload video on Google Drive & Paste link above <br/>
+                            2. Video will need to be less than 20MB <br/>
+                            3. Supprted formats are WEBM & OGG
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui buttons" >
+                <button class="ui orange button" ng-click="closeThisDialog()" type="button">Cancel</button>
+                <div class="or"></div>
+                <button id="addToLesson" class="ui blue button" type="button" ng-disabled="!showAddLessonBtn" ng-click="addVideo()">Add To Lesson</button>
+            </div>
+        </div>
+    </div>
+</script>
