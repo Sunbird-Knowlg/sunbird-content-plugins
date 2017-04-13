@@ -37,7 +37,7 @@
         </div>
         <div class="content video-content">
             <div class="ui fluid action input">
-                <input type="text" ng-keyup="$event.keyCode == 13 && videoUrl !== '' && previewVideo()" placeholder="Paste video url here..." ng-model="videoUrl">
+                <input type="text" ng-keyup="$event.keyCode == 13 && videoUrl !== '' && previewVideo()" placeholder="Paste video url here..." ng-model="videoUrl" ng-change="showAddLessonBtn = false">
                 <div class="ui blue button" ng-click="previewVideo()">Go</div>
             </div>
             <div class="ui grid container">
@@ -48,7 +48,8 @@
                                <div class="ui text">Preview will come here</div>
                             </div>
                             <div class="ui segment" id="errorMessage" ng-if="show == 'error'" style="height: 200px !important">
-                                <div class="ui text">ERROR. Please check your url</div>
+                                <i class="warning sign large red icon"></i>
+                                <div class="ui text">There is a problem in loading. Please check your url.</div>
                             </div>
                             <div class="ui segment" ng-if="show == 'loader'" style="height: 200px !important">
                                 <div class="ui active inverted dimmer">

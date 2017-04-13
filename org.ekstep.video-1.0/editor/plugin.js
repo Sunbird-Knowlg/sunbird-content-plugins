@@ -3,7 +3,6 @@
  */
 org.ekstep.contenteditor.basePlugin.extend({
     screenShot: undefined,
-    videoSrc: undefined,
     initialize: function() {
         EkstepEditorAPI.addEventListener("org.ekstep.video:showpopup", this.loadBrowser, this);
         var templatePath = EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/video.html");
@@ -37,12 +36,12 @@ org.ekstep.contenteditor.basePlugin.extend({
                     $scope.messageDiv = true;
                     $scope.show = 'loader';
                     var url = $scope.videoUrl;
-                    if(!_.isNull(url.match(/drive.google/g))){
-                        $('.video-content .container #previewVideo').html('<video id="myVideo" width="400" height="200" controls="controls" autoplay src="'+$scope.videoUrl+'" ></video>'); 
+                    if(!ecEditor._.isNull(url.match(/drive.google/g))){
+                        ecEditor.jQuery('.video-content .container #previewVideo').html('<video id="myVideo" width="400" height="200" controls="controls" autoplay src="'+$scope.videoUrl+'" ></video>'); 
                         var video = document.getElementsByTagName('video')[0];
                         video.play()
                         .then(function() {
-                            var scope = angular.element($("#addToLesson")).scope();
+                            var scope = angular.element(ecEditor.jQuery("#addToLesson")).scope();
                             scope.$apply(function(){
                                 $scope.messageDiv = false;
                                 $scope.showAddLessonBtn = true;
@@ -50,7 +49,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                             console.log("Valid URL:", video);
                         })
                         .catch(function(err){
-                            var scope = angular.element($("#addToLesson")).scope();
+                            var scope = angular.element(ecEditor.jQuery("#addToLesson")).scope();
                             scope.$apply(function(){
                                 $scope.show = 'error';
                                 $scope.messageDiv = true;
@@ -58,9 +57,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                             });
                             console.log("Invalid URL:", err);
                         })
-                    }else if(!_.isNull(url.match(/youtube./g))){
+                    }else if(!ecEditor._.isNull(url.match(/youtube./g))){
                         $scope.showPreview = true;
-                        $('.video-content .container #previewVideo').html('<iframe id="ytvideo" width="400" height="200" src="'+$scope.videoUrl+'?autoplay=1"></iframe>');
+                        ecEditor.jQuery('.video-content .container #previewVideo').html('<iframe id="ytvideo" width="400" height="200" src="'+$scope.videoUrl+'?autoplay=1"></iframe>');
                         console.log('video ', video);
                     }else{
                          $scope.show = 'error';
@@ -74,12 +73,12 @@ org.ekstep.contenteditor.basePlugin.extend({
                         "x": 10.97,
                         "w": 78.4,
                         "h": 79.51,
-                        "videoUrl": $scope.videoUrl,
                         "config": {
                             "autoplay": true,
                             "controls": false,
                             "muted": false,
-                            "visible": true
+                            "visible": true,
+                            "url": $scope.videoUrl
                         }
                     });
                 };
@@ -92,22 +91,10 @@ org.ekstep.contenteditor.basePlugin.extend({
     getMedia: function() {
         return [{
             "id": this.id,
-            "src": this.attributes.videoUrl || '',
+            "src": this.getConfig()['url'] || '',
             "assetId": this.id,
             "type": "video"
         }]
-    },
-    onConfigChange: function(key, value) {
-        console.log('key', key, 'value', value);
-        var instance = this;
-        var editorObj = instance.editorObj
-        switch (key) {
-            case "url":
-                instance.addConfig(key, value);
-                break;
-        }
-        ecEditor.render();
-        ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
     }
 });
 //# sourceURL=videoplugin.js
