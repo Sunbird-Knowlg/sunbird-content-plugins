@@ -1,0 +1,141 @@
+<script type="text/ng-template" ng-app="transliterationapp" ng-controller="transliterationController as $ctrl" id="transliteration">
+    <style type="text/css">
+    .filters-container {
+        padding: 8px 10px 4px 18px;
+        background: #f1f1f1;
+    }
+    
+    .textWrapper {
+        font-size: 26px;
+        overflow-x: auto;
+        white-space: nowrap;
+        background-color: #efefef;
+        height: 75px;
+        display: flex;
+        align-items: center;
+    }
+    
+    .helptext {
+        color: #ccc;
+    }
+    
+    .words-div: {
+        width: 100%;
+    }
+    
+    .words-list {
+        width: 22%;
+        float: left;
+        margin: 4px;
+    }
+    
+    .panel {
+        margin-bottom: 20px;
+        background-color: #fff;
+        border: 1px solid transparent;
+        border-radius: 4px;
+        box-shadow: 0 1px 1px rgba(0, 0, 0, .05);
+    }
+    
+    .panel-heading {
+        border: 0px;
+        color: #000;
+        background: #BAD9D4;
+        padding: 20px 15px;
+    }
+    
+    
+    .panel-body {
+        padding: 15px;
+    }
+    
+    #div1 {
+        float: left;
+        margin: 10px;
+        padding: 10px;
+        border: solid 2px;
+        border-color: #C0C0C0;
+    }
+    
+    .dragDiv {
+        margin: 20px;
+    }
+    
+    .cursor-pointer {
+        cursor: pointer;
+    }
+    
+    .error-msg {
+        color: red;
+    }
+    .ui.modal{
+        top: 10%;
+    }
+    .bottom-margin{
+        margin-bottom: 10px;
+    }
+    .top-margin{
+        margin-top: 5vh;
+    }
+    .ui.form textarea.no-resize{
+        resize:none;
+    }
+    .lang-dropdown{
+        width:15vw;
+    }
+    </style>
+    <div class="ui modal large active">
+        <div class="content">
+            <div class="ui mini one steps">
+                <div class="active step">
+                    <i class="browser icon"></i>
+                    <div class="content">
+                        <div class="title">Transliterator</div>
+                        <div class="description">Select language </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div class="ui two column horizontally padded grid">
+                    <div class="six wide column">
+                        <div class="row top-margin">
+                            <div call="field">Text in screen:</div>
+                        </div>
+                        <div class="row bottom-margin">
+                            <div class="column">
+                                <div class="field ui fluid labeled input form">
+                                    <textarea  class="no-resize" ng-model="$ctrl.originalText" cols="5" rows="16"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="six wide column">
+                        <div class="row bottom-margin">
+                             <select class="ui dropdown lang-dropdown" ng-model="$ctrl.selectedLanguage" ng-options="lang as lang.name for lang in $ctrl.languages"> 
+                             <option value="" >Select Language</option>
+                             </select>
+
+                            <div class="ui buttons pull-right">
+                                <button class="ui blue button" ng-click="$ctrl.transliterate()" ng-disabled="$ctrl.originalText == '' || $ctrl.selectedLanguage == null" type="button"> Transliterate </button>
+                            </div>
+                        </div>
+                        <div class="row bottom-margin">
+                            <div class="column">
+                                <div class="field ui fluid labeled input form">
+                                    <textarea class="no-resize" ng-model="$ctrl.transliteratedText" cols="5" rows="16"></textarea>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui buttons">
+                <button class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+                <div class="or"></div>
+                <button class="ui blue button" type="button" ng-disabled="$ctrl.transliteratedText == undefined || $ctrl.transliteratedText == ''" ng-click="$ctrl.addToStage()">Add to stage</button>
+            </div>
+        </div>
+    </div>

@@ -30,7 +30,7 @@ var textEditor = (function() {
     var $editor = EkstepEditorAPI.jQuery("#authoringTextEditor"),
         $doneBtn = EkstepEditorAPI.jQuery("#authoringTextEditorBtn"),
         $cancelBtn = EkstepEditorAPI.jQuery("#authoringTextEditorCancel"),
-        $btnGrpParent = EkstepEditorAPI.jQuery('<div>',{style:"margin-top: 6px; margin-right: 6px;"}) 
+        $btnGrpParent = EkstepEditorAPI.jQuery('<div>',{style:"margin-top: 6px; margin-right: 6px;"})
         $buttonGrp = EkstepEditorAPI.jQuery('<div>', { class: 'ui buttons', id: 'texteditorBtnGrp', style:"float: right;" });
     $orBtn = EkstepEditorAPI.jQuery('<div>', { class: 'or' });
     pluginId = undefined,
@@ -52,10 +52,10 @@ var textEditor = (function() {
 
     function generateTelemetry(data) {
         if(data){
-            EkstepEditorAPI.getService(ServiceConstants.TELEMETRY_SERVICE).interact({ 
-                "type": data.type, "subtype": data.subtype, "target": data.target, 
-                "pluginid": "org.ekstep.text", "pluginver": "1.0", "objectid": "", 
-                "stage": EkstepEditorAPI.getCurrentStage().id 
+            EkstepEditorAPI.getService(ServiceConstants.TELEMETRY_SERVICE).interact({
+                "type": data.type, "subtype": data.subtype, "target": data.target,
+                "pluginid": "org.ekstep.textAdvanced", "pluginver": "1.0", "objectid": "",
+                "stage": EkstepEditorAPI.getCurrentStage().id
             });
         }
     }
@@ -125,7 +125,7 @@ var textEditor = (function() {
         $buttonGrp.show();
         var angScope = EkstepEditorAPI.getAngularScope();
         EkstepEditorAPI.ngSafeApply(angScope, function () {
-          angScope.configStyle = "";           
+          angScope.configStyle = "";
         });
     }
 
@@ -136,7 +136,7 @@ var textEditor = (function() {
         $cancelBtn.hide();
         var angScope = EkstepEditorAPI.getAngularScope();
         EkstepEditorAPI.ngSafeApply(angScope, function () {
-          angScope.configStyle = "";           
+          angScope.configStyle = "";
         });
     }
     return {

@@ -9,19 +9,19 @@
  */
 EkstepEditor.basePlugin.extend({
     /**
-     * This expains the type of the plugin 
+     * This expains the type of the plugin
      * @member {String} type
      * @memberof Text
      */
     type: "org.ekstep.text",
     /**
-     * Magic Number is used to calculate the from and to ECML conversion 
+     * Magic Number is used to calculate the from and to ECML conversion
      * @member {Number} magicNumber
      * @memberof Text
      */
     magicNumber: 1920,
     /**
-     * Editor Width is used to calculate the from and to ECML conversion 
+     * Editor Width is used to calculate the from and to ECML conversion
      * @member {Number} editorWidth
      * @memberof Text
      */
@@ -31,7 +31,11 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     initialize: function() {
+
+
         var instance = this;
+        ecEditor.addEventListener("org.ekstep.text:showpopup", this.loadHtml, this);
+
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
         EkstepEditorAPI.addEventListener("stage:unselect", this.stageUnselect, this);
         EkstepEditorAPI.addEventListener("org.ekstep.text:readalong:show", this.showReadalong, this);
@@ -40,10 +44,90 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("org.ekstep.text:modified", this.dblClickHandler, this);
         var templatePath = EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/delete_confirmation_dialog.html");
         EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
+
+        var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/transliterationconfig.html');
+        var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/transliterationapp.js');
+        var popupService = org.ekstep.contenteditor.api.getService(ServiceConstants.POPUP_SERVICE);
+        popupService.loadNgModules(templatePath, controllerPath);
+    },
+    /**
+    * This method uses popup service to open the transliteration wizard
+    * @returns {void}
+    * @memberof Text
+    */
+    loadHtml: function() {
+
+        var instance = this;
+        var popupService = org.ekstep.contenteditor.api.getService(ServiceConstants.POPUP_SERVICE);
+        popupService.open({
+            template: 'transliteration',
+            controller: 'transliterationController',
+            controllerAs: '$ctrl',
+            resolve: {
+                'instance': function() {
+                    return instance;
+                }
+            },
+            width: 900,
+            showClose: false,
+        });
+    },
+    /**
+    * This method instansiates a text plugin on the stage with the given text. Uses pre defined values
+    * for attributes if a text object isn't already selected on the stage.
+    * @param {string} transliteratedText - text to show in the text box.
+    * @returns {void}
+    * @memberof Text
+    */
+    createTransliteratedText: function(transliteratedText) {
+        var currentObject = org.ekstep.contenteditor.api.getCurrentObject();
+        var textAttributes = {"__text": transliteratedText, "x": 30, "y": 30, "w": 300, "h": 500, "fontFamily": "NotoSans", "fontSize": 18, "minWidth": 20, "maxWidth": 500, "fill": "#000"};
+
+        if(currentObject){
+            textAttributes.x = currentObject.attributes.x;
+            textAttributes.y = currentObject.attributes.y;
+            textAttributes.w = currentObject.attributes.w;
+            textAttributes.h = currentObject.attributes.h;
+            textAttributes.fontFamily = currentObject.attributes.fontFamily;
+            textAttributes.fontSize = currentObject.attributes.fontSize;
+            textAttributes.minWidth = currentObject.attributes.minWidth;
+            textAttributes.maxWidth = currentObject.attributes.maxWidth;
+            textAttributes.color = currentObject.attributes.color;
+
+            this.pixelToPercent(textAttributes)
+            textAttributes = this.getOffsetPosition(textAttributes);
+        }
+
+
+
+        org.ekstep.contenteditor.api.instantiatePlugin('org.ekstep.text', textAttributes, org.ekstep.contenteditor.api.getCurrentStage());
+
+    },
+    /**
+    * Method to calculate the offset position of the new text box relative to the
+    * source(this) textbox.
+    * @param {object} attributes - current attributes/attributes, relative to which the next textbox needs to be placed
+    * @returns {object} attributes - same object with offset added to x and/or y values.
+    * @memberof Text
+    */
+    getOffsetPosition: function(attributes){
+        if(attributes.x + attributes.w < 50){
+            attributes.x = 50;
+        }else if(attributes.x >= 50){
+            attributes.x = 12;
+        }else if(attributes.y+attributes.h <50){
+            attributes.y = 50;
+        }else if(attributes.y >= 50){
+            attributes.y = 12;
+        }else{
+            attributes.x +=20;
+            attributes.y +=20;
+        }
+        return attributes;
     },
     /**
      * This method used to create the text fabric object and assigns it to editor of the instance
-     * convertToFabric is used to convert attributes to fabric properties 
+     * convertToFabric is used to convert attributes to fabric properties
      * It shows the text editor popup to enter text to add it to canvas editor fabric object
      * @memberof Text
      */
@@ -51,7 +135,7 @@ EkstepEditor.basePlugin.extend({
         var props = this.convertToFabric(this.attributes);
         delete props.__text;
         if(EkstepEditorAPI._.isUndefined(this.config.text))
-            this.config.text = EkstepEditorAPI._.isUndefined(this.attributes.__text) ? "" : this.attributes.__text; 
+            this.config.text = EkstepEditorAPI._.isUndefined(this.attributes.__text) ? "" : this.attributes.__text;
         if(!EkstepEditorAPI._.isUndefined(this.attributes.__text))
             delete this.attributes.__text;
 
@@ -81,7 +165,7 @@ EkstepEditor.basePlugin.extend({
             var instance = this;
             this.addMedia({
                 "id": "org.ekstep.text.popuptint",
-                "src": EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
+                "src": EkstepEditorAPI.getConfig('absURL') + EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
                 "type": "image",
                 "assetId": "org.ekstep.text.popuptint"
             });
@@ -234,10 +318,10 @@ EkstepEditor.basePlugin.extend({
         return props;
     },
     /**
-     * This method is used to convert font size when we are doing from or to conversion based on the flag 
+     * This method is used to convert font size when we are doing from or to conversion based on the flag
      * @memberof Text
      * @param {Number} initFontSize  This is font size need to be converted
-     * @param {Boolean} The flag  It provides the flag on conversion to ecml or from ecml with values false, true 
+     * @param {Boolean} The flag  It provides the flag on conversion to ecml or from ecml with values false, true
      * @return {Number} fontsize The fontsize is converted font size
      */
     updateFontSize: function(initFontSize, flag) {
@@ -255,9 +339,9 @@ EkstepEditor.basePlugin.extend({
         return fontsize;
     },
     /**
-     * This method overridden from Ekstepeditor.basePlugin 
+     * This method overridden from Ekstepeditor.basePlugin
      * <br/>It is used convert data to fabric elements before creating the editor Object
-     * <br/>Here font weight , style and size to be converted to fabric 
+     * <br/>Here font weight , style and size to be converted to fabric
      * @param {Object} data This data provided by either api or on creation of new instance
      * @return {Object} retData retData is fabric form of data used to create fabric text object
      * @memberof Text
@@ -291,7 +375,7 @@ EkstepEditor.basePlugin.extend({
             retData.align = data.align;
         }
         if (data.rotate) retData.angle = data.rotate;
-        delete retData.lineHeight // line height set to default value 
+        delete retData.lineHeight // line height set to default value
         return retData;
     },
     getConfigManifest: function() {
@@ -307,11 +391,11 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     showReadalong: function() {
-        var instance = this;
+        currentInstance = this;
         var textObj = EkstepEditorAPI.getCurrentObject();
         EkstepEditorAPI.dispatchEvent('org.ekstep.readalongbrowser:showpopup', {
             textObj: textObj,
-            callback: instance.convertTexttoReadalong
+            callback: currentInstance.convertTexttoReadalong
         });
     },
     convertTexttoReadalong: function(data){
@@ -340,18 +424,18 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     showWordInfo: function() {
-        var instance = this;
+        currentInstance = this;
         var textObj = EkstepEditorAPI.getCurrentObject();
         EkstepEditorAPI.dispatchEvent('org.ekstep.wordinfobrowser:showpopup', {
             textObj: textObj,
-            callback: instance.convertTexttoWordinfo
+            callback: currentInstance.convertTexttoWordinfo
         });
     },
     convertTexttoWordinfo: function(data, templateData){
         var textObj = EkstepEditorAPI.getCurrentObject();
         var instance = EkstepEditorAPI.getPluginInstance(textObj.id);
         textObj.data = templateData;
-        textObj.config.text = textObj.editorObj.text = data.text;;
+        textObj.config.text = textObj.editorObj.text = data.text;
         textObj.config.words = data.words;
         textObj.config.wordfontcolor = data.wordfontcolor;
         textObj.config.wordhighlightcolor = data.wordhighlightcolor;
@@ -359,7 +443,7 @@ EkstepEditor.basePlugin.extend({
         textObj.attributes.textType = 'wordinfo';
         textObj.addMedia({
             "id": "org.ekstep.text.popuptint",
-            "src": EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
+            "src": EkstepEditorAPI.getConfig('absURL') + EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
             "type": "image",
             "assetId": "org.ekstep.text.popuptint"
         });
@@ -491,6 +575,6 @@ EkstepEditor.basePlugin.extend({
         }else{
             return instance._super();
         }
-    }  
+    }
 });
 //# sourceURL=textplugin.js
