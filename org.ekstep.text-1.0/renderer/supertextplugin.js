@@ -1,5 +1,5 @@
 Plugin.extend({
-    _type: 'org.ekstep.textAdvanced',
+    _type: 'org.ekstep.text',
     _isContainer: true,
     _render: true,
     _plginConfig: {},
@@ -16,7 +16,7 @@ Plugin.extend({
             data._id = pid;
             delete data.id;
         }
-        this.id = _.uniqueId('org.ekstep.textAdvanced');
+        this.id = _.uniqueId('org.ekstep.text');
         switch (data.textType) {
             case 'readalong':
                 this._data = data;
