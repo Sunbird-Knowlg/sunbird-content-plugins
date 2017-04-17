@@ -36,35 +36,42 @@ org.ekstep.contenteditor.basePlugin.extend({
                     $scope.messageDiv = true;
                     $scope.show = 'loader';
                     var url = $scope.videoUrl;
-                    if(!ecEditor._.isNull(url.match(/drive.google/g))){
-                        ecEditor.jQuery('.video-content .container #previewVideo').html('<video id="myVideo" width="400" height="200" controls="controls" autoplay src="'+$scope.videoUrl+'" ></video>'); 
-                        var video = document.getElementsByTagName('video')[0];
-                        video.play()
-                        .then(function() {
-                            var scope = angular.element(ecEditor.jQuery("#addToLesson")).scope();
-                            scope.$apply(function(){
-                                $scope.messageDiv = false;
-                                $scope.showAddLessonBtn = true;
-                            });
-                            console.log("Valid URL:", video);
-                        })
-                        .catch(function(err){
-                            var scope = angular.element(ecEditor.jQuery("#addToLesson")).scope();
-                            scope.$apply(function(){
-                                $scope.show = 'error';
-                                $scope.messageDiv = true;
-                                $scope.showAddLessonBtn = false;
-                            });
-                            console.log("Invalid URL:", err);
-                        })
-                    }else if(!ecEditor._.isNull(url.match(/youtube./g))){
-                        $scope.showPreview = true;
-                        ecEditor.jQuery('.video-content .container #previewVideo').html('<iframe id="ytvideo" width="400" height="200" src="'+$scope.videoUrl+'?autoplay=1"></iframe>');
-                        console.log('video ', video);
-                    }else{
-                         $scope.show = 'error';
-                    }
+
+                    // var id = url.match(/[-\w]{25,}/);
+                    // $scope.videoUrl =  "https://drive.google.com/uc?export=download&id="+id;
+                    // ecEditor.jQuery('.video-content .container #previewVideo').html('<video width="400" height="200" controls="controls" autoplay src="'+$scope.videoUrl+'" ></video>'); 
+                    var videoelement = $scope.creteVideoElement($scope.videoUrl);
+                    ecEditor.jQuery('.video-content .container #previewVideo').html(videoelement);
+                    var video = document.getElementsByTagName('video')[0];
+                    video.play()
+                    .then(function() {
+                        var scope = angular.element(ecEditor.jQuery("#addToLesson")).scope();
+                        scope.$apply(function(){
+                            $scope.messageDiv = false;
+                            $scope.showAddLessonBtn = true;
+                        });
+                        console.log("Valid URL:", video);
+                    })
+                    .catch(function(err){
+                        var scope = angular.element(ecEditor.jQuery("#addToLesson")).scope();
+                        scope.$apply(function(){
+                            $scope.show = 'error';
+                            $scope.messageDiv = true;
+                            $scope.showAddLessonBtn = false;
+                        });
+                        console.log("Invalid URL:", err);
+                    });
                 };
+
+                $scope.creteVideoElement = function(url){
+                    var video = document.createElement('video');
+                    video.src = url;
+                    video.width = '400';
+                    video.height = '200';
+                    video.controls = true;
+                    video.autoplay = 'autoplay';
+                    return video;
+                }
 
                 $scope.addVideo = function() {
                     $scope.closeThisDialog();

@@ -49,7 +49,7 @@
                             </div>
                             <div class="ui segment" id="errorMessage" ng-if="show == 'error'" style="height: 200px !important">
                                 <i class="warning sign large red icon"></i>
-                                <div class="ui text">There is a problem in loading. Please check your url.</div>
+                                <div class="ui text">Sorry could not load preview of the video link. Please check the link and try again.</div>
                             </div>
                             <div class="ui segment" ng-if="show == 'loader'" style="height: 200px !important">
                                 <div class="ui active inverted dimmer">
@@ -61,9 +61,9 @@
                     </div>
                     <div class="column video-rightContent" style="width: 35% !important">
                         <p>
-                            1. Please upload video on Google Drive & Paste link above <br/>
-                            2. Video will need to be less than 20MB <br/>
-                            3. Supprted formats are WEBM & OGG
+                            1. Currently only direct link to video file and Google Drive public shared links are supported. <br/>
+                            2. It is recommended to keep the video file size less than 20 MB. <br/>
+                            3. Currently only WebM & OGG formats are supported.
                         </p>
                     </div>
                 </div>
