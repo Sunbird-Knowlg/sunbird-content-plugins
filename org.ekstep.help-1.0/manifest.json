@@ -10,21 +10,13 @@
         "main": "editor/plugin.js",        
         "dependencies": [
             {"type": "js", "src": "editor/libs/micromarkdown.min.js"}
-        ],
-        "menu": [{
+        ],        
+        "sidebarMenu": [{
             "id": "help",
-            "category": "config",
             "type": "icon",
             "toolTip": "Help",
             "title": "Help",
             "iconClass": "help icon",
-            "onclick": {
-                "id": "config:help:show",
-                "data": { "sidebarId": "help" }
-            }
-        }],
-        "sidebar": [{
-            "id": "help",
             "templateURL": "editor/partials/sidebarHelpTemplate.html"
         }]
     }

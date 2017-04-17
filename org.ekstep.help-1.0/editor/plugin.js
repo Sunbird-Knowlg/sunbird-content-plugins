@@ -8,7 +8,7 @@
 EkstepEditor.basePlugin.extend({
     type: "help",
     initialize: function() {
-        org.ekstep.contenteditor.api.addEventListener("config:help:show", this.showHelpTab, this);
+        org.ekstep.contenteditor.api.addEventListener("sidebar:help", this.showHelpTab, this);
         org.ekstep.contenteditor.api.addEventListener("object:selected", this.showHelpTab, this);
         org.ekstep.contenteditor.api.addEventListener("object:unselected", this.showHelpTab, this);
     },

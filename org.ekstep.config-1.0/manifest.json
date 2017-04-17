@@ -10,21 +10,13 @@
         "dependencies": [
             {"type": "js", "src": "editor/libs/jquery-ui.min.js"},            
             {"type": "css", "src": "editor/config.css"}
-		],
-        "menu": [{
+		],        
+        "sidebarMenu": [{
             "id": "settings",
-            "category": "config",
             "type": "icon",
             "toolTip": "Settings",
             "title": "Settings",
-            "iconClass": "settings icon",
-            "onclick": {
-                "id": "config:settings:show",
-                "data": { "sidebarId": "settings" }
-            }
-        }],
-        "sidebar": [{
-            "id": "settings",
+            "iconClass": "settings icon",            
             "templateURL": "editor/partials/sidebarSettingTemplate.html",
             "controllerURL": "editor/sidebar-settings-controller.js"
         }]

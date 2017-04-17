@@ -14,20 +14,13 @@
             {"type": "js", "src": "editor/jquery-comments.js"},
             {"type": "css", "src": "editor/jquery-comments.css"}
         ],
-        "menu": [{
+        "menu": [],
+        "sidebarMenu": [{
             "id": "comments",
-            "category": "config",
             "type": "icon",
             "toolTip": "comments",
             "title": "comments",
-            "iconClass": "comments icon",
-            "onclick": {
-                "id": "config:comments:show",
-                "data": { "sidebarId": "comments" }
-            }
-        }],
-        "sidebar": [{
-            "id": "comments",
+            "iconClass": "comments icon",            
             "templateURL": "editor/partials/sidebarCommentsTemplate.html"            
         }]
     }
