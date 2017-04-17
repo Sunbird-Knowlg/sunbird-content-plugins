@@ -35,8 +35,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 $scope.previewVideo = function() {
                     $scope.messageDiv = true;
                     $scope.show = 'loader';
-                    var url = $scope.videoUrl;
-
+                    
                     // var id = url.match(/[-\w]{25,}/);
                     // $scope.videoUrl =  "https://drive.google.com/uc?export=download&id="+id;
                     // ecEditor.jQuery('.video-content .container #previewVideo').html('<video width="400" height="200" controls="controls" autoplay src="'+$scope.videoUrl+'" ></video>'); 
@@ -44,26 +43,26 @@ org.ekstep.contenteditor.basePlugin.extend({
                     ecEditor.jQuery('.video-content .container #previewVideo').html(videoelement);
                     var video = document.getElementsByTagName('video')[0];
                     video.play()
-                    .then(function() {
-                        var scope = angular.element(ecEditor.jQuery("#addToLesson")).scope();
-                        scope.$apply(function(){
-                            $scope.messageDiv = false;
-                            $scope.showAddLessonBtn = true;
+                        .then(function() {
+                            var scope = angular.element(ecEditor.jQuery("#addToLesson")).scope();
+                            scope.$apply(function() {
+                                $scope.messageDiv = false;
+                                $scope.showAddLessonBtn = true;
+                            });
+                            console.log("Valid URL:", video);
+                        })
+                        .catch(function(err) {
+                            var scope = angular.element(ecEditor.jQuery("#addToLesson")).scope();
+                            scope.$apply(function() {
+                                $scope.show = 'error';
+                                $scope.messageDiv = true;
+                                $scope.showAddLessonBtn = false;
+                            });
+                            console.log("Invalid URL:", err);
                         });
-                        console.log("Valid URL:", video);
-                    })
-                    .catch(function(err){
-                        var scope = angular.element(ecEditor.jQuery("#addToLesson")).scope();
-                        scope.$apply(function(){
-                            $scope.show = 'error';
-                            $scope.messageDiv = true;
-                            $scope.showAddLessonBtn = false;
-                        });
-                        console.log("Invalid URL:", err);
-                    });
                 };
 
-                $scope.creteVideoElement = function(url){
+                $scope.creteVideoElement = function(url) {
                     var video = document.createElement('video');
                     video.src = url;
                     video.width = '400';
@@ -71,7 +70,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     video.controls = true;
                     video.autoplay = 'autoplay';
                     return video;
-                }
+                };
 
                 $scope.addVideo = function() {
                     $scope.closeThisDialog();
@@ -96,12 +95,13 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
     },
     getMedia: function() {
-        return [{
+        var media = {};
+        return media[this.id] = {
             "id": this.id,
             "src": this.getConfig()['url'] || '',
             "assetId": this.id,
             "type": "video"
-        }]
+        };
     }
 });
 //# sourceURL=videoplugin.js
