@@ -3,7 +3,7 @@
  * plugin to get asset (image/audio) from learning platform
  * @class assetBrowser
  * @extends EkstepEditor.basePlugin
- * @author Sunil A S <sunils@ilimi.in>
+ * @author Amol Ghatol
  * @fires stagedecorator:addcomponent
  * @listens org.ekstep.assetbrowser:show
  */
@@ -21,15 +21,10 @@ EkstepEditor.basePlugin.extend({
     *
     */
     initialize: function() {
-        EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.initPreview, this);
-        setTimeout(function() {
-            var templatePath = EkstepEditorAPI.resolvePluginResource("org.ekstep.assetbrowser", "1.0", "editor/assetBrowser.html");
-            var controllerPath = EkstepEditorAPI.resolvePluginResource("org.ekstep.assetbrowser", "1.0", "editor/assetbrowserapp.js");
-
-            EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
-
-
-        }, 1000);
+        org.ekstep.contenteditor.api.addEventListener(this.manifest.id + ":show", this.initPreview, this);
+        var templatePath = org.ekstep.contenteditor.api.resolvePluginResource("org.ekstep.assetbrowser", "1.0", "editor/assetBrowser.html");
+        var controllerPath = org.ekstep.contenteditor.api.resolvePluginResource("org.ekstep.assetbrowser", "1.0", "editor/assetbrowserapp.js");
+        org.ekstep.contenteditor.api.getService('popup').loadNgModules(templatePath, controllerPath);
     },
     /**
     *   load html template to show the popup
@@ -42,7 +37,7 @@ EkstepEditor.basePlugin.extend({
         this.cb = data.callback;
         this.mediaType = data.type;
         this.search_filter = data.search_filter;
-        EkstepEditorAPI.getService('popup').open({
+        org.ekstep.contenteditor.api.getService('popup').open({
             template: 'partials/assetbrowser.html',
             controller: 'browsercontroller',
             controllerAs: '$ctrl',
@@ -66,7 +61,6 @@ EkstepEditor.basePlugin.extend({
     */
     getAsset: function(searchText, mediaType, portalOwner, cb) {
         var instance = this,
-            iservice = new org.ekstep.services.iService(),
             requestObj,
             requestHeaders,
             allowableFilter;
@@ -84,28 +78,38 @@ EkstepEditor.basePlugin.extend({
         };
 
         requestHeaders = {
-            headers: {
-                'Content-Type': 'application/json',
-                'user-id': 'ATTool'
-            }
+            'Content-Type': 'application/json',
+            'user-id': 'ATTool'
         };
 
-        EkstepEditorAPI._.isUndefined(searchText) ? null : requestObj.request.query = searchText;
+        org.ekstep.contenteditor.api._.isUndefined(searchText) ? null : requestObj.request.query = searchText;
 
         // Public assets only
-        if (EkstepEditorAPI._.isUndefined(portalOwner)){
+        if (org.ekstep.contenteditor.api._.isUndefined(portalOwner)){
             requestObj.request.filters.license = "Creative Commons Attribution (CC BY)";
-            allowableFilter = EkstepEditorAPI._.omit(this.search_filter, ['mediaType', 'license', 'limit']);
+            allowableFilter = org.ekstep.contenteditor.api._.omit(this.search_filter, ['mediaType', 'license', 'limit']);
         }
         else{
         // All assets
             requestObj.request.filters.portalOwner = portalOwner;
-            allowableFilter = EkstepEditorAPI._.omit(this.search_filter, ['mediaType', 'limit', 'portalOwner']);
+            allowableFilter = org.ekstep.contenteditor.api._.omit(this.search_filter, ['mediaType', 'limit', 'portalOwner']);
         }
 
-        EkstepEditorAPI._.merge(requestObj.request.filters, allowableFilter);
+        org.ekstep.contenteditor.api._.merge(requestObj.request.filters, allowableFilter);
 
-        iservice.http.post(EkstepEditorAPI.getConfig('baseURL') + EkstepEditorAPI.getConfig('apislug') + '/search/v2/search', requestObj, requestHeaders, cb);
+        org.ekstep.contenteditor.jQuery.ajax({
+            type: "POST",
+            url: org.ekstep.contenteditor.api.getConfig('baseURL') + org.ekstep.contenteditor.api.getConfig('apislug') + '/search/v2/search',
+            data: JSON.stringify(requestObj),
+            headers: requestHeaders,
+            success: function(res) {
+                res = { data: res };
+                cb(null, res);
+            },
+            error: function(err) {
+                cb(err, null);
+            }
+        });
     },
     /**
     *   invokes popup service to show the popup window
@@ -127,8 +131,8 @@ EkstepEditor.basePlugin.extend({
         /*Check for browser support for all File API*/
         if (window.File && window.FileList && window.Blob) {
             /*Get file size and file type*/
-            var fsize = EkstepEditorAPI.jQuery('#' + fieldId)[0].files[0].size;
-            var ftype = EkstepEditorAPI.jQuery('#' + fieldId)[0].files[0].type;
+            var fsize = org.ekstep.contenteditor.api.jQuery('#' + fieldId)[0].files[0].size;
+            var ftype = org.ekstep.contenteditor.api.jQuery('#' + fieldId)[0].files[0].type;
 
             /*Check file size*/
             if (fsize > allowedFileSize) {
@@ -138,7 +142,7 @@ EkstepEditor.basePlugin.extend({
 
             /*Check mime type*/
             if (ftype) {
-                if (EkstepEditorAPI.jQuery.inArray(ftype, allowedMimeTypes) == -1) {
+                if (org.ekstep.contenteditor.api.jQuery.inArray(ftype, allowedMimeTypes) == -1) {
                     alert("File type is not allowed!");
                     return false;
                 }
