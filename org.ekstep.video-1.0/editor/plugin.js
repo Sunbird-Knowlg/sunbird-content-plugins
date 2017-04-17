@@ -96,12 +96,13 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     getMedia: function() {
         var media = {};
-        return media[this.id] = {
+        media[this.id] = {
             "id": this.id,
             "src": this.getConfig()['url'] || '',
             "assetId": this.id,
             "type": "video"
         };
+        return media;
     }
 });
 //# sourceURL=videoplugin.js
