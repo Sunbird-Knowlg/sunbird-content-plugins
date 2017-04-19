@@ -1,4 +1,4 @@
-<script type="text/ng-template" id="videoPreviewDialog">
+<script type="text/ng-template" ng-app="videoApp" ng-controller="videoCtrl as $ctrl"  id="videoPreviewDialog">
     <style type="text/css">
     .video-modal{
         top: 10% !important
@@ -37,27 +37,27 @@
         </div>
         <div class="content video-content">
             <div class="ui fluid action input">
-                <input type="text" ng-keyup="$event.keyCode == 13 && videoUrl !== '' && previewVideo()" placeholder="Paste video url here..." ng-model="videoUrl" ng-change="showAddLessonBtn = false">
-                <div class="ui blue button" ng-click="previewVideo()">Go</div>
+                <input type="text" ng-keyup="$event.keyCode == 13 && $ctrl.videoUrl !== '' && $ctrl.previewVideo()" placeholder="Paste video url here..." ng-model="$ctrl.videoUrl" ng-change="$ctrl.showAddLessonBtn = false">
+                <div class="ui blue button" ng-click="$ctrl.previewVideo()">Go</div>
             </div>
             <div class="ui grid container">
                 <div class="two column row">
                     <div class="column video-leftContent" style="width: 65% !important">
-                        <div ng-show="messageDiv">
-                            <div class="ui segment" class="ui" id="previewMessage" ng-if="show == 'message'" style="height: 200px !important">
+                        <div ng-show="$ctrl.messageDiv">
+                            <div class="ui segment" class="ui" id="previewMessage" ng-if="$ctrl.show == 'message'" style="height: 200px !important">
                                <div class="ui text">Preview will come here</div>
                             </div>
-                            <div class="ui segment" id="errorMessage" ng-if="show == 'error'" style="height: 200px !important">
+                            <div class="ui segment" id="errorMessage" ng-if="$ctrl.show == 'error'" style="height: 200px !important">
                                 <i class="warning sign large red icon"></i>
                                 <div class="ui text">Sorry could not load preview of the video link. Please check the link and try again.</div>
                             </div>
-                            <div class="ui segment" ng-if="show == 'loader'" style="height: 200px !important">
+                            <div class="ui segment" ng-if="$ctrl.show == 'loader'" style="height: 200px !important">
                                 <div class="ui active inverted dimmer">
                                     <div class="ui text loader">Just one second, We're loading the video for you.</div>
                                 </div>
                             </div>
                         </div>
-                        <div ng-show="!messageDiv" id="previewVideo"></div>
+                        <div ng-show="!$ctrl.messageDiv" id="previewVideo"></div>
                     </div>
                     <div class="column video-rightContent" style="width: 35% !important">
                         <p>
@@ -73,7 +73,7 @@
             <div class="ui buttons" >
                 <button class="ui orange button" ng-click="closeThisDialog()" type="button">Cancel</button>
                 <div class="or"></div>
-                <button id="addToLesson" class="ui blue button" type="button" ng-disabled="!showAddLessonBtn" ng-click="addVideo()">Add To Lesson</button>
+                <button id="addToLesson" class="ui blue button" type="button" ng-disabled="!$ctrl.showAddLessonBtn" ng-click="$ctrl.addVideo()">Add To Lesson</button>
             </div>
         </div>
     </div>
