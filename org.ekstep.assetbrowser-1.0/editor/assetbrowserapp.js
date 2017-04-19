@@ -491,7 +491,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             EkstepEditorAPI.getService('asset').saveAsset(ctrl.assetId, content, function(err, resp) {
                 if (resp) {
                     ctrl.uploadingAsset = true;
-                    ctrl.uploadFile(resp, data);
+                    ctrl.uploadFile(resp, data, fields.assetName);
                 }
             });
         }
@@ -501,8 +501,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             return file;
         }
 
-        ctrl.uploadFile = function(resp, data) {
-            var assetName = resp.config.data.request.content.name;
+        ctrl.uploadFile = function(resp, data, assetName) {
+            var assetName = assetName;
             EkstepEditorAPI.jQuery.ajax({
                 // @Todo Use the correct URL
 
