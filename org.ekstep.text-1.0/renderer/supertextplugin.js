@@ -40,7 +40,10 @@ Plugin.extend({
                 data.id = pid;
                 data['z-index'] = 1000;
                 var wordsArr = this._plginConfig.words.split(',');
-                var text = this._plginConfig.text;
+
+                var text = _.isUndefined(this._plginConfig.text) ? data.__text : this._plginConfig.text;
+                text = text.replace(/(?:\r\n|\r|\n)/g, ' <br /> ');
+
                 var fontsize = data.fontsize;
                 if (isFinite(fontsize)) {
                     if (data.w) {

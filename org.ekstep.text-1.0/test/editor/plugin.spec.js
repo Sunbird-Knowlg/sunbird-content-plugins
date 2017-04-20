@@ -13,7 +13,9 @@ describe("Text plugin", function() {
             done();
         });
     });
-
+    afterAll(function() {
+        $('div#textEditorContainer').remove();
+    });
     it("should create plain text", function() {
         expect(stage.children.length).toBe(0);
         EkstepEditorAPI.dispatchEvent("org.ekstep.text:create", {"__text": "", "x": 10, "y": 20, "fontFamily": "NotoSans", "fontSize": 18, "minWidth": 20, "w": 35, "maxWidth": 500, "fill": "#000000", "fontStyle": "normal", "fontWeight": "normal"});

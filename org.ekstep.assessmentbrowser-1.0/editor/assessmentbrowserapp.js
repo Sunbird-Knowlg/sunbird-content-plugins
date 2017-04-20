@@ -193,6 +193,7 @@ angular.module('assessmentbrowserapp', [])
                 });
                 var itemIndex = this.getItemIndex(item);
                 if (itemIndex != -1) ctrl.items[itemIndex].isSelected = false;
+                EkstepEditorAPI.jQuery(".displayCount #total_items option[value='number:"+(parseInt(this.items.length+1))+"']").remove();
                 ctrl.activityOptions.total_items = this.items.length;
                 EkstepEditorAPI.jQuery('.displayCount .text').html(ctrl.activityOptions.total_items);
                 $scope.$safeApply();
