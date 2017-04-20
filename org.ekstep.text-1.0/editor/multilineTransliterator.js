@@ -73,11 +73,11 @@ org.ekstep.plugins.text.MultilineTransliterator = Class.extend({
                 if (item.state == 'fulfilled' && item.value.data.result.transliterations[languageCode] != undefined) {
                     var val = item['value']['data']['result']['transliterations'][languageCode]['output'];
                     if (val)
-                        return val;
+                        return decodeURIComponent(val);
                     else
-                        return texts[index];
+                        return decodeURIComponent(texts[index]);
                 } else {
-                    return texts[index];
+                    return decodeURIComponent(texts[index]);
                 }
             }).join('\n');
             callback(transliteratedText);
