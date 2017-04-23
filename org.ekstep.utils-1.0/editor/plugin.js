@@ -34,13 +34,14 @@ EkstepEditor.basePlugin.extend({
         EkstepEditorAPI.addEventListener("object:selected", this.objectSelected, this);
         EkstepEditorAPI.addEventListener("object:unselected", this.objectUnSelected, this);
 
-        EkstepEditorAPI.registerKeyboardCommand('ctrl+c', function() {
+        EkstepEditorAPI.registerKeyboardCommand('mod+c', function() {
             instance.copyItem();
         });
-        EkstepEditorAPI.registerKeyboardCommand('ctrl+v', function() {
+        EkstepEditorAPI.registerKeyboardCommand('mod+v', function() {
             instance.pasteItem();
         });
-        EkstepEditorAPI.registerKeyboardCommand('shift+del', function() {
+        EkstepEditorAPI.registerKeyboardCommand(['del', 'backspace'], function() {
+            console.log("Delete or backspace key pressed");
             instance.deleteObject();
         });
     },
