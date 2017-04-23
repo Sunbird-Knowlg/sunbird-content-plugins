@@ -37,6 +37,8 @@ angular.module('editorApp')
             org.ekstep.contenteditor.api.dispatchEvent("config:updateValue", { newValue: newValue, oldValue: oldValue });
         }, true);
 
+        var canvasOffset = ecEditor.jQuery("#canvas").offset();
+
         $('.sidebarConfig .item, .sidebarHelp .item').tab({
             history: false
         });
@@ -159,16 +161,16 @@ angular.module('editorApp')
 
         $scope.addAction = function(data) {
             if (data.command && data.asset) {
-                if (data.command) {
-                    org.ekstep.contenteditor.api.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': 'transitionTo', 'asset': 'theme', 'value': data.asset }] });
+                if (stageActionsList[data.command]) {
+                    ecEditor.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': 'transitionTo', 'asset': 'theme', 'value': data.asset, name: $scope.actionTargetObject[data.asset] }] });
                 } else {
-                    org.ekstep.contenteditor.api.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': data.command, 'asset': data.asset, name: $scope.actionTargetObject[data.asset] }] });
+                    ecEditor.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': data.command, 'asset': data.asset, name: $scope.actionTargetObject[data.asset] }] });
                 }
-            };
+            }
             $scope.updateActions();
             setTimeout(function() {
-                org.ekstep.contenteditor.api.jQuery("#actionTargetDropdown").dropdown('restore defaults');
-                org.ekstep.contenteditor.api.jQuery("#actionTypeDropdown").dropdown('restore defaults');
+                ecEditor.jQuery("#actionTargetDropdown").dropdown('restore defaults');
+                ecEditor.jQuery("#actionTypeDropdown").dropdown('restore defaults');
             }, 500);
         };
 
@@ -191,22 +193,21 @@ angular.module('editorApp')
 
         $scope.highlightTargetObject = function() {
             var instance = this;
-            instance.canvasOffset = $("#canvas").offset();
-            org.ekstep.contenteditor.api.jQuery("#actionTargetDropdown:not(.addClick)").parent().on('click', function() {
-                org.ekstep.contenteditor.api.jQuery("#actionTargetDropdown").nextAll(".menu.transition").find(".item").mouseover(function(event) {
-                    var id = org.ekstep.contenteditor.api.jQuery(event.target).text();
-                    var pluginInstance = org.ekstep.contenteditor.api.getPluginInstance(id);
+            ecEditor.jQuery("#actionTargetDropdown:not(.addClick)").parent().on('click', function() {
+                ecEditor.jQuery("#actionTargetDropdown").nextAll(".menu.transition").find(".item").mouseover(function(event) {
+                    var id = ecEditor.jQuery(event.target).attr("data-value").split(":")[1];
+                    var pluginInstance = ecEditor.getPluginInstance(id);
                     if (pluginInstance && pluginInstance['editorObj']) {
                         var editorObj = pluginInstance['editorObj'];
-                        var left = instance.canvasOffset.left + editorObj.left - 5;
-                        var top = instance.canvasOffset.top + editorObj.top - 5;
-                        org.ekstep.contenteditor.api.jQuery("#objectPointer")
+                        var left = canvasOffset.left + editorObj.left - 5;
+                        var top = canvasOffset.top + editorObj.top;
+                        ecEditor.jQuery("#objectPointer")
                             .show().offset({ 'left': left, 'top': top })
                             .css({ 'height': editorObj.getHeight() + 10, 'width': editorObj.getWidth() + 10 });
                     }
                 });
-                org.ekstep.contenteditor.api.jQuery(this).mouseleave(function() {
-                    org.ekstep.contenteditor.api.jQuery("#objectPointer").hide();
+                ecEditor.jQuery(this).mouseleave(function() {
+                    ecEditor.jQuery("#objectPointer").hide();
                 });
             }).addClass("addClick");
         };
@@ -214,25 +215,30 @@ angular.module('editorApp')
 
 
         $scope.setVisibleObjects = function() {
-            var pluginInstanceIds = {};
-            var pluginInstances = org.ekstep.contenteditor.api.getStagePluginInstances(org.ekstep.contenteditor.api.getCurrentStage().id, null, ['org.ekstep.audio'], [org.ekstep.contenteditor.api.getCurrentObject().id]);
-            org.ekstep.contenteditor.api._.forEach(pluginInstances, function(pi) {
-                pluginInstanceIds[pi.id] = pi.id;
+            var pluginInstanceIds = [];
+            var pluginInstances = ecEditor.getStagePluginInstances(ecEditor.getCurrentStage().id, null, ['org.ekstep.audio', 'org.ekstep.image'], [ecEditor.getCurrentObject().id]);
+            ecEditor._.forEach(pluginInstances, function(pi) {
+                pluginInstanceIds[pi.id] = pi.getDisplayName() + " (" + pi['id'].substr(0, 15) + "..." + ")";
             })
-
+            var imageInstances = ecEditor.getStagePluginInstances(ecEditor.getCurrentStage().id, ['org.ekstep.image'], null, [ecEditor.getCurrentObject().id]);
+            ecEditor._.forEach(imageInstances, function(pi) {
+                pluginInstanceIds[pi.id] = pi.getDisplayName();
+            })
             $scope.actionTargetObject = pluginInstanceIds;
+            $scope.$safeApply();
         };
 
         $scope.setPlayableObjects = function() {
-            var pluginInstances = org.ekstep.contenteditor.api.getStagePluginInstances(org.ekstep.contenteditor.api.getCurrentStage().id, ['org.ekstep.audio'], null, [org.ekstep.contenteditor.api.getCurrentObject().id]);
-            var optionsList = {};
-            org.ekstep.contenteditor.api._.forEach(pluginInstances, function(pi) {
+            var pluginInstances = ecEditor.getStagePluginInstances(ecEditor.getCurrentStage().id, ['org.ekstep.audio'], null, [ecEditor.getCurrentObject().id]);
+            var optionsList = [];
+            ecEditor._.forEach(pluginInstances, function(pi) {
                 if (pi.media) {
                     var mediaObj = pi.media[Object.keys(pi.media)[0]];
-                    optionsList[mediaObj.id] = mediaObj.id;
+                    optionsList[mediaObj.id] = pi.getDisplayName();
                 }
             });
             $scope.actionTargetObject = optionsList;
+            $scope.$safeApply();
         };
 
         $scope.setStageObjects = function() {
@@ -279,7 +285,7 @@ angular.module('editorApp')
             $scope.selectedObject.stage = true;
             $scope.showSettingsTab(event, data);
         };
-        
+
         org.ekstep.contenteditor.api.addEventListener("object:selected", $scope.objectSelected, $scope);
         org.ekstep.contenteditor.api.addEventListener("object:unselected", $scope.objectUnselected, $scope);
         org.ekstep.contenteditor.api.addEventListener("config:show", $scope.showSettingsTab, $scope);

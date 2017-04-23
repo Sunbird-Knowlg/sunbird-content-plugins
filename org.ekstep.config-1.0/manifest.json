@@ -9,7 +9,8 @@
         "main": "editor/plugin.js",
         "dependencies": [
             {"type": "js", "src": "editor/libs/jquery-ui.min.js"},            
-            {"type": "css", "src": "editor/config.css"}
+            {"type": "css", "src": "editor/config.css"},
+            {"type": "plugin", "plugin": "org.ekstep.colorpicker", "ver": "1.0"}
 		],        
         "sidebarMenu": [{
             "id": "settings",

@@ -175,7 +175,10 @@ a.item.at-menu-item.popup-item.active {
             <tbody>
                 <tr ng-repeat="action in currentObjectActions track by $index">
                     <td>{{action.command}}</td>
-                    <td>{{action.asset | limitTo: 15}}</td>
+                    <td> 
+                    <span ng-if="action.name">{{action.name  | limitTo: 15}}</span>
+                    <span ng-if="!action.name">{{action.asset  | limitTo: 15}}</span>
+                    </td>
                     <td><i class="delete icon link" ng-click="removeAction({index : $index})"></i></td>
                 </tr>
             </tbody>

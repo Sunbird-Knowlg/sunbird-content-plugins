@@ -19,17 +19,20 @@ EkstepEditor.basePlugin.extend({
      */
     initialize: function() {
         var instance = this;
-        EkstepEditorAPI.addEventListener("org.ekstep.config:invoke", this.invoke, this);
-        EkstepEditorAPI.addEventListener("org.ekstep.config:toggleStageEvent", this.toggleEventToStage, this);
-        EkstepEditorAPI.addEventListener("config:updateValue", this.updateConfig, this);
-        EkstepEditorAPI.addEventListener("config:on:change", this._onConfigChange, this);
+        org.ekstep.contenteditor.api.addEventListener("org.ekstep.config:invoke", this.invoke, this);
+        org.ekstep.contenteditor.api.addEventListener("org.ekstep.config:toggleStageEvent", this.toggleEventToStage, this);
+        org.ekstep.contenteditor.api.addEventListener("config:updateValue", this.updateConfig, this);
+        org.ekstep.contenteditor.api.addEventListener("config:on:change", this._onConfigChange, this);
+        org.ekstep.contenteditor.api.addEventListener("config:add", this.addConfig, this);
+        var colorpickerDirPath = org.ekstep.contenteditor.api.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/colorpicker-directive.js');
+        org.ekstep.contenteditor.api.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(undefined, colorpickerDirPath);
     },
     updateConfig: function(event, data) {
         var instance = this;
-        var changedValues = EkstepEditorAPI._.reduce(data.oldValue, function(result, value, key) {
-            return EkstepEditorAPI._.isEqual(value, data.newValue[key]) ? result : result.concat(key);
+        var changedValues = org.ekstep.contenteditor.api._.reduce(data.oldValue, function(result, value, key) {
+            return org.ekstep.contenteditor.api._.isEqual(value, data.newValue[key]) ? result : result.concat(key);
         }, []);
-        EkstepEditorAPI._.forEach(changedValues, function(cv) {
+        org.ekstep.contenteditor.api._.forEach(changedValues, function(cv) {
             instance.onConfigChange(cv, data.newValue[cv]);
         })
     },
@@ -43,8 +46,8 @@ EkstepEditor.basePlugin.extend({
         this.onConfigChange(data.key, data.value);
     },
     onConfigChange: function(key, value) {
-        var plugin = EkstepEditorAPI.getCurrentObject() ? EkstepEditorAPI.getCurrentObject() : EkstepEditorAPI.getCurrentStage();
-        if (!EkstepEditorAPI._.isUndefined(value) && plugin) {
+        var plugin = org.ekstep.contenteditor.api.getCurrentObject() ? org.ekstep.contenteditor.api.getCurrentObject() : org.ekstep.contenteditor.api.getCurrentStage();
+        if (!org.ekstep.contenteditor.api._.isUndefined(value) && plugin) {
             plugin._onConfigChange(key, value);
             plugin.onConfigChange(key, value);
             if (key === 'autoplay') {
@@ -57,7 +60,7 @@ EkstepEditor.basePlugin.extend({
         if (data.type) {
             switch (data.type) {
                 case 'imagebrowser':
-                    EkstepEditorAPI.dispatchEvent('org.ekstep.assetbrowser:show', {
+                    org.ekstep.contenteditor.api.dispatchEvent('org.ekstep.assetbrowser:show', {
                         type: 'image',
                         callback: function(data) { instance.onConfigChange('asset', data) }
                     });
@@ -66,17 +69,17 @@ EkstepEditor.basePlugin.extend({
                     break;
             }
         }
-    },    
+    },
     toggleEventToStage: function(event, data) {
-        var currentStage = EkstepEditorAPI.getCurrentStage();
+        var currentStage = org.ekstep.contenteditor.api.getCurrentStage();
         var eventIndex = -1;
         if (currentStage.event) {
             _.forEach(currentStage.event, function(e, i) {
-                if (EkstepEditorAPI._.isArray(e.action)) {
+                if (org.ekstep.contenteditor.api._.isArray(e.action)) {
                     if (e.action[0].asset === data.id) {
                         eventIndex = i;
                     }
-                } else if (EkstepEditorAPI._.isObject(e.action)) {
+                } else if (org.ekstep.contenteditor.api._.isObject(e.action)) {
                     if (e.action.asset === data.id) {
                         eventIndex = i;
                     }
