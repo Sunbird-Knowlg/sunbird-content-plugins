@@ -294,5 +294,9 @@ angular.module('editorApp')
         org.ekstep.contenteditor.api.addEventListener("config:comments:show", $scope.showCommentsTab, $scope);
         org.ekstep.contenteditor.api.addEventListener('config:show:actions', $scope.showActions, $scope);
         org.ekstep.contenteditor.api.addEventListener("config:show:customise", $scope.showConfig, $scope);
-        org.ekstep.contenteditor.api.addEventListener("content:load:complete", $scope.showConfig, $scope);
+
+        setTimeout(function() {
+            $scope.showConfig();     
+        }, 200);
+        
     }]);
