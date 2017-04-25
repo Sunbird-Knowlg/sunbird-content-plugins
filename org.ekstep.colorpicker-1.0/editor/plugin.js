@@ -2,11 +2,11 @@
  * The purpose of {@link colorpicker} is used to add color to other plugin objects
  *
  * @class colorpicker
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  *
  * @author Chetan Sachdev <chetan.sachdev@tarento.com>
  */
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     /**
      * This expains the type of the plugin 
      * @member {String} type
@@ -21,7 +21,7 @@ EkstepEditor.basePlugin.extend({
     picker: [],
     
     initialize: function() {
-        EkstepEditorAPI.addEventListener("colorpicker:state", this.invoke, this);
+        ecEditor.addEventListener("colorpicker:state", this.invoke, this);
     },
     /**
      * The method is used to initiate the colorpicker
@@ -32,9 +32,9 @@ EkstepEditor.basePlugin.extend({
      */
     invoke: function(event, data) {
         var instance = this;
-        if (EkstepEditorAPI.jQuery("#" + data.id).attr("colorpicker") != "added") {
+        if (ecEditor.jQuery("#" + data.id).attr("colorpicker") != "added") {
            
-           this.picker[data.id] = EkstepEditorAPI.jQuery("#" +data.id).spectrum({
+           this.picker[data.id] = ecEditor.jQuery("#" +data.id).spectrum({
                 color: "#FF0000",
                 showInput: true,
                 showAlpha: false,
@@ -68,14 +68,14 @@ EkstepEditor.basePlugin.extend({
                 },
             });
 
-            EkstepEditorAPI.jQuery("#" + data.id).attr("colorpicker", "added");
+            ecEditor.jQuery("#" + data.id).attr("colorpicker", "added");
         }
         if (data && data.color) {
             //this.picker[data.id].fromString(data.color);
-             EkstepEditorAPI.jQuery("#" + data.id).spectrum("set", data.color);
+             ecEditor.jQuery("#" + data.id).spectrum("set", data.color);
         } else {
             //this.picker[data.id].fromString("#000000"); // default color will be black
-             EkstepEditorAPI.jQuery("#" + data.id).spectrum("set", "#000000");// default color will be black
+             ecEditor.jQuery("#" + data.id).spectrum("set", "#000000");// default color will be black
         }
     }
 });

@@ -4,10 +4,10 @@
 org.ekstep.contenteditor.basePlugin.extend({
     screenShot: undefined,
     initialize: function() {
-        EkstepEditorAPI.addEventListener(this.manifest.id + ":showpopup", this.loadBrowser, this);
-        var templatePath = EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/video.html");
-        var controllerPath = EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/videoapp.js"); 
-        EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
+        ecEditor.addEventListener(this.manifest.id + ":showpopup", this.loadBrowser, this);
+        var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/video.html");
+        var controllerPath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/videoapp.js"); 
+        ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
     },
     newInstance: function() {
         var instance = this;
@@ -27,7 +27,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     loadBrowser: function() {
         currentInstance = this;
-        EkstepEditorAPI.getService('popup').open({
+        ecEditor.getService('popup').open({
             template: 'videoPreviewDialog',
             controller: 'videoCtrl',
             controllerAs: '$ctrl',

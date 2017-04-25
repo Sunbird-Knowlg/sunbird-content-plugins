@@ -1,11 +1,11 @@
 /**
  * This plugin is used to add activities to the content
  * @class activityBrowser
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  * @author Harish Kumar Gangula <harishg@ilimi.in>
  */
 
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     currentInstance: undefined,
     /**
      * registers events
@@ -13,11 +13,11 @@ EkstepEditor.basePlugin.extend({
      */
     initialize: function() {
         var instance = this;
-        EkstepEditorAPI.addEventListener("org.ekstep.activitybrowser:showpopup", this.loadBrowser, this);
+        ecEditor.addEventListener("org.ekstep.activitybrowser:showpopup", this.loadBrowser, this);
         setTimeout(function() {
-            var templatePath = EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/activityBrowser.html");
-            var controllerPath = EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/activityBrowser.js"); 
-            EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
+            var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/activityBrowser.html");
+            var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/activityBrowser.js"); 
+            ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
 
     },
@@ -37,7 +37,7 @@ EkstepEditor.basePlugin.extend({
      */
     loadBrowser: function() {
         currentInstance = this;
-        EkstepEditorAPI.getService('popup').open({
+        ecEditor.getService('popup').open({
             template: 'activityBrowser',
             controller: 'activityBrowserCtrl',
             controllerAs: '$ctrl',

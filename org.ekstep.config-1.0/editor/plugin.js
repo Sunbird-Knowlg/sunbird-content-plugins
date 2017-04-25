@@ -3,11 +3,11 @@
  * The purpose of {@link Configplugin} is to encapsulate configurable properties and providing a UI for changing values
  *
  * @class Config
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  *
  * @author Harishkumar Gangula <harishg@ilimi.in>
  */
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     type: "config",
     /**
      * 

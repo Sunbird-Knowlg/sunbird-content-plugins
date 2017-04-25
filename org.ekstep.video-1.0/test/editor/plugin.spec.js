@@ -5,8 +5,8 @@ describe("Video plugin", function() {
 
     beforeAll(function(done) {
         ContentEditorTestFramework.init(function() {
-            stage = EkstepEditorAPI.instantiatePlugin('org.ekstep.stage');
-            EkstepEditorAPI.loadPlugin('org.ekstep.video', '1.0');
+            stage = ecEditor.instantiatePlugin('org.ekstep.stage');
+            ecEditor.loadPlugin('org.ekstep.video', '1.0');
             done();
         });
     });

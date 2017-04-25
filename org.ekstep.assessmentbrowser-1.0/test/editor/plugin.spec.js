@@ -11,7 +11,7 @@ describe('Assessment-browser plugin', function() {
 
     beforeEach(function() {
         jasmine.getJSONFixtures().fixturesPath = 'test';
-        EkstepEditor.config = {
+        org.ekstep.contenteditor.config = {
             defaultSettings: 'base/plugins/org.ekstep.assessmentbrowser-1.0/test/editor/config/editorSettings.json',
             pluginRepo: 'http://localhost:9876/base/plugins',
         }
@@ -22,7 +22,7 @@ describe('Assessment-browser plugin', function() {
     beforeEach(module('editorApp'));
 
     beforeEach(function() {
-        EkstepEditor.pluginManager.loadPlugin('org.ekstep.assessmentbrowser', "1.0");
+        org.ekstep.contenteditor.pluginManager.loadPlugin('org.ekstep.assessmentbrowser', "1.0");
     });
 
     beforeEach(inject(function($rootScope, _$controller_, $uibModal, $q) {
@@ -34,7 +34,7 @@ describe('Assessment-browser plugin', function() {
         config = {
             template: 'base/plugins/org.ekstep.assessmentbrowser-1.0/editor/assessmentbrowser.html',
         };
-        var plugin = EkstepEditorAPI.getPlugin('org.ekstep.assessmentbrowser');
+        var plugin = ecEditor.getPlugin('org.ekstep.assessmentbrowser');
         pluginObj = new plugin.p(plugin.m);
         $uibModalInstance = {
             close: jasmine.createSpy('modalInstance.close'),
@@ -43,7 +43,7 @@ describe('Assessment-browser plugin', function() {
     }));
 
     it('should open the popup window', function() {
-        EkstepEditorAPI.dispatchEvent("org.ekstep.assessmentbrowser:show", {});
+        ecEditor.dispatchEvent("org.ekstep.assessmentbrowser:show", {});
         var callback = function() {};
         spyOn(uibModal, 'open').and.callFake(function(config) {
             return {
@@ -61,8 +61,8 @@ describe('Assessment-browser plugin', function() {
 
 
     it('should call callback function', function(done) {
-        EkstepEditorAPI.dispatchEvent("org.ekstep.assessmentbrowser:show", {});
-        spyOn(EkstepEditorAPI, "dispatchEvent").and.callThrough();
+        ecEditor.dispatchEvent("org.ekstep.assessmentbrowser:show", {});
+        spyOn(ecEditor, "dispatchEvent").and.callThrough();
         pluginObj.controllerCallback($scope, '', { instance: this });
         //spyOn(pluginObj.__proto__, 'controllerCallback');
         setTimeout(function() {

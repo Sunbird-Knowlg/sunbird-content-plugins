@@ -1,11 +1,11 @@
 /**
  * plugin is used to create or modifiy the word meaning text in editor
  * @class wordinfobrowser
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  * @author Kartheek Palla <kartheekp@ilimi.in>
  */
 
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     /**
      * This expains the type of the plugin 
      * @member {String} type
@@ -21,13 +21,13 @@ EkstepEditor.basePlugin.extend({
      */
     initialize: function() {
         var instance = this;
-        EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
-        EkstepEditorAPI.addEventListener("delete:invoked", this.deleteObject, this);
-        EkstepEditorAPI.addEventListener(instance.manifest.id + ":showpopup", this.loadHtml, this);
+        ecEditor.addEventListener("object:unselected", this.objectUnselected, this);
+        ecEditor.addEventListener("delete:invoked", this.deleteObject, this);
+        ecEditor.addEventListener(instance.manifest.id + ":showpopup", this.loadHtml, this);
         setTimeout(function() {
-            var templatePath = EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/wordinfobrowser.html");
-            var controllerPath = EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/wordinfobrowserapp.js");
-            EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
+            var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/wordinfobrowser.html");
+            var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/wordinfobrowserapp.js");
+            ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
     },
     /**        
@@ -43,7 +43,7 @@ EkstepEditor.basePlugin.extend({
         this.config = data.textObj.config;
         if(data.textObj.attributes.textType == "wordinfo")
             this.editorObj = data.textObj.editorObj;
-        EkstepEditorAPI.getService('popup').open({
+        ecEditor.getService('popup').open({
             template: 'wordinfobrowser',
             controller: 'wordinfobrowsercontroller',
             controllerAs: '$ctrl',

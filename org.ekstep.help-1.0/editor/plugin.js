@@ -1,11 +1,11 @@
 /**
  * 
  * @class Help
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  *
  * @author Sunil A S <sunils@ilimi.in>
  */
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     type: "help",
     initialize: function() {
         org.ekstep.contenteditor.api.addEventListener("sidebar:help", this.showHelpTab, this);

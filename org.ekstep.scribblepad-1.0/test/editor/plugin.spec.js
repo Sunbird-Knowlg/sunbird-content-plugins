@@ -14,13 +14,13 @@ describe('org.ekstep.scribblepad', function() {
     }));
 
     beforeEach(function() {
-        EkstepEditor.pluginManager.loadPlugin(pluginTitle, "1.0");
+        org.ekstep.contenteditor.pluginManager.loadPlugin(pluginTitle, "1.0");
     });
 
 
 
     it('should be intialized', function() {
-        EkstepEditor.eventManager.dispatchEvent(pluginTitle + ':create', {
+        org.ekstep.contenteditor.eventManager.dispatchEvent(pluginTitle + ':create', {
             "type": "roundrect",
             "y": 20,
             "x": 25,
@@ -28,7 +28,7 @@ describe('org.ekstep.scribblepad', function() {
             "w": 27,
             "h": 60
         });
-        pluginInstance = EkstepEditorAPI.getCurrentObject();
+        pluginInstance = ecEditor.getCurrentObject();
         expect(pluginInstance.type).toBe(pluginTitle);
         expect(pluginInstance.editorObj).toBeDefined();
     });
@@ -43,11 +43,11 @@ describe('org.ekstep.scribblepad', function() {
     });
 
     it('should fire event onConfigChange', function() {
-        spyOn(EkstepEditorAPI, 'render');
-        spyOn(EkstepEditorAPI, 'dispatchEvent');
+        spyOn(ecEditor, 'render');
+        spyOn(ecEditor, 'dispatchEvent');
         pluginInstance.onConfigChange('color', '#663300');
-        expect(EkstepEditorAPI.render).toHaveBeenCalled();
-        expect(EkstepEditorAPI.dispatchEvent).toHaveBeenCalledWith('object:modified', { target: EkstepEditorAPI.getEditorObject() });
+        expect(ecEditor.render).toHaveBeenCalled();
+        expect(ecEditor.dispatchEvent).toHaveBeenCalledWith('object:modified', { target: ecEditor.getEditorObject() });
     });
 
     it('should have config properties defined', function() {

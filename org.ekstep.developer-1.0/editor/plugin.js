@@ -1,4 +1,4 @@
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     initialize: function() {
         org.ekstep.contenteditor.api.addEventListener("org.ekstep.developer:loadplugin", this.loadPlugin, this);
         org.ekstep.contenteditor.api.addEventListener("org.ekstep.developer:getPlugins", this.listPlugins, this);
@@ -44,7 +44,7 @@ EkstepEditor.basePlugin.extend({
                     scope.localPlugins = data;
                 }
                 org.ekstep.contenteditor.api.ngSafeApply(scope, function() {});
-                //EkstepEditor.stageManager.reloadStages();
+                //org.ekstep.contenteditor.stageManager.reloadStages();
             },
             error: function(err) {
                 scope.contributedPluginMessageClass = "error";

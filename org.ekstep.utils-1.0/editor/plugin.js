@@ -2,7 +2,7 @@
  * 
  * plugin to add utilities to other plugins
  * @class Utils
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  *
  * @author Harish Kumar Gangula <harishg@ilimi.in>
  * @listens copy:copyItem
@@ -14,7 +14,7 @@
  * @listens object:unselected
  * 
  */
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     type: "utils",
     picker: undefined,
     /**
@@ -26,21 +26,21 @@ EkstepEditor.basePlugin.extend({
     initialize: function() {
         var instance = this;
 
-        EkstepEditorAPI.addEventListener("reorder:sendtofront", this.sendToFront, this);
-        EkstepEditorAPI.addEventListener("reorder:sendtoback", this.sendToBack, this);
-        EkstepEditorAPI.addEventListener('copy:copyItem', this.copyItem, this);
-        EkstepEditorAPI.addEventListener('paste:pasteItem', this.pasteItem, this);
-        EkstepEditorAPI.addEventListener("delete:invoke", this.deleteObject, this);
-        EkstepEditorAPI.addEventListener("object:selected", this.objectSelected, this);
-        EkstepEditorAPI.addEventListener("object:unselected", this.objectUnSelected, this);
+        ecEditor.addEventListener("reorder:sendtofront", this.sendToFront, this);
+        ecEditor.addEventListener("reorder:sendtoback", this.sendToBack, this);
+        ecEditor.addEventListener('copy:copyItem', this.copyItem, this);
+        ecEditor.addEventListener('paste:pasteItem', this.pasteItem, this);
+        ecEditor.addEventListener("delete:invoke", this.deleteObject, this);
+        ecEditor.addEventListener("object:selected", this.objectSelected, this);
+        ecEditor.addEventListener("object:unselected", this.objectUnSelected, this);
 
-        EkstepEditorAPI.registerKeyboardCommand('mod+c', function() {
+        ecEditor.registerKeyboardCommand('mod+c', function() {
             instance.copyItem();
         });
-        EkstepEditorAPI.registerKeyboardCommand('mod+v', function() {
+        ecEditor.registerKeyboardCommand('mod+v', function() {
             instance.pasteItem();
         });
-        EkstepEditorAPI.registerKeyboardCommand(['del', 'backspace'], function() {
+        ecEditor.registerKeyboardCommand(['del', 'backspace'], function() {
             console.log("Delete or backspace key pressed");
             instance.deleteObject();
         });
@@ -52,9 +52,9 @@ EkstepEditor.basePlugin.extend({
      *   @memberof Utils
      */
     sendToFront: function(event, data) {
-        EkstepEditorAPI.getCanvas().bringForward(EkstepEditorAPI.getEditorObject());        
-        EkstepEditorAPI.render();        
-        EkstepEditorAPI.dispatchEvent('object:modified', {id: EkstepEditorAPI.getEditorObject().id});
+        ecEditor.getCanvas().bringForward(ecEditor.getEditorObject());        
+        ecEditor.render();        
+        ecEditor.dispatchEvent('object:modified', {id: ecEditor.getEditorObject().id});
     },
     /**
      *
@@ -63,9 +63,9 @@ EkstepEditor.basePlugin.extend({
      *   @memberof Utils
      */
     sendToBack: function(event, data) {
-        EkstepEditorAPI.getCanvas().sendBackwards(EkstepEditorAPI.getEditorObject());        
-        EkstepEditorAPI.render();
-        EkstepEditorAPI.dispatchEvent('object:modified', {id: EkstepEditorAPI.getEditorObject().id});
+        ecEditor.getCanvas().sendBackwards(ecEditor.getEditorObject());        
+        ecEditor.render();
+        ecEditor.dispatchEvent('object:modified', {id: ecEditor.getEditorObject().id});
     },
     /**
      *
@@ -74,9 +74,9 @@ EkstepEditor.basePlugin.extend({
      *   @memberof Utils
      */
     copyItem: function() {
-        this.clipboard = EkstepEditorAPI.getCurrentObject() ? EkstepEditorAPI.getCurrentObject() : EkstepEditorAPI.getCurrentGroup();
+        this.clipboard = ecEditor.getCurrentObject() ? ecEditor.getCurrentObject() : ecEditor.getCurrentGroup();
         if(this.clipboard) {
-            EkstepEditorAPI.updateContextMenu({ id: 'paste', state: 'SHOW', data: {} });
+            ecEditor.updateContextMenu({ id: 'paste', state: 'SHOW', data: {} });
         }
     },
     /**
@@ -88,14 +88,14 @@ EkstepEditor.basePlugin.extend({
     pasteItem: function() {
         if(this.clipboard) {
             if (_.isArray(this.clipboard)) {
-                EkstepEditorAPI.getCanvas().discardActiveGroup();
+                ecEditor.getCanvas().discardActiveGroup();
                 this.clipboard.forEach(function(instance){
-                    EkstepEditorAPI.cloneInstance(instance);
+                    ecEditor.cloneInstance(instance);
                 });
             }
-            else EkstepEditorAPI.cloneInstance(this.clipboard);
+            else ecEditor.cloneInstance(this.clipboard);
             this.clipboard = undefined;
-            EkstepEditorAPI.updateContextMenu({ id: 'paste', state: 'HIDE', data: {} });
+            ecEditor.updateContextMenu({ id: 'paste', state: 'HIDE', data: {} });
         }
     },
     /**
@@ -105,12 +105,12 @@ EkstepEditor.basePlugin.extend({
      *   @memberof Utils
      */
     deleteObject: function(event, data) {
-        var activeGroup = EkstepEditorAPI.getEditorGroup(), activeObject = EkstepEditorAPI.getEditorObject(), id, instance = this;
+        var activeGroup = ecEditor.getEditorGroup(), activeObject = ecEditor.getEditorObject(), id, instance = this;
 
         if (activeObject) {
             instance.remove(activeObject);
         } else if (activeGroup) {
-            EkstepEditorAPI.getCanvas().discardActiveGroup();
+            ecEditor.getCanvas().discardActiveGroup();
             activeGroup.getObjects().forEach(function(object) {
                 instance.remove(object);
             });
@@ -122,9 +122,9 @@ EkstepEditor.basePlugin.extend({
      *   @memberof Utils
      */
     remove: function(object) {
-        EkstepEditorAPI.dispatchEvent('delete:invoked', { 'editorObj': EkstepEditorAPI.getPluginInstance(object.id).attributes });
-        EkstepEditorAPI.getCanvas().remove(object);
-        EkstepEditorAPI.dispatchEvent('stage:modified', { id: object.id });
+        ecEditor.dispatchEvent('delete:invoked', { 'editorObj': ecEditor.getPluginInstance(object.id).attributes });
+        ecEditor.getCanvas().remove(object);
+        ecEditor.dispatchEvent('stage:modified', { id: object.id });
     },
     /**
      *
@@ -132,7 +132,7 @@ EkstepEditor.basePlugin.extend({
      *   @memberof Utils
      */
     objectSelected: function(event, data) {
-        EkstepEditorAPI.updateContextMenus([{ id: 'reorder', state: 'SHOW', data: {}}, 
+        ecEditor.updateContextMenus([{ id: 'reorder', state: 'SHOW', data: {}}, 
                                             { id: 'copy', state: 'SHOW', data: {} },
                                             { id: 'delete', state: 'SHOW', data: {} }]);
     },
@@ -142,7 +142,7 @@ EkstepEditor.basePlugin.extend({
      *   @memberof Utils
      */
     objectUnSelected: function(event, data) {
-        EkstepEditorAPI.updateContextMenus([{ id: 'reorder', state: 'HIDE', data: {}},
+        ecEditor.updateContextMenus([{ id: 'reorder', state: 'HIDE', data: {}},
                                             { id: 'copy', state: 'HIDE', data: {} },
                                             { id: 'delete', state: 'HIDE', data: {} }]);
     }

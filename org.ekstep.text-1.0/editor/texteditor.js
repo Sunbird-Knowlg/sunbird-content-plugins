@@ -27,19 +27,19 @@ fabric.ITextbox.fromObject = function(object) {
 fabric.ITextbox.instances = [];
 
 var textEditor = (function() {
-    var $editor = EkstepEditorAPI.jQuery("#authoringTextEditor"),
-        $doneBtn = EkstepEditorAPI.jQuery("#authoringTextEditorBtn"),
-        $cancelBtn = EkstepEditorAPI.jQuery("#authoringTextEditorCancel"),
-        $btnGrpParent = EkstepEditorAPI.jQuery('<div>',{style:"margin-top: 6px; margin-right: 6px;"}) 
-        $buttonGrp = EkstepEditorAPI.jQuery('<div>', { class: 'ui buttons', id: 'texteditorBtnGrp', style:"float: right;" });
-    $orBtn = EkstepEditorAPI.jQuery('<div>', { class: 'or' });
+    var $editor = ecEditor.jQuery("#authoringTextEditor"),
+        $doneBtn = ecEditor.jQuery("#authoringTextEditorBtn"),
+        $cancelBtn = ecEditor.jQuery("#authoringTextEditorCancel"),
+        $btnGrpParent = ecEditor.jQuery('<div>',{style:"margin-top: 6px; margin-right: 6px;"}) 
+        $buttonGrp = ecEditor.jQuery('<div>', { class: 'ui buttons', id: 'texteditorBtnGrp', style:"float: right;" });
+    $orBtn = ecEditor.jQuery('<div>', { class: 'or' });
     pluginId = undefined,
         editorText = undefined;
 
     function _removeObject() {
-        EkstepEditorAPI.getPluginInstance(pluginId).editorObj.remove();
-        EkstepEditorAPI.render();
-        EkstepEditorAPI.dispatchEvent('object:modified', { id: pluginId });
+        ecEditor.getPluginInstance(pluginId).editorObj.remove();
+        ecEditor.render();
+        ecEditor.dispatchEvent('object:modified', { id: pluginId });
     }
 
     function _commonBtnClickAction() {
@@ -47,38 +47,38 @@ var textEditor = (function() {
         $cancelBtn.hide();
         $editor.hide();
         $doneBtn.hide();
-        EkstepEditorAPI.jQuery("#toolbarOptions").show();
+        ecEditor.jQuery("#toolbarOptions").show();
     }
 
     function generateTelemetry(data) {
         if(data){
-            EkstepEditorAPI.getService(ServiceConstants.TELEMETRY_SERVICE).interact({ 
+            ecEditor.getService(ServiceConstants.TELEMETRY_SERVICE).interact({ 
                 "type": data.type, "subtype": data.subtype, "target": data.target, 
                 "pluginid": "org.ekstep.text", "pluginver": "1.0", "objectid": "", 
-                "stage": EkstepEditorAPI.getCurrentStage().id 
+                "stage": ecEditor.getCurrentStage().id 
             });
         }
     }
 
     function showEditor(id) {
         pluginId = id;
-        editorText = EkstepEditorAPI.getPluginInstance(pluginId).editorObj.text;
+        editorText = ecEditor.getPluginInstance(pluginId).editorObj.text;
         if (!$editor.length) {
-            var form = EkstepEditorAPI.jQuery("<div>", { class: "ui form", id: "textEditorContainer", style:"margin-left: 10px; margin-top: 10px;" });
+            var form = ecEditor.jQuery("<div>", { class: "ui form", id: "textEditorContainer", style:"margin-left: 10px; margin-top: 10px;" });
             form.css({
-                "top": EkstepEditorAPI.jQuery("#canvas").offset().top,
-                "left": EkstepEditorAPI.jQuery("#canvas").offset().left,
+                "top": ecEditor.jQuery("#canvas").offset().top,
+                "left": ecEditor.jQuery("#canvas").offset().left,
                 "position": "absolute"
             });
-            var field = EkstepEditorAPI.jQuery("<div>", { class: "field" });
+            var field = ecEditor.jQuery("<div>", { class: "field" });
             form.appendTo("body");
             field.appendTo(form)
-            EkstepEditorAPI.jQuery(document.createElement("textarea"))
+            ecEditor.jQuery(document.createElement("textarea"))
                 .text(editorText)
                 .attr({ "id": "authoringTextEditor", "placeholder": "Add text here", "rows": 12 })
                 .css({ "width": "30.5em" })
                 .appendTo(field);
-            $editor = EkstepEditorAPI.jQuery("#authoringTextEditor");
+            $editor = ecEditor.jQuery("#authoringTextEditor");
             $btnGrpParent.insertAfter($editor);
             $btnGrpParent.append($buttonGrp);
         } else {
@@ -86,16 +86,16 @@ var textEditor = (function() {
         }
 
         if (!$doneBtn.length) {
-            $doneBtn = EkstepEditorAPI.jQuery("<button>",{text: 'Done',id: 'authoringTextEditorBtn', class: 'ui primary button'})
+            $doneBtn = ecEditor.jQuery("<button>",{text: 'Done',id: 'authoringTextEditorBtn', class: 'ui primary button'})
                 .click(function() {
                     generateTelemetry({type: 'click', subtype: 'done', target: 'addString'});
                     _commonBtnClickAction();
                     if ($editor.val().trim().length) {
-                        EkstepEditorAPI.getPluginInstance(pluginId).editorObj.text = $editor.val();
-                        EkstepEditorAPI.getPluginInstance(pluginId).config.text = $editor.val();
-                        EkstepEditorAPI.render();
-                        EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getPluginInstance(pluginId).editorObj });
-                        EkstepEditorAPI.jQuery("#toolbarOptions").show();
+                        ecEditor.getPluginInstance(pluginId).editorObj.text = $editor.val();
+                        ecEditor.getPluginInstance(pluginId).config.text = $editor.val();
+                        ecEditor.render();
+                        ecEditor.dispatchEvent('object:modified', { target: ecEditor.getPluginInstance(pluginId).editorObj });
+                        ecEditor.jQuery("#toolbarOptions").show();
                     } else {
                         _removeObject();
                     }
@@ -106,7 +106,7 @@ var textEditor = (function() {
         }
 
         if (!$cancelBtn.length) {
-            $cancelBtn = EkstepEditorAPI.jQuery('<button>',{text: 'Cancel',id: 'authoringTextEditorCancel', class: 'ui secondary button'})
+            $cancelBtn = ecEditor.jQuery('<button>',{text: 'Cancel',id: 'authoringTextEditorCancel', class: 'ui secondary button'})
                 .click(function() {
                     generateTelemetry({type: 'click', subtype: 'cancel', target: 'cancelTextEditor'});
                     _commonBtnClickAction();
@@ -123,8 +123,8 @@ var textEditor = (function() {
         $buttonGrp.append($doneBtn);
         //$buttonGrp.css({position:'absolute', 'top': $editor.offset().top+$editor.height()/2+64,'left': $editor.offset().left+22})
         $buttonGrp.show();
-        var angScope = EkstepEditorAPI.getAngularScope();
-        EkstepEditorAPI.ngSafeApply(angScope, function () {
+        var angScope = ecEditor.getAngularScope();
+        ecEditor.ngSafeApply(angScope, function () {
           angScope.configStyle = "";           
         });
     }
@@ -134,8 +134,8 @@ var textEditor = (function() {
         $buttonGrp.hide();
         $doneBtn.hide();
         $cancelBtn.hide();
-        var angScope = EkstepEditorAPI.getAngularScope();
-        EkstepEditorAPI.ngSafeApply(angScope, function () {
+        var angScope = ecEditor.getAngularScope();
+        ecEditor.ngSafeApply(angScope, function () {
           angScope.configStyle = "";           
         });
     }
