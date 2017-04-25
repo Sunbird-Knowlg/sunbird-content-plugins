@@ -2,11 +2,11 @@
  * 
  * plugin for preview stage contents
  * @class Preview
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  * @author Sunil A S <sunils@ilimi.in>
  * @listens atpreview:show
  */
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     /**
      *   @member type {String} plugin title
      *   @memberof preview
@@ -31,9 +31,9 @@ EkstepEditor.basePlugin.extend({
      *
      */
     initialize: function() {
-        EkstepEditorAPI.addEventListener("atpreview:show", this.initPreview, this);
-        var templatePath = EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/popup.html");
-        EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
+        ecEditor.addEventListener("atpreview:show", this.initPreview, this);
+        var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/popup.html");
+        ecEditor.getService('popup').loadNgModules(templatePath);
     },
     /**
      *
@@ -44,7 +44,7 @@ EkstepEditor.basePlugin.extend({
     initPreview: function(event, data) {
         this.contentBody = data.contentBody;
         if(data.currentStage){
-            this.contentBody.theme.startStage = EkstepEditorAPI.getCurrentStage().id;
+            this.contentBody.theme.startStage = ecEditor.getCurrentStage().id;
         }
         this.showPreview();
     },
@@ -54,11 +54,11 @@ EkstepEditor.basePlugin.extend({
     showPreview: function() {        
         console.log(this.previewURL);
         var instance = this;
-        var contentService = EkstepEditorAPI.getService('content');
-        var meta = EkstepEditorAPI.getService('content').getContentMeta(EkstepEditorAPI.getContext('contentId'));
+        var contentService = ecEditor.getService('content');
+        var meta = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId'));
         var modalController = function($scope) {
             $scope.$on('ngDialog.opened', function() {                
-                var previewContentIframe = EkstepEditorAPI.jQuery('#previewContentIframe')[0];
+                var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
                 previewContentIframe.src = instance.previewURL;
                 meta.contentMeta = _.isUndefined(meta.contentMeta) ? null : meta.contentMeta;
                 previewContentIframe.onload = function() {
@@ -67,7 +67,7 @@ EkstepEditor.basePlugin.extend({
             });
         };
 
-        EkstepEditorAPI.getService('popup').open({
+        ecEditor.getService('popup').open({
             template: 'partials_org.ekstep.preview.html',
             controller: ['$scope', modalController],
             showClose: false,

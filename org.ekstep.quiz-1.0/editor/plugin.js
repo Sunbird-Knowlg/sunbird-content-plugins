@@ -2,13 +2,13 @@
  * 
  * plugin to add assessments to stage
  * @class assessment
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  * @author Manju dr <manjunathd@ilimi.in>
  * @fires org.ekstep.assessmentbrowser:show
  * @fires org.ekstep.quiz:add 
  * @listens org.ekstep.image:assessment:showPopup
  */
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     /**
      * This expains the type of the plugin 
      * @member {String} type
@@ -21,8 +21,8 @@ EkstepEditor.basePlugin.extend({
      * @memberof assessment
      */
     initialize: function() {
-        EkstepEditorAPI.addEventListener(this.manifest.id + ":showPopup", this.openAssessmentBrowser, this);
-        EkstepEditorAPI.addEventListener(this.manifest.id + ":renderQuiz", this.renderQuiz, this);
+        ecEditor.addEventListener(this.manifest.id + ":showPopup", this.openAssessmentBrowser, this);
+        ecEditor.addEventListener(this.manifest.id + ":renderQuiz", this.renderQuiz, this);
     },
     mediaObj: {},
     hasTemplateMedia: true,
@@ -50,10 +50,10 @@ EkstepEditor.basePlugin.extend({
         var templateArray = [],
             errorTemplateurl = [],
             resCount = 0;
-        if ((EkstepEditorAPI._.isUndefined(instance.data.template) || instance.data.template.length == 0 || !instance.hasTemplateMedia) && _.size(templateIds) >0) {
+        if ((ecEditor._.isUndefined(instance.data.template) || instance.data.template.length == 0 || !instance.hasTemplateMedia) && _.size(templateIds) >0) {
             for (var index in templateIds) {
                 // get Template based on ID and push all templates response to arrray.
-                EkstepEditorAPI.getService('assessment').getTemplate(templateIds[index], function(err, res) {
+                ecEditor.getService('assessment').getTemplate(templateIds[index], function(err, res) {
                     try {
                         if (res) {
                             resCount++;
@@ -90,8 +90,8 @@ EkstepEditor.basePlugin.extend({
     },
     showQuizbgImage: function(questionnaire, _parent) {
         var instance = this;
-        var path = EkstepEditorAPI.getConfig('useProxyForURL') ? "/plugins/" : "/content-plugins/";
-        var quizImage = EkstepEditor.config.absURL+path+"org.ekstep.quiz-1.0/editor/assets/QuizImage.png";
+        var path = ecEditor.getConfig('useProxyForURL') ? "/plugins/" : "/content-plugins/";
+        var quizImage = org.ekstep.contenteditor.config.absURL+path+"org.ekstep.quiz-1.0/editor/assets/QuizImage.png";
         fabric.Image.fromURL(quizImage, function(img) {
             var count = questionnaire.total_items + '/' + instance.getItems(questionnaire.items);
             var quizDetails = instance.getPropsForEditor(questionnaire.title, count, questionnaire.max_score);
@@ -154,10 +154,10 @@ EkstepEditor.basePlugin.extend({
             }
         }
         if (_.size(errTemplateids) === _.size(errTempurl) && _.size(errTemplateids) > 0) {
-            var path = EkstepEditorAPI.getConfig('useProxyForURL') ? "/plugins/" : "/content-plugins/";
-            EkstepEditorAPI.getService('popup').open({
+            var path = ecEditor.getConfig('useProxyForURL') ? "/plugins/" : "/content-plugins/";
+            ecEditor.getService('popup').open({
                 showClose: false,
-                template: EkstepEditor.config.absURL + path + "org.ekstep.quiz-1.0/editor/warning.html",
+                template: org.ekstep.contenteditor.config.absURL + path + "org.ekstep.quiz-1.0/editor/warning.html",
                 controller: ['$scope', function($scope) {
                     $scope.callClear = function() {
                         instance.clearItem(questionnaire, errTemplateids,function(){
@@ -213,7 +213,7 @@ EkstepEditor.basePlugin.extend({
         instance.setData(controller);
         _assessmentData["data"] = { __cdata: JSON.stringify(controller) };
         _assessmentData["config"] = { __cdata: JSON.stringify({ "type": "items", "var": "item" }) };
-        EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', _assessmentData);
+        ecEditor.dispatchEvent(instance.manifest.id + ':create', _assessmentData);
     },
     parseItem: function(item) {
         // this function is restricted to parse the few keys
@@ -246,7 +246,7 @@ EkstepEditor.basePlugin.extend({
     },
     addMediaToConfig: function (media) {
         if (media.src) {
-            EkstepEditor.mediaManager.getMediaOriginURL(media.src);
+            org.ekstep.contenteditor.mediaManager.getMediaOriginURL(media.src);
             this.mediaObj[media.id] = media;        
             this.addConfig("media", this.mediaObj);
         }
@@ -321,9 +321,9 @@ EkstepEditor.basePlugin.extend({
                     break;
             }
         }
-        EkstepEditorAPI.render();
-        EkstepEditorAPI.dispatchEvent('object:modified', {
-            target: EkstepEditorAPI.getEditorObject()
+        ecEditor.render();
+        ecEditor.dispatchEvent('object:modified', {
+            target: ecEditor.getEditorObject()
         });
     },
     getConfig: function() {
@@ -346,9 +346,9 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         var callback = function(items, config) {
             var assessmentData = { items: items, config: config };
-            EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':renderQuiz', assessmentData);
+            ecEditor.dispatchEvent(instance.manifest.id + ':renderQuiz', assessmentData);
         };
-        EkstepEditorAPI.dispatchEvent("org.ekstep.assessmentbrowser:show", callback);
+        ecEditor.dispatchEvent("org.ekstep.assessmentbrowser:show", callback);
     }
 });
 //# sourceURL=quizPlugin.js

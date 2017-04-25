@@ -1,7 +1,7 @@
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     type: "unsupported",
     initialize: function() {
-        EkstepEditorAPI.addEventListener("unsupported:invoke", this.showUnsupported, this);
+        ecEditor.addEventListener("unsupported:invoke", this.showUnsupported, this);
     },
     props: {x: 0, y: 0, w: 40, h: 40, r: 0},
     hasDims: false,
@@ -10,7 +10,7 @@ EkstepEditor.basePlugin.extend({
         var _parent = this.parent; 
         this.parent = undefined;
         var props = this.setImageDimensions(this.data.data);        
-        var imgSrc = EkstepEditorAPI.getConfig('absURL') + EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "assets/unsupportedplugin.png");
+        var imgSrc = ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "assets/unsupportedplugin.png");
         fabric.Image.fromURL(imgSrc, function(img) {
             instance.editorObj = img;
             instance.parent = _parent;

@@ -25,7 +25,7 @@ $.fn.hybridtodo = function(options){
 	function getTodosAndComments(apiRequestParams)
 	{
 		jQuery.ajax({
-			url: EkstepEditorAPI.getConfig('baseURL') + '/index.php?option=com_api&app=jlike&resource=hybridtodos&format=raw',
+			url: ecEditor.getConfig('baseURL') + '/index.php?option=com_api&app=jlike&resource=hybridtodos&format=raw',
 			headers: {
 				'x-auth':'session'
 			},
@@ -43,7 +43,7 @@ $.fn.hybridtodo = function(options){
 
 	function createTodo(apiPostParams){
 		jQuery.ajax({
-			url: EkstepEditorAPI.getConfig('baseURL') + '/index.php?option=com_api&app=jlike&resource=todos&format=raw',
+			url: ecEditor.getConfig('baseURL') + '/index.php?option=com_api&app=jlike&resource=todos&format=raw',
 			headers: {
 				'x-auth':'session'
 			},
@@ -125,7 +125,7 @@ $.fn.hybridtodo = function(options){
 
 				jQuery.ajax({
 					type: 'POST',
-					url: EkstepEditorAPI.getConfig('baseURL') + "/index.php?option=com_api&app=jlike&resource=annotations&format=raw",
+					url: ecEditor.getConfig('baseURL') + "/index.php?option=com_api&app=jlike&resource=annotations&format=raw",
 					headers: {
 						'x-auth':'session'
 					},
@@ -150,7 +150,7 @@ $.fn.hybridtodo = function(options){
 				commentJSON.context = div.attr('data-jlike-context');
 				jQuery.ajax({
 					type: 'delete',
-					url: EkstepEditorAPI.getConfig('baseURL') + "/index.php?option=com_api&app=jlike&resource=annotations&format=raw&id="+commentJSON.annotation_id,
+					url: ecEditor.getConfig('baseURL') + "/index.php?option=com_api&app=jlike&resource=annotations&format=raw&id="+commentJSON.annotation_id,
 					headers: {
 						'x-auth':'session'
 					},
@@ -169,7 +169,7 @@ $.fn.hybridtodo = function(options){
 				commentJSON.context = div.attr('data-jlike-context');
 				jQuery.ajax({
 					type: 'POST',
-					url: EkstepEditorAPI.getConfig('baseURL') + "/index.php?option=com_api&app=jlike&resource=annotations&format=raw&annotation_id="+commentJSON.annotation_id,
+					url: ecEditor.getConfig('baseURL') + "/index.php?option=com_api&app=jlike&resource=annotations&format=raw&annotation_id="+commentJSON.annotation_id,
 					headers: {
 						'x-auth':'session'
 					},

@@ -14,10 +14,10 @@ angular.module('readalongbrowserapp', [])
         ctrl.autoplay = false;
         ctrl.name = '';
         ctrl.highlightColor = '#FFFF00';
-        if(!EkstepEditorAPI._.isUndefined(instance.editorObj) && !EkstepEditorAPI._.isUndefined(instance.config.audioObj)){
+        if(!ecEditor._.isUndefined(instance.editorObj) && !ecEditor._.isUndefined(instance.config.audioObj)){
             media = instance.config.audioObj;
             ctrl.audioObj = instance.config.audioObj;
-            ctrl.downloadurl = !EkstepEditorAPI._.isUndefined(media) ?  media.src : '';
+            ctrl.downloadurl = !ecEditor._.isUndefined(media) ?  media.src : '';
             ctrl.audioSelected = true;
             ctrl.autoplay = instance.config.autoplay;
             ctrl.name = instance.config.audio;
@@ -28,7 +28,7 @@ angular.module('readalongbrowserapp', [])
             }, 1000);
         }
         ctrl.selectAudio = function(value) {
-            EkstepEditorAPI.dispatchEvent('org.ekstep.assetbrowser:show', {
+            ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
                 type: 'audio',
                 search_filter: {},
                 callback: function(data) { 
@@ -43,7 +43,7 @@ angular.module('readalongbrowserapp', [])
                     ctrl.audioObj = data.assetMedia;
                     karaoke = instance.invokeKaraoke(ctrl.downloadurl);
                     ctrl.audioSelected = true;
-                    if(!EkstepEditorAPI._.isUndefined(instance.editorObj))
+                    if(!ecEditor._.isUndefined(instance.editorObj))
                         ctrl.audioChanged = true;
                     $scope.$safeApply();
                 }
@@ -57,16 +57,16 @@ angular.module('readalongbrowserapp', [])
             if (text.length > 0) {
                 ctrl.showText = false;
             }
-            EkstepEditorAPI._.forEach(textArray, function(text, key) {
+            ecEditor._.forEach(textArray, function(text, key) {
                 key = key + 1;
                 str += '<span class="word" id="word-' + key + '">' + text + ' </span>';
             });
-            EkstepEditorAPI.jQuery('#main-text-block').html(str);
+            ecEditor.jQuery('#main-text-block').html(str);
         }
 
         ctrl.addReadAlong = function() {
             var timings = [];
-            EkstepEditorAPI._.each(karaoke.audioObj.wordTimes, function(n) {
+            ecEditor._.each(karaoke.audioObj.wordTimes, function(n) {
                 timings.push(parseInt(n * 1000));
             });
             var dataArr = {
@@ -83,11 +83,11 @@ angular.module('readalongbrowserapp', [])
         };
 
         ctrl.cancel = function() {
-            instance.cb();
             $scope.closeThisDialog();
         };
 
         ctrl.generateTelemetry = function(data) {
-          if (data) EkstepEditorAPI.getService('telemetry').interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", "stage": EkstepEditorAPI.getCurrentStage().id })
+          if (data) ecEditor.getService('telemetry').interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", "stage": ecEditor.getCurrentStage().id })
         }
     }]);
+    //# sourceURL=readalongbrowserapp.js

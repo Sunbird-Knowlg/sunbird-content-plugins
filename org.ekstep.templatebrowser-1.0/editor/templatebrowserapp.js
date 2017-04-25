@@ -28,7 +28,7 @@ angular.module('org.ekstep.templatebroser-1.0', []).controller('templatebrowser'
         if (err) {
             ctrl.error = true;
         }
-        EkstepEditorAPI.getAngularScope().safeApply();
+        ecEditor.getAngularScope().safeApply();
         if (res) ctrl.initPopup(res.data.result.items);
     };
 

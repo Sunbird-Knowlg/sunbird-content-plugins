@@ -3,11 +3,11 @@
  * The purpose of {@link TextPlugin} is used to create or modifiy the text in editor
  *
  * @class Text
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  *
  * @author Harishkumar Gangula <harishg@ilimi.in>
  */
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     /**
      * This expains the type of the plugin 
      * @member {String} type
@@ -32,14 +32,14 @@ EkstepEditor.basePlugin.extend({
      */
     initialize: function() {
         var instance = this;
-        EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
-        EkstepEditorAPI.addEventListener("stage:unselect", this.stageUnselect, this);
-        EkstepEditorAPI.addEventListener("org.ekstep.text:readalong:show", this.showReadalong, this);
-        EkstepEditorAPI.addEventListener("org.ekstep.text:wordinfo:show", this.showWordInfo, this);
-        EkstepEditorAPI.addEventListener("org.ekstep.text:delete:enhancement", this.deleteEnhancement, this);
-        EkstepEditorAPI.addEventListener("org.ekstep.text:modified", this.dblClickHandler, this);
-        var templatePath = EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/delete_confirmation_dialog.html");
-        EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
+        ecEditor.addEventListener("object:unselected", this.objectUnselected, this);
+        ecEditor.addEventListener("stage:unselect", this.stageUnselect, this);
+        ecEditor.addEventListener("org.ekstep.text:readalong:show", this.showReadalong, this);
+        ecEditor.addEventListener("org.ekstep.text:wordinfo:show", this.showWordInfo, this);
+        ecEditor.addEventListener("org.ekstep.text:delete:enhancement", this.deleteEnhancement, this);
+        ecEditor.addEventListener("org.ekstep.text:modified", this.dblClickHandler, this);
+        var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/delete_confirmation_dialog.html");
+        ecEditor.getService('popup').loadNgModules(templatePath);
     },
     /**
      * This method used to create the text fabric object and assigns it to editor of the instance
@@ -50,9 +50,9 @@ EkstepEditor.basePlugin.extend({
     newInstance: function() {
         var props = this.convertToFabric(this.attributes);
         delete props.__text;
-        if(EkstepEditorAPI._.isUndefined(this.config.text))
-            this.config.text = EkstepEditorAPI._.isUndefined(this.attributes.__text) ? "" : this.attributes.__text; 
-        if(!EkstepEditorAPI._.isUndefined(this.attributes.__text))
+        if(ecEditor._.isUndefined(this.config.text))
+            this.config.text = ecEditor._.isUndefined(this.attributes.__text) ? "" : this.attributes.__text; 
+        if(!ecEditor._.isUndefined(this.attributes.__text))
             delete this.attributes.__text;
 
         props.editable = false; // added to disable inline editing of exiting content
@@ -61,27 +61,27 @@ EkstepEditor.basePlugin.extend({
             textEditor.showEditor(this.id);
         }
 
-        if (!EkstepEditorAPI._.isUndefined(this.attributes.timings) || this.attributes.textType === 'readalong') {
-            if (EkstepEditorAPI._.isUndefined(this.attributes.textType)) {
+        if (!ecEditor._.isUndefined(this.attributes.timings) || this.attributes.textType === 'readalong') {
+            if (ecEditor._.isUndefined(this.attributes.textType)) {
                 this.attributes.textType = "readalong";
                 this.config.audio = this.attributes.audio;
                 this.config.timings = this.attributes.timings;
                 this.config.highlight = this.attributes.highlight;
                 this.config.autoplay = this.attributes.autoplay;
-                var audioObj = EkstepEditorAPI.getMedia(this.attributes.audio);
-                audioObj.src = EkstepEditor.mediaManager.getMediaOriginURL(audioObj.src);
-                if (EkstepEditorAPI._.isUndefined(audioObj.preload))
+                var audioObj = ecEditor.getMedia(this.attributes.audio);
+                audioObj.src = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(audioObj.src);
+                if (ecEditor._.isUndefined(audioObj.preload))
                     audioObj.preload = true;
                 this.config.audioObj = audioObj;
             }
             this.addMedia(this.config.audioObj);
             this.manifest.editor.playable = true;
             this.addReadalongconfigManifest(this);
-        } else if (!EkstepEditorAPI._.isUndefined(this.attributes.words) || this.attributes.textType === 'wordinfo') {
+        } else if (!ecEditor._.isUndefined(this.attributes.words) || this.attributes.textType === 'wordinfo') {
             var instance = this;
             this.addMedia({
                 "id": "org.ekstep.text.popuptint",
-                "src": EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
+                "src": ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
                 "type": "image",
                 "assetId": "org.ekstep.text.popuptint"
             });
@@ -91,14 +91,14 @@ EkstepEditor.basePlugin.extend({
         }
     },
     /**
-     * This method overridden from Ekstepeditor.basePlugin and here we double click event is added
+     * This method overridden from org.ekstep.contenteditor.basePlugin and here we double click event is added
      * @memberof Text
      */
     selected: function(instance) {
         fabric.util.addListener(fabric.document, 'dblclick', this.dblClickHandler);
     },
     /**
-     * This method overridden from Ekstepeditor.basePlugin and here we double click event is removed
+     * This method overridden from org.ekstep.contenteditor.basePlugin and here we double click event is removed
      * @memberof Text
      */
     deselected: function(instance, options, event) {
@@ -117,20 +117,20 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     dblClickHandler: function(event) {
-        var bounds  = EkstepEditorAPI.getCurrentObject().editorObj.getBoundingRect();
-        var leftSt = EkstepEditorAPI.jQuery("#canvas").offset().left + EkstepEditorAPI.getCurrentObject().editorObj.left;
-        var leftEnd = leftSt + EkstepEditorAPI.getCurrentObject().editorObj.width;
-        var topSt = EkstepEditorAPI.jQuery("#canvas").offset().top + EkstepEditorAPI.getCurrentObject().editorObj.top;
-        var topEnd = topSt + EkstepEditorAPI.getCurrentObject().editorObj.height;
+        var bounds  = ecEditor.getCurrentObject().editorObj.getBoundingRect();
+        var leftSt = ecEditor.jQuery("#canvas").offset().left + ecEditor.getCurrentObject().editorObj.left;
+        var leftEnd = leftSt + ecEditor.getCurrentObject().editorObj.width;
+        var topSt = ecEditor.jQuery("#canvas").offset().top + ecEditor.getCurrentObject().editorObj.top;
+        var topEnd = topSt + ecEditor.getCurrentObject().editorObj.height;
         if (_.isObject(bounds)){
-            leftSt = EkstepEditorAPI.jQuery("#canvas").offset().left + bounds.left;
+            leftSt = ecEditor.jQuery("#canvas").offset().left + bounds.left;
             eftEnd = leftSt + bounds.width;
-            topSt = EkstepEditorAPI.jQuery("#canvas").offset().top + bounds.top;
+            topSt = ecEditor.jQuery("#canvas").offset().top + bounds.top;
             topEnd = topSt + bounds.height;
         }
         /* istanbul ignore next*/
         if (event.clientX > leftSt && event.clientX < leftEnd && event.clientY > topSt && event.clientY < topEnd) {
-            textEditor.showEditor(EkstepEditorAPI.getEditorObject().id);
+            textEditor.showEditor(ecEditor.getEditorObject().id);
         }
         textEditor.generateTelemetry({ type: 'click', subtype: 'doubleClick', target: 'textEditor' });
     },
@@ -143,20 +143,20 @@ EkstepEditor.basePlugin.extend({
         textEditor.hide();
     },
     /**
-     * This method overridden from Ekstepeditor.basePlugin and this will provide attributes to generate content for Genie
+     * This method overridden from org.ekstep.contenteditor.basePlugin and this will provide attributes to generate content for Genie
      * @memberof Text
      */
     getAttributes: function() {
-        var attributes = EkstepEditorAPI._.omit(EkstepEditorAPI._.clone(this.attributes), ['top', 'left', 'width', 'height', 'fontFamily', 'fontfamily', 'fontSize', 'fontstyle', 'fontweight', 'scaleX', 'scaleY']);
+        var attributes = ecEditor._.omit(ecEditor._.clone(this.attributes), ['top', 'left', 'width', 'height', 'fontFamily', 'fontfamily', 'fontSize', 'fontstyle', 'fontweight', 'scaleX', 'scaleY']);
         attributes.font = this.editorObj.get('fontFamily');
         attributes.fontsize = this.updateFontSize(this.editorObj.get('fontSize'), false);
-        var fontWeight = EkstepEditorAPI._.isUndefined(this.editorObj.get("fontWeight")) ? "" : (this.editorObj.get("fontWeight") === "bold" ? "bold" : "");
-        var fontStyle = EkstepEditorAPI._.isUndefined(this.editorObj.get("fontStyle")) ? "" : (this.editorObj.get("fontStyle") === "italic" ? "italic" : "");
+        var fontWeight = ecEditor._.isUndefined(this.editorObj.get("fontWeight")) ? "" : (this.editorObj.get("fontWeight") === "bold" ? "bold" : "");
+        var fontStyle = ecEditor._.isUndefined(this.editorObj.get("fontStyle")) ? "" : (this.editorObj.get("fontStyle") === "italic" ? "italic" : "");
         attributes.weight = (fontWeight + ' ' + fontStyle).trim();
         return attributes;
     },
     /**
-     * This method overridden from Ekstepeditor.basePlugin and it will be called on change of config plugin,
+     * This method overridden from org.ekstep.contenteditor.basePlugin and it will be called on change of config plugin,
      * <br/>It will update the fontweight, fontstyle, fontfamily,fontsize and color of the plugin
      * @memberof Text
      */
@@ -204,11 +204,11 @@ EkstepEditor.basePlugin.extend({
                 this.config.wordunderlinecolor = value;
                 break;
         }
-        EkstepEditorAPI.render();
-        EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
+        ecEditor.render();
+        ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
     },
     /**
-     * This method overridden from Ekstepeditor.basePlugin and it will provide the config of this plugin
+     * This method overridden from org.ekstep.contenteditor.basePlugin and it will provide the config of this plugin
      * @memberof Text
      */
     getConfig: function() {
@@ -222,12 +222,12 @@ EkstepEditor.basePlugin.extend({
         return config;
     },
     /**
-     * This method overridden from Ekstepeditor.basePlugin and it will provide the properties of this plugin
+     * This method overridden from org.ekstep.contenteditor.basePlugin and it will provide the properties of this plugin
      * @memberof Text
      */
     getProperties: function() {
-        var props = EkstepEditorAPI._.omitBy(EkstepEditorAPI._.clone(this.attributes), EkstepEditorAPI._.isObject);
-        props = EkstepEditorAPI._.omitBy(props, EkstepEditorAPI._.isNaN);
+        var props = ecEditor._.omitBy(ecEditor._.clone(this.attributes), ecEditor._.isObject);
+        props = ecEditor._.omitBy(props, ecEditor._.isNaN);
         delete props.__text;
         props.text = this.editorObj.text;
         this.pixelToPercent(props);
@@ -255,7 +255,7 @@ EkstepEditor.basePlugin.extend({
         return fontsize;
     },
     /**
-     * This method overridden from Ekstepeditor.basePlugin 
+     * This method overridden from org.ekstep.contenteditor.basePlugin 
      * <br/>It is used convert data to fabric elements before creating the editor Object
      * <br/>Here font weight , style and size to be converted to fabric 
      * @param {Object} data This data provided by either api or on creation of new instance
@@ -263,17 +263,17 @@ EkstepEditor.basePlugin.extend({
      * @memberof Text
      */
     convertToFabric: function(data) {
-        var retData = EkstepEditorAPI._.clone(data);
+        var retData = ecEditor._.clone(data);
         if (data.x) retData.left = data.x;
         if (data.y) retData.top = data.y;
         if (data.w) retData.width = data.w;
         if (data.h) retData.height = data.h;
         if (data.color) retData.fill = data.color;
-        if (data.weight && EkstepEditorAPI._.includes(data.weight, 'bold')) {
+        if (data.weight && ecEditor._.includes(data.weight, 'bold')) {
             retData.fontWeight = "bold";
             data.fontweight = true;
         } else { data.fontweight = false; }
-        if (data.weight && EkstepEditorAPI._.includes(data.weight, 'italic')) {
+        if (data.weight && ecEditor._.includes(data.weight, 'italic')) {
             retData.fontStyle = "italic";
             data.fontstyle = true;
         } else { data.fontstyle = false; }
@@ -296,7 +296,7 @@ EkstepEditor.basePlugin.extend({
     },
     getConfigManifest: function() {
         var config = this._super();
-        EkstepEditorAPI._.remove(config, function(c) {
+        ecEditor._.remove(config, function(c) {
             return c.propertyName === 'stroke';
         })
         return config;
@@ -308,15 +308,15 @@ EkstepEditor.basePlugin.extend({
      */
     showReadalong: function() {
         var instance = this;
-        var textObj = EkstepEditorAPI.getCurrentObject();
-        EkstepEditorAPI.dispatchEvent('org.ekstep.readalongbrowser:showpopup', {
+        var textObj = ecEditor.getCurrentObject();
+        ecEditor.dispatchEvent('org.ekstep.readalongbrowser:showpopup', {
             textObj: textObj,
             callback: instance.convertTexttoReadalong
         });
     },
     convertTexttoReadalong: function(data){
-        var textObj = EkstepEditorAPI.getCurrentObject();
-        var instance = EkstepEditorAPI.getPluginInstance(textObj.id);
+        var textObj = ecEditor.getCurrentObject();
+        var instance = ecEditor.getPluginInstance(textObj.id);
         textObj.config.text = textObj.editorObj.text = data.text;
         textObj.config.audio = data.audio;
         textObj.config.timings = data.timings;
@@ -327,12 +327,12 @@ EkstepEditor.basePlugin.extend({
         textObj.attributes.textType = 'readalong';
         textObj.manifest.editor.playable = true;
         var audioObj = data.audioObj;
-        if (!EkstepEditorAPI._.isUndefined(audioObj))
-            audioObj.src = EkstepEditor.mediaManager.getMediaOriginURL(audioObj.src);
+        if (!ecEditor._.isUndefined(audioObj))
+            audioObj.src = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(audioObj.src);
         textObj.addMedia(audioObj);
         instance.addReadalongconfigManifest(textObj);
-        EkstepEditorAPI.dispatchEvent("config:show");
-        EkstepEditorAPI.render();
+        ecEditor.dispatchEvent("config:show");
+        ecEditor.render();
     },
     /**
      * This method is used show wordinfo popup
@@ -341,15 +341,15 @@ EkstepEditor.basePlugin.extend({
      */
     showWordInfo: function() {
         var instance = this;
-        var textObj = EkstepEditorAPI.getCurrentObject();
-        EkstepEditorAPI.dispatchEvent('org.ekstep.wordinfobrowser:showpopup', {
+        var textObj = ecEditor.getCurrentObject();
+        ecEditor.dispatchEvent('org.ekstep.wordinfobrowser:showpopup', {
             textObj: textObj,
             callback: instance.convertTexttoWordinfo
         });
     },
     convertTexttoWordinfo: function(data, templateData){
-        var textObj = EkstepEditorAPI.getCurrentObject();
-        var instance = EkstepEditorAPI.getPluginInstance(textObj.id);
+        var textObj = ecEditor.getCurrentObject();
+        var instance = ecEditor.getPluginInstance(textObj.id);
         textObj.data = templateData;
         textObj.config.text = textObj.editorObj.text = data.text;;
         textObj.config.words = data.words;
@@ -359,31 +359,31 @@ EkstepEditor.basePlugin.extend({
         textObj.attributes.textType = 'wordinfo';
         textObj.addMedia({
             "id": "org.ekstep.text.popuptint",
-            "src": EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
+            "src": ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
             "type": "image",
             "assetId": "org.ekstep.text.popuptint"
         });
         instance.addWordinfoconfigManifest(textObj);
-        EkstepEditorAPI.dispatchEvent("config:show");
-        EkstepEditorAPI.render();
+        ecEditor.dispatchEvent("config:show");
+        ecEditor.render();
     },
     /**
      * This method is used delete readalong/wordinfo setting and reset to text plugin
      * @memberof Text
      */
     deleteEnhancement: function() {
-        EkstepEditorAPI.getService('popup').open({
+        ecEditor.getService('popup').open({
             template: 'deleteConfirmationDialog',
             controller: ['$scope', function($scope) {
-                $scope.warningMessage = EkstepEditorAPI.getCurrentObject().attributes.textType == 'readalong' ? 'Read-Along' : 'Word Info Popup';
+                $scope.warningMessage = ecEditor.getCurrentObject().attributes.textType == 'readalong' ? 'Read-Along' : 'Word Info Popup';
                 $scope.delete = function() {
                     $scope.closeThisDialog();
-                    var textObj = EkstepEditorAPI.getCurrentObject();
+                    var textObj = ecEditor.getCurrentObject();
                     if (textObj.attributes.textType == 'readalong') {
                         textObj.manifest.editor.playable = false;
                         //deleting readlong configarations from text configManifest
-                        EkstepEditorAPI._.reject(textObj.manifest.editor.configManifest, { propertyName: 'highlight' });
-                        var prop = textObj.manifest.editor.configManifest[EkstepEditorAPI._.findIndex(textObj.manifest.editor.configManifest, function(value, key) {
+                        ecEditor._.reject(textObj.manifest.editor.configManifest, { propertyName: 'highlight' });
+                        var prop = textObj.manifest.editor.configManifest[ecEditor._.findIndex(textObj.manifest.editor.configManifest, function(value, key) {
                             return value.propertyName == 'textType';
                         })];
                         // updating status value to hide delete button
@@ -398,11 +398,11 @@ EkstepEditor.basePlugin.extend({
                         delete textObj.attributes.autoplay;
                     } else {
                         //deleting wordinfo configarations from text configManifest
-                        EkstepEditorAPI._.reject(textObj.manifest.editor.configManifest, { propertyName: 'wordfontcolor' });
-                        EkstepEditorAPI._.reject(textObj.manifest.editor.configManifest, { propertyName: 'wordhighlightcolor' });
-                        EkstepEditorAPI._.reject(textObj.manifest.editor.configManifest, { propertyName: 'wordunderlinecolor' });
+                        ecEditor._.reject(textObj.manifest.editor.configManifest, { propertyName: 'wordfontcolor' });
+                        ecEditor._.reject(textObj.manifest.editor.configManifest, { propertyName: 'wordhighlightcolor' });
+                        ecEditor._.reject(textObj.manifest.editor.configManifest, { propertyName: 'wordunderlinecolor' });
 
-                        var prop = textObj.manifest.editor.configManifest[EkstepEditorAPI._.findIndex(textObj.manifest.editor.configManifest, function(value, key) {
+                        var prop = textObj.manifest.editor.configManifest[ecEditor._.findIndex(textObj.manifest.editor.configManifest, function(value, key) {
                             return value.propertyName == 'textType';
                         })];
                         // updating status value to hide delete button
@@ -416,8 +416,8 @@ EkstepEditor.basePlugin.extend({
                         delete textObj.config.wordunderlinecolor;
                     }
                     textObj.attributes.textType = "text";
-                    EkstepEditorAPI.dispatchEvent("config:show");
-                    EkstepEditorAPI.render();
+                    ecEditor.dispatchEvent("config:show");
+                    ecEditor.render();
                 }
             }],
             width: 520,
@@ -439,7 +439,7 @@ EkstepEditor.basePlugin.extend({
             "defaultValue": "#FFFF00"
         });
         //getting textType config basedon index
-        var prop = instance.manifest.editor.configManifest[EkstepEditorAPI._.findIndex(instance.manifest.editor.configManifest, function(value, key) {
+        var prop = instance.manifest.editor.configManifest[ecEditor._.findIndex(instance.manifest.editor.configManifest, function(value, key) {
             return value.propertyName == 'textType';
         })];
         // updating status value to show delete button
@@ -476,7 +476,7 @@ EkstepEditor.basePlugin.extend({
             "defaultValue": "#0000FF"
         });
         //getting textType config basedon index
-        var prop = instance.manifest.editor.configManifest[EkstepEditorAPI._.findIndex(instance.manifest.editor.configManifest, function(value, key) {
+        var prop = instance.manifest.editor.configManifest[ecEditor._.findIndex(instance.manifest.editor.configManifest, function(value, key) {
             return value.propertyName == 'textType';
         })];
         // updating status value to show delete button

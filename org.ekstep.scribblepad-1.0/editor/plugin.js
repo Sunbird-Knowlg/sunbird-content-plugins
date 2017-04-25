@@ -2,12 +2,12 @@
  * 
  * Simple plugin to create scribblepad
  * @class scribblePad
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  *
  * @author Sunil A S <sunils@ilimi.in>
  * @fires object:modified
  */
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     type: "org.ekstep.scribblepad",
     initialize: function() {},
     /**
@@ -44,7 +44,7 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         var dataList = { "radius": "radius", "opacity": "opacity", "stroke": "stroke", "stroke-width": "stroke-width", "scaleX": "scaleX", "scaleY": "scaleY" };
         if (instance) {
-            EkstepEditorAPI._.forEach(dataList, function(val, key) {
+            ecEditor._.forEach(dataList, function(val, key) {
                 instance.attributes[key] = instance.editorObj.get(val);
             })
         }
@@ -62,8 +62,8 @@ EkstepEditor.basePlugin.extend({
             this.editorObj.setFill(value);
             this.attributes.fill = value;
         }
-        EkstepEditorAPI.render();
-        EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
+        ecEditor.render();
+        ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
     },
     /** 
      *   set scribblepad properties for ECML

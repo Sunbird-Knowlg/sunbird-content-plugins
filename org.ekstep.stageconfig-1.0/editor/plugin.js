@@ -1,4 +1,4 @@
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     type: "org.ekstep.stageconfig",
     /**
      * Object to store stage audios. DataStructe {"<stage-id>": []} where array contains all audio objects in the stage
@@ -6,11 +6,11 @@ EkstepEditor.basePlugin.extend({
      * @type {Object}
      */
     stageAudios: {},
-    scope: EkstepEditorAPI.getAngularScope(),
+    scope: ecEditor.getAngularScope(),
     initialize: function() {
-        EkstepEditorAPI.addEventListener(this.manifest.id + ":addcomponent", this.register, this);
-        EkstepEditorAPI.addEventListener("stage:render:complete", this.stageRender, this);
-        EkstepEditorAPI.addEventListener(this.manifest.id + ":remove", this.removeAudio, this);
+        ecEditor.addEventListener(this.manifest.id + ":addcomponent", this.register, this);
+        ecEditor.addEventListener("stage:render:complete", this.stageRender, this);
+        ecEditor.addEventListener(this.manifest.id + ":remove", this.removeAudio, this);
     },
     register: function(event, data) {
         if (!this.stageAudios[data.stageId]) this.stageAudios[data.stageId] = [];
@@ -18,13 +18,13 @@ EkstepEditor.basePlugin.extend({
         this.showComponents(data.stageId);
     },
     getStageIndex: function(data) {
-        return EkstepEditorAPI._.findIndex(this.stageConfig, function(stage) {
+        return ecEditor._.findIndex(this.stageConfig, function(stage) {
             return data.stageId === stage.stageId;
         });
     },
     addComponents: function(stageId) {
         var instance = this;        
-        var audios = EkstepEditorAPI.getStagePluginInstances(stageId, ["org.ekstep.audio"]);
+        var audios = ecEditor.getStagePluginInstances(stageId, ["org.ekstep.audio"]);
         if (audios.length) this.stageAudios[stageId] = this.stageAudios[stageId] ? this.stageAudios[stageId] : [];
         _.each(audios, function(audio) {            
             instance.stageAudios[stageId].push(audio.audioData);
@@ -43,19 +43,19 @@ EkstepEditor.basePlugin.extend({
             //FIXME: Find a proper place to update currentStage
             //Good comment
         var instance = this;
-        EkstepEditorAPI.ngSafeApply(instance.scope, function() {
-            instance.scope.currentStage = EkstepEditorAPI.getCurrentStage();
+        ecEditor.ngSafeApply(instance.scope, function() {
+            instance.scope.currentStage = ecEditor.getCurrentStage();
         });
     },
     showStageComponents: function(stageId) {
         var instance = this;
         var items = [];
-        EkstepEditorAPI._.forEach(this.stageAudios[stageId], function(component) {
-            var plugin = EkstepEditorAPI.getPluginInstance(component.id);
+        ecEditor._.forEach(this.stageAudios[stageId], function(component) {
+            var plugin = ecEditor.getPluginInstance(component.id);
             component.autoplay =  plugin.config.autoplay;
             items.push(component);
         });
-        EkstepEditorAPI.ngSafeApply(instance.scope, function() {
+        ecEditor.ngSafeApply(instance.scope, function() {
             instance.scope.stageAttachments['audio'] = {};
             instance.scope.stageAttachments['audio'].items = items;
             instance.scope.stageAttachments['audio'].show = true;
@@ -63,7 +63,7 @@ EkstepEditor.basePlugin.extend({
     },
     hideStageComponents: function(stageId) {
         var instance = this;
-        EkstepEditorAPI.ngSafeApply(instance.scope, function() {
+        ecEditor.ngSafeApply(instance.scope, function() {
             instance.scope.stageAttachments['audio'] = {};
             instance.scope.stageAttachments['audio'].items = [];
             instance.scope.stageAttachments['audio'].show = false;
@@ -71,7 +71,7 @@ EkstepEditor.basePlugin.extend({
     },
     removeAudio: function(event, data) {
         var instance = this;
-        this.stageAudios[data.stageId] = EkstepEditorAPI._.reject(this.stageAudios[data.stageId], { id: data.id });
+        this.stageAudios[data.stageId] = ecEditor._.reject(this.stageAudios[data.stageId], { id: data.id });
         this.showComponents(data.stageId);
     }
 });

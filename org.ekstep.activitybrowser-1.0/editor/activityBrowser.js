@@ -2,13 +2,13 @@
 angular.module('activityBrowserApp', [])
     .controller('activityBrowserCtrl', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
         var ctrl = this,
-            angScope = EkstepEditorAPI.getAngularScope();
+            angScope = ecEditor.getAngularScope();
 
         ctrl.errorLoadingActivities = false;
         ctrl.activitiesList = [];
         ctrl.noActivities = false;
         ctrl.loading = false;
-        ctrl.defaultActivityImage = EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/default-activity.png");
+        ctrl.defaultActivityImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/default-activity.png");
         ctrl.activityOptions = {
             searchQuery: "",
             conceptsPlaceHolder: '(0) Concepts',
@@ -51,7 +51,7 @@ angular.module('activityBrowserApp', [])
                     "limit": 200
                 }
             };
-            EkstepEditorAPI.getService('search').search(data, function(err, resp) {
+            ecEditor.getService('search').search(data, function(err, resp) {
                 ctrl.loading = false;
                 $scope.$safeApply();
                 if (err) {
@@ -68,11 +68,11 @@ angular.module('activityBrowserApp', [])
         };
         ctrl.addPlugin = function(activity) {
             var publishedDate = new Date((activity['lastPublishedOn'] || new Date().toString())).getTime();
-            EkstepEditorAPI.loadAndInitPlugin(activity.code, activity.semanticVersion, publishedDate);
+            ecEditor.loadAndInitPlugin(activity.code, activity.semanticVersion, publishedDate);
             $scope.closeThisDialog();
         }
         ctrl.getActivities();
-        EkstepEditorAPI.dispatchEvent('org.ekstep.conceptselector:init', {
+        ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
             element: 'activityConceptSelector',
             selectedConcepts: [], // All composite keys except mediaType
             callback: function(data) {
@@ -87,13 +87,13 @@ angular.module('activityBrowserApp', [])
 
         function applyDimmerToCard() {
             setTimeout(function() {
-                EkstepEditorAPI.jQuery("#activity-cards .image").dimmer({
+                ecEditor.jQuery("#activity-cards .image").dimmer({
                     on: 'hover'
                 });
             }, 500);
         }
         setTimeout(function () {
-            EkstepEditorAPI.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});    
+            ecEditor.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});    
         },1000);
 
         ctrl.generateTelemetry = function(data) {
@@ -101,7 +101,7 @@ angular.module('activityBrowserApp', [])
                 org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).interact({ 
                     "type": data.type, "subtype": data.subtype, "target": data.target, 
                     "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", 
-                    "stage": EkstepEditorAPI.getCurrentStage().id 
+                    "stage": ecEditor.getCurrentStage().id 
                 });
             }
         };

@@ -2,11 +2,11 @@
  *
  * plugin for add download content
  * @class download
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  * @author Gourav More <gourav_m@tekditechnologies.com>
  * @listens download:content
  */
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     /**
      *   @member type {String} plugin title
      *   @memberof download
@@ -19,9 +19,9 @@ EkstepEditor.basePlugin.extend({
      *
      */
     initialize: function() {
-        EkstepEditorAPI.addEventListener("download:content", this.downloadContent, this);
-        var templatePath = EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/popup.html");
-        EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
+        ecEditor.addEventListener("download:content", this.downloadContent, this);
+        var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/popup.html");
+        ecEditor.getService('popup').loadNgModules(templatePath);
     },
     /**
      *
@@ -41,25 +41,25 @@ EkstepEditor.basePlugin.extend({
             $scope.isLoading = instance.isLoading;
             $scope.isSuccess = instance.isSuccess;
             $scope.isDownloading = instance.isDownloading;
-            $scope.cntName = EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).name;
+            $scope.cntName = ecEditor.getService('content').getContentMeta(window.context.content_id).name;
             instance.getDownloadUrl(function(downloadUrl) {
                 if (downloadUrl) {
                     $scope.isLoading = true;
                     $scope.isDownloading = false;
-                    EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
+                    ecEditor.ngSafeApply(ecEditor.getAngularScope());
                     instance.sendEmail($scope, downloadUrl);
                 } else {
                     $scope.isLoading = false;
                     $scope.isDownloading = false;
                     $scope.status = false;
                     $scope.getMessage = 'Content is not ready to download, please try again later';
-                    EkstepEditorAPI.jQuery('.ct_download_msg').transition('drop');
-                    EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
+                    ecEditor.jQuery('.ct_download_msg').transition('drop');
+                    ecEditor.ngSafeApply(ecEditor.getAngularScope());
                 }
             });
         };
 
-        EkstepEditorAPI.getService('popup').open({
+        ecEditor.getService('popup').open({
             template: 'partials_org.ekstep.download.html',
             controller: ['$scope', modalController],
             showClose: false,
@@ -69,8 +69,8 @@ EkstepEditor.basePlugin.extend({
         });
     },
     getDownloadUrl: function(callback) {
-        var fileName = (EkstepEditorAPI.getService('content').getContentMeta(EkstepEditorAPI.getContext('contentId')).name).toLowerCase();
-        EkstepEditorAPI.getService('content').downloadContent(EkstepEditorAPI.getContext('contentId'), fileName, function(err, resp) {
+        var fileName = (ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name).toLowerCase();
+        ecEditor.getService('content').downloadContent(ecEditor.getContext('contentId'), fileName, function(err, resp) {
             if (!err && resp.data.responseCode == "OK") {
                 callback(resp.data.result.ECAR_URL);
             } else {
@@ -79,29 +79,29 @@ EkstepEditor.basePlugin.extend({
         });
     },
     sendEmail: function($scope, data) {
-        EkstepEditorAPI.jQuery.ajax({
-            url: EkstepEditorAPI.getConfig('baseURL') + '/index.php?option=com_api&app=ekcontent&resource=download&format=raw',
+        ecEditor.jQuery.ajax({
+            url: ecEditor.getConfig('baseURL') + '/index.php?option=com_api&app=ekcontent&resource=download&format=raw',
             headers: {
                 'x-auth': 'session'
             },
             type: "POST",
             data: {
                 downloadUrl: data,
-                name: EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id).name
+                name: ecEditor.getService('content').getContentMeta(window.context.content_id).name
             },
             success: function(results) {
                 $scope.isLoading = false;
                 $scope.status = (results.responseCode == 'OK') ? true : false;
                 $scope.getMessage = results.result;
-                EkstepEditorAPI.jQuery('.ct_download_msg').transition('drop');
-                EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
+                ecEditor.jQuery('.ct_download_msg').transition('drop');
+                ecEditor.ngSafeApply(ecEditor.getAngularScope());
             },
             error: function() {
                 $scope.isLoading = false;
                 $scope.status = false;
                 $scope.getMessage = 'Unable to send email, please try again later';
-                EkstepEditorAPI.jQuery('.ct_download_msg').transition('drop');
-                EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
+                ecEditor.jQuery('.ct_download_msg').transition('drop');
+                ecEditor.ngSafeApply(ecEditor.getAngularScope());
             }
         });
     },

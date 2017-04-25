@@ -24,8 +24,8 @@ angular.module('wordinfobrowserapp', []).controller('wordinfobrowsercontroller',
                     };
 
     ctrl.selectWords = function($index, word, $event) {
-        if (EkstepEditorAPI._.indexOf(ctrl.slectedWords, word) != -1) {
-            ctrl.slectedWords.splice(EkstepEditorAPI._.indexOf(ctrl.slectedWords, word), 1);
+        if (ecEditor._.indexOf(ctrl.slectedWords, word) != -1) {
+            ctrl.slectedWords.splice(ecEditor._.indexOf(ctrl.slectedWords, word), 1);
             $(event.target).removeClass('teal');
             $scope.$safeApply();
         } else {
@@ -49,7 +49,7 @@ angular.module('wordinfobrowserapp', []).controller('wordinfobrowsercontroller',
                 "content": ctrl.selectedSentence
             }
         };
-        EkstepEditorAPI.getService('language').getKeyWords(requestData, function(err, response) {
+        ecEditor.getService('language').getKeyWords(requestData, function(err, response) {
             ctrl.loading = false;
             if (err) {
                 ctrl.errorLoadingKeywords = true;
@@ -64,7 +64,7 @@ angular.module('wordinfobrowserapp', []).controller('wordinfobrowsercontroller',
                 return;
             } else {
                 ctrl.showTypeownText = false;
-                EkstepEditorAPI._.forEach(response.data.result, function(value, key) {
+                ecEditor._.forEach(response.data.result, function(value, key) {
                     ctrl.keywords.push(key);
                     $scope.$safeApply();
                 });
@@ -81,13 +81,13 @@ angular.module('wordinfobrowserapp', []).controller('wordinfobrowsercontroller',
                 }
             }
         };
-        EkstepEditorAPI.getService('search').search(requestData, function(err, response) {
+        ecEditor.getService('search').search(requestData, function(err, response) {
             if (!err) {
                 var dictionary = {};
-                EkstepEditorAPI._.forEach(response.data.result.words, function(w) {
+                ecEditor._.forEach(response.data.result.words, function(w) {
                     dictionary[w.lemma] = {
                         lemma: w.lemma,
-                        gloss: EkstepEditorAPI._.isUndefined(w.meaning) ? "" : w.meaning
+                        gloss: ecEditor._.isUndefined(w.meaning) ? "" : w.meaning
                     }
                 });
                 var configData = {
@@ -115,9 +115,9 @@ angular.module('wordinfobrowserapp', []).controller('wordinfobrowsercontroller',
         ctrl.noKeywords = false;
     };
 
-    if (!EkstepEditorAPI._.isUndefined(instance.editorObj)) {
+    if (!ecEditor._.isUndefined(instance.editorObj)) {
         ctrl.selectedSentence = instance.config.text;
-        ctrl.prevSlectedWords = ctrl.slectedWords = !EkstepEditorAPI._.isUndefined(instance.config.words) ? instance.config.words.split(',') : [];
+        ctrl.prevSlectedWords = ctrl.slectedWords = !ecEditor._.isUndefined(instance.config.words) ? instance.config.words.split(',') : [];
         $scope.$safeApply();
     } 
 }]);
