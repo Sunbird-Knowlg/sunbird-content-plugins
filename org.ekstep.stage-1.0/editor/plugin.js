@@ -1,27 +1,27 @@
 /**
  * @author Santhosh Vasabhaktula <santhosh@ilimi.in>
  */
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     type: "stage",
     thumbnail: undefined,
     onclick: undefined,
     currentObject: undefined,
     canvas: undefined,
     initialize: function() {
-        EkstepEditorAPI.addEventListener("stage:create", this.createStage, this);
-        EkstepEditorAPI.addEventListener("object:modified", this.modified, this);
-        EkstepEditorAPI.addEventListener("stage:modified", this.modified, this);
-        EkstepEditorAPI.addEventListener("object:selected", this.objectSelected, this);
-        EkstepEditorAPI.addEventListener("object:removed", this.objectRemoved, this);
+        ecEditor.addEventListener("stage:create", this.createStage, this);
+        ecEditor.addEventListener("object:modified", this.modified, this);
+        ecEditor.addEventListener("stage:modified", this.modified, this);
+        ecEditor.addEventListener("object:selected", this.objectSelected, this);
+        ecEditor.addEventListener("object:removed", this.objectRemoved, this);
     },
     createStage: function(event, data) {
-        EkstepEditorAPI.instantiatePlugin(this.manifest.id, data);
+        ecEditor.instantiatePlugin(this.manifest.id, data);
     },
     newInstance: function() {
         this.onclick = { id: 'stage:select', data: { stageId: this.id } };
         this.ondelete = { id: 'stage:delete', data: { stageId: this.id } };
         this.duplicate = { id: 'stage:duplicate', data: { stageId: this.id } };
-        EkstepEditorAPI.addStage(this);        
+        ecEditor.addStage(this);        
         this.attributes = {
             x: 0,
             y: 0,
@@ -32,7 +32,7 @@ EkstepEditor.basePlugin.extend({
         this.addConfig('instructions', this.getParam('instructions') || '');
     },
     getOnClick: function() {
-        return { id: 'stage:select', data: { stageId: this.id, prevStageId: EkstepEditorAPI.getCurrentStage().id } };
+        return { id: 'stage:select', data: { stageId: this.id, prevStageId: ecEditor.getCurrentStage().id } };
     },
     setCanvas: function(canvas) {
         this.canvas = canvas;
@@ -43,7 +43,7 @@ EkstepEditor.basePlugin.extend({
             this.canvas.add(plugin.editorObj);
             if(plugin.editorObj.selectable) this.canvas.setActiveObject(plugin.editorObj);
             this.setThumbnail();
-            EkstepEditorAPI.dispatchEvent('stage:modified', { id: plugin.id });
+            ecEditor.dispatchEvent('stage:modified', { id: plugin.id });
         }
     },
     setThumbnail: function() {
@@ -58,7 +58,7 @@ EkstepEditor.basePlugin.extend({
     },
     updateZIndex: function() {
         var instance = this;
-        EkstepEditorAPI._.forEach(this.children, function(child) {
+        ecEditor._.forEach(this.children, function(child) {
             if(child.editorObj) {
                 child.attributes['z-index'] = instance.canvas.getObjects().indexOf(child.editorObj);
             } else {
@@ -67,25 +67,25 @@ EkstepEditor.basePlugin.extend({
         });
     },
     render: function(canvas) {
-        EkstepEditor.stageManager.clearCanvas(canvas);
-        this.children = EkstepEditorAPI._.sortBy(this.children, [function(o) { return o.getAttribute('z-index'); }]);
-        EkstepEditorAPI._.forEach(this.children, function(plugin) {
+        org.ekstep.contenteditor.stageManager.clearCanvas(canvas);
+        this.children = ecEditor._.sortBy(this.children, [function(o) { return o.getAttribute('z-index'); }]);
+        ecEditor._.forEach(this.children, function(plugin) {
             plugin.render(canvas);
         });
         canvas.renderAll();
-        EkstepEditorAPI.dispatchEvent('stage:render:complete', { stageId: this.id });
+        ecEditor.dispatchEvent('stage:render:complete', { stageId: this.id });
         this.thumbnail = canvas.toDataURL({format: 'jpeg', quality: 0.1});
-        EkstepEditorAPI.refreshStages();
+        ecEditor.refreshStages();
     },
     modified: function(event, data) {
-        EkstepEditorAPI.getCurrentStage().updateZIndex(); 
-        EkstepEditorAPI.getCurrentStage().setThumbnail();
-        EkstepEditorAPI.refreshStages();
+        ecEditor.getCurrentStage().updateZIndex(); 
+        ecEditor.getCurrentStage().setThumbnail();
+        ecEditor.refreshStages();
     },
     objectSelected: function(event, data) {
-        if(!EkstepEditorAPI._.isUndefined(this.currentObject) && this.currentObject !== data.id) {
-            var plugin = EkstepEditorAPI.getPluginInstance(this.currentObject);
-            EkstepEditorAPI.getCanvas().trigger("selection:cleared", { target: plugin.editorObj });
+        if(!ecEditor._.isUndefined(this.currentObject) && this.currentObject !== data.id) {
+            var plugin = ecEditor.getPluginInstance(this.currentObject);
+            ecEditor.getCanvas().trigger("selection:cleared", { target: plugin.editorObj });
         }
         this.currentObject = data.id;
     },
@@ -111,7 +111,7 @@ EkstepEditor.basePlugin.extend({
     },
     getConfig: function() {
         var config = this._super();
-        config.genieControls = EkstepEditorAPI.getAngularScope().showGenieControls;
+        config.genieControls = ecEditor.getAngularScope().showGenieControls;
         return config;
     },
     onConfigChange: function(key, value) {
@@ -120,9 +120,9 @@ EkstepEditor.basePlugin.extend({
                 this.addParam('instructions', value);
                 break;
             case "genieControls":
-                if(value !== EkstepEditorAPI.getAngularScope().showGenieControls) {
-                    var angScope = EkstepEditorAPI.getAngularScope();
-                    EkstepEditorAPI.ngSafeApply(angScope, function() {
+                if(value !== ecEditor.getAngularScope().showGenieControls) {
+                    var angScope = ecEditor.getAngularScope();
+                    ecEditor.ngSafeApply(angScope, function() {
                         angScope.toggleGenieControl();
                     });
                 }

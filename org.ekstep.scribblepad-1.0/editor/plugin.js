@@ -2,12 +2,12 @@
  * 
  * Simple plugin to create scribblepad
  * @class scribblePad
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  *
  * @author Sunil A S <sunils@ilimi.in>
  * @fires object:modified
  */
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     type: "org.ekstep.scribblepad",
     initialize: function() {},
     /**
@@ -17,8 +17,7 @@ EkstepEditor.basePlugin.extend({
     *   @memberof scribblePad
     */
     newInstance: function() {
-        var props = this.convertToFabric(this.attributes),
-        host = EkstepEditorAPI.getConfig('useProxyForURL') ? EkstepEditorAPI.getConfig('baseURL') : EkstepEditorAPI.getConfig('absURL');
+        var props = this.convertToFabric(this.attributes);
         props.stroke = 1;
         props.strokeWidth = 2;
         props.strokeDashArray = [5, 5];
@@ -27,7 +26,7 @@ EkstepEditor.basePlugin.extend({
             this.editorObj = new fabric.Rect(props);
             this.addMedia({
                 id: "org.ekstep.scribblepad.eraser",
-                src: host + "/assets/public/content/1460624453530trash.png",
+                src: "/assets/public/content/1460624453530trash.png",
                 assetId: "org.ekstep.scribblepad.eraser",
                 type: "image",
                 preload: true
@@ -45,7 +44,7 @@ EkstepEditor.basePlugin.extend({
         var instance = this;
         var dataList = { "radius": "radius", "opacity": "opacity", "stroke": "stroke", "stroke-width": "stroke-width", "scaleX": "scaleX", "scaleY": "scaleY" };
         if (instance) {
-            EkstepEditorAPI._.forEach(dataList, function(val, key) {
+            ecEditor._.forEach(dataList, function(val, key) {
                 instance.attributes[key] = instance.editorObj.get(val);
             })
         }
@@ -63,8 +62,8 @@ EkstepEditor.basePlugin.extend({
             this.editorObj.setFill(value);
             this.attributes.fill = value;
         }
-        EkstepEditorAPI.render();
-        EkstepEditorAPI.dispatchEvent('object:modified', { target: EkstepEditorAPI.getEditorObject() });
+        ecEditor.render();
+        ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
     },
     /** 
      *   set scribblepad properties for ECML

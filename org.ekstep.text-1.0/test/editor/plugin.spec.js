@@ -4,21 +4,23 @@ describe("Text plugin", function() {
     var stage, text1, text2, wordinfo_text, readalong_text;
     beforeAll(function(done) {
         ContentEditorTestFramework.init(function() {
-            stage = EkstepEditorAPI.instantiatePlugin('org.ekstep.stage');
-            EkstepEditorAPI.loadPlugin('org.ekstep.text', '1.0');
-            EkstepEditorAPI.loadPlugin('org.ekstep.readalongbrowser', '1.0');
+            stage = ecEditor.instantiatePlugin('org.ekstep.stage');
+            ecEditor.loadPlugin('org.ekstep.text', '1.0');
+            ecEditor.loadPlugin('org.ekstep.readalongbrowser', '1.0');
             org.ekstep.contenteditor.mediaManager.addMedia({"name":"10","id":"do_20076098","src":"https://dev.ekstep.in:443/assets/public/content/10_1466574879197.mp3","type":"audio"});
             $('<div class="ui form" id="textEditorContainer"><div class="field"><textarea id="authoringTextEditor" placeholder="Add text here" rows="12">Plain text</textarea><div><div class="ui buttons" id="texteditorBtnGrp"><button id="authoringTextEditorCancel" class="ui secondary button">Cancel</button><div class="or"></div><button id="authoringTextEditorBtn" class="ui primary button">Done</button></div></div></div></div>').appendTo('body');
             done();
         });
     });
-
+    afterAll(function() {
+        $('div#textEditorContainer').remove();
+    });
     it("should create plain text", function() {
         expect(stage.children.length).toBe(0);
-        EkstepEditorAPI.dispatchEvent("org.ekstep.text:create", {"__text": "", "x": 10, "y": 20, "fontFamily": "NotoSans", "fontSize": 18, "minWidth": 20, "w": 35, "maxWidth": 500, "fill": "#000000", "fontStyle": "normal", "fontWeight": "normal"}); 
+        ecEditor.dispatchEvent("org.ekstep.text:create", {"__text": "", "x": 10, "y": 20, "fontFamily": "NotoSans", "fontSize": 18, "minWidth": 20, "w": 35, "maxWidth": 500, "fill": "#000000", "fontStyle": "normal", "fontWeight": "normal"}); 
         text1 = stage.children[0];
         expect(stage.children.length).toBe(1);
-        var fbObject = ContentEditorTestFramework.getFabricObject(text1.id, EkstepEditorAPI.getCanvas());
+        var fbObject = ContentEditorTestFramework.getFabricObject(text1.id, ecEditor.getCanvas());
         ContentEditorTestFramework.objectsEqual(text1.editorObj, fbObject);
         text1.onConfigChange('fontsize', 22);
         text1.onConfigChange('fontweight', true);
@@ -48,12 +50,12 @@ describe("Text plugin", function() {
         ContentEditorTestFramework.unselect(text1.id);
         expect(stage.canvas.getActiveObject()).toBe(null);
 
-        EkstepEditorAPI.dispatchEvent('stage:unselect', {});
+        ecEditor.dispatchEvent('stage:unselect', {});
         expect(stage.canvas.getActiveObject()).toBe(null);
     });
     
     it("should crate wordinfo text", function() {
-        EkstepEditorAPI.dispatchEvent("org.ekstep.text:create", {"x": 10, "y": 20, "fontFamily": "NotoSans", "fontSize": 18, "minWidth": 20, "w": 35, "maxWidth": 500, "fill": "#000000", "fontStyle": "normal", "fontWeight": "normal", "textType": "wordinfo"}); 
+        ecEditor.dispatchEvent("org.ekstep.text:create", {"x": 10, "y": 20, "fontFamily": "NotoSans", "fontSize": 18, "minWidth": 20, "w": 35, "maxWidth": 500, "fill": "#000000", "fontStyle": "normal", "fontWeight": "normal", "textType": "wordinfo"}); 
         expect(stage.children.length).toBe(2);
         wordinfo_text = stage.children[1];
 
@@ -68,7 +70,7 @@ describe("Text plugin", function() {
     });
 
     it("should crate readalong text using old AT data", function() {
-        EkstepEditorAPI.dispatchEvent("org.ekstep.text:create", {"__text": "Test read along text", "x": 10, "y": 20, "fontFamily": "NotoSans", "fontSize": 18, "minWidth": 20, "w": 35, "maxWidth": 500, "fill": "#000000", "fontStyle": "normal", "fontWeight": "normal", "audio":"do_20076098", "timings":"470,720,1720", "highlight":"#FFFF00"}); 
+        ecEditor.dispatchEvent("org.ekstep.text:create", {"__text": "Test read along text", "x": 10, "y": 20, "fontFamily": "NotoSans", "fontSize": 18, "minWidth": 20, "w": 35, "maxWidth": 500, "fill": "#000000", "fontStyle": "normal", "fontWeight": "normal", "audio":"do_20076098", "timings":"470,720,1720", "highlight":"#FFFF00"}); 
         expect(stage.children.length).toBe(3);
         readalong_text = stage.children[2];
 
@@ -86,7 +88,7 @@ describe("Text plugin", function() {
     });
 
     it("should create plain text with height and fontweight..", function() {
-        EkstepEditorAPI.dispatchEvent("org.ekstep.text:create", {"__text": "", "x": 10, "y": 20, "font": "NotoSans", "fontsize": 18, "minWidth": 20, "w": 35, "maxWidth": 500, "fill": "#000000", "fontStyle": "normal", "fontWeight": "normal", "h": 5.02, "color": "#000000", "weight": "bold italic", "align": "left", "rotate": 28}); 
+        ecEditor.dispatchEvent("org.ekstep.text:create", {"__text": "", "x": 10, "y": 20, "font": "NotoSans", "fontsize": 18, "minWidth": 20, "w": 35, "maxWidth": 500, "fill": "#000000", "fontStyle": "normal", "fontWeight": "normal", "h": 5.02, "color": "#000000", "weight": "bold italic", "align": "left", "rotate": 28}); 
         text2 = stage.children[3];
         expect(stage.children.length).toBe(4);
 
@@ -106,15 +108,15 @@ describe("Text plugin", function() {
 
     it("shold tigger jquery done and cancel buttons", function() {
         textEditor.showEditor(text2.id);
-        EkstepEditorAPI.jQuery("#authoringTextEditor").val('Text');
-        EkstepEditorAPI.jQuery('#authoringTextEditorBtn').trigger('click');
+        ecEditor.jQuery("#authoringTextEditor").val('Text');
+        ecEditor.jQuery('#authoringTextEditorBtn').trigger('click');
         expect(text2.editorObj.text).toBe('Text');
 
-        EkstepEditorAPI.jQuery("#authoringTextEditor").val('');
-        EkstepEditorAPI.jQuery('#authoringTextEditorBtn').trigger('click');
+        ecEditor.jQuery("#authoringTextEditor").val('');
+        ecEditor.jQuery('#authoringTextEditorBtn').trigger('click');
         expect($("#authoringTextEditor").is(':visible')).toBe(false);
         
-        EkstepEditorAPI.jQuery('#authoringTextEditorCancel').trigger('click');
+        ecEditor.jQuery('#authoringTextEditorCancel').trigger('click');
         expect($("#authoringTextEditor").is(':visible')).toBe(false);
     });
 

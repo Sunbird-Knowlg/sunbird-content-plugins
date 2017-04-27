@@ -145,7 +145,11 @@
                 "iconClass": "align right icon"
             }],
             "defaultValue": "left"
-        }, {
+        },{
+            "type": "custom_template",
+            "controllerURL": "editor/config-controller.js",
+            "templateURL": "editor/configTemplate.html"
+        },{
             "propertyName": "fontfamily",
             "title": "Font Family",
             "description": "Select font family for the text",

@@ -15,6 +15,8 @@ module.exports = function(config) {
         // list of files / patterns to load in the browser
         files: [
             // bower:js
+            'node_modules/angular/angular.min.js',
+            'node_modules/angular-mocks/angular-mocks.js',
             'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/content-editor/scripts/external.min.js',
             //'test/external.min.js',
             'test/bootstrap-html.js',

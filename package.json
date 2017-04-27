@@ -4,6 +4,8 @@
     "description": "Testing content plugins",
     "dependencies": {},
     "devDependencies": {
+        "angular": "^1.6.4",
+        "angular-mocks": "^1.6.4",
         "jasmine": "2.5.2",
         "jasmine-core": "2.5.2",
         "jasmine-expect": "3.7.0",

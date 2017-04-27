@@ -2,11 +2,11 @@
  *
  * plugin for add collaborator to contents
  * @class collaborator
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  * @author Gourav More <gourav_m@tekditechnologies.com>
  * @listens collaborator:add
  */
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     /**
      *   @member type {String} plugin title
      *   @memberof collaborator
@@ -19,9 +19,9 @@ EkstepEditor.basePlugin.extend({
      *
      */
     initialize: function() {
-        EkstepEditorAPI.addEventListener("collaborator:add", this.addCollaborator, this);
-        var templatePath = EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/popup.html");
-        EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
+        ecEditor.addEventListener("collaborator:add", this.addCollaborator, this);
+        var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/popup.html");
+        ecEditor.getService('popup').loadNgModules(templatePath);
     },
     /**
      *   Load userlist to add collaborators
@@ -31,9 +31,9 @@ EkstepEditor.basePlugin.extend({
      */
     addCollaborator: function(event, data) {
         this.showPreview(function() {
-            EkstepEditorAPI.jQuery('#colUsersDropdown').dropdown({
+            ecEditor.jQuery('#colUsersDropdown').dropdown({
                 apiSettings: {
-                    url: EkstepEditorAPI.getConfig('baseURL')+'/index.php?option=com_ekcontent&task=contentform.getUsersToInvite&id=' + window.context.id + '&isEditor=true&search={query}',
+                    url: ecEditor.getConfig('baseURL')+'/index.php?option=com_ekcontent&task=contentform.getUsersToInvite&id=' + window.context.id + '&isEditor=true&search={query}',
                     cache: true
                 },
                 saveRemoteData: true,
@@ -73,7 +73,7 @@ EkstepEditor.basePlugin.extend({
             });
         };
 
-        EkstepEditorAPI.getService('popup').open({
+        ecEditor.getService('popup').open({
             template: 'partials_org.ekstep.collaborator.html',
             controller: ['$scope', modalController],
             showClose: false,
@@ -87,7 +87,7 @@ EkstepEditor.basePlugin.extend({
      */
     getUrlLink: function() {
         var instance = this;
-        EkstepEditorAPI.jQuery("#copyTarget").select();
+        ecEditor.jQuery("#copyTarget").select();
 
         try {
             var successful = document.execCommand('copy');
@@ -102,7 +102,7 @@ EkstepEditor.basePlugin.extend({
      */
     sendInvites: function() {
         var instance = this;
-        EkstepEditorAPI.jQuery('#colInviteForm')
+        ecEditor.jQuery('#colInviteForm')
             .form({
                 inline: true,
                 fields: {
@@ -138,8 +138,8 @@ EkstepEditor.basePlugin.extend({
      */
     notifyUser: function(event, fields) {
         var instance = this;
-        EkstepEditorAPI.jQuery.ajax({
-            url: EkstepEditorAPI.getConfig('baseURL')+'/index.php?option=com_ekcontent&task=contentform.inviteUsers',
+        ecEditor.jQuery.ajax({
+            url: ecEditor.getConfig('baseURL')+'/index.php?option=com_ekcontent&task=contentform.inviteUsers',
             headers: {
                 'x-auth': 'session'
             },
@@ -150,17 +150,17 @@ EkstepEditor.basePlugin.extend({
                 instance.loading = 'active';
                 instance.isLoading = true;
                 instance.isError = false;
-                EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
+                ecEditor.ngSafeApply(ecEditor.getAngularScope());
             },
             success: function(result) {
                 if (result == true) {
                     instance.isLoading = false;
-                    EkstepEditorAPI.jQuery('.collaborator_msg').transition('drop');
-                    EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
+                    ecEditor.jQuery('.collaborator_msg').transition('drop');
+                    ecEditor.ngSafeApply(ecEditor.getAngularScope());
                 } else {
                     instance.isError = true;
-                    EkstepEditorAPI.jQuery('.collaborator_msg').transition('drop');
-                    EkstepEditorAPI.ngSafeApply(EkstepEditorAPI.getAngularScope());
+                    ecEditor.jQuery('.collaborator_msg').transition('drop');
+                    ecEditor.ngSafeApply(ecEditor.getAngularScope());
                 }
             },
             error: function() {
@@ -175,8 +175,8 @@ EkstepEditor.basePlugin.extend({
     collaboratorsInfo: function() {
         var instance = this;
 
-        EkstepEditorAPI.jQuery.ajax({
-            url: EkstepEditorAPI.getConfig('baseURL')+'/index.php?option=com_api&app=ekcontent&resource=collaborator&format=raw',
+        ecEditor.jQuery.ajax({
+            url: ecEditor.getConfig('baseURL')+'/index.php?option=com_api&app=ekcontent&resource=collaborator&format=raw',
             headers: {
                 'x-auth': 'session'
             },

@@ -2,7 +2,7 @@
  * 
  * Simple plugin to add image to stage
  * @class image
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  *
  * @author Sunil A S <sunils@ilimi.in>
  * @fires org.ekstep.assetbrowser:show
@@ -10,7 +10,7 @@
  * @listens org.ekstep.image:assetbrowser:open
  */
 
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     name: "Image",
     /**
     *  
@@ -19,7 +19,7 @@ EkstepEditor.basePlugin.extend({
     */
     initialize: function() {
         var instance = this;
-        EkstepEditorAPI.addEventListener(instance.manifest.id + ":assetbrowser:open", this.openBrowser, this);
+        ecEditor.addEventListener(instance.manifest.id + ":assetbrowser:open", this.openBrowser, this);
     },
     /**
     * 
@@ -40,8 +40,8 @@ EkstepEditor.basePlugin.extend({
         if (!(media && media.src)) throw new Error('media source is missing!');                               
         if (media && media.src) {
             this.name = this.attributes.asset;
-            media.src = EkstepEditorAPI.getMediaReverseProxyURL(media.src);
-            var imageURL = EkstepEditorAPI.getConfig('useProxyForURL') ? "image/get/" + encodeURIComponent(media.src) : media.src;
+            media.src = ecEditor.getMediaReverseProxyURL(media.src);
+            var imageURL = ecEditor.getConfig('useProxyForURL') ? "image/get/" + encodeURIComponent(media.src) : media.src;
             fabric.Image.fromURL(imageURL, function(img) {
                 instance.editorObj = img;
                 instance.parent = _parent;
@@ -62,7 +62,7 @@ EkstepEditor.basePlugin.extend({
     */
     openBrowser: function() {
         var instance = this;
-        EkstepEditorAPI.dispatchEvent('org.ekstep.assetbrowser:show', {
+        ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',
             search_filter: {}, // All composite keys except mediaType
             callback: function(data) { 
@@ -71,7 +71,7 @@ EkstepEditor.basePlugin.extend({
                 data.w = 50;
                 data.h = 50;
                 data.from = 'plugin';
-                EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', data) 
+                ecEditor.dispatchEvent(instance.manifest.id + ':create', data) 
             }
         });
     },
@@ -89,8 +89,8 @@ EkstepEditor.basePlugin.extend({
     onConfigChange: function(key, value) {
         switch (key) {
             case "asset":
-                EkstepEditorAPI.dispatchEvent('delete:invoke');
-                EkstepEditorAPI.dispatchEvent(this.manifest.id + ':create', value)
+                ecEditor.dispatchEvent('delete:invoke');
+                ecEditor.dispatchEvent(this.manifest.id + ':create', value)
                 break;
         }
     },

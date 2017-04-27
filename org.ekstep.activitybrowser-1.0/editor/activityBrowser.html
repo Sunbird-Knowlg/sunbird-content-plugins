@@ -42,8 +42,8 @@
                             </div> -->
                             <div class="field">
                                 <div class="ui fluid labeled input">
-                                    <div class="ui label">Category</div>
-                                    <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activityOptions.categories" ng-options="type for type in $ctrl.categories" ng-change="$ctrl.getActivities();$ctrl.generateTelemetry({type: 'click', subtype: 'advanceSearch', target: 'searchActivityCard'})">
+                                    <div class="ui label" ng-init="$ctrl.activityOptions.categories = []">Category</div>
+                                    <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activityOptions.categories"  ng-options="type for type in $ctrl.categories" ng-change="$ctrl.getActivities();$ctrl.generateTelemetry({type: 'click', subtype: 'advanceSearch', target: 'searchActivityCard'})">
                                         <option value="">
                                             Type
                                         </option>

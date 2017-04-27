@@ -2,12 +2,12 @@
  *
  * Simple plugin to create geometrical shapes
  * @class shape
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  *
  * @author Sunil A S <sunils@ilimi.in>
  * @fires object:modified
  */
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     type: "shape",
     _points: undefined,
     shapeType: undefined,
@@ -161,9 +161,9 @@ EkstepEditor.basePlugin.extend({
 
                 break;
         }
-        EkstepEditorAPI.render();
-        EkstepEditorAPI.dispatchEvent('object:modified', {
-            target: EkstepEditorAPI.getEditorObject()
+        ecEditor.render();
+        ecEditor.dispatchEvent('object:modified', {
+            target: ecEditor.getEditorObject()
         });
     },
     /**

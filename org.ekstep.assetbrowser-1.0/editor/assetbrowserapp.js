@@ -2,7 +2,7 @@
 angular.module('assetbrowserapp', ['angularAudioRecorder']).config(['recorderServiceProvider', function(recorderServiceProvider){
 
         recorderServiceProvider.forceSwf(false);
-        var lameJsUrl = window.location.origin + EkstepEditorAPI.resolvePluginResource("org.ekstep.assetbrowser", "1.0", "editor/recorder/lib2/lame.min.js");
+        var lameJsUrl = window.location.origin + ecEditor.resolvePluginResource("org.ekstep.assetbrowser", "1.0", "editor/recorder/lib2/lame.min.js");
         var config = {lameJsUrl:lameJsUrl, bitRate: 92};
 
         recorderServiceProvider.withMp3Conversion(true, config);
@@ -16,7 +16,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             lastSelectedImage,
             audioTabSelected = false,
             imageTabSelected = true,
-            angScope = EkstepEditorAPI.getAngularScope(),
+            angScope = ecEditor.getAngularScope(),
             ctrl = this;
 
         var $sce = $injector.get('$sce');
@@ -36,7 +36,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         ctrl.buttonToShow = 'select';
         ctrl.uploadView = false;
         ctrl.languagecode = 'en';
-        ctrl.portalOwner = EkstepEditorAPI._.isUndefined(window.context) ? '' : window.context.user.id;
+        ctrl.portalOwner = ecEditor._.isUndefined(window.context) ? '' : window.context.user.id;
         ctrl.asset = {
             'requiredField': '',
         };
@@ -53,7 +53,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             'keywords': [],
             'creator': '',
             'status': 'Draft',
-            'portalOwner': EkstepEditorAPI._.isUndefined(window.context) ? '' : window.context.user.id,
+            'portalOwner': ecEditor._.isUndefined(window.context) ? '' : window.context.user.id,
             'code': "org.ekstep" + Math.random(),
             'mimeType': "",
             'mediaType': "",
@@ -67,12 +67,12 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         ctrl.loading = 'active';
         ctrl.plugin = instance.mediaType;
         ctrl.upload = (instance.mediaType == 'image') ? true : false;
-        ctrl.fileTypes = (instance.mediaType == "image") ? "jpeg, jpg, png, gif" : "mp3, mp4, mpeg, ogg, wav, webm";
-        ctrl.fileSize = (instance.mediaType == "image") ? '3 MB' : '6 MB';
+        ctrl.fileTypes = (instance.mediaType == "image") ? "jpeg, jpg, png" : "mp3, mp4, mpeg, ogg, wav, webm";
+        ctrl.fileSize = (instance.mediaType == "image") ? '1 MB' : '6 MB';
 
         if (instance.mediaType == 'image') {
-            ctrl.allowedFileSize = (3 * 1024 * 1024);
-            ctrl.allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
+            ctrl.allowedFileSize = (1 * 1024 * 1024);
+            ctrl.allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
         } else if (instance.mediaType == 'audio') {
             ctrl.allowedFileSize = (6 * 1024 * 1024);
             ctrl.allowedMimeTypes = ['audio/mp3', 'audio/mp4', 'audio/mpeg', 'audio/ogg', 'audio/webm', 'audio/x-wav', 'audio/wav'];
@@ -82,8 +82,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             if (res && res.data.result.content) {
                 ctrl.imageList = [];
 
-                EkstepEditorAPI._.forEach(res.data.result.content, function(obj, index) {
-                    if (!EkstepEditorAPI._.isUndefined(obj.downloadUrl)){
+                ecEditor._.forEach(res.data.result.content, function(obj, index) {
+                    if (!ecEditor._.isUndefined(obj.downloadUrl)){
                         ctrl.imageList.push(obj);
                     }
                 });
@@ -103,8 +103,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             if (res && res.data.result.content) {
                 ctrl.audioList = [];
 
-                EkstepEditorAPI._.forEach(res.data.result.content, function(obj, index) {
-                    if (!EkstepEditorAPI._.isUndefined(obj.downloadUrl)){
+                ecEditor._.forEach(res.data.result.content, function(obj, index) {
+                    if (!ecEditor._.isUndefined(obj.downloadUrl)){
                         ctrl.audioList.push({ downloadUrl: trustResource(obj.downloadUrl), identifier: obj.identifier, name:obj.name, mimeType:obj.mimeType, license:obj.license });
                     }
                 });
@@ -133,7 +133,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         }
 
 		setTimeout(function() {
-            EkstepEditorAPI.jQuery('#audioDropDown')
+            ecEditor.jQuery('#audioDropDown')
 			  .dropdown({
 				onChange: function(value, text, $selectedItem) {
 					searchText = ctrl.query;
@@ -157,7 +157,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 
             imageTabSelected = true;
             audioTabSelected = false;
-            ctrl.selectBtnDisable = EkstepEditorAPI._.isUndefined(lastSelectedImage) ? true : false;
+            ctrl.selectBtnDisable = ecEditor._.isUndefined(lastSelectedImage) ? true : false;
             ctrl.buttonToShow = 'select';
 
             (searchText === "") ? searchText = undefined: null;
@@ -173,9 +173,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 			if (instance.mediaType === "image"){
 				return new Array(instance.mediaType);
 			}else{
-				if ((EkstepEditorAPI.jQuery('#audioDropDown').dropdown('get value') == '') || (EkstepEditorAPI.jQuery('#audioDropDown').dropdown('get value') == 'all')){
+				if ((ecEditor.jQuery('#audioDropDown').dropdown('get value') == '') || (ecEditor.jQuery('#audioDropDown').dropdown('get value') == 'all')){
 					return new Array('audio','voice')
-				}else if (EkstepEditorAPI.jQuery('#audioDropDown').dropdown('get value') =='voice'){
+				}else if (ecEditor.jQuery('#audioDropDown').dropdown('get value') =='voice'){
 					return new Array('voice');
 				}
 				else{
@@ -194,7 +194,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             ctrl.tabSelected = "all";
             imageTabSelected = true;
             audioTabSelected = false;
-            ctrl.selectBtnDisable = EkstepEditorAPI._.isUndefined(lastSelectedImage) ? true : false;
+            ctrl.selectBtnDisable = ecEditor._.isUndefined(lastSelectedImage) ? true : false;
             ctrl.buttonToShow = 'select';
 
             (searchText === "") ? searchText = undefined: null;
@@ -240,14 +240,14 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 
         ctrl.uploadClick = function() {
             setTimeout(function() {
-                EkstepEditorAPI.jQuery('#uploadtab').trigger('click');
+                ecEditor.jQuery('#uploadtab').trigger('click');
             }, 100);
         }
 
         ctrl.audioTab = function() {
             audioTabSelected = true;
             imageTabSelected = false;
-            ctrl.selectBtnDisable = EkstepEditorAPI._.isUndefined(lastSelectedAudio) ? true : false;
+            ctrl.selectBtnDisable = ecEditor._.isUndefined(lastSelectedAudio) ? true : false;
             ctrl.buttonToShow = 'select';
         };
 
@@ -294,7 +294,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         };
 
         ctrl.toggleImageCheck = function($index) {
-            if (!EkstepEditorAPI._.isUndefined(lastSelectedImage)) {
+            if (!ecEditor._.isUndefined(lastSelectedImage)) {
                 ctrl.selected_images[lastSelectedImage].selected = false;
             }
             lastSelectedImage = $index;
@@ -317,7 +317,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 
         ctrl.toggleAudioCheck = function($index) {
             var audioElem;
-            if (!EkstepEditorAPI._.isUndefined(lastSelectedAudio)) {
+            if (!ecEditor._.isUndefined(lastSelectedAudio)) {
                 ctrl.selected_audios[lastSelectedAudio].selected = false;
                 audioElem = document.getElementById('audio-' + lastSelectedAudio);
                 audioElem.pause();
@@ -329,12 +329,12 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 
         ctrl.initPopup = function(item) {
             // Remove existing popover
-            EkstepEditorAPI.jQuery('.assetbrowser .ui.popup').each(function(){
-                EkstepEditorAPI.jQuery(this).remove();
+            ecEditor.jQuery('.assetbrowser .ui.popup').each(function(){
+                ecEditor.jQuery(this).remove();
             });
 
             setTimeout(function(){
-                EkstepEditorAPI.jQuery('.assetbrowser .infopopover')
+                ecEditor.jQuery('.assetbrowser .infopopover')
                   .popup({
                     inline: true,
                     position: 'bottom center',
@@ -344,7 +344,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         };
 
         ctrl.convertToBytes = function(bytes) {
-            if (EkstepEditorAPI._.isUndefined(bytes)) return " N/A";
+            if (ecEditor._.isUndefined(bytes)) return " N/A";
             bytes = parseInt(bytes);
             var precision = 1;
             var units = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'],
@@ -361,19 +361,19 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             if (audiodata && audiodata.asset && instance.mediaType == "audio") {
                 console.log("audiodata")
                 console.log(audiodata);
-                //EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", { stageId: EkstepEditorAPI.getCurrentStage().id,type: 'audio', title: audiodata.asset });
+                //ecEditor.dispatchEvent("org.ekstep.stageconfig:addcomponent", { stageId: ecEditor.getCurrentStage().id,type: 'audio', title: audiodata.asset });
                 instance.cb(audiodata);
                 ctrl.cancel();
             }
         }
 
-        EkstepEditorAPI.getService('language').getLanguages(function(err, resp) {
-            if (!err && resp.data && resp.data.result && EkstepEditorAPI._.isArray(resp.data.result.languages)) {
+        ecEditor.getService('language').getLanguages(function(err, resp) {
+            if (!err && resp.data && resp.data.result && ecEditor._.isArray(resp.data.result.languages)) {
                 var assetlanguages = {};
-                EkstepEditorAPI._.forEach(resp.data.result.languages, function(lang) {
+                ecEditor._.forEach(resp.data.result.languages, function(lang) {
                     assetlanguages[lang.code] = lang.name;
                 });
-                ctrl.asset.language = EkstepEditorAPI._.values(assetlanguages);
+                ctrl.asset.language = ecEditor._.values(assetlanguages);
                 $scope.$safeApply();
             }
         });
@@ -386,7 +386,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         }
 
         ctrl.viewMore = function() {
-            EkstepEditorAPI.jQuery('.removeError').each(function() { EkstepEditorAPI.jQuery(this).removeClass('error') });
+            ecEditor.jQuery('.removeError').each(function() { ecEditor.jQuery(this).removeClass('error') });
             ctrl.hideField = false;
         }
 
@@ -403,7 +403,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 
             ctrl.file.name = 'audio_'+Date.now()+'.mp3';
             file = ctrl.blobToFile(window.mp3Blob, ctrl.file.name);
-            EkstepEditorAPI.jQuery("#fileSize").text(ctrl.formatBytes(file.size));
+            ecEditor.jQuery("#fileSize").text(ctrl.formatBytes(file.size));
         }
 
         ctrl.formatBytes = function (bytes,decimals) {
@@ -421,15 +421,15 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             ctrl.showfileInfoBlock = false;
             ctrl.uploadBtnDisabled = true;
 
-            EkstepEditorAPI.jQuery("#replaceRecord").hide();
-            EkstepEditorAPI.jQuery("#replaceRecordDiv").hide();
+            ecEditor.jQuery("#replaceRecord").hide();
+            ecEditor.jQuery("#replaceRecordDiv").hide();
         }
 
         ctrl.onConversionComplete = function(){
             ctrl.uploadBtnDisabled = false;
             ctrl.showFileInfo();
 
-            EkstepEditorAPI.jQuery("#replaceRecordDiv").show();
+            ecEditor.jQuery("#replaceRecordDiv").show();
         }
 
         ctrl.uploadAsset = function(event, fields) {
@@ -453,7 +453,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                 data.append('file', file);
             }
             else {
-                EkstepEditorAPI.jQuery.each(EkstepEditorAPI.jQuery('#assetfile')[0].files, function(i, file) {
+                ecEditor.jQuery.each(ecEditor.jQuery('#assetfile')[0].files, function(i, file) {
                     data.append('file', file);
                     ctrl.assetMeta.mimeType = file.type;
 
@@ -463,14 +463,14 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             }
 
             /** Convert language into array **/
-            if ((!EkstepEditorAPI._.isUndefined(ctrl.languageText)) && (ctrl.languageText) != null) {
+            if ((!ecEditor._.isUndefined(ctrl.languageText)) && (ctrl.languageText) != null) {
                 content.language = [ctrl.languageText];
             } else {
                 delete content.language;
             }
 
             /** Convert keywords in to array **/
-            if ((!EkstepEditorAPI._.isUndefined(ctrl.keywordsText)) && (ctrl.keywordsText) != null) {
+            if ((!ecEditor._.isUndefined(ctrl.keywordsText)) && (ctrl.keywordsText) != null) {
                 content.keywords = ctrl.keywordsText.split(",");
             } else {
                 delete content.keywords;
@@ -479,7 +479,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             var requestObj = {};
             angular.forEach(content, function(value, key) {
 
-                if ((EkstepEditorAPI._.isUndefined(value) || value == null || value == "") && key != 'body') {
+                if ((ecEditor._.isUndefined(value) || value == null || value == "") && key != 'body') {
                     delete content[key];
                 }
 
@@ -488,10 +488,10 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             console.log(content);
 
             // Create the content for asset
-            EkstepEditorAPI.getService('asset').saveAsset(ctrl.assetId, content, function(err, resp) {
+            ecEditor.getService('asset').saveAsset(ctrl.assetId, content, function(err, resp) {
                 if (resp) {
                     ctrl.uploadingAsset = true;
-                    ctrl.uploadFile(resp, data);
+                    ctrl.uploadFile(resp, data, fields.assetName);
                 }
             });
         }
@@ -501,12 +501,12 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             return file;
         }
 
-        ctrl.uploadFile = function(resp, data) {
-            var assetName = resp.config.data.request.content.name;
-            EkstepEditorAPI.jQuery.ajax({
+        ctrl.uploadFile = function(resp, data, assetName) {
+            var assetName = assetName;
+            ecEditor.jQuery.ajax({
                 // @Todo Use the correct URL
 
-                url: EkstepEditorAPI.getConfig('baseURL') + EkstepEditorAPI.getConfig('apislug') + "/learning/v2/content/upload/" + resp.data.result.node_id,
+                url: ecEditor.getConfig('baseURL') + ecEditor.getConfig('apislug') + "/learning/v2/content/upload/" + resp.data.result.node_id,
                 type: 'POST',
                 contentType: false,
                 data: data,
@@ -548,7 +548,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         ctrl.doUpload = function(mediaType) {
             var fromThisPlugin = true;
 
-            EkstepEditorAPI.jQuery('.ui.form')
+            ecEditor.jQuery('.ui.form')
                 .form({
                     inline: true,
                     fields: {
@@ -647,13 +647,13 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         }
 
         ctrl.generateTelemetry = function(data) {
-          if (data) EkstepEditorAPI.getService('telemetry').interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", "stage": EkstepEditorAPI.getCurrentStage().id })
+          if (data) ecEditor.getService('telemetry').interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", "stage": ecEditor.getCurrentStage().id })
         }
 
         setTimeout(function() {
-            EkstepEditorAPI.jQuery('.assetbrowser .menu .item').tab();
-            EkstepEditorAPI.jQuery('.assetbrowser .ui.dropdown').dropdown();
-            EkstepEditorAPI.jQuery('.assetbrowser .ui.radio.checkbox').checkbox();
+            ecEditor.jQuery('.assetbrowser .menu .item').tab();
+            ecEditor.jQuery('.assetbrowser .ui.dropdown').dropdown();
+            ecEditor.jQuery('.assetbrowser .ui.radio.checkbox').checkbox();
         }, 100);
 
     }]);

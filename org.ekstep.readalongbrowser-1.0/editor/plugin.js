@@ -1,11 +1,11 @@
 /**
  * plugin is used to create or modifiy the readalong text in editor
  * @class readalongbrowser
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  * @author Kartheek Palla <kartheekp@ilimi.in>
  */
 
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     /**
      * This expains the type of the plugin 
      * @member {String} type
@@ -37,13 +37,13 @@ EkstepEditor.basePlugin.extend({
      */
     initialize: function() {
         var instance = this;
-        EkstepEditorAPI.addEventListener("object:unselected", this.objectUnselected, this);
-        EkstepEditorAPI.addEventListener("delete:invoked", this.deleteObject, this);
-        EkstepEditorAPI.addEventListener(instance.manifest.id + ":showpopup", this.loadHtml, this);
+        ecEditor.addEventListener("object:unselected", this.objectUnselected, this);
+        ecEditor.addEventListener("delete:invoked", this.deleteObject, this);
+        ecEditor.addEventListener(instance.manifest.id + ":showpopup", this.loadHtml, this);
         setTimeout(function() {
-            var templatePath = EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/readalongbrowser.html");
-            var controllerPath = EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/readalongbrowserapp.js");
-            EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
+            var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/readalongbrowser.html");
+            var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/readalongbrowserapp.js");
+            ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
 
     },
@@ -54,7 +54,7 @@ EkstepEditor.basePlugin.extend({
         this.config = data.textObj.config;
         if(data.textObj.attributes.textType == "readalong")
             this.editorObj = data.textObj.editorObj;
-        EkstepEditorAPI.getService('popup').open({
+        ecEditor.getService('popup').open({
             template: 'readalongbrowser',
             controller: 'readalongbrowsercontroller',
             controllerAs: '$ctrl',
@@ -67,9 +67,9 @@ EkstepEditor.basePlugin.extend({
             showClose: false,
             className: 'ngdialog-theme-plain'
         }, function() {
-            if(!EkstepEditorAPI._.isUndefined(currentInstance.editorObj) && !currentInstance.editorObj.text) {
+            if(!ecEditor._.isUndefined(currentInstance.editorObj) && !currentInstance.editorObj.text) {
                 currentInstance.editorObj.remove();
-                EkstepEditorAPI.render();
+                ecEditor.render();
             }
         });
 
@@ -78,12 +78,12 @@ EkstepEditor.basePlugin.extend({
         var karaoke = new Karaoke();
         karaoke.audioObj.url = audioSrc;
         if (attrs) {
-            var timings = !EkstepEditorAPI._.isEmpty(attrs.config.timings) ? EkstepEditorAPI._.split(attrs.config.timings, ',') : '',
+            var timings = !ecEditor._.isEmpty(attrs.config.timings) ? ecEditor._.split(attrs.config.timings, ',') : '',
                 wordTimes = [],
                 words = [],
-                wordsArr = EkstepEditorAPI._.split(attrs.attributes.__text, ' '),
+                wordsArr = ecEditor._.split(attrs.attributes.__text, ' '),
                 wordIdx = 0;
-            EkstepEditorAPI._.each(timings, function(key, value) {
+            ecEditor._.each(timings, function(key, value) {
                 wordIdx += 1;
                 words.push({
                     word: wordsArr[value],
@@ -101,17 +101,17 @@ EkstepEditor.basePlugin.extend({
             karaoke.audioObj.wordMap = '';
             karaoke.audioObj.wordTimes = '';
             karaoke.audioObj.highlightColor = '';
-            EkstepEditorAPI.jQuery("#jplayerSync").data('jPlayer', "");
+            ecEditor.jQuery("#jplayerSync").data('jPlayer', "");
         }
-        EkstepEditorAPI.jQuery('#syncSlider').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.changePlaybackRate, karaoke));
-        EkstepEditorAPI.jQuery('#changeaudio').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.res, karaoke));
-        EkstepEditorAPI.jQuery('#syncStart').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.startSync, karaoke));
-        EkstepEditorAPI.jQuery('#pick-hcolor').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.setColor, karaoke));
-        EkstepEditorAPI.jQuery('#stopAudio').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.stopAudio, karaoke));
-        EkstepEditorAPI.jQuery('.slideStep').bind('drop', EkstepEditorAPI.jQuery.proxy(karaoke.handleWordDrop, karaoke));
-        EkstepEditorAPI.jQuery('#syncMark').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.markWords, karaoke));
-        EkstepEditorAPI.jQuery('#sync-play').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.playSyncedLayer, karaoke));
-        EkstepEditorAPI.jQuery('#sync-pause').bind('click', EkstepEditorAPI.jQuery.proxy(karaoke.pauseAudio, karaoke));
+        ecEditor.jQuery('#syncSlider').bind('click', ecEditor.jQuery.proxy(karaoke.changePlaybackRate, karaoke));
+        ecEditor.jQuery('#changeaudio').bind('click', ecEditor.jQuery.proxy(karaoke.res, karaoke));
+        ecEditor.jQuery('#syncStart').bind('click', ecEditor.jQuery.proxy(karaoke.startSync, karaoke));
+        ecEditor.jQuery('#pick-hcolor').bind('click', ecEditor.jQuery.proxy(karaoke.setColor, karaoke));
+        ecEditor.jQuery('#stopAudio').bind('click', ecEditor.jQuery.proxy(karaoke.stopAudio, karaoke));
+        ecEditor.jQuery('.slideStep').bind('drop', ecEditor.jQuery.proxy(karaoke.handleWordDrop, karaoke));
+        ecEditor.jQuery('#syncMark').bind('click', ecEditor.jQuery.proxy(karaoke.markWords, karaoke));
+        ecEditor.jQuery('#sync-play').bind('click', ecEditor.jQuery.proxy(karaoke.playSyncedLayer, karaoke));
+        ecEditor.jQuery('#sync-pause').bind('click', ecEditor.jQuery.proxy(karaoke.pauseAudio, karaoke));
         window.karaoke = karaoke;
         karaoke.initPlayer();
         return karaoke;

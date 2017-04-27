@@ -2,13 +2,13 @@
  * 
  * plugin to get assessments (Questions) from learning platform
  * @class assessmentBrowser
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  * @author Kartheek Palla <kartheekp@ilimi.in>
  * @fires assessment:addassessment to stage
  * @listens org.ekstep.assessmentbrowser:show
  */
 
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     /**
      * This expains the type of the plugin 
      * @member {String} type
@@ -33,11 +33,11 @@ EkstepEditor.basePlugin.extend({
      */
     initialize: function() {
         var instance = this;
-        EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.showAssessmentBrowser, this);
+        ecEditor.addEventListener(this.manifest.id + ":show", this.showAssessmentBrowser, this);
         setTimeout(function() {
-            var templatePath = EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assessmentbrowser.html");
-            var controllerPath = EkstepEditorAPI.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assessmentbrowserapp.js");
-            EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
+            var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assessmentbrowser.html");
+            var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assessmentbrowserapp.js");
+            ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
 
     },
@@ -50,10 +50,7 @@ EkstepEditor.basePlugin.extend({
     showAssessmentBrowser: function(event, callback) {
         var instance = this;
         this.callback = callback;
-        // this.loadResource('editor/assessmentbrowser.html', 'html', function(err, response) {
-        //     instance.showAssessmentBrowser(err, response);
-        // });
-        EkstepEditorAPI.getService('popup').open({
+        ecEditor.getService('popup').open({
             template: 'assessmentbrowser',
             controller: 'assessmentbrowsercontroller',
             controllerAs: '$ctrl',

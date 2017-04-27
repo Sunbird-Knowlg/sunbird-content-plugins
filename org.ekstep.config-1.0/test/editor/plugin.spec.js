@@ -5,7 +5,7 @@ describe('Config plugin', function() {
     var $scope;
     beforeEach(function() {
         jasmine.getJSONFixtures().fixturesPath = 'test';
-        EkstepEditor.config = {
+        org.ekstep.contenteditor.config = {
             defaultSettings: 'base/plugins/org.ekstep.config-1.0/test/editor/config/editorSettings.json',
             pluginRepo: 'http://localhost:9876/base/plugins',
         }
@@ -20,8 +20,8 @@ describe('Config plugin', function() {
         _$controller_('MainCtrl', { $scope: $scope });
     }));
     beforeEach(function() {
-        EkstepEditor.pluginManager.loadPlugin('org.ekstep.config', "1.0");
-        EkstepEditor.eventManager.dispatchEvent('org.ekstep.shape:create', {
+        org.ekstep.contenteditor.pluginManager.loadPlugin('org.ekstep.config', "1.0");
+        org.ekstep.contenteditor.eventManager.dispatchEvent('org.ekstep.shape:create', {
             "type": "rect",
             "x": 10,
             "y": 20,
@@ -32,26 +32,26 @@ describe('Config plugin', function() {
     });
 
     it('should add the plugin to plugin manager', function(done) {
-        expect(EkstepEditor.pluginManager.plugins).toBeDefined();
-        expect(Object.keys(EkstepEditor.pluginManager.plugins)).toContain('org.ekstep.shape');
+        expect(org.ekstep.contenteditor.pluginManager.plugins).toBeDefined();
+        expect(Object.keys(org.ekstep.contenteditor.pluginManager.plugins)).toContain('org.ekstep.shape');
         setTimeout(function() {
             done();
-            expect(EkstepEditor.jQuery("#toolbarOptions")).toBeInDOM();
+            expect(org.ekstep.contenteditor.jQuery("#toolbarOptions")).toBeInDOM();
         }, 1001);
         expect($scope.contextToolbar.length).toEqual(jasmine.any(Number));
     });
     it('should call object selected', function() {
-        EkstepEditorAPI.dispatchEvent("object:selected", { id: EkstepEditorAPI.getCurrentObject().id })
-        expect(EkstepEditor.jQuery("#toolbarOptions").css("display")).toEqual("block");
+        ecEditor.dispatchEvent("object:selected", { id: ecEditor.getCurrentObject().id })
+        expect(org.ekstep.contenteditor.jQuery("#toolbarOptions").css("display")).toEqual("block");
     });
     it('should call object unselected', function() {
-        EkstepEditorAPI.dispatchEvent("object:unselected", { id: EkstepEditorAPI.getCurrentObject().id })
-        expect(EkstepEditor.jQuery("#plugin-toolbar-container").css('display')).toEqual('none');
-        expect(EkstepEditor.jQuery("#toolbarOptions").css("display")).toEqual("none");
+        ecEditor.dispatchEvent("object:unselected", { id: ecEditor.getCurrentObject().id })
+        expect(org.ekstep.contenteditor.jQuery("#plugin-toolbar-container").css('display')).toEqual('none');
+        expect(org.ekstep.contenteditor.jQuery("#toolbarOptions").css("display")).toEqual("none");
     });
     it('should call show config method', function(done) {
-        spyOn(EkstepEditorAPI.getCurrentObject(), 'onConfigChange')
-        EkstepEditorAPI.dispatchEvent("config:show");
+        spyOn(ecEditor.getCurrentObject(), 'onConfigChange')
+        ecEditor.dispatchEvent("config:show");
         setTimeout(function() {
             done();
         }, 501)
@@ -59,24 +59,24 @@ describe('Config plugin', function() {
         expect($scope.pluginConfig.length).toEqual(jasmine.any(Number));
         $scope.configData.color = "#000000";
         $scope.safeApply();
-        expect(EkstepEditorAPI.getCurrentObject().onConfigChange).toHaveBeenCalledWith('color', '#000000');
+        expect(ecEditor.getCurrentObject().onConfigChange).toHaveBeenCalledWith('color', '#000000');
     });
     it('should call show config method with undefined manifest config', function(done) {
-        spyOn(EkstepEditorAPI.getCurrentObject(), 'getPluginConfig').and.returnValue(undefined);
-        spyOn(EkstepEditorAPI.getCurrentObject(),'renderConfig')
-        EkstepEditorAPI.dispatchEvent("config:show");
+        spyOn(ecEditor.getCurrentObject(), 'getPluginConfig').and.returnValue(undefined);
+        spyOn(ecEditor.getCurrentObject(),'renderConfig')
+        ecEditor.dispatchEvent("config:show");
         setTimeout(function() {
             expect($scope.pluginConfig.length).toEqual(0);
-            expect(EkstepEditorAPI.getCurrentObject().renderConfig).toHaveBeenCalled();
+            expect(ecEditor.getCurrentObject().renderConfig).toHaveBeenCalled();
             done();
         }, 501)
     });
     it('should call stage unselect', function() {
-        EkstepEditorAPI.dispatchEvent("stage:unselect")
+        ecEditor.dispatchEvent("stage:unselect")
     });
     it('should show help', function(done) {
-        spyOn(EkstepEditorAPI,'dispatchEvent').and.callThrough();
-        EkstepEditorAPI.dispatchEvent("config:help");
+        spyOn(ecEditor,'dispatchEvent').and.callThrough();
+        ecEditor.dispatchEvent("config:help");
         setTimeout(function() {
             expect($('#pluginHelp').html()).toBeDefined();
             done();    
@@ -84,13 +84,13 @@ describe('Config plugin', function() {
         
     });
     it('should show properties', function() {
-        EkstepEditorAPI.dispatchEvent("config:properties");
+        ecEditor.dispatchEvent("config:properties");
         expect($scope.pluginProperties).toBeDefined();
     });
     it('should remove config toolbar and container', function() {
-        EkstepEditorAPI.dispatchEvent("object:modified",{id:"text"});
-        expect(EkstepEditor.jQuery('#toolbarOptions').css("display")).toEqual("none");
-        expect(EkstepEditor.jQuery('#plugin-toolbar-container').css("display")).toEqual("none");
+        ecEditor.dispatchEvent("object:modified",{id:"text"});
+        expect(org.ekstep.contenteditor.jQuery('#toolbarOptions').css("display")).toEqual("none");
+        expect(org.ekstep.contenteditor.jQuery('#plugin-toolbar-container').css("display")).toEqual("none");
     });
 });
 */

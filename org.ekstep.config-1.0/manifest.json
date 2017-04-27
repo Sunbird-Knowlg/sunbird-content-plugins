@@ -8,40 +8,18 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-            {"type": "js", "src": "editor/libs/jquery-ui.min.js"},
-            {"type": "js", "src": "editor/libs/micromarkdown.min.js"},
-            {"type": "css", "src": "editor/config.css"}
-		],
-        "menu": [{
+            {"type": "js", "src": "editor/libs/jquery-ui.min.js"},            
+            {"type": "css", "src": "editor/config.css"},
+            {"type": "plugin", "plugin": "org.ekstep.colorpicker", "ver": "1.0"}
+		],        
+        "sidebarMenu": [{
             "id": "settings",
-            "category": "config",
             "type": "icon",
             "toolTip": "Settings",
             "title": "Settings",
-            "iconClass": "settings icon",
-            "onclick": {
-                "id": "config:settings:show"
-            }
-        },{
-            "id": "help",
-            "category": "config",
-            "type": "icon",
-            "toolTip": "Help",
-            "title": "Help",
-            "iconClass": "help icon",
-            "onclick": {
-                "id": "config:help:show"
-            }
-        },{
-            "id": "comments",
-            "category": "config",
-            "type": "icon",
-            "toolTip": "Comments",
-            "title": "Comments",
-            "iconClass": "comments icon",
-            "onclick": {
-                "id": "config:comments:show"
-            }
+            "iconClass": "settings icon",            
+            "templateURL": "editor/partials/sidebarSettingTemplate.html",
+            "controllerURL": "editor/sidebar-settings-controller.js"
         }]
     }
 }
