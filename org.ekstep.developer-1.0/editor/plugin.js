@@ -1,11 +1,14 @@
 org.ekstep.contenteditor.basePlugin.extend({
     initialize: function() {
-        org.ekstep.contenteditor.api.addEventListener("org.ekstep.developer:loadplugin", this.loadPlugin, this);
-        org.ekstep.contenteditor.api.addEventListener("org.ekstep.developer:getPlugins", this.listPlugins, this);
-        org.ekstep.contenteditor.api.addEventListener("org.ekstep.developer:updateLocalServerPath", this.updateLocalServerPath, this);
+        EkstepEditorAPI.addEventListener("org.ekstep.developer:loadplugin", this.loadPlugin, this);
+        EkstepEditorAPI.addEventListener("org.ekstep.developer:getPlugins", this.listPlugins, this);
+        EkstepEditorAPI.addEventListener("org.ekstep.developer:updateLocalServerPath", this.updateLocalServerPath, this);
+        ecEditor.addResourceRepository(org.ekstep.pluginframework.draftRepo);
+        ecEditor.addResourceRepository(org.ekstep.pluginframework.hostRepo);
         
-        var scope = org.ekstep.contenteditor.api.getAngularScope();
-        scope.localServerPath = scope.localServerPath || org.ekstep.contenteditor.api.getHostRepoBasePath();
+        var scope = EkstepEditorAPI.getAngularScope();
+        scope.localServerPath = scope.localServerPath || org.ekstep.pluginframework.hostRepo.basePath;
+        scope.configMenus = scope.configMenus || [];
         if (scope.developerMode) {
             org.ekstep.contenteditor.api.updateSidebarMenu({
                 "id": "developer",
@@ -30,7 +33,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         scope.contributedPluginMessage = "";
         org.ekstep.contenteditor.api.jQuery.ajax({
             type: 'GET',
-            url: org.ekstep.contenteditor.api.getHostRepoBasePath()+"/list",
+            url: org.ekstep.pluginframework.hostRepo.basePath+"/list",
             beforeSend: function() {
                 scope.localPluginsPlugins = true;
                 org.ekstep.contenteditor.api.ngSafeApply(scope, function() {});

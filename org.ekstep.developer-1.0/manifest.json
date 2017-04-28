@@ -6,9 +6,13 @@
     "description": "",
     "publishedDate": "",
     "editor": {
-        "main": "editor/plugin.js",
-        "dependencies": [{ "type": "css", "src": "editor/developer.css" }],
-        "menu": [],
+    	"main": "editor/plugin.js",
+        "dependencies":[
+            {"type": "css", "src": "editor/developer.css"},
+            {"type": "js", "src": "editor/draft-repo.js"},
+            {"type": "js", "src": "editor/host-repo.js"}
+        ],
+		"menu": [],
         "sidebarMenu": [{
             "id": "developer",
             "state": "HIDE",
