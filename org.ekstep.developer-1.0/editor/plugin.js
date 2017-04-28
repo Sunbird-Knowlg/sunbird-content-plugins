@@ -1,12 +1,12 @@
 org.ekstep.contenteditor.basePlugin.extend({
     initialize: function() {
-        EkstepEditorAPI.addEventListener("org.ekstep.developer:loadplugin", this.loadPlugin, this);
-        EkstepEditorAPI.addEventListener("org.ekstep.developer:getPlugins", this.listPlugins, this);
-        EkstepEditorAPI.addEventListener("org.ekstep.developer:updateLocalServerPath", this.updateLocalServerPath, this);
+        ecEditor.addEventListener("org.ekstep.developer:loadplugin", this.loadPlugin, this);
+        ecEditor.addEventListener("org.ekstep.developer:getPlugins", this.listPlugins, this);
+        ecEditor.addEventListener("org.ekstep.developer:updateLocalServerPath", this.updateLocalServerPath, this);
         ecEditor.addResourceRepository(org.ekstep.pluginframework.draftRepo);
         ecEditor.addResourceRepository(org.ekstep.pluginframework.hostRepo);
         
-        var scope = EkstepEditorAPI.getAngularScope();
+        var scope = ecEditor.getAngularScope();
         scope.localServerPath = scope.localServerPath || org.ekstep.pluginframework.hostRepo.basePath;
         scope.configMenus = scope.configMenus || [];
         if (scope.developerMode) {
