@@ -136,10 +136,10 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this,
             question = [];
         _.each(assessmentData.items, function(item) {
-            if (!_.isUndefined(item.question)) {
-                item.question = instance.parseItem(item.question);
+            if (!_.isUndefined(item)) {
+                item = instance.parseItem(item);
             }
-            question.push(item.question);
+            question.push(item);
         });
         instance.setQuizdata(question, assessmentData.config);
     },
@@ -207,7 +207,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         questionSets[question[0].identifier] = question;
         controller.questionnaire["items"] = questionSets;
         controller.questionnaire["item_sets"] = [{ "count": config.total_items, "id": question[0].identifier }]
-        controller["questionnaire"] = Object.assign(controller.questionnaire, config);
+        controller["questionnaire"] = ecEditor._.assign(controller.questionnaire, config);
         instance.addConfig("type", "items");
         instance.addConfig("var", "item");
         instance.setData(controller);
@@ -319,6 +319,10 @@ org.ekstep.contenteditor.basePlugin.extend({
                     this.config.optionShuffle = value;
                     this.data.questionnaire.optionShuffle = value;
                     break;
+                case 'browser':
+                    ecEditor.dispatchEvent('delete:invoke');
+                    ecEditor.dispatchEvent(this.manifest.id + ':renderQuiz', { items: value.items, config: value.config })
+                    break;
             }
         }
         ecEditor.render();
@@ -343,12 +347,18 @@ org.ekstep.contenteditor.basePlugin.extend({
      * 
      */
     openAssessmentBrowser: function(event, callback) {
-        var instance = this;
-        var callback = function(items, config) {
-            var assessmentData = { items: items, config: config };
-            ecEditor.dispatchEvent(instance.manifest.id + ':renderQuiz', assessmentData);
-        };
-        ecEditor.dispatchEvent("org.ekstep.assessmentbrowser:show", callback);
+        var instance = this,
+            data = undefined;        
+        if(ecEditor._.isUndefined(callback)){
+            callback = function(data) {
+                var assessmentData = { items: data.items, config: data.config };
+                ecEditor.dispatchEvent(instance.manifest.id + ':renderQuiz', assessmentData);
+            };
+        }else{
+            callback = callback.callback;
+            data = ecEditor.getCurrentObject().data;
+        }
+        ecEditor.dispatchEvent("org.ekstep.assessmentbrowser:show", {callback : callback, data : data});  
     }
 });
 //# sourceURL=quizPlugin.js

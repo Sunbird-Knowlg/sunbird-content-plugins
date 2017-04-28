@@ -29,8 +29,12 @@
             "propertyName": "assessmentbrowser",
             "title": "assessment Browser",
             "description": "Choose a  from the browser",
-            "dataType": "assessmentbrowser",
-            "required": true
+            "dataType": "browser",
+            "required": true,
+            "onclick":{
+                "id": "org.ekstep.quiz:showPopup",
+                "type": "quiz"
+            }
         },
         {
             "propertyName": "title",
