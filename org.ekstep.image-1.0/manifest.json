@@ -31,11 +31,15 @@
             "rotatable": true
         },
         "configManifest": [{
-            "propertyName": "imageBrowser",
+            "propertyName": "imagebrowser",
             "title": "Image Browser",
             "description": "Choose a  from the browser",
-            "dataType": "imagebrowser",
-            "required": true
+            "dataType": "browser",
+            "required": true,
+            "onclick":{
+                "id": "org.ekstep.assetbrowser:show",
+                "type": "image"
+            }
         }]
     }
 }
