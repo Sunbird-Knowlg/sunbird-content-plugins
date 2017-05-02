@@ -10,6 +10,6 @@ org.ekstep.pluginframework.draftRepo = new(org.ekstep.pluginframework.iRepo.exte
         }, publishedTime);
     },
     resolveResource: function(id, ver, resource) {
-    	return org.ekstep.pluginframework.config.draftRepo + "/" + id + "-snapshot" + "/" + resource;
+    	return "/content-plugins/" + id + "-snapshot" + "/" + resource;
     }
 }));
