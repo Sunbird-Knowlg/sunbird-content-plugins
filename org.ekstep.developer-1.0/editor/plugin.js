@@ -3,8 +3,8 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.addEventListener("org.ekstep.developer:loadplugin", this.loadPlugin, this);
         ecEditor.addEventListener("org.ekstep.developer:getPlugins", this.listPlugins, this);
         ecEditor.addEventListener("org.ekstep.developer:updateLocalServerPath", this.updateLocalServerPath, this);
-        ecEditor.addResourceRepository(org.ekstep.pluginframework.draftRepo);
-        ecEditor.addResourceRepository(org.ekstep.pluginframework.hostRepo);
+        ecEditor.addResourceRepository(org.ekstep.pluginframework.hostRepo, 0);
+        ecEditor.addResourceRepository(org.ekstep.pluginframework.draftRepo, 1);        
         
         var scope = ecEditor.getAngularScope();
         scope.localServerPath = scope.localServerPath || org.ekstep.pluginframework.hostRepo.basePath;
