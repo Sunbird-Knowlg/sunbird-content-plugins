@@ -46,6 +46,17 @@ org.ekstep.contenteditor.basePlugin.extend({
         if(data.currentStage){
             this.contentBody.theme.startStage = ecEditor.getCurrentStage().id;
         }
+        var scope = ecEditor.getAngularScope();
+        if (scope.developerMode) {
+            if(!this.contentBody.theme['plugin-manifest']) this.contentBody.theme['plugin-manifest'] = {"plugin": []};
+            if(!_.isArray(this.contentBody.theme['plugin-manifest'].plugin)) this.contentBody.theme['plugin-manifest'].plugin = [this.contentBody.theme['plugin-manifest'].plugin];
+            this.contentBody.theme['plugin-manifest'].plugin.splice(0, 0, {
+                "id": "org.ekstep.developer",
+                "ver": "1.0",
+                "type": "plugin",
+                "hostPath": org.ekstep.pluginframework.hostRepo.basePath
+            });
+        }
         this.showPreview();
     },
     /**     

@@ -62,7 +62,8 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     updateLocalServerPath: function (event, data) {
         var scope = org.ekstep.contenteditor.api.getAngularScope();
-        org.ekstep.contenteditor.api.setHostRepoBasePath(data.path);
+        org.ekstep.pluginframework.hostRepo.basePath = data.path;
+        org.ekstep.pluginframework.hostRepo.checkConnection();
         scope.localServerPathEdit = false;
         org.ekstep.contenteditor.api.ngSafeApply(scope, function() {});
         this.listPlugins();
