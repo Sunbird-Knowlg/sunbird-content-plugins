@@ -54,7 +54,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                 "id": "org.ekstep.developer",
                 "ver": "1.0",
                 "type": "plugin",
-                "hostPath": org.ekstep.pluginframework.hostRepo.basePath
+                "hostPath": org.ekstep.pluginframework.hostRepo.basePath,
+                "preload": true
             });
         }
         this.showPreview();

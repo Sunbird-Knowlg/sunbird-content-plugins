@@ -88,7 +88,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                 jsondata.theme['plugin-manifest'].plugin.splice(0, 0, {
                     "id": "org.ekstep.developer",
                     "ver": "1.0",
-                    "type": "plugin"
+                    "type": "plugin",
+                    "hostPath": org.ekstep.pluginframework.hostRepo.basePath,
+                    "preload": true
                 });
             }
             ctrl.contentBody = converter.buildECML(jsondata, true)
