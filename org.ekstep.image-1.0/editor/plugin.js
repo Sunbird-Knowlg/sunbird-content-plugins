@@ -88,7 +88,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     onConfigChange: function(key, value) {
         switch (key) {
-            case "asset":
+            case "browser":
                 ecEditor.dispatchEvent('delete:invoke');
                 ecEditor.dispatchEvent(this.manifest.id + ':create', value)
                 break;

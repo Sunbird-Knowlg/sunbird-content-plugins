@@ -47,9 +47,10 @@ org.ekstep.contenteditor.basePlugin.extend({
      *   @param callback {Function} callback to be fired when data is available.
      *   @memberof assessmentBrowser
      */
-    showAssessmentBrowser: function(event, callback) {
+    showAssessmentBrowser: function(event, dataObj) {
         var instance = this;
-        this.callback = callback;
+        this.callback = dataObj.callback;
+        this.data = (!ecEditor._.isUndefined(dataObj.data)) ? dataObj.data : ''; 
         ecEditor.getService('popup').open({
             template: 'assessmentbrowser',
             controller: 'assessmentbrowsercontroller',

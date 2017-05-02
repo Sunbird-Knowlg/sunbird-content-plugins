@@ -75,10 +75,10 @@ a.item.at-menu-item.popup-item.active {
                         </select>
                     </div>
                 </div>
-                <div class="ui form" ng-switch-when="imagebrowser">
+                <div class="ui form" ng-switch-when="browser">
                     <div class="field">
                         <label ng-show="config.title">{{config.title}}</label>
-                        <i class="browser icon link" ng-click="fireEvent({'id':'org.ekstep.config:invoke', 'data': {'type': config.dataType}}); fireSidebarTelemetry({id: config.propertyName}, config.dataType)"></i>
+                        <i class="browser icon link" ng-click="fireEvent({'id':'org.ekstep.config:invoke', 'data': {'type': config.dataType, 'event': config.onclick}}); fireSidebarTelemetry({id: config.propertyName}, config.dataType)"></i>
                     </div>
                 </div>
                 <div class="ui icon buttons" ng-switch-when="group">
