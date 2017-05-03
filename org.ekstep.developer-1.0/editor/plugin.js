@@ -2,9 +2,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     initialize: function() {
         ecEditor.addEventListener("org.ekstep.developer:loadplugin", this.loadPlugin, this);
         ecEditor.addEventListener("org.ekstep.developer:getPlugins", this.listPlugins, this);
-        ecEditor.addEventListener("org.ekstep.developer:updateLocalServerPath", this.updateLocalServerPath, this);
-        ecEditor.addResourceRepository(org.ekstep.pluginframework.hostRepo, 0);
-        ecEditor.addResourceRepository(org.ekstep.pluginframework.draftRepo, 1);        
+        ecEditor.addEventListener("org.ekstep.developer:updateLocalServerPath", this.updateLocalServerPath, this);               
         
         var scope = ecEditor.getAngularScope();
         scope.localServerPath = scope.localServerPath || org.ekstep.pluginframework.hostRepo.basePath;
@@ -13,7 +11,9 @@ org.ekstep.contenteditor.basePlugin.extend({
             org.ekstep.contenteditor.api.updateSidebarMenu({
                 "id": "developer",
                 "state": "SHOW"
-            }); 
+            });
+            ecEditor.addResourceRepository(org.ekstep.pluginframework.hostRepo, 0);
+            ecEditor.addResourceRepository(org.ekstep.pluginframework.draftRepo, 1);  
         }
         scope.localServerPathEdit = false;
         org.ekstep.contenteditor.api.ngSafeApply(scope, function() {});
