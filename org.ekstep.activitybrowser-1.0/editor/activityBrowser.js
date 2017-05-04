@@ -62,7 +62,14 @@ angular.module('activityBrowserApp', [])
                     ctrl.noActivities = true;
                     return;
                 }
-                ctrl.activitiesList = resp.data.result.content;
+                //ctrl.activitiesList = resp.data.result.content;
+                ecEditor._.forEach(resp.data.result.content, function(val){
+                    if(_.isUndefined(val.category)){
+                        ctrl.activitiesList.push(val);
+                    }else if(val.category && val.category.indexOf('library') == -1){
+                        ctrl.activitiesList.push(val);
+                    }
+                })
                 applyDimmerToCard();
             });
         };
@@ -108,3 +115,4 @@ angular.module('activityBrowserApp', [])
         
 
     }]);
+//# sourceURL=activitybrowserapp.js
