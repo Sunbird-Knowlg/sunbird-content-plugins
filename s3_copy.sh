@@ -6,7 +6,7 @@ aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.c
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.colorpicker-1.0/ --recursive
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.conceptselector-1.0/ --recursive
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.config-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.$1eloper-1.0/ --recursive
+aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.developer-1.0/ --recursive
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.download-1.0/ --recursive
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.hotspot-1.0/ --recursive
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.image-1.0/ --recursive
