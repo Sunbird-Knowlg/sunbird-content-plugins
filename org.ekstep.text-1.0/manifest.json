@@ -54,6 +54,8 @@
                 "title": "Read-along",
                 "toolTip": "Read-along",
                 "description": "Readalong",
+                "dataType": "icon",
+                "iconClass": "icon icon-readalong",
                 "state": true,
                 "status": "HIDE",
                 "onclick": {
@@ -73,6 +75,8 @@
                 "toolTip": "Word Info",
                 "description": "Wordinfo",
                 "state": true,
+                "dataType": "icon",
+                "iconClass": "icon icon-wordinfo",
                 "status": "HIDE",
                 "onclick": {
                     "id": "org.ekstep.text:wordinfo:show"
