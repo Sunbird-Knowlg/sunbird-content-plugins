@@ -23,5 +23,12 @@
             "iconClass": "code icon",
             "templateURL": "editor/partials/sidebarDeveloperTemplate.html"
         }]
+    },
+    "renderer": {
+        "main": "renderer/plugin.js",
+        "dependencies": [
+            {"type": "js", "src": "editor/draft-repo.js"},
+            {"type": "js", "src": "editor/host-repo.js"}
+        ]
     }
 }

@@ -58,9 +58,10 @@ org.ekstep.contenteditor.basePlugin.extend({
     invoke: function(event, data) {
         var instance = this;
         if (data.type == "browser") {
+            var type = data.type;
             org.ekstep.contenteditor.api.dispatchEvent(data.event.id, {
                 type: data.event.type,
-                callback: function(data) { instance.onConfigChange(data.type, data) }
+                callback: function(data) { instance.onConfigChange(type, data) }
             });
         }
     },
