@@ -129,11 +129,11 @@ a.item.at-menu-item.popup-item.active {
                     <div class="field">
                         <label ng-show="config.title">{{config.title}}</label>
                         <span ng-repeat="option in config.options" ng-show="option.state">
-                <button class="ui icon button" ng-show="option.status === 'SHOW'" ng-repeat="suboption in option.suboptions" ng-click="fireEvent(suboption.onclick)" data-tooltip="{{suboption.toolTip}}">
-                    <i class="{{suboption.iconClass}} "></i>
-                </button>
-                <div class="ui grey button {{option.status === 'SHOW' ? 'primary': ''}}" ng-click="fireEvent(option.onclick)">{{option.title}}</div>
-            </span>
+                            <button class="ui icon button" ng-show="option.status === 'SHOW'" ng-repeat="suboption in option.suboptions" ng-click="fireEvent(suboption.onclick)" data-tooltip="{{suboption.toolTip}}">
+                                <i class="{{suboption.iconClass}} "></i>
+                            </button>
+                            <div class="ui grey button {{option.status === 'SHOW' ? 'primary': ''}}" ng-click="fireEvent(option.onclick)"><i class="{{option.iconClass}}"></i>{{option.title}}</div>
+                        </span>
                     </div>
                 </div>
             </div>
