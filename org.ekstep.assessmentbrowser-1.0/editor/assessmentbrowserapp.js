@@ -50,7 +50,7 @@ angular.module('assessmentbrowserapp', ['ui.sortable'])
             ctrl.itemsLoading = false;
             $scope.$safeApply();
         }
-        ctrl.context = org.ekstep.contenteditor.globalContext;
+        ctrl.context = window.context;
 
         //get languages from languages api
         ecEditor.getService('language').getLanguages(function(err, respLan) {
