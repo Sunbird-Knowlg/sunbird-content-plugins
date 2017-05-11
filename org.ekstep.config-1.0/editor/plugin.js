@@ -57,17 +57,12 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     invoke: function(event, data) {
         var instance = this;
-        if (data.type) {
-            switch (data.type) {
-                case 'imagebrowser':
-                    org.ekstep.contenteditor.api.dispatchEvent('org.ekstep.assetbrowser:show', {
-                        type: 'image',
-                        callback: function(data) { instance.onConfigChange('asset', data) }
-                    });
-                    break;
-                default:
-                    break;
-            }
+        if (data.type == "browser") {
+            var type = data.type;
+            org.ekstep.contenteditor.api.dispatchEvent(data.event.id, {
+                type: data.event.type,
+                callback: function(data) { instance.onConfigChange(type, data) }
+            });
         }
     },
     toggleEventToStage: function(event, data) {

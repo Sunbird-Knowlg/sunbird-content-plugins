@@ -75,10 +75,10 @@ a.item.at-menu-item.popup-item.active {
                         </select>
                     </div>
                 </div>
-                <div class="ui form" ng-switch-when="imagebrowser">
+                <div class="ui form" ng-switch-when="browser">
                     <div class="field">
                         <label ng-show="config.title">{{config.title}}</label>
-                        <i class="browser icon link" ng-click="fireEvent({'id':'org.ekstep.config:invoke', 'data': {'type': config.dataType}}); fireSidebarTelemetry({id: config.propertyName}, config.dataType)"></i>
+                        <i class="browser icon link" ng-click="fireEvent({'id':'org.ekstep.config:invoke', 'data': {'type': config.dataType, 'event': config.onclick}}); fireSidebarTelemetry({id: config.propertyName}, config.dataType)"></i>
                     </div>
                 </div>
                 <div class="ui icon buttons" ng-switch-when="group">
@@ -129,11 +129,11 @@ a.item.at-menu-item.popup-item.active {
                     <div class="field">
                         <label ng-show="config.title">{{config.title}}</label>
                         <span ng-repeat="option in config.options" ng-show="option.state">
-                <button class="ui icon button" ng-show="option.status === 'SHOW'" ng-repeat="suboption in option.suboptions" ng-click="fireEvent(suboption.onclick)" data-tooltip="{{suboption.toolTip}}">
-                    <i class="{{suboption.iconClass}} "></i>
-                </button>
-                <div class="ui grey button {{option.status === 'SHOW' ? 'primary': ''}}" ng-click="fireEvent(option.onclick)">{{option.title}}</div>
-            </span>
+                            <button class="ui icon button" ng-show="option.status === 'SHOW'" ng-repeat="suboption in option.suboptions" ng-click="fireEvent(suboption.onclick)" data-tooltip="{{suboption.toolTip}}">
+                                <i class="{{suboption.iconClass}} "></i>
+                            </button>
+                            <div class="ui grey button {{option.status === 'SHOW' ? 'primary': ''}}" ng-click="fireEvent(option.onclick)"><i class="{{option.iconClass}}"></i>{{option.title}}</div>
+                        </span>
                     </div>
                 </div>
             </div>

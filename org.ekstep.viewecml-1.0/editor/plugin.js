@@ -81,6 +81,18 @@ org.ekstep.contenteditor.basePlugin.extend({
 
         ctrl.previewLoad = function() {
             var jsondata = org.ekstep.contenteditor.stageManager.toECML();
+            var scope = ecEditor.getAngularScope();
+            if (scope.developerMode) {
+                if(!jsondata.theme['plugin-manifest']) jsondata.theme['plugin-manifest'] = {"plugin": []};
+                if(!_.isArray(jsondata.theme['plugin-manifest'].plugin)) jsondata.theme['plugin-manifest'].plugin = [jsondata.theme['plugin-manifest'].plugin];
+                jsondata.theme['plugin-manifest'].plugin.splice(0, 0, {
+                    "id": "org.ekstep.developer",
+                    "ver": "1.0",
+                    "type": "plugin",
+                    "hostPath": org.ekstep.pluginframework.hostRepo.basePath,
+                    "preload": true
+                });
+            }
             ctrl.contentBody = converter.buildECML(jsondata, true)
             $scope.$safeApply(function(){
                 setTimeout(function() {

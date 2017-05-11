@@ -21,14 +21,34 @@ angular.module('assessmentbrowserapp', [])
             'gradeLevel': '',
             'conceptIds': []
         };
-        ctrl.activityOptions = {
-            title: "",
-            shuffle: false,
-            showImmediateFeedback: true,
-            myQuestions: false,
-            concepts: '(0) Concepts'
-        };
-        ctrl.context = ecEditor.getAngularScope().context;
+        if(ecEditor._.isUndefined(instance.data.questionnaire)){
+            ctrl.activityOptions = {    
+                title: "",
+                shuffle: false,
+                showImmediateFeedback: true,
+                myQuestions: false,
+                concepts: '(0) Concepts'
+            };
+        }else{
+            ctrl.activityOptions = {    
+                title: instance.data.questionnaire.title,
+                shuffle: instance.data.questionnaire.shuffle,
+                showImmediateFeedback: instance.data.questionnaire.showImmediateFeedback,
+                myQuestions: instance.data.questionnaire.myQuestions,
+                concepts: instance.data.questionnaire.concepts
+            };
+            ctrl.cart = { "items": instance.data.questionnaire.items[instance.data.questionnaire.item_sets[0].id] };
+            ctrl.isAdvanceOptionOpen = false;
+            ctrl.activityOptions.total_items = ctrl.cart.items.length;
+            ctrl.activityOptions.max_score = ctrl.activityOptions.total_items;
+            ctrl.activityOptions.range = ecEditor._.times(ctrl.activityOptions.total_items).splice(1);
+            ctrl.activityOptions.range.push(ctrl.activityOptions.total_items);
+            ecEditor.jQuery('.displayCount .text').html(ctrl.activityOptions.total_items);
+            ctrl.isItemAvailable = true;
+            ctrl.itemsLoading = false;
+            $scope.$safeApply();
+        }
+        ctrl.context = window.context;
 
         //get languages from languages api
         ecEditor.getService('language').getLanguages(function(err, respLan) {
@@ -149,9 +169,9 @@ angular.module('assessmentbrowserapp', [])
                         ecEditor._.forEach(resp.data.result.items, function(value) {
                             if(!ecEditor._.isUndefined(value.template_id)){
                                 item = {};
-                                item.question = value;
+                                item = value;
                                 if (ecEditor._.findIndex(ctrl.cart.items, function(i) {
-                                        return i.question.identifier === value.identifier
+                                        return i.identifier === value.identifier
                                     }) === -1) {
                                     item.isSelected = false;
                                 } else {
@@ -160,7 +180,11 @@ angular.module('assessmentbrowserapp', [])
                                 ctrl.items.push(item);
                             }
                         });
-                        ctrl.previewItem(ctrl.items[0]);
+                        if(ecEditor._.isUndefined(ctrl.cart.items) || ctrl.cart.items.length <= 0){
+                            ctrl.previewItem(ctrl.items[0]);
+                        }else{
+                            ctrl.previewItem(ctrl.cart.items[0]); 
+                        }
                     }
                     ctrl.totalItems = ctrl.items.length;
                     $scope.$safeApply();
@@ -174,10 +198,10 @@ angular.module('assessmentbrowserapp', [])
         };
 
         ctrl.cart = {
-            "items": [],
+            "items": (ecEditor._.isUndefined(instance.data.questionnaire)) ? [] : instance.data.questionnaire.items[instance.data.questionnaire.item_sets[0].id],
             "getItemIndex": function(item) {
                 return ecEditor._.findIndex(ctrl.items, function(i) {
-                    return i.question.identifier === item.question.identifier
+                    return i.identifier === item.identifier
                 });
             },
             "add": function(item) {
@@ -189,7 +213,7 @@ angular.module('assessmentbrowserapp', [])
             },
             "remove": function(item) {
                 ecEditor._.remove(this.items, function(cartItem) {
-                    return item.question.identifier == cartItem.question.identifier;
+                    return item.identifier == cartItem.identifier;
                 });
                 var itemIndex = this.getItemIndex(item);
                 if (itemIndex != -1) ctrl.items[itemIndex].isSelected = false;
@@ -220,7 +244,8 @@ angular.module('assessmentbrowserapp', [])
         });
       
         ctrl.previewItem = function(item) {
-            ecEditor.getService('assessment').getItem(item.question.identifier, function(err, resp) {
+            console.log('previewItem');
+            ecEditor.getService('assessment').getItem(item.identifier, function(err, resp) {
                 if (!err) {
                     item = resp.data.result.assessment_item ? resp.data.result.assessment_item : item;
                     ctrl.itemPreviewLoading = true;
@@ -263,7 +288,7 @@ angular.module('assessmentbrowserapp', [])
 
         ctrl.addItemActivity = function() {
             if (!ecEditor._.isUndefined(instance.callback)) {
-                instance.callback(ctrl.cart.items, ctrl.activityOptions);
+                instance.callback({ 'items' : ctrl.cart.items, 'config' : ctrl.activityOptions});
                 ctrl.cancel();
             }
         }

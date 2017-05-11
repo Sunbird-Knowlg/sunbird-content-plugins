@@ -14,15 +14,34 @@ angular.module('editorApp')
 
         var stageActionsList = { "link": "Link To" };
         var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.config");
+        var stageConfigManifest = [{
+            "propertyName": "genieControls",
+            "title": "Show Genie Controls",
+            "description": "Toggle genie controls",
+            "dataType": "boolean",
+            "required": true,
+            "defaultValue": true
+        }, {
+            "propertyName": "instructions",
+            "title": "Teacher Instructions",
+            "description": "Teacher Instructions",
+            "dataType": "textarea",
+            "required": true,
+            "defaultValue": ""
+        }];
 
-        $scope.pluginConfig = undefined;
-        $scope.configData = undefined;
         $scope.actionTargetObject = {};
         $scope.customTemplates = [];
         $scope.settingsCategory = {};
         $scope.selectedObject = { stage: true };
         $scope.currentObject = {};
-        $scope.currentObjectActions = [];
+        $scope.currentObjectActions = [];  
+
+        // on load
+        $scope.settingsCategory.selected = 'customize';
+        $scope.pluginConfig = stageConfigManifest;
+        $scope.configData = { genieControls: true, instructions: "" };
+
 
         $scope.allActionsList = {
             "show": "Show",
@@ -293,10 +312,6 @@ angular.module('editorApp')
         org.ekstep.contenteditor.api.addEventListener("config:settings:show", $scope.showSettingsTab, $scope);
         org.ekstep.contenteditor.api.addEventListener("config:comments:show", $scope.showCommentsTab, $scope);
         org.ekstep.contenteditor.api.addEventListener('config:show:actions', $scope.showActions, $scope);
-        org.ekstep.contenteditor.api.addEventListener("config:show:customise", $scope.showConfig, $scope);
-
-        setTimeout(function() {
-            $scope.showConfig();     
-        }, 200);
+        org.ekstep.contenteditor.api.addEventListener("config:show:customise", $scope.showConfig, $scope);       
         
     }]);
