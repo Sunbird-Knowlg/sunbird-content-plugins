@@ -8,6 +8,7 @@ angular.module('assessmentbrowserapp', [])
             itemIframe;
 
         ctrl.isAdvanceOptionOpen = true;
+        ctrl.enableConfiguration = false;
         ctrl.isMyQuestions = false;
         ctrl.errorMessage = false;
         ctrl.languagecode = 'en';
@@ -196,6 +197,12 @@ angular.module('assessmentbrowserapp', [])
                 }
             });
         };
+        ctrl.enableConfigurations = function(){
+            ctrl.enableConfiguration = true;
+        };
+        ctrl.addMoreQuestion = function(){
+            ctrl.enableConfiguration = false;
+        };
 
         ctrl.cart = {
             "items": (ecEditor._.isUndefined(instance.data.questionnaire)) ? [] : instance.data.questionnaire.items[instance.data.questionnaire.item_sets[0].id],
@@ -287,12 +294,18 @@ angular.module('assessmentbrowserapp', [])
         };
 
         ctrl.addItemActivity = function() {
-            if (!ecEditor._.isUndefined(instance.callback)) {
-                instance.callback({ 'items' : ctrl.cart.items, 'config' : ctrl.activityOptions});
-                ctrl.cancel();
+            if (ctrl.activityOptions.title && ctrl.cart.items.length) {
+                if (!ecEditor._.isUndefined(instance.callback)) {
+                    instance.callback({
+                        'items': ctrl.cart.items,
+                        'config': ctrl.activityOptions
+                    });
+                    ctrl.cancel();
+                }
+            } else {
+                angular.element('#field1').addClass("field error");
             }
-        }
-
+        };
         ctrl.cancel = function() {
             $scope.closeThisDialog();
         };
@@ -314,6 +327,10 @@ angular.module('assessmentbrowserapp', [])
 
         ctrl.generateTelemetry = function(data) {
           if (data) ecEditor.getService('telemetry').interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", "stage": ecEditor.getCurrentStage().id })
-        }
+        };
+        ctrl.showConfiguration = function(){
+            console.info("show configuration is trigerring..")
+            $scope.showConfiguration = true;
+        };
     }]);
 //# sourceURL=assessmentbrowserapp.js

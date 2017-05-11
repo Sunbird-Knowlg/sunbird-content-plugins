@@ -138,9 +138,9 @@
         <div ng-show="!$ctrl.isAdvanceOptionOpen" class="filters-container">
             <div class="ui form">
                 <div class="five fields">
-                    <div class="field">
+                    <div class="field" id="field1">
                         <div class="ui corner labeled input">
-                            <input name="title" ng-model="$ctrl.activityOptions.title" type="text" placeholder="Question Set Title" autocomplete="off" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'questionTitleInput'})">
+                            <input name="title" ng-model="$ctrl.activityOptions.title" type="text" maxlength="60" placeholder="Question Set Title" autocomplete="off" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'questionTitleInput'})">
                             <div class="ui corner label">
                                 <i class="asterisk icon"></i>
                             </div>
@@ -149,7 +149,7 @@
                     <div class="field">
                         <div class="ui fluid labeled input">
                             <div class="ui label">Total Marks</div>
-                            <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="$ctrl.activityOptions.max_score" required="" type="number" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'totalMarksInput'})"/>
+                            <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="$ctrl.activityOptions.max_score" required="" type="number" min="1" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'totalMarksInput'})"/>
                         </div>
                     </div>
                     <div class="field">
@@ -189,7 +189,7 @@
             </div>
         </div>
         <div ng-show="($ctrl.isAdvanceOptionOpen && $ctrl.items.length > 0) || (!$ctrl.isAdvanceOptionOpen && $ctrl.cart.items.length > 0)">
-            <div class="ui two column horizontally padded grid" ng-show="!$ctrl.itemsLoading">
+            <div class="ui two column horizontally padded grid" ng-show="!$ctrl.itemsLoading && !$ctrl.enableConfiguration">
                 <div class="column" style="width: 480px;height: 284px; overflow-y: scroll;">
                     <div class="ui large divided items" ng-show="$ctrl.isAdvanceOptionOpen">
                         <div class="item select" ng-repeat="item in $ctrl.items" ng-click=" item.isSelected ? $ctrl.cart.remove(item) : $ctrl.cart.add(item); $event.stopPropagation(); $ctrl.generateTelemetry({type: 'select', subtype: 'checkbox', target: 'selectQuestion'})">
@@ -223,6 +223,28 @@
                     <div class="itemIframeMessages" ng-show="!$ctrl.itemPreviewLoading && ($ctrl.itemPreviewContent.error || ($ctrl.itemPreviewDisplay == $ctrl.itemPreviewDefaultMessage))">{{$ctrl.itemPreviewDisplay}}</div>
                 </div>
             </div>
+            <!-- manju -->
+            <div class="ui two column horizontally padded grid" ng-show="$ctrl.enableConfiguration">
+                <div class="column" style="width: 480px;height: 284px; overflow-y: scroll;">
+                    <div class="ui large divided items" >
+                            <div class="item select" ng-repeat="cartItem in $ctrl.cart.items">
+                                <div class="middle aligned content" ng-click="$ctrl.previewItem(cartItem, true);">
+                                <div class="header">{{ cartItem.question }}</div>
+                                <div class="meta">{{cartItem.type}} | {{ cartItem.qlevel}} | {{ cartItem.title }}</div>
+                                <div class="description">{{ cartItem.description }}</div>
+                            </div>
+                            <div class="ui checkbox" ng-class="item.isSelected ? 'checked' : '' " ng-click=" $ctrl.generateTelemetry({type: 'select', subtype: 'checkbox', target: 'selectQuestion'})">
+                                <input type="checkbox" checked="" name="check">
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="column right floated">
+                    <h1>Configuration view page is here </h1>
+                </div>
+            </div>
+            <!-- end -->
         </div>
         <div class="ui center aligned segment" ng-show="($ctrl.items && !$ctrl.items.length) && $ctrl.isAdvanceOptionOpen">
             No Data Found
@@ -233,6 +255,9 @@
         <a ng-href="{{$ctrl.context.createItemLink}}" target="_blank">
             <button class="ui blue left floated button" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'createAQuestionButton'})">Create A Question</button>
         </a>
+         <button class="ui blue left floated button" ng-click="$ctrl.enableConfigurations()">Configuration</button>
+      
+
         <div class="ui label" ng-show="$ctrl.cart.items.length">
             <a class="ui grey circular label">{{$ctrl.cart.items.length}}</a> Questions added
         </div>
@@ -242,9 +267,9 @@
             <button class="ui blue button" ng-click="$ctrl.addActivityOptions(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'nextButton'})" ng-disabled="!$ctrl.cart.items.length" type="button">NEXT</button>
         </div>
         <div class="ui buttons" ng-if="!$ctrl.isAdvanceOptionOpen">
-            <button id="closePopUp" class="ui orange button" ng-click="$ctrl.isAdvanceOptionOpen = !$ctrl.isAdvanceOptionOpen; $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'addMoreQuestions'})" type="button">Add More Questions</button>
+            <button id="closePopUp" class="ui orange button" ng-click=" $ctrl.addMoreQuestion();$ctrl.isAdvanceOptionOpen = !$ctrl.isAdvanceOptionOpen; $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'addMoreQuestions'})" type="button">Add More Questions</button>
             <div class="or"></div>
-            <button id="selectanduse" class="ui blue button" ng-click="$ctrl.addItemActivity(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'addQuestionSet'})" ng-disabled="!$ctrl.activityOptions.title || !$ctrl.cart.items.length" type="button">Add Question Set</button>
+            <button id="selectanduse" class="ui blue button" ng-click="$ctrl.addItemActivity(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'addQuestionSet'})" type="button">Add Question Set</button>
         </div>
     </div>
 </div>
