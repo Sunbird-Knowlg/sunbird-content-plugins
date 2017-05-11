@@ -2,13 +2,11 @@ angular.module('editorApp')
     .controller('org.ekstep.config:configController', ['$scope', '$timeout', '$ocLazyLoad', function($scope, $timeout, $ocLazyLoad) {
 
         var visibleActionsList = {
-            "show": "Show",
-            "hide": "Hide"
+            "toggleShow": "Show / Hide"
         };
 
         var playableActionsList = {
-            "play": "Play",
-            "pause": "Pause",
+            "togglePlay": "Play / Pause",
             "stop": "Stop"
         };
 
@@ -44,10 +42,8 @@ angular.module('editorApp')
 
 
         $scope.allActionsList = {
-            "show": "Show",
-            "hide": "Hide",
-            "play": "Play",
-            "pause": "Pause",
+            "toggleShow": "Show / Hide",
+            "togglePlay": "Play / Pause",
             "stop": "Stop",
             "link": "Link To"
         };
