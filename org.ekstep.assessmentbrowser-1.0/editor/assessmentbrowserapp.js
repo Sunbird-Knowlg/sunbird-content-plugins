@@ -1,12 +1,12 @@
 'use strict';
 
-angular.module('assessmentbrowserapp', [])
+angular.module('assessmentbrowserapp', ['ui.sortable'])
     .controller('assessmentbrowsercontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
         ecEditor.jQuery('.modal').addClass('item-activity');
         var config = { "showStartPage": false, "showEndPage": false },
             ctrl = this,
             itemIframe;
-
+        $scope.list = [{"text":"11"},1,2,3,4,5];
         ctrl.isAdvanceOptionOpen = true;
         ctrl.enableConfiguration = false;
         ctrl.isMyQuestions = false;
@@ -22,6 +22,7 @@ angular.module('assessmentbrowserapp', [])
             'gradeLevel': '',
             'conceptIds': []
         };
+        ctrl.QuestionConfig = {};
         if(ecEditor._.isUndefined(instance.data.questionnaire)){
             ctrl.activityOptions = {    
                 title: "",
@@ -203,6 +204,9 @@ angular.module('assessmentbrowserapp', [])
         ctrl.addMoreQuestion = function(){
             ctrl.enableConfiguration = false;
         };
+        ctrl.returnConfigItem = function(configData){
+            ctrl.QuestionConfig = configData;
+        };
 
         ctrl.cart = {
             "items": (ecEditor._.isUndefined(instance.data.questionnaire)) ? [] : instance.data.questionnaire.items[instance.data.questionnaire.item_sets[0].id],
@@ -294,7 +298,7 @@ angular.module('assessmentbrowserapp', [])
         };
 
         ctrl.addItemActivity = function() {
-            if (ctrl.activityOptions.title && ctrl.cart.items.length) {
+           // if (ctrl.activityOptions.title && ctrl.cart.items.length) {
                 if (!ecEditor._.isUndefined(instance.callback)) {
                     instance.callback({
                         'items': ctrl.cart.items,
@@ -302,9 +306,9 @@ angular.module('assessmentbrowserapp', [])
                     });
                     ctrl.cancel();
                 }
-            } else {
+            /*} else {
                 angular.element('#field1').addClass("field error");
-            }
+            }*/
         };
         ctrl.cancel = function() {
             $scope.closeThisDialog();
