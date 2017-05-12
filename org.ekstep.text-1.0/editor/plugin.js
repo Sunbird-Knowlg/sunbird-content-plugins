@@ -326,6 +326,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         textObj.attributes.autoplay = data.autoplay;
         textObj.attributes.textType = 'readalong';
         textObj.manifest.editor.playable = true;
+        textEditor.hide();
         var audioObj = data.audioObj;
         if (!ecEditor._.isUndefined(audioObj))
             audioObj.src = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(audioObj.src);
