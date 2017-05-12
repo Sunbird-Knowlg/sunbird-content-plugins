@@ -132,7 +132,7 @@ a.item.at-menu-item.popup-item.active {
                             <button class="ui icon button" ng-show="option.status === 'SHOW'" ng-repeat="suboption in option.suboptions" ng-click="fireEvent(suboption.onclick)" data-tooltip="{{suboption.toolTip}}">
                                 <i class="{{suboption.iconClass}} "></i>
                             </button>
-                            <div class="ui grey button {{option.status === 'SHOW' ? 'primary': ''}}" ng-click="fireEvent(option.onclick)"><i class="{{option.iconClass}}"></i>{{option.title}}</div>
+                            <div class="ui grey button {{option.status === 'SHOW' ? 'primary': ''}}" ng-click="fireEvent(option.onclick)" style="padding: 0.8em 0.8em;" data-tooltip="{{option.toolTip}}"><i class="{{option.iconClass}}"></i>{{option.title}}</div>
                         </span>
                     </div>
                 </div>
