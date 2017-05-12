@@ -52,7 +52,7 @@
             "options": [{
                 "value": "readalong",
                 "title": "Read-along",
-                "toolTip": "Read-along",
+                "toolTip": "click to configure",
                 "description": "Readalong",
                 "dataType": "icon",
                 "iconClass": "icon icon-readalong",
@@ -72,7 +72,7 @@
             },{
                 "value": "wordinfo",
                 "title": "Word Info",
-                "toolTip": "Word Info",
+                "toolTip": "click to configure",
                 "description": "Wordinfo",
                 "state": true,
                 "dataType": "icon",
