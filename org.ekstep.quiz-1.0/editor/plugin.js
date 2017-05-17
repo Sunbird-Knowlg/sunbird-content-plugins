@@ -21,8 +21,17 @@ org.ekstep.contenteditor.basePlugin.extend({
      * @memberof assessment
      */
     initialize: function() {
+        var instance = this;
+       
         ecEditor.addEventListener(this.manifest.id + ":showPopup", this.openAssessmentBrowser, this);
         ecEditor.addEventListener(this.manifest.id + ":renderQuiz", this.renderQuiz, this);
+        ecEditor.addEventListener(this.manifest.id + ":showQuizConfig", this.showQuizConfig, this);
+        //setTimeout(function() {
+            var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/templates/quizconfig.html");
+            var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/js/quizconfigapp.js");
+            ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
+        //}, 1000);
+
     },
     mediaObj: {},
     hasTemplateMedia: true,
@@ -323,11 +332,30 @@ org.ekstep.contenteditor.basePlugin.extend({
                     ecEditor.dispatchEvent('delete:invoke');
                     ecEditor.dispatchEvent(this.manifest.id + ':renderQuiz', { items: value.items, config: value.config })
                     break;
+                case 'quizConfig':
+                     console.info("I am launching now ..");    
+                     ecEditor.dispatchEvent(this.manifest.id + ':showQuizConfig', { items: value.items, config: value.config })
             }
         }
         ecEditor.render();
         ecEditor.dispatchEvent('object:modified', {
             target: ecEditor.getEditorObject()
+        });
+    },
+    showQuizConfig: function(event, dataObj) {
+       var currentQuizObj = ecEditor.getCurrentObject().data;
+        ecEditor.getService('popup').open({
+            template: 'quizconfig',
+            controller: 'quizconfigcontroller',
+            controllerAs: '$ctrl',
+            resolve: {
+                'quizInstance': function() {
+                    return currentQuizObj;
+                }
+            },
+            width: 900,
+            showClose: false,
+            className: 'ngdialog-theme-plain'
         });
     },
     getConfig: function() {

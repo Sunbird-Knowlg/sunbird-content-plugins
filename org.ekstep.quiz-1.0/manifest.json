@@ -12,7 +12,9 @@
             "dataType": "text"
         },
         "dependencies": [
-            {"type": "plugin", "plugin": "org.ekstep.assessmentbrowser", "ver": "1.0"}
+            {"type": "plugin", "plugin": "org.ekstep.assessmentbrowser", "ver": "1.0"},
+            { "type": "js", "src": "libs/sortable.js" },
+            { "type": "js", "src": "editor/js/quizUtil.js" }
         ],
         "menu": [{
             "id": "assessment",
@@ -36,6 +38,18 @@
                 "type": "quiz"
             }
         },
+        {
+            "propertyName": "quizConfig",
+            "title": "quizConfig",
+            "dataType": "browser",
+            "description": "quizConfig",
+            "required": true,
+            "onclick":{
+                "id": "org.ekstep.quiz:showQuizConfig",
+                "type": "quiz"
+            }
+        },
+
         {
             "propertyName": "title",
             "title": "Assessment Title",

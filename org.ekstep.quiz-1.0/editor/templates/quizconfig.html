@@ -1,0 +1,107 @@
+<script type="text/ng-template" ng-app="quizconfigapp" ng-controller="quizconfigcontroller as $ctrl" id="quizconfig">
+    <style type="text/css">
+    .filters-container {
+        padding: 8px 10px 4px 18px;
+        background: #f1f1f1;
+    }
+    
+    .itemIframeMessages {
+        border: 2px solid #E4E4E4;
+        padding: 110px 20px;
+        background: #FFFFFF;
+        text-align: center;
+        font-weight: bold;
+        height: 270px;
+        width: 480px;
+    }
+    
+    .grid .items .item:hover {
+        background: #f1f1f1;
+    }
+    
+    .verticalcenter {
+        display: flex;
+        align-items: center;
+    }
+    
+    .assessmentbrowser.ui.modal {
+        position: inherit !important;
+        top: 0 !important;
+    }
+    
+    .ngdialog-content {
+        top: 3% !important;
+        width: 100% !important;
+        position: absolute !important;
+        background: none !important;
+    }
+    
+    .assessment-browser-error {
+        height: 350px;
+    }
+    
+    .item.select:hover {
+        background: #F3F3F3;
+        box-shadow: 4px 4px 4px #888888;
+    }
+    </style>
+    <div class="quizConfig ui modal large active" style="top: 5%;">
+        <div class="content">
+            <div class="filters-container" ng-if="!$ctrl.errorMessage">
+            </div>
+            <div class="ui divider"></div>
+            <div class="ui segment" style="width: 100%;height: 270px;" ng-show="$ctrl.itemsLoading">
+                <div class="ui active inverted dimmer">
+                    <div class="ui text loader">Just one second, We're fetching that content for you.</div>
+                </div>
+            </div>
+            <div ng-if="$ctrl.errorMessage" class=" assessment-browser-error">
+                <div class="ui negative message">
+                    <div class="header">
+                        We're sorry!
+                    </div>
+                    <p>Unable to fetch the Questions! Please try again later!</p>
+                </div>
+            </div>
+            <div ng-show="$ctrl.cart.items.length">
+                <div class="ui two column horizontally padded grid" ng-show="!$ctrl.itemsLoading">
+                    <div class="column" style="width: 480px;height: 337px; overflow-y: scroll;">
+                        <div class="ui large divided items" ui-sortable ng-model="$ctrl.cart.items">
+                            <div class="item select" ng-repeat="cartItem in $ctrl.cart.items">
+                                <div class="ui checkbox" ng-click="$ctrl.generateTelemetry({type: 'select', subtype: 'checkbox', target: 'selectQuestion'})">
+                                    <input type="checkbox" name="check" ng-model="cartItem.checked" ng-click="$ctrl.handleQuestionScoreConfig($index,$ctrl.cart.items)">
+                                    <label></label>
+                                </div>
+                                <div class="middle aligned content" ng-click="$ctrl.previewItem(cartItem, true);">
+                                    <div class="header">{{ cartItem.question }}</div>
+                                    <div class="meta">{{cartItem.type}} | {{ cartItem.qlevel}} | {{ cartItem.title }}</div>
+                                    <div class="description">{{ cartItem.description }}</div>
+                                </div>
+                                <div ng-click="$ctrl.cart.remove(cartItem); $ctrl.generateTelemetry({type: 'select', subtype: 'checkbox', target: 'selectQuestion'})" style="cursor:pointer">
+                                    <i class="trash icon"></i>
+                                    <label></label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column right floated">
+                        <div class="ui fluid labeled input">
+                            <div class="ui label">Marks</div>
+                            <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="$ctrl.currentQuestion.max_score" required="" ng-change="$ctrl.updateScoreToquestion()" min="0" type="number" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'totalMarksInput'})" />
+                        </div>
+                        <iframe id="itemIframe" ng-hide="!$ctrl.itemPreviewLoading && ($ctrl.itemPreviewContent.error || ($ctrl.itemPreviewDisplay == $ctrl.itemPreviewDefaultMessage))" style="width: 490px;height: 310px; border: 2px solid #E4E4E4;"></iframe>
+                        <div class="itemIframeMessages" ng-show="!$ctrl.itemPreviewLoading && ($ctrl.itemPreviewContent.error || ($ctrl.itemPreviewDisplay == $ctrl.itemPreviewDefaultMessage))" style="width: 490px;height: 310px">{{$ctrl.itemPreviewDisplay}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui center aligned segment" ng-show="($ctrl.cart.items && !$ctrl.cart.items.length)">
+                No Data Found
+                <br> Redefine your search filters!
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui buttons">
+                <button id="selectanduse" class="ui blue button" ng-click=" $ctrl.doneConfig();$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'addQuestionSet'})" type="button">Done</button>
+            </div>
+        </div>
+    </div>
