@@ -1,12 +1,9 @@
 'use strict';
 
-angular.module('assessmentbrowserapp', ['ui.sortable'])
+angular.module('assessmentbrowserapp', [])
     .controller('assessmentbrowsercontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
         ecEditor.jQuery('.modal').addClass('item-activity');
-        var config = {
-                "showStartPage": false,
-                "showEndPage": false
-            },
+        var config = { "showStartPage": false, "showEndPage": false },
             ctrl = this,
             itemIframe;
 
@@ -16,7 +13,6 @@ angular.module('assessmentbrowserapp', ['ui.sortable'])
         ctrl.languagecode = 'en';
         ctrl.activePreviewItem = '';
         ctrl.assessment = {};
-        ctrl.currentQuestion;
         ctrl.activity = {
             'title': '',
             'qlevel': '',
@@ -25,25 +21,23 @@ angular.module('assessmentbrowserapp', ['ui.sortable'])
             'gradeLevel': '',
             'conceptIds': []
         };
-        if (ecEditor._.isUndefined(instance.data.questionnaire)) {
-            ctrl.activityOptions = {
+        if(ecEditor._.isUndefined(instance.data.questionnaire)){
+            ctrl.activityOptions = {    
                 title: "",
                 shuffle: false,
                 showImmediateFeedback: true,
                 myQuestions: false,
                 concepts: '(0) Concepts'
             };
-        } else {
-            ctrl.activityOptions = {
+        }else{
+            ctrl.activityOptions = {    
                 title: instance.data.questionnaire.title,
                 shuffle: instance.data.questionnaire.shuffle,
                 showImmediateFeedback: instance.data.questionnaire.showImmediateFeedback,
                 myQuestions: instance.data.questionnaire.myQuestions,
                 concepts: instance.data.questionnaire.concepts
             };
-            ctrl.cart = {
-                "items": instance.data.questionnaire.items[instance.data.questionnaire.item_sets[0].id]
-            };
+            ctrl.cart = { "items": instance.data.questionnaire.items[instance.data.questionnaire.item_sets[0].id] };
             ctrl.isAdvanceOptionOpen = false;
             ctrl.activityOptions.total_items = ctrl.cart.items.length;
             ctrl.activityOptions.max_score = ctrl.activityOptions.total_items;
@@ -93,23 +87,20 @@ angular.module('assessmentbrowserapp', ['ui.sortable'])
                                 });
                                 ctrl.assessment.type = questionTypes;
                                 $scope.$safeApply();
-                            } else {
+                            }else{
                                 ctrl.errorMessage = true;
                                 $scope.$safeApply();
                                 return;
                             }
                         });
-                        ecEditor.jQuery('.ui.dropdown.lableCls').dropdown({
-                            useLabels: false,
-                            forceSelection: false
-                        });
-                    } else {
+                        ecEditor.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});
+                    }else{
                         ctrl.errorMessage = true;
                         $scope.$safeApply();
                         return;
                     }
                 });
-            } else {
+            }else{
                 ctrl.errorMessage = true;
                 $scope.$safeApply();
                 return;
@@ -127,9 +118,7 @@ angular.module('assessmentbrowserapp', ['ui.sortable'])
                         status: [],
                     },
 
-                    sort_by: {
-                        "name": "desc"
-                    },
+                    sort_by: { "name": "desc" },
                     limit: 200
                 }
             };
@@ -178,7 +167,7 @@ angular.module('assessmentbrowserapp', ['ui.sortable'])
                         ctrl.isItemAvailable = false;
                     } else {
                         ecEditor._.forEach(resp.data.result.items, function(value) {
-                            if (!ecEditor._.isUndefined(value.template_id)) {
+                            if(!ecEditor._.isUndefined(value.template_id)){
                                 item = {};
                                 item = value;
                                 if (ecEditor._.findIndex(ctrl.cart.items, function(i) {
@@ -191,10 +180,10 @@ angular.module('assessmentbrowserapp', ['ui.sortable'])
                                 ctrl.items.push(item);
                             }
                         });
-                        if (ecEditor._.isUndefined(ctrl.cart.items) || ctrl.cart.items.length <= 0) {
+                        if(ecEditor._.isUndefined(ctrl.cart.items) || ctrl.cart.items.length <= 0){
                             ctrl.previewItem(ctrl.items[0]);
-                        } else {
-                            ctrl.previewItem(ctrl.cart.items[0]);
+                        }else{
+                            ctrl.previewItem(ctrl.cart.items[0]); 
                         }
                     }
                     ctrl.totalItems = ctrl.items.length;
@@ -206,41 +195,6 @@ angular.module('assessmentbrowserapp', ['ui.sortable'])
                     return;
                 }
             });
-        };
-        ctrl.handleQuestionConfig = function(position, cartItem) {
-            angular.forEach(cartItem, function(item, $index) {
-                if (position != $index) {
-                    item.checked = false;
-                }
-            });
-            ctrl.currentQuestion = cartItem[position];
-            ctrl.updateScoreToquestion();
-            ctrl.previewItem(cartItem[position], true);
-        };
-        ctrl.updateScoreToquestion = function() {
-            var options = ctrl.parseObject(ctrl.currentQuestion);
-            ctrl.distributedScore(options, ctrl.currentQuestion.max_score);
-        };
-        ctrl.distributedScore = function(options, max_score) {
-            var answerCoutn;
-            answerCoutn = ctrl.currentQuestion.type === 'ftb' ? _.size(_.map(_.filter(options, 'value'))) : _.size(_.map(_.filter(options, ['answer', true])))
-            if (answerCoutn != 0) {
-                var distScore = answerCoutn / max_score;
-                jQuery.each(options, function(index, val) {
-                    if (!_.isUndefined(val) || !_.isEmpty(val)) {
-                        val.score = Number(distScore.toFixed(1));
-                    }
-                });
-            }
-
-        };
-        ctrl.parseObject = function(question) {
-            jQuery.each(question, function(key, value) {
-                if (key === 'options' || key === 'rhs_options' || key === 'answer') {
-                    question[key] = !_.isObject(question[key]) ? JSON.parse(question[key]) : question[key];
-                }
-            });
-            return question.options || question.rhs_options || question.answer;
         };
 
         ctrl.cart = {
@@ -263,7 +217,7 @@ angular.module('assessmentbrowserapp', ['ui.sortable'])
                 });
                 var itemIndex = this.getItemIndex(item);
                 if (itemIndex != -1) ctrl.items[itemIndex].isSelected = false;
-                ecEditor.jQuery(".displayCount #total_items option[value='number:" + (parseInt(this.items.length + 1)) + "']").remove();
+                ecEditor.jQuery(".displayCount #total_items option[value='number:"+(parseInt(this.items.length+1))+"']").remove();
                 ctrl.activityOptions.total_items = this.items.length;
                 ecEditor.jQuery('.displayCount .text').html(ctrl.activityOptions.total_items);
                 $scope.$safeApply();
@@ -280,7 +234,7 @@ angular.module('assessmentbrowserapp', ['ui.sortable'])
             $scope.$safeApply();
         };
 
-        $scope.$on('ngDialog.opened', function(e, $dialog) {
+        $scope.$on('ngDialog.opened', function (e, $dialog) {
             itemIframe = org.ekstep.contenteditor.jQuery('#itemIframe')[0];
             if (itemIframe.src == "")
                 itemIframe.src = instance.previewURL;
@@ -288,7 +242,7 @@ angular.module('assessmentbrowserapp', ['ui.sortable'])
                 itemIframe.contentWindow.setContentData(null, ctrl.itemPreviewContent, config);
             });
         });
-
+      
         ctrl.previewItem = function(item) {
             console.log('previewItem');
             ecEditor.getService('assessment').getItem(item.identifier, function(err, resp) {
@@ -301,10 +255,7 @@ angular.module('assessmentbrowserapp', ['ui.sortable'])
                     if (templateRef) {
                         ecEditor.getService('assessment').getTemplate(templateRef, function(err, response) {
                             if (!err) {
-                                var x2js = new X2JS({
-                                    attributePrefix: 'none',
-                                    enableToStringFunc: false
-                                });
+                                var x2js = new X2JS({ attributePrefix: 'none', enableToStringFunc: false });
                                 var templateJson = x2js.xml_str2json(response.data.result.content.body);
                                 ctrl.itemPreviewContent = assessmentBrowserUtil.getQuestionPreviwContent(templateJson, item);
                                 ctrl.itemPreviewDisplay = !ecEditor._.isUndefined(ctrl.itemPreviewContent.error) ? ctrl.itemPreviewContent.error : '';
@@ -312,9 +263,7 @@ angular.module('assessmentbrowserapp', ['ui.sortable'])
                                 itemIframe.contentWindow.location.reload();
                                 $scope.$safeApply();
                             } else {
-                                ctrl.itemPreviewContent = {
-                                    "error": 'Preview could not be shown.'
-                                };
+                                ctrl.itemPreviewContent = { "error": 'Preview could not be shown.' };
                                 ctrl.itemPreviewDisplay = ctrl.itemPreviewContent.error;
                                 ctrl.itemPreviewLoading = false;
                                 ctrl.errorMessage = true;
@@ -323,14 +272,12 @@ angular.module('assessmentbrowserapp', ['ui.sortable'])
                             }
                         });
                     } else {
-                        ctrl.itemPreviewContent = {
-                            "error": 'Item does not have a template selected.'
-                        };
+                        ctrl.itemPreviewContent = { "error": 'Item does not have a template selected.' };
                         ctrl.itemPreviewDisplay = ctrl.itemPreviewContent.error;
                         ctrl.itemPreviewLoading = false;
                         $scope.$safeApply();
                     }
-                } else {
+                }else{
                     ctrl.errorMessage = true;
                     $scope.$safeApply();
                     return;
@@ -341,10 +288,7 @@ angular.module('assessmentbrowserapp', ['ui.sortable'])
 
         ctrl.addItemActivity = function() {
             if (!ecEditor._.isUndefined(instance.callback)) {
-                instance.callback({
-                    'items': ctrl.cart.items,
-                    'config': ctrl.activityOptions
-                });
+                instance.callback({ 'items' : ctrl.cart.items, 'config' : ctrl.activityOptions});
                 ctrl.cancel();
             }
         }
@@ -369,15 +313,7 @@ angular.module('assessmentbrowserapp', ['ui.sortable'])
         });
 
         ctrl.generateTelemetry = function(data) {
-            if (data) ecEditor.getService('telemetry').interact({
-                "type": data.type,
-                "subtype": data.subtype,
-                "target": data.target,
-                "pluginid": instance.manifest.id,
-                "pluginver": instance.manifest.ver,
-                "objectid": "",
-                "stage": ecEditor.getCurrentStage().id
-            })
+          if (data) ecEditor.getService('telemetry').interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", "stage": ecEditor.getCurrentStage().id })
         }
     }]);
 //# sourceURL=assessmentbrowserapp.js
