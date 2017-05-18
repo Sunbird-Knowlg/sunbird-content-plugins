@@ -11,11 +11,11 @@ angular.module('quizconfigapp', ['ui.sortable'])
             itemIframe;
         ctrl.previewURL = 'preview/preview.html?webview=true', ctrl.activePreviewItem = '';
         ctrl.currentQuestion;
+        ctrl.enableQuestionConfig = false;
 
         ctrl.loadSelectedQuestions = function() {
             ctrl.seteupQuestionsConfig();
             ctrl.itemsLoading = false;
-            ctrl.previewItem(ctrl.cart.items[0]);
         }
 
         ctrl.seteupQuestionsConfig = function() {
@@ -40,6 +40,7 @@ angular.module('quizconfigapp', ['ui.sortable'])
             angular.element('#questionTitle').removeClass("error");
         }
         ctrl.handleQuestionScoreConfig = function(position, cartItem) {
+            ctrl.enableQuestionConfig = true;
             angular.forEach(cartItem, function(item, $index) {
                 if (position != $index) {
                     item.checked = false;
@@ -47,7 +48,7 @@ angular.module('quizconfigapp', ['ui.sortable'])
             });
             ctrl.currentQuestion = cartItem[position];
             ctrl.updateScoreToquestion();
-            ctrl.previewItem(cartItem[position], true);
+            /*ctrl.previewItem(cartItem[position], true);*/
         };
         ctrl.updateScoreToquestion = function() {
             var options = ctrl.parseObject(ctrl.currentQuestion);
@@ -91,12 +92,17 @@ angular.module('quizconfigapp', ['ui.sortable'])
             if (itemIframe.src == "")
                 itemIframe.src = ctrl.previewURL;
             itemIframe.addEventListener('load', function() {
-                itemIframe.contentWindow.setContentData(null, ctrl.itemPreviewContent, config);
+                itemIframe.contentWindow.setContentData(null, ctrl.itemPreviewContent, config)
+                itemIframe.contentWindow.onload = function() {
+                    itemIframe.contentWindow.setContentData(null, ctrl.itemPreviewContent, config)
+                };
             });
         });
         ctrl.previewItem = function(item) {
-            if (item.template_id) {
-                ecEditor.getService('assessment').getTemplate(item.template_id, function(err, response) {
+            ctrl.enableQuestionConfig = false;
+            var templateRef = item.template_id ? item.template_id : item.template;
+            if (templateRef) {
+                ecEditor.getService('assessment').getTemplate(templateRef, function(err, response) {
                     if (!err) {
                         var x2js = new X2JS({
                             attributePrefix: 'none',
@@ -131,6 +137,9 @@ angular.module('quizconfigapp', ['ui.sortable'])
         ctrl.doneConfig = function() {
             $scope.closeThisDialog();
         };
+        ctrl.showQuestionConfig = function(){
+            ctrl.enableQuestionConfig = true;
+        }
         ctrl.loadSelectedQuestions();
         ctrl.generateTelemetry = function(data) {
             if (data) ecEditor.getService('telemetry').interact({

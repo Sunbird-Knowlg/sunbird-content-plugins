@@ -166,7 +166,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             var path = ecEditor.getConfig('useProxyForURL') ? "/plugins/" : "/content-plugins/";
             ecEditor.getService('popup').open({
                 showClose: false,
-                template: ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/warning.html"),
+                template: ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/templates/warning.html"),
                 controller: ['$scope', function($scope) {
                     $scope.callClear = function() {
                         instance.clearItem(questionnaire, errTemplateids,function(){
@@ -332,10 +332,10 @@ org.ekstep.contenteditor.basePlugin.extend({
                     ecEditor.dispatchEvent('delete:invoke');
                     ecEditor.dispatchEvent(this.manifest.id + ':renderQuiz', { items: value.items, config: value.config })
                     break;
-                case 'quizConfig':
+                /*case 'quizConfig':
                      console.info("I am launching now ..");    
                      ecEditor.dispatchEvent(this.manifest.id + ':showQuizConfig', { items: value.items, config: value.config })
-            }
+    */        }
         }
         ecEditor.render();
         ecEditor.dispatchEvent('object:modified', {
