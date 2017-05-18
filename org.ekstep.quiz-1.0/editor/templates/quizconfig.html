@@ -97,6 +97,10 @@
                     <div class="column right floated">
                         <table class="ui blue celled table" ng-show="$ctrl.enableQuestionConfig">
                             <tbody>
+                                <tr class="active">
+                                    <td><b>Title</b></td>
+                                    <td>{{$ctrl.currentQuestion.title | uppercase}}</td>
+                                </tr>
                                 <tr>
                                     <td><b>Marks</b></td>
                                     <td>
@@ -105,15 +109,15 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr ng-if ="$ctrl.currentQuestion.description">
+                                <tr ng-if ="$ctrl.currentQuestion.description" class="active">
                                     <td><b>Description</b></td>
                                     <td>{{$ctrl.currentQuestion.description | uppercase}}</td>
                                 </tr>
-                                <tr>
+                                <tr class="active">
                                     <td><b>Question Type</b></td>
                                     <td>{{$ctrl.currentQuestion.type | uppercase}}</td>
                                 </tr>
-                                <tr>
+                                <tr >
                                     <td><b>Difficult Level</b></td>
                                     <td>{{$ctrl.currentQuestion.qlevel | uppercase}}</td>
                                 </tr>
