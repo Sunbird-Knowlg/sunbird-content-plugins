@@ -48,7 +48,6 @@ angular.module('quizconfigapp', ['ui.sortable'])
             });
             ctrl.currentQuestion = cartItem[position];
             ctrl.updateScoreToquestion();
-            /*ctrl.previewItem(cartItem[position], true);*/
         };
         ctrl.updateScoreToquestion = function() {
             var options = ctrl.parseObject(ctrl.currentQuestion);

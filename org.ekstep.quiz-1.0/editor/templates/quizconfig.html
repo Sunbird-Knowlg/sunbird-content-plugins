@@ -52,7 +52,7 @@
         <h2 class="ui header">
         <i class="settings icon"></i>
       <div class="content">
-        Question Settings
+        <b>Question Settings</b>
         <div class="sub header">Manage your selected questions</div>
       </div>
         </h2>
@@ -75,19 +75,21 @@
                     <div class="column" style="width: 480px;height: 337px; overflow-y: scroll;">
                         <div class="ui large divided items" ui-sortable ng-model="$ctrl.cart.items" style="cursor:move;">
                             <div class="item select" ng-repeat="cartItem in $ctrl.cart.items">
-                                <div class="ui checkbox" ng-click="$ctrl.generateTelemetry({type: 'select', subtype: 'checkbox', target: 'selectQuestion'})">
-                                    <input type="checkbox" name="check" ng-model="cartItem.checked" ng-click="$ctrl.previewItem(cartItem)">
-                                    <label></label>
+                                <div class="description" style="margin-top: 3%">
+                                    <i class="content icon" style="cursor:move;"></i>
                                 </div>
                                 <div class="middle aligned content" style="padding:3%">
                                     <div class="header">{{ cartItem.question }}</div>
                                 </div>
-                                <div ng-click="$ctrl.cart.remove(cartItem); $ctrl.generateTelemetry({type: 'select', subtype: 'checkbox', target: 'selectQuestion'})" style="cursor:pointer">
+                                <div ng-click="$ctrl.cart.remove(cartItem); $ctrl.generateTelemetry({type: 'select', subtype: 'checkbox', target: 'selectQuestion'})" style="cursor:pointer; margin-top: 3%">
                                     <i class="trash icon"></i>
                                     <label></label>
                                 </div>
-                                <div class="description" ng-click="$ctrl.handleQuestionScoreConfig($index,$ctrl.cart.items)">
+                                <div class="description" ng-click="$ctrl.handleQuestionScoreConfig($index,$ctrl.cart.items)" style="margin-top: 3%">
                                     <i class="configure icon" style="cursor:pointer;"></i>
+                                </div>
+                                <div class="description" ng-click="$ctrl.previewItem(cartItem)" style="margin-top: 3%">
+                                    <i class="icon-preview icon" style="cursor:pointer;margin-top: 3%"></i>
                                 </div>
                             </div>
                         </div>
@@ -98,7 +100,7 @@
                                 <tr>
                                     <td><b>Marks</b></td>
                                     <td>
-                                        <div class="ui fluid labeled input" ng-show="$ctrl.enableQuestionConfig">
+                                        <div class="ui fluid labeled input" ng-show="$ctrl.enableQuestionConfig" style="width: 64%">
                                             <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="$ctrl.currentQuestion.max_score" required="" ng-change="$ctrl.updateScoreToquestion()" min="0" type="number" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'totalMarksInput'})" />
                                         </div>
                                     </td>

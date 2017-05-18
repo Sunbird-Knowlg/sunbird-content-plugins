@@ -3,7 +3,7 @@
  * plugin to add assessments to stage
  * @class assessment
  * @extends org.ekstep.contenteditor.basePlugin
- * @author Manju dr <manjunathd@ilimi.in>
+ * @author Manjunath Davanam  <manjunathd@ilimi.in>
  * @fires org.ekstep.assessmentbrowser:show
  * @fires org.ekstep.quiz:add 
  * @listens org.ekstep.image:assessment:showPopup
@@ -332,10 +332,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     ecEditor.dispatchEvent('delete:invoke');
                     ecEditor.dispatchEvent(this.manifest.id + ':renderQuiz', { items: value.items, config: value.config })
                     break;
-                /*case 'quizConfig':
-                     console.info("I am launching now ..");    
-                     ecEditor.dispatchEvent(this.manifest.id + ':showQuizConfig', { items: value.items, config: value.config })
-    */        }
+                }
         }
         ecEditor.render();
         ecEditor.dispatchEvent('object:modified', {

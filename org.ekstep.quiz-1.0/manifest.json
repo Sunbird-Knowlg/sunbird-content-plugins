@@ -40,9 +40,10 @@
         },
         {
             "propertyName": "quizConfig",
-            "title": "quizConfig",
+            "title": "question config",
             "dataType": "browser",
             "description": "quizConfig",
+            "iconClass":"settings icon",
             "required": true,
             "onclick":{
                 "id": "org.ekstep.quiz:showQuizConfig",
