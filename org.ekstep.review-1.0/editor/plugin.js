@@ -7,7 +7,7 @@
  * @listens org.ekstep.review:show
  */
 
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     /**
      * This explains the type of the plugin
      * @member {String} type
@@ -20,18 +20,18 @@ EkstepEditor.basePlugin.extend({
      */
     initialize: function() {
         /**Add event listeners**/
-        EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.loadHtml, this);
-        EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.getContent, this);
-        EkstepEditorAPI.addEventListener(this.manifest.id + ":showDialog", this.showDialog, this);
+        ecEditor.addEventListener(this.manifest.id + ":show", this.loadHtml, this);
+        ecEditor.addEventListener(this.manifest.id + ":show", this.getContent, this);
+        ecEditor.addEventListener(this.manifest.id + ":showDialog", this.showDialog, this);
 
         /**load html templates**/
-        var templatePath = EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/review.html");
-        var controllerPath = EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/reviewapp.js");
-        var ngModuleTemplatePath = EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/editMetaDialog.html");
+        var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/review.html");
+        var controllerPath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/reviewapp.js");
+        var ngModuleTemplatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/editMetaDialog.html");
 
         /**get ngModule service**/
-        EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
-        EkstepEditorAPI.getService('popup').loadNgModules(ngModuleTemplatePath);
+        ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
+        ecEditor.getService('popup').loadNgModules(ngModuleTemplatePath);
     },
     /**
      *   load html template to show the popup
@@ -41,7 +41,7 @@ EkstepEditor.basePlugin.extend({
     loadHtml: function(event) {
         var instance = this;
 
-        EkstepEditorAPI.getService('popup').open({
+        ecEditor.getService('popup').open({
             template: 'partials/review.html',
             controller: 'reviewcontroller',
             controllerAs: '$ctrl',
@@ -70,7 +70,7 @@ EkstepEditor.basePlugin.extend({
             $scope.redirectToEditMeta = instance.redirectToEditMeta;
             $scope.isError = data.isError;
         };
-        EkstepEditorAPI.getService('popup').open({
+        ecEditor.getService('popup').open({
             template: 'partials/editMetaDialog.html',
             controller: ['$scope', modalController],
             showClose: false,
@@ -92,7 +92,7 @@ EkstepEditor.basePlugin.extend({
      */
     getContent: function(event) {
         var instance = this;
-        instance.contentObj = EkstepEditorAPI.getService('content').getContentMeta(window.context.content_id);
+        instance.contentObj = ecEditor.getService('content').getContentMeta(window.context.content_id);
     }
 });
 //# sourceURL="reviewplugin.js"
