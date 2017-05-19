@@ -9,18 +9,16 @@ angular.module('quizconfigapp', ['ui.sortable'])
         ctrl.currentQuestion;
         ctrl.enableQuestionConfig = false;
         ctrl.loadSelectedQuestions = function() {
-            ctrl.setupQuestionsConfig();
+            quizInstance.questionnaire && ctrl.setupQuestionsConfig();
         }
         ctrl.setupQuestionsConfig = function() {
-            if (!_.isUndefined(quizInstance.questionnaire)) {
-                ctrl.activityOptions = {title: quizInstance.questionnaire.title, shuffle: quizInstance.questionnaire.shuffle, showImmediateFeedback: quizInstance.questionnaire.showImmediateFeedback, concepts: quizInstance.questionnaire.concepts }; 
-                ctrl.cart = {"items": quizInstance.questionnaire.items[quizInstance.questionnaire.item_sets[0].id] };
-                ctrl.activityOptions.total_items = ctrl.cart.items.length;
-                ctrl.activityOptions.max_score = ctrl.activityOptions.total_items;
-                ctrl.activityOptions.range = ecEditor._.times(ctrl.activityOptions.total_items).splice(1);
-                ctrl.activityOptions.range.push(ctrl.activityOptions.total_items);
-                $scope.$safeApply();
-            }
+            ctrl.activityOptions = {title: quizInstance.questionnaire.title, shuffle: quizInstance.questionnaire.shuffle, showImmediateFeedback: quizInstance.questionnaire.showImmediateFeedback, concepts: quizInstance.questionnaire.concepts }; 
+            ctrl.cart = {"items": quizInstance.questionnaire.items[quizInstance.questionnaire.item_sets[0].id] };
+            ctrl.activityOptions.total_items = ctrl.cart.items.length;
+            ctrl.activityOptions.max_score = ctrl.activityOptions.total_items;
+            ctrl.activityOptions.range = ecEditor._.times(ctrl.activityOptions.total_items).splice(1);
+            ctrl.activityOptions.range.push(ctrl.activityOptions.total_items);
+            $scope.$safeApply();
         }
         $scope.sortableOptions = {
             update: function(e, ui) {
