@@ -74,24 +74,33 @@ angular.module('quizconfigapp', ['ui.sortable'])
                 };
             });
         });
+
         ctrl.previewItem = function(item) {
             ctrl.enableQuestionConfig = false;
             var templateRef = item.template_id ? item.template_id : item.template;
             if (templateRef) {
-                ecEditor.getService('assessment').getTemplate(templateRef, function(err, response) {
+                ecEditor.getService('assessment').getTemplate(templateRef, function(err, res) {
                     if (!err) {
                         var x2js = new X2JS({
                             attributePrefix: 'none',
                             enableToStringFunc: false
                         });
-                        var templateJson = x2js.xml_str2json(response.data.result.content.body);
+                        var templateJson;
+                        if (!_.isNull(res.data.result.content.body)) {
+                            if (res.data.result.content.body.lastIndexOf('{', 0) === 0) {
+                                templateJson = JSON.parse(res);
+                            } else {
+                                templateJson = x2js.xml_str2json(res.data.result.content.body);
+                            }
+                        }
                         ctrl.itemPreviewContent = assessmentBrowserUtil.getQuestionPreviwContent(templateJson, item);
                         ctrl.itemPreviewDisplay = !ecEditor._.isUndefined(ctrl.itemPreviewContent.error) ? ctrl.itemPreviewContent.error : '';
-                        ctrl.itemPreviewLoading = false;
                         itemIframe.contentWindow.location.reload();
                         $scope.$safeApply();
                     } else {
-                        ctrl.itemPreviewContent = {"error": 'Preview could not be shown.'};
+                        ctrl.itemPreviewContent = {
+                            "error": 'Preview could not be shown.'
+                        };
                     }
                 });
             } else {
@@ -99,7 +108,6 @@ angular.module('quizconfigapp', ['ui.sortable'])
                     "error": 'Item does not have a template selected.'
                 };
                 ctrl.itemPreviewDisplay = ctrl.itemPreviewContent.error;
-                ctrl.itemPreviewLoading = false;
                 $scope.$safeApply();
             }
         }
