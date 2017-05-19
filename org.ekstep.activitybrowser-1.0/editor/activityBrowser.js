@@ -30,6 +30,23 @@ angular.module('activityBrowserApp', [])
             "ftb": "ftb"
         };
 
+        ctrl.showPluginDetails = false;
+
+        ctrl.pluginDetails = {};
+        ctrl.images = $scope.images = [];
+
+        ctrl.viewPluginDetails = function(activity) {
+            ctrl.hideMainPage = true;            
+            ctrl.getPluginDetails(activity.identifier);
+            ctrl.selectedPlugin = activity;
+            $scope.$safeApply();
+        };
+
+        ctrl.closePluginDetails = function() {
+            ctrl.showPluginDetails = false;
+            ctrl.hideMainPage = false;  
+            $scope.$safeApply();
+        };
 
         ctrl.getActivities = function() {
             ctrl.loading = true;
@@ -63,10 +80,10 @@ angular.module('activityBrowserApp', [])
                     return;
                 }
                 //ctrl.activitiesList = resp.data.result.content;
-                ecEditor._.forEach(resp.data.result.content, function(val){
-                    if(_.isUndefined(val.category)){
+                ecEditor._.forEach(resp.data.result.content, function(val) {
+                    if (_.isUndefined(val.category)) {
                         ctrl.activitiesList.push(val);
-                    }else if(val.category && val.category.indexOf('library') == -1){
+                    } else if (val.category && val.category.indexOf('library') == -1) {
                         ctrl.activitiesList.push(val);
                     }
                 })
@@ -99,20 +116,142 @@ angular.module('activityBrowserApp', [])
                 });
             }, 500);
         }
-        setTimeout(function () {
-            ecEditor.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});    
-        },1000);
+
+        $scope.$on("ngDialog.opened", function() {
+            ecEditor.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false });
+        });
+
 
         ctrl.generateTelemetry = function(data) {
-            if(data){
-                org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).interact({ 
-                    "type": data.type, "subtype": data.subtype, "target": data.target, 
-                    "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", 
-                    "stage": ecEditor.getCurrentStage().id 
+            if (data) {
+                org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).interact({
+                    "type": data.type,
+                    "subtype": data.subtype,
+                    "target": data.target,
+                    "pluginid": instance.manifest.id,
+                    "pluginver": instance.manifest.ver,
+                    "objectid": "",
+                    "stage": ecEditor.getCurrentStage().id
                 });
             }
         };
-        
+
+        ctrl.getPluginDetails = function(pluginId) {
+            ctrl.loading = true;
+            ctrl.imageAvailable = false;
+            ctrl.errorLoadingActivities = false;
+            ctrl.pluginDetails = {};
+            ctrl.images = $scope.images = [];
+            var request = {
+                "request": {
+                    "filters": {
+                        "objectType": ["Content"],
+                        "contentType": ["plugin"],
+                        "status": ["live"],                        
+                        "identifier": pluginId
+                    }
+                }
+            };
+
+            ecEditor.getService('search').search(request, function(err, res) {
+                ctrl.loading = false;
+                if (res.data) res = res.data;
+                if (res && res.responseCode === "OK" && res.result.count > 0) {
+                    ctrl.pluginDetails = res.result.content[0];                    
+                    if (res.result.content[0].usesContent && res.result.content[0].usesContent.length) ctrl.getPluginScreenshots(res.result.content[0].usesContent);
+                    else {
+                        ctrl.images.push({
+                            image: ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'assets/image-placeholder.png')
+                        });
+                        ctrl.imageAvailable = true;
+                    }
+                    ctrl.showPluginDetails = true;
+                } else {
+                    ctrl.errorLoadingActivities = true;
+                }
+                $scope.$safeApply();
+            });
+        };
+
+        ctrl.getPluginScreenshots = function(assetList) {
+            var request = {
+                "request": {
+                    "filters": {
+                        "contentType": ["asset"],
+                        "identifier": assetList
+                    }
+                }
+            };
+
+            ecEditor.getService('search').search(request, function(err, res) {
+                if (res.data) res = res.data;
+                if (res && res.responseCode === "OK" && res.result.count > 0) {
+                    res.result.content.forEach(function(content) {
+                        if (content.downloadUrl) ctrl.images.push({ image: content.downloadUrl });
+                    });
+                ctrl.imageAvailable = true;
+                } else {
+
+                }
+                $scope.$safeApply();
+            });
+
+        };
+
 
     }]);
+
+angular.module('activityBrowserApp').directive('slider', function() {
+    return {
+        restrict: 'EA',
+        scope: {
+            images: '=',
+            group: '=?'
+        },
+        controller: ['$scope', function($scope) {
+            $scope.group = $scope.group || 1;
+            $scope.currentIndex = 0;
+            $scope.direction = 'left';
+
+            var init = function() {
+                var images = [];
+                var source = [];
+
+                angular.copy($scope.images, source);
+
+                for (var i = 0; i < source.length; i + $scope.group) {
+                    if (source[i]) {
+                        images.push(source.splice(i, $scope.group));
+                    }
+                }
+                $scope.setCurrent(0);
+                $scope.slides = $scope.images;
+            };
+
+            $scope.$watch('group', init);
+
+            $scope.setCurrent = function(index) {
+                $scope.direction = (index > $scope.currentIndex) ? 'left' : 'right';
+                $scope.currentIndex = index;
+            };
+
+            $scope.isCurrent = function(index) {
+                return $scope.currentIndex === index;
+            };
+
+            $scope.next = function() {
+                $scope.direction = 'left';
+                $scope.currentIndex = $scope.currentIndex < $scope.slides.length - 1 ? ++$scope.currentIndex : 0;
+            };
+
+            $scope.prev = function() {
+                $scope.direction = 'right';
+                $scope.currentIndex = $scope.currentIndex > 0 ? --$scope.currentIndex : $scope.slides.length - 1;
+            };
+        }],
+        template: '<div class="slides group-{{group}}"><div ng-repeat="slide in slides"><div ng-show="isCurrent($index)" class="slide slide-animation"><div ng-repeat="item in slide" class="image"><img ng-src="{{item}}"/></div></div></div><div class="controls"><div class="navigation"><a ng-click="prev()" class="prev"><span><i class="chevron circle left big icon"></i></span></a><a ng-click="next()" class="next"><span><i class="chevron circle right big icon"></i></span></a></div></div></div>',
+        link: function(scope, element, attrs) {}
+    };
+});
+
 //# sourceURL=activitybrowserapp.js
