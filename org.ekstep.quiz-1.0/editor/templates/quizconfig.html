@@ -1,10 +1,5 @@
 <script type="text/ng-template" ng-app="quizconfigapp" ng-controller="quizconfigcontroller as $ctrl" id="quizconfig">
     <style type="text/css">
-    .filters-container {
-        padding: 8px 10px 4px 18px;
-        background: #f1f1f1;
-    }
-    
     .itemIframeMessages {
         border: 2px solid #E4E4E4;
         padding: 110px 20px;
@@ -19,21 +14,9 @@
         background: #f1f1f1;
     }
     
-    .verticalcenter {
-        display: flex;
-        align-items: center;
-    }
-    
     .assessmentbrowser.ui.modal {
         position: inherit !important;
         top: 0 !important;
-    }
-    
-    .ngdialog-content {
-        top: 3% !important;
-        width: 100% !important;
-        position: absolute !important;
-        background: none !important;
     }
     
     .assessment-browser-error {
@@ -44,34 +27,22 @@
         background: #F3F3F3;
         box-shadow: 4px 4px 4px #888888;
     }
-    td{
+    
+    td {
         width: 43%;
     }
     </style>
     <div class="quizConfig ui modal large active" style="top: 5%;">
-        <h2 class="ui header">
-        <i class="settings icon"></i>
-      <div class="content">
-        <b>Question Settings</b>
-        <div class="sub header">Manage your selected questions</div>
-      </div>
-        </h2>
+        <div class="ui header">
+            <i class="settings icon"></i>
+            <div class="content">
+                <b>Question Settings</b>
+                <div class="sub header">Manage your selected questions</div>
+            </div>
+        </div>
         <div class="content">
-            <div class="ui segment" style="width: 100%;height: 270px;" ng-show="$ctrl.itemsLoading">
-                <div class="ui active inverted dimmer">
-                    <div class="ui text loader">Just one second, We're fetching that content for you.</div>
-                </div>
-            </div>
-            <div ng-if="$ctrl.errorMessage" class=" assessment-browser-error">
-                <div class="ui negative message">
-                    <div class="header">
-                        We're sorry!
-                    </div>
-                    <p>Unable to fetch the Questions! Please try again later!</p>
-                </div>
-            </div>
             <div ng-show="$ctrl.cart.items.length">
-                <div class="ui two column horizontally padded grid" ng-show="!$ctrl.itemsLoading">
+                <div class="ui two column horizontally padded grid">
                     <div class="column" style="width: 480px;height: 337px; overflow-y: scroll;">
                         <div class="ui large divided items" ui-sortable="sortableOptions" ng-model="$ctrl.cart.items" style="cursor:move;">
                             <div class="item select" ng-repeat="cartItem in $ctrl.cart.items">
@@ -84,10 +55,10 @@
                                 <div ng-click="$ctrl.removeItem(cartItem); $ctrl.generateTelemetry({type: 'click', subtype: '', target: 'self'})" style="cursor:pointer; margin-top: 3%"><i class="trash icon"></i>
                                     <label></label>
                                 </div>
-                                <div class="description" ng-click="$ctrl.handleQuestionScoreConfig($index,$ctrl.cart.items); $ctrl.generateTelemetry({type: 'edit', subtype: ' ', target: 'self'})"" style="margin-top: 3%">
-                                    <i class="configure icon" style="cursor:pointer;"></i>
+                                <div class="description" ng-click="$ctrl.handleQuestionScoreConfig($index,$ctrl.cart.items); $ctrl.generateTelemetry({type: 'edit', subtype: ' ', target: 'self'})" " style="margin-top: 3% ">
+                                    <i class="configure icon " style="cursor:pointer; "></i>
                                 </div>
-                                <div class="description" ng-click="$ctrl.previewItem(cartItem);$ctrl.generateTelemetry({type: 'click', subtype: '', target: 'self'})"" style="margin-top: 3%">
+                                <div class="description " ng-click="$ctrl.previewItem(cartItem);$ctrl.generateTelemetry({type: 'click', subtype: '', target: 'self'}) "" style="margin-top: 3%">
                                     <i class="icon-preview icon" style="cursor:pointer;margin-top: 3%"></i>
                                 </div>
                             </div>
@@ -108,7 +79,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr ng-if ="$ctrl.currentQuestion.description" class="active">
+                                <tr ng-if="$ctrl.currentQuestion.description" class="active">
                                     <td><b>Description</b></td>
                                     <td>{{$ctrl.currentQuestion.description | uppercase}}</td>
                                 </tr>
@@ -116,7 +87,7 @@
                                     <td><b>Question Type</b></td>
                                     <td>{{$ctrl.currentQuestion.type | uppercase}}</td>
                                 </tr>
-                                <tr >
+                                <tr>
                                     <td><b>Difficult Level</b></td>
                                     <td>{{$ctrl.currentQuestion.qlevel | uppercase}}</td>
                                 </tr>
@@ -128,8 +99,8 @@
                 </div>
             </div>
             <div class="ui center aligned segment" ng-show="($ctrl.cart.items && !$ctrl.cart.items.length)">
-                No Data Found
-                <br> Redefine your search filters!
+                Questions are empty
+                <br> Please select some questions
             </div>
         </div>
         <div class="actions">

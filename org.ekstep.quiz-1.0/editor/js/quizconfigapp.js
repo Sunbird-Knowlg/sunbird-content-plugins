@@ -3,32 +3,18 @@
 angular.module('quizconfigapp', ['ui.sortable'])
     .controller('quizconfigcontroller', ['$scope', '$injector', 'quizInstance', function($scope, $injector, quizInstance) {
         ecEditor.jQuery('.modal').addClass('item-activity');
-        var config = {
-                "showStartPage": false,
-                "showEndPage": false
-            },
-            ctrl = this,
-            itemIframe;
+        var config = {"showStartPage": false, "showEndPage": false }, ctrl = this, itemIframe;
         ctrl.previewURL = 'preview/preview.html?webview=true', ctrl.activePreviewItem = '';
+        var pluginId = 'org.ekstep.quiz', ver = '1.0';
         ctrl.currentQuestion;
         ctrl.enableQuestionConfig = false;
-
         ctrl.loadSelectedQuestions = function() {
-            ctrl.seteupQuestionsConfig();
-            ctrl.itemsLoading = false;
+            ctrl.setupQuestionsConfig();
         }
-
-        ctrl.seteupQuestionsConfig = function() {
+        ctrl.setupQuestionsConfig = function() {
             if (!_.isUndefined(quizInstance.questionnaire)) {
-                ctrl.activityOptions = {
-                    title: quizInstance.questionnaire.title,
-                    shuffle: quizInstance.questionnaire.shuffle,
-                    showImmediateFeedback: quizInstance.questionnaire.showImmediateFeedback,
-                    concepts: quizInstance.questionnaire.concepts
-                };
-                ctrl.cart = {
-                    "items": quizInstance.questionnaire.items[quizInstance.questionnaire.item_sets[0].id]
-                };
+                ctrl.activityOptions = {title: quizInstance.questionnaire.title, shuffle: quizInstance.questionnaire.shuffle, showImmediateFeedback: quizInstance.questionnaire.showImmediateFeedback, concepts: quizInstance.questionnaire.concepts }; 
+                ctrl.cart = {"items": quizInstance.questionnaire.items[quizInstance.questionnaire.item_sets[0].id] };
                 ctrl.activityOptions.total_items = ctrl.cart.items.length;
                 ctrl.activityOptions.max_score = ctrl.activityOptions.total_items;
                 ctrl.activityOptions.range = ecEditor._.times(ctrl.activityOptions.total_items).splice(1);
@@ -36,26 +22,14 @@ angular.module('quizconfigapp', ['ui.sortable'])
                 $scope.$safeApply();
             }
         }
-        $scope.changeClass = function() {
-            angular.element('#questionTitle').removeClass("error");
-        }
         $scope.sortableOptions = {
             update: function(e, ui) {
-                ctrl.generateTelemetry({
-                    type: 'selected',
-                    subtype: 'reorder',
-                    target: 'self'
-                })
+                ctrl.generateTelemetry({type: 'selected', subtype: 'reorder', target: 'self'})
             },
             'ui-floating': true
         };
         ctrl.handleQuestionScoreConfig = function(position, cartItem) {
             ctrl.enableQuestionConfig = true;
-            angular.forEach(cartItem, function(item, $index) {
-                if (position != $index) {
-                    item.checked = false;
-                }
-            });
             ctrl.currentQuestion = cartItem[position];
             ctrl.updateScoreToquestion();
         };
@@ -119,14 +93,7 @@ angular.module('quizconfigapp', ['ui.sortable'])
                         itemIframe.contentWindow.location.reload();
                         $scope.$safeApply();
                     } else {
-                        ctrl.itemPreviewContent = {
-                            "error": 'Preview could not be shown.'
-                        };
-                        ctrl.itemPreviewDisplay = ctrl.itemPreviewContent.error;
-                        ctrl.itemPreviewLoading = false;
-                        ctrl.errorMessage = true;
-                        $scope.$safeApply();
-                        return;
+                        ctrl.itemPreviewContent = {"error": 'Preview could not be shown.'};
                     }
                 });
             } else {
@@ -144,22 +111,14 @@ angular.module('quizconfigapp', ['ui.sortable'])
             var _assessmentData = {};
             _assessmentData["data"] = {__cdata: JSON.stringify(quizInstance) }; 
             _assessmentData["config"] = {__cdata: JSON.stringify({"type": "items", "var": "item"}) };
-            ecEditor.dispatchEvent("org.ekstep.quiz" + ':create', _assessmentData);
+            ecEditor.dispatchEvent(pluginId + ':create', _assessmentData);
         };
         ctrl.showQuestionConfig = function() {
             ctrl.enableQuestionConfig = true;
         }
         ctrl.loadSelectedQuestions();
         ctrl.generateTelemetry = function(data) {
-            if (data) ecEditor.getService('telemetry').interact({
-                "type": data.type,
-                "subtype": data.subtype,
-                "target": data.target,
-                "pluginid": "org.ekstep.quiz",
-                "pluginver": "1.0",
-                "objectid": "",
-                "stage": ecEditor.getCurrentStage().id
-            })
+            if (data) ecEditor.getService('telemetry').interact({"type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": pluginId, "pluginver": ver, "objectid": "", "stage": ecEditor.getCurrentStage().id }) 
         }
     }]);
 //# sourceURL=quizConfigApp.js
