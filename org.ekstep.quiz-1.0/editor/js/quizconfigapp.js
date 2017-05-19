@@ -19,7 +19,7 @@ angular.module('quizconfigapp', ['ui.sortable'])
         }
 
         ctrl.seteupQuestionsConfig = function() {
-            if (ecEditor._.isUndefined(quizInstance.questionnaire)) {
+            if (!_.isUndefined(quizInstance.questionnaire)) {
                 ctrl.activityOptions = {
                     title: quizInstance.questionnaire.title,
                     shuffle: quizInstance.questionnaire.shuffle,
@@ -39,6 +39,16 @@ angular.module('quizconfigapp', ['ui.sortable'])
         $scope.changeClass = function() {
             angular.element('#questionTitle').removeClass("error");
         }
+        $scope.sortableOptions = {
+            update: function(e, ui) {
+                ctrl.generateTelemetry({
+                    type: 'selected',
+                    subtype: 'reorder',
+                    target: 'self'
+                })
+            },
+            'ui-floating': true
+        };
         ctrl.handleQuestionScoreConfig = function(position, cartItem) {
             ctrl.enableQuestionConfig = true;
             angular.forEach(cartItem, function(item, $index) {
@@ -74,18 +84,13 @@ angular.module('quizconfigapp', ['ui.sortable'])
             });
             return question.options || question.rhs_options || question.answer;
         };
-
-        ctrl.cart = {
-            "items": (ecEditor._.isUndefined(quizInstance.questionnaire)) ? [] : quizInstance.questionnaire.items[quizInstance.questionnaire.item_sets[0].id],
-            "remove": function(item) {
-                ecEditor._.remove(this.items, function(cartItem) {
-                    return item.identifier == cartItem.identifier;
-                });
-                var itemIndex = this.getItemIndex(item);
-                ctrl.activityOptions.total_items = this.items.length;
-                $scope.$safeApply();
-            }
-        };
+        ctrl.removeItem = function(item) {
+            ecEditor._.remove(ctrl.cart.items, function(cartItem) {
+                return item.identifier == cartItem.identifier;
+            });
+            ctrl.activityOptions.total_items = quizInstance.questionnaire.total_items = ctrl.cart.items.length;
+            $scope.$safeApply();
+        }
         $scope.$on('ngDialog.opened', function(e, $dialog) {
             itemIframe = org.ekstep.contenteditor.jQuery('#itemIframe')[0];
             if (itemIframe.src == "")
@@ -135,8 +140,13 @@ angular.module('quizconfigapp', ['ui.sortable'])
         }
         ctrl.doneConfig = function() {
             $scope.closeThisDialog();
+            ecEditor.dispatchEvent('delete:invoke');
+            var _assessmentData = {};
+            _assessmentData["data"] = {__cdata: JSON.stringify(quizInstance) }; 
+            _assessmentData["config"] = {__cdata: JSON.stringify({"type": "items", "var": "item"}) };
+            ecEditor.dispatchEvent("org.ekstep.quiz" + ':create', _assessmentData);
         };
-        ctrl.showQuestionConfig = function(){
+        ctrl.showQuestionConfig = function() {
             ctrl.enableQuestionConfig = true;
         }
         ctrl.loadSelectedQuestions();

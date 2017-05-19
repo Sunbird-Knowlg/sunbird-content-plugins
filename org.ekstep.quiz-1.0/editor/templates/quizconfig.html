@@ -73,7 +73,7 @@
             <div ng-show="$ctrl.cart.items.length">
                 <div class="ui two column horizontally padded grid" ng-show="!$ctrl.itemsLoading">
                     <div class="column" style="width: 480px;height: 337px; overflow-y: scroll;">
-                        <div class="ui large divided items" ui-sortable ng-model="$ctrl.cart.items" style="cursor:move;">
+                        <div class="ui large divided items" ui-sortable="sortableOptions" ng-model="$ctrl.cart.items" style="cursor:move;">
                             <div class="item select" ng-repeat="cartItem in $ctrl.cart.items">
                                 <div class="description" style="margin-top: 3%">
                                     <i class="content icon" style="cursor:move;"></i>
@@ -81,14 +81,13 @@
                                 <div class="middle aligned content" style="padding:3%">
                                     <div class="header">{{ cartItem.question }}</div>
                                 </div>
-                                <div ng-click="$ctrl.cart.remove(cartItem); $ctrl.generateTelemetry({type: 'select', subtype: 'checkbox', target: 'selectQuestion'})" style="cursor:pointer; margin-top: 3%">
-                                    <i class="trash icon"></i>
+                                <div ng-click="$ctrl.removeItem(cartItem); $ctrl.generateTelemetry({type: 'click', subtype: '', target: 'self'})" style="cursor:pointer; margin-top: 3%"><i class="trash icon"></i>
                                     <label></label>
                                 </div>
-                                <div class="description" ng-click="$ctrl.handleQuestionScoreConfig($index,$ctrl.cart.items)" style="margin-top: 3%">
+                                <div class="description" ng-click="$ctrl.handleQuestionScoreConfig($index,$ctrl.cart.items); $ctrl.generateTelemetry({type: 'edit', subtype: ' ', target: 'self'})"" style="margin-top: 3%">
                                     <i class="configure icon" style="cursor:pointer;"></i>
                                 </div>
-                                <div class="description" ng-click="$ctrl.previewItem(cartItem)" style="margin-top: 3%">
+                                <div class="description" ng-click="$ctrl.previewItem(cartItem);$ctrl.generateTelemetry({type: 'click', subtype: '', target: 'self'})"" style="margin-top: 3%">
                                     <i class="icon-preview icon" style="cursor:pointer;margin-top: 3%"></i>
                                 </div>
                             </div>
@@ -105,7 +104,7 @@
                                     <td><b>Marks</b></td>
                                     <td>
                                         <div class="ui fluid labeled input" ng-show="$ctrl.enableQuestionConfig" style="width: 64%">
-                                            <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="$ctrl.currentQuestion.max_score" required="" ng-change="$ctrl.updateScoreToquestion()" min="0" type="number" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'totalMarksInput'})" />
+                                            <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="$ctrl.currentQuestion.max_score" required="" ng-change="$ctrl.updateScoreToquestion()" min="0" type="number" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: '', target: 'self'})" />
                                         </div>
                                     </td>
                                 </tr>
@@ -125,7 +124,6 @@
                         </table>
                         <iframe id="itemIframe" ng-hide="$ctrl.enableQuestionConfig || $ctrl.itemPreviewContent.error" style="width: 490px;height: 310px; border: 2px solid #E4E4E4;"></iframe>
                         <div class="itemIframeMessages" ng-hide="$ctrl.enableQuestionConfig || !$ctrl.itemPreviewContent.error" style="width: 490px;height: 310px">{{$ctrl.itemPreviewDisplay}}</div>
-                        <!-- <div class="itemIframeMessages" ng-show="!$ctrl.itemPreviewLoading || !$ctrl.enableQuestionConfig&& ($ctrl.itemPreviewContent.error || ($ctrl.itemPreviewDisplay == $ctrl.itemPreviewDefaultMessage))" style="width: 490px;height: 310px">{{$ctrl.itemPreviewDisplay}}</div> -->
                     </div>
                 </div>
             </div>
@@ -136,7 +134,7 @@
         </div>
         <div class="actions">
             <div class="ui buttons">
-                <button id="selectanduse" class="ui blue button" ng-click=" $ctrl.doneConfig();$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'addQuestionSet'})" type="button">Done</button>
+                <button id="selectanduse" class="ui blue button" ng-click=" $ctrl.doneConfig();$ctrl.generateTelemetry({type: 'modify', subtype: ' ', target: 'self'})" type="button">Done</button>
             </div>
         </div>
     </div>
