@@ -72,8 +72,7 @@ describe("Text plugin", function() {
 
     it('should test text object click and deselection', function() {
         var dblclick = text1.dblClickHandler({ 'clientX': 350, 'clientY': 100 });
-        expect($("#authoringTextEditor").is(':visible')).toBe(true);
-
+        
         ContentEditorTestFramework.unselect(text1.id);
         expect(stage.canvas.getActiveObject()).toBe(null);
 
@@ -107,7 +106,7 @@ describe("Text plugin", function() {
             "font": 'NotoSans',
             "fontsize": 48,
             "weight": '',
-            "config.__cdata": '{"opacity":100,"strokeWidth":1,"stroke":"rgba(255, 255, 255, 0)","autoplay":false,"visible":true,"text":"","color":"#000000","fontfamily":"NotoSans","fontsize":18,"fontweight":false,"fontstyle":false,"align":"center","wordfontcolor":"#CC1234","wordhighlightcolor":"#CC1235","wordunderlinecolor":"#CC1236"}'
+            "config.__cdata": '{"opacity":100,"strokeWidth":1,"stroke":"rgba(255, 255, 255, 0)","autoplay":false,"visible":true,"text":"","wordfontcolor":"#CC1234","wordhighlightcolor":"#CC1235","wordunderlinecolor":"#CC1236","color":"#000000","fontfamily":"NotoSans","fontsize":18,"fontweight":false,"fontstyle":false,"align":"center"}'
         });
     });
 
