@@ -22,15 +22,12 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     initialize: function() {
         var instance = this;
-       
         ecEditor.addEventListener(this.manifest.id + ":showPopup", this.openAssessmentBrowser, this);
         ecEditor.addEventListener(this.manifest.id + ":renderQuiz", this.renderQuiz, this);
         ecEditor.addEventListener(this.manifest.id + ":showQuizConfig", this.showQuizConfig, this);
-        //setTimeout(function() {
-            var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/templates/quizconfig.html");
-            var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/js/quizconfigapp.js");
-            ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
-        //}, 1000);
+        var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/templates/quizconfig.html");
+        var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/js/quizconfigapp.js");
+        ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
 
     },
     mediaObj: {},
