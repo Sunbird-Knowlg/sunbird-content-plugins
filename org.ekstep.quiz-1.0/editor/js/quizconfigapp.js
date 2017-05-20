@@ -8,11 +8,11 @@ angular.module('quizconfigapp', ['ui.sortable'])
         ctrl.currentQuestion;
         ctrl.enableQuestionConfig = false;
         ctrl.loadSelectedQuestions = function() {
-            quizInstance.questionnaire && ctrl.setupQuestionsConfig();
+            quizInstance.data.questionnaire && ctrl.setupQuestionsConfig();
         }
         ctrl.setupQuestionsConfig = function() {
-            ctrl.activityOptions = {title: quizInstance.questionnaire.title, shuffle: quizInstance.questionnaire.shuffle, showImmediateFeedback: quizInstance.questionnaire.showImmediateFeedback, concepts: quizInstance.questionnaire.concepts }; 
-            ctrl.cart = {"items": quizInstance.questionnaire.items[quizInstance.questionnaire.item_sets[0].id] };
+            ctrl.activityOptions = {title: quizInstance.data.questionnaire.title, shuffle: quizInstance.data.questionnaire.shuffle, showImmediateFeedback: quizInstance.data.questionnaire.showImmediateFeedback, concepts: quizInstance.data.questionnaire.concepts }; 
+            ctrl.cart = {"items": quizInstance.data.questionnaire.items[quizInstance.data.questionnaire.item_sets[0].id] };
             ctrl.activityOptions.total_items = ctrl.cart.items.length;
             ctrl.activityOptions.max_score = ctrl.activityOptions.total_items;
             ctrl.activityOptions.range = ecEditor._.times(ctrl.activityOptions.total_items).splice(1);
@@ -59,7 +59,7 @@ angular.module('quizconfigapp', ['ui.sortable'])
             ecEditor._.remove(ctrl.cart.items, function(cartItem) {
                 return item.identifier == cartItem.identifier;
             });
-            ctrl.activityOptions.total_items = quizInstance.questionnaire.total_items = ctrl.cart.items.length;
+            ctrl.activityOptions.total_items = quizInstance.data.questionnaire.total_items = ctrl.cart.items.length;
             $scope.$safeApply();
         }
         $scope.$on('ngDialog.opened', function(e, $dialog) {
@@ -67,54 +67,32 @@ angular.module('quizconfigapp', ['ui.sortable'])
             if (itemIframe.src == "")
                 itemIframe.src = ctrl.previewURL;
             itemIframe.addEventListener('load', function() {
-                itemIframe.contentWindow.setContentData(null, ctrl.itemPreviewContent, config)
-                itemIframe.contentWindow.onload = function() {
+                if (ctrl.itemPreviewContent) {
                     itemIframe.contentWindow.setContentData(null, ctrl.itemPreviewContent, config)
-                };
+                    itemIframe.contentWindow.onload = function() {
+                        itemIframe.contentWindow.setContentData(null, ctrl.itemPreviewContent, config)
+                    };
+                } else {
+                    ctrl.itemPreviewContent = {
+                        "error": 'Preview could not be shown.'
+                    };
+                }
+
             });
         });
-
         ctrl.previewItem = function(item) {
             ctrl.enableQuestionConfig = false;
             var templateRef = item.template_id ? item.template_id : item.template;
-            if (templateRef) {
-                ecEditor.getService('assessment').getTemplate(templateRef, function(err, res) {
-                    if (!err) {
-                        var x2js = new X2JS({
-                            attributePrefix: 'none',
-                            enableToStringFunc: false
-                        });
-                        var templateJson;
-                        if (!_.isNull(res.data.result.content.body)) {
-                            if (res.data.result.content.body.lastIndexOf('{', 0) === 0) {
-                                templateJson = JSON.parse(res);
-                            } else {
-                                templateJson = x2js.xml_str2json(res.data.result.content.body);
-                            }
-                        }
-                        ctrl.itemPreviewContent = assessmentBrowserUtil.getQuestionPreviwContent(templateJson, item);
-                        ctrl.itemPreviewDisplay = !ecEditor._.isUndefined(ctrl.itemPreviewContent.error) ? ctrl.itemPreviewContent.error : '';
-                        itemIframe.contentWindow.location.reload();
-                        $scope.$safeApply();
-                    } else {
-                        ctrl.itemPreviewContent = {
-                            "error": 'Preview could not be shown.'
-                        };
-                    }
-                });
-            } else {
-                ctrl.itemPreviewContent = {
-                    "error": 'Item does not have a template selected.'
-                };
-                ctrl.itemPreviewDisplay = ctrl.itemPreviewContent.error;
-                $scope.$safeApply();
-            }
+            var templateData = _.filter(quizInstance.data.template, ['id', item.template]);
+            ctrl.itemPreviewContent = quizBrowserUtil.getQuestionPreviwContent(templateData, item);
+            ctrl.itemPreviewDisplay = !ecEditor._.isUndefined(ctrl.itemPreviewContent.error) ? ctrl.itemPreviewContent.error : '';
+            itemIframe.contentWindow.location.reload();
         }
         ctrl.doneConfig = function() {
             $scope.closeThisDialog();
             ecEditor.dispatchEvent('delete:invoke');
             var _assessmentData = {};
-            _assessmentData["data"] = {__cdata: JSON.stringify(quizInstance) }; 
+            _assessmentData["data"] = {__cdata: JSON.stringify(quizInstance.data) }; 
             _assessmentData["config"] = {__cdata: JSON.stringify({"type": "items", "var": "item"}) };
             ecEditor.dispatchEvent(pluginId + ':create', _assessmentData);
         };

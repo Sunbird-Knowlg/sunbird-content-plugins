@@ -13,7 +13,8 @@
         },
         "dependencies": [
             {"type": "plugin", "plugin": "org.ekstep.assessmentbrowser", "ver": "1.0"},
-            { "type": "js", "src": "libs/sortable.js" }
+            { "type": "js", "src": "libs/sortable.js" },
+            { "type": "js", "src": "editor/js/quizUtil.js" }
         ],
         "menu": [{
             "id": "assessment",

@@ -337,7 +337,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
     },
     showQuizConfig: function(event, dataObj) {
-       var currentQuizObj = ecEditor.getCurrentObject().data;
+       var currentQuizObj = ecEditor.getCurrentObject();
         ecEditor.getService('popup').open({
             template: 'quizconfig',
             controller: 'quizconfigcontroller',
