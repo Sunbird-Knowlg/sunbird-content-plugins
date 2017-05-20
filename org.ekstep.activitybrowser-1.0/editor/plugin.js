@@ -14,12 +14,9 @@ org.ekstep.contenteditor.basePlugin.extend({
     initialize: function() {
         var instance = this;
         ecEditor.addEventListener("org.ekstep.activitybrowser:showpopup", this.loadBrowser, this);
-        setTimeout(function() {
-            var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/activityBrowser.html");
-            var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/activityBrowser.js"); 
-            ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
-        }, 1000);
-
+        var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/activityBrowser.html");
+        var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/activityBrowser.js");
+        ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
     },
     /**
      * This method used to create the text fabric object and assigns it to editor of the instance
