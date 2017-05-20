@@ -52,13 +52,13 @@
                                 <div class="middle aligned content" style="padding:3%">
                                     <div class="header">{{ cartItem.question }}</div>
                                 </div>
-                                <div ng-click="$ctrl.removeItem(cartItem); $ctrl.generateTelemetry({type: 'click', subtype: '', target: 'self'})" style="cursor:pointer; margin-top: 3%"><i class="trash icon"></i>
+                                <div ng-click="$ctrl.removeItem(cartItem); $ctrl.generateTelemetry({type: 'click', subtype: 'delete', target: 'question'})" style="cursor:pointer; margin-top: 3%"><i class="trash icon"></i>
                                     <label></label>
                                 </div>
-                                <div class="description" ng-click="$ctrl.handleQuestionScoreConfig($index,$ctrl.cart.items); $ctrl.generateTelemetry({type: 'edit', subtype: ' ', target: 'self'})" " style="margin-top: 3% ">
+                                <div class="description" ng-click="$ctrl.handleQuestionScoreConfig($index,$ctrl.cart.items); $ctrl.generateTelemetry({type: 'click', subtype: 'edit', target: 'question'})" " style="margin-top: 3% ">
                                     <i class="configure icon " style="cursor:pointer; "></i>
                                 </div>
-                                <div class="description " ng-click="$ctrl.previewItem(cartItem);$ctrl.generateTelemetry({type: 'click', subtype: '', target: 'self'}) "" style="margin-top: 3%">
+                                <div class="description " ng-click="$ctrl.previewItem(cartItem);$ctrl.generateTelemetry({type: 'click', subtype: 'preview', target: 'question'}) "" style="margin-top: 3%">
                                     <i class="icon-preview icon" style="cursor:pointer;margin-top: 3%"></i>
                                 </div>
                             </div>
@@ -105,7 +105,7 @@
         </div>
         <div class="actions">
             <div class="ui buttons">
-                <button id="selectanduse" class="ui blue button" ng-click=" $ctrl.doneConfig();$ctrl.generateTelemetry({type: 'modify', subtype: ' ', target: 'self'})" type="button">Done</button>
+                <button id="selectanduse" class="ui blue button" ng-click=" $ctrl.doneConfig();$ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'question'})" type="button">Done</button>
             </div>
         </div>
     </div>

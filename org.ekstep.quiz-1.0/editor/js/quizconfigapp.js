@@ -22,7 +22,7 @@ angular.module('quizconfigapp', ['ui.sortable'])
         }
         $scope.sortableOptions = {
             update: function(e, ui) {
-                ctrl.generateTelemetry({type: 'selected', subtype: 'reorder', target: 'self'})
+                ctrl.generateTelemetry({type: 'click', subtype: 'reorder', target: 'question'})
             },
             'ui-floating': true
         };
