@@ -4,12 +4,8 @@ describe('Shape plugin', function() {
     var spyEvent;
     var stage, rect, circle, roundedRect, star, polygon, trapezium, arrow, doubleArrow;
 
-    beforeAll(function(done) {
-        ContentEditorTestFramework.init(function() {
-            stage = ecEditor.instantiatePlugin('org.ekstep.stage');
-            ecEditor.loadPlugin('org.ekstep.shape', '1.0');
-            done();
-        });
+    beforeAll(function() {        
+        stage = ecEditor.instantiatePlugin('org.ekstep.stage');        
     });
 
     describe('should create all shapes', function() {

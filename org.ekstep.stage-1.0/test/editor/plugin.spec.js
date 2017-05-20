@@ -1,16 +1,13 @@
 'use strict';
 
-describe('Shape plugin', function() {
+describe('Stage plugin', function() {
     var spyEvent;
     var stage1, stage2, stageId, rect1, rect2;
 
-    beforeAll(function(done) {
-        ContentEditorTestFramework.init(function() {
-            stage1 = ecEditor.instantiatePlugin('org.ekstep.stage');
-            stageId = stage1.id;
-            ecEditor.loadPlugin('org.ekstep.shape', '1.0');
-            done();
-        });
+    beforeAll(function() {
+        ContentEditorTestFramework.cleanUp();
+        stage1 = ecEditor.instantiatePlugin('org.ekstep.stage');
+        stageId = stage1.id;                
     });
 
     describe('should test stage plugin', function() {
@@ -25,13 +22,15 @@ describe('Shape plugin', function() {
             var currentStageId = ecEditor.getCurrentStage().id;
             var onclick = stage1.getOnClick();
             ContentEditorTestFramework.validateObject(onclick, {
-                'id': 'stage:select', 'data.stageId': stage1.id, 'data.prevStageId': currentStageId
+                'id': 'stage:select',
+                'data.stageId': stage1.id,
+                'data.prevStageId': currentStageId
             });
         });
 
         it('should test rendering of children', function() {
-            rect1 = ecEditor.instantiatePlugin("org.ekstep.shape", {"type": "rect", "x": 10, "y": 20, "fill": "#FFFF00", "w": 14, "h": 25, "stroke": "rgba(255, 255, 255, 0)", "strokeWidth": 1, "opacity": 1 }, ecEditor.getCurrentStage());
-            rect2 = ecEditor.instantiatePlugin("org.ekstep.shape", {"type": "rect", "x": 15, "y": 30, "fill": "#FFFF00", "w": 14, "h": 25, "stroke": "rgba(255, 255, 255, 0)", "strokeWidth": 1, "opacity": 1 }, ecEditor.getCurrentStage());
+            rect1 = ecEditor.instantiatePlugin("org.ekstep.shape", { "type": "rect", "x": 10, "y": 20, "fill": "#FFFF00", "w": 14, "h": 25, "stroke": "rgba(255, 255, 255, 0)", "strokeWidth": 1, "opacity": 1 }, ecEditor.getCurrentStage());
+            rect2 = ecEditor.instantiatePlugin("org.ekstep.shape", { "type": "rect", "x": 15, "y": 30, "fill": "#FFFF00", "w": 14, "h": 25, "stroke": "rgba(255, 255, 255, 0)", "strokeWidth": 1, "opacity": 1 }, ecEditor.getCurrentStage());
 
             rect1.setAttribute('z-index', 1);
             rect2.setAttribute('z-index', 0);
@@ -43,14 +42,13 @@ describe('Shape plugin', function() {
         });
 
         it('should add both fabric plugins and non fabric plugins as children', function() {
-            ecEditor.loadPlugin('org.ekstep.audio', '1.0');
             var audioPlugin = ecEditor.instantiatePlugin("org.ekstep.audio", {
                 asset: 'do_123123',
                 assetMedia: {
                     name: 'testaudio',
                     id: 'do_123123',
                     src: '/assets/test.mp3',
-                    type: 'audio'    
+                    type: 'audio'
                 }
             }, ecEditor.getCurrentStage());
             ecEditor.dispatchEvent('stage:modified', {});
@@ -96,7 +94,7 @@ describe('Shape plugin', function() {
                 callbackInvoked = true;
             });
 
-            ecEditor.instantiatePlugin("org.ekstep.shape", {"type": "rect", "x": 15, "y": 30, "fill": "#FFFF00", "w": 14, "h": 25, "stroke": "rgba(255, 255, 255, 0)", "strokeWidth": 1, "opacity": 1 }, ecEditor.getCurrentStage());
+            ecEditor.instantiatePlugin("org.ekstep.shape", { "type": "rect", "x": 15, "y": 30, "fill": "#FFFF00", "w": 14, "h": 25, "stroke": "rgba(255, 255, 255, 0)", "strokeWidth": 1, "opacity": 1 }, ecEditor.getCurrentStage());
             setTimeout(function() {
                 expect(callbackInvoked).toBe(true);
             }, 2000);

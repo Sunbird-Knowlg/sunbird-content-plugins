@@ -3,12 +3,8 @@
 describe("Video plugin", function() {
     var stage, controller, scope, video, modalInstance;
 
-    beforeAll(function(done) {
-        ContentEditorTestFramework.init(function() {
-            stage = ecEditor.instantiatePlugin('org.ekstep.stage');
-            ecEditor.loadPlugin('org.ekstep.video', '1.0');
-            done();
-        });
+    beforeAll(function() {
+        stage = ecEditor.instantiatePlugin('org.ekstep.stage');            
     });
 
     beforeEach(module('editorApp'));

@@ -11,14 +11,10 @@ describe('Quiz plugin instantiate and load stagePlugin:', function() {
         render: pluginNames.quiz.concat(':renderQuiz'),
         showPopup: pluginNames.quiz.concat(':showPopup'),
     };
-    beforeAll(function(done) {
-        ContentEditorTestFramework.cleanUp();
-        ContentEditorTestFramework.init(function() {
-            stage = ecEditor.instantiatePlugin(pluginNames.stage);
-            ecEditor.loadPlugin(pluginNames.quiz, pluginVersion);
-            quizProto = org.ekstep.pluginframework.pluginManager.plugins[pluginNames.quiz].p.prototype;
-            done();
-        });
+    beforeAll(function() {
+        ContentEditorTestFramework.cleanUp();        
+        stage = ecEditor.instantiatePlugin(pluginNames.stage);            
+        quizProto = org.ekstep.pluginframework.pluginManager.plugins[pluginNames.quiz].p.prototype;
     });
     beforeEach(module('editorApp'));
     beforeEach(inject(function($rootScope, $controller) {
