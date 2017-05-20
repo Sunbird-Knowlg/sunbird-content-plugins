@@ -45,7 +45,7 @@ angular.module('org.ekstep.review', [])
                 fieldsToFill = [],
                 mandatoryFields = {
                     "appIcon": "Lesson Icon",
-                    "name": "title",
+                    "name": "Title",
                     "description": "Description",
                     "contentType": "Lesson Type",
                     "language": "Language",
@@ -55,6 +55,10 @@ angular.module('org.ekstep.review', [])
                     "gradeLevel": "Grades"
                 };
             /**Check for mandatory fields**/
+            if (ctrl.contentMeta['name'] == "Untitled lesson") {
+                isValid = 0;
+                fieldsToFill.push('Title');
+            }
             ecEditor._.each(mandatoryFields, function(value, key) {
                 if (typeof ctrl.contentMeta[key] == 'undefined' || ctrl.contentMeta[key] == "") {
                     isValid = 0;
@@ -68,7 +72,7 @@ angular.module('org.ekstep.review', [])
             /**Check if it is valid**/
             if (isValid == 1) {
                 var contentBody = org.ekstep.contenteditor.stageManager.toECML();
-                $rootScope.sendForReview({ stageIcons: JSON.stringify(org.ekstep.contenteditor.stageManager.getStageIcons()) }, contentBody, function() {
+                $rootScope.patchContent({ stageIcons: JSON.stringify(org.ekstep.contenteditor.stageManager.getStageIcons()) }, contentBody, function() {
                     ctrl.message = "Saving content";
                     ctrl.active = "active";
                     ctrl.isLoading = true;

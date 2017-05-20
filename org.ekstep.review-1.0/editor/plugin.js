@@ -21,7 +21,6 @@ org.ekstep.contenteditor.basePlugin.extend({
     initialize: function() {
         /**Add event listeners**/
         ecEditor.addEventListener(this.manifest.id + ":show", this.loadHtml, this);
-        ecEditor.addEventListener(this.manifest.id + ":show", this.getContent, this);
         ecEditor.addEventListener(this.manifest.id + ":showDialog", this.showDialog, this);
 
         /**load html templates**/
@@ -40,7 +39,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     loadHtml: function(event) {
         var instance = this;
-
+        instance.contentObj = ecEditor.getService('content').getContentMeta(window.context.content_id);
         ecEditor.getService('popup').open({
             template: 'partials/review.html',
             controller: 'reviewcontroller',
@@ -84,15 +83,6 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     redirectToEditMeta: function() {
         window.location.href = window.context.editMetaLink;
-    },
-    /**
-     *   Get the content
-     *   @param event {Object} Event
-     *   @memberof review
-     */
-    getContent: function(event) {
-        var instance = this;
-        instance.contentObj = ecEditor.getService('content').getContentMeta(window.context.content_id);
     }
 });
 //# sourceURL="reviewplugin.js"
