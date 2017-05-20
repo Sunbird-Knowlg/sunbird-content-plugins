@@ -1,16 +1,13 @@
-var assessmentBrowserUtil = (function() {
+var quizBrowserUtil = (function() {
 
-    function getQuestionPreviwContent(templateJson, itemJson) {
+    function getQuestionPreviwContent(tempalteData, itemJson) {
         try {
-            if (!templateJson) {
+            if (!tempalteData) {
                 throw "Template cannot be empty";
             }
-
             var story = { "theme": { "manifest": { "media": [] }, "template": [], "controller": [{ "name": "assessment", "type": "items", "id": "assessment", "__cdata": {} }], "startStage": "assessmentStage", "id": "theme", "ver": 0.3, "stage": [{ "id": "baseStage", "preload": true, "image": [], "audio": [], "voice": [] }, { "id": "assessmentStage", "x": 0, "y": 0, "w": 100, "h": 100, "g": [{ "embed": { "template": "item", "var-item": "item" }, "x": 10, "y": 0, "w": 80, "h": 90 }], "iterate": "assessment", "var": "item" }] } };
             story.theme.controller[0].__cdata = { "total_items": 1, "SET_TYPE": "MATERIALISED_SET", "SET_OBJECT_TYPE_KEY": "AssessmentItem", "item_sets": [{ "id": "itemSet", "count": 1 }], "items": { "itemSet": [itemJson] }, "identifier": "itemSet" };
-
-            var templates = ecEditor._.isUndefined(templateJson.theme.template) ? [] : (ecEditor._.isArray(templateJson.theme.template) ? templateJson.theme.template : [templateJson.theme.template]);
-            ecEditor._.forEach(templates, function(t) {
+            ecEditor._.forEach(tempalteData, function(t) {
                 if (t && ecEditor._.findIndex(story.theme.template, function(st) {
                         return st.id == t.id
                     }) < 0) {
@@ -20,19 +17,22 @@ var assessmentBrowserUtil = (function() {
             if (itemJson.media) {
                 story = addMediaToStory(story, itemJson.media);
             }
-            if (ecEditor._.has(templateJson, 'theme.manifest') && templateJson.theme.manifest.media) {
-                story = addMediaToStory(story, templateJson.theme.manifest.media);
-            }
+            story = addMediaToStory(story, ecEditor.getCurrentObject().media);
             return story;
         } catch (err) {
             return { "error": err };
         };
     }
-
     function addMediaToStory(story, media) {
-        media = ecEditor._.isUndefined(media) ? [] : (ecEditor._.isArray(media) ? media : [media]);
-        var idIndex,
-            srcIndex;
+        var questionMedia = [], idIndex, srcIndex;
+        if(!ecEditor._.isUndefined(media)){
+            if(!ecEditor._.isArray(media)){
+                _.each(media, function(value){
+                    questionMedia.push(value);
+                });
+                media = questionMedia;
+            }
+        }
         ecEditor._.forEach(media, function(m) {
             if (m.id && m.src) {
                 srcIndex = ecEditor._.findIndex(story.theme.manifest.media, function(sm) {
@@ -55,3 +55,5 @@ var assessmentBrowserUtil = (function() {
         getQuestionPreviwContent: getQuestionPreviwContent
     }
 })();
+
+//# sourceURL=quizUtil.js
