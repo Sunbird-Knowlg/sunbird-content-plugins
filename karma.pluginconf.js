@@ -21,8 +21,8 @@ module.exports = function(config) {
             //'test/external.min.js',
             
             'test/bootstrap-html.js',
-            //'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/content-editor/scripts/script.min.js',            
-            'test/script.min.js',
+            'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/content-editor/scripts/script.min.js',            
+            //'test/script.min.js',
             'test/bootstrap-editor.js',            
             //'**/editor/**/*.js',
             // 'plugins/org.ekstep.test-1.0/editor/*.js', // if you want to test your editor plugin only
