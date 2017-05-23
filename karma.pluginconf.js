@@ -34,13 +34,14 @@ module.exports = function(config) {
             { pattern: '**/*.html', watched: true, served: true, included: false },
             { pattern: '**/*.json', watched: true, served: true, included: false },
             { pattern: '**/*.js', watched: true, served: true, included: false },
+            { pattern: '**/*.png', watched: true, served: true, included: false },
             '**/test/editor/*.spec.js'            
         ],
 
         exclude: [
-            'node_modules',
-            'coverage',
-            'hooks'
+            'node_modules/**',
+            'coverage/**',
+            'hooks/**'
         ],
 
         client: {
