@@ -55,8 +55,10 @@
             "options": [{
                 "value": "readalong",
                 "title": "Read-along",
-                "toolTip": "Read-along",
+                "toolTip": "click to configure",
                 "description": "Readalong",
+                "dataType": "icon",
+                "iconClass": "icon icon-readalong",
                 "state": true,
                 "status": "HIDE",
                 "onclick": {
@@ -73,9 +75,11 @@
             },{
                 "value": "wordinfo",
                 "title": "Word Info",
-                "toolTip": "Word Info",
+                "toolTip": "click to configure",
                 "description": "Wordinfo",
                 "state": true,
+                "dataType": "icon",
+                "iconClass": "icon icon-wordinfo",
                 "status": "HIDE",
                 "onclick": {
                     "id": "org.ekstep.text:wordinfo:show"
@@ -167,7 +171,7 @@
                 "iconClass": "align right icon"
             }],
             "defaultValue": "left"
-        }, {
+        },{
             "propertyName": "fontfamily",
             "title": "Font Family",
             "description": "Select font family for the text",

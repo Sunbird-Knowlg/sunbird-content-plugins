@@ -162,7 +162,7 @@ var conceptModal;
                 foundNodes = recursiveNodeSearch(nodes, function(node) {
                     return node.name && node.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
                 });
-                EkstepEditorAPI._.forEach(foundNodes, function(value) {
+                ecEditor._.forEach(foundNodes, function(value) {
                     if(value.selectable === 'selectable'){
                         formatedNodes.push(value);
                     }

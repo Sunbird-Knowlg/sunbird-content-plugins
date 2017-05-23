@@ -1,57 +1,53 @@
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     initialize: function() {
-        EkstepEditorAPI.addEventListener("org.ekstep.developer:loadplugin", this.loadPlugin, this);
-        EkstepEditorAPI.addEventListener("org.ekstep.developer:getPlugins", this.listPlugins, this);
-        EkstepEditorAPI.addEventListener("org.ekstep.developer:updateLocalServerPath", this.updateLocalServerPath, this);
+        ecEditor.addEventListener("org.ekstep.developer:loadplugin", this.loadPlugin, this);
+        ecEditor.addEventListener("org.ekstep.developer:getPlugins", this.listPlugins, this);
+        ecEditor.addEventListener("org.ekstep.developer:updateLocalServerPath", this.updateLocalServerPath, this);               
         
-        var scope = EkstepEditorAPI.getAngularScope();
-        scope.localServerPath = scope.localServerPath || EkstepEditorAPI.getHostRepoBasePath();
+        var scope = ecEditor.getAngularScope();
+        scope.localServerPath = scope.localServerPath || org.ekstep.pluginframework.hostRepo.basePath;
         scope.configMenus = scope.configMenus || [];
         if (scope.developerMode) {
-            scope.configMenus.push({
+            org.ekstep.contenteditor.api.updateSidebarMenu({
                 "id": "developer",
-                "category": "config",
-                "type": "icon",
-                "toolTip": "Developer",
-                "title": "Developers",
-                "iconClass": "code icon",
-                "onclick": {
-                    "id": "config:developer:show"
-                }
-            });    
+                "state": "SHOW"
+            });
+            ecEditor.addResourceRepository(org.ekstep.pluginframework.hostRepo, 0);
+            ecEditor.addResourceRepository(org.ekstep.pluginframework.draftRepo, 1);  
         }
         scope.localServerPathEdit = false;
-        EkstepEditorAPI.ngSafeApply(scope, function() {});
+        org.ekstep.contenteditor.api.ngSafeApply(scope, function() {});
+        this.listPlugins();
     },
     loadPlugin: function(event, data) {
-        var scope = EkstepEditorAPI.getAngularScope();
+        var scope = org.ekstep.contenteditor.api.getAngularScope();
         var idx = data.plugin.lastIndexOf("-");
         var pluginId = data.plugin.substr(0, idx);
         var pluginVer = data.plugin.substr(idx + 1, data.plugin.length);
-        EkstepEditorAPI.loadAndInitPlugin(pluginId, pluginVer, (new Date()).getTime());
+        org.ekstep.contenteditor.api.loadAndInitPlugin(pluginId, pluginVer, (new Date()).getTime());
     },
     listPlugins: function(event, data) {
-        var scope = EkstepEditorAPI.getAngularScope();
+        var scope = org.ekstep.contenteditor.api.getAngularScope();
         scope.localPlugins = [];
         scope.contributedPluginMessageClass = "";
         scope.contributedPluginMessage = "";
-        EkstepEditorAPI.jQuery.ajax({
+        org.ekstep.contenteditor.api.jQuery.ajax({
             type: 'GET',
-            url: EkstepEditorAPI.getHostRepoBasePath()+"/list",
+            url: org.ekstep.pluginframework.hostRepo.basePath+"/list",
             beforeSend: function() {
                 scope.localPluginsPlugins = true;
-                EkstepEditorAPI.ngSafeApply(scope, function() {});
+                org.ekstep.contenteditor.api.ngSafeApply(scope, function() {});
             },
             success: function(data) {
-                if (EkstepEditorAPI._.isArray(data) && data.length === 0) {
+                if (org.ekstep.contenteditor.api._.isArray(data) && data.length === 0) {
                     scope.contributedPluginMessageClass = "info";
                     scope.contributedPluginMessage = "No plugins found.";
                 }
-                if(EkstepEditorAPI._.isArray(data)){
+                if(org.ekstep.contenteditor.api._.isArray(data)){
                     scope.localPlugins = data;
                 }
-                EkstepEditorAPI.ngSafeApply(scope, function() {});
-                //EkstepEditor.stageManager.reloadStages();
+                org.ekstep.contenteditor.api.ngSafeApply(scope, function() {});
+                //org.ekstep.contenteditor.stageManager.reloadStages();
             },
             error: function(err) {
                 scope.contributedPluginMessageClass = "error";
@@ -59,16 +55,17 @@ EkstepEditor.basePlugin.extend({
             },
             complete: function () {
                 scope.loadingContributedPlugins = false;
-                EkstepEditorAPI.ngSafeApply(scope, function() {});
+                org.ekstep.contenteditor.api.ngSafeApply(scope, function() {});
             }
         });
 
     },
     updateLocalServerPath: function (event, data) {
-        var scope = EkstepEditorAPI.getAngularScope();
-        EkstepEditorAPI.setHostRepoBasePath(data.path);
+        var scope = org.ekstep.contenteditor.api.getAngularScope();
+        org.ekstep.pluginframework.hostRepo.basePath = data.path;
+        org.ekstep.pluginframework.hostRepo.checkConnection();
         scope.localServerPathEdit = false;
-        EkstepEditorAPI.ngSafeApply(scope, function() {});
+        org.ekstep.contenteditor.api.ngSafeApply(scope, function() {});
         this.listPlugins();
     }
 });

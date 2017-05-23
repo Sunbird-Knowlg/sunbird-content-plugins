@@ -2,7 +2,7 @@
 
 angular.module('assessmentbrowserapp', [])
     .controller('assessmentbrowsercontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
-        EkstepEditorAPI.jQuery('.modal').addClass('item-activity');
+        ecEditor.jQuery('.modal').addClass('item-activity');
         var config = { "showStartPage": false, "showEndPage": false },
             ctrl = this,
             itemIframe;
@@ -21,28 +21,48 @@ angular.module('assessmentbrowserapp', [])
             'gradeLevel': '',
             'conceptIds': []
         };
-        ctrl.activityOptions = {
-            title: "",
-            shuffle: false,
-            showImmediateFeedback: true,
-            myQuestions: false,
-            concepts: '(0) Concepts'
-        };
-        ctrl.context = EkstepEditorAPI.getAngularScope().context;
+        if(ecEditor._.isUndefined(instance.data.questionnaire)){
+            ctrl.activityOptions = {    
+                title: "",
+                shuffle: false,
+                showImmediateFeedback: true,
+                myQuestions: false,
+                concepts: '(0) Concepts'
+            };
+        }else{
+            ctrl.activityOptions = {    
+                title: instance.data.questionnaire.title,
+                shuffle: instance.data.questionnaire.shuffle,
+                showImmediateFeedback: instance.data.questionnaire.showImmediateFeedback,
+                myQuestions: instance.data.questionnaire.myQuestions,
+                concepts: instance.data.questionnaire.concepts
+            };
+            ctrl.cart = { "items": instance.data.questionnaire.items[instance.data.questionnaire.item_sets[0].id] };
+            ctrl.isAdvanceOptionOpen = false;
+            ctrl.activityOptions.total_items = ctrl.cart.items.length;
+            ctrl.activityOptions.max_score = ctrl.activityOptions.total_items;
+            ctrl.activityOptions.range = ecEditor._.times(ctrl.activityOptions.total_items).splice(1);
+            ctrl.activityOptions.range.push(ctrl.activityOptions.total_items);
+            ecEditor.jQuery('.displayCount .text').html(ctrl.activityOptions.total_items);
+            ctrl.isItemAvailable = true;
+            ctrl.itemsLoading = false;
+            $scope.$safeApply();
+        }
+        ctrl.context = window.context;
 
         //get languages from languages api
-        EkstepEditorAPI.getService('language').getLanguages(function(err, respLan) {
+        ecEditor.getService('language').getLanguages(function(err, respLan) {
             if (!err) {
                 var assessmentlanguages = {};
-                EkstepEditorAPI._.forEach(respLan.data.result.languages, function(lang) {
+                ecEditor._.forEach(respLan.data.result.languages, function(lang) {
                     assessmentlanguages[lang.code] = lang.name;
                 });
-                ctrl.assessment.language = EkstepEditorAPI._.values(assessmentlanguages);
+                ctrl.assessment.language = ecEditor._.values(assessmentlanguages);
                 //get questiontype, grade and difficulty dropdown values from definitions api
-                EkstepEditorAPI.getService('meta').getDefinitions('AssessmentItem', function(err, resp) {
+                ecEditor.getService('meta').getDefinitions('AssessmentItem', function(err, resp) {
                     if (!err) {
                         var questionTypes = {};
-                        EkstepEditorAPI._.forEach(resp.data.result.definition_node.properties, function(prop) {
+                        ecEditor._.forEach(resp.data.result.definition_node.properties, function(prop) {
                             switch (prop.propertyName) {
                                 case "qlevel":
                                     ctrl.assessment.qlevel = prop.range;
@@ -56,9 +76,9 @@ angular.module('assessmentbrowserapp', [])
                             }
                         });
                         //get question type full defination from resource bundles api
-                        EkstepEditorAPI.getService('meta').getResourceBundles(ctrl.languagecode, function(err, resourceResp) {
+                        ecEditor.getService('meta').getResourceBundles(ctrl.languagecode, function(err, resourceResp) {
                             if (!err) {
-                                EkstepEditorAPI._.forEach(ctrl.assessment.type, function(data) {
+                                ecEditor._.forEach(ctrl.assessment.type, function(data) {
                                     if (resourceResp.data.result.en[data] == undefined) {
                                         questionTypes[data] = data;
                                     } else {
@@ -73,7 +93,7 @@ angular.module('assessmentbrowserapp', [])
                                 return;
                             }
                         });
-                        EkstepEditorAPI.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});
+                        ecEditor.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});
                     }else{
                         ctrl.errorMessage = true;
                         $scope.$safeApply();
@@ -104,12 +124,12 @@ angular.module('assessmentbrowserapp', [])
             };
             if (ctrl.activityOptions.myQuestions) {
                 ctrl.isMyQuestions = true;
-                data.request.filters.portalOwner = EkstepEditorAPI._.isUndefined(ctrl.context) ? '' : ctrl.context.user.id;
+                data.request.filters.portalOwner = ecEditor._.isUndefined(ctrl.context) ? '' : ctrl.context.user.id;
             } else {
                 ctrl.isMyQuestions = false;
             }
             // setting filters values and title to request data
-            EkstepEditorAPI._.forEach(activity, function(value, key) {
+            ecEditor._.forEach(activity, function(value, key) {
                 if (value) {
                     switch (key) {
                         case "question_title":
@@ -138,7 +158,7 @@ angular.module('assessmentbrowserapp', [])
                 }
             });
             // get Questions from questions api
-            EkstepEditorAPI.getService('assessment').getQuestions(data, function(err, resp) {
+            ecEditor.getService('assessment').getQuestions(data, function(err, resp) {
                 if (!err) {
                     ctrl.itemsLoading = false;
                     var item;
@@ -146,12 +166,12 @@ angular.module('assessmentbrowserapp', [])
                     if (!resp.data.result.count || resp.data.result.count <= 0) {
                         ctrl.isItemAvailable = false;
                     } else {
-                        EkstepEditorAPI._.forEach(resp.data.result.items, function(value) {
-                            if(!EkstepEditorAPI._.isUndefined(value.template_id)){
+                        ecEditor._.forEach(resp.data.result.items, function(value) {
+                            if(!ecEditor._.isUndefined(value.template_id)){
                                 item = {};
-                                item.question = value;
-                                if (EkstepEditorAPI._.findIndex(ctrl.cart.items, function(i) {
-                                        return i.question.identifier === value.identifier
+                                item = value;
+                                if (ecEditor._.findIndex(ctrl.cart.items, function(i) {
+                                        return i.identifier === value.identifier
                                     }) === -1) {
                                     item.isSelected = false;
                                 } else {
@@ -160,7 +180,11 @@ angular.module('assessmentbrowserapp', [])
                                 ctrl.items.push(item);
                             }
                         });
-                        ctrl.previewItem(ctrl.items[0]);
+                        if(ecEditor._.isUndefined(ctrl.cart.items) || ctrl.cart.items.length <= 0){
+                            ctrl.previewItem(ctrl.items[0]);
+                        }else{
+                            ctrl.previewItem(ctrl.cart.items[0]); 
+                        }
                     }
                     ctrl.totalItems = ctrl.items.length;
                     $scope.$safeApply();
@@ -174,10 +198,10 @@ angular.module('assessmentbrowserapp', [])
         };
 
         ctrl.cart = {
-            "items": [],
+            "items": (ecEditor._.isUndefined(instance.data.questionnaire)) ? [] : instance.data.questionnaire.items[instance.data.questionnaire.item_sets[0].id],
             "getItemIndex": function(item) {
-                return EkstepEditorAPI._.findIndex(ctrl.items, function(i) {
-                    return i.question.identifier === item.question.identifier
+                return ecEditor._.findIndex(ctrl.items, function(i) {
+                    return i.identifier === item.identifier
                 });
             },
             "add": function(item) {
@@ -188,14 +212,14 @@ angular.module('assessmentbrowserapp', [])
                 $scope.$safeApply();
             },
             "remove": function(item) {
-                EkstepEditorAPI._.remove(this.items, function(cartItem) {
-                    return item.question.identifier == cartItem.question.identifier;
+                ecEditor._.remove(this.items, function(cartItem) {
+                    return item.identifier == cartItem.identifier;
                 });
                 var itemIndex = this.getItemIndex(item);
                 if (itemIndex != -1) ctrl.items[itemIndex].isSelected = false;
-                EkstepEditorAPI.jQuery(".displayCount #total_items option[value='number:"+(parseInt(this.items.length+1))+"']").remove();
+                ecEditor.jQuery(".displayCount #total_items option[value='number:"+(parseInt(this.items.length+1))+"']").remove();
                 ctrl.activityOptions.total_items = this.items.length;
-                EkstepEditorAPI.jQuery('.displayCount .text').html(ctrl.activityOptions.total_items);
+                ecEditor.jQuery('.displayCount .text').html(ctrl.activityOptions.total_items);
                 $scope.$safeApply();
             }
         };
@@ -204,14 +228,14 @@ angular.module('assessmentbrowserapp', [])
             ctrl.isAdvanceOptionOpen = false;
             ctrl.activityOptions.total_items = ctrl.cart.items.length;
             ctrl.activityOptions.max_score = ctrl.activityOptions.total_items;
-            ctrl.activityOptions.range = EkstepEditorAPI._.times(ctrl.activityOptions.total_items).splice(1);
+            ctrl.activityOptions.range = ecEditor._.times(ctrl.activityOptions.total_items).splice(1);
             ctrl.activityOptions.range.push(ctrl.activityOptions.total_items);
-            EkstepEditorAPI.jQuery('.displayCount .text').html(ctrl.activityOptions.total_items);
+            ecEditor.jQuery('.displayCount .text').html(ctrl.activityOptions.total_items);
             $scope.$safeApply();
         };
 
         $scope.$on('ngDialog.opened', function (e, $dialog) {
-            itemIframe = EkstepEditor.jQuery('#itemIframe')[0];
+            itemIframe = org.ekstep.contenteditor.jQuery('#itemIframe')[0];
             if (itemIframe.src == "")
                 itemIframe.src = instance.previewURL;
             itemIframe.addEventListener('load', function() {
@@ -220,7 +244,8 @@ angular.module('assessmentbrowserapp', [])
         });
       
         ctrl.previewItem = function(item) {
-            EkstepEditorAPI.getService('assessment').getItem(item.question.identifier, function(err, resp) {
+            console.log('previewItem');
+            ecEditor.getService('assessment').getItem(item.identifier, function(err, resp) {
                 if (!err) {
                     item = resp.data.result.assessment_item ? resp.data.result.assessment_item : item;
                     ctrl.itemPreviewLoading = true;
@@ -228,12 +253,12 @@ angular.module('assessmentbrowserapp', [])
                     ctrl.activePreviewItem = item.identifier;
                     var templateRef = item.template_id ? item.template_id : item.template;
                     if (templateRef) {
-                        EkstepEditorAPI.getService('assessment').getTemplate(templateRef, function(err, response) {
+                        ecEditor.getService('assessment').getTemplate(templateRef, function(err, response) {
                             if (!err) {
                                 var x2js = new X2JS({ attributePrefix: 'none', enableToStringFunc: false });
                                 var templateJson = x2js.xml_str2json(response.data.result.content.body);
                                 ctrl.itemPreviewContent = assessmentBrowserUtil.getQuestionPreviwContent(templateJson, item);
-                                ctrl.itemPreviewDisplay = !EkstepEditorAPI._.isUndefined(ctrl.itemPreviewContent.error) ? ctrl.itemPreviewContent.error : '';
+                                ctrl.itemPreviewDisplay = !ecEditor._.isUndefined(ctrl.itemPreviewContent.error) ? ctrl.itemPreviewContent.error : '';
                                 ctrl.itemPreviewLoading = false;
                                 itemIframe.contentWindow.location.reload();
                                 $scope.$safeApply();
@@ -262,8 +287,8 @@ angular.module('assessmentbrowserapp', [])
         };
 
         ctrl.addItemActivity = function() {
-            if (!EkstepEditorAPI._.isUndefined(instance.callback)) {
-                instance.callback(ctrl.cart.items, ctrl.activityOptions);
+            if (!ecEditor._.isUndefined(instance.callback)) {
+                instance.callback({ 'items' : ctrl.cart.items, 'config' : ctrl.activityOptions});
                 ctrl.cancel();
             }
         }
@@ -273,7 +298,7 @@ angular.module('assessmentbrowserapp', [])
         };
 
         ctrl.searchQuestions();
-        EkstepEditorAPI.dispatchEvent('org.ekstep.conceptselector:init', {
+        ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
             element: 'assessmentConceptSelector',
             selectedConcepts: [], // All composite keys except mediaType
             callback: function(data) {
@@ -288,7 +313,7 @@ angular.module('assessmentbrowserapp', [])
         });
 
         ctrl.generateTelemetry = function(data) {
-          if (data) EkstepEditorAPI.getService('telemetry').interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", "stage": EkstepEditorAPI.getCurrentStage().id })
+          if (data) ecEditor.getService('telemetry').interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", "stage": ecEditor.getCurrentStage().id })
         }
     }]);
 //# sourceURL=assessmentbrowserapp.js

@@ -14,7 +14,7 @@
             "type": "icon",
             "toolTip": "Add Video",
             "title": "Add Video",
-            "iconClass": "fa fa-video-camera",
+            "iconClass": "video play outline large icon",
             "iconStyle": "",
             "onclick": {
                 "id": "org.ekstep.video:showpopup"

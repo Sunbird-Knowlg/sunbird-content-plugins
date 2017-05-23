@@ -2,13 +2,13 @@
  *
  * Plugin to browse concepts and select
  * @class conceptselector
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  *
  * @author Santhosh Vasabhaktula <santhosh@ilimi.in>
  * @listens org.ekstep.image:conceptselector:init
  */
 
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     conceptData: undefined,
     callback: undefined,
     /**
@@ -37,7 +37,7 @@ EkstepEditor.basePlugin.extend({
 
         /**Get concept data**/
         instance.getConcept(0, instance.limit, instance, function() { instance.initData(instance); });
-        EkstepEditorAPI.addEventListener(instance.manifest.id + ":init", this.initConceptBrowser, this);
+        ecEditor.addEventListener(instance.manifest.id + ":init", this.initConceptBrowser, this);
     },
     /**
      *
@@ -51,16 +51,16 @@ EkstepEditor.basePlugin.extend({
         var data = { "request": { "filters": { "objectType": ["Dimension", "Domain"] } } };
 
         /**Get domains and dimensions data**/
-        EkstepEditorAPI.getService('search').search(data, function(err, resp) {
-            if (!err && resp.data && resp.data.result && EkstepEditorAPI._.isArray(resp.data.result.domains)) {
-                EkstepEditorAPI._.forEach(resp.data.result.domains, function(value) {
+        ecEditor.getService('search').search(data, function(err, resp) {
+            if (!err && resp.data && resp.data.result && ecEditor._.isArray(resp.data.result.domains)) {
+                ecEditor._.forEach(resp.data.result.domains, function(value) {
                     var domain = {};
                     domain.id = value.identifier;
                     domain.name = value.name;
                     var domainChild = [];
 
                     /**Get domain child**/
-                    EkstepEditorAPI._.forEach(getChild(value.identifier, resp.data.result.dimensions), function(value) {
+                    ecEditor._.forEach(getChild(value.identifier, resp.data.result.dimensions), function(value) {
                         var dimension = {};
                         dimension.id = value.id;
                         dimension.name = value.name;
@@ -78,7 +78,7 @@ EkstepEditor.basePlugin.extend({
         /**Get child recursively**/
         function getChild(id, resp) {
             var childArray = [];
-            EkstepEditorAPI._.forEach(resp, function(value) {
+            ecEditor._.forEach(resp, function(value) {
                 if (value.parent != undefined) {
                     if (value.parent[0] == id) {
                         var child = {};
@@ -112,9 +112,9 @@ EkstepEditor.basePlugin.extend({
 
         var data = { "request": { "filters": { "objectType": ["Concept"] }, "offset": offset, "limit": instance.limit } };
 
-        EkstepEditorAPI.getService('search').search(data, function(err, resp) {
-            if (!err && resp.data && resp.data.result && EkstepEditorAPI._.isArray(resp.data.result.concepts)) {
-                EkstepEditorAPI._.forEach(resp.data.result.concepts, function(value) {
+        ecEditor.getService('search').search(data, function(err, resp) {
+            if (!err && resp.data && resp.data.result && ecEditor._.isArray(resp.data.result.concepts)) {
+                ecEditor._.forEach(resp.data.result.concepts, function(value) {
                     instance.concepts.push(value);
                 });
                 if (resp.data.result.count > limit) {
@@ -136,7 +136,7 @@ EkstepEditor.basePlugin.extend({
         if (instance.selectors.indexOf(data.element) == -1) {
             /**This is needed to get updated conceptData**/
             setTimeout(function() {
-                EkstepEditorAPI.jQuery('#' + data.element).treePicker({
+                ecEditor.jQuery('#' + data.element).treePicker({
                     data: instance.conceptData,
                     name: 'Concepts',
                     picked: data.selectedConcepts,

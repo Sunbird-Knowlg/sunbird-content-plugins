@@ -494,7 +494,7 @@
 
     Karaoke.prototype.changePlaybackRate = function() {
         //getting slider selected value and assigning to variable
-        var value = EkstepEditorAPI.jQuery('#syncSlider').val();
+        var value = ecEditor.jQuery('#syncSlider').val();
         $('.ui-slider-legend p').css('color', 'black');
         $('.ui-slider-legend p:eq(' + (value - 1) + ')').css('color', 'grey');
         //basedon user selection we are changing playbackrate of audio

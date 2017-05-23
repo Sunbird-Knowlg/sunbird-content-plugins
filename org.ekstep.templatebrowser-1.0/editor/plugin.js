@@ -1,19 +1,19 @@
 'use strict';
 
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     callback: undefined,
     initialize: function() {
-        EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.initPreview, this);
+        ecEditor.addEventListener(this.manifest.id + ":show", this.initPreview, this);
         setTimeout(function() {
-            var templatePath = EkstepEditor.config.pluginRepo + '/org.ekstep.templatebrowser-1.0/editor/templateBrowser.html';
-            var controllerPath = EkstepEditor.config.pluginRepo + '/org.ekstep.templatebrowser-1.0/editor/templatebrowserapp.js';
-            EkstepEditorAPI.getService('popup').loadNgModules(templatePath, controllerPath);
+            var templatePath = org.ekstep.contenteditor.config.pluginRepo + '/org.ekstep.templatebrowser-1.0/editor/templateBrowser.html';
+            var controllerPath = org.ekstep.contenteditor.config.pluginRepo + '/org.ekstep.templatebrowser-1.0/editor/templatebrowserapp.js';
+            ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
     },
     initPreview: function(event, callback) {
         var instance = this;
         instance.callback = callback;
-        EkstepEditorAPI.getService('popup').open({
+        ecEditor.getService('popup').open({
             template: 'partials_org.ekstep.templatebrowser.html',
             controller: 'templatebrowser',
             controllerAs: '$ctrl',
@@ -29,7 +29,7 @@ EkstepEditor.basePlugin.extend({
     },
     getTemplates: function(searchText, callback) {
         var instance = this,
-            iservice = new EkstepEditor.iService(),
+            iservice = new org.ekstep.contenteditor.iService(),
             requestObj,
             requestHeaders;
 
@@ -49,6 +49,6 @@ EkstepEditor.basePlugin.extend({
         };
 
         _.isUndefined(searchText) ? null : (requestObj.request.filters.name = [searchText]);
-        iservice.http.post(EkstepEditor.config.baseURL + '/api/search/v2/search', requestObj, requestHeaders, callback);
+        iservice.http.post(org.ekstep.contenteditor.config.baseURL + '/api/search/v2/search', requestObj, requestHeaders, callback);
     }
 });

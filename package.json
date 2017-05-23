@@ -4,6 +4,8 @@
     "description": "Testing content plugins",
     "dependencies": {},
     "devDependencies": {
+        "angular": "^1.6.4",
+        "angular-mocks": "^1.6.4",
         "jasmine": "2.5.2",
         "jasmine-core": "2.5.2",
         "jasmine-expect": "3.7.0",
@@ -12,7 +14,8 @@
         "karma-jasmine": "1.0.2",
         "karma-jasmine-matchers": "3.7.0",
         "karma-phantomjs-launcher": "1.0.2",
-        "phantomjs": "2.1.7"
+        "phantomjs": "2.1.7",
+        "karma-mocha-reporter": "^2.2.3"
     },
     "scripts": {
         "test": "karma start karma.pluginconf.js"

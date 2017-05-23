@@ -13,6 +13,15 @@
             {"type": "js", "src": "editor/hybridtodo.jQuery.js"},
             {"type": "js", "src": "editor/jquery-comments.js"},
             {"type": "css", "src": "editor/jquery-comments.css"}
-        ]
+        ],
+        "menu": [],
+        "sidebarMenu": [{
+            "id": "comments",
+            "type": "icon",
+            "toolTip": "comments",
+            "title": "comments",
+            "iconClass": "comments icon",            
+            "templateURL": "editor/partials/sidebarCommentsTemplate.html"            
+        }]
     }
 }

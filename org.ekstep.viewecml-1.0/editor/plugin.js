@@ -2,12 +2,12 @@
  * 
  * Simple plugin to view ECML
  * @class ECML
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  *
  * @author Anshu Narayan
  * @fires object:modified
  */
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     type: "viewecml",
     /**
      *   @memberof callback {Funtion} callback
@@ -24,10 +24,10 @@ EkstepEditor.basePlugin.extend({
           'break-lines': 80
         });
         converter = new E2EConverter();
-        EkstepEditorAPI.addEventListener(this.manifest.id + ":show", this.initViewECML, this);
-        var templatePath = EkstepEditorAPI.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/ECMLbrowser.html");
+        ecEditor.addEventListener(this.manifest.id + ":show", this.initViewECML, this);
+        var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/ECMLbrowser.html");
         setTimeout(function() {
-            EkstepEditorAPI.getService('popup').loadNgModules(templatePath);
+            ecEditor.getService('popup').loadNgModules(templatePath);
         }, 1000);
     },
     /**        
@@ -52,7 +52,7 @@ EkstepEditor.basePlugin.extend({
     showECMLBrowser: function(err, data) {
         var instance = this,
             popupConfig;
-        var ecmlToCopy = EkstepEditor.stageManager.toECML();
+        var ecmlToCopy = org.ekstep.contenteditor.stageManager.toECML();
 
         popupConfig = {
             template: data,
@@ -61,7 +61,7 @@ EkstepEditor.basePlugin.extend({
             }
         };
 
-        EkstepEditorAPI.getService('popup').open({
+        ecEditor.getService('popup').open({
             template: 'partials_org.ekstep.ECMLbrowser.html',
             controller: ['$scope', instance.controllerCallback],
             controllerAs: '$ctrl',
@@ -80,15 +80,27 @@ EkstepEditor.basePlugin.extend({
         ctrl.contentBody = "ECML Content";
 
         ctrl.previewLoad = function() {
-            var jsondata = EkstepEditor.stageManager.toECML();
+            var jsondata = org.ekstep.contenteditor.stageManager.toECML();
+            var scope = ecEditor.getAngularScope();
+            if (scope.developerMode) {
+                if(!jsondata.theme['plugin-manifest']) jsondata.theme['plugin-manifest'] = {"plugin": []};
+                if(!_.isArray(jsondata.theme['plugin-manifest'].plugin)) jsondata.theme['plugin-manifest'].plugin = [jsondata.theme['plugin-manifest'].plugin];
+                jsondata.theme['plugin-manifest'].plugin.splice(0, 0, {
+                    "id": "org.ekstep.developer",
+                    "ver": "1.0",
+                    "type": "plugin",
+                    "hostPath": org.ekstep.pluginframework.hostRepo.basePath,
+                    "preload": true
+                });
+            }
             ctrl.contentBody = converter.buildECML(jsondata, true)
             $scope.$safeApply(function(){
                 setTimeout(function() {
-                    Prism.highlightElement(EkstepEditorAPI.jQuery("#xmlBody")[0]);
+                    Prism.highlightElement(ecEditor.jQuery("#xmlBody")[0]);
                 }, 100);
             });
 
-            // var iService = new EkstepEditor.iService();
+            // var iService = new org.ekstep.contenteditor.iService();
             // iService.http.post('ecml', { data: jsondata }, null,  function(err, resp) {
             //     ctrl.contentBody = resp.data;
             //     $scope.$safeApply();

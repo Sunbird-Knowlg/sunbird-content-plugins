@@ -2,7 +2,7 @@
  * 
  * Simple plugin to add audio to stage
  * @class audio
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  *
  * @author Sunil A S <sunils@ilimi.in>
  * @fires org.ekstep.assetbrowser:show
@@ -10,7 +10,7 @@
  * @listens org.ekstep.audio:assetbrowser:open
  */
 
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     audioData: undefined,
     name: undefined,
     /**
@@ -20,10 +20,10 @@ EkstepEditor.basePlugin.extend({
      */
     initialize: function() {
         var instance = this;
-        EkstepEditorAPI.addEventListener(instance.manifest.id + ":assetbrowser:open", this.openBrowser, this);
-        EkstepEditorAPI.addEventListener(instance.manifest.id + ":removeAudio", this.removeAudio, this);
-        EkstepEditorAPI.addEventListener(instance.manifest.id + ":toggleAudio", this.toggleAudio, this);
-        EkstepEditorAPI.addEventListener(instance.manifest.id + ":jplayerInit", this.jplayerInit, this);
+        ecEditor.addEventListener(instance.manifest.id + ":assetbrowser:open", this.openBrowser, this);
+        ecEditor.addEventListener(instance.manifest.id + ":removeAudio", this.removeAudio, this);
+        ecEditor.addEventListener(instance.manifest.id + ":toggleAudio", this.toggleAudio, this);
+        ecEditor.addEventListener(instance.manifest.id + ":jplayerInit", this.jplayerInit, this);
     },
     /**
      * 
@@ -35,18 +35,18 @@ EkstepEditor.basePlugin.extend({
         var media = this.media ? this.media[this.attributes.asset] : undefined;
         //this.id = media.id;
         if (media && media.src) {
-            media.src = EkstepEditor.mediaManager.getMediaOriginURL(media.src);
+            media.src = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(media.src);
             this.addMedia(media);
             this.audioData = {
-                stageId: EkstepEditorAPI.getCurrentStage().id,
+                stageId: ecEditor.getCurrentStage().id,
                 type: 'audio',
-                title: (EkstepEditorAPI._.isUndefined(media.name)) ? media.id : media.name,
+                title: (ecEditor._.isUndefined(media.name)) ? media.id : media.name,
                 assetId: media.id,
                 id: instance.id,
                 url: media.src
             }
             this.name = this.audioData.title;
-            EkstepEditorAPI.dispatchEvent("org.ekstep.stageconfig:addcomponent", this.audioData);
+            ecEditor.dispatchEvent("org.ekstep.stageconfig:addcomponent", this.audioData);
         } else {
             this.parent = undefined;
         }
@@ -59,10 +59,10 @@ EkstepEditor.basePlugin.extend({
      */
     openBrowser: function() {
         var instance = this;
-        EkstepEditorAPI.dispatchEvent('org.ekstep.assetbrowser:show', {
+        ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'audio',
             search_filter: {}, // All composite keys except mediaType
-            callback: function(data) { EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', data) }
+            callback: function(data) { ecEditor.dispatchEvent(instance.manifest.id + ':create', data) }
         });
     },
     /**
@@ -77,49 +77,49 @@ EkstepEditor.basePlugin.extend({
         return cp;
     },
     onConfigChange: function(key, value) {
-        EkstepEditorAPI.dispatchEvent('delete:invoke');
-        EkstepEditorAPI.dispatchEvent(this.manifest.id + ':create', value)
+        ecEditor.dispatchEvent('delete:invoke');
+        ecEditor.dispatchEvent(this.manifest.id + ':create', value)
     },
     render: function(canvas) {
         //do nothing, since there is no editorObj
     },
     removeAudio: function(event, data) {
-        var instance = EkstepEditorAPI.getPluginInstance(data.id);
+        var instance = ecEditor.getPluginInstance(data.id);
         instance.remove();
-        EkstepEditorAPI.dispatchEvent('org.ekstep.stageconfig:remove', data);
+        ecEditor.dispatchEvent('org.ekstep.stageconfig:remove', data);
     },
     toggleAudio: function(event, data) {
-        var instance = EkstepEditorAPI.getPluginInstance(data.id);
+        var instance = ecEditor.getPluginInstance(data.id);
         instance.config.autoplay = data.autoplay;
-        EkstepEditorAPI.dispatchEvent('org.ekstep.config:toggleStageEvent', { 'flag': data.autoplay, 'id': data.assetId });
+        ecEditor.dispatchEvent('org.ekstep.config:toggleStageEvent', { 'flag': data.autoplay, 'id': data.assetId });
     },
     jplayerInit: function(event, data) {
         var id = data.id;
-        EkstepEditorAPI.jQuery("#" + id).jPlayer({
+        ecEditor.jQuery("#" + id).jPlayer({
             swfPath: 'js/jplayer/',
             supplied: 'mp3',
             solution: 'html, flash',
             preload: 'auto',
             wmode: 'window',
             ready: function() {
-                EkstepEditorAPI.jQuery(this).jPlayer("setMedia", {
+                ecEditor.jQuery(this).jPlayer("setMedia", {
                     mp3: data.url
                 }).jPlayer('play');
             },
             play: function() {
-                EkstepEditorAPI.jQuery(this).addClass('pause');
+                ecEditor.jQuery(this).addClass('pause');
             },
             pause: function() {
-                EkstepEditorAPI.jQuery(this).removeClass('pause');
+                ecEditor.jQuery(this).removeClass('pause');
             },
             stop: function() {
-                EkstepEditorAPI.jQuery(this).removeClass('pause');
+                ecEditor.jQuery(this).removeClass('pause');
             }
         });
-        if (!EkstepEditorAPI.jQuery("#" + id).hasClass('pause')) {
-            EkstepEditorAPI.jQuery("#" + id).jPlayer('play');
+        if (!ecEditor.jQuery("#" + id).hasClass('pause')) {
+            ecEditor.jQuery("#" + id).jPlayer('play');
         } else {
-            EkstepEditorAPI.jQuery("#" + id).jPlayer('pause');
+            ecEditor.jQuery("#" + id).jPlayer('pause');
         }
     },
     getDisplayName: function () {

@@ -2,12 +2,12 @@
  *
  * plugin to get asset (image/audio) from learning platform
  * @class assetBrowser
- * @extends EkstepEditor.basePlugin
+ * @extends org.ekstep.contenteditor.basePlugin
  * @author Amol Ghatol
  * @fires stagedecorator:addcomponent
  * @listens org.ekstep.assetbrowser:show
  */
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     type: 'assetbrowser',
     initData: undefined,
     /**

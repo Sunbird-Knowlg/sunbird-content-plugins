@@ -2,13 +2,13 @@
  * 
  * plugin to add assessments to stage
  * @class assessment
- * @extends EkstepEditor.basePlugin
- * @author Manju dr <manjunathd@ilimi.in>
+ * @extends org.ekstep.contenteditor.basePlugin
+ * @author Manjunath Davanam  <manjunathd@ilimi.in>
  * @fires org.ekstep.assessmentbrowser:show
  * @fires org.ekstep.quiz:add 
  * @listens org.ekstep.image:assessment:showPopup
  */
-EkstepEditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     /**
      * This expains the type of the plugin 
      * @member {String} type
@@ -21,8 +21,14 @@ EkstepEditor.basePlugin.extend({
      * @memberof assessment
      */
     initialize: function() {
-        EkstepEditorAPI.addEventListener(this.manifest.id + ":showPopup", this.openAssessmentBrowser, this);
-        EkstepEditorAPI.addEventListener(this.manifest.id + ":renderQuiz", this.renderQuiz, this);
+        var instance = this;
+        ecEditor.addEventListener(this.manifest.id + ":showPopup", this.openAssessmentBrowser, this);
+        ecEditor.addEventListener(this.manifest.id + ":renderQuiz", this.renderQuiz, this);
+        ecEditor.addEventListener(this.manifest.id + ":showQuizConfig", this.showQuizConfig, this);
+        var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/templates/quizconfig.html");
+        var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/js/quizconfigapp.js");
+        ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
+
     },
     mediaObj: {},
     hasTemplateMedia: true,
@@ -50,10 +56,10 @@ EkstepEditor.basePlugin.extend({
         var templateArray = [],
             errorTemplateurl = [],
             resCount = 0;
-        if ((EkstepEditorAPI._.isUndefined(instance.data.template) || instance.data.template.length == 0 || !instance.hasTemplateMedia) && _.size(templateIds) >0) {
+        if ((ecEditor._.isUndefined(instance.data.template) || instance.data.template.length == 0 || !instance.hasTemplateMedia) && _.size(templateIds) >0) {
             for (var index in templateIds) {
                 // get Template based on ID and push all templates response to arrray.
-                EkstepEditorAPI.getService('assessment').getTemplate(templateIds[index], function(err, res) {
+                ecEditor.getService('assessment').getTemplate(templateIds[index], function(err, res) {
                     try {
                         if (res) {
                             resCount++;
@@ -90,8 +96,7 @@ EkstepEditor.basePlugin.extend({
     },
     showQuizbgImage: function(questionnaire, _parent) {
         var instance = this;
-        var path = EkstepEditorAPI.getConfig('useProxyForURL') ? "/plugins/" : "/content-plugins/";
-        var quizImage = EkstepEditor.config.absURL+path+"org.ekstep.quiz-1.0/editor/assets/QuizImage.png";
+        var quizImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assets/QuizImage.png");
         fabric.Image.fromURL(quizImage, function(img) {
             var count = questionnaire.total_items + '/' + instance.getItems(questionnaire.items);
             var quizDetails = instance.getPropsForEditor(questionnaire.title, count, questionnaire.max_score);
@@ -136,10 +141,10 @@ EkstepEditor.basePlugin.extend({
         var instance = this,
             question = [];
         _.each(assessmentData.items, function(item) {
-            if (!_.isUndefined(item.question)) {
-                item.question = instance.parseItem(item.question);
+            if (!_.isUndefined(item)) {
+                item = instance.parseItem(item);
             }
-            question.push(item.question);
+            question.push(item);
         });
         instance.setQuizdata(question, assessmentData.config);
     },
@@ -154,10 +159,9 @@ EkstepEditor.basePlugin.extend({
             }
         }
         if (_.size(errTemplateids) === _.size(errTempurl) && _.size(errTemplateids) > 0) {
-            var path = EkstepEditorAPI.getConfig('useProxyForURL') ? "/plugins/" : "/content-plugins/";
-            EkstepEditorAPI.getService('popup').open({
+            ecEditor.getService('popup').open({
                 showClose: false,
-                template: EkstepEditor.config.absURL + path + "org.ekstep.quiz-1.0/editor/warning.html",
+                template: ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/templates/warning.html"),
                 controller: ['$scope', function($scope) {
                     $scope.callClear = function() {
                         instance.clearItem(questionnaire, errTemplateids,function(){
@@ -207,13 +211,13 @@ EkstepEditor.basePlugin.extend({
         questionSets[question[0].identifier] = question;
         controller.questionnaire["items"] = questionSets;
         controller.questionnaire["item_sets"] = [{ "count": config.total_items, "id": question[0].identifier }]
-        controller["questionnaire"] = Object.assign(controller.questionnaire, config);
+        controller["questionnaire"] = ecEditor._.assign(controller.questionnaire, config);
         instance.addConfig("type", "items");
         instance.addConfig("var", "item");
         instance.setData(controller);
         _assessmentData["data"] = { __cdata: JSON.stringify(controller) };
         _assessmentData["config"] = { __cdata: JSON.stringify({ "type": "items", "var": "item" }) };
-        EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':create', _assessmentData);
+        ecEditor.dispatchEvent(instance.manifest.id + ':create', _assessmentData);
     },
     parseItem: function(item) {
         // this function is restricted to parse the few keys
@@ -246,7 +250,7 @@ EkstepEditor.basePlugin.extend({
     },
     addMediaToConfig: function (media) {
         if (media.src) {
-            EkstepEditor.mediaManager.getMediaOriginURL(media.src);
+            org.ekstep.contenteditor.mediaManager.getMediaOriginURL(media.src);
             this.mediaObj[media.id] = media;        
             this.addConfig("media", this.mediaObj);
         }
@@ -319,11 +323,31 @@ EkstepEditor.basePlugin.extend({
                     this.config.optionShuffle = value;
                     this.data.questionnaire.optionShuffle = value;
                     break;
-            }
+                case 'browser':
+                    ecEditor.dispatchEvent('delete:invoke');
+                    ecEditor.dispatchEvent(this.manifest.id + ':renderQuiz', { items: value.items, config: value.config })
+                    break;
+                }
         }
-        EkstepEditorAPI.render();
-        EkstepEditorAPI.dispatchEvent('object:modified', {
-            target: EkstepEditorAPI.getEditorObject()
+        ecEditor.render();
+        ecEditor.dispatchEvent('object:modified', {
+            target: ecEditor.getEditorObject()
+        });
+    },
+    showQuizConfig: function(event, dataObj) {
+       var currentQuizObj = ecEditor.getCurrentObject();
+        ecEditor.getService('popup').open({
+            template: 'quizconfig',
+            controller: 'quizconfigcontroller',
+            controllerAs: '$ctrl',
+            resolve: {
+                'quizInstance': function() {
+                    return currentQuizObj;
+                }
+            },
+            width: 900,
+            showClose: false,
+            className: 'ngdialog-theme-plain'
         });
     },
     getConfig: function() {
@@ -343,12 +367,18 @@ EkstepEditor.basePlugin.extend({
      * 
      */
     openAssessmentBrowser: function(event, callback) {
-        var instance = this;
-        var callback = function(items, config) {
-            var assessmentData = { items: items, config: config };
-            EkstepEditorAPI.dispatchEvent(instance.manifest.id + ':renderQuiz', assessmentData);
-        };
-        EkstepEditorAPI.dispatchEvent("org.ekstep.assessmentbrowser:show", callback);
+        var instance = this,
+            data = undefined;        
+        if(ecEditor._.isUndefined(callback)){
+            callback = function(data) {
+                var assessmentData = { items: data.items, config: data.config };
+                ecEditor.dispatchEvent(instance.manifest.id + ':renderQuiz', assessmentData);
+            };
+        }else{
+            callback = callback.callback;
+            data = ecEditor.getCurrentObject().data;
+        }
+        ecEditor.dispatchEvent("org.ekstep.assessmentbrowser:show", {callback : callback, data : data});  
     }
 });
 //# sourceURL=quizPlugin.js

@@ -15,22 +15,45 @@ module.exports = function(config) {
         // list of files / patterns to load in the browser
         files: [
             // bower:js
-            'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/content-editor/scripts/external.min.js',
+            'node_modules/angular/angular.min.js',            
+            'node_modules/angular-mocks/angular-mocks.js',                         
+            'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/content-editor/scripts/external.min.js',                                               
             //'test/external.min.js',
+            
             'test/bootstrap-html.js',
-            'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/content-editor/scripts/script.min.js',
+            'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/content-editor/scripts/script.min.js',            
             //'test/script.min.js',
-            'test/bootstrap-editor.js',
+            'test/bootstrap-editor.js',            
             //'**/editor/**/*.js',
             // 'plugins/org.ekstep.test-1.0/editor/*.js', // if you want to test your editor plugin only
             // 'plugins/org.ekstep.test-1.0/test/*.js',  // include test directory for your specific plugin
             // fixtures - include as required, below patterns cover the core plugins
+
             { pattern: '**/*.md', watched: true, served: true, included: false },
             { pattern: '**/*.css', watched: true, served: true, included: false },
             { pattern: '**/*.html', watched: true, served: true, included: false },
             { pattern: '**/*.json', watched: true, served: true, included: false },
             { pattern: '**/*.js', watched: true, served: true, included: false },
-            '**/test/editor/*.js'
+            { pattern: '**/*.png', watched: true, served: true, included: false },
+            '**/test/editor/*.spec.js'            
+        ],
+
+        exclude: [
+            'node_modules/**',
+            'coverage/**',
+            'hooks/**'
+        ],
+
+        client: {
+            captureConsole: false
+        },
+
+        plugins: [
+            'karma-jasmine',
+            'karma-jasmine-matchers',
+            'karma-coverage',
+            'karma-phantomjs-launcher',
+            'karma-mocha-reporter'
         ],
 
 
@@ -46,7 +69,23 @@ module.exports = function(config) {
         // test results reporter to use
         // possible values: 'dots', 'progress'
         // available reporters: https://npmjs.org/browse/keyword/karma-reporter
-        reporters: ['progress', 'coverage'],
+        reporters: ['mocha', 'coverage'],
+     
+        // reporter options 
+        mochaReporter: {
+          colors: {
+            success: 'green',
+            info: 'bgYellow',
+            warning: 'cyan',
+            error: 'bgRed'
+          },
+          symbols: {
+            success: '✔',
+            info: '#',
+            warning: '!',
+            error: 'x'
+            }
+        },
 
 
         // web server port

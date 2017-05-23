@@ -27,7 +27,7 @@
 }
 
 .ngdialog-content {
-    top: 10% !important;
+    top: 3% !important;
     width: 100% !important;
     position: absolute !important;
     background: none !important;
@@ -188,15 +188,15 @@
                 <p>Unable to fetch the Questions! Please try again later!</p>
             </div>
         </div>
-        <div ng-show="($ctrl.isAdvanceOptionOpen && $ctrl.items.length) || (!$ctrl.isAdvanceOptionOpen && $ctrl.cart.items.length)">
+        <div ng-show="($ctrl.isAdvanceOptionOpen && $ctrl.items.length > 0) || (!$ctrl.isAdvanceOptionOpen && $ctrl.cart.items.length > 0)">
             <div class="ui two column horizontally padded grid" ng-show="!$ctrl.itemsLoading">
                 <div class="column" style="width: 480px;height: 284px; overflow-y: scroll;">
                     <div class="ui large divided items" ng-show="$ctrl.isAdvanceOptionOpen">
                         <div class="item select" ng-repeat="item in $ctrl.items" ng-click=" item.isSelected ? $ctrl.cart.remove(item) : $ctrl.cart.add(item); $event.stopPropagation(); $ctrl.generateTelemetry({type: 'select', subtype: 'checkbox', target: 'selectQuestion'})">
                             <div class="middle aligned content">
-                                <div class="header">{{ item.question.question }}</div>
-                                <div class="meta">{{item.question.type}} | {{ item.question.qlevel}} | {{ item.question.title }}</div>
-                                <div class="description">{{ item.question.description }}</div>
+                                <div class="header">{{ item.question }}</div>
+                                <div class="meta">{{item.type}} | {{ item.qlevel}} | {{ item.title }}</div>
+                                <div class="description">{{ item.description }}</div>
                             </div>
                             <div class="ui checkbox" ng-class="item.isSelected ? 'checked' : '' ">
                                 <input type="checkbox" ng-checked="item.isSelected ? 'checked' : ''" name="check">
@@ -207,9 +207,9 @@
                     <div class="ui large divided items" ng-show="!$ctrl.isAdvanceOptionOpen">
                             <div class="item select" ng-repeat="cartItem in $ctrl.cart.items">
                                 <div class="middle aligned content" ng-click="$ctrl.previewItem(cartItem, true);">
-                                <div class="header">{{ cartItem.question.question }}</div>
-                                <div class="meta">{{cartItem.question.type}} | {{ cartItem.question.qlevel}} | {{ cartItem.question.title }}</div>
-                                <div class="description">{{ cartItem.question.description }}</div>
+                                <div class="header">{{ cartItem.question }}</div>
+                                <div class="meta">{{cartItem.type}} | {{ cartItem.qlevel}} | {{ cartItem.title }}</div>
+                                <div class="description">{{ cartItem.description }}</div>
                             </div>
                             <div class="ui checkbox" ng-class="item.isSelected ? 'checked' : '' " ng-click="$ctrl.cart.remove(cartItem); $ctrl.generateTelemetry({type: 'select', subtype: 'checkbox', target: 'selectQuestion'})">
                                 <input type="checkbox" checked="" name="check">
