@@ -96,8 +96,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     showQuizbgImage: function(questionnaire, _parent) {
         var instance = this;
-        var path = ecEditor.getConfig('useProxyForURL') ? "/plugins/" : "/content-plugins/";
-        var quizImage = ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assets/QuizImage.png");
+        var quizImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assets/QuizImage.png");
         fabric.Image.fromURL(quizImage, function(img) {
             var count = questionnaire.total_items + '/' + instance.getItems(questionnaire.items);
             var quizDetails = instance.getPropsForEditor(questionnaire.title, count, questionnaire.max_score);
@@ -160,10 +159,9 @@ org.ekstep.contenteditor.basePlugin.extend({
             }
         }
         if (_.size(errTemplateids) === _.size(errTempurl) && _.size(errTemplateids) > 0) {
-            var path = ecEditor.getConfig('useProxyForURL') ? "/plugins/" : "/content-plugins/";
             ecEditor.getService('popup').open({
                 showClose: false,
-                template: ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/templates/warning.html"),
+                template: ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/templates/warning.html"),
                 controller: ['$scope', function($scope) {
                     $scope.callClear = function() {
                         instance.clearItem(questionnaire, errTemplateids,function(){

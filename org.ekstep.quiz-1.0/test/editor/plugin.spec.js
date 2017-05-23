@@ -105,7 +105,4 @@ describe('Quiz plugin instantiate and load stagePlugin:', function() {
             quizProto.getTemplateData(templateArray);
         });
     });
-    describe('Quiz plugin: Open assessmentbrowser popup', function() {
-       // ecEditor.dispatchEvent(quiz.showPopup, {});
-    });
 });
