@@ -138,7 +138,7 @@
         <div ng-show="!$ctrl.isAdvanceOptionOpen" class="filters-container">
             <div class="ui form">
                 <div class="five fields">
-                    <div class="field" ng-class="$ctrl.activityOptions.title ? 'field' :'field error'">
+                    <div  ng-class="$ctrl.activityOptions.title ? 'field' :'field error'">
                         <div class="ui corner labeled input">
                             <input name="title" ng-model="$ctrl.activityOptions.title"  type="text" placeholder="Question Set Title"  maxlength="60"  autocomplete="off" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'questionTitleInput'})">
                             <div class="ui corner label">
@@ -152,7 +152,7 @@
                             <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="$ctrl.activityOptions.max_score" min='0' required="" type="number" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'totalMarksInput'})"/>
                         </div>
                     </div>
-                    <div class ="field" ng-class="$ctrl.activityOptions.total_items ? 'field' : 'field error' ">
+                    <div ng-class="$ctrl.activityOptions.total_items ? 'field' : 'field error' ">
                         <div class="ui fluid labeled input displayCount">
                             <div class="ui label">Display</div>
                             <select class="ui fluid dropdown" id="total_items" ng-model="$ctrl.activityOptions.total_items" ng-options="option as option for option in $ctrl.activityOptions.range" ng-change="$ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'noOfQuestionsdisplay'})">
