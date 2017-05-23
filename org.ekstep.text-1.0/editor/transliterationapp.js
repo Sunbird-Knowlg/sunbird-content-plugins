@@ -9,10 +9,13 @@ angular.module('transliterationapp', [])
         ctrl.transliteratedText = undefined;
         ctrl.languages = [];
         ctrl.selectedLanguage = null;
+        ctrl.isLoading = false;
+        ctrl.showError = false;
+        ctrl.errorMsg = "";
 
         var languageService = org.ekstep.contenteditor.api.getService(ServiceConstants.LANGUAGE_SERVICE);
-        var multilineTransliterator = org.ekstep.plugins.text.MultilineTransliterator.create($q, languageService);
-        var wordExtractor = new org.ekstep.plugins.text.WordExtractor();
+        var multilineTransliterator = org.ekstep.textNew.MultilineTransliterator.create($q, languageService);
+        var wordExtractor = new org.ekstep.textNew.WordExtractor();
 
 
         ctrl.originalText = wordExtractor.extractText();
@@ -21,9 +24,17 @@ angular.module('transliterationapp', [])
          * Callback function when Transliterate button in pressed on the wizard
          */
         ctrl.transliterate = function() {
-
-            multilineTransliterator.transliterate(ctrl.originalText, ctrl.selectedLanguage.code, function(result) {
+            var instance = this;
+            instance.isLoading = true;
+            ctrl.showError = false;
+            ctrl.transliteratedText = "";
+            multilineTransliterator.transliterate(ctrl.originalText, ctrl.selectedLanguage.code, function(err, result) {
                 ctrl.transliteratedText = result;
+                instance.isLoading = false;
+                if(err){
+                    ctrl.showError = true;
+                    ctrl.errorMsg = err;
+                }
             });
 
         };

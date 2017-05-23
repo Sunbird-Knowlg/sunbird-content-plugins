@@ -13,7 +13,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      * @member {String} type
      * @memberof Text
      */
-    type: "org.ekstep.text",
+    type: "org.ekstep.textNew",
     /**
      * Magic Number is used to calculate the from and to ECML conversion
      * @member {Number} magicNumber
@@ -34,15 +34,95 @@ org.ekstep.contenteditor.basePlugin.extend({
 
 
         var instance = this;
-
+        ecEditor.addEventListener("org.ekstep.textNew:showpopup", this.loadHtml, this);
         ecEditor.addEventListener("object:unselected", this.objectUnselected, this);
         ecEditor.addEventListener("stage:unselect", this.stageUnselect, this);
-        ecEditor.addEventListener("org.ekstep.text:readalong:show", this.showReadalong, this);
-        ecEditor.addEventListener("org.ekstep.text:wordinfo:show", this.showWordInfo, this);
-        ecEditor.addEventListener("org.ekstep.text:delete:enhancement", this.deleteEnhancement, this);
-        ecEditor.addEventListener("org.ekstep.text:modified", this.dblClickHandler, this);
+        ecEditor.addEventListener("org.ekstep.textNew:readalong:show", this.showReadalong, this);
+        ecEditor.addEventListener("org.ekstep.textNew:wordinfo:show", this.showWordInfo, this);
+        ecEditor.addEventListener("org.ekstep.textNew:delete:enhancement", this.deleteEnhancement, this);
+        ecEditor.addEventListener("org.ekstep.textNew:modified", this.dblClickHandler, this);
         var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/delete_confirmation_dialog.html");
         ecEditor.getService('popup').loadNgModules(templatePath);
+
+        var transliterationTemplatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/transliterationconfig.html');
+        var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/transliterationapp.js');
+        var popupService = org.ekstep.contenteditor.api.getService(ServiceConstants.POPUP_SERVICE);
+        popupService.loadNgModules(transliterationTemplatePath, controllerPath);
+    },
+    /**
+    * This method uses popup service to open the transliteration wizard
+    * @returns {void}
+    * @memberof Text
+    */
+    loadHtml: function() {
+
+        var instance = this;
+        var popupService = org.ekstep.contenteditor.api.getService(ServiceConstants.POPUP_SERVICE);
+        popupService.open({
+            template: 'transliteration',
+            controller: 'transliterationController',
+            controllerAs: '$ctrl',
+            resolve: {
+                'instance': function() {
+                    return instance;
+                }
+            },
+            width: 900,
+            showClose: false,
+        });
+    },
+    /**
+    * This method instansiates a text plugin on the stage with the given text. Uses pre defined values
+    * for attributes if a text object isn't already selected on the stage.
+    * @param {string} transliteratedText - text to show in the text box.
+    * @returns {void}
+    * @memberof Text
+    */
+    createTransliteratedText: function(transliteratedText) {
+        var currentObject = org.ekstep.contenteditor.api.getCurrentObject();
+        var textAttributes = {"__text": transliteratedText, "x": 30, "y": 30, "w": 300, "h": 500, "fontFamily": "NotoSans", "fontSize": 18, "minWidth": 20, "maxWidth": 500, "fill": "#000"};
+
+        if(currentObject){
+            textAttributes.x = currentObject.attributes.x;
+            textAttributes.y = currentObject.attributes.y;
+            textAttributes.w = currentObject.attributes.w;
+            textAttributes.h = currentObject.attributes.h;
+            textAttributes.fontFamily = currentObject.attributes.fontFamily;
+            textAttributes.fontSize = currentObject.attributes.fontSize;
+            textAttributes.minWidth = currentObject.attributes.minWidth;
+            textAttributes.maxWidth = currentObject.attributes.maxWidth;
+            textAttributes.color = currentObject.attributes.color;
+
+            this.pixelToPercent(textAttributes)
+            textAttributes = this.getOffsetPosition(textAttributes);
+        }
+
+
+
+        org.ekstep.contenteditor.api.instantiatePlugin('org.ekstep.textNew', textAttributes, org.ekstep.contenteditor.api.getCurrentStage());
+
+    },
+    /**
+    * Method to calculate the offset position of the new text box relative to the
+    * source(this) textbox.
+    * @param {object} attributes - current attributes/attributes, relative to which the next textbox needs to be placed
+    * @returns {object} attributes - same object with offset added to x and/or y values.
+    * @memberof Text
+    */
+    getOffsetPosition: function(attributes){
+        if(attributes.x + attributes.w < 50){
+            attributes.x = 50;
+        }else if(attributes.x >= 50){
+            attributes.x = 12;
+        }else if(attributes.y+attributes.h <50){
+            attributes.y = 50;
+        }else if(attributes.y >= 50){
+            attributes.y = 12;
+        }else{
+            attributes.x +=20;
+            attributes.y +=20;
+        }
+        return attributes;
     },
     /**
      * This method used to create the text fabric object and assigns it to editor of the instance
@@ -83,10 +163,10 @@ org.ekstep.contenteditor.basePlugin.extend({
         } else if (!ecEditor._.isUndefined(this.attributes.words) || this.attributes.textType === 'wordinfo') {
             var instance = this;
             this.addMedia({
-                "id": "org.ekstep.text.popuptint",
+                "id": "org.ekstep.textNew.popuptint",
                 "src": ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
                 "type": "image",
-                "assetId": "org.ekstep.text.popuptint"
+                "assetId": "org.ekstep.textNew.popuptint"
             });
             this.addWordinfoconfigManifest(this);
         } else {
@@ -314,7 +394,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var textObj = ecEditor.getCurrentObject();
         ecEditor.dispatchEvent('org.ekstep.readalongbrowser:showpopup', {
             textObj: textObj,
-            callback: currentInstance.convertTexttoReadalong
+            callback: instance.convertTexttoReadalong
         });
     },
     convertTexttoReadalong: function(data){
@@ -348,7 +428,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var textObj = ecEditor.getCurrentObject();
         ecEditor.dispatchEvent('org.ekstep.wordinfobrowser:showpopup', {
             textObj: textObj,
-            callback: currentInstance.convertTexttoWordinfo
+            callback: instance.convertTexttoWordinfo
         });
     },
     convertTexttoWordinfo: function(data, templateData){
@@ -362,10 +442,10 @@ org.ekstep.contenteditor.basePlugin.extend({
         textObj.config.wordunderlinecolor = data.wordunderlinecolor;
         textObj.attributes.textType = 'wordinfo';
         textObj.addMedia({
-            "id": "org.ekstep.text.popuptint",
+            "id": "org.ekstep.textNew.popuptint",
             "src": ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
             "type": "image",
-            "assetId": "org.ekstep.text.popuptint"
+            "assetId": "org.ekstep.textNew.popuptint"
         });
         instance.addWordinfoconfigManifest(textObj);
         ecEditor.dispatchEvent("config:show");

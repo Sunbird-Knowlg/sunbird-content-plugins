@@ -11,14 +11,14 @@ describe('transliterationapp', function() {
 
     beforeEach(function() {
         languageService = jasmine.createSpyObj("languageService", ["getLanguages"]);
-        multilineTransliterator = jasmine.createSpyObj("org.ekstep.plugins.text.MultilineTransliterator", ["transliterate"]);
-        spyOn(org.ekstep.plugins.text.MultilineTransliterator,"create").and.returnValue(multilineTransliterator);
+        multilineTransliterator = jasmine.createSpyObj("org.ekstep.textNew.MultilineTransliterator", ["transliterate"]);
+        spyOn(org.ekstep.textNew.MultilineTransliterator,"create").and.returnValue(multilineTransliterator);
         spyOn(org.ekstep.contenteditor.api, "getService").and.callFake(function(serviceName) {
             if (serviceName === ServiceConstants.LANGUAGE_SERVICE) {
                 return languageService;
             }
         });
-        
+
         multilineTransliterator.transliterate.calls.reset()
 
     });
@@ -35,21 +35,21 @@ describe('transliterationapp', function() {
 
     it("has a method to cancel the dialog", function() {
         controller.cancel();
-        
+
         expect($scope.closeThisDialog).toHaveBeenCalled();
     });
 
     it("calls MultilineTransliterator service when transliterate button is pressed",function(){
-        
+
         controller.originalText = "Hello";
         controller.selectedLanguage = {"name":"Hindi", "code":"hi"};
         controller.transliterate();
-        
+
         expect(multilineTransliterator.transliterate).toHaveBeenCalled();
         expect(multilineTransliterator.transliterate.calls.mostRecent().args[0]).toBe("Hello");
         expect(multilineTransliterator.transliterate.calls.mostRecent().args[1]).toBe("hi");
-        
-        multilineTransliterator.transliterate.calls.mostRecent().args[2]("à¤¹à¤²à¥Š");
+
+        multilineTransliterator.transliterate.calls.mostRecent().args[2]('',"à¤¹à¤²à¥Š");
         expect(controller.transliteratedText).toBe("à¤¹à¤²à¥Š");
 
     });
@@ -57,7 +57,7 @@ describe('transliterationapp', function() {
     it("should add transliterated text to stage and close wizard",function(){
         controller.transliteratedText = "Hello world";
         controller.addToStage();
-        
+
         expect(instance.createTransliteratedText).toHaveBeenCalledWith("Hello world");
         expect($scope.closeThisDialog).toHaveBeenCalled();
 
@@ -79,12 +79,57 @@ describe('transliterationapp', function() {
 
     });
 
-
-
-
-
-
-
-
-
 })
+describe("WordExtractor", function() {
+
+    it("should should call getCurrentObject",function(){
+        spyOn(org.ekstep.contenteditor.api, "getCurrentObject");
+        var wordExtractor = new org.ekstep.textNew.WordExtractor();
+
+        wordExtractor.extractText();
+
+        expect(org.ekstep.contenteditor.api.getCurrentObject).toHaveBeenCalled();
+
+    });
+
+    it("should get text from the selected text plugin",function(){
+
+        var obj = {manifest:{id:"org.ekstep.textNew"},editorObj:{text:"hello world!"}};
+        spyOn(org.ekstep.contenteditor.api, "getCurrentObject").and.returnValue(obj);
+        var wordExtractor = new org.ekstep.textNew.WordExtractor();
+
+        var val = wordExtractor.extractText();
+
+        expect(val).toBe("hello world!");
+
+    });
+
+    it("should retun undefined if the selected plugin isn't text",function(){
+
+        var obj = {manifest:{id:"org.ekstep.shape"}};
+
+        spyOn(org.ekstep.contenteditor.api, "getCurrentObject").and.returnValue(obj);
+        var wordExtractor = new org.ekstep.textNew.WordExtractor();
+
+        var val = wordExtractor.extractText();
+
+        expect(val).toBe(undefined);
+
+    });
+
+    it("should retun undefined if nothing is selected",function(){
+
+        var obj = false;
+
+        spyOn(org.ekstep.contenteditor.api, "getCurrentObject").and.returnValue(obj);
+        var wordExtractor = new org.ekstep.textNew.WordExtractor();
+
+        var val = wordExtractor.extractText();
+
+        expect(val).toBe(undefined);
+
+    });
+
+
+
+});

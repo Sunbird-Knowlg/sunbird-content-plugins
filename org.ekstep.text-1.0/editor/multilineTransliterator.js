@@ -1,8 +1,9 @@
+org.ekstep.textNew = {};
 /**
  * @class  org.ekstep.plugins.text.MultilineTransliterator
  */
-org.ekstep.plugins.text.MultilineTransliterator = Class.extend({
-
+org.ekstep.textNew.MultilineTransliterator = Class.extend({
+    error:"error",
     init: function($q, transliterateService) {
         this.$q = $q;
         this.transliterateService = transliterateService;
@@ -69,18 +70,24 @@ org.ekstep.plugins.text.MultilineTransliterator = Class.extend({
         };
 
         allSettled(promises).then(function(result) {
+
+           instance.error = "";
             var transliteratedText = _.map(result, function(item, index) {
                 if (item.state == 'fulfilled' && item.value.data.result.transliterations[languageCode] != undefined) {
                     var val = item['value']['data']['result']['transliterations'][languageCode]['output'];
-                    if (val)
+                    if (val){
                         return decodeURIComponent(val);
-                    else
+                    }
+                    else{
+                        instance.error = "Could not transliterate";
                         return decodeURIComponent(texts[index]);
+                    }
                 } else {
+                    instance.error = "Transliteration failed";
                     return decodeURIComponent(texts[index]);
                 }
             }).join('\n');
-            callback(transliteratedText);
+            callback(instance.error, transliteratedText);
         })
 
 
@@ -88,6 +95,24 @@ org.ekstep.plugins.text.MultilineTransliterator = Class.extend({
 
 })
 
-org.ekstep.plugins.text.MultilineTransliterator.create = function($q, transliterateService) {
-    return new org.ekstep.plugins.text.MultilineTransliterator($q, transliterateService)
+org.ekstep.textNew.MultilineTransliterator.create = function($q, transliterateService) {
+    return new org.ekstep.textNew.MultilineTransliterator($q, transliterateService)
 }
+
+/**
+ * @class  org.ekstep.plugins.text.WordExtractor
+ */
+org.ekstep.textNew.WordExtractor = Class.extend({
+    /**
+     * Get the currently selected object on the stage. If its a text plugin,
+     * retuns the text else returns undefined.
+     * @returns {string} plugin.editorObj.text - text being displayed by the text plugin
+     */
+    extractText: function() {
+        var plugin = org.ekstep.contenteditor.api.getCurrentObject();
+        if (plugin && plugin.manifest.id == "org.ekstep.textNew") {
+            return plugin.editorObj.text;
+        }
+        return undefined;
+    }
+});

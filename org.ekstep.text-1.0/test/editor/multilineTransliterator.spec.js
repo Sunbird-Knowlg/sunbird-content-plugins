@@ -7,7 +7,7 @@ describe("MultilineTransliterator", function() {
     beforeEach(inject(function(_$q_, _$rootScope_) {
         $q = _$q_;
         $rootScope = _$rootScope_;
-        multilineTransliterator = new org.ekstep.plugins.text.MultilineTransliterator($q, languageService);
+        multilineTransliterator = new org.ekstep.textNew.MultilineTransliterator($q, languageService);
         languageService.getTransliteration.calls.reset();
     }));
 
@@ -17,16 +17,15 @@ describe("MultilineTransliterator", function() {
         var text = "Hello";
         var languageCode = "hi";
         var transliterationCallback = jasmine.createSpy('transliterationCallback');
-
         multilineTransliterator.transliterate(text, languageCode, transliterationCallback);
 
         expect(languageService.getTransliteration).toHaveBeenCalled();
         expect(languageService.getTransliteration.calls.mostRecent().args[0]).toEqual({"text":"Hello","languages":["hi"]});
-        
+
         languageService.getTransliteration.calls.mostRecent().args[1](null, { "data": { "result": { "transliterations": { "hi": { "output": "à¤¹à¤²à¥Š" } } } } });
         $rootScope.$apply();
-        
-        expect(transliterationCallback).toHaveBeenCalledWith("à¤¹à¤²à¥Š");
+
+        expect(transliterationCallback).toHaveBeenCalledWith('',"à¤¹à¤²à¥Š");
 
     });
 
@@ -40,12 +39,12 @@ describe("MultilineTransliterator", function() {
         expect(languageService.getTransliteration).toHaveBeenCalled();
         expect(languageService.getTransliteration.calls.allArgs()[0][0]).toEqual({"text":"Hello","languages":["hi"]});
         expect(languageService.getTransliteration.calls.allArgs()[1][0]).toEqual({"text":"world","languages":["hi"]});
-        
+
         languageService.getTransliteration.calls.allArgs()[0][1](null, { "data": { "result": { "transliterations": { "hi": { "output": "हलॊ" } } } } });
         languageService.getTransliteration.calls.allArgs()[1][1](null, { "data": { "result": { "transliterations": { "hi": { "output": "वर्ल्ड्" } } } } });
         $rootScope.$apply();
 
-        expect(transliterationCallback).toHaveBeenCalledWith("हलॊ" + "\n" + "वर्ल्ड्");
+        expect(transliterationCallback).toHaveBeenCalledWith('',"हलॊ" + "\n" + "वर्ल्ड्");
 
     });
 
@@ -58,10 +57,10 @@ describe("MultilineTransliterator", function() {
 
         expect(languageService.getTransliteration).toHaveBeenCalled();
         expect(languageService.getTransliteration.calls.mostRecent().args[0]).toEqual({"text":"The%20quick%20brown%20fox%20jumped%20over%20the%20lazy%20god.%20Yes%20god.%20Deal%20with%20it%20now.","languages":["hi"]});
-        
+
         languageService.getTransliteration.calls.mostRecent().args[1](null, { "data": { "result": { "transliterations": { "hi": { "output": "द क्विक् ब्रौन् फ़ाक्स् जम्प्ट् ऒवर् द लॆज़ी गाड् यॆस् गाड् डील् विद् इट् नौ" } } } } });
         $rootScope.$apply();
-        expect(transliterationCallback).toHaveBeenCalledWith("द क्विक् ब्रौन् फ़ाक्स् जम्प्ट् ऒवर् द लॆज़ी गाड् यॆस् गाड् डील् विद् इट् नौ");
+        expect(transliterationCallback).toHaveBeenCalledWith('',"द क्विक् ब्रौन् फ़ाक्स् जम्प्ट् ऒवर् द लॆज़ी गाड् यॆस् गाड् डील् विद् इट् नौ");
     });
 
     it("should transliterate multiline sentences", function() {
@@ -83,7 +82,7 @@ describe("MultilineTransliterator", function() {
         languageService.getTransliteration.calls.allArgs()[3][1](null, { "data": { "result": { "transliterations": { "hi": { "output": "ऎन्टर्टॆन् अस्" } } } } });
         $rootScope.$apply();
 
-        expect(transliterationCallback).toHaveBeenCalledWith("विद् द लैट्स् औट्" + "\n" + "इट्स् लॆस् डॆन्जरस्" + "\n" + "हीर् वी आर् नौ" + "\n" + "ऎन्टर्टॆन् अस्");
+        expect(transliterationCallback).toHaveBeenCalledWith('',"विद् द लैट्स् औट्" + "\n" + "इट्स् लॆस् डॆन्जरस्" + "\n" + "हीर् वी आर् नौ" + "\n" + "ऎन्टर्टॆन् अस्");
     });
 
     it("should handle failure of one out of one api fails", function() {
@@ -99,7 +98,7 @@ describe("MultilineTransliterator", function() {
 
         languageService.getTransliteration.calls.mostRecent().args[1](error, { "data": { "result": { "transliterations": {} } } });
         $rootScope.$apply();
-        expect(transliterationCallback).toHaveBeenCalledWith('Hello');
+        expect(transliterationCallback).toHaveBeenCalledWith('Transliteration failed','Hello');
 
     });
 
@@ -118,7 +117,7 @@ describe("MultilineTransliterator", function() {
         languageService.getTransliteration.calls.allArgs()[0][1](error, { "data": { "result": { "transliterations": {} } } });
         languageService.getTransliteration.calls.allArgs()[1][1](null, { "data": { "result": { "transliterations": { "hi": { "output": "वर्ल्ड्" } } } } });
         $rootScope.$apply();
-        expect(transliterationCallback).toHaveBeenCalledWith("Hello" + "\n" + "वर्ल्ड्");
+        expect(transliterationCallback).toHaveBeenCalledWith('Transliteration failed', "Hello" + "\n" + "वर्ल्ड्");
 
     });
 
@@ -133,16 +132,12 @@ describe("MultilineTransliterator", function() {
         expect(languageService.getTransliteration).toHaveBeenCalled();
         expect(languageService.getTransliteration.calls.allArgs()[0][0]).toEqual({"text":"Hello","languages":["hi"]});
         expect(languageService.getTransliteration.calls.allArgs()[1][0]).toEqual({"text":"world","languages":["hi"]});
-        
+
         languageService.getTransliteration.calls.allArgs()[0][1](error, { "data": { "result": { "transliterations": {} } } });
         languageService.getTransliteration.calls.allArgs()[1][1](error, { "data": { "result": { "transliterations": {} } } });
         $rootScope.$apply();
-        expect(transliterationCallback).toHaveBeenCalledWith("Hello" + "\n" + "world");
+        expect(transliterationCallback).toHaveBeenCalledWith('Transliteration failed',"Hello" + "\n" + "world");
 
     });
-
-    it("should handle unsupported words", function() {});
-
-
 
 });
