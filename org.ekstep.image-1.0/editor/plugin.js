@@ -47,6 +47,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 instance.parent = _parent;
                 if (instance.attributes.from == 'plugin') {
                     instance.editorObj.scaleToWidth(props.w);
+                    instance.editorObj.scaleToHeight(props.h);
                     delete instance.attributes.from;
                 }
                 //
