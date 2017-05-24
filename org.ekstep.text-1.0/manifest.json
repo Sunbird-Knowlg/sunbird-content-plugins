@@ -10,7 +10,10 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-            { "type": "js", "src": "editor/texteditor.js" }
+            { "type": "js", "src": "editor/init.js" },
+            { "type": "js", "src": "editor/texteditor.js" },
+            { "type": "js", "src": "editor/multilineTransliterator.js" },
+            { "type": "js", "src": "editor/wordExtractor.js" }
         ],
         "menu": [{
             "id": "org.ekstep.text",
@@ -87,6 +90,25 @@
                     "iconClass": "trash icon",
                     "onclick": {
                         "id": "org.ekstep.text:delete:enhancement"
+                    }      
+                }]
+            },
+            {
+                "value": "Transliterate",
+                "title": "Transliterate",
+                "toolTip": "Transliterate",
+                "description": "Transliterate",
+                "state": true,
+                "status": "HIDE",
+                "onclick": {
+                    "id": "org.ekstep.text:showpopup"
+                },
+                "suboptions":[{
+                    "toolTip": "Delete",
+                    "dataType": "icon",
+                    "iconClass": "trash icon",
+                    "onclick": {
+                        "id": "org.ekstep.text:showpopup"
                     }      
                 }]
             }],
