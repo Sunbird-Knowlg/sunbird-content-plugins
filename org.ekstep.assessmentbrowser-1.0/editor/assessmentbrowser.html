@@ -138,9 +138,9 @@
         <div ng-show="!$ctrl.isAdvanceOptionOpen" class="filters-container">
             <div class="ui form">
                 <div class="five fields">
-                    <div class="field">
+                    <div  ng-class="$ctrl.activityOptions.title ? 'field' :'field error'">
                         <div class="ui corner labeled input">
-                            <input name="title" ng-model="$ctrl.activityOptions.title" type="text" placeholder="Question Set Title" autocomplete="off" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'questionTitleInput'})">
+                            <input name="title" ng-model="$ctrl.activityOptions.title"  type="text" placeholder="Question Set Title"  maxlength="60"  autocomplete="off" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'questionTitleInput'})">
                             <div class="ui corner label">
                                 <i class="asterisk icon"></i>
                             </div>
@@ -149,10 +149,10 @@
                     <div class="field">
                         <div class="ui fluid labeled input">
                             <div class="ui label">Total Marks</div>
-                            <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="$ctrl.activityOptions.max_score" required="" type="number" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'totalMarksInput'})"/>
+                            <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="$ctrl.activityOptions.max_score" min='0' required="" type="number" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'totalMarksInput'})"/>
                         </div>
                     </div>
-                    <div class="field">
+                    <div ng-class="$ctrl.activityOptions.total_items ? 'field' : 'field error' ">
                         <div class="ui fluid labeled input displayCount">
                             <div class="ui label">Display</div>
                             <select class="ui fluid dropdown" id="total_items" ng-model="$ctrl.activityOptions.total_items" ng-options="option as option for option in $ctrl.activityOptions.range" ng-change="$ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'noOfQuestionsdisplay'})">
@@ -244,7 +244,7 @@
         <div class="ui buttons" ng-if="!$ctrl.isAdvanceOptionOpen">
             <button id="closePopUp" class="ui orange button" ng-click="$ctrl.isAdvanceOptionOpen = !$ctrl.isAdvanceOptionOpen; $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'addMoreQuestions'})" type="button">Add More Questions</button>
             <div class="or"></div>
-            <button id="selectanduse" class="ui blue button" ng-click="$ctrl.addItemActivity(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'addQuestionSet'})" ng-disabled="!$ctrl.activityOptions.title || !$ctrl.cart.items.length" type="button">Add Question Set</button>
+            <button id="selectanduse" class="ui blue button" ng-click="$ctrl.addItemActivity(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'addQuestionSet'})" type="button">Add Question Set</button>
         </div>
     </div>
 </div>

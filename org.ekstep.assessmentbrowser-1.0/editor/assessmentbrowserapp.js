@@ -287,9 +287,14 @@ angular.module('assessmentbrowserapp', [])
         };
 
         ctrl.addItemActivity = function() {
-            if (!ecEditor._.isUndefined(instance.callback)) {
-                instance.callback({ 'items' : ctrl.cart.items, 'config' : ctrl.activityOptions});
-                ctrl.cancel();
+            if (ctrl.activityOptions.title && ctrl.cart.items.length) {
+                if (!ecEditor._.isUndefined(instance.callback)) {
+                    instance.callback({
+                        'items': ctrl.cart.items,
+                        'config': ctrl.activityOptions
+                    });
+                    ctrl.cancel();
+                }
             }
         }
 
