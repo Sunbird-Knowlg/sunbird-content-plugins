@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('quizconfigapp', ['ui.sortable'])
-    .controller('quizconfigcontroller', ['$scope', '$injector', 'quizInstance', function($scope, $injector, quizInstance) {
+    .controller('quizconfigcontroller', ['$scope', 'quizInstance', function($scope, quizInstance) {
         var config = {"showStartPage": false, "showEndPage": false }, ctrl = this, itemIframe;
         ctrl.previewURL = 'preview/preview.html?webview=true', ctrl.activePreviewItem = '';
         var pluginId = 'org.ekstep.quiz', ver = '1.0';

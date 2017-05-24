@@ -1,42 +1,54 @@
 'use strict';
 
 describe('Quiz plugin instantiate and load stagePlugin:', function() {
-    var stage, quizProto, pluginVersion = '1.0', scope, controller, modalInstance;
-    var pluginNames = {
-        stage: 'org.ekstep.stage',
-        quiz: 'org.ekstep.quiz'
-    };
+    var stage, quizProto, pluginVersion = '1.0', scope, controller, $controller;
+    var pluginNames = {stage: 'org.ekstep.stage', quiz: 'org.ekstep.quiz'};
     var quiz = {
         create: pluginNames.quiz.concat(':create'),
         render: pluginNames.quiz.concat(':renderQuiz'),
         showPopup: pluginNames.quiz.concat(':showPopup'),
     };
+    var path, ctrl,  manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.quiz");
+    var quizTestInstance = {};
+        quizTestInstance.data = {"questionnaire":{"items":{"domain_62758":[{"template":"org.ekstep.mtf.mixed.horizontal","code":"org.ekstep.assessmentitem.literacy_575578c63e74d","qlevel":"EASY","language":["English"],"media":[{"id":"domain_62745","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/friday_345_1465219264_1465219265016.mp3","asset_id":"domain_62745","preload":"true"},{"id":"domain_62746","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/_345_1465219265_1465219265451.mp3","asset_id":"domain_62746","preload":"true"},{"id":"domain_62747","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/friday_345_1465219265_1465219265905.mp3","asset_id":"domain_62747","preload":"true"},{"id":"domain_62748","type":"image","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/icon_next_345_1465219266_1465219266362.png","asset_id":"domain_62748","preload":"true"},{"id":"domain_62749","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/_345_1465219266_1465219266766.mp3","asset_id":"domain_62749","preload":"true"},{"id":"domain_62750","type":"image","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/micro_345_1465219266_1465219267120.png","asset_id":"domain_62750","preload":"true"},{"id":"domain_62751","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/friday_345_1465219267_1465219267482.mp3","asset_id":"domain_62751","preload":"true"},{"id":"domain_62752","type":"image","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/icon_next_345_1465219267_1465219267936.png","asset_id":"domain_62752","preload":"true"},{"id":"domain_62753","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/_345_1465219268_1465219268301.mp3","asset_id":"domain_62753","preload":"true"},{"id":"domain_62754","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/friday_345_1465219268_1465219268700.mp3","asset_id":"domain_62754","preload":"true"},{"id":"domain_62755","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/_345_1465219268_1465219269091.mp3","asset_id":"domain_62755","preload":"true"},{"id":"domain_62756","type":"image","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/micro_345_1465219269_1465219269536.png","asset_id":"domain_62756","preload":"true"},{"id":"domain_62757","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/friday_345_1465219269_1465219269981.mp3","asset_id":"domain_62757","preload":"true"}],"type":"mtf","title":"zontal","createdOn":"2016-06-06T13:21:10.249+0000","objectType":"AssessmentItem","feedback":"","gradeLevel":["Grade 1"],"lastUpdatedOn":"2016-09-01T18:50:00.051+0000","used_for":"worksheet","model":null,"rhs_options":[{"value":{"type":"mixed","text":"","count":"","image":"domain_62752","audio":"domain_62753"},"answer":0},{"value":{"type":"mixed","text":"C","count":"","image":null,"audio":"domain_62754"},"answer":1},{"value":{"type":"mixed","text":"D","count":"","image":null,"audio":"domain_62755"},"answer":2},{"value":{"type":"mixed","text":"","count":"","image":"domain_62756","audio":"domain_62757"},"answer":3}],"owner":"345","identifier":"domain_62758","question":"zontal zontal","portalOwner":"345","graph_id":"domain","nodeType":"DATA_NODE","lhs_options":[{"value":{"type":"mixed","text":"A","count":"","image":null,"audio":"domain_62746"},"index":0},{"value":{"type":"mixed","text":"B","count":"","image":null,"audio":"domain_62747"},"index":1},{"value":{"type":"mixed","text":"","count":"","image":"domain_62748","audio":"domain_62749"},"index":2},{"value":{"type":"mixed","text":"","count":"","image":"domain_62750","audio":"domain_62751"},"index":3}],"max_score":1,"name":"zontal","template_id":"domain_62743","node_id":60954,"question_audio":"domain_62745","es_metadata_id":"domain_62758","isSelected":true,"$$hashKey":"object:261"}]},"item_sets":[{"count":1,"id":"domain_62758"}],"title":"dfs","shuffle":false,"showImmediateFeedback":true,"myQuestions":false,"concepts":"(0) Concepts","total_items":1,"max_score":1,"range":[1],"optionShuffle":true},"template":[]}; 
     beforeAll(function() {
         ContentEditorTestFramework.cleanUp();        
-        stage = ecEditor.instantiatePlugin(pluginNames.stage);            
+        stage = ecEditor.instantiatePlugin(pluginNames.stage);        
+        path = ecEditor.resolvePluginResource('org.ekstep.quiz','1.0', "editor/js/quizconfigapp.js");       
         quizProto = org.ekstep.pluginframework.pluginManager.plugins[pluginNames.quiz].p.prototype;
     });
-    beforeEach(module('editorApp'));
-    beforeEach(inject(function($rootScope, $controller) {
-        scope = $rootScope.$new();
-        modalInstance = {
-            result: {
-                then: jasmine.createSpy('modalInstance.result.then')
-            }
-        };
-        controller = $controller('popupController', {
-            $scope: scope,
-            $modalInstance: modalInstance
-        });
-    }));
     describe('Quiz plugin: render', function() {
-        //var _assesmentData = { "data": { "questionnaire": { "items": { "do_1121893167451750401118": [{ "template": "org.ekstep.ftb.barakhadi", "identifier": "do_1121893167451750401118", "code": "org.ekstep.assessmentitem.do_1121893167451750401118", "question": "FIB   < > ddsdada <b>sam</b>", "qlevel": "EASY", "portalOwner": "340", "description": "FIB check < > ddsdada <b>sam</b>", "language": ["English"], "title": "FIB check issue  anguler bracket", "type": "ftb", "graph_id": "domain", "nodeType": "DATA_NODE", "createdOn": "2017-02-24T16:28:24.245+0000", "objectType": "AssessmentItem", "gradeLevel": ["Grade 1"], "answer": { "ans1": { "value": "Anguler bracket is req.", "score": 1 } }, "max_score": 1, "name": "FIB check issue  anguler bracket", "lastUpdatedOn": "2017-02-25T11:24:36.902+0000", "model": { "divisor": "7", "dividend": "49", "Quotient_text": "Quotient", "Reminder_text": "Reminder", "keys": "0,1,2,3,4,5,6,7,8,9,+.-,*,/,=,<,+,." }, "used_for": "worksheet", "template_id": "domain_49025", "node_id": 95650, "concepts": ["C26"], "es_metadata_id": "do_1121893167451750401118" }] }, "item_sets": [{ "count": 1, "id": "do_1121893167451750401118" }], "title": "fsd", "shuffle": false, "showImmediateFeedback": true, "myQuestions": false, "concepts": "(0) Concepts", "total_items": 1, "max_score": 1, "range": [1], "optionShuffle": true }, "template": [{ "text": [{ "align": "center", "color": "black", "font": "Verdana", "fontsize": 70, "model": "item.title", "w": 80, "x": 10, "y": 6, "z-index": 101 }, { "align": "center", "color": "black", "font": "Verdana", "fontsize": 100, "h": 15, "id": "newText", "model": "item.ans1", "valign": "middle", "w": 35, "x": 58, "y": 68, "z-index": 100 }], "shape": [{ "event": { "type": "click" }, "h": 15, "hitArea": true, "opacity": 1, "w": 80, "x": 10, "y": 6, "z-index": 99 }, { "event": { "action": { "asset": "bKeyboard", "command": "custom", "id": "newText", "invoke": "switchTarget", "type": "command" }, "type": "click" }, "h": 15, "hitArea": true, "stroke": "black", "stroke-width": 5, "w": 35, "x": 58, "y": 67, "z-index": 99 }, { "event": { "action": { "asset_model": "item.question_audio", "command": "play", "type": "command" }, "type": "click" }, "h": 40, "hitArea": true, "stroke-width": 5, "w": 20, "x": 10, "y": 58, "z-index": 99 }], "keyboard": { "id": "bKeyboard", "keys": "item.keys", "limit": 10, "target": "newText", "type": "custom", "x": 5, "y": 15 }, "g": { "image": { "h": 75, "model": "item.question_image", "w": 100, "x": 0, "y": 0, "z-index": 102 }, "text": { "align": "center", "color": "black", "font": "Verdana", "fontsize": "2em", "h": 25, "model": "item.question", "valign": "middle", "w": 100, "x": 0, "y": 75, "z-index": 103 }, "h": 40, "w": 20, "x": 10, "y": 58 }, "id": "org.ekstep.ftb.barakhadi" }] }, "config": { "type": "items", "var": "item" } };
         var _assesmentData = { "data": {"questionnaire":{"items":{"domain_44140":[{"owner":"346","template":"org.ekstep.mcq.ia_ta.tia10","identifier":"domain_44140","code":"org.ekstep.assessmentitem.numeracy_5729b6da54e20","question":"123","qlevel":"EASY","portalOwner":"346","language":["English"],"type":"mcq","title":"सही संख्या की तीलियाँ चुनें","graph_id":"domain","nodeType":"DATA_NODE","createdOn":"2016-05-04T08:46:18.351+0000","objectType":"AssessmentItem","feedback":"","gradeLevel":["Grade 1"],"max_score":1,"options":[{"marks":"1","value":{"type":"mixed","text":"12","count":"","image":null,"audio":null},"score":1,"answer":true},{"marks":"0","value":{"type":"mixed","text":"21","count":"","image":null,"audio":null}}],"name":"सही संख्या की तीलियाँ चुनें","lastUpdatedOn":"2016-09-01T18:49:45.662+0000","used_for":"worksheet","template_id":"domain_43151","model":null,"node_id":42529,"es_metadata_id":"domain_44140","isSelected":true,"$$hashKey":"object:254"}]},"item_sets":[{"count":1,"id":"domain_44140"}],"title":"dd","shuffle":false,"showImmediateFeedback":true,"myQuestions":false,"concepts":"(0) Concepts","total_items":1,"max_score":1,"range":[1]}}};
         it('Quiz plugin initialization ', function() {
             expect(stage.children.length).toBe(0);
             ecEditor.dispatchEvent(quiz.create, _assesmentData);
             console.info('stage.childrens', stage.children.length);
             ecEditor.dispatchEvent(quiz.showPopup);
+        });
+
+        it('mock popup service', function(done) {
+            angular.mock.module('oc.lazyLoad');
+            angular.mock.module('Scope.safeApply');
+            angular.mock.module('ui.sortable');
+            inject(function($ocLazyLoad, _$rootScope_, _$controller_) {
+                var $controller = _$controller_;
+                var $scope = _$rootScope_.$new();                
+                $ocLazyLoad.load([{
+                    type: 'js',
+                    path: path
+                }]).then(function() {
+                    ctrl = $controller("quizconfigcontroller", {
+                        $scope: $scope,
+                        quizInstance: quizTestInstance
+                    });
+                    done();
+                }, function(error) {
+                    done();
+                });
+                setInterval(function() {
+                    _$rootScope_.$digest();
+                }, 10);
+            });
         });
 
         it('Render quiz data', function() {
@@ -105,4 +117,41 @@ describe('Quiz plugin instantiate and load stagePlugin:', function() {
             quizProto.getTemplateData(templateArray);
         });
     });
+    describe('Quiz plugin question config',function() {
+
+        it('Removing of the particualr question',function(){
+            var question = {"template":"org.ekstep.mtf.mixed.horizontal","code":"org.ekstep.assessmentitem.literacy_575578c63e74d","qlevel":"EASY","language":["English"],"media":[{"id":"domain_62745","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/friday_345_1465219264_1465219265016.mp3","asset_id":"domain_62745","preload":"true"},{"id":"domain_62746","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/_345_1465219265_1465219265451.mp3","asset_id":"domain_62746","preload":"true"},{"id":"domain_62747","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/friday_345_1465219265_1465219265905.mp3","asset_id":"domain_62747","preload":"true"},{"id":"domain_62748","type":"image","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/icon_next_345_1465219266_1465219266362.png","asset_id":"domain_62748","preload":"true"},{"id":"domain_62749","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/_345_1465219266_1465219266766.mp3","asset_id":"domain_62749","preload":"true"},{"id":"domain_62750","type":"image","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/micro_345_1465219266_1465219267120.png","asset_id":"domain_62750","preload":"true"},{"id":"domain_62751","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/friday_345_1465219267_1465219267482.mp3","asset_id":"domain_62751","preload":"true"},{"id":"domain_62752","type":"image","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/icon_next_345_1465219267_1465219267936.png","asset_id":"domain_62752","preload":"true"},{"id":"domain_62753","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/_345_1465219268_1465219268301.mp3","asset_id":"domain_62753","preload":"true"},{"id":"domain_62754","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/friday_345_1465219268_1465219268700.mp3","asset_id":"domain_62754","preload":"true"},{"id":"domain_62755","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/_345_1465219268_1465219269091.mp3","asset_id":"domain_62755","preload":"true"},{"id":"domain_62756","type":"image","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/micro_345_1465219269_1465219269536.png","asset_id":"domain_62756","preload":"true"},{"id":"domain_62757","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/friday_345_1465219269_1465219269981.mp3","asset_id":"domain_62757","preload":"true"}],"type":"mtf","title":"zontal","createdOn":"2016-06-06T13:21:10.249+0000","objectType":"AssessmentItem","feedback":"","gradeLevel":["Grade 1"],"lastUpdatedOn":"2016-09-01T18:50:00.051+0000","used_for":"worksheet","model":null,"rhs_options":[{"value":{"type":"mixed","text":"","count":"","image":"domain_62752","audio":"domain_62753"},"answer":0},{"value":{"type":"mixed","text":"C","count":"","image":null,"audio":"domain_62754"},"answer":1},{"value":{"type":"mixed","text":"D","count":"","image":null,"audio":"domain_62755"},"answer":2},{"value":{"type":"mixed","text":"","count":"","image":"domain_62756","audio":"domain_62757"},"answer":3}],"owner":"345","identifier":"domain_62758","question":"zontal zontal","portalOwner":"345","graph_id":"domain","nodeType":"DATA_NODE","lhs_options":[{"value":{"type":"mixed","text":"A","count":"","image":null,"audio":"domain_62746"},"index":0},{"value":{"type":"mixed","text":"B","count":"","image":null,"audio":"domain_62747"},"index":1},{"value":{"type":"mixed","text":"","count":"","image":"domain_62748","audio":"domain_62749"},"index":2},{"value":{"type":"mixed","text":"","count":"","image":"domain_62750","audio":"domain_62751"},"index":3}],"max_score":1,"name":"zontal","template_id":"domain_62743","node_id":60954,"question_audio":"domain_62745","es_metadata_id":"domain_62758","isSelected":true,"$$hashKey":"object:261"};
+            ctrl.removeItem(question);
+            var isItemavailable = _.filter(ctrl.cart.items, question);
+            expect(isItemavailable.length).toBe(0);
+        });
+
+        it('Loading of the questions onclick of the config',function(){
+              ctrl.loadSelectedQuestions();
+              expect(ctrl.activityOptions).not.toBe(undefined);
+        });
+
+        it('Updating score to each question',function(){
+            var question = [{"template":"org.ekstep.mtf.mixed.horizontal","code":"org.ekstep.assessmentitem.literacy_575578c63e74d","qlevel":"EASY","language":["English"],"media":[{"id":"domain_62745","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/friday_345_1465219264_1465219265016.mp3","asset_id":"domain_62745","preload":"true"},{"id":"domain_62746","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/_345_1465219265_1465219265451.mp3","asset_id":"domain_62746","preload":"true"},{"id":"domain_62747","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/friday_345_1465219265_1465219265905.mp3","asset_id":"domain_62747","preload":"true"},{"id":"domain_62748","type":"image","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/icon_next_345_1465219266_1465219266362.png","asset_id":"domain_62748","preload":"true"},{"id":"domain_62749","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/_345_1465219266_1465219266766.mp3","asset_id":"domain_62749","preload":"true"},{"id":"domain_62750","type":"image","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/micro_345_1465219266_1465219267120.png","asset_id":"domain_62750","preload":"true"},{"id":"domain_62751","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/friday_345_1465219267_1465219267482.mp3","asset_id":"domain_62751","preload":"true"},{"id":"domain_62752","type":"image","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/icon_next_345_1465219267_1465219267936.png","asset_id":"domain_62752","preload":"true"},{"id":"domain_62753","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/_345_1465219268_1465219268301.mp3","asset_id":"domain_62753","preload":"true"},{"id":"domain_62754","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/friday_345_1465219268_1465219268700.mp3","asset_id":"domain_62754","preload":"true"},{"id":"domain_62755","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/_345_1465219268_1465219269091.mp3","asset_id":"domain_62755","preload":"true"},{"id":"domain_62756","type":"image","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/micro_345_1465219269_1465219269536.png","asset_id":"domain_62756","preload":"true"},{"id":"domain_62757","type":"audio","src":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/friday_345_1465219269_1465219269981.mp3","asset_id":"domain_62757","preload":"true"}],"type":"mtf","title":"zontal","createdOn":"2016-06-06T13:21:10.249+0000","objectType":"AssessmentItem","feedback":"","gradeLevel":["Grade 1"],"lastUpdatedOn":"2016-09-01T18:50:00.051+0000","used_for":"worksheet","model":null,"rhs_options":[{"value":{"type":"mixed","text":"","count":"","image":"domain_62752","audio":"domain_62753"},"answer":0},{"value":{"type":"mixed","text":"C","count":"","image":null,"audio":"domain_62754"},"answer":1},{"value":{"type":"mixed","text":"D","count":"","image":null,"audio":"domain_62755"},"answer":2},{"value":{"type":"mixed","text":"","count":"","image":"domain_62756","audio":"domain_62757"},"answer":3}],"owner":"345","identifier":"domain_62758","question":"zontal zontal","portalOwner":"345","graph_id":"domain","nodeType":"DATA_NODE","lhs_options":[{"value":{"type":"mixed","text":"A","count":"","image":null,"audio":"domain_62746"},"index":0},{"value":{"type":"mixed","text":"B","count":"","image":null,"audio":"domain_62747"},"index":1},{"value":{"type":"mixed","text":"","count":"","image":"domain_62748","audio":"domain_62749"},"index":2},{"value":{"type":"mixed","text":"","count":"","image":"domain_62750","audio":"domain_62751"},"index":3}],"max_score":1,"name":"zontal","template_id":"domain_62743","node_id":60954,"question_audio":"domain_62745","es_metadata_id":"domain_62758","isSelected":true,"$$hashKey":"object:261"}];
+            var index = 0;
+            ctrl.handleQuestionScoreConfig(index,question);
+            expect(ctrl.currentQuestion).not.toBe(undefined);
+        });
+
+        xit('Preview of the question', function() {
+            var question = {"owner":"346","template":"org.ekstep.mcq.ia_ta.tia10","identifier":"domain_44140","code":"org.ekstep.assessmentitem.numeracy_5729b6da54e20","question":"123","qlevel":"EASY","portalOwner":"346","language":["English"],"type":"mcq","title":"सही संख्या की तीलियाँ चुनें","graph_id":"domain","nodeType":"DATA_NODE","createdOn":"2016-05-04T08:46:18.351+0000","objectType":"AssessmentItem","feedback":"","gradeLevel":["Grade 1"],"max_score":1,"options":[{"marks":"1","value":{"type":"mixed","text":"12","count":"","image":null,"audio":null},"score":1,"answer":true},{"marks":"0","value":{"type":"mixed","text":"21","count":"","image":null,"audio":null}}],"name":"सही संख्या की तीलियाँ चुनें","lastUpdatedOn":"2016-09-01T18:49:45.662+0000","used_for":"worksheet","template_id":"domain_43151","model":null,"node_id":42529,"es_metadata_id":"domain_44140","isSelected":true,"$$hashKey":"object:741"};
+            ctrl.previewItem(question);
+            expect(ctrl.enableQuestionConfig).toBe(false);
+        });
+        it('enable question config',function(){
+            ctrl.showQuestionConfig();
+            expect(ctrl.enableQuestionConfig).toBe(true);
+        });
+        
+        xit('sort of the question',function(){
+            $scope.sortableOptions.update();
+        });
+        
+
+    })
 });
