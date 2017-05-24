@@ -1,8 +1,8 @@
-org.ekstep.textNew = {};
+org.ekstep.text = {};
 /**
  * @class  org.ekstep.plugins.text.MultilineTransliterator
  */
-org.ekstep.textNew.MultilineTransliterator = Class.extend({
+org.ekstep.text.MultilineTransliterator = Class.extend({
     error:"error",
     init: function($q, transliterateService) {
         this.$q = $q;
@@ -95,14 +95,14 @@ org.ekstep.textNew.MultilineTransliterator = Class.extend({
 
 })
 
-org.ekstep.textNew.MultilineTransliterator.create = function($q, transliterateService) {
-    return new org.ekstep.textNew.MultilineTransliterator($q, transliterateService)
+org.ekstep.text.MultilineTransliterator.create = function($q, transliterateService) {
+    return new org.ekstep.text.MultilineTransliterator($q, transliterateService)
 }
 
 /**
  * @class  org.ekstep.plugins.text.WordExtractor
  */
-org.ekstep.textNew.WordExtractor = Class.extend({
+org.ekstep.text.WordExtractor = Class.extend({
     /**
      * Get the currently selected object on the stage. If its a text plugin,
      * retuns the text else returns undefined.
@@ -110,7 +110,7 @@ org.ekstep.textNew.WordExtractor = Class.extend({
      */
     extractText: function() {
         var plugin = org.ekstep.contenteditor.api.getCurrentObject();
-        if (plugin && plugin.manifest.id == "org.ekstep.textNew") {
+        if (plugin && plugin.manifest.id == "org.ekstep.text") {
             return plugin.editorObj.text;
         }
         return undefined;

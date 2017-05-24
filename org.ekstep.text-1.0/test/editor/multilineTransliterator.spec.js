@@ -7,7 +7,7 @@ describe("MultilineTransliterator", function() {
     beforeEach(inject(function(_$q_, _$rootScope_) {
         $q = _$q_;
         $rootScope = _$rootScope_;
-        multilineTransliterator = new org.ekstep.textNew.MultilineTransliterator($q, languageService);
+        multilineTransliterator = new org.ekstep.text.MultilineTransliterator($q, languageService);
         languageService.getTransliteration.calls.reset();
     }));
 

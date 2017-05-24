@@ -13,7 +13,7 @@
      });
      it("should create plain text", function() {
          expect(stage.children.length).toBe(0);
-         ecEditor.dispatchEvent("org.ekstep.textNew:create", { "__text": "", "x": 10, "y": 20, "fontFamily": "NotoSans", "fontSize": 18, "minWidth": 20, "w": 35, "maxWidth": 500, "fill": "#000000", "fontStyle": "normal", "fontWeight": "normal" });
+         ecEditor.dispatchEvent("org.ekstep.text:create", { "__text": "", "x": 10, "y": 20, "fontFamily": "NotoSans", "fontSize": 18, "minWidth": 20, "w": 35, "maxWidth": 500, "fill": "#000000", "fontStyle": "normal", "fontWeight": "normal" });
          text1 = stage.children[0];
          expect(stage.children.length).toBe(1);
          var fbObject = ContentEditorTestFramework.getFabricObject(text1.id, ecEditor.getCanvas());
@@ -82,7 +82,7 @@
      });
 
      it("should crate wordinfo text", function() {
-         ecEditor.dispatchEvent("org.ekstep.textNew:create", { "x": 10, "y": 20, "fontFamily": "NotoSans", "fontSize": 18, "minWidth": 20, "w": 35, "maxWidth": 500, "fill": "#000000", "fontStyle": "normal", "fontWeight": "normal", "textType": "wordinfo" });
+         ecEditor.dispatchEvent("org.ekstep.text:create", { "x": 10, "y": 20, "fontFamily": "NotoSans", "fontSize": 18, "minWidth": 20, "w": 35, "maxWidth": 500, "fill": "#000000", "fontStyle": "normal", "fontWeight": "normal", "textType": "wordinfo" });
          expect(stage.children.length).toBe(2);
          wordinfo_text = stage.children[1];
 
@@ -112,7 +112,7 @@
      });
 
      it("should crate readalong text using old AT data", function() {
-         ecEditor.dispatchEvent("org.ekstep.textNew:create", { "__text": "Test read along text", "x": 10, "y": 20, "fontFamily": "NotoSans", "fontSize": 18, "minWidth": 20, "w": 35, "maxWidth": 500, "fill": "#000000", "fontStyle": "normal", "fontWeight": "normal", "audio": "do_20076098", "timings": "470,720,1720", "highlight": "#FFFF00" });
+         ecEditor.dispatchEvent("org.ekstep.text:create", { "__text": "Test read along text", "x": 10, "y": 20, "fontFamily": "NotoSans", "fontSize": 18, "minWidth": 20, "w": 35, "maxWidth": 500, "fill": "#000000", "fontStyle": "normal", "fontWeight": "normal", "audio": "do_20076098", "timings": "470,720,1720", "highlight": "#FFFF00" });
          expect(stage.children.length).toBe(3);
          readalong_text = stage.children[2];
 
@@ -149,7 +149,7 @@
      });
 
      it("should create plain text with height and fontweight..", function() {
-         ecEditor.dispatchEvent("org.ekstep.textNew:create", { "__text": "", "x": 10, "y": 20, "font": "NotoSans", "fontsize": 18, "minWidth": 20, "w": 35, "maxWidth": 500, "fill": "#000000", "fontStyle": "normal", "fontWeight": "normal", "h": 5.02, "color": "#000000", "weight": "bold italic", "align": "left", "rotate": 28 });
+         ecEditor.dispatchEvent("org.ekstep.text:create", { "__text": "", "x": 10, "y": 20, "font": "NotoSans", "fontsize": 18, "minWidth": 20, "w": 35, "maxWidth": 500, "fill": "#000000", "fontStyle": "normal", "fontWeight": "normal", "h": 5.02, "color": "#000000", "weight": "bold italic", "align": "left", "rotate": 28 });
          text2 = stage.children[3];
          expect(stage.children.length).toBe(4);
 
@@ -160,7 +160,7 @@
          text2.showWordInfo();
          expect(text2.showWordInfo).toHaveBeenCalled();
 
-         var templateData = '{"controller":{"id":"dictionary","data":{"word":{"lemma":"word","gloss":"the divine word of God; the second person in the Trinity (incarnate in Jesus)"}}},"template":{"id":"infoTemplate","g":{"x":"0","y":"0","w":"100","h":"100","image":{"asset":"org.ekstep.textNew.popuptint","x":"0","y":"0","w":"100","h":"100","visible":"true","id":"popup-Tint"},"text":[{"x":"25","y":"25","w":"50","h":"9","visible":"true","editable":"true","model":"word.lemma","weight":"normal","font":"helvetica","color":"rgb(0,0,0)","fontsize":"75","align":"left","z-index":"1","id":"lemma"},{"x":"25","y":"35","w":"50","h":"40","visible":"true","editable":"true","model":"word.gloss","weight":"normal","font":"helvetica","color":"rgb(0,0,0)","fontsize":"43","align":"left","z-index":"2","id":"gloss"}],"shape":{"x":"20","y":"20","w":"60","h":"60","visible":"true","editable":"true","type":"roundrect","radius":"10","opacity":"1","fill":"#45b3a5","stroke-width":"1","z-index":"0","id":"textBg"}}}}';
+         var templateData = '{"controller":{"id":"dictionary","data":{"word":{"lemma":"word","gloss":"the divine word of God; the second person in the Trinity (incarnate in Jesus)"}}},"template":{"id":"infoTemplate","g":{"x":"0","y":"0","w":"100","h":"100","image":{"asset":"org.ekstep.text.popuptint","x":"0","y":"0","w":"100","h":"100","visible":"true","id":"popup-Tint"},"text":[{"x":"25","y":"25","w":"50","h":"9","visible":"true","editable":"true","model":"word.lemma","weight":"normal","font":"helvetica","color":"rgb(0,0,0)","fontsize":"75","align":"left","z-index":"1","id":"lemma"},{"x":"25","y":"35","w":"50","h":"40","visible":"true","editable":"true","model":"word.gloss","weight":"normal","font":"helvetica","color":"rgb(0,0,0)","fontsize":"43","align":"left","z-index":"2","id":"gloss"}],"shape":{"x":"20","y":"20","w":"60","h":"60","visible":"true","editable":"true","type":"roundrect","radius":"10","opacity":"1","fill":"#45b3a5","stroke-width":"1","z-index":"0","id":"textBg"}}}}';
          var data = { "text": "word info", "words": "word", "wordfontcolor": "#0000FF", "wordhighlightcolor": "#FFFF00", "wordunderlinecolor": "#0000FF" };
          text2.convertTexttoWordinfo(data, templateData);
          expect(text2.toECML().textType).toBe('wordinfo');

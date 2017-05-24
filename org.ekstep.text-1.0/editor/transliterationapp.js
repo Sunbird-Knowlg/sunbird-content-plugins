@@ -14,8 +14,8 @@ angular.module('transliterationapp', [])
         ctrl.errorMsg = "";
 
         var languageService = org.ekstep.contenteditor.api.getService(ServiceConstants.LANGUAGE_SERVICE);
-        var multilineTransliterator = org.ekstep.textNew.MultilineTransliterator.create($q, languageService);
-        var wordExtractor = new org.ekstep.textNew.WordExtractor();
+        var multilineTransliterator = org.ekstep.text.MultilineTransliterator.create($q, languageService);
+        var wordExtractor = new org.ekstep.text.WordExtractor();
 
 
         ctrl.originalText = wordExtractor.extractText();

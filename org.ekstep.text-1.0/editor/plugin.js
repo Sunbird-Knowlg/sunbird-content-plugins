@@ -13,7 +13,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      * @member {String} type
      * @memberof Text
      */
-    type: "org.ekstep.textNew",
+    type: "org.ekstep.text",
     /**
      * Magic Number is used to calculate the from and to ECML conversion
      * @member {Number} magicNumber
@@ -34,13 +34,13 @@ org.ekstep.contenteditor.basePlugin.extend({
 
 
         var instance = this;
-        ecEditor.addEventListener("org.ekstep.textNew:showpopup", this.loadHtml, this);
+        ecEditor.addEventListener("org.ekstep.text:showpopup", this.loadHtml, this);
         ecEditor.addEventListener("object:unselected", this.objectUnselected, this);
         ecEditor.addEventListener("stage:unselect", this.stageUnselect, this);
-        ecEditor.addEventListener("org.ekstep.textNew:readalong:show", this.showReadalong, this);
-        ecEditor.addEventListener("org.ekstep.textNew:wordinfo:show", this.showWordInfo, this);
-        ecEditor.addEventListener("org.ekstep.textNew:delete:enhancement", this.deleteEnhancement, this);
-        ecEditor.addEventListener("org.ekstep.textNew:modified", this.dblClickHandler, this);
+        ecEditor.addEventListener("org.ekstep.text:readalong:show", this.showReadalong, this);
+        ecEditor.addEventListener("org.ekstep.text:wordinfo:show", this.showWordInfo, this);
+        ecEditor.addEventListener("org.ekstep.text:delete:enhancement", this.deleteEnhancement, this);
+        ecEditor.addEventListener("org.ekstep.text:modified", this.dblClickHandler, this);
         var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/delete_confirmation_dialog.html");
         ecEditor.getService('popup').loadNgModules(templatePath);
 
@@ -99,7 +99,7 @@ org.ekstep.contenteditor.basePlugin.extend({
 
 
 
-        org.ekstep.contenteditor.api.instantiatePlugin('org.ekstep.textNew', textAttributes, org.ekstep.contenteditor.api.getCurrentStage());
+        org.ekstep.contenteditor.api.instantiatePlugin('org.ekstep.text', textAttributes, org.ekstep.contenteditor.api.getCurrentStage());
 
     },
     /**
@@ -163,10 +163,10 @@ org.ekstep.contenteditor.basePlugin.extend({
         } else if (!ecEditor._.isUndefined(this.attributes.words) || this.attributes.textType === 'wordinfo') {
             var instance = this;
             this.addMedia({
-                "id": "org.ekstep.textNew.popuptint",
+                "id": "org.ekstep.text.popuptint",
                 "src": ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
                 "type": "image",
-                "assetId": "org.ekstep.textNew.popuptint"
+                "assetId": "org.ekstep.text.popuptint"
             });
             this.addWordinfoconfigManifest(this);
         } else {
@@ -442,10 +442,10 @@ org.ekstep.contenteditor.basePlugin.extend({
         textObj.config.wordunderlinecolor = data.wordunderlinecolor;
         textObj.attributes.textType = 'wordinfo';
         textObj.addMedia({
-            "id": "org.ekstep.textNew.popuptint",
+            "id": "org.ekstep.text.popuptint",
             "src": ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/popuptint.png"),
             "type": "image",
-            "assetId": "org.ekstep.textNew.popuptint"
+            "assetId": "org.ekstep.text.popuptint"
         });
         instance.addWordinfoconfigManifest(textObj);
         ecEditor.dispatchEvent("config:show");

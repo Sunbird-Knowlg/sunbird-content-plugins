@@ -11,8 +11,8 @@ describe('transliterationapp', function() {
 
     beforeEach(function() {
         languageService = jasmine.createSpyObj("languageService", ["getLanguages"]);
-        multilineTransliterator = jasmine.createSpyObj("org.ekstep.textNew.MultilineTransliterator", ["transliterate"]);
-        spyOn(org.ekstep.textNew.MultilineTransliterator,"create").and.returnValue(multilineTransliterator);
+        multilineTransliterator = jasmine.createSpyObj("org.ekstep.text.MultilineTransliterator", ["transliterate"]);
+        spyOn(org.ekstep.text.MultilineTransliterator,"create").and.returnValue(multilineTransliterator);
         spyOn(org.ekstep.contenteditor.api, "getService").and.callFake(function(serviceName) {
             if (serviceName === ServiceConstants.LANGUAGE_SERVICE) {
                 return languageService;
@@ -84,7 +84,7 @@ describe("WordExtractor", function() {
 
     it("should should call getCurrentObject",function(){
         spyOn(org.ekstep.contenteditor.api, "getCurrentObject");
-        var wordExtractor = new org.ekstep.textNew.WordExtractor();
+        var wordExtractor = new org.ekstep.text.WordExtractor();
 
         wordExtractor.extractText();
 
@@ -94,9 +94,9 @@ describe("WordExtractor", function() {
 
     it("should get text from the selected text plugin",function(){
 
-        var obj = {manifest:{id:"org.ekstep.textNew"},editorObj:{text:"hello world!"}};
+        var obj = {manifest:{id:"org.ekstep.text"},editorObj:{text:"hello world!"}};
         spyOn(org.ekstep.contenteditor.api, "getCurrentObject").and.returnValue(obj);
-        var wordExtractor = new org.ekstep.textNew.WordExtractor();
+        var wordExtractor = new org.ekstep.text.WordExtractor();
 
         var val = wordExtractor.extractText();
 
@@ -109,7 +109,7 @@ describe("WordExtractor", function() {
         var obj = {manifest:{id:"org.ekstep.shape"}};
 
         spyOn(org.ekstep.contenteditor.api, "getCurrentObject").and.returnValue(obj);
-        var wordExtractor = new org.ekstep.textNew.WordExtractor();
+        var wordExtractor = new org.ekstep.text.WordExtractor();
 
         var val = wordExtractor.extractText();
 
@@ -122,7 +122,7 @@ describe("WordExtractor", function() {
         var obj = false;
 
         spyOn(org.ekstep.contenteditor.api, "getCurrentObject").and.returnValue(obj);
-        var wordExtractor = new org.ekstep.textNew.WordExtractor();
+        var wordExtractor = new org.ekstep.text.WordExtractor();
 
         var val = wordExtractor.extractText();
 

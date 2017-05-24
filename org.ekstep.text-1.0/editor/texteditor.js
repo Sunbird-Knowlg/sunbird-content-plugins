@@ -54,7 +54,7 @@ var textEditor = (function() {
         if(data){
             ecEditor.getService(ServiceConstants.TELEMETRY_SERVICE).interact({
                 "type": data.type, "subtype": data.subtype, "target": data.target,
-                "pluginid": "org.ekstep.textNew", "pluginver": "1.0", "objectid": "",
+                "pluginid": "org.ekstep.text", "pluginver": "1.0", "objectid": "",
                 "stage": ecEditor.getCurrentStage().id
             });
         }
