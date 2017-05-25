@@ -86,7 +86,7 @@ angular.module('quizconfigapp', ['ui.sortable'])
             var templateData = _.filter(quizInstance.data.template, ['id', item.template]);
             ctrl.itemPreviewContent = quizBrowserUtil.getQuestionPreviwContent(templateData, item);
             ctrl.itemPreviewDisplay = !ecEditor._.isUndefined(ctrl.itemPreviewContent.error) ? ctrl.itemPreviewContent.error : '';
-            itemIframe.contentWindow.location.reload();
+            if(itemIframe) itemIframe.contentWindow.location.reload();
         }
         ctrl.doneConfig = function() {
             $scope.closeThisDialog();

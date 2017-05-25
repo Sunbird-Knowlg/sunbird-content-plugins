@@ -31,8 +31,8 @@ describe('Quiz plugin instantiate and load stagePlugin:', function() {
             angular.mock.module('Scope.safeApply');
             angular.mock.module('ui.sortable');
             inject(function($ocLazyLoad, _$rootScope_, _$controller_) {
-                var $controller = _$controller_;
-                $scope = _$rootScope_.$new();                
+                $controller = _$controller_;
+                $scope = _$rootScope_.$new(); 
                 $ocLazyLoad.load([{
                     type: 'js',
                     path: path
@@ -173,7 +173,15 @@ describe('Quiz plugin instantiate and load stagePlugin:', function() {
             });
         });
         describe('quiz preview question',function(){
-            xit('Preview of the question', function() {
+
+            xit('on model open',function(){
+                spyOn($scope, '$on');
+                $scope.$emit('ngDialog.opened');
+                expect($scope.$on).toHaveBeenCalled();
+                $scope.on('ngDialog.opened');
+
+            });
+            it('Preview of the question', function() {
                 var question = {"owner":"346","template":"org.ekstep.mcq.ia_ta.tia10","identifier":"domain_44140","code":"org.ekstep.assessmentitem.numeracy_5729b6da54e20","question":"123","qlevel":"EASY","portalOwner":"346","language":["English"],"type":"mcq","title":"सही संख्या की तीलियाँ चुनें","graph_id":"domain","nodeType":"DATA_NODE","createdOn":"2016-05-04T08:46:18.351+0000","objectType":"AssessmentItem","feedback":"","gradeLevel":["Grade 1"],"max_score":1,"options":[{"marks":"1","value":{"type":"mixed","text":"12","count":"","image":null,"audio":null},"score":1,"answer":true},{"marks":"0","value":{"type":"mixed","text":"21","count":"","image":null,"audio":null}}],"name":"सही संख्या की तीलियाँ चुनें","lastUpdatedOn":"2016-09-01T18:49:45.662+0000","used_for":"worksheet","template_id":"domain_43151","model":null,"node_id":42529,"es_metadata_id":"domain_44140","isSelected":true,"$$hashKey":"object:741"};
                 ctrl.previewItem(question);
                 expect(ctrl.enableQuestionConfig).toBe(false);
