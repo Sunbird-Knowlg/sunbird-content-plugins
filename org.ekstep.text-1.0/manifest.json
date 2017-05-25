@@ -70,7 +70,7 @@
                     "iconClass": "trash icon",
                     "onclick": {
                         "id": "org.ekstep.text:delete:enhancement"
-                    }      
+                    }
                 }]
             },{
                 "value": "wordinfo",
@@ -90,13 +90,13 @@
                     "iconClass": "trash icon",
                     "onclick": {
                         "id": "org.ekstep.text:delete:enhancement"
-                    }      
+                    }
                 }]
             },
             {
                 "value": "Transliterate",
                 "title": "Transliterate",
-                "toolTip": "Transliterate",
+                "toolTip": "Write English in Hindi script",
                 "description": "Transliterate",
                 "state": true,
                 "status": "HIDE",
@@ -109,7 +109,7 @@
                     "iconClass": "trash icon",
                     "onclick": {
                         "id": "org.ekstep.text:showpopup"
-                    }      
+                    }
                 }]
             }],
             "defaultValue": "text"

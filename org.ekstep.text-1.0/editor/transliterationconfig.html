@@ -165,7 +165,7 @@
                     <div class="snapRight six wide column">
                         <div class="row bottom-margin">
                             <select class="ui dropdown lang-dropdown" ng-model="$ctrl.selectedLanguage" ng-options="lang as lang.name for lang in $ctrl.languages">
-                                <option value="">Select Language</option>
+                                <option value="">Select an Indian language</option>
                             </select>
                             <div class="ui buttons pull-right">
                                 <button class="ui blue button" ng-click="$ctrl.transliterate()" ng-disabled="$ctrl.originalText == '' || $ctrl.selectedLanguage == null" type="button"> Transliterate </button>
