@@ -3,7 +3,7 @@
  * plugin to add assessments to stage
  * @class assessment
  * @extends org.ekstep.contenteditor.basePlugin
- * @author Manju dr <manjunathd@ilimi.in>
+ * @author Manjunath Davanam  <manjunathd@ilimi.in>
  * @fires org.ekstep.assessmentbrowser:show
  * @fires org.ekstep.quiz:add 
  * @listens org.ekstep.image:assessment:showPopup
@@ -21,8 +21,14 @@ org.ekstep.contenteditor.basePlugin.extend({
      * @memberof assessment
      */
     initialize: function() {
+        var instance = this;
         ecEditor.addEventListener(this.manifest.id + ":showPopup", this.openAssessmentBrowser, this);
         ecEditor.addEventListener(this.manifest.id + ":renderQuiz", this.renderQuiz, this);
+        ecEditor.addEventListener(this.manifest.id + ":showQuizConfig", this.showQuizConfig, this);
+        var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/templates/quizconfig.html");
+        var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/js/quizconfigapp.js");
+        ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
+
     },
     mediaObj: {},
     hasTemplateMedia: true,
@@ -90,8 +96,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     showQuizbgImage: function(questionnaire, _parent) {
         var instance = this;
-        var path = ecEditor.getConfig('useProxyForURL') ? "/plugins/" : "/content-plugins/";
-        var quizImage = ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assets/QuizImage.png");
+        var quizImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assets/QuizImage.png");
         fabric.Image.fromURL(quizImage, function(img) {
             var count = questionnaire.total_items + '/' + instance.getItems(questionnaire.items);
             var quizDetails = instance.getPropsForEditor(questionnaire.title, count, questionnaire.max_score);
@@ -154,10 +159,9 @@ org.ekstep.contenteditor.basePlugin.extend({
             }
         }
         if (_.size(errTemplateids) === _.size(errTempurl) && _.size(errTemplateids) > 0) {
-            var path = ecEditor.getConfig('useProxyForURL') ? "/plugins/" : "/content-plugins/";
             ecEditor.getService('popup').open({
                 showClose: false,
-                template: ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/warning.html"),
+                template: ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/templates/warning.html"),
                 controller: ['$scope', function($scope) {
                     $scope.callClear = function() {
                         instance.clearItem(questionnaire, errTemplateids,function(){
@@ -323,11 +327,27 @@ org.ekstep.contenteditor.basePlugin.extend({
                     ecEditor.dispatchEvent('delete:invoke');
                     ecEditor.dispatchEvent(this.manifest.id + ':renderQuiz', { items: value.items, config: value.config })
                     break;
-            }
+                }
         }
         ecEditor.render();
         ecEditor.dispatchEvent('object:modified', {
             target: ecEditor.getEditorObject()
+        });
+    },
+    showQuizConfig: function(event, dataObj) {
+       var currentQuizObj = ecEditor.getCurrentObject();
+        ecEditor.getService('popup').open({
+            template: 'quizconfig',
+            controller: 'quizconfigcontroller',
+            controllerAs: '$ctrl',
+            resolve: {
+                'quizInstance': function() {
+                    return currentQuizObj;
+                }
+            },
+            width: 900,
+            showClose: false,
+            className: 'ngdialog-theme-plain'
         });
     },
     getConfig: function() {

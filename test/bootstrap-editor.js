@@ -8,10 +8,16 @@ var testConfig = {
 	dispatcher: 'console',
 	pluginRepo: 'http://localhost:9876/base',
 	corePluginsPackaged: false,
-	plugins: {
-		'org.ekstep.stage': '1.0',
-		'org.ekstep.config': '1.0'
-	}
+	plugins: [
+		{ "id": "org.ekstep.stage", "ver": "1.0", "type": "plugin" },
+		{ "id": "org.ekstep.config", "ver": "1.0", "type": "plugin" },
+		{ "id": "org.ekstep.shape", "ver": "1.0", "type": "plugin" },
+		{ "id": "org.ekstep.quiz", "ver": "1.0", "type": "plugin" },
+		{ "id": "org.ekstep.text", "ver": "1.0", "type": "plugin" },
+		{ "id": "org.ekstep.video", "ver": "1.0", "type": "plugin" },
+		{ "id": "org.ekstep.audio", "ver": "1.0", "type": "plugin" },
+		{ "id": "org.ekstep.readalongbrowser", "ver": "1.0", "type": "plugin" }
+	]
 }
 
 var $scope = {
@@ -96,4 +102,6 @@ ContentEditorTestFramework = {
 		//EkstepEditorAPI.getCanvas().fire('selection:cleared', {target: object});
 		object.fire('deselected', {});
 	}
-}
+};
+
+ContentEditorTestFramework.init(function() {});

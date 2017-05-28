@@ -30,7 +30,7 @@ var textEditor = (function() {
     var $editor = ecEditor.jQuery("#authoringTextEditor"),
         $doneBtn = ecEditor.jQuery("#authoringTextEditorBtn"),
         $cancelBtn = ecEditor.jQuery("#authoringTextEditorCancel"),
-        $btnGrpParent = ecEditor.jQuery('<div>',{style:"margin-top: 6px; margin-right: 6px;"}) 
+        $btnGrpParent = ecEditor.jQuery('<div>',{style:"margin-top: 6px; margin-right: 6px;"})
         $buttonGrp = ecEditor.jQuery('<div>', { class: 'ui buttons', id: 'texteditorBtnGrp', style:"float: right;" });
     $orBtn = ecEditor.jQuery('<div>', { class: 'or' });
     pluginId = undefined,
@@ -52,10 +52,10 @@ var textEditor = (function() {
 
     function generateTelemetry(data) {
         if(data){
-            ecEditor.getService(ServiceConstants.TELEMETRY_SERVICE).interact({ 
-                "type": data.type, "subtype": data.subtype, "target": data.target, 
-                "pluginid": "org.ekstep.text", "pluginver": "1.0", "objectid": "", 
-                "stage": ecEditor.getCurrentStage().id 
+            ecEditor.getService(ServiceConstants.TELEMETRY_SERVICE).interact({
+                "type": data.type, "subtype": data.subtype, "target": data.target,
+                "pluginid": "org.ekstep.text", "pluginver": "1.0", "objectid": "",
+                "stage": ecEditor.getCurrentStage().id
             });
         }
     }
@@ -125,7 +125,7 @@ var textEditor = (function() {
         $buttonGrp.show();
         var angScope = ecEditor.getAngularScope();
         ecEditor.ngSafeApply(angScope, function () {
-          angScope.configStyle = "";           
+          angScope.configStyle = "";
         });
     }
 
@@ -136,7 +136,7 @@ var textEditor = (function() {
         $cancelBtn.hide();
         var angScope = ecEditor.getAngularScope();
         ecEditor.ngSafeApply(angScope, function () {
-          angScope.configStyle = "";           
+          angScope.configStyle = "";
         });
     }
     return {

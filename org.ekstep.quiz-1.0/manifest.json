@@ -12,7 +12,9 @@
             "dataType": "text"
         },
         "dependencies": [
-            {"type": "plugin", "plugin": "org.ekstep.assessmentbrowser", "ver": "1.0"}
+            {"type": "plugin", "plugin": "org.ekstep.assessmentbrowser", "ver": "1.0"},
+            { "type": "js", "src": "libs/sortable.js" },
+            { "type": "js", "src": "editor/js/quizUtil.js" }
         ],
         "menu": [{
             "id": "assessment",
@@ -36,6 +38,19 @@
                 "type": "quiz"
             }
         },
+        {
+            "propertyName": "quizConfig",
+            "title": "question config",
+            "dataType": "browser",
+            "description": "quizConfig",
+            "iconClass":"settings icon",
+            "required": true,
+            "onclick":{
+                "id": "org.ekstep.quiz:showQuizConfig",
+                "type": "quiz"
+            }
+        },
+
         {
             "propertyName": "title",
             "title": "Assessment Title",
@@ -71,7 +86,8 @@
             "description": "Toal marks to display",
             "dataType": "input",
             "valueType":"number",
-            "required": true
+            "required": true,
+            "minimumValue":"0"
         },
         {
             "propertyName": "max_score",
@@ -79,7 +95,9 @@
             "description": "Toal marks to display",
             "dataType": "input",
             "valueType":"number",
-            "required": true
+            "required": true,
+            "minimumValue":"1",
+            "maximumValue":"99"
             
         }]
     },

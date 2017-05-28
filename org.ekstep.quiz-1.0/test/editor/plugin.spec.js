@@ -11,14 +11,10 @@ describe('Quiz plugin instantiate and load stagePlugin:', function() {
         render: pluginNames.quiz.concat(':renderQuiz'),
         showPopup: pluginNames.quiz.concat(':showPopup'),
     };
-    beforeAll(function(done) {
-        ContentEditorTestFramework.cleanUp();
-        ContentEditorTestFramework.init(function() {
-            stage = ecEditor.instantiatePlugin(pluginNames.stage);
-            ecEditor.loadPlugin(pluginNames.quiz, pluginVersion);
-            quizProto = org.ekstep.pluginframework.pluginManager.plugins[pluginNames.quiz].p.prototype;
-            done();
-        });
+    beforeAll(function() {
+        ContentEditorTestFramework.cleanUp();        
+        stage = ecEditor.instantiatePlugin(pluginNames.stage);            
+        quizProto = org.ekstep.pluginframework.pluginManager.plugins[pluginNames.quiz].p.prototype;
     });
     beforeEach(module('editorApp'));
     beforeEach(inject(function($rootScope, $controller) {
@@ -108,8 +104,5 @@ describe('Quiz plugin instantiate and load stagePlugin:', function() {
             var templateArray = [{ "manifest": "", "controller": { "id": "assessment", "name": "assessment", "type": "items" }, "template": ["[{\"manifest\":\"\",\"controller\":{\"id\":\"assessment\",\"name\":\"assessment\",\"type\":\"items\"},\"template\":{\"text\":[{\"align\":\"center\",\"color\":\"black\",\"font\":\"Verdana\",\"fontsize\":50,\"model\":\"item.title\",\"valign\":\"middle\",\"w\":80,\"x\":10,\"y\":10},{\"align\":\"center\",\"color\":\"black\",\"font\":\"Verdana\",\"fontsize\":60,\"model\":\"item.question\",\"valign\":\"middle\",\"w\":80,\"x\":10,\"y\":20}],\"shape\":{\"event\":{\"action\":{\"asset_model\":\"item.question_audio\",\"command\":\"play\",\"type\":\"command\"},\"type\":\"click\"},\"h\":10,\"hitArea\":true,\"id\":\"retry\",\"type\":\"rect\",\"visible\":true,\"w\":80,\"x\":10,\"y\":17},\"image\":{\"h\":30,\"model\":\"item.question_image\",\"x\":35,\"y\":27},\"mcq\":{\"options\":{\"image\":{\"h\":75,\"model\":\"option.value.image\",\"x\":20,\"y\":0},\"text\":{\"align\":\"center\",\"font\":\"Georgia\",\"fontsize\":350,\"h\":10,\"model\":\"option.value.text\",\"w\":100,\"weight\":\"bold\",\"x\":0,\"y\":75},\"event\":{\"action\":{\"asset_model\":\"option.value.audio\",\"command\":\"play\",\"type\":\"command\"},\"type\":\"click\"},\"cols\":5,\"h\":40,\"layout\":\"table\",\"marginX\":5,\"marginY\":5,\"options\":\"options\",\"w\":80,\"x\":10,\"y\":60},\"model\":\"item\",\"multi_select\":false},\"id\":\"org.ekstep.mcq.ia_ta.tia10\"},\"stage\":{\"embed\":{\"template\":\"item\",\"var-item\":\"item\"},\"h\":100,\"id\":\"stage1\",\"iterate\":\"assessment\",\"var\":\"item\",\"w\":100,\"x\":0,\"y\":0},\"id\":\"theme\",\"ver\":0.2}]", "test"], "stage": { "embed": { "template": "item", "var-item": "item" }, "h": 100, "id": "stage1", "iterate": "assessment", "var": "item", "w": 100, "x": 0, "y": 0 }, "id": "theme", "ver": 0.2 }];
             quizProto.getTemplateData(templateArray);
         });
-    });
-    describe('Quiz plugin: Open assessmentbrowser popup', function() {
-       // ecEditor.dispatchEvent(quiz.showPopup, {});
     });
 });
