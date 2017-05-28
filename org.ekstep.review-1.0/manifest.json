@@ -1,10 +1,10 @@
 {
     "id": "org.ekstep.review",
     "ver": "1.0",
-    "author": "",
+    "author": "Gourav More",
     "type": "widget",
     "title": "review Plugin",
-    "description": "",
+    "description": "Plugin for send content to review",
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
