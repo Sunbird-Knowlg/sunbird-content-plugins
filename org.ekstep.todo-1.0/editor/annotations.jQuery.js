@@ -23,7 +23,7 @@ $.fn.annotations = function(options){
 		console.warn('URL not found for widget ID = ' + element.attr('id'));
 	}
 
-	// Get per widget unique ID. Unique Id will be geerated based on stageId
+	// Get per widget unique ID. Unique Id will be generated based on stageId
 	ecEditor.jQuery.ajax({
 		url: ecEditor.getConfig('baseURL') + "/index.php?option=com_api&app=jlike&resource=init&format=raw",
 		headers: { 'x-auth':'session' },
