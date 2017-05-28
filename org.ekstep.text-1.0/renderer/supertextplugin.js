@@ -10,10 +10,10 @@ Plugin.extend({
         this._plginConfig = JSON.parse(data.config.__cdata);
         if(!_.isUndefined(data.data))
             this._plginData = JSON.parse(data.data.__cdata);
-        
+
         var pid = data._id || data.id;
         if(data.id) {
-            data._id = pid;    
+            data._id = pid;
             delete data.id;
         }
         this.id = _.uniqueId('org.ekstep.text');
@@ -22,7 +22,7 @@ Plugin.extend({
                 this._data = data;
                 var data = _.clone(this._data);
                 data.id = pid;
-                data.__text = _.isUndefined(this._plginConfig.text) ? data.__text : this._plginConfig.text;
+                data.__text = this._plginConfig.text;
                 data.timings = this._plginConfig.timings;
                 data.audio = this._plginConfig.audio;
                 data.highlight = this._plginConfig.highlight;
@@ -40,8 +40,10 @@ Plugin.extend({
                 data.id = pid;
                 data['z-index'] = 1000;
                 var wordsArr = this._plginConfig.words.split(',');
+
                 var text = _.isUndefined(this._plginConfig.text) ? data.__text : this._plginConfig.text;
                 text = text.replace(/(?:\r\n|\r|\n)/g, ' <br /> ');
+
                 var fontsize = data.fontsize;
                 if (isFinite(fontsize)) {
                     if (data.w) {
@@ -62,7 +64,7 @@ Plugin.extend({
                         return word;
                     }
                 }).join(' ');
-            
+
                 var dims = this.relativeDims();
                 var div = document.getElementById(data.id);
                 if (div) {
@@ -104,7 +106,7 @@ Plugin.extend({
                 if(_.isUndefined(instance._stage._data.events)){
                     instance._stage._data.events = {'event': event}
                 }
-                
+
                 this.invokeController();
                 this.invokeTemplate();
                 //Invoke the embed plugin to start rendering the templates
@@ -115,7 +117,7 @@ Plugin.extend({
                 this._data = data;
                 var data = _.clone(this._data);
                 data.id = pid;
-                data.__text = _.isUndefined(this._plginConfig.text) ? data.__text : this._plginConfig.text;
+                data.__text = this._plginConfig.text;
                 PluginManager.invoke('text', data, instance._parent, instance._stage, instance._theme);
                 break;
         }
