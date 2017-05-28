@@ -47,7 +47,7 @@ angular.module('org.ekstep.review', [])
                     if (res && !ecEditor._.isUndefined(res.responseJSON)) {
                         // This could be converted to switch..case to handle different error codes
                         if (res.responseJSON.params.err == "ERR_STALE_VERSION_KEY")
-							ecEditor.dispatchEvent('org.ekstep.review:showConflictDialog');
+                            ecEditor.dispatchEvent('org.ekstep.review:showConflictDialog');
                     } else {
                         $rootScope.saveNotification('error');
                     }
@@ -60,11 +60,11 @@ angular.module('org.ekstep.review', [])
 
         /**save content**/
         ctrl.forceUpdate = function() {
-			$rootScope.fetchPlatformContentVersionKey(function(platformContentVersionKey) {
+            $rootScope.fetchPlatformContentVersionKey(function(platformContentVersionKey) {
                 //Invoke saveBeforeReview function here...
-				ctrl.saveBeforeReview();
+                ctrl.saveBeforeReview();
             });
-		}
+        }
 
         /**send for review content**/
         ctrl.sendForReview = function() {

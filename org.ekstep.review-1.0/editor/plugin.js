@@ -138,7 +138,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     showConflictDialog: function(event) {
         var instance = this;
         var modalController = function($scope) {
-			 $scope.redirectToHome = instance.redirectToHome;
+            $scope.redirectToHome = instance.redirectToHome;
         };
         ecEditor.getService('popup').open({
             template: 'partials/reviewConflictDialog.html',
@@ -152,15 +152,6 @@ org.ekstep.contenteditor.basePlugin.extend({
             showClose: false,
             className: 'ngdialog-theme-plain reviewConflict'
         });
-
-        //~ ecEditor.getService('popup').open({
-            //~ template: 'partials/reviewConflictDialog.html',
-            //~ controller: ['$scope', '$rootScope', modalController],
-            //~ className: 'ngdialog-theme-plain reviewConflict',
-			//~ showClose: false,
-			//~ closeByDocument: true,
-			//~ closeByEscape: true
-        //~ });
     },
     /**
      *   redirect to home page
