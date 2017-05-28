@@ -1,6 +1,6 @@
 'use strict';
 angular.module('activityBrowserApp', [])
-    .controller('activityBrowserCtrl', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
+    .controller('activityBrowserCtrl', ['$scope', 'instance', function($scope, instance) {
         var ctrl = this,
             angScope = ecEditor.getAngularScope();
 
@@ -36,7 +36,7 @@ angular.module('activityBrowserApp', [])
         ctrl.images = $scope.images = [];
 
         ctrl.viewPluginDetails = function(activity) {
-            ctrl.hideMainPage = true;            
+            ctrl.hideMainPage = true;
             ctrl.getPluginDetails(activity.identifier);
             ctrl.selectedPlugin = activity;
             $scope.$safeApply();
@@ -44,7 +44,7 @@ angular.module('activityBrowserApp', [])
 
         ctrl.closePluginDetails = function() {
             ctrl.showPluginDetails = false;
-            ctrl.hideMainPage = false;  
+            ctrl.hideMainPage = false;
             $scope.$safeApply();
         };
 
@@ -87,7 +87,7 @@ angular.module('activityBrowserApp', [])
                         ctrl.activitiesList.push(val);
                     }
                 })
-                applyDimmerToCard();
+                ctrl.applyDimmerToCard();
             });
         };
         ctrl.addPlugin = function(activity) {
@@ -109,7 +109,7 @@ angular.module('activityBrowserApp', [])
             }
         });
 
-        function applyDimmerToCard() {
+        ctrl.applyDimmerToCard = function() {
             setTimeout(function() {
                 ecEditor.jQuery("#activity-cards .image").dimmer({
                     on: 'hover'
@@ -147,7 +147,7 @@ angular.module('activityBrowserApp', [])
                     "filters": {
                         "objectType": ["Content"],
                         "contentType": ["plugin"],
-                        "status": ["live"],                        
+                        "status": ["live"],
                         "identifier": pluginId
                     }
                 }
@@ -157,7 +157,7 @@ angular.module('activityBrowserApp', [])
                 ctrl.loading = false;
                 if (res.data) res = res.data;
                 if (res && res.responseCode === "OK" && res.result.count > 0) {
-                    ctrl.pluginDetails = res.result.content[0];                    
+                    ctrl.pluginDetails = res.result.content[0];
                     if (res.result.content[0].usesContent && res.result.content[0].usesContent.length) ctrl.getPluginScreenshots(res.result.content[0].usesContent);
                     else {
                         ctrl.images.push({
@@ -188,19 +188,18 @@ angular.module('activityBrowserApp', [])
                 if (res && res.responseCode === "OK" && res.result.count > 0) {
                     res.result.content.forEach(function(content) {
                         if (content.downloadUrl) ctrl.images.push({ image: content.downloadUrl });
-                    });
-                ctrl.imageAvailable = true;
+                    });                    
                 } else {
-
+                    ctrl.images.push({
+                        image: ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'assets/image-placeholder.png')
+                    });                    
                 }
+                ctrl.imageAvailable = true;
                 $scope.$safeApply();
             });
-
         };
-
-
     }]);
-
+/* istanbul ignore next */
 angular.module('activityBrowserApp').directive('slider', function() {
     return {
         restrict: 'EA',

@@ -16,7 +16,8 @@ var testConfig = {
 		{ "id": "org.ekstep.text", "ver": "1.0", "type": "plugin" },
 		{ "id": "org.ekstep.video", "ver": "1.0", "type": "plugin" },
 		{ "id": "org.ekstep.audio", "ver": "1.0", "type": "plugin" },
-		{ "id": "org.ekstep.readalongbrowser", "ver": "1.0", "type": "plugin" }
+		{ "id": "org.ekstep.readalongbrowser", "ver": "1.0", "type": "plugin" },
+		{ "id": "org.ekstep.activitybrowser", "ver": "1.0", "type": "plugin" }
 	]
 }
 
