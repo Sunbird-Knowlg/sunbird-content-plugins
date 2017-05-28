@@ -1184,9 +1184,11 @@
                 'data-container': 'comments'
             });
 
-            // @Hack by TJ
-            // this.$el.append(commentsContainer); // Original code
-            this.$el.prepend(commentsContainer); // Ek-content
+            if (this.options.enableNavigationOnTop) {
+               this.$el.prepend(commentsContainer);
+            } else {
+               this.$el.append(commentsContainer);
+            }
 
             // "No comments" placeholder
             var noComments = $('<div/>', {

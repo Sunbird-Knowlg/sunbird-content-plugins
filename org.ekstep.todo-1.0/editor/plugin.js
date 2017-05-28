@@ -12,7 +12,7 @@ org.ekstep.contenteditor.basePlugin.extend({
 		ecEditor.addEventListener("stage:select", this.controllerCallback, this);
     },
     initData: function(){
-		var instance = this;
+        var instance = this;
 	},
     controllerCallback: function(event, data) {
 		ctrl = this;
@@ -68,6 +68,14 @@ org.ekstep.contenteditor.basePlugin.extend({
 					// Status C = Complete(resolved todo)
 					requestParams["status"] = "C";
 					ctrl.getTodos(widgetRef, requestParams, "#pageLevelResolvedTodos");
+
+					// Render collaborators comments. Update widget attribute based on stageId
+					ecEditor.jQuery('#collaboratorsCommentsDiv').attr("data-jlike-url", requestParams["url"]);
+					// Update subtype based on stageId. subtype is very IMP to load comments
+					ecEditor.jQuery('#collaboratorsCommentsDiv').attr("data-jlike-subtype", "collaborators#"+data.stageId);
+					ecEditor.jQuery('#collaboratorsCommentsDiv').attr('data-jlike-cont-id', requestParams["cont_id"]);
+					// Call annotation function to make API's call
+					ecEditor.jQuery('#collaboratorsCommentsDiv').annotations();
 				}
 			}
 		}
