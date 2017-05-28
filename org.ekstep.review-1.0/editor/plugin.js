@@ -20,17 +20,21 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     initialize: function() {
         /**Add event listeners**/
+        ecEditor.addEventListener(this.manifest.id + ":review", this.review, this);
         ecEditor.addEventListener(this.manifest.id + ":show", this.loadHtml, this);
         ecEditor.addEventListener(this.manifest.id + ":showDialog", this.showDialog, this);
+        ecEditor.addEventListener(this.manifest.id + ":showConflictDialog", this.showConflictDialog, this);
 
         /**load html templates**/
         var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/review.html");
         var controllerPath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/reviewapp.js");
+        var conflictNgModuleTemplatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/reviewConflictDialog.html");
         var ngModuleTemplatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/editMetaDialog.html");
 
         /**get ngModule service**/
         ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
         ecEditor.getService('popup').loadNgModules(ngModuleTemplatePath);
+        ecEditor.getService('popup').loadNgModules(conflictNgModuleTemplatePath);
     },
     /**
      *   load html template to show the popup
@@ -55,6 +59,55 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
     },
     /**
+     *   Function to validate to reivew content
+     *   @param event {Object} event
+     *   @memberof review
+     */
+    review: function(event) {
+        var instance = this;
+        var isValid = 1,
+            fieldsToFill = [],
+            mandatoryFields = {
+                "appIcon": "Lesson Icon",
+                "name": "Title",
+                "description": "Description",
+                "contentType": "Lesson Type",
+                "language": "Language",
+                "domain": "Domain",
+                "owner": "Author",
+                "ageGroup": "Age Group",
+                "gradeLevel": "Grades"
+            };
+
+        instance.contentObj = ecEditor.getService('content').getContentMeta(window.context.content_id);
+        /**Check for mandatory fields**/
+        if (instance.contentObj['name'] == "Untitled lesson") {
+            isValid = 0;
+            fieldsToFill.push('Title');
+        }
+        ecEditor._.each(mandatoryFields, function(value, key) {
+            if (typeof instance.contentObj[key] == 'undefined' || instance.contentObj[key] == "") {
+                isValid = 0;
+                fieldsToFill.push(value);
+            } else if (Array.isArray(instance.contentObj[key]) && instance.contentObj[key].length == 0) {
+                isValid = 0;
+                fieldsToFill.push(value);
+            }
+        });
+
+        if (isValid == 1) {
+            instance.loadHtml(instance);
+        } else {
+            /**If madatory fields are not fill then show error message**/
+            ecEditor.dispatchEvent('org.ekstep.review:showDialog', {
+                dialogMainText: "Please fill in the following mandatory details.",
+                dialogSubtext: fieldsToFill.join(","),
+                isRedirect: true,
+                isError: true
+            });
+        }
+    },
+    /**
      *   load html template to show the dialogbox
      *   @param event {Object} event
      *   @param data {Object} data
@@ -66,23 +119,55 @@ org.ekstep.contenteditor.basePlugin.extend({
             $scope.dialogMainText = data.dialogMainText;
             $scope.dialogSubtext = data.dialogSubtext;
             $scope.isRedirect = data.isRedirect;
-            $scope.redirectToEditMeta = instance.redirectToEditMeta;
+            $scope.redirectToHome = instance.redirectToHome;
             $scope.isError = data.isError;
         };
         ecEditor.getService('popup').open({
             template: 'partials/editMetaDialog.html',
-            controller: ['$scope', modalController],
+            controller: ['$scope', '$rootScope', modalController],
             showClose: false,
-            width: 500,
-            className: 'ngdialog-theme-default'
+            className: 'ngdialog-theme-plain'
         });
     },
     /**
-     *   redirect to edit metadata form
+     *   show conflict dialog box
+     *   @param event {Object} event
+     *   @param data {Object} data
      *   @memberof review
      */
-    redirectToEditMeta: function() {
-        window.location.href = window.context.editMetaLink;
+    showConflictDialog: function(event) {
+        var instance = this;
+        var modalController = function($scope) {
+			 $scope.redirectToHome = instance.redirectToHome;
+        };
+        ecEditor.getService('popup').open({
+            template: 'partials/reviewConflictDialog.html',
+            controller: 'reviewcontroller',
+            controllerAs: '$ctrl',
+            resolve: {
+                'instance': function() {
+                    return instance;
+                },
+            },
+            showClose: false,
+            className: 'ngdialog-theme-plain reviewConflict'
+        });
+
+        //~ ecEditor.getService('popup').open({
+            //~ template: 'partials/reviewConflictDialog.html',
+            //~ controller: ['$scope', '$rootScope', modalController],
+            //~ className: 'ngdialog-theme-plain reviewConflict',
+			//~ showClose: false,
+			//~ closeByDocument: true,
+			//~ closeByEscape: true
+        //~ });
+    },
+    /**
+     *   redirect to home page
+     *   @memberof review
+     */
+    redirectToHome: function() {
+        window.location.href = window.context.baseURL;
     }
 });
 //# sourceURL="reviewplugin.js"

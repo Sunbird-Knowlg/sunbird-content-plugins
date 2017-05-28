@@ -3,11 +3,11 @@
     .meta-dialog .dialog-inner-container {
         padding: 30px 10px 25px 0px;
     }
-    
+
     .meta-dialog .display-inline {
         display: inline;
     }
-    
+
     .meta-dialog .text-container {
         text-align: center;
         margin: 10px;
@@ -15,13 +15,13 @@
         color: #5f5c5c;
         display: inline;
     }
-    
+
     .meta-dialog .subtext-container {
         margin-left: 10px;
     }
-    
+
     .meta-dialog .margin-left {
-        margin-left: 139px;
+ margin-left: 89px;
     }
     </style>
     <div class="meta-dialog ui dialog-outer-container">
@@ -40,10 +40,11 @@
         </div>
         <div class="margin-left" ng-show="{{isRedirect}}">
             <button class="ui  compact primary button" ng-click="closeThisDialog()">Cancel</button>
-            <button class="ui compact secondary button" ng-click="redirectToEditMeta()">Ok</button>
+            <button class="ui compact secondary button" ng-click="closeThisDialog(); editContentMeta()">Edit details</button>
         </div>
         <div class="margin-left" ng-show="{{!isRedirect}}">
-            <button class="ui  compact primary button" ng-click="closeThisDialog()">ok</button>
+            <button class="ui  compact primary button" ng-show="{{isError}}" ng-click="closeThisDialog()">ok</button>
+            <button class="ui  compact primary button" ng-show="{{!isError}}" ng-click="redirectToHome()">Home</button>
         </div>
     </div>
 </script>
