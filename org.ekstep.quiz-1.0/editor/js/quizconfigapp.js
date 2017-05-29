@@ -21,7 +21,7 @@ angular.module('quizconfigapp', ['ui.sortable'])
         }
         $scope.sortableOptions = {
             update: function(e, ui) {
-                ctrl.generateTelemetry({type: 'click', subtype: 'reorder', target: 'question'})
+                ctrl.generateTelemetry({type: 'click', subtype: 'reorder', target: 'question',targetid: ui.item.sortable.model.identifier})
             },
             'ui-floating': true
         };
@@ -101,7 +101,16 @@ angular.module('quizconfigapp', ['ui.sortable'])
         }
         ctrl.loadSelectedQuestions();
         ctrl.generateTelemetry = function(data) {
-            if (data) ecEditor.getService('telemetry').interact({"type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": pluginId, "pluginver": ver, "objectid": "", "stage": ecEditor.getCurrentStage().id }) 
+            if (data) ecEditor.getService('telemetry').interact({
+                "type": data.type,
+                "subtype": data.subtype,
+                "target": data.target,
+                "pluginid": pluginId,
+                "pluginver": ver,
+                "objectid": ecEditor.getCurrentObject().id,
+                "targetid":data.targetid,
+                "stage": ecEditor.getCurrentStage().id
+            })
         }
     }]);
 //# sourceURL=quizConfigApp.js
