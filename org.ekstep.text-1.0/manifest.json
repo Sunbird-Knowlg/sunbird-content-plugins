@@ -64,7 +64,7 @@
                 "onclick": {
                     "id": "org.ekstep.text:readalong:show"
                 },
-                "suboptions":[{
+                "suboptions": [{
                     "toolTip": "Delete",
                     "dataType": "icon",
                     "iconClass": "trash icon",
@@ -72,7 +72,7 @@
                         "id": "org.ekstep.text:delete:enhancement"
                     }
                 }]
-            },{
+            }, {
                 "value": "wordinfo",
                 "title": "Word Info",
                 "toolTip": "click to configure",
@@ -84,7 +84,7 @@
                 "onclick": {
                     "id": "org.ekstep.text:wordinfo:show"
                 },
-                "suboptions":[{
+                "suboptions": [{
                     "toolTip": "Delete",
                     "dataType": "icon",
                     "iconClass": "trash icon",
@@ -92,35 +92,20 @@
                         "id": "org.ekstep.text:delete:enhancement"
                     }
                 }]
-            },
-            {
-                "value": "Transliterate",
-                "title": "Transliterate",
-                "toolTip": "Write English in Hindi script",
-                "description": "Transliterate",
-                "state": true,
-                "status": "HIDE",
-                "onclick": {
-                    "id": "org.ekstep.text:showpopup"
-                },
-                "suboptions":[{
-                    "toolTip": "Delete",
-                    "dataType": "icon",
-                    "iconClass": "trash icon",
-                    "onclick": {
-                        "id": "org.ekstep.text:showpopup"
-                    }
-                }]
             }],
             "defaultValue": "text"
-        },{
+        }, {
+            "type": "custom_template",
+            "controllerURL": "editor/config-controller.js",
+            "templateURL": "editor/configTemplate.html"
+        }, {
             "propertyName": "color",
             "title": "Font color",
             "description": "Choose a color from the color picker",
             "dataType": "colorpicker",
             "required": true,
             "defaultValue": "rgb(255,0,0)"
-        },{
+        }, {
             "propertyName": "font",
             "dataType": "group",
             "description": "Choose fontweight and fontstyle",
@@ -171,7 +156,7 @@
                 "iconClass": "align right icon"
             }],
             "defaultValue": "left"
-        },{
+        }, {
             "propertyName": "fontfamily",
             "title": "Font Family",
             "description": "Select font family for the text",

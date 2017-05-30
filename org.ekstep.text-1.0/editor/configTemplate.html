@@ -1,14 +1,18 @@
 <div ng-controller="org.ekstep.text:config-controller">
-    <div class="field">
-        <label>Choose language</label>
-        <button class="circular ui blue icon button" ng-click="setFont('NotoSans')"><strong>English</strong></button>
-        <button class="circular ui blue icon button" ng-click="setFont('NotoSansKannada')"><strong>ಕನ್ನಡ</strong></button>
-        <button class="circular ui blue icon button" ng-click="setFont('NotoSansDevanagari')"><strong>हिंदी</strong></button>
-        <button class="circular ui blue icon button" ng-click="setFont('NotoSansOriya')"><strong>ଓଡିଆ</strong></button>
-        <br>
-        <br>
-        <button class="circular ui blue icon button" ng-click="setFont('NotoSansBengali')"><strong>বাঙালি</strong></button>
-        <button class="circular ui blue icon button" ng-click="setFont('NotoSansTelugu')"><strong>
-తెలుగు</strong></button>
-    </div>
+    <style type="text/css">
+    .title {
+        font-size:0.92307692em;
+    }
+    .ui.grey.button.transliterate{
+    	font-size:0.92307692em;
+    	padding: 1em;
+    	margin-top: 0.5em;
+    }
+    </style>
+    <label class="title"><strong>Language Feature</strong></label>
+
+	<br/>
+	<button class="small ui grey button transliterate" ng-click="openTransliterator()">
+	    <strong>Transliterate</strong>
+	</button>
 </div>
