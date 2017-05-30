@@ -2,8 +2,8 @@
  *
  * plugin to send content for review
  * @class reviewContent
- * @extends EkstepEditor.basePlugin
- * @author Amol Ghatol <amol_g@techjoomla.com>
+ * @extends org.ekstep.contenteditor.basePlugin
+ * @author Gourav More <gourav_m@tekditechnologies.com>
  * @listens org.ekstep.review:show
  */
 
@@ -123,7 +123,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             $scope.isError = data.isError;
         };
         ecEditor.getService('popup').open({
-            template: 'partials/editMetaDialog.html',
+            template: 'org.ekstep.review.editMetaDialog.html',
             controller: ['$scope', '$rootScope', modalController],
             showClose: false,
             className: 'ngdialog-theme-default'
