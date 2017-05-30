@@ -10,10 +10,8 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-            { "type": "js", "src": "editor/init.js" },
             { "type": "js", "src": "editor/texteditor.js" },
-            { "type": "js", "src": "editor/multilineTransliterator.js" },
-            { "type": "js", "src": "editor/wordExtractor.js" }
+            { "type": "js", "src": "editor/multilineTransliterator.js" }
         ],
         "menu": [{
             "id": "org.ekstep.text",
