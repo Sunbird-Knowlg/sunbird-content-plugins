@@ -45,7 +45,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         instance.contentObj = ecEditor.getService('content').getContentMeta(window.context.content_id);
         ecEditor.getService('popup').open({
-            template: 'partials/review.html',
+            template: 'org.ekstep.review.html',
             controller: 'reviewcontroller',
             controllerAs: '$ctrl',
             resolve: {
@@ -147,7 +147,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             $scope.redirectToHome = instance.redirectToHome;
         };
         ecEditor.getService('popup').open({
-            template: 'partials/reviewConflictDialog.html',
+            template: 'org.ekstep.review.reviewConflictDialog.html',
             controller: 'reviewcontroller',
             controllerAs: '$ctrl',
             resolve: {

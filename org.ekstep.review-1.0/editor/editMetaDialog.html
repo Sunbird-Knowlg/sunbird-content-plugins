@@ -40,12 +40,12 @@
             </div>
         </div>
         <div class="margin-left" ng-show="{{isRedirect}}">
-            <button class="ui  compact primary button" ng-click="closeThisDialog()">Cancel</button>
+            <button class="ui compact primary button" ng-click="closeThisDialog()">Cancel</button>
             <button class="ui compact secondary button" ng-click="closeThisDialog(); editContentMeta()">Edit details</button>
         </div>
         <div class="margin-left" ng-show="{{!isRedirect}}">
-            <button class="ui  compact primary button" ng-show="{{isError}}" ng-click="closeThisDialog()">ok</button>
-            <button class="ui  compact primary button" ng-show="{{!isError}}" ng-click="redirectToHome()">Home</button>
+            <button class="ui compact primary button" ng-show="{{isError}}" ng-click="closeThisDialog()">ok</button>
+            <button class="ui compact primary button" ng-show="{{!isError}}" ng-click="redirectToHome()">Home</button>
         </div>
     </div>
 </script>
