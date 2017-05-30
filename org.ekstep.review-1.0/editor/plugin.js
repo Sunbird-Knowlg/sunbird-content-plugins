@@ -101,7 +101,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             /**If madatory fields are not fill then show error message**/
             ecEditor.dispatchEvent('org.ekstep.review:showDialog', {
                 dialogMainText: "Please fill in the following mandatory details.",
-                dialogSubtext: fieldsToFill.join(","),
+                dialogSubtext: fieldsToFill,
                 isRedirect: true,
                 isError: true
             });
@@ -126,8 +126,14 @@ org.ekstep.contenteditor.basePlugin.extend({
             template: 'partials/editMetaDialog.html',
             controller: ['$scope', '$rootScope', modalController],
             showClose: false,
-            className: 'ngdialog-theme-plain'
+            className: 'ngdialog-theme-default'
         });
+
+        if (!data.isError) {
+            setTimeout(function() {
+                instance.redirectToHome();
+            }, 1000);
+        }
     },
     /**
      *   show conflict dialog box

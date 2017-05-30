@@ -12,7 +12,7 @@ angular.module('org.ekstep.review', [])
             if (ctrl.success) {
                 ecEditor.dispatchEvent('org.ekstep.review:showDialog', {
                     dialogMainText: 'Sent for reivew Successfully..!!',
-                    dialogSubtext: dialogMsg,
+                    dialogSubtext: 'Redirecting to HomePage...',
                     isRedirect: false,
                     isError: false
                 });
@@ -24,7 +24,6 @@ angular.module('org.ekstep.review', [])
                     isError: true
                 });
             }
-
         }
 
         /**Close send for reivew popup after success messages**/
@@ -39,10 +38,24 @@ angular.module('org.ekstep.review', [])
         /**Close send for reivew popup after success messages**/
         ctrl.editContentMeta = $rootScope.editContentMeta;
 
+        /**Refresh the browser as user want to fetch the version from platform**/
+        ctrl.refreshContent = function() {
+            location.reload();
+        }
+
         /**save content**/
         ctrl.saveBeforeReview = function() {
+            ctrl.message = "Saving content";
+            ctrl.active = "active";
+            ctrl.isLoading = true;
+            ctrl.success = false;
+            ctrl.success_msg = "";
+            ecEditor.ngSafeApply($scope);
             var contentBody = org.ekstep.contenteditor.stageManager.toECML();
             $rootScope.patchContent({ stageIcons: JSON.stringify(org.ekstep.contenteditor.stageManager.getStageIcons()) }, contentBody, function(err, res) {
+                ctrl.isLoading = false;
+                ctrl.active = '';
+                ecEditor.ngSafeApply($scope);
                 if (err) {
                     if (res && !ecEditor._.isUndefined(res.responseJSON)) {
                         // This could be converted to switch..case to handle different error codes
@@ -58,7 +71,7 @@ angular.module('org.ekstep.review', [])
             });
         }
 
-        /**save content**/
+        /**force to save content**/
         ctrl.forceUpdate = function() {
             $rootScope.fetchPlatformContentVersionKey(function(platformContentVersionKey) {
                 //Invoke saveBeforeReview function here...
@@ -91,6 +104,8 @@ angular.module('org.ekstep.review', [])
                     if (resp.status === 'success') {
                         ctrl.success = true;
                         ctrl.success_msg = resp.msg;
+                        $scope.closeThisDialog();
+                        ctrl.closeThisDialog(true);
                     } else {
                         ctrl.success_msg = resp.msg;
                         ctrl.success = false;

@@ -1,27 +1,23 @@
 <script type="text/ng-template" id="partials/editMetaDialog.html">
     <style>
-    .meta-dialog .dialog-inner-container {
-        padding: 30px 10px 25px 0px;
-    }
-    
     .meta-dialog .display-inline {
         display: inline;
     }
     
     .meta-dialog .text-container {
         text-align: center;
-        margin: 10px;
+        margin: 2px;
         font-size: 17px;
         color: #5f5c5c;
         display: inline;
     }
     
     .meta-dialog .subtext-container {
-        margin-left: 10px;
+        margin-left: 2px;
     }
     
     .meta-dialog .margin-left {
-        margin-left: 89px;
+        margin-left: 79px;
     }
     </style>
     <div class="meta-dialog ui dialog-outer-container">
@@ -34,7 +30,12 @@
                 </div>
                 <div class="ten wide column">
                     <div class="meta text-container">{{dialogMainText}}</div>
-                    <div class="meta subtext-container">{{dialogSubtext}}</div>
+                    <div class="meta subtext-container" ng-show="{{!isError}}">{{dialogSubtext}}</div>
+                    <div class="meta subtext-container" ng-show="{{isError}}">
+                        <ul class="list" ng-repeat="item in dialogSubtext">
+                            <li>{{item}}</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
