@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('quizconfigapp', ['ui.sortable'])
-    .controller('quizconfigcontroller', ['$scope', '$injector', 'quizInstance', function($scope, $injector, quizInstance) {
+    .controller('quizconfigcontroller', ['$scope', 'quizInstance', function($scope, quizInstance) {
         var config = {"showStartPage": false, "showEndPage": false }, ctrl = this, itemIframe;
         ctrl.previewURL = 'preview/preview.html?webview=true', ctrl.activePreviewItem = '';
         var pluginId = 'org.ekstep.quiz', ver = '1.0';
@@ -21,7 +21,7 @@ angular.module('quizconfigapp', ['ui.sortable'])
         }
         $scope.sortableOptions = {
             update: function(e, ui) {
-                ctrl.generateTelemetry({type: 'click', subtype: 'reorder', target: 'question'})
+                ctrl.generateTelemetry({type: 'click', subtype: 'reorder', target: 'question',targetid: ui.item.sortable.model.identifier})
             },
             'ui-floating': true
         };
@@ -86,7 +86,7 @@ angular.module('quizconfigapp', ['ui.sortable'])
             var templateData = _.filter(quizInstance.data.template, ['id', item.template]);
             ctrl.itemPreviewContent = quizBrowserUtil.getQuestionPreviwContent(templateData, item);
             ctrl.itemPreviewDisplay = !ecEditor._.isUndefined(ctrl.itemPreviewContent.error) ? ctrl.itemPreviewContent.error : '';
-            itemIframe.contentWindow.location.reload();
+            if(itemIframe) itemIframe.contentWindow.location.reload();
         }
         ctrl.doneConfig = function() {
             $scope.closeThisDialog();
@@ -101,7 +101,16 @@ angular.module('quizconfigapp', ['ui.sortable'])
         }
         ctrl.loadSelectedQuestions();
         ctrl.generateTelemetry = function(data) {
-            if (data) ecEditor.getService('telemetry').interact({"type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": pluginId, "pluginver": ver, "objectid": "", "stage": ecEditor.getCurrentStage().id }) 
+            if (data) ecEditor.getService('telemetry').interact({
+                "type": data.type,
+                "subtype": data.subtype,
+                "target": data.target,
+                "pluginid": pluginId,
+                "pluginver": ver,
+                "objectid": ecEditor.getCurrentObject().id,
+                "targetid":data.targetid,
+                "stage": ecEditor.getCurrentStage().id
+            })
         }
     }]);
 //# sourceURL=quizConfigApp.js
