@@ -37,8 +37,8 @@
         </div>
         <div class="content video-content">
             <div class="ui fluid action input">
-                <input type="text" ng-keyup="$event.keyCode == 13 && $ctrl.videoUrl !== '' && $ctrl.previewVideo()" placeholder="Paste video url here..." ng-model="$ctrl.videoUrl" ng-change="$ctrl.showAddLessonBtn = false">
-                <div class="ui blue button" ng-click="$ctrl.previewVideo()">Go</div>
+                <input type="text" ng-keyup="$event.keyCode == 13 && $ctrl.videoUrl !== '' && $ctrl.previewVideo(); $ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'videoUrl'})" placeholder="Paste video url here..." ng-model="$ctrl.videoUrl" ng-change="$ctrl.showAddLessonBtn = false">
+                <div class="ui blue button" ng-click="$ctrl.previewVideo(); $ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'videoUrl'})">Go</div>
             </div>
             <div class="ui grid container">
                 <div class="two column row">
@@ -71,9 +71,9 @@
         </div>
         <div class="actions">
             <div class="ui buttons" >
-                <button class="ui orange button" ng-click="closeThisDialog()" type="button">Cancel</button>
+                <button class="ui orange button" ng-click="closeThisDialog();$ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'cancelButton'})" type="button">Cancel</button>
                 <div class="or"></div>
-                <button id="addToLesson" class="ui blue button" type="button" ng-disabled="!$ctrl.showAddLessonBtn" ng-click="$ctrl.addVideo()">Add To Lesson</button>
+                <button id="addToLesson" class="ui blue button" type="button" ng-disabled="!$ctrl.showAddLessonBtn" ng-click="$ctrl.addVideo();$ctrl.generateTelemetry({type: 'click', subtype: 'addToLesson', target: 'addVideo'})"">Add To Lesson</button>
             </div>
         </div>
     </div>
