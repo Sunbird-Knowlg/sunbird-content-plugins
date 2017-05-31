@@ -43,16 +43,16 @@
                 </div>
             </div>
             <div class="ui divider" style="margin: 0;" ng-if="!$ctrl.showPluginDetails"></div>
-            <div ng-if="$ctrl.showPluginDetails" class="ui divided grid" style="width: 100%">
+            <div ng-if="$ctrl.showPluginDetails" class="ui divided grid" style="width: 103%">
                 <div class="ui row activity-browser-content">
                     <div class="ui six wide column">
-                        <h2 class="ui header" style="margin-bottom: 15%;">
+                        <h3 class="ui header" style="margin-bottom: 15%;">
                                 <span><i class="fa fa-puzzle-piece fa-2x" aria-hidden="true"></i></span>
                                 <div class="content">
                                     {{$ctrl.pluginDetails.name | limitTo: 30}}
                                 <div class="sub header">Check out our plug-in!</div>
                             </div>    
-                        </h2>
+                        </h3>
                         <div ng-if="$ctrl.imageAvailable">
                             <slider images="$ctrl.images"></slider>
                         </div>
@@ -139,7 +139,7 @@
                     </div>
                 </div>
             </div>
-            <div ng-if="!$ctrl.showPluginDetails" class="content" style="width: 100%">
+            <div ng-if="!$ctrl.showPluginDetails" class="content" style="width: 100%; padding-right: 0;">
                 <div class="ui row activity-browser-content">
                     <div class="ui segment activity-browser-content-loader" ng-if="$ctrl.loading">
                         <div class="ui active inverted dimmer">
@@ -183,7 +183,7 @@
         <div class="actions" ng-show="$ctrl.showPluginDetails">
             <div class="ui grid">
                 <div class="ui two wide column left aligned">
-                    <div class="ui primary button" ng-click="$ctrl.closePluginDetails()">Back</div>
+                    <div class="ui primary button" ng-click="$ctrl.closePluginDetails();$ctrl.generateTelemetry({type: 'click', subtype: 'back', target: 'backButton'})">Back</div>
                 </div>
                 <div class="ui ten wide column right aligned">
                     <div class="ui buttons">

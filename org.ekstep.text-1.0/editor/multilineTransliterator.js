@@ -79,11 +79,11 @@ org.ekstep.text.MultilineTransliterator = Class.extend({
                         return decodeURIComponent(val);
                     }
                     else{
-                        instance.error = "Could not transliterate";
+                        instance.error = "Transliteration unavailable at the moment";
                         return decodeURIComponent(texts[index]);
                     }
                 } else {
-                    instance.error = "Transliteration failed";
+                    instance.error = "Transliteration unavailable at the moment";
                     return decodeURIComponent(texts[index]);
                 }
             }).join('\n');
