@@ -177,7 +177,12 @@
                             </span>
                         </div>
                         <div class="field">
-                            <b>Attributions:</b> {{$ctrl.contentMeta.attributions}}
+                            <b>Attributions:</b>
+                            <span>
+                                <ng-repeat ng-repeat="item in $ctrl.contentMeta.attributions">
+                                    {{item}}{{$last ? '' : ', '}}
+                                </ng-repeat>
+                            </span>
                         </div>
                     </div>
                     <div class="four wide column">
