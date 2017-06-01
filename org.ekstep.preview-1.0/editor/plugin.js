@@ -72,11 +72,11 @@ org.ekstep.contenteditor.basePlugin.extend({
             $scope.$on('ngDialog.opened', function() {                
                 var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
                 previewContentIframe.src = instance.previewURL;
-                meta.contentMeta = _.isUndefined(meta.contentMeta) ? null : meta.contentMeta;
+                var userData = ecEditor.getService('telemetry').context;
                 previewContentIframe.onload = function() {
                     var configuration = {};
-                    configuration.context = {'mode':'edit','contentId':meta.identifier}; 
-                    configuration.config = {'showEndPage':'true','showEndPage':'true'};
+                    configuration.context = {'mode':'edit','contentId':meta.identifier,'sid':userData.sid,'uid':userData.uid}; 
+                    configuration.config = {'showEndPage':'true','showStartPage':'true'};
                     configuration.metadata = meta.contentMeta; configuration.data = instance.contentBody;
                     previewContentIframe.contentWindow.initializePreview(configuration);
                     
