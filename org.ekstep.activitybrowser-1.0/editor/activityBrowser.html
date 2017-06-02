@@ -46,96 +46,90 @@
             <div ng-if="$ctrl.showPluginDetails" class="ui divided grid" style="width: 103%">
                 <div class="ui row activity-browser-content">
                     <div class="ui six wide column">
-                        <h3 class="ui header" style="margin-bottom: 15%;">
+                        <h3 class="ui header">                        
                                 <span><i class="fa fa-puzzle-piece fa-2x" aria-hidden="true"></i></span>
-                                <div class="content">
-                                    {{$ctrl.pluginDetails.name | limitTo: 30}}
-                                <div class="sub header">Check out our plug-in!</div>
-                            </div>    
+                                <div class="top aligned content">
+                                    {{$ctrl.pluginDetails.name | limitTo: 30}}                            
+                                </div>
                         </h3>
                         <div ng-if="$ctrl.imageAvailable">
                             <slider images="$ctrl.images"></slider>
                         </div>
                     </div>
-                    <div class="ui six wide column" style="overflow-y: auto">
-                        <h2>Plugin Details:</h2>
-                        <table class="ui striped table">
-                            <tbody>
-                                <tr>
-                                    <td><strong>Description: </strong></td>
-                                    <td>{{$ctrl.pluginDetails.description}}
+                    <div class="ui six wide column">
+                        <h4>Plugin Details:</h4>
+                        <div style="overflow-y: auto; height: 370px;">
+                            <table class="ui striped table">
+                                <tbody>
+                                    <tr>
+                                        <td><strong>Description: </strong></td>
+                                        <td>{{$ctrl.pluginDetails.description}}
+                                            <td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Created By:</strong></td>
+                                        <td>{{$ctrl.pluginDetails.creator}}
+                                            <td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Version: </strong></td>
+                                        <td>{{$ctrl.pluginDetails.semanticVersion}}
+                                            <td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Category: </strong></td>
                                         <td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Version: </strong></td>
-                                    <td>{{$ctrl.pluginDetails.semanticVersion}}
+                                            <div ng-repeat="category in $ctrl.pluginDetails.category">
+                                                {{category}}
+                                            </div>
+                                            <td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Subject: </strong></td>
+                                        <td>{{$ctrl.pluginDetails.subject}}
+                                            <td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Grade: </strong></td>
                                         <td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Subject: </strong></td>
-                                    <td>{{$ctrl.pluginDetails.subject}}
+                                            <div ng-repeat="grade in $ctrl.pluginDetails.gradeLevel">
+                                                {{grade}}
+                                            </div>
+                                            <td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Age Group: </strong></td>
                                         <td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Grade: </strong></td>
-                                    <td>
-                                        <div ng-repeat="grade in $ctrl.pluginDetails.gradeLevel">
-                                            {{grade}}
-                                        </div>
+                                            <div ng-repeat="ageGroup in $ctrl.pluginDetails.ageGroup">
+                                                {{ageGroup}}
+                                            </div>
+                                            <td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Domain: </strong></td>
                                         <td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Category: </strong></td>
-                                    <td>
-                                        <div ng-repeat="category in $ctrl.pluginDetails.category">
-                                            {{category}}
-                                        </div>
+                                            <div ng-repeat="domain in $ctrl.pluginDetails.domain">
+                                                {{domain}}
+                                            </div>
+                                            <td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Language: </strong></td>
                                         <td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Age Group: </strong></td>
-                                    <td>
-                                        <div ng-repeat="ageGroup in $ctrl.pluginDetails.ageGroup">
-                                            {{ageGroup}}
-                                        </div>
+                                            <div ng-repeat="language in $ctrl.pluginDetails.language">
+                                                {{language}}
+                                            </div>
+                                            <td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>Last pusblished: </strong></td>
                                         <td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Domain: </strong></td>
-                                    <td>
-                                        <div ng-repeat="domain in $ctrl.pluginDetails.domain">
-                                            {{domain}}
-                                        </div>
-                                        <td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Language: </strong></td>
-                                    <td>
-                                        <div ng-repeat="language in $ctrl.pluginDetails.language">
-                                            {{language}}
-                                        </div>
-                                        <td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Concepts: </strong></td>
-                                    <td>
-                                        <div ng-repeat="concepts in $ctrl.pluginDetails.concepts">
-                                            {{concepts}}
-                                        </div>
-                                        <td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Publisher: </strong></td>
-                                    <td>{{$ctrl.pluginDetails.publisher}}
-                                        <td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Author:</strong></td>
-                                    <td>{{$ctrl.pluginDetails.creator}}
-                                        <td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                            {{$ctrl.pluginDetails.lastPublishedOn | date:'mediumDate'}}
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -147,7 +141,7 @@
                         </div>
                     </div>
                     <div class="ui four stackable special cards" ng-show="$ctrl.activitiesList.length > 0 && !$ctrl.hideMainPage" id="activity-cards">
-                        <div class="ui link card" ng-repeat="activity in $ctrl.activitiesList track by $index" ng-click="$ctrl.viewPluginDetails(activity)">
+                        <div class="ui link card" ng-repeat="activity in $ctrl.activitiesList track by $index" ng-click="$ctrl.viewPluginDetails(activity); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'activityCard'});">
                             <div class="blurring dimmable image">
                                 <div class="ui dimmer">
                                     <div class="content">

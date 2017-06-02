@@ -50,6 +50,7 @@ angular.module('activityBrowserApp', [])
 
         ctrl.getActivities = function() {
             ctrl.loading = true;
+            ctrl.hideMainPage = false;
             ctrl.errorLoadingActivities = false;
             ctrl.noActivities = false;
             ctrl.activitiesList = [];
@@ -167,7 +168,7 @@ angular.module('activityBrowserApp', [])
                     }
                     ctrl.showPluginDetails = true;
                 } else {
-                    ctrl.errorLoadingActivities = true;
+                    ctrl.errorLoadingActivities = true;                                        
                 }
                 $scope.$safeApply();
             });
