@@ -36,7 +36,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
         ctrl.buttonToShow = 'select';
         ctrl.uploadView = false;
         ctrl.languagecode = 'en';
-        ctrl.portalOwner = ecEditor._.isUndefined(window.context) ? '' : window.context.user.id;
+        ctrl.createdBy = ecEditor._.isUndefined(window.context) ? '' : window.context.user.id;
         ctrl.asset = {
             'requiredField': '',
         };
@@ -53,7 +53,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             'keywords': [],
             'creator': '',
             'status': 'Draft',
-            'portalOwner': ecEditor._.isUndefined(window.context) ? '' : window.context.user.id,
+            'createdBy': ecEditor._.isUndefined(window.context) ? '' : window.context.user.id,
             'code': "org.ekstep" + Math.random(),
             'mimeType': "",
             'mediaType': "",
@@ -127,9 +127,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 
         //load image on opening window
         if (instance.mediaType == 'image') {
-            instance.getAsset(undefined, new Array(instance.mediaType), ctrl.portalOwner, imageAssetCb);
+            instance.getAsset(undefined, new Array(instance.mediaType), ctrl.createdBy, imageAssetCb);
         } else {
-            instance.getAsset(undefined, new Array('audio','voice'), ctrl.portalOwner, audioAssetCb);
+            instance.getAsset(undefined, new Array('audio','voice'), ctrl.createdBy, audioAssetCb);
         }
 
 		setTimeout(function() {
@@ -139,7 +139,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 					searchText = ctrl.query;
 					(searchText === "") ? searchText = undefined: null;
 					var selectedValue = value != 'all' ? new Array(value) : new Array('audio','voice');
-					instance.getAsset(searchText, selectedValue, ctrl.portalOwner, audioAssetCb);
+					instance.getAsset(searchText, selectedValue, ctrl.createdBy, audioAssetCb);
 				}
 			});
         }, 1000);
@@ -166,7 +166,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
             ctrl.selectBtnDisable = true;
             var mediaType = ctrl.getMediaType();
-            callback && instance.getAsset(searchText, mediaType, ctrl.portalOwner, callback);
+            callback && instance.getAsset(searchText, mediaType, ctrl.createdBy, callback);
         }
 
         ctrl.getMediaType = function(){
@@ -270,7 +270,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
 
             if (ctrl.tabSelected == "my") {
 				 var mediaType = ctrl.getMediaType();
-                callback && instance.getAsset(searchText, mediaType, ctrl.portalOwner, callback);
+                callback && instance.getAsset(searchText, mediaType, ctrl.createdBy, callback);
             } else {
 				var mediaType = instance.mediaType != "image" ? new Array('audio','voice') : new Array(instance.mediaType);
                 callback && instance.getAsset(searchText, mediaType, undefined, callback);
@@ -506,7 +506,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             ecEditor.jQuery.ajax({
                 // @Todo Use the correct URL
 
-                url: ecEditor.getConfig('baseURL') + ecEditor.getConfig('apislug') + "/learning/v3/content/upload/" + resp.data.result.node_id,
+                url: ecEditor.getConfig('baseURL') + ecEditor.getConfig('apislug') + "/content/v3/upload/" + resp.data.result.node_id,
                 type: 'POST',
                 contentType: false,
                 data: data,
