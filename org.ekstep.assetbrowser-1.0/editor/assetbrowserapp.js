@@ -506,7 +506,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             ecEditor.jQuery.ajax({
                 // @Todo Use the correct URL
 
-                url: ecEditor.getConfig('baseURL') + ecEditor.getConfig('apislug') + "/learning/v3/content/upload/" + resp.data.result.node_id,
+                url: ecEditor.getConfig('baseURL') + ecEditor.getConfig('apislug') + "/content/v3/upload/" + resp.data.result.node_id,
                 type: 'POST',
                 contentType: false,
                 data: data,
