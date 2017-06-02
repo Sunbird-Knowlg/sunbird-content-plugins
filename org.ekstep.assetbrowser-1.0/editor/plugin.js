@@ -99,7 +99,7 @@ org.ekstep.contenteditor.basePlugin.extend({
 
         org.ekstep.contenteditor.jQuery.ajax({
             type: "POST",
-            url: org.ekstep.contenteditor.api.getConfig('baseURL') + org.ekstep.contenteditor.api.getConfig('apislug') + '/search/v2/search',
+            url: org.ekstep.contenteditor.api.getConfig('baseURL') + org.ekstep.contenteditor.api.getConfig('apislug') + '/search/v3/search',
             data: JSON.stringify(requestObj),
             headers: requestHeaders,
             success: function(res) {

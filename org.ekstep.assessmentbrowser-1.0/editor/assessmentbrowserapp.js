@@ -94,6 +94,7 @@ angular.module('assessmentbrowserapp', [])
                             }
                         });
                         ecEditor.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});
+                        ctrl.searchQuestions();
                     }else{
                         ctrl.errorMessage = true;
                         $scope.$safeApply();
@@ -301,8 +302,6 @@ angular.module('assessmentbrowserapp', [])
         ctrl.cancel = function() {
             $scope.closeThisDialog();
         };
-
-        ctrl.searchQuestions();
         ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
             element: 'assessmentConceptSelector',
             selectedConcepts: [], // All composite keys except mediaType
