@@ -59,7 +59,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     *   @memberof assetBrowser
     *
     */
-    getAsset: function(searchText, mediaType, portalOwner, cb) {
+    getAsset: function(searchText, mediaType, createdBy, cb) {
         var instance = this,
             requestObj,
             requestHeaders,
@@ -85,14 +85,14 @@ org.ekstep.contenteditor.basePlugin.extend({
         org.ekstep.contenteditor.api._.isUndefined(searchText) ? null : requestObj.request.query = searchText;
 
         // Public assets only
-        if (org.ekstep.contenteditor.api._.isUndefined(portalOwner)){
+        if (org.ekstep.contenteditor.api._.isUndefined(createdBy)){
             requestObj.request.filters.license = "Creative Commons Attribution (CC BY)";
             allowableFilter = org.ekstep.contenteditor.api._.omit(this.search_filter, ['mediaType', 'license', 'limit']);
         }
         else{
         // All assets
-            requestObj.request.filters.portalOwner = portalOwner;
-            allowableFilter = org.ekstep.contenteditor.api._.omit(this.search_filter, ['mediaType', 'limit', 'portalOwner']);
+            requestObj.request.filters.createdBy = createdBy;
+            allowableFilter = org.ekstep.contenteditor.api._.omit(this.search_filter, ['mediaType', 'limit', 'createdBy']);
         }
 
         org.ekstep.contenteditor.api._.merge(requestObj.request.filters, allowableFilter);
