@@ -32,7 +32,10 @@ org.ekstep.contenteditor.basePlugin.extend({
         this.setSidebarState();
     },
     _getStateFromService: function() {
-        return JSON.parse(ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext("contentId")).editorState);
+        if(ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext("contentId")).editorState) {
+            return JSON.parse(ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext("contentId")).editorState);
+        }
+        return;
     },
     setStageState: function() {
         var instance = this;
