@@ -79,7 +79,8 @@ org.ekstep.contenteditor.basePlugin.extend({
 
         requestHeaders = {
             'Content-Type': 'application/json',
-            'user-id': 'ATTool'
+            'user-id': 'ATTool',
+            "authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiYWYyYzg1OWIxMDg0NzhkYjMyNmYwZDQxNjMwZWMzMSJ9.YZjU6kKNg9F5BvS7JrXTfrxyTEULjR49v7wRD-CT9sg"
         };
 
         org.ekstep.contenteditor.api._.isUndefined(searchText) ? null : requestObj.request.query = searchText;
@@ -99,7 +100,7 @@ org.ekstep.contenteditor.basePlugin.extend({
 
         org.ekstep.contenteditor.jQuery.ajax({
             type: "POST",
-            url: org.ekstep.contenteditor.api.getConfig('baseURL') + org.ekstep.contenteditor.api.getConfig('apislug') + '/search/v3/search',
+            url: org.ekstep.contenteditor.api.getConfig('baseURL') + org.ekstep.contenteditor.api.getConfig('apislug') + '/composite/v3/search',
             data: JSON.stringify(requestObj),
             headers: requestHeaders,
             success: function(res) {

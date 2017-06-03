@@ -514,6 +514,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                 processData: false,
                 beforeSend: function(request) {
                     request.setRequestHeader("user-id", "mahesh");
+                    request.setRequestHeader("authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiYWYyYzg1OWIxMDg0NzhkYjMyNmYwZDQxNjMwZWMzMSJ9.YZjU6kKNg9F5BvS7JrXTfrxyTEULjR49v7wRD-CT9sg");
                 },
                 success: function(resp) {
                     console.log('response');
