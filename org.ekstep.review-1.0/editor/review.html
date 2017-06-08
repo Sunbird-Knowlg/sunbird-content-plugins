@@ -193,7 +193,12 @@
                             <b>Author:</b> {{$ctrl.contentMeta.owner}}
                         </div>
                         <div class="field">
-                            <b>Audience:</b> {{$ctrl.contentMeta.audience}}
+                            <b>Attributions:</b>
+                            <span>
+                                <ng-repeat ng-repeat="item in $ctrl.contentMeta.audience">
+                                    {{item}}{{$last ? '' : ', '}}
+                                </ng-repeat>
+                            </span>
                         </div>
                     </div>
                 </div>
