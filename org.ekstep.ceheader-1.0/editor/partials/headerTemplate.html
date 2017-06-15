@@ -1,0 +1,64 @@
+<div ng-app="org.ekstep.ceheader:headerApp" ng-controller="mainController" class="ui masthead vertical segment content-masterhead">
+    <div class="ui grid">
+        <div class="one column" style="width:auto;padding-right: 6px;">
+            <img class="ui mini image content-logo" ng-src="{{contentDetails.contentImage}}">
+        </div>
+        <div class="five wide column" style="padding-left: 0px">
+            <div class="ui canvas" style="margin-top: 6px; ">
+                <label class="content-title" ng-bind="contentDetails.contentTitle | limitTo:30">
+                    <span ng-if="contentDetails.contentTitle.length > 30">...</span></label>
+                <label class="content-type-label" ng-bind="contentDetails.contentType"></label>                
+                <a class="btn at-btn at-btn-ok" ng-click="editContentMeta(); fireToolbarTelemetry({id: 'editMeta'}, 'editMetaButton')">
+                    <i class="edit icon link"></i>
+                </a>
+            </div>
+            <div class="row">
+                <label class="content-concept-label" ng-bind="contentDetails.contentConcepts"></label>
+            </div>
+        </div>
+        <div class="right floated four wide column bottom aligned" style="padding-right: 20px;">
+            <div id="userprofile" ng-show="userDetails.id" class="usercontext">
+                <div class="browse item at username" ng-bind="userDetails.name">
+                    <i class="dropdown icon"></i>
+                </div>
+                <div class="ui fluid popup bottom right transition hidden user-details-container">
+                    <div class="ui divided items">
+                        <div class="item">
+                            <div class="ui tiny circular image user-avtar">
+                                <img src="{{userDetails.avtar}}">
+                            </div>
+                            <div class="middle aligned content" style="text-align: left;">
+                                <span class="header" ng-bind="userDetails.name"></span>
+                                <div class="meta">
+                                    <span ng-bind="userDetails.email"></span>
+                                </div>
+                                <div class="extra" ng-init="disableRedirectBtn = false">
+                                    <a ng-class="disableRedirectBtn ? 'ui tiny button disabled': 'ui tiny button'" ng-href="{{cancelLink}}" ng-click="disableRedirectBtn = true; fireToolbarTelemetry({id: 'close'}, 'closeButton')" target="_self">close</a>
+                                    <a ng-class="disableRedirectBtn ? 'ui tiny button disabled': 'ui tiny button'" ng-href="{{userDetails.logout}}" ng-click="disableRedirectBtn = true; fireToolbarTelemetry({id: 'logout'}, 'logoutButton')" target="_self">logout</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+            <button class="ui compact icon button right floated ce-button" ng-class="saveBtnEnabled ? 'ui compact icon button right floated ce-button' : 'ui compact icon button right floated disabled'" ng-click="saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId" style="margin-left: 5px;">
+                <i class="icon-save icon"></i> Save
+            </button>
+            <div class="ui compact buttons right floated ce-button">
+                <div class="ui button" ng-click="previewContent(); fireToolbarTelemetry({id: 'preview'}, 'previewButton');">
+                    <i class="icon-preview icon"></i> Preview</div>
+                <div class="ui floating dropdown icon button">
+                    <i class="dropdown icon"></i>
+                    <div class="menu">
+                        <div class="item" ng-click="previewContent('start'); fireToolbarTelemetry({id: 'preview'}, 'previewButton')">preview from beginning</div>
+                    </div>
+                </div>
+            </div>
+            <div class="download-collaborator-icon">
+                <i class="large add user link icon" ng-click="fireEvent({id: 'collaborator:add'});" title="Add Collaborator"></i>
+                <i class="large download link icon" ng-click="fireEvent({id: 'download:content'});" title="Download" style="line-height: 26px;"></i>
+                <i class="large send link icon" title="Send For Review" ng-click="fireEvent({id: 'org.ekstep.review:review'});"></i>
+            </div>
+        </div>
+    </div>
+</div>

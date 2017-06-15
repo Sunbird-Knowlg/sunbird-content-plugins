@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('org.ekstep.review', [])
-    .controller('reviewcontroller', ['$scope', '$injector', 'instance', '$rootScope', function($scope, $injector, instance, $rootScope) {
+    .controller('reviewcontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
         var ctrl = this;
 
         /**Set contentMeta object to display info in send for review popup**/
@@ -36,48 +36,20 @@ angular.module('org.ekstep.review', [])
         }
 
         /**Close send for reivew popup after success messages**/
-        ctrl.editContentMeta = $rootScope.editContentMeta;
+        ctrl.editContentMeta = function() {
+            ecEditor.dispatchEvent('org.ekstep.ceheader:edit:meta');
+        };
 
         /**Refresh the browser as user want to fetch the version from platform**/
         ctrl.refreshContent = function() {
             location.reload();
         }
 
-        /**save content**/
-        ctrl.saveBeforeReview = function() {
-            ctrl.message = "Saving content";
-            ctrl.active = "active";
-            ctrl.isLoading = true;
-            ctrl.success = false;
-            ctrl.success_msg = "";
-            ecEditor.ngSafeApply($scope);
-            var contentBody = org.ekstep.contenteditor.stageManager.toECML();
-            $rootScope.patchContent({ stageIcons: JSON.stringify(org.ekstep.contenteditor.stageManager.getStageIcons()) }, contentBody, function(err, res) {
-                ctrl.isLoading = false;
-                ctrl.active = '';
-                ecEditor.ngSafeApply($scope);
-                if (err) {
-                    if (res && !ecEditor._.isUndefined(res.responseJSON)) {
-                        // This could be converted to switch..case to handle different error codes
-                        if (res.responseJSON.params.err == "ERR_STALE_VERSION_KEY")
-                            ecEditor.dispatchEvent('org.ekstep.review:showConflictDialog');
-                    } else {
-                        $rootScope.saveNotification('error');
-                    }
-                } else if (res && res.data.responseCode == "OK") {
-                    ctrl.sendForReview();
-                }
-                $rootScope.saveBtnEnabled = true;
-            });
-        }
 
         /**force to save content**/
         ctrl.forceUpdate = function() {
-            $rootScope.fetchPlatformContentVersionKey(function(platformContentVersionKey) {
-                //Invoke saveBeforeReview function here...
-                ctrl.saveBeforeReview();
-            });
-        }
+            ecEditor.dispatchEvent('org.ekstep.ceheader:save:force');
+        };
 
         /**send for review content**/
         ctrl.sendForReview = function() {
