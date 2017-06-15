@@ -34,10 +34,10 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.addEventListener("object:selected", this.objectSelected, this);
         ecEditor.addEventListener("object:unselected", this.objectUnSelected, this);
 
-        ecEditor.registerKeyboardCommand(['mod+c','ctrl+c'], function() {
+        ecEditor.registerKeyboardCommand('mod+c', function() {
             instance.copyItem();
         });
-        ecEditor.registerKeyboardCommand(['mod+v','ctrl+v'], function() {
+        ecEditor.registerKeyboardCommand('mod+v', function() {
             instance.pasteItem();
         });
         ecEditor.registerKeyboardCommand(['del', 'backspace'], function() {
@@ -48,21 +48,21 @@ org.ekstep.contenteditor.basePlugin.extend({
         // Changes
         ecEditor.registerKeyboardCommand('ctrl+m', function(event) {
             event.preventDefault();
-            ecEditor.dispatchEvent('stage:create');
+            ecEditor.dispatchEvent('stage:create', {position:"afterCurrent"});
         });
 
-        ecEditor.registerKeyboardCommand(['ctrl+d','mod+d'], function(event) {
+        ecEditor.registerKeyboardCommand('mod+d', function(event) {
             event.preventDefault();
             ecEditor.dispatchEvent('stage:duplicate', {stageId: org.ekstep.contenteditor.api.getCurrentStage().id});
         });
 
-        ecEditor.registerKeyboardCommand(['ctrl+x','mod+x'], function(event) {
-            event.preventDefault();
-            instance.copyItem();
-            instance.deleteObject();
-        });
+        // ecEditor.registerKeyboardCommand('mod+x', function(event) {
+        //     event.preventDefault();
+        //     instance.copyItem();
+        //     instance.deleteObject();
+        // });
 
-        ecEditor.registerKeyboardCommand(['ctrl+a','mod+a'], function(event) {
+        ecEditor.registerKeyboardCommand('mod+a', function(event) {
             event.preventDefault();
             var canvas = org.ekstep.contenteditor.api.getCanvas();
             var elements = canvas.getObjects().map(function(elem) {
@@ -76,7 +76,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             canvas.setActiveGroup(group.setCoords()).renderAll();
         });
 
-        ecEditor.registerKeyboardCommand(['ctrl+s','mod+s'], function(event) {
+        ecEditor.registerKeyboardCommand('mod+s', function(event) {
             event.preventDefault();
             ecEditor.dispatchEvent('org.ekstep.ceheader:save');
         });
@@ -97,7 +97,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             ecEditor.dispatchEvent('stage:select', {prevStageId:org.ekstep.contenteditor.api.getCurrentStage().id,stageId:org.ekstep.contenteditor.stageManager.stages[org.ekstep.contenteditor.stageManager.stages.length-1].id});
         });
 
-        ecEditor.registerKeyboardCommand(['ctrl+b','mod+b'], function(event) {
+        ecEditor.registerKeyboardCommand('mod+b', function(event) {
             event.preventDefault();
             var elem = org.ekstep.contenteditor.api.getCurrentObject();
             if (elem) {
@@ -105,7 +105,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             }
         });
 
-        ecEditor.registerKeyboardCommand(['ctrl+i','mod+i'], function(event) {
+        ecEditor.registerKeyboardCommand('mod+i', function(event) {
             event.preventDefault();
             var elem = org.ekstep.contenteditor.api.getCurrentObject();
             if (elem) {
@@ -115,7 +115,7 @@ org.ekstep.contenteditor.basePlugin.extend({
 
         // '>' key is a shift component which is not supported on mousetrap.
         // To use that we have to use '.' key
-        ecEditor.registerKeyboardCommand(['ctrl+shift+.', 'mod+shift+.'], function(event) {
+        ecEditor.registerKeyboardCommand('mod+shift+.', function(event) {
             event.preventDefault();
             var elem = org.ekstep.contenteditor.api.getCurrentObject();
             if (elem) {
@@ -124,7 +124,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             }
         });
 
-        ecEditor.registerKeyboardCommand(['ctrl+shift+,', 'mod+shift+,'], function(event) {
+        ecEditor.registerKeyboardCommand('mod+shift+,', function(event) {
             event.preventDefault();
             var elem = org.ekstep.contenteditor.api.getCurrentObject();
             if (elem) {
@@ -133,7 +133,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             }
         });
 
-        ecEditor.registerKeyboardCommand(['ctrl+shift+l', 'mod+shift+l'], function(event) {
+        ecEditor.registerKeyboardCommand('mod+shift+l', function(event) {
             event.preventDefault();
             var elem = org.ekstep.contenteditor.api.getCurrentObject();
             if (elem) {
@@ -141,7 +141,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             }
         });
 
-        ecEditor.registerKeyboardCommand(['ctrl+shift+r', 'mod+shift+r'], function(event) {
+        ecEditor.registerKeyboardCommand('mod+shift+r', function(event) {
             event.preventDefault();
             var elem = org.ekstep.contenteditor.api.getCurrentObject();
             if (elem) {
@@ -150,7 +150,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
 
         // Conflicting with view ecml shortcut
-        // ecEditor.registerKeyboardCommand(['ctrl+shift+e', 'mod+shift+e'], function(event) {
+        // ecEditor.registerKeyboardCommand('mod+shift+e', function(event) {
         //     event.preventDefault();
         //     var elem = org.ekstep.contenteditor.api.getCurrentObject();
         //     if (elem) {
@@ -158,12 +158,12 @@ org.ekstep.contenteditor.basePlugin.extend({
         //     }
         // });
 
-        ecEditor.registerKeyboardCommand(['ctrl+down', 'mod+down'], function(event) {
+        ecEditor.registerKeyboardCommand('mod+down', function(event) {
             event.preventDefault();
             ecEditor.dispatchEvent('reorder:sendtoback');
         });
 
-        ecEditor.registerKeyboardCommand(['ctrl+up', 'mod+up'], function(event) {
+        ecEditor.registerKeyboardCommand('mod+up', function(event) {
             event.preventDefault();
             ecEditor.dispatchEvent('reorder:sendtofront');
         });
