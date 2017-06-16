@@ -85,12 +85,12 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
             $scope.patchContent({ stageIcons: JSON.stringify(org.ekstep.contenteditor.stageManager.getStageIcons()) }, contentBody, function(err, res) {
                 if (res) {
                     $scope.saveNotification('success');
-                    $window.location.assign(window.context.editMetaLink);
+                    window.location.assign(window.context.editMetaLink);
                 }
                 if (err) $scope.saveNotification('error');
             });
         } else {
-            $window.location.assign(window.context.editMetaLink);
+            window.location.assign(window.context.editMetaLink);
         }
     };
 
