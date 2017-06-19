@@ -26,6 +26,10 @@ angular.module('org.ekstep.review', [])
             }
         }
 
+        ctrl.saveBeforeReview = function() {
+            ecEditor.dispatchEvent('org.ekstep.ceheader:save');
+        }
+
         /**Close send for reivew popup after success messages**/
         ctrl.closeThisDialog = function(success) {
             if (success) {

@@ -121,10 +121,13 @@ org.ekstep.contenteditor.basePlugin.extend({
             $scope.isRedirect = data.isRedirect;
             $scope.redirectToHome = instance.redirectToHome;
             $scope.isError = data.isError;
+            $scope.editContentMeta = function() {
+                ecEditor.dispatchEvent('org.ekstep.ceheader:meta:edit');
+            }
         };
         ecEditor.getService('popup').open({
             template: 'org.ekstep.review.editMetaDialog.html',
-            controller: ['$scope', '$rootScope', modalController],
+            controller: ['$scope', modalController],
             showClose: false,
             className: 'ngdialog-theme-default'
         });
