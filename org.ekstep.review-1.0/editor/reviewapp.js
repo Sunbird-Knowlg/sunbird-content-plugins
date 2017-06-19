@@ -27,7 +27,18 @@ angular.module('org.ekstep.review', [])
         }
 
         ctrl.saveBeforeReview = function() {
-            ecEditor.dispatchEvent('org.ekstep.ceheader:save');
+            ctrl.message = "Saving content";
+            ctrl.active = "active";
+            ctrl.isLoading = true;
+            ctrl.success = false;
+            ctrl.success_msg = "";
+            ecEditor.dispatchEvent('org.ekstep.ceheader:save', function(err, res) {
+                ctrl.isLoading = false;
+                ctrl.active = '';
+                if (res && res.data.responseCode == "OK") {
+                    ctrl.sendForReview();
+                }
+            });
         }
 
         /**Close send for reivew popup after success messages**/
@@ -52,7 +63,7 @@ angular.module('org.ekstep.review', [])
 
         /**force to save content**/
         ctrl.forceUpdate = function() {
-            ecEditor.dispatchEvent('org.ekstep.ceheader:save:force');
+            ecEditor.dispatchEvent('org.ekstep.ceheader:save:force', function(err, res) {});
         };
 
         /**send for review content**/

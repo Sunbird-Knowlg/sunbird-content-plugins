@@ -31,16 +31,16 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
                     $scope.saveNotification('success');
                 }
                 $scope.saveBtnEnabled = true;
-                if (cb) cb(err, res);
+                if (typeof cb === "function") cb(err, res);
             });
         }
     }
 
-    $scope.saveBrowserContent = function() {
+    $scope.saveBrowserContent = function(event, cb) {
         // Fetch latest versionKey and then save the content from browser
         $scope.fetchPlatformContentVersionKey(function(platformContentVersionKey) {
             //Invoke save function here...
-            $scope.saveContent();
+            $scope.saveContent(event, cb);
         });
     }
 
