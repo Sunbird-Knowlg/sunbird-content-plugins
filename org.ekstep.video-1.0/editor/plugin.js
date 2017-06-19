@@ -50,6 +50,13 @@ org.ekstep.contenteditor.basePlugin.extend({
             "type": "video"
         };
         return media;
+    },
+    getConfigManifest: function() {
+        var config = this._super();
+        ecEditor._.remove(config, function(c) {
+            return c.propertyName === 'stroke';
+        })
+        return config;
     }
 });
 //# sourceURL=videoplugin.js
