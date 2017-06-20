@@ -63,6 +63,7 @@ angular.module('org.ekstep.review', [])
 
         /**force to save content**/
         ctrl.forceUpdate = function() {
+            ctrl.closeThisDialog(true);
             ecEditor.dispatchEvent('org.ekstep.ceheader:save:force', function(err, res) {});
         };
 
