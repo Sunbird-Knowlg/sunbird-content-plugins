@@ -5,7 +5,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
     $scope.migrationFlag = false;
     $scope.saveBtnEnabled = true;
     $scope.userDetails = !_.isUndefined(window.context) ? window.context.user : undefined;
-
+    $scope.telemetryService = org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE);
 
     $scope.setEditorState = function(event, data) {
         if (data) $scope.editorState = data;
@@ -99,6 +99,16 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
         var template = (message === 'success') ? "editor/partials/saveSuccessMessage.html" : "editor/partials/saveErrorMessage.html";
         var config = {
             template: ecEditor.resolvePluginResource(plugin.id, plugin.ver, template),
+            controller: ['$scope', 'mainCtrlScope', function($scope, mainCtrlScope) {
+                $scope.fireTelemetry = function(menu, menuType) {
+                    mainCtrlScope.fireTelemetry(menu, menuType);
+                }
+            }],
+            resolve: {
+                mainCtrlScope: function() {
+                    return $scope;
+                }
+            },
             showClose: false
         }
         $scope.popupService.open(config);
@@ -125,7 +135,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
                     instance.refreshContent();
                 };
                 $scope.firetelemetry = function(menu, menuType) {
-                    instance.telemetryService.interact({ "type": "click", "subtype": "popup", "target": menuType, "pluginid": '', 'pluginver': '', "objectid": menu.id, "stage": org.ekstep.contenteditor.stageManager.currentStage.id });
+                    instance.telemetryService.interact({ "type": "click", "subtype": "popup", "target": menuType, "pluginid": 'org.ekstep.ceheader', 'pluginver': '1.0', "objectid": menu.id, "stage": org.ekstep.contenteditor.stageManager.currentStage.id });
                 };
                 $scope.showAdvancedOption = false;
             }],
@@ -143,6 +153,10 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
                 $scope.routeToContentMeta = function(save) {
                     $scope.closeThisDialog();
                     mainCtrlScope.routeToContentMeta(save);
+                }
+
+                $scope.fireTelemetry = function(data) {
+                    mainCtrlScope.telemetryService.interact({ "type": "click", "subtype": data.subtype, "target": data.target, "pluginid": 'org.ekstep.ceheader', 'pluginver': '1.0', "objectid": data.id, "stage": org.ekstep.contenteditor.stageManager.currentStage.id });
                 }
             }],
             resolve: {
@@ -208,8 +222,8 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
         if (event) org.ekstep.contenteditor.api.dispatchEvent(event.id, event.data);
     };
 
-    $scope.fireToolbarTelemetry = function(menu, menuType) {
-        $scope.telemetryService.interact({ "type": "click", "subtype": "menu", "target": menuType, "pluginid": '', 'pluginver': '', "objectid": menu.id, "stage": org.ekstep.contenteditor.stageManager.currentStage.id });
+    $scope.fireTelemetry = function(menu, menuType) {
+        $scope.telemetryService.interact({ "type": "click", "subtype": "menu", "target": menuType, "pluginid": 'org.ekstep.ceheader', 'pluginver': '1.0', "objectid": menu.id, "stage": org.ekstep.contenteditor.stageManager.currentStage.id });
     };
 
     ecEditor.addEventListener('org.ekstep.editorstate:state', $scope.setEditorState, $scope);
