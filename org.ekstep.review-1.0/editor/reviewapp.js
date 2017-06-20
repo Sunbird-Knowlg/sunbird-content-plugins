@@ -35,8 +35,12 @@ angular.module('org.ekstep.review', [])
             ecEditor.dispatchEvent('org.ekstep.ceheader:save', function(err, res) {
                 ctrl.isLoading = false;
                 ctrl.active = '';
-                if (res && res.data.responseCode == "OK") {
+                if (res && res.data && res.data.responseCode == "OK") {
                     ctrl.sendForReview();
+                } else if (err) {
+                    if (res && !ecEditor._.isUndefined(res.responseJSON)) {                        
+                        if (res.responseJSON.params.err == "ERR_STALE_VERSION_KEY") ctrl.closeThisDialog(true);                            
+                    }
                 }
             });
         }
@@ -63,7 +67,6 @@ angular.module('org.ekstep.review', [])
 
         /**force to save content**/
         ctrl.forceUpdate = function() {
-            ctrl.closeThisDialog(true);
             ecEditor.dispatchEvent('org.ekstep.ceheader:save:force', function(err, res) {});
         };
 
