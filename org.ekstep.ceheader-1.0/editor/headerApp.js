@@ -24,7 +24,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
                     if (res && !ecEditor._.isUndefined(res.responseJSON)) {
                         // This could be converted to switch..case to handle different error codes
                         if (res.responseJSON.params.err == "ERR_STALE_VERSION_KEY")
-                            $scope.showConflictDialog();
+                            $scope.showConflictDialog(options);
                     } else {
                         if(options && options.failPopup) $scope.saveNotification('error');
                     }
@@ -114,7 +114,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
         $scope.popupService.open(config);
     };
 
-    $scope.showConflictDialog = function() {
+    $scope.showConflictDialog = function(options) {
         var instance = $scope;
         $scope.popupService.open({
             template: ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/partials/conflictDialog.html"),
@@ -124,7 +124,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
                     instance.previewPlatformContent();
                 };
                 $scope.saveBrowserContent = function() {
-                    instance.saveBrowserContent();
+                    instance.saveBrowserContent(undefined, options);
                     $scope.closeThisDialog();
                 };
                 //Existing copy
