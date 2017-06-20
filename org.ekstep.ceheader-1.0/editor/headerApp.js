@@ -2,7 +2,6 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
 
     var plugin = { id: "org.ekstep.ceheader", ver: "1.0" };
     $scope.editorState = undefined;
-    $scope.migrationFlag = false;
     $scope.saveBtnEnabled = true;
     $scope.userDetails = !_.isUndefined(window.context) ? window.context.user : undefined;
     $scope.telemetryService = org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE);
@@ -46,7 +45,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
     }
 
     $scope.patchContent = function(metadata, body, cb) {
-        if ($scope.migrationFlag) {
+        if (org.ekstep.contenteditor.migration.isMigratedContent()) {
             if (!metadata) metadata = {};
             metadata.oldContentBody = $scope.oldContentBody;
             metadata.editorState = JSON.stringify($scope.editorState);
@@ -55,6 +54,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
             }
             $scope.showMigratedContentSaveDialog(migrationPopupCb);
         } else {
+            metadata.editorState = JSON.stringify($scope.editorState);
             $scope.contentService.saveContent(org.ekstep.contenteditor.api.getContext('contentId'), metadata, body, cb);
         }
     }
@@ -65,7 +65,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
             template: ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/partials/migratedContentSaveMsg.html"),
             controller: ['$scope', function($scope) {
                 $scope.saveContent = function() {
-                    instance.migrationFlag = false;
+                    org.ekstep.contenteditor.migration.clearMigrationFlag();
                     callback();
                 }
 
