@@ -32,7 +32,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
                 }
                 $scope.saveBtnEnabled = true;
                 if (typeof options.callback === "function") options.callback(err, res);
-            });
+            }, options);
         }
     }
 
@@ -44,13 +44,14 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
         });
     }
 
-    $scope.patchContent = function(metadata, body, cb) {
+    $scope.patchContent = function(metadata, body, cb, options) {
         if (org.ekstep.contenteditor.migration.isMigratedContent()) {
             if (!metadata) metadata = {};
             metadata.oldContentBody = $scope.oldContentBody;
             metadata.editorState = JSON.stringify($scope.editorState);
-            var migrationPopupCb = function() {
-                $scope.contentService.saveContent(org.ekstep.contenteditor.api.getContext('contentId'), metadata, body, cb);
+            var migrationPopupCb = function(err, res) {
+                if (res) $scope.contentService.saveContent(org.ekstep.contenteditor.api.getContext('contentId'), metadata, body, cb);
+                if (err) options && options.callback('save action interrupted by user');
             }
             $scope.showMigratedContentSaveDialog(migrationPopupCb);
         } else {
@@ -65,12 +66,13 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
             template: ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/partials/migratedContentSaveMsg.html"),
             controller: ['$scope', function($scope) {
                 $scope.saveContent = function() {
-                    org.ekstep.contenteditor.migration.clearMigrationFlag();
-                    callback();
+                    org.ekstep.contenteditor.migration.clearMigrationFlag();                    
+                    callback(undefined, true);
                 }
 
                 $scope.enableSaveBtn = function() {
                     instance.saveBtnEnabled = true;
+                    callback(true, undefined);
                 }
             }],
             showClose: false,
