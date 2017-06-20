@@ -56,7 +56,7 @@ angular.module('org.ekstep.review', [])
 
         /**Close send for reivew popup after success messages**/
         ctrl.editContentMeta = function() {
-            ecEditor.dispatchEvent('org.ekstep.ceheader:edit:meta');
+            ecEditor.dispatchEvent('org.ekstep.ceheader:meta:edit');
         };
 
         /**Refresh the browser as user want to fetch the version from platform**/
@@ -67,7 +67,15 @@ angular.module('org.ekstep.review', [])
 
         /**force to save content**/
         ctrl.forceUpdate = function() {
-            ecEditor.dispatchEvent('org.ekstep.ceheader:save:force');
+            ecEditor.dispatchEvent('org.ekstep.ceheader:save:force', {
+                successPopup: false,
+                failPopup: true,
+                callback: function(err, res) {                    
+                    if (res && res.data && res.data.responseCode == "OK") {
+                        ctrl.sendForReview();
+                    }
+                }
+            });
         };
 
         /**send for review content**/
