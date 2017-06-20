@@ -12,8 +12,8 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
     };
 
 
-    $scope.saveContent = function(event, options, cb) {
-        options = options || { successPopup: true, failPopup: true };
+    $scope.saveContent = function(event, options) {
+        options = options || { successPopup: true, failPopup: true, callback: function(){} };
         if ($scope.saveBtnEnabled) {
             $scope.saveBtnEnabled = false;
             org.ekstep.pluginframework.eventManager.dispatchEvent('content:before:save');
@@ -32,16 +32,16 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
                     if(options && options.successPopup) $scope.saveNotification('success');
                 }
                 $scope.saveBtnEnabled = true;
-                if (typeof cb === "function") cb(err, res);
+                if (typeof options.callback === "function") options.callback(err, res);
             });
         }
     }
 
-    $scope.saveBrowserContent = function(event, options, cb) {
+    $scope.saveBrowserContent = function(event, options) {
         // Fetch latest versionKey and then save the content from browser
         $scope.fetchPlatformContentVersionKey(function(platformContentVersionKey) {
             //Invoke save function here...
-            $scope.saveContent(event, options, cb);
+            $scope.saveContent(event, options);
         });
     }
 
