@@ -12,7 +12,8 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
     };
 
 
-    $scope.saveContent = function(event, cb) {
+    $scope.saveContent = function(event, options, cb) {
+        options = options || { successPopup: true, failPopup: true };
         if ($scope.saveBtnEnabled) {
             $scope.saveBtnEnabled = false;
             org.ekstep.pluginframework.eventManager.dispatchEvent('content:before:save');
@@ -25,10 +26,10 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
                         if (res.responseJSON.params.err == "ERR_STALE_VERSION_KEY")
                             $scope.showConflictDialog();
                     } else {
-                        $scope.saveNotification('error');
+                        if(options && options.failPopup) $scope.saveNotification('error');
                     }
                 } else if (res && res.data.responseCode == "OK") {
-                    $scope.saveNotification('success');
+                    if(options && options.successPopup) $scope.saveNotification('success');
                 }
                 $scope.saveBtnEnabled = true;
                 if (typeof cb === "function") cb(err, res);
@@ -36,11 +37,11 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
         }
     }
 
-    $scope.saveBrowserContent = function(event, cb) {
+    $scope.saveBrowserContent = function(event, options, cb) {
         // Fetch latest versionKey and then save the content from browser
         $scope.fetchPlatformContentVersionKey(function(platformContentVersionKey) {
             //Invoke save function here...
-            $scope.saveContent(event, cb);
+            $scope.saveContent(event, options, cb);
         });
     }
 
@@ -128,7 +129,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
                 };
                 $scope.showAdvancedOption = false;
             }],
-            className: 'ngdialog-theme-plain',
+            className: 'ngdialog-theme-plain header-conflict-dialog',
             showClose: false,
             closeByDocument: true,
             closeByEscape: true
