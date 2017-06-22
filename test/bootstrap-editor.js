@@ -18,7 +18,8 @@ var testConfig = {
 		{ "id": "org.ekstep.audio", "ver": "1.0", "type": "plugin" },
 		{ "id": "org.ekstep.readalongbrowser", "ver": "1.0", "type": "plugin" },
 		{ "id": "org.ekstep.activitybrowser", "ver": "1.0", "type": "plugin" },
-		{ "id": "org.ekstep.editorstate", "ver": "1.0", "type": "plugin" }
+		{ "id": "org.ekstep.editorstate", "ver": "1.0", "type": "plugin" },
+		{ "id": "org.ekstep.keyboardshortcuts", "ver": "1.0", "type": "plugin" }
 	]
 }
 
@@ -107,3 +108,4 @@ ContentEditorTestFramework = {
 };
 
 ContentEditorTestFramework.init(function() {});
+org.ekstep.contenteditor.sidebarManager.loadNgModules= function() {};
