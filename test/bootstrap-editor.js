@@ -108,4 +108,3 @@ ContentEditorTestFramework = {
 };
 
 ContentEditorTestFramework.init(function() {});
-org.ekstep.contenteditor.sidebarManager.loadNgModules= function() {};
