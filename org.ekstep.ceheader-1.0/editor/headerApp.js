@@ -2,7 +2,6 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
 
     var plugin = { id: "org.ekstep.ceheader", ver: "1.0" };
     $scope.editorState = undefined;
-    $scope.migrationFlag = false;
     $scope.saveBtnEnabled = true;
     $scope.userDetails = !_.isUndefined(window.context) ? window.context.user : undefined;
     $scope.telemetryService = org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE);
@@ -24,7 +23,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
                     if (res && !ecEditor._.isUndefined(res.responseJSON)) {
                         // This could be converted to switch..case to handle different error codes
                         if (res.responseJSON.params.err == "ERR_STALE_VERSION_KEY")
-                            $scope.showConflictDialog();
+                            $scope.showConflictDialog(options);
                     } else {
                         if(options && options.failPopup) $scope.saveNotification('error');
                     }
@@ -33,7 +32,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
                 }
                 $scope.saveBtnEnabled = true;
                 if (typeof options.callback === "function") options.callback(err, res);
-            });
+            }, options);
         }
     }
 
@@ -45,16 +44,18 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
         });
     }
 
-    $scope.patchContent = function(metadata, body, cb) {
-        if ($scope.migrationFlag) {
+    $scope.patchContent = function(metadata, body, cb, options) {
+        if (org.ekstep.contenteditor.migration.isMigratedContent()) {
             if (!metadata) metadata = {};
             metadata.oldContentBody = $scope.oldContentBody;
             metadata.editorState = JSON.stringify($scope.editorState);
-            var migrationPopupCb = function() {
-                $scope.contentService.saveContent(org.ekstep.contenteditor.api.getContext('contentId'), metadata, body, cb);
+            var migrationPopupCb = function(err, res) {
+                if (res) $scope.contentService.saveContent(org.ekstep.contenteditor.api.getContext('contentId'), metadata, body, cb);
+                if (err) options && options.callback('save action interrupted by user');
             }
             $scope.showMigratedContentSaveDialog(migrationPopupCb);
         } else {
+            metadata.editorState = JSON.stringify($scope.editorState);
             $scope.contentService.saveContent(org.ekstep.contenteditor.api.getContext('contentId'), metadata, body, cb);
         }
     }
@@ -65,12 +66,13 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
             template: ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/partials/migratedContentSaveMsg.html"),
             controller: ['$scope', function($scope) {
                 $scope.saveContent = function() {
-                    instance.migrationFlag = false;
-                    callback();
+                    org.ekstep.contenteditor.migration.clearMigrationFlag();                    
+                    callback(undefined, true);
                 }
 
                 $scope.enableSaveBtn = function() {
                     instance.saveBtnEnabled = true;
+                    callback(true, undefined);
                 }
             }],
             showClose: false,
@@ -114,7 +116,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
         $scope.popupService.open(config);
     };
 
-    $scope.showConflictDialog = function() {
+    $scope.showConflictDialog = function(options) {
         var instance = $scope;
         $scope.popupService.open({
             template: ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/partials/conflictDialog.html"),
@@ -124,7 +126,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
                     instance.previewPlatformContent();
                 };
                 $scope.saveBrowserContent = function() {
-                    instance.saveBrowserContent();
+                    instance.saveBrowserContent(undefined, options);
                     $scope.closeThisDialog();
                 };
                 //Existing copy

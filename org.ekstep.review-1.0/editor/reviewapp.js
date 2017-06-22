@@ -67,11 +67,18 @@ angular.module('org.ekstep.review', [])
 
         /**force to save content**/
         ctrl.forceUpdate = function() {
+            ctrl.message = "Saving content";
+            ctrl.active = "active";
+            ctrl.isLoading = true;
+            ctrl.success = false;
+            ctrl.success_msg = "";
             ecEditor.dispatchEvent('org.ekstep.ceheader:save:force', {
                 successPopup: false,
                 failPopup: true,
                 callback: function(err, res) {                    
                     if (res && res.data && res.data.responseCode == "OK") {
+                        ctrl.isLoading = false;
+                        ctrl.active = '';
                         ctrl.sendForReview();
                     }
                 }

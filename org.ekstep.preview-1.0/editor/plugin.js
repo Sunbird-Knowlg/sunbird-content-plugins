@@ -89,7 +89,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             controller: ['$scope', modalController],
             showClose: false,
             width: 900,
-            className: 'ngdialog-theme-plain'
+            className: 'ngdialog-theme-plain preview-window'
         });
 
     }
