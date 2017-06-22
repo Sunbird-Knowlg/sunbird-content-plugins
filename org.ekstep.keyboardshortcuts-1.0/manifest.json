@@ -2,14 +2,7 @@
     "id": "org.ekstep.keyboardshortcuts",
     "ver": "1.0",
     "author": "Akash Gupta",
-    "title": "Shortcuts Plugin",
-    "description": "",
-    "publishedDate": "",
-    "type": "widget",
     "editor": {
-        "main": "editor/plugin.js",
-        "dependencies": [
-        ],
-        "menu": [{}]
+        "main": "editor/plugin.js"
     }
 }
