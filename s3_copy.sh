@@ -28,5 +28,6 @@ aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.w
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.video-1.0/ --recursive
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.ceheader-1.0/ --recursive
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.review-1.0/ --recursive
+aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.keyboardshortcuts-1.0/ --recursive
 
 aws s3 --region ap-south-1 cp ansible/content-plugins s3://ekstep-public-$1/content-plugins/ --recursive --acl public-read
