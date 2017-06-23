@@ -1,10 +1,15 @@
 <style>
     #shortCut {
         width: 100%;
+        overflow-y: auto;
+        overflow-x: hidden;
     }
     .shortcut-table, .note-shortcut {
         width: 100%;
         margin-left: 3.8em;
+    }
+    .shortcut-popup {
+        height: 450px !important
     }
 </style>
 <div class="ui large modal active" style="top: 5% !important">
@@ -22,7 +27,7 @@
         </div>
     </div>
     <div class="content">
-        <div class="ui grid">
+        <div class="ui grid shortcut-popup">
             <pre class="line-numbers language-markup" id="shortCut">
                 <table class="shortcut-table">
                     <tr>
