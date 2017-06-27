@@ -97,13 +97,13 @@ org.ekstep.contenteditor.basePlugin.extend({
     deleteObject: function(event, data) {
         var activeGroup = ecEditor.getEditorGroup(), activeObject = ecEditor.getEditorObject(), id, instance = this;
 
-        if (activeObject) {
-            instance.remove(activeObject);
-        } else if (activeGroup) {
+        if (activeGroup) {
             ecEditor.getCanvas().discardActiveGroup();
             activeGroup.getObjects().forEach(function(object) {
                 instance.remove(object);
             });
+        } else if (activeObject) {
+            instance.remove(activeObject);
         }
     },
     /**

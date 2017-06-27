@@ -132,7 +132,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
 
         /**
-         *  Listen for hpme key
+         *  Listen for home key
          *  move the focus to first stage
          *  @memberof Shortcuts
          */

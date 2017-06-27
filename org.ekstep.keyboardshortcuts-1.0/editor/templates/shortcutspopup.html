@@ -3,10 +3,11 @@
         width: 100%;
         overflow-y: auto;
         overflow-x: hidden;
+        height: 450px;
     }
-    .shortcut-table, .note-shortcut {
+    .shortcut-table {
         width: 100%;
-        margin-left: 3.8em;
+        margin-left: 3.6em;
     }
     .shortcut-popup {
         height: 450px !important
@@ -28,126 +29,154 @@
     </div>
     <div class="content">
         <div class="ui grid shortcut-popup">
-            <pre class="line-numbers language-markup" id="shortCut">
+            <pre class="line-numbers language-markup shortcut-popup`" id="shortCut">
                 <table class="shortcut-table">
                     <tr>
-                        <th colspan="2">ShortCut</th>
-                        <th colspan="8">Details</th>
+                        <th colspan="2">ShortCuts(Windows)</th>
+                        <th colspan="2">ShortCuts(Mac)</th>
+                        <th colspan="6">Details</th>
                     </tr>
                     <tr>
-                        <td colspan="2">ctrl + x</td>
-                        <td colspan="8">Cut selected object</td>
+                        <td colspan="2">Ctrl + x</td>
+                        <td colspan="2">Command + x</td>
+                        <td colspan="6">Cut selected object</td>
                     </tr>
                     <tr>
-                        <td colspan="2">ctrl + c</td>
-                        <td colspan="8">Copy selected object</td>
+                        <td colspan="2">Ctrl + c</td>
+                        <td colspan="2">Command + c</td>
+                        <td colspan="6">Copy selected object</td>
                     </tr>
                     <tr>
-                        <td colspan="2">ctrl + v</td>
-                        <td colspan="8">Paste selected object</td>
+                        <td colspan="2">Ctrl + v</td>
+                        <td colspan="2">Command + v</td>
+                        <td colspan="6">Paste selected object</td>
                     </tr>
                     <tr>
-                        <td colspan="2">ctrl + a</td>
-                        <td colspan="8">Select all object</td>
+                        <td colspan="2">Ctrl + a</td>
+                        <td colspan="2">Command + a</td>
+                        <td colspan="6">Select all object</td>
                     </tr>
                     <tr>
                         <td colspan="2">Delete</td>
-                        <td colspan="8">Delete selected object</td>
+                        <td colspan="2">Delete</td>
+                        <td colspan="6">Delete selected object</td>
                     </tr>
                     <tr>
-                        <td colspan="2">ctrl + m</td>
-                        <td colspan="8">Add a new stage</td>
+                        <td colspan="2">Ctrl + m</td>
+                        <td colspan="2">Command + m</td>
+                        <td colspan="6">Add a new stage</td>
                     </tr>
                     <tr>
-                        <td colspan="2">ctrl + d</td>
-                        <td colspan="8">Duplicate a stage</td>
+                        <td colspan="2">Ctrl + d</td>
+                        <td colspan="2">Command + d</td>
+                        <td colspan="6">Duplicate a stage</td>
                     </tr>
                     <tr>
-                        <td colspan="2">ctrl + s</td>
-                        <td colspan="8">Save content</td>
+                        <td colspan="2">Ctrl + s</td>
+                        <td colspan="2">Command + s</td>
+                        <td colspan="6">Save content</td>
                     </tr>
                     <tr>
-                        <td colspan="2">Home (for mac users use command+up)</td>
-                        <td colspan="8">Go to First Slide</td>
+                        <td colspan="2">Home</td>
+                        <td colspan="2">Command + up</td>
+                        <td colspan="6">Go to First Slide</td>
                     </tr>
                     <tr>
-                        <td colspan="2">End (for mac users use command+down)</td>
-                        <td colspan="8">Go to last Slide</td>
+                        <td colspan="2">End</td>
+                        <td colspan="2">Command + down</td>
+                        <td colspan="6">Go to last Slide</td>
                     </tr>
                     <tr>
-                        <td colspan="2">ctrl + b</td>
-                        <td colspan="8">Make text style as bold</td>
+                        <td colspan="2">Ctrl + b</td>
+                        <td colspan="2">Command + b</td>
+                        <td colspan="6">Make text style as bold</td>
                     </tr>
                     <tr>
-                        <td colspan="2">ctrl + i</td>
-                        <td colspan="8">Make text style as italic</td>
+                        <td colspan="2">Ctrl + i</td>
+                        <td colspan="2">Command + i</td>
+                        <td colspan="6">Make text style as italic</td>
                     </tr>
                     <tr>
-                        <td colspan="2">ctrl + shift + ></td>
-                        <td colspan="8">Increase text size of selected text object</td>
+                        <td colspan="2">Ctrl + shift + ></td>
+                        <td colspan="2">Command + shift + ></td>
+                        <td colspan="6">Increase text size of selected text object</td>
                     </tr>
                     <tr>
-                        <td colspan="2">ctrl + shift + <</td>
-                        <td colspan="8">Decrease text size of selected text object</td>
+                        <td colspan="2">Ctrl + shift + <</td>
+                        <td colspan="2">Command + shift + <</td>
+                        <td colspan="6">Decrease text size of selected text object</td>
                     </tr>
                     <tr>
-                        <td colspan="2">ctrl + alt + shift + l</td>
-                        <td colspan="8">Align a text object to left</td>
+                        <td colspan="2">Ctrl + alt + shift + l</td>
+                        <td colspan="2">Command + alt + shift + l</td>
+                        <td colspan="6">Align a text object to left</td>
                     </tr>
                     <tr>
-                        <td colspan="2">ctrl + alt + shift + r</td>
-                        <td colspan="8">Align a text object to right</td>
+                        <td colspan="2">Ctrl + alt + shift + r</td>
+                        <td colspan="2">Command + alt + shift + r</td>
+                        <td colspan="6">Align a text object to right</td>
                     </tr>
                     <tr>
-                        <td colspan="2">ctrl + alt + shift + e</td>
-                        <td colspan="8">Align a text object to center</td>
+                        <td colspan="2">Ctrl + alt + shift + e</td>
+                        <td colspan="2">Command + alt + shift + e</td>
+                        <td colspan="6">Align a text object to center</td>
                     </tr>
                     <tr>
-                        <td colspan="2">ctrl + down arrow</td>
-                        <td colspan="8">Send an object to back</td>
+                        <td colspan="2">Ctrl + down arrow</td>
+                        <td colspan="2">Command + down arrow</td>
+                        <td colspan="6">Send an object to back</td>
                     </tr>
                     <tr>
-                        <td colspan="2">ctrl + up arrow</td>
-                        <td colspan="8">Send an object to front</td>
+                        <td colspan="2">Ctrl + up arrow</td>
+                        <td colspan="2">Command + up arrow</td>
+                        <td colspan="6">Send an object to front</td>
                     </tr>
                     <tr>
-                        <td colspan="2">up arrow</td>
-                        <td colspan="8">Move selected object up by 3 pixel</td>
+                        <td colspan="2">Up arrow</td>
+                        <td colspan="2">Up arrow</td>
+                        <td colspan="6">Move selected object up by 3 pixel</td>
                     </tr>
                     <tr>
-                        <td colspan="2">down arrow</td>
-                        <td colspan="8">Move selected object down by 3 pixel</td>
+                        <td colspan="2">Down arrow</td>
+                        <td colspan="2">Down arrow</td>
+                        <td colspan="6">Move selected object down by 3 pixel</td>
                     </tr>
                     <tr>
-                        <td colspan="2">left arrow</td>
+                        <td colspan="2">Left arrow</td>
+                        <td colspan="2">Left arrow</td>
                         <td colspan="2">Move selected object left by 3 pixel</td>
                     </tr>
                     <tr>
-                        <td colspan="2">right arrow</td>
-                        <td colspan="8">Move selected object right by 3 pixel</td>
+                        <td colspan="2">Right arrow</td>
+                        <td colspan="2">Right arrow</td>
+                        <td colspan="6">Move selected object right by 3 pixel</td>
                     </tr>
                     <tr>
-                        <td colspan="2">shift + up arrow</td>
-                        <td colspan="8">Move selected object up by 1 pixel</td>
+                        <td colspan="2">Shift + up arrow</td>
+                        <td colspan="2">Shift + up arrow</td>
+                        <td colspan="6">Move selected object up by 1 pixel</td>
                     </tr>
                     <tr>
-                        <td colspan="2">shift + down arrow</td>
-                        <td colspan="8">Move selected object down by 1 pixel</td>
+                        <td colspan="2">Shift + down arrow</td>
+                        <td colspan="2">Shift + down arrow</td>
+                        <td colspan="6">Move selected object down by 1 pixel</td>
                     </tr>
                     <tr>
-                        <td colspan="2">shift + left arrow</td>
+                        <td colspan="2">Shift + left arrow</td>
+                        <td colspan="2">Shift + left arrow</td>
                         <td colspan="2">Move selected object left by 1 pixel</td>
                     </tr>
                     <tr>
-                        <td colspan="2">shift + right arrow</td>
-                        <td colspan="8">Move selected object right by 1 pixel</td>
+                        <td colspan="2">Shift + right arrow</td>
+                        <td colspan="2">Shift + right arrow</td>
+                        <td colspan="6">Move selected object right by 1 pixel</td>
                     </tr>
                     <tr>
-                        <td colspan="2">ctrl + /</td>
-                        <td colspan="8">Show keyboard shortcut popup</td>
+                        <td colspan="2">Ctrl + /</td>
+                        <td colspan="2">Command + /</td>
+                        <td colspan="6">Show keyboard shortcut popup</td>
                     </tr>
                 </table>
-                <p class="note-shortcut">For mac users use command key in place of ctrl key</p>
             </pre>
         </div>
     </div>
