@@ -1,0 +1,7 @@
+.ui-fancytree:focus {
+	outline: none;
+}
+
+ul.fancytree-container {  
+  /*overflow: auto;*/
+}

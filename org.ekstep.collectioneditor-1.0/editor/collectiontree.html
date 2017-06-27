@@ -1,0 +1,86 @@
+<div ng-app="org.ekstep.collectioneditor" ng-controller="mainController" class="ui masthead vertical segment content-masterhead">
+    <div class="ui grid">
+        <div class="one column" style="width:auto;padding-right: 6px;">
+            <img class="ui mini image content-logo" ng-src="{{contentDetails.contentImage}}">
+        </div>
+        <div class="five wide column" style="padding-left: 0px">
+            <div class="ui canvas" style="margin-top: 6px; ">
+                <label class="content-title" ng-bind="contentDetails.contentTitle | limitTo:30">
+                    <span ng-if="contentDetails.contentTitle.length > 30">...</span></label>
+                <label class="content-type-label" ng-bind="contentDetails.contentType"></label>
+                <a class="btn at-btn at-btn-ok" ng-click="editContentMeta(); fireTelemetry({id: 'editMeta'}, 'editMetaButton')">
+                    <i class="edit icon link"></i>
+                </a>
+            </div>
+            <div class="row">
+                <label class="content-concept-label" ng-bind="contentDetails.contentConcepts"></label>
+            </div>
+        </div>
+        <div class="right floated four wide column bottom aligned" style="padding-right: 20px;">
+            <button class="ui compact icon button right floated ce-button" ng-class="saveBtnEnabled ? 'ui compact icon button right floated ce-button' : 'ui compact icon button right floated disabled'" ng-click="saveContent(); fireTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId" style="margin-left: 5px;">
+                <i class="icon-save icon"></i> Save
+            </button>
+            <div class="ui compact buttons right floated ce-button">
+                <div class="ui button" ng-click="previewContent(); fireTelemetry({id: 'preview'}, 'previewButton');">
+                    <i class="icon-preview icon"></i> Preview</div>
+            </div>
+            <div class="download-collaborator-icon">
+                <i class="large download link icon" ng-click="fireEvent({id: 'download:content'}); telemetryService.interact({ 'type': 'click', 'subtype': 'menu', 'target': 'download', 'pluginid': 'org.ekstep.download', 'pluginver': '1.0', 'objectid': 'downloadButton', 'stage': org.ekstep.contenteditor.stageManager.currentStage.id })" title="Download" style="line-height: 26px;"></i>
+                <i class="large send link icon" title="Send For Review" ng-click="fireEvent({id: 'org.ekstep.review:review'}); telemetryService.interact({ 'type': 'click', 'subtype': 'menu', 'target': 'review', 'pluginid': 'org.ekstep.review', 'pluginver': '1.0', 'objectid': 'downloadButton', 'stage': org.ekstep.contenteditor.stageManager.currentStage.id })"></i>
+            </div>
+        </div>
+    </div>
+    <div class="ui grid">
+        <div class="ui three wide column">
+            <div class="ui segments">
+                <div class="ui segment">
+                    <p>Table of Contents</p>
+                </div>
+                <div class="ui segment">
+                    <div id="collection-tree"></div>
+                </div>
+            </div>
+        </div>
+        <div class="ui seven wide column">
+            <form class="ui form segment" name="textBookUnitForm" novalidate>
+                <div class="field">
+                    <label>Title</label>
+                    <div class="ui input">
+                        <input placeholder="Enter title for Book unit" ng-model="collection.name" name="title" type="text">
+                        <span style="color:red" ng-show="textBookUnitForm.collection.name.$dirty && textBookUnitForm.collection.name.$invalid">
+                        <span ng-show="textBookUnitForm.collection.name.$error.required">Title is required.</span>
+                        </span>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Description</label>
+                    <div class="ui input">
+                        <textarea placeholder="brief description about the unit" ng-model="collection.description" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Concepts</label>
+                    <input name="concepts" ng-model="collection.concepts" type="text">
+                </div>
+                <div class="field">
+                    <label>Keywords</label>
+                    <input name="keywords" ng-model="collection.keywords" type="text">
+                </div>
+                <div class="field">
+                    <label>Notes to Teacher</label>
+                    <input placeholder="Add Notes" ng-model="collection.notes" name="notes" type="text">
+                </div>
+                <div class="field">
+                    <label>Page No.</label>
+                    <input placeholder="Page no" ng-model="collection.pageNumber" name="pageNumber" type="text">
+                </div>
+                <div class="ui primary submit button right" ng-click="saveNodeMetadata()"> 
+                Save!
+                </div>                
+            </form>
+        </div>
+    </div>
+    <div class="sidebar-reportissue " style="position: fixed; right: 0; bottom: 0;width: 100%;margin-bottom: 10px; ">
+        <a class="ui basic small button" ng-href="{{reportIssueLink}} " target="_blank " style="position: absolute; bottom:0; right: 30px "><i class="help circle medium icon "></i>Help</a>
+    </div>
+</div>
