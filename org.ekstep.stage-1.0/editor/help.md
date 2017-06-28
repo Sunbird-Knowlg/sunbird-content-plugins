@@ -1,4 +1,4 @@
-**Stage**
+**Slide**
 
 ***Are you a developer?***
 

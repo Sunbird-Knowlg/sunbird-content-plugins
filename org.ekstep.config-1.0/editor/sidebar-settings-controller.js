@@ -267,7 +267,7 @@ angular.module('editorApp')
         $scope.setStageObjects = function() {
             var stageOptions = {};
             org.ekstep.contenteditor.api._.forEach(org.ekstep.contenteditor.api._.clone(org.ekstep.contenteditor.api.getAllStages(), true), function(stage, i) {
-                var stageKey = 'Stage ' + (i + 1);
+                var stageKey = 'Slide ' + (i + 1);
                 stageOptions[stage.id] = stageKey;
             });
             delete stageOptions[org.ekstep.contenteditor.api.getCurrentStage().id];
