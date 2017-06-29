@@ -3,7 +3,7 @@
     <div class="ui grid fluid container custom-container">
         <!-- header part 1 -->
         <div class="one wide centered column custom-1-wide">
-            <img class="ui tiny centered image" src="../../../../app/images/ekstep_logo_white.png" />
+            <img class="ui tiny centered image" src="{{ekstepLogo}}" />
         </div>
         <!-- header part 1 -->
         <!-- header part 2 -->
@@ -47,7 +47,7 @@
                     <div class="ui fluid popup bottom right transition hidden user-details-wrapper">
                         <div class="user-details">
                             <div class="row user avtar">
-                                <img src="..\..\..\..\images\com_ekcontent\default-images\default-content.png" alt="user avtar" />
+                                <img src="{{userDetails.avtar}}" alt="user avtar" />
                             </div>
                             <div class="row user-name">
                                 <span ng-bind="userDetails.name"></span>
@@ -117,7 +117,7 @@
                             </div>
                         </div>
                         <div class="icon-box popup-item" data-content="Save content" data-variation="tiny inverted" data-position="top center">
-                            <i  class="ui primary icon-save custom-icon" ng-class="ui saveBtnEnabled ? '' : 'ui disabled'" ng-click="saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId"></i>
+                            <i  class="ui primary icon-save custom-icon" ng-class="saveBtnEnabled ? 'ui' : 'ui disabled'" ng-click="saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId"></i>
                         </div>
                     </div>
                 </div>
