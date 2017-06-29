@@ -55,10 +55,10 @@
                             <div class="row meta user-email">
                                 <span ng-bind="userDetails.email"></span>
                             </div>
-                            <div class="row user-details-edit">
+                            <!--                             <div class="row user-details-edit">
                                 <a href="#">Edit</a>
                             </div>
-                        </div>
+ --></div>
                         <div class="user-profile-menu">
                             <!-- <div id="whatsNew" class="row option" onclick="alert('what is new');">
                                 <span>What's new</span>
@@ -67,9 +67,10 @@
                             <div id="takeATour" class="row option">
                                 <span>Take a tour</span>
                             </div> -->
-                            <div id="help" class="row option">
+                            <!--                             <div id="help" class="row option">
                                 <span>Help</span>
                             </div>
+ -->
                             <div id="logout" class="row option" ng-init="disableRedirectBtn = false">
                                 <a ng-class="disableRedirectBtn ? 'disabled': ''" ng-href="{{userDetails.logout}}" ng-click="disableRedirectBtn = true; fireToolbarTelemetry({id: 'logout'}, 'logoutButton')" target="_self">Logout</a>
                             </div>
@@ -84,9 +85,10 @@
             <div class="row header-icon-container">
                 <div class="custom-row-2">
                     <div class="icon-group-1">
-                        <div class="icon-box">
+                        <!--                         <div class="icon-box">
                             <i class="icon-whatsnew custom-icon" ng-click="" title="What's new"></i>
                         </div>
+ -->
                         <div class="icon-box">
                             <i class="add user icon custom-icon" ng-click="fireEvent({id: 'collaborator:add'});" title="Add Collaborator"></i>
                         </div>
@@ -100,15 +102,15 @@
                         </div>
                         <div class="preview-icon-group">
                             <div class="icon-box">
-                                <i class="fa fa-eye custom-icon" ng-click="previewContent('start'); fireToolbarTelemetry({id: 'preview'}, 'previewButton')" title="Preview"></i>
+                                <i class="fa fa-eye custom-icon" ng-click="previewContent(); fireTelemetry({id: 'preview'}, 'previewButton');" title="Preview"></i>
                             </div>
                             <div class="ui pointing dropdown icon-box">
                                 <i class="caret down icon custom-icon"></i>
                                 <div class="menu">
-                                    <div class="item" ng-click="previewContent('start'); fireToolbarTelemetry({id: 'preview'}, 'previewButton')" title="Preview">
+                                    <!-- <div class="item" ng-click="previewContent(); fireToolbarTelemetry({id: 'preview'}, 'previewButton')" title="Preview">
                                         Preview from current stage
-                                    </div>
-                                    <div class="item">
+                                    </div> -->
+                                    <div class="item" ng-click="previewContent('start'); fireTelemetry({id: 'previewFromBeginning'}, 'previewButton')">
                                         Preview from begining
                                     </div>
                                 </div>
