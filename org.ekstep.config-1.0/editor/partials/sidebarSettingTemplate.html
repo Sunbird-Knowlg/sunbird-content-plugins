@@ -33,9 +33,10 @@ a.item.at-menu-item.popup-item.active {
 </style>
 <div ng-controller="org.ekstep.config:configController">
     <div class="ui mini compact menu item sidebarConfig sidebarHeadTab three">
-        <a class="item active" id="settingsTab" data-tab="settings" ng-click="showConfig(); fireSidebarTelemetry({id: 'customise'}, 'config')"><i class="setting icon"></i> Customise </a>
-        <a class="item {{selectedObject.stage ? 'disabled disabled-link' : ''}}" data-tab="actions" ng-click="showActions(); fireSidebarTelemetry({id: 'actions'}, 'config')"><i class="tasks icon"></i> Actions </a>
-        <a class="item" data-tab="info" ng-click="showProperties(); fireSidebarTelemetry({id: 'properties'}, 'config')"><i class="info icon"></i> Properties </a>
+        <a title="Customise" id="customizeOptionSideBar" class="item active" id="settingsTab" data-tab="settings" ng-click="showConfig(); fireSidebarTelemetry({id: 'customise'}, 'config')"><i class="setting icon"></i> <span class="large-screen-only">Customise</span> </a>
+        <a title="Actions" id="actionsOptionSideBar" class="item {{selectedObject.stage ? 'disabled disabled-link' : ''}}" data-tab="actions" ng-click="showActions(); fireSidebarTelemetry({id: 'actions'}, 'config')"><i class="tasks icon"></i> 
+        <span class="large-screen-only">Actions</span> </a>
+        <a title="Properties" id="propertiesOptionSideBar" class="item" data-tab="info" ng-click="showProperties(); fireSidebarTelemetry({id: 'properties'}, 'config')"><i class="info icon"></i> <span class="large-screen-only">Properties</span> </a>
     </div>
     <div class="ui active tab segment sidebarContent" data-tab="settings">
         <div ng-repeat="config in pluginConfig">
@@ -175,9 +176,9 @@ a.item.at-menu-item.popup-item.active {
             <tbody>
                 <tr ng-repeat="action in currentObjectActions track by $index">
                     <td>{{action.command}}</td>
-                    <td> 
-                    <span ng-if="action.name">{{action.name  | limitTo: 15}}</span>
-                    <span ng-if="!action.name">{{action.asset  | limitTo: 15}}</span>
+                    <td>
+                        <span ng-if="action.name">{{action.name  | limitTo: 15}}</span>
+                        <span ng-if="!action.name">{{action.asset  | limitTo: 15}}</span>
                     </td>
                     <td><i class="delete icon link" ng-click="removeAction({index : $index})"></i></td>
                 </tr>

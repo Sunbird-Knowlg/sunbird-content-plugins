@@ -1,64 +1,129 @@
 <div ng-app="org.ekstep.ceheader:headerApp" ng-controller="mainController" class="ui masthead vertical segment content-masterhead">
-    <div class="ui grid">
-        <div class="one column" style="width:auto;padding-right: 6px;">
-            <img class="ui mini image content-logo" ng-src="{{contentDetails.contentImage}}">
+    <!-- new header code start -->
+    <div class="ui grid fluid container custom-container">
+        <!-- header part 1 -->
+        <div class="one wide centered column custom-1-wide">
+            <img class="ui tiny centered image" src="{{ekstepLogo}}" />
         </div>
-        <div class="five wide column" style="padding-left: 0px">
-            <div class="ui canvas" style="margin-top: 6px; ">
+        <!-- header part 1 -->
+        <!-- header part 2 -->
+        <div class="six wide column custom-6-wide">
+            <!-- content title -->
+            <div class="row custom-row-1">
                 <label class="content-title" ng-bind="contentDetails.contentTitle | limitTo:30">
                     <span ng-if="contentDetails.contentTitle.length > 30">...</span></label>
-                <label class="content-type-label" ng-bind="contentDetails.contentType"></label>                
-                <a class="btn at-btn at-btn-ok" ng-click="editContentMeta(); fireTelemetry({id: 'editMeta'}, 'editMetaButton')">
-                    <i class="edit icon link"></i>
+            </div>
+            <!-- content title -->
+            <!-- edit lesson details -->
+            <div class="row custom-row-2">
+                <a class="btn at-btn at-btn-ok" ng-click="editContentMeta(); fireToolbarTelemetry({id: 'editMeta'}, 'editMetaButton')">
+                    <i class="edit icon link"></i>&nbsp;Edit Lesson Details
                 </a>
             </div>
-            <div class="row">
-                <label class="content-concept-label" ng-bind="contentDetails.contentConcepts"></label>
-            </div>
+            <!-- edit lesson details -->
         </div>
-        <div class="right floated four wide column bottom aligned" style="padding-right: 20px;">
-            <div id="userprofile" ng-show="userDetails.id" class="usercontext">
-                <div class="browse item at username" ng-bind="userDetails.name">
-                    <i class="dropdown icon"></i>
+        <!-- header part 2 -->
+        <!-- header part 3 -->
+        <div class="five wide column custom-5-wide">
+            <!-- header part 3 upper deck -->
+            <div class="row custom-row-1">
+                <!-- close button -->
+                <div class="close" ng-init="disableRedirectBtn = false">
+                    <a ng-class="disableRedirectBtn ? 'disabled': ''" ng-href="{{cancelLink}}" ng-click="disableRedirectBtn = true; fireToolbarTelemetry({id: 'close'}, 'closeButton')" target="_self">
+                        <i class="remove icon custom-cursor"></i>
+                    </a>
                 </div>
-                <div class="ui fluid popup bottom right transition hidden user-details-container">
-                    <div class="ui divided items">
-                        <div class="item">
-                            <div class="ui tiny circular image user-avtar">
-                                <img src="{{userDetails.avtar}}">
+                <!-- close button -->
+                <!-- username, userprofile menu and its dropdown -->
+                <div id="userprofile" ng-show="userDetails.id" class="user-context">
+                    <!-- username and user-active red marker -->
+                    <div class="browse item at username">
+                        <!-- <i class="circle icon user-active-mark"></i> -->
+                        <span ng-bind="userDetails.name" class="custom-cursor name"></span>
+                        <i class="caret down icon custom-cursor"></i>
+                    </div>
+                    <!-- username and user-active active red marker -->
+                    <!-- userprofile menu -->
+                    <div class="ui fluid popup bottom right transition hidden user-details-wrapper">
+                        <div class="user-details">
+                            <div class="row user avtar">
+                                <img src="{{userDetails.avtar}}"/>
                             </div>
-                            <div class="middle aligned content" style="text-align: left;">
-                                <span class="header" ng-bind="userDetails.name"></span>
-                                <div class="meta">
-                                    <span ng-bind="userDetails.email"></span>
-                                </div>
-                                <div class="extra" ng-init="disableRedirectBtn = false">
-                                    <a ng-class="disableRedirectBtn ? 'ui tiny button disabled': 'ui tiny button'" ng-href="{{cancelLink}}" ng-click="disableRedirectBtn = true; fireTelemetry({id: 'close'}, 'closeButton')" target="_self">close</a>
-                                    <a ng-class="disableRedirectBtn ? 'ui tiny button disabled': 'ui tiny button'" ng-href="{{userDetails.logout}}" ng-click="disableRedirectBtn = true; fireTelemetry({id: 'logout'}, 'logoutButton')" target="_self">logout</a>
-                                </div>
+                            <div class="row user-name">
+                                <span ng-bind="userDetails.name"></span>
+                            </div>
+                            <div class="row meta user-email">
+                                <span ng-bind="userDetails.email"></span>
+                            </div>
+                            <!--                             <div class="row user-details-edit">
+                                <a href="#">Edit</a>
+                            </div>
+ --></div>
+                        <div class="user-profile-menu">
+                            <!-- <div id="whatsNew" class="row option" onclick="alert('what is new');">
+                                <span>What's new</span>
+                                <i class="circle icon user-active-mark"></i>
+                            </div>
+                            <div id="takeATour" class="row option">
+                                <span>Take a tour</span>
+                            </div> -->
+                            <!--                             <div id="help" class="row option">
+                                <span>Help</span>
+                            </div>
+ -->
+                            <div id="logout" class="row option" ng-init="disableRedirectBtn = false">
+                                <a ng-class="disableRedirectBtn ? 'disabled': ''" ng-href="{{userDetails.logout}}" ng-click="disableRedirectBtn = true; fireToolbarTelemetry({id: 'logout'}, 'logoutButton')" target="_self">Logout</a>
                             </div>
                         </div>
                     </div>
+                    <!-- userprofile menu -->
                 </div>
-            </div>            
-            <button class="ui compact icon button right floated ce-button" ng-class="saveBtnEnabled ? 'ui compact icon button right floated ce-button' : 'ui compact icon button right floated disabled'" ng-click="saveContent(); fireTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId" style="margin-left: 5px;">
-                <i class="icon-save icon"></i> Save
-            </button>
-            <div class="ui compact buttons right floated ce-button">
-                <div class="ui button" ng-click="previewContent(); fireTelemetry({id: 'preview'}, 'previewButton');">
-                    <i class="icon-preview icon"></i> Preview</div>
-                <div class="ui floating simple dropdown icon button">
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div class="item" ng-click="previewContent('start'); fireTelemetry({id: 'previewFromBeginning'}, 'previewButton')">preview from beginning</div>
+                <!-- username, userprofile menu and its dropdown -->
+            </div>
+            <!-- header part 3 upper deck -->
+            <!-- header part 3 lower deck -->
+            <div class="row header-icon-container">
+                <div class="custom-row-2">
+                    <div class="icon-group-1">
+                        <!--                         <div class="icon-box popup-item"  data-tooltip="Add Collaborator" data-position="bottom right" data-inverted="">
+                            <i class="icon-whatsnew custom-icon" ng-click="" title="What's new"></i>
+                        </div>
+ -->
+                        <div class="icon-box popup-item" data-content="Add Collaborator" data-variation="tiny inverted" data-position="top center">
+                            <i class="add user icon custom-icon" ng-click="fireEvent({id: 'collaborator:add'});"></i>
+                        </div>
+                    </div>
+                    <div class="icon-group-2">
+                        <div class="icon-box popup-item" data-content="Download" data-variation="tiny inverted" data-position="top center">
+                            <i class="download icon custom-icon" ng-click="fireEvent({id: 'download:content'});" ></i>
+                        </div>
+                        <div class="icon-box popup-item" data-content="Send for review" data-variation="tiny inverted" data-position="top center">
+                            <i class="send icon custom-icon" ng-click="fireEvent({id: 'org.ekstep.review:review'});"></i>
+                        </div>
+                        <div class="preview-icon-group">
+                            <div class="icon-box popup-item" data-content="Preview" data-variation="tiny inverted" data-position="top center">
+                                <i class="fa fa-eye custom-icon" ng-click="previewContent(); fireTelemetry({id: 'preview'}, 'previewButton');" ></i>
+                            </div>
+                            <div class="ui pointing dropdown icon-box">
+                                <i class="caret down icon custom-icon"></i>
+                                <div class="menu">
+                                    <!-- <div class="item" ng-click="previewContent(); fireToolbarTelemetry({id: 'preview'}, 'previewButton')" >
+                                        Preview from current stage
+                                    </div> -->
+                                    <div class="item" ng-click="previewContent('start'); fireTelemetry({id: 'previewFromBeginning'}, 'previewButton')">
+                                        Preview from begining
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="icon-box popup-item" data-content="Save content" data-variation="tiny inverted" data-position="top center">
+                            <i  class="ui primary icon-save custom-icon" ng-class="saveBtnEnabled ? 'ui' : 'ui disabled'" ng-click="saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId"></i>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="download-collaborator-icon">
-                <i class="large add user link icon" ng-click="fireEvent({id: 'collaborator:add'}); telemetryService.interact({ 'type': 'click', 'subtype': 'menu', 'target': 'addCollaborator', 'pluginid': 'org.ekstep.collaborator', 'pluginver': '1.0', 'objectid': 'addCollaboratorButton', 'stage': org.ekstep.contenteditor.stageManager.currentStage.id })" title="Add Collaborator"></i>
-                <i class="large download link icon" ng-click="fireEvent({id: 'download:content'}); telemetryService.interact({ 'type': 'click', 'subtype': 'menu', 'target': 'download', 'pluginid': 'org.ekstep.download', 'pluginver': '1.0', 'objectid': 'downloadButton', 'stage': org.ekstep.contenteditor.stageManager.currentStage.id })" title="Download" style="line-height: 26px;"></i>
-                <i class="large send link icon" title="Send For Review" ng-click="fireEvent({id: 'org.ekstep.review:review'}); telemetryService.interact({ 'type': 'click', 'subtype': 'menu', 'target': 'review', 'pluginid': 'org.ekstep.review', 'pluginver': '1.0', 'objectid': 'downloadButton', 'stage': org.ekstep.contenteditor.stageManager.currentStage.id })"></i>
-            </div>
+            <!-- header part 3 lower deck -->
         </div>
+        <!-- header part 3 -->
     </div>
 </div>
