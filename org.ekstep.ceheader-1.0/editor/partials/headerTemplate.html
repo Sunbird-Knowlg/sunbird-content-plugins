@@ -85,23 +85,23 @@
             <div class="row header-icon-container">
                 <div class="custom-row-2">
                     <div class="icon-group-1">
-                        <!--                         <div class="icon-box" data-tooltip="Add Collaborator" data-position="bottom right" data-inverted="">
+                        <!--                         <div class="icon-box popup-item"  data-tooltip="Add Collaborator" data-position="bottom right" data-inverted="">
                             <i class="icon-whatsnew custom-icon" ng-click="" title="What's new"></i>
                         </div>
  -->
-                        <div class="icon-box" data-tooltip="Add Collaborator" data-position="bottom right" data-inverted="">
+                        <div class="icon-box popup-item" data-content="Add Collaborator" data-variation="tiny inverted" data-position="top center">
                             <i class="add user icon custom-icon" ng-click="fireEvent({id: 'collaborator:add'});" title="Add Collaborator"></i>
                         </div>
                     </div>
                     <div class="icon-group-2">
-                        <div class="icon-box" data-tooltip="Download" data-position="bottom right" data-inverted="">
+                        <div class="icon-box popup-item" data-content="Download" data-variation="tiny inverted" data-position="top center">
                             <i class="download icon custom-icon" ng-click="fireEvent({id: 'download:content'});" title="Download"></i>
                         </div>
-                        <div class="icon-box" data-tooltip="Send for review" data-position="bottom right" data-inverted="">
+                        <div class="icon-box popup-item" data-content="Send for review" data-variation="tiny inverted" data-position="top center">
                             <i class="send icon custom-icon" ng-click="fireEvent({id: 'org.ekstep.review:review'});" title="Send for review"></i>
                         </div>
                         <div class="preview-icon-group">
-                            <div class="icon-box" data-tooltip="Preview" data-position="bottom right" data-inverted="">
+                            <div class="icon-box popup-item" data-content="Preview" data-variation="tiny inverted" data-position="top center">
                                 <i class="fa fa-eye custom-icon" ng-click="previewContent(); fireTelemetry({id: 'preview'}, 'previewButton');" title="Preview"></i>
                             </div>
                             <div class="ui pointing dropdown icon-box">
@@ -116,7 +116,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="icon-box" data-tooltip="Save content" data-position="bottom right" data-inverted="">
+                        <div class="icon-box popup-item" data-content="Save content" data-variation="tiny inverted" data-position="top center">
                             <i title="Save" class="ui primary icon-save custom-icon" ng-class="ui saveBtnEnabled ? '' : 'ui disabled'" ng-click="saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId"></i>
                         </div>
                     </div>
