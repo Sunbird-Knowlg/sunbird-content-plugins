@@ -90,8 +90,12 @@
                 </div>
             </div>
         </div>
-        <div class="ui seven wide column" id="contents-data-form">
-            <form class="ui form segment" name="textBookUnitForm" novalidate>
+        <div class="ui nine wide column" id="contents-pane">
+            <div class="ui segment header-segment">
+                hello
+                <!-- <h5>hello</h6> -->
+            </div>
+            <form class="ui form segment" id="contents-data-form" name="textBookUnitForm" novalidate>
                 <div class="fields">
                     <div class="two wide required field book-image-field">
                         <label for="bookImage">Add image</label>
@@ -101,7 +105,7 @@
                             <input type="hidden" name="bookImage" id="bookImage" />
                         </div>
                     </div>
-                    <div class="fourteen wide field form-fields-except-image">
+                    <div class="eight wide field form-fields-except-image">
                         <div class="required field">
                             <label>Title</label>
                             <div class="ui input">
@@ -189,7 +193,7 @@
                     </div>
                 </div>
                 <div class="ui primary submit button right" ng-click="saveNodeMetadata()">
-                    Save!
+                    Save
                 </div>
             </form>
         </div>
