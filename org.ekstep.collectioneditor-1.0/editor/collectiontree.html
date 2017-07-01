@@ -1,39 +1,20 @@
-,
 <div ng-app="org.ekstep.collectioneditor" ng-controller="mainController" class="ui masthead vertical segment content-masterhead">
     <!-- anshu test -->
-    <!--     <div id="parent">
-        <div id="div1"> My Data1 </div>
-        <div id="div2"> My Data2</div>
-    </div>
- -->
-    <!-- anshu test -->
-    <!-- <script type="text/javascript">
-    function showKeyWord() {
-        console.log(Json.stringify(this));
-    }
-
-    var keyWordOb = {
-        currentKeyWord: "",
-        keyWordsArr: [],
-        tabCount: 0
-
-    };
-
-    $("#keywords").keydown(function(event) {
-        var commaTabEnterASCII = [44, 9, 13];
-        if (!commaTabEnterASCII.includes(event.which)) {
-            keyWordOb.tabCount+=1;
-            keyWordOb.currentKeyWord += event.key;
-        } else {
-
-            if (!keyWordOb.keyWordsArr.includes(keyWordOb.currentKeyWord))
-                keyWordOb.keyWordsArr.push(keyWordOb.currentKeyWord);
-
-            keyWordOb.currentKeyWord = "";
-            
-        }
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> -->
+    <!-- <script src="../plugins/org.ekstep.collectioneditor-1.0/editor/libs/jQuery-ui.js"></script> -->
+    <script type="text/javascript">
+    $("#table-of-contents").resizable({
+        minWidth: 320,
+        maxWidth: 500,
+        handles: 'e, w'
     });
-    </script> -->
+
+    $('#table-of-contents').resize(function() {
+        
+        document.getElementById('contents-pane').setAttribute("style", "width: calc(100% - " + $("#table-of-contents").width() + "px)!important");
+       
+    });
+    </script>
     <div class="ui grid">
         <div class="one column" style="width:auto;padding-right: 6px;">
             <img class="ui mini image content-logo" ng-src="{{contentDetails.contentImage}}">
@@ -66,7 +47,7 @@
         </div>
     </div>
     <div class="ui grid" id="mainBody">
-        <div class="ui three wide column" id="table-of-contents">
+        <div class="ui column" id="table-of-contents">
             <div class="ui segments">
                 <div class="ui segment tree-access-tools-segment">
                     <!-- <p>Table of Contents</p> -->
@@ -85,15 +66,25 @@
                             <span class="ui popup" data-content="Collapse all"><i class="chevron circle up icon" data-content="Collapse all"></i></span> -->
                     </div>
                 </div>
-                <div class="ui segment">
+                <div class="ui segment tree-wrapper">
                     <div id="collection-tree"></div>
                 </div>
             </div>
         </div>
-        <div class="ui nine wide column" id="contents-pane">
+        <div class="ui column" id="contents-pane">
             <div class="ui segment header-segment">
-                hello
-                <!-- <h5>hello</h6> -->
+                <div class="ui breadcrumb">
+                    <a class="section">Untitled book</a>
+                    <div class="divider"> / </div>
+                    <a class="section">Unit 1</a>
+                    <div class="divider"> / </div>
+                    <a class="section">Unit 1.1</a>
+                    <div class="divider"> / </div>
+                    <a class="section">Unit 1.1</a>
+                    <div class="divider"> / </div>
+                    <div class="active section">Collection1</div>
+                </div>
+                <span>Collection1</span>
             </div>
             <form class="ui form segment" id="contents-data-form" name="textBookUnitForm" novalidate>
                 <div class="fields">
@@ -192,16 +183,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="ui primary submit button right" ng-click="saveNodeMetadata()">
+                <div class="ui primary submit button right" id="save-button" ng-click="saveNodeMetadata()">
                     Save
                 </div>
             </form>
         </div>
-        <!-- <div class="ui three wide right floated column sidebar-reportissue">
-            <a class="ui basic small button help-button" ng-href="{{reportIssueLink}} " target="_blank"><i class="help circle medium icon "></i>Help</a>
-        </div> -->
     </div>
-    <!--  <div class="ui one wide column sidebar-reportissue " style="position: fixed; right: 0; bottom: 0;width: 100%;margin-bottom: 15px; ">
-        <a class="ui basic small button" ng-href="{{reportIssueLink}} " target="_blank " style="position: absolute; bottom:0; right: 30px "><i class="help circle medium icon "></i>Help</a>
-    </div> -->
 </div>
