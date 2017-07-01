@@ -119,7 +119,6 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
             controller: [function() {
                 $scope.popUpValues = {};
                 $scope.popUpValues.headerMsg = 'Saving content please wait...';
-                $scope.popUpValues.popUpIcon = 'check green';
                 $scope.popUpValues.showCloseButton = false;
             }],
             showClose: false,
@@ -132,14 +131,14 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
     $scope.changePopupValues = function(message) {
         if (message === 'success') {
             $scope.popUpValues.headerMsg = 'Content Saved!';
-            $scope.popUpValues.popUpIcon = 'check green';
+            $scope.popUpValues.popUpIcon = 'circle check green';
             $scope.popUpValues.showCloseButton = true;
             $scope.popUpValues.saveNotificationCloseButton = 'saveSuccessNotificationCloseButton';
             $scope.$safeApply();
         } else
         if (message === 'error') {
             $scope.popUpValues.headerMsg = 'Failed to save Content';
-            $scope.popUpValues.popUpIcon = 'remove red';
+            $scope.popUpValues.popUpIcon = 'circle remove red';
             $scope.popUpValues.showCloseButton = true;
             $scope.popUpValues.saveNotificationCloseButton = 'saveFailNotificationCloseButton';
             $scope.$safeApply();
