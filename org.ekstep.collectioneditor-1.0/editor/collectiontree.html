@@ -1,4 +1,39 @@
+,
 <div ng-app="org.ekstep.collectioneditor" ng-controller="mainController" class="ui masthead vertical segment content-masterhead">
+    <!-- anshu test -->
+    <!--     <div id="parent">
+        <div id="div1"> My Data1 </div>
+        <div id="div2"> My Data2</div>
+    </div>
+ -->
+    <!-- anshu test -->
+    <!-- <script type="text/javascript">
+    function showKeyWord() {
+        console.log(Json.stringify(this));
+    }
+
+    var keyWordOb = {
+        currentKeyWord: "",
+        keyWordsArr: [],
+        tabCount: 0
+
+    };
+
+    $("#keywords").keydown(function(event) {
+        var commaTabEnterASCII = [44, 9, 13];
+        if (!commaTabEnterASCII.includes(event.which)) {
+            keyWordOb.tabCount+=1;
+            keyWordOb.currentKeyWord += event.key;
+        } else {
+
+            if (!keyWordOb.keyWordsArr.includes(keyWordOb.currentKeyWord))
+                keyWordOb.keyWordsArr.push(keyWordOb.currentKeyWord);
+
+            keyWordOb.currentKeyWord = "";
+            
+        }
+    });
+    </script> -->
     <div class="ui grid">
         <div class="one column" style="width:auto;padding-right: 6px;">
             <img class="ui mini image content-logo" ng-src="{{contentDetails.contentImage}}">
@@ -30,57 +65,139 @@
             </div>
         </div>
     </div>
-    <div class="ui grid">
-        <div class="ui three wide column">
+    <div class="ui grid" id="mainBody">
+        <div class="ui three wide column" id="table-of-contents">
             <div class="ui segments">
-                <div class="ui segment">
-                    <p>Table of Contents</p>
+                <div class="ui segment tree-access-tools-segment">
+                    <!-- <p>Table of Contents</p> -->
+                    <div class="tree-access-tools">
+                        <div class="ui search">
+                            <div class="ui icon input">
+                                <input class="prompt" type="text" placeholder="Search content...">
+                                <i class="search icon"></i>
+                            </div>
+                        </div>
+                        <div class="icon-container">
+                            <span class="show-popup" data-content="Expand all"><i class="chevron circle down large icon" title="Expand all"></i></span>
+                            <span class="show-popup" data-content="Collapse all"><i class="chevron circle up large icon" title="Collapse all"></i></span>
+                        </div>
+                        <!-- <span class="ui popup" data-content="Expand all"><i class="chevron circle down icon"></i></span>
+                            <span class="ui popup" data-content="Collapse all"><i class="chevron circle up icon" data-content="Collapse all"></i></span> -->
+                    </div>
                 </div>
                 <div class="ui segment">
                     <div id="collection-tree"></div>
                 </div>
             </div>
         </div>
-        <div class="ui seven wide column">
+        <div class="ui seven wide column" id="contents-data-form">
             <form class="ui form segment" name="textBookUnitForm" novalidate>
-                <div class="field">
-                    <label>Title</label>
-                    <div class="ui input">
-                        <input placeholder="Enter title for Book unit" ng-model="collection.name" name="title" type="text">
-                        <span style="color:red" ng-show="textBookUnitForm.collection.name.$dirty && textBookUnitForm.collection.name.$invalid">
+                <div class="fields">
+                    <div class="two wide required field book-image-field">
+                        <label for="bookImage">Add image</label>
+                        <div class="book-image-container">
+                            <i class="camera icon"></i>
+                            <img src="" />
+                            <input type="hidden" name="bookImage" id="bookImage" />
+                        </div>
+                    </div>
+                    <div class="fourteen wide field form-fields-except-image">
+                        <div class="required field">
+                            <label>Title</label>
+                            <div class="ui input">
+                                <input placeholder="Enter title for Book unit" ng-model="collection.name" name="title" type="text">
+                                <span style="color:red" ng-show="textBookUnitForm.collection.name.$dirty && textBookUnitForm.collection.name.$invalid">
                         <span ng-show="textBookUnitForm.collection.name.$error.required">Title is required.</span>
-                        </span>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="four fields">
+                            <div class="required field">
+                                <label for="board">Board</label>
+                                <select class="ui fluid dropdown" name="board" id="board">
+                                    <option value="cbse">CBSE</option>
+                                    <option value="icse">ICSE</option>
+                                </select>
+                            </div>
+                            <div class="required field">
+                                <label for="medium">Medium</label>
+                                <select class="ui fluid dropdown" name="medium" id="medium">
+                                    <option value="eng">English</option>
+                                    <option value="hin">Hindi</option>
+                                </select>
+                            </div>
+                            <div class="required field">
+                                <label for="subject">Subject</label>
+                                <select class="ui fluid dropdown" name="subject" id="subject">
+                                    <option value="maths">Maths</option>
+                                    <option value="science">Science</option>
+                                </select>
+                            </div>
+                            <div class="required field">
+                                <label for="grade">Grade</label>
+                                <select class="ui fluid dropdown" name="grade" id="grade">
+                                    <option value="kg">Kindergarten</option>
+                                    <option value="g1">Grade 1</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="three fields">
+                            <div class="required field">
+                                <label for="author">Author</label>
+                                <input type="text" placeholder="Enter author name" />
+                            </div>
+                            <div class="field">
+                                <label for="publication">Publication</label>
+                                <input type="text" placeholder="Publication (optional)" />
+                            </div>
+                            <div class="field">
+                                <label for="edition">Edition</label>
+                                <input type="text" placeholder="Edition (optional)" />
+                            </div>
+                        </div>
+                        <div class="requiered field">
+                            <label>Description</label>
+                            <div class="ui input">
+                                <textarea placeholder="brief description about the unit" ng-model="collection.description" rows="2"></textarea>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Concepts</label>
+                            <input name="concepts" ng-model="collection.concepts" type="text">
+                        </div>
+                        <div class="two fields">
+                            <div class="required twelve wide field">
+                                <label>Keywords</label>
+                                <input id="keywords" name="keywords" ng-model="collection.keywords" type="text">
+                            </div>
+                            <div class="four wide field">
+                                <label for="audience">Audience</label>
+                                <select class="ui fluid dropdown" name="audience" id="audience">
+                                    <option value="learner">Learner</option>
+                                    <option value="instructor">Instructor</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <label>Notes to Teacher</label>
+                            <input placeholder="Add Notes" ng-model="collection.notes" name="notes" type="text">
+                        </div>
+                        <div class="field">
+                            <label>Page No.</label>
+                            <input placeholder="Page no" ng-model="collection.pageNumber" name="pageNumber" type="text">
+                        </div>
                     </div>
                 </div>
-                <div class="field">
-                    <label>Description</label>
-                    <div class="ui input">
-                        <textarea placeholder="brief description about the unit" ng-model="collection.description" rows="2"></textarea>
-                    </div>
+                <div class="ui primary submit button right" ng-click="saveNodeMetadata()">
+                    Save!
                 </div>
-                <div class="field">
-                    <label>Concepts</label>
-                    <input name="concepts" ng-model="collection.concepts" type="text">
-                </div>
-                <div class="field">
-                    <label>Keywords</label>
-                    <input name="keywords" ng-model="collection.keywords" type="text">
-                </div>
-                <div class="field">
-                    <label>Notes to Teacher</label>
-                    <input placeholder="Add Notes" ng-model="collection.notes" name="notes" type="text">
-                </div>
-                <div class="field">
-                    <label>Page No.</label>
-                    <input placeholder="Page no" ng-model="collection.pageNumber" name="pageNumber" type="text">
-                </div>
-                <div class="ui primary submit button right" ng-click="saveNodeMetadata()"> 
-                Save!
-                </div>                
             </form>
         </div>
+        <!-- <div class="ui three wide right floated column sidebar-reportissue">
+            <a class="ui basic small button help-button" ng-href="{{reportIssueLink}} " target="_blank"><i class="help circle medium icon "></i>Help</a>
+        </div> -->
     </div>
-    <div class="sidebar-reportissue " style="position: fixed; right: 0; bottom: 0;width: 100%;margin-bottom: 10px; ">
+    <!--  <div class="ui one wide column sidebar-reportissue " style="position: fixed; right: 0; bottom: 0;width: 100%;margin-bottom: 15px; ">
         <a class="ui basic small button" ng-href="{{reportIssueLink}} " target="_blank " style="position: absolute; bottom:0; right: 30px "><i class="help circle medium icon "></i>Help</a>
-    </div>
+    </div> -->
 </div>
