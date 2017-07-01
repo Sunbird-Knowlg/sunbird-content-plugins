@@ -112,6 +112,12 @@ ul.fancytree-container {
     margin: auto !important;
 }
 
+.book-image-container img{
+    height: 100%;
+    width: 100%;
+    position: relative;
+    display: inline-block;
+}
 .book-image-container:hover {
     cursor: pointer;
 }
