@@ -74,9 +74,12 @@
                     <label>Page No.</label>
                     <input placeholder="Page no" ng-model="collection.pageNumber" name="pageNumber" type="text">
                 </div>
-                <div class="ui primary submit button right" ng-click="saveNodeMetadata()"> 
+                <div class="ui primary submit button right" ng-click="saveNodeMetadata()">
                 Save!
-                </div>                
+                </div>
+                <div class="ui primary button right" onclick="ecEditor.dispatchEvent('org.ekstep.lessonbrowser:show');">
+                    Add lesson</i>
+                </div>
             </form>
         </div>
     </div>
