@@ -10,16 +10,26 @@ body,
     color: #9b9b9b!important;
 }
 
-#mainController {
+.content-masterhead {
     padding-top: 0!important;
-    padding-left: 2rem!important;
-    padding-right: 2rem!important;
+    height: 100vh!important;
 }
 
 .ui.vertical.segment {
     // padding: 2rem!important;
     padding-left: 2rem!important;
     padding-right: 2rem!important;
+}
+
+.page-header {
+    height: 10%!important;
+    margin-top: 0!important;
+}
+
+.main-body {
+    height: 90%!important;
+    margin-bottom: 0!important;
+    margin-top: 2rem!important;
 }
 
 .ui-fancytree:focus {
@@ -31,11 +41,8 @@ ul.fancytree-container {
 }
 
 #table-of-contents {
-    padding-right: 0;
-    padding-top: 0;
-    padding-left: 0;
-    // padding-left: 2rem!important;
-    position: relative;
+    padding: 0!important;
+    height: 100%! position: relative;
     width: 320px;
     min-width: 320px;
     box-shadow: none!important;
@@ -61,18 +68,21 @@ ul.fancytree-container {
 // }
 #table-of-contents .ui.segments {
     border: none;
+    height: 100%;
 }
 
 #table-of-contents .tree-wrapper {
     border-right: 0.2px solid #D8DEE2;
     border-top: none;
     padding: 0 0.5rem!important;
+    height: 90%!important;
 }
 
 #contents-pane {
     padding: 0;
     padding-left: 2rem;
     width: calc(100% - 350px);
+    height: 100%;
 }
 
 .header-segment {
@@ -109,8 +119,7 @@ ul.fancytree-container {
 
 #contents-data-form {
     margin-top: 0;
-    // border-radius: 0;
-    height: 460px;
+    height: calc(100% - 84.4px);
     overflow-y: auto;
     padding-left: 0;
     border: none;
@@ -121,16 +130,15 @@ ul.fancytree-container {
 #contents-data-form::-webkit-scrollbar-thumb,
 #collection-tree::-webkit-scrollbar,
 #collection-tree::-webkit-scrollbar-thumb {
-    width: 3px;
-    background-color: #9b9b9b;
+    width: 0;
+    // background-color: #9b9b9b;
 }
 
-#contents-data-form::-webkit-scrollbar-track,
-#collection-tree::-webkit-scrollbar {
-    background-color: #F9F9F9;
-    border-radius: 0;
-}
-
+// #contents-data-form::-webkit-scrollbar-track,
+// #collection-tree::-webkit-scrollbar {
+//     background-color: #F9F9F9;
+//     border-radius: 0;
+// }
 #contents-data-form input,
 #contents-data-form textarea {
     background: none;
@@ -153,14 +161,25 @@ ul.fancytree-container {
 }
 
 .form-fields-except-image .field input,
-.form-fields-except-image .field select {
+.form-fields-except-image .field .ui.selection.dropdown {
     padding: 0.339054em 1.07692308em!important;
     font-size: 12px!important;
 }
 
-.form-fields-except-image .field .ui.fluid.dropdown {
+.form-fields-except-image .ui.selection.dropdown>.dropdown.icon {
+    top: 0.3rem!important;
+}
+
+.form-fields-except-image .ui.dropdown .menu>.item {
+    color: #9b9b9b;
+    font-size: 12px!important;
+}
+
+.form-fields-except-image .field .ui.selection.dropdown {
     height: 50%;
     color: #9b9b9b!important;
+    min-width: 9em!important;
+    min-height: 1.5rem!important
 }
 
 .form-fields-except-image {
@@ -211,7 +230,7 @@ ul.fancytree-container {
 }
 
 #collection-tree {
-    height: 450px;
+    height: 100%;
     overflow: hidden;
     overflow-y: auto;
 }
@@ -250,8 +269,8 @@ ul.fancytree-container {
 
 .tree-access-tools-segment {
     padding: 0.3em 0.5em 0.3em 1em!important;
-    // border-radius: 0!important;
     border-right: 0.2px solid #D8DEE2!important;
+    height: 8%!important;
 }
 
 i.icon {
@@ -270,7 +289,7 @@ i.icon:hover {
     cursor: pointer;
 }
 
-#save-button{
+#save-button {
     position: relative;
     float: right;
     margin-right: 20%;
