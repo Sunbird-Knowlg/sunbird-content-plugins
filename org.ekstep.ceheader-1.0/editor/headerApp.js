@@ -19,7 +19,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
 
 
     $scope.saveContent = function(event, options) {
-        options = options || { savingPopup: true, successPopup: true, failPopup: true, callback: function(){} };
+        options = options || { savingPopup: false, successPopup: false, failPopup: true, callback: function(){} };
         if ($scope.saveBtnEnabled) {
             if (options.savingPopup) $scope.saveNotification('saving');
             $scope.saveBtnEnabled = false;
@@ -33,15 +33,19 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
                         if (res.responseJSON.params.err == "ERR_STALE_VERSION_KEY")
                             $scope.showConflictDialog(options);
                     } else {
-                        if (!options.savingPopup) $scope.saveNotification();
-                        if(options && options.failPopup) $scope.changePopupValues('error');
+                        if(options && options.failPopup) {
+                            if (!options.savingPopup) $scope.saveNotification();
+                            $scope.changePopupValues('error');
+                        }
                         
                     }
                 } else if (res && res.data.responseCode == "OK") {
                     lastSavedTime = new Date(Date.now());
                     $scope.calculateSaveTime();
-                    if (!options.savingPopup) $scope.saveNotification();
-                    if(options && options.successPopup) $scope.changePopupValues('success');
+                    if(options && options.successPopup) {
+                        if (!options.savingPopup) $scope.saveNotification();
+                        $scope.changePopupValues('success');
+                    }
                 }
                 $scope.saveBtnEnabled = true;
                 if (typeof options.callback === "function") options.callback(err, res);
