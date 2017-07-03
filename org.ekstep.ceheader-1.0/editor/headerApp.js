@@ -11,6 +11,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
         'text': 'Internet Connection not available'
     };
     $scope.lastSaved;
+    $scope.popUpValues = {};
 
     $scope.setEditorState = function(event, data) {
         if (data) $scope.editorState = data;
@@ -18,9 +19,9 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
 
 
     $scope.saveContent = function(event, options) {
-        options = options || { successPopup: true, failPopup: true, callback: function(){} };
+        options = options || { savingPopup: true, successPopup: true, failPopup: true, callback: function(){} };
         if ($scope.saveBtnEnabled) {
-            $scope.saveNotification();
+            if (options.savingPopup) $scope.saveNotification('saving');
             $scope.saveBtnEnabled = false;
             org.ekstep.pluginframework.eventManager.dispatchEvent('content:before:save');
             // TODO: Show saving dialog
@@ -32,12 +33,14 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
                         if (res.responseJSON.params.err == "ERR_STALE_VERSION_KEY")
                             $scope.showConflictDialog(options);
                     } else {
+                        if (!options.savingPopup) $scope.saveNotification();
                         if(options && options.failPopup) $scope.changePopupValues('error');
                         
                     }
                 } else if (res && res.data.responseCode == "OK") {
                     lastSavedTime = new Date(Date.now());
                     $scope.calculateSaveTime();
+                    if (!options.savingPopup) $scope.saveNotification();
                     if(options && options.successPopup) $scope.changePopupValues('success');
                 }
                 $scope.saveBtnEnabled = true;
@@ -111,20 +114,16 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
         }
     };
 
-    $scope.saveNotification = function() {
+    $scope.saveNotification = function(message) {
         var template = "editor/partials/saveMessage.html";
         var config = {
             template: ecEditor.resolvePluginResource(plugin.id, plugin.ver, template),
             scope: $scope,
-            controller: [function() {
-                $scope.popUpValues = {};
-                $scope.popUpValues.headerMsg = 'Saving content please wait...';
-                $scope.popUpValues.showCloseButton = false;
-            }],
             showClose: false,
             closeByEscape: false,
             closeByDocument: false
         }
+        $scope.changePopupValues(message);
         $scope.popupService.open(config);
     };
 
@@ -141,6 +140,11 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
             $scope.popUpValues.popUpIcon = 'circle remove red';
             $scope.popUpValues.showCloseButton = true;
             $scope.popUpValues.saveNotificationCloseButton = 'saveFailNotificationCloseButton';
+            $scope.$safeApply();
+        }
+        if (message === 'saving') {
+            $scope.popUpValues.headerMsg = 'Saving content please wait...';
+            $scope.popUpValues.showCloseButton = false;
             $scope.$safeApply();
         }
     }
@@ -268,7 +272,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
             var seconds = Math.floor((new Date() - lastSavedTime) / 1000);
             var interval = Math.floor(seconds / 86400);
             if (interval >= 1) {
-                $scope.lastSaved = "Last Saved: " + interval + " minutes ago";
+                $scope.lastSaved = "Last Saved: "+ interval + " days ago";
                 $scope.$safeApply();
                 return 
             }
@@ -280,7 +284,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
             }
             interval = Math.floor(seconds / 60);
             if (interval >= 1) {
-                $scope.lastSaved = "Last Saved: "+ interval + " days ago";
+                $scope.lastSaved = "Last Saved: " + interval + " minutes ago";
                 $scope.$safeApply();
                 return;
             }

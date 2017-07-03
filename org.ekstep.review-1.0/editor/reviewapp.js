@@ -33,6 +33,7 @@ angular.module('org.ekstep.review', [])
             ctrl.success = false;
             ctrl.success_msg = "";
             ecEditor.dispatchEvent('org.ekstep.ceheader:save', {
+                savingPopup: false,
                 successPopup: false,
                 failPopup: true,
                 callback: function(err, res) {
@@ -73,6 +74,7 @@ angular.module('org.ekstep.review', [])
             ctrl.success = false;
             ctrl.success_msg = "";
             ecEditor.dispatchEvent('org.ekstep.ceheader:save:force', {
+                savingPopup: false,
                 successPopup: false,
                 failPopup: true,
                 callback: function(err, res) {                    
