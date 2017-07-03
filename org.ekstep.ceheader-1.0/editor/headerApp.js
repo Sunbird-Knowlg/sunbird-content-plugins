@@ -266,7 +266,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
     $scope.calculateSaveTime = function() {
         if (lastSavedTime) {
             var seconds = Math.floor((new Date() - lastSavedTime) / 1000);
-            var interval = Math.floor(seconds / 60);
+            var interval = Math.floor(seconds / 86400);
             if (interval >= 1) {
                 $scope.lastSaved = "Last Saved: " + interval + " minutes ago";
                 $scope.$safeApply();
@@ -278,7 +278,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
                 $scope.$safeApply();
                 return;
             }
-            interval = Math.floor(seconds / 86400);
+            interval = Math.floor(seconds / 60);
             if (interval >= 1) {
                 $scope.lastSaved = "Last Saved: "+ interval + " days ago";
                 $scope.$safeApply();
