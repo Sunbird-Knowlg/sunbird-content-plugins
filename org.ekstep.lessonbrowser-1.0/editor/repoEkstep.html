@@ -1,0 +1,180 @@
+<div ng-app="org.ekstep.contentprovider" ng-controller="contentproviderekstepController as $ctrl" id="partials/repoEkstep.html">
+
+<style type="text/css">
+	.source-result-container {max-height: 440px; overflow-y: scroll;}
+	.source-filter-container {max-height: 365px; overflow-y: scroll;}
+
+	.lesson-row{border-bottom: 1px solid #ddd}
+	.lesson-lang-separator {margin-left: 5px; margin-right: 5px;}
+
+</style>
+
+<div class="ui grid">
+  	<div class="row" ng-if="$ctrl.err">
+    	<div class="column">
+    		{{ $ctrl.err }}
+    	</div>
+  	</div>
+	<div class="row" ng-if="!$ctrl.err">
+    	<div class="column">
+    		<div class="ui fluid action input">
+				<input type="text" placeholder="Search for keyword" autocomplete="off" spellcheck="false" ng-model="searchKeyword">
+		    	<button class="ui button" ng-click="searchByKeyword()">Search</button>
+		    	<button class="ui button" ng-click="resetSearchByKeyword()">Reset</button>
+			</div>
+    	</div>
+  	</div>
+  	<div class="row" ng-if="!$ctrl.err">
+  		<!-- Filters start -->
+	  	<div class="four wide column">
+	  		<div class="row">
+	  			<h4>Filters</h4>
+	  			<div class="ui divider"></div>
+	  		</div>
+	  		<div class="ui styled accordion source-filter-container" style="margin-top: 5px; margin-bottom: 5px;">
+			  	<div class="title">
+			    	<i class="dropdown icon"></i>
+			    	Language
+			  	</div>
+			  	<div class="content">
+				    <div class="ui list">
+						<div class="item ui checkbox"><input type="checkbox"><label><strong>Select all</strong></label></div>
+
+						<div class="item ui checkbox"><input type="checkbox"><label>Bengali</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>English</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Gujarati</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Hindi</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Kannada</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Marathi</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Punjabi</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Tamil</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Telugu</label></div>
+					</div>
+			  	</div>
+			  	<div class="title">
+			    	<i class="dropdown icon"></i>
+			    	Grade
+			  	</div>
+			  	<div class="content">
+			  		<div class="ui list">
+				    	<div class="item ui checkbox"><input type="checkbox"><label><strong>Select all</strong></label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>KG</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Grade 1</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Grade 2</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Grade 3</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Grade 4</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Grade 5</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Grade 6</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Grade 7</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Grade 8</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Grade 9</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Grade 10</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Grade 11</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Grade 12</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Others</label></div>
+					</div>
+			  	</div>
+				<div class="title">
+					<i class="dropdown icon"></i>
+					Lesson type
+				</div>
+				<div class="content">
+					<div class="ui list">
+						<div class="item ui checkbox"><input type="checkbox"><label><strong>Select all</strong></label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Story</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Worksheet</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Collection</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Game</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Plugin</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Template</label></div>
+					</div>
+				</div>
+				<div class="title">
+					<i class="dropdown icon"></i>
+					Domain
+				</div>
+				<div class="content">
+					<div class="ui list">
+						<div class="item ui checkbox"><input type="checkbox"><label><strong>Select all</strong></label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Numeracy</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Literacy</label></div>
+						<div class="item ui checkbox"><input type="checkbox"><label>Science</label></div>
+					</div>
+				</div>
+				<div class="title">
+					<i class="dropdown icon"></i>
+					Concept
+				</div>
+				<div class="content">
+					Chose Concept
+				</div>
+				<div class="title">
+					<i class="dropdown icon"></i>
+					Ownership
+				</div>
+				<div class="content">
+					<select class="ui fluid dropdown">
+						<option value="1">Everyone's lesson</option>
+						<option value="1">My lessons</option>
+						<option value="3">Lessons I am collaborating</option>
+					</select>
+				</div>
+				<div class="title">
+					<i class="dropdown icon"></i>
+					Date
+				</div>
+				<div class="content">
+					<select class="ui fluid dropdown">
+						<option value="1">Select date type</option>
+						<option value="1">Created date</option>
+						<option value="1">Updated date</option>
+						<option value="1">Published date</option>
+						<option value="1">Submitted date</option>
+					</select>
+					<select class="ui fluid dropdown">
+						<option value="1">Select lesson ordering</option>
+						<option value="1">Latest first</option>
+						<option value="3">Oldest first</option>
+					</select>
+				</div>
+			</div>
+		  	<div class="row">
+		  		<button class="ui right floated button primary" ng-click="somefunction()">Apply</button>
+				<button class="ui left floated button">Reset</button>
+		  	</div>
+	  	</div>
+	  	<!-- Filters end -->
+	  	<!-- Result start -->
+		<div class="eight wide column">
+			<div class="row">
+	  			<h4>Lessons
+	  			<span style="font-size: 0.8em">({{ $ctrl.res.count }})</span>
+	  			</h4>
+	  			<div class="ui divider"></div>
+	  		</div>
+			<div class="ui grid source-result-container">
+				<div class="row lesson-row" ng-repeat="lesson in $ctrl.res.content">
+					<div class="three wide column" style="padding-top: 3px;">
+						<div class="ui checkbox">
+							<input type="checkbox">
+							<label>
+								<img class="ui middle aligned tiny right floated image" src="{{lesson.appIcon}}" ng-if="lesson.appIcon">
+								<img class="ui middle aligned tiny right floated image" src="http://via.placeholder.com/80x80" ng-if="!lesson.appIcon">
+							</label>
+						</div>
+					</div>
+					<div class="eight wide column">
+						<div><h3>{{lesson.name}}</h3></div>
+						<div>{{ lesson.contentType }}</div>
+						<div>
+							<span ng-repeat="lang in lesson.language"><span ng-if="!$first" class="lesson-lang-separator">|</span>{{lang}}</span>
+						</div>
+						<div>{{lesson.description | removeHTMLTags | cut:true:120:' ...'}}</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Result end -->
+  	</div>
+</div>
+</div>
