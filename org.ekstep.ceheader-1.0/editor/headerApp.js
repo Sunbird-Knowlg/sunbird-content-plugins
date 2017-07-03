@@ -19,7 +19,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
 
 
     $scope.saveContent = function(event, options) {
-        options = options || { savingPopup: false, successPopup: false, failPopup: true, callback: function(){} };
+        options = options || { savingPopup: true, successPopup: true, failPopup: true, callback: function(){} };
         if ($scope.saveBtnEnabled) {
             if (options.savingPopup) $scope.saveNotification('saving');
             $scope.saveBtnEnabled = false;
