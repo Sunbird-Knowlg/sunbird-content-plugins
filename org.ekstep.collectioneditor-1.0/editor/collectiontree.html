@@ -1,5 +1,21 @@
 <div ng-app="org.ekstep.collectioneditor" ng-controller="mainController" class="ui masthead vertical segment content-masterhead">
-    <div class="ui grid">
+    <!-- anshu test -->
+    <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> -->
+    <!-- <script src="../plugins/org.ekstep.collectioneditor-1.0/editor/libs/jQuery-ui.js"></script> -->
+    <script type="text/javascript">
+    $("#table-of-contents").resizable({
+        minWidth: 320,
+        maxWidth: 500,
+        handles: 'e, w'
+    });
+
+    $('#table-of-contents').resize(function() {
+
+        document.getElementById('contents-pane').setAttribute("style", "width: calc(100% - " + $("#table-of-contents").width() + "px)!important");
+
+    });
+    </script>
+    <div class="ui grid page-header">
         <div class="one column" style="width:auto;padding-right: 6px;">
             <img class="ui mini image content-logo" ng-src="{{contentDetails.contentImage}}">
         </div>
@@ -48,15 +64,14 @@
                         </div>
                     </div>
                 </div>
-                <div class="ui segment">
+                <div class="ui segment tree-wrapper">
                     <div id="collection-tree"></div>
                 </div>
             </div>
         </div>
         <div class="ui nine wide column" id="contents-pane">
-            <div class="ui segment header-segment">
-                hello
-            </div>{{template}}{{templateURL}}
+            <div class="ui segment header-segment">                
+            </div>
             <div class="metacontent-holder" ng-if="template" ng-include="templateURL"></div>
             <!-- <div class="metacontent-holder" ng-repeat="metadataPageRegistry in data">
                 
@@ -64,3 +79,6 @@
         </div>
     </div>
 </div>
+<script>
+$(".ui.selection.dropdown").dropdown();
+</script>

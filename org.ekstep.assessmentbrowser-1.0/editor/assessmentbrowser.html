@@ -231,7 +231,7 @@
     </div>
     <div class="actions">
         <a ng-href="{{$ctrl.context.createItemLink}}" target="_blank">
-            <button class="ui blue left floated button" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'createAQuestionButton'})">Create A Question</button>
+            <button class="ui blue left floated button" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'createAQuestionButton'})">Create a question</button>
         </a>
         <div class="ui label" ng-show="$ctrl.cart.items.length">
             <a class="ui grey circular label">{{$ctrl.cart.items.length}}</a> Questions added
@@ -239,7 +239,7 @@
         <div class="ui buttons" ng-if="$ctrl.isAdvanceOptionOpen">
             <button class="ui orange button" ng-click="$ctrl.cancel(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'cancelButton'})" type="button">Cancel</button>
             <div class="or"></div>
-            <button class="ui blue button" ng-click="$ctrl.addActivityOptions(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'nextButton'})" ng-disabled="!$ctrl.cart.items.length" type="button">NEXT</button>
+            <button class="ui blue button" ng-click="$ctrl.addActivityOptions(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'nextButton'})" ng-disabled="!$ctrl.cart.items.length" type="button">Next</button>
         </div>
         <div class="ui buttons" ng-if="!$ctrl.isAdvanceOptionOpen">
             <button id="closePopUp" class="ui orange button" ng-click="$ctrl.isAdvanceOptionOpen = !$ctrl.isAdvanceOptionOpen; $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'addMoreQuestions'})" type="button">Add More Questions</button>
