@@ -30,57 +30,37 @@
             </div>
         </div>
     </div>
-    <div class="ui grid">
-        <div class="ui three wide column">
+    <div class="ui grid" id="mainBody">
+        <div class="ui three wide column" id="table-of-contents">
             <div class="ui segments">
-                <div class="ui segment">
-                    <p>Table of Contents</p>
+                <div class="ui segment tree-access-tools-segment">
+                    <!-- <p>Table of Contents</p> -->
+                    <div class="tree-access-tools">
+                        <div class="ui search">
+                            <div class="ui icon input">
+                                <input class="prompt" type="text" placeholder="Search content...">
+                                <i class="search icon"></i>
+                            </div>
+                        </div>
+                        <div class="icon-container">
+                            <span class="show-popup" data-content="Expand all"><i class="chevron circle down large icon" title="Expand all"></i></span>
+                            <span class="show-popup" data-content="Collapse all"><i class="chevron circle up large icon" title="Collapse all"></i></span>
+                        </div>
+                    </div>
                 </div>
                 <div class="ui segment">
                     <div id="collection-tree"></div>
                 </div>
             </div>
         </div>
-        <div class="ui seven wide column">
-            <form class="ui form segment" name="textBookUnitForm" novalidate>
-                <div class="field">
-                    <label>Title</label>
-                    <div class="ui input">
-                        <input placeholder="Enter title for Book unit" ng-model="collection.name" name="title" type="text">
-                        <span style="color:red" ng-show="textBookUnitForm.collection.name.$dirty && textBookUnitForm.collection.name.$invalid">
-                        <span ng-show="textBookUnitForm.collection.name.$error.required">Title is required.</span>
-                        </span>
-                    </div>
-                </div>
-                <div class="field">
-                    <label>Description</label>
-                    <div class="ui input">
-                        <textarea placeholder="brief description about the unit" ng-model="collection.description" rows="2"></textarea>
-                    </div>
-                </div>
-                <div class="field">
-                    <label>Concepts</label>
-                    <input name="concepts" ng-model="collection.concepts" type="text">
-                </div>
-                <div class="field">
-                    <label>Keywords</label>
-                    <input name="keywords" ng-model="collection.keywords" type="text">
-                </div>
-                <div class="field">
-                    <label>Notes to Teacher</label>
-                    <input placeholder="Add Notes" ng-model="collection.notes" name="notes" type="text">
-                </div>
-                <div class="field">
-                    <label>Page No.</label>
-                    <input placeholder="Page no" ng-model="collection.pageNumber" name="pageNumber" type="text">
-                </div>
-                <div class="ui primary submit button right" ng-click="saveNodeMetadata()"> 
-                Save!
-                </div>                
-            </form>
+        <div class="ui nine wide column" id="contents-pane">
+            <div class="ui segment header-segment">
+                hello
+            </div>{{template}}{{templateURL}}
+            <div class="metacontent-holder" ng-if="template" ng-include="templateURL"></div>
+            <!-- <div class="metacontent-holder" ng-repeat="metadataPageRegistry in data">
+                
+            </div> -->
         </div>
-    </div>
-    <div class="sidebar-reportissue " style="position: fixed; right: 0; bottom: 0;width: 100%;margin-bottom: 10px; ">
-        <a class="ui basic small button" ng-href="{{reportIssueLink}} " target="_blank " style="position: absolute; bottom:0; right: 30px "><i class="help circle medium icon "></i>Help</a>
     </div>
 </div>

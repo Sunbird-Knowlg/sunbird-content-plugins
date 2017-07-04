@@ -6,6 +6,9 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         contentConcepts: "No concepts selected",
         contentType: ""
     };
+    $scope.metadataPageRegistry = [];
+    $scope.template = false;
+    $scope.templateUrl = '';
 
     $scope.contentId = $location.search().contentId;
     if (_.isUndefined($scope.contentId)) {
@@ -26,4 +29,15 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
             org.ekstep.collectioneditor.api.getService('collection').addTree([template]);                       
         }
     });
+
+    $scope.loadMetaPage = function(event, data){
+        ecEditor.getService('popup').loadNgModules(data.templateURL, data.controllerURL).then(function(){
+            $scope.templateUrl = data.templateURL;
+            $scope.template = true;       
+            $scope.$safeApply();    
+        }, function() {});        
+    };
+
+    ecEditor.addEventListener("org.ekstep.collectioneditor:loadmetapage", $scope.loadMetaPage);
 }]);
+//# sourceURL=collectiontreeApp.js
