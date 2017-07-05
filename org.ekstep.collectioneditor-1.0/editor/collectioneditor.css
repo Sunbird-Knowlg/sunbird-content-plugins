@@ -79,7 +79,7 @@ body {
     margin-bottom: 0!important;
     border-radius: 0!important;
     border-right: none!important;
-    height: 84.4px!important;
+    height: 90.4px!important;
     border: none!important;
     padding-left: 0!important;
     padding-top: 0!important;
@@ -106,7 +106,7 @@ body {
 .metadata-form-container {
     margin-top: 0;
     border-radius: 0;
-    height: calc(100% - 84.4px)!important;
+    height: calc(100% - 90.4px)!important;
     overflow-y: auto;
 }
 

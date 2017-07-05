@@ -1,14 +1,14 @@
 <div ng-app="collectioneditormetaApp" ng-controller="collectioneditormetaController">
     <form class="ui form segment" id="contents-data-form" novalidate>
         <div class="fields">
-            <div class="two wide  field book-image-field">
+            <div class="field book-image-field">
                 <label for="bookImage">Add image</label>
                 <div class="book-image-container" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
                     <img ng-src="{{textbook.image}}" ng-show="textbook.image != ''" />
                 </div>
             </div>
-            <div class="fourteen wide field form-fields-except-image">
+            <div class="field form-fields-except-image">
                 <div class=" field">
                     <label>Title</label>
                     <div class="ui input">
