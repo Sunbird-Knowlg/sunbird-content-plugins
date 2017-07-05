@@ -1,0 +1,11 @@
+{
+    "id": "org.ekstep.collectioneditormeta",
+    "ver": "1.0",
+    "author": "Kartheek Palla",
+    "title": "Collectioneditor Meta plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js"
+    }
+}

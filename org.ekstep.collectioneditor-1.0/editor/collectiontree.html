@@ -36,14 +36,6 @@
             <button class="ui compact icon button right floated ce-button" ng-class="saveBtnEnabled ? 'ui compact icon button right floated ce-button' : 'ui compact icon button right floated disabled'" ng-click="saveContent(); fireTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId" style="margin-left: 5px;">
                 <i class="icon-save icon"></i> Save
             </button>
-            <div class="ui compact buttons right floated ce-button">
-                <div class="ui button" ng-click="previewContent(); fireTelemetry({id: 'preview'}, 'previewButton');">
-                    <i class="icon-preview icon"></i> Preview</div>
-            </div>
-            <div class="download-collaborator-icon">
-                <i class="large download link icon" ng-click="fireEvent({id: 'download:content'}); telemetryService.interact({ 'type': 'click', 'subtype': 'menu', 'target': 'download', 'pluginid': 'org.ekstep.download', 'pluginver': '1.0', 'objectid': 'downloadButton', 'stage': org.ekstep.contenteditor.stageManager.currentStage.id })" title="Download" style="line-height: 26px;"></i>
-                <i class="large send link icon" title="Send For Review" ng-click="fireEvent({id: 'org.ekstep.review:review'}); telemetryService.interact({ 'type': 'click', 'subtype': 'menu', 'target': 'review', 'pluginid': 'org.ekstep.review', 'pluginver': '1.0', 'objectid': 'downloadButton', 'stage': org.ekstep.contenteditor.stageManager.currentStage.id })"></i>
-            </div>
         </div>
     </div>
     <div class="ui grid" id="mainBody">
@@ -70,12 +62,21 @@
             </div>
         </div>
         <div class="ui nine wide column" id="contents-pane">
-            <div class="ui segment header-segment">                
+            <div class="ui segment header-segment">
+                <div class="ui breadcrumb">
+                    <a class="section">Untitled book</a>
+                    <div class="divider"> / </div>
+                    <a class="section">Unit 1</a>
+                    <div class="divider"> / </div>
+                    <a class="section">Unit 1.1</a>
+                    <div class="divider"> / </div>
+                    <a class="section">Unit 1.1</a>
+                    <div class="divider"> / </div>
+                    <div class="active section">Collection1</div>
+                </div>
+                <span>Collection1</span>
             </div>
-            <div class="metacontent-holder" ng-if="template" ng-include="templateURL"></div>
-            <!-- <div class="metacontent-holder" ng-repeat="metadataPageRegistry in data">
-                
-            </div> -->
+            <div class="metacontent-holder" ng-if="template" ng-include="templatePath"></div>
         </div>
     </div>
 </div>
