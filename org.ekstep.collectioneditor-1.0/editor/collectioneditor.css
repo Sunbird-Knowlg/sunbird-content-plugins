@@ -100,9 +100,31 @@ body {
 .header-segment h3 {
     color: rgba(0, 0, 0, 0.7)!important;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif!important;
-    margin-top: 0.5em;
+    left: 0;
 }
 
+.header-bottom-segment {
+    position: absolute!important;
+    bottom: 0!important;
+    margin: 0!important;
+}
+
+.inline-block {
+    display: inline-block!important;
+}
+
+.header-buttons-container {
+    float: right;
+    width: 50%;
+    height: 38%;
+    padding-right: 0;
+    right: 20px;
+}
+
+.header-buttons-container .ui.button{
+    min-height: initial!important;
+    height: 100%!important;
+}
 .metadata-form-container {
     margin-top: 0;
     border-radius: 0;
@@ -217,19 +239,23 @@ i.icon:hover {
 
 .button-overrides {
     font-family: Helvetica!important;
-    padding: 1em 1.5em!important;
+    padding: 0.85em 1.5em!important;
     text-transform: none!important;
     border-radius: .25rem!important;
 }
 
-#save-button,
-#add-lesson-button {
+.right-float {
     position: relative;
     float: right;
 }
 
-#save-button {
-    margin-right: 21.3%;
+#save-button,
+#update-button {
+    margin-right: 0;
+}
+
+#update-button{
+    display: none!important;
 }
 
 #add-lesson-button:hover {

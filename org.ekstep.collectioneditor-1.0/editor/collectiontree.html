@@ -1,6 +1,5 @@
 <div ng-app="org.ekstep.collectioneditor" ng-controller="mainController" class="ui masthead vertical segment content-masterhead">
-    
-     <div class="ui grid page-header">
+    <div class="ui grid page-header">
         <div class="one column" style="width:auto;padding-right: 6px;">
             <img class="ui mini image content-logo" ng-src="{{contentDetails.contentImage}}">
         </div>
@@ -59,10 +58,20 @@
                     <div class="divider"> / </div>
                     <div class="active section">Collection1</div>
                 </div>
-                <h3>Collection1</h3>
+                <h3 class="header-bottom-segment inline-block">Collection1</h3>
+                <div class="header-buttons-container header-bottom-segment inline-block">
+                    <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="saveNodeMetadata()">
+                        Save
+                    </div>
+                    <div class="ui primary submit button inline-block right-float button-overrides" id="update-button" ng-click="saveNodeMetadata()">
+                        Update
+                    </div>
+                    <div class="ui primary basic submit button inline-block right-float button-overrides" id="add-lesson-button" ng-click="addlesson()">
+                        Add lesson
+                    </div>
+                </div>
             </div>
             <div class="metacontent-holder metadata-form-container" ng-if="template" ng-include="templatePath"></div>
         </div>
     </div>
 </div>
-
