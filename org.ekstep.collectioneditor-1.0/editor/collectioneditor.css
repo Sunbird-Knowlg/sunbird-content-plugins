@@ -20,6 +20,15 @@ body {
     margin-bottom: 0!important;
 }
 
+.page-header .one.column {
+    width: auto;
+    padding-left: 0!important;
+}
+
+.page-header .one.column .content-logo {
+    margin-left: 0!important;
+}
+
 .main-body {
     // border: 1px solid;
     height: 90%!important;
@@ -121,10 +130,11 @@ body {
     right: 20px;
 }
 
-.header-buttons-container .ui.button{
+.header-buttons-container .ui.button {
     min-height: initial!important;
     height: 100%!important;
 }
+
 .metadata-form-container {
     margin-top: 0;
     border-radius: 0;
@@ -254,7 +264,7 @@ i.icon:hover {
     margin-right: 0;
 }
 
-#update-button{
+#update-button {
     display: none!important;
 }
 
