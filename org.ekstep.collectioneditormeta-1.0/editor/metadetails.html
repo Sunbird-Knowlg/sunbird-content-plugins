@@ -8,7 +8,7 @@
                     <img ng-src="{{textbook.image}}" ng-show="textbook.image != ''" />
                 </div>
             </div>
-            <div class="eight wide field form-fields-except-image">
+            <div class="ten wide field form-fields-except-image">
                 <div class="required field">
                     <label>Title</label>
                     <div class="ui input">
@@ -18,31 +18,47 @@
                 <div class="four fields">
                     <div class="field">
                         <label for="board">Board</label>
-                        <select class="ui fluid dropdown" name="board" id="board" ng-model="textbook.board">
-                            <option value="cbse">CBSE</option>
-                            <option value="icse">ICSE</option>
-                        </select>
+                        <div class="ui selection dropdown">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Board</div>
+                            <div class="menu">
+                                <div class="item" data-value="cbse">CBSE</div>
+                                <div class="item" data-value="icse">ICSE</div>
+                            </div>
+                        </div>
                     </div>
                     <div class="field">
                         <label for="medium">Medium</label>
-                        <select class="ui fluid dropdown" name="medium" id="medium" ng-model="textbook.medium">
-                            <option value="eng">English</option>
-                            <option value="hin">Hindi</option>
-                        </select>
+                        <div class="ui selection dropdown">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Medium</div>
+                            <div class="menu">
+                                <div class="item" data-value="eng">English</div>
+                                <div class="item" data-value="hin">Hindi</div>
+                            </div>
+                        </div>
                     </div>
                     <div class="field">
                         <label for="subject">Subject</label>
-                        <select class="ui fluid dropdown" name="subject" id="subject" ng-model="textbook.subject">
-                            <option value="maths">Maths</option>
-                            <option value="science">Science</option>
-                        </select>
+                        <div class="ui selection dropdown">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Subject</div>
+                            <div class="menu">
+                                <div class="item" data-value="maths">Maths</div>
+                                <div class="item" data-value="science">Science</div>
+                            </div>
+                        </div>
                     </div>
                     <div class="field">
                         <label for="grade">Grade</label>
-                        <select class="ui fluid dropdown" name="grade" id="grade" ng-model="textbook.grade">
-                            <option value="kg">Kindergarten</option>
-                            <option value="g1">Grade 1</option>
-                        </select>
+                        <div class="ui selection dropdown">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Grade</div>
+                            <div class="menu">
+                                <div class="item" data-value="kg">Kindergarten</div>
+                                <div class="item" data-value="g1">Grade 1</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="three fields">
@@ -81,10 +97,14 @@
                     </div>
                     <div class="four wide field">
                         <label for="audience">Audience</label>
-                        <select class="ui fluid dropdown" name="audience" id="audience" ng-model="textbook.audience">
-                            <option value="learner">Learner</option>
-                            <option value="instructor">Instructor</option>
-                        </select>
+                        <div class="ui selection dropdown">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Audience</div>
+                            <div class="menu">
+                                <div class="item" data-value="learner">Learner</div>
+                                <div class="item" data-value="instructor">Instructor</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="field">
@@ -105,3 +125,6 @@
         </div>
     </form>
 </div>
+<script>
+$(".ui.selection.dropdown").dropdown();
+</script>

@@ -1,21 +1,6 @@
 <div ng-app="org.ekstep.collectioneditor" ng-controller="mainController" class="ui masthead vertical segment content-masterhead">
-    <!-- anshu test -->
-    <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> -->
-    <!-- <script src="../plugins/org.ekstep.collectioneditor-1.0/editor/libs/jQuery-ui.js"></script> -->
-    <script type="text/javascript">
-    $("#table-of-contents").resizable({
-        minWidth: 320,
-        maxWidth: 500,
-        handles: 'e, w'
-    });
-
-    $('#table-of-contents').resize(function() {
-
-        document.getElementById('contents-pane').setAttribute("style", "width: calc(100% - " + $("#table-of-contents").width() + "px)!important");
-
-    });
-    </script>
-    <div class="ui grid page-header">
+    
+     <div class="ui grid page-header">
         <div class="one column" style="width:auto;padding-right: 6px;">
             <img class="ui mini image content-logo" ng-src="{{contentDetails.contentImage}}">
         </div>
@@ -38,8 +23,8 @@
             </button>
         </div>
     </div>
-    <div class="ui grid" id="mainBody">
-        <div class="ui three wide column" id="table-of-contents">
+    <div class="ui grid main-body">
+        <div class="ui column" id="table-of-contents">
             <div class="ui segments">
                 <div class="ui segment tree-access-tools-segment">
                     <!-- <p>Table of Contents</p> -->
@@ -61,7 +46,7 @@
                 </div>
             </div>
         </div>
-        <div class="ui nine wide column" id="contents-pane">
+        <div class="ui column" id="contents-pane">
             <div class="ui segment header-segment">
                 <div class="ui breadcrumb">
                     <a class="section">Untitled book</a>
@@ -76,10 +61,8 @@
                 </div>
                 <span>Collection1</span>
             </div>
-            <div class="metacontent-holder" ng-if="template" ng-include="templatePath"></div>
+            <div class="metacontent-holder metadata-form-container" ng-if="template" ng-include="templatePath"></div>
         </div>
     </div>
 </div>
-<script>
-$(".ui.selection.dropdown").dropdown();
-</script>
+
