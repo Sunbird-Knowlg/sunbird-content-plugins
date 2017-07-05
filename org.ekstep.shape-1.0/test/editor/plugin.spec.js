@@ -2,7 +2,7 @@
 
 describe('Shape plugin', function() {
     var spyEvent;
-    var stage, rect, circle, roundedRect, star, polygon, trapezium, arrow, doubleArrow;
+    var stage, rect, circle, roundedRect, star, polygon, trapezium, arrow, doubleArrow, triangle;
 
     beforeAll(function() {        
         stage = ecEditor.instantiatePlugin('org.ekstep.stage');        
@@ -151,6 +151,25 @@ describe('Shape plugin', function() {
             ContentEditorTestFramework.validateObject(doubleArrow.toECML(), {
                 'type': 'harrow', 'x': 20, 'y': 20, 'fill': '#000000', 'w': 30, 'h': 25, 'stroke': 'rgba(255, 255, 255, 0)', 'strokeWidth': 1, 'opacity': 1, 'rotate': 0, 'z-index': 7, 'id': doubleArrow.id, 'config.__cdata': '{"opacity":100,"strokeWidth":1,"stroke":"rgba(255, 255, 255, 0)","autoplay":false,"visible":true,"color":"#000000","points":[{"x":0,"y":50},{"x":25,"y":0},{"x":25,"y":25},{"x":75,"y":25},{"x":75,"y":0},{"x":100,"y":50},{"x":75,"y":100},{"x":75,"y":75},{"x":25,"y":75},{"x":25,"y":100}]}'
             });
+        });
+
+        it('should create triangle and test configuration changes', function() {
+
+            // Test Triangle
+            ecEditor.dispatchEvent("org.ekstep.shape:create", {"type": "polygon", "x": 20, "y": 20, "fill": "#FF0000", "w": 14, "h": 25, "sides": 3, "stroke": "rgba(255, 255, 255, 0)", "strokeWidth": 1, "opacity": 1 });
+            triangle = stage.children[8];
+            expect(stage.children.length).toBe(9);
+            var fbObject = ContentEditorTestFramework.getFabricObject(triangle.id, ecEditor.getCanvas());
+            ContentEditorTestFramework.objectsEqual(triangle.editorObj, fbObject);
+            ContentEditorTestFramework.validateObject(triangle.toECML(), {
+                'type': 'polygon', 'x': 20, 'y': 20, 'fill': '#FF0000', 'w': 14, 'h': 25, 'sides': 3, 'stroke': 'rgba(255, 255, 255, 0)', 'strokeWidth': 1, 'opacity': 1, 'rotate': 0, 'z-index': 8, 'id': triangle.id, 'config.__cdata': '{"opacity":100,"strokeWidth":1,"stroke":"rgba(255, 255, 255, 0)","autoplay":false,"visible":true,"color":"#FF0000","sides":3,"points":[{"x":50,"y":0},{"x":100,"y":100},{"x":0,"y":100}]}'
+            });
+
+            triangle.onConfigChange('color', '#CC1234');
+            ContentEditorTestFramework.validateObject(triangle.toECML(),{
+                'type': 'polygon', 'x': 20, 'y': 20, 'fill': '#CC1234', 'w': 14, 'h': 25, 'sides': 3, 'stroke': 'rgba(255, 255, 255, 0)', 'strokeWidth': 1, 'opacity': 1, 'rotate': 0, 'z-index': 8, 'id': triangle.id, 'config.__cdata': '{"opacity":100,"strokeWidth":1,"stroke":"rgba(255, 255, 255, 0)","autoplay":false,"visible":true,"color":"#CC1234","sides":3,"points":[{"x":50,"y":0},{"x":100,"y":100},{"x":0,"y":100}]}'
+            });
+
         });
     });
 });
