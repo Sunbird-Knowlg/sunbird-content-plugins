@@ -1,0 +1,95 @@
+.ui.selection.dropdown {
+    height: 2.385629em!important;
+    min-height: initial!important;
+    min-width: 13em!important;
+}
+
+#contents-data-form input,
+#contents-data-form textarea {
+    background: none;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    box-shadow: none;
+    border-radius: 0;
+    padding-left: 0!important;
+}
+
+#contents-data-form input:focus {
+    border-bottom: 1px solid #009FDA;
+}
+
+#contents-data-form textarea:focus {
+    border-bottom: 1px solid #009FDA;
+}
+
+.form-fields-except-image .field {
+    margin-bottom: 20px!important;
+}
+
+.form-fields-except-image .field input,
+{
+    padding: 0.339054em 1.07692308em!important;
+    font-size: 12px!important;
+}
+
+.ui.form .field>label,
+.form-fields-except-image .field input,
+.form-fields-except-image .field textarea {
+    font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif!important;
+}
+
+.ui.form .field>label {
+    font-size: .92857143em!important;
+    font-weight: bold!important;
+    text-transform: none!important;
+    margin: 0 0 .28571429rem 0!important;
+    color: rgba(0, 0, 0, 0.82)!important;
+}
+
+.form-fields-except-image {
+    width: calc(100% - 120px)!important;
+}
+
+@media only screen and (max-width: 1048px) {
+    .form-fields-except-image,
+    #contents-pane>.ui.form .fields>.eight.wide.field {
+        width: calc(100% - 120px)!important;
+    }
+}
+
+.book-image-container {
+    height: 100px;
+    width: 100px;
+    border: 0.2px solid rgba(192, 192, 192, 0.39);
+    position: relative;
+}
+
+.book-image-container i {
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin: auto !important;
+}
+
+.book-image-container img {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    display: inline-block;
+}
+
+.book-image-container:hover {
+    cursor: pointer;
+}
+
+.book-image-container:hover i {
+    color: black;
+}
+
+.book-image-field {
+    width: 116px!important;
+    min-width: 116px!important;
+    max-width: 116px!important;
+}
