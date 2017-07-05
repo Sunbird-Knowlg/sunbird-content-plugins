@@ -1,15 +1,15 @@
 <div ng-app="collectioneditormetaApp" ng-controller="collectioneditormetaController">
     <form class="ui form segment" id="contents-data-form" novalidate>
         <div class="fields">
-            <div class="two wide required field book-image-field">
+            <div class="two wide  field book-image-field">
                 <label for="bookImage">Add image</label>
                 <div class="book-image-container" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
                     <img ng-src="{{textbook.image}}" ng-show="textbook.image != ''" />
                 </div>
             </div>
-            <div class="ten wide field form-fields-except-image">
-                <div class="required field">
+            <div class="fourteen wide field form-fields-except-image">
+                <div class=" field">
                     <label>Title</label>
                     <div class="ui input">
                         <input placeholder="Enter title for Book unit" ng-model="textbook.name" name="title" type="text">
@@ -62,7 +62,7 @@
                     </div>
                 </div>
                 <div class="three fields">
-                    <div class="required field">
+                    <div class=" field">
                         <label for="author">Author</label>
                         <input type="text" placeholder="Enter author name" ng-model="textbook.author" />
                     </div>
@@ -86,13 +86,8 @@
                     <input name="concepts" id="conceptSelector" ng-model="textbook.concepts" type="text">
                 </div>
                 <div class="two fields">
-                    <div class="required twelve wide field">
+                    <div class=" twelve wide field">
                         <label>Keywords</label>
-                        <a class="ui label">Tag1<i class="delete icon"></i></a>
-                        <a class="ui label">Tag2<i class="delete icon"></i></a>
-                        <a class="ui label">Tag3<i class="delete icon"></i></a>
-                        <a class="ui label">Tag4<i class="delete icon"></i></a>
-                        <a class="ui label">Tag5<i class="delete icon"></i></a>
                         <input id="keywords" name="keywords" ng-model="textbook.keywords" type="text">
                     </div>
                     <div class="four wide field">

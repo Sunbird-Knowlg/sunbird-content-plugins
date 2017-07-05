@@ -6,6 +6,10 @@
     "description": "",
     "publishedDate": "",
     "editor": {
-        "main": "editor/plugin.js"
+        "main": "editor/plugin.js",
+        "dependencies": [
+            
+            { "type": "css", "src": "editor/metadetails.css" }           
+        ]
     }
 }
