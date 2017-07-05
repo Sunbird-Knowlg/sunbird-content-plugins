@@ -14,7 +14,6 @@ body {
 }
 
 .page-header {
-    // border: 1px solid;
     height: 10%!important;
     margin-top: 0!important;
     margin-bottom: 0!important;
@@ -30,7 +29,6 @@ body {
 }
 
 .main-body {
-    // border: 1px solid;
     height: 90%!important;
     margin-bottom: 0!important;
     margin-top: 0.5em!important;
@@ -48,7 +46,7 @@ body {
     min-width: 320px;
     box-shadow: none!important;
     border: none;
-    border-right: 0.2px solid #c0c0c0;
+    border-right: 0.2px solid rgba(192, 192, 192, 0.39);
 }
 
 #table-of-contents .ui.dropdown .menu>.item {
@@ -67,8 +65,8 @@ body {
 
 #table-of-contents .ui.segments,
 #contents-data-form .ui.form.segment {
-    border-radius: 0;
-    box-shadow: none;
+    border-radius: 0!important;
+    box-shadow: none!important;
     height: 100%;
 }
 
@@ -160,14 +158,9 @@ body {
     height: 0!important;
 }
 
-// .form-fields-except-image .field .ui.fluid.dropdown {
-//     height: 50%;
-//     color: #9b9b9b!important;
-// }
 #collection-tree {
     height: 100%;
     overflow: auto;
-    // overflow-y: auto;
 }
 
 #collection-tree span {
@@ -183,7 +176,6 @@ body {
 .icon-container {
     display: inline-block;
     position: relative;
-    /* float: left; */
 }
 
 .tree-wrapper {
@@ -227,7 +219,6 @@ i.icon:hover {
 
 .tree-access-tools-segment {
     padding: 0.3em 0.5em 0.3em 0!important;
-    // border-right: 0.2px solid #D8DEE2!important;
     height: 8%!important;
 }
 
@@ -236,7 +227,6 @@ i.icon {
 }
 
 .icon-container {
-    // margin-left: 18px;
     color: #9b9b9b;
     float: right;
 }
