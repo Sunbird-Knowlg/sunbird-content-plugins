@@ -16,14 +16,6 @@
 
 	<div class="ui bottom attached tab segment" ng-class='{active:$first}' ng-repeat="(rid, repo) in $ctrl.lessonbrowser.repos" ng-include="repo.templateUrl" data-tab="{{repo.id}}{{rid}}">
 	</div>
-
-
-	<div class="row">
-    	<div class="column">
-    		<button class="ui right floated button primary">Add</button>
-			<button class="ui right floated button">Cancel</button>
-    	</div>
-  	</div>
 </div>
 
 </script>

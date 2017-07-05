@@ -10,6 +10,8 @@ org.ekstep.contenteditor.basePlugin.extend({
     initData: undefined,
     repos: [],
 
+    cb: null,
+
     /**
     *   registers events
     *   @memberof lessonBrowser
@@ -18,6 +20,8 @@ org.ekstep.contenteditor.basePlugin.extend({
     initialize: function() {
         // Listen if someone calls for lesson browser
         org.ekstep.contenteditor.api.addEventListener(this.manifest.id + ":show", this.initPreview, this);
+        org.ekstep.contenteditor.api.addEventListener("org.ekstep.contentprovider:lessonSelected", this.lessonSelected, this);
+        org.ekstep.contenteditor.api.addEventListener("org.ekstep.contentprovider:closePopup", this.closeLessonBrowser, this);
 
         var templatePath = org.ekstep.contenteditor.api.resolvePluginResource("org.ekstep.lessonbrowser", "1.0", "editor/lessonBrowser.html");
         var controllerPath = org.ekstep.contenteditor.api.resolvePluginResource("org.ekstep.lessonbrowser", "1.0", "editor/lessonBrowserApp.js");
@@ -37,6 +41,17 @@ org.ekstep.contenteditor.basePlugin.extend({
 
     },
 
+    lessonSelected: function(event, data) {
+        var instance = this;
+        var err = null;
+        var res = data;
+        instance.cb(err, res);
+    },
+
+    closeLessonBrowser: function() {
+
+    },
+
     /**
     *   load html template to show the popup
     *   @param event {Object} event
@@ -45,6 +60,8 @@ org.ekstep.contenteditor.basePlugin.extend({
     initPreview: function(event, cb) {
         var instance = this;
         cb = cb || function() {};
+
+        instance.cb = cb;
 
         org.ekstep.contenteditor.api.getService('popup').open({
             template: 'partials/lessonbrowser.html',
@@ -72,10 +89,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                 controllerUrl: undefined,
 
                 init: function() {
-                    console.log('init repo EkStep');
                     this.templateUrl = org.ekstep.contenteditor.api.resolvePluginResource("org.ekstep.lessonbrowser", "1.0", "editor/repoEkstep.html");
                     this.controllerUrl = org.ekstep.contenteditor.api.resolvePluginResource("org.ekstep.lessonbrowser", "1.0", "editor/repoEkstepApp.js");
-                },
+                }
             }));
 
         return repo;

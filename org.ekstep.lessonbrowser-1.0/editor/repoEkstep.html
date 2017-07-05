@@ -34,71 +34,42 @@
 	  		<div class="ui styled accordion source-filter-container" style="margin-top: 5px; margin-bottom: 5px;">
 			  	<div class="title">
 			    	<i class="dropdown icon"></i>
-			    	Language
+			    	Language ({{langSelection.length}})
 			  	</div>
 			  	<div class="content">
 				    <div class="ui list">
-						<div class="item ui checkbox"><input type="checkbox"><label><strong>Select all</strong></label></div>
-
-						<div class="item ui checkbox"><input type="checkbox"><label>Bengali</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>English</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Gujarati</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Hindi</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Kannada</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Marathi</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Punjabi</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Tamil</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Telugu</label></div>
+						<!-- <div class="item ui checkbox"><input type="checkbox"><label><strong>Select all</strong></label></div> -->
+						<div class="item ui checkbox" ng-repeat="lang in $ctrl.meta.languages"><input type="checkbox" value="{{lang.value}}" name="selectedLangs[]" ng-checked="langSelection.indexOf(lang.value) > -1" ng-click="toggleSelection(langSelection, lang.value)"><label>{{lang.label}}</label></div>
 					</div>
 			  	</div>
 			  	<div class="title">
 			    	<i class="dropdown icon"></i>
-			    	Grade
+			    	Grade ({{gradeSelection.length}})
 			  	</div>
 			  	<div class="content">
 			  		<div class="ui list">
-				    	<div class="item ui checkbox"><input type="checkbox"><label><strong>Select all</strong></label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>KG</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 1</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 2</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 3</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 4</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 5</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 6</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 7</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 8</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 9</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 10</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 11</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 12</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Others</label></div>
+				    	<!-- <div class="item ui checkbox"><input type="checkbox"><label><strong>Select all</strong></label></div> -->
+						<div class="item ui checkbox" ng-repeat="grade in $ctrl.meta.grades"><input type="checkbox" value="{{grade.label}}" name="selectedGrades[]" ng-checked="gradeSelection.indexOf(grade.label) > -1" ng-click="toggleSelection(gradeSelection, grade.label)"><label>{{grade.label}}</label></div>
 					</div>
 			  	</div>
 				<div class="title">
 					<i class="dropdown icon"></i>
-					Lesson type
+					Lesson type ({{lessonTypeSelection.length}})
 				</div>
 				<div class="content">
 					<div class="ui list">
-						<div class="item ui checkbox"><input type="checkbox"><label><strong>Select all</strong></label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Story</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Worksheet</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Collection</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Game</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Plugin</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Template</label></div>
+						<!-- <div class="item ui checkbox"><input type="checkbox"><label><strong>Select all</strong></label></div> -->
+						<div class="item ui checkbox" ng-repeat="lessonType in $ctrl.meta.lessonTypes"><input type="checkbox" value="{{lessonType}}" name="selectedLessonTypes[]" ng-checked="lessonTypeSelection.indexOf(lessonType) > -1" ng-click="toggleSelection(lessonTypeSelection, lessonType)"><label>{{lessonType}}</label></div>
 					</div>
 				</div>
 				<div class="title">
 					<i class="dropdown icon"></i>
-					Domain
+					Domain ({{domainSelection.length}})
 				</div>
 				<div class="content">
 					<div class="ui list">
-						<div class="item ui checkbox"><input type="checkbox"><label><strong>Select all</strong></label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Numeracy</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Literacy</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Science</label></div>
+						<!-- <div class="item ui checkbox"><input type="checkbox"><label><strong>Select all</strong></label></div> -->
+						<div class="item ui checkbox" ng-repeat="domain in $ctrl.meta.domains"><input type="checkbox" value="{{domain}}" name="selectedDomains[]" ng-checked="domainSelection.indexOf(domain) > -1" ng-click="toggleSelection(domainSelection, domain)"><label style="text-transform: capitalize;">{{domain}}</label></div>
 					</div>
 				</div>
 				<div class="title">
@@ -108,7 +79,7 @@
 				<div class="content">
 					Chose Concept
 				</div>
-				<div class="title">
+				<!-- <div class="title">
 					<i class="dropdown icon"></i>
 					Ownership
 				</div>
@@ -118,8 +89,8 @@
 						<option value="1">My lessons</option>
 						<option value="3">Lessons I am collaborating</option>
 					</select>
-				</div>
-				<div class="title">
+				</div> -->
+				<!-- <div class="title">
 					<i class="dropdown icon"></i>
 					Date
 				</div>
@@ -136,10 +107,10 @@
 						<option value="1">Latest first</option>
 						<option value="3">Oldest first</option>
 					</select>
-				</div>
+				</div> -->
 			</div>
 		  	<div class="row">
-		  		<button class="ui right floated button primary" ng-click="somefunction()">Apply</button>
+		  		<button class="ui right floated button primary" ng-click="applyFilters()">Apply</button>
 				<button class="ui left floated button">Reset</button>
 		  	</div>
 	  	</div>
@@ -156,7 +127,7 @@
 				<div class="row lesson-row" ng-repeat="lesson in $ctrl.res.content">
 					<div class="three wide column" style="padding-top: 3px;">
 						<div class="ui checkbox">
-							<input type="checkbox">
+							<input type="checkbox" name="lessons[]" ng-click="toggleSelection(lessonSelection, lesson.identifier)">
 							<label>
 								<img class="ui middle aligned tiny right floated image" src="{{lesson.appIcon}}" ng-if="lesson.appIcon">
 								<img class="ui middle aligned tiny right floated image" src="http://via.placeholder.com/80x80" ng-if="!lesson.appIcon">
@@ -175,6 +146,15 @@
 			</div>
 		</div>
 		<!-- Result end -->
+  	</div>
+  	<div class="row">
+    	<div class="column">
+    		<button class="ui right floated button primary" ng-click="addSelectedLessons()">Add</button>
+			<button class="ui right floated button" ng-click="closePopup()">Cancel</button>
+    	</div>
+  	</div>
+  	<div class="row" ng-if="noLessonSelected">
+    	<div style="width: 100%; text-align: right; margin-right: 15px; color: #ff0000;">Please select at least one lesson</div>
   	</div>
 </div>
 </div>

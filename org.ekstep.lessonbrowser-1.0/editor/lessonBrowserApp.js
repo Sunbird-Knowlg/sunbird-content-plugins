@@ -8,10 +8,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
         setTimeout(function(){$('.tabular.menu .item').tab()}, 200);
     });
 
-    // TODO: return appropriate response
-    var error = undefined;
-    var response = undefined;
-
-    callback(error, response);
-
+    ctrl.cancel = function() {
+        $scope.closeThisDialog();
+    };
 }]);

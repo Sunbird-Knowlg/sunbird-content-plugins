@@ -23,7 +23,13 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
             var template = _.clone(org.ekstep.collectioneditor.api.getService('collection').getConfig().defaultTemplate);
             template.folder = true;
             template.root = true;
-            org.ekstep.collectioneditor.api.getService('collection').addTree([template]);                       
+            org.ekstep.collectioneditor.api.getService('collection').addTree([template]);
         }
     });
+
+    $scope.initLessonBrowser =  function(){
+        ecEditor.dispatchEvent('org.ekstep.lessonbrowser:show', function(err, res){
+            // console.log(res);
+        });
+    };
 }]);
