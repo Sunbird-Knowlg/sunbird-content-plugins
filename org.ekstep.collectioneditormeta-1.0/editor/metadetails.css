@@ -197,9 +197,11 @@
     color: #fff!important;
 }
 
-.read-metadata-wrapper .ui.items {
+#read-metadata-wrapper .ui.items {
     height: 30%!important;
     margin-bottom: 0!important;
+    font-family: Helvetica!important;
+
 }
 
 .metacontent-fields-container {
@@ -210,14 +212,14 @@
 }
 
 .metacontent-field {
-    height: 100px;
-    width: 24%;
+    width: 25%;
     position: relative;
     float: left;
+    margin-top: -5px;
 }
 
 .long.metacontent-field {
-    width: 49%;
+    width: 50%;
 }
 
 .field-text {
@@ -225,16 +227,21 @@
     padding: 1em;
 }
 
-.field-text h4 {
-    font-weight: bold;
+.field-text h5[class="field-value"] {
+    color: #383838;
     margin-top: 0;
+    font-size: 1rem!important;
 }
 
 .field-text h5 {
-    margin-bottom: 0;
+    margin-bottom: 0.5em;
+    color: #949494;
+    font-size: 0.8rem!important;
+    font-family: Helvetica!important;
 }
 
 .field-value-wrapper .field-value {
-    font-size: 1.7rem;
-    font-weight: bold;
+    font-size: 1rem;
+    font-family: Helvetica!important;
+    color: #383838;
 }
