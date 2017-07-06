@@ -16,7 +16,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
             lastSelectedImage,
             audioTabSelected = false,
             imageTabSelected = true,
-            angScope = ecEditor.getAngularScope(),
             ctrl = this;
 
         var $sce = $injector.get('$sce');

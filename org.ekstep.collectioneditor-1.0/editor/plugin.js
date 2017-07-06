@@ -1,4 +1,6 @@
 org.ekstep.contenteditor.basePlugin.extend({
-	initialize: function() {}
+	initialize: function() {
+		
+	}
 });
 //# sourceURL=collectiontree.js

@@ -12,8 +12,7 @@
             { "type": "js", "src": "editor/libs/jquery.fancytree.min.js" },         
             { "type": "js", "src": "editor/libs/jquery.fancytree.dnd.js" },               
             { "type": "js", "src": "editor/libs/jquery.fancytree.wide.js" },               
-            { "type": "js", "src": "editor/libs/jquery.fancytree.edit.js" },               
-            { "type": "js", "src": "editor/libs/collectioneditor.js" },               
+            { "type": "js", "src": "editor/libs/jquery.fancytree.edit.js" },                                          
             { "type": "css", "src": "editor/libs/skin-lion/ui.fancytree.min.css" },
             { "type": "css", "src": "editor/collectioneditor.css" }           
         ],        

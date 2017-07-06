@@ -6,6 +6,15 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         contentConcepts: "No concepts selected",
         contentType: ""
     };
+    $scope.metaPages = [];
+    $scope.selectedObjectType = undefined;
+
+    $scope.setSelectedNode = function(event, data) {
+        if (data.data.objectType) {
+            $scope.selectedObjectType = data.data.objectType
+            $scope.$safeApply();
+        }
+    }
 
     $scope.contentId = $location.search().contentId;
     if (_.isUndefined($scope.contentId)) {
@@ -23,13 +32,12 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
             var template = _.clone(org.ekstep.collectioneditor.api.getService('collection').getConfig().defaultTemplate);
             template.folder = true;
             template.root = true;
+            template.id = UUID();
             org.ekstep.collectioneditor.api.getService('collection').addTree([template]);
         }
+        $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
     });
 
-    $scope.initLessonBrowser =  function(){
-        ecEditor.dispatchEvent('org.ekstep.lessonbrowser:show', function(err, res){
-            // console.log(res);
-        });
-    };
+    ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
 }]);
+//# sourceURL=collectiontreeApp.js

@@ -1,22 +1,6 @@
 <div ng-app="org.ekstep.collectioneditor" ng-controller="mainController" class="ui masthead vertical segment content-masterhead">
-    <!-- anshu test -->
-    <!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script> -->
-    <!-- <script src="../plugins/org.ekstep.collectioneditor-1.0/editor/libs/jQuery-ui.js"></script> -->
-    <script type="text/javascript">
-    $("#table-of-contents").resizable({
-        minWidth: 320,
-        maxWidth: 500,
-        handles: 'e, w'
-    });
-
-    $('#table-of-contents').resize(function() {
-
-        document.getElementById('contents-pane').setAttribute("style", "width: calc(100% - " + $("#table-of-contents").width() + "px)!important");
-
-    });
-    </script>
     <div class="ui grid page-header">
-        <div class="one column" style="width:auto;padding-right: 6px;">
+        <div class="one column">
             <img class="ui mini image content-logo" ng-src="{{contentDetails.contentImage}}">
         </div>
         <div class="five wide column" style="padding-left: 0px">
@@ -36,14 +20,6 @@
             <button class="ui compact icon button right floated ce-button" ng-class="saveBtnEnabled ? 'ui compact icon button right floated ce-button' : 'ui compact icon button right floated disabled'" ng-click="saveContent(); fireTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId" style="margin-left: 5px;">
                 <i class="icon-save icon"></i> Save
             </button>
-            <div class="ui compact buttons right floated ce-button">
-                <div class="ui button" ng-click="previewContent(); fireTelemetry({id: 'preview'}, 'previewButton');">
-                    <i class="icon-preview icon"></i> Preview</div>
-            </div>
-            <div class="download-collaborator-icon">
-                <i class="large download link icon" ng-click="fireEvent({id: 'download:content'}); telemetryService.interact({ 'type': 'click', 'subtype': 'menu', 'target': 'download', 'pluginid': 'org.ekstep.download', 'pluginver': '1.0', 'objectid': 'downloadButton', 'stage': org.ekstep.contenteditor.stageManager.currentStage.id })" title="Download" style="line-height: 26px;"></i>
-                <i class="large send link icon" title="Send For Review" ng-click="fireEvent({id: 'org.ekstep.review:review'}); telemetryService.interact({ 'type': 'click', 'subtype': 'menu', 'target': 'review', 'pluginid': 'org.ekstep.review', 'pluginver': '1.0', 'objectid': 'downloadButton', 'stage': org.ekstep.contenteditor.stageManager.currentStage.id })"></i>
-            </div>
         </div>
     </div>
     <div class="ui grid main-body">
@@ -62,8 +38,6 @@
                             <span class="show-popup" data-content="Expand all"><i class="chevron circle down large icon" title="Expand all"></i></span>
                             <span class="show-popup" data-content="Collapse all"><i class="chevron circle up large icon" title="Collapse all"></i></span>
                         </div>
-                        <!-- <span class="ui popup" data-content="Expand all"><i class="chevron circle down icon"></i></span>
-                            <span class="ui popup" data-content="Collapse all"><i class="chevron circle up icon" data-content="Collapse all"></i></span> -->
                     </div>
                 </div>
                 <div class="ui segment tree-wrapper">
@@ -72,173 +46,7 @@
             </div>
         </div>
         <div class="ui column" id="contents-pane">
-            <div class="ui segment header-segment">
-                <div class="ui breadcrumb">
-                    <a class="section">Untitled book</a>
-                    <div class="divider"> / </div>
-                    <a class="section">Unit 1</a>
-                    <div class="divider"> / </div>
-                    <a class="section">Unit 1.1</a>
-                    <div class="divider"> / </div>
-                    <a class="section">Unit 1.1</a>
-                    <div class="divider"> / </div>
-                    <div class="active section">Collection1</div>
-                </div>
-                <span>Collection1</span>
-            </div>
-            <form class="ui form segment" id="contents-data-form" name="textBookUnitForm" novalidate>
-                <div class="fields">
-                    <div class="two wide required field book-image-field">
-                        <label for="bookImage">Add image</label>
-                        <div class="book-image-container">
-                            <i class="camera icon"></i>
-                            <img src="" />
-                            <input type="hidden" name="bookImage" id="bookImage" />
-                        </div>
-                    </div>
-                    <div class="eight wide field form-fields-except-image">
-                        <div class="required field">
-                            <label>Title</label>
-                            <div class="ui input">
-                                <input placeholder="Enter title for Book unit" ng-model="collection.name" name="title" type="text">
-                                <span style="color:red" ng-show="textBookUnitForm.collection.name.$dirty && textBookUnitForm.collection.name.$invalid">
-                        <span ng-show="textBookUnitForm.collection.name.$error.required">Title is required.</span>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="four wide fields">
-                            <div class="required field">
-                                <label for="board">Board</label>
-                                <div class="ui selection dropdown">
-                                    <i class="dropdown icon"></i>
-                                    <div class="default text">Board</div>
-                                    <div class="menu">
-                                        <div class="item" data-value="cbse">CBSE</div>
-                                        <div class="item" data-value="icse">ICSE</div>
-                                    </div>
-                                </div>
-                                <!-- <select class="ui selection dropdown" name="board" id="board">
-                                    <option value="cbse">CBSE</option>
-                                    <option value="icse">ICSE</option>
-                                </select> -->
-                            </div>
-                            <div class="required field">
-                                <label for="medium">Medium</label>
-                                <div class="ui selection dropdown">
-                                    <i class="dropdown icon"></i>
-                                    <div class="default text">Medium</div>
-                                    <div class="menu">
-                                        <div class="item" data-value="eng">English</div>
-                                        <div class="item" data-value="hindi">Hindi</div>
-                                    </div>
-                                </div>
-                                <!-- <select class="ui selection dropdown" name="medium" id="medium">
-                                    <option value="eng">English</option>
-                                    <option value="hin">Hindi</option>
-                                </select> -->
-                            </div>
-                            <div class="required field">
-                                <label for="subject">Subject</label>
-                                <div class="ui selection dropdown">
-                                    <i class="dropdown icon"></i>
-                                    <div class="default text">Subject</div>
-                                    <div class="menu">
-                                        <div class="item" data-value="maths">Maths</div>
-                                        <div class="item" data-value="science">Science</div>
-                                    </div>
-                                </div>
-                                <!--                                 <select class="ui selection dropdown" name="subject" id="subject">
-                                    <option value="maths">Maths</option>
-                                    <option value="science">Science</option>
-                                </select>
- -->
-                            </div>
-                            <div class="required field">
-                                <label for="grade">Grade</label>
-                                <div class="ui selection dropdown">
-                                    <i class="dropdown icon"></i>
-                                    <div class="default text">Grade</div>
-                                    <div class="menu">
-                                        <div class="item" data-value="kg">Kindergarten</div>
-                                        <div class="item" data-value="g1">Grade 1</div>
-                                    </div>
-                                </div>
-                                <!--                                 <select class="ui selection dropdown" name="grade" id="grade">
-                                    <option value="kg">Kindergarten</option>
-                                    <option value="g1">Grade 1</option>
-                                </select>
- -->
-                            </div>
-                        </div>
-                        <div class="three fields">
-                            <div class="required field">
-                                <label for="author">Author</label>
-                                <input type="text" placeholder="Enter author name" />
-                            </div>
-                            <div class="field">
-                                <label for="publication">Publication</label>
-                                <input type="text" placeholder="Publication (optional)" />
-                            </div>
-                            <div class="field">
-                                <label for="edition">Edition</label>
-                                <input type="text" placeholder="Edition (optional)" />
-                            </div>
-                        </div>
-                        <div class="requiered field">
-                            <label>Description</label>
-                            <div class="ui input">
-                                <textarea placeholder="brief description about the unit" ng-model="collection.description" rows="2"></textarea>
-                            </div>
-                        </div>
-                        <div class="field">
-                            <label>Concepts</label>
-                            <input name="concepts" ng-model="collection.concepts" type="text">
-                        </div>
-                        <div class="two fields">
-                            <div class="required twelve wide field">
-                                <label>Keywords</label>
-                                <input id="keywords" name="keywords" ng-model="collection.keywords" type="text">
-                            </div>
-                            <div class="four wide field">
-                                <label for="audience">Audience</label>
-                                <div class="ui selection dropdown">
-                                    <i class="dropdown icon"></i>
-                                    <div class="default text">Audience</div>
-                                    <div class="menu">
-                                        <div class="item" data-value="learner">Learner</div>
-                                        <div class="item" data-value="instructor">Instructor</div>
-                                    </div>
-                                </div>
-                                <!-- <select class="ui selection dropdown" name="audience" id="audience">
-    <option value="learner">Learner</option>
-    <option value="instructor">Instructor</option>
-</select>
- -->
-                            </div>
-                        </div>
-                        <div class="field">
-                            <label>Notes to Teacher</label>
-                            <input placeholder="Add Notes" ng-model="collection.notes" name="notes" type="text">
-                        </div>
-                        <div class="field">
-                            <label>Page No.</label>
-                            <input placeholder="Page no" ng-model="collection.pageNumber" name="pageNumber" type="text">
-                        </div>
-                    </div>
-                </div>
-                <div class="ui primary submit button right" id="save-button" ng-click="saveNodeMetadata()">
-                    Save
-                </div>
-                <div class="ui primary submit button right" ng-click="saveNodeMetadata()">
-                Save!
-                </div>
-                <div class="ui primary button right" ng-click="initLessonBrowser()">
-                    Add lesson</i>
-                </div>
-            </form>
+            <div class="metacontent-holder metadata-form-container"  ng-repeat="page in metaPages" ng-if="page.objectType === selectedObjectType" ng-include="page.templateURL"></div>
         </div>
     </div>
 </div>
-<script>
-$(".ui.selection.dropdown").dropdown();
-</script>
