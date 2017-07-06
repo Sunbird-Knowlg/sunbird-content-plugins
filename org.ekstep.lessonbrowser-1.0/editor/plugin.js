@@ -59,6 +59,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                 }
             },
             showClose: false,
+            closeByDocument: false,
+            closeByEscape: false,
             width: 1000,
             className: 'ngdialog-theme-plain'
         });
@@ -72,15 +74,15 @@ org.ekstep.contenteditor.basePlugin.extend({
                 controllerUrl: undefined,
 
                 init: function() {
-                    console.log('init repo EkStep');
                     this.templateUrl = org.ekstep.contenteditor.api.resolvePluginResource("org.ekstep.lessonbrowser", "1.0", "editor/repoEkstep.html");
                     this.controllerUrl = org.ekstep.contenteditor.api.resolvePluginResource("org.ekstep.lessonbrowser", "1.0", "editor/repoEkstepApp.js");
                 },
+                getFilters: function(){
+                    return {"language":[], "grade": [], "lessonType": [], "domain": []};
+                }
             }));
 
         return repo;
     }
-
-
 });
 //# sourceURL=lessonbrowserplugin.js

@@ -17,11 +17,11 @@
 	<div class="ui bottom attached tab segment" ng-class='{active:$first}' ng-repeat="(rid, repo) in $ctrl.lessonbrowser.repos" ng-include="repo.templateUrl" data-tab="{{repo.id}}{{rid}}">
 	</div>
 
-
 	<div class="row">
     	<div class="column">
-    		<button class="ui right floated button primary">Add</button>
-			<button class="ui right floated button">Cancel</button>
+    		<!-- <button class="ui right floated button primary" ng-click="returnSelectedLessons()" ng-disabled="!lessonSelection.length">Add</button> -->
+    		<button class="ui right floated button primary" ng-click="returnSelectedLessons(selectedLessons.list)" ng-disabled="!selectedLessons.list.length">Add</button>
+			<button class="ui right floated button" ng-click="closePopup()">Cancel</button>
     	</div>
   	</div>
 </div>

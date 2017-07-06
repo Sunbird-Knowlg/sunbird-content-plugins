@@ -33,7 +33,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
             template.folder = true;
             template.root = true;
             template.id = UUID();
-            org.ekstep.collectioneditor.api.getService('collection').addTree([template]);                       
+            org.ekstep.collectioneditor.api.getService('collection').addTree([template]);
         }
         $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
     });
