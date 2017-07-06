@@ -1,11 +1,11 @@
-angular.module('collectioneditormetaApp', []).controller('collectioneditormetaController', ['$scope', function($scope) {
+angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$scope', function($scope) {
     var ctrl = this;
     $scope.textbook = {};
     $scope.gradeLevel = '';
     $scope.metadataCloneObj = {}; 
     if(_.isEmpty(org.ekstep.collectioneditor.collectionService.getActiveNode().data.metadata) || _.isUndefined(org.ekstep.collectioneditor.collectionService.getActiveNode().data.metadata)){
         $scope.editMode = true;
-        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.collectioneditormeta", "1.0", "assets/default.png");
+        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.textbookmeta", "1.0", "assets/default.png");
     }else{
         $scope.editMode = false;
     }
