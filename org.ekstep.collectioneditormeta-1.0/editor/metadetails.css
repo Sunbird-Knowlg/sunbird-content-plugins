@@ -210,14 +210,10 @@
 }
 
 .metacontent-field {
-    height: 150px;
+    height: 100px;
     width: 24%;
-    /* background: yellow; */
     position: relative;
     float: left;
-    /* border: 1px solid; */
-    margin-bottom: 1%;
-    margin-right: 1%;
 }
 
 .long.metacontent-field {
@@ -229,11 +225,16 @@
     padding: 1em;
 }
 
-.field-text h3 {
+.field-text h4 {
     font-weight: bold;
+    margin-top: 0;
+}
+
+.field-text h5 {
+    margin-bottom: 0;
 }
 
 .field-value-wrapper .field-value {
-    font-size: 1.75rem;
+    font-size: 1.7rem;
     font-weight: bold;
 }
