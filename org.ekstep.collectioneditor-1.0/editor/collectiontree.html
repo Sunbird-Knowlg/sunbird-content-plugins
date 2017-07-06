@@ -45,8 +45,8 @@
                 </div>
             </div>
         </div>
-        <div class="ui nine wide column" id="contents-pane">
-            <div class="metacontent-holder" ng-repeat="page in metaPages" ng-if="page.objectType === selectedObjectType" ng-include="page.templateURL"></div>
+        <div class="ui column" id="contents-pane">
+            <div class="metacontent-holder metadata-form-container"  ng-repeat="page in metaPages" ng-if="page.objectType === selectedObjectType" ng-include="page.templateURL"></div>
         </div>
     </div>
 </div>
