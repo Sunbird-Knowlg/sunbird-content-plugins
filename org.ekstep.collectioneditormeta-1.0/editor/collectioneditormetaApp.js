@@ -10,7 +10,7 @@ angular.module('collectioneditormetaApp', []).controller('collectioneditormetaCo
     }
     $scope.defaultImage = (_.isUndefined($scope.textbook.image) || $scope.textbook.image === '') ?  ecEditor.resolvePluginResource("org.ekstep.collectioneditormeta", "1.0", "assets/default.png") : $scope.textbook.image;
 
-    org.ekstep.collectioneditor.api.getService('meta').getOrdinals(function(err, resp) {
+    org.ekstep.collectioneditor.api.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.gradeList = resp.data.result.ordinals.gradeLevel;
             $scope.languageList = resp.data.result.ordinals.language;
