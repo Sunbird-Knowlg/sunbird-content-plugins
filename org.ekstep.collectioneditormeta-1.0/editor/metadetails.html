@@ -1,15 +1,40 @@
-<div ng-app="collectioneditormetaApp" ng-controller="collectioneditormetaController">
+<div ng-app="collectioneditormetaApp" class="metacontent-wrapper" ng-controller="collectioneditormetaController">
+    <div class="ui segment header-segment">
+        <div class="ui breadcrumb">
+            <a class="section">Untitled book</a>
+            <div class="divider"> / </div>
+            <a class="section">Unit 1</a>
+            <div class="divider"> / </div>
+            <a class="section">Unit 1.1</a>
+            <div class="divider"> / </div>
+            <a class="section">Unit 1.1</a>
+            <div class="divider"> / </div>
+            <div class="active section">Collection1</div>
+        </div>
+        <h3 class="header-bottom-segment inline-block">Collection1</h3>
+        <div class="header-buttons-container header-bottom-segment inline-block">
+            <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="saveNodeMetadata()">
+                Edit
+            </div>
+            <div class="ui primary submit button inline-block right-float button-overrides" id="update-button" ng-click="saveNodeMetadata()">
+                Update
+            </div>
+            <div class="ui primary basic submit button inline-block right-float button-overrides" id="add-lesson-button" ng-click="addlesson()">
+                Add lesson
+            </div>
+        </div>
+    </div>
     <form class="ui form segment" id="contents-data-form" novalidate>
         <div class="fields">
-            <div class="two wide required field book-image-field">
+            <div class="field book-image-field">
                 <label for="bookImage">Add image</label>
                 <div class="book-image-container" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
                     <img ng-src="{{textbook.image}}" ng-show="textbook.image != ''" />
                 </div>
             </div>
-            <div class="eight wide field form-fields-except-image">
-                <div class="required field">
+            <div class="field form-fields-except-image">
+                <div class=" field">
                     <label>Title</label>
                     <div class="ui input">
                         <input placeholder="Enter title for Book unit" ng-model="textbook.name" name="title" type="text">
@@ -18,35 +43,51 @@
                 <div class="four fields">
                     <div class="field">
                         <label for="board">Board</label>
-                        <select class="ui fluid dropdown" name="board" id="board" ng-model="textbook.board">
-                            <option value="cbse">CBSE</option>
-                            <option value="icse">ICSE</option>
-                        </select>
+                        <div class="ui selection dropdown">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Board</div>
+                            <div class="menu">
+                                <div class="item" data-value="cbse">CBSE</div>
+                                <div class="item" data-value="icse">ICSE</div>
+                            </div>
+                        </div>
                     </div>
                     <div class="field">
                         <label for="medium">Medium</label>
-                        <select class="ui fluid dropdown" name="medium" id="medium" ng-model="textbook.medium">
-                            <option value="eng">English</option>
-                            <option value="hin">Hindi</option>
-                        </select>
+                        <div class="ui selection dropdown">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Medium</div>
+                            <div class="menu">
+                                <div class="item" data-value="eng">English</div>
+                                <div class="item" data-value="hin">Hindi</div>
+                            </div>
+                        </div>
                     </div>
                     <div class="field">
                         <label for="subject">Subject</label>
-                        <select class="ui fluid dropdown" name="subject" id="subject" ng-model="textbook.subject">
-                            <option value="maths">Maths</option>
-                            <option value="science">Science</option>
-                        </select>
+                        <div class="ui selection dropdown">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Subject</div>
+                            <div class="menu">
+                                <div class="item" data-value="maths">Maths</div>
+                                <div class="item" data-value="science">Science</div>
+                            </div>
+                        </div>
                     </div>
                     <div class="field">
                         <label for="grade">Grade</label>
-                        <select class="ui fluid dropdown" name="grade" id="grade" ng-model="textbook.grade">
-                            <option value="kg">Kindergarten</option>
-                            <option value="g1">Grade 1</option>
-                        </select>
+                        <div class="ui selection dropdown">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Grade</div>
+                            <div class="menu">
+                                <div class="item" data-value="kg">Kindergarten</div>
+                                <div class="item" data-value="g1">Grade 1</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="three fields">
-                    <div class="required field">
+                    <div class=" field">
                         <label for="author">Author</label>
                         <input type="text" placeholder="Enter author name" ng-model="textbook.author" />
                     </div>
@@ -70,21 +111,20 @@
                     <input name="concepts" id="conceptSelector" ng-model="textbook.concepts" type="text">
                 </div>
                 <div class="two fields">
-                    <div class="required twelve wide field">
+                    <div class=" twelve wide field">
                         <label>Keywords</label>
-                        <a class="ui label">Tag1<i class="delete icon"></i></a>
-                        <a class="ui label">Tag2<i class="delete icon"></i></a>
-                        <a class="ui label">Tag3<i class="delete icon"></i></a>
-                        <a class="ui label">Tag4<i class="delete icon"></i></a>
-                        <a class="ui label">Tag5<i class="delete icon"></i></a>
                         <input id="keywords" name="keywords" ng-model="textbook.keywords" type="text">
                     </div>
                     <div class="four wide field">
                         <label for="audience">Audience</label>
-                        <select class="ui fluid dropdown" name="audience" id="audience" ng-model="textbook.audience">
-                            <option value="learner">Learner</option>
-                            <option value="instructor">Instructor</option>
-                        </select>
+                        <div class="ui selection dropdown">
+                            <i class="dropdown icon"></i>
+                            <div class="default text">Audience</div>
+                            <div class="menu">
+                                <div class="item" data-value="learner">Learner</div>
+                                <div class="item" data-value="instructor">Instructor</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="field">
@@ -97,11 +137,8 @@
                 </div>
             </div>
         </div>
-        <div class="ui primary submit button right" id="save-button" ng-click="saveNodeMetadata()">
-            Save
-        </div>
-        <div class="ui primary submit button right" id="save-button" ng-click="addlesson()">
-            Add lesson
-        </div>
     </form>
 </div>
+<script>
+$(".ui.selection.dropdown").dropdown();
+</script>
