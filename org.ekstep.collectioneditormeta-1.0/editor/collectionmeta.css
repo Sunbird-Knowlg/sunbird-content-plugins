@@ -227,16 +227,17 @@
     padding: 1em;
 }
 
-.field-text h5[class="field-value"] {
+.field-text h5[class*="field-value"] {
     color: #383838;
     margin-top: 0;
-    font-size: 1rem!important;
+    font-size: 1rem !important;
+    text-transform: capitalize !important;
 }
 
 .field-text h5 {
     margin-bottom: 0.5em;
     color: #949494;
-    font-size: 0.8rem!important;
+    font-size: 0.8rem !important;
     font-family: Helvetica!important;
 }
 

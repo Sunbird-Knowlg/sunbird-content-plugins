@@ -5,10 +5,10 @@ angular.module('collectioneditormetaApp', []).controller('collectioneditormetaCo
     $scope.metadataCloneObj = {}; 
     if(_.isEmpty(org.ekstep.collectioneditor.collectionService.getActiveNode().data.metadata) || _.isUndefined(org.ekstep.collectioneditor.collectionService.getActiveNode().data.metadata)){
         $scope.editMode = true;
+        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.collectioneditormeta", "1.0", "assets/default.png");
     }else{
         $scope.editMode = false;
     }
-    $scope.defaultImage = (_.isUndefined($scope.textbook.image) || $scope.textbook.image === '') ?  ecEditor.resolvePluginResource("org.ekstep.collectioneditormeta", "1.0", "assets/default.png") : $scope.textbook.image;
 
     org.ekstep.collectioneditor.api.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
@@ -37,8 +37,7 @@ angular.module('collectioneditormetaApp', []).controller('collectioneditormetaCo
             type: 'image',
             search_filter: {}, // All composite keys except mediaType
             callback: function(data) { 
-                console.log('data ', data);
-                $scope.textbook.image = data.assetMedia.src;
+                $scope.textbook.appIcon = data.assetMedia.src;
                 $scope.$safeApply();
             }
         });
@@ -66,6 +65,7 @@ angular.module('collectioneditormetaApp', []).controller('collectioneditormetaCo
         activeNode.data.metadata = $scope.textbook;
         $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
         console.log('Modify ', $scope.modifyArr);
+        $scope.$safeApply();
     }
 
     $scope.createModifyArray = function(activeNode, newValue, oldValue, attribute){

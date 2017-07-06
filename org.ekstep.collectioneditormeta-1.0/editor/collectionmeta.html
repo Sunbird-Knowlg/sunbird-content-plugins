@@ -16,30 +16,31 @@
             <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true;" ng-show="!editMode">
                 Edit
             </div>
-            <div class="ui buttons right-float" ng-show="editMode">>
-                <div class="ui button" ng-click="editMode = false">
+            <div ng-class="metaForm.$invalid ? 'ui primary button disabled right-float button-overrides' : 'ui primary button right-float button-overrides' " id="update-button" ng-click="editMode = false; saveNodeMetadata()" ng-show="editMode">
+                Update
+            </div>
+            <!-- <div class="ui buttons right-float" ng-show="editMode">>
+                <div class="ui orange button button-overrides" ng-click="editMode = false">
                     Cancel
                 </div> 
                 <div class="or"></div>
-                <div ng-class="metaForm.$invalid ? 'ui primary button disabled' : 'ui primary button' " id="update-button" ng-click="editMode = false; saveNodeMetadata()">
-                    Update
-                </div>
-            </div>
+                
+            </div> -->
         </div>
     </div>
     <div class="ui segment" id="read-metadata-wrapper" ng-show="!editMode">
         <div class="ui items">
             <div class="item">
                 <div class="ui tiny image">
-                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQkUI7_o0MDUGp01eHyGb3tN6H79_D09QUf0Vn1PvzUoiUgTF9Llg" alt="">
+                    <img ng-src="{{textbook.appIcon || defaultImage}}" alt="">
                 </div>
                 <div class="content">
-                    <div class="header">ESL Course</div>
+                    <div class="header">{{textbook.name}}</div>
                     <div class="meta">by&nbsp;
-                        <span id="book-author">Test Author</span>
+                        <span id="book-author">{{textbook.author}}</span>
                     </div>
                     <div class="description">
-                        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dolorem impedit quidem, possimus nisi illum voluptatum quibusdam, ducimus. Dolor at animi fuga dolorum ullam alias totam, facere eius non, consequatur, repellendus.</p>
+                        <p>{{textbook.description}}</p>
                     </div>
                 </div>
             </div>
@@ -48,54 +49,50 @@
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Board</h5>
-                    <h5 class="field-value">CBSE</h5>
+                    <h5 class="field-value">{{textbook.board | uppercase}}</h5>
                 </div>
             </div>
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Medium</h5>
-                    <h5 class="field-value">English</h5>
+                    <h5 class="field-value">{{textbook.medium | lowercase}}</h5>
                 </div>
             </div>
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Subject</h5>
-                    <h5 class="field-value">Maths</h5>
+                    <h5 class="field-value">{{textbook.subject | lowercase}}</h5>
                 </div>
             </div>
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Grade</h5>
-                    <h5 class="field-value">Kindergarten</h5>
+                    <h5 class="field-value">{{textbook.grade | lowercase}}</h5>
                 </div>
             </div>
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Publication</h5>
-                    <h5 class="field-value">Test publication</h5>
+                    <h5 class="field-value">{{textbook.publication | lowercase}}</h5>
                 </div>
             </div>
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Edition</h5>
-                    <h5 class="field-value">3rd</h5>
+                    <h5 class="field-value">{{textbook.edition | lowercase}}</h5>
                 </div>
             </div>
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Audience</h5>
-                    <h5 class="field-value">Learner</h5>
+                    <h5 class="field-value">{{textbook.audience | lowercase}}</h5>
                 </div>
             </div>
             <div class="long metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Concepts</h5>
                     <div class="field-value-wrapper">
-                        <span class="field-value">Concept1</span>,
-                        <span class="field-value">Concept2</span>,
-                        <span class="field-value">Concept3</span>,
-                        <span class="field-value">Concept4</span>,
-                        <span class="field-value">Concept5</span>
+                        <span class="field-value">{{textbook.concepts}}</span>
                     </div>
                 </div>
             </div>
@@ -103,23 +100,19 @@
                 <div class="field-text">
                     <h5 class="field-key">Keywords</h5>
                     <div class="field-value-wrapper">
-                        <span class="field-value">Keyword1</span>,
-                        <span class="field-value">Keyword2</span>,
-                        <span class="field-value">Keyword3</span>,
-                        <span class="field-value">Keyword4</span>,
-                        <span class="field-value">Keyword5</span>
+                        <span class="field-value">{{textbook.keywords | lowercase}}</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <form class="ui form segment" id="contents-data-form" validate ng-show="editMode">
+    <form class="ui form segment" id="contents-data-form" validate name="metaForm" ng-show="editMode">
         <div class="fields">
             <div class="field book-image-field">
-                <label for="bookImage">Add image</label>
+                <label for="bookImage">Add icon</label>
                 <div class="book-image-container" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
-                    <img ng-src="{{textbook.image}}" ng-show="textbook.image != ''" />
+                    <img ng-src="{{textbook.appIcon}}" ng-show="textbook.appIcon != ''" />
                 </div>
             </div>
             <div class="field form-fields-except-image">
