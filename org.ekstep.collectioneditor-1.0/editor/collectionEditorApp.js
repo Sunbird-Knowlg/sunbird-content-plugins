@@ -6,9 +6,15 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         contentConcepts: "No concepts selected",
         contentType: ""
     };
-    $scope.metadataPageRegistry = [];
-    $scope.template = false;
-    $scope.templateUrl = '';
+    $scope.metaPages = [];
+    $scope.selectedObjectType = undefined;
+
+    $scope.setSelectedNode = function(event, data) {
+        if (data.data.objectType) {
+            $scope.selectedObjectType = data.data.objectType
+            $scope.$safeApply();
+        }
+    }
 
     $scope.contentId = $location.search().contentId;
     if (_.isUndefined($scope.contentId)) {
@@ -29,26 +35,9 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
             template.id = UUID();
             org.ekstep.collectioneditor.api.getService('collection').addTree([template]);                       
         }
+        $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
     });
 
-    $scope.loadMetaPage = function(eve){
-        var templatePath = ecEditor.resolvePluginResource("org.ekstep.collectioneditormeta", "1.0", "editor/metadetails.html");
-        var controllerPath = ecEditor.resolvePluginResource("org.ekstep.collectioneditormeta", "1.0", "editor/testbookmetaApp.js");
-        ecEditor.getService('popup').loadNgModules(templatePath, controllerPath)
-            .then(function() {
-                $scope.template = true;
-                $scope.templatePath = templatePath;
-                $scope.$safeApply();
-                ecEditor.dispatchEvent("org.ekstep.collectioneditormeta:setdata");
-            }, function() {
-                throw "unable to load controller :" + templatePath;
-            });
-    };
-    ecEditor.addEventListener("org.ekstep.collectioneditor:collectioneditormeta", $scope.loadMetaPage);
-    ecEditor.jQuery("#collection-tree").fancytree({
-        click: function(event, data) {
-            $scope.loadMetaPage();
-        }
-    });
+    ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
 }]);
 //# sourceURL=collectiontreeApp.js

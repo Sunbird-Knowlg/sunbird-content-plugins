@@ -76,7 +76,7 @@
                 </div>
                 <span>Collection1</span>
             </div>
-            <div class="metacontent-holder" ng-if="template" ng-include="templatePath"></div>
+            <div class="metacontent-holder" ng-repeat="page in metaPages" ng-if="page.objectType === selectedObjectType" ng-include="page.templateURL"></div>
         </div>
     </div>
 </div>
