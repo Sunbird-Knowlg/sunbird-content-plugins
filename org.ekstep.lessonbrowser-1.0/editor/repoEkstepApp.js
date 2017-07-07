@@ -83,9 +83,9 @@ angular.module('org.ekstep.contentprovider', [])
                         ctrl.res.content.push(lessonContent);
                     });
 
-                    $scope.loadmoreEnabledFlag = true;
-                    $scope.loadmoreVisibleFlag = true;
                 }
+                $scope.loadmoreVisibleFlag = true;
+                $scope.loadmoreEnabledFlag = true;
 
                 if (loadedLessonCount >= ctrl.res.count) {
                     $scope.loadmoreEnabledFlag = false;
@@ -203,6 +203,7 @@ angular.module('org.ekstep.contentprovider', [])
 
     // Load more results
     $scope.loadmore = function() {
+        $scope.loadmoreEnabledFlag = false;
         ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'loadmore',targetid: ''});
         offset = limit + offset;
         ctrl.searchLessons(true);
