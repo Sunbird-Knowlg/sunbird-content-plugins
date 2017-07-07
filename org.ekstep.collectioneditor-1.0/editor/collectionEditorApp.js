@@ -1,11 +1,12 @@
 angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('mainController', ['$scope', '$location', function($scope, $location) {
-    var ctrl = this;
+    //TODO: get config and data from environment
+    var config = { "context": { "uid": "386", "contentId": "do_112272630392659968130", "sid": "0d5b94c87052869b58e47ec692f467cd", "channel": "ntp/ap", "pdata": { "id": "SunbirdPortal", "ver": "1.0" }, "dims": ["b27e743b51a22b4eed737c6a72cd4266"] }, "mode": "Edit", "rules": { "levels": 3, "objectTypes": [{ "type": "TextBook", "label": "Textbook", "isRoot": true, "editable": true, "childrenTypes": ["TextBookUnit"], "addType": "Editor", "iconClass": "fa fa-book fa-2" }, { "type": "TextBookUnit", "label": "Textbook Unit", "isRoot": false, "editable": true, "childrenTypes": ["TextBookUnit", "Collection", "Content"], "addType": "Editor", "iconClass": "fa fa-folder fa-2" }, { "type": "Collection", "label": "Collection", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }, { "type": "Content", "label": "Content", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }] }, "defaultTemplate": {} };
+
     $scope.contentDetails = {
         contentTitle: "Untitled Content",
         contentImage: "/images/com_ekcontent/default-images/default-content.png",
-        contentConcepts: "No concepts selected",
-        contentType: ""
     };
+    $scope.contentId = config.context.contentId;
     $scope.metaPages = [];
     $scope.selectedObjectType = undefined;
 
@@ -14,27 +15,21 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
             $scope.selectedObjectType = data.data.objectType
             $scope.$safeApply();
         }
-    }
+    };
 
-    $scope.contentId = $location.search().contentId;
-    if (_.isUndefined($scope.contentId)) {
-        $scope.contentId = ((window.context && window.context.content_id) ? window.context.content_id : undefined)
+    $scope.loadContent = function(callback) {
+        org.ekstep.services.languageService.getCollectionHierarchy({ contentId: $scope.contentId }, function(err, res) {
+            if (res && res.data && res.data.responseCode === "OK") {
+                org.ekstep.collectioneditor.collectionService.fromCollection(res.data.result.content);
+                callback && callback(err, res);
+            } else {
+                callback && callback('unable to fetch the content!', res);
+            }
+        });
     }
-
-    //TODO: get config and data from environment
-    var config = { "levels": 4, "mode": "edit/read", "objectTypes": ["TextBook", "TextBookUnit", "Collection", "Content"], "defaultTemplate": { "title": "Untitled TextBook", "objectType": "TextBook", "metadata": {}, "children": [] }, "rules": { "definition": { "TextBook": { "root": true, "childrenTypes": ["TextBookUnit", "Collection"], "additionalConfig": {} }, "TextBookUnit": { "root": false, "childrenTypes": ["TextBookUnit", "Collection", "Content"], "additionalConfig": {} }, "Collection": { "root": false, "childrenTypes": [], "additionalConfig": {} }, "Content": { "root": false, "childrenTypes": [], "additionalConfig": {} } } }, "labels": { "TextBook": "Text book", "TextBookUnit": "Unit", "Collection": "Collection", "Content": "Content" } }
-    var data = undefined;
 
     org.ekstep.collectioneditor.api.initEditor(config, function() {
-        if (data) {
-            org.ekstep.collectioneditor.api.getService('collection').addTree(data);
-        } else {
-            var template = _.clone(org.ekstep.collectioneditor.api.getService('collection').getConfig().defaultTemplate);
-            template.folder = true;
-            template.root = true;
-            template.id = UUID();
-            org.ekstep.collectioneditor.api.getService('collection').addTree([template]);                       
-        }
+        $scope.loadContent();
         $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
     });
 

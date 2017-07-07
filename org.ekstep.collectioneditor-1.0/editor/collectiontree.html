@@ -35,8 +35,8 @@
                             </div>
                         </div>
                         <div class="icon-container">
-                            <span class="show-popup" data-content="Expand all"><i class="chevron circle down large icon" title="Expand all"></i></span>
-                            <span class="show-popup" data-content="Collapse all"><i class="chevron circle up large icon" title="Collapse all"></i></span>
+                            <span class="show-popup" onclick="ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild().setExpanded()" data-content="Expand all"><i class="chevron circle down large icon" title="Expand all"></i></span>
+                            <span class="show-popup" onclick="ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild().setExpanded(false)" data-content="Collapse all"><i class="chevron circle up large icon" title="Collapse all"></i></span>
                         </div>
                     </div>
                 </div>
