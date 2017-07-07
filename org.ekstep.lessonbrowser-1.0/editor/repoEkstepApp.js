@@ -36,6 +36,20 @@ angular.module('org.ekstep.contentprovider', [])
     // Get accordions functioning
     setTimeout(function(){$('.ui.accordion').accordion()}, 200);
 
+    //Telemetry
+    ctrl.generateTelemetry = function(data) {
+        if (data) ecEditor.getService('telemetry').interact({
+            "type": data.type,
+            "subtype": data.subtype,
+            "target": data.target,
+            "targetid":data.targetid,
+            "pluginid": $scope.telemetry.pluginid,
+            "pluginver": $scope.telemetry.pluginver,
+            // "objectid": ecEditor.getCurrentObject().id,
+            // "stage": ecEditor.getCurrentStage().id
+        })
+    };
+
     // Search API Integration
     var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
     ctrl.searchLessons = function(loadmore = false){
@@ -118,6 +132,7 @@ angular.module('org.ekstep.contentprovider', [])
 
     // Title filter
     $scope.searchByKeyword = function(){
+        ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'search',targetid: ''});
         searchBody.request.filters.name = {"startsWith": this.searchKeyword};
         ctrl.searchLessons();
     };
@@ -125,12 +140,14 @@ angular.module('org.ekstep.contentprovider', [])
     // Title filter - search on enter
     $scope.searchOnKeypress = function() {
         if (event.keyCode === 13) {
+            ctrl.generateTelemetry({type: 'keypress', subtype: 'submit', target: 'search',targetid: ''});
             this.searchByKeyword();
         }
     }
 
     // Title filter - Reset
     $scope.resetSearchByKeyword = function(){
+        ctrl.generateTelemetry({type: 'click', subtype: 'reset', target: 'search',targetid: ''});
         this.searchKeyword = '';
         delete searchBody.request.filters.name;
         ctrl.searchLessons();
@@ -138,6 +155,7 @@ angular.module('org.ekstep.contentprovider', [])
 
     // Sidebar - filters
     $scope.applyFilters = function(){
+        ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'filter',targetid: ''});
         if ($scope.filterSelection.lang.length) {
             searchBody.request.filters.language = $scope.filterSelection.lang;
         } else {
@@ -173,6 +191,7 @@ angular.module('org.ekstep.contentprovider', [])
 
     // Sidebar filters - Reset
     $scope.resetFilters = function() {
+        ctrl.generateTelemetry({type: 'click', subtype: 'reset', target: 'filter',targetid: ''});
         $scope.filterSelection.lang.splice(0, $scope.filterSelection.lang.length);
         $scope.filterSelection.grade.splice(0, $scope.filterSelection.grade.length);
         $scope.filterSelection.lessonType.splice(0, $scope.filterSelection.lessonType.length);
@@ -184,22 +203,25 @@ angular.module('org.ekstep.contentprovider', [])
 
     // Load more results
     $scope.loadmore = function() {
+        ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'loadmore',targetid: ''});
         offset = limit + offset;
         ctrl.searchLessons(true);
     }
 
-    // Toggle selection for lessons - called on click of select all
-    $scope.toggleSelection = function(selectionKey, val, metaKey, valueKey) {
+    // Toggle selection for filters - called on click of individual checkbox items
+    $scope.toggleSelectionFilter = function(selectionKey, val, metaKey, valueKey) {
 
         var idx = $scope.filterSelection[selectionKey].indexOf(val);
 
         if (idx > -1) {
+            ctrl.generateTelemetry({type: 'click', subtype: 'uncheck', target: 'filter',targetid: ''});
             // is currently selected, remove from selection list
             $scope.filterSelection[selectionKey].splice(idx, 1);
 
             // Un-check select all box
             $scope.isAllSelected[selectionKey] = false;
         } else {
+            ctrl.generateTelemetry({type: 'click', subtype: 'check', target: 'filter',targetid: ''});
             // is newly selected, add to the selection list
             $scope.filterSelection[selectionKey].push(val);
 
@@ -219,20 +241,44 @@ angular.module('org.ekstep.contentprovider', [])
     };
 
     // Toggle select all
-    $scope.toggleAll = function(selectionKey, metaKey, valueKey){
+    $scope.toggleAllFilter = function(selectionKey, metaKey, valueKey){
         var toggleStatus = !$scope.isAllSelected[selectionKey];
         $scope.filterSelection[selectionKey].splice(0, 15);
 
         if (toggleStatus) {
+            ctrl.generateTelemetry({type: 'click', subtype: 'check-all', target: 'filter',targetid: ''});
             if (valueKey) {
                 angular.forEach(ctrl.meta[metaKey], function(itm){ $scope.filterSelection[selectionKey].push(itm[valueKey]); });
             } else {
                 angular.forEach(ctrl.meta[metaKey], function(itm){ $scope.filterSelection[selectionKey].push(itm); });
             }
+        } else {
+            ctrl.generateTelemetry({type: 'click', subtype: 'uncheck-all', target: 'filter',targetid: ''});
         }
 
         $scope.isAllSelected[selectionKey] = toggleStatus;
     };
+
+    // Toggle selection for lessons
+    $scope.toggleSelectionLesson = function(lesson) {
+        var idx = $scope.lessonSelection.indexOf(lesson);
+
+        if (idx > -1) {
+            ctrl.generateTelemetry({type: 'click', subtype: 'uncheck', target: 'lesson',targetid: lesson.identifier});
+            // is currently selected, remove from selection list
+            $scope.lessonSelection.splice(idx, 1);
+        } else {
+            ctrl.generateTelemetry({type: 'click', subtype: 'check', target: 'lesson',targetid: lesson.identifier);
+            // is newly selected, add to the selection list
+            $scope.lessonSelection.push(lesson);
+        }
+
+        console.log($scope.lessonSelection);
+    };
+
+    $scope.triggerConceptSelector = function() {
+        ctrl.generateTelemetry({type: 'click', subtype: 'init', target: 'concept-selector',targetid: ''});
+    }
 
     // Initiate concept selector
     ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
@@ -249,8 +295,6 @@ angular.module('org.ekstep.contentprovider', [])
     // Fetch sidebar filters through APIs
     ctrl.learningConfig();
     ctrl.configOrdinals();
-
-    console.log(ctrl.meta);
 
     // Fetch and apply initial filters for first load
     var repoId = 'ekstep';
