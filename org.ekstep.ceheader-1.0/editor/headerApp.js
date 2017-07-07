@@ -319,4 +319,20 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
     ecEditor.addEventListener('org.ekstep.ceheader:meta:edit', $scope.editContentMeta, $scope);
     org.ekstep.contenteditor.api.jQuery('.browse.item.at').popup({ on: 'click', setFluidWidth: false, position: 'bottom right' });
 
+    // Show the Whatsnew red dot, if this is a new release
+    // and want to show the user to click.
+    $scope.nextversion = store.get('nextversion');
+    console.log( $scope.nextversion);
+    $scope.previousversion = store.get('previousversion') || 0;
+    console.log( $scope.previousversion);
+    $scope.whatsNewBadge = !($scope.nextversion === $scope.previousversion);
+    console.log( $scope.whatsNewBadge);
+
+    $scope.displayWhatsNew = function () {
+        $scope.fireEvent({id: 'org.ekstep.whatsnew:showpopup'});
+        store.set('previousversion', $scope.nextversion);
+        $scope.whatsNewBadge = false;
+    };
+
+
 }]);

@@ -9,6 +9,10 @@
     	"header": [{
     		"templateURL": "editor/partials/headerTemplate.html",
     		"controllerURL": "editor/headerApp.js"
-    	}]
+    	}],
+        "dependencies": [
+            { "type": "js", "src": "lib/store2.min.js"},
+            {"type": "plugin", "plugin": "org.ekstep.whatsnew", "ver": "1.0"}
+        ]
     }
 }

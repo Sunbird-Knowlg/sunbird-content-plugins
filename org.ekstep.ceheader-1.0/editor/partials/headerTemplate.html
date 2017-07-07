@@ -50,6 +50,19 @@
         font-size: 12px;
         color: #9b9b9b;
     }
+
+    .icon-badge {
+        color: #fff !important;
+        background: #e16273 !important;
+        border: 1px solid #e27a93 !important;
+        border-radius: 30px !important;
+        font-size: 2px !important;
+        padding: 0 2px !important;
+        line-height: 4px !important;
+        position: absolute !important;
+        top: -5px;
+        right: -5px;
+    }
 </style>
 <div ng-app="org.ekstep.ceheader:headerApp" ng-controller="mainController" class="ui masthead vertical segment content-masterhead">
     <!-- new header code start -->
@@ -142,10 +155,11 @@
                     <!-- <div> Last saved :  5 min ago</div> -->
                     <div ng-if="lastSaved" class="last-saved-label"><label class="">{{lastSaved}}</label></div>
                     <div class="icon-group-1">
-                        <!--                         <div class="icon-box popup-item"  data-tooltip="Add Collaborator" data-position="bottom right" data-inverted="">
-                            <i class="icon-whatsnew custom-icon" ng-click="" title="What's new"></i>
+                       <div class="icon-box popup-item"  data-content="See What's New" data-variation="tiny inverted" data-position="bottom right">
+                            <i class="icon-whatsnew custom-icon" ng-click="displayWhatsNew()" title="What's new">
+                                <span class="icon-badge" id="whatsnew-badge" ng-show="whatsNewBadge">&nbsp;</span>
+                            </i>
                         </div>
- -->
                         <div class="icon-box popup-item" data-content="Add Collaborator" data-variation="tiny inverted" data-position="top center">
                             <i class="add user icon custom-icon" ng-click="fireEvent({id: 'collaborator:add'});"></i>
                         </div>
