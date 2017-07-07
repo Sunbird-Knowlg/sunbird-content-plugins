@@ -282,7 +282,7 @@ angular.module('org.ekstep.contentprovider', [])
 
     // Initiate concept selector
     ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
-        element: 'conceptSelector',
+        element: 'lessonBrowserConceptSelector',
         selectedConcepts: [], // All composite keys except mediaType
         callback: function(concepts) {
             angular.forEach(concepts, function(concept){
