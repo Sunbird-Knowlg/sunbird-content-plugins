@@ -268,7 +268,7 @@ angular.module('org.ekstep.contentprovider', [])
             // is currently selected, remove from selection list
             $scope.lessonSelection.splice(idx, 1);
         } else {
-            ctrl.generateTelemetry({type: 'click', subtype: 'check', target: 'lesson',targetid: lesson.identifier);
+            ctrl.generateTelemetry({type: 'click', subtype: 'check', target: 'lesson',targetid: lesson.identifier});
             // is newly selected, add to the selection list
             $scope.lessonSelection.push(lesson);
         }
