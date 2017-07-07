@@ -21,6 +21,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         org.ekstep.services.languageService.getCollectionHierarchy({ contentId: $scope.contentId }, function(err, res) {
             if (res && res.data && res.data.responseCode === "OK") {
                 org.ekstep.collectioneditor.collectionService.fromCollection(res.data.result.content);
+                $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
+                $scope.$safeApply();
                 callback && callback(err, res);
             } else {
                 callback && callback('unable to fetch the content!', res);
@@ -30,7 +32,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
 
     org.ekstep.collectioneditor.api.initEditor(config, function() {
         $scope.loadContent();
-        $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
     });
 
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
