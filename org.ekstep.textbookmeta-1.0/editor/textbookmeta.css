@@ -32,13 +32,13 @@
     font-size: 12px!important;
 }
 
-.ui.form .field>label,
-.form-fields-except-image .field input,
-.form-fields-except-image .field textarea {
+#contents-data-form .ui.form .field>label,
+#contents-data-form .form-fields-except-image .field input,
+#contents-data-form .form-fields-except-image .field textarea {
     font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif!important;
 }
 
-.ui.form .field>label {
+#contents-data-form .ui.form .field>label {
     font-size: .92857143em!important;
     font-weight: bold!important;
     text-transform: none!important;
@@ -201,7 +201,6 @@
     height: 30%!important;
     margin-bottom: 0!important;
     font-family: Helvetica!important;
-
 }
 
 .metacontent-fields-container {
@@ -247,6 +246,6 @@
     color: #383838;
 }
 
-.ui.form .ng-invalid{
+.ui.form .ng-invalid {
     border-color: red !important;
 }
