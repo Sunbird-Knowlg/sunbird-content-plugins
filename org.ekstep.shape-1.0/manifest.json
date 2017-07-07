@@ -18,6 +18,26 @@
             "title": "Shapes",
             "iconClass": "icon-shape icon",
             "submenu": [{
+                "id": "triangle",
+                "type": "icon",
+                "toolTip": "Add Triangle",
+                "title": "Triangle",
+                "iconClass": "icon-triangle icon",
+                "onclick": {
+                    "id": "org.ekstep.shape:create",
+                    "data": {
+                        "type": "triangle",
+                        "x": 20,
+                        "y": 20,
+                        "fill": "#00FF00",
+                        "w": 14,
+                        "h": 25,
+                        "stroke": "rgba(255, 255, 255, 0)",
+                        "strokeWidth": 1,
+                        "opacity": 1
+                    }
+                }
+            }, {
                 "id": "rectangle",
                 "type": "icon",
                 "toolTip": "Add Rectangle",
