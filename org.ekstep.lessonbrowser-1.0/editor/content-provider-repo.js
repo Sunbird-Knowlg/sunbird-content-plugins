@@ -8,15 +8,11 @@ org.ekstep.collectioneditor.contentProviderRepo = Class.extend({
 	id: undefined,
 	label: undefined,
 
-	init: function() {
+	init: function() {},
 
-	},
+	getFilters: function(){},
 
 	getTemplate: function() {
 		throw "cannot invoke abstract method"
-	},
-
-	// getLessons: function($filters) {
-
-	// }
+	}
 });

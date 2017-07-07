@@ -3,6 +3,7 @@
 <style type="text/css">
 	.source-result-container {max-height: 440px; overflow-y: scroll;}
 	.source-filter-container {max-height: 365px; overflow-y: scroll;}
+	.ui.styled.accordion .title {padding-left: 30px; outline: none;}
 
 	.lesson-row{border-bottom: 1px solid #ddd}
 	.lesson-lang-separator {margin-left: 5px; margin-right: 5px;}
@@ -18,8 +19,8 @@
 	<div class="row" ng-if="!$ctrl.err">
     	<div class="column">
     		<div class="ui fluid action input">
-				<input type="text" placeholder="Search for keyword" autocomplete="off" spellcheck="false" ng-model="searchKeyword">
-		    	<button class="ui button" ng-click="searchByKeyword()">Search</button>
+				<input type="text" placeholder="Search for keyword" autocomplete="off" spellcheck="false" ng-model="searchKeyword" ng-keypress="searchOnKeypress()">
+		    	<button class="ui button primary" ng-click="searchByKeyword()">Search</button>
 		    	<button class="ui button" ng-click="resetSearchByKeyword()">Reset</button>
 			</div>
     	</div>
@@ -33,82 +34,73 @@
 	  		</div>
 	  		<div class="ui styled accordion source-filter-container" style="margin-top: 5px; margin-bottom: 5px;">
 			  	<div class="title">
-			    	<i class="dropdown icon"></i>
-			    	Language
+			    	Language ({{filterSelection.lang.length}})
 			  	</div>
 			  	<div class="content">
 				    <div class="ui list">
-						<div class="item ui checkbox"><input type="checkbox"><label><strong>Select all</strong></label></div>
+						<div class="item ui checkbox">
+							<input type="checkbox" ng-click="toggleAllFilter('lang', 'languages', 'value')" ng-checked="isAllSelected.lang">
+							<label><strong>Select all</strong></label>
+						</div>
 
-						<div class="item ui checkbox"><input type="checkbox"><label>Bengali</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>English</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Gujarati</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Hindi</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Kannada</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Marathi</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Punjabi</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Tamil</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Telugu</label></div>
+						<div class="item ui checkbox" ng-repeat="lang in $ctrl.meta.languages">
+							<input type="checkbox" value="{{lang.value}}" name="selectedLangs[]" ng-checked="filterSelection.lang.indexOf(lang.value) > -1" ng-click="toggleSelectionFilter('lang', lang.value, 'languages', 'value')">
+							<label>{{lang.label}}</label>
+						</div>
 					</div>
 			  	</div>
 			  	<div class="title">
-			    	<i class="dropdown icon"></i>
-			    	Grade
+			    	Grade ({{filterSelection.grade.length}})
 			  	</div>
 			  	<div class="content">
 			  		<div class="ui list">
-				    	<div class="item ui checkbox"><input type="checkbox"><label><strong>Select all</strong></label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>KG</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 1</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 2</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 3</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 4</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 5</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 6</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 7</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 8</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 9</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 10</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 11</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Grade 12</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Others</label></div>
+				    	<div class="item ui checkbox">
+				    		<input type="checkbox" ng-click="toggleAllFilter('grade', 'grades', 'label')" ng-checked="isAllSelected.grade">
+				    		<label><strong>Select all</strong></label>
+				    	</div>
+						<div class="item ui checkbox" ng-repeat="grade in $ctrl.meta.grades">
+							<input type="checkbox" value="{{grade.label}}" name="selectedGrades[]" ng-checked="filterSelection.grade.indexOf(grade.label) > -1" ng-click="toggleSelectionFilter('grade', grade.label, 'grades', 'label')">
+							<label>{{grade.label}}</label>
+						</div>
 					</div>
 			  	</div>
 				<div class="title">
-					<i class="dropdown icon"></i>
-					Lesson type
+					Lesson type ({{filterSelection.lessonType.length}})
 				</div>
 				<div class="content">
 					<div class="ui list">
-						<div class="item ui checkbox"><input type="checkbox"><label><strong>Select all</strong></label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Story</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Worksheet</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Collection</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Game</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Plugin</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Template</label></div>
+						<div class="item ui checkbox">
+							<input type="checkbox" ng-click="toggleAllFilter('lessonType', 'lessonTypes', false)" ng-checked="isAllSelected.lessonType">
+							<label><strong>Select all</strong></label>
+						</div>
+						<div class="item ui checkbox" ng-repeat="lessonType in $ctrl.meta.lessonTypes">
+							<input type="checkbox" value="{{lessonType}}" name="selectedLessonTypes[]" ng-checked="filterSelection.lessonType.indexOf(lessonType) > -1" ng-click="toggleSelectionFilter('lessonType', lessonType, 'lessonTypes', false)">
+							<label>{{lessonType}}</label>
+						</div>
 					</div>
 				</div>
 				<div class="title">
-					<i class="dropdown icon"></i>
-					Domain
+					Domain ({{filterSelection.domain.length}})
 				</div>
 				<div class="content">
 					<div class="ui list">
-						<div class="item ui checkbox"><input type="checkbox"><label><strong>Select all</strong></label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Numeracy</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Literacy</label></div>
-						<div class="item ui checkbox"><input type="checkbox"><label>Science</label></div>
+						<div class="item ui checkbox">
+							<input type="checkbox" ng-click="toggleAllFilter('domain', 'domains', false)" ng-checked="isAllSelected.domain">
+							<label><strong>Select all</strong></label>
+						</div>
+						<div class="item ui checkbox" ng-repeat="domain in $ctrl.meta.domains">
+							<input type="checkbox" value="{{domain}}" name="selectedDomains[]" ng-checked="filterSelection.domain.indexOf(domain) > -1" ng-click="toggleSelectionFilter('domain', domain, 'domains', false)">
+							<label style="text-transform: capitalize;">{{domain}}</label>
+						</div>
 					</div>
 				</div>
 				<div class="title">
-					<i class="dropdown icon"></i>
-					Concept
+					Concept ({{filterSelection.concept.length}})
 				</div>
 				<div class="content">
-					Chose Concept
+					<input type="button" class="ui button" name="" id="conceptSelector" value="Select concepts">
 				</div>
-				<div class="title">
+				<!-- <div class="title">
 					<i class="dropdown icon"></i>
 					Ownership
 				</div>
@@ -118,8 +110,8 @@
 						<option value="1">My lessons</option>
 						<option value="3">Lessons I am collaborating</option>
 					</select>
-				</div>
-				<div class="title">
+				</div> -->
+				<!-- <div class="title">
 					<i class="dropdown icon"></i>
 					Date
 				</div>
@@ -136,11 +128,11 @@
 						<option value="1">Latest first</option>
 						<option value="3">Oldest first</option>
 					</select>
-				</div>
+				</div> -->
 			</div>
 		  	<div class="row">
-		  		<button class="ui right floated button primary" ng-click="somefunction()">Apply</button>
-				<button class="ui left floated button">Reset</button>
+		  		<button class="ui right floated button primary" ng-click="applyFilters()">Apply</button>
+				<button class="ui left floated button"  ng-click="resetFilters()">Reset</button>
 		  	</div>
 	  	</div>
 	  	<!-- Filters end -->
@@ -156,7 +148,7 @@
 				<div class="row lesson-row" ng-repeat="lesson in $ctrl.res.content">
 					<div class="three wide column" style="padding-top: 3px;">
 						<div class="ui checkbox">
-							<input type="checkbox">
+							<input type="checkbox" name="lessons[]" ng-click="toggleSelectionLesson(lesson)">
 							<label>
 								<img class="ui middle aligned tiny right floated image" src="{{lesson.appIcon}}" ng-if="lesson.appIcon">
 								<img class="ui middle aligned tiny right floated image" src="http://via.placeholder.com/80x80" ng-if="!lesson.appIcon">
@@ -172,7 +164,14 @@
 						<div>{{lesson.description | removeHTMLTags | cut:true:120:' ...'}}</div>
 					</div>
 				</div>
+				<div class="row lesson-row" ng-if="!$ctrl.res.content.length">
+					No lessons found. Please try changing the filters.
+				</div>
+				<div>
+					<button class="ui button primary" ng-click="loadmore()" style="margin-top:25px;" ng-disabled="!loadmoreEnabledFlag" ng-show="loadmoreVisibleFlag">Load more</button>
+				</div>
 			</div>
+
 		</div>
 		<!-- Result end -->
   	</div>

@@ -1,0 +1,206 @@
+<div ng-app="textbookmetaApp" class="metacontent-wrapper" ng-controller="textbookmetaController">
+    <div class="ui segment header-segment">
+        <div class="ui breadcrumb">
+            <a class="section">Untitled book</a>
+            <div class="divider"> / </div>
+            <a class="section">Unit 1</a>
+            <div class="divider"> / </div>
+            <a class="section">Unit 1.1</a>
+            <div class="divider"> / </div>
+            <a class="section">Unit 1.1</a>
+            <div class="divider"> / </div>
+            <div class="active section">Textbook</div>
+        </div>
+        <h3 class="header-bottom-segment inline-block">Textbook</h3>
+        <div class="header-buttons-container header-bottom-segment inline-block">
+            <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true;" ng-show="!editMode">
+                Edit
+            </div>
+            <div ng-class="metaForm.$invalid ? 'ui primary button disabled right-float button-overrides' : 'ui primary button right-float button-overrides' " id="update-button" ng-click="editMode = false; saveNodeMetadata()" ng-show="editMode">
+                Update
+            </div>
+            <!-- <div class="ui buttons right-float" ng-show="editMode">>
+                <div class="ui orange button button-overrides" ng-click="editMode = false">
+                    Cancel
+                </div> 
+                <div class="or"></div>
+                
+            </div> -->
+        </div>
+    </div>
+    <div class="ui segment" id="read-metadata-wrapper" ng-show="!editMode">
+        <div class="ui items">
+            <div class="item">
+                <div class="ui tiny image">
+                    <img ng-src="{{textbook.appIcon || defaultImage}}" alt="">
+                </div>
+                <div class="content">
+                    <div class="header">{{textbook.name}}</div>
+                    <div class="meta">by&nbsp;
+                        <span id="book-author">{{textbook.author}}</span>
+                    </div>
+                    <div class="description">
+                        <p>{{textbook.description}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="metacontent-fields-container">
+            <div class="metacontent-field">
+                <div class="field-text">
+                    <h5 class="field-key">Board</h5>
+                    <h5 class="field-value">{{textbook.board | uppercase}}</h5>
+                </div>
+            </div>
+            <div class="metacontent-field">
+                <div class="field-text">
+                    <h5 class="field-key">Medium</h5>
+                    <h5 class="field-value">{{textbook.medium | lowercase}}</h5>
+                </div>
+            </div>
+            <div class="metacontent-field">
+                <div class="field-text">
+                    <h5 class="field-key">Subject</h5>
+                    <h5 class="field-value">{{textbook.subject | lowercase}}</h5>
+                </div>
+            </div>
+            <div class="metacontent-field">
+                <div class="field-text">
+                    <h5 class="field-key">Grade</h5>
+                    <h5 class="field-value">{{textbook.grade | lowercase}}</h5>
+                </div>
+            </div>
+            <div class="metacontent-field">
+                <div class="field-text">
+                    <h5 class="field-key">Publication</h5>
+                    <h5 class="field-value">{{textbook.publication | lowercase}}</h5>
+                </div>
+            </div>
+            <div class="metacontent-field">
+                <div class="field-text">
+                    <h5 class="field-key">Edition</h5>
+                    <h5 class="field-value">{{textbook.edition | lowercase}}</h5>
+                </div>
+            </div>
+            <div class="metacontent-field">
+                <div class="field-text">
+                    <h5 class="field-key">Audience</h5>
+                    <h5 class="field-value">{{textbook.audience | lowercase}}</h5>
+                </div>
+            </div>
+            <div class="long metacontent-field">
+                <div class="field-text">
+                    <h5 class="field-key">Concepts</h5>
+                    <div class="field-value-wrapper">
+                        <span class="field-value">{{textbook.concepts}}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="long metacontent-field">
+                <div class="field-text">
+                    <h5 class="field-key">Keywords</h5>
+                    <div class="field-value-wrapper">
+                        <span class="field-value">{{textbook.keywords | lowercase}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form class="ui form segment" id="contents-data-form" validate name="metaForm" ng-show="editMode">
+        <div class="fields">
+            <div class="field book-image-field">
+                <label for="bookImage">Add icon</label>
+                <div class="book-image-container" ng-click="showAssestBrowser()">
+                    <i class="camera icon"></i>
+                    <img ng-src="{{textbook.appIcon}}" ng-show="textbook.appIcon != ''" />
+                </div>
+            </div>
+            <div class="field form-fields-except-image">
+                <div class=" field">
+                    <label>Title</label>
+                    <div class="ui input">
+                        <input placeholder="Enter title for Book" ng-model="textbook.name" name="title" type="text" required>
+                    </div>
+                </div>
+                <div class="four fields">
+                    <div class="field">
+                        <label for="board">Board</label>
+                        <select id="board" class="ui selection dropdown" ng-model="textbook.board">
+                            <option value="">Board</option>
+                            <option value="cbse">CBSE</option>
+                            <option value="icse">ICSE</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="medium">Medium</label>
+                        <select id="medium" class="ui selection dropdown" ng-model="textbook.medium" ng-options="medium for medium in languageList">
+                            <option value="">Medium</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="subject">Subject</label>
+                        <select id="subject" class="ui selection dropdown" ng-model="textbook.subject">
+                            <option value="">Subject</option>
+                            <option value="maths">Maths</option>
+                            <option value="science">Science</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="grade">Grade</label>
+                        <select id="grade" class="ui selection dropdown" ng-model="textbook.gradeLevel" ng-options="grade for grade in gradeList">
+                            <option value="">Grade</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="three fields">
+                    <div class=" field">
+                        <label for="author">Author</label>
+                        <input type="text" placeholder="Enter author name" ng-model="textbook.author" required />
+                    </div>
+                    <div class="field">
+                        <label for="publication">Publication</label>
+                        <input type="text" placeholder="Publication (optional)" ng-model="textbook.publication" />
+                    </div>
+                    <div class="field">
+                        <label for="edition">Edition</label>
+                        <input type="text" placeholder="Edition (optional)" ng-model="textbook.edition" />
+                    </div>
+                </div>
+                <div class="requiered field">
+                    <label>Description</label>
+                    <div class="ui input">
+                        <textarea placeholder="brief description about the unit" ng-model="textbook.description" rows="2" required></textarea>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Concepts</label>
+                    <input name="concepts" id="conceptSelector" ng-model="textbook.concepts" type="text">
+                </div>
+                <div class="two fields">
+                    <div class=" twelve wide field">
+                        <label>Keywords</label>
+                        <input id="keywords" name="keywords" ng-model="textbook.keywords" type="text" required>
+                    </div>
+                    <div class="four wide field">
+                        <label for="audience">Audience</label>
+                        <select id="audience" class="ui selection dropdown" ng-model="textbook.audience">
+                            <option value="">Audience</option>
+                            <option value="{{audience}}" ng-repeat="audience in audienceList">{{audience}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="field">
+                    <label>Notes to Teacher</label>
+                    <input placeholder="Add Notes" ng-model="textbook.notes" name="notes" type="text">
+                </div>
+                <div class="field">
+                    <label>Page No.</label>
+                    <input placeholder="Page no" ng-model="textbook.pageNumber" name="pageNumber" type="text">
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+$(".ui.selection.dropdown").dropdown();
+</script>
