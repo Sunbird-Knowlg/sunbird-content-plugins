@@ -7,6 +7,22 @@ angular.module('org.ekstep.lessonbrowserapp', [])
 
     ctrl.lessonbrowser = instance;
 
+    $scope.telemetry = {"pluginid":ctrl.lessonbrowser.manifest.id, "pluginver":ctrl.lessonbrowser.manifest.ver};
+
+    ctrl.generateTelemetry = function(data) {
+        if (data) ecEditor.getService('telemetry').interact({
+            "type": data.type,
+            "subtype": data.subtype,
+            "target": data.target,
+            "targetid":data.targetid,
+            "pluginid": $scope.telemetry.pluginid,
+            "pluginver": $scope.telemetry.pluginver,
+            // "objectid": ecEditor.getCurrentObject().id,
+            // "stage": ecEditor.getCurrentStage().id
+        })
+    };
+
+
     // Delay init of tabs till DOM is loaded
     $scope.$on('ngDialog.opened', function(){
         setTimeout(function(){$('.tabular.menu .item').tab()}, 200);
@@ -14,6 +30,8 @@ angular.module('org.ekstep.lessonbrowserapp', [])
 
     // Get and return the selected lessons
     $scope.returnSelectedLessons = function(selectedLessons){
+        ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'addlesson',targetid: ''});
+
     	// return selected lessons to the lesson browser caller
     	var err = null;
         var res = selectedLessons;
@@ -25,6 +43,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
 
     // Close the popup
     $scope.closePopup = function() {
+        ctrl.generateTelemetry({type: 'click', subtype: 'cancel', target: 'addlesson', targetid: ''});
         $scope.closeThisDialog();
     };
 
