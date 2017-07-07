@@ -89,7 +89,9 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
         if(_.isEmpty(activeNode.data.metadata) || _.isUndefined(activeNode.data.metadata)){
             $scope.textbook = {};
             $scope.metadataCloneObj = _.clone($scope.textbook);
+            $scope.editMode = true;
         }else{
+            $scope.editMode = false;
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
             $scope.textbook = activeNode.data.metadata;
             $('#board').dropdown('set selected', $scope.textbook.board);
@@ -100,6 +102,6 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
         }
         $scope.$safeApply();
     }
-    ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:'+org.ekstep.collectioneditor.collectionService.getActiveNode().data.objectType, $scope.setMetaformValues);
+    ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:TextBook', $scope.setMetaformValues);
 }]);
 //# sourceURL=textbookmetaApp.js
