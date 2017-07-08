@@ -30,7 +30,7 @@
                     <div class="tree-access-tools">
                         <div class="ui search">
                             <div class="ui icon input">
-                                <input class="prompt" type="text" placeholder="Search content...">
+                                <input class="prompt" type="text" ng-model="nodeFilter" placeholder="Search content..." ng-keypress="searchNode($event)">
                                 <i class="search icon"></i>
                             </div>
                         </div>
