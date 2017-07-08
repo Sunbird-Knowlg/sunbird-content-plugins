@@ -1,15 +1,28 @@
 angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', function($scope) {
-    var ctrl = this;
-    $scope.unit = {};
-    $scope.gradeLevel = '';
-    $scope.metadataCloneObj = {}; 
     $scope.mode = org.ekstep.collectioneditor.collectionService.getConfig().mode;
-    
+
     org.ekstep.collectioneditor.api.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.gradeList = resp.data.result.ordinals.gradeLevel;
             $scope.languageList = resp.data.result.ordinals.language;
             $scope.audienceList = resp.data.result.ordinals.audience;
+            //TODO: Replace below list with API resplonse
+            $scope.boardList = {};
+            $scope.boardList["CBSE"]  = "CBSE";
+            $scope.boardList["NCERT"] = "NCERT";
+            $scope.boardList["ICSE"] = "ICSE"
+            $scope.boardList["MSCERT"] = "MSCERT";
+            $scope.boardList["Other"] = "Othres";
+          
+            $scope.subjectList = {};
+            $scope.subjectList["Maths"]  = "Maths";
+            $scope.subjectList["English"] = "English";
+            $scope.subjectList["Hindi"] = "Hindi"
+            $scope.subjectList["Bengali"] = "Bengali";
+            $scope.subjectList["Telugu"] = "Telugu";
+            $scope.subjectList["Tamil"] = "Tamil";
+            $scope.subjectList["Kannada"] = "Kanada";
+            $scope.subjectList["Marathi"] = "Marathi";
             $scope.$safeApply();
         }
     });
@@ -38,14 +51,17 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         });
     }
     
-    $scope.saveNodeMetadata = function(){
+    $scope.updateNode = function(){
         $scope.modifyArr = [];
+        if(_.isString($scope.unit.tags)){
+            $scope.unit.tags = $scope.unit.tags.split(',');
+        }
         var activeNode = org.ekstep.collectioneditor.collectionService.getActiveNode();
+        $scope.unit.contentType = activeNode.data.objectType;
         org.ekstep.collectioneditor.collectionService.setNodeTitle($scope.unit.name);
-        org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id]["isNew"] = _.isEmpty($scope.metadataCloneObj) ? true : false;
+        org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id]["isNew"] = _.isEmpty(activeNode.data.metadata) ? true : false;
         org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id]["root"] = false;
-        org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.unit));;
-        console.log('Modify '+activeNode.data.id, org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id]);
+        org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id].metadata , $scope.getUpdatedMetadata(activeNode.data.meta, $scope.unit));;
         $scope.$safeApply();
     }
 
@@ -95,12 +111,10 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         var activeNode = org.ekstep.collectioneditor.collectionService.getActiveNode();
         if(_.isEmpty(activeNode.data.metadata) && _.isEmpty(org.ekstep.collectioneditor.cache.nodesModified[nodeId].metadata)){
             $scope.unit = {};
-            $scope.metadataCloneObj = _.clone($scope.unit);
             $scope.editMode = true;
             $('.ui.dropdown').dropdown('refresh');
         }else{
             $scope.editMode = false;
-            $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
             $scope.unit = _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[nodeId].metadata);
             $('#unitBoard').dropdown('set selected', $scope.unit.board);
             $('#unitMedium').dropdown('set selected', $scope.unit.medium);
@@ -122,7 +136,6 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                 $scope.path.push({'title' : node.title, 'nodeId'  : node.key })
             }
         });
-        $scope.$safeApply();
     }
 
     $scope.setActiveNode = function(nodeId){

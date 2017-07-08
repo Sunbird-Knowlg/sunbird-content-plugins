@@ -85,7 +85,7 @@
                 <div class="field-text">
                     <h5 class="field-key">Keywords</h5>
                     <div class="field-value-wrapper">
-                        <span class="field-value" ng-repeat="tag in textbook.tags">{{tag | lowercase}}</span>
+                        <span class="field-value" ng-repeat="tag in textbook.tags">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
                     </div>
                 </div>
             </div>
@@ -112,9 +112,7 @@
                         <label for="board">Board</label>
                         <select id="board" class="ui selection dropdown" ng-model="textbook.board">
                             <option value="">Board</option>
-                            <option value="CBSE">CBSE</option>
-                            <option value="ICSE">ICSE</option>
-                            <option value="NCERT">NCERT</option>
+                            <option value="{{board}}" ng-repeat="board in boardList">{{board}}</option>
                         </select>
                     </div>
                     <div class="field">
@@ -128,8 +126,7 @@
                         <label for="subject">Subject</label>
                         <select id="subject" class="ui selection dropdown" ng-model="textbook.subject">
                             <option value="">Subject</option>
-                            <option value="Maths">Maths</option>
-                            <option value="Science">Science</option>
+                            <option value="{{subject}}" ng-repeat="subject in subjectList">{{subject}}</option>
                         </select>
                     </div>
                     <div class="field">

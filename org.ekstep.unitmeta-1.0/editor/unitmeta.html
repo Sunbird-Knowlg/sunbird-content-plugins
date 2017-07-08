@@ -1,27 +1,19 @@
 <div ng-app="unitmetaApp" class="metacontent-wrapper" ng-controller="unitmetaController">
     <div class="ui segment header-segment">
         <div class="ui breadcrumb">
-            <a class="section" ng-repeat="value in path" ng-click="setActiveNode(value.nodeId)">{{value.title}} 
+            <a class="section" ng-repeat="value in path" ng-click="setActiveNode(value.nodeId)">
+                {{value.title}} 
                 <div class="divider"> / </div>
             </a>
-            <!-- <a class="section">Untitled Unit</a>
-            <div class="active section">Unit</div> -->
         </div>
         <h3 class="header-bottom-segment inline-block">{{unit.name}}</h3>
         <div class="header-buttons-container header-bottom-segment inline-block" ng-show="mode == 'Edit'">
             <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true;" ng-show="!editMode">
                 Edit
             </div>
-            <div ng-class="metaForm.$invalid ? 'ui primary button disabled right-float button-overrides' : 'ui primary button right-float button-overrides' " id="update-button" ng-click="editMode = false; saveNodeMetadata()" ng-show="editMode">
+            <div ng-class="metaForm.$invalid ? 'ui primary button disabled right-float button-overrides' : 'ui primary button right-float button-overrides' " id="update-button" ng-click="editMode = false; updateNode()" ng-show="editMode">
                 Update
             </div>
-            <!-- <div class="ui buttons right-float" ng-show="editMode">>
-                <div class="ui orange button button-overrides" ng-click="editMode = false">
-                    Cancel
-                </div> 
-                <div class="or"></div>
-                
-            </div> -->
         </div>
     </div>
     <div class="ui segment" id="read-metadata-wrapper" ng-show="!editMode">
@@ -96,7 +88,8 @@
                 <div class="field-text">
                     <h5 class="field-key">Keywords</h5>
                     <div class="field-value-wrapper">
-                        <span class="field-value" ng-repeat="tag in unit.tags">{{tag | lowercase}}</span>
+                        <!-- <span class="field-value" ng-repeat="tag in unit.tags">{{tag | lowercase}}{{$last ? '' : ', '}}</span> -->
+                        <span class="field-value" ng-repeat="tag in unit.tags track by $index">{{tag | lowercase}}</span>
                     </div>
                 </div>
             </div>
@@ -123,9 +116,7 @@
                         <label for="board">Board</label>
                         <select id="unitBoard" class="ui selection dropdown" ng-model="unit.board">
                             <option value="">Board</option>
-                            <option value="CBSE">CBSE</option>
-                            <option value="ICSE">ICSE</option>
-                            <option value="NCERT">NCERT</option>
+                            <option value="{{board}}" ng-repeat="board in boardList">{{board}}</option>
                         </select>
                     </div>
                     <div class="field">
@@ -139,8 +130,7 @@
                         <label for="subject">Subject</label>
                         <select id="unitSubject" class="ui selection dropdown" ng-model="unit.subject">
                             <option value="">Subject</option>
-                            <option value="Maths">Maths</option>
-                            <option value="Science">Science</option>
+                            <option value="{{subject}}" ng-repeat="subject in subjectList">{{subject}}</option>
                         </select>
                     </div>
                     <div class="field">
@@ -178,7 +168,7 @@
                 <div class="two fields">
                     <div class=" twelve wide field">
                         <label>Keywords</label>
-                        <input id="keywords" name="keywords" ng-model="unit.tags" type="text" required>
+                        <input id="keywords" name="keywords" ng-blur="unit.tags.split(',');" ng-model="unit.tags" type="text" required>
                     </div>
                     <div class="four wide field">
                         <label for="audience">Audience</label>
