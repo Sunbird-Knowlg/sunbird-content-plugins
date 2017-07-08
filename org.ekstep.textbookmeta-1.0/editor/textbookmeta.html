@@ -1,31 +1,16 @@
 <div ng-app="textbookmetaApp" class="metacontent-wrapper" ng-controller="textbookmetaController">
     <div class="ui segment header-segment">
         <div class="ui breadcrumb">
-            <a class="section">Untitled book</a>
-            <div class="divider"> / </div>
-            <a class="section">Unit 1</a>
-            <div class="divider"> / </div>
-            <a class="section">Unit 1.1</a>
-            <div class="divider"> / </div>
-            <a class="section">Unit 1.1</a>
-            <div class="divider"> / </div>
-            <div class="active section">Textbook</div>
+            <a class="section" ng-click="setActiveNode(path.nodeId)">{{path.title}}</a>
         </div>
-        <h3 class="header-bottom-segment inline-block">Textbook</h3>
-        <div class="header-buttons-container header-bottom-segment inline-block">
+        <h3 class="header-bottom-segment inline-block">{{textbook.name}}</h3>
+        <div class="header-buttons-container header-bottom-segment inline-block" ng-show="mode == 'Edit'">
             <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true;" ng-show="!editMode">
                 Edit
             </div>
-            <div ng-class="metaForm.$invalid ? 'ui primary button disabled right-float button-overrides' : 'ui primary button right-float button-overrides' " id="update-button" ng-click="editMode = false; saveNodeMetadata()" ng-show="editMode">
+            <div ng-class="metaForm.$invalid ? 'ui primary button disabled right-float button-overrides' : 'ui primary button right-float button-overrides' " id="update-button" ng-click="editMode = false; updateNode()" ng-show="editMode">
                 Update
             </div>
-            <!-- <div class="ui buttons right-float" ng-show="editMode">>
-                <div class="ui orange button button-overrides" ng-click="editMode = false">
-                    Cancel
-                </div> 
-                <div class="or"></div>
-                
-            </div> -->
         </div>
     </div>
     <div class="ui segment" id="read-metadata-wrapper" ng-show="!editMode">
@@ -67,7 +52,7 @@
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Grade</h5>
-                    <h5 class="field-value">{{textbook.grade | lowercase}}</h5>
+                    <h5 class="field-value">{{textbook.gradeLevel | lowercase}}</h5>
                 </div>
             </div>
             <div class="metacontent-field">
@@ -92,7 +77,7 @@
                 <div class="field-text">
                     <h5 class="field-key">Concepts</h5>
                     <div class="field-value-wrapper">
-                        <span class="field-value">{{textbook.concepts}}</span>
+                        <span class="field-value" ng-repeat="concept in textbook.concepts">{{concept.Name}}</span>
                     </div>
                 </div>
             </div>
@@ -100,7 +85,7 @@
                 <div class="field-text">
                     <h5 class="field-key">Keywords</h5>
                     <div class="field-value-wrapper">
-                        <span class="field-value">{{textbook.keywords | lowercase}}</span>
+                        <span class="field-value" ng-repeat="tag in textbook.tags">{{tag | lowercase}}</span>
                     </div>
                 </div>
             </div>
@@ -127,28 +112,31 @@
                         <label for="board">Board</label>
                         <select id="board" class="ui selection dropdown" ng-model="textbook.board">
                             <option value="">Board</option>
-                            <option value="cbse">CBSE</option>
-                            <option value="icse">ICSE</option>
+                            <option value="CBSE">CBSE</option>
+                            <option value="ICSE">ICSE</option>
+                            <option value="NCERT">NCERT</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="medium">Medium</label>
-                        <select id="medium" class="ui selection dropdown" ng-model="textbook.medium" ng-options="medium for medium in languageList">
+                        <select id="medium" class="ui selection dropdown" ng-model="textbook.medium">
                             <option value="">Medium</option>
+                            <option value="{{medium}}" ng-repeat="medium in languageList">{{medium}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="subject">Subject</label>
                         <select id="subject" class="ui selection dropdown" ng-model="textbook.subject">
                             <option value="">Subject</option>
-                            <option value="maths">Maths</option>
-                            <option value="science">Science</option>
+                            <option value="Maths">Maths</option>
+                            <option value="Science">Science</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="grade">Grade</label>
-                        <select id="grade" class="ui selection dropdown" ng-model="textbook.gradeLevel" ng-options="grade for grade in gradeList">
+                        <select id="gradeLevel" class="ui selection dropdown" ng-model="textbook.gradeLevel">
                             <option value="">Grade</option>
+                            <option value="{{gradeLevel}}" ng-repeat="gradeLevel in gradeList">{{gradeLevel}}</option>
                         </select>
                     </div>
                 </div>
@@ -174,12 +162,12 @@
                 </div>
                 <div class="field">
                     <label>Concepts</label>
-                    <input name="concepts" id="conceptSelector" ng-model="textbook.concepts" type="text">
+                    <input name="concepts" id="textbookConceptSelector" ng-model="textbook.concepts" type="text">
                 </div>
                 <div class="two fields">
                     <div class=" twelve wide field">
                         <label>Keywords</label>
-                        <input id="keywords" name="keywords" ng-model="textbook.keywords" type="text" required>
+                        <input id="keywords" name="keywords" ng-model="textbook.tags" type="text" required>
                     </div>
                     <div class="four wide field">
                         <label for="audience">Audience</label>

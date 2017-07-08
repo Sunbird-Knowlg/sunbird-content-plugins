@@ -244,6 +244,7 @@
     font-size: 1rem;
     font-family: Helvetica!important;
     color: #383838;
+    text-transform: capitalize !important;
 }
 
 .ui.form .ng-invalid {

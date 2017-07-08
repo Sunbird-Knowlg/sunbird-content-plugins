@@ -3,13 +3,8 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     $scope.unit = {};
     $scope.gradeLevel = '';
     $scope.metadataCloneObj = {}; 
-    // if(_.isEmpty(org.ekstep.collectioneditor.collectionService.getActiveNode().data.metadata) || _.isUndefined(org.ekstep.collectioneditor.collectionService.getActiveNode().data.metadata)){
-    //     $scope.editMode = true;
-    //     $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.unitmeta", "1.0", "assets/default.png");
-    // }else{
-    //     $scope.editMode = false;
-    // }
-
+    $scope.mode = org.ekstep.collectioneditor.collectionService.getConfig().mode;
+    
     org.ekstep.collectioneditor.api.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.gradeList = resp.data.result.ordinals.gradeLevel;
@@ -20,7 +15,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     });
     
     ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
-        element: 'conceptSelector',
+        element: 'unitConceptSelector',
         selectedConcepts: [], // All composite keys except mediaType
         callback: function(data) {
             $scope.unit.concepts = '(' + data.length + ') concepts selected';
@@ -46,26 +41,30 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     $scope.saveNodeMetadata = function(){
         $scope.modifyArr = [];
         var activeNode = org.ekstep.collectioneditor.collectionService.getActiveNode();
-        var oldValue = $scope.metadataCloneObj;
         org.ekstep.collectioneditor.collectionService.setNodeTitle($scope.unit.name);
-        var newValue = $scope.unit;
-        if(_.isEmpty(activeNode.data.metadata) || _.isUndefined(activeNode.data.metadata)){
-            _.forEach(newValue, function(val, key){
-                $scope.createModifyArray(activeNode, val, "", key);
+        org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id]["isNew"] = _.isEmpty($scope.metadataCloneObj) ? true : false;
+        org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id]["root"] = false;
+        org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.unit));;
+        console.log('Modify '+activeNode.data.id, org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id]);
+        $scope.$safeApply();
+    }
+
+    $scope.getUpdatedMetadata = function(originalMetadata, currentMetadata){
+        var metadata = { };
+        if(_.isEmpty(originalMetadata)){
+            _.forEach(currentMetadata, function(value, key){
+                metadata[key] = value;
             });
         }else{
-            _.forEach(newValue, function(value, key){
-                if(_.isUndefined(oldValue[key])){
-                    $scope.createModifyArray(activeNode, value, "", key);
-                }else if(value != oldValue[key]){
-                    $scope.createModifyArray(activeNode, value, oldValue[key], key);
+            _.forEach(currentMetadata   , function(value, key){
+                if(_.isUndefined(originalMetadata[key])){
+                    metadata[key] = value;
+                }else if(value != originalMetadata[key]){
+                    metadata[key] = value;
                 }
             });
         }
-        activeNode.data.metadata = $scope.unit;
-        $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
-        console.log('Modify ', $scope.modifyArr);
-        $scope.$safeApply();
+        return metadata;
     }
 
     $scope.createModifyArray = function(activeNode, newValue, oldValue, attribute){
@@ -84,26 +83,50 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
     }
 
-    $scope.setMetaformValues = function(){
+    $scope.onNodeSelect = function(evant, data){
+        var nodeId = data.data.id;
+        var nodeType = data.data.objectType;
+        var editable = data.editable;
+        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.textbookmeta", "1.0", "assets/default.png");
+
+        if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[nodeId])) {
+            org.ekstep.collectioneditor.cache.nodesModified[nodeId] = {};
+        }
         var activeNode = org.ekstep.collectioneditor.collectionService.getActiveNode();
-        if(_.isEmpty(activeNode.data.metadata) || _.isUndefined(activeNode.data.metadata)){
+        if(_.isEmpty(activeNode.data.metadata) && _.isEmpty(org.ekstep.collectioneditor.cache.nodesModified[nodeId].metadata)){
             $scope.unit = {};
             $scope.metadataCloneObj = _.clone($scope.unit);
             $scope.editMode = true;
             $('.ui.dropdown').dropdown('refresh');
-            $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.unitmeta", "1.0", "assets/default.png");
         }else{
             $scope.editMode = false;
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
-            $scope.unit = activeNode.data.metadata;
-            $('#board').dropdown('set selected', $scope.unit.board);
-            $('#medium').dropdown('set selected', $scope.unit.medium);
-            $('#subject').dropdown('set selected', $scope.unit.subject);
-            $('#grade').dropdown('set selected', $scope.unit.grade);
-            $('#audience').dropdown('set selected', $scope.unit.audience);
+            $scope.unit = _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[nodeId].metadata);
+            $('#unitBoard').dropdown('set selected', $scope.unit.board);
+            $('#unitMedium').dropdown('set selected', $scope.unit.medium);
+            $('#unitSubject').dropdown('set selected', $scope.unit.subject);
+            $('#unitGradeLevel').dropdown('set selected', $scope.unit.gradeLevel);
+            $('#unitAudience').dropdown('set selected', $scope.unit.audience);
         }
+        $scope.getPath();
         $scope.$safeApply();
     }
-    ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:TextBookUnit', $scope.setMetaformValues);
+    ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:TextBookUnit', $scope.onNodeSelect);
+
+    $scope.getPath = function() {
+        $scope.path = [];
+        var path = ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getKeyPath();
+        _.forEach(path.split('/'), function(key) {
+            if(key){
+                var node = ecEditor.jQuery("#collection-tree").fancytree("getTree").getNodeByKey(key);
+                $scope.path.push({'title' : node.title, 'nodeId'  : node.key })
+            }
+        });
+        $scope.$safeApply();
+    }
+
+    $scope.setActiveNode = function(nodeId){
+        org.ekstep.collectioneditor.collectionService.setActiveNode(nodeId);
+    }
 }]);
 //# sourceURL=unitmetaApp.js
