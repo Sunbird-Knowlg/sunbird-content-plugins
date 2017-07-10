@@ -167,3 +167,12 @@ body {
     left: initial!important;
     right: 0!important;
 }
+
+#collection-tree span.fancytree-node:hover {
+    background: #f5f5f5!important;
+}
+
+#collection-tree span i:hover {
+    cursor: pointer!important;
+    color: #4a4a4a!important;
+}
