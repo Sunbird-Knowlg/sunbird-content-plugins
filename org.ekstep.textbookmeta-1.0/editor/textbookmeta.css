@@ -129,6 +129,7 @@
     border: none!important;
     padding-left: 0!important;
     padding-top: 0!important;
+    padding-right: 0!important;
 }
 
 .header-segment .ui.breadcrumb {
@@ -164,7 +165,7 @@
     width: 50%;
     height: 38%;
     padding-right: 0;
-    right: 20px;
+    right: 0!important;
 }
 
 .header-buttons-container .ui.button {
@@ -251,14 +252,4 @@
 
 .ui.form .ng-invalid {
     border-color: red !important;
-}
-
-.remove-unit-popup,
-.success-popup {
-    width: 30%!important;
-}
-
-.remove-unit-buttons {
-    padding-left: 1.6em;
-    margin-top: 1em;
 }
