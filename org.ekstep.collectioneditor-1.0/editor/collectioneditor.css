@@ -24,7 +24,7 @@ body {
     margin-left: -1em!important;
 }
 
-.collection-masterhead .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown .menu{
+.collection-masterhead .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown .menu {
     left: -48px!important;
 }
 
@@ -161,4 +161,9 @@ body {
 .icon-container {
     color: #9b9b9b;
     float: right;
+}
+
+#collection-tree .ui.dropdown .menu {
+    left: initial!important;
+    right: 0!important;
 }

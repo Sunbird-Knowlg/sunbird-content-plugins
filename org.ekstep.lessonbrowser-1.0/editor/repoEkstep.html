@@ -17,10 +17,9 @@
         <div class="row filters-and-lessons-wrapper" ng-if="!$ctrl.err">
             <!-- Filters start -->
             <div class="four wide column">
-                <!-- <div class="row">
-	  			<h4>Filters</h4>
-	  			<div class="ui divider"></div>
-	  		</div> -->
+                <div class="row">
+	  			<h5>Filters</h5>
+	  		</div>
                 <div class="ui styled accordion source-filter-container f6f7f8-background" style="margin-top: 5px; margin-bottom: 20px;">
                     <div class="title">
                         Language ({{filterSelection.lang.length}})
@@ -128,12 +127,11 @@
             <!-- Filters end -->
             <!-- Result start -->
             <div class="eight wide column" style="padding-left:0; padding-right:0;">
-                <!-- <div class="row">
-	  			<h4>Lessons
+                <div class="row">
+	  			<h5>Lessons
 	  			<span style="font-size: 0.8em">({{ $ctrl.res.count }})</span>
-	  			</h4>
-	  			<div class="ui divider"></div>
-	  		</div> -->
+	  			</h5>
+	  		</div>
                 <div class="ui grid source-result-container">
                     <div class="row lesson-row" ng-repeat="lesson in $ctrl.res.content">
                         <div class="two wide column lesson-image-box" style="padding-top: 3px;">
