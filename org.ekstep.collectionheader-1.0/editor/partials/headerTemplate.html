@@ -66,6 +66,14 @@
     top: -5px;
     right: -5px;
 }
+
+.header-icon-container .custom-row-2{
+    display: inline-block;
+    position: absolute;
+    bottom: 5px;
+    right: 1em;
+}
+
 </style>
 <div ng-app="org.ekstep.ceheader:headerApp" ng-controller="mainController" class="ui masthead vertical segment content-masterhead">
     <!-- new header code start -->
@@ -102,9 +110,10 @@
                 <div ng-if="lastSaved" class="last-saved-label">
                     <label class="">{{lastSaved}}</label>
                 </div>
-                <div class="icon-box popup-item" data-content="Save content" data-variation="tiny inverted" data-position="top center" ng-click="saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId">
-                    <i class="ui primary icon-save custom-icon" ng-class="saveBtnEnabled ? 'ui' : 'ui disabled'"></i>
+                <div class="ui primary icon button button-overrides popup-item" data-content="Save content" data-variation="tiny inverted" data-position="top center" ng-click="saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId">
+                    <i class="icon-save" ng-class="saveBtnEnabled ? 'ui' : 'ui disabled'"></i>&nbsp;&nbsp;Save
                 </div>
+                
             </div>
         </div>
     </div>
