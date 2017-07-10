@@ -1,5 +1,7 @@
 angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$scope', function($scope) {
-    $scope.mode = org.ekstep.collectioneditor.collectionService.getConfig().mode;
+    $scope.mode = org.ekstep.collectioneditor.api.getService('collection').getConfig().mode;
+    $scope.metadataCloneObj = {};
+
     org.ekstep.collectioneditor.api.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.gradeList = resp.data.result.ordinals.gradeLevel;
@@ -51,16 +53,19 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
     }
     
     $scope.updateNode = function(){
-        $scope.modifyArr = [];
+        var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
+        if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id])) {
+            org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id] = {};
+        }
         if(_.isString($scope.textbook.tags)){
             $scope.textbook.tags = $scope.textbook.tags.split(',');
         }
-        var activeNode = org.ekstep.collectioneditor.collectionService.getActiveNode();
-        org.ekstep.collectioneditor.collectionService.setNodeTitle($scope.textbook.name);
-        $scope.unit.contentType = activeNode.data.objectType;
+        org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
+        $scope.textbook.contentType = activeNode.data.objectType;
         org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id]["isNew"] = false;
         org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id]["root"] = true;
-        org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id] = $scope.getUpdatedMetadata(activeNode.data.meta, $scope.textbook);
+        org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
+        $scope.metadataCloneObj = _.clone($scope.textbook);
         $scope.$safeApply();
     }
 
@@ -82,18 +87,6 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
         return metadata;
     }
 
-    $scope.createModifyArray = function(activeNode, newValue, oldValue, attribute){
-        $scope.modifyArr.push({
-            "ts": Date.now(), 
-            "target": activeNode.data.id, 
-            "action": "modify", 
-            "parent": activeNode.parent.data.id,
-            "attribute": attribute, 
-            "oldValue": oldValue, 
-            "newValue": newValue
-        });
-    }
-
     $scope.addlesson = function(){
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
     }
@@ -101,25 +94,28 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
     $scope.onNodeSelect = function(evant, data){
         var nodeId = data.data.id;
         var nodeType = data.data.objectType;
-        var editable = data.editable;
+        $scope.textbook = {};
+        $scope.editMode = false;
+        $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
         $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.textbookmeta", "1.0", "assets/default.png");
 
-        if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[nodeId])) {
-            org.ekstep.collectioneditor.cache.nodesModified[nodeId] = {};
-        }
-        var activeNode = org.ekstep.collectioneditor.collectionService.getActiveNode();
-        if(_.isEmpty(activeNode.data.metadata) || _.isUndefined(activeNode.data.metadata)){
-            $scope.textbook = {};
+        var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
+        if($scope.mode === "Edit" && $scope.editable === true){
             $scope.editMode = true;
             $('.ui.dropdown').dropdown('refresh');
-        }else{
+            $scope.metadataCloneObj = _.clone($scope.textbook);
+        }
+        if(!_.isEmpty(activeNode.data.metadata)){
             $scope.editMode = false;
             $scope.textbook = activeNode.data.metadata;
+            
+            $scope.textbook = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[nodeId].metadata);
             $('#board').dropdown('set selected', $scope.textbook.board);
             $('#medium').dropdown('set selected', $scope.textbook.medium);
             $('#subject').dropdown('set selected', $scope.textbook.subject);
             $('#gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
             $('#audience').dropdown('set selected', $scope.textbook.audience);
+            $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
         }
         $scope.getPath();
         $scope.$safeApply();
@@ -141,7 +137,7 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
     }
 
     $scope.setActiveNode = function(nodeId){
-        org.ekstep.collectioneditor.collectionService.setActiveNode(nodeId);
+        org.ekstep.collectioneditor.api.getService('collection').setActiveNode(nodeId);
     }
 }]);
 //# sourceURL=textbookmetaApp.js

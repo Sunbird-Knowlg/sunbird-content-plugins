@@ -1,9 +1,12 @@
-<div ng-app="textbookmetaApp" class="metacontent-wrapper" ng-controller="textbookmetaController">
+<div ng-app="contentmetaApp" class="metacontent-wrapper" ng-controller="contentmetaController">
     <div class="ui segment header-segment">
         <div class="ui breadcrumb">
-            <a class="section" ng-click="setActiveNode(path.nodeId)">{{path.title}}</a>
+            <a class="section" ng-repeat="value in path" ng-click="setActiveNode(value.nodeId)">
+                {{value.title}} 
+                <div class="divider"> / </div>
+            </a>
         </div>
-        <h3 class="header-bottom-segment inline-block">{{textbook.name}}</h3>
+        <h3 class="header-bottom-segment inline-block">{{content.name}}</h3>
         <div class="header-buttons-container header-bottom-segment inline-block" ng-show="mode == 'Edit' && editable == true">
             <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true;" ng-show="!editMode">
                 Edit
@@ -13,43 +16,19 @@
             </div>
         </div>
     </div>
-    <!-- Confirmation dialog start -->
-<!--     <div class="ui icon negative message remove-unit-popup">
-        <i class="close icon"></i>
-        <div class="content">
-            <div class="header">
-                <i class="fa fa-exclamation-triangle"></i> Do you want to remove this&nbsp;<span class="removal-element">unit</span>
-            </div>
-            <div class="remove-unit-buttons">
-                <div class="ui red button button-overrides" id="remove-yes-button">Yes</div>
-                <div class="ui basic primary button button-overrides" id="remove-no-button">No</div>
-            </div>
-        </div>
-    </div>
- -->    <!-- Confirmation dialog end -->
-    <!-- Success dialog start -->
-<!--     <div class="ui icon positive message success-popup">
-        <i class="close icon"></i>
-        <div class="content">
-            <div class="header">
-                <i class="fa fa-check-circle-o"></i> Successfully saved content
-            </div>
-        </div>
-    </div>
- -->    <!-- Success dialog end -->
     <div class="ui segment" id="read-metadata-wrapper" ng-show="!editMode">
         <div class="ui items">
             <div class="item">
                 <div class="ui tiny image">
-                    <img ng-src="{{textbook.appIcon || defaultImage}}" alt="">
+                    <img ng-src="{{content.appIcon || defaultImage}}" alt="">
                 </div>
                 <div class="content">
-                    <div class="header">{{textbook.name}}</div>
+                    <div class="header">{{content.name}}</div>
                     <div class="meta">by&nbsp;
-                        <span id="book-author">{{textbook.author}}</span>
+                        <span id="book-author">{{content.author}}</span>
                     </div>
                     <div class="description">
-                        <p>{{textbook.description}}</p>
+                        <p>{{content.description}}</p>
                     </div>
                 </div>
             </div>
@@ -58,50 +37,50 @@
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Board</h5>
-                    <h5 class="field-value">{{textbook.board | uppercase}}</h5>
+                    <h5 class="field-value">{{content.board | uppercase}}</h5>
                 </div>
             </div>
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Medium</h5>
-                    <h5 class="field-value">{{textbook.medium | lowercase}}</h5>
+                    <h5 class="field-value">{{content.medium | lowercase}}</h5>
                 </div>
             </div>
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Subject</h5>
-                    <h5 class="field-value">{{textbook.subject | lowercase}}</h5>
+                    <h5 class="field-value">{{content.subject | lowercase}}</h5>
                 </div>
             </div>
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Grade</h5>
-                    <h5 class="field-value">{{textbook.gradeLevel | lowercase}}</h5>
+                    <h5 class="field-value">{{content.grade | lowercase}}</h5>
                 </div>
             </div>
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Publication</h5>
-                    <h5 class="field-value">{{textbook.publication | lowercase}}</h5>
+                    <h5 class="field-value">{{content.publication | lowercase}}</h5>
                 </div>
             </div>
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Edition</h5>
-                    <h5 class="field-value">{{textbook.edition | lowercase}}</h5>
+                    <h5 class="field-value">{{content.edition | lowercase}}</h5>
                 </div>
             </div>
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Audience</h5>
-                    <h5 class="field-value">{{textbook.audience | lowercase}}</h5>
+                    <h5 class="field-value">{{content.audience.toString() | lowercase}}</h5>
                 </div>
             </div>
             <div class="long metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Concepts</h5>
                     <div class="field-value-wrapper">
-                        <span class="field-value" ng-repeat="concept in textbook.concepts">{{concept.Name}}</span>
+                        <span class="field-value" ng-repeat="concept in content.concepts">{{concept.Name}}</span>
                     </div>
                 </div>
             </div>
@@ -109,7 +88,8 @@
                 <div class="field-text">
                     <h5 class="field-key">Keywords</h5>
                     <div class="field-value-wrapper">
-                        <span class="field-value" ng-repeat="tag in textbook.tags">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
+                        <!-- <span class="field-value" ng-repeat="tag in content.tags">{{tag | lowercase}}{{$last ? '' : ', '}}</span> -->
+                        <span class="field-value" ng-repeat="tag in content.tags track by $index">{{tag | lowercase}}</span>
                     </div>
                 </div>
             </div>
@@ -121,41 +101,41 @@
                 <label for="bookImage">Add icon</label>
                 <div class="book-image-container" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
-                    <img ng-src="{{textbook.appIcon}}" ng-show="textbook.appIcon != ''" />
+                    <img ng-src="{{content.appIcon}}" ng-show="content.appIcon != ''" />
                 </div>
             </div>
             <div class="field form-fields-except-image">
                 <div class=" field">
-                    <label>Title</label>
+                    <label>Content Title</label>
                     <div class="ui input">
-                        <input placeholder="Enter title for Book" ng-model="textbook.name" name="title" type="text" required>
+                        <input placeholder="Enter title for Book" ng-model="content.name" name="title" type="text" required>
                     </div>
                 </div>
                 <div class="four fields">
                     <div class="field">
                         <label for="board">Board</label>
-                        <select id="board" class="ui selection dropdown" ng-model="textbook.board">
+                        <select id="contentBoard" class="ui selection dropdown" ng-model="content.board">
                             <option value="">Board</option>
                             <option value="{{board}}" ng-repeat="board in boardList">{{board}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="medium">Medium</label>
-                        <select id="medium" class="ui selection dropdown" ng-model="textbook.medium">
+                        <select id="contentMedium" class="ui selection dropdown" ng-model="content.medium">
                             <option value="">Medium</option>
                             <option value="{{medium}}" ng-repeat="medium in languageList">{{medium}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="subject">Subject</label>
-                        <select id="subject" class="ui selection dropdown" ng-model="textbook.subject">
+                        <select id="contentSubject" class="ui selection dropdown" ng-model="content.subject">
                             <option value="">Subject</option>
                             <option value="{{subject}}" ng-repeat="subject in subjectList">{{subject}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="grade">Grade</label>
-                        <select id="gradeLevel" class="ui selection dropdown" ng-model="textbook.gradeLevel">
+                        <select id="contentGradeLevel" class="ui selection dropdown" ng-model="content.gradeLevel">
                             <option value="">Grade</option>
                             <option value="{{gradeLevel}}" ng-repeat="gradeLevel in gradeList">{{gradeLevel}}</option>
                         </select>
@@ -164,35 +144,35 @@
                 <div class="three fields">
                     <div class=" field">
                         <label for="author">Author</label>
-                        <input type="text" placeholder="Enter author name" ng-model="textbook.author" required />
+                        <input type="text" placeholder="Enter author name" ng-model="content.author" required />
                     </div>
                     <div class="field">
                         <label for="publication">Publication</label>
-                        <input type="text" placeholder="Publication (optional)" ng-model="textbook.publication" />
+                        <input type="text" placeholder="Publication (optional)" ng-model="content.publication" />
                     </div>
                     <div class="field">
                         <label for="edition">Edition</label>
-                        <input type="text" placeholder="Edition (optional)" ng-model="textbook.edition" />
+                        <input type="text" placeholder="Edition (optional)" ng-model="content.edition" />
                     </div>
                 </div>
                 <div class="requiered field">
                     <label>Description</label>
                     <div class="ui input">
-                        <textarea placeholder="brief description about the unit" ng-model="textbook.description" rows="2" required></textarea>
+                        <textarea placeholder="brief description about the content" ng-model="content.description" rows="2" required></textarea>
                     </div>
                 </div>
                 <div class="field">
                     <label>Concepts</label>
-                    <input name="concepts" id="textbookConceptSelector" ng-model="textbook.concepts" type="text">
+                    <input name="concepts" id="contentConceptSelector" ng-model="content.concepts" type="text">
                 </div>
                 <div class="two fields">
                     <div class=" twelve wide field">
                         <label>Keywords</label>
-                        <input id="keywords" name="keywords" ng-model="textbook.tags" type="text" required>
+                        <input id="keywords" name="keywords" ng-blur="content.tags.split(',');" ng-model="content.tags" type="text" required>
                     </div>
                     <div class="four wide field">
                         <label for="audience">Audience</label>
-                        <select id="audience" class="ui selection dropdown" ng-model="textbook.audience">
+                        <select id="contentAudience" class="ui selection dropdown" ng-model="content.audience">
                             <option value="">Audience</option>
                             <option value="{{audience}}" ng-repeat="audience in audienceList">{{audience}}</option>
                         </select>
@@ -200,7 +180,7 @@
                 </div>
                 <div class="field">
                     <label>Notes to Teacher</label>
-                    <input placeholder="Add Notes" ng-model="textbook.notes" name="notes" type="text">
+                    <input placeholder="Add Notes" ng-model="content.notes" name="notes" type="text">
                 </div>
             </div>
         </div>

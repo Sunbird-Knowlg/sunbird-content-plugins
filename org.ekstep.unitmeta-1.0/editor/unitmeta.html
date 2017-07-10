@@ -7,7 +7,7 @@
             </a>
         </div>
         <h3 class="header-bottom-segment inline-block">{{unit.name}}</h3>
-        <div class="header-buttons-container header-bottom-segment inline-block" ng-show="mode == 'Edit'">
+        <div class="header-buttons-container header-bottom-segment inline-block" ng-show="mode == 'Edit' && editable == true">
             <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true;" ng-show="!editMode">
                 Edit
             </div>
@@ -181,10 +181,6 @@
                 <div class="field">
                     <label>Notes to Teacher</label>
                     <input placeholder="Add Notes" ng-model="unit.notes" name="notes" type="text">
-                </div>
-                <div class="field">
-                    <label>Page No.</label>
-                    <input placeholder="Page no" ng-model="unit.pageNumber" name="pageNumber" type="text">
                 </div>
             </div>
         </div>
