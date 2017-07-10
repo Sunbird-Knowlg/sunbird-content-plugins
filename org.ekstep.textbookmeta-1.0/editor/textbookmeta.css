@@ -226,17 +226,17 @@
 
 .metacontent-fields-container .ui.cards>.card {
     border: none!important;
-    box-shadow: -1px 0px 0px 0px #D4D4D5!important;
+    box-shadow: none!important;
     border-radius: 0!important;
     font-size: 1em!important;
-
+    border-left: 0.1px solid #d4d4d5!important;
+    width: 13em!important;
 }
 
 .metacontent-fields-container .ui.card>.content>.header:not(.ui),
 .metacontent-fields-container .ui.cards>.card>.content>.header:not(.ui) {
     font-size: 1em!important;
 }
-
 
 .ui.form .ng-invalid {
     border-color: red !important;

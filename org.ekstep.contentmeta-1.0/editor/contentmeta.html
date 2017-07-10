@@ -25,76 +25,77 @@
         <div class="ui items">
             <div class="item">
                 <div class="ui tiny image">
-                    <img ng-src="{{content.appIcon || defaultImage}}" alt="">
+                    <img ng-src="{{textbook.appIcon || defaultImage}}" alt="">
                 </div>
                 <div class="content">
-                    <div class="header">{{content.name}}</div>
+                    <div class="header">{{textbook.name}}</div>
                     <div class="meta">by&nbsp;
-                        <span id="book-author">{{content.author}}</span>
+                        <span id="book-author">{{textbook.author}}</span>
                     </div>
                     <div class="description">
-                        <p>{{content.description}}</p>
+                        <p>{{textbook.description}}</p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="metacontent-fields-container">
-            <div class="metacontent-field">
-                <div class="field-text">
-                    <h5 class="field-key">Board</h5>
-                    <h5 class="field-value">{{content.board.toString() | uppercase}}</h5>
-                </div>
-            </div>
-            <div class="metacontent-field">
-                <div class="field-text">
-                    <h5 class="field-key">Medium</h5>
-                    <h5 class="field-value">{{content.medium.toString() | lowercase}}</h5>
-                </div>
-            </div>
-            <div class="metacontent-field">
-                <div class="field-text">
-                    <h5 class="field-key">Subject</h5>
-                    <h5 class="field-value">{{content.subject.toString() | lowercase}}</h5>
-                </div>
-            </div>
-            <div class="metacontent-field">
-                <div class="field-text">
-                    <h5 class="field-key">Grade</h5>
-                    <h5 class="field-value">{{content.grade.toString() | lowercase}}</h5>
-                </div>
-            </div>
-            <div class="metacontent-field">
-                <div class="field-text">
-                    <h5 class="field-key">Publication</h5>
-                    <h5 class="field-value">{{content.publication | lowercase}}</h5>
-                </div>
-            </div>
-            <div class="metacontent-field">
-                <div class="field-text">
-                    <h5 class="field-key">Edition</h5>
-                    <h5 class="field-value">{{content.edition | lowercase}}</h5>
-                </div>
-            </div>
-            <div class="metacontent-field">
-                <div class="field-text">
-                    <h5 class="field-key">Audience</h5>
-                    <h5 class="field-value">{{content.audience.toString() | lowercase}}</h5>
-                </div>
-            </div>
-            <div class="long metacontent-field">
-                <div class="field-text">
-                    <h5 class="field-key">Concepts</h5>
-                    <div class="field-value-wrapper">
-                        <span class="field-value" ng-repeat="concept in content.concepts">{{concept.Name}}</span>
+            <div class="ui cards">
+                <div class="card">
+                    <div class="content">
+                        <div class="header">Board</div>
+                        <div class="description">{{textbook.board.toString() | uppercase}}</div>
                     </div>
                 </div>
-            </div>
-            <div class="long metacontent-field">
-                <div class="field-text">
-                    <h5 class="field-key">Keywords</h5>
-                    <div class="field-value-wrapper">
-                        <!-- <span class="field-value" ng-repeat="tag in content.tags">{{tag | lowercase}}{{$last ? '' : ', '}}</span> -->
-                        <span class="field-value" ng-repeat="tag in content.tags track by $index">{{tag | lowercase}}</span>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">Medium</div>
+                        <div class="description">{{textbook.medium.toString() | lowercase}}</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">Subject</div>
+                        <div class="description">{{textbook.subject.toString() | lowercase}}</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">Grade</div>
+                        <div class="description">{{textbook.gradeLevel.toString() | lowercase}}</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">Publication</div>
+                        <div class="description">{{textbook.publication | lowercase}}</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">Edition</div>
+                        <div class="description">{{textbook.edition | lowercase}}</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">Audience</div>
+                        <div class="description">{{textbook.audience.toString() | lowercase}}</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">Concepts</div>
+                        <div class="description">
+                            <span class="field-value" ng-repeat="concept in textbook.concepts">{{concept.Name}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">Keywords</div>
+                        <div class="description">
+                            <span class="field-value" ng-repeat="tag in textbook.tags">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
+                        </div>
                     </div>
                 </div>
             </div>

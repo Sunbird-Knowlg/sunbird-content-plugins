@@ -86,7 +86,6 @@ body {
     width: calc(100% - 320px)!important;
     height: 100%;
     padding: 0!important;
-    // padding-left: 2rem!important;
 }
 
 #collection-tree::-webkit-scrollbar {
@@ -100,12 +99,7 @@ body {
 }
 
 #collection-tree span {
-    color: #9b9b9b;
-}
-
-.fancytree-treefocus span.fancytree-active span.fancytree-title,
-.fancytree-treefocus span.fancytree-selected span.fancytree-title {
-    color: #fff!important;
+    color: #4a4a4a;
 }
 
 .tree-access-tools .ui.search,
@@ -174,5 +168,4 @@ body {
 
 #collection-tree span i:hover {
     cursor: pointer!important;
-    color: #4a4a4a!important;
 }
