@@ -1,27 +1,5 @@
-<div ng-app="org.ekstep.collectioneditor" ng-controller="mainController" class="ui masthead vertical segment content-masterhead">
-    <div class="ui grid page-header">
-        <div class="one column">
-            <img class="ui mini image content-logo" ng-src="{{contentDetails.contentImage}}">
-        </div>
-        <div class="five wide column" style="padding-left: 0px">
-            <div class="ui canvas" style="margin-top: 6px; ">
-                <label class="content-title" ng-bind="contentDetails.contentTitle | limitTo:30">
-                    <span ng-if="contentDetails.contentTitle.length > 30">...</span></label>
-                <label class="content-type-label" ng-bind="contentDetails.contentType"></label>
-                <a class="btn at-btn at-btn-ok" ng-click="editContentMeta(); fireTelemetry({id: 'editMeta'}, 'editMetaButton')">
-                    <i class="edit icon link"></i>
-                </a>
-            </div>
-            <div class="row">
-                <label class="content-concept-label" ng-bind="contentDetails.contentConcepts"></label>
-            </div>
-        </div>
-        <div class="right floated four wide column bottom aligned" style="padding-right: 20px;">
-            <button class="ui compact icon button right floated ce-button" ng-class="saveBtnEnabled ? 'ui compact icon button right floated ce-button' : 'ui compact icon button right floated disabled'" ng-click="saveContent(); fireTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId" style="margin-left: 5px;">
-                <i class="icon-save icon"></i> Save
-            </button>
-        </div>
-    </div>
+<div ng-app="org.ekstep.collectioneditor" ng-controller="mainController" class="ui masthead vertical segment collection-masterhead">
+<div ng-repeat="header in headers" ng-include="header.templateURL"></div>
     <div class="ui grid main-body">
         <div class="ui column" id="table-of-contents">
             <div class="ui segments">
