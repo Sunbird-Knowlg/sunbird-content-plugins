@@ -34,9 +34,9 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
         selectedConcepts: [], // All composite keys except mediaType
         callback: function(data) {
             $scope.textbook.concepts = '(' + data.length + ') concepts selected';
-            // $scope.concepts = _.map(data, function(concept) {
-            //     return concept.id;
-            // });
+            $scope.textbook.conceptData = _.map(data, function(concept) {
+                return { "identifier" : concept.id , "name" : concept.name} ;
+            });
             $scope.$safeApply();
         }
     });
@@ -115,6 +115,8 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
             $('#subject').dropdown('set selected', $scope.textbook.subject);
             $('#gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
             $('#audience').dropdown('set selected', $scope.textbook.audience);
+            $scope.textbook.conceptData = activeNode.data.metadata.concepts;
+            $scope.textbook.concepts = '(' + $scope.textbook.conceptData.length + ') concepts selected';
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
         }
         $scope.getPath();

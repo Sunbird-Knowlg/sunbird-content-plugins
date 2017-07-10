@@ -80,7 +80,7 @@
                 <div class="field-text">
                     <h5 class="field-key">Concepts</h5>
                     <div class="field-value-wrapper">
-                        <span class="field-value" ng-repeat="concept in unit.concepts">{{concept.Name}}</span>
+                        <span class="field-value" ng-repeat="concept in unit.conceptData">{{concept.name}}{{$last ? '' : ', '}}</span>
                     </div>
                 </div>
             </div>
@@ -88,8 +88,7 @@
                 <div class="field-text">
                     <h5 class="field-key">Keywords</h5>
                     <div class="field-value-wrapper">
-                        <!-- <span class="field-value" ng-repeat="tag in unit.tags">{{tag | lowercase}}{{$last ? '' : ', '}}</span> -->
-                        <span class="field-value" ng-repeat="tag in unit.tags track by $index">{{tag | lowercase}}</span>
+                        <span class="field-value" ng-repeat="tag in unit.tags track by $index">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
                     </div>
                 </div>
             </div>

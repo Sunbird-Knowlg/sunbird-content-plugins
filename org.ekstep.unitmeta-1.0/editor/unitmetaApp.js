@@ -33,9 +33,9 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         selectedConcepts: [], // All composite keys except mediaType
         callback: function(data) {
             $scope.unit.concepts = '(' + data.length + ') concepts selected';
-            // $scope.concepts = _.map(data, function(concept) {
-            //     return concept.id;
-            // });
+            $scope.unit.conceptData = _.map(data, function(concept) {
+                return { "identifier" : concept.id , "name" : concept.name} ;
+            });
             $scope.$safeApply();
         }
     });
@@ -113,6 +113,8 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             $('#unitSubject').dropdown('set selected', $scope.unit.subject);
             $('#unitGradeLevel').dropdown('set selected', $scope.unit.gradeLevel);
             $('#unitAudience').dropdown('set selected', $scope.unit.audience);
+            $scope.unit.conceptData = activeNode.data.metadata.concepts;
+            $scope.unit.concepts = '(' + $scope.unit.conceptData.length + ') concepts selected';
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
         }
         $scope.getPath();
