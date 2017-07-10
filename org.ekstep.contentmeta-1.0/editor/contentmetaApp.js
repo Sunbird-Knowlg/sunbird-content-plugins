@@ -1,6 +1,7 @@
 angular.module('contentmetaApp', []).controller('contentmetaController', ['$scope', function($scope) {
     $scope.mode = org.ekstep.collectioneditor.api.getService('collection').getConfig().mode;
     $scope.metadataCloneOb = {};
+    $scope.nodeId = $scope.nodeType = '';
     org.ekstep.collectioneditor.api.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.gradeList = resp.data.result.ordinals.gradeLevel;
@@ -52,19 +53,18 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     }
     
     $scope.updateNode = function(){
-        var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
-        if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id])) {
-            org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id] = {};
+        if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
         }
         if(_.isString($scope.content.tags)){
             $scope.content.tags = $scope.content.tags.split(',');
         }
-        $scope.content.contentType = activeNode.data.objectType;
+        $scope.content.contentType = $scope.nodeType;
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
-        org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id]["isNew"] = _.isEmpty(activeNode.data.metadata) ? true : false;
-        org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id]["root"] = false;
-        org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id].metadata , $scope.getUpdatedMetadata(activeNode.data.meta, $scope.content));;
-        $scope.metadataCloneObj = _.clone($scope.textbook);
+        org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = false;
+        org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = false;
+        org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.content));;
+        $scope.metadataCloneObj = _.clone($scope.content);
         $scope.$safeApply();
     }
 
@@ -86,18 +86,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         return metadata;
     }
 
-    $scope.createModifyArray = function(activeNode, newValue, oldValue, attribute){
-        $scope.modifyArr.push({
-            "ts": Date.now(), 
-            "target": activeNode.data.id, 
-            "action": "modify", 
-            "parent": activeNode.parent.data.id,
-            "attribute": attribute, 
-            "oldValue": oldValue, 
-            "newValue": newValue
-        });
-    }
-
     $scope.addlesson = function(){
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
     }
@@ -106,9 +94,9 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         var contentArr = ["Story", "Collection", "Game", "Worksheet"];
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
         if(_.indexOf(contentArr, data.data.objectType) != -1){
-            var nodeId = data.data.id;
-            var nodeType = data.data.objectType;
-            $scope.unit = {};
+            $scope.nodeId = data.data.id;
+            $scope.nodeType = data.data.objectType;
+            $scope.content = {};
             $scope.editMode = false;
             $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
             $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.contentmeta", "1.0", "assets/default.png");
@@ -121,7 +109,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             }
             if(!_.isEmpty(activeNode.data.metadata)){
                 $scope.editMode = false;
-                $scope.content = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[nodeId].metadata);
+                $scope.content = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
                 $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
             }
             $scope.getPath();
@@ -143,6 +131,24 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
 
     $scope.setActiveNode = function(nodeId){
         org.ekstep.collectioneditor.api.getService('collection').setActiveNode(nodeId);
+    }
+
+    // $scope.previewContent = function(){
+    //     org.ekstep.contenteditor.globalContex = {};
+    //     ecEditor.setContext('contentId', $scope.nodeId);
+    //     org.ekstep.services.contentService.getContent($scope.nodeId, function(err, content) {
+    //         if (!err) {
+    //             var contentBody = content.body;
+    //             org.ekstep.pluginframework.eventManager.dispatchEvent("atpreview:show", { contentBody: content.body, 'currentStage': false });
+    //             console.log('contentBody ',contentBody);
+    //         } else {
+    //           //  org.ekstep.services.telemetryService.error({ "env": "content", "stage": "", "action": "show error and stop the application", "err": "Unable to fetch content from remote", "type": "API", "data": err, "severity": "fatal" });
+    //         }
+    //     });
+    // }
+
+    $scope.generateTelemetry = function(data) {
+        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.contentmeta", "pluginver": "1.0", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
 }]);
 //# sourceURL=contentmetaApp.js

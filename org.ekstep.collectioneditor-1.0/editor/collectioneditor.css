@@ -6,8 +6,8 @@ body {
 .collection-masterhead {
     padding: 0 1em!important;
     height: 100vh!important;
-    padding-left: 2rem!important;
-    padding-right: 1rem!important;
+    padding-left: 2em!important;
+    padding-right: 2em!important;
     background: #fff!important;
 }
 
@@ -20,7 +20,8 @@ body {
 
 .header-wrapper .custom-container {
     margin: 0!important;
-    min-width: 101.2%!important;
+    min-width: 100vw!important;
+    margin-left: -1em!important;
 }
 
 .collection-masterhead .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown .menu{
