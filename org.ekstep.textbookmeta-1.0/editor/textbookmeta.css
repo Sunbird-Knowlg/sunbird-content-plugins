@@ -192,7 +192,8 @@
     /*display: none!important;*/
 }
 
-#add-lesson-button:hover {
+#add-lesson-button:hover,
+#remove-no-button:hover {
     background: #317bca!important;
     color: #fff!important;
 }
@@ -249,4 +250,14 @@
 
 .ui.form .ng-invalid {
     border-color: red !important;
+}
+
+.remove-unit-popup,
+.success-popup {
+    width: 30%!important;
+}
+
+.remove-unit-buttons {
+    padding-left: 1.6em;
+    margin-top: 1em;
 }
