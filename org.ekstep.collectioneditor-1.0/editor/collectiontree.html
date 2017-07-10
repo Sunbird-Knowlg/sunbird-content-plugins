@@ -1,5 +1,5 @@
 <div ng-app="org.ekstep.collectioneditor" ng-controller="mainController" class="ui masthead vertical segment collection-masterhead">
-<div ng-repeat="header in headers" ng-include="header.templateURL"></div>
+    <div ng-repeat="header in headers" ng-include="header.templateURL" class="header-wrapper "></div>
     <div class="ui grid main-body">
         <div class="ui column" id="table-of-contents">
             <div class="ui segments">
@@ -24,7 +24,7 @@
             </div>
         </div>
         <div class="ui column" id="contents-pane">
-            <div class="metacontent-holder metadata-form-container"  ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" ng-include="page.templateURL"></div>
+            <div class="metacontent-holder metadata-form-container" ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" ng-include="page.templateURL"></div>
         </div>
     </div>
 </div>

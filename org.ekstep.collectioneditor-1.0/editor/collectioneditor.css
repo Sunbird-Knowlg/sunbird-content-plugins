@@ -3,15 +3,25 @@ body {
     color: #9b9b9b!important;
 }
 
-.content-masterhead {
+.collection-masterhead {
     padding: 0 1em!important;
     height: 100vh!important;
-}
-
-.ui.vertical.segment {
     padding-left: 2rem!important;
     padding-right: 2rem!important;
 }
+
+.header-wrapper {
+    width: 100%!important;
+    padding-left: 0!important;
+    padding-right: 0!important;
+    margin-left: -1em;
+}
+
+.header-wrapper .custom-container {
+    margin: 0!important;
+    min-width: 100%!important;
+}
+
 
 .page-header {
     height: 10%!important;
@@ -31,7 +41,7 @@ body {
 .main-body {
     height: 90%!important;
     margin-bottom: 0!important;
-    margin-top: 0.5em!important;
+    margin-top: 0em!important;
 }
 
 .ui-fancytree:focus {
@@ -75,8 +85,6 @@ body {
     padding-left: 2rem!important;
 }
 
-
-
 #collection-tree::-webkit-scrollbar {
     width: 0!important;
     height: 0!important;
@@ -113,7 +121,8 @@ body {
     padding: 0.4em 0 0 0!important;
 }
 
-.tree-access-tools i.icon, .book-image-container i.icon{
+.tree-access-tools i.icon,
+.book-image-container i.icon {
     color: #9b9b9b;
 }
 
@@ -127,7 +136,6 @@ body {
     color: black;
     cursor: pointer;
 }
-
 
 .tree-access-tools .ui.search {
     height: 23px;
@@ -146,10 +154,7 @@ body {
     height: 8%!important;
 }
 
-
-
 .icon-container {
     color: #9b9b9b;
     float: right;
 }
-
