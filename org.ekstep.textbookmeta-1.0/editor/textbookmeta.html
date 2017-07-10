@@ -5,10 +5,10 @@
         </div>
         <h3 class="header-bottom-segment inline-block">{{textbook.name}}</h3>
         <div class="header-buttons-container header-bottom-segment inline-block" ng-show="mode == 'Edit' && editable == true">
-            <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true;" ng-show="!editMode">
+            <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'})" ng-show="!editMode">
                 Edit
             </div>
-            <div ng-class="metaForm.$invalid ? 'ui primary button disabled right-float button-overrides' : 'ui primary button right-float button-overrides' " id="update-button" ng-click="editMode = false; updateNode()" ng-show="editMode">
+            <div ng-class="metaForm.$invalid ? 'ui primary button disabled right-float button-overrides' : 'ui primary button right-float button-overrides' " id="update-button" ng-click="editMode = false; updateNode(); generateTelemetry({type: 'click', subtype: 'update', target: 'updatemeta'})" ng-show="editMode">
                 Update
             </div>
         </div>
@@ -34,25 +34,25 @@
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Board</h5>
-                    <h5 class="field-value">{{textbook.board | uppercase}}</h5>
+                    <h5 class="field-value">{{textbook.board.toString() | uppercase}}</h5>
                 </div>
             </div>
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Medium</h5>
-                    <h5 class="field-value">{{textbook.medium | lowercase}}</h5>
+                    <h5 class="field-value">{{textbook.medium.toString() | lowercase}}</h5>
                 </div>
             </div>
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Subject</h5>
-                    <h5 class="field-value">{{textbook.subject | lowercase}}</h5>
+                    <h5 class="field-value">{{textbook.subject.toString() | lowercase}}</h5>
                 </div>
             </div>
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Grade</h5>
-                    <h5 class="field-value">{{textbook.gradeLevel | lowercase}}</h5>
+                    <h5 class="field-value">{{textbook.gradeLevel.toString() | lowercase}}</h5>
                 </div>
             </div>
             <div class="metacontent-field">
@@ -70,7 +70,7 @@
             <div class="metacontent-field">
                 <div class="field-text">
                     <h5 class="field-key">Audience</h5>
-                    <h5 class="field-value">{{textbook.audience | lowercase}}</h5>
+                    <h5 class="field-value">{{textbook.audience.toString() | lowercase}}</h5>
                 </div>
             </div>
             <div class="long metacontent-field">

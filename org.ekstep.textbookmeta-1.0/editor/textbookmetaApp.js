@@ -1,6 +1,7 @@
 angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$scope', function($scope) {
     $scope.mode = org.ekstep.collectioneditor.api.getService('collection').getConfig().mode;
     $scope.metadataCloneObj = {};
+    $scope.nodeId = $scope.nodeType = '';
 
     org.ekstep.collectioneditor.api.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
@@ -53,18 +54,17 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
     }
     
     $scope.updateNode = function(){
-        var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
-        if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id])) {
-            org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id] = {};
+        if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
         }
         if(_.isString($scope.textbook.tags)){
             $scope.textbook.tags = $scope.textbook.tags.split(',');
         }
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
-        $scope.textbook.contentType = activeNode.data.objectType;
-        org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id]["isNew"] = false;
-        org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id]["root"] = true;
-        org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[activeNode.data.id].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
+        $scope.textbook.contentType = $scope.nodeType;
+        org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = false;
+        org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = true;
+        org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
         $scope.metadataCloneObj = _.clone($scope.textbook);
         $scope.$safeApply();
     }
@@ -92,8 +92,8 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
     }
 
     $scope.onNodeSelect = function(evant, data){
-        var nodeId = data.data.id;
-        var nodeType = data.data.objectType;
+        $scope.nodeId = data.data.id;
+        $scope.nodeType = data.data.objectType;
         $scope.textbook = {};
         $scope.editMode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
@@ -109,7 +109,7 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
             $scope.editMode = false;
             $scope.textbook = activeNode.data.metadata;
             
-            $scope.textbook = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[nodeId].metadata);
+            $scope.textbook = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
             $('#board').dropdown('set selected', $scope.textbook.board);
             $('#medium').dropdown('set selected', $scope.textbook.medium);
             $('#subject').dropdown('set selected', $scope.textbook.subject);
@@ -138,6 +138,10 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
 
     $scope.setActiveNode = function(nodeId){
         org.ekstep.collectioneditor.api.getService('collection').setActiveNode(nodeId);
+    }
+
+    $scope.generateTelemetry = function(data) {
+        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.textbookmeta", "pluginver": "1.0", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
 }]);
 //# sourceURL=textbookmetaApp.js
