@@ -134,7 +134,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     }
 
     $scope.previewContent = function(){
-        org.ekstep.contenteditor.globalContex = {};
         ecEditor.setContext('contentId', $scope.nodeId);
         org.ekstep.services.contentService.getContent($scope.nodeId, function(err, content) {
             if (!err) {
@@ -142,7 +141,16 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 org.ekstep.pluginframework.eventManager.dispatchEvent("atpreview:show", { contentBody: content.body, 'currentStage': false });
                 console.log('contentBody ',contentBody);
             } else {
-              //  org.ekstep.services.telemetryService.error({ "env": "content", "stage": "", "action": "show error and stop the application", "err": "Unable to fetch content from remote", "type": "API", "data": err, "severity": "fatal" });
+              ecEditor.getService('popup').open({
+                template: '<div class="ui icon negative message success-popup"><div class="content"><div class="header">Unable to preview the content, please try again later</div></div></div>',
+                controller: ['$scope', function(){}],
+                closeByDocument: true,
+                closeByEscape: true, 
+                clasName: "ngdialog-theme-plain",               
+                plain: true,
+                showClose: false
+              });
+              org.ekstep.services.telemetryService.error({ "env": "content", "stage": "", "action": "show error", "err": "Unable to fetch content from remote", "type": "API", "data": err, "severity": "fatal" });
             }
         });
     }
