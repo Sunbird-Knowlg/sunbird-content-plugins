@@ -116,7 +116,8 @@
 }
 
 #contents-data-form::-webkit-scrollbar,
-#read-metadata-wrapper::-webkit-scrollbar {
+#read-metadata-wrapper::-webkit-scrollbar,
+#read-metadata-wrapper .item .content .description::-webkit-scrollbar {
     width: 0!important;
 }
 
@@ -206,6 +207,16 @@
     font-family: Helvetica!important;
 }
 
+#read-metadata-wrapper .item,
+#read-metadata-wrapper .item .content {
+    height: 100%!important;
+}
+
+#read-metadata-wrapper .item .content .description {
+    height: 55%!important;
+    overflow-y: auto!important;
+}
+
 .metacontent-fields-container {
     height: 70%;
     box-sizing: border-box;
@@ -213,42 +224,19 @@
     position: relative;
 }
 
-.metacontent-field {
-    width: 25%;
-    position: relative;
-    float: left;
-    margin-top: -5px;
+.metacontent-fields-container .ui.cards>.card {
+    border: none!important;
+    box-shadow: -1px 0px 0px 0px #D4D4D5!important;
+    border-radius: 0!important;
+    font-size: 1em!important;
+
 }
 
-.long.metacontent-field {
-    width: 50%;
+.metacontent-fields-container .ui.card>.content>.header:not(.ui),
+.metacontent-fields-container .ui.cards>.card>.content>.header:not(.ui) {
+    font-size: 1em!important;
 }
 
-.field-text {
-    text-align: left;
-    padding: 1em;
-}
-
-.field-text h5[class*="field-value"] {
-    color: #383838;
-    margin-top: 0;
-    font-size: 1rem !important;
-    text-transform: capitalize !important;
-}
-
-.field-text h5 {
-    margin-bottom: 0.5em;
-    color: #949494;
-    font-size: 0.8rem !important;
-    font-family: Helvetica!important;
-}
-
-.field-value-wrapper .field-value {
-    font-size: 1rem;
-    font-family: Helvetica!important;
-    color: #383838;
-    text-transform: capitalize !important;
-}
 
 .ui.form .ng-invalid {
     border-color: red !important;
