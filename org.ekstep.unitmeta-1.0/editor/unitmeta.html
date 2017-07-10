@@ -38,50 +38,50 @@
                 <div class="card">
                     <div class="content">
                         <div class="header">Board</div>
-                        <div class="description">{{textbook.board.toString() | uppercase}}</div>
+                        <div class="description">{{unit.board.toString() | uppercase}}</div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="content">
                         <div class="header">Medium</div>
-                        <div class="description">{{textbook.medium.toString() | lowercase}}</div>
+                        <div class="description">{{unit.medium.toString() | lowercase}}</div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="content">
                         <div class="header">Subject</div>
-                        <div class="description">{{textbook.subject.toString() | lowercase}}</div>
+                        <div class="description">{{unit.subject.toString() | lowercase}}</div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="content">
                         <div class="header">Grade</div>
-                        <div class="description">{{textbook.gradeLevel.toString() | lowercase}}</div>
+                        <div class="description">{{unit.gradeLevel.toString() | lowercase}}</div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="content">
                         <div class="header">Publication</div>
-                        <div class="description">{{textbook.publication | lowercase}}</div>
+                        <div class="description">{{unit.publication | lowercase}}</div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="content">
                         <div class="header">Edition</div>
-                        <div class="description">{{textbook.edition | lowercase}}</div>
+                        <div class="description">{{unit.edition | lowercase}}</div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="content">
                         <div class="header">Audience</div>
-                        <div class="description">{{textbook.audience.toString() | lowercase}}</div>
+                        <div class="description">{{unit.audience.toString() | lowercase}}</div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="content">
                         <div class="header">Concepts</div>
                         <div class="description">
-                            <span class="field-value" ng-repeat="concept in textbook.concepts">{{concept.Name}}</span>
+                            <span class="field-value" ng-repeat="concept in unit.concepts">{{concept.Name}}</span>
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
                     <div class="content">
                         <div class="header">Keywords</div>
                         <div class="description">
-                            <span class="field-value" ng-repeat="tag in textbook.tags">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
+                            <span class="field-value" ng-repeat="tag in unit.tags">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
                         </div>
                     </div>
                 </div>
