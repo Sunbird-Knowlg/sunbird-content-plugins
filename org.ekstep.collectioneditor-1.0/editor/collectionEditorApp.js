@@ -3,7 +3,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     var config = { "context": { "uid": "386", "contentId": "do_112272630392659968130", "sid": "0d5b94c87052869b58e47ec692f467cd", "channel": "ntp/ap", "pdata": { "id": "SunbirdPortal", "ver": "1.0" }, "dims": ["b27e743b51a22b4eed737c6a72cd4266"] }, "mode": "Edit", "rules": { "levels": 3, "objectTypes": [{ "type": "TextBook", "label": "Textbook", "isRoot": true, "editable": true, "childrenTypes": ["TextBookUnit"], "addType": "Editor", "iconClass": "fa fa-book fa-2" }, { "type": "TextBookUnit", "label": "Textbook Unit", "isRoot": false, "editable": true, "childrenTypes": ["TextBookUnit", "Collection", "Story", "Game", "Worksheet"], "addType": "Editor", "iconClass": "fa fa-folder fa-2" }, { "type": "Collection", "label": "Collection", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }, { "type": "Story", "label": "Story", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }, { "type": "Worksheet", "label": "Worksheet", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }, { "type": "Game", "label": "Game", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }] }, "defaultTemplate": {} };
 
     $scope.contentDetails = {
-        contentTitle: "Untitled Content",
+        contentTitle: "",
         contentImage: "/images/com_ekcontent/default-images/default-content.png",
     };
     $scope.contentId = config.context.contentId;
@@ -55,6 +55,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         $scope.loadContent(function(err, res) {
             if (res) {
                 var activeNode = org.ekstep.collectioneditor.collectionService.getActiveNode();
+                $scope.contentDetails.contentTitle = activeNode.title ? activeNode.title : "Untitled Content";
                 setTimeout(function() { ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode) }, 200);
             }
         });
