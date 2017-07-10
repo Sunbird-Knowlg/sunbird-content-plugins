@@ -133,19 +133,19 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         org.ekstep.collectioneditor.api.getService('collection').setActiveNode(nodeId);
     }
 
-    // $scope.previewContent = function(){
-    //     org.ekstep.contenteditor.globalContex = {};
-    //     ecEditor.setContext('contentId', $scope.nodeId);
-    //     org.ekstep.services.contentService.getContent($scope.nodeId, function(err, content) {
-    //         if (!err) {
-    //             var contentBody = content.body;
-    //             org.ekstep.pluginframework.eventManager.dispatchEvent("atpreview:show", { contentBody: content.body, 'currentStage': false });
-    //             console.log('contentBody ',contentBody);
-    //         } else {
-    //           //  org.ekstep.services.telemetryService.error({ "env": "content", "stage": "", "action": "show error and stop the application", "err": "Unable to fetch content from remote", "type": "API", "data": err, "severity": "fatal" });
-    //         }
-    //     });
-    // }
+    $scope.previewContent = function(){
+        org.ekstep.contenteditor.globalContex = {};
+        ecEditor.setContext('contentId', $scope.nodeId);
+        org.ekstep.services.contentService.getContent($scope.nodeId, function(err, content) {
+            if (!err) {
+                var contentBody = content.body;
+                org.ekstep.pluginframework.eventManager.dispatchEvent("atpreview:show", { contentBody: content.body, 'currentStage': false });
+                console.log('contentBody ',contentBody);
+            } else {
+              //  org.ekstep.services.telemetryService.error({ "env": "content", "stage": "", "action": "show error and stop the application", "err": "Unable to fetch content from remote", "type": "API", "data": err, "severity": "fatal" });
+            }
+        });
+    }
 
     $scope.generateTelemetry = function(data) {
         if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.contentmeta", "pluginver": "1.0", "objectid": $scope.nodeId, "stage": $scope.nodeId })

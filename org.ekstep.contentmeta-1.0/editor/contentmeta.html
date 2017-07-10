@@ -8,9 +8,9 @@
         </div>
         <h3 class="header-bottom-segment inline-block">{{content.name}}</h3>
         <div class="header-buttons-container header-bottom-segment inline-block">
-            <!-- <div class="ui primary submit button inline-block right-float button-overrides" id="preview-button" ng-click="previewContent(); generateTelemetry({type: 'click', subtype: 'preview', target: 'preview'})" ng-show="!editMode">
+            <div class="ui primary submit button inline-block right-float button-overrides" id="preview-button" ng-click="previewContent(); generateTelemetry({type: 'click', subtype: 'preview', target: 'preview'})" ng-show="!editMode">
                 Preview
-            </div> -->
+            </div>
             <div ng-show="mode == 'Edit' && editable == true">
                 <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'})" ng-show="!editMode">
                     Edit
