@@ -8,7 +8,7 @@ angular.module('org.ekstep.contentprovider', [])
     ctrl.res = {count:0, content:[]};
 
     // Selected filters
-    $scope.filterSelection = {"lang": [], "grade": ["Grade 1"], "lessonType": [], "domain": [], "concept": []};
+    $scope.filterSelection = {"lang": [], "grade": [], "lessonType": [], "domain": [], "concept": []};
 
     // Selected lessons
     $scope.lessonSelection = [];
@@ -163,25 +163,25 @@ angular.module('org.ekstep.contentprovider', [])
             delete searchBody.request.filters.language;
         }
 
-        if ($scope.filterSelection.grade.length) {
+        if ($scope.filterSelection.grade && $scope.filterSelection.grade.length) {
             searchBody.request.filters.gradeLevel = $scope.filterSelection.grade;
         } else {
             delete searchBody.request.filters.gradeLevel;
         }
 
-        if ($scope.filterSelection.lessonType.length) {
+        if ($scope.filterSelection.lessonType && $scope.filterSelection.lessonType.length) {
             searchBody.request.filters.contentType = $scope.filterSelection.lessonType;
         } else {
             delete searchBody.request.filters.contentType;
         }
 
-        if ($scope.filterSelection.domain.length) {
+        if ($scope.filterSelection.domain && $scope.filterSelection.domain.length) {
             searchBody.request.filters.domain = $scope.filterSelection.domain;
         } else {
             delete searchBody.request.filters.domain;
         }
 
-        if ($scope.filterSelection.concept.length) {
+        if ($scope.filterSelection.concept && $scope.filterSelection.concept.length) {
             searchBody.request.filters.concepts = $scope.filterSelection.concept;
         } else {
             delete searchBody.request.filters.concepts;
