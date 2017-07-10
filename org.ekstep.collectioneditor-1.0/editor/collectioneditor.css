@@ -7,7 +7,8 @@ body {
     padding: 0 1em!important;
     height: 100vh!important;
     padding-left: 2rem!important;
-    padding-right: 2rem!important;
+    padding-right: 1rem!important;
+    background: #fff!important;
 }
 
 .header-wrapper {
@@ -19,9 +20,12 @@ body {
 
 .header-wrapper .custom-container {
     margin: 0!important;
-    min-width: 100%!important;
+    min-width: 101.2%!important;
 }
 
+.collection-masterhead .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown .menu{
+    left: -48px!important;
+}
 
 .page-header {
     height: 10%!important;
@@ -56,7 +60,6 @@ body {
     min-width: 320px;
     box-shadow: none!important;
     border: none;
-    border-right: 0.2px solid rgba(192, 192, 192, 0.39);
 }
 
 #table-of-contents .ui.dropdown .menu>.item {
@@ -82,7 +85,7 @@ body {
     width: calc(100% - 320px)!important;
     height: 100%;
     padding: 0!important;
-    padding-left: 2rem!important;
+    // padding-left: 2rem!important;
 }
 
 #collection-tree::-webkit-scrollbar {

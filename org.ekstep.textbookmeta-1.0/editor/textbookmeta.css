@@ -108,7 +108,8 @@
 #read-metadata-wrapper {
     border-radius: 0;
     height: calc(100% - 90.4px)!important;
-    border: none;
+    border: none!important;
+    box-shadow: none!important;
     padding-left: 0!important;
     overflow-y: auto;
     margin-top: 0!important;
