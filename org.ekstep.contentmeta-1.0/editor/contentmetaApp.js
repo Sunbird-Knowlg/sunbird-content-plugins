@@ -53,19 +53,23 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     }
     
     $scope.updateNode = function(){
-        if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
-            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
+        if($scope.contentMetaForm.$valid){ 
+            if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
+                org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
+            }
+            if(_.isString($scope.content.tags)){
+                $scope.content.tags = $scope.content.tags.split(',');
+            }
+            $scope.content.contentType = $scope.nodeType;
+            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = false;
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = false;
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.content));;
+            $scope.metadataCloneObj = _.clone($scope.content);
+            $scope.$safeApply();
+        }else{
+            $scope.content.submitted = true; 
         }
-        if(_.isString($scope.content.tags)){
-            $scope.content.tags = $scope.content.tags.split(',');
-        }
-        $scope.content.contentType = $scope.nodeType;
-        org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
-        org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = false;
-        org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = false;
-        org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.content));;
-        $scope.metadataCloneObj = _.clone($scope.content);
-        $scope.$safeApply();
     }
 
     $scope.getUpdatedMetadata = function(originalMetadata, currentMetadata){
@@ -111,6 +115,10 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 $scope.editMode = false;
                 $scope.content = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
                 $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
+                if(!_.isUndefined(activeNode.data.metadata.concepts)){
+                    $scope.content.conceptData = activeNode.data.metadata.concepts;
+                    $scope.content.concepts = '(' + $scope.content.conceptData.length + ') concepts selected';
+                }
             }
             $scope.getPath();
             $scope.$safeApply();

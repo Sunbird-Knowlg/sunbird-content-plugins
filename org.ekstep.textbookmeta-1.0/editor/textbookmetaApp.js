@@ -54,19 +54,24 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
     }
     
     $scope.updateNode = function(){
-        if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
+        if($scope.textbookMetaForm.$valid){ 
+            if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
+            }
+            if(_.isString($scope.textbook.tags)){
+                $scope.textbook.tags = $scope.textbook.tags.split(',');
+            }
+            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
+            $scope.textbook.contentType = $scope.nodeType;
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = false;
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = true;
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
+            $scope.metadataCloneObj = _.clone($scope.textbook);
+            $scope.editMode = false;
+            $scope.$safeApply();
+        }else{
+            $scope.textbook.submitted = true; 
         }
-        if(_.isString($scope.textbook.tags)){
-            $scope.textbook.tags = $scope.textbook.tags.split(',');
-        }
-        org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
-        $scope.textbook.contentType = $scope.nodeType;
-        org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = false;
-        org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = true;
-        org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
-        $scope.metadataCloneObj = _.clone($scope.textbook);
-        $scope.$safeApply();
     }
 
     $scope.getUpdatedMetadata = function(originalMetadata, currentMetadata){
@@ -115,8 +120,10 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
             $('#subject').dropdown('set selected', $scope.textbook.subject);
             $('#gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
             $('#audience').dropdown('set selected', $scope.textbook.audience);
-            $scope.textbook.conceptData = activeNode.data.metadata.concepts;
-            $scope.textbook.concepts = '(' + $scope.textbook.conceptData.length + ') concepts selected';
+            if(!_.isUndefined(activeNode.data.metadata.concepts)){
+                $scope.textbook.conceptData = activeNode.data.metadata.concepts;
+                $scope.textbook.concepts = '(' + $scope.textbook.conceptData.length + ') concepts selected';
+            }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
         }
         $scope.getPath();

@@ -247,7 +247,3 @@
     color: #383838;
     text-transform: capitalize !important;
 }
-
-.ui.form .ng-invalid{
-    border-color: red !important;
-}

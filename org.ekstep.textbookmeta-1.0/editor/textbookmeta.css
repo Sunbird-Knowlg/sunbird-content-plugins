@@ -238,6 +238,7 @@
     font-size: 1em!important;
 }
 
-.ui.form .ng-invalid {
+.ui.form .error{
     border-color: red !important;
+    /*background: #e0b4b4 !important;*/
 }
