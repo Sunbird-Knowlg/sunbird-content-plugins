@@ -50,6 +50,12 @@ org.ekstep.contenteditor.basePlugin.extend({
                 this.editorObj = new fabric.Rect(props);
                 break;
 
+            case 'triangle':
+                props.sides = 3;
+                this.shapeType = "3polygon";
+                this.drawShape(this.shapeType, props);
+                break;
+
             case 'star':
                 this.manifest.editor.configManifest.push({
                     "propertyName": "corners",

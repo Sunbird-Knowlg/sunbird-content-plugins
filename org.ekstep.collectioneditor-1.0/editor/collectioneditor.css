@@ -57,12 +57,6 @@ body {
     padding: 0!important;
 }
 
-.ui.segment,
-.ui.segments .segment {
-    border-radius: 0!important;
-    box-shadow: none!important;
-}
-
 #table-of-contents .ui.segments,
 #contents-data-form .ui.form.segment {
     border-radius: 0!important;
@@ -119,7 +113,7 @@ body {
     padding: 0.4em 0 0 0!important;
 }
 
-i.icon {
+.tree-access-tools i.icon, .book-image-container i.icon{
     color: #9b9b9b;
 }
 
@@ -129,7 +123,7 @@ i.icon {
 }
 
 .icon-container i:hover,
-i.icon:hover {
+.book-image-container i.icon:hover {
     color: black;
     cursor: pointer;
 }
@@ -152,17 +146,10 @@ i.icon:hover {
     height: 8%!important;
 }
 
-i.icon {
-    color: #9b9b9b;
-}
+
 
 .icon-container {
     color: #9b9b9b;
     float: right;
 }
 
-.icon-container i:hover,
-i.icon:hover {
-    color: black;
-    cursor: pointer;
-}

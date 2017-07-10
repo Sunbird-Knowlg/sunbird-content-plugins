@@ -61,7 +61,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             showClose: false,
             closeByDocument: false,
             closeByEscape: false,
-            width: 1000,
+            width: 851,
             className: 'ngdialog-theme-plain'
         });
     },

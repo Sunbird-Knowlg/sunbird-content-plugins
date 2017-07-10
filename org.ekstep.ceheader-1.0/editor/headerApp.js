@@ -1,11 +1,17 @@
 angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController', ['$scope', function($scope) {
 
-    var plugin = { id: "org.ekstep.ceheader", ver: "1.0" };
+    var plugin = { id: "org.ekstep.ceheader", ver: "1.0" }, lastSavedTime;
     $scope.editorState = undefined;
     $scope.saveBtnEnabled = true;
     $scope.userDetails = !_.isUndefined(window.context) ? window.context.user : undefined;
     $scope.telemetryService = org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE);
     $scope.ekstepLogo = ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/ekstep_logo_white.png");
+    $scope.internetStatusObj = {
+        'status':navigator.onLine,
+        'text': 'Internet Connection not available'
+    };
+    $scope.lastSaved;
+    $scope.popUpValues = {};
 
     $scope.setEditorState = function(event, data) {
         if (data) $scope.editorState = data;
@@ -13,8 +19,9 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
 
 
     $scope.saveContent = function(event, options) {
-        options = options || { successPopup: true, failPopup: true, callback: function(){} };
+        options = options || { savingPopup: true, successPopup: true, failPopup: true, callback: function(){} };
         if ($scope.saveBtnEnabled) {
+            if (options.savingPopup) $scope.saveNotification('saving');
             $scope.saveBtnEnabled = false;
             org.ekstep.pluginframework.eventManager.dispatchEvent('content:before:save');
             // TODO: Show saving dialog
@@ -26,10 +33,19 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
                         if (res.responseJSON.params.err == "ERR_STALE_VERSION_KEY")
                             $scope.showConflictDialog(options);
                     } else {
-                        if(options && options.failPopup) $scope.saveNotification('error');
+                        if(options && options.failPopup) {
+                            if (!options.savingPopup) $scope.saveNotification();
+                            $scope.changePopupValues('error');
+                        }
+                        
                     }
                 } else if (res && res.data.responseCode == "OK") {
-                    if(options && options.successPopup) $scope.saveNotification('success');
+                    lastSavedTime = new Date(Date.now());
+                    $scope.calculateSaveTime();
+                    if(options && options.successPopup) {
+                        if (!options.savingPopup) $scope.saveNotification();
+                        $scope.changePopupValues('success');
+                    }
                 }
                 $scope.saveBtnEnabled = true;
                 if (typeof options.callback === "function") options.callback(err, res);
@@ -88,10 +104,14 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
             var contentBody = org.ekstep.contenteditor.stageManager.toECML();
             $scope.patchContent({ stageIcons: JSON.stringify(org.ekstep.contenteditor.stageManager.getStageIcons()) }, contentBody, function(err, res) {
                 if (res) {
-                    $scope.saveNotification('success');
+                    $scope.saveNotification();
+                    $scope.changePopupValues('success');
                     window.location.assign(window.context.editMetaLink);
                 }
-                if (err) $scope.saveNotification('error');
+                if (err) {
+                    $scope.saveNotification();
+                    $scope.changePopupValues('error');
+                };
             });
         } else {
             window.location.assign(window.context.editMetaLink);
@@ -99,23 +119,39 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
     };
 
     $scope.saveNotification = function(message) {
-        var template = (message === 'success') ? "editor/partials/saveSuccessMessage.html" : "editor/partials/saveErrorMessage.html";
+        var template = "editor/partials/saveMessage.html";
         var config = {
             template: ecEditor.resolvePluginResource(plugin.id, plugin.ver, template),
-            controller: ['$scope', 'mainCtrlScope', function($scope, mainCtrlScope) {
-                $scope.fireTelemetry = function(menu, menuType) {
-                    mainCtrlScope.fireTelemetry(menu, menuType);
-                }
-            }],
-            resolve: {
-                mainCtrlScope: function() {
-                    return $scope;
-                }
-            },
-            showClose: false
+            scope: $scope,
+            showClose: false,
+            closeByEscape: false,
+            closeByDocument: false
         }
+        $scope.changePopupValues(message);
         $scope.popupService.open(config);
     };
+
+    $scope.changePopupValues = function(message) {
+        if (message === 'success') {
+            $scope.popUpValues.headerMsg = 'Content Saved!';
+            $scope.popUpValues.popUpIcon = 'circle check green';
+            $scope.popUpValues.showCloseButton = true;
+            $scope.popUpValues.saveNotificationCloseButton = 'saveSuccessNotificationCloseButton';
+            $scope.$safeApply();
+        } else
+        if (message === 'error') {
+            $scope.popUpValues.headerMsg = 'Failed to save Content';
+            $scope.popUpValues.popUpIcon = 'circle remove red';
+            $scope.popUpValues.showCloseButton = true;
+            $scope.popUpValues.saveNotificationCloseButton = 'saveFailNotificationCloseButton';
+            $scope.$safeApply();
+        }
+        if (message === 'saving') {
+            $scope.popUpValues.headerMsg = 'Saving content please wait...';
+            $scope.popUpValues.showCloseButton = false;
+            $scope.$safeApply();
+        }
+    }
 
     $scope.showConflictDialog = function(options) {
         var instance = $scope;
@@ -229,10 +265,74 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
         $scope.telemetryService.interact({ "type": "click", "subtype": "menu", "target": menuType, "pluginid": 'org.ekstep.ceheader', 'pluginver': '1.0', "objectid": menu.id, "stage": org.ekstep.contenteditor.stageManager.currentStage.id });
     };
 
+    $scope.internetStatusFn = function(event) {
+        $scope.$safeApply(function() {
+            $scope.internetStatusObj.status = navigator.onLine;
+        })
+    };
+
+    $scope.calculateSaveTime = function() {
+        if (lastSavedTime) {
+            var seconds = Math.floor((new Date() - lastSavedTime) / 1000);
+            var interval = Math.floor(seconds / 86400);
+            if (interval >= 1) {
+                $scope.lastSaved = "Last Saved: "+ interval + " days ago";
+                $scope.$safeApply();
+                return 
+            }
+            interval = Math.floor(seconds / 3600);
+            if (interval >= 1) {
+                $scope.lastSaved = "Last Saved: " + interval + " hours ago";
+                $scope.$safeApply();
+                return;
+            }
+            interval = Math.floor(seconds / 60);
+            if (interval >= 1) {
+                $scope.lastSaved = "Last Saved: " + interval + " minutes ago";
+                $scope.$safeApply();
+                return;
+            }
+            $scope.lastSaved = "Last Saved: " + Math.floor(seconds) + " seconds ago";
+            $scope.$safeApply();
+        }
+    };
+
+    setInterval($scope.calculateSaveTime, 60000)
+
+    $scope.setSaveStatus = function() {
+        if (!lastSavedTime) {
+            $scope.lastSaved = 'You have unsaved changes';
+            $scope.$safeApply();
+            ecEditor.removeEventListener('object:modified',  $scope.setSaveStatus, $scope);
+        }
+    }
+
+    window.onbeforeunload = function(e) {
+        return "You have unsaved unsaved changes";
+    }
+    window.addEventListener('online',  $scope.internetStatusFn, false);
+    window.addEventListener('offline', $scope.internetStatusFn, false);
+    ecEditor.addEventListener('object:modified', $scope.setSaveStatus, $scope);
     ecEditor.addEventListener('org.ekstep.editorstate:state', $scope.setEditorState, $scope);
     ecEditor.addEventListener('org.ekstep.ceheader:save', $scope.saveContent, $scope);
     ecEditor.addEventListener('org.ekstep.ceheader:save:force', $scope.saveBrowserContent, $scope);
     ecEditor.addEventListener('org.ekstep.ceheader:meta:edit', $scope.editContentMeta, $scope);
     org.ekstep.contenteditor.api.jQuery('.browse.item.at').popup({ on: 'click', setFluidWidth: false, position: 'bottom right' });
+
+    // Show the Whatsnew red dot, if this is a new release
+    // and want to show the user to click.
+    $scope.nextversion = store.get('nextversion');
+    console.log( $scope.nextversion);
+    $scope.previousversion = store.get('previousversion') || 0;
+    console.log( $scope.previousversion);
+    $scope.whatsNewBadge = !($scope.nextversion === $scope.previousversion);
+    console.log( $scope.whatsNewBadge);
+
+    $scope.displayWhatsNew = function () {
+        $scope.fireEvent({id: 'org.ekstep.whatsnew:showpopup'});
+        store.set('previousversion', $scope.nextversion);
+        $scope.whatsNewBadge = false;
+    };
+
 
 }]);
