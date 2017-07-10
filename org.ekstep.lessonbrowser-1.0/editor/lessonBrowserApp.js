@@ -17,8 +17,8 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             "targetid":data.targetid,
             "pluginid": $scope.telemetry.pluginid,
             "pluginver": $scope.telemetry.pluginver,
-            // "objectid": ecEditor.getCurrentObject().id,
-            // "stage": ecEditor.getCurrentStage().id
+            "objectid": '',
+            "stage": org.ekstep.collectioneditor.collectionService.getActiveNode().id
         })
     };
 
@@ -30,7 +30,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
 
     // Get and return the selected lessons
     $scope.returnSelectedLessons = function(selectedLessons){
-        ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'addlesson',targetid: ''});
+        ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'addlesson',targetid: 'button-add'});
 
     	// return selected lessons to the lesson browser caller
     	var err = null;
@@ -43,7 +43,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
 
     // Close the popup
     $scope.closePopup = function() {
-        ctrl.generateTelemetry({type: 'click', subtype: 'cancel', target: 'addlesson', targetid: ''});
+        ctrl.generateTelemetry({type: 'click', subtype: 'cancel', target: 'addlesson', targetid: 'button-cancel'});
         $scope.closeThisDialog();
     };
 
