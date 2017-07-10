@@ -9,6 +9,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
 
     $scope.telemetry = {"pluginid":ctrl.lessonbrowser.manifest.id, "pluginver":ctrl.lessonbrowser.manifest.ver};
 
+    var collectionService = org.ekstep.collectioneditor.api.getService('collection');
     ctrl.generateTelemetry = function(data) {
         if (data) ecEditor.getService('telemetry').interact({
             "type": data.type,
@@ -18,7 +19,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             "pluginid": $scope.telemetry.pluginid,
             "pluginver": $scope.telemetry.pluginver,
             "objectid": '',
-            "stage": org.ekstep.collectioneditor.collectionService.getActiveNode().id
+            "stage": collectionService.getActiveNode().id
         })
     };
 

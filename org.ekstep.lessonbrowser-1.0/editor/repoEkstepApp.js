@@ -37,6 +37,7 @@ angular.module('org.ekstep.contentprovider', [])
     setTimeout(function(){$('.ui.accordion').accordion()}, 200);
 
     //Telemetry
+    var collectionService = org.ekstep.collectioneditor.api.getService('collection');
     ctrl.generateTelemetry = function(data) {
         if (data) ecEditor.getService('telemetry').interact({
             "type": data.type,
@@ -46,7 +47,7 @@ angular.module('org.ekstep.contentprovider', [])
             "pluginid": $scope.telemetry.pluginid,
             "pluginver": $scope.telemetry.pluginver,
             "objectid": '',
-            "stage": org.ekstep.collectioneditor.collectionService.getActiveNode().id
+            "stage": collectionService.getActiveNode().id
         })
     };
 
@@ -278,7 +279,6 @@ angular.module('org.ekstep.contentprovider', [])
     };
 
     $scope.telemetryConceptSelector = function() {
-        console.log('tele conc');
         ctrl.generateTelemetry({type: 'click', subtype: 'init', target: 'concept-selector',targetid: 'button-concept-selector'});
     }
 
