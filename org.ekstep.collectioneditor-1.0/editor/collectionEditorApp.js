@@ -10,6 +10,9 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     $scope.metaPages = [];
     $scope.selectedObjectType = undefined;
     $scope.nodeFilter = "";
+    $scope.getObjectType = function(objectType) {
+        return _.find(objectType, function(type) { return type == $scope.selectedObjectType });
+    }
 
     $scope.searchNode = function(event) {
         if($scope.nodeFilter == "") org.ekstep.collectioneditor.collectionService.clearFilter();
