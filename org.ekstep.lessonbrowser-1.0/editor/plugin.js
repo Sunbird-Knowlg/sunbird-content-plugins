@@ -42,10 +42,11 @@ org.ekstep.contenteditor.basePlugin.extend({
     *   @param event {Object} event
     *   @param cb {Function} callback to be fired when asset is available.
     */
-    initPreview: function(event, filters, cb) {
+    initPreview: function(event, params) {
         var instance = this;
-        cb = cb || function() {};
-        filters = filters || {};
+
+        cb = params.callback || function() {};
+        filters = params.filters || {};
 
         org.ekstep.contenteditor.api.getService('popup').open({
             template: 'partials/lessonbrowser.html',
