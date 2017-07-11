@@ -8,7 +8,7 @@
         </div>
         <h3 class="header-bottom-segment inline-block">{{content.name}}</h3>
         <div class="header-buttons-container header-bottom-segment inline-block">
-            <div class="ui primary submit button inline-block right-float button-overrides" id="preview-button" ng-click="previewContent(); generateTelemetry({type: 'click', subtype: 'preview', target: 'preview'})" ng-show="!editMode && selectedObjectType != 'Collection'">
+            <div class="ui primary submit button inline-block right-float button-overrides" id="preview-button" ng-click="previewContent(); generateTelemetry({type: 'click', subtype: 'preview', target: 'preview'})" ng-show="!editMode && nodeType != 'Collection'">
                 Preview
             </div>
             <div ng-show="mode == 'Edit' && editable == true">
