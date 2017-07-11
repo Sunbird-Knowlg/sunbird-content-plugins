@@ -119,8 +119,8 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             $('#unitGradeLevel').dropdown('set selected', $scope.unit.gradeLevel);
             $('#unitAudience').dropdown('set selected', $scope.unit.audience);
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
-                $scope.unit.conceptData = activeNode.data.metadata.concepts;
-                $scope.unit.concepts = '(' + $scope.unit.conceptData.length + ') concepts selected';
+                $scope.unit.concepts = activeNode.data.metadata.concepts;
+                $scope.unit.conceptData = '(' + $scope.unit.concepts.length + ') concepts selected';
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
         }

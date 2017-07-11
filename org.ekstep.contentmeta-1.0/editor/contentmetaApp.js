@@ -109,15 +109,15 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             if($scope.mode === "Edit" && $scope.editable === true){
                 $scope.editMode = true;
                 $('.ui.dropdown').dropdown('refresh');
-                $scope.metadataCloneObj = _.clone($scope.textbook);
+                $scope.metadataCloneObj = _.clone($scope.content);
             }
             if(!_.isEmpty(activeNode.data.metadata)){
                 $scope.editMode = false;
                 $scope.content = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
                 $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
                 if(!_.isUndefined(activeNode.data.metadata.concepts)){
-                    $scope.content.conceptData = activeNode.data.metadata.concepts;
-                    $scope.content.concepts = '(' + $scope.content.conceptData.length + ') concepts selected';
+                    $scope.content.concepts = activeNode.data.metadata.concepts;
+                    $scope.content.conceptData = '(' + $scope.content.concepts.length + ') concepts selected';
                 }
             }
             $scope.getPath();

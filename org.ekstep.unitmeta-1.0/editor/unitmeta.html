@@ -81,7 +81,7 @@
                     <div class="content">
                         <div class="header">Concepts</div>
                         <div class="description">
-                            <span class="field-value" ng-repeat="concept in unit.concepts">{{concept.Name}}</span>
+                            <span class="field-value" ng-repeat="concept in unit.concepts track by $index">{{concept.name}}</span>
                         </div>
                     </div>
                 </div>

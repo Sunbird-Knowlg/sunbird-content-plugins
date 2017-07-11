@@ -121,8 +121,8 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
             $('#gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
             $('#audience').dropdown('set selected', $scope.textbook.audience);
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
-                $scope.textbook.conceptData = activeNode.data.metadata.concepts;
-                $scope.textbook.concepts = '(' + $scope.textbook.conceptData.length + ') concepts selected';
+                $scope.textbook.concepts = activeNode.data.metadata.concepts;
+                $scope.textbook.conceptData = '(' + $scope.textbook.concepts.length + ') concepts selected';
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
         }

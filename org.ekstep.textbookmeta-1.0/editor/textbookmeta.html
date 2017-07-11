@@ -78,7 +78,7 @@
                     <div class="content">
                         <div class="header">Concepts</div>
                         <div class="description">
-                            <span class="field-value" ng-repeat="concept in textbook.conceptData">{{concept.name}}{{$last ? '' : ', '}}</span>
+                            <span class="field-value" ng-repeat="concept in textbook.concepts track by $index">{{concept.name}}{{$last ? '' : ', '}}</span>
                         </div>
                     </div>
                 </div>
