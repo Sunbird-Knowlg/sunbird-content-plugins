@@ -2,7 +2,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.mode = org.ekstep.collectioneditor.api.getService('collection').getConfig().mode;
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
-    org.ekstep.collectioneditor.api.getService('meta').getConfigOrdinals(function(err, resp) {
+    ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.gradeList = resp.data.result.ordinals.gradeLevel;
             $scope.languageList = resp.data.result.ordinals.language;
