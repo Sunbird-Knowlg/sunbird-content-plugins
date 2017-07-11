@@ -1,6 +1,6 @@
 .add-lessons-popup-wrapper {
     position: relative;
-    height: 600px;
+    height: 590px;
     width: 851px;
     border-radius: 1em!important;
     font-family: Helvetica!important;
@@ -43,14 +43,14 @@
 }
 
 .source-result-container {
-    max-height: 407px;
+    max-height: 360px;
     overflow-y: scroll;
     padding: 0 1em!important;
     margin: 0!important;
 }
 
 .source-filter-container {
-    height: 350px!important;
+    height: 304px!important;
     overflow-y: scroll;
     -webkit-box-shadow: none!important;
     box-shadow: none!important;
@@ -123,6 +123,7 @@
 .filters-and-lessons-wrapper {
     padding: 0!important;
     padding-top: 1em!important;
+    max-height: 410px!important;
 }
 
 .lesson-row {
@@ -185,5 +186,16 @@
     border: none;
 }
 
+.repo-names-menu-bar{
+    margin-top: 0!important;
+    min-height: 2em!important;
+}
+
+.full-height{
+    height: 100%!important;
+}
+.repo-names-menu-bar >.item{
+    padding: 0.5em 1em!important;
+}
 
 /* from lessonBrowser.html */
