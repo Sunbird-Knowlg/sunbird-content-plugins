@@ -1,4 +1,4 @@
-<div ng-app="unitmetaApp" class="metacontent-wrapper" ng-controller="unitmetaController">
+<div ng-app="contentmetaApp" class="metacontent-wrapper" ng-controller="contentmetaController">
     <div class="ui segment header-segment">
         <div class="ui breadcrumb">
             <a class="section" ng-repeat="value in path" ng-click="setActiveNode(value.nodeId)">
@@ -6,13 +6,18 @@
                 <div class="divider"> / </div>
             </a>
         </div>
-        <h3 class="header-bottom-segment inline-block">{{unit.name}}</h3>
-        <div class="header-buttons-container header-bottom-segment inline-block" ng-show="mode == 'Edit' && editable == true">
-            <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'})" ng-show="!editMode">
-                Edit
+        <h3 class="header-bottom-segment inline-block">{{content.name}}</h3>
+        <div class="header-buttons-container header-bottom-segment inline-block">
+            <div class="ui primary submit button inline-block right-float button-overrides" id="preview-button" ng-click="previewContent(); generateTelemetry({type: 'click', subtype: 'preview', target: 'preview'})" ng-show="!editMode">
+                Preview
             </div>
-            <div class="ui primary button right-float button-overrides" id="update-button" ng-click="updateNode(); generateTelemetry({type: 'click', subtype: 'update', target: 'updatemeta'})" ng-show="editMode">
-                Update
+            <div ng-show="mode == 'Edit' && editable == true">
+                <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'})" ng-show="!editMode">
+                    Edit
+                </div>
+                <div class="ui primary button right-float button-overrides" id="update-button" ng-click="updateNode(); generateTelemetry({type: 'click', subtype: 'update', target: 'updatemeta'})" ng-show="editMode">
+                    Update
+                </div>
             </div>
         </div>
     </div>
@@ -20,15 +25,15 @@
         <div class="ui items">
             <div class="item">
                 <div class="ui tiny image">
-                    <img ng-src="{{unit.appIcon || defaultImage}}" alt="">
+                    <img ng-src="{{content.appIcon || defaultImage}}" alt="">
                 </div>
                 <div class="content">
-                    <div class="header">{{unit.name}}</div>
+                    <div class="header">{{content.name}}</div>
                     <div class="meta">by&nbsp;
-                        <span id="book-author">{{unit.author}}</span>
+                        <span id="book-author">{{content.author}}</span>
                     </div>
                     <div class="description">
-                        <p>{{unit.description}}</p>
+                        <p>{{content.description}}</p>
                     </div>
                 </div>
             </div>
@@ -38,50 +43,50 @@
                 <div class="card">
                     <div class="content">
                         <div class="header">Board</div>
-                        <div class="description">{{unit.board.toString() | uppercase}}</div>
+                        <div class="description">{{content.board.toString() | uppercase}}</div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="content">
                         <div class="header">Medium</div>
-                        <div class="description">{{unit.medium.toString() | lowercase}}</div>
+                        <div class="description">{{content.medium.toString() | lowercase}}</div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="content">
                         <div class="header">Subject</div>
-                        <div class="description">{{unit.subject.toString() | lowercase}}</div>
+                        <div class="description">{{content.subject.toString() | lowercase}}</div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="content">
                         <div class="header">Grade</div>
-                        <div class="description">{{unit.gradeLevel.toString() | lowercase}}</div>
+                        <div class="description">{{content.gradeLevel.toString() | lowercase}}</div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="content">
                         <div class="header">Publication</div>
-                        <div class="description">{{unit.publication | lowercase}}</div>
+                        <div class="description">{{content.publication | lowercase}}</div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="content">
                         <div class="header">Edition</div>
-                        <div class="description">{{unit.edition | lowercase}}</div>
+                        <div class="description">{{content.edition | lowercase}}</div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="content">
                         <div class="header">Audience</div>
-                        <div class="description">{{unit.audience.toString() | lowercase}}</div>
+                        <div class="description">{{content.audience.toString() | lowercase}}</div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="content">
                         <div class="header">Concepts</div>
                         <div class="description">
-                            <span class="field-value" ng-repeat="concept in unit.concepts">{{concept.Name}}</span>
+                            <span class="field-value" ng-repeat="concept in content.conceptData">{{concept.name}}{{$last ? '' : ', '}}</span>
                         </div>
                     </div>
                 </div>
@@ -89,54 +94,54 @@
                     <div class="content">
                         <div class="header">Keywords</div>
                         <div class="description">
-                            <span class="field-value" ng-repeat="tag in unit.tags">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
+                            <span class="field-value" ng-repeat="tag in content.tags">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <form class="ui form segment" id="contents-data-form" novalidate ng-submit="updateNode()" ng-show="editMode" name="unitMetaForm">
+    <form class="ui form segment" id="contents-data-form" novalidate ng-submit="updateNode()" ng-show="editMode" name="contentMetaForm">
         <div class="fields">
             <div class="field book-image-field">
                 <label for="bookImage">Add icon</label>
                 <div class="book-image-container" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
-                    <img ng-src="{{unit.appIcon}}" ng-show="unit.appIcon != ''" />
+                    <img ng-src="{{content.appIcon}}" ng-show="content.appIcon != ''" />
                 </div>
             </div>
             <div class="field form-fields-except-image">
                 <div class=" field">
-                    <label>Unit Title</label>
+                    <label>Content Title</label>
                     <div class="ui input">
-                        <input placeholder="Enter title for Book" ng-model="unit.name" ng-class=" {error: unit.submitted && unitMetaForm.name.$error.required}" name="name" type="text" required>
+                        <input placeholder="Enter title for Book" ng-model="content.name" ng-class=" {error: content.submitted && contentMetaForm.name.$error.required}" name="name" type="text" required>
                     </div>
                 </div>
                 <div class="four fields">
                     <div class="field">
                         <label for="board">Board</label>
-                        <select id="unitBoard" class="ui selection dropdown" ng-model="unit.board">
+                        <select id="contentBoard" class="ui selection dropdown" ng-model="content.board">
                             <option value="">Board</option>
                             <option value="{{board}}" ng-repeat="board in boardList">{{board}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="medium">Medium</label>
-                        <select id="unitMedium" class="ui selection dropdown" ng-model="unit.medium">
+                        <select id="contentMedium" class="ui selection dropdown" ng-model="content.medium">
                             <option value="">Medium</option>
                             <option value="{{medium}}" ng-repeat="medium in languageList">{{medium}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="subject">Subject</label>
-                        <select id="unitSubject" class="ui selection dropdown" ng-model="unit.subject">
+                        <select id="contentSubject" class="ui selection dropdown" ng-model="content.subject">
                             <option value="">Subject</option>
                             <option value="{{subject}}" ng-repeat="subject in subjectList">{{subject}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="grade">Grade</label>
-                        <select id="unitGradeLevel" class="ui selection dropdown" ng-model="unit.gradeLevel">
+                        <select id="contentGradeLevel" class="ui selection dropdown" ng-model="content.gradeLevel">
                             <option value="">Grade</option>
                             <option value="{{gradeLevel}}" ng-repeat="gradeLevel in gradeList">{{gradeLevel}}</option>
                         </select>
@@ -145,35 +150,35 @@
                 <div class="three fields">
                     <div class=" field">
                         <label for="author">Author</label>
-                        <input type="text" placeholder="Enter author name" ng-model="unit.author" ng-class=" {error: unit.submitted && unitMetaForm.author.$error.required}" name="author" required />
+                        <input type="text" placeholder="Enter author name" ng-model="content.author" ng-class=" {error: content.submitted && contentMetaForm.author.$error.required}" name="author" required />
                     </div>
                     <div class="field">
                         <label for="publication">Publication</label>
-                        <input type="text" placeholder="Publication (optional)" ng-model="unit.publication" />
+                        <input type="text" placeholder="Publication (optional)" ng-model="content.publication" />
                     </div>
                     <div class="field">
                         <label for="edition">Edition</label>
-                        <input type="text" placeholder="Edition (optional)" ng-model="unit.edition" />
+                        <input type="text" placeholder="Edition (optional)" ng-model="content.edition" />
                     </div>
                 </div>
                 <div class="requiered field">
                     <label>Description</label>
                     <div class="ui input">
-                        <textarea placeholder="brief description about the unit" ng-model="unit.description" ng-class=" {error: unit.submitted && unitMetaForm.description.$error.required}" name="description" rows="2" required></textarea>
+                        <textarea placeholder="brief description about the content" ng-model="content.description" ng-class=" {error: content.submitted && contentMetaForm.description.$error.required}" name="description" rows="2" required></textarea>
                     </div>
                 </div>
                 <div class="field">
                     <label>Concepts</label>
-                    <input name="concepts" id="unitConceptSelector" ng-model="unit.concepts" type="text">
+                    <input name="concepts" id="contentConceptSelector" ng-model="content.concepts" type="text">
                 </div>
                 <div class="two fields">
                     <div class=" twelve wide field">
                         <label>Keywords</label>
-                        <input id="keywords" name="keywords" ng-blur="unit.tags.split(',');" ng-model="unit.tags" type="text" required>
+                        <input id="keywords" name="keywords" ng-blur="content.tags.split(',');" ng-model="content.tags" type="text" required>
                     </div>
                     <div class="four wide field">
                         <label for="audience">Audience</label>
-                        <select id="unitAudience" class="ui selection dropdown" ng-model="unit.audience">
+                        <select id="contentAudience" class="ui selection dropdown" ng-model="content.audience">
                             <option value="">Audience</option>
                             <option value="{{audience}}" ng-repeat="audience in audienceList">{{audience}}</option>
                         </select>
@@ -181,7 +186,7 @@
                 </div>
                 <div class="field">
                     <label>Notes to Teacher</label>
-                    <input placeholder="Add Notes" ng-model="unit.notes" name="notes" type="text">
+                    <input placeholder="Add Notes" ng-model="content.notes" name="notes" type="text">
                 </div>
             </div>
         </div>

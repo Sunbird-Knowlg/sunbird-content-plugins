@@ -66,7 +66,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             closeByDocument: false,
             closeByEscape: false,
             width: 851,
-            className: 'ngdialog-theme-plain'
+            className: 'ngdialog-theme-plain lessonbrowser-dialog'
         });
     },
 

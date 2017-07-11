@@ -108,14 +108,16 @@
 #read-metadata-wrapper {
     border-radius: 0;
     height: calc(100% - 90.4px)!important;
-    border: none;
+    border: none!important;
+    box-shadow: none!important;
     padding-left: 0!important;
     overflow-y: auto;
     margin-top: 0!important;
 }
 
 #contents-data-form::-webkit-scrollbar,
-#read-metadata-wrapper::-webkit-scrollbar {
+#read-metadata-wrapper::-webkit-scrollbar,
+#read-metadata-wrapper .item .content .description::-webkit-scrollbar {
     width: 0!important;
 }
 
@@ -128,6 +130,7 @@
     border: none!important;
     padding-left: 0!important;
     padding-top: 0!important;
+    padding-right: 0!important;
 }
 
 .header-segment .ui.breadcrumb {
@@ -163,7 +166,7 @@
     width: 50%;
     height: 38%;
     padding-right: 0;
-    right: 20px;
+    right: 0!important;
 }
 
 .header-buttons-container .ui.button {
@@ -204,6 +207,16 @@
     font-family: Helvetica!important;
 }
 
+#read-metadata-wrapper .item,
+#read-metadata-wrapper .item .content {
+    height: 100%!important;
+}
+
+#read-metadata-wrapper .item .content .description {
+    height: 55%!important;
+    overflow-y: auto!important;
+}
+
 .metacontent-fields-container {
     height: 70%;
     box-sizing: border-box;
@@ -211,53 +224,21 @@
     position: relative;
 }
 
-.metacontent-field {
-    width: 25%;
-    position: relative;
-    float: left;
-    margin-top: -5px;
+.metacontent-fields-container .ui.cards>.card {
+    border: none!important;
+    box-shadow: none!important;
+    border-radius: 0!important;
+    font-size: 1em!important;
+    border-left: 0.1px solid #d4d4d5!important;
+    width: 13em!important;
 }
 
-.long.metacontent-field {
-    width: 50%;
+.metacontent-fields-container .ui.card>.content>.header:not(.ui),
+.metacontent-fields-container .ui.cards>.card>.content>.header:not(.ui) {
+    font-size: 1em!important;
 }
 
-.field-text {
-    text-align: left;
-    padding: 1em;
-}
-
-.field-text h5[class*="field-value"] {
-    color: #383838;
-    margin-top: 0;
-    font-size: 1rem !important;
-    text-transform: capitalize !important;
-}
-
-.field-text h5 {
-    margin-bottom: 0.5em;
-    color: #949494;
-    font-size: 0.8rem !important;
-    font-family: Helvetica!important;
-}
-
-.field-value-wrapper .field-value {
-    font-size: 1rem;
-    font-family: Helvetica!important;
-    color: #383838;
-    text-transform: capitalize !important;
-}
-
-.ui.form .ng-invalid {
+.ui.form .error{
     border-color: red !important;
-}
-
-.remove-unit-popup,
-.success-popup {
-    width: 30%!important;
-}
-
-.remove-unit-buttons {
-    padding-left: 1.6em;
-    margin-top: 1em;
+    /*background: #e0b4b4 !important;*/
 }
