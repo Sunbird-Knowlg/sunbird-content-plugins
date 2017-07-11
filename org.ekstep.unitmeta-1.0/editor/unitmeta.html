@@ -89,7 +89,7 @@
                     <div class="content">
                         <div class="header">Keywords</div>
                         <div class="description">
-                            <span class="field-value" ng-repeat="tag in unit.tags">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
+                            <span class="field-value" ng-repeat="tag in unit.tags track by $index">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
                         </div>
                     </div>
                 </div>
@@ -169,7 +169,7 @@
                 <div class="two fields">
                     <div class=" twelve wide field">
                         <label>Keywords</label>
-                        <input id="keywords" name="keywords" ng-blur="unit.tags.split(',');" ng-model="unit.tags" type="text" required>
+                        <input id="keywords" name="keywords" ng-blur="unit.tags.split(',');" ng-model="unit.tags" type="text" ng-class=" {error: unit.submitted && unitMetaForm.keywords.$error.required}" required>
                     </div>
                     <div class="four wide field">
                         <label for="audience">Audience</label>

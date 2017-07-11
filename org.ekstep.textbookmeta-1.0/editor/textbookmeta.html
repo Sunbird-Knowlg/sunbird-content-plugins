@@ -166,7 +166,7 @@
                 <div class="two fields">
                     <div class=" twelve wide field">
                         <label>Keywords</label>
-                        <input id="keywords" name="keywords" ng-model="textbook.tags" type="text" required>
+                        <input id="keywords" name="keywords" ng-model="textbook.tags" type="text" ng-class=" {error: textbook.submitted && textbookMetaForm.keywords.$error.required}" required>
                     </div>
                     <div class="four wide field">
                         <label for="audience">Audience</label>

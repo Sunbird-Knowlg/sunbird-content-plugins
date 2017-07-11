@@ -66,7 +66,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = _.isEmpty(activeNode.data.metadata) ? true : false;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = false;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.unit));;
-            $scope.metadataCloneObj = _.clone($scope.textbook);
+            $scope.metadataCloneObj = _.clone($scope.unit);
             $scope.editMode = false;
             $scope.$safeApply();
         }else{
@@ -105,14 +105,14 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.unitmeta", "1.0", "assets/default.png");
 
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
+        $scope.unit = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
         if($scope.mode === "Edit" && $scope.editable === true){
             $scope.editMode = true;
             $('.ui.dropdown').dropdown('refresh');
-            $scope.metadataCloneObj = _.clone($scope.textbook);
+            $scope.metadataCloneObj = _.clone($scope.unit);
         }
         if(!_.isEmpty(activeNode.data.metadata)){
             $scope.editMode = false;
-            $scope.unit = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
             $('#unitBoard').dropdown('set selected', $scope.unit.board);
             $('#unitMedium').dropdown('set selected', $scope.unit.medium);
             $('#unitSubject').dropdown('set selected', $scope.unit.subject);

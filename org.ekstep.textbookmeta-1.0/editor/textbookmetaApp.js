@@ -105,6 +105,7 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
         $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.textbookmeta", "1.0", "assets/default.png");
 
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
+        $scope.textbook = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
         if($scope.mode === "Edit" && $scope.editable === true){
             $scope.editMode = true;
             $('.ui.dropdown').dropdown('refresh');
@@ -112,9 +113,6 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
         }
         if(!_.isEmpty(activeNode.data.metadata)){
             $scope.editMode = false;
-            $scope.textbook = activeNode.data.metadata;
-            
-            $scope.textbook = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
             $('#board').dropdown('set selected', $scope.textbook.board);
             $('#medium').dropdown('set selected', $scope.textbook.medium);
             $('#subject').dropdown('set selected', $scope.textbook.subject);

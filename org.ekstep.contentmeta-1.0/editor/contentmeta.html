@@ -174,7 +174,7 @@
                 <div class="two fields">
                     <div class=" twelve wide field">
                         <label>Keywords</label>
-                        <input id="keywords" name="keywords" ng-blur="content.tags.split(',');" ng-model="content.tags" type="text" required>
+                        <input id="keywords" name="keywords" ng-model="content.tags" type="text" ng-class=" {error: content.submitted && contentMetaForm.keywords.$error.required}"  required>
                     </div>
                     <div class="four wide field">
                         <label for="audience">Audience</label>
