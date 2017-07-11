@@ -13,6 +13,10 @@
     border-radius: 1em!important;
 }
 
+.ngdialog.ngdialog-theme-default .ngdialog-content {
+    padding: 0!important;
+}
+
 .lesson-filters {
     padding-left: 0!important;
 }
