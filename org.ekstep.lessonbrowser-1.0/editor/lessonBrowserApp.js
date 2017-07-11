@@ -1,5 +1,5 @@
 angular.module('org.ekstep.lessonbrowserapp', [])
-.controller('lessonController', ['$scope', 'instance', 'callback',function($scope, instance, callback) {
+.controller('lessonController', ['$scope', 'instance', 'callback', 'callerFilters', function($scope, instance, callback, callerFilters) {
     var ctrl = this;
 
     // QUICK FIX - Return selected lesson from repo. Service should be implemented
@@ -9,6 +9,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
 
     $scope.telemetry = {"pluginid":ctrl.lessonbrowser.manifest.id, "pluginver":ctrl.lessonbrowser.manifest.ver};
 
+    var collectionService = org.ekstep.collectioneditor.api.getService('collection');
     ctrl.generateTelemetry = function(data) {
         if (data) ecEditor.getService('telemetry').interact({
             "type": data.type,
@@ -17,8 +18,8 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             "targetid":data.targetid,
             "pluginid": $scope.telemetry.pluginid,
             "pluginver": $scope.telemetry.pluginver,
-            // "objectid": ecEditor.getCurrentObject().id,
-            // "stage": ecEditor.getCurrentStage().id
+            "objectid": '',
+            "stage": collectionService.getActiveNode().id
         })
     };
 
@@ -30,7 +31,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
 
     // Get and return the selected lessons
     $scope.returnSelectedLessons = function(selectedLessons){
-        ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'addlesson',targetid: ''});
+        ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'addlesson',targetid: 'button-add'});
 
     	// return selected lessons to the lesson browser caller
     	var err = null;
@@ -43,7 +44,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
 
     // Close the popup
     $scope.closePopup = function() {
-        ctrl.generateTelemetry({type: 'click', subtype: 'cancel', target: 'addlesson', targetid: ''});
+        ctrl.generateTelemetry({type: 'click', subtype: 'cancel', target: 'addlesson', targetid: 'button-cancel'});
         $scope.closeThisDialog();
     };
 
@@ -55,7 +56,26 @@ angular.module('org.ekstep.lessonbrowserapp', [])
     		if (repo) {
     			filters = repo.getFilters();
     		}
-    		return filters;
+
+            var mergedFilters = {"language":[], "grade": [], "lessonType": [], "domain": []};
+            angular.forEach(mergedFilters, function(idx, filterKey){
+                if (filters[filterKey] && callerFilters[filterKey]) {
+                    mergedFilters[filterKey] = filters[filterKey].concat(callerFilters[filterKey]);
+                    mergedFilters[filterKey] = arrayUnique(mergedFilters[filterKey]);
+                }
+            });
+    		return mergedFilters;
     	}
     };
+
+    var arrayUnique = function(array) {
+        var a = array.concat();
+        for(var i=0; i<a.length; ++i) {
+            for(var j=i+1; j<a.length; ++j) {
+                if(a[i] === a[j])
+                    a.splice(j--, 1);
+            }
+        }
+        return a;
+    }
 }]);

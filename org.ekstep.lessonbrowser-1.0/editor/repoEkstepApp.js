@@ -8,7 +8,7 @@ angular.module('org.ekstep.contentprovider', [])
     ctrl.res = {count:0, content:[]};
 
     // Selected filters
-    $scope.filterSelection = {"lang": [], "grade": ["Grade 1"], "lessonType": [], "domain": [], "concept": []};
+    $scope.filterSelection = {"lang": [], "grade": [], "lessonType": [], "domain": [], "concept": []};
 
     // Selected lessons
     $scope.lessonSelection = [];
@@ -37,6 +37,7 @@ angular.module('org.ekstep.contentprovider', [])
     setTimeout(function(){$('.ui.accordion').accordion()}, 200);
 
     //Telemetry
+    var collectionService = org.ekstep.collectioneditor.api.getService('collection');
     ctrl.generateTelemetry = function(data) {
         if (data) ecEditor.getService('telemetry').interact({
             "type": data.type,
@@ -45,8 +46,8 @@ angular.module('org.ekstep.contentprovider', [])
             "targetid":data.targetid,
             "pluginid": $scope.telemetry.pluginid,
             "pluginver": $scope.telemetry.pluginver,
-            // "objectid": ecEditor.getCurrentObject().id,
-            // "stage": ecEditor.getCurrentStage().id
+            "objectid": '',
+            "stage": collectionService.getActiveNode().id
         })
     };
 
@@ -83,9 +84,9 @@ angular.module('org.ekstep.contentprovider', [])
                         ctrl.res.content.push(lessonContent);
                     });
 
-                    $scope.loadmoreEnabledFlag = true;
-                    $scope.loadmoreVisibleFlag = true;
                 }
+                $scope.loadmoreVisibleFlag = true;
+                $scope.loadmoreEnabledFlag = true;
 
                 if (loadedLessonCount >= ctrl.res.count) {
                     $scope.loadmoreEnabledFlag = false;
@@ -132,7 +133,7 @@ angular.module('org.ekstep.contentprovider', [])
 
     // Title filter
     $scope.searchByKeyword = function(){
-        ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'search',targetid: ''});
+        ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'search',targetid: 'button-search'});
         searchBody.request.filters.name = {"startsWith": this.searchKeyword};
         ctrl.searchLessons();
     };
@@ -140,14 +141,14 @@ angular.module('org.ekstep.contentprovider', [])
     // Title filter - search on enter
     $scope.searchOnKeypress = function() {
         if (event.keyCode === 13) {
-            ctrl.generateTelemetry({type: 'keypress', subtype: 'submit', target: 'search',targetid: ''});
+            ctrl.generateTelemetry({type: 'keypress', subtype: 'submit', target: 'search',targetid: 'keypress-search'});
             this.searchByKeyword();
         }
     }
 
     // Title filter - Reset
     $scope.resetSearchByKeyword = function(){
-        ctrl.generateTelemetry({type: 'click', subtype: 'reset', target: 'search',targetid: ''});
+        ctrl.generateTelemetry({type: 'click', subtype: 'reset', target: 'search',targetid: 'button-reset'});
         this.searchKeyword = '';
         delete searchBody.request.filters.name;
         ctrl.searchLessons();
@@ -155,32 +156,32 @@ angular.module('org.ekstep.contentprovider', [])
 
     // Sidebar - filters
     $scope.applyFilters = function(){
-        ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'filter',targetid: ''});
+        ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'filter',targetid: 'button-filter-apply'});
         if ($scope.filterSelection.lang.length) {
             searchBody.request.filters.language = $scope.filterSelection.lang;
         } else {
             delete searchBody.request.filters.language;
         }
 
-        if ($scope.filterSelection.grade.length) {
+        if ($scope.filterSelection.grade && $scope.filterSelection.grade.length) {
             searchBody.request.filters.gradeLevel = $scope.filterSelection.grade;
         } else {
             delete searchBody.request.filters.gradeLevel;
         }
 
-        if ($scope.filterSelection.lessonType.length) {
+        if ($scope.filterSelection.lessonType && $scope.filterSelection.lessonType.length) {
             searchBody.request.filters.contentType = $scope.filterSelection.lessonType;
         } else {
             delete searchBody.request.filters.contentType;
         }
 
-        if ($scope.filterSelection.domain.length) {
+        if ($scope.filterSelection.domain && $scope.filterSelection.domain.length) {
             searchBody.request.filters.domain = $scope.filterSelection.domain;
         } else {
             delete searchBody.request.filters.domain;
         }
 
-        if ($scope.filterSelection.concept.length) {
+        if ($scope.filterSelection.concept && $scope.filterSelection.concept.length) {
             searchBody.request.filters.concepts = $scope.filterSelection.concept;
         } else {
             delete searchBody.request.filters.concepts;
@@ -191,7 +192,7 @@ angular.module('org.ekstep.contentprovider', [])
 
     // Sidebar filters - Reset
     $scope.resetFilters = function() {
-        ctrl.generateTelemetry({type: 'click', subtype: 'reset', target: 'filter',targetid: ''});
+        ctrl.generateTelemetry({type: 'click', subtype: 'reset', target: 'filter',targetid: 'button-filter-reset'});
         $scope.filterSelection.lang.splice(0, $scope.filterSelection.lang.length);
         $scope.filterSelection.grade.splice(0, $scope.filterSelection.grade.length);
         $scope.filterSelection.lessonType.splice(0, $scope.filterSelection.lessonType.length);
@@ -203,7 +204,8 @@ angular.module('org.ekstep.contentprovider', [])
 
     // Load more results
     $scope.loadmore = function() {
-        ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'loadmore',targetid: ''});
+        $scope.loadmoreEnabledFlag = false;
+        ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'loadmore',targetid: 'button-load-more'});
         offset = limit + offset;
         ctrl.searchLessons(true);
     }
@@ -214,14 +216,14 @@ angular.module('org.ekstep.contentprovider', [])
         var idx = $scope.filterSelection[selectionKey].indexOf(val);
 
         if (idx > -1) {
-            ctrl.generateTelemetry({type: 'click', subtype: 'uncheck', target: 'filter',targetid: ''});
+            ctrl.generateTelemetry({type: 'click', subtype: 'uncheck', target: 'filter', targetid: 'checkbox-filter'});
             // is currently selected, remove from selection list
             $scope.filterSelection[selectionKey].splice(idx, 1);
 
             // Un-check select all box
             $scope.isAllSelected[selectionKey] = false;
         } else {
-            ctrl.generateTelemetry({type: 'click', subtype: 'check', target: 'filter',targetid: ''});
+            ctrl.generateTelemetry({type: 'click', subtype: 'check', target: 'filter',targetid: 'checkbox-filter'});
             // is newly selected, add to the selection list
             $scope.filterSelection[selectionKey].push(val);
 
@@ -246,14 +248,14 @@ angular.module('org.ekstep.contentprovider', [])
         $scope.filterSelection[selectionKey].splice(0, 15);
 
         if (toggleStatus) {
-            ctrl.generateTelemetry({type: 'click', subtype: 'check-all', target: 'filter',targetid: ''});
+            ctrl.generateTelemetry({type: 'click', subtype: 'check-all', target: 'filter',targetid: 'checkbox-filter'});
             if (valueKey) {
                 angular.forEach(ctrl.meta[metaKey], function(itm){ $scope.filterSelection[selectionKey].push(itm[valueKey]); });
             } else {
                 angular.forEach(ctrl.meta[metaKey], function(itm){ $scope.filterSelection[selectionKey].push(itm); });
             }
         } else {
-            ctrl.generateTelemetry({type: 'click', subtype: 'uncheck-all', target: 'filter',targetid: ''});
+            ctrl.generateTelemetry({type: 'click', subtype: 'uncheck-all', target: 'filter',targetid: 'checkbox-filter'});
         }
 
         $scope.isAllSelected[selectionKey] = toggleStatus;
@@ -276,13 +278,13 @@ angular.module('org.ekstep.contentprovider', [])
         console.log($scope.lessonSelection);
     };
 
-    $scope.triggerConceptSelector = function() {
-        ctrl.generateTelemetry({type: 'click', subtype: 'init', target: 'concept-selector',targetid: ''});
+    $scope.telemetryConceptSelector = function() {
+        ctrl.generateTelemetry({type: 'click', subtype: 'init', target: 'concept-selector',targetid: 'button-concept-selector'});
     }
 
     // Initiate concept selector
     ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
-        element: 'conceptSelector',
+        element: 'lessonBrowserConceptSelector',
         selectedConcepts: [], // All composite keys except mediaType
         callback: function(concepts) {
             angular.forEach(concepts, function(concept){
