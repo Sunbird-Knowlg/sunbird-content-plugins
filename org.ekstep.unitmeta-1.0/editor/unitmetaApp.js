@@ -56,21 +56,20 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         if($scope.unitMetaForm.$valid){ 
             if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
+                org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = $scope.newNode;
+                org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = false;
             }
             if(_.isString($scope.unit.tags)){
                 $scope.unit.tags = $scope.unit.tags.split(',');
             }
             $scope.unit.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.unit.name);
-            var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
-            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = _.isEmpty(activeNode.data.metadata) ? true : false;
-            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = false;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.unit));;
             $scope.metadataCloneObj = _.clone($scope.unit);
             $scope.editMode = false;
             $scope.$safeApply();
         }else{
-            $scope.unit.submitted = true; 
+            $scope.submitted = true; 
         }
     }
 
@@ -100,7 +99,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.unit = {};
-        $scope.editMode = false;
+        $scope.editMode = $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
         $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.unitmeta", "1.0", "assets/default.png");
 
@@ -123,6 +122,8 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                 $scope.unit.conceptData = '(' + $scope.unit.concepts.length + ') concepts selected';
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
+        }else{
+            $scope.newNode = true;
         }
         $scope.getPath();
         $scope.$safeApply();

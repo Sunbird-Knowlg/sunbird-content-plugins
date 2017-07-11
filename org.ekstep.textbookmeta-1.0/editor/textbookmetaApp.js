@@ -56,21 +56,21 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
     $scope.updateNode = function(){
         if($scope.textbookMetaForm.$valid){ 
             if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
-            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
+                org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
+                org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = $scope.newNode;
+                org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = true;
             }
             if(_.isString($scope.textbook.tags)){
                 $scope.textbook.tags = $scope.textbook.tags.split(',');
             }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
             $scope.textbook.contentType = $scope.nodeType;
-            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = false;
-            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = true;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
             $scope.metadataCloneObj = _.clone($scope.textbook);
             $scope.editMode = false;
             $scope.$safeApply();
         }else{
-            $scope.textbook.submitted = true; 
+            $scope.submitted = true; 
         }
     }
 
@@ -100,7 +100,7 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.textbook = {};
-        $scope.editMode = false;
+        $scope.editMode = $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
         $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.textbookmeta", "1.0", "assets/default.png");
 
@@ -123,6 +123,8 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
                 $scope.textbook.conceptData = '(' + $scope.textbook.concepts.length + ') concepts selected';
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
+        }else{
+            $scope.newNode = true;
         }
         $scope.getPath();
         $scope.$safeApply();

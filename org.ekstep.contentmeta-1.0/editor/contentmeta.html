@@ -114,7 +114,7 @@
                 <div class=" field">
                     <label>Content Title</label>
                     <div class="ui input">
-                        <input placeholder="Enter title for Book" ng-model="content.name" ng-class=" {error: content.submitted && contentMetaForm.name.$error.required}" name="name" type="text" required>
+                        <input placeholder="Enter title for Book" ng-model="content.name" ng-class=" {error: submitted && contentMetaForm.name.$error.required}" name="name" type="text" required>
                     </div>
                 </div>
                 <div class="four fields">
@@ -150,7 +150,7 @@
                 <div class="three fields">
                     <div class=" field">
                         <label for="author">Author</label>
-                        <input type="text" placeholder="Enter author name" ng-model="content.author" ng-class=" {error: content.submitted && contentMetaForm.author.$error.required}" name="author" required />
+                        <input type="text" placeholder="Enter author name" ng-model="content.author" ng-class=" {error: submitted && contentMetaForm.author.$error.required}" name="author" required />
                     </div>
                     <div class="field">
                         <label for="publication">Publication</label>
@@ -164,7 +164,7 @@
                 <div class="requiered field">
                     <label>Description</label>
                     <div class="ui input">
-                        <textarea placeholder="brief description about the content" ng-model="content.description" ng-class=" {error: content.submitted && contentMetaForm.description.$error.required}" name="description" rows="2" required></textarea>
+                        <textarea placeholder="brief description about the content" ng-model="content.description" ng-class=" {error: submitted && contentMetaForm.description.$error.required}" name="description" rows="2" required></textarea>
                     </div>
                 </div>
                 <div class="field">
@@ -174,7 +174,7 @@
                 <div class="two fields">
                     <div class=" twelve wide field">
                         <label>Keywords</label>
-                        <input id="keywords" name="keywords" ng-model="content.tags" type="text" ng-class=" {error: content.submitted && contentMetaForm.keywords.$error.required}"  required>
+                        <input id="keywords" name="keywords" ng-model="content.tags" type="text" ng-class=" {error: submitted && contentMetaForm.keywords.$error.required}"  required>
                     </div>
                     <div class="four wide field">
                         <label for="audience">Audience</label>
