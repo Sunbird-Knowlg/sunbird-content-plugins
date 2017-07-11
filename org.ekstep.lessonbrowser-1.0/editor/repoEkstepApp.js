@@ -274,8 +274,6 @@ angular.module('org.ekstep.contentprovider', [])
             // is newly selected, add to the selection list
             $scope.lessonSelection.push(lesson);
         }
-
-        console.log($scope.lessonSelection);
     };
 
     $scope.telemetryConceptSelector = function() {
