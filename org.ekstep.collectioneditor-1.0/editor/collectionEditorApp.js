@@ -62,7 +62,10 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
             if (res) {
                 var activeNode = org.ekstep.collectioneditor.collectionService.getActiveNode();
                 $scope.contentDetails.contentTitle = activeNode.title ? activeNode.title : "Untitled Content";
-                setTimeout(function() { ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode) }, 200);
+                setTimeout(function() { 
+                        ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', activeNode);
+                        ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode)
+                    }, 200);
             }
         });
     });

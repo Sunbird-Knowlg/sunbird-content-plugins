@@ -8,7 +8,7 @@
         </div>
         <h3 class="header-bottom-segment inline-block">{{content.name}}</h3>
         <div class="header-buttons-container header-bottom-segment inline-block">
-            <div class="ui primary submit button inline-block right-float button-overrides" id="preview-button" ng-click="previewContent(); generateTelemetry({type: 'click', subtype: 'preview', target: 'preview'})" ng-show="!editMode">
+            <div class="ui primary submit button inline-block right-float button-overrides" id="preview-button" ng-click="previewContent(); generateTelemetry({type: 'click', subtype: 'preview', target: 'preview'})" ng-show="!editMode && selectedObjectType != 'Collection'">
                 Preview
             </div>
             <div ng-show="mode == 'Edit' && editable == true">
@@ -86,7 +86,7 @@
                     <div class="content">
                         <div class="header">Concepts</div>
                         <div class="description">
-                            <span class="field-value" ng-repeat="concept in content.concepts track by $index">{{concept.Name}}</span>
+                            <span class="field-value" ng-repeat="concept in content.concepts track by $index">{{concept.name}}</span>
                         </div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                     <div class="content">
                         <div class="header">Keywords</div>
                         <div class="description">
-                            <span class="field-value" ng-repeat="tag in content.tags">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
+                            <span class="field-value" ng-repeat="tag in content.tags track by $index">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
                         </div>
                     </div>
                 </div>

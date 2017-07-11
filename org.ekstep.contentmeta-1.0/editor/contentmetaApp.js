@@ -66,6 +66,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.content));;
             $scope.metadataCloneObj = _.clone($scope.content);
+            $scope.editMode = false;
             $scope.$safeApply();
         }else{
             $scope.submitted = true; 
