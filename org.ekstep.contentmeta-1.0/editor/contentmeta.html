@@ -8,7 +8,7 @@
         </div>
         <h3 class="header-bottom-segment inline-block">{{content.name}}</h3>
         <div class="header-buttons-container header-bottom-segment inline-block">
-            <div class="ui primary submit button inline-block right-float button-overrides" id="preview-button" ng-click="previewContent(); generateTelemetry({type: 'click', subtype: 'preview', target: 'preview'})" ng-show="!editMode">
+            <div class="ui primary submit button inline-block right-float button-overrides" id="preview-button" ng-click="previewContent(); generateTelemetry({type: 'click', subtype: 'preview', target: 'preview'})" ng-show="!editMode && selectedObjectType != 'Collection'">
                 Preview
             </div>
             <div ng-show="mode == 'Edit' && editable == true">
@@ -86,7 +86,7 @@
                     <div class="content">
                         <div class="header">Concepts</div>
                         <div class="description">
-                            <span class="field-value" ng-repeat="concept in content.concepts track by $index">{{concept.Name}}</span>
+                            <span class="field-value" ng-repeat="concept in content.concepts track by $index">{{concept.name}}</span>
                         </div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                     <div class="content">
                         <div class="header">Keywords</div>
                         <div class="description">
-                            <span class="field-value" ng-repeat="tag in content.tags">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
+                            <span class="field-value" ng-repeat="tag in content.tags track by $index">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
                         </div>
                     </div>
                 </div>
@@ -107,41 +107,41 @@
                 <label for="bookImage">Add icon</label>
                 <div class="book-image-container" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
-                    <img ng-src="{{content.appIcon}}" ng-show="content.appIcon != ''" />
+                    <img ng-src="{{content.appIcon}}" ng-show="content.appIcon != ''" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})"  />
                 </div>
             </div>
             <div class="field form-fields-except-image">
                 <div class=" field">
                     <label>Content Title</label>
                     <div class="ui input">
-                        <input placeholder="Enter title for Book" ng-model="content.name" ng-class=" {error: content.submitted && contentMetaForm.name.$error.required}" name="name" type="text" required>
+                        <input placeholder="Enter title for Book" ng-model="content.name" ng-class=" {error: submitted && contentMetaForm.name.$error.required}" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required >
                     </div>
                 </div>
                 <div class="four fields">
                     <div class="field">
                         <label for="board">Board</label>
-                        <select id="contentBoard" class="ui selection dropdown" ng-model="content.board">
+                        <select id="contentBoard" class="ui selection dropdown" ng-model="content.board" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'board'})">
                             <option value="">Board</option>
                             <option value="{{board}}" ng-repeat="board in boardList">{{board}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="medium">Medium</label>
-                        <select id="contentMedium" class="ui selection dropdown" ng-model="content.medium">
+                        <select id="contentMedium" class="ui selection dropdown" ng-model="content.medium" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'medium'})" >
                             <option value="">Medium</option>
                             <option value="{{medium}}" ng-repeat="medium in languageList">{{medium}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="subject">Subject</label>
-                        <select id="contentSubject" class="ui selection dropdown" ng-model="content.subject">
+                        <select id="contentSubject" class="ui selection dropdown" ng-model="content.subject" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'subject'})">
                             <option value="">Subject</option>
                             <option value="{{subject}}" ng-repeat="subject in subjectList">{{subject}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="grade">Grade</label>
-                        <select id="contentGradeLevel" class="ui selection dropdown" ng-model="content.gradeLevel">
+                        <select id="contentGradeLevel" class="ui selection dropdown" ng-model="content.gradeLevel" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'gradeLevel'})">
                             <option value="">Grade</option>
                             <option value="{{gradeLevel}}" ng-repeat="gradeLevel in gradeList">{{gradeLevel}}</option>
                         </select>
@@ -150,35 +150,35 @@
                 <div class="three fields">
                     <div class=" field">
                         <label for="author">Author</label>
-                        <input type="text" placeholder="Enter author name" ng-model="content.author" ng-class=" {error: content.submitted && contentMetaForm.author.$error.required}" name="author" required />
+                        <input type="text" placeholder="Enter author name" ng-model="content.author" ng-class=" {error: submitted && contentMetaForm.author.$error.required}" name="author" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'author'})" required />
                     </div>
                     <div class="field">
                         <label for="publication">Publication</label>
-                        <input type="text" placeholder="Publication (optional)" ng-model="content.publication" />
+                        <input type="text" placeholder="Publication (optional)" ng-model="content.publication" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'publication'})" />
                     </div>
                     <div class="field">
                         <label for="edition">Edition</label>
-                        <input type="text" placeholder="Edition (optional)" ng-model="content.edition" />
+                        <input type="text" placeholder="Edition (optional)" ng-model="content.edition" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'edition'})" />
                     </div>
                 </div>
                 <div class="requiered field">
                     <label>Description</label>
                     <div class="ui input">
-                        <textarea placeholder="brief description about the content" ng-model="content.description" ng-class=" {error: content.submitted && contentMetaForm.description.$error.required}" name="description" rows="2" required></textarea>
+                        <textarea placeholder="brief description about the content" ng-model="content.description" ng-class=" {error: submitted && contentMetaForm.description.$error.required}" name="description" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})" required></textarea>
                     </div>
                 </div>
                 <div class="field">
                     <label>Concepts</label>
-                    <input name="concepts" id="contentConceptSelector" ng-model="content.concepts" type="text">
+                    <input name="concepts" id="contentConceptSelector" ng-model="content.concepts" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
                 </div>
                 <div class="two fields">
                     <div class=" twelve wide field">
                         <label>Keywords</label>
-                        <input id="keywords" name="keywords" ng-blur="content.tags.split(',');" ng-model="content.tags" type="text" required>
+                        <input id="keywords" name="keywords" ng-model="content.tags" type="text" ng-class=" {error: submitted && contentMetaForm.keywords.$error.required}"  ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'tags'})" required>
                     </div>
                     <div class="four wide field">
                         <label for="audience">Audience</label>
-                        <select id="contentAudience" class="ui selection dropdown" ng-model="content.audience">
+                        <select id="contentAudience" class="ui selection dropdown" ng-model="content.audience" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'audience'})">
                             <option value="">Audience</option>
                             <option value="{{audience}}" ng-repeat="audience in audienceList">{{audience}}</option>
                         </select>
@@ -186,7 +186,7 @@
                 </div>
                 <div class="field">
                     <label>Notes to Teacher</label>
-                    <input placeholder="Add Notes" ng-model="content.notes" name="notes" type="text">
+                    <input placeholder="Add Notes" ng-model="content.notes" name="notes" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'notes'})">
                 </div>
             </div>
         </div>

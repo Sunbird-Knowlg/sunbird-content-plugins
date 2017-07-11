@@ -100,6 +100,22 @@ body {
 
 #collection-tree span {
     color: #4a4a4a;
+    outline: none!important;
+}
+
+#collection-tree span.fancytree-active span.fancytree-title,
+#collection-tree span.fancytree-selected span.fancytree-title {
+    color: #fff!important;
+    background: #2E9FD9!important;
+}
+
+#collection-tree span.fancytree-node {
+    min-height: 24px!important;
+    font-size: 1.1em!important;
+}
+
+.primary.button-overrides {
+    background: #2E9FD9!important;
 }
 
 .tree-access-tools .ui.search,

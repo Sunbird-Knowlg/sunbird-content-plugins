@@ -21,12 +21,13 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
     $scope.saveContent = function(event, options) {
         options = options || { savingPopup: true, successPopup: true, failPopup: true, callback: function(){} };
         if ($scope.saveBtnEnabled) {
-            if (options.savingPopup) $scope.saveNotification('saving');
+            //if (options.savingPopup) $scope.saveNotification('saving');
             $scope.saveBtnEnabled = false;
             org.ekstep.pluginframework.eventManager.dispatchEvent('content:before:save');
             // TODO: Show saving dialog
-            var contentBody = org.ekstep.contenteditor.stageManager.toECML();
-            $scope.patchContent({ stageIcons: JSON.stringify(org.ekstep.contenteditor.stageManager.getStageIcons()) }, contentBody, function(err, res) {
+            var contentBody = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy();
+            console.log(contentBody);
+            /*$scope.patchContent({ stageIcons: JSON.stringify(org.ekstep.contenteditor.stageManager.getStageIcons()) }, contentBody, function(err, res) {
                 if (err) {
                     if (res && !ecEditor._.isUndefined(res.responseJSON)) {
                         // This could be converted to switch..case to handle different error codes
@@ -49,7 +50,8 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
                 }
                 $scope.saveBtnEnabled = true;
                 if (typeof options.callback === "function") options.callback(err, res);
-            }, options);
+            }, options);*/
+            $scope.saveBtnEnabled = true;
         }
     }
 

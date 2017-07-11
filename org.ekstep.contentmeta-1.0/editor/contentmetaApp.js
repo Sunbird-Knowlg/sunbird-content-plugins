@@ -2,7 +2,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.mode = org.ekstep.collectioneditor.api.getService('collection').getConfig().mode;
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
-    org.ekstep.collectioneditor.api.getService('meta').getConfigOrdinals(function(err, resp) {
+    ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.gradeList = resp.data.result.ordinals.gradeLevel;
             $scope.languageList = resp.data.result.ordinals.language;
@@ -56,19 +56,20 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         if($scope.contentMetaForm.$valid){ 
             if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
+                org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = $scope.newNode;
+                org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = false;
             }
             if(_.isString($scope.content.tags)){
                 $scope.content.tags = $scope.content.tags.split(',');
             }
             $scope.content.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
-            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = false;
-            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = false;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.content));;
             $scope.metadataCloneObj = _.clone($scope.content);
+            $scope.editMode = false;
             $scope.$safeApply();
         }else{
-            $scope.content.submitted = true; 
+            $scope.submitted = true; 
         }
     }
 
@@ -101,7 +102,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.nodeId = data.data.id;
             $scope.nodeType = data.data.objectType;
             $scope.content = {};
-            $scope.editMode = false;
+            $scope.editMode = $scope.newNode = false;
             $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
             $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.contentmeta", "1.0", "assets/default.png");
             
@@ -119,6 +120,8 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                     $scope.content.concepts = activeNode.data.metadata.concepts;
                     $scope.content.conceptData = '(' + $scope.content.concepts.length + ') concepts selected';
                 }
+            }else{
+                $scope.newNode = true;
             }
             $scope.getPath();
             $scope.$safeApply();
