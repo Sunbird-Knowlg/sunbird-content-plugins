@@ -1,68 +1,71 @@
 <style>
-    .spinner {
-        width: 18px;
-        height: 18px;
-        background-color: #ff0c00;
-        border-radius: 100%;  
-        display: inline-block;
-        position: relative;
-        top: 4px;
-        margin-right: 3px;
-        -webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
-        animation: sk-scaleout 1.0s infinite ease-in-out;
-    }
-    @-webkit-keyframes sk-scaleout {
-        0% { 
-            -webkit-transform: scale(0) 
-        }
-        100% {
-            -webkit-transform: scale(1.0);
-            opacity: 0;
-        }
-    }
-    @keyframes sk-scaleout {
-        0% { 
-            -webkit-transform: scale(0);
-            transform: scale(0);
-        }
-        100% {
-            -webkit-transform: scale(1.0);
-            transform: scale(1.0);
-            opacity: 0;
-        }
-    }
-    .internet-status-label {
-        visibility: hidden;
-    }
+.spinner {
+    width: 18px;
+    height: 18px;
+    background-color: #ff0c00;
+    border-radius: 100%;
+    display: inline-block;
+    position: relative;
+    top: 4px;
+    margin-right: 3px;
+    -webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
+    animation: sk-scaleout 1.0s infinite ease-in-out;
+}
 
-    .internet-status { 
-        position: relative;
-        margin: 0;
-        bottom: -4px;
-        color: #9b9b9b;
+@-webkit-keyframes sk-scaleout {
+    0% {
+        -webkit-transform: scale(0)
     }
+    100% {
+        -webkit-transform: scale(1.0);
+        opacity: 0;
+    }
+}
 
-    .last-saved-label {
-        display: inline-block;
-        float: left;
-        position: relative;
-        bottom: -7px;
-        font-size: 12px;
-        color: #9b9b9b;
+@keyframes sk-scaleout {
+    0% {
+        -webkit-transform: scale(0);
+        transform: scale(0);
     }
+    100% {
+        -webkit-transform: scale(1.0);
+        transform: scale(1.0);
+        opacity: 0;
+    }
+}
 
-    .icon-badge {
-        color: #fff !important;
-        background: #e16273 !important;
-        border: 1px solid #e27a93 !important;
-        border-radius: 30px !important;
-        font-size: 2px !important;
-        padding: 0 2px !important;
-        line-height: 4px !important;
-        position: absolute !important;
-        top: -5px;
-        right: -5px;
-    }
+.internet-status-label {
+    visibility: hidden;
+}
+
+.internet-status {
+    position: relative;
+    margin: 0;
+    bottom: -4px;
+    color: #9b9b9b;
+}
+
+.last-saved-label {
+    display: inline-block;
+    float: left;
+    position: relative;
+    bottom: -7px;
+    font-size: 12px;
+    color: #9b9b9b;
+}
+
+.icon-badge {
+    color: #fff !important;
+    background: #e16273 !important;
+    border: 1px solid #e27a93 !important;
+    border-radius: 30px !important;
+    font-size: 2px !important;
+    padding: 0 2px !important;
+    line-height: 4px !important;
+    position: absolute !important;
+    top: -5px;
+    right: -5px;
+}
 </style>
 <div ng-app="org.ekstep.ceheader:headerApp" ng-controller="mainController" class="ui masthead vertical segment content-masterhead">
     <!-- new header code start -->
@@ -86,7 +89,6 @@
                     <i class="edit icon link"></i>&nbsp;Edit Lesson Details
                 </a>
                 <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}"><span class="spinner"></span>{{internetStatusObj.text}}</label>
-
             </div>
             <!-- edit lesson details -->
         </div>
@@ -115,7 +117,7 @@
                     <div class="ui fluid popup bottom right transition hidden user-details-wrapper">
                         <div class="user-details">
                             <div class="row user avtar">
-                                <img src="{{userDetails.avtar}}"/>
+                                <img src="{{userDetails.avtar}}" />
                             </div>
                             <div class="row user-name">
                                 <span ng-bind="userDetails.name"></span>
@@ -153,9 +155,11 @@
             <div class="row header-icon-container">
                 <div class="custom-row-2">
                     <!-- <div> Last saved :  5 min ago</div> -->
-                    <div ng-if="lastSaved" class="last-saved-label"><label class="">{{lastSaved}}</label></div>
+                    <div ng-if="lastSaved" class="last-saved-label">
+                        <label class="">{{lastSaved}}</label>
+                    </div>
                     <div class="icon-group-1">
-                       <div class="icon-box popup-item"  data-content="See What's New" data-variation="tiny inverted" data-position="bottom right">
+                        <div class="icon-box popup-item" data-content="See What's New" data-variation="tiny inverted" data-position="bottom right">
                             <i class="icon-whatsnew custom-icon" ng-click="displayWhatsNew()" title="What's new">
                                 <span class="icon-badge" id="whatsnew-badge" ng-show="whatsNewBadge">&nbsp;</span>
                             </i>
@@ -166,14 +170,14 @@
                     </div>
                     <div class="icon-group-2">
                         <div class="icon-box popup-item" data-content="Download" data-variation="tiny inverted" data-position="top center">
-                            <i class="download icon custom-icon" ng-click="fireEvent({id: 'download:content'});" ></i>
+                            <i class="download icon custom-icon" ng-click="fireEvent({id: 'download:content'});"></i>
                         </div>
                         <div class="icon-box popup-item" data-content="Send for review" data-variation="tiny inverted" data-position="top center">
                             <i class="send icon custom-icon" ng-click="fireEvent({id: 'org.ekstep.review:review'});"></i>
                         </div>
                         <div class="preview-icon-group">
                             <div class="icon-box popup-item" data-content="Preview" data-variation="tiny inverted" data-position="top center">
-                                <i class="fa fa-eye custom-icon" ng-click="previewContent(); fireTelemetry({id: 'preview'}, 'previewButton');" ></i>
+                                <i class="fa fa-eye custom-icon" ng-click="previewContent(); fireTelemetry({id: 'preview'}, 'previewButton');"></i>
                             </div>
                             <div class="ui pointing dropdown icon-box">
                                 <i class="caret down icon custom-icon"></i>
@@ -187,9 +191,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="icon-box popup-item" data-content="Save content" data-variation="tiny inverted" data-position="top center">
-                            <i  class="ui primary icon-save custom-icon" ng-class="saveBtnEnabled ? 'ui' : 'ui disabled'" ng-click="saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId"></i>
+                        <div class="icon-box popup-item save-button" data-content="Save content" data-variation="tiny inverted" data-position="top center">
+                            <i class="ui primary icon-save custom-icon" ng-class="saveBtnEnabled ? 'ui' : 'ui disabled'" ng-click="saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId"></i>
                         </div>
+                        
                     </div>
                 </div>
             </div>
