@@ -66,6 +66,12 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
                         ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', activeNode);
                         ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode)
                     }, 200);
+            } else {
+                ecEditor.getService('popup').open({
+                    template: '<h1>Unable to fetch the content! Please try again later</h1>',
+                    plain: true,
+                    showClose: false
+                });
             }
         });
     });
