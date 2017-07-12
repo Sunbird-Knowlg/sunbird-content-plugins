@@ -412,6 +412,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.file.name = 'audio_' + Date.now() + '.mp3';
         file = ctrl.blobToFile(window.mp3Blob, ctrl.file.name);
         ecEditor.jQuery("#fileSize").text(ctrl.formatBytes(file.size));
+        ctrl.preFillForm(ctrl.file);
     }
 
     ctrl.formatBytes = function(bytes, decimals) {
