@@ -16,10 +16,10 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     cb: undefined,
     /**
-    *   registers events
-    *   @memberof assetBrowser
-    *
-    */
+     *   registers events
+     *   @memberof assetBrowser
+     *
+     */
     initialize: function() {
         org.ekstep.contenteditor.api.addEventListener(this.manifest.id + ":show", this.initPreview, this);
         var templatePath = org.ekstep.contenteditor.api.resolvePluginResource("org.ekstep.assetbrowser", "1.0", "editor/assetBrowser.html");
@@ -27,11 +27,11 @@ org.ekstep.contenteditor.basePlugin.extend({
         org.ekstep.contenteditor.api.getService('popup').loadNgModules(templatePath, controllerPath);
     },
     /**
-    *   load html template to show the popup
-    *   @param event {Object} event
-    *   @param cb {Function} callback to be fired when asset is available.
-    *   @memberof assetBrowser
-    */
+     *   load html template to show the popup
+     *   @param event {Object} event
+     *   @param cb {Function} callback to be fired when asset is available.
+     *   @memberof assetBrowser
+     */
     initPreview: function(event, data) {
         var instance = this;
         this.cb = data.callback;
@@ -52,13 +52,13 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
 
     /**
-    *   get asset from Learning platfrom
-    *   @param {String} name of the asset
-    *   @param {String} type of media
-    *   @param {Function} callback to be fired when XHR request is completed
-    *   @memberof assetBrowser
-    *
-    */
+     *   get asset from Learning platfrom
+     *   @param {String} name of the asset
+     *   @param {String} type of media
+     *   @param {Function} callback to be fired when XHR request is completed
+     *   @memberof assetBrowser
+     *
+     */
     getAsset: function(searchText, mediaType, createdBy, cb) {
         var instance = this,
             requestObj,
@@ -69,11 +69,14 @@ org.ekstep.contenteditor.basePlugin.extend({
             "request": {
                 "filters": {
                     "mediaType": mediaType,
-                    "contentType":"Asset",
-                    "compatibilityLevel": {"min": 1, "max": 2},
-                    "status": new Array("Live","Review","Draft")
+                    "contentType": "Asset",
+                    "compatibilityLevel": {
+                        "min": 1,
+                        "max": 2
+                    },
+                    "status": new Array("Live", "Review", "Draft")
                 },
-                "limit":50
+                "limit": 50
             }
         };
 
@@ -86,12 +89,11 @@ org.ekstep.contenteditor.basePlugin.extend({
         org.ekstep.contenteditor.api._.isUndefined(searchText) ? null : requestObj.request.query = searchText;
 
         // Public assets only
-        if (org.ekstep.contenteditor.api._.isUndefined(createdBy)){
+        if (org.ekstep.contenteditor.api._.isUndefined(createdBy)) {
             requestObj.request.filters.license = "Creative Commons Attribution (CC BY)";
             allowableFilter = org.ekstep.contenteditor.api._.omit(this.search_filter, ['mediaType', 'license', 'limit']);
-        }
-        else{
-        // All assets
+        } else {
+            // All assets
             requestObj.request.filters.createdBy = createdBy;
             allowableFilter = org.ekstep.contenteditor.api._.omit(this.search_filter, ['mediaType', 'limit', 'createdBy']);
         }
@@ -104,7 +106,9 @@ org.ekstep.contenteditor.basePlugin.extend({
             data: JSON.stringify(requestObj),
             headers: requestHeaders,
             success: function(res) {
-                res = { data: res };
+                res = {
+                    data: res
+                };
                 cb(null, res);
             },
             error: function(err) {
@@ -113,19 +117,19 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
     },
     /**
-    *   invokes popup service to show the popup window
-    *   @param err {Object} err when loading template async
-    *   @param data {String} template HTML
-    *   @memberof assetBrowser
-    */
+     *   invokes popup service to show the popup window
+     *   @param err {Object} err when loading template async
+     *   @param data {String} template HTML
+     *   @memberof assetBrowser
+     */
     showAssetBrowser: function(err, data) {
 
     },
     /**
-    *   File size and mime type validation
-    *   @param id {fieldId} Id of the field
-    *   @memberof assetBrowser
-    */
+     *   File size and mime type validation
+     *   @param id {fieldId} Id of the field
+     *   @memberof assetBrowser
+     */
     fileValidation: function(fieldId, allowedFileSize, allowedMimeTypes) {
         var instance = this;
 
