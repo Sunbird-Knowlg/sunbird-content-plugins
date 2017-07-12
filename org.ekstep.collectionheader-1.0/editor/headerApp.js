@@ -5,7 +5,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
     $scope.saveBtnEnabled = true;
     $scope.userDetails = !_.isUndefined(window.context) ? window.context.user : undefined;
     $scope.telemetryService = org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE);
-    $scope.ekstepLogo = ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/ekstep_logo_white.png");
+    $scope.contentDetails.contentImage = ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/default.png");
     $scope.internetStatusObj = {
         'status':navigator.onLine,
         'text': 'Internet Connection not available'
