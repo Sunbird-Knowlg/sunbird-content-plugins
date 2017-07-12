@@ -185,3 +185,68 @@ body {
 #collection-tree span i:hover {
     cursor: pointer!important;
 }
+
+
+/* for not able to fetch content */
+
+.no-content-dialog {
+    width: 100vw;
+    height: 100vh;
+    padding: 2em;
+    background: #fff;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.ekstep-logo {
+    background: url('http://upload.wikimedia.org/wikipedia/commons/thumb/6/61/Minla_strigula_-_Doi_Inthanon.jpg/320px-Minla_strigula_-_Doi_Inthanon.jpg') center center;
+    background-color: #2E9FD9;
+    background-blend-mode: multiply;
+    width: 150px;
+    height: 150px;
+    margin: 0px auto 15px;
+}
+
+.no-content-message,
+.refetch-contents {
+    padding-top: 1em;
+    height: 15vh;
+    user-select: none;
+    width: 41%;
+    margin: 0 auto;
+}
+
+.no-content-message:hover,
+.refetch-contents:hover {
+    background: rgba(255, 165, 0, 0.21);
+}
+
+.not-found-icon {
+    float: left;
+    // margin-left: 30%;
+}
+
+.not-found-message {
+    float: left;
+    margin: 0;
+    margin-top: 0.4em;
+    color: #9b9b9b;
+    font-family: Helvetica;
+}
+
+.refetch-icon {
+    float: right;
+    // margin-right: 30%;
+}
+
+.refetch-message {
+    float: right;
+    margin: 0;
+    margin-top: 0.4em;
+    color: #9b9b9b;
+    font-family: Helvetica;
+}
+
+
+/* for not able to fetch content */
