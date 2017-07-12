@@ -11,7 +11,6 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
         'text': 'Internet Connection not available'
     };
     $scope.lastSaved;
-    $scope.popUpValues = {};
 
     $scope.setEditorState = function(event, data) {
         if (data) $scope.editorState = data;
@@ -21,6 +20,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
     $scope.saveContent = function(event, options) {
         options = options || { savingPopup: true, successPopup: true, failPopup: true, callback: function(){} };
         if ($scope.saveBtnEnabled) {
+            $scope.popUpValues = {};
             if (options.savingPopup) $scope.saveNotification('saving');
             $scope.saveBtnEnabled = false;
             org.ekstep.pluginframework.eventManager.dispatchEvent('content:before:save');

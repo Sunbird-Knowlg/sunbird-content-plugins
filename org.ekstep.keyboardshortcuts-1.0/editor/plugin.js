@@ -95,6 +95,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.registerKeyboardCommand('mod+a', function(event) {
             event.preventDefault();
             var canvas = org.ekstep.contenteditor.api.getCanvas();
+            canvas.deactivateAll();
             var elements = canvas.getObjects().map(function(elem) {
                 return elem.set('active', true);
             });
