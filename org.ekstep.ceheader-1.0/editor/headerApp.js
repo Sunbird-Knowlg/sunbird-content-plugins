@@ -1,5 +1,5 @@
 angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController', ['$scope', function($scope) {
-
+    var closeSaveNotification = function() {};
     var plugin = { id: "org.ekstep.ceheader", ver: "1.0" }, lastSavedTime;
     $scope.editorState = undefined;
     $scope.saveBtnEnabled = true;
@@ -121,6 +121,11 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
         var config = {
             template: ecEditor.resolvePluginResource(plugin.id, plugin.ver, template),
             scope: $scope,
+            controller: ["$scope", function($scope) {
+                closeSaveNotification = function() {
+                    $scope.closeThisDialog();
+                }
+            }],
             showClose: false,
             closeByEscape: false,
             closeByDocument: false
@@ -154,6 +159,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
 
     $scope.showConflictDialog = function(options) {
         var instance = $scope;
+        closeSaveNotification();
         $scope.popupService.open({
             template: ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/partials/conflictDialog.html"),
             controller: ['$scope', function($scope) {
