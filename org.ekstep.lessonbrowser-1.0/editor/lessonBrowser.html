@@ -5,7 +5,6 @@
         margin: 0 10px;
     }
      */
-
     </style>
     <div class="ui modal active add-lessons-popup-wrapper f6f7f8-background" style="top: 12px">
         <div class="ui grid f6f7f8-background">
@@ -14,11 +13,10 @@
                     <h5>Lesson browser</h5>
                 </div>
             </div>
-            <!-- <div class="ui top attached tabular menu">
-			<div class="item" ng-class='{active:$first}' ng-repeat="(rid, repo) in $ctrl.lessonbrowser.repos" data-repo-id="{{repo.id}}" data-tab="{{repo.id}}{{rid}}">{{repo.label}}</div>
-		</div>
- -->
-            <div class="ui bottom attached tab segment f6f7f8-background" ng-class='{active:$first}' ng-repeat="(rid, repo) in $ctrl.lessonbrowser.repos" ng-include="repo.templateUrl" data-tab="{{repo.id}}{{rid}}">
+            <div class="ui top attached tabular menu repo-names-menu-bar">
+                <div class="item f6f7f8-background" ng-class='{active:$first}' ng-repeat="(rid, repo) in $ctrl.lessonbrowser.repos" data-repo-id="{{repo.id}}" data-tab="{{repo.id}}{{rid}}">{{repo.label}}</div>
+            </div>
+            <div class="ui bottom attached tab segment f6f7f8-background" ng-class='{active:$first}' ng-repeat="(rid, repo) in $ctrl.lessonbrowser.repos" ng-include="repo.templateUrl" data-tab="{{repo.id}}{{rid}}" style="max-height:450px;">
             </div>
             <div class="row">
                 <div class="column">
