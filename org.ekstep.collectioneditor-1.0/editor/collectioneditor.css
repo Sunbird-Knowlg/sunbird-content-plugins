@@ -24,23 +24,9 @@ body {
     margin-left: -1em!important;
 }
 
-.collection-masterhead .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown .menu {
-    left: -48px!important;
-}
-
-.page-header {
-    height: 10%!important;
-    margin-top: 0!important;
-    margin-bottom: 0!important;
-}
-
-.page-header .one.column {
-    width: 4%!important;
-    padding-left: 0!important;
-}
-
-.page-header .one.column .content-logo {
-    margin-left: 0!important;
+.header-wrapper .custom-1-wide .ui.tiny.image {
+    height: 100%!important;
+    width: 100%!important;
 }
 
 .main-body {
