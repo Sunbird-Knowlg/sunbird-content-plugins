@@ -89,6 +89,9 @@ body {
     outline: none!important;
 }
 
+#collection-tree i{
+    color: #4a4a4a!important;
+}
 #collection-tree span.fancytree-active span.fancytree-title,
 #collection-tree span.fancytree-selected span.fancytree-title {
     color: #fff!important;
@@ -170,6 +173,12 @@ body {
 
 #collection-tree span i:hover {
     cursor: pointer!important;
+}
+
+.ui.dropdown .menu .selected.item, .ui.dropdown.selected,.ui.dropdown .menu .active.item{
+    font-weight: initial;
+    color: rgba(0,0,0,.95);
+    background: initial;
 }
 
 
