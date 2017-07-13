@@ -79,11 +79,10 @@
     top: -5px;
     right: -5px;
 }
-    
+
 .save-response {
     min-height: 112px;
 }
-
 </style>
 <div ng-app="org.ekstep.ceheader:headerApp" ng-controller="mainController" class="ui masthead vertical segment content-masterhead">
     <!-- new header code start -->
@@ -177,25 +176,25 @@
                         <label class="">{{lastSaved}}</label>
                     </div>
                     <div class="icon-group-1">
-                        <div class="icon-box popup-item" data-content="See What's New" data-variation="tiny inverted" data-position="bottom right">
-                            <i class="icon-whatsnew custom-icon" ng-click="displayWhatsNew()" title="What's new">
+                        <div class="icon-box popup-item" data-content="See What's New" data-variation="tiny inverted" data-position="bottom right" ng-click="displayWhatsNew()">
+                            <i class="icon-whatsnew custom-icon">
                                 <span class="icon-badge" id="whatsnew-badge" ng-show="whatsNewBadge">&nbsp;</span>
                             </i>
                         </div>
-                        <div class="icon-box popup-item" data-content="Add Collaborator" data-variation="tiny inverted" data-position="top center">
-                            <i class="add user icon custom-icon" ng-click="fireEvent({id: 'collaborator:add'});"></i>
+                        <div class="icon-box popup-item" data-content="Add Collaborator" data-variation="tiny inverted" data-position="top center" ng-click="fireEvent({id: 'collaborator:add'});">
+                            <i class="add user icon custom-icon"></i>
                         </div>
                     </div>
                     <div class="icon-group-2">
-                        <div class="icon-box popup-item" data-content="Download" data-variation="tiny inverted" data-position="top center">
-                            <i class="download icon custom-icon" ng-click="fireEvent({id: 'download:content'});"></i>
+                        <div class="icon-box popup-item" data-content="Download" data-variation="tiny inverted" data-position="top center" ng-click="fireEvent({id: 'download:content'});">
+                            <i class="download icon custom-icon"></i>
                         </div>
-                        <div class="icon-box popup-item" data-content="Send for review" data-variation="tiny inverted" data-position="top center">
-                            <i class="send icon custom-icon" ng-click="fireEvent({id: 'org.ekstep.review:review'});"></i>
+                        <div class="icon-box popup-item" data-content="Send for review" data-variation="tiny inverted" data-position="top center" ng-click="fireEvent({id: 'org.ekstep.review:review'});">
+                            <i class="send icon custom-icon"></i>
                         </div>
                         <div class="preview-icon-group">
-                            <div class="icon-box popup-item" data-content="Preview" data-variation="tiny inverted" data-position="top center">
-                                <i class="fa fa-eye custom-icon" ng-click="previewContent(); fireTelemetry({id: 'preview'}, 'previewButton');"></i>
+                            <div class="icon-box popup-item" data-content="Preview" data-variation="tiny inverted" data-position="top center" ng-click="previewContent(); fireTelemetry({id: 'preview'}, 'previewButton');">
+                                <i class="fa fa-eye custom-icon"></i>
                             </div>
                             <div class="ui pointing dropdown icon-box">
                                 <i class="caret down icon custom-icon"></i>
@@ -209,10 +208,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="icon-box popup-item save-button" data-content="Save content" data-variation="tiny inverted" data-position="top center">
-                            <i class="ui primary icon-save custom-icon" ng-class="saveBtnEnabled ? 'ui' : 'ui disabled'" ng-click="saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId"></i>
+                        <div class="icon-box popup-item save-button" data-content="Save content" data-variation="tiny inverted" data-position="top center" ng-class="saveBtnEnabled ? 'ui' : 'ui disabled'" ng-click="saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId">
+                            <i class="ui primary icon-save custom-icon"></i>
                         </div>
-                        
                     </div>
                 </div>
             </div>
