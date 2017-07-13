@@ -16,8 +16,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     }
 
     $scope.searchNode = function(event) {
-        if ($scope.nodeFilter == "") org.ekstep.collectioneditor.collectionService.clearFilter();
-        org.ekstep.collectioneditor.collectionService.filterNode($scope.nodeFilter);
+        if (event.target.value == "") org.ekstep.collectioneditor.collectionService.clearFilter();
+        org.ekstep.collectioneditor.collectionService.filterNode(event.target.value);
     };
 
     $scope.setSelectedNode = function(event, data) {
