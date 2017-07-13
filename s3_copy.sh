@@ -29,5 +29,12 @@ aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.v
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.ceheader-1.0/ --recursive
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.review-1.0/ --recursive
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.keyboardshortcuts-1.0/ --recursive
+aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.collectioneditor-1.0/ --recursive
+aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.collectionheader-1.0/ --recursive
+aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.textbookmeta-1.0/ --recursive
+aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.lessonbrowser-1.0/ --recursive
+aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.unitmeta-1.0/ --recursive
+aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.contentmeta-1.0/ --recursive
+
 
 aws s3 --region ap-south-1 cp ansible/content-plugins s3://ekstep-public-$1/content-plugins/ --recursive --acl public-read
