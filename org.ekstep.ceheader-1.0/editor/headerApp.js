@@ -16,11 +16,9 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
         if (data) $scope.editorState = data;
     };
 
-
     $scope.saveContent = function(event, options) {
         options = options || { savingPopup: true, successPopup: true, failPopup: true, callback: function(){} };
         if ($scope.saveBtnEnabled) {
-            $scope.popUpValues = {};
             if (options.savingPopup) $scope.saveNotification('saving');
             $scope.saveBtnEnabled = false;
             org.ekstep.pluginframework.eventManager.dispatchEvent('content:before:save');
@@ -132,6 +130,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
     };
 
     $scope.changePopupValues = function(message) {
+        $scope.popUpValues = {};
         if (message === 'success') {
             $scope.popUpValues.headerMsg = 'Content Saved!';
             $scope.popUpValues.popUpIcon = 'circle check green';
