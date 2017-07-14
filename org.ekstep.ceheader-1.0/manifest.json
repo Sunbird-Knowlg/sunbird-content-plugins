@@ -14,6 +14,7 @@
             { "type": "css", "src": "editor/styles/header.css"},
             { "type": "js", "src": "lib/angular-timeago.min.js"},
             { "type": "js", "src": "lib/store2.min.js"},
+            { "type": "css", "src": "editor/styles/header.css"},
             {"type": "plugin", "plugin": "org.ekstep.whatsnew", "ver": "1.0"}
         ]
     }
