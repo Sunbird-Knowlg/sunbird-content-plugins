@@ -1,0 +1,14 @@
+{
+    "id": "org.ekstep.contenteditorfunctions",
+    "ver": "1.0",    
+    "author": "Sunil A S",    
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+    	"main": "editor/plugin.js",
+    	"header": [{
+    		"templateURL": "editor/partials/contenteditorfunctions.html",
+    		"controllerURL": "editor/contenteditorfunctions.js"
+    	}]
+    }
+}

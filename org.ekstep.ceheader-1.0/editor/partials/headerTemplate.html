@@ -47,10 +47,10 @@
 
 .last-saved-label {
     display: inline-block;
-    float: left;
+    float: right;
     position: relative;
     bottom: -7px;
-    font-size: 12px;
+    font-size: 13px;
     color: #9b9b9b;
 }
 
@@ -67,7 +67,7 @@
     right: -5px;
 }
 </style>
-<div ng-app="org.ekstep.ceheader:headerApp" ng-controller="mainController" class="ui masthead vertical segment content-masterhead">
+<div ng-app="org.ekstep.ceheader:headerApp" ng-controller="headerController" class="ui masthead vertical segment content-masterhead">
     <!-- new header code start -->
     <div class="ui grid fluid container custom-container">
         <!-- header part 1 -->
@@ -89,6 +89,10 @@
                     <i class="edit icon link"></i>&nbsp;Edit Lesson Details
                 </a>
                 <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}"><span class="spinner"></span>{{internetStatusObj.text}}</label>
+
+                <div class="last-saved-label">
+                    <label class="" ng-if="lastSaved"><strong>Last saved <time-ago from-time='{{ lastSaved }}'></time-ago></strong></label>
+                </div>
             </div>
             <!-- edit lesson details -->
         </div>
@@ -125,22 +129,8 @@
                             <div class="row meta user-email">
                                 <span ng-bind="userDetails.email"></span>
                             </div>
-                            <!--                             <div class="row user-details-edit">
-                                <a href="#">Edit</a>
-                            </div>
- --></div>
+                        </div>
                         <div class="user-profile-menu">
-                            <!-- <div id="whatsNew" class="row option" onclick="alert('what is new');">
-                                <span>What's new</span>
-                                <i class="circle icon user-active-mark"></i>
-                            </div>
-                            <div id="takeATour" class="row option">
-                                <span>Take a tour</span>
-                            </div> -->
-                            <!--                             <div id="help" class="row option">
-                                <span>Help</span>
-                            </div>
- -->
                             <div id="logout" class="row option" ng-init="disableRedirectBtn = false">
                                 <a ng-class="disableRedirectBtn ? 'disabled': ''" ng-href="{{userDetails.logout}}" ng-click="disableRedirectBtn = true; fireToolbarTelemetry({id: 'logout'}, 'logoutButton')" target="_self">Logout</a>
                             </div>
@@ -155,9 +145,6 @@
             <div class="row header-icon-container">
                 <div class="custom-row-2">
                     <!-- <div> Last saved :  5 min ago</div> -->
-                    <div ng-if="lastSaved" class="last-saved-label">
-                        <label class="">{{lastSaved}}</label>
-                    </div>
                     <div class="icon-group-1">
                         <div class="icon-box popup-item" data-content="See What's New" data-variation="tiny inverted" data-position="bottom right">
                             <i class="icon-whatsnew custom-icon" ng-click="displayWhatsNew()" title="What's new">
@@ -192,7 +179,8 @@
                             </div>
                         </div>
                         <div class="icon-box popup-item save-button" data-content="Save content" data-variation="tiny inverted" data-position="top center">
-                            <i class="ui primary icon-save custom-icon" ng-class="saveBtnEnabled ? 'ui' : 'ui disabled'" ng-click="saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId"></i>
+                            <i class="ui icon-save custom-icon disabled" ng-if="!saveBtnEnabled"></i>
+                            <i class="ui primary icon-save custom-icon" ng-click="saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')" ng-if="saveBtnEnabled"></i>
                         </div>
                         
                     </div>

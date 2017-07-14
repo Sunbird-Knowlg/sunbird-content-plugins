@@ -16,7 +16,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         'deleteElem': 'delete:invoke',
         'createStage': 'stage:create',
         'duplicateStage': 'stage:duplicate',
-        'saveContent': 'org.ekstep.ceheader:save',
+        'saveContent': 'org.ekstep.contenteditor:save',
         'selectStage': 'stage:select',
         'sendToBack': 'reorder:sendtoback',
         'sendToFront': 'reorder:sendtofront'

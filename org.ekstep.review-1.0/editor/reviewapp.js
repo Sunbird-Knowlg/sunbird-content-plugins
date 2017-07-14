@@ -32,7 +32,7 @@ angular.module('org.ekstep.review', [])
             ctrl.isLoading = true;
             ctrl.success = false;
             ctrl.success_msg = "";
-            ecEditor.dispatchEvent('org.ekstep.ceheader:save', {
+            ecEditor.dispatchEvent('org.ekstep.contenteditor:save', {
                 savingPopup: false,
                 successPopup: false,
                 failPopup: true,
@@ -73,7 +73,7 @@ angular.module('org.ekstep.review', [])
             ctrl.isLoading = true;
             ctrl.success = false;
             ctrl.success_msg = "";
-            ecEditor.dispatchEvent('org.ekstep.ceheader:save:force', {
+            ecEditor.dispatchEvent('org.ekstep.contenteditor:save:force', {
                 savingPopup: false,
                 successPopup: false,
                 failPopup: true,
