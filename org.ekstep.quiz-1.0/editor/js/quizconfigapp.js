@@ -73,7 +73,7 @@ angular.module('quizconfigapp', ['ui.sortable'])
                         var configuration = {};
                         userData.etags = userData.etags || {};
                         configuration.context = {'mode':'edit','contentId': ctrl.activePreviewItem,'sid':userData.sid,'uid':userData.uid, 'channel': userData.channel, 'pdata': userData.pdata, 'app': userData.etags.app, 'dims': userData.etags.dims, 'partner': userData.etags.partner }; 
-                        configuration.config = {'showEndPage':'true','showStartPage':'true'};
+                        configuration.config = config;
                         configuration.data = ctrl.itemPreviewContent;
                         itemIframe.contentWindow.initializePreview(configuration);
                    // };
