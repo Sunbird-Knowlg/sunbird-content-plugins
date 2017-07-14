@@ -52,6 +52,7 @@
     bottom: -7px;
     font-size: 12px;
     color: #9b9b9b;
+    text-align: center;
 }
 
 .icon-badge {
@@ -89,7 +90,7 @@
         <div class="one wide centered column custom-1-wide">
             <img class="ui tiny centered image" src="{{ekstepLogo}}" />
         </div>
-        <div class="six wide column custom-6-wide">
+        <div class="four wide column custom-6-wide">
             <div class="row custom-row-1">
                 <label class="content-title" ng-bind="contentDetails.contentTitle | limitTo:30">
                     <span ng-if="contentDetails.contentTitle.length > 30">...</span></label>
@@ -99,6 +100,11 @@
                     <i class="edit icon link"></i>&nbsp;Edit Lesson Details
                 </a>
                 <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}"><span class="spinner"></span>{{internetStatusObj.text}}</label>
+            </div>
+        </div>
+        <div class="two wide centered column">
+            <div ng-if="lastSaved" class="last-saved-label">
+                    <label class="">{{lastSaved}}</label>
             </div>
         </div>
         <div class="five wide column custom-5-wide">
@@ -134,10 +140,7 @@
                 </div>
             </div>
             <div class="row header-icon-container">
-                <div class="custom-row-2">
-                    <div ng-if="lastSaved" class="last-saved-label">
-                        <label class="">{{lastSaved}}</label>
-                    </div>
+                <div class="custom-row-2">                    
                     <div class="icon-group-1">
                         <div class="icon-box popup-item" data-content="See What's New" data-variation="tiny inverted" data-position="bottom right" ng-click="displayWhatsNew()">
                             <i class="icon-whatsnew custom-icon">
