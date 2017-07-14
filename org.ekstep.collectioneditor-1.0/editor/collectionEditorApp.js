@@ -39,7 +39,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     //Header scope ends
 
     $scope.loadContent = function(callback) {
-        org.ekstep.services.languageService.getCollectionHierarchy({ contentId: $scope.contentId }, function(err, res) {
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId }, function(err, res) {
             if (res && res.data && res.data.responseCode === "OK") {
                 org.ekstep.collectioneditor.collectionService.fromCollection(res.data.result.content);
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
