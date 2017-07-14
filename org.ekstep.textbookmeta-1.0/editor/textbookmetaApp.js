@@ -28,19 +28,6 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
             $scope.$safeApply();
         }
     });
-    
-    ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
-        element: 'textbookConceptSelector',
-        selectedConcepts: [], // All composite keys except mediaType
-        callback: function(data) {
-            $scope.textbook.concepts = '(' + data.length + ') concepts selected';
-            $scope.textbook.conceptData = _.map(data, function(concept) {
-                return { "identifier" : concept.id , "name" : concept.name} ;
-            });
-            $scope.$safeApply();
-        }
-    });
-
 
     $scope.showAssestBrowser = function(){
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
@@ -55,13 +42,14 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
     
     $scope.updateNode = function(){
         if($scope.textbookMetaForm.$valid){ 
+            ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:updated');
             if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = $scope.newNode;
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = true;
             }
-            if(_.isString($scope.textbook.tags)){
-                $scope.textbook.tags = $scope.textbook.tags.split(',');
+            if(_.isString($scope.textbook.keywords)){
+                $scope.textbook.keywords = $scope.textbook.keywords.split(',');
             }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
             $scope.textbook.contentType = $scope.nodeType;
@@ -70,6 +58,10 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
             $scope.editMode = false;
             $scope.$safeApply();
         }else{
+            iziToast.warning({
+                message: 'Please fill in all required fields',
+                position: 'topCenter'
+            });
             $scope.submitted = true; 
         }
     }
@@ -97,6 +89,7 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
     }
 
     $scope.onNodeSelect = function(evant, data){
+        var selectedConcepts = [];
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.textbook = {};
@@ -120,12 +113,28 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
             $('#audience').dropdown('set selected', $scope.textbook.audience);
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.textbook.concepts = activeNode.data.metadata.concepts;
-                $scope.textbook.conceptData = '(' + $scope.textbook.concepts.length + ') concepts selected';
+                $scope.textbook.conceptData = '(' + $scope.textbook.concepts + ') concepts selected';
+                if($scope.textbook.concepts.length > 0){
+                    _.forEach($scope.textbook.concepts, function(concept){
+                        selectedConcepts.push(concept.identifier);
+                    });
+                }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
         }else{
             $scope.newNode = true;
         }
+        ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
+            element: 'textbookConceptSelector',
+            selectedConcepts: selectedConcepts,
+            callback: function(data) {
+                $scope.textbook.conceptData = '(' + data.length + ') concepts selected';
+                $scope.textbook.concepts = _.map(data, function(concept) {
+                    return { "identifier" : concept.id , "name" : concept.name} ;
+                });
+                $scope.$safeApply();
+            }
+        });
         $scope.getPath();
         $scope.$safeApply();
     }
