@@ -208,7 +208,7 @@ body {
 .custom-5-wide .user-details-wrapper .user-profile-menu a,
 .custom-5-wide .user-details-wrapper .user-profile-menu a:hover {
     color: #9b9b9b !important;
-    cursor: default;
+    cursor: pointer;
 }
 
 .custom-5-wide .user-details-wrapper .user-profile-menu .option:hover {
