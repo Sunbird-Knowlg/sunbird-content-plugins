@@ -51,12 +51,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         });
     };
 
-    $scope.showLessonBrowser = function() {
-        ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show", { "language": ["Kannada"], "grade": ["Grade 1"] }, function(selectedLessons) {
-            //
-        });
-    };
-
     org.ekstep.collectioneditor.api.initEditor(config, function() {
         $scope.loadContent(function(err, res) {
             if (res) {

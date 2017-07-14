@@ -12,10 +12,18 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
         var contentBody = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy();
         console.log('contentBody', contentBody);
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).saveCollectionHierarchy({ body: contentBody }, function(err, res) {
-            if (res && res.data.responseCode == "OK") {
-                alert('content saved successfully');
+            if (res && res.data && res.data.responseCode == "OK") {
+                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                    title: 'Content saved successfully!',                    
+                    position: 'topCenter',
+                    icon: 'fa fa-check-circle'
+                });
             } else {
-                alert('unable to save content');
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'Unable to save the content, try again!',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
             }
         });
     };
@@ -38,6 +46,6 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
         return "You have unsaved changes";
     }
     window.addEventListener('online', $scope.internetStatusFn, false);
-    window.addEventListener('offline', $scope.internetStatusFn, false);    
+    window.addEventListener('offline', $scope.internetStatusFn, false);
     ecEditor.addEventListener('org.ekstep.collectionheader:save', $scope.saveContent, $scope);
 }]);
