@@ -303,6 +303,10 @@ body {
     color: #2e9fd9;
 }
 
+.custom-5-wide .custom-row-2 .icon-box.save-button.ui.disabled .icon-save {
+    color: #9B9B9B!important;
+}
+
 .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown {
     box-shadow: none;
 }
