@@ -62,19 +62,48 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
             if (res) {
                 var activeNode = org.ekstep.collectioneditor.collectionService.getActiveNode();
                 $scope.contentDetails.contentTitle = activeNode.title ? activeNode.title : "Untitled Content";
-                if(!_.isUndefined(activeNode.data.metadata.appIcon)){
-                    $scope.contentDetails.contentImage =  activeNode.data.metadata.appIcon;
+                if (!_.isUndefined(activeNode.data.metadata.appIcon)) {
+                    $scope.contentDetails.contentImage = activeNode.data.metadata.appIcon;
                 }
                 setTimeout(function() {
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', activeNode);
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode)
                 }, 200);
             } else {
-                ecEditor.getService('popup').open({
-                    template: '<div class="ui warning message no-content-dialog"><div id="content-not-fetch-message">:( &nbsp;Unable to fetch the content! Please try again later!</div><div><div class="ui negative basic button button-overrides"><i class="help circle icon"></i>Help</div><div class="ui black basic button button button-overrides"><i class="close icon"></i>Close editor</div></div></div>',
-                    plain: true,
-                    showClose: false,
-                    width: "50vw"
+                // ecEditor.getService('popup').open({
+                //     template: '<div class="ui warning message no-content-dialog"><div id="content-not-fetch-message">:( &nbsp;Unable to fetch the content! Please try again later!</div><div><div class="ui negative basic button button-overrides"><i class="help circle icon"></i>Help</div><div class="ui black basic button button button-overrides"><i class="close icon"></i>Close editor</div></div></div>',
+                //     plain: true,
+                //     showClose: false,
+                //     width: "50vw"
+                // });
+                iziToast.error({
+
+                    icon: 'material',
+                    title: 'No content!!!',
+                    timeout: false,
+                    message: 'We are unable to fetch content now.',
+                    animateInside: true,
+                    close: false,
+                    position: 'topCenter', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+                    buttons: [
+                        ['<button>Reload</button>', function(instance, toast) {
+                            alert("Hello world!");
+                        }],
+                        ['<button>Close Editor</button>', function(instance, toast) {
+                            instance.hide({
+                                transitionOut: 'fadeOutUp',
+                                onClosing: function(instance, toast, closedBy) {
+                                    console.info('closedBy: ' + closedBy); //btn2
+                                }
+                            }, toast, 'close', 'btn2');
+                        }]
+                    ],
+                    onOpening: function(instance, toast) {
+                        $('.collection-masterhead').css('visibility', 'hidden');
+                    },
+                    onClosing: function(instance, toast, closedBy) {
+                        console.info('closedBy: ' + closedBy); // tells if it was closed by 'drag' or 'button'
+                    }
                 });
             }
         });
