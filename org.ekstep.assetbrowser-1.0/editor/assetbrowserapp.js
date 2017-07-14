@@ -2,7 +2,7 @@
 angular.module('assetbrowserapp', ['angularAudioRecorder']).config(['recorderServiceProvider', function(recorderServiceProvider) {
 
     recorderServiceProvider.forceSwf(false);
-    var lameJsUrl = window.location.origin + ecEditor.resolvePluginResource("org.ekstep.assetbrowser", "1.0", "editor/recorder/lib2/lame.min.js");
+    var lameJsUrl = ecEditor.resolvePluginResource("org.ekstep.assetbrowser", "1.0", "editor/recorder/lib2/lame.min.js");
     var config = {
         lameJsUrl: lameJsUrl,
         bitRate: 92
@@ -37,14 +37,14 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         value: "voice"
     }];
 
-    ctrl.context = window.context;
+    ctrl.context = org.ekstep.contenteditor.globalContext;
     ctrl.selected_images = {};
     ctrl.selected_audios = {};
     ctrl.selectBtnDisable = true;
     ctrl.buttonToShow = 'select';
     ctrl.uploadView = false;
     ctrl.languagecode = 'en';
-    ctrl.createdBy = ecEditor._.isUndefined(window.context) ? '' : window.context.user.id;
+    ctrl.createdBy = ecEditor._.isUndefined(ctrl.context) ? '' : ctrl.context.user.id;
     ctrl.asset = {
         'requiredField': '',
     };
@@ -61,7 +61,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         'keywords': [],
         'creator': '',
         'status': 'Draft',
-        'createdBy': ecEditor._.isUndefined(window.context) ? '' : window.context.user.id,
+        'createdBy': ecEditor._.isUndefined(ctrl.context) ? '' : ctrl.context.user.id,
         'code': "org.ekstep" + Math.random(),
         'mimeType': "",
         'mediaType': "",
@@ -660,7 +660,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
     ctrl.preFillForm = function(data) {
         ctrl.assetMeta.name = data.name.replace(/\.[^/.]+$/, "").replace(/[_.^/_]/g, " ");
-        ctrl.assetMeta.creator = window.context.user.name;
+        ctrl.assetMeta.creator = ctrl.context.user.name;
         ecEditor.jQuery('.field', '#hideShowFields').removeClass('disabled');
         ctrl.showDragDropMsg = true;
         ecEditor.ngSafeApply(ecEditor.getAngularScope());

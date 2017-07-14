@@ -43,7 +43,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     loadHtml: function(event) {
         var instance = this;
-        instance.contentObj = ecEditor.getService('content').getContentMeta(window.context.content_id);
+        instance.contentObj = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId'));
         ecEditor.getService('popup').open({
             template: 'org.ekstep.review.html',
             controller: 'reviewcontroller',
@@ -79,7 +79,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 "gradeLevel": "Grades"
             };
 
-        instance.contentObj = ecEditor.getService('content').getContentMeta(window.context.content_id);
+        instance.contentObj = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId'));
         /**Check for mandatory fields**/
         if (instance.contentObj['name'] == "Untitled lesson") {
             isValid = 0;
@@ -167,7 +167,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      *   @memberof review
      */
     redirectToHome: function() {
-        window.location.href = window.context.baseURL;
+        window.location.href = org.ekstep.contenteditor.globalContext.baseURL;
     }
 });
 //# sourceURL="reviewplugin.js"

@@ -41,7 +41,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             $scope.isLoading = instance.isLoading;
             $scope.isSuccess = instance.isSuccess;
             $scope.isDownloading = instance.isDownloading;
-            $scope.cntName = ecEditor.getService('content').getContentMeta(window.context.content_id).name;
+            $scope.cntName = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name;
             instance.getDownloadUrl(function(downloadUrl) {
                 if (downloadUrl) {
                     $scope.isLoading = true;
@@ -87,7 +87,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             type: "POST",
             data: {
                 downloadUrl: data,
-                name: ecEditor.getService('content').getContentMeta(window.context.content_id).name
+                name: ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name
             },
             success: function(results) {
                 $scope.isLoading = false;

@@ -19,15 +19,15 @@ org.ekstep.contenteditor.basePlugin.extend({
         setTimeout(function() {
             ctrl.initializeTodoWidget();
         }, 3000);
-
+        ctrl.context = org.ekstep.contenteditor.globalContext;
         ctrl.initializeTodoWidget = function() {
             var requestParams = {};
             var widgetRef;
 
-            if (!ecEditor._.isUndefined(window.context)) {
-                if (!ecEditor._.isUndefined(window.context.content_id) && window.context.content_id != "") {
+            if (!ecEditor._.isUndefined(ctrl.context)) {
+                if (!ecEditor._.isUndefined(ctrl.context.contentId) && ctrl.context.contentId != "") {
                     // Content url
-                    requestParams["url"] = "index.php?option=com_ekcontent&view=content&id=" + window.context.id;
+                    requestParams["url"] = "index.php?option=com_ekcontent&view=content&id=" + ctrl.context.id;
                     requestParams["type"] = "todos";
 
                     // Stage id
@@ -35,10 +35,10 @@ org.ekstep.contenteditor.basePlugin.extend({
                     requestParams["client"] = "content.jlike_ekcontent";
 
                     // Content id
-                    requestParams["cont_id"] = window.context.id;
+                    requestParams["cont_id"] = ctrl.context.id;
 
                     // Content title
-                    requestParams["title"] = ecEditor.getService('content').getContentMeta(window.context.content_id).name;
+                    requestParams["title"] = ecEditor.getService('content').getContentMeta(ctrl.context.contentId).name;
 
                     widgetRef = ecEditor.jQuery("#pageLevelTodos");
 

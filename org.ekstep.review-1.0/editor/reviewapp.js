@@ -102,7 +102,7 @@ angular.module('org.ekstep.review', [])
                 url: ecEditor.getConfig('baseURL') + "/index.php?option=com_ekcontent&task=contentform.sendForReview",
                 type: 'POST',
                 data: {
-                    identifier: window.context.content_id,
+                    identifier: ecEditor.getContext('contentId'),
                 },
                 cache: false,
                 beforeSend: function() {
