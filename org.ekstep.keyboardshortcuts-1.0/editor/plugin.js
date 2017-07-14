@@ -120,7 +120,7 @@ org.ekstep.contenteditor.basePlugin.extend({
          *  show all available shourtcuts
          *  @memberof Shortcuts
          */
-        ecEditor.registerKeyboardCommand('ctrl+/', function(event) {
+        ecEditor.registerKeyboardCommand('mod+/', function(event) {
             event.preventDefault();
             ecEditor.getService('popup').open({
                 templateUrl: templatePath,
