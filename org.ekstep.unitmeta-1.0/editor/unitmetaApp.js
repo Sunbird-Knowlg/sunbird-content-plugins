@@ -56,9 +56,10 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             $scope.editMode = false;
             $scope.$safeApply();
         }else{
-            iziToast.warning({
-                message: 'Please fill in all required fields',
-                position: 'topCenter'
+            ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
+                title: 'Please fill in all required fields',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
             });
             $scope.submitted = true; 
         }
