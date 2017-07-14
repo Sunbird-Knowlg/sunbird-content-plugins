@@ -3,8 +3,7 @@
  * plugin to add keyboard shortcuts to interact with editor
  * @class Shortcuts
  * @extends org.ekstep.contenteditor.basePlugin
- *
- * @author  <Akash Gupta>
+ * @author Akash Gupta<akash.gupta@tarento.com>
  * 
  */
 
