@@ -27,19 +27,6 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             $scope.$safeApply();
         }
     });
-    
-    ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
-        element: 'unitConceptSelector',
-        selectedConcepts: [], // All composite keys except mediaType
-        callback: function(data) {
-            $scope.unit.concepts = '(' + data.length + ') concepts selected';
-            $scope.unit.conceptData = _.map(data, function(concept) {
-                return { "identifier" : concept.id , "name" : concept.name} ;
-            });
-            $scope.$safeApply();
-        }
-    });
-
 
     $scope.showAssestBrowser = function(){
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
@@ -59,8 +46,8 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = $scope.newNode;
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = false;
             }
-            if(_.isString($scope.unit.tags)){
-                $scope.unit.tags = $scope.unit.tags.split(',');
+            if(_.isString($scope.unit.keywords)){
+                $scope.unit.keywords = $scope.unit.keywords.split(',');
             }
             $scope.unit.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.unit.name);
@@ -69,6 +56,11 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             $scope.editMode = false;
             $scope.$safeApply();
         }else{
+            ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
+                title: 'Please fill in all required fields',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });
             $scope.submitted = true; 
         }
     }
@@ -96,6 +88,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     }
 
     $scope.onNodeSelect = function(evant, data){
+        var selectedConcepts = [];
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.unit = {};
@@ -120,11 +113,27 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.unit.concepts = activeNode.data.metadata.concepts;
                 $scope.unit.conceptData = '(' + $scope.unit.concepts.length + ') concepts selected';
+                if($scope.unit.concepts.length > 0){
+                    _.forEach($scope.unit.concepts, function(concept){
+                        selectedConcepts.push(concept.identifier);
+                    });
+                }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
         }else{
             $scope.newNode = true;
         }
+        ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
+            element: 'unitConceptSelector',
+            selectedConcepts: selectedConcepts,
+            callback: function(data) {
+                $scope.unit.conceptData = '(' + data.length + ') concepts selected';
+                $scope.unit.concepts = _.map(data, function(concept) {
+                    return { "identifier" : concept.id , "name" : concept.name} ;
+                });
+                $scope.$safeApply();
+            }
+        });
         $scope.getPath();
         $scope.$safeApply();
     }

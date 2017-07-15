@@ -28,19 +28,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         }
     });
     
-    ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
-        element: 'contentConceptSelector',
-        selectedConcepts: [], // All composite keys except mediaType
-        callback: function(data) {
-            $scope.content.concepts = '(' + data.length + ') concepts selected';
-            // $scope.concepts = _.map(data, function(concept) {
-            //     return concept.id;
-            // });
-            $scope.$safeApply();
-        }
-    });
-
-
     $scope.showAssestBrowser = function(){
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',
@@ -59,8 +46,8 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = $scope.newNode;
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = false;
             }
-            if(_.isString($scope.content.tags)){
-                $scope.content.tags = $scope.content.tags.split(',');
+            if(_.isString($scope.content.keywords)){
+                $scope.content.keywords = $scope.content.keywords.split(',');
             }
             $scope.content.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
@@ -69,6 +56,11 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.editMode = false;
             $scope.$safeApply();
         }else{
+            ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
+                title: 'Please fill in all required fields',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });
             $scope.submitted = true; 
         }
     }
@@ -99,6 +91,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         var contentArr = ["Story", "Collection", "Game", "Worksheet"];
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
         if(_.indexOf(contentArr, data.data.objectType) != -1){
+            var selectedConcepts = [];
             $scope.nodeId = data.data.id;
             $scope.nodeType = data.data.objectType;
             $scope.content = {};
@@ -118,11 +111,27 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
                 if(!_.isUndefined(activeNode.data.metadata.concepts)){
                     $scope.content.concepts = activeNode.data.metadata.concepts;
-                    $scope.content.conceptData = '(' + $scope.content.concepts.length + ') concepts selected';
+                    $scope.content.content = '(' + $scope.content.concepts.length + ') concepts selected';
+                    if($scope.content.concepts.length > 0){
+                        _.forEach($scope.content.concepts, function(concept){
+                            selectedConcepts.push(concept.identifier);
+                        });
+                    }
                 }
             }else{
                 $scope.newNode = true;
             }
+            ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
+                element: 'contentConceptSelector',
+                selectedConcepts: selectedConcepts,
+                callback: function(data) {
+                    $scope.content.concepts = '(' + data.length + ') concepts selected';
+                    $scope.content.conceptData = _.map(data, function(concept) {
+                        return concept.id;
+                    });
+                    $scope.$safeApply();
+                }
+            });
             $scope.getPath();
             $scope.$safeApply();
         }
