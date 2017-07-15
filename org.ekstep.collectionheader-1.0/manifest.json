@@ -11,7 +11,7 @@
     		"controllerURL": "editor/headerApp.js"
     	}],
         "dependencies": [
-            { "type": "js", "src": "lib/store2.min.js"}            
+            { "type": "js", "src": "lib/angular-timeago.min.js"}
         ]
     }
 }

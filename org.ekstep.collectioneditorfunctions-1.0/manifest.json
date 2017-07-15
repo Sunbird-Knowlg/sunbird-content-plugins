@@ -1,0 +1,10 @@
+{
+    "id": "org.ekstep.collectioneditorfunctions",
+    "ver": "1.0",    
+    "author": "Sunil A S",    
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+    	"main": "editor/plugin.js"    	
+    }
+}

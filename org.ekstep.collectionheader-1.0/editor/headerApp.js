@@ -1,29 +1,22 @@
-angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController', ['$scope', function($scope) {
+angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.angular-timeago"]).controller('headerController', ['$scope', function($scope) {
 
-    var plugin = { id: "org.ekstep.collectionheader", ver: "1.0" },
-        lastSavedTime;
+    var plugin = { id: "org.ekstep.collectionheader", ver: "1.0" };
     $scope.contentDetails.contentImage = ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/default.png");
     $scope.internetStatusObj = {
         'status': navigator.onLine,
-        'text': 'Internet Connection not available'
+        'text': 'No Internet Connection!'
     };
+    $scope.disableSaveBtn = false;    
+    $scope.lastSaved;
 
-    $scope.saveContent = function(event, options) {
-        var contentBody = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy();
-        console.log('contentBody', contentBody);
-        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).saveCollectionHierarchy({ body: contentBody }, function(err, res) {
-            if (res && res.data && res.data.responseCode == "OK") {
-                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
-                    title: 'Content saved successfully!',                    
-                    position: 'topCenter',
-                    icon: 'fa fa-check-circle'
-                });
-            } else {
-                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                    message: 'Unable to save the content, try again!',
-                    position: 'topCenter',
-                    icon: 'fa fa-warning'
-                });
+    $scope.saveContent = function() {
+        $scope.disableSaveBtn = true;
+        ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:save", {
+            showNotification: true,
+            callback: function(err, res) {
+                $scope.disableSaveBtn = false;
+                $scope.lastSaved = Date.now(); 
+                $scope.$safeApply();               
             }
         });
     };
@@ -39,7 +32,7 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
     $scope.internetStatusFn = function(event) {
         $scope.$safeApply(function() {
             $scope.internetStatusObj.status = navigator.onLine;
-        })
+        });
     };
 
     window.onbeforeunload = function(e) {
@@ -47,5 +40,4 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
     }
     window.addEventListener('online', $scope.internetStatusFn, false);
     window.addEventListener('offline', $scope.internetStatusFn, false);
-    ecEditor.addEventListener('org.ekstep.collectionheader:save', $scope.saveContent, $scope);
 }]);

@@ -67,7 +67,7 @@
     right: -5px;
 }
 
-.header-icon-container .custom-row-2{
+.header-icon-container .custom-row-2 {
     display: inline-block;
     position: absolute;
     bottom: 5px;
@@ -75,7 +75,7 @@
 }
 
 </style>
-<div ng-app="org.ekstep.ceheader:headerApp" ng-controller="mainController" class="ui masthead vertical segment content-masterhead">
+<div ng-app="org.ekstep.collectionheader:app" ng-controller="headerController" class="ui masthead vertical segment content-masterhead">
     <!-- new header code start -->
     <div class="ui grid fluid container custom-container">
         <!-- header part 1 -->
@@ -84,33 +84,33 @@
         </div>
         <!-- header part 1 -->
         <!-- header part 2 -->
-        <div class="six wide column custom-6-wide">
+        <div class="four wide column custom-6-wide">
             <!-- content title -->
             <div class="row custom-row-1">
                 <label class="content-title" ng-bind="contentDetails.contentTitle | limitTo:30">
                     <span ng-if="contentDetails.contentTitle.length > 30">...</span></label>
             </div>
+            <div class="row custom-row-1">
+                <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}"><span class="spinner"></span>{{internetStatusObj.text}}</label>
+            </div>
             <!-- content title -->
+        </div>
+        <div class="two wide column">
+            <div ng-if="lastSaved" class="last-saved-label">
+                    <label class="">Last saved {{lastSaved | timeAgo }}</label>
+            </div>
         </div>
         <!-- header part 2 -->
         <!-- header part 3 -->
         <!-- header part 3 upper deck -->
         <!-- header part 3 lower deck -->
         <div class="header-icon-container right floated column right aligned">
-            <div class="custom-row-2">
-                <!-- <div> Last saved :  5 min ago</div> -->
-                <div ng-if="lastSaved" class="last-saved-label">
-                    <label class="">{{lastSaved}}</label>
+            <div class="custom-row-2">                                
+                <div ng-class="disableSaveBtn ? 'ui primary icon button button-overrides popup-item disabled' : 'ui primary icon button button-overrides popup-item'" data-content="Save content" data-variation="tiny inverted" data-position="top center" ng-click="saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')">
+                    <i class="icon-save"></i>&nbsp;&nbsp;Save
                 </div>
-                <div class="ui primary icon button button-overrides popup-item" data-content="Save content" data-variation="tiny inverted" data-position="top center" ng-click="saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')" ng-disabled="!contentId">
-                    <i class="icon-save" ng-class="saveBtnEnabled ? 'ui' : 'ui disabled'"></i>&nbsp;&nbsp;Save
-                </div>
-                
             </div>
         </div>
     </div>
     <!-- header part 3 lower deck -->
-</div>
-<!-- header part 3 -->
-</div>
 </div>
