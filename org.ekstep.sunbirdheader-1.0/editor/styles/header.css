@@ -45,7 +45,7 @@ body {
 }
 
 .custom-icon {
-    line-height: normal;
+    line-height: initial;
     height: 14px;
     width: 15px;
 }
@@ -81,7 +81,6 @@ body {
 }
 
 .custom-1-wide {
-    background-color: #2e9fd9;
     -webkit-background-blend-mode: multiply;
     -moz-background-blend-mode: multiply;
     -ms-background-blend-mode: multiply;
@@ -90,8 +89,6 @@ body {
 }
 
 .custom-1-wide .ui.tiny.image {
-    width: 60px;
-    height: 57px;
     display: block;
 }
 
@@ -112,9 +109,9 @@ body {
 
 .custom-6-wide .custom-row-2 {
     position: relative;
-    font-size: 12px !important;
-    height: 25px;
-    line-height: 25px;
+    font-size: 13px !important;
+    height: 50px;
+    line-height: 50px;
 }
 
 .custom-6-wide .custom-row-2 a {
@@ -153,11 +150,15 @@ body {
     border-radius: 50%;
 }
 
+.custom-5-wide .user-details-wrapper .user-name {
+    font-weight: bold;
+}
+
 .custom-5-wide .user-details-wrapper .user-name,
 .custom-5-wide .user-details-wrapper .user-email,
 .custom-5-wide .user-details-wrapper .user-details-edit {
     color: #4A4A4A;
-    font-size: 9px;
+    font-size: 10px;
     line-height: 11px;
     padding: 2px 10px;
     margin-top: 3px;
@@ -262,7 +263,7 @@ body {
     height: 30px;
     float: right;
     font-size: 12px !important;
-    padding-top: 2px;
+    top: 4px;
 }
 
 .custom-5-wide .custom-row-2 .icon,
@@ -285,7 +286,6 @@ body {
 .custom-5-wide .custom-row-2 .icon-group-1 {
     float: left;
     border-right: 0.2px solid rgba(128, 128, 128, 0.15);
-    padding-right: 5px;
 }
 
 .custom-5-wide .custom-row-2 .icon-group-1 .comments-icon-group {
@@ -295,7 +295,6 @@ body {
 
 .custom-5-wide .custom-row-2 .icon-group-2 {
     float: right;
-    padding-left: 5px;
 }
 
 .custom-5-wide .custom-row-2 .icon-group-2 .icon-save,
@@ -303,17 +302,30 @@ body {
     color: #2e9fd9;
 }
 
+.icon-save.disabled {
+    color: #D7D7D7 !important;
+}
+
 .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown {
     box-shadow: none;
 }
 
+.custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown:hover {
+    background: none !important;
+}
+
+.custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown:hover .custom-icon {
+    color: #4a4a4a !important;
+}
+
 .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown .menu {
-    left: -85px !important;
-    top: 70%;
+    left: initial !important;
+    right: -14px !important;
+    top: 50% !important;
 }
 
 .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown .menu .item {
-    font-size: 9px !important;
+    font-size: 10px !important;
     line-height: 11px;
     padding: 9px 10px !important;
     font-family: Helvetica;
@@ -336,6 +348,20 @@ body {
 
 .custom-5-wide .custom-row-2 .icon-group-2 .preview-icon-group .ui.pointing.dropdown.icon-box .icon {
     font-size: 12px !important;
+}
+
+.toolbar .ui.nine.wide.column,
+.toolbar .ui.icon.menu,
+.toolbar .ui.three.wide.column {
+    background: linear-gradient(rgba(255, 255, 255, 0.05), rgba(0, 0, 0, 0.05)) #FFF !important;
+}
+
+.toolbar .ui.nine.wide.column .ui.icon.menu {
+    margin-bottom: 0;
+    margin-top: 0;
+    margin-left: 30px;
+    border: none;
+    box-shadow: none;
 }
 
 .unsupported-resolution {
