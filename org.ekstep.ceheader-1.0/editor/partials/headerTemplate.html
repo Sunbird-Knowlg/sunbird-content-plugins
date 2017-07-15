@@ -47,10 +47,10 @@
 
 .last-saved-label {
     display: inline-block;
-    float: left;
+    float: right;
     position: relative;
     bottom: -7px;
-    font-size: 12px;
+    font-size: 13px;
     color: #9b9b9b;
 }
 
@@ -89,6 +89,10 @@
                     <i class="edit icon link"></i>&nbsp;Edit Lesson Details
                 </a>
                 <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}"><span class="spinner"></span>{{internetStatusObj.text}}</label>
+
+                <div class="last-saved-label">
+                    <label class="" ng-if="lastSaved"><strong>Last saved <time-ago from-time='{{ lastSaved }}'></time-ago></strong></label>
+                </div>
             </div>
             <!-- edit lesson details -->
         </div>

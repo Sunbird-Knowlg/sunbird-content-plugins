@@ -53,13 +53,11 @@ body {
 .custom-container {
     margin-top: 0 !important;
     margin-bottom: 1rem !important;
-    height: 55px !important;
 }
 
 .custom-container .one.wide.column,
 .custom-container .six.wide.column,
-.custom-container .five.wide.column,
-.custom-container .two.wide.column {
+.custom-container .five.wide.column {
     height: 55px !important;
 }
 
@@ -74,7 +72,7 @@ body {
     padding-right: 0.3rem;
 }
 
-.ui.grid.custom-container>.column:not(.row) {
+.ui.grid.custom-container > .column:not(.row) {
     padding-top: 0.3rem;
 }
 
@@ -172,7 +170,7 @@ body {
 
 .custom-5-wide .user-details-wrapper .user-email,
 .custom-5-wide .user-details-wrapper .user-details-edit,
-.custom-5-wide .user-details-wrapper .user-profile-menu>.option {
+.custom-5-wide .user-details-wrapper .user-profile-menu > .option {
     color: #4A4A4A;
     font-size: 9px;
     font-weight: normal;
@@ -197,22 +195,22 @@ body {
     user-select: none;
 }
 
-.custom-5-wide .user-details-wrapper .user-profile-menu .option>* {
+.custom-5-wide .user-details-wrapper .user-profile-menu .option > * {
     display: inline-block;
 }
 
 .custom-5-wide .user-details-wrapper .user-profile-menu a {
     width: 100%;
-    color: #9b9b9b !important;
-    cursor: pointer;
 }
 
+.custom-5-wide .user-details-wrapper .user-profile-menu a,
 .custom-5-wide .user-details-wrapper .user-profile-menu a:hover {
-    color: #4a4a4a!important
+    color: #9b9b9b !important;
+    cursor: default;
 }
+
 .custom-5-wide .user-details-wrapper .user-profile-menu .option:hover {
     background-color: #F3F3F3;
-    cursor: pointer;
 }
 
 .custom-5-wide .user-context {
@@ -307,8 +305,8 @@ body {
     color: #2e9fd9;
 }
 
-.custom-5-wide .custom-row-2 .icon-box.save-button.ui.disabled .icon-save {
-    color: #9B9B9B!important;
+.icon-save.disabled {
+    color: #D7D7D7 !important;
 }
 
 .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown {
@@ -327,11 +325,6 @@ body {
     left: initial !important;
     right: -14px !important;
     top: 50% !important;
-}
-
-.custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown .menu:after {
-    left: initial !important;
-    right: 13% !important;
 }
 
 .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown .menu .item {
