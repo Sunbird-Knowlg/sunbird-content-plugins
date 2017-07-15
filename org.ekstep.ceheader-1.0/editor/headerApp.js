@@ -1,8 +1,10 @@
-angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController', ['$scope', function($scope) {
-    var closeSaveNotification = function() {};
-    var plugin = { id: "org.ekstep.ceheader", ver: "1.0" }, lastSavedTime;
-    $scope.editorState = undefined;
-    $scope.saveBtnEnabled = true;
+angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).controller('headerController', ['$scope', function($scope) {
+
+    var plugin = { id: "org.ekstep.ceheader", ver: "1.0" };
+    $scope.lastSaved = undefined;
+    $scope.pendingChanges = false;
+    $scope.saveBtnEnabled = false;
+    
     $scope.userDetails = !_.isUndefined(window.context) ? window.context.user : undefined;
     $scope.telemetryService = org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE);
     $scope.ekstepLogo = ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/ekstep_logo_white.png");
@@ -10,45 +12,10 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
         'status':navigator.onLine,
         'text': 'Internet Connection not available'
     };
-    $scope.lastSaved;
 
-    $scope.setEditorState = function(event, data) {
-        if (data) $scope.editorState = data;
-    };
-
-    $scope.saveContent = function(event, options) {
-        options = options || { savingPopup: true, successPopup: true, failPopup: true, callback: function(){} };
-        if ($scope.saveBtnEnabled) {
-            if (options.savingPopup) $scope.saveNotification('saving');
-            $scope.saveBtnEnabled = false;
-            org.ekstep.pluginframework.eventManager.dispatchEvent('content:before:save');
-            // TODO: Show saving dialog
-            var contentBody = org.ekstep.contenteditor.stageManager.toECML();
-            $scope.patchContent({ stageIcons: JSON.stringify(org.ekstep.contenteditor.stageManager.getStageIcons()) }, contentBody, function(err, res) {
-                if (err) {
-                    if (res && !ecEditor._.isUndefined(res.responseJSON)) {
-                        // This could be converted to switch..case to handle different error codes
-                        if (res.responseJSON.params.err == "ERR_STALE_VERSION_KEY")
-                            $scope.showConflictDialog(options);
-                    } else {
-                        if(options && options.failPopup) {
-                            if (!options.savingPopup) $scope.saveNotification();
-                            $scope.changePopupValues('error');
-                        }
-                        
-                    }
-                } else if (res && res.data.responseCode == "OK") {
-                    lastSavedTime = new Date(Date.now());
-                    $scope.calculateSaveTime();
-                    if(options && options.successPopup) {
-                        if (!options.savingPopup) $scope.saveNotification();
-                        $scope.changePopupValues('success');
-                    }
-                }
-                $scope.saveBtnEnabled = true;
-                if (typeof options.callback === "function") options.callback(err, res);
-            }, options);
-        }
+    $scope.previewContent = function(fromBeginning) {
+        console.log('preview working');
+        ecEditor.dispatchEvent('org.ekstep.contenteditor:preview', {fromBeginning: fromBeginning});
     }
 
     $scope.saveBrowserContent = function(event, options) {
@@ -114,80 +81,6 @@ angular.module('org.ekstep.ceheader:headerApp', []).controller('mainController',
         } else {
             window.location.assign(window.context.editMetaLink);
         }
-    };
-
-    $scope.saveNotification = function(message) {
-        var template = "editor/partials/saveMessage.html";
-        var config = {
-            template: ecEditor.resolvePluginResource(plugin.id, plugin.ver, template),
-            scope: $scope,
-            controller: ["$scope", function($scope) {
-                closeSaveNotification = function() {
-                    $scope.closeThisDialog();
-                }
-            }],
-            showClose: false,
-            closeByEscape: false,
-            closeByDocument: false
-        }
-        $scope.changePopupValues(message);
-        $scope.popupService.open(config);
-    };
-
-    $scope.changePopupValues = function(message) {
-        $scope.popUpValues = {};
-        if (message === 'success') {
-            $scope.popUpValues.headerMsg = 'Content Saved!';
-            $scope.popUpValues.popUpIcon = 'circle check green';
-            $scope.popUpValues.showCloseButton = true;
-            $scope.popUpValues.saveNotificationCloseButton = 'saveSuccessNotificationCloseButton';
-            $scope.$safeApply();
-        } else
-        if (message === 'error') {
-            $scope.popUpValues.headerMsg = 'Failed to save Content';
-            $scope.popUpValues.popUpIcon = 'circle remove red';
-            $scope.popUpValues.showCloseButton = true;
-            $scope.popUpValues.saveNotificationCloseButton = 'saveFailNotificationCloseButton';
-            $scope.$safeApply();
-        }
-        if (message === 'saving') {
-            $scope.popUpValues.headerMsg = 'Saving content please wait...';
-            $scope.popUpValues.showCloseButton = false;
-            $scope.$safeApply();
-        }
-    }
-
-    $scope.showConflictDialog = function(options) {
-        var instance = $scope;
-        closeSaveNotification();
-        $scope.popupService.open({
-            template: ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/partials/conflictDialog.html"),
-            controller: ['$scope', function($scope) {
-                //Platform copy
-                $scope.previewPlatformContent = function() {
-                    instance.previewPlatformContent();
-                };
-                $scope.saveBrowserContent = function() {
-                    instance.saveBrowserContent(undefined, options);
-                    $scope.closeThisDialog();
-                };
-                //Existing copy
-                $scope.previewContent = function() {
-                    instance.previewContent();
-                };
-                $scope.refreshContent = function() {
-                    instance.refreshContent();
-                };
-                $scope.firetelemetry = function(menu, menuType) {
-                    instance.telemetryService.interact({ "type": "click", "subtype": "popup", "target": menuType, "pluginid": 'org.ekstep.ceheader', 'pluginver': '1.0', "objectid": menu.id, "stage": org.ekstep.contenteditor.stageManager.currentStage.id });
-                };
-                $scope.showAdvancedOption = false;
-            }],
-            className: 'ngdialog-theme-plain header-conflict-dialog',
-            showClose: false,
-            closeByDocument: true,
-            closeByEscape: true
-        });
     };
 
     $scope.editContentMeta = function() {

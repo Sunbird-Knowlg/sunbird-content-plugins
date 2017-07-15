@@ -124,7 +124,7 @@ angular.module('assessmentbrowserapp', [])
             };
             if (ctrl.activityOptions.myQuestions) {
                 ctrl.isMyQuestions = true;
-                data.request.filters.createdBy = ecEditor._.isUndefined(ctrl.context) ? '' : ctrl.context.user.id;
+                data.request.filters.createdBy = ecEditor._.isUndefined(ctrl.context) ? '' : (ctrl.context.uid || ctrl.context.user.id);
             } else {
                 ctrl.isMyQuestions = false;
             }
