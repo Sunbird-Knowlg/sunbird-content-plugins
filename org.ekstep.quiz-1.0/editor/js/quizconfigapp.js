@@ -67,11 +67,16 @@ angular.module('quizconfigapp', ['ui.sortable'])
             if (itemIframe.src == "")
                 itemIframe.src = ctrl.previewURL;
             itemIframe.addEventListener('load', function() {
-                if (ctrl.itemPreviewContent) {
-                    itemIframe.contentWindow.setContentData(null, ctrl.itemPreviewContent, config)
-                    itemIframe.contentWindow.onload = function() {
-                        itemIframe.contentWindow.setContentData(null, ctrl.itemPreviewContent, config)
-                    };
+                if (ctrl.itemPreviewContent) {                    
+                    //itemIframe.contentWindow.onload = function() {
+                        var userData = ecEditor.getService('telemetry').context;
+                        var configuration = {};
+                        userData.etags = userData.etags || {};
+                        configuration.context = {'mode':'edit','contentId': ctrl.activePreviewItem,'sid':userData.sid,'uid':userData.uid, 'channel': userData.channel, 'pdata': userData.pdata, 'app': userData.etags.app, 'dims': userData.etags.dims, 'partner': userData.etags.partner }; 
+                        configuration.config = config;
+                        configuration.data = ctrl.itemPreviewContent;
+                        itemIframe.contentWindow.initializePreview(configuration);
+                   // };
                 } else {
                     ctrl.itemPreviewContent = {
                         "error": 'Preview could not be shown.'
@@ -82,6 +87,7 @@ angular.module('quizconfigapp', ['ui.sortable'])
         });
         ctrl.previewItem = function(item) {
             ctrl.enableQuestionConfig = false;
+            ctrl.activePreviewItem = item.identifier;
             var templateRef = item.template_id ? item.template_id : item.template;
             var templateData = _.filter(quizInstance.data.template, ['id', item.template]);
             ctrl.itemPreviewContent = quizBrowserUtil.getQuestionPreviwContent(templateData, item);

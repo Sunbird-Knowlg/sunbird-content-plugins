@@ -75,7 +75,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                 var userData = ecEditor.getService('telemetry').context;
                 previewContentIframe.onload = function() {
                     var configuration = {};
-                    configuration.context = {'mode':'edit','contentId':meta.identifier,'sid':userData.sid,'uid':userData.uid}; 
+                    userData.etags = userData.etags || {};
+                    configuration.context = {'mode':'edit','contentId':meta.identifier,'sid':userData.sid,'uid':userData.uid, 'channel': userData.channel, 'pdata': userData.pdata, 'app': userData.etags.app, 'dims': userData.etags.dims, 'partner': userData.etags.partner }; 
                     configuration.config = {'showEndPage':'true','showStartPage':'true'};
                     configuration.metadata = meta.contentMeta; configuration.data = instance.contentBody;
                     previewContentIframe.contentWindow.initializePreview(configuration);

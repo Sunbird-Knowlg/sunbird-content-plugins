@@ -1,624 +1,624 @@
 'use strict';
-angular.module('assetbrowserapp', ['angularAudioRecorder']).config(['recorderServiceProvider', function(recorderServiceProvider){
+angular.module('assetbrowserapp', ['angularAudioRecorder']).config(['recorderServiceProvider', function(recorderServiceProvider) {
 
-        recorderServiceProvider.forceSwf(false);
-        var lameJsUrl = window.location.origin + ecEditor.resolvePluginResource("org.ekstep.assetbrowser", "1.0", "editor/recorder/lib2/lame.min.js");
-        var config = {lameJsUrl:lameJsUrl, bitRate: 92};
+    recorderServiceProvider.forceSwf(false);
+    var lameJsUrl = window.location.origin + ecEditor.resolvePluginResource("org.ekstep.assetbrowser", "1.0", "editor/recorder/lib2/lame.min.js");
+    var config = {
+        lameJsUrl: lameJsUrl,
+        bitRate: 92
+    };
 
-        recorderServiceProvider.withMp3Conversion(true, config);
-  }]);
-angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$injector', 'instance', function($scope ,$injector, instance) {
-        var audiodata = {},
-            assetMedia,
-            assetdata = {},
-            searchText,
-            lastSelectedAudio,
-            lastSelectedImage,
-            audioTabSelected = false,
-            imageTabSelected = true,
-            ctrl = this;
+    recorderServiceProvider.withMp3Conversion(true, config);
+}]);
+angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
+    var audiodata = {},
+        assetMedia,
+        assetdata = {},
+        searchText,
+        lastSelectedAudio,
+        lastSelectedImage,
+        audioTabSelected = false,
+        imageTabSelected = true,
+        ctrl = this;
 
-        var $sce = $injector.get('$sce');
-        ctrl.file = {
-            "infoShow": false,
-            "name":"",
-            "size":0
-        };
+    var $sce = $injector.get('$sce');
+    ctrl.file = {
+        "infoShow": false,
+        "name": "",
+        "size": 0
+    };
 
-        ctrl.audioType = "audio";
-        ctrl.voiceOption = [{label:"Audio", value:"audio"}, {label:"Voice", value:"voice"}];
+    ctrl.audioType = "audio";
+    ctrl.voiceOption = [{
+        label: "Audio",
+        value: "audio"
+    }, {
+        label: "Voice",
+        value: "voice"
+    }];
 
-        ctrl.context = window.context;
-        ctrl.selected_images = {};
-        ctrl.selected_audios = {};
-        ctrl.selectBtnDisable = true;
-        ctrl.buttonToShow = 'select';
-        ctrl.uploadView = false;
-        ctrl.languagecode = 'en';
-        ctrl.createdBy = ecEditor._.isUndefined(window.context) ? '' : window.context.user.id;
-        ctrl.asset = {
-            'requiredField': '',
-        };
-        ctrl.hideField = false;
-        ctrl.keywordsText;
-        ctrl.languageText = "English";
-        ctrl.optional = true;
-        ctrl.uploadingAsset = false;
-        ctrl.assetId = undefined;
-        ctrl.tabSelected = "my";
-        ctrl.assetMeta = {
-            'body': '',
-            'name': '',
-            'keywords': [],
-            'creator': '',
-            'status': 'Draft',
-            'createdBy': ecEditor._.isUndefined(window.context) ? '' : window.context.user.id,
-            'code': "org.ekstep" + Math.random(),
-            'mimeType': "",
-            'mediaType': "",
-            'contentType': "Asset",
-            'osId': "org.ekstep.quiz.app",
-            'copyright': "",
-            'sources': "",
-            'publisher': ""
-        };
+    ctrl.context = window.context;
+    ctrl.selected_images = {};
+    ctrl.selected_audios = {};
+    ctrl.selectBtnDisable = true;
+    ctrl.buttonToShow = 'select';
+    ctrl.uploadView = false;
+    ctrl.languagecode = 'en';
+    ctrl.createdBy = ecEditor._.isUndefined(window.context) ? '' : window.context.user.id;
+    ctrl.asset = {
+        'requiredField': '',
+    };
+    ctrl.hideField = false;
+    ctrl.keywordsText;
+    ctrl.languageText = "English";
+    ctrl.optional = true;
+    ctrl.uploadingAsset = false;
+    ctrl.assetId = undefined;
+    ctrl.tabSelected = "my";
+    ctrl.assetMeta = {
+        'body': '',
+        'name': '',
+        'keywords': [],
+        'creator': '',
+        'status': 'Draft',
+        'createdBy': ecEditor._.isUndefined(window.context) ? '' : window.context.user.id,
+        'code': "org.ekstep" + Math.random(),
+        'mimeType': "",
+        'mediaType': "",
+        'contentType': "Asset",
+        'osId': "org.ekstep.quiz.app",
+        'sources': "",
+        'publisher': ""
+    };
 
-        ctrl.loading = 'active';
-        ctrl.plugin = instance.mediaType;
-        ctrl.upload = (instance.mediaType == 'image') ? true : false;
-        ctrl.fileTypes = (instance.mediaType == "image") ? "jpeg, jpg, png" : "mp3, mp4, mpeg, ogg, wav, webm";
-        ctrl.fileSize = (instance.mediaType == "image") ? '1 MB' : '6 MB';
+    ctrl.loading = 'active';
+    ctrl.plugin = instance.mediaType;
+    ctrl.upload = (instance.mediaType == 'image') ? true : false;
+    ctrl.fileTypes = (instance.mediaType == "image") ? "jpeg, jpg, png" : "mp3, mp4, mpeg, ogg, wav, webm";
+    ctrl.fileSize = (instance.mediaType == "image") ? '1 MB' : '6 MB';
 
-        if (instance.mediaType == 'image') {
-            ctrl.allowedFileSize = (1 * 1024 * 1024);
-            ctrl.allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
-        } else if (instance.mediaType == 'audio') {
-            ctrl.allowedFileSize = (6 * 1024 * 1024);
-            ctrl.allowedMimeTypes = ['audio/mp3', 'audio/mp4', 'audio/mpeg', 'audio/ogg', 'audio/webm', 'audio/x-wav', 'audio/wav'];
-        }
+    if (instance.mediaType == 'image') {
+        ctrl.allowedFileSize = (1 * 1024 * 1024);
+        ctrl.allowedMimeTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+    } else if (instance.mediaType == 'audio') {
+        ctrl.allowedFileSize = (6 * 1024 * 1024);
+        ctrl.allowedMimeTypes = ['audio/mp3', 'audio/mp4', 'audio/mpeg', 'audio/ogg', 'audio/webm', 'audio/x-wav', 'audio/wav'];
+    }
 
-        function imageAssetCb(err, res) {
-            if (res && res.data.result.content) {
-                ctrl.imageList = [];
+    function imageAssetCb(err, res) {
+        if (res && res.data.result.content) {
+            ctrl.imageList = [];
 
-                ecEditor._.forEach(res.data.result.content, function(obj, index) {
-                    if (!ecEditor._.isUndefined(obj.downloadUrl)){
-                        ctrl.imageList.push(obj);
-                    }
-                });
-                ctrl.initPopup(res.data.result.content);
-            } else {
-                ctrl.imageList = [];
-            };
-
-            // Hide loader
-            hideLoader();
-
-            $scope.$safeApply();
-        };
-
-        function audioAssetCb(err, res) {
-
-            if (res && res.data.result.content) {
-                ctrl.audioList = [];
-
-                ecEditor._.forEach(res.data.result.content, function(obj, index) {
-                    if (!ecEditor._.isUndefined(obj.downloadUrl)){
-                        ctrl.audioList.push({ downloadUrl: trustResource(obj.downloadUrl), identifier: obj.identifier, name:obj.name, mimeType:obj.mimeType, license:obj.license });
-                    }
-                });
-
-                ctrl.initPopup(res.data.result.content);
-
-            } else {
-                ctrl.audioList = [];
-            };
-
-            // Hide loader
-            hideLoader();
-
-            $scope.$safeApply();
-        };
-
-        function trustResource(src) {
-            return $sce.trustAsResourceUrl(src);
-        }
-
-        //load image on opening window
-        if (instance.mediaType == 'image') {
-            instance.getAsset(undefined, new Array(instance.mediaType), ctrl.createdBy, imageAssetCb);
+            ecEditor._.forEach(res.data.result.content, function(obj, index) {
+                if (!ecEditor._.isUndefined(obj.downloadUrl)) {
+                    ctrl.imageList.push(obj);
+                }
+            });
+            ctrl.initPopup(res.data.result.content);
         } else {
-            instance.getAsset(undefined, new Array('audio','voice'), ctrl.createdBy, audioAssetCb);
+            ctrl.imageList = [];
+        };
+
+        // Hide loader
+        hideLoader();
+
+        $scope.$safeApply();
+    };
+
+    function audioAssetCb(err, res) {
+
+        if (res && res.data.result.content) {
+            ctrl.audioList = [];
+
+            ecEditor._.forEach(res.data.result.content, function(obj, index) {
+                if (!ecEditor._.isUndefined(obj.downloadUrl)) {
+                    ctrl.audioList.push({
+                        downloadUrl: trustResource(obj.downloadUrl),
+                        identifier: obj.identifier,
+                        name: obj.name,
+                        mimeType: obj.mimeType,
+                        license: obj.license
+                    });
+                }
+            });
+
+            ctrl.initPopup(res.data.result.content);
+
+        } else {
+            ctrl.audioList = [];
+        };
+
+        // Hide loader
+        hideLoader();
+
+        $scope.$safeApply();
+    };
+
+    function trustResource(src) {
+        return $sce.trustAsResourceUrl(src);
+    }
+
+    //load image on opening window
+    if (instance.mediaType == 'image') {
+        instance.getAsset(undefined, new Array(instance.mediaType), ctrl.createdBy, imageAssetCb);
+    } else {
+        instance.getAsset(undefined, new Array('audio', 'voice'), ctrl.createdBy, audioAssetCb);
+    }
+
+   $scope.$on('ngDialog:opened', function() {
+        ecEditor.jQuery('#audioDropDown')
+            .dropdown({
+                onChange: function(value, text, $selectedItem) {
+                    searchText = ctrl.query;
+                    (searchText === "") ? searchText = undefined: null;
+                    var selectedValue = value != 'all' ? new Array(value) : new Array('audio', 'voice');
+                    instance.getAsset(searchText, selectedValue, ctrl.createdBy, audioAssetCb);
+                }
+            });
+	});
+
+    ctrl.myAssetTab = function() {
+        var callback,
+            searchText = ctrl.query;
+
+        // Show loader
+        showLoader();
+
+        ctrl.selectBtnDisable = false;
+        ctrl.buttonToShow = 'select';
+        ctrl.tabSelected = "my";
+
+        imageTabSelected = true;
+        audioTabSelected = false;
+        ctrl.selectBtnDisable = ecEditor._.isUndefined(lastSelectedImage) ? true : false;
+        ctrl.buttonToShow = 'select';
+
+        (searchText === "") ? searchText = undefined: null;
+        callback = (instance.mediaType === "image") ? imageAssetCb : callback;
+        callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
+        callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
+        ctrl.selectBtnDisable = true;
+        var mediaType = ctrl.getMediaType();
+        callback && instance.getAsset(searchText, mediaType, ctrl.createdBy, callback);
+    }
+
+    ctrl.getMediaType = function() {
+        if (instance.mediaType === "image") {
+            return new Array(instance.mediaType);
+        } else {
+            if ((ecEditor.jQuery('#audioDropDown').dropdown('get value') == '') || (ecEditor.jQuery('#audioDropDown').dropdown('get value') == 'all')) {
+                return new Array('audio', 'voice')
+            } else if (ecEditor.jQuery('#audioDropDown').dropdown('get value') == 'voice') {
+                return new Array('voice');
+            } else {
+                return new Array(instance.mediaType);
+            }
+        }
+    }
+
+    ctrl.allAssetTab = function() {
+        var callback,
+            searchText = ctrl.query;
+
+        // Show loader
+        showLoader();
+
+        ctrl.tabSelected = "all";
+        imageTabSelected = true;
+        audioTabSelected = false;
+        ctrl.selectBtnDisable = ecEditor._.isUndefined(lastSelectedImage) ? true : false;
+        ctrl.buttonToShow = 'select';
+
+        (searchText === "") ? searchText = undefined: null;
+        callback = (instance.mediaType === "image") ? imageAssetCb : callback;
+        callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
+        callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
+        ctrl.selectBtnDisable = true;
+
+        var mediaType = instance.mediaType != "image" ? new Array('audio', 'voice') : new Array(instance.mediaType);
+        callback && instance.getAsset(searchText, mediaType, undefined, callback);
+    }
+
+    function showLoader() {
+        // Just add class active to loader element
+        ctrl.loading = 'active';
+    }
+
+    function hideLoader() {
+        // Just remove class active form loader element
+        ctrl.loading = '';
+    }
+
+    ctrl.uploadButton = function() {
+        if (instance.mediaType == "image") {
+            ctrl.uploadBtnDisabled = false;
+        } else {
+            if (ctrl.record == true) {
+                ctrl.audioType = "voice";
+                ctrl.uploadBtnDisabled = true;
+            } else if (ctrl.upload == false) {
+                ctrl.uploadBtnDisabled = true;
+            } else {
+                ctrl.audioType = "audio";
+                ctrl.uploadBtnDisabled = false;
+            }
         }
 
-		setTimeout(function() {
-            ecEditor.jQuery('#audioDropDown')
-			  .dropdown({
-				onChange: function(value, text, $selectedItem) {
-					searchText = ctrl.query;
-					(searchText === "") ? searchText = undefined: null;
-					var selectedValue = value != 'all' ? new Array(value) : new Array('audio','voice');
-					instance.getAsset(searchText, selectedValue, ctrl.createdBy, audioAssetCb);
-				}
-			});
-        }, 1000);
+        $scope.$safeApply();
+    }
 
-        ctrl.myAssetTab = function() {
-            var callback,
-                searchText = ctrl.query;
+    ctrl.uploadClick = function() {
+        $scope.$on('ngDialog:opened', function() {
+            ecEditor.jQuery('#uploadtab').trigger('click');
+        });
+    }
 
-            // Show loader
-            showLoader();
+    ctrl.audioTab = function() {
+        audioTabSelected = true;
+        imageTabSelected = false;
+        ctrl.selectBtnDisable = ecEditor._.isUndefined(lastSelectedAudio) ? true : false;
+        ctrl.buttonToShow = 'select';
+    };
 
-            ctrl.selectBtnDisable = false;
-            ctrl.buttonToShow = 'select';
-            ctrl.tabSelected = "my";
+    ctrl.assetUpload = function() {
+        ctrl.buttonToShow = 'upload';
+        imageTabSelected = false;
+        audioTabSelected = false;
+    };
 
-            imageTabSelected = true;
-            audioTabSelected = false;
-            ctrl.selectBtnDisable = ecEditor._.isUndefined(lastSelectedImage) ? true : false;
-            ctrl.buttonToShow = 'select';
+    ctrl.search = function() {
+        var callback,
+            searchText;
 
-            (searchText === "") ? searchText = undefined: null;
-            callback = (instance.mediaType === "image") ? imageAssetCb : callback;
-            callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
-            callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
-            ctrl.selectBtnDisable = true;
+        searchText = ctrl.query;
+        (searchText === "") ? searchText = undefined: null;
+        callback = (instance.mediaType === "image") ? imageAssetCb : callback;
+        callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
+        callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
+        ctrl.selectBtnDisable = true;
+
+        if (ctrl.tabSelected == "my") {
             var mediaType = ctrl.getMediaType();
             callback && instance.getAsset(searchText, mediaType, ctrl.createdBy, callback);
-        }
-
-        ctrl.getMediaType = function(){
-			if (instance.mediaType === "image"){
-				return new Array(instance.mediaType);
-			}else{
-				if ((ecEditor.jQuery('#audioDropDown').dropdown('get value') == '') || (ecEditor.jQuery('#audioDropDown').dropdown('get value') == 'all')){
-					return new Array('audio','voice')
-				}else if (ecEditor.jQuery('#audioDropDown').dropdown('get value') =='voice'){
-					return new Array('voice');
-				}
-				else{
-					return new Array(instance.mediaType);
-				}
-			}
-		}
-
-        ctrl.allAssetTab = function() {
-            var callback,
-                searchText = ctrl.query;
-
-            // Show loader
-            showLoader();
-
-            ctrl.tabSelected = "all";
-            imageTabSelected = true;
-            audioTabSelected = false;
-            ctrl.selectBtnDisable = ecEditor._.isUndefined(lastSelectedImage) ? true : false;
-            ctrl.buttonToShow = 'select';
-
-            (searchText === "") ? searchText = undefined: null;
-            callback = (instance.mediaType === "image") ? imageAssetCb : callback;
-            callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
-            callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
-            ctrl.selectBtnDisable = true;
-
-            var mediaType = instance.mediaType != "image" ? new Array('audio','voice') : new Array(instance.mediaType);
+        } else {
+            var mediaType = instance.mediaType != "image" ? new Array('audio', 'voice') : new Array(instance.mediaType);
             callback && instance.getAsset(searchText, mediaType, undefined, callback);
         }
 
-        function showLoader(){
-            // Just add class active to loader element
-            ctrl.loading = 'active';
+    }
+
+    ctrl.cancel = function() {
+        $scope.closeThisDialog();
+    };
+
+    ctrl.ImageSource = function(event, $index) {
+        assetdata.asset = event.target.attributes.data_id.value;
+        assetdata.assetMedia = {
+            id: assetdata.asset,
+            src: event.target.attributes.src.value,
+            type: 'image'
         }
+        ctrl.selectBtnDisable = false;
+        ctrl.toggleImageCheck($index);
+    };
 
-        function hideLoader() {
-            // Just remove class active form loader element
-            ctrl.loading = '';
+    ctrl.toggleImageCheck = function($index) {
+        if (!ecEditor._.isUndefined(lastSelectedImage)) {
+            ctrl.selected_images[lastSelectedImage].selected = false;
         }
+        lastSelectedImage = $index;
+        return true;
+    }
 
-        ctrl.uploadButton = function(){
-            if (instance.mediaType == "image"){
-                ctrl.uploadBtnDisabled = false;
-            }
-            else {
-                if (ctrl.record == true) {
-					ctrl.audioType="voice";
-                    ctrl.uploadBtnDisabled = true;
-                }
-                else if (ctrl.upload == false) {
-                    ctrl.uploadBtnDisabled = true;
-                }
-                else{
-					ctrl.audioType="audio";
-                    ctrl.uploadBtnDisabled = false;
-                }
-            }
-
-            $scope.$safeApply();
+    ctrl.AudioSource = function(audio, $index) {
+        var audioElem;
+        document.getElementById('audio-' + $index).play();
+        audiodata.asset = audio.identifier;
+        audiodata.assetMedia = {
+            name: audio.name,
+            id: audiodata.asset,
+            src: audio.downloadUrl.toString(),
+            type: 'audio'
         }
+        ctrl.selectBtnDisable = false;
+        ctrl.toggleAudioCheck($index);
+    };
 
-        ctrl.uploadClick = function() {
-            setTimeout(function() {
-                ecEditor.jQuery('#uploadtab').trigger('click');
-            }, 100);
+    ctrl.toggleAudioCheck = function($index) {
+        var audioElem;
+        if (!ecEditor._.isUndefined(lastSelectedAudio)) {
+            ctrl.selected_audios[lastSelectedAudio].selected = false;
+            audioElem = document.getElementById('audio-' + lastSelectedAudio);
+            audioElem.pause();
+            audioElem.currentTime = 0.0;
         }
+        lastSelectedAudio = $index;
+        return true;
+    };
 
-        ctrl.audioTab = function() {
-            audioTabSelected = true;
-            imageTabSelected = false;
-            ctrl.selectBtnDisable = ecEditor._.isUndefined(lastSelectedAudio) ? true : false;
-            ctrl.buttonToShow = 'select';
-        };
-
-        ctrl.assetUpload = function() {
-            ctrl.buttonToShow = 'upload';
-            imageTabSelected = false;
-            audioTabSelected = false;
-        };
-
-        ctrl.search = function() {
-            var callback,
-                searchText;
-
-            searchText = ctrl.query;
-            (searchText === "") ? searchText = undefined: null;
-            callback = (instance.mediaType === "image") ? imageAssetCb : callback;
-            callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
-            callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
-            ctrl.selectBtnDisable = true;
-
-            if (ctrl.tabSelected == "my") {
-				 var mediaType = ctrl.getMediaType();
-                callback && instance.getAsset(searchText, mediaType, ctrl.createdBy, callback);
-            } else {
-				var mediaType = instance.mediaType != "image" ? new Array('audio','voice') : new Array(instance.mediaType);
-                callback && instance.getAsset(searchText, mediaType, undefined, callback);
-            }
-
-        }
-
-        ctrl.cancel = function() {
-            $scope.closeThisDialog();
-        };
-
-        ctrl.ImageSource = function(event, $index) {
-            assetdata.asset = event.target.attributes.data_id.value;
-            assetdata.assetMedia = {
-                id: assetdata.asset,
-                src: event.target.attributes.src.value,
-                type: 'image'
-            }
-            ctrl.selectBtnDisable = false;
-            ctrl.toggleImageCheck($index);
-        };
-
-        ctrl.toggleImageCheck = function($index) {
-            if (!ecEditor._.isUndefined(lastSelectedImage)) {
-                ctrl.selected_images[lastSelectedImage].selected = false;
-            }
-            lastSelectedImage = $index;
-            return true;
-        }
-
-        ctrl.AudioSource = function(audio, $index) {
-            var audioElem;
-            document.getElementById('audio-' + $index).play();
-            audiodata.asset = audio.identifier;
-            audiodata.assetMedia = {
-                name: audio.name,
-                id: audiodata.asset,
-                src: audio.downloadUrl.toString(),
-                type: 'audio'
-            }
-            ctrl.selectBtnDisable = false;
-            ctrl.toggleAudioCheck($index);
-        };
-
-        ctrl.toggleAudioCheck = function($index) {
-            var audioElem;
-            if (!ecEditor._.isUndefined(lastSelectedAudio)) {
-                ctrl.selected_audios[lastSelectedAudio].selected = false;
-                audioElem = document.getElementById('audio-' + lastSelectedAudio);
-                audioElem.pause();
-                audioElem.currentTime = 0.0;
-            }
-            lastSelectedAudio = $index;
-            return true;
-        };
-
-        ctrl.initPopup = function(item) {
-            // Remove existing popover
-            ecEditor.jQuery('.assetbrowser .ui.popup').each(function(){
-                ecEditor.jQuery(this).remove();
-            });
-
-            setTimeout(function(){
-                ecEditor.jQuery('.assetbrowser .infopopover')
-                  .popup({
-                    inline: true,
-                    position: 'bottom center',
-                  })
-                ;
-            },100)
-        };
-
-        ctrl.convertToBytes = function(bytes) {
-            if (ecEditor._.isUndefined(bytes)) return " N/A";
-            bytes = parseInt(bytes);
-            var precision = 1;
-            var units = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'],
-                number = Math.floor(Math.log(bytes) / Math.log(1024));
-            return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) + ' ' + units[number];
-        }
-
-        ctrl.select = function() {
-            if (assetdata && assetdata.asset && instance.mediaType == "image") {
-                instance.cb(assetdata);
-                ctrl.cancel();
-            }
-
-            if (audiodata && audiodata.asset && instance.mediaType == "audio") {
-                console.log("audiodata")
-                console.log(audiodata);
-                //ecEditor.dispatchEvent("org.ekstep.stageconfig:addcomponent", { stageId: ecEditor.getCurrentStage().id,type: 'audio', title: audiodata.asset });
-                instance.cb(audiodata);
-                ctrl.cancel();
-            }
-        }
-
-        ecEditor.getService('language').getLanguages(function(err, resp) {
-            if (!err && resp.data && resp.data.result && ecEditor._.isArray(resp.data.result.languages)) {
-                var assetlanguages = {};
-                ecEditor._.forEach(resp.data.result.languages, function(lang) {
-                    assetlanguages[lang.code] = lang.name;
-                });
-                ctrl.asset.language = ecEditor._.values(assetlanguages);
-                $scope.$safeApply();
-            }
+    ctrl.initPopup = function(item) {
+        // Remove existing popover
+        ecEditor.jQuery('.assetbrowser .ui.popup').each(function() {
+            ecEditor.jQuery(this).remove();
         });
 
-        ctrl.setPublic = function() {
-            ctrl.assetMeta.license = "Creative Commons Attribution (CC BY)";
-            ctrl.asset.requiredField = 'required';
-            ctrl.hideField = false;
-            ctrl.optional = false;
-        }
-
-        ctrl.viewMore = function() {
-            ecEditor.jQuery('.removeError').each(function() { ecEditor.jQuery(this).removeClass('error') });
-            ctrl.hideField = false;
-        }
-
-        ctrl.setPrivate = function() {
-            delete ctrl.assetMeta.license;
-            ctrl.asset.requiredField = '';
-            ctrl.optional = true;
-            ctrl.hideField = true;
-        }
-
-        ctrl.showFileInfo = function(){
-            var file;
-            ctrl.file.infoShow = true;
-
-            ctrl.file.name = 'audio_'+Date.now()+'.mp3';
-            file = ctrl.blobToFile(window.mp3Blob, ctrl.file.name);
-            ecEditor.jQuery("#fileSize").text(ctrl.formatBytes(file.size));
-        }
-
-        ctrl.formatBytes = function (bytes,decimals) {
-           if(bytes == 0) return '0 Byte';
-           var k = 1000;
-           var dm = decimals + 1 || 3;
-           var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
-           var i = Math.floor(Math.log(bytes) / Math.log(k));
-           return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
-        }
-
-        ctrl.onRecordStart = function (){
-            ctrl.replaceRecord = false;
-            ctrl.file.infoShow = false;
-            ctrl.showfileInfoBlock = false;
-            ctrl.uploadBtnDisabled = true;
-
-            ecEditor.jQuery("#replaceRecord").hide();
-            ecEditor.jQuery("#replaceRecordDiv").hide();
-        }
-
-        ctrl.onConversionComplete = function(){
-            ctrl.uploadBtnDisabled = false;
-            ctrl.showFileInfo();
-
-            ecEditor.jQuery("#replaceRecordDiv").show();
-        }
-
-        ctrl.uploadAsset = function(event, fields) {
-            var requestObj,
-                content = ctrl.assetMeta,
-                data = new FormData();
-
-            $scope.$safeApply();
-
-            if (ctrl.record == true) {
-                var file;
-                file = ctrl.blobToFile(window.mp3Blob, ctrl.file.name);
-
-                if (file.size > ctrl.allowedFileSize) {
-                    alert('File size is higher than the allowed size!');
-                    return false;
-                }
-
-                ctrl.assetMeta.mimeType = 'audio/mp3';
-                ctrl.assetMeta.mediaType = ctrl.audioType;
-                data.append('file', file);
-            }
-            else {
-                ecEditor.jQuery.each(ecEditor.jQuery('#assetfile')[0].files, function(i, file) {
-                    data.append('file', file);
-                    ctrl.assetMeta.mimeType = file.type;
-
-                    // @Todo for audio
-                    ctrl.assetMeta.mediaType = instance.mediaType != 'audio' ? instance.mediaType : ctrl.audioType;
-                });
-            }
-
-            /** Convert language into array **/
-            if ((!ecEditor._.isUndefined(ctrl.languageText)) && (ctrl.languageText) != null) {
-                content.language = [ctrl.languageText];
-            } else {
-                delete content.language;
-            }
-
-            /** Convert keywords in to array **/
-            if ((!ecEditor._.isUndefined(ctrl.keywordsText)) && (ctrl.keywordsText) != null) {
-                content.keywords = ctrl.keywordsText.split(",");
-            } else {
-                delete content.keywords;
-            }
-
-            var requestObj = {};
-            angular.forEach(content, function(value, key) {
-
-                if ((ecEditor._.isUndefined(value) || value == null || value == "") && key != 'body') {
-                    delete content[key];
-                }
-
-            }, null);
-
-            console.log(content);
-
-            // Create the content for asset
-            ecEditor.getService('asset').saveAsset(ctrl.assetId, content, function(err, resp) {
-                if (resp) {
-                    ctrl.uploadingAsset = true;
-                    ctrl.uploadFile(resp, data, fields.assetName);
-                }
-            });
-        }
-
-       ctrl.blobToFile = function(theBlob, fileName){
-            var file = new File([theBlob], fileName, {type: theBlob.type, lastModified: Date.now()});
-            return file;
-        }
-
-        ctrl.uploadFile = function(resp, data, assetName) {
-            var assetName = assetName;
-            ecEditor.jQuery.ajax({
-                // @Todo Use the correct URL
-
-                url: ecEditor.getConfig('baseURL') + ecEditor.getConfig('apislug') + "/content/v3/upload/" + resp.data.result.node_id,
-                type: 'POST',
-                contentType: false,
-                data: data,
-                cache: false,
-                processData: false,
-                beforeSend: function(request) {
-                    request.setRequestHeader("user-id", "mahesh");
-                    request.setRequestHeader("authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiYWYyYzg1OWIxMDg0NzhkYjMyNmYwZDQxNjMwZWMzMSJ9.YZjU6kKNg9F5BvS7JrXTfrxyTEULjR49v7wRD-CT9sg");
-                },
-                success: function(resp) {
-                    console.log('response');
-                    console.log(resp);
-                    assetdata.asset = resp.result.node_id;
-                    assetdata.assetMedia = resp;
-                    assetdata.assetMedia.name = assetName;
-                    assetdata.assetMedia.id = resp.result.node_id;
-                    assetdata.assetMedia.src = resp.result.content_url;
-                    assetdata.assetMedia.type = instance.mediaType;
-
-                    console.log("Passing data");
-                    delete assetdata.assetMedia.params;
-                    delete assetdata.assetMedia.result;
-                    console.log(assetdata.assetMedia);
-
-                    instance.cb(assetdata);
-                    ctrl.uploadingAsset = false;
-                    alert((instance.mediaType).charAt(0).toUpperCase() + (instance.mediaType).slice(1) + ' successfully uploaded');
-                    ctrl.cancel();
-                },
-                complete: function() {
-                    ctrl.uploadingAsset = false;
-                    ctrl.uploadBtnDisabled = false;
-                },
-                error: function() {
-                    alert('Error in Uploading image, please try again!');
-                }
-            });
-        }
-
-        ctrl.doUpload = function(mediaType) {
-            var fromThisPlugin = true;
-
-            ecEditor.jQuery('.ui.form')
-                .form({
+        $scope.$on('ngDialog:opened', function() {
+            ecEditor.jQuery('.assetbrowser .infopopover')
+                .popup({
                     inline: true,
-                    fields: {
-                        assetfile: {
-                            identifier: 'assetfile',
-                            rules: [{
-                                type: 'empty',
-                                prompt: 'Please select file'
-                            }]
-                        },
-                        ccByContribution: {
-                            identifier: 'ccByContribution',
-                            rules: [{
-                                type: 'checked',
-                                prompt: 'Please select Copyright & License'
-                            }]
-                        },
-                        assetName: {
-                            identifier: 'assetName',
-                            rules: [{
-                                type: 'empty',
-                                prompt: 'Please enter asset caption'
-                            }]
-                        },
+                    position: 'bottom center',
+                });
+        });
+    };
 
-                        keywords: {
-                            identifier: 'keywords',
-                            optional: true,
-                            rules: [{
-                                type: 'empty',
-                                prompt: 'Please enter enter tags'
-                            }]
-                        },
+    ctrl.convertToBytes = function(bytes) {
+        if (ecEditor._.isUndefined(bytes)) return " N/A";
+        bytes = parseInt(bytes);
+        var precision = 1;
+        var units = ['bytes', 'kB', 'MB', 'GB', 'TB', 'PB'],
+            number = Math.floor(Math.log(bytes) / Math.log(1024));
+        return (bytes / Math.pow(1024, Math.floor(number))).toFixed(precision) + ' ' + units[number];
+    }
 
-                        language: {
-                            identifier: 'language',
-                            optional: true,
-                            rules: [{
-                                type: 'empty',
-                            }]
-                        },
+    ctrl.select = function() {
+        if (assetdata && assetdata.asset && instance.mediaType == "image") {
+            instance.cb(assetdata);
+            ctrl.cancel();
+        }
 
-                        creator: {
-                            identifier: 'creator',
-                            optional: ctrl.optional,
-                            rules: [{
-                                type: 'empty',
-                                prompt: 'Please enter creator name'
-                            }]
-                        },
+        if (audiodata && audiodata.asset && instance.mediaType == "audio") {
+            console.log("audiodata")
+            console.log(audiodata);
+            //ecEditor.dispatchEvent("org.ekstep.stageconfig:addcomponent", { stageId: ecEditor.getCurrentStage().id,type: 'audio', title: audiodata.asset });
+            instance.cb(audiodata);
+            ctrl.cancel();
+        }
+    }
 
-                        copyright: {
-                            identifier: 'copyright',
-                            optional: ctrl.optional,
-                            rules: [{
-                                type: 'empty',
-                                prompt: 'Please enter copyright details'
-                            }]
-                        },
+    ecEditor.getService('language').getLanguages(function(err, resp) {
+        if (!err && resp.data && resp.data.result && ecEditor._.isArray(resp.data.result.languages)) {
+            var assetlanguages = {};
+            ecEditor._.forEach(resp.data.result.languages, function(lang) {
+                assetlanguages[lang.code] = lang.name;
+            });
+            ctrl.asset.language = ecEditor._.values(assetlanguages);
+            $scope.$safeApply();
+        }
+    });
+
+    ctrl.setPublic = function() {
+        ctrl.assetMeta.license = "Creative Commons Attribution (CC BY)";
+        ctrl.asset.requiredField = 'required';
+        ctrl.optional = false;
+    }
+
+    ctrl.viewMore = function() {
+        ecEditor.jQuery('.removeError').each(function() {
+            ecEditor.jQuery(this).removeClass('error')
+        });
+        ctrl.hideField = false;
+    }
+
+    ctrl.setPrivate = function() {
+        delete ctrl.assetMeta.license;
+        ctrl.asset.requiredField = '';
+        ctrl.optional = true;
+    }
+
+    ctrl.showFileInfo = function() {
+        var file;
+        ctrl.file.infoShow = true;
+
+        ctrl.file.name = 'audio_' + Date.now() + '.mp3';
+        file = ctrl.blobToFile(window.mp3Blob, ctrl.file.name);
+        ecEditor.jQuery("#fileSize").text(ctrl.formatBytes(file.size));
+        ctrl.preFillForm(ctrl.file);
+    }
+
+    ctrl.formatBytes = function(bytes, decimals) {
+        if (bytes == 0) return '0 Byte';
+        var k = 1000;
+        var dm = decimals + 1 || 3;
+        var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+        var i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    }
+
+    ctrl.onRecordStart = function() {
+        ctrl.replaceRecord = false;
+        ctrl.file.infoShow = false;
+        ctrl.showfileInfoBlock = false;
+        ctrl.uploadBtnDisabled = true;
+
+        ecEditor.jQuery("#replaceRecord").hide();
+        ecEditor.jQuery("#replaceRecordDiv").hide();
+    }
+
+    ctrl.onConversionComplete = function() {
+        ctrl.uploadBtnDisabled = false;
+        ctrl.showFileInfo();
+
+        ecEditor.jQuery("#replaceRecordDiv").show();
+    }
+
+    ctrl.uploadAsset = function(event, fields) {
+        var requestObj,
+            content = ctrl.assetMeta,
+            data = new FormData();
+
+        $scope.$safeApply();
+
+        if (ctrl.record == true) {
+            var file;
+            file = ctrl.blobToFile(window.mp3Blob, ctrl.file.name);
+
+            if (file.size > ctrl.allowedFileSize) {
+                alert('File size is higher than the allowed size!');
+                return false;
+            }
+
+            ctrl.assetMeta.mimeType = 'audio/mp3';
+            ctrl.assetMeta.mediaType = ctrl.audioType;
+            data.append('file', file);
+        } else {
+            ecEditor.jQuery.each(ecEditor.jQuery('#assetfile')[0].files, function(i, file) {
+                data.append('file', file);
+                ctrl.assetMeta.mimeType = file.type;
+
+                // @Todo for audio
+                ctrl.assetMeta.mediaType = instance.mediaType != 'audio' ? instance.mediaType : ctrl.audioType;
+            });
+        }
+
+        /** Convert language into array **/
+        if ((!ecEditor._.isUndefined(ctrl.languageText)) && (ctrl.languageText) != null) {
+            content.language = [ctrl.languageText];
+        } else {
+            delete content.language;
+        }
+
+        /** Convert keywords in to array **/
+        if ((!ecEditor._.isUndefined(ctrl.keywordsText)) && (ctrl.keywordsText) != null) {
+            content.keywords = ctrl.keywordsText.split(",");
+        } else {
+            delete content.keywords;
+        }
+
+        var requestObj = {};
+        angular.forEach(content, function(value, key) {
+
+            if ((ecEditor._.isUndefined(value) || value == null || value == "") && key != 'body') {
+                delete content[key];
+            }
+
+        }, null);
+
+        console.log(content);
+
+        // Create the content for asset
+        ecEditor.getService('asset').saveAsset(ctrl.assetId, content, function(err, resp) {
+            if (resp) {
+                ctrl.uploadingAsset = true;
+                ctrl.uploadFile(resp, data, fields.assetName);
+            }
+        });
+    }
+
+    ctrl.blobToFile = function(theBlob, fileName) {
+        var file = new File([theBlob], fileName, {
+            type: theBlob.type,
+            lastModified: Date.now()
+        });
+        return file;
+    }
+
+    ctrl.uploadFile = function(resp, data, assetName) {
+        var assetName = assetName;
+        ecEditor.jQuery.ajax({
+            // @Todo Use the correct URL
+
+            url: ecEditor.getConfig('baseURL') + ecEditor.getConfig('apislug') + "/content/v3/upload/" + resp.data.result.node_id,
+            type: 'POST',
+            contentType: false,
+            data: data,
+            cache: false,
+            processData: false,
+            beforeSend: function(request) {
+                request.setRequestHeader("user-id", "mahesh");
+                request.setRequestHeader("authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiYWYyYzg1OWIxMDg0NzhkYjMyNmYwZDQxNjMwZWMzMSJ9.YZjU6kKNg9F5BvS7JrXTfrxyTEULjR49v7wRD-CT9sg");
+            },
+            success: function(resp) {
+                console.log('response');
+                console.log(resp);
+                assetdata.asset = resp.result.node_id;
+                assetdata.assetMedia = resp;
+                assetdata.assetMedia.name = assetName;
+                assetdata.assetMedia.id = resp.result.node_id;
+                assetdata.assetMedia.src = resp.result.content_url;
+                assetdata.assetMedia.type = instance.mediaType;
+
+                console.log("Passing data");
+                delete assetdata.assetMedia.params;
+                delete assetdata.assetMedia.result;
+                console.log(assetdata.assetMedia);
+
+                instance.cb(assetdata);
+                ctrl.uploadingAsset = false;
+                alert((instance.mediaType).charAt(0).toUpperCase() + (instance.mediaType).slice(1) + ' successfully uploaded');
+                ctrl.cancel();
+            },
+            complete: function() {
+                ctrl.uploadingAsset = false;
+                ctrl.uploadBtnDisabled = false;
+            },
+            error: function() {
+                alert('Error in Uploading image, please try again!');
+            }
+        });
+    }
+
+    ctrl.doUpload = function(mediaType) {
+        var fromThisPlugin = true;
+
+        ecEditor.jQuery('.ui.form')
+            .form({
+                inline: true,
+                fields: {
+                    assetfile: {
+                        identifier: 'assetfile',
+                        rules: [{
+                            type: 'empty',
+                            prompt: 'Please select file'
+                        }]
                     },
-                    onSuccess: function(event, fields) {
-                        ctrl.uploadBtnDisabled = true;
-                        if (fromThisPlugin) { //to avoid ui form success callback being called on sucess of '.ui.form' anywhere from main html page
-                        if (ctrl.record == true )
-                        {
+                    ccByContribution: {
+                        identifier: 'ccByContribution',
+                        rules: [{
+                            type: 'checked',
+                            prompt: 'Please select Copyright & License'
+                        }]
+                    },
+                    assetName: {
+                        identifier: 'assetName',
+                        rules: [{
+                            type: 'empty',
+                            prompt: 'Please enter asset caption'
+                        }]
+                    },
+
+                    keywords: {
+                        identifier: 'keywords',
+                        optional: true,
+                        rules: [{
+                            type: 'empty',
+                            prompt: 'Please enter enter tags'
+                        }]
+                    },
+
+                    language: {
+                        identifier: 'language',
+                        optional: true,
+                        rules: [{
+                            type: 'empty',
+                        }]
+                    },
+
+                    creator: {
+                        identifier: 'creator',
+                        optional: ctrl.optional,
+                        rules: [{
+                            type: 'empty',
+                            prompt: 'Please enter creator name'
+                        }]
+                    },
+                },
+                onSuccess: function(event, fields) {
+                    ctrl.uploadBtnDisabled = true;
+                    if (fromThisPlugin) { //to avoid ui form success callback being called on sucess of '.ui.form' anywhere from main html page
+                        if (ctrl.record == true) {
                             // @Todo file size validation for recorded file
                             ctrl.uploadAsset(event, fields);
-                        }
-                        else
-                        {
+                        } else {
                             // Validate file if not editing meta data
                             var validateFile = instance.fileValidation('assetfile', ctrl.allowedFileSize, ctrl.allowedMimeTypes);
 
@@ -633,27 +633,72 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope','$in
                         ctrl.uploadBtnDisabled = false;
                     }
                 },
-                    onFailure: function(formErrors, fields) {
-                        console.log("fields validation failed");
-                        ctrl.uploadBtnDisabled = false;
-                        return false;
-                    }
-                });
-        }
+                onFailure: function(formErrors, fields) {
+                    console.log("fields validation failed");
+                    ctrl.uploadBtnDisabled = false;
+                    return false;
+                }
+            });
+    }
 
-        ctrl.switchToUpload = function(){
-            ctrl.uploadView = true;
-            ctrl.uploadButton();
-        }
+    ctrl.switchToUpload = function() {
+        ctrl.uploadView = true;
+        ctrl.uploadButton();
+    }
 
-        ctrl.generateTelemetry = function(data) {
-          if (data) ecEditor.getService('telemetry').interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", "stage": ecEditor.getCurrentStage().id })
-        }
+    ctrl.generateTelemetry = function(data) {
+        if (data) ecEditor.getService('telemetry').interact({
+            "type": data.type,
+            "subtype": data.subtype,
+            "target": data.target,
+            "pluginid": instance.manifest.id,
+            "pluginver": instance.manifest.ver,
+            "objectid": "",
+            "stage": ecEditor.getCurrentStage().id
+        })
+    }
 
-        setTimeout(function() {
-            ecEditor.jQuery('.assetbrowser .menu .item').tab();
-            ecEditor.jQuery('.assetbrowser .ui.dropdown').dropdown();
-            ecEditor.jQuery('.assetbrowser .ui.radio.checkbox').checkbox();
-        }, 100);
+    ctrl.preFillForm = function(data) {
+        ctrl.assetMeta.name = data.name.replace(/\.[^/.]+$/, "").replace(/[_.^/_]/g, " ");
+        ctrl.assetMeta.creator = window.context.user.name;
+        ecEditor.jQuery('.field', '#hideShowFields').removeClass('disabled');
+        ctrl.showDragDropMsg = true;
+        ecEditor.ngSafeApply(ecEditor.getAngularScope());
+    }
 
-    }]);
+    setTimeout(function() {
+        ecEditor.jQuery('.assetbrowser .menu .item').tab();
+        ecEditor.jQuery('.assetbrowser .ui.dropdown').dropdown();
+        ecEditor.jQuery('.assetbrowser .ui.radio.checkbox').checkbox();
+        ecEditor.jQuery('.field', '#hideShowFields').addClass('disabled');
+        ecEditor.jQuery("#ccByContribution2").click();
+
+        ecEditor.jQuery('body').on('dragover dragenter', function(e) {
+            e = e || event;
+            if ($(e.target).hasClass("droppable")) {
+                ecEditor.jQuery('#assetfile').addClass('is-dragover');
+            } else {
+                e.preventDefault();
+            }
+        })
+        .on('dragleave dragend drop', function(e) {
+            e = e || event;
+            if ($(e.target).hasClass("droppable")) {
+                ecEditor.jQuery('#assetfile').removeClass('is-dragover');
+            } else {
+                e.preventDefault();
+            }
+        })
+        .on('drop', function(e) {
+            e = e || event;
+            if ($(e.target).hasClass("droppable")) {
+                ecEditor.jQuery('.field', '#hideShowFields').removeClass('disabled');
+            } else {
+                e.preventDefault();
+            }
+        });
+        ecEditor.jQuery(document).on('change', '#assetfile', function() {
+            ctrl.preFillForm(this.files[0]);
+        });
+    }, 100);
+}]);

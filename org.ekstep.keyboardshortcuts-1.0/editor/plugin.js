@@ -3,8 +3,7 @@
  * plugin to add keyboard shortcuts to interact with editor
  * @class Shortcuts
  * @extends org.ekstep.contenteditor.basePlugin
- *
- * @author  <Akash Gupta>
+ * @author Akash Gupta<akash.gupta@tarento.com>
  * 
  */
 
@@ -95,6 +94,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.registerKeyboardCommand('mod+a', function(event) {
             event.preventDefault();
             var canvas = org.ekstep.contenteditor.api.getCanvas();
+            canvas.deactivateAll();
             var elements = canvas.getObjects().map(function(elem) {
                 return elem.set('active', true);
             });
@@ -120,7 +120,7 @@ org.ekstep.contenteditor.basePlugin.extend({
          *  show all available shourtcuts
          *  @memberof Shortcuts
          */
-        ecEditor.registerKeyboardCommand('ctrl+/', function(event) {
+        ecEditor.registerKeyboardCommand('mod+/', function(event) {
             event.preventDefault();
             ecEditor.getService('popup').open({
                 templateUrl: templatePath,

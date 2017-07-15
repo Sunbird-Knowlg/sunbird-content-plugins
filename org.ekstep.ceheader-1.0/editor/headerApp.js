@@ -4,6 +4,7 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
     $scope.lastSaved = undefined;
     $scope.pendingChanges = false;
     $scope.saveBtnEnabled = false;
+
     $scope.userDetails = !_.isUndefined(window.context) ? window.context.user : undefined;
     $scope.telemetryService = org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE);
     $scope.ekstepLogo = ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/ekstep_logo_white.png");

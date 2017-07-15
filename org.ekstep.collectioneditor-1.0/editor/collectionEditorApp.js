@@ -1,6 +1,6 @@
 angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('mainController', ['$scope', '$location', function($scope, $location) {
     //do_112272630392659968130
-    //var config = { "context": { "uid": "386", "contentId": "", "sid": "0d5b94c87052869b58e47ec692f467cd", "channel": "ntp/ap", "pdata": { "id": "SunbirdPortal", "ver": "1.0" }, "dims": ["b27e743b51a22b4eed737c6a72cd4266"] }, "mode": "Edit", "rules": { "levels": 3, "objectTypes": [{ "type": "TextBook", "label": "Textbook", "isRoot": true, "editable": true, "childrenTypes": ["TextBookUnit"], "addType": "Editor", "iconClass": "fa fa-book fa-2" }, { "type": "TextBookUnit", "label": "Textbook Unit", "isRoot": false, "editable": true, "childrenTypes": ["TextBookUnit", "Collection", "Story", "Game", "Worksheet"], "addType": "Editor", "iconClass": "fa fa-folder fa-2" }, { "type": "Collection", "label": "Collection", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }, { "type": "Story", "label": "Story", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }, { "type": "Worksheet", "label": "Worksheet", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }, { "type": "Game", "label": "Game", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }] }, "defaultTemplate": {} };
+    //var config = { "context": { "uid": "386", "contentId": "do_112272630392659968130", "sid": "0d5b94c87052869b58e47ec692f467cd", "channel": "ntp/ap", "pdata": { "id": "SunbirdPortal", "ver": "1.0" }, "dims": ["b27e743b51a22b4eed737c6a72cd4266"] }, "mode": "Edit", "rules": { "levels": 3, "objectTypes": [{ "type": "TextBook", "label": "Textbook", "isRoot": true, "editable": true, "childrenTypes": ["TextBookUnit"], "addType": "Editor", "iconClass": "fa fa-book fa-2" }, { "type": "TextBookUnit", "label": "Textbook Unit", "isRoot": false, "editable": true, "childrenTypes": ["TextBookUnit", "Collection", "Story", "Game", "Worksheet"], "addType": "Editor", "iconClass": "fa fa-folder fa-2" }, { "type": "Collection", "label": "Collection", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }, { "type": "Story", "label": "Story", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }, { "type": "Worksheet", "label": "Worksheet", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }, { "type": "Game", "label": "Game", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }] }, "defaultTemplate": {} };
     var config = (!_.isUndefined(window.collectionEditor)) ? window.collectionEditor.config : window.parent.collectionEditor.config;
     $scope.contentDetails = {
         contentTitle: ""
@@ -39,7 +39,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     //Header scope ends
 
     $scope.loadContent = function(callback) {
-        org.ekstep.services.languageService.getCollectionHierarchy({ contentId: $scope.contentId }, function(err, res) {
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId }, function(err, res) {
             if (res && res.data && res.data.responseCode === "OK") {
                 org.ekstep.collectioneditor.collectionService.fromCollection(res.data.result.content);
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
@@ -48,12 +48,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
             } else {
                 callback && callback('unable to fetch the content!', res);
             }
-        });
-    };
-
-    $scope.showLessonBrowser = function() {
-        ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show", { "language": ["Kannada"], "grade": ["Grade 1"] }, function(selectedLessons) {
-            //
         });
     };
 
@@ -71,7 +65,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
                 }, 200);
             } else {
                 ecEditor.getService('popup').open({
-                    template: '<div class="no-content-dialog"><div class="ekstep-logo"></div><div class="no-content-message"><div class="not-found-icon"><i class="huge red warning icon"></i></div><h1 class="not-found-message">We are unable to fetch contents</h1></div><div class="refetch-contents"><a href="#"><div class="refetch-icon"><i class="huge blue undo icon"></i></div><h1 class="refetch-message">Please try reloading the page</h1></a></div></div>',
+                    template: '<div class="ui warning message no-content-dialog"><div id="content-not-fetch-message">:( &nbsp;Unable to fetch the content! Please try again later!</div><div><div class="ui negative basic button button-overrides"><i class="help circle icon"></i>Help</div><div class="ui black basic button button button-overrides"><i class="close icon"></i>Close editor</div></div></div>',
                     plain: true,
                     showClose: false,
                     width: "50vw"

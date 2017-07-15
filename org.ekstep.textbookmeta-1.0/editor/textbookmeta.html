@@ -86,7 +86,7 @@
                     <div class="content">
                         <div class="header">Keywords</div>
                         <div class="description">
-                            <span class="field-value" ng-repeat="tag in textbook.tags">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
+                            <span class="field-value" ng-repeat="keyword in textbook.keywords">{{keyword | lowercase}}{{$last ? '' : ', '}}</span>
                         </div>
                     </div>
                 </div>
@@ -161,12 +161,12 @@
                 </div>
                 <div class="field">
                     <label>Concepts</label>
-                    <input name="concepts" id="textbookConceptSelector" ng-model="textbook.concepts" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
+                    <input name="concepts" id="textbookConceptSelector" ng-model="textbook.conceptData" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
                 </div>
                 <div class="two fields">
                     <div class=" twelve wide field">
                         <label>Keywords</label>
-                        <input id="keywords" name="keywords" ng-model="textbook.tags" type="text" ng-class=" {error: submitted && textbookMetaForm.keywords.$error.required}" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'tags'})" required >
+                        <input id="keywords" name="keywords" ng-model="textbook.keywords" type="text" ng-class=" {error: submitted && textbookMetaForm.keywords.$error.required}" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})" required >
                     </div>
                     <div class="four wide field">
                         <label for="audience">Audience</label>

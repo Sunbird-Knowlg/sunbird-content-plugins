@@ -94,7 +94,7 @@
                     <div class="content">
                         <div class="header">Keywords</div>
                         <div class="description">
-                            <span class="field-value" ng-repeat="tag in content.tags track by $index">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
+                            <span class="field-value" ng-repeat="tag in content.keywords track by $index">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
                         </div>
                     </div>
                 </div>
@@ -169,12 +169,12 @@
                 </div>
                 <div class="field">
                     <label>Concepts</label>
-                    <input name="concepts" id="contentConceptSelector" ng-model="content.concepts" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
+                    <input name="concepts" id="contentConceptSelector" ng-model="content.conceptData" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
                 </div>
                 <div class="two fields">
                     <div class=" twelve wide field">
                         <label>Keywords</label>
-                        <input id="keywords" name="keywords" ng-model="content.tags" type="text" ng-class=" {error: submitted && contentMetaForm.keywords.$error.required}"  ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'tags'})" required>
+                        <input id="keywords" name="keywords" ng-model="content.keywords" type="text" ng-class=" {error: submitted && contentMetaForm.keywords.$error.required}"  ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})" required>
                     </div>
                     <div class="four wide field">
                         <label for="audience">Audience</label>

@@ -239,7 +239,13 @@ angular.module('assessmentbrowserapp', [])
             if (itemIframe.src == "")
                 itemIframe.src = instance.previewURL;
             itemIframe.addEventListener('load', function() {
-                itemIframe.contentWindow.setContentData(null, ctrl.itemPreviewContent, config);
+                var userData = ecEditor.getService('telemetry').context;
+                var configuration = {};
+                userData.etags = userData.etags || {};
+                configuration.context = {'mode':'edit','contentId': ctrl.activePreviewItem,'sid':userData.sid,'uid':userData.uid, 'channel': userData.channel, 'pdata': userData.pdata, 'app': userData.etags.app, 'dims': userData.etags.dims, 'partner': userData.etags.partner }; 
+                configuration.config = config;
+                configuration.data = ctrl.itemPreviewContent;
+                itemIframe.contentWindow.initializePreview(configuration);
             });
         });
       
