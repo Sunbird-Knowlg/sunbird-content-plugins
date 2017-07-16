@@ -12,6 +12,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     position: 'topCenter',
                     icon: 'fa fa-check-circle'
                 });
+                org.ekstep.collectioneditor.api.getService('collection').clearCache();
             } else {
                 if (data.showNotification) ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                     message: 'Unable to save the content, try again!',
