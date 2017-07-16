@@ -14,7 +14,6 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
     };
 
     $scope.previewContent = function(fromBeginning) {
-        console.log('preview working');
         ecEditor.dispatchEvent('org.ekstep.contenteditor:preview', {fromBeginning: fromBeginning});
     }
 
@@ -24,7 +23,6 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
     }
 
     $scope.onSave = function() {
-        console.log('Save call received');
         $scope.pendingChanges = false;
         $scope.lastSaved = Date.now();
         $scope.$safeApply();

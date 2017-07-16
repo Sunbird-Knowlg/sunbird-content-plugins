@@ -1,11 +1,9 @@
 angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('mainController', ['$scope', '$location', function($scope, $location) {
     //do_112272630392659968130
-    //var config = { "context": { "uid": "386", "contentId": "do_112272630392659968130", "sid": "0d5b94c87052869b58e47ec692f467cd", "channel": "ntp/ap", "pdata": { "id": "SunbirdPortal", "ver": "1.0" }, "dims": ["b27e743b51a22b4eed737c6a72cd4266"] }, "mode": "Edit", "rules": { "levels": 3, "objectTypes": [{ "type": "TextBook", "label": "Textbook", "isRoot": true, "editable": true, "childrenTypes": ["TextBookUnit"], "addType": "Editor", "iconClass": "fa fa-book fa-2" }, { "type": "TextBookUnit", "label": "Textbook Unit", "isRoot": false, "editable": true, "childrenTypes": ["TextBookUnit", "Collection", "Story", "Game", "Worksheet"], "addType": "Editor", "iconClass": "fa fa-folder fa-2" }, { "type": "Collection", "label": "Collection", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }, { "type": "Story", "label": "Story", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }, { "type": "Worksheet", "label": "Worksheet", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }, { "type": "Game", "label": "Game", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file fa-2" }] }, "defaultTemplate": {} };
-    var config = (!_.isUndefined(window.collectionEditor)) ? window.collectionEditor.config : window.parent.collectionEditor.config;
     $scope.contentDetails = {
         contentTitle: ""
     };
-    $scope.contentId = config.context.contentId;
+    $scope.contentId = ecEditor.getContext('contentId');
     $scope.metaPages = [];
     $scope.selectedObjectType = undefined;
     $scope.nodeFilter = "";
@@ -16,8 +14,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     }
 
     $scope.searchNode = function(event) {
-        if (event.target.value == "") org.ekstep.collectioneditor.collectionService.clearFilter();
-        org.ekstep.collectioneditor.collectionService.filterNode(event.target.value);
+        if (event.target.value == "") org.ekstep.services.collectionService.clearFilter();
+        org.ekstep.services.collectionService.filterNode(event.target.value);
     };
 
     $scope.setSelectedNode = function(event, data) {
@@ -41,7 +39,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     $scope.loadContent = function(callback) {
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId }, function(err, res) {
             if (res && res.data && res.data.responseCode === "OK") {
-                org.ekstep.collectioneditor.collectionService.fromCollection(res.data.result.content);
+                org.ekstep.services.collectionService.fromCollection(res.data.result.content);
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
                 $scope.$safeApply();
                 callback && callback(err, res);
@@ -51,10 +49,10 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         });
     };
 
-    org.ekstep.collectioneditor.api.initEditor(config, function() {
+    org.ekstep.collectioneditor.api.initEditor(ecEditor.getConfig('editorConfig'), function() {
         $scope.loadContent(function(err, res) {
             if (res) {
-                var activeNode = org.ekstep.collectioneditor.collectionService.getActiveNode();
+                var activeNode = org.ekstep.services.collectionService.getActiveNode();
                 $scope.contentDetails.contentTitle = activeNode.title ? activeNode.title : "Untitled Content";
                 if (!_.isUndefined(activeNode.data.metadata.appIcon)) {
                     $scope.contentDetails.contentImage = activeNode.data.metadata.appIcon;

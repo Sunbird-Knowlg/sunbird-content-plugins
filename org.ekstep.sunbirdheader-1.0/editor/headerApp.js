@@ -48,7 +48,6 @@ angular.module('org.ekstep.sunbirdheader:headerApp', ['yaru22.angular-timeago'])
     };
 
     $scope.setSaveStatus = function(event, data) {
-        console.error('event', event, 'data', data);
         $scope.pendingChanges = true;
         $scope.saveBtnEnabled = true;
         $scope.$safeApply();

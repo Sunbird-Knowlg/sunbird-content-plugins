@@ -28,13 +28,8 @@ org.ekstep.collectioneditor.basePlugin.extend({
 
     registerRepo: function(repo) {
         var instance = this;
-        org.ekstep.contenteditor.api.getService('popup').loadNgModules(repo.templateUrl, repo.controllerUrl).then(
-            function() {
-                instance.repos.push(repo);
-            }, function() {
-                throw "unable to load controller :" + repo.controllerUrl;
-        });
-
+        org.ekstep.contenteditor.api.getService('popup').loadNgModules(repo.templateUrl, repo.controllerUrl);
+        instance.repos.push(repo);
     },
 
     /**
