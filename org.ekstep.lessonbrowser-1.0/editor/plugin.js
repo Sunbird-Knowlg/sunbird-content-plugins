@@ -2,10 +2,10 @@
  *
  * plugin to get lessons from learning platform
  * @class lessonBrowser
- * @extends org.ekstep.contenteditor.basePlugin
+ * @extends org.ekstep.collectioneditor.basePlugin
  * @author G S Bajaj
  */
-org.ekstep.contenteditor.basePlugin.extend({
+org.ekstep.collectioneditor.basePlugin.extend({
     type: 'lessonbrowser',
     initData: undefined,
     repos: [],

@@ -1,3 +1,3 @@
-org.ekstep.contenteditor.basePlugin.extend({
+org.ekstep.collectioneditor.basePlugin.extend({
 	initialize: function() {}
 });

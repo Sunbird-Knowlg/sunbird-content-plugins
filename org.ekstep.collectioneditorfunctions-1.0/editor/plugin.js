@@ -1,4 +1,4 @@
-org.ekstep.contenteditor.basePlugin.extend({
+org.ekstep.collectioneditor.basePlugin.extend({
 	initialize: function() {
 		ecEditor.addEventListener(this.manifest.id + ':save', this.saveContent, this);
 	},
