@@ -63,41 +63,22 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', activeNode);
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode)
                 }, 200);
-            } else {
-                // ecEditor.getService('popup').open({
-                //     template: '<div class="ui warning message no-content-dialog"><div id="content-not-fetch-message">:( &nbsp;Unable to fetch the content! Please try again later!</div><div><div class="ui negative basic button button-overrides"><i class="help circle icon"></i>Help</div><div class="ui black basic button button button-overrides"><i class="close icon"></i>Close editor</div></div></div>',
-                //     plain: true,
-                //     showClose: false,
-                //     width: "50vw"
-                // });
-                iziToast.error({
-
+            } else {                
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                     icon: 'material',
                     title: 'No content!!!',
                     timeout: false,
                     message: 'We are unable to fetch content now.',
                     animateInside: true,
                     close: false,
-                    position: 'topCenter', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter
+                    position: 'topCenter',
                     buttons: [
                         ['<button>Reload</button>', function(instance, toast) {
-                            alert("Hello world!");
+                            window.location.reload();
                         }],
-                        ['<button>Close Editor</button>', function(instance, toast) {
-                            instance.hide({
-                                transitionOut: 'fadeOutUp',
-                                onClosing: function(instance, toast, closedBy) {
-                                    console.info('closedBy: ' + closedBy); //btn2
-                                }
-                            }, toast, 'close', 'btn2');
+                        ['<button>Close Editor</button>', function(instance, toast) {                                                        
                         }]
-                    ],
-                    onOpening: function(instance, toast) {
-                        $('.collection-masterhead').css('visibility', 'hidden');
-                    },
-                    onClosing: function(instance, toast, closedBy) {
-                        console.info('closedBy: ' + closedBy); // tells if it was closed by 'drag' or 'button'
-                    }
+                    ]
                 });
             }
         });
