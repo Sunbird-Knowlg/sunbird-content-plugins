@@ -6,7 +6,7 @@ var conceptModal;
         picked = [];
         nodes = [];
         tabs = {};
-        $(".tree-picker.small.modal.item-activity").length == 0 ? '' : $('.tree-picker.small.modal.item-activity').remove();
+        $(".tree-picker.small.modal").length == 0 ? '' : $('.tree-picker.small.modal').remove();
         modal = $("<div class=\"ui tree-picker small modal\">\n  <div class=\"header\">\n    " + options.name + "\n\n    <div class=\"ui menu\">\n      <a class=\"active tree item\">\n        <i class=\"list icon\"></i> Concepts\n      </a>\n      <a class=\"picked item\">\n        <i class=\"checkmark icon\"></i> Selected Concepts <span class=\"count\"></span>\n      </a>\n    </div>\n  </div>\n  <div class=\"ui search form\">\n    <div class=\"field\">\n      <div class=\"ui icon input\">\n        <input type=\"text\" placeholder=\"Search\">\n        <i class=\"search icon\"></i>\n      </div>\n    </div>\n  </div>\n  <div class=\"content\">\n    <div class=\"ui active inverted dimmer\"><div class=\"ui text loader\">Loading data</div></div>\n    <div class=\"tree-tab\">\n      <div style=\"height: 400px\"></div>\n    </div>\n\n    <div class=\"search-tab\">\n    </div>\n\n    <div class=\"picked-tab\">\n    </div>\n  </div>\n  <div class=\"actions\">\n    <a class=\"pick-search\"><i class=\"checkmark icon\"></i> Choose All</a>\n    <a class=\"unpick-search\"><i class=\"remove icon\"></i> Remove All</a>\n    <a class=\"unpick-picked\"><i class=\"remove icon\"></i> Remove All</a>\n    <a class=\"ui blue button accept\">Done</a>\n    <a class=\"ui button close\">Cancel</a>\n  </div>\n</div>").modal({
             duration: 200,
             allowMultiple: true
@@ -56,6 +56,7 @@ var conceptModal;
             } else {
                 widget.html(config.displayFormat([]));
             }
+            widget.unbind("click");
             widget.on('click', function(e) {
                 console.log('click event received', nodes);
                 modal.modal('show');
