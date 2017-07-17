@@ -1,4 +1,4 @@
-angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', function($scope) {
+angular.module('courseunitmetaApp', []).controller('courseunitmetaController', ['$scope', function($scope) {
     $scope.mode = org.ekstep.collectioneditor.api.getService('collection').getConfig().mode;
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
@@ -8,26 +8,26 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             type: 'image',
             search_filter: {}, // All composite keys except mediaType
             callback: function(data) { 
-                $scope.unit.appIcon = data.assetMedia.src;
+                $scope.courseunit.appIcon = data.assetMedia.src;
                 $scope.$safeApply();
             }
         });
     }
     
     $scope.updateNode = function(){
-        if($scope.unitMetaForm.$valid){ 
+        if($scope.courseunitMetaForm.$valid){ 
             if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = $scope.newNode;
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = false;
             }
-            if(_.isString($scope.unit.keywords)){
-                $scope.unit.keywords = $scope.unit.keywords.split(',');
+            if(_.isString($scope.courseunit.keywords)){
+                $scope.courseunit.keywords = $scope.courseunit.keywords.split(',');
             }
-            $scope.unit.contentType = $scope.nodeType;
-            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.unit.name);
-            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.unit));;
-            $scope.metadataCloneObj = _.clone($scope.unit);
+            $scope.courseunit.contentType = $scope.nodeType;
+            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.courseunit.name);
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.courseunit));;
+            $scope.metadataCloneObj = _.clone($scope.courseunit);
             $scope.editMode = false;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             $scope.$safeApply();
@@ -67,24 +67,24 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         var selectedConcepts = [];
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
-        $scope.unit = {};
+        $scope.courseunit = {};
         $scope.editMode = $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
-        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.unitmeta", "1.0", "assets/default.png");
+        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.courseunitmeta", "1.0", "assets/default.png");
 
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
-        $scope.unit = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
+        $scope.courseunit = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
         if($scope.mode === "Edit" && $scope.editable === true){
             $scope.editMode = true;
-            $scope.metadataCloneObj = _.clone($scope.unit);
+            $scope.metadataCloneObj = _.clone($scope.courseunit);
         }
         if(!_.isEmpty(activeNode.data.metadata)){
             $scope.editMode = false;
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
-                $scope.unit.concepts = activeNode.data.metadata.concepts;
-                $scope.unit.conceptData = '(' + $scope.unit.concepts.length + ') concepts selected';
-                if($scope.unit.concepts.length > 0){
-                    _.forEach($scope.unit.concepts, function(concept){
+                $scope.courseunit.concepts = activeNode.data.metadata.concepts;
+                $scope.courseunit.conceptData = '(' + $scope.courseunit.concepts.length + ') concepts selected';
+                if($scope.courseunit.concepts.length > 0){
+                    _.forEach($scope.courseunit.concepts, function(concept){
                         selectedConcepts.push(concept.identifier);
                     });
                 }
@@ -94,11 +94,11 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             $scope.newNode = true;
         }
         ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
-            element: 'unitConceptSelector',
+            element: 'courseunitConceptSelector',
             selectedConcepts: selectedConcepts,
             callback: function(data) {
-                $scope.unit.conceptData = '(' + data.length + ') concepts selected';
-                $scope.unit.concepts = _.map(data, function(concept) {
+                $scope.courseunit.conceptData = '(' + data.length + ') concepts selected';
+                $scope.courseunit.concepts = _.map(data, function(concept) {
                     return { "identifier" : concept.id , "name" : concept.name} ;
                 });
                 $scope.$safeApply();
@@ -107,7 +107,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         $scope.getPath();
         $scope.$safeApply();
     }
-    ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:TextBookUnit', $scope.onNodeSelect);
+    ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:CourseUnit', $scope.onNodeSelect);
 
     $scope.getPath = function() {
         $scope.path = [];
@@ -125,7 +125,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     }
 
     $scope.generateTelemetry = function(data) {
-        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.unitmeta", "pluginver": "1.0", "objectid": $scope.nodeId, "stage": $scope.nodeId })
+        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.courseunitmeta", "pluginver": "1.0", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
 }]);
-//# sourceURL=unitmetaApp.js
+//# sourceURL=courseunitmetaApp.js

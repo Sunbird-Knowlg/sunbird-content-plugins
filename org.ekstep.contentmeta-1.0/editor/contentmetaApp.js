@@ -4,26 +4,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.nodeId = $scope.nodeType = '';
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
-            $scope.gradeList = resp.data.result.ordinals.gradeLevel;
             $scope.languageList = resp.data.result.ordinals.language;
-            $scope.audienceList = resp.data.result.ordinals.audience;
-            //TODO: Replace below list with API resplonse
-            $scope.boardList = {};
-            $scope.boardList["CBSE"]  = "CBSE";
-            $scope.boardList["NCERT"] = "NCERT";
-            $scope.boardList["ICSE"] = "ICSE"
-            $scope.boardList["MSCERT"] = "MSCERT";
-            $scope.boardList["Other"] = "Othres";
-          
-            $scope.subjectList = {};
-            $scope.subjectList["Maths"]  = "Maths";
-            $scope.subjectList["English"] = "English";
-            $scope.subjectList["Hindi"] = "Hindi"
-            $scope.subjectList["Bengali"] = "Bengali";
-            $scope.subjectList["Telugu"] = "Telugu";
-            $scope.subjectList["Tamil"] = "Tamil";
-            $scope.subjectList["Kannada"] = "Kanada";
-            $scope.subjectList["Marathi"] = "Marathi";
             $scope.$safeApply();
         }
     });
@@ -92,7 +73,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         var contentArr = ["Story", "Collection", "Game", "Worksheet"];
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
         if(_.indexOf(contentArr, data.data.objectType) != -1){
-            var selectedConcepts = [];
             $scope.nodeId = data.data.id;
             $scope.nodeType = data.data.objectType;
             $scope.content = {};
@@ -110,29 +90,10 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 $scope.editMode = false;
                 $scope.content = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
                 $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
-                if(!_.isUndefined(activeNode.data.metadata.concepts)){
-                    $scope.content.concepts = activeNode.data.metadata.concepts;
-                    $scope.content.content = '(' + $scope.content.concepts.length + ') concepts selected';
-                    if($scope.content.concepts.length > 0){
-                        _.forEach($scope.content.concepts, function(concept){
-                            selectedConcepts.push(concept.identifier);
-                        });
-                    }
-                }
+                $('#language').dropdown('set selected', $scope.content.language);
             }else{
                 $scope.newNode = true;
             }
-            ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
-                element: 'contentConceptSelector',
-                selectedConcepts: selectedConcepts,
-                callback: function(data) {
-                    $scope.content.concepts = '(' + data.length + ') concepts selected';
-                    $scope.content.conceptData = _.map(data, function(concept) {
-                        return concept.id;
-                    });
-                    $scope.$safeApply();
-                }
-            });
             $scope.getPath();
             $scope.$safeApply();
         }

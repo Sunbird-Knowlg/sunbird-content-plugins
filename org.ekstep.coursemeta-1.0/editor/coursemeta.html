@@ -1,0 +1,146 @@
+<div ng-app="coursemetaApp" class="metacontent-wrapper" ng-controller="coursemetaController">
+    <div class="ui segment header-segment">
+        <div class="ui breadcrumb">
+            <a class="section" ng-click="setActiveNode(path.nodeId)">{{path.title}}</a>
+        </div>
+        <h3 class="header-bottom-segment inline-block">{{course.name}}</h3>
+        <div class="header-buttons-container header-bottom-segment inline-block" ng-show="mode == 'Edit' && editable == true">
+            <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'})" ng-show="!editMode">
+                Edit
+            </div>
+            <div class="ui primary button right-float button-overrides" id="update-button" ng-click="updateNode(); generateTelemetry({type: 'click', subtype: 'update', target: 'updatemeta'})" ng-show="editMode">
+                Update
+            </div>
+        </div>
+    </div>
+    <div class="ui segment" id="read-metadata-wrapper" ng-show="!editMode">
+        <div class="ui items">
+            <div class="item">
+                <div class="ui tiny image">
+                    <img ng-src="{{course.appIcon || defaultImage}}" alt="">
+                </div>
+                <div class="content">
+                    <div class="header">{{course.name}}</div>
+                    <div class="description">
+                        <p>{{course.description}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="metacontent-fields-container">
+            <div class="ui cards">
+                <div class="card">
+                    <div class="content">
+                        <div class="header">Language</div>
+                        <div class="description">{{course.language.toString() | lowercase}}</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">Faculty</div>
+                        <div class="description">{{course.faculty.toString() | lowercase}}</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">Tutor</div>
+                        <div class="description">{{course.tutor.toString() | lowercase}}</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">Audience</div>
+                        <div class="description">{{course.audience.toString() | lowercase}}</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">Concepts</div>
+                        <div class="description">
+                            <span class="field-value" ng-repeat="concept in course.concepts track by $index">{{concept.name}}{{$last ? '' : ', '}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
+                        <div class="header">Keywords</div>
+                        <div class="description">
+                            <span class="field-value" ng-repeat="keyword in course.keywords track by $index">{{keyword | lowercase}}{{$last ? '' : ', '}}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form class="ui form segment" id="contents-data-form" novalidate ng-submit="updateNode()" ng-show="editMode" name="courseMetaForm">
+        <div class="fields">
+            <div class="field book-image-field">
+                <label for="bookImage">Add icon</label>
+                <div class="book-image-container" ng-click="showAssestBrowser()">
+                    <i class="camera icon"></i>
+                    <img ng-src="{{course.appIcon}}" ng-show="course.appIcon != ''" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
+                </div>
+            </div>
+            <div class="field form-fields-except-image">
+                <div class=" field">
+                    <label>Title</label>
+                    <div class="ui input">
+                        <input placeholder="Enter title for Book" ng-model="course.name" ng-class=" {error: submitted && courseMetaForm.name.$error.required}" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required >
+                    </div>
+                </div>
+                 <div class="requiered field">
+                    <label>Description</label>
+                    <div class="ui input">
+                        <textarea placeholder="brief description about the unit" ng-model="course.description" ng-class="{error: submitted && courseMetaForm.description.$error.required}" name="description"  rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})" required></textarea>
+                    </div>
+                </div>
+                <div class="two fields">
+                    <div class="field">
+                        <label for="language">Language</label>
+                        <select id="language" class="ui selection dropdown" ng-model="course.language" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'language'})">
+                            <option value="">Language</option>
+                            <option value="{{language}}" ng-repeat="language in languageList">{{language}}</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="audience">Audience</label>
+                        <select id="audience" class="ui selection dropdown" ng-model="course.audience" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'audience'})">
+                            <option value="">Audience</option>
+                            <option value="{{audience}}" ng-repeat="audience in audienceList">{{audience}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="three fields">
+                    <div class="field">
+                        <label for="faculty">Faculty</label>
+                        <input type="text" placeholder="Enter faculty name" name="faculty" ng-model="course.author" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'faculty'})" />
+                    </div>
+                    <div class="field">
+                        <label for="tutor">Tutor</label>
+                        <input type="text" placeholder="Enter tutor name" name="tutor" ng-model="course.tutor" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'tutor'})" />
+                    </div>
+                    <div class="field">
+                        <label for="audience">Audience</label>
+                        <select id="audience" class="ui selection dropdown" ng-model="course.audience" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'audience'})">
+                            <option value="">Audience</option>
+                            <option value="{{audience}}" ng-repeat="audience in audienceList">{{audience}}</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="two fields">
+                    <div class="six wide field">
+                        <label>Concepts</label>
+                        <input name="concepts" id="courseConceptSelector" ng-model="course.conceptData" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
+                    </div>
+                    <div class="six wide field">
+                        <label>Keywords</label>
+                        <input id="keywords" name="keywords" ng-model="course.keywords" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})" >
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<script>
+$(".ui.selection.dropdown").dropdown();
+</script>

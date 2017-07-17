@@ -1,4 +1,4 @@
-<div ng-app="unitmetaApp" class="metacontent-wrapper" ng-controller="unitmetaController">
+<div ng-app="courseunitmetaApp" class="metacontent-wrapper" ng-controller="courseunitmetaController">
     <div class="ui segment header-segment">
         <div class="ui breadcrumb">
             <a class="section" ng-repeat="value in path" ng-click="setActiveNode(value.nodeId)">
@@ -6,7 +6,7 @@
                 <div class="divider"> / </div>
             </a>
         </div>
-        <h3 class="header-bottom-segment inline-block">{{unit.name}}</h3>
+        <h3 class="header-bottom-segment inline-block">{{courseunit.name}}</h3>
         <div class="header-buttons-container header-bottom-segment inline-block" ng-show="mode == 'Edit' && editable == true">
             <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'})" ng-show="!editMode">
                 Edit
@@ -20,12 +20,15 @@
         <div class="ui items">
             <div class="item">
                 <div class="ui tiny image">
-                    <img ng-src="{{unit.appIcon || defaultImage}}" alt="">
+                    <img ng-src="{{courseunit.appIcon || defaultImage}}" alt="">
                 </div>
                 <div class="content">
-                    <div class="header">{{unit.name}}</div>
+                    <div class="header">{{courseunit.name}}</div>
+                    <div class="meta">by&nbsp;
+                        <span id="book-author">{{courseunit.author}}</span>
+                    </div>
                     <div class="description">
-                        <p>{{unit.description}}</p>
+                        <p>{{courseunit.description}}</p>
                     </div>
                 </div>
             </div>
@@ -36,7 +39,7 @@
                     <div class="content">
                         <div class="header">Concepts</div>
                         <div class="description">
-                            <span class="field-value" ng-repeat="concept in unit.concepts track by $index">{{concept.name}}{{$last ? '' : ', '}}</span>
+                            <span class="field-value" ng-repeat="concept in courseunit.concepts track by $index">{{concept.name}}{{$last ? '' : ', '}}</span>
                         </div>
                     </div>
                 </div>
@@ -44,51 +47,44 @@
                     <div class="content">
                         <div class="header">Keywords</div>
                         <div class="description">
-                            <span class="field-value" ng-repeat="tag in unit.keywords track by $index">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
+                            <span class="field-value" ng-repeat="tag in courseunit.keywords track by $index">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <form class="ui form segment" id="contents-data-form" novalidate ng-submit="updateNode()" ng-show="editMode" name="unitMetaForm">
+    <form class="ui form segment" id="contents-data-form" novalidate ng-submit="updateNode()" ng-show="editMode" name="courseunitMetaForm">
         <div class="fields">
             <div class="field book-image-field">
                 <label for="bookImage">Add icon</label>
                 <div class="book-image-container" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
-                    <img ng-src="{{unit.appIcon}}" ng-show="unit.appIcon != ''" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
+                    <img ng-src="{{courseunit.appIcon}}" ng-show="courseunit.appIcon != ''" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
                 </div>
             </div>
             <div class="field form-fields-except-image">
                 <div class="field">
-                    <label>Unit Title</label>
+                    <label>Title</label>
                     <div class="ui input">
-                        <input placeholder="Enter title for Book" ng-model="unit.name" ng-class=" {error: submitted && unitMetaForm.name.$error.required}" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required>
+                        <input placeholder="Enter title for Book" ng-model="courseunit.name" ng-class=" {error: submitted && courseunitMetaForm.name.$error.required}" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required>
                     </div>
                 </div>
                 <div class="field">
                     <label>Description</label>
                     <div class="ui input">
-                        <textarea placeholder="brief description about the unit" ng-model="unit.description" ng-class=" {error: submitted && unitMetaForm.description.$error.required}" name="description" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})" required></textarea>
+                        <textarea placeholder="brief description about the courseunit" ng-model="courseunit.description" ng-class=" {error: submitted && courseunitMetaForm.description.$error.required}" name="description" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})" required></textarea>
                     </div>
                 </div>
                 <div class="field">
                     <label>Concepts</label>
-                    <input name="concepts" id="unitConceptSelector" ng-model="unit.conceptData" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
+                    <input name="concepts" id="courseunitConceptSelector" ng-model="courseunit.conceptData" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
                 </div>
                 <div class="field">
                     <label>Keywords</label>
-                    <input id="keywords" name="keywords" ng-blur="unit.keywords.split(',');" ng-model="unit.keywords" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})" >
-                </div>
-                <div class="field">
-                    <label>Notes to Teacher</label>
-                    <input placeholder="Add Notes" ng-model="unit.notes" name="notes" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'notes'})">
+                    <input id="keywords" name="keywords" ng-blur="courseunit.keywords.split(',');" ng-model="courseunit.keywords" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})" >
                 </div>
             </div>
         </div>
     </form>
 </div>
-<script>
-$(".ui.selection.dropdown").dropdown();
-</script>

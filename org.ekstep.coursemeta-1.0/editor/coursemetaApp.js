@@ -1,30 +1,12 @@
-angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$scope', function($scope) {
+angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope', function($scope) {
     $scope.mode = org.ekstep.collectioneditor.api.getService('collection').getConfig().mode;
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
 
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
-            $scope.gradeList = resp.data.result.ordinals.gradeLevel;
             $scope.languageList = resp.data.result.ordinals.language;
             $scope.audienceList = resp.data.result.ordinals.audience;
-            //TODO: Replace below list with API resplonse
-            $scope.boardList = {};
-            $scope.boardList["CBSE"]  = "CBSE";
-            $scope.boardList["NCERT"] = "NCERT";
-            $scope.boardList["ICSE"] = "ICSE"
-            $scope.boardList["MSCERT"] = "MSCERT";
-            $scope.boardList["Other"] = "Othres";
-          
-            $scope.subjectList = {};
-            $scope.subjectList["Maths"]  = "Maths";
-            $scope.subjectList["English"] = "English";
-            $scope.subjectList["Hindi"] = "Hindi"
-            $scope.subjectList["Bengali"] = "Bengali";
-            $scope.subjectList["Telugu"] = "Telugu";
-            $scope.subjectList["Tamil"] = "Tamil";
-            $scope.subjectList["Kannada"] = "Kanada";
-            $scope.subjectList["Marathi"] = "Marathi";
             $scope.$safeApply();
         }
     });
@@ -34,26 +16,26 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
             type: 'image',
             search_filter: {}, // All composite keys except mediaType
             callback: function(data) { 
-                $scope.textbook.appIcon = data.assetMedia.src;
+                $scope.course.appIcon = data.assetMedia.src;
                 $scope.$safeApply();
             }
         });
     }
     
     $scope.updateNode = function(){
-        if($scope.textbookMetaForm.$valid){ 
+        if($scope.courseMetaForm.$valid){ 
             if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = $scope.newNode;
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = true;
             }
-            if(_.isString($scope.textbook.keywords)){
-                $scope.textbook.keywords = $scope.textbook.keywords.split(',');
+            if(_.isString($scope.course.keywords)){
+                $scope.course.keywords = $scope.course.keywords.split(',');
             }
-            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
-            $scope.textbook.contentType = $scope.nodeType;
-            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
-            $scope.metadataCloneObj = _.clone($scope.textbook);
+            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.course.name);
+            $scope.course.contentType = $scope.nodeType;
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.course));
+            $scope.metadataCloneObj = _.clone($scope.course);
             $scope.editMode = false;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             $scope.$safeApply();
@@ -93,31 +75,27 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
         var selectedConcepts = [];
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
-        $scope.textbook = {};
+        $scope.course = {};
         $scope.editMode = $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
-        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.textbookmeta", "1.0", "assets/default.png");
+        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.coursemeta", "1.0", "assets/default.png");
 
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
-        $scope.textbook = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
+        $scope.course = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
         if($scope.mode === "Edit" && $scope.editable === true){
             $scope.editMode = true;
             $('.ui.dropdown').dropdown('refresh');
-            $scope.metadataCloneObj = _.clone($scope.textbook);
+            $scope.metadataCloneObj = _.clone($scope.course);
         }
         if(!_.isEmpty(activeNode.data.metadata)){
             $scope.editMode = false;
-            $('#board').dropdown('set selected', $scope.textbook.board);
-            $('#medium').dropdown('set selected', $scope.textbook.medium);
-            $('#subject').dropdown('set selected', $scope.textbook.subject);
-            $('#gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
-            $('#audience').dropdown('set selected', $scope.textbook.audience);
-            $('#language').dropdown('set selected', $scope.textbook.language);
+            $('#language').dropdown('set selected', $scope.course.language);
+            $('#audience').dropdown('set selected', $scope.course.audience);
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
-                $scope.textbook.concepts = activeNode.data.metadata.concepts;
-                $scope.textbook.conceptData = '(' + $scope.textbook.concepts + ') concepts selected';
-                if($scope.textbook.concepts.length > 0){
-                    _.forEach($scope.textbook.concepts, function(concept){
+                $scope.course.concepts = activeNode.data.metadata.concepts;
+                $scope.course.conceptData = '(' + $scope.course.concepts + ') concepts selected';
+                if($scope.course.concepts.length > 0){
+                    _.forEach($scope.course.concepts, function(concept){
                         selectedConcepts.push(concept.identifier);
                     });
                 }
@@ -127,11 +105,11 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
             $scope.newNode = true;
         }
         ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
-            element: 'textbookConceptSelector',
+            element: 'courseConceptSelector',
             selectedConcepts: selectedConcepts,
             callback: function(data) {
-                $scope.textbook.conceptData = '(' + data.length + ') concepts selected';
-                $scope.textbook.concepts = _.map(data, function(concept) {
+                $scope.course.conceptData = '(' + data.length + ') concepts selected';
+                $scope.course.concepts = _.map(data, function(concept) {
                     return { "identifier" : concept.id , "name" : concept.name} ;
                 });
                 $scope.$safeApply();
@@ -140,7 +118,7 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
         $scope.getPath();
         $scope.$safeApply();
     }
-    ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:TextBook', $scope.onNodeSelect);
+    ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:Course', $scope.onNodeSelect);
 
     $scope.getPath = function() {
         var nodes = [];
@@ -161,7 +139,7 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
     }
 
     $scope.generateTelemetry = function(data) {
-        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.textbookmeta", "pluginver": "1.0", "objectid": $scope.nodeId, "stage": $scope.nodeId })
+        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.coursemeta", "pluginver": "1.0", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
 }]);
-//# sourceURL=textbookmetaApp.js
+//# sourceURL=coursemetaApp.js

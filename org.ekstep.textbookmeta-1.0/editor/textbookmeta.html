@@ -58,6 +58,12 @@
                 </div>
                 <div class="card">
                     <div class="content">
+                        <div class="header">Language</div>
+                        <div class="description">{{textbook.language.toString() | lowercase}}</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="content">
                         <div class="header">Publication</div>
                         <div class="description">{{textbook.publication | lowercase}}</div>
                     </div>
@@ -163,10 +169,17 @@
                     <label>Concepts</label>
                     <input name="concepts" id="textbookConceptSelector" ng-model="textbook.conceptData" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
                 </div>
-                <div class="two fields">
+                <div class="three fields">
                     <div class=" twelve wide field">
                         <label>Keywords</label>
-                        <input id="keywords" name="keywords" ng-model="textbook.keywords" type="text" ng-class=" {error: submitted && textbookMetaForm.keywords.$error.required}" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})" required >
+                        <input id="keywords" name="keywords" ng-model="textbook.keywords" type="text" ng-class=" {error: submitted && textbookMetaForm.keywords.$error.required}" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})" >
+                    </div>
+                    <div class="field">
+                        <label for="language">Language</label>
+                        <select id="language" class="ui selection dropdown" ng-model="textbook.language" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'language'})">
+                            <option value="">Language</option>
+                            <option value="{{language}}" ng-repeat="language in languageList">{{language}}</option>
+                        </select>
                     </div>
                     <div class="four wide field">
                         <label for="audience">Audience</label>

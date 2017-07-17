@@ -29,9 +29,6 @@
                 </div>
                 <div class="content">
                     <div class="header">{{content.name}}</div>
-                    <div class="meta">by&nbsp;
-                        <span id="book-author">{{content.author}}</span>
-                    </div>
                     <div class="description">
                         <p>{{content.description}}</p>
                     </div>
@@ -40,56 +37,6 @@
         </div>
         <div class="metacontent-fields-container">
             <div class="ui cards">
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Board</div>
-                        <div class="description">{{content.board.toString() | uppercase}}</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Medium</div>
-                        <div class="description">{{content.medium.toString() | lowercase}}</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Subject</div>
-                        <div class="description">{{content.subject.toString() | lowercase}}</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Grade</div>
-                        <div class="description">{{content.gradeLevel.toString() | lowercase}}</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Publication</div>
-                        <div class="description">{{content.publication | lowercase}}</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Edition</div>
-                        <div class="description">{{content.edition | lowercase}}</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Audience</div>
-                        <div class="description">{{content.audience.toString() | lowercase}}</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Concepts</div>
-                        <div class="description">
-                            <span class="field-value" ng-repeat="concept in content.concepts track by $index">{{concept.name}}</span>
-                        </div>
-                    </div>
-                </div>
                 <div class="card">
                     <div class="content">
                         <div class="header">Keywords</div>
@@ -117,81 +64,26 @@
                         <input placeholder="Enter title for Book" ng-model="content.name" ng-class=" {error: submitted && contentMetaForm.name.$error.required}" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required >
                     </div>
                 </div>
-                <div class="four fields">
-                    <div class="field">
-                        <label for="board">Board</label>
-                        <select id="contentBoard" class="ui selection dropdown" ng-model="content.board" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'board'})">
-                            <option value="">Board</option>
-                            <option value="{{board}}" ng-repeat="board in boardList">{{board}}</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label for="medium">Medium</label>
-                        <select id="contentMedium" class="ui selection dropdown" ng-model="content.medium" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'medium'})" >
-                            <option value="">Medium</option>
-                            <option value="{{medium}}" ng-repeat="medium in languageList">{{medium}}</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label for="subject">Subject</label>
-                        <select id="contentSubject" class="ui selection dropdown" ng-model="content.subject" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'subject'})">
-                            <option value="">Subject</option>
-                            <option value="{{subject}}" ng-repeat="subject in subjectList">{{subject}}</option>
-                        </select>
-                    </div>
-                    <div class="field">
-                        <label for="grade">Grade</label>
-                        <select id="contentGradeLevel" class="ui selection dropdown" ng-model="content.gradeLevel" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'gradeLevel'})">
-                            <option value="">Grade</option>
-                            <option value="{{gradeLevel}}" ng-repeat="gradeLevel in gradeList">{{gradeLevel}}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="three fields">
-                    <div class=" field">
-                        <label for="author">Author</label>
-                        <input type="text" placeholder="Enter author name" ng-model="content.author" ng-class=" {error: submitted && contentMetaForm.author.$error.required}" name="author" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'author'})" required />
-                    </div>
-                    <div class="field">
-                        <label for="publication">Publication</label>
-                        <input type="text" placeholder="Publication (optional)" ng-model="content.publication" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'publication'})" />
-                    </div>
-                    <div class="field">
-                        <label for="edition">Edition</label>
-                        <input type="text" placeholder="Edition (optional)" ng-model="content.edition" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'edition'})" />
-                    </div>
-                </div>
-                <div class="requiered field">
+                <div class="field">
                     <label>Description</label>
                     <div class="ui input">
                         <textarea placeholder="brief description about the content" ng-model="content.description" ng-class=" {error: submitted && contentMetaForm.description.$error.required}" name="description" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})" required></textarea>
                     </div>
                 </div>
-                <div class="field">
-                    <label>Concepts</label>
-                    <input name="concepts" id="contentConceptSelector" ng-model="content.conceptData" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
-                </div>
                 <div class="two fields">
-                    <div class=" twelve wide field">
+                    <div class=" field">
                         <label>Keywords</label>
-                        <input id="keywords" name="keywords" ng-model="content.keywords" type="text" ng-class=" {error: submitted && contentMetaForm.keywords.$error.required}"  ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})" required>
+                        <input id="keywords" name="keywords" ng-model="content.keywords" type="text" ng-class=" {error: submitted && contentMetaForm.keywords.$error.required}"  ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})">
                     </div>
-                    <div class="four wide field">
-                        <label for="audience">Audience</label>
-                        <select id="contentAudience" class="ui selection dropdown" ng-model="content.audience" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'audience'})">
-                            <option value="">Audience</option>
-                            <option value="{{audience}}" ng-repeat="audience in audienceList">{{audience}}</option>
+                    <div class="field">
+                        <label for="language">Language</label>
+                        <select id="language" class="ui selection dropdown" ng-model="content.language" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'language'})">
+                            <option value="">Language</option>
+                            <option value="{{language}}" ng-repeat="language in languageList">{{language}}</option>
                         </select>
                     </div>
-                </div>
-                <div class="field">
-                    <label>Notes to Teacher</label>
-                    <input placeholder="Add Notes" ng-model="content.notes" name="notes" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'notes'})">
                 </div>
             </div>
         </div>
     </form>
 </div>
-<script>
-$(".ui.selection.dropdown").dropdown();
-</script>
