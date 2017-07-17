@@ -53,10 +53,6 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
         });
     };
 
-    window.onbeforeunload = function(e) {
-        if (!$scope.disableSaveBtn) return "You have unsaved changes"; 
-        e.preventDefault();       
-    }
     window.addEventListener('online', $scope.internetStatusFn, false);
     window.addEventListener('offline', $scope.internetStatusFn, false);
     ecEditor.addEventListener("org.ekstep.collectioneditor:node:added", $scope.onNodeEvent, $scope);
