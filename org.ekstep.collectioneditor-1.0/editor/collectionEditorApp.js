@@ -89,6 +89,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
                     ]
                 });
             }
+            // close the loading screen
+            window.loading_screen.finish();
         });
     });
 

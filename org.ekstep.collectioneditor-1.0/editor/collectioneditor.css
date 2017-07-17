@@ -1,3 +1,11 @@
+body > .inner {
+  display: none;
+}
+
+body.pg-loaded > .inner {
+  display: block;
+}
+
 body {
     min-width: 800px;
     color: #9b9b9b!important;
@@ -204,4 +212,12 @@ body {
     font-size: 1.2em;
 }
 
+.loading-message {
+    font-size: 30px;
+    margin-bottom: 100px;
+    font-color: grey;
+    color: black;
+    font-weight: 300;
+    font-family: "raleway",sans-serif;
+}
 /* for not able to fetch content */
