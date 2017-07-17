@@ -22,6 +22,7 @@ body {
     margin: 0!important;
     min-width: 100vw!important;
     margin-left: -1em!important;
+    border-bottom: 0.2px solid rgba(128, 128, 128, 0.43);
 }
 
 .header-wrapper .custom-1-wide .ui.tiny.image {
