@@ -26,7 +26,7 @@
         <!-- header part 3 lower deck -->
         <div class="header-icon-container right floated column right aligned">
             <div class="custom-row-2">                                
-                <div ng-class="disableSaveBtn ? 'ui primary icon button button-overrides popup-item disabled' : 'ui primary icon button button-overrides popup-item'" data-content="Save content" data-variation="tiny inverted" data-position="top center" ng-click="saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')">
+                <div ng-class="disableSaveBtn ? 'ui primary icon button button-overrides popup-item disabled' : 'ui primary icon button button-overrides popup-item'" data-content="Save content" data-variation="tiny inverted" data-position="top center" ng-click="saveContent(); telemetry({ subtype: 'save', target: 'saveBtn'});">
                     <i class="icon-save"></i>&nbsp;&nbsp;Save
                 </div>
             </div>

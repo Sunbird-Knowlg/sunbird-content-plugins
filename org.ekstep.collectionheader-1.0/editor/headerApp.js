@@ -25,12 +25,8 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
         $scope.$safeApply();                
     };
 
-    $scope.fireEvent = function(event) {
-        if (event) org.ekstep.contenteditor.api.dispatchEvent(event.id, event.data);
-    };
-
-    $scope.fireTelemetry = function(menu, menuType) {
-        $scope.telemetryService.interact({ "type": "click", "subtype": "menu", "target": menuType, "pluginid": 'org.ekstep.ceheader', 'pluginver': '1.0', "objectid": menu.id, "stage": org.ekstep.contenteditor.stageManager.currentStage.id });
+    $scope.telemetry = function(data) {
+        org.ekstep.services.telemetryService.interact({ "type": 'click', "subtype": data.subtype, "target": data.target, "pluginid": plugin.id, "pluginver": plugin.ver, "objectid": ecEditor.getCurrentStage().id, "stage": ecEditor.getCurrentStage().id });
     };
 
     $scope.internetStatusFn = function(event) {

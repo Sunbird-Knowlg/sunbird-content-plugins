@@ -3,17 +3,18 @@
     <div class="ui grid main-body">
         <div class="ui column" id="table-of-contents">
             <div class="ui segments">
-                <div class="ui segment tree-access-tools-segment" style="padding-top: 0px !important">
-                    <div class="ui mini menu">
-                        <div class="ui transparent icon input item" style="width: 73.5%">
-                            <input type="text" placeholder="Search nodes..." ng-keypress="searchNode($event)" ng-blur="searchNode($event)">
-                            <i class="search link icon" style="margin-right: 10px"></i>
+                <div class="ui segment tree-access-tools-segment">
+                    <!-- <p>Table of Contents</p> -->
+                    <div class="tree-access-tools">
+                        <div class="ui search">
+                            <div class="ui icon input">
+                                <input class="prompt" type="text" placeholder="Search content..." ng-keypress="searchNode($event)" ng-click="telemetry({ subtype: 'input', target: 'searchNodeBtn'});">
+                                <i class="search icon"></i>
+                            </div>
                         </div>
-                        <div class="ui icon item" ng-click="expandNode(true);">
-                            <i class="chevron down icon"></i>
-                        </div>
-                        <div class="ui icon item" ng-click="expandNode(false);">
-                            <i class="chevron up icon"></i>
+                        <div class="icon-container">
+                            <span class="show-popup" ng-click="expandNode(true); telemetry({ subtype: 'expand', target: 'expandNodeBtn'});" data-content="Expand all"><i class="caret down icon" title="Expand all"></i></span>
+                            <span class="show-popup" ng-click="expandNode(false); telemetry({ subtype: 'collapse', target: 'collapseNodeBtn'});" data-content="Collapse all"><i class="caret up icon" title="Collapse all"></i></span>
                         </div>
                     </div>
                 </div>

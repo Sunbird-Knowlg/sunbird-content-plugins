@@ -55,6 +55,10 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).expandAll(flag);
     };
 
+    $scope.telemetry = function(data) {
+        org.ekstep.services.telemetryService.interact({ "type": 'click', "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.collectioneditor", "pluginver": "1.0", "objectid": ecEditor.getCurrentStage().id, "stage": ecEditor.getCurrentStage().id });
+    };
+
     org.ekstep.collectioneditor.api.initEditor(ecEditor.getConfig('editorConfig'), function() {
         $scope.loadContent(function(err, res) {
             if (res) {
