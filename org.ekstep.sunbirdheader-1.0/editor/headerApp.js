@@ -58,17 +58,17 @@ angular.module('org.ekstep.sunbirdheader:headerApp', ['yaru22.angular-timeago'])
         $scope.saveBtnEnabled = true;
         $scope.$safeApply();
     }
-}
-window.addEventListener('online', $scope.internetStatusFn, false);
-window.addEventListener('offline', $scope.internetStatusFn, false);
-ecEditor.addEventListener('object:modified', $scope.setSaveStatus, $scope);
-ecEditor.addEventListener('stage:delete', $scope.setSaveStatus, $scope);
-ecEditor.addEventListener('stage:duplicate', $scope.setSaveStatus, $scope);
-ecEditor.addEventListener('stage:reorder', $scope.setSaveStatus, $scope);
-ecEditor.addEventListener('object:removed', $scope.setSaveStatus, $scope);
 
-ecEditor.addEventListener('org.ekstep.contenteditor:save', $scope.onSave, $scope);
-ecEditor.addEventListener('org.ekstep.editorstate:state', $scope.setEditorState, $scope);
-ecEditor.addEventListener('org.ekstep.ceheader:meta:edit', $scope.editContentMeta, $scope);
+    window.addEventListener('online', $scope.internetStatusFn, false);
+    window.addEventListener('offline', $scope.internetStatusFn, false);
+    ecEditor.addEventListener('object:modified', $scope.setSaveStatus, $scope);
+    ecEditor.addEventListener('stage:delete', $scope.setSaveStatus, $scope);
+    ecEditor.addEventListener('stage:duplicate', $scope.setSaveStatus, $scope);
+    ecEditor.addEventListener('stage:reorder', $scope.setSaveStatus, $scope);
+    ecEditor.addEventListener('object:removed', $scope.setSaveStatus, $scope);
+
+    ecEditor.addEventListener('org.ekstep.contenteditor:save', $scope.onSave, $scope);
+    ecEditor.addEventListener('org.ekstep.editorstate:state', $scope.setEditorState, $scope);
+    ecEditor.addEventListener('org.ekstep.ceheader:meta:edit', $scope.editContentMeta, $scope);
 
 }]);
