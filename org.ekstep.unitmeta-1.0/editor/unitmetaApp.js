@@ -56,6 +56,12 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                 }
             });
         }
+        if(_.isUndefined(metadata['name'])){
+            metadata['name'] = originalMetadata['name'];
+        }
+        if(_.isUndefined(metadata['code'])){
+            metadata['code'] = $scope.nodeId;
+        }
         return metadata;
     }
 

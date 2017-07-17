@@ -82,6 +82,12 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
                 }
             });
         }
+        if(_.isUndefined(metadata['name'])){
+            metadata['name'] = originalMetadata['name'];
+        }
+        if(_.isUndefined(metadata['code'])){
+            metadata['code'] = $scope.nodeId;
+        }
         return metadata;
     }
 
