@@ -41,7 +41,7 @@ org.ekstep.collectioneditor.basePlugin.extend({
 	},
     isValidSave: function() {
         var isValid = true;
-        var mandatoryFields = ["name", "contentType", "author", "description", "mimeType"];
+        var mandatoryFields = ["name", "contentType", "description", "mimeType"];
         ecEditor._.forIn(org.ekstep.collectioneditor.cache.nodesModified, function(data, id) {
             if (data.isNew) {
                 mandatoryFields.forEach(function(key) {
