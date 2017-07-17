@@ -51,6 +51,10 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         });
     };
 
+    $scope.expandNode = function(flag) {
+        ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).expandAll(flag);
+    };
+
     org.ekstep.collectioneditor.api.initEditor(ecEditor.getConfig('editorConfig'), function() {
         $scope.loadContent(function(err, res) {
             if (res) {
