@@ -6,15 +6,15 @@ org.ekstep.collectioneditor.basePlugin.extend({
 		var contentBody = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy();
         console.log('contentBody', contentBody);
         // validate save data
-        if (!this.isValidSave()) {
-            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                message: 'Please update the collection details before save',
-                position: 'topCenter',
-                icon: 'fa fa-warning'
-            });
-            data.callback && data.callback("invalid save data");
-            return false;
-        }
+        // if (!this.isValidSave()) {
+        //     ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+        //         message: 'Please update the collection details before save',
+        //         position: 'topCenter',
+        //         icon: 'fa fa-warning'
+        //     });
+        //     data.callback && data.callback("invalid save data");
+        //     return false;
+        // }
 
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).saveCollectionHierarchy({ body: contentBody }, function(err, res) {
             if (res && res.data && res.data.responseCode == "OK") {
