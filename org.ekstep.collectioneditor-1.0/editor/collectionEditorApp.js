@@ -51,14 +51,22 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         });
     };
 
+    $scope.expandNode = function(flag) {
+        ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).expandAll(flag);
+    };
+
+    $scope.telemetry = function(data) {
+        org.ekstep.services.telemetryService.interact({ "type": 'click', "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.collectioneditor", "pluginver": "1.0", "objectid": ecEditor.getCurrentStage().id, "stage": ecEditor.getCurrentStage().id });
+    };
+
     org.ekstep.collectioneditor.api.initEditor(ecEditor.getConfig('editorConfig'), function() {
         $scope.loadContent(function(err, res) {
             if (res) {
                 var activeNode = org.ekstep.services.collectionService.getActiveNode();
                 $scope.contentDetails.contentTitle = activeNode.title ? activeNode.title : "Untitled Content";
-                if (!_.isUndefined(activeNode.data.metadata.appIcon)) {
-                    $scope.contentDetails.contentImage = activeNode.data.metadata.appIcon;
-                }
+                // if (!_.isUndefined(activeNode.data.metadata.appIcon)) {
+                //     $scope.contentDetails.contentImage = activeNode.data.metadata.appIcon;
+                // }
                 setTimeout(function() {
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', activeNode);
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode)

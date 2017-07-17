@@ -1,0 +1,18 @@
+{
+    "id": "org.ekstep.sunbirdcollectionheader",
+    "ver": "1.0",    
+    "author": "Sunil A S",    
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "header": [{
+            "templateURL": "editor/headerTemplate.html",
+            "controllerURL": "editor/headerApp.js"
+        }],
+        "dependencies": [
+            { "type": "css", "src": "editor/collectionheader.css"},
+            { "type": "js", "src": "editor/lib/angular-timeago.min.js"}
+        ]
+    }
+}

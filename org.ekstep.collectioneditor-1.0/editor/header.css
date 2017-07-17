@@ -58,22 +58,24 @@ body {
 .custom-container .one.wide.column,
 .custom-container .six.wide.column,
 .custom-container .five.wide.column {
-    height: 55px !important;
+    height: 100%!important;
 }
 
 .custom-container .one.wide.column {
-    width: 60px !important;
+    width: 70px !important;
 }
 
-.custom-container .five.wide.column {
-    width: -webkit-calc(100% - (50% + 60px)) !important;
-    width: -moz-calc(100% - (50% + 60px)) !important;
-    width: calc(100% - (50% + 60px)) !important;
-    padding-right: 0.3rem;
-}
+// .custom-container .five.wide.column {
+//     width: -webkit-calc(100% - (50% + 60px)) !important;
+//     width: -moz-calc(100% - (50% + 60px)) !important;
+//     width: calc(100% - (50% + 60px)) !important;
+//     padding-right: 0.3rem;
+// }
 
 .content-masterhead {
-    padding: 0 !important;
+    padding: 0px !important;
+    width: 98vw !important;
+    height: 60px !important;
 }
 
 .custom-1-wide {

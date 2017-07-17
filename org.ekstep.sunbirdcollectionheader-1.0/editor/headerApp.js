@@ -1,7 +1,7 @@
-angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.angular-timeago"]).controller('headerController', ['$scope', function($scope) {
+angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "yaru22.angular-timeago"]).controller('headerController', ['$scope', function($scope) {
 
-    var plugin = { id: "org.ekstep.collectionheader", ver: "1.0" };
-    $scope.contentDetails.contentImage = ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/default.png");
+    var plugin = { id: "org.ekstep.sunbirdcollectionheader", ver: "1.0" };
+    $scope.contentDetails.contentImage = ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/sunbird_logo.png");
     $scope.internetStatusObj = {
         'status': navigator.onLine,
         'text': 'No Internet Connection!'
@@ -24,6 +24,10 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
         $scope.disableSaveBtn = false;
         $scope.$safeApply();                
     };
+
+    $scope.closeEditor = function() {
+        window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
+    }
 
     $scope.telemetry = function(data) {
         org.ekstep.services.telemetryService.interact({ "type": 'click', "subtype": data.subtype, "target": data.target, "pluginid": plugin.id, "pluginver": plugin.ver, "objectid": ecEditor.getCurrentStage().id, "stage": ecEditor.getCurrentStage().id });

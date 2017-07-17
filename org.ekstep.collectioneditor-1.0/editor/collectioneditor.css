@@ -20,8 +20,7 @@ body {
 
 .header-wrapper .custom-container {
     margin: 0!important;
-    min-width: 100vw!important;
-    margin-left: -1em!important;
+    min-width: 97.8vw!important;
     border-bottom: 0.2px solid rgba(128, 128, 128, 0.43);
 }
 
@@ -34,6 +33,7 @@ body {
     height: 90%!important;
     margin-bottom: 0!important;
     margin-top: 0em!important;
+    // padding-top: 5px !important;
 }
 
 .ui-fancytree:focus {

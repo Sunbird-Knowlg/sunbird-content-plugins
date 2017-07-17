@@ -3,7 +3,7 @@
 angular.module('quizconfigapp', ['ui.sortable'])
     .controller('quizconfigcontroller', ['$scope', 'quizInstance', function($scope, quizInstance) {
         var config = {"showStartPage": false, "showEndPage": false }, ctrl = this, itemIframe;
-        ctrl.previewURL = 'preview/preview.html?webview=true', ctrl.activePreviewItem = '';
+        ctrl.previewURL = (ecEditor.getConfig('previewURL') || '/content/preview/preview.html') + '?webview=true', ctrl.activePreviewItem = '';
         var pluginId = 'org.ekstep.quiz', ver = '1.0';
         ctrl.currentQuestion;
         ctrl.enableQuestionConfig = false;
