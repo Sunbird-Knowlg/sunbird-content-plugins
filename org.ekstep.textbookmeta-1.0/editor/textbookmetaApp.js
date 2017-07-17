@@ -111,7 +111,7 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
             $('.ui.dropdown').dropdown('refresh');
             $scope.metadataCloneObj = _.clone($scope.textbook);
         }
-        if(!_.isEmpty(activeNode.data.metadata)){
+        if(!_.isEmpty(activeNode.data.metadata) && (_.values(activeNode.data.metadata).length > 1)){
             $scope.editMode = false;
             $('#board').dropdown('set selected', $scope.textbook.board);
             $('#medium').dropdown('set selected', $scope.textbook.medium);
