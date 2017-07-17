@@ -13,6 +13,11 @@ org.ekstep.collectioneditor.basePlugin.extend({
                     icon: 'fa fa-check-circle'
                 });
                 org.ekstep.collectioneditor.api.getService('collection').clearCache();
+                // update node id's of collection
+                ecEditor._.forIn(res.data.result.identifiers, function(newId, oldId) {
+                   var node = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(oldId);    
+                   if (node) node.data.id = newId;
+                });
             } else {
                 if (data.showNotification) ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                     message: 'Unable to save the content, try again!',
@@ -24,3 +29,4 @@ org.ekstep.collectioneditor.basePlugin.extend({
         });
 	}
 });
+//# sourceURL=collectioneditorfunctions.js

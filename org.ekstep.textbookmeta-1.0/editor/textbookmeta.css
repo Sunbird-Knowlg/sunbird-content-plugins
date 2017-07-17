@@ -222,6 +222,7 @@
     box-sizing: border-box;
     padding: 1em!important;
     position: relative;
+    padding-left: 0!important;
 }
 
 .metacontent-fields-container .ui.cards>.card {
