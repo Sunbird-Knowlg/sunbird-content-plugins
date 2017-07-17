@@ -3,9 +3,20 @@
     <div class="ui grid main-body">
         <div class="ui column" id="table-of-contents">
             <div class="ui segments">
-                <div class="ui segment tree-access-tools-segment">
-                    <!-- <p>Table of Contents</p> -->
-                    <div class="tree-access-tools">
+                <div class="ui segment tree-access-tools-segment" style="padding-top: 0px !important">
+                    <div class="ui mini menu">
+                        <div class="ui transparent icon input item" style="width: 73.5%">
+                            <input type="text" placeholder="Search nodes..." ng-keypress="searchNode($event)" ng-blur="searchNode($event)">
+                            <i class="search link icon" style="margin-right: 10px"></i>
+                        </div>
+                        <div class="ui icon item" onclick="ecEditor.jQuery('#collection-tree').fancytree('getTree').visit(function(node){node.setExpanded();});">
+                            <i class="chevron down icon"></i>
+                        </div>
+                        <div class="ui icon item" onclick="ecEditor.jQuery('#collection-tree').fancytree('getTree').visit(function(node){node.setExpanded(false);});">
+                            <i class="chevron up icon"></i>
+                        </div>
+                    </div>
+                    <!-- <div class="tree-access-tools">
                         <div class="ui search">
                             <div class="ui icon input">
                                 <input class="prompt" type="text" placeholder="Search content..." ng-keypress="searchNode($event)">
@@ -13,10 +24,10 @@
                             </div>
                         </div>
                         <div class="icon-container">
-                            <span class="show-popup" onclick="ecEditor.jQuery('#collection-tree').fancytree('getTree').visit(function(node){node.setExpanded();});" data-content="Expand all"><i class="chevron circle down large icon" title="Expand all"></i></span>
+                            <span class="show-popup" onclick="" data-content="Expand all"><i class="chevron circle down large icon" title="Expand all"></i></span>
                             <span class="show-popup" onclick="ecEditor.jQuery('#collection-tree').fancytree('getTree').visit(function(node){node.setExpanded(false);});" data-content="Collapse all"><i class="chevron circle up large icon" title="Collapse all"></i></span>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
                 <div class="ui segment tree-wrapper">
                     <div id="collection-tree"></div>
