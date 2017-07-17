@@ -8,25 +8,39 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
     };
     $scope.disableSaveBtn = true;    
     $scope.lastSaved;
+    $scope.alertOnUnload = ecEditor.getConfig('alertOnUnload');
+    $scope.pendingChanges = false;
 
     $scope.saveContent = function() {
         $scope.disableSaveBtn = true;
         ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:save", {
             showNotification: true,
             callback: function(err, res) {                
-                if(res && res.data && res.data.responseCode == "OK") $scope.lastSaved = Date.now(); 
+                if(res && res.data && res.data.responseCode == "OK") {
+                    $scope.lastSaved = Date.now();
+                    $scope.pendingChanges = false; 
+                } else {
+                    $scope.disableSaveBtn = false;
+                }
                 $scope.$safeApply();               
             }
         });
     };
 
     $scope.onNodeEvent = function(event, data) {
+        $scope.pendingChanges = true;
         $scope.disableSaveBtn = false;
         $scope.$safeApply();                
     };
 
     $scope.closeEditor = function() {
-        window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
+        if ($scope.alertOnUnload === true && $scope.pendingChanges === true) {
+            if (window.confirm("You have unsaved changes! Do you want to leave?")) {
+                window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
+            }
+        } else {
+            window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');  
+        }
     }
 
     $scope.telemetry = function(data) {
