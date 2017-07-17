@@ -42,7 +42,6 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
     
     $scope.updateNode = function(){
         if($scope.textbookMetaForm.$valid){ 
-            ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:updated');
             if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = $scope.newNode;
@@ -56,6 +55,7 @@ angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$sc
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
             $scope.metadataCloneObj = _.clone($scope.textbook);
             $scope.editMode = false;
+            ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             $scope.$safeApply();
         }else{
             ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
