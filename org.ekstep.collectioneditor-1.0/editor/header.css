@@ -62,15 +62,15 @@ body {
 }
 
 .custom-container .one.wide.column {
-    width: 60px !important;
+    width: 70px !important;
 }
 
-.custom-container .five.wide.column {
-    width: -webkit-calc(100% - (50% + 60px)) !important;
-    width: -moz-calc(100% - (50% + 60px)) !important;
-    width: calc(100% - (50% + 60px)) !important;
-    padding-right: 0.3rem;
-}
+// .custom-container .five.wide.column {
+//     width: -webkit-calc(100% - (50% + 60px)) !important;
+//     width: -moz-calc(100% - (50% + 60px)) !important;
+//     width: calc(100% - (50% + 60px)) !important;
+//     padding-right: 0.3rem;
+// }
 
 .content-masterhead {
     padding: 0px !important;

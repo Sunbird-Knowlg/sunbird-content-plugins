@@ -86,3 +86,12 @@
 .content-title-container{
     line-height: 250%!important;
 }
+
+.custom-container .custom-5-wide{
+    right: -3vw;
+    padding-right: 0!important;
+}
+
+.custom-container .custom-5-wide .header-icon-container{
+    line-height: 3.5;
+}
