@@ -37,7 +37,9 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     //Header scope ends
 
     $scope.loadContent = function(callback) {
-        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId }, function(err, res) {
+        var mode;
+        if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
             if (res && res.data && res.data.responseCode === "OK") {
                 org.ekstep.services.collectionService.fromCollection(res.data.result.content);
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();

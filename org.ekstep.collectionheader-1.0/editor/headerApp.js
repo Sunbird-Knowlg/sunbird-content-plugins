@@ -15,7 +15,7 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
             showNotification: true,
             callback: function(err, res) {
                 $scope.disableSaveBtn = false;
-                $scope.lastSaved = Date.now(); 
+                if(res && res.data && res.data.responseCode == "OK") $scope.lastSaved = Date.now(); 
                 $scope.$safeApply();               
             }
         });
