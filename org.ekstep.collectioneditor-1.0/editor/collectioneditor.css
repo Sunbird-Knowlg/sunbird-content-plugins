@@ -33,6 +33,7 @@ body {
     height: 90%!important;
     margin-bottom: 0!important;
     margin-top: 0em!important;
+    padding-top: 5px !important;
 }
 
 .ui-fancytree:focus {

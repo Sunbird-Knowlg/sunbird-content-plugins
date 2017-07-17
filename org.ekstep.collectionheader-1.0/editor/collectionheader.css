@@ -74,15 +74,15 @@
 }
 
 .header-wrapper .custom-row-2{
-    line-height: 3.6 !important;
+    line-height: 2.8 !important;
 }
 .content-masterhead{
-    height: 70px !important;
+    height: 60px !important;
 }
 .custom-container,.custom-container > div{
     height: 100% !important;
 }
 
 .content-title-container{
-    line-height: 250%!important;
+    line-height: 200%!important;
 }
