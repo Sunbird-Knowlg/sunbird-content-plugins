@@ -20,7 +20,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      * @member {string} previewURL
      * @memberof assessment
      */
-    previewURL: 'preview/preview.html?webview=true',
+    previewURL: (ecEditor.getConfig('previewURL') || '/content/preview/preview.html') + '?webview=true',
     /**
      *   @memberof callback {Funtion} callback
      *   @memberof assessmentBrowser
