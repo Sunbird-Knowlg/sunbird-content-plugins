@@ -6,16 +6,18 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
         'status': navigator.onLine,
         'text': 'No Internet Connection!'
     };
-    $scope.disableSaveBtn = true;    
+    $scope.disableSaveBtn = true;  
+    $scope.disableReviewBtn = false;  
     $scope.lastSaved;
     $scope.alertOnUnload = ecEditor.getConfig('alertOnUnload');
     $scope.pendingChanges = false;
 
     $scope.saveContent = function() {
         $scope.disableSaveBtn = true;
+        $scope.disableReviewBtn = false;  
         ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:save", {
             showNotification: true,
-            callback: function(err, res) {                
+            callback: function(err, res) {               
                 if(res && res.data && res.data.responseCode == "OK") {
                     $scope.lastSaved = Date.now();
                     $scope.pendingChanges = false; 
@@ -27,9 +29,22 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
         });
     };
 
+    $scope.sendForReview = function(){
+        $scope.disableReviewBtn = true;
+        ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:review", {
+            callback: function(err, res) {                
+                if(err){
+                    $scope.disableReviewBtn = false;
+                }
+                $scope.$safeApply();               
+            }
+        });
+    };
+
     $scope.onNodeEvent = function(event, data) {
         $scope.pendingChanges = true;
         $scope.disableSaveBtn = false;
+        $scope.disableReviewBtn = true;
         $scope.$safeApply();                
     };
 
