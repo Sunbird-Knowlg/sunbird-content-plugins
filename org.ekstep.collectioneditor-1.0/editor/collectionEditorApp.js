@@ -69,11 +69,11 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
                 // }
                 setTimeout(function() {
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', activeNode);
-                    ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode)
+                    ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode);
+                    ecEditor.dispatchEvent("org.ekstep.collectioneditor:content:load");
                 }, 200);
                 // close the loading screen
                 window.loading_screen.finish();
-                ecEditor.dispatchEvent("org.ekstep.collectioneditor:content:load");
             } else {
                 ecEditor.jQuery('.loading-message').remove();
                 ecEditor.jQuery('.sk-cube-grid').remove(); 
