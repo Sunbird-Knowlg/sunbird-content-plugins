@@ -32,6 +32,12 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             if(_.isString($scope.course.keywords)){
                 $scope.course.keywords = $scope.course.keywords.split(',');
             }
+            if(_.isString($scope.course.faculty)){
+                $scope.course.faculty = $scope.course.faculty.split(',');
+            }
+            if(_.isString($scope.course.tutor)){
+                $scope.course.tutor = $scope.course.tutor.split(',');
+            }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.course.name);
             $scope.course.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.course));

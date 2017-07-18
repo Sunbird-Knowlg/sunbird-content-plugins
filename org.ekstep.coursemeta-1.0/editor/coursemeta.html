@@ -38,13 +38,17 @@
                 <div class="card">
                     <div class="content">
                         <div class="header">Faculty</div>
-                        <div class="description">{{course.faculty.toString() | lowercase}}</div>
+                        <div class="description">
+                            <span class="field-value" ng-repeat="faculty in course.faculty track by $index">{{faculty | lowercase}}{{$last ? '' : ', '}}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="card">
                     <div class="content">
                         <div class="header">Tutor</div>
-                        <div class="description">{{course.tutor.toString() | lowercase}}</div>
+                        <div class="description">
+                            <span class="field-value" ng-repeat="tutor in course.tutor track by $index">{{tutor | lowercase}}{{$last ? '' : ', '}}</span>
+                        </div>
                     </div>
                 </div>
                 <div class="card">
@@ -113,11 +117,11 @@
                 <div class="three fields">
                     <div class="field">
                         <label for="faculty">Faculty</label>
-                        <input type="text" placeholder="Enter faculty name" name="faculty" ng-model="course.author" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'faculty'})" />
+                        <ng-token-field ng-model="course.faculty" placeholder="Enter comma separated faculty" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'faculty'})"></ng-token-field>
                     </div>
                     <div class="field">
                         <label for="tutor">Tutor</label>
-                        <input type="text" placeholder="Enter tutor name" name="tutor" ng-model="course.tutor" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'tutor'})" />
+                        <ng-token-field ng-model="course.tutor" placeholder="Enter comma separated tutor" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'tutor'})"></ng-token-field>
                     </div>
                     <div class="field">
                         <label for="audience">Audience</label>
@@ -134,7 +138,7 @@
                     </div>
                     <div class="six wide field">
                         <label>Keywords</label>
-                        <input id="keywords" name="keywords" ng-model="course.keywords" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})" >
+                        <ng-token-field ng-model="course.keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
                     </div>
                 </div>
             </div>

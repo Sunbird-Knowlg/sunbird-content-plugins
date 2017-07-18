@@ -82,7 +82,7 @@
                 </div>
                 <div class="field">
                     <label>Keywords</label>
-                    <input id="keywords" name="keywords" ng-blur="courseunit.keywords.split(',');" ng-model="courseunit.keywords" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})" >
+                    <ng-token-field ng-model="courseunit.keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
                 </div>
             </div>
         </div>

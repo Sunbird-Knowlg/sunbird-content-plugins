@@ -13,7 +13,6 @@
             { "type": "css", "src": "editor/textbookmeta.css" },
             { "type": "css", "src": "editor/libs/tokens.css" },
             { "type": "js", "src": "editor/libs/tokens.js" }
-
         ]
     }
 }
