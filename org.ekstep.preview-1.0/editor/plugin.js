@@ -69,7 +69,9 @@ org.ekstep.contenteditor.basePlugin.extend({
         var contentService = ecEditor.getService('content');
         var meta = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId'));
         var modalController = function($scope) {
-            $scope.$on('ngDialog.opened', function() {                
+            $scope.$on('ngDialog.opened', function() {
+                var imageUrl = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/images/editor-frame.png'); 
+                ecEditor.jQuery('.preview-bgimage').css('background', 'url(' + imageUrl + ')');
                 var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
                 previewContentIframe.src = instance.previewURL;
                 var userData = ecEditor.getService('telemetry').context;
