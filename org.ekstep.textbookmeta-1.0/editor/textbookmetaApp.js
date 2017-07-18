@@ -1,4 +1,4 @@
-angular.module('textbookmetaApp', []).controller('textbookmetaController', ['$scope', function($scope) {
+angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaController', ['$scope', function($scope) {
     $scope.mode = org.ekstep.collectioneditor.api.getService('collection').getConfig().mode;
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
