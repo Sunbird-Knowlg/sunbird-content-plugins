@@ -220,4 +220,8 @@ body {
     font-weight: 300;
     font-family: "raleway",sans-serif;
 }
+
+.search-menu-cursor {
+    cursor: pointer;
+}
 /* for not able to fetch content */
