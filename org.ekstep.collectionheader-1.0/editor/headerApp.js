@@ -1,7 +1,7 @@
 angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.angular-timeago"]).controller('headerController', ['$scope', function($scope) {
 
     var plugin = { id: "org.ekstep.collectionheader", ver: "1.0" };
-    $scope.contentDetails.contentImage = ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/default.png");
+    $scope.contentDetails.contentImage =  ecEditor.getConfig('headerLogo') || ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/default.png");
     $scope.internetStatusObj = {
         'status': navigator.onLine,
         'text': 'No Internet Connection!'

@@ -1,7 +1,7 @@
 angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "yaru22.angular-timeago"]).controller('headerController', ['$scope', function($scope) {
 
     var plugin = { id: "org.ekstep.sunbirdcollectionheader", ver: "1.0" };
-    $scope.contentDetails.contentImage = ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/sunbird_logo.png");
+    $scope.contentDetails.contentImage = ecEditor.getConfig('headerLogo') || ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/sunbird_logo.png");
     $scope.internetStatusObj = {
         'status': navigator.onLine,
         'text': 'No Internet Connection!'
