@@ -166,7 +166,7 @@
                             <div class="icon-box popup-item" data-content="Preview" data-variation="tiny inverted" data-position="top center">
                                 <i class="fa fa-eye custom-icon" ng-click="previewContent(); fireTelemetry({id: 'preview'}, 'previewButton');"></i>
                             </div>
-                            <div class="ui pointing dropdown icon-box">
+                            <div class="ui pointing dropdown icon-box" id="previewDropdown" ng-mouseover="showPreviewDropdown()">
                                 <i class="caret down icon custom-icon"></i>
                                 <div class="menu">
                                     <!-- <div class="item" ng-click="previewContent(); fireToolbarTelemetry({id: 'preview'}, 'previewButton')" >

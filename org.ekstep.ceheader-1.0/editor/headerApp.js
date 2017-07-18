@@ -9,12 +9,12 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
     $scope.ekstepLogo = ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/ekstep_logo_white.png");
     console.log('$scope.ekstepLogo', $scope.ekstepLogo);
     $scope.internetStatusObj = {
-        'status':navigator.onLine,
+        'status': navigator.onLine,
         'text': 'Internet Connection not available'
     };
 
     $scope.previewContent = function(fromBeginning) {
-        ecEditor.dispatchEvent('org.ekstep.contenteditor:preview', {fromBeginning: fromBeginning});
+        ecEditor.dispatchEvent('org.ekstep.contenteditor:preview', { fromBeginning: fromBeginning });
     }
 
     $scope.saveContent = function() {
@@ -27,7 +27,7 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
         $scope.lastSaved = Date.now();
         $scope.$safeApply();
     }
-    
+
     $scope.routeToContentMeta = function(save) {
         if (save) {
             org.ekstep.pluginframework.eventManager.dispatchEvent('content:before:save');
@@ -93,11 +93,11 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
     }
 
     window.onbeforeunload = function(e) {
-        if($scope.pendingChanges === true) {
+        if ($scope.pendingChanges === true) {
             return "You have unsaved unsaved changes";
         }
     }
-    window.addEventListener('online',  $scope.internetStatusFn, false);
+    window.addEventListener('online', $scope.internetStatusFn, false);
     window.addEventListener('offline', $scope.internetStatusFn, false);
     ecEditor.addEventListener('object:modified', $scope.setSaveStatus, $scope);
     ecEditor.addEventListener('stage:delete', $scope.setSaveStatus, $scope);
@@ -116,9 +116,13 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
     $scope.previousversion = store.get('previousversion') || 0;
     $scope.whatsNewBadge = !($scope.nextversion === $scope.previousversion);
 
-    $scope.displayWhatsNew = function () {
-        $scope.fireEvent({id: 'org.ekstep.whatsnew:showpopup'});
+    $scope.displayWhatsNew = function() {
+        $scope.fireEvent({ id: 'org.ekstep.whatsnew:showpopup' });
         store.set('previousversion', $scope.nextversion);
         $scope.whatsNewBadge = false;
     };
+
+    $scope.showPreviewDropdown = function() {
+        org.ekstep.contenteditor.api.jQuery('#previewDropdown').dropdown({ on: 'hover' });
+    }
 }]);
