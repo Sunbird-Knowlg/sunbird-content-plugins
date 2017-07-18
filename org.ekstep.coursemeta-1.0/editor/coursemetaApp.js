@@ -70,6 +70,9 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
         if(_.isUndefined(metadata['code'])){
             metadata['code'] = $scope.nodeId;
         }
+        if(_.isUndefined(metadata['mimeType'])){
+            metadata['mimeType'] = "application/vnd.ekstep.content-collection";
+        }
         return metadata;
     }
 
