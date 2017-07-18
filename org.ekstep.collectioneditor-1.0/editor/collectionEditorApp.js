@@ -73,6 +73,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
                 }, 200);
                 // close the loading screen
                 window.loading_screen.finish();
+                ecEditor.dispatchEvent("org.ekstep.collectioneditor:content:load");
             } else {
                 ecEditor.jQuery('.loading-message').remove();
                 ecEditor.jQuery('.sk-cube-grid').remove(); 

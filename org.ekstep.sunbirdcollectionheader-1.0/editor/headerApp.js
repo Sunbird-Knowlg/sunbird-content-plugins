@@ -11,6 +11,7 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
     $scope.lastSaved;
     $scope.alertOnUnload = ecEditor.getConfig('alertOnUnload');
     $scope.pendingChanges = false;
+    $scope.hideReviewBtn = false;
 
     $scope.saveContent = function() {
         $scope.disableSaveBtn = true;
@@ -72,6 +73,13 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
         });
     };
 
+    $scope.getContentMetadata = function(){
+        var rootNode = org.ekstep.services.collectionService.getNodeById(ecEditor.getContext('contentId'));        
+        if(rootNode.data.metadata.status === 'Review')
+            $scope.hideReviewBtn = true;
+        $scope.$safeApply();  
+    }
+    
     window.addEventListener('online', $scope.internetStatusFn, false);
     window.addEventListener('offline', $scope.internetStatusFn, false);
     ecEditor.addEventListener("org.ekstep.collectioneditor:node:added", $scope.onNodeEvent, $scope);
@@ -79,4 +87,5 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
     ecEditor.addEventListener("org.ekstep.collectioneditor:node:removed", $scope.onNodeEvent, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:node:reorder", $scope.onNodeEvent, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:content:notfound", $scope.showNoContent, $scope);
+    ecEditor.addEventListener("org.ekstep.collectioneditor:content:load", $scope.getContentMetadata, $scope);
 }]);

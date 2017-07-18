@@ -30,7 +30,7 @@
                     <div class="tiny ui button" ng-click="closeEditor();telemetry({ subtype: 'close', target: 'closeButton'});">
                         close
                     </div>
-                    <div ng-class="disableReviewBtn ? 'tiny ui blue button disabled' : 'tiny ui blue button'"  data-content="Send for review" data-variation="tiny inverted" data-position="top center" ng-click="sendForReview(); telemetry({ subtype: 'save', target: 'sendforreview'});" >
+                    <div ng-class="disableReviewBtn ? 'tiny ui blue button disabled' : 'tiny ui blue button'"  data-content="Send for review" data-variation="tiny inverted" data-position="top center" ng-click="sendForReview(); telemetry({ subtype: 'save', target: 'sendforreview'});" ng-hide="hideReviewBtn">
                         <i class="send icon "></i>&nbsp;&nbsp;Send for review
                     </div>
                     <div ng-class="disableSaveBtn ? 'tiny ui blue button disabled' : 'tiny ui blue button'" data-content="Save content" data-variation="tiny inverted" data-position="top center" ng-click="saveContent(); telemetry({ subtype: 'save', target: 'saveBtn'});" >
