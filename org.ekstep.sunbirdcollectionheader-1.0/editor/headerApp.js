@@ -17,14 +17,14 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
         $scope.disableReviewBtn = false;  
         ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:save", {
             showNotification: true,
-            callback: function(err, res) {               
-                if(res && res.data && res.data.responseCode == "OK") {
+            callback: function(err, res) {
+                if (res && res.data && res.data.responseCode == "OK") {
                     $scope.lastSaved = Date.now();
-                    $scope.pendingChanges = false; 
+                    $scope.pendingChanges = false;
                 } else {
                     $scope.disableSaveBtn = false;
                 }
-                $scope.$safeApply();               
+                $scope.$safeApply();
             }
         });
     };
@@ -48,13 +48,17 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
         $scope.$safeApply();                
     };
 
+    $scope.showNoContent = function() {
+        $scope.closeEditor();
+    };
+
     $scope.closeEditor = function() {
         if ($scope.alertOnUnload === true && $scope.pendingChanges === true) {
             if (window.confirm("You have unsaved changes! Do you want to leave?")) {
                 window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
             }
         } else {
-            window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');  
+            window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
         }
     }
 
@@ -74,4 +78,5 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
     ecEditor.addEventListener("org.ekstep.collectioneditor:node:modified", $scope.onNodeEvent, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:node:removed", $scope.onNodeEvent, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:node:reorder", $scope.onNodeEvent, $scope);
+    ecEditor.addEventListener("org.ekstep.collectioneditor:content:notfound", $scope.showNoContent, $scope);
 }]);

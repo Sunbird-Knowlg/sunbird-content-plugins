@@ -71,26 +71,13 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', activeNode);
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode)
                 }, 200);
-            } else {                
-                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                    icon: 'material',
-                    title: 'No content!!!',
-                    timeout: false,
-                    message: 'We are unable to fetch content now.',
-                    animateInside: true,
-                    close: false,
-                    position: 'topCenter',
-                    buttons: [
-                        ['<button>Reload</button>', function(instance, toast) {
-                            window.location.reload();
-                        }],
-                        ['<button>Close Editor</button>', function(instance, toast) {                                                        
-                        }]
-                    ]
-                });
-            }
-            // close the loading screen
-            window.loading_screen.finish();
+                // close the loading screen
+                window.loading_screen.finish();
+            } else {
+                ecEditor.jQuery('.loading-message').remove();
+                ecEditor.jQuery('.sk-cube-grid').remove(); 
+                ecEditor.jQuery('.pg-loading-html').prepend('<p class="loading-message">Unable to fetch content! Please try again later</p><button class="ui red button" onclick="ecEditor.dispatchEvent(\'org.ekstep.collectioneditor:content:notfound\');"><i class="window close icon"></i>Close Editor!</button>');               
+            }            
         });
     });
 
