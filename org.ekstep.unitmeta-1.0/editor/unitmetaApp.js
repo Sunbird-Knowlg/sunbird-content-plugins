@@ -1,5 +1,5 @@
 angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', function($scope) {
-    $scope.mode = org.ekstep.collectioneditor.api.getService('collection').getConfig().mode;
+    $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
     

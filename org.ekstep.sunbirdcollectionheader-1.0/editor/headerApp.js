@@ -12,6 +12,7 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
     $scope.alertOnUnload = ecEditor.getConfig('alertOnUnload');
     $scope.pendingChanges = false;
     $scope.hideReviewBtn = false;
+    $scope.publishMode = ecEditor.getConfig('editorConfig').publishMode || false;
 
     $scope.saveContent = function() {
         $scope.disableSaveBtn = true;
@@ -38,6 +39,24 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
                     $scope.disableReviewBtn = false;
                 }
                 $scope.$safeApply();               
+            }
+        });
+    };
+
+    $scope.publishContent = function(){
+        ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:publish", {
+            callback: function(err, res) {
+                if(!err)
+                    window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
+            }
+        });
+    };
+
+    $scope.rejectContent = function(){
+        ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:reject", {
+            callback: function(err, res) {
+                if(!err)
+                    window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
             }
         });
     };

@@ -2,6 +2,8 @@ org.ekstep.collectioneditor.basePlugin.extend({
 	initialize: function() {
 		ecEditor.addEventListener(this.manifest.id + ':save', this.saveContent, this);
         ecEditor.addEventListener(this.manifest.id + ':review', this.reviewContent, this);
+        ecEditor.addEventListener(this.manifest.id + ':publish', this.publishContent, this);
+        ecEditor.addEventListener(this.manifest.id + ':reject', this.rejectContent, this);
 	},
 	saveContent: function(event, data) {
 		var contentBody = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy();
@@ -58,6 +60,40 @@ org.ekstep.collectioneditor.basePlugin.extend({
             }
             data.callback && data.callback(err, res);
         });
+    },
+    publishContent: function(){
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).publishContent({ contentId: ecEditor.getContext('contentId') }, function(err, res) {
+        if (res && res.data && res.data.responseCode == "OK") {
+            ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                title: 'Content published successfully!',                    
+                position: 'topCenter',
+                icon: 'fa fa-check-circle'
+            });
+        }else {
+            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                message: 'Unable to publish content, try again!',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });
+        }
+        data.callback && data.callback(err, res);
+    },
+    rejectContent: function(){
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).rejectContent({ contentId: ecEditor.getContext('contentId') }, function(err, res) {
+        if (res && res.data && res.data.responseCode == "OK") {
+            ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                title: 'Content rejected successfully!',                    
+                position: 'topCenter',
+                icon: 'fa fa-check-circle'
+            });
+        }else {
+            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                message: 'Unable to reject content, try again!',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });
+        }
+        data.callback && data.callback(err, res);
     },
     isValidSave: function() {
         var isValid = true;
