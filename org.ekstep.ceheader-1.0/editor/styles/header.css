@@ -371,34 +371,3 @@ body {
     border: none;
     box-shadow: none;
 }
-
-.unsupported-resolution {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 55px;
-    display: none;
-    z-index: 10000000000;
-    background-color: rgba(192, 192, 192, 0.5);
-}
-
-@media only screen and (max-width: 1023px) {
-    .unsupported-resolution {
-        display: block;
-    }
-}
-
-.unsupported-resolution .ui.icon.negative.message {
-    position: relative;
-    width: 35%;
-    height: 20%;
-    margin: 15% auto;
-    min-width: 350px;
-    padding: 1em 0em 1em 2em;
-}
-
-.message-container .fa.fa-exclamation-triangle {
-    position: relative;
-    font-size: 40px;
-    left: -10px;
-}
