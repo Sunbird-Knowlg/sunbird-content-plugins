@@ -12,8 +12,8 @@
             <div class="ui segments">
                 <div class="ui segment tree-access-tools-segment" style="padding-top: 0px !important">
                     <div class="ui mini menu">
-                        <div class="ui transparent icon input item" style="width: 73.5%">
-                            <input type="text" placeholder="Search nodes..." ng-keypress="searchNode($event)" ng-blur="searchNode($event)">
+                        <div class="ui transparent icon input item search-input-container" style="width: 73.5%">
+                            <input class="tree-search-item" type="text" placeholder="Search nodes..." ng-keypress="searchNode($event)" ng-blur="searchNode($event)">
                             <i class="search link icon" style="margin-right: 10px"></i>
                         </div>
                         <div class="ui icon item search-menu-cursor" ng-click="expandNode(true); telemetry({ subtype: 'expand', target: 'expandNodeBtn'});">

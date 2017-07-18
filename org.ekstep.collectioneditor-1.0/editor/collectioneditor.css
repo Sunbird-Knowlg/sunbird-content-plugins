@@ -63,6 +63,7 @@ body {
     padding: 0.5em 0.5em!important;
 }
 
+
 #table-of-contents .ui.dropdown .menu {
     padding: 0!important;
 }
@@ -76,6 +77,15 @@ body {
 
 #table-of-contents .ui.segments {
     border: none;
+}
+
+.tree-search-item{
+    font-size: 1.2em!important;
+    font-weight: bold!important;
+}
+
+.search-input-container{
+    padding: 0.5em 1.25em!important;
 }
 
 #contents-pane {
