@@ -61,7 +61,7 @@ org.ekstep.collectioneditor.basePlugin.extend({
             data.callback && data.callback(err, res);
         });
     },
-    publishContent: function(){
+    publishContent: function(event, data){
         var contentId = ecEditor.getContext('contentId');
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).publishContent({ contentId:  contentId}, function(err, res) {
             if (res && res.data && res.data.responseCode == "OK") {
@@ -80,7 +80,7 @@ org.ekstep.collectioneditor.basePlugin.extend({
             data.callback && data.callback(err, res);
         });
     },
-    rejectContent: function(){
+    rejectContent: function(event, data){
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).rejectContent({ contentId: ecEditor.getContext('contentId') }, function(err, res) {
             if (res && res.data && res.data.responseCode == "OK") {
                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
