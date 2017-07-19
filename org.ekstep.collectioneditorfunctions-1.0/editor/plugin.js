@@ -34,7 +34,7 @@ org.ekstep.collectioneditor.basePlugin.extend({
                 });
             } else {
                 if (data.showNotification) ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                    message: 'Sending for review failed, please try again later...',
+                    message: 'Unable to save the content, try again!',
                     position: 'topCenter',
                     icon: 'fa fa-warning'
                 });
@@ -53,7 +53,7 @@ org.ekstep.collectioneditor.basePlugin.extend({
                 });
             }else {
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                    message: 'Unable to send for review, try again!',
+                    message: 'Sending for review failed, please try again later...',
                     position: 'topCenter',
                     icon: 'fa fa-warning'
                 });
