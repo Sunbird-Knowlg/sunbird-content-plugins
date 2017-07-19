@@ -337,7 +337,8 @@ body {
     line-height: 11px;
     padding: 9px 10px !important;
     font-family: Helvetica;
-    color: #9b9b9b;
+    color: #9b9b9b!important;
+    font-weight: initial!important;
 }
 
 .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown .menu .item:hover {

@@ -8,6 +8,7 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
     $scope.telemetryService = org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE);
     $scope.ekstepLogo = ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/ekstep_logo_white.png");
     console.log('$scope.ekstepLogo', $scope.ekstepLogo);
+    $scope.showDropDown = false;
     $scope.internetStatusObj = {
         'status': navigator.onLine,
         'text': 'Internet Connection not available'
@@ -122,7 +123,15 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
         $scope.whatsNewBadge = false;
     };
 
-    $scope.showPreviewDropdown = function() {
-        org.ekstep.contenteditor.api.jQuery('#previewDropdown').dropdown({ on: 'hover' });
+
+    $scope.init = function() {
+        setTimeout(function() {
+            // Show the preview dropdown on hovering over dropdown icon beside preview icon
+            org.ekstep.contenteditor.api.jQuery('#previewDropdown').dropdown({ on: 'hover' });
+
+        }, 800);
     }
+
+    $scope.init();
+
 }]);

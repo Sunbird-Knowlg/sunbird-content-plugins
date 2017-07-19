@@ -68,22 +68,15 @@
 }
 </style>
 <div ng-app="org.ekstep.ceheader:headerApp" ng-controller="headerController" class="ui masthead vertical segment content-masterhead">
-    <!-- new header code start -->
     <div class="ui grid fluid container custom-container">
-        <!-- header part 1 -->
         <div class="one wide centered column custom-1-wide">
             <img class="ui tiny centered image" src="{{ekstepLogo}}" />
         </div>
-        <!-- header part 1 -->
-        <!-- header part 2 -->
         <div class="six wide column custom-6-wide">
-            <!-- content title -->
             <div class="row custom-row-1">
                 <label class="content-title" ng-bind="contentDetails.contentTitle | limitTo:30">
                     <span ng-if="contentDetails.contentTitle.length > 30">...</span></label>
             </div>
-            <!-- content title -->
-            <!-- edit lesson details -->
             <div class="row custom-row-2">
                 <a class="btn at-btn at-btn-ok" ng-click="editContentMeta(); fireToolbarTelemetry({id: 'editMeta'}, 'editMetaButton')">
                     <i class="edit icon link"></i>&nbsp;Edit Lesson Details
@@ -93,30 +86,19 @@
                     <label class="" ng-if="lastSaved"><strong>Last saved <time-ago from-time='{{ lastSaved }}'></time-ago></strong></label>
                 </div>
             </div>
-            <!-- edit lesson details -->
         </div>
-        <!-- header part 2 -->
-        <!-- header part 3 -->
         <div class="five wide column custom-5-wide">
-            <!-- header part 3 upper deck -->
             <div class="row custom-row-1">
-                <!-- close button -->
                 <div class="close" ng-init="disableRedirectBtn = false">
                     <a ng-class="disableRedirectBtn ? 'disabled': ''" ng-href="{{cancelLink}}" ng-click="disableRedirectBtn = true; fireToolbarTelemetry({id: 'close'}, 'closeButton')" target="_self">
                         <i class="remove icon custom-cursor"></i>
                     </a>
                 </div>
-                <!-- close button -->
-                <!-- username, userprofile menu and its dropdown -->
                 <div id="userprofile" ng-show="userDetails.id" class="user-context">
-                    <!-- username and user-active red marker -->
                     <div class="browse item at username">
-                        <!-- <i class="circle icon user-active-mark"></i> -->
                         <span ng-bind="userDetails.name" class="custom-cursor name"></span>
                         <i class="caret down icon custom-cursor"></i>
                     </div>
-                    <!-- username and user-active active red marker -->
-                    <!-- userprofile menu -->
                     <div class="ui fluid popup bottom right transition hidden user-details-wrapper">
                         <div class="user-details">
                             <div class="row user avtar">
@@ -135,15 +117,10 @@
                             </div>
                         </div>
                     </div>
-                    <!-- userprofile menu -->
                 </div>
-                <!-- username, userprofile menu and its dropdown -->
             </div>
-            <!-- header part 3 upper deck -->
-            <!-- header part 3 lower deck -->
             <div class="row header-icon-container">
                 <div class="custom-row-2">
-                    <!-- <div> Last saved :  5 min ago</div> -->
                     <div class="icon-group-1">
                         <div class="icon-box popup-item" data-content="See What's New" data-variation="tiny inverted" data-position="bottom right" ng-click="displayWhatsNew()">
                             <i class="icon-whatsnew custom-icon">
@@ -165,12 +142,9 @@
                             <div class="icon-box popup-item" data-content="Preview" data-variation="tiny inverted" data-position="top center" ng-click="previewContent(); fireTelemetry({id: 'preview'}, 'previewButton');">
                                 <i class="fa fa-eye custom-icon"></i>
                             </div>
-                            <div class="ui dropdown pointing icon-box" id="previewDropdown" ng-mouseover="showPreviewDropdown()">
+                            <div class="ui dropdown pointing icon-box" id="previewDropdown">
                                 <i class="caret down icon custom-icon"></i>
-                                <div class="menu">
-                                    <!-- <div class="item" ng-click="previewContent(); fireToolbarTelemetry({id: 'preview'}, 'previewButton')" >
-                                        Preview from current stage
-                                    </div> -->
+                                <div id="testId" class="menu" style="">
                                     <div class="item" ng-click="previewContent('start'); fireTelemetry({id: 'previewFromBeginning'}, 'previewButton')">
                                         Preview from begining
                                     </div>
@@ -184,8 +158,6 @@
                     </div>
                 </div>
             </div>
-            <!-- header part 3 lower deck -->
         </div>
-        <!-- header part 3 -->
     </div>
 </div>
