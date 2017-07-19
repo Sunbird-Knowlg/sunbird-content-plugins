@@ -43,9 +43,12 @@ var conceptModal;
             if (config.data) {
                 nodes = config.data;
             }
-            if (widget.attr("data-picked-ids")) {
-                config.picked = widget.attr("data-picked-ids").split(",");
+            if (config.picked) {
+                config.picked = config.picked;                
+            } else if (widget.attr("data-picked-ids")) {
+                widget.attr("data-picked-ids").split(",");
             }
+            
             if (config.picked) {
                 if (nodes.length) {
                     updatePickedNodes();
@@ -372,3 +375,4 @@ var conceptModal;
     };
 
 }).call(this);
+//# sourceURL=semantic-ui-tree-picker.js
