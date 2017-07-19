@@ -89,6 +89,7 @@ angular.module('ngTokenField', []).directive('ngTokenField', ["$parse", "$timeou
              * @param tokens An array containing the text values for each token to be created. Example: ['joe@email.com', 'alice@bob.com']
              */
             function createTokens(tokens) {
+                if (!tokens) return;
                 for (var i = 0; i < tokens.length; i++) {
                     var text = tokens[i];
                     if (text != '') {
