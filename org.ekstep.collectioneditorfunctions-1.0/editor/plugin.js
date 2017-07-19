@@ -62,6 +62,7 @@ org.ekstep.collectioneditor.basePlugin.extend({
         });
     },
     publishContent: function(){
+        var contentId = ecEditor.getContext('contentId');
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).publishContent({ contentId:  contentId}, function(err, res) {
             if (res && res.data && res.data.responseCode == "OK") {
                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
