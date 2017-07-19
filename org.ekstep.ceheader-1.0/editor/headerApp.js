@@ -129,7 +129,7 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
             // Show the preview dropdown on hovering over dropdown icon beside preview icon
             org.ekstep.contenteditor.api.jQuery('#previewDropdown').dropdown({ on: 'hover' });
 
-        }, 800);
+        }, 900);
     }
 
     $scope.init();
