@@ -23,7 +23,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ctrl.initializeTodoWidget = function() {
             var requestParams = {};
             var widgetRef;
-
+            ecEditor.jQuery("#todo-sidebar-tab .item").tab();            
             if (!ecEditor._.isUndefined(ctrl.context)) {
                 if (!ecEditor._.isUndefined(ctrl.context.contentId) && ctrl.context.contentId != "") {
                     // Content url
