@@ -439,9 +439,10 @@
    							<p>Maximum allowed file size: {{$ctrl.fileSize}}</p>
    						</div>
    					</div>
-   					<div class="required field" ng-if="$ctrl.upload" ng-hide="$ctrl.editMetaFlag">
+   					<div class="required field {{$ctrl.assetFileError}}" ng-if="$ctrl.upload" ng-hide="$ctrl.editMetaFlag">
    						<label for="assetfile" title="Enter asset caption">Select file</label>
    						<input class="droppable cropit-image-input" id="assetfile" type="file" name="assetfile" accept="{{$ctrl.allowedMimeTypes.join(', ')}}" data-validate="assetfile" />
+   						<div ng-if="$ctrl.assetFileError == 'error'" class="ui basic red pointing prompt label transition visible">Please select file</div>
    					</div>
    					<div class="ui info message mini message" ng-if="$ctrl.upload" ng-hide="$ctrl.editMetaFlag">
    						<p>Allowed file types are: {{$ctrl.fileTypes}}</p>
@@ -478,9 +479,10 @@
    						</div>
    					  </div>
    					</div>
-   					<div class="required field">
+   					<div class="required field {{$ctrl.assetNameError}}">
    						<label for="assetName" title="Enter asset caption">Asset Caption</label>
    						<input id="assetName" type="text" name="assetName" ng-model="$ctrl.assetMeta.name" placeholder="Enter asset caption" data-validate="assetName" />
+   						<div ng-if="$ctrl.assetNameError == 'error'" class="ui basic red pointing prompt label transition visible">Please enter asset caption</div>
    					</div>
 
    					<div class="field">
