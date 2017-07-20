@@ -6,7 +6,7 @@ angular.module('org.ekstep.sunbirdheader:headerApp', ['yaru22.angular-timeago'])
     $scope.saveBtnEnabled = false;
     $scope.userDetails = !_.isUndefined(window.context) ? window.context.user : undefined;
     $scope.telemetryService = org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE);
-    $scope.logo = ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/sunbird_logo.png");
+    $scope.logo = ecEditor.getConfig('headerLogo') || ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/sunbird_logo.png");
     $scope.alertOnUnload = ecEditor.getConfig('alertOnUnload');
 
     $scope.internetStatusObj = {
