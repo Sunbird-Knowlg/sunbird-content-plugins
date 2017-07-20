@@ -203,8 +203,7 @@ angular.module('org.ekstep.contenteditorfunctions:cefuntions', []).controller('c
         });
     };
 
-    ecEditor.addEventListener('org.ekstep.editorstate:state', $scope.setEditorState, $scope);
-    ecEditor.addEventListener('org.ekstep.editorstate:state', $scope.setEditorState, $scope);
+    ecEditor.addEventListener('org.ekstep.editorstate:state', $scope.setEditorState, $scope);    
     ecEditor.addEventListener('org.ekstep.contenteditor:save', $scope.saveContent, $scope);
     ecEditor.addEventListener('org.ekstep.contenteditor:preview', function(event, data) {
         $scope.previewContent(data.fromBeginning);

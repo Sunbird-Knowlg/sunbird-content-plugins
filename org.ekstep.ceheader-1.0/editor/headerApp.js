@@ -32,17 +32,10 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
     $scope.routeToContentMeta = function(save) {
         if (save) {
             org.ekstep.pluginframework.eventManager.dispatchEvent('content:before:save');
-            var contentBody = org.ekstep.contenteditor.stageManager.toECML();
-            $scope.patchContent({ stageIcons: JSON.stringify(org.ekstep.contenteditor.stageManager.getStageIcons()) }, contentBody, function(err, res) {
-                if (res) {
-                    $scope.saveNotification();
-                    $scope.changePopupValues('success');
-                    window.location.assign(window.context.editMetaLink);
+            ecEditor.dispatchEvent('org.ekstep.contenteditor:save', {
+                callback: function(err, res) {
+                    if (res) window.location.assign(window.context.editMetaLink);
                 }
-                if (err) {
-                    $scope.saveNotification();
-                    $scope.changePopupValues('error');
-                };
             });
         } else {
             window.location.assign(window.context.editMetaLink);
@@ -106,8 +99,7 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
     ecEditor.addEventListener('stage:reorder', $scope.setSaveStatus, $scope);
     ecEditor.addEventListener('object:removed', $scope.setSaveStatus, $scope);
 
-    ecEditor.addEventListener('org.ekstep.contenteditor:save', $scope.onSave, $scope);
-    ecEditor.addEventListener('org.ekstep.editorstate:state', $scope.setEditorState, $scope);
+    ecEditor.addEventListener('org.ekstep.contenteditor:save', $scope.onSave, $scope);    
     ecEditor.addEventListener('org.ekstep.ceheader:meta:edit', $scope.editContentMeta, $scope);
     org.ekstep.contenteditor.api.jQuery('.browse.item.at').popup({ on: 'click', setFluidWidth: false, position: 'bottom right' });
 
