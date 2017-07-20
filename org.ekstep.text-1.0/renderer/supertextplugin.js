@@ -20,8 +20,8 @@ Plugin.extend({
         switch (data.textType) {
             case 'readalong':
                 this._data = data;
-                data.id = pid;
                 var data = _.clone(this._data);
+                data.id = pid;
                 data.__text = this._plginConfig.text;
                 data.timings = this._plginConfig.timings;
                 data.audio = this._plginConfig.audio;
@@ -36,8 +36,8 @@ Plugin.extend({
                 break;
             case 'wordinfo':
                 this._data = data;
-                data.id = pid;
                 var data = _.clone(this._data);
+                data.id = pid;
                 data['z-index'] = 1000;
                 var wordsArr = this._plginConfig.words.split(',');
 
@@ -115,8 +115,8 @@ Plugin.extend({
                 break;
             default:
                 this._data = data;
-                data.id = pid;
                 var data = _.clone(this._data);
+                data.id = pid;
                 data.__text = this._plginConfig.text;
                 PluginManager.invoke('text', data, instance._parent, instance._stage, instance._theme);
                 break;
