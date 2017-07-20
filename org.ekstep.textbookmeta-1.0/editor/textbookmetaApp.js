@@ -2,6 +2,7 @@ angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaCont
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
+    $scope.showImageIcon = true;
 
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
@@ -103,6 +104,7 @@ angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaCont
 
     $scope.onNodeSelect = function(evant, data){
         var selectedConcepts = [];
+        $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.textbook = {};
@@ -149,6 +151,7 @@ angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaCont
                 $scope.$safeApply();
             }
         });
+        $scope.showImageIcon = true;
         $scope.getPath();
         $scope.$safeApply();
     }

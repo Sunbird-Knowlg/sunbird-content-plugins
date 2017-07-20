@@ -2,7 +2,8 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
-    
+    $scope.showImageIcon = true;
+
     $scope.showAssestBrowser = function(){
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',
@@ -74,6 +75,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
 
     $scope.onNodeSelect = function(evant, data){
         var selectedConcepts = [];
+        $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.courseunit = {};
@@ -113,6 +115,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
                 $scope.$safeApply();
             }
         });
+        $scope.showImageIcon = true;
         $scope.getPath();
         $scope.$safeApply();
     }

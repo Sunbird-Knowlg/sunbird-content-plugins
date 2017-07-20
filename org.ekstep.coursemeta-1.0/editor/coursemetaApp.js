@@ -2,6 +2,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
+    $scope.showImageIcon = true;
 
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
@@ -88,6 +89,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
 
     $scope.onNodeSelect = function(evant, data){
         var selectedConcepts = [];
+        $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.course = {};
@@ -130,6 +132,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
                 $scope.$safeApply();
             }
         });
+        $scope.showImageIcon = true;
         $scope.getPath();
         $scope.$safeApply();
     }

@@ -20,7 +20,7 @@
         <div class="ui items">
             <div class="item">
                 <div class="ui tiny image">
-                    <img ng-src="{{courseunit.appIcon || defaultImage}}" alt="">
+                    <img ng-if="showImageIcon" ng-src="{{courseunit.appIcon || defaultImage}}" alt="">
                 </div>
                 <div class="content">
                     <div class="header">{{courseunit.name}}</div>
@@ -60,7 +60,7 @@
                 <label for="bookImage">Add icon</label>
                 <div class="book-image-container" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
-                    <img ng-src="{{courseunit.appIcon}}" ng-show="courseunit.appIcon != ''" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
+                    <img ng-if="showImageIcon" ng-src="{{courseunit.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
                 </div>
             </div>
             <div class="field form-fields-except-image">
