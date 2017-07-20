@@ -6,7 +6,7 @@
                 <div class="divider"> / </div>
             </a>
         </div>
-        <h3 class="header-bottom-segment inline-block">{{unit.name}}</h3>
+        <h3 class="header-bottom-segment inline-block">{{unit.name | limitTo:50 }}<span ng-if="unit.name.length > 100"> ...</span></h3>
         <div class="header-buttons-container header-bottom-segment inline-block" ng-show="mode == 'Edit' && editable == true">
             <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'})" ng-show="!editMode">
                 Edit
@@ -70,7 +70,7 @@
                 <div class="field required">
                     <label>Unit Title</label>
                     <div class="ui input">
-                        <input placeholder="Enter title for Book" ng-model="unit.name" ng-class=" {error: submitted && unitMetaForm.name.$error.required}" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required>
+                        <input placeholder="Enter title for Book" ng-model="unit.name" ng-class=" {error: submitted && unitMetaForm.name.$error.required}" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" requir5d maxlength="150">
                     </div>
                 </div>
                 <div class="field required">
