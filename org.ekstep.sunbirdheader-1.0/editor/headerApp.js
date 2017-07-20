@@ -62,6 +62,8 @@ angular.module('org.ekstep.sunbirdheader:headerApp', ['yaru22.angular-timeago'])
     window.addEventListener('online', $scope.internetStatusFn, false);
     window.addEventListener('offline', $scope.internetStatusFn, false);
     ecEditor.addEventListener('object:modified', $scope.setSaveStatus, $scope);
+    ecEditor.addEventListener('object:added', $scope.setSaveStatus, $scope);
+    ecEditor.addEventListener('stage:add', $scope.setSaveStatus, $scope);
     ecEditor.addEventListener('stage:delete', $scope.setSaveStatus, $scope);
     ecEditor.addEventListener('stage:duplicate', $scope.setSaveStatus, $scope);
     ecEditor.addEventListener('stage:reorder', $scope.setSaveStatus, $scope);
