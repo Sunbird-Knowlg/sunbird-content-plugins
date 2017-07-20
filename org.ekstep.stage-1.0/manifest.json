@@ -58,7 +58,7 @@
         }],
         "configManifest": [{
             "propertyName": "genieControls",
-            "title": "Show Genie Controls",
+            "title": "Show Player Control",
             "description": "Toggle genie controls",
             "dataType": "boolean",
             "required": true,
