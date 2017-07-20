@@ -2,6 +2,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
+    $scope.showImageIcon = true;
     
     $scope.showAssestBrowser = function(){
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
@@ -74,6 +75,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
 
     $scope.onNodeSelect = function(evant, data){
         var selectedConcepts = [];
+        $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.unit = {};
@@ -113,6 +115,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                 $scope.$safeApply();
             }
         });
+        $scope.showImageIcon = true;
         $scope.getPath();
         $scope.$safeApply();
     }
