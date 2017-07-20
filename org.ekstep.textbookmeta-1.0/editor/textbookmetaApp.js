@@ -50,6 +50,9 @@ angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaCont
             if(_.isString($scope.textbook.keywords)){
                 $scope.textbook.keywords = $scope.textbook.keywords.split(',');
             }
+            if(_.isString($scope.textbook.gradeLevel)){
+                $scope.textbook.gradeLevel = [$scope.textbook.gradeLevel];
+            }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
             $scope.textbook.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
