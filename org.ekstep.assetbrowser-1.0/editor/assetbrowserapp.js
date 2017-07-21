@@ -44,6 +44,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.buttonToShow = 'select';
     ctrl.uploadView = false;
     ctrl.languagecode = 'en';
+    ctrl.assetFileError = "";
     ctrl.createdBy = ecEditor._.isUndefined(ctrl.context) ? '' : ctrl.context.user.id;
     ctrl.asset = {
         'requiredField': '',
@@ -564,7 +565,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             ctrl.uploadBtnDisabled = true;
             if (ctrl.record == true) {
                 // @Todo file size validation for recorded file
-                ctrl.uploadAsset(event, fields);
+                ctrl.uploadAsset(event, ctrl.assetMeta);
             } else {
                 // Validate file if not editing meta data
                 var validateFile = instance.fileValidation('assetfile', ctrl.allowedFileSize, ctrl.allowedMimeTypes);
