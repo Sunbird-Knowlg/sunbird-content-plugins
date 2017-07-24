@@ -8,6 +8,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.$safeApply();
         }
     });
+    $scope.showImageIcon = true;
     
     $scope.showAssestBrowser = function(){
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
@@ -79,6 +80,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     }
 
     $scope.onNodeSelect = function(evant, data){
+        $scope.showImageIcon = false;
         var contentArr = ["Story", "Collection", "Game", "Worksheet"];
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
         if(_.indexOf(contentArr, data.data.objectType) != -1){
@@ -95,7 +97,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 $('.ui.dropdown').dropdown('refresh');
                 $scope.metadataCloneObj = _.clone($scope.content);
             }
-            if(!_.isEmpty(activeNode.data.metadata) && (_.values(activeNode.data.metadata).length > 1)){
+            if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
                 $scope.editMode = false;
                 $scope.content = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
                 $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
@@ -103,9 +105,10 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             }else{
                 $scope.newNode = true;
             }
-            $scope.getPath();
-            $scope.$safeApply();
+            $scope.getPath();            
         }
+        $scope.showImageIcon = true;
+        $scope.$safeApply();
     }
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.onNodeSelect);
 
