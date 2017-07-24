@@ -92,7 +92,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     }
                 }
             });
-            return childArray;
+            return _.uniq(childArray);
         }
         /**Set Concept data**/
         this.conceptData = domains;
