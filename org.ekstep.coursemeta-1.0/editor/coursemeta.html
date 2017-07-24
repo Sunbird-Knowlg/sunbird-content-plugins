@@ -117,11 +117,11 @@
                 <div class="three fields">
                     <div class="field">
                         <label for="faculty">Faculty</label>
-                        <ng-token-field ng-model="course.faculty" placeholder="Enter comma separated faculty" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'faculty'})"></ng-token-field>
+                        <ng-token-field ng-model="course.faculty" id="coursemeta-faculty" placeholder="Enter comma separated faculty" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'faculty'})"></ng-token-field>
                     </div>
                     <div class="field">
                         <label for="tutor">Tutor</label>
-                        <ng-token-field ng-model="course.tutor" placeholder="Enter comma separated tutor" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'tutor'})"></ng-token-field>
+                        <ng-token-field ng-model="course.tutor" id="coursemeta-tutor" placeholder="Enter comma separated tutor" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'tutor'})"></ng-token-field>
                     </div>
                     <div class="field">
                         <label for="audience">Audience</label>
