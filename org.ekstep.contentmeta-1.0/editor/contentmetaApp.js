@@ -31,8 +31,8 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             if(_.isString($scope.content.keywords)){
                 $scope.content.keywords = $scope.content.keywords.split(',');
             }
-            if(_.isString($scope.textbook.language)){
-                $scope.textbook.language = [$scope.textbook.language];
+            if(_.isString($scope.content.language)){
+                $scope.content.language = [$scope.content.language];
             }
             $scope.content.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
