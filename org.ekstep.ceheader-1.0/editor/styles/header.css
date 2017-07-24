@@ -45,7 +45,7 @@ body {
 }
 
 .custom-icon {
-    line-height: initial;
+    line-height: normal;
     height: 14px;
     width: 15px;
 }
@@ -242,7 +242,6 @@ body {
 
 .custom-5-wide .close {
     position: relative;
-    display: inline-block;
     float: right;
     z-index: 10001;
 }
@@ -262,7 +261,6 @@ body {
 
 .custom-5-wide .custom-row-2 {
     position: relative;
-    display: inline-block;
     height: 30px;
     float: right;
     font-size: 12px !important;
@@ -324,13 +322,13 @@ body {
 }
 
 .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown .menu {
-    left: initial !important;
+    left: inherit !important;
     right: -14px !important;
     top: 50% !important;
 }
 
 .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown .menu:after {
-    left: initial !important;
+    left: inherit !important;
     right: 14%!important;
 }
 
@@ -340,7 +338,7 @@ body {
     padding: 9px 10px !important;
     font-family: Helvetica;
     color: #9b9b9b!important;
-    font-weight: initial!important;
+    font-weight: normal!important;
 }
 
 .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown .menu .item:hover {
@@ -362,7 +360,6 @@ body {
 }
 
 .label-icon-box {
-    display: inline-block;
     width: auto!important;
     padding: 0 0.5em!important;
     line-height: 2;
