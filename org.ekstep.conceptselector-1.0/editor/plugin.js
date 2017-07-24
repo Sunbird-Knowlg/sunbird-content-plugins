@@ -92,7 +92,16 @@ org.ekstep.contenteditor.basePlugin.extend({
                     }
                 }
             });
-            return childArray;
+
+            /**Remove Duplicate Concepts**/
+            var flags = [], output = [], l = childArray.length, i;
+            for( i=0; i<l; i++) {
+                if( flags[childArray[i].id]) continue;
+                flags[childArray[i].id] = true;
+                output.push(childArray[i]);
+            }
+
+            return output;
         }
         /**Set Concept data**/
         this.conceptData = domains;
