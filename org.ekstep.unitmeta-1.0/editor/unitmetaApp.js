@@ -93,11 +93,13 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             $scope.editMode = false;
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.unit.concepts = activeNode.data.metadata.concepts;
-                $scope.unit.conceptData = '(' + $scope.unit.concepts.length + ') concepts selected';
                 if($scope.unit.concepts.length > 0){
+                    $scope.unit.conceptData = '(' + $scope.unit.concepts.length + ') concepts selected';
                     _.forEach($scope.unit.concepts, function(concept){
                         selectedConcepts.push(concept.identifier);
                     });
+                }else{
+                    $scope.unit.conceptData = '';
                 }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);

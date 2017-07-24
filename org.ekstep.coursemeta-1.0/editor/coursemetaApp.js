@@ -113,11 +113,13 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             $('#audience').dropdown('set selected', $scope.course.audience);
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.course.concepts = activeNode.data.metadata.concepts;
-                $scope.course.conceptData = '(' + $scope.course.concepts + ') concepts selected';
                 if($scope.course.concepts.length > 0){
+                    $scope.course.conceptData = '(' + $scope.course.concepts.length + ') concepts selected';
                     _.forEach($scope.course.concepts, function(concept){
                         selectedConcepts.push(concept.identifier);
                     });
+                }else{
+                    $scope.course.conceptData = '';
                 }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
