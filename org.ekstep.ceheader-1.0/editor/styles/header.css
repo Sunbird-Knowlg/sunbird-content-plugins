@@ -374,7 +374,7 @@ body {
 .label-icon-box-text {
     position: relative;
     left: -5px;
-    font-family: Helvetica;
+    font-family: HelveticaNeueLTStd-Lt,'Helvetica Neue',Arial,Helvetica,sans-serif;
     cursor: default;
 }
 
