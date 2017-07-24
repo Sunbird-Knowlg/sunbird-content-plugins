@@ -9,6 +9,7 @@ angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaCont
             $scope.gradeList = resp.data.result.ordinals.gradeLevel;
             $scope.languageList = resp.data.result.ordinals.language;
             $scope.audienceList = resp.data.result.ordinals.audience;
+            $scope.subjectList = resp.data.result.ordinals.language;
             //TODO: Replace below list with API resplonse
             $scope.boardList = {};
             $scope.boardList["CBSE"]  = "CBSE";
@@ -16,16 +17,6 @@ angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaCont
             $scope.boardList["ICSE"] = "ICSE"
             $scope.boardList["MSCERT"] = "MSCERT";
             $scope.boardList["Other"] = "Othres";
-          
-            $scope.subjectList = {};
-            $scope.subjectList["Maths"]  = "Maths";
-            $scope.subjectList["English"] = "English";
-            $scope.subjectList["Hindi"] = "Hindi"
-            $scope.subjectList["Bengali"] = "Bengali";
-            $scope.subjectList["Telugu"] = "Telugu";
-            $scope.subjectList["Tamil"] = "Tamil";
-            $scope.subjectList["Kannada"] = "Kanada";
-            $scope.subjectList["Marathi"] = "Marathi";
             $scope.$safeApply();
         }
     });
@@ -53,6 +44,9 @@ angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaCont
             }
             if(_.isString($scope.textbook.gradeLevel)){
                 $scope.textbook.gradeLevel = [$scope.textbook.gradeLevel];
+            }
+            if(_.isString($scope.textbook.language)){
+                $scope.textbook.language = [$scope.textbook.language];
             }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
             $scope.textbook.contentType = $scope.nodeType;
@@ -129,11 +123,13 @@ angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaCont
             $('#language').dropdown('set selected', $scope.textbook.language);
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.textbook.concepts = activeNode.data.metadata.concepts;
-                $scope.textbook.conceptData = '(' + $scope.textbook.concepts + ') concepts selected';
                 if($scope.textbook.concepts.length > 0){
+                    $scope.textbook.conceptData = '(' + $scope.textbook.concepts.length + ') concepts selected';
                     _.forEach($scope.textbook.concepts, function(concept){
                         selectedConcepts.push(concept.identifier);
                     });
+                }else{
+                    $scope.textbook.conceptData = '';
                 }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);

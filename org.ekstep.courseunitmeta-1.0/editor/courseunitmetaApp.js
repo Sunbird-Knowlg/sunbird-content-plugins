@@ -93,11 +93,13 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
             $scope.editMode = false;
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.courseunit.concepts = activeNode.data.metadata.concepts;
-                $scope.courseunit.conceptData = '(' + $scope.courseunit.concepts.length + ') concepts selected';
                 if($scope.courseunit.concepts.length > 0){
+                    $scope.courseunit.conceptData = '(' + $scope.courseunit.concepts.length + ') concepts selected';
                     _.forEach($scope.courseunit.concepts, function(concept){
                         selectedConcepts.push(concept.identifier);
                     });
+                }else{
+                    $scope.courseunit.conceptData = '';
                 }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
