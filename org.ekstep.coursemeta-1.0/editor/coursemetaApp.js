@@ -39,8 +39,8 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             if(_.isString($scope.course.tutor)){
                 $scope.course.tutor = $scope.course.tutor.split(',');
             }
-            if(_.isString($scope.textbook.language)){
-                $scope.textbook.language = [$scope.textbook.language];
+            if(_.isString($scope.course.language)){
+                $scope.course.language = [$scope.course.language];
             }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.course.name);
             $scope.course.contentType = $scope.nodeType;
