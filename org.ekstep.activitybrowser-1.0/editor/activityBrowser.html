@@ -154,7 +154,7 @@
                                 <img ng-src="{{activity.appIcon || $ctrl.defaultActivityImage}}">
                             </div>
                             <div class="content activity-title-content">
-                                <b class="sub-header" title="{{activity.name}}" style="display: inline;">{{activity.name | limitTo:12}}<span ng-if="activity.name.length > 12">...</span></b>
+                                <b class="sub-header" title="{{activity.name}}" style="display: inline;">{{activity.name | limitTo:22}}<span ng-if="activity.name.length > 22">...</span></b>
                                 <span class="right floated">
                                 <a class="sub-header" ng-click="$ctrl.addPlugin(activity);$ctrl.generateTelemetry({type: 'click', subtype: 'add', target: 'addActivityCard'})">ADD<i class="plus icon"></i></a>    
                             </span>
