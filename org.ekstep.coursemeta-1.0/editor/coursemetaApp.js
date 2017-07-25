@@ -57,7 +57,12 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             });
             $scope.submitted = true; 
         }
-    }
+    };
+
+    $scope.initDropdown = function() {
+        $('#language').dropdown('set selected', $scope.course.language);
+        $('#audience').dropdown('set selected', $scope.course.audience);
+    };
 
     $scope.getUpdatedMetadata = function(originalMetadata, currentMetadata){
         var metadata = { };

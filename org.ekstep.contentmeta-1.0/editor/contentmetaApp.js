@@ -49,7 +49,11 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             });
             $scope.submitted = true; 
         }
-    }
+    };
+
+    $scope.initDropdown = function() {
+        $('#language').dropdown('set selected', $scope.content.language);
+    };
 
     $scope.getUpdatedMetadata = function(originalMetadata, currentMetadata){
         var metadata = { };
