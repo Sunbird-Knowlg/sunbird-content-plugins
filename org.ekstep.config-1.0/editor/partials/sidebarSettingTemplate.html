@@ -44,7 +44,7 @@ a.item.at-menu-item.popup-item.active {
     <div class="ui active tab segment sidebarContent" data-tab="settings">
         <div ng-repeat="config in pluginConfig">
             <div ng-switch on="config.dataType">
-                <div class="ui divider" ng-show="$index != 0"></div>
+                <div class="ui divider" ng-show="$index != 0" style="border-top: 1px solid transparent; border-bottom: 1px solid transparent;"></div>
                 <div class="ui form" ng-switch-when="colorpicker">
                     <div class="field">
                         <label ng-show="config.title">{{config.title}}</label>
@@ -148,7 +148,7 @@ a.item.at-menu-item.popup-item.active {
         <button class="ui tiny circular twitter icon button right floated show-action-form-btn" id="showActionFormBtn" ng-click="showActionForm = !showActionForm" ng-init="showActionForm = false;">
             <i class="plus icon"></i>
         </button>
-        <div class="ui divider"></div>
+        <div class="ui divider" style="border-top: 1px solid transparent; border-bottom: 1px solid transparent;"></div>
         <div class="ui segment" ng-show="showActionForm">
             <div id="addActionForm">
                 <form class="ui form">
