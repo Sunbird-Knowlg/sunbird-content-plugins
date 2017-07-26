@@ -39,6 +39,9 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             if(_.isString($scope.course.tutor)){
                 $scope.course.tutor = $scope.course.tutor.split(',');
             }
+            if(_.isString($scope.course.language)){
+                $scope.course.language = [$scope.course.language];
+            }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.course.name);
             $scope.course.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.course));
@@ -54,7 +57,12 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             });
             $scope.submitted = true; 
         }
-    }
+    };
+
+    $scope.initDropdown = function() {
+        $('#language').dropdown('set selected', $scope.course.language);
+        $('#audience').dropdown('set selected', $scope.course.audience);
+    };
 
     $scope.getUpdatedMetadata = function(originalMetadata, currentMetadata){
         var metadata = { };
@@ -110,11 +118,13 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             $('#audience').dropdown('set selected', $scope.course.audience);
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.course.concepts = activeNode.data.metadata.concepts;
-                $scope.course.conceptData = '(' + $scope.course.concepts + ') concepts selected';
                 if($scope.course.concepts.length > 0){
+                    $scope.course.conceptData = '(' + $scope.course.concepts.length + ') concepts selected';
                     _.forEach($scope.course.concepts, function(concept){
                         selectedConcepts.push(concept.identifier);
                     });
+                }else{
+                    $scope.course.conceptData = '';
                 }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);

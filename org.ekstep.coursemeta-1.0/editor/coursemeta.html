@@ -5,7 +5,7 @@
         </div>
         <h3 class="header-bottom-segment inline-block">{{course.name | limitTo:70}}<span ng-if="course.name.length > 70"> ...</span></h3>
         <div class="header-buttons-container header-bottom-segment inline-block" ng-show="mode == 'Edit' && editable == true">
-            <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'})" ng-show="!editMode">
+            <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'}); initDropdown();" ng-show="!editMode">
                 Edit
             </div>
             <div class="ui primary button right-float button-overrides" id="update-button" ng-click="updateNode(); generateTelemetry({type: 'click', subtype: 'update', target: 'updatemeta'})" ng-show="editMode">
@@ -114,7 +114,7 @@
                         </select>
                     </div>
                 </div>
-                <div class="three fields">
+                <div class="two fields">
                     <div class="field">
                         <label for="faculty">Faculty</label>
                         <ng-token-field ng-model="course.faculty" id="coursemeta-faculty" placeholder="Enter comma separated faculty" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'faculty'})"></ng-token-field>
@@ -122,13 +122,6 @@
                     <div class="field">
                         <label for="tutor">Tutor</label>
                         <ng-token-field ng-model="course.tutor" id="coursemeta-tutor" placeholder="Enter comma separated tutor" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'tutor'})"></ng-token-field>
-                    </div>
-                    <div class="field">
-                        <label for="audience">Audience</label>
-                        <select id="audience" class="ui selection dropdown" ng-model="course.audience" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'audience'})">
-                            <option value="">Audience</option>
-                            <option value="{{audience}}" ng-repeat="audience in audienceList">{{audience}}</option>
-                        </select>
                     </div>
                 </div>
                 <div class="two fields">
