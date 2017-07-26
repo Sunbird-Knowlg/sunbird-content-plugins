@@ -43,7 +43,7 @@
                 </div>
             </div>
             <div class="ui divider" style="margin: 0;" ng-if="!$ctrl.showPluginDetails"></div>
-            <div ng-if="$ctrl.showPluginDetails" class="ui divided grid" style="width: 103%">
+            <div ng-if="$ctrl.showPluginDetails" class="ui divided grid">
                 <div class="ui row activity-browser-content">
                     <div class="ui six wide column">
                         <h3 class="ui header">                        
@@ -133,7 +133,7 @@
                     </div>
                 </div>
             </div>
-            <div ng-if="!$ctrl.showPluginDetails" class="content" style="width: 100%; padding-right: 0;">
+            <div ng-if="!$ctrl.showPluginDetails" class="content" style="width: 100%;">
                 <div class="ui row activity-browser-content">
                     <div class="ui segment activity-browser-content-loader" ng-if="$ctrl.loading">
                         <div class="ui active inverted dimmer">
@@ -146,8 +146,8 @@
                                 <div class="ui dimmer">
                                     <div class="content">
                                         <div class="center">
-                                            <div class="ui tiny inverted header" title="{{activity.name}}">{{activity.name | limitTo:20}}<span ng-if="activity.name.length > 20">...</span></div>
-                                            <p title="{{activity.description}}">{{activity.description | limitTo:30}}<span ng-if="activity.description.length > 30">...</span></p>
+                                            <div class="ui tiny inverted header" title="{{activity.name}}">{{activity.name| limitTo:80}}<span ng-if="activity.name.length > 80">...</span></div>
+                                            <p title="{{activity.description}}">{{activity.description | limitTo:140}}<span ng-if="activity.description.length > 140">...</span></p>
                                         </div>
                                     </div>
                                 </div>
