@@ -1,18 +1,88 @@
 <div ng-controller="org.ekstep.text:config-controller">
-    <style type="text/css">
-    .title {
-        font-size:0.92307692em;
-    }
-    .ui.grey.button.transliterate{
-    	font-size:0.92307692em;
-    	padding: 1em;
-    	margin-top: 0.5em;
-    }
-    </style>
-    <label class="title"><strong>Language Feature</strong></label>
+    <div class="ui accordion sidebar-accordion">
+        <div class="active title">Text Formatting</div>
+        <div class="active content text-formatting-section">
+            <div class="ui form text-formatting-options">
+                <div class="inline fields">
+                    <label>Font</label>
+                    <div class="ui selection dropdown font-face-dropdown">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">select font</div>
+                        <div class="menu">
+                            <div class="item" data-value="1">1</div>
+                            <div class="item" data-value="2">1</div>
+                            <div class="item" data-value="3">1</div>
+                            <div class="item" data-value="4">1</div>
+                        </div>
+                    </div>
+<!--                     <select class="ui selection dropdown">
+                        <option value="helvetica" selected>Helvetica</option>
+                        <option value="timesnewroman">Times New Roman</option>
+                    </select>
+ -->                </div>
+                <div class="inline fields">
+                    <label>Size</label>
+                    <div class="ui selection dropdown font-size-dropdown">
+                        <i class="dropdown icon"></i>
+                        <div class="default text">select font size</div>
+                        <div class="menu">
+                            <div class="item" data-value="1">12</div>
+                            <div class="item" data-value="2">13</div>
+                            <div class="item" data-value="3">14</div>
+                            <div class="item" data-value="4">15</div>
+                        </div>
+                    </div>
 
-	<br/>
-	<button class="small ui grey button transliterate" ng-click="openTransliterator()">
-	    <strong>Transliterate</strong>
-	</button>
+<!--                     <select class="ui selection dropdown">
+                        <option value="12">12</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                    </select>
+ -->                    <div class="ui icon buttons">
+                        <button class="ui button"><i class="bold icon"></i></button>
+                        <button class="ui button"><i class="italic icon"></i></button>
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <label>Alignment</label>
+                    <div class="ui icon buttons">
+                        <button class="ui button"><i class="align left icon"></i></button>
+                        <button class="ui button"><i class="align center icon"></i></button>
+                        <button class="ui button"><i class="align right icon"></i></button>
+                    </div>
+                </div>
+                <div class="inline fields">
+                    <label>Color</label>
+                    <ui-colorpicker></ui-colorpicker>
+                </div>
+                <div class="inline fields">
+                    <label>Opacity</label>
+                    <div ui input>
+                        <input type="range" min="0" max="100" value="0" class="config-slider">
+                    </div>
+                    <label class="opacity-percent">45%</label>
+                </div>
+            </div>
+        </div>
+        <div class="title">Read-along</div>
+        <div class="content">
+            <button class="small ui grey button">
+                <strong>Read-along</strong>
+            </button>
+        </div>
+        <div class="title">Word Info</div>
+        <div class="content">
+            <button class="small ui grey button">
+                <strong>Word Info</strong>
+            </button>
+        </div>
+        <div class="title">Transliterate</div>
+        <div class="content">
+            <button class="small ui grey button">
+                <strong>Transliterate</strong>
+            </button>
+        </div>
+    </div>
+    <!-- <label class="title"><strong>Language Feature</strong></label> -->
+    <!-- <br/> -->
 </div>
