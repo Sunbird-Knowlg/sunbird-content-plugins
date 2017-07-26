@@ -8,6 +8,10 @@ body {
     padding: 0 !important;
 }
 
+.custom-1-wide{
+    background: #fff!important;
+}
+
 .no-margin,
 .custom-6-wide,
 .custom-5-wide {
@@ -90,6 +94,9 @@ body {
 
 .custom-1-wide .ui.tiny.image {
     display: block;
+    height: 100%!important;
+    width: 100%!important;
+    padding: 2px;
 }
 
 .custom-6-wide .custom-row-1 {
