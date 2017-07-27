@@ -1,8 +1,14 @@
-angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaController', ['$scope', function($scope) {
+angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controller('textbookmetaController', ['$scope', function($scope) {    
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
     $scope.showImageIcon = true;
+    $scope.boardList = {};
+    $scope.gradeList = [];
+    $scope.languageList = [];
+    $scope.audienceList = [];
+    $scope.subjectList = [];
+
 
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
@@ -10,14 +16,13 @@ angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaCont
             $scope.languageList = resp.data.result.ordinals.language;
             $scope.audienceList = resp.data.result.ordinals.audience;
             $scope.subjectList = resp.data.result.ordinals.language;
-            //TODO: Replace below list with API resplonse
-            $scope.boardList = {};
+            //TODO: Replace below list with API resplonse            
             $scope.boardList["CBSE"]  = "CBSE";
             $scope.boardList["NCERT"] = "NCERT";
             $scope.boardList["ICSE"] = "ICSE"
             $scope.boardList["MSCERT"] = "MSCERT";
-            $scope.boardList["Other"] = "Othres";
-            $scope.$safeApply();
+            $scope.boardList["Other"] = "Others";
+            $scope.$safeApply();                   
         }
     });
 
@@ -30,6 +35,15 @@ angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaCont
                 $scope.$safeApply();
             }
         });
+    }
+
+    $scope.initDropdown = function() {
+        $('#board').dropdown('set selected', $scope.textbook.board);
+        $('#medium').dropdown('set selected', $scope.textbook.medium);
+        $('#subject').dropdown('set selected', $scope.textbook.subject);
+        $('#gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
+        $('#audience').dropdown('set selected', $scope.textbook.audience);
+        $('#language').dropdown('set selected', $scope.textbook.language);    
     }
     
     $scope.updateNode = function(){

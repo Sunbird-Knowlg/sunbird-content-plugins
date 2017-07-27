@@ -39,8 +39,8 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             if(_.isString($scope.course.tutor)){
                 $scope.course.tutor = $scope.course.tutor.split(',');
             }
-            if(_.isString($scope.textbook.language)){
-                $scope.textbook.language = [$scope.textbook.language];
+            if(_.isString($scope.course.language)){
+                $scope.course.language = [$scope.course.language];
             }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.course.name);
             $scope.course.contentType = $scope.nodeType;
@@ -57,7 +57,12 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             });
             $scope.submitted = true; 
         }
-    }
+    };
+
+    $scope.initDropdown = function() {
+        $('#language').dropdown('set selected', $scope.course.language);
+        $('#audience').dropdown('set selected', $scope.course.audience);
+    };
 
     $scope.getUpdatedMetadata = function(originalMetadata, currentMetadata){
         var metadata = { };
