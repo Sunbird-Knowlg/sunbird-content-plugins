@@ -6,7 +6,7 @@ angular.module('org.ekstep.sunbirdheader:headerApp', ['yaru22.angular-timeago'])
     $scope.saveBtnEnabled = false;
     $scope.userDetails = !_.isUndefined(window.context) ? window.context.user : undefined;
     $scope.telemetryService = org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE);
-    $scope.logo = ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/sunbird_logo.png");
+    $scope.logo = ecEditor.getConfig('headerLogo') || ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/sunbird_logo.png");
     $scope.alertOnUnload = ecEditor.getConfig('alertOnUnload');
 
     $scope.internetStatusObj = {
@@ -62,6 +62,8 @@ angular.module('org.ekstep.sunbirdheader:headerApp', ['yaru22.angular-timeago'])
     window.addEventListener('online', $scope.internetStatusFn, false);
     window.addEventListener('offline', $scope.internetStatusFn, false);
     ecEditor.addEventListener('object:modified', $scope.setSaveStatus, $scope);
+    ecEditor.addEventListener('object:added', $scope.setSaveStatus, $scope);
+    ecEditor.addEventListener('stage:add', $scope.setSaveStatus, $scope);
     ecEditor.addEventListener('stage:delete', $scope.setSaveStatus, $scope);
     ecEditor.addEventListener('stage:duplicate', $scope.setSaveStatus, $scope);
     ecEditor.addEventListener('stage:reorder', $scope.setSaveStatus, $scope);

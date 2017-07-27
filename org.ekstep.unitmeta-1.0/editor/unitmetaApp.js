@@ -2,6 +2,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
+    $scope.showImageIcon = true;
     
     $scope.showAssestBrowser = function(){
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
@@ -74,6 +75,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
 
     $scope.onNodeSelect = function(evant, data){
         var selectedConcepts = [];
+        $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.unit = {};
@@ -87,15 +89,17 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             $scope.editMode = true;
             $scope.metadataCloneObj = _.clone($scope.unit);
         }
-        if(!_.isEmpty(activeNode.data.metadata) && (_.values(activeNode.data.metadata).length > 1)){
+        if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
             $scope.editMode = false;
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.unit.concepts = activeNode.data.metadata.concepts;
-                $scope.unit.conceptData = '(' + $scope.unit.concepts.length + ') concepts selected';
                 if($scope.unit.concepts.length > 0){
+                    $scope.unit.conceptData = '(' + $scope.unit.concepts.length + ') concepts selected';
                     _.forEach($scope.unit.concepts, function(concept){
                         selectedConcepts.push(concept.identifier);
                     });
+                }else{
+                    $scope.unit.conceptData = '';
                 }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
@@ -113,6 +117,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                 $scope.$safeApply();
             }
         });
+        $scope.showImageIcon = true;
         $scope.getPath();
         $scope.$safeApply();
     }

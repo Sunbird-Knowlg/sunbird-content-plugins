@@ -18,7 +18,7 @@ angular.module('editorApp')
         var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.config");
         var stageConfigManifest = [{
             "propertyName": "genieControls",
-            "title": "Show Genie Controls",
+            "title": "Show Player Control",
             "description": "Toggle genie controls",
             "dataType": "boolean",
             "required": true,

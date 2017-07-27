@@ -5,7 +5,7 @@
         </div>
         <h3 class="header-bottom-segment inline-block">{{textbook.name | limitTo:70}}<span ng-if="textbook.name.length > 70"> ...</span></h3>
         <div class="header-buttons-container header-bottom-segment inline-block" ng-show="mode == 'Edit' && editable == true">
-            <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'})" ng-show="!editMode">
+            <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'}); initDropdown();" ng-show="!editMode">
                 Edit
             </div>
             <div class="ui primary button right-float button-overrides" id="update-button" ng-click="updateNode(); generateTelemetry({type: 'click', subtype: 'update', target: 'updatemeta'})" ng-show="editMode">
@@ -17,7 +17,7 @@
         <div class="ui items">
             <div class="item">
                 <div class="ui tiny image">
-                    <img ng-src="{{textbook.appIcon || defaultImage}}" alt="">
+                    <img ng-if="showImageIcon" ng-src="{{textbook.appIcon || defaultImage}}" alt="">
                 </div>
                 <div class="content">
                     <div class="header">{{textbook.name}}</div>
@@ -111,7 +111,7 @@
                 <label for="bookImage">Add icon</label>
                 <div class="book-image-container" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
-                    <img ng-src="{{textbook.appIcon}}" ng-show="textbook.appIcon != ''" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
+                    <img ng-if="showImageIcon" ng-src="{{textbook.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
                 </div>
             </div>
             <div class="field form-fields-except-image">

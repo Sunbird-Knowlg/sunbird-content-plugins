@@ -2,7 +2,8 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
-    
+    $scope.showImageIcon = true;
+
     $scope.showAssestBrowser = function(){
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',
@@ -74,6 +75,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
 
     $scope.onNodeSelect = function(evant, data){
         var selectedConcepts = [];
+        $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.courseunit = {};
@@ -87,15 +89,17 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
             $scope.editMode = true;
             $scope.metadataCloneObj = _.clone($scope.courseunit);
         }
-        if(!_.isEmpty(activeNode.data.metadata) && (_.values(activeNode.data.metadata).length > 1)){
+        if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
             $scope.editMode = false;
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.courseunit.concepts = activeNode.data.metadata.concepts;
-                $scope.courseunit.conceptData = '(' + $scope.courseunit.concepts.length + ') concepts selected';
                 if($scope.courseunit.concepts.length > 0){
+                    $scope.courseunit.conceptData = '(' + $scope.courseunit.concepts.length + ') concepts selected';
                     _.forEach($scope.courseunit.concepts, function(concept){
                         selectedConcepts.push(concept.identifier);
                     });
+                }else{
+                    $scope.courseunit.conceptData = '';
                 }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
@@ -113,6 +117,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
                 $scope.$safeApply();
             }
         });
+        $scope.showImageIcon = true;
         $scope.getPath();
         $scope.$safeApply();
     }

@@ -44,6 +44,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.buttonToShow = 'select';
     ctrl.uploadView = false;
     ctrl.languagecode = 'en';
+    ctrl.assetFileError = "";
     ctrl.createdBy = ecEditor._.isUndefined(ctrl.context) ? '' : ctrl.context.user.id;
     ctrl.asset = {
         'requiredField': '',
@@ -558,87 +559,31 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     }
 
     ctrl.doUpload = function(mediaType) {
-        var fromThisPlugin = true;
+        ctrl.assetMeta.name == "" ? ctrl.assetNameError="error" : true;
+        ecEditor.jQuery('#assetfile').val() == "" ? ctrl.assetFileError="error" : true;
+        if(ctrl.assetMeta.name != ""  && ecEditor.jQuery('#assetfile').val() != ""){
+            ctrl.uploadBtnDisabled = true;
+            if (ctrl.record == true) {
+                // @Todo file size validation for recorded file
+                ctrl.uploadAsset(event, ctrl.assetMeta);
+            } else {
+                // Validate file if not editing meta data
+                var validateFile = instance.fileValidation('assetfile', ctrl.allowedFileSize, ctrl.allowedMimeTypes);
 
-        ecEditor.jQuery('.ui.form')
-            .form({
-                inline: true,
-                fields: {
-                    assetfile: {
-                        identifier: 'assetfile',
-                        rules: [{
-                            type: 'empty',
-                            prompt: 'Please select file'
-                        }]
-                    },
-                    ccByContribution: {
-                        identifier: 'ccByContribution',
-                        rules: [{
-                            type: 'checked',
-                            prompt: 'Please select Copyright & License'
-                        }]
-                    },
-                    assetName: {
-                        identifier: 'assetName',
-                        rules: [{
-                            type: 'empty',
-                            prompt: 'Please enter asset caption'
-                        }]
-                    },
-
-                    keywords: {
-                        identifier: 'keywords',
-                        optional: true,
-                        rules: [{
-                            type: 'empty',
-                            prompt: 'Please enter enter tags'
-                        }]
-                    },
-
-                    language: {
-                        identifier: 'language',
-                        optional: true,
-                        rules: [{
-                            type: 'empty',
-                        }]
-                    },
-
-                    creator: {
-                        identifier: 'creator',
-                        optional: ctrl.optional,
-                        rules: [{
-                            type: 'empty',
-                            prompt: 'Please enter creator name'
-                        }]
-                    },
-                },
-                onSuccess: function(event, fields) {
-                    ctrl.uploadBtnDisabled = true;
-                    if (fromThisPlugin) { //to avoid ui form success callback being called on sucess of '.ui.form' anywhere from main html page
-                        if (ctrl.record == true) {
-                            // @Todo file size validation for recorded file
-                            ctrl.uploadAsset(event, fields);
-                        } else {
-                            // Validate file if not editing meta data
-                            var validateFile = instance.fileValidation('assetfile', ctrl.allowedFileSize, ctrl.allowedMimeTypes);
-
-                            if (validateFile) {
-                                ctrl.uploadAsset(event, fields);
-                            } else {
-                                ctrl.uploadBtnDisabled = false;
-                                return false;
-                            }
-                        }
-                        fromThisPlugin = false;
-                        ctrl.uploadBtnDisabled = false;
-                    }
-                },
-                onFailure: function(formErrors, fields) {
-                    console.log("fields validation failed");
+                if (validateFile) {
+                    ctrl.uploadAsset(event, ctrl.assetMeta);
+                } else {
                     ctrl.uploadBtnDisabled = false;
                     return false;
                 }
-            });
+            }
+        ctrl.uploadBtnDisabled = false;
+        }
+        else {
+            console.log("fields validation failed");
+            ctrl.uploadBtnDisabled = false;
+            return false;
+        }
     }
 
     ctrl.switchToUpload = function() {
@@ -672,6 +617,13 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ecEditor.jQuery('.assetbrowser .ui.radio.checkbox').checkbox();
         ecEditor.jQuery('.field', '#hideShowFields').addClass('disabled');
         ecEditor.jQuery("#ccByContribution2").click();
+
+        ecEditor.jQuery(document).on('change', '#assetName, #assetfile', function() {
+            ctrl.uploadBtnDisabled = false;
+            ctrl.assetNameError=true;
+            ctrl.assetFileError=true;
+            ecEditor.ngSafeApply(ecEditor.getAngularScope());
+        });
 
         ecEditor.jQuery('body').on('dragover dragenter', function(e) {
             e = e || event;

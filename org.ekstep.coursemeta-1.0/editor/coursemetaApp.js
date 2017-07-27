@@ -2,6 +2,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
+    $scope.showImageIcon = true;
 
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
@@ -38,6 +39,9 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             if(_.isString($scope.course.tutor)){
                 $scope.course.tutor = $scope.course.tutor.split(',');
             }
+            if(_.isString($scope.course.language)){
+                $scope.course.language = [$scope.course.language];
+            }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.course.name);
             $scope.course.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.course));
@@ -53,7 +57,12 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             });
             $scope.submitted = true; 
         }
-    }
+    };
+
+    $scope.initDropdown = function() {
+        $('#language').dropdown('set selected', $scope.course.language);
+        $('#audience').dropdown('set selected', $scope.course.audience);
+    };
 
     $scope.getUpdatedMetadata = function(originalMetadata, currentMetadata){
         var metadata = { };
@@ -88,6 +97,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
 
     $scope.onNodeSelect = function(evant, data){
         var selectedConcepts = [];
+        $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.course = {};
@@ -102,17 +112,19 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             $('.ui.dropdown').dropdown('refresh');
             $scope.metadataCloneObj = _.clone($scope.course);
         }
-        if(!_.isEmpty(activeNode.data.metadata) && (_.values(activeNode.data.metadata).length > 1)){
+        if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
             $scope.editMode = false;
             $('#language').dropdown('set selected', $scope.course.language);
             $('#audience').dropdown('set selected', $scope.course.audience);
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.course.concepts = activeNode.data.metadata.concepts;
-                $scope.course.conceptData = '(' + $scope.course.concepts + ') concepts selected';
                 if($scope.course.concepts.length > 0){
+                    $scope.course.conceptData = '(' + $scope.course.concepts.length + ') concepts selected';
                     _.forEach($scope.course.concepts, function(concept){
                         selectedConcepts.push(concept.identifier);
                     });
+                }else{
+                    $scope.course.conceptData = '';
                 }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
@@ -130,6 +142,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
                 $scope.$safeApply();
             }
         });
+        $scope.showImageIcon = true;
         $scope.getPath();
         $scope.$safeApply();
     }

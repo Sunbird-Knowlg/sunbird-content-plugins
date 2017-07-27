@@ -16,15 +16,16 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
 
     $scope.saveContent = function() {
         $scope.disableSaveBtn = true;
-        $scope.disableReviewBtn = false;  
         ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:save", {
             showNotification: true,
             callback: function(err, res) {
                 if (res && res.data && res.data.responseCode == "OK") {
                     $scope.lastSaved = Date.now();
                     $scope.pendingChanges = false;
+                    $scope.disableReviewBtn = false;
                 } else {
                     $scope.disableSaveBtn = false;
+                    $scope.disableReviewBtn = true;
                 }
                 $scope.$safeApply();
             }

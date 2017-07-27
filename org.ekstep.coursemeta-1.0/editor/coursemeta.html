@@ -5,7 +5,7 @@
         </div>
         <h3 class="header-bottom-segment inline-block">{{course.name | limitTo:70}}<span ng-if="course.name.length > 70"> ...</span></h3>
         <div class="header-buttons-container header-bottom-segment inline-block" ng-show="mode == 'Edit' && editable == true">
-            <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'})" ng-show="!editMode">
+            <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'}); initDropdown();" ng-show="!editMode">
                 Edit
             </div>
             <div class="ui primary button right-float button-overrides" id="update-button" ng-click="updateNode(); generateTelemetry({type: 'click', subtype: 'update', target: 'updatemeta'})" ng-show="editMode">
@@ -17,7 +17,7 @@
         <div class="ui items">
             <div class="item">
                 <div class="ui tiny image">
-                    <img ng-src="{{course.appIcon || defaultImage}}" alt="">
+                    <img ng-if="showImageIcon" ng-src="{{course.appIcon || defaultImage}}" alt="">
                 </div>
                 <div class="content">
                     <div class="header">{{course.name}}</div>
@@ -82,7 +82,7 @@
                 <label for="bookImage">Add icon</label>
                 <div class="book-image-container" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
-                    <img ng-src="{{course.appIcon}}" ng-show="course.appIcon != ''" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
+                    <img ng-if="showImageIcon" ng-src="{{course.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
                 </div>
             </div>
             <div class="field form-fields-except-image">
@@ -114,21 +114,14 @@
                         </select>
                     </div>
                 </div>
-                <div class="three fields">
+                <div class="two fields">
                     <div class="field">
                         <label for="faculty">Faculty</label>
-                        <ng-token-field ng-model="course.faculty" placeholder="Enter comma separated faculty" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'faculty'})"></ng-token-field>
+                        <ng-token-field ng-model="course.faculty" id="coursemeta-faculty" placeholder="Enter comma separated faculty" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'faculty'})"></ng-token-field>
                     </div>
                     <div class="field">
                         <label for="tutor">Tutor</label>
-                        <ng-token-field ng-model="course.tutor" placeholder="Enter comma separated tutor" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'tutor'})"></ng-token-field>
-                    </div>
-                    <div class="field">
-                        <label for="audience">Audience</label>
-                        <select id="audience" class="ui selection dropdown" ng-model="course.audience" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'audience'})">
-                            <option value="">Audience</option>
-                            <option value="{{audience}}" ng-repeat="audience in audienceList">{{audience}}</option>
-                        </select>
+                        <ng-token-field ng-model="course.tutor" id="coursemeta-tutor" placeholder="Enter comma separated tutor" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'tutor'})"></ng-token-field>
                     </div>
                 </div>
                 <div class="two fields">

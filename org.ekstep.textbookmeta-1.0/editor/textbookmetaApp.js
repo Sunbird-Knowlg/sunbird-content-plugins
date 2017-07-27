@@ -1,31 +1,28 @@
-angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaController', ['$scope', function($scope) {
+angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controller('textbookmetaController', ['$scope', function($scope) {    
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
+    $scope.showImageIcon = true;
+    $scope.boardList = {};
+    $scope.gradeList = [];
+    $scope.languageList = [];
+    $scope.audienceList = [];
+    $scope.subjectList = [];
+
 
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.gradeList = resp.data.result.ordinals.gradeLevel;
             $scope.languageList = resp.data.result.ordinals.language;
             $scope.audienceList = resp.data.result.ordinals.audience;
-            //TODO: Replace below list with API resplonse
-            $scope.boardList = {};
+            $scope.subjectList = resp.data.result.ordinals.language;
+            //TODO: Replace below list with API resplonse            
             $scope.boardList["CBSE"]  = "CBSE";
             $scope.boardList["NCERT"] = "NCERT";
             $scope.boardList["ICSE"] = "ICSE"
             $scope.boardList["MSCERT"] = "MSCERT";
-            $scope.boardList["Other"] = "Othres";
-          
-            $scope.subjectList = {};
-            $scope.subjectList["Maths"]  = "Maths";
-            $scope.subjectList["English"] = "English";
-            $scope.subjectList["Hindi"] = "Hindi"
-            $scope.subjectList["Bengali"] = "Bengali";
-            $scope.subjectList["Telugu"] = "Telugu";
-            $scope.subjectList["Tamil"] = "Tamil";
-            $scope.subjectList["Kannada"] = "Kanada";
-            $scope.subjectList["Marathi"] = "Marathi";
-            $scope.$safeApply();
+            $scope.boardList["Other"] = "Others";
+            $scope.$safeApply();                   
         }
     });
 
@@ -38,6 +35,15 @@ angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaCont
                 $scope.$safeApply();
             }
         });
+    }
+
+    $scope.initDropdown = function() {
+        $('#board').dropdown('set selected', $scope.textbook.board);
+        $('#medium').dropdown('set selected', $scope.textbook.medium);
+        $('#subject').dropdown('set selected', $scope.textbook.subject);
+        $('#gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
+        $('#audience').dropdown('set selected', $scope.textbook.audience);
+        $('#language').dropdown('set selected', $scope.textbook.language);    
     }
     
     $scope.updateNode = function(){
@@ -52,6 +58,9 @@ angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaCont
             }
             if(_.isString($scope.textbook.gradeLevel)){
                 $scope.textbook.gradeLevel = [$scope.textbook.gradeLevel];
+            }
+            if(_.isString($scope.textbook.language)){
+                $scope.textbook.language = [$scope.textbook.language];
             }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
             $scope.textbook.contentType = $scope.nodeType;
@@ -103,6 +112,7 @@ angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaCont
 
     $scope.onNodeSelect = function(evant, data){
         var selectedConcepts = [];
+        $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.textbook = {};
@@ -117,7 +127,7 @@ angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaCont
             $('.ui.dropdown').dropdown('refresh');
             $scope.metadataCloneObj = _.clone($scope.textbook);
         }
-        if(!_.isEmpty(activeNode.data.metadata) && (_.values(activeNode.data.metadata).length > 1)){
+        if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
             $scope.editMode = false;
             $('#board').dropdown('set selected', $scope.textbook.board);
             $('#medium').dropdown('set selected', $scope.textbook.medium);
@@ -127,11 +137,13 @@ angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaCont
             $('#language').dropdown('set selected', $scope.textbook.language);
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.textbook.concepts = activeNode.data.metadata.concepts;
-                $scope.textbook.conceptData = '(' + $scope.textbook.concepts + ') concepts selected';
                 if($scope.textbook.concepts.length > 0){
+                    $scope.textbook.conceptData = '(' + $scope.textbook.concepts.length + ') concepts selected';
                     _.forEach($scope.textbook.concepts, function(concept){
                         selectedConcepts.push(concept.identifier);
                     });
+                }else{
+                    $scope.textbook.conceptData = '';
                 }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
@@ -149,6 +161,7 @@ angular.module('textbookmetaApp', ['ngTokenField']).controller('textbookmetaCont
                 $scope.$safeApply();
             }
         });
+        $scope.showImageIcon = true;
         $scope.getPath();
         $scope.$safeApply();
     }
