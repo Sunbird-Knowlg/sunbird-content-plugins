@@ -5,36 +5,30 @@
             <div class="ui form text-formatting-options">
                 <div class="inline fields">
                     <label>Font</label>
-                    <div class="ui selection dropdown font-face-dropdown">
-                        <i class="dropdown icon"></i>
-                        <div class="default text">Helvetica</div>
-                        <div class="menu">
-                            <div class="item" data-value="helvetica">Helvetica</div>
-                            <div class="item" data-value="times new roman">Times New Roman</div>
-                        </div>
-                    </div>
+                    <select class="ui  dropdown font-face-dropdown" ng-model="configData['fontfamily']" ng-options="val for val in fontFamily" ng-change="fireSidebarTelemetry({id: 'fontfamily'}, 'select')">
+                    </select>
                 </div>
                 <div class="inline fields">
                     <label>Size</label>
-                    <div class="ui selection dropdown font-size-dropdown">
-                        <i class="dropdown icon"></i>
-                        <div class="default text">12</div>
-                        <div class="menu">
-                            <div class="item" data-value="12">12</div>
-                            <div class="item" data-value="13">13</div>
-                        </div>
-                    </div>
-                    <div class="ui icon buttons">
-                        <button class="ui button"><i class="bold icon"></i></button>
-                        <button class="ui button"><i class="italic icon"></i></button>
+                    <select class="ui  dropdown font-size-dropdown" ng-model="configData['fontsize']" ng-options="val for val in fontSize" ng-change="fireSidebarTelemetry({id: 'fontSize'}, 'inputSelect')">
+                    </select>
+                    <div class="ui icon buttons bold-italic-buttons-group">
+                        <button class="ui button {{configData[dd.propertyName] ? 'primary': ''}}" ng-repeat="dd in fontGroupConfig.config" ng-click="configData[dd.propertyName] = !configData[dd.propertyName]; fireSidebarTelemetry({id: config.propertyName}, config.dataType)" data-tooltip="{{dd.toolTip}}">
+                            <div ng-switch on="dd.dataType">
+                                <span ng-show="dd.text" ng-switch-when="text" class="{{dd.textClass}}" style="{{dd.textStyle}}">{{dd.text}}</span>
+                                <i class="{{dd.iconClass}} " ng-show="dd.iconClass" style="{{dd.iconStyle}}" ng-switch-when="icon"></i>
+                            </div>
+                        </button>
                     </div>
                 </div>
                 <div class="inline fields">
                     <label>Alignment</label>
                     <div class="ui icon buttons">
-                        <button class="ui button"><i class="align left icon"></i></button>
-                        <button class="ui button"><i class="align center icon"></i></button>
-                        <button class="ui button"><i class="align right icon"></i></button>
+                        <button class="ui button {{configData[textAlignmentConfig.propertyName] === option.value ? 'primary': ''}}" ng-repeat="option in textAlignmentConfig.options" ng-click="configData[textAlignmentConfig.propertyName] = option.value; fireSidebarTelemetry({id: textAlignmentConfig.propertyName}, textAlignmentConfig.dataType)" data-tooltip="{{option.toolTip}}">
+                            <div ng-switch on="option.dataType">
+                                <i class="{{option.iconClass}} " ng-show="option.iconClass" style="{{option.iconStyle}}" ng-switch-when="icon"></i>
+                            </div>
+                        </button>
                     </div>
                 </div>
                 <div class="inline fields">
@@ -44,31 +38,35 @@
                 <div class="inline fields">
                     <label>Opacity</label>
                     <div ui input>
-                        <input type="range" min="0" max="100" value="0" class="config-slider">
+                        <input type="range" id="{{textOpacityConfig.propertyName}}" min="{{textOpacityConfig.minimumValue}}" max="{{textOpacityConfig.maximumValue}}" value="{{textOpacityConfig.defaultValue}}" class="config-slider" ng-model="configData[textOpacityConfig.propertyName]" ng-init="configData[textOpacityConfig.propertyName] = configData[textOpacityConfig.propertyName] || textOpacityConfig.defaultValue" ng-click="fireSidebarTelemetry({id: textOpacityConfig.propertyName}, textOpacityConfig.dataType)">
+                        <label class="opacity-percent" ng-bind="configData[textOpacityConfig.propertyName] + '%'"></label>
                     </div>
-                    <label class="opacity-percent">45%</label>
                 </div>
             </div>
         </div>
         <div class="title">Read-along</div>
         <div class="content">
-            <button class="small ui grey button">
-                <strong>Read-along</strong>
-            </button>
+            <span ng-repeat="option in readAlongConfig.options" ng-show="option.state">
+                            <button class="ui icon button" ng-show="option.status === 'SHOW'" ng-repeat="suboption in option.suboptions" ng-click="fireEvent(suboption.onclick)">
+                                <i class="{{suboption.iconClass}} "></i>
+                            </button>
+                            <div class="ui grey button {{option.status === 'SHOW' ? 'primary': ''}}" ng-click="fireEvent(option.onclick)" style="padding: 0.8em 0.8em;"><i class="{{option.iconClass}}"></i>{{option.title}}</div>
+                        </span>
         </div>
         <div class="title">Word Info</div>
         <div class="content">
-            <button class="small ui grey button">
-                <strong>Word Info</strong>
-            </button>
+            <span ng-repeat="option in wordInfoConfig.options" ng-show="option.state">
+                            <button class="ui icon button" ng-show="option.status === 'SHOW'" ng-repeat="suboption in option.suboptions" ng-click="fireEvent(suboption.onclick)">
+                                <i class="{{suboption.iconClass}} "></i>
+                            </button>
+                            <div class="ui grey button {{option.status === 'SHOW' ? 'primary': ''}}" ng-click="fireEvent(option.onclick)" style="padding: 0.8em 0.8em;"><i class="{{option.iconClass}}"></i>{{option.title}}</div>
+                        </span>
         </div>
         <div class="title">Transliterate</div>
         <div class="content">
-            <button class="small ui grey button">
+            <button class="small ui grey button" ng-click="openTransliterator()">
                 <strong>Transliterate</strong>
             </button>
         </div>
     </div>
-    <!-- <label class="title"><strong>Language Feature</strong></label> -->
-    <!-- <br/> -->
 </div>
