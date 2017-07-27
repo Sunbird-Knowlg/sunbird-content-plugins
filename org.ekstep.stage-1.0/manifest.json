@@ -70,6 +70,13 @@
             "dataType": "textarea",
             "required": true,
             "defaultValue": ""
+        }, {
+            "propertyName":"color",
+            "title":"Slide Background color",
+            "description":"Slide Background color",
+            "dataType":"colorpicker",
+            "required":true,
+            "defaultValue":"#FFFFFF"
         }]
     }    
 }

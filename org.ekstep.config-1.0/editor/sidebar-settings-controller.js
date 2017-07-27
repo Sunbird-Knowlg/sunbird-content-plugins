@@ -30,7 +30,14 @@ angular.module('editorApp')
             "dataType": "textarea",
             "required": true,
             "defaultValue": ""
-        }];
+        }, {
+            "propertyName":"color",
+            "title":"Slide Background color",
+            "description":"Slide Background color",
+            "dataType":"colorpicker",
+            "required":true,
+            "defaultValue":"#FFFFFF"
+    }];
 
         $scope.actionTargetObject = {};
         $scope.customTemplates = [];
@@ -42,8 +49,7 @@ angular.module('editorApp')
         // on load
         $scope.settingsCategory.selected = 'customize';
         $scope.pluginConfig = stageConfigManifest;
-        $scope.configData = { genieControls: true, instructions: "" };
-
+        $scope.configData = { genieControls: true, instructions: "", color: "#FFFFFF" };
 
         $scope.allActionsList = {
             "show": "Show",

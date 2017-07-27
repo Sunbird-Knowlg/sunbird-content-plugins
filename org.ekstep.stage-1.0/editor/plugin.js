@@ -21,7 +21,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         this.onclick = { id: 'stage:select', data: { stageId: this.id } };
         this.ondelete = { id: 'stage:delete', data: { stageId: this.id } };
         this.duplicate = { id: 'stage:duplicate', data: { stageId: this.id } };
-        ecEditor.addStage(this);        
         this.attributes = {
             x: 0,
             y: 0,
@@ -29,7 +28,13 @@ org.ekstep.contenteditor.basePlugin.extend({
             h: 405,
             id: this.id
         };
+        if (this.data) {
+            this.addConfig('color', this.data.config.color || '#FFFFFF');
+        } else {
+            this.addConfig('color', this.config.color || '#FFFFFF');
+        }
         this.addConfig('instructions', this.getParam('instructions') || '');
+        ecEditor.addStage(this);
     },
     getOnClick: function() {
         return { id: 'stage:select', data: { stageId: this.id, prevStageId: ecEditor.getCurrentStage().id } };
@@ -72,10 +77,11 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor._.forEach(this.children, function(plugin) {
             plugin.render(canvas);
         });
+        if(this.config.color) canvas.setBackgroundColor(this.config.color, canvas.renderAll.bind(canvas));
         canvas.renderAll();
-        ecEditor.dispatchEvent('stage:render:complete', { stageId: this.id });
         this.thumbnail = canvas.toDataURL({format: 'jpeg', quality: 0.1});
         ecEditor.refreshStages();
+        ecEditor.dispatchEvent('stage:render:complete', { stageId: this.id });
     },
     modified: function(event, data) {
         ecEditor.getCurrentStage().updateZIndex(); 
@@ -127,10 +133,18 @@ org.ekstep.contenteditor.basePlugin.extend({
                     });
                 }
                 break;
+            case "color":
+                ecEditor.getCurrentStage().canvas.backgroundColor = value;
+                this.config.color = value;
+                ecEditor.dispatchEvent("stage:modified");
+                ecEditor.render();
+                break;
         }
     },
     updateThumbnail: function() {
         $('<canvas>').attr({ id: this.id }).css({ width: '720px', height: '405px' }).appendTo('#thumbnailCanvasContainer');
+        //var canvasbgColor = !ecEditor._.isEmpty(ecEditor.getCurrentStage().canvas.backgroundColor) || "#FFFFFF";
+        //canvas = new fabric.Canvas(this.id, { backgroundColor: canvasbgColor, preserveObjectStacking: true, width: 720, height: 405 });
         canvas = new fabric.Canvas(this.id, { backgroundColor: "#FFFFFF", preserveObjectStacking: true, width: 720, height: 405 });
         this.render(canvas);
         ecEditor.jQuery('#' + this.id).remove();
