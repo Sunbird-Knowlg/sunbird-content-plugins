@@ -5,7 +5,5 @@ angular.module('editorApp')
         };
 
         ecEditor.jQuery('.ui.accordion').accordion();
-        ecEditor.jQuery('.font-face-dropdown').dropdown({
-        	'set selected': '1'
-        });
+        
     }]);
