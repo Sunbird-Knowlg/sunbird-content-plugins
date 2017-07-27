@@ -152,6 +152,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     onSubmit: function(nodes) {
                         data.callback(nodes);
                     },
+                    nodeName:"conceptSelector_" + data.element,
                     /**displayFormat: function(picked) { return "Concepts ("+picked.length+" selected)"; },**/
                     minSearchQueryLength: 1
                 });
