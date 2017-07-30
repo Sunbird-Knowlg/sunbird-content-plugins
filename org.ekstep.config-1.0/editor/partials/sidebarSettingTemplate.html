@@ -3,7 +3,11 @@
     background: rgb(238, 238, 238) !important;
     border: none!important;
     -webkit-box-shadow: none!important1;
-    box-shadow: none!important1;
+    box-shadow: none!important;
+    margin: 0!important;
+    height: 450px;
+    overflow: hidden;
+    overflow-y: scroll;
 }
 
 .sidebarContent div label {
@@ -33,6 +37,16 @@
 a.item.at-menu-item.popup-item.active {
     background-color: #D7D7D7 !important;
 }
+
+.show-action-form-btn {
+    float: left;
+    margin-left: 1em;
+}
+
+.actions-header{
+    float: left;
+    padding: 0.6em!important;
+}
 </style>
 <div ng-controller="org.ekstep.config:configController">
     <div class="ui mini compact menu item sidebarConfig sidebarHeadTab three">
@@ -44,7 +58,7 @@ a.item.at-menu-item.popup-item.active {
     <div class="ui active tab segment sidebarContent" data-tab="settings">
         <div ng-repeat="config in pluginConfig">
             <div ng-switch on="config.dataType">
-                <div class="ui divider" ng-show="$index != 0"></div>
+                <div class="ui divider" ng-show="$index != 0" style="border-top: 1px solid transparent; border-bottom: 1px solid transparent;"></div>
                 <div class="ui form" ng-switch-when="colorpicker">
                     <div class="field">
                         <label ng-show="config.title">{{config.title}}</label>
@@ -144,11 +158,11 @@ a.item.at-menu-item.popup-item.active {
         </div>
     </div>
     <div class="ui tab segment sidebarContent" data-tab="actions">
-        <h5 class="ui header">On click</h5>
-        <button class="ui tiny circular twitter icon button right floated show-action-form-btn" id="showActionFormBtn" ng-click="showActionForm = !showActionForm" ng-init="showActionForm = false;">
+        <h5 class="ui header actions-header">On click</h5>
+        <button class="ui tiny circular twitter icon button show-action-form-btn" id="showActionFormBtn" ng-click="showActionForm = !showActionForm" ng-init="showActionForm = false;">
             <i class="plus icon"></i>
         </button>
-        <div class="ui divider"></div>
+        <div class="ui divider" style="border-top: 1px solid transparent; border-bottom: 1px solid transparent;"></div>
         <div class="ui segment" ng-show="showActionForm">
             <div id="addActionForm">
                 <form class="ui form">

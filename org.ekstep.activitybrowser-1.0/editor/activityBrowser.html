@@ -146,15 +146,15 @@
                                 <div class="ui dimmer">
                                     <div class="content">
                                         <div class="center">
-                                            <div class="ui tiny inverted header" title="{{activity.name}}">{{activity.name | limitTo:20}}<span ng-if="activity.name.length > 20">...</span></div>
-                                            <p title="{{activity.description}}">{{activity.description | limitTo:30}}<span ng-if="activity.description.length > 30">...</span></p>
+                                            <div class="ui tiny inverted header" title="{{activity.name}}">{{activity.name| limitTo:80}}<span ng-if="activity.name.length > 80">...</span></div>
+                                            <p title="{{activity.description}}">{{activity.description | limitTo:100}}<span ng-if="activity.description.length > 100">...</span></p>
                                         </div>
                                     </div>
                                 </div>
-                                <img ng-src="{{activity.appIcon || $ctrl.defaultActivityImage}}">
+                                <img ng-src="{{activity.appIcon || $ctrl.defaultActivityImage}}" style="height:242px!important;">
                             </div>
                             <div class="content activity-title-content">
-                                <b class="sub-header" title="{{activity.name}}" style="display: inline;">{{activity.name | limitTo:12}}<span ng-if="activity.name.length > 12">...</span></b>
+                                <b class="sub-header" title="{{activity.name}}" style="display: inline;">{{activity.name | limitTo:22}}<span ng-if="activity.name.length > 22">...</span></b>
                                 <span class="right floated">
                                 <a class="sub-header" ng-click="$ctrl.addPlugin(activity);$ctrl.generateTelemetry({type: 'click', subtype: 'add', target: 'addActivityCard'})">ADD<i class="plus icon"></i></a>    
                             </span>
