@@ -41,6 +41,9 @@ org.ekstep.contenteditor.basePlugin.extend({
     addDivElement: function(event, instance) {
         var canvasCord = ecEditor.jQuery('#canvas').offset();
         var numOnly = /\d+/;
+        var divWrapper = document.createElement('div');
+        divWrapper.setAttribute("id", 'richtext-wrapper');
+        ecEditor.jQuery(".canvas-container").append(divWrapper);
         var div = document.createElement('div');
         div.setAttribute("id", instance.data.id);
         div.style.position = 'absolute';
@@ -51,9 +54,9 @@ org.ekstep.contenteditor.basePlugin.extend({
         div.style.width = (instance.data.editorObj.width) + "px";
         div.style.height = (instance.data.editorObj.height) + "px";
         div.style.pointerEvents = "none";
-        ecEditor.jQuery("#canvas-wrapper #richtext-wrapper").append(div);
-        ecEditor.jQuery("#canvas-wrapper #richtext-wrapper div#" + instance.data.id).html(instance.data.config.text);
-        ecEditor.jQuery("#" + instance.data.id).offset({'top':instance.data.editorObj.top + canvasCord.top, 'left':Number(ecEditor.jQuery(".canvas-container").css('margin-left').match(numOnly)[0]) + (instance.data.editorObj.left + canvasCord.left)});
+        ecEditor.jQuery(".canvas-container #richtext-wrapper").append(div);
+        ecEditor.jQuery(".canvas-container #richtext-wrapper div#" + instance.data.id).html(instance.data.config.text);
+        ecEditor.jQuery("#" + instance.data.id).offset({'top':instance.data.editorObj.top + canvasCord.top + 10, 'left':Number(ecEditor.jQuery(".canvas-container").css('margin-left').match(numOnly)[0]) + (instance.data.editorObj.left + canvasCord.left) + 10});
         // ecEditor.jQuery("div#"+this.id).draggable({
         //     containment: "canvas"
         // });
