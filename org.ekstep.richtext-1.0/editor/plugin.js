@@ -8,6 +8,9 @@ org.ekstep.contenteditor.basePlugin.extend({
         var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/richtexteditor.html");
         var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/richtexteditorapp.js");
         ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
+        var divWrapper = document.createElement('div');
+        divWrapper.setAttribute("id", 'richtext-wrapper');
+        ecEditor.jQuery(".canvas-container").append(divWrapper);
     },
     newInstance: function() {
         var instance = this;
@@ -41,9 +44,6 @@ org.ekstep.contenteditor.basePlugin.extend({
     addDivElement: function(event, instance) {
         var canvasCord = ecEditor.jQuery('#canvas').offset();
         var numOnly = /\d+/;
-        var divWrapper = document.createElement('div');
-        divWrapper.setAttribute("id", 'richtext-wrapper');
-        ecEditor.jQuery(".canvas-container").append(divWrapper);
         var div = document.createElement('div');
         div.setAttribute("id", instance.data.id);
         div.style.position = 'absolute';
