@@ -16,28 +16,6 @@ angular.module('editorApp')
 
         var stageActionsList = { "link": "Link To" };
         var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.config");
-        var stageConfigManifest = [{
-            "propertyName": "genieControls",
-            "title": "Show Player Control",
-            "description": "Toggle genie controls",
-            "dataType": "boolean",
-            "required": true,
-            "defaultValue": true
-        }, {
-            "propertyName": "instructions",
-            "title": "Teacher Instructions",
-            "description": "Teacher Instructions",
-            "dataType": "textarea",
-            "required": true,
-            "defaultValue": ""
-        }, {
-            "propertyName":"color",
-            "title":"Slide Background color",
-            "description":"Slide Background color",
-            "dataType":"colorpicker",
-            "required":true,
-            "defaultValue":"#FFFFFF"
-    }];
 
         $scope.actionTargetObject = {};
         $scope.customTemplates = [];
@@ -48,8 +26,7 @@ angular.module('editorApp')
 
         // on load
         $scope.settingsCategory.selected = 'customize';
-        $scope.pluginConfig = stageConfigManifest;
-        $scope.configData = { genieControls: true, instructions: "", color: "#FFFFFF" };
+        $scope.pluginConfig;
 
         $scope.allActionsList = {
             "show": "Show",

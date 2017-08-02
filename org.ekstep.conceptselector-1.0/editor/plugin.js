@@ -91,7 +91,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                         childArray.push(child);
                     }
                 }
-            });            
+            });
             return ecEditor._.uniqBy(childArray, "id");
         }
         /**Set Concept data**/

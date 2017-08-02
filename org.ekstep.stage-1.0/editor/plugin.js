@@ -21,6 +21,12 @@ org.ekstep.contenteditor.basePlugin.extend({
         this.onclick = { id: 'stage:select', data: { stageId: this.id } };
         this.ondelete = { id: 'stage:delete', data: { stageId: this.id } };
         this.duplicate = { id: 'stage:duplicate', data: { stageId: this.id } };
+        if (this.data) {
+            this.addConfig('color', this.data.config.color || '#FFFFFF');
+        } else {
+            this.addConfig('color', this.config.color || '#FFFFFF');
+        }
+        ecEditor.addStage(this);
         this.attributes = {
             x: 0,
             y: 0,
@@ -28,13 +34,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             h: 405,
             id: this.id
         };
-        if (this.data) {
-            this.addConfig('color', this.data.config.color || '#FFFFFF');
-        } else {
-            this.addConfig('color', this.config.color || '#FFFFFF');
-        }
         this.addConfig('instructions', this.getParam('instructions') || '');
-        ecEditor.addStage(this);
     },
     getOnClick: function() {
         return { id: 'stage:select', data: { stageId: this.id, prevStageId: ecEditor.getCurrentStage().id } };
@@ -67,7 +67,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if(child.editorObj) {
                 child.attributes['z-index'] = instance.canvas.getObjects().indexOf(child.editorObj);
             } else {
-                child.attributes['z-index'] = instance.canvas.getObjects().length;
+                child.attributes['z-index'] = _.isUndefined(child.attributes['z-index']) ? instance.canvas.getObjects().length : child.attributes['z-index'];
             }
         });
     },
@@ -134,6 +134,15 @@ org.ekstep.contenteditor.basePlugin.extend({
                 }
                 break;
             case "color":
+                var shapeInstance;
+                ecEditor._.forEach(ecEditor.getCurrentStage().children, function(child) {
+                  shapeInstance = child;
+                });
+                if (!shapeInstance) {
+                    ecEditor.instantiatePlugin('org.ekstep.shape', {"id":"slidebackground","type":"rect","x":0,"y":0,"fill":value,"w": 100,"h": 100,"stroke":"rgba(255, 255, 255, 0)","strokeWidth":1,"opacity":1, "z-index": -999}, ecEditor.getCurrentStage());
+                } else {
+                    shapeInstance.attributes.fill = value;
+                }
                 ecEditor.getCurrentStage().canvas.backgroundColor = value;
                 this.config.color = value;
                 ecEditor.dispatchEvent("stage:modified");
