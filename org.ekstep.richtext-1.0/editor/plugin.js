@@ -25,12 +25,8 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.dispatchEvent(instance.manifest.id + ":adddiv", { data: instance });
     },
     moving: function(instance) {
-        // ecEditor.jQuery("#" + this.editorObj.id).css("top", this.editorObj.top + 10);
-        // ecEditor.jQuery("#" + this.editorObj.id).css("left", this.editorObj.left + 10);
         var canvasCord = ecEditor.jQuery('#canvas').offset();
-        ecEditor.jQuery("#" + this.editorObj.id).offset({'top':this.editorObj.top + 10 + canvasCord.top, 'left':this.editorObj.left + 10 + canvasCord.left});
-        ecEditor.jQuery("#" + this.editorObj.id).css("width", this.attributes.w);
-        ecEditor.jQuery("#" + this.editorObj.id).css("height", this.attributes.h);
+        ecEditor.jQuery("#" + this.editorObj.id).offset({'top':this.editorObj.top + canvasCord.top, 'left':this.editorObj.left + canvasCord.left});
     },
     selected: function(instance) {
         fabric.util.addListener(fabric.document, 'dblclick', this.dblClickHandler);
@@ -49,17 +45,17 @@ org.ekstep.contenteditor.basePlugin.extend({
         div.style.position = 'absolute';
         div.style.fontSize = '18px';
         div.style.fontFamily = 'NotoSans';
-        // div.style.top = (instance.data.editorObj.top + 10) + "px";
-        // div.style.left = Number(ecEditor.jQuery(".canvas-container").css('margin-left').match(numOnly)[0]) + (instance.data.editorObj.left + 10) + "px";
-        div.style.width = (instance.data.editorObj.width) + "px";
-        div.style.height = (instance.data.editorObj.height) + "px";
+        div.style.width = "auto";
+        div.style.height = "auto";
         div.style.pointerEvents = "none";
         ecEditor.jQuery(".canvas-container #richtext-wrapper").append(div);
         ecEditor.jQuery(".canvas-container #richtext-wrapper div#" + instance.data.id).html(instance.data.config.text);
-        ecEditor.jQuery("#" + instance.data.id).offset({'top':instance.data.editorObj.top + canvasCord.top + 10, 'left':Number(ecEditor.jQuery(".canvas-container").css('margin-left').match(numOnly)[0]) + (instance.data.editorObj.left + canvasCord.left) + 10});
+        ecEditor.jQuery("#" + instance.data.id).offset({'top':instance.data.editorObj.top + canvasCord.top, 'left':Number(ecEditor.jQuery(".canvas-container").css('margin-left').match(numOnly)[0]) + (instance.data.editorObj.left + canvasCord.left)});
         // ecEditor.jQuery("div#"+this.id).draggable({
         //     containment: "canvas"
         // });
+        instance.data.editorObj.width = $('#' + instance.data.id).width();
+        instance.data.editorObj.height = $('#' + instance.data.id).height();
     },
     dblClickHandler: function(event) {
         if (ecEditor.getCurrentObject().manifest.id === "org.ekstep.richtext") {

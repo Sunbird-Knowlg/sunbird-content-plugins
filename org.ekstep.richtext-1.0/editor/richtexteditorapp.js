@@ -20,6 +20,9 @@ angular.module('richtexteditorapp', [])
             if(textObj){
                 textObj.config.text = CKEDITOR.instances.editor1.getData();
                 ecEditor.jQuery("#richtext-wrapper div#"+textObj.id).html(textObj.config.text);
+                var currentObject = org.ekstep.contenteditor.api.getCurrentObject();
+                 currentObject.editorObj.width = $('#' + textObj.id).width();
+                 currentObject.editorObj.height = $('#' + textObj.id).height();
                 ecEditor.render();
             }else{
                 ecEditor.dispatchEvent('org.ekstep.richtext:create', {
@@ -28,8 +31,6 @@ angular.module('richtexteditorapp', [])
                     "x": 10,
                     "y": 20,
                     "fill": "rgba(0, 0, 0, 0)",
-                    "w": 50,
-                    "h": 50,
                     "stroke": "rgba(255, 255, 255, 0)",
                     "strokeWidth": 1,
                     "opacity": 1
