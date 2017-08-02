@@ -7,22 +7,35 @@
     "title": "Text Plugin",
     "description": "",
     "publishedDate": "",
-    "editor": {
+    "editor":
+    {
         "main": "editor/plugin.js",
         "dependencies": [
-            { "type": "js", "src": "editor/texteditor.js" },
-            { "type": "js", "src": "editor/multilineTransliterator.js" }
-        ],
-        "menu": [{
+        {
+            "type": "js",
+            "src": "editor/texteditor.js"
+        },
+        {
+            "type": "js",
+            "src": "editor/multilineTransliterator.js"
+        },
+                {
+            "type": "css",
+            "src": "editor/style/plugin.css"
+        }],
+        "menu": [
+        {
             "id": "org.ekstep.text",
             "category": "main",
             "type": "icon",
             "toolTip": "Add Text",
             "title": "Text",
             "iconClass": "icon-text icon",
-            "onclick": {
+            "onclick":
+            {
                 "id": "org.ekstep.text:create",
-                "data": {
+                "data":
+                {
                     "__text": "",
                     "x": 10,
                     "y": 20,
@@ -42,142 +55,23 @@
                 }
             }
         }],
-        "behaviour": {
+        "behaviour":
+        {
             "rotatable": true
         },
-        "configManifest": [{
-            "propertyName": "textType",
-            "title": "Enable Interactive features",
-            "dataType": "featureButtonToggle",
-            "description": "Text Enhancement",
-            "options": [{
-                "value": "readalong",
-                "title": "Read-along",
-                "toolTip": "click to configure",
-                "description": "Readalong",
-                "dataType": "icon",
-                "iconClass": "icon icon-readalong",
-                "state": true,
-                "status": "HIDE",
-                "onclick": {
-                    "id": "org.ekstep.text:readalong:show"
-                },
-                "suboptions": [{
-                    "toolTip": "Delete",
-                    "dataType": "icon",
-                    "iconClass": "trash icon",
-                    "onclick": {
-                        "id": "org.ekstep.text:delete:enhancement"
-                    }
-                }]
-            }, {
-                "value": "wordinfo",
-                "title": "Word Info",
-                "toolTip": "click to configure",
-                "description": "Wordinfo",
-                "state": true,
-                "dataType": "icon",
-                "iconClass": "icon icon-wordinfo",
-                "status": "HIDE",
-                "onclick": {
-                    "id": "org.ekstep.text:wordinfo:show"
-                },
-                "suboptions": [{
-                    "toolTip": "Delete",
-                    "dataType": "icon",
-                    "iconClass": "trash icon",
-                    "onclick": {
-                        "id": "org.ekstep.text:delete:enhancement"
-                    }
-                }]
-            }],
-            "defaultValue": "text"
-        }, {
+        "configManifest": [
+        {
             "type": "custom_template",
             "controllerURL": "editor/config-controller.js",
             "templateURL": "editor/configTemplate.html"
-        }, {
-            "propertyName": "color",
-            "title": "Font color",
-            "description": "Choose a color from the color picker",
-            "dataType": "colorpicker",
-            "required": true,
-            "defaultValue": "rgb(255,0,0)"
-        }, {
-            "propertyName": "font",
-            "dataType": "group",
-            "description": "Choose fontweight and fontstyle",
-            "config": [{
-                "propertyName": "fontweight",
-                "title": "Font Weight",
-                "toolTip": "Bold",
-                "description": "Select font size for the text",
-                "dataType": "icon",
-                "iconClass": "bold icon",
-                "required": true,
-                "defaultValue": false
-            }, {
-                "propertyName": "fontstyle",
-                "title": "Font Style",
-                "toolTip": "Italic",
-                "description": "Select font style for the text",
-                "dataType": "icon",
-                "iconClass": "italic icon",
-                "required": true,
-                "defaultValue": false
-            }]
-        }, {
-            "propertyName": "align",
-            "title": "Align Text",
-            "dataType": "buttonToggle",
-            "description": "Select text alignment",
-            "options": [{
-                "value": "left",
-                "title": "Text Align Left",
-                "toolTip": "Left Align",
-                "description": "Align text to left",
-                "dataType": "icon",
-                "iconClass": "align left icon"
-            }, {
-                "value": "center",
-                "title": "Text Align Center",
-                "toolTip": "Center Align",
-                "description": "Align text to center",
-                "dataType": "icon",
-                "iconClass": "align center icon"
-            }, {
-                "value": "right",
-                "title": "Text Align Right",
-                "toolTip": "Right Align",
-                "description": "Align text to right",
-                "dataType": "icon",
-                "iconClass": "align right icon"
-            }],
-            "defaultValue": "left"
-        }, {
-            "propertyName": "fontfamily",
-            "title": "Font Family",
-            "description": "Select font family for the text",
-            "dataType": "select",
-            "range": ["Arial", "Courier", "Georgia", "Helvetica", "Monospace", "Sans-serif", "Serif", "Tahoma", "Times", "Trebuchet MS", "Verdana", "NotoSans", "NotoSansKannada", "NotoSansGujarati", "NotoSansBengali", "NotoSansGurmukhi", "NotoSansOriya", "NotoSansDevanagari", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu", "NotoSansMalayalam"],
-            "required": true,
-            "defaultValue": "NotoSans"
-        }, {
-            "propertyName": "fontsize",
-            "title": "Font Size",
-            "description": "Select font size for the text",
-            "dataType": "inputSelect",
-            "minValue": 6,
-            "maxValue": 400,
-            "range": [18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 54, 60, 66, 72, 80, 88, 96],
-            "required": true,
-            "defaultValue": 18
         }],
-        "help": {
+        "help":
+        {
             "src": "editor/help.md",
             "dataType": "text"
         },
-        "init-data": {
+        "init-data":
+        {
             "__text": "",
             "x": 10,
             "y": 20,
@@ -191,7 +85,8 @@
             "fontWeight": "normal"
         }
     },
-    "renderer": {
+    "renderer":
+    {
         "main": "renderer/supertextplugin.js"
     }
 }

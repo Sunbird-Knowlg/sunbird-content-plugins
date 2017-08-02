@@ -174,7 +174,7 @@
 /* from lessonBrowser.html */
 
 .popup-heading {
-    padding: 0.5em!important;
+    padding: 1em 0.5em!important;
 }
 
 .popup-heading h5 {
@@ -196,6 +196,7 @@
 }
 .repo-names-menu-bar >.item{
     padding: 0.5em 1em!important;
+    letter-spacing: 1px;
 }
 
 /* from lessonBrowser.html */

@@ -359,6 +359,8 @@ body {
     font-size: 12px !important;
 }
 
+
+/* for labelled icons in header */
 .label-icon-box {
     width: auto!important;
     padding: 0 0.5em!important;
@@ -384,3 +386,4 @@ body {
 .save-button-text {
     top: -1px;
 }
+/* for labelled icons in header */
