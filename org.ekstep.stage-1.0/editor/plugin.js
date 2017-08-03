@@ -52,7 +52,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         }else{
             var stage = ecEditor.getCurrentStage(),
                 canvas = stage.canvas;
-            html2canvas($('#canvas-wrapper'), { 
+            html2canvas($('#canvas-wrapper'), {  
                 onrendered: function (canvas) {
                     stage.thumbnail = canvas.toDataURL({format: 'jpeg', quality: 0.1});
                     var angScope = ecEditor.getAngularScope();
@@ -72,6 +72,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
     },
     render: function(canvas) {
+        var instance = this;
         org.ekstep.contenteditor.stageManager.clearCanvas(canvas);
         this.children = ecEditor._.sortBy(this.children, [function(o) { return o.getAttribute('z-index'); }]);
         ecEditor._.forEach(this.children, function(plugin) {
@@ -79,11 +80,11 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
         canvas.renderAll();
         ecEditor.dispatchEvent('stage:render:complete', { stageId: this.id });
-         if (org.ekstep.contenteditor.stageManager.contentLoading) {
+        if (org.ekstep.contenteditor.stageManager.contentLoading) {
             this.thumbnail = canvas.toDataURL({format: 'jpeg', quality: 0.1});
-         }else{
+        }else{
             var instance = this;
-            _.debounce(function() {
+            // _.debounce(function() {
                 html2canvas($('#canvas-wrapper'), {
                     onrendered: function(canvas) {
                         instance.thumbnail = canvas.toDataURL({ format: 'jpeg', quality: 0.1 });
@@ -92,7 +93,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     },
                     timeout: 0
                 });
-            }, 150, { leading: true });
+            // }, 150, { leading: true });
         }
         ecEditor.refreshStages();
     },
