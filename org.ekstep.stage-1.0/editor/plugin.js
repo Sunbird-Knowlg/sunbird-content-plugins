@@ -152,11 +152,8 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     updateThumbnail: function() {
         $('<canvas>').attr({ id: this.id }).css({ width: '720px', height: '405px' }).appendTo('#thumbnailCanvasContainer');
-        //var canvasbgColor = !ecEditor._.isEmpty(ecEditor.getCurrentStage().canvas.backgroundColor) || "#FFFFFF";
-        //canvas = new fabric.Canvas(this.id, { backgroundColor: canvasbgColor, preserveObjectStacking: true, width: 720, height: 405 });
         canvas = new fabric.Canvas(this.id, { backgroundColor: "#FFFFFF", preserveObjectStacking: true, width: 720, height: 405 });
         this.render(canvas);
         ecEditor.jQuery('#' + this.id).remove();
     }
 });
-//# sourceURL=stageplugin.js
