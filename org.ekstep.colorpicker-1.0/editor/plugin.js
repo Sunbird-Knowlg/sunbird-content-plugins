@@ -65,7 +65,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 hideAfterPaletteSelect:true,
                 move: function(tinycolor) { 
                     data.callback(data.id, tinycolor.toHexString());
-                },
+                }
             });
 
             ecEditor.jQuery("#" + data.id).attr("colorpicker", "added");

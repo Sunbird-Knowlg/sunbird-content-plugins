@@ -136,10 +136,10 @@ org.ekstep.contenteditor.basePlugin.extend({
             case "color":
                 var shapeInstance;
                 ecEditor._.forEach(ecEditor.getCurrentStage().children, function(child) {
-                  shapeInstance = child;
+                  if (child.id == 'slidebackground') shapeInstance = child;
                 });
                 if (!shapeInstance) {
-                    ecEditor.instantiatePlugin('org.ekstep.shape', {"id":"slidebackground","type":"rect","x":0,"y":0,"fill":value,"w": 100,"h": 100,"stroke":"rgba(255, 255, 255, 0)","strokeWidth":1,"opacity":1, "z-index": -999}, ecEditor.getCurrentStage());
+                    if (value !== "#FFFFFF") ecEditor.instantiatePlugin('org.ekstep.shape', {"id":"slidebackground","type":"rect","x":0,"y":0,"fill":value,"w": 100,"h": 100,"stroke":"rgba(255, 255, 255, 0)","strokeWidth":1,"opacity":1, "z-index": -999}, ecEditor.getCurrentStage());
                 } else {
                     shapeInstance.attributes.fill = value;
                 }
