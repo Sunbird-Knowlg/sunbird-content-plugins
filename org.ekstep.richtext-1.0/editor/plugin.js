@@ -5,6 +5,8 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.addEventListener("org.ekstep.richtext:showpopup", this.loadHtml, this);
         ecEditor.addEventListener('stage:select', this.removeHtmlElements, this);
         ecEditor.addEventListener(instance.manifest.id + ":adddiv", this.addDivElement, this);
+        var canvas = org.ekstep.contenteditor.api.getCanvas();
+        canvas.on('object:scaling', this.resizeObject, this);
         var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/richtexteditor.html");
         var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/richtexteditorapp.js");
         ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
@@ -16,17 +18,30 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         var props = this.convertToFabric(this.attributes);
         if (ecEditor._.isUndefined(this.config.text))
-            this.config.text = ecEditor._.isUndefined(this.attributes.__text) ? "" : this.attributes.__text;
+               this.config.text = ecEditor._.isUndefined(this.attributes.__text) ? "" : this.attributes.__text;
         delete props.__text;
         delete this.attributes.__text;
-
         this.editorObj = new fabric.Rect(props);
         if (this.editorObj) this.editorObj.setFill(props.fill);
         ecEditor.dispatchEvent(instance.manifest.id + ":adddiv", { data: instance });
     },
+    resizeObject: function(e) {
+        if (org.ekstep.contenteditor.api.getCurrentObject().manifest.id == 'org.ekstep.richtext') {
+               var canvasCord = ecEditor.jQuery('#canvas').offset();
+               ecEditor.jQuery("#" + e.target.id).offset({
+                     'top':e.target.top + canvasCord.top, 
+                     'left':e.target.left + canvasCord.left
+               });
+               ecEditor.jQuery("#" + e.target.id).width(e.target.getWidth());
+               ecEditor.jQuery("#" + e.target.id).height(e.target.getHeight());
+        }
+    },
     moving: function(instance) {
         var canvasCord = ecEditor.jQuery('#canvas').offset();
-        ecEditor.jQuery("#" + this.editorObj.id).offset({'top':this.editorObj.top + canvasCord.top, 'left':this.editorObj.left + canvasCord.left});
+        ecEditor.jQuery("#" + this.editorObj.id).offset({
+               'top':this.editorObj.top + canvasCord.top, 
+               'left':this.editorObj.left + canvasCord.left
+        });
     },
     selected: function(instance) {
         fabric.util.addListener(fabric.document, 'dblclick', this.dblClickHandler);
@@ -59,23 +74,23 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     dblClickHandler: function(event) {
         if (ecEditor.getCurrentObject().manifest.id === "org.ekstep.richtext") {
-            ecEditor.dispatchEvent("org.ekstep.richtext:showpopup");
+               ecEditor.dispatchEvent("org.ekstep.richtext:showpopup");
         }
     },
     loadHtml: function(event, data) {
         currentInstance = this;
         ecEditor.getService('popup').open({
-            template: 'richtexteditor',
-            controller: 'richtexteditorcontroller',
-            controllerAs: '$ctrl',
-            resolve: {
-                'instance': function() {
-                    return currentInstance;
-                }
-            },
-            width: 500,
-            showClose: false,
-            className: 'ngdialog-theme-plain'
+               template: 'richtexteditor',
+               controller: 'richtexteditorcontroller',
+               controllerAs: '$ctrl',
+               resolve: {
+                      'instance': function() {
+                           return currentInstance;
+                      }
+               },
+               width: 500,
+               showClose: false,
+               className: 'ngdialog-theme-plain'
         });
     },
     render: function(canvas) {
