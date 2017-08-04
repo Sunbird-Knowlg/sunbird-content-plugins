@@ -48,7 +48,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             case 'rect':
                 this.shapeType = 'rect';
                 // slide background shape not adding to canvas. Only it is visible in renderer.
-                if (this.id !== "slidebackground") this.editorObj = new fabric.Rect(props);
+                if (props.subtype !== "slidebackground") this.editorObj = new fabric.Rect(props);
                 break;
 
             case 'triangle':

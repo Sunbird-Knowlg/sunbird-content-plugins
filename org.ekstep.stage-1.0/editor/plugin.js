@@ -21,8 +21,10 @@ org.ekstep.contenteditor.basePlugin.extend({
         this.onclick = { id: 'stage:select', data: { stageId: this.id } };
         this.ondelete = { id: 'stage:delete', data: { stageId: this.id } };
         this.duplicate = { id: 'stage:duplicate', data: { stageId: this.id } };
-        if (this.data) {
-            this.addConfig('color', this.data.config.color || '#FFFFFF');
+        if (this.editorData.stageECML) {
+            var config = JSON.parse(this.editorData.stageECML.config.__cdata);
+            this.addConfig('color', config.color || '#FFFFFF');
+            this.setSlideBackground(config.color || '#FFFFFF');
         } else {
             this.addConfig('color', this.config.color || '#FFFFFF');
         }
@@ -134,21 +136,25 @@ org.ekstep.contenteditor.basePlugin.extend({
                 }
                 break;
             case "color":
-                var shapeInstance;
-                ecEditor._.forEach(ecEditor.getCurrentStage().children, function(child) {
-                  if (child.id == 'slidebackground') shapeInstance = child;
-                });
-                if (!shapeInstance) {
-                    if (value !== "#FFFFFF") ecEditor.instantiatePlugin('org.ekstep.shape', {"id":"slidebackground","type":"rect","x":0,"y":0,"fill":value,"w": 100,"h": 100,"stroke":"rgba(255, 255, 255, 0)","strokeWidth":1,"opacity":1, "z-index": -999}, ecEditor.getCurrentStage());
-                } else {
-                    shapeInstance.attributes.fill = value;
-                }
-                ecEditor.getCurrentStage().canvas.backgroundColor = value;
-                this.config.color = value;
+                this.setSlideBackground(value);
                 ecEditor.dispatchEvent("stage:modified");
                 ecEditor.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
                 break;
         }
+    },
+    setSlideBackground: function(color) {
+        var shapeInstance;
+        ecEditor._.forEach(ecEditor.getCurrentStage().children, function(child) {
+            if (child.attributes.subtype == 'slidebackground') shapeInstance = child;
+        });
+        if (!shapeInstance) {
+            if (color !== "#FFFFFF") ecEditor.instantiatePlugin('org.ekstep.shape', {"type":"rect","subtype": "slidebackground", "x":0,"y":0,"fill":color,"w": 100,"h": 100,"stroke":"rgba(255, 255, 255, 0)","strokeWidth":1,"opacity":1, "z-index": -999}, ecEditor.getCurrentStage());
+        } else {
+            shapeInstance.attributes.fill = color;
+        }
+        ecEditor.getCurrentStage().canvas.backgroundColor = color;
+        this.config.color = color;
     },
     updateThumbnail: function() {
         $('<canvas>').attr({ id: this.id }).css({ width: '720px', height: '405px' }).appendTo('#thumbnailCanvasContainer');
@@ -157,3 +163,4 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.jQuery('#' + this.id).remove();
     }
 });
+//# sourceURL=stageplugin.js
