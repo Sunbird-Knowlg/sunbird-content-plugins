@@ -6,23 +6,23 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
         'status': navigator.onLine,
         'text': 'No Internet Connection!'
     };
-    $scope.disableSaveBtn = true;    
+    $scope.disableSaveBtn = true;
     $scope.lastSaved;
 
     $scope.saveContent = function() {
         $scope.disableSaveBtn = true;
         ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:save", {
             showNotification: true,
-            callback: function(err, res) {                
-                if(res && res.data && res.data.responseCode == "OK") $scope.lastSaved = Date.now(); 
-                $scope.$safeApply();               
+            callback: function(err, res) {
+                if(res && res.data && res.data.responseCode == "OK") $scope.lastSaved = Date.now();
+                $scope.$safeApply();
             }
         });
     };
 
     $scope.onNodeEvent = function(event, data) {
         $scope.disableSaveBtn = false;
-        $scope.$safeApply();                
+        $scope.$safeApply();
     };
 
     $scope.telemetry = function(data) {
@@ -35,9 +35,11 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
         });
     };
 
+    $scope.reportIssueLink = ((window.context && window.context.reportIssueLink) ? window.context.reportIssueLink : "");
+
     window.onbeforeunload = function(e) {
-        if (!$scope.disableSaveBtn) return "You have unsaved changes"; 
-        e.preventDefault();       
+        if (!$scope.disableSaveBtn) return "You have unsaved changes";
+        e.preventDefault();
     }
     window.addEventListener('online', $scope.internetStatusFn, false);
     window.addEventListener('offline', $scope.internetStatusFn, false);

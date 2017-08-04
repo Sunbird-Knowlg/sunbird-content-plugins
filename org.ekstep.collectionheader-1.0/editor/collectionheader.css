@@ -86,3 +86,15 @@
 .content-title-container{
     line-height: 200%!important;
 }
+
+.collection-header-help-button{
+    position: fixed;
+    right: 1vw;
+    bottom: 2vh;
+    z-index: 1;
+    background: white!important;
+}
+
+.custom-help-button{
+    color: rgb(0, 147, 221);
+}
