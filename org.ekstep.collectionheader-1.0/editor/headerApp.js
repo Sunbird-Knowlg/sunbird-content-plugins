@@ -20,6 +20,10 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
         });
     };
 
+    $scope.downloadContent = function() {
+        ecEditor.dispatchEvent("download:content");
+    };
+
     $scope.onNodeEvent = function(event, data) {
         $scope.disableSaveBtn = false;
         $scope.$safeApply();
