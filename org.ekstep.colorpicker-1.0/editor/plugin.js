@@ -32,9 +32,9 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     invoke: function(event, data) {
         var instance = this;
-        if (ecEditor.jQuery("#" + data.id).attr("colorpicker") != "added") {
+        if (ecEditor.jQuery("#" + data.id + " input").attr("colorpicker") != "added") {
            
-           this.picker[data.id] = ecEditor.jQuery("#" +data.id).spectrum({
+           this.picker[data.id] = ecEditor.jQuery("#" +data.id+" input").spectrum({
                 color: "#FF0000",
                 showInput: true,
                 showAlpha: false,
@@ -45,6 +45,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 showButtons: true,
                 change: function(color) { 
                     data.callback(data.id, color.toHexString());
+                    ecEditor.getService(ServiceConstants.TELEMETRY_SERVICE).interact({ "type": "click", "subtype": "change", "target": 'colorpicker', "pluginid": instance.manifest.id, 'pluginver': instance.manifest.ver, "objectid": data.id, "stage": ecEditor.getCurrentStage().id });
                 },
                 showPaletteOnly: true,
                 togglePaletteOnly: true,
@@ -65,17 +66,18 @@ org.ekstep.contenteditor.basePlugin.extend({
                 hideAfterPaletteSelect:true,
                 move: function(tinycolor) { 
                     data.callback(data.id, tinycolor.toHexString());
+                    ecEditor.getService(ServiceConstants.TELEMETRY_SERVICE).interact({ "type": "click", "subtype": "move", "target": 'colorpicker', "pluginid": instance.manifest.id, 'pluginver': instance.manifest.ver, "objectid": data.id, "stage": ecEditor.getCurrentStage().id });
                 },
             });
 
-            ecEditor.jQuery("#" + data.id).attr("colorpicker", "added");
+            ecEditor.jQuery("#" + data.id+" input").attr("colorpicker", "added");
         }
         if (data && data.color) {
             //this.picker[data.id].fromString(data.color);
-             ecEditor.jQuery("#" + data.id).spectrum("set", data.color);
+             ecEditor.jQuery("#" + data.id+" input").spectrum("set", data.color);
         } else {
             //this.picker[data.id].fromString("#000000"); // default color will be black
-             ecEditor.jQuery("#" + data.id).spectrum("set", "#000000");// default color will be black
+             ecEditor.jQuery("#" + data.id+" input").spectrum("set", "#000000");// default color will be black
         }
     }
 });

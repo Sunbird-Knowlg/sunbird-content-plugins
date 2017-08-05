@@ -5,6 +5,23 @@ angular.module('editorApp')
         };
 
         $scope.config = $scope.config;
+        $scope.textTypeSelected;
+        $scope.refreshTab = true;
+        $scope.wordInfoColorpicker = [{
+            id: "wordfontcolorpicker",
+            title: "Word Color"
+        }, {
+            id: "wordhighlightcolorpicker",
+            title: "Word Highlight Color"
+        }, {
+            id: "wordunderlinecolorpicker",
+            title: "Word Underline Color"
+        }];
+
+        $scope.readAlongColorpicker = [{
+            id: "highlightcolorpicker",
+            title: "Read-along Highlight Color"
+        }]
 
         $scope.fontFamily = ["Arial", "Courier", "Georgia", "Helvetica", "Monospace", "Sans-serif", "Serif", "Tahoma", "Times", "Trebuchet MS", "Verdana", "NotoSans", "NotoSansKannada", "NotoSansGujarati", "NotoSansBengali", "NotoSansGurmukhi", "NotoSansOriya", "NotoSansDevanagari", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu", "NotoSansMalayalam"];
         $scope.fontSize = [18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 54, 60, 66, 72, 80, 88, 96];
@@ -63,18 +80,18 @@ angular.module('editorApp')
             "defaultValue": "left"
         }
 
-        $scope.showColorpicker = function() {
+        $scope.showColorpicker = function(id, color) {
             var eventData = {
-                id: 'color',
+                id: id,
                 callback: function(key, value) {
                     org.ekstep.contenteditor.api.dispatchEvent('config:on:change', { key: key, value: value });
                 },
-                color: $scope.configData['color']
+                color: color
             };
             setTimeout(function() { org.ekstep.contenteditor.api.dispatchEvent("colorpicker:state", eventData) }, 500);
         };
 
-        $scope.showColorpicker();
+        $scope.showColorpicker('textcolor', $scope.configData['color']);
 
         $scope.textOpacityConfig = {
             "propertyName": "opacity",
@@ -88,62 +105,6 @@ angular.module('editorApp')
             "maximumValue": 100
         };
 
-        $scope.readAlongConfig = {
-            "propertyName": "textType",
-            "title": "Enable Interactive features",
-            "dataType": "featureButtonToggle",
-            "description": "Text Enhancement",
-            "options": [{
-                "value": "readalong",
-                "title": "Read-along",
-                // "toolTip": "Click to read-along",
-                "description": "Readalong",
-                "dataType": "icon",
-                "iconClass": "icon icon-readalong",
-                "state": true,
-                "status": "HIDE",
-                "onclick": {
-                    "id": "org.ekstep.text:readalong:show"
-                },
-                "suboptions": [{
-                    "toolTip": "Delete",
-                    "dataType": "icon",
-                    "iconClass": "trash icon",
-                    "onclick": {
-                        "id": "org.ekstep.text:delete:enhancement"
-                    }
-                }]
-            }],
-            "defaultValue": "text"
-        };
-
-        $scope.wordInfoConfig = {
-            "propertyName": "textType",
-            "title": "Enable Interactive features",
-            "dataType": "featureButtonToggle",
-            "description": "Text Enhancement",
-            "options": [{
-                "value": "wordinfo",
-                "title": "Word Info",
-                // "toolTip": "Click for word-info",
-                "description": "Wordinfo",
-                "state": true,
-                "dataType": "icon",
-                "iconClass": "icon icon-wordinfo",
-                "status": "HIDE",
-                "onclick": {
-                    "id": "org.ekstep.text:wordinfo:show"
-                },
-                "suboptions": [{
-                    "toolTip": "Delete",
-                    "dataType": "icon",
-                    "iconClass": "trash icon",
-                    "onclick": {
-                        "id": "org.ekstep.text:delete:enhancement"
-                    }
-                }]
-            }]
-        }
         ecEditor.jQuery('.ui.accordion').accordion({
             "collapsible": true,
             "duration": "500"
@@ -152,6 +113,74 @@ angular.module('editorApp')
         setTimeout(function() {
             ecEditor.jQuery('.font-face-dropdown').dropdown();
             ecEditor.jQuery('.font-size-dropdown').dropdown();
+            ecEditor.jQuery("#readalongautoplay").checkbox({
+                onChecked: function() {
+                    $scope.configData.autoplay = true;
+                },
+                onUnchecked: function() {
+                    $scope.configData.autoplay = false;
+                }
+            });
+            if ($scope.configData.autoplay) ecEditor.jQuery("#readalongautoplay").checkbox('set checked');
         }, 0);
 
+        $scope.onTextSelect = function(event, data) {
+            if (ecEditor.getCurrentObject().attributes.textType == "readalong") {
+                $scope.hasReadAlong = true;
+                $scope.hasWordInfo = false;
+                $scope.textTypeSelected = "readalong";
+                $scope.updateAdvancedTab();
+                $scope.showReadAlong(ecEditor.getCurrentObject());
+            } else if (ecEditor.getCurrentObject().attributes.textType == "wordinfo") {
+                $scope.hasWordInfo = true;
+                $scope.hasReadAlong = false;
+                $scope.textTypeSelected = "wordinfo";
+                $scope.updateAdvancedTab();
+                $scope.showWordInfo(ecEditor.getCurrentObject());
+            } else {
+                $scope.textTypeSelected = undefined;
+                $scope.hasReadAlong = false;
+                $scope.hasWordInfo = false;
+                $scope.updateAdvancedTab();
+            }
+            $scope.$safeApply();
+        };
+
+
+        $scope.updateAdvancedTab = function() {
+            $scope.refreshTab = false;
+            $scope.refreshTab = true;
+            $scope.$safeApply();
+        };
+
+        $scope.showReadAlong = function(data) {
+            $scope.showColorpicker('highlightcolorpicker', data.config.highlight || '#FFFF00');
+        };
+
+        $scope.showWordInfo = function(data) {
+            $scope.showColorpicker('wordfontcolorpicker', data.config.wordfontcolor || '#0000FF');
+            $scope.showColorpicker('wordhighlightcolorpicker', data.config.wordhighlightcolor || '#FFFF00');
+            $scope.showColorpicker('wordunderlinecolorpicker', data.config.wordunderlinecolor || '#0000FF');
+        };
+
+        $scope.onTextSelect();
+
+        //remove listeners on object:unselect. controller is executed everytime object is selected, 
+        //so everytime listeners are registered with new scope.
+        //if we dont clean up the listeners, it will pile up the eventbus and causes performance issue.
+        $scope.unregisterListeners = function() {
+            ecEditor.removeEventListener("org.ekstep.text:addWordInfo", $scope.onTextSelect, $scope);
+            ecEditor.removeEventListener("org.ekstep.text:addReadAlong", $scope.onTextSelect, $scope);
+            ecEditor.removeEventListener("org.ekstep.text:added", $scope.onTextSelect, $scope);
+            ecEditor.removeEventListener("org.ekstep.text:modified", $scope.onTextSelect, $scope);
+            ecEditor.removeEventListener("org.ekstep.text:unselected", $scope.unregisterListeners, $scope);
+            ecEditor.removeEventListener("config:show", $scope.onTextSelect, $scope);
+        };
+
+        ecEditor.addEventListener("org.ekstep.text:addWordInfo", $scope.onTextSelect, $scope);
+        ecEditor.addEventListener("org.ekstep.text:addReadAlong", $scope.onTextSelect, $scope);
+        ecEditor.addEventListener("org.ekstep.text:added", $scope.onTextSelect, $scope);
+        ecEditor.addEventListener("org.ekstep.text:modified", $scope.onTextSelect, $scope);        
+        ecEditor.addEventListener("org.ekstep.text:unselected", $scope.unregisterListeners, $scope);
+        ecEditor.addEventListener("config:show", $scope.onTextSelect, $scope);
     }]);
