@@ -17,7 +17,11 @@
             "type": "icon",
             "toolTip": "Add Slide",
             "title": "Stage",
-            "iconClass": "icon-newstage icon",            
+            "iconClass": "icon-newstage icon",
+            "onclick": {
+                "id": "stage:create",
+                "data": { "position": "end" }
+            },
             "submenu": [{
                 "id": "beginning",
                 "type": "icon",
@@ -78,5 +82,5 @@
             "required":true,
             "defaultValue":"#FFFFFF"
         }]
-    }    
+    }
 }
