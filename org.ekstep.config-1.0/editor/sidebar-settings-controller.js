@@ -290,10 +290,16 @@ angular.module('editorApp')
         };
 
         $scope.objectSelected = function(event, data) {
+            org.ekstep.contenteditor.api.dispatchEvent('sidebar:settings', undefined);
             $scope.selectedPluginId = data.id;
             $scope.selectedObject.stage = false;
             $scope.updateActions();
             $scope.showSettingsTab(event, data);
+            $scope.showConfig(event, data);
+            $("#customizeOptionSideBar").addClass('active');
+            $("#customizeOptionSideBar").siblings().removeClass('active');
+            $(".tab.segment[data-tab='settings']").addClass("active");
+            $(".tab.segment[data-tab='settings']").siblings().removeClass("active");
         };
 
         $scope.objectUnselected = function(event, data) {
