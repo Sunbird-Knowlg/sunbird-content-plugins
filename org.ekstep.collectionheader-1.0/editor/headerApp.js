@@ -39,6 +39,8 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
         });
     };
 
+    $scope.reportIssueLink = ((window.context && window.context.reportIssueLink) ? window.context.reportIssueLink : "");
+
     window.onbeforeunload = function(e) {
         if (!$scope.disableSaveBtn) return "You have unsaved changes";
         e.preventDefault();
