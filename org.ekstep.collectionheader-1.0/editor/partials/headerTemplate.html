@@ -33,6 +33,9 @@
                 <div ng-class="disableSaveBtn ? 'ui primary icon button button-overrides popup-item disabled' : 'ui primary icon button button-overrides popup-item'" data-content="Save content" data-variation="tiny inverted" data-position="top center" ng-click="saveContent(); telemetry({ subtype: 'save', target: 'saveBtn'});">
                     <i class="icon-save"></i>&nbsp;&nbsp;Save
                 </div>
+                <div class="ui red icon button button-overrides popup-item" ng-click="closeCollectionEdtr(); telemetry({ subtype: 'close', target: 'closeBtn'});">
+                    <i class="window close icon"></i>&nbsp;&nbsp;Close Editor!
+                </div>
                 <div>
                     <a class="ui compact icon basic big button collection-header-help-button" ng-click="telemetry({ subtype: 'reportIssue', target: 'reportIssueButton'});" ng-href="{{reportIssueLink}} " target="_blank " data-tooltip="Click to help" data-position="left center"><i class="help circle medium icon custom-help-button"></i></a>
                 </div>
