@@ -39,6 +39,20 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
         });
     };
 
+    $scope.closeCollectionEdtr = function ()
+    {
+        if ($scope.disableSaveBtn === false)
+        {
+            window.parent.EkTextbookUI.unsavedChangesWarningForCollectionEditor();
+            window.onbeforeunload = null;
+        }
+        else
+        {
+            //window.parent.jQuery('#default-collection-modal').iziModal('close');
+            window.parent.location.reload();
+        }
+    };
+
     $scope.reportIssueLink = ((window.context && window.context.reportIssueLink) ? window.context.reportIssueLink : "");
 
     window.onbeforeunload = function(e) {
