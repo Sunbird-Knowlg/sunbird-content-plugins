@@ -7,6 +7,9 @@
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
+        "dependencies": [
+            { "type": "js", "src": "editor/libs/html2canvas.js" }
+        ],
         "help": {
             "src": "editor/help.md",
             "dataType": "text"
