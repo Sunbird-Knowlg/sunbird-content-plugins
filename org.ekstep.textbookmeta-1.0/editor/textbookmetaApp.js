@@ -181,6 +181,10 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
         });
     }
 
+    setTimeout(function(){
+        ecEditor.jQuery('.popup-item').popup();
+    },0);
+    
     $scope.setActiveNode = function(nodeId){
         org.ekstep.collectioneditor.api.getService('collection').setActiveNode(nodeId);
     }

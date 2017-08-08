@@ -80,7 +80,7 @@
         <div class="fields">
             <div class="field book-image-field">
                 <label for="bookImage">Add icon</label>
-                <div class="book-image-container" ng-click="showAssestBrowser()">
+                <div class="book-image-container popup-item" data-content="Add or change image" data-variation="tiny inverted" data-position="right center" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
                     <img ng-if="showImageIcon" ng-src="{{course.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
                 </div>
