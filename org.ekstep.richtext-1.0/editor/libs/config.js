@@ -23,7 +23,7 @@ CKEDITOR.editorConfig = function( config ) {
 		{ name: 'styles' },
 		{ name: 'colors' }
 	];
-	config.removePlugins = 'stylescombo';
+	config.removePlugins = 'stylescombo, magicline';
 	config.font_names  = "Georgia/Georgia: Helvetica/Helvetica; Monospace/Monospace; Sans-serif/Sans-serif; Serif/Serif; Tahoma/Tahoma; Times/Times; Trebuchet MS/Trebuchet MS; Verdana/Verdana; NotoSans/NotoSans; NotoSansKannada/NotoSansKannada; NotoSansGujarati/NotoSansGujarati; NotoSansBengali/NotoSansBengali; NotoSansGurmukhi/NotoSansGurmukhi; NotoSansOriya/NotoSansOriya; NotoSansDevanagari/NotoSansDevanagari; NotoSansTamil/NotoSansTamil; NotoSansTelugu/NotoSansTelugu; NotoNastaliqUrdu/NotoNastaliqUrdu; NotoSansMalayalam/NotoSansMalayalam"
 
 	// Remove some buttons provided by the standard plugins, which are

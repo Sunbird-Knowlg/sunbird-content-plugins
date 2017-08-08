@@ -78,6 +78,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         }
     },
     loadHtml: function(event, data) {
+      if (document.getElementsByClassName('richtextEditor_1').length > 0) {return}; // Dont open popup if already opened
         currentInstance = this;
         ecEditor.getService('popup').open({
                template: 'richtexteditor',
@@ -90,7 +91,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                },
                width: 500,
                showClose: false,
-               className: 'ngdialog-theme-plain'
+               className: 'ngdialog-theme-plain richtextEditor_1'
         });
     },
     render: function(canvas) {

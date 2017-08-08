@@ -7,9 +7,9 @@ angular.module('richtexteditorapp', [])
         $scope.$on('ngDialog.opened', function (e, $dialog) {
             CKEDITOR.basePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/libs/");
             CKEDITOR.replace( 'editor1', {
-                customConfig: CKEDITOR.basePath + "/config.js",
-                skin: 'moono-lisa,'+CKEDITOR.basePath + "/skins/moono-lisa/",
-                contentsCss: CKEDITOR.basePath + "/contents.js",
+                customConfig: CKEDITOR.basePath + "config.js",
+                skin: 'moono-lisa,'+CKEDITOR.basePath + "skins/moono-lisa/",
+                contentsCss: CKEDITOR.basePath + "contents.css",
             });
             var textObj = ecEditor.getCurrentObject();
             if(textObj)
