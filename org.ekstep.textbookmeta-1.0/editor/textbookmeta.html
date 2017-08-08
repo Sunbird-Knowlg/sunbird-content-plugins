@@ -31,76 +31,66 @@
             </div>
         </div>
         <div class="metacontent-fields-container">
-            <div class="ui cards">
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Board</div>
-                        <div class="description">{{textbook.board.toString() | uppercase}}</div>
-                    </div>
+            <div class="ui fluid grid container">
+                <div class="four wide column" style="padding-left:0;">
+                    <table class="ui padded striped selectable table">
+                        <tbody>
+                            <tr>
+                                <td>Board</td>
+                                <td>{{textbook.board.toString() | uppercase}}</td>
+                            </tr>
+                            <tr>
+                                <td>Medium</td>
+                                <td>{{textbook.medium.toString() | lowercase}}</td>
+                            </tr>
+                            <tr>
+                                <td>Subject</td>
+                                <td>{{textbook.subject.toString() | lowercase}}</td>
+                            </tr>
+                            <tr>
+                                <td>Grade</td>
+                                <td>{{textbook.gradeLevel.toString() | lowercase}}</td>
+                            </tr>
+                            <tr>
+                                <td>Language</td>
+                                <td>{{textbook.language.toString() | lowercase}}</td>
+                            </tr>
+                            <tr>
+                                <td>Publication</td>
+                                <td>{{textbook.publication | lowercase}}</td>
+                            </tr>
+                            <tr>
+                                <td>Edition</td>
+                                <td>{{textbook.edition | lowercase}}</td>
+                            </tr>
+                            <tr>
+                                <td>Audience</td>
+                                <td>{{textbook.audience.toString() | lowercase}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Medium</div>
-                        <div class="description">{{textbook.medium.toString() | lowercase}}</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Subject</div>
-                        <div class="description">{{textbook.subject.toString() | lowercase}}</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Grade</div>
-                        <div class="description">{{textbook.gradeLevel.toString() | lowercase}}</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Language</div>
-                        <div class="description">{{textbook.language.toString() | lowercase}}</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Publication</div>
-                        <div class="description">{{textbook.publication | lowercase}}</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Edition</div>
-                        <div class="description">{{textbook.edition | lowercase}}</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Audience</div>
-                        <div class="description">{{textbook.audience.toString() | lowercase}}</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Concepts</div>
-                        <div class="description">
-                            <span class="field-value" ng-repeat="concept in textbook.concepts track by $index">{{concept.name}}{{$last ? '' : ', '}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Keywords</div>
-                        <div class="description">
-                            <span class="field-value" ng-repeat="keyword in textbook.keywords">{{keyword | lowercase}}{{$last ? '' : ', '}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Notes</div>
-                        <div class="description">{{textbook.notes.toString() | lowercase}}</div>
-                    </div>
+                <div class="eight wide column" style="padding-right:0;">
+                    <table class="ui padded striped selectable table">
+                        <tbody>
+                            <tr>
+                                <td>Concepts</td>
+                                <td>
+                                    <span ng-repeat="concept in textbook.concepts track by $index">{{concept.name}}{{$last ? '' : ', '}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Keywords</td>
+                                <td>
+                                    <span class="field-value" ng-repeat="keyword in textbook.keywords">{{keyword | lowercase}}{{$last ? '' : ', '}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Notes</td>
+                                <td>{{textbook.notes.toString() | lowercase}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -154,7 +144,7 @@
                 <div class="three fields">
                     <div class="field required">
                         <label for="author">Author</label>
-                        <input type="text" placeholder="Enter author name" ng-class="{error: submitted && textbookMetaForm.author.$error.required}" name="author" ng-model="textbook.author" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'author'})"  required/>
+                        <input type="text" placeholder="Enter author name" ng-class="{error: submitted && textbookMetaForm.author.$error.required}" name="author" ng-model="textbook.author" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'author'})" required/>
                     </div>
                     <div class="field">
                         <label for="publication">Publication</label>
@@ -168,7 +158,7 @@
                 <div class="field required">
                     <label>Description</label>
                     <div class="ui input">
-                        <textarea placeholder="brief description about the unit" ng-model="textbook.description" ng-class="{error: submitted && textbookMetaForm.description.$error.required}" name="description"  rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})" required></textarea>
+                        <textarea placeholder="brief description about the unit" ng-model="textbook.description" ng-class="{error: submitted && textbookMetaForm.description.$error.required}" name="description" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})" required></textarea>
                     </div>
                 </div>
                 <div class="field">

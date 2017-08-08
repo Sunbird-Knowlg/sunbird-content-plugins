@@ -36,20 +36,23 @@
             </div>
         </div>
         <div class="metacontent-fields-container">
-            <div class="ui cards">
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Keywords</div>
-                        <div class="description">
-                            <span class="field-value" ng-repeat="tag in content.keywords track by $index">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Language</div>
-                        <div class="description">{{content.language.toString() | lowercase}}</div>
-                    </div>
+            <div class="ui fluid grid container">
+                <div class="seven wide column" style="padding-left:0;">
+                    <table class="ui padded striped selectable table">
+                        <tbody>
+                            <tr>
+                                <td>Keywords</td>
+                                <td>
+                                    <span class="field-value" ng-repeat="tag in content.keywords track by $index">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Language</td>
+                                <td>
+                                    {{content.language.toString() | lowercase}} </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -60,7 +63,7 @@
                 <label for="bookImage">Add icon</label>
                 <div class="book-image-container popup-item" data-content="Add or change image" data-variation="tiny inverted" data-position="right center" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
-                    <img ng-if="showImageIcon" ng-src="{{content.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})"  />
+                    <img ng-if="showImageIcon" ng-src="{{content.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
                 </div>
             </div>
             <div class="field form-fields-except-image">
