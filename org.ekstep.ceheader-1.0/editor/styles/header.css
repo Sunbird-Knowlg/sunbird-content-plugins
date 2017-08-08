@@ -323,8 +323,8 @@ body {
 
 .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown .menu {
     left: inherit !important;
-    right: -14px !important;
-    top: 50% !important;
+    right: -16px !important;
+    top: 70% !important;
 }
 
 .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown .menu:after {
@@ -333,7 +333,7 @@ body {
 }
 
 .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown .menu .item {
-    font-size: 10px !important;
+    font-size: 11px !important;
     line-height: 11px;
     padding: 9px 10px !important;
     font-family: Helvetica;
@@ -363,7 +363,7 @@ body {
 /* for labelled icons in header */
 .label-icon-box {
     width: auto!important;
-    padding: 0 0.5em!important;
+    padding: 0 0em 0 0.5em!important;
     line-height: 2;
     float: right;
     margin-left: 5px;
@@ -372,7 +372,7 @@ body {
 
 .label-icon-box-text {
     position: relative;
-    left: -5px;
+    left: -10px;
     font-family: HelveticaNeueLTStd-Lt,'Helvetica Neue',Arial,Helvetica,sans-serif;
     cursor: default;
 }
