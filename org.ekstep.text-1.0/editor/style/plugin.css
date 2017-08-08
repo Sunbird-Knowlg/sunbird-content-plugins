@@ -10,12 +10,24 @@
 
 .text-formatting-options .inline.fields>label {
     width: 5em!important;
-    color: #9b9b9b!important;
+    color: grey!important;
     font-size: 1em!important;
     font-weight: normal!important;
     margin-right: 3em!important;
 }
 
+#readAlongContents .inline.fields>label,
+#wordInfoContents .inline.fields>label {
+    width: 17vw;
+    color: grey;
+    font-size: 1em;
+    font-weight: normal;
+}
+
+#readAlongContents,
+#wordInfoContents {
+    margin-top: 1vh;
+}
 
 .text-formatting-options input,
 .text-formatting-options .ui.dropdown,
