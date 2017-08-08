@@ -27,14 +27,14 @@
 
         <div class="header-icon-container five wide right floated column right aligned">
             <div class="custom-row-2">
-                <div class="ui primary icon button button-overrides popup-item" data-content="Download content" data-variation="tiny inverted" data-position="top center" ng-click="downloadContent(); telemetry({ subtype: 'download', target: 'downloadBtn'});">
+                <div id="downloadButton" class="ui primary icon button button-overrides popup-item" data-content="Download content" data-variation="tiny inverted" data-position="top center" ng-click="downloadContent(); telemetry({ subtype: 'download', target: 'downloadBtn'});">
                     <i class="icon-download"></i>&nbsp;&nbsp;Download
                 </div>
-                <div ng-class="disableSaveBtn ? 'ui primary icon button button-overrides popup-item disabled' : 'ui primary icon button button-overrides popup-item'" data-content="Save content" data-variation="tiny inverted" data-position="top center" ng-click="saveContent(); telemetry({ subtype: 'save', target: 'saveBtn'});">
+                <div id="saveButton" ng-class="disableSaveBtn ? 'ui primary icon button button-overrides popup-item disabled' : 'ui primary icon button button-overrides popup-item'" data-content="Save content" data-variation="tiny inverted" data-position="top center" ng-click="saveContent(); telemetry({ subtype: 'save', target: 'saveBtn'});">
                     <i class="icon-save"></i>&nbsp;&nbsp;Save
                 </div>
-                <div class="ui red icon button button-overrides popup-item" ng-click="closeCollectionEdtr(); telemetry({ subtype: 'close', target: 'closeBtn'});">
-                    <i class="window close icon"></i>&nbsp;&nbsp;Close Editor!
+                <div id="closeButton" class="ui red icon button button-overrides popup-item" ng-click="closeCollectionEdtr(); telemetry({ subtype: 'close', target: 'closeBtn'});">
+                    <i class="window close icon"></i>
                 </div>
                 <div>
                     <a class="ui compact icon basic big button collection-header-help-button" ng-click="telemetry({ subtype: 'reportIssue', target: 'reportIssueButton'});" ng-href="{{reportIssueLink}} " target="_blank " data-tooltip="Click to help" data-position="left center"><i class="help circle medium icon custom-help-button"></i></a>
