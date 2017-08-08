@@ -7,44 +7,66 @@
  * @author Harish Kumar Gangula <harishg@ilimi.in>
  * @listens copy:copyItem
  * @listens copy:copyItem
- * @listens reorder:sendtofront
- * @listens reorder:sendtoback
+ * @listens reorder:bringforward
+ * @listens reorder:sendbackward
  * @listens delete:invoke
  * @listens object:selected
  * @listens object:unselected
- * 
+ *
  */
 org.ekstep.contenteditor.basePlugin.extend({
     type: "utils",
     picker: undefined,
     /**
-     *   @member clipboard {Object}  
+     *   @member clipboard {Object}
      *   @memberof Utils
-     *   
+     *
      */
     clipboard: undefined,
     initialize: function() {
         var instance = this;
-
-        ecEditor.addEventListener("reorder:sendtofront", this.sendToFront, this);
-        ecEditor.addEventListener("reorder:sendtoback", this.sendToBack, this);
+        ecEditor.addEventListener("reorder:bringforward", this.bringforward, this);
+        ecEditor.addEventListener("reorder:bringfront", this.bringfront, this);
+        ecEditor.addEventListener("reorder:sendbackward", this.sendbackward, this);
+        ecEditor.addEventListener("reorder:sendback", this.sendback, this);
         ecEditor.addEventListener('copy:copyItem', this.copyItem, this);
         ecEditor.addEventListener('paste:pasteItem', this.pasteItem, this);
         ecEditor.addEventListener("delete:invoke", this.deleteObject, this);
         ecEditor.addEventListener("object:selected", this.objectSelected, this);
         ecEditor.addEventListener("object:unselected", this.objectUnSelected, this);
     },
-
+    /**
+     *
+     *   send the object to front in the canvas
+     *   fires the object:modified event to update stage and renders
+     *   @memberof Utils
+     */
+    bringfront: function(event, data) {
+        ecEditor.getCanvas().bringToFront(ecEditor.getEditorObject());
+        ecEditor.render();
+        ecEditor.dispatchEvent('object:modified', { id: ecEditor.getEditorObject().id });
+    },
+    /**
+     *
+     *   send the object to last in the canvas
+     *   fires the object:modified event to update stage and renders
+     *   @memberof Utils
+     */
+    sendback: function(event, data) {
+        ecEditor.getCanvas().sendToBack(ecEditor.getEditorObject());
+        ecEditor.render();
+        ecEditor.dispatchEvent('object:modified', { id: ecEditor.getEditorObject().id });
+    },
     /**
      *
      *   send the object to one step front in the canvas
      *   fires the object:modified event to update stage and renders
      *   @memberof Utils
      */
-    sendToFront: function(event, data) {
-        ecEditor.getCanvas().bringForward(ecEditor.getEditorObject());        
-        ecEditor.render();        
-        ecEditor.dispatchEvent('object:modified', {id: ecEditor.getEditorObject().id});
+    bringforward: function(event, data) {
+        ecEditor.getCanvas().bringForward(ecEditor.getEditorObject());
+        ecEditor.render();
+        ecEditor.dispatchEvent('object:modified', { id: ecEditor.getEditorObject().id });
     },
     /**
      *
@@ -52,10 +74,10 @@ org.ekstep.contenteditor.basePlugin.extend({
      *   fires the object:modified event to update stage and renders
      *   @memberof Utils
      */
-    sendToBack: function(event, data) {
-        ecEditor.getCanvas().sendBackwards(ecEditor.getEditorObject());        
+    sendbackward: function(event, data) {
+        ecEditor.getCanvas().sendBackwards(ecEditor.getEditorObject());
         ecEditor.render();
-        ecEditor.dispatchEvent('object:modified', {id: ecEditor.getEditorObject().id});
+        ecEditor.dispatchEvent('object:modified', { id: ecEditor.getEditorObject().id });
     },
     /**
      *
@@ -65,7 +87,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     copyItem: function() {
         this.clipboard = _.cloneDeep(ecEditor.getCurrentObject() ? ecEditor.getCurrentObject() : ecEditor.getCurrentGroup());
-        if(this.clipboard) {
+        if (this.clipboard) {
             ecEditor.updateContextMenu({ id: 'paste', state: 'SHOW', data: {} });
         }
     },
@@ -76,26 +98,27 @@ org.ekstep.contenteditor.basePlugin.extend({
      *   @memberof Utils
      */
     pasteItem: function() {
-        if(this.clipboard) {
+        if (this.clipboard) {
             if (_.isArray(this.clipboard)) {
                 ecEditor.getCanvas().discardActiveGroup();
-                this.clipboard.forEach(function(instance){
+                this.clipboard.forEach(function(instance) {
                     ecEditor.cloneInstance(instance);
                 });
-            }
-            else ecEditor.cloneInstance(this.clipboard);
+            } else ecEditor.cloneInstance(this.clipboard);
             this.clipboard = undefined;
             ecEditor.updateContextMenu({ id: 'paste', state: 'HIDE', data: {} });
         }
     },
     /**
      *
-     *   deletes the object or group from the canvas 
+     *   deletes the object or group from the canvas
      *   invokes remove method
      *   @memberof Utils
      */
     deleteObject: function(event, data) {
-        var activeGroup = ecEditor.getEditorGroup(), activeObject = ecEditor.getEditorObject(), id, instance = this;
+        var activeGroup = ecEditor.getEditorGroup(),
+            activeObject = ecEditor.getEditorObject(),
+            id, instance = this;
 
         if (activeGroup) {
             ecEditor.getCanvas().discardActiveGroup();
@@ -122,9 +145,10 @@ org.ekstep.contenteditor.basePlugin.extend({
      *   @memberof Utils
      */
     objectSelected: function(event, data) {
-        ecEditor.updateContextMenus([{ id: 'reorder', state: 'SHOW', data: {}}, 
-                                            { id: 'copy', state: 'SHOW', data: {} },
-                                            { id: 'delete', state: 'SHOW', data: {} }]);
+        ecEditor.updateContextMenus([{ id: 'reorder', state: 'SHOW', data: {} },
+            { id: 'copy', state: 'SHOW', data: {} },
+            { id: 'delete', state: 'SHOW', data: {} }
+        ]);
     },
     /**
      *
@@ -132,9 +156,10 @@ org.ekstep.contenteditor.basePlugin.extend({
      *   @memberof Utils
      */
     objectUnSelected: function(event, data) {
-        ecEditor.updateContextMenus([{ id: 'reorder', state: 'HIDE', data: {}},
-                                            { id: 'copy', state: 'HIDE', data: {} },
-                                            { id: 'delete', state: 'HIDE', data: {} }]);
+        ecEditor.updateContextMenus([{ id: 'reorder', state: 'HIDE', data: {} },
+            { id: 'copy', state: 'HIDE', data: {} },
+            { id: 'delete', state: 'HIDE', data: {} }
+        ]);
     }
 });
 //# sourceURL=utilsplugin.js

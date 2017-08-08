@@ -33,7 +33,7 @@
                 </div>
                 <div class="inline fields">
                     <label>Color</label>
-                    <ui-colorpicker></ui-colorpicker>
+                    <ui-colorpicker id="textcolor"></ui-colorpicker>
                 </div>
                 <div class="inline fields">
                     <label>Opacity</label>
@@ -44,23 +44,42 @@
                 </div>
             </div>
         </div>
-        <div class="title">Read-along</div>
-        <div class="content">
-            <span ng-repeat="option in readAlongConfig.options" ng-show="option.state">
-                            <button class="ui icon button" ng-show="option.status === 'SHOW'" ng-repeat="suboption in option.suboptions" ng-click="fireEvent(suboption.onclick)">
-                                <i class="{{suboption.iconClass}} "></i>
-                            </button>
-                            <div class="ui grey button {{option.status === 'SHOW' ? 'primary': ''}}" ng-click="fireEvent(option.onclick)" style="padding: 0.8em 0.8em;"><i class="{{option.iconClass}}"></i>{{option.title}}</div>
-                        </span>
-        </div>
-        <div class="title">Word Info</div>
-        <div class="content">
-            <span ng-repeat="option in wordInfoConfig.options" ng-show="option.state">
-                            <button class="ui icon button" ng-show="option.status === 'SHOW'" ng-repeat="suboption in option.suboptions" ng-click="fireEvent(suboption.onclick)">
-                                <i class="{{suboption.iconClass}} "></i>
-                            </button>
-                            <div class="ui grey button {{option.status === 'SHOW' ? 'primary': ''}}" ng-click="fireEvent(option.onclick)" style="padding: 0.8em 0.8em;"><i class="{{option.iconClass}}"></i>{{option.title}}</div>
-                        </span>
+        <div class="title">Read-along/Word Info</div>
+        <div class="content text-formatting-options">
+            <div ng-if="refreshTab">
+                <span>
+                <button class="ui icon button" ng-show="hasReadAlong && !hasWordInfo" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'})">
+                    <i class="trash icon"></i>
+                </button>
+                <div ng-if="!hasWordInfo" class="ui grey button {{hasReadAlong ? 'primary': ''}}" ng-click="fireEvent({id:'org.ekstep.text:readalong:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-readalong"></i>Read-along</div>
+                <div class="inline fields" ng-show="hasReadAlong && !hasWordInfo" ng-repeat="colorpicker in readAlongColorpicker">
+                    <br>
+                    <label>{{colorpicker.title}}</label>
+                    <ui-colorpicker id={{colorpicker.id}}></ui-colorpicker>
+                </div> 
+                <div ng-show="hasReadAlong && !hasWordInfo">
+                    <br>
+                    <label>Autoplay</label>
+                    <br>
+                    <div class="ui toggle checkbox" id="readalongautoplay">
+                        <input name="autoplay" type="checkbox" ng-click="fireSidebarTelemetry({id: 'autoplay'}, 'boolean');">
+                        <label></label>
+                    </div>
+                </div>               
+            </span>
+                <span>
+                <button class="ui icon button" ng-show="hasWordInfo && !hasReadAlong" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'})">
+                    <i class="trash icon"></i>
+                </button>
+                <div ng-if="!hasReadAlong" class="ui grey button {{hasWordInfo ? 'primary': ''}}" ng-click="fireEvent({id:'org.ekstep.text:wordinfo:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-wordinfo"></i>Word Info</div>
+                <div class="inline fields" ng-show="hasWordInfo && !hasReadAlong" ng-repeat="colorpicker in wordInfoColorpicker">
+                    <br>
+                    <br>
+                    <label>{{colorpicker.title}}</label>
+                    <ui-colorpicker id={{colorpicker.id}}></ui-colorpicker>
+               </div>
+            </span>
+            </div>
         </div>
         <div class="title">Transliterate</div>
         <div class="content">

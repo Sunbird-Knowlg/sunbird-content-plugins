@@ -62,7 +62,7 @@ a.item.at-menu-item.popup-item.active {
                 <div class="ui form" ng-switch-when="colorpicker">
                     <div class="field">
                         <label ng-show="config.title">{{config.title}}</label>
-                        <ui-colorpicker></ui-colorpicker>
+                        <ui-colorpicker id="{{config.propertyName}}"></ui-colorpicker>
                     </div>
                 </div>
                 <div class="ui form" ng-if='config.type == "custom_template"' compilehtml="config.template"></div>
