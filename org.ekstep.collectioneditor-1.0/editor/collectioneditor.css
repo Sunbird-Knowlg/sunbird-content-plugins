@@ -95,7 +95,7 @@ body {
 }
 
 #collection-tree::-webkit-scrollbar {
-    width: 0!important; // height: 0!important;
+    width: 0!important;
 }
 
 #collection-tree {
@@ -135,11 +135,10 @@ body {
     position: relative;
 }
 
-.tree-wrapper {
-    height: 92%!important;
-    border: none!important;
-    padding-left: 0!important;
-    padding-top: 0!important;
+#treeWrapper {
+    height: 100%;
+    border: none;
+    padding: 0;
 }
 
 .tree-access-tools {
@@ -175,9 +174,30 @@ body {
     border-radius: 0;
 }
 
-.tree-access-tools-segment {
-    padding: 0.3em 0.5em 0.3em 0!important;
-    height: 8%!important;
+#treeAccessToolsSegment {
+    position: absolute;
+    right: 0;
+    top: -0.8vh;
+    padding: 0.3em 0em 0.3em 0;
+    height: 8%;
+    z-index: 10;
+    background: transparent;
+}
+
+#treeExpandCollapseButtonsContainer{
+    display: inline-block;
+    position: relative;
+    background: transparent;
+}
+
+#treeExpandCollapseButtonsContainer .ui.button{
+    margin-right: auto;
+    min-width: 0;
+    width: 1vw;
+    display: block;
+    padding: 1em;
+    padding-right: 2em;
+    border-radius: 0;
 }
 
 .icon-container {
