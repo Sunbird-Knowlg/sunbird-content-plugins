@@ -1,6 +1,6 @@
 <div ng-controller="org.ekstep.text:config-controller">
     <div class="ui accordion sidebar-accordion">
-        <div class="active title">Text Formatting</div>
+        <div class="active title" id="textFormatting" ng-click="toggleActiveAcordionTitle($event);">Text Formatting</div>
         <div class="active content text-formatting-section">
             <div class="ui form text-formatting-options">
                 <div class="inline fields">
@@ -44,7 +44,7 @@
                 </div>
             </div>
         </div>
-        <div class="title">Read-along/Word Info</div>
+        <div class="title" id="readAlongWordInfo" ng-click="toggleActiveAcordionTitle($event);">Read-along/Word Info</div>
         <div class="content text-formatting-options">
             <div ng-if="refreshTab">
                 <span>
@@ -81,7 +81,7 @@
             </span>
             </div>
         </div>
-        <div class="title">Transliterate</div>
+        <div class="title" id="transliterate" ng-click="toggleActiveAcordionTitle($event);">Transliterate</div>
         <div class="content">
             <button class="small ui grey button" ng-click="openTransliterator()">
                 <strong>Transliterate</strong>

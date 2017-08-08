@@ -168,6 +168,23 @@ angular.module('editorApp')
         //remove listeners on object:unselect. controller is executed everytime object is selected, 
         //so everytime listeners are registered with new scope.
         //if we dont clean up the listeners, it will pile up the eventbus and causes performance issue.
+
+        ecEditor.jQuery('.sidebar-accordion').accordion();
+
+        setTimeout(function() {
+            ecEditor.jQuery('.font-face-dropdown').dropdown();
+            ecEditor.jQuery('.font-size-dropdown').dropdown();
+        }, 0);
+
+
+        $scope.toggleActiveAcordionTitle = function(clickEvent) {
+            let targetId = clickEvent.target.id;
+            ecEditor.jQuery(".sidebar-accordion>.title").removeClass('active');
+            ecEditor.jQuery('#' + targetId + '').addClass('active');
+
+        };
+
+
         $scope.unregisterListeners = function() {
             ecEditor.removeEventListener("org.ekstep.text:addWordInfo", $scope.onTextSelect, $scope);
             ecEditor.removeEventListener("org.ekstep.text:addReadAlong", $scope.onTextSelect, $scope);
@@ -180,7 +197,7 @@ angular.module('editorApp')
         ecEditor.addEventListener("org.ekstep.text:addWordInfo", $scope.onTextSelect, $scope);
         ecEditor.addEventListener("org.ekstep.text:addReadAlong", $scope.onTextSelect, $scope);
         ecEditor.addEventListener("org.ekstep.text:added", $scope.onTextSelect, $scope);
-        ecEditor.addEventListener("org.ekstep.text:modified", $scope.onTextSelect, $scope);        
+        ecEditor.addEventListener("org.ekstep.text:modified", $scope.onTextSelect, $scope);
         ecEditor.addEventListener("org.ekstep.text:unselected", $scope.unregisterListeners, $scope);
         ecEditor.addEventListener("config:show", $scope.onTextSelect, $scope);
     }]);

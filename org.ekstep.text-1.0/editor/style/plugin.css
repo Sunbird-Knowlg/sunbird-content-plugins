@@ -36,7 +36,7 @@
     width: 4em!important;
 }
 
-.text-formatting-options .font-size-dropdown .menu{
+.text-formatting-options .font-size-dropdown .menu {
     max-height: 140px!important;
 }
 
@@ -50,7 +50,7 @@
 }
 
 .opacity-percent {
-    margin-left: 0.8em!important; 
+    margin-left: 0.8em!important;
     text-align: center;
 }
 
@@ -71,7 +71,6 @@
 }
 
 .sidebar-accordion .active.title {
-    border: none!important;
     color: #4a4a4a!important;
 }
 
@@ -81,7 +80,10 @@
     padding-left: 0!important;
     color: #2e9fd9!important;
     height: 3em;
-    border-top: 0.5px solid #d2d3d5 !important;
+    line-height: 1.8em;
+    border-top: 0.1px solid #d2d3d5 !important;
+    margin-top: 0!important;
+    margin-bottom: 0!important;
 }
 
 .sidebar-accordion .ui-icon {
@@ -91,5 +93,4 @@
 .sidebar-accordion .content {
     color: #9b9b9b!important;
     overflow: hidden!important;
-
 }
