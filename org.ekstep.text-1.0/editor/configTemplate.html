@@ -36,7 +36,7 @@
                     <ui-colorpicker id="textcolor"></ui-colorpicker>
                 </div>
                 <div class="inline fields">
-                    <label>Opacity</label>
+                    <label>Transparency</label>
                     <div ui input>
                         <input type="range" id="{{textOpacityConfig.propertyName}}" min="{{textOpacityConfig.minimumValue}}" max="{{textOpacityConfig.maximumValue}}" value="{{textOpacityConfig.defaultValue}}" class="config-slider" ng-model="configData[textOpacityConfig.propertyName]" ng-init="configData[textOpacityConfig.propertyName] = configData[textOpacityConfig.propertyName] || textOpacityConfig.defaultValue" ng-click="fireSidebarTelemetry({id: textOpacityConfig.propertyName}, textOpacityConfig.dataType)">
                         <label class="opacity-percent" ng-bind="configData[textOpacityConfig.propertyName] + '%'"></label>
@@ -45,40 +45,41 @@
             </div>
         </div>
         <div class="title" id="readAlongWordInfo" ng-click="toggleActiveAcordionTitle($event);">Read-along/Word Info</div>
-        <div class="content text-formatting-options">
+        <div class="content">
             <div ng-if="refreshTab">
-                <span>
-                <button class="ui icon button" ng-show="hasReadAlong && !hasWordInfo" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'})">
-                    <i class="trash icon"></i>
-                </button>
-                <div ng-if="!hasWordInfo" class="ui grey button {{hasReadAlong ? 'primary': ''}}" ng-click="fireEvent({id:'org.ekstep.text:readalong:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-readalong"></i>Read-along</div>
-                <div class="inline fields" ng-show="hasReadAlong && !hasWordInfo" ng-repeat="colorpicker in readAlongColorpicker">
-                    <br>
-                    <label>{{colorpicker.title}}</label>
-                    <ui-colorpicker id={{colorpicker.id}}></ui-colorpicker>
-                </div> 
-                <div ng-show="hasReadAlong && !hasWordInfo">
-                    <br>
-                    <label>Autoplay</label>
-                    <br>
-                    <div class="ui toggle checkbox" id="readalongautoplay">
-                        <input name="autoplay" type="checkbox" ng-click="fireSidebarTelemetry({id: 'autoplay'}, 'boolean');">
-                        <label></label>
+                <div style="display: inline-block;">
+                    <button class="ui icon button" ng-show="hasReadAlong && !hasWordInfo" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'})">
+                        <i class="trash icon"></i>
+                    </button>
+                    <div ng-if="!hasWordInfo" class="ui grey button {{hasReadAlong ? 'primary': ''}}" ng-click="fireEvent({id:'org.ekstep.text:readalong:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-readalong"></i>Read-along</div>
+                    <div class="ui form" id="readAlongContents">
+                        <div class="inline fields" ng-show="hasReadAlong && !hasWordInfo" ng-repeat="colorpicker in readAlongColorpicker">
+                            <label>{{colorpicker.title}}</label>
+                            <ui-colorpicker id={{colorpicker.id}}></ui-colorpicker>
+                        </div>
+                        <div class="inline fields" ng-show="hasReadAlong && !hasWordInfo">
+                            <br>
+                            <label>Autoplay</label>
+                            <br>
+                            <div class="ui toggle checkbox" id="readalongautoplay">
+                                <input name="autoplay" type="checkbox" ng-click="fireSidebarTelemetry({id: 'autoplay'}, 'boolean');">
+                                <label></label>
+                            </div>
+                        </div>
                     </div>
-                </div>               
-            </span>
-                <span>
-                <button class="ui icon button" ng-show="hasWordInfo && !hasReadAlong" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'})">
-                    <i class="trash icon"></i>
-                </button>
-                <div ng-if="!hasReadAlong" class="ui grey button {{hasWordInfo ? 'primary': ''}}" ng-click="fireEvent({id:'org.ekstep.text:wordinfo:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-wordinfo"></i>Word Info</div>
-                <div class="inline fields" ng-show="hasWordInfo && !hasReadAlong" ng-repeat="colorpicker in wordInfoColorpicker">
-                    <br>
-                    <br>
-                    <label>{{colorpicker.title}}</label>
-                    <ui-colorpicker id={{colorpicker.id}}></ui-colorpicker>
-               </div>
-            </span>
+                </div>
+                <div style="display: inline-block;">
+                    <button class="ui icon button" ng-show="hasWordInfo && !hasReadAlong" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'})">
+                        <i class="trash icon"></i>
+                    </button>
+                    <div ng-if="!hasReadAlong" class="ui grey button {{hasWordInfo ? 'primary': ''}}" ng-click="fireEvent({id:'org.ekstep.text:wordinfo:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-wordinfo"></i>Word Info</div>
+                    <div class="ui form" id="wordInfoContents">
+                        <div class="inline fields" ng-show="hasWordInfo && !hasReadAlong" ng-repeat="colorpicker in wordInfoColorpicker">
+                            <label>{{colorpicker.title}}</label>
+                            <ui-colorpicker id={{colorpicker.id}}></ui-colorpicker>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
         <div class="title" id="transliterate" ng-click="toggleActiveAcordionTitle($event);">Transliterate</div>

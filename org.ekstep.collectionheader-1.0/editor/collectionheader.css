@@ -73,21 +73,25 @@
     right: 0px !important;
 }
 
-.header-wrapper .custom-row-2{
+
+.header-wrapper .custom-row-2 {
     line-height: 2.8 !important;
 }
-.content-masterhead{
+
+.content-masterhead {
     height: 60px !important;
 }
-.custom-container,.custom-container > div{
+
+.custom-container,
+.custom-container>div {
     height: 100% !important;
 }
 
-.content-title-container{
+.content-title-container {
     line-height: 200%!important;
 }
 
-.collection-header-help-button{
+.collection-header-help-button {
     position: fixed;
     right: 1vw;
     bottom: 2vh;
@@ -95,6 +99,24 @@
     background: white!important;
 }
 
-.custom-help-button{
+.custom-help-button {
     color: rgb(0, 147, 221);
+}
+
+#downloadButton,
+#closeButton,
+#saveButton {
+    background: none;
+    color: #4a4a4a;
+}
+
+
+#saveButton:hover,
+#downloadButton:hover {
+    background: #2E9FD9;
+    color: #fff;
+}
+
+#closeButton:hover {
+    color: #fd2313;
 }

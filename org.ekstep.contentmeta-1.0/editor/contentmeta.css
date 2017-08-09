@@ -248,3 +248,13 @@
     color: #383838;
     text-transform: capitalize !important;
 }
+
+#collectionMetadataAccordion .active.title,
+#collectionMetadataAccordion .title{
+    outline: none;
+}
+
+.metadata-fields-table tr>td:first-child{
+    color: #4a4a4a;
+    font-weight: bold;
+}

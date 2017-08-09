@@ -166,6 +166,9 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
         org.ekstep.collectioneditor.api.getService('collection').setActiveNode(nodeId);
     }
 
+    setTimeout(function(){
+        ecEditor.jQuery('.popup-item').popup();
+    },0);
     $scope.generateTelemetry = function(data) {
         if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.coursemeta", "pluginver": "1.0", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }

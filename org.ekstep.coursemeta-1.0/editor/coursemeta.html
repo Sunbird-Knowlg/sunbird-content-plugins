@@ -28,50 +28,54 @@
             </div>
         </div>
         <div class="metacontent-fields-container">
-            <div class="ui cards">
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Language</div>
-                        <div class="description">{{course.language.toString() | lowercase}}</div>
-                    </div>
+            <div class="ui fluid grid container">
+                <div class="four wide column" style="padding-left:0;">
+                    <table class="ui padded striped selectable table metadata-fields-table">
+                        <tbody>
+                            <tr>
+                                <td>Language</td>
+                                <td>{{textbook.language.toString() | lowercase}}</td>
+                            </tr>
+                            <tr>
+                                <td>Audience</td>
+                                <td>{{textbook.audience.toString() | lowercase}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Faculty</div>
-                        <div class="description">
-                            <span class="field-value" ng-repeat="faculty in course.faculty track by $index">{{faculty | lowercase}}{{$last ? '' : ', '}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Tutor</div>
-                        <div class="description">
-                            <span class="field-value" ng-repeat="tutor in course.tutor track by $index">{{tutor | lowercase}}{{$last ? '' : ', '}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Audience</div>
-                        <div class="description">{{course.audience.toString() | lowercase}}</div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Concepts</div>
-                        <div class="description">
-                            <span class="field-value" ng-repeat="concept in course.concepts track by $index">{{concept.name}}{{$last ? '' : ', '}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Keywords</div>
-                        <div class="description">
-                            <span class="field-value" ng-repeat="keyword in course.keywords track by $index">{{keyword | lowercase}}{{$last ? '' : ', '}}</span>
-                        </div>
-                    </div>
+                <div class="eight wide column" style="padding-right:0;">
+                    <table class="ui padded striped selectable table">
+                        <tbody>
+                            <tr>
+                                <td>Faculty</td>
+                                <td>
+                                    <span ng-repeat="faculty in course.faculty track by $index">{{faculty | lowercase}}{{$last ? '' : ', '}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Tutor</td>
+                                <td>
+                                    <span class="field-value" ng-repeat="tutor in course.tutor track by $index">{{tutor | lowercase}}{{$last ? '' : ', '}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Concepts</td>
+                                <td>
+                                    <span class="field-value" ng-repeat="concept in course.concepts track by $index">{{concept.name}}{{$last ? '' : ', '}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Keywords</td>
+                                <td>
+                                    <span class="field-value" ng-repeat="keyword in textbook.keywords">{{keyword | lowercase}}{{$last ? '' : ', '}}</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Notes</td>
+                                <td>{{textbook.notes.toString() | lowercase}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -80,7 +84,7 @@
         <div class="fields">
             <div class="field book-image-field">
                 <label for="bookImage">Add icon</label>
-                <div class="book-image-container" ng-click="showAssestBrowser()">
+                <div class="book-image-container popup-item" data-content="Add or change image" data-variation="tiny inverted" data-position="right center" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
                     <img ng-if="showImageIcon" ng-src="{{course.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
                 </div>
@@ -92,10 +96,10 @@
                         <input placeholder="Enter title for Book" ng-model="course.name" ng-class=" {error: submitted && courseMetaForm.name.$error.required}" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="150">
                     </div>
                 </div>
-                 <div class="field required">
+                <div class="field required">
                     <label>Description</label>
                     <div class="ui input">
-                        <textarea placeholder="brief description about the unit" ng-model="course.description" ng-class="{error: submitted && courseMetaForm.description.$error.required}" name="description"  rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})" required></textarea>
+                        <textarea placeholder="brief description about the unit" ng-model="course.description" ng-class="{error: submitted && courseMetaForm.description.$error.required}" name="description" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})" required></textarea>
                     </div>
                 </div>
                 <div class="two fields">

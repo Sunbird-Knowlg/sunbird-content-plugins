@@ -7,6 +7,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     $scope.metaPages = [];
     $scope.selectedObjectType = undefined;
     $scope.nodeFilter = "";
+    $scope.expandNodeFlag = true;
     $scope.getObjectType = function(objectType) {
         return _.find(objectType, function(type) {
             return type == $scope.selectedObjectType
@@ -51,13 +52,20 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         });
     };
 
-    $scope.expandNode = function(flag) {
-        ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).expandAll(flag);
+    $scope.expandNode = function() {
+        ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).expandAll($scope.expandNodeFlag);
+        $scope.expandNodeFlag = !($scope.expandNodeFlag);
+        setTimeout(function() {
+            ecEditor.jQuery('.popup-item').popup();
+        }, 0);
     };
 
     $scope.telemetry = function(data) {
         org.ekstep.services.telemetryService.interact({ "type": 'click', "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.collectioneditor", "pluginver": "1.0", "objectid": ecEditor.getCurrentStage().id, "stage": ecEditor.getCurrentStage().id });
     };
+
+
+    
 
     org.ekstep.collectioneditor.api.initEditor(ecEditor.getConfig('editorConfig'), function() {
         $scope.loadContent(function(err, res) {
@@ -76,9 +84,9 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
                 window.loading_screen.finish();
             } else {
                 ecEditor.jQuery('.loading-message').remove();
-                ecEditor.jQuery('.sk-cube-grid').remove(); 
-                ecEditor.jQuery('.pg-loading-html').prepend('<p class="loading-message">Unable to fetch content! Please try again later</p><button class="ui red button" onclick="ecEditor.dispatchEvent(\'org.ekstep.collectioneditor:content:notfound\');"><i class="window close icon"></i>Close Editor!</button>');               
-            }            
+                ecEditor.jQuery('.sk-cube-grid').remove();
+                ecEditor.jQuery('.pg-loading-html').prepend('<p class="loading-message">Unable to fetch content! Please try again later</p><button class="ui red button" onclick="ecEditor.dispatchEvent(\'org.ekstep.collectioneditor:content:notfound\');"><i class="window close icon"></i>Close Editor!</button>');
+            }
         });
     });
 

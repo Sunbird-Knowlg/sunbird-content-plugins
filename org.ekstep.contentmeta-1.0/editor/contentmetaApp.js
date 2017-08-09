@@ -152,6 +152,15 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         });
     }
 
+    setTimeout(function(){
+        ecEditor.jQuery('.popup-item').popup();
+        ecEditor.jQuery(".collection-metadata-accordion").accordion({
+            collapsible: true,
+            duration: 500
+        });
+        ecEditor.jQuery('.collection-metadata-accordion .title:first-child').click();
+    },0);
+
     $scope.generateTelemetry = function(data) {
         if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.contentmeta", "pluginver": "1.0", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
