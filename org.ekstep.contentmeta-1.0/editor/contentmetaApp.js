@@ -104,10 +104,15 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 $('.ui.dropdown').dropdown('refresh');
                 $scope.metadataCloneObj = _.clone($scope.content);
             }
-            if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
+            if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])) {
                 $scope.editMode = false;
                 $scope.content = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
                 $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
+                $('#language').dropdown('set selected', $scope.content.language);
+            }if(_.has(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, ["name"])){
+                $scope.editMode = false;
+                $scope.content = _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
+                $scope.metadataCloneObj = _.clone(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
                 $('#language').dropdown('set selected', $scope.content.language);
             }else{
                 $scope.newNode = true;
