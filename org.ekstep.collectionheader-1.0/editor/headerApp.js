@@ -39,18 +39,21 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
         });
     };
 
-    $scope.closeCollectionEdtr = function ()
-    {
-        if ($scope.disableSaveBtn === false)
-        {
-            window.parent.EkTextbookUI.unsavedChangesWarningForCollectionEditor();
-            window.onbeforeunload = null;
+    $scope.closeCollectionEdtr = function() {
+        // Condition for portal. If editor opens in iframe
+        if (window.self !== window.top) {
+            if (!$scope.disableSaveBtn) {
+                var cf = confirm("Changes that you made may not be saved.");
+                if (cf == true) {
+                    window.onbeforeunload = null;
+                    window.parent.editor.izimodalRef.iziModal("close");
+                }
+            }
+            else {
+                window.parent.editor.izimodalRef.iziModal("close");
+            }
         }
-        else
-        {
-            //window.parent.jQuery('#default-collection-modal').iziModal('close');
-            window.parent.location.reload();
-        }
+        else window.location.reload(); // Can remove this condition.
     };
 
     $scope.reportIssueLink = ((window.context && window.context.reportIssueLink) ? window.context.reportIssueLink : "");
@@ -59,6 +62,7 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
         if (!$scope.disableSaveBtn) return "You have unsaved changes";
         e.preventDefault();
     }
+
     window.addEventListener('online', $scope.internetStatusFn, false);
     window.addEventListener('offline', $scope.internetStatusFn, false);
     ecEditor.addEventListener("org.ekstep.collectioneditor:node:added", $scope.onNodeEvent, $scope);
