@@ -17,8 +17,8 @@ org.ekstep.contenteditor.basePlugin.extend({
         'duplicateStage': 'stage:duplicate',
         'saveContent': 'org.ekstep.contenteditor:save',
         'selectStage': 'stage:select',
-        'sendToBack': 'reorder:sendtoback',
-        'sendToFront': 'reorder:sendtofront'
+        'sendToBack': 'reorder:sendback',
+        'sendToFront': 'reorder:bringfront'
     },
     initialize: function() {
         var instance = this;
