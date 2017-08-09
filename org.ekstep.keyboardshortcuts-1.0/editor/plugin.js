@@ -189,6 +189,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (elem) {
                 event.preventDefault();
                 var fontSize = elem.getConfig().fontsize;
+                fontSize = parseInt(fontSize, 10);
                 elem.onConfigChange('fontsize', fontSize+1);
             }
         });
@@ -203,6 +204,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (elem) {
                 event.preventDefault();
                 var fontSize = elem.getConfig().fontsize;
+                fontSize = parseInt(fontSize, 10);
                 elem.onConfigChange('fontsize', fontSize-1);
             }
         });
@@ -258,7 +260,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
 
         /**
-         *  Listen for ctrl/command + c key
+         *  Listen for ctrl/command + up key
          *  send an object to front
          *  @memberof Shortcuts
          */
@@ -277,11 +279,21 @@ org.ekstep.contenteditor.basePlugin.extend({
             var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
             if (activeGroup) {
                 event.preventDefault();
+                _.each(activeGroup._objects, function(element) {
+                    var richText = ecEditor.jQuery('#' + element.id);
+                    if (richText.length != 0) {
+                        richText[0].style.top = parseInt(richText[0].style.top, 10) - 3 + 'px';
+                    }
+                })
                 activeGroup.top = activeGroup.top - 3;
                 org.ekstep.contenteditor.api.render();
             } else
             if (activeElement) {
                 event.preventDefault();
+                var richText = ecEditor.jQuery('#' + activeElement.id);
+                if (richText) {
+                    richText[0].style.top = parseInt(richText[0].style.top, 10) - 3 + 'px';
+                }
                 activeElement.editorObj.top = activeElement.editorObj.top - 3;
                 org.ekstep.contenteditor.api.render();
             }
@@ -297,11 +309,21 @@ org.ekstep.contenteditor.basePlugin.extend({
             var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
             if (activeGroup) {
                 event.preventDefault();
+                _.each(activeGroup._objects, function(element) {
+                    var richText = ecEditor.jQuery('#' + element.id);
+                    if (richText.length != 0) {
+                        richText[0].style.top = parseInt(richText[0].style.top, 10) + 3 + 'px';
+                    }
+                })
                 activeGroup.top = activeGroup.top + 3;
                 org.ekstep.contenteditor.api.render();
             } else 
             if (activeElement) {
                 event.preventDefault();
+                var richText = ecEditor.jQuery('#' + activeElement.id);
+                if (richText) {
+                    richText[0].style.top = parseInt(richText[0].style.top, 10) + 3 + 'px';
+                }
                 activeElement.editorObj.top = activeElement.editorObj.top + 3;
                 org.ekstep.contenteditor.api.render();
             }
@@ -317,11 +339,21 @@ org.ekstep.contenteditor.basePlugin.extend({
             var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
             if (activeGroup) {
                 event.preventDefault();
+                _.each(activeGroup._objects, function(element) {
+                    var richText = ecEditor.jQuery('#' + element.id);
+                    if (richText.length != 0) {
+                        richText[0].style.left = parseInt(richText[0].style.left, 10) - 3 + 'px';
+                    }
+                })
                 activeGroup.left = activeGroup.left - 3;
                 org.ekstep.contenteditor.api.render();
             } else 
             if (activeElement) {
                 event.preventDefault();
+                var richText = ecEditor.jQuery('#' + activeElement.id);
+                if (richText) {
+                    richText[0].style.left = parseInt(richText[0].style.left, 10) - 3 + 'px';
+                }
                 activeElement.editorObj.left = activeElement.editorObj.left - 3;
                 org.ekstep.contenteditor.api.render();
             }
@@ -337,11 +369,21 @@ org.ekstep.contenteditor.basePlugin.extend({
             var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
             if (activeGroup) {
                 event.preventDefault();
+                _.each(activeGroup._objects, function(element) {
+                    var richText = ecEditor.jQuery('#' + element.id);
+                    if (richText.length != 0) {
+                        richText[0].style.left = parseInt(richText[0].style.left, 10) + 3 + 'px';
+                    }
+                })
                 activeGroup.left = activeGroup.left + 3;
                 org.ekstep.contenteditor.api.render();
             } else
             if (activeElement) {
                 event.preventDefault();
+                var richText = ecEditor.jQuery('#' + activeElement.id);
+                if (richText) {
+                    richText[0].style.left = parseInt(richText[0].style.left, 10) + 3 + 'px';
+                }
                 activeElement.editorObj.left = activeElement.editorObj.left + 3;
                 org.ekstep.contenteditor.api.render();
             }
@@ -357,11 +399,21 @@ org.ekstep.contenteditor.basePlugin.extend({
             var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
             if (activeGroup) {
                 event.preventDefault();
+                _.each(activeGroup._objects, function(element) {
+                    var richText = ecEditor.jQuery('#' + element.id);
+                    if (richText.length != 0) {
+                        richText[0].style.top = parseInt(richText[0].style.top, 10) - 1 + 'px';
+                    }
+                })
                 activeGroup.top = activeGroup.top - 1;
                 org.ekstep.contenteditor.api.render();
             } else
             if (activeElement) {
                 event.preventDefault();
+                var richText = ecEditor.jQuery('#' + activeElement.id);
+                if (richText) {
+                    richText[0].style.top = parseInt(richText[0].style.top, 10) - 1 + 'px';
+                }
                 activeElement.editorObj.top = activeElement.editorObj.top - 1;
                 org.ekstep.contenteditor.api.render();
             }
@@ -377,11 +429,21 @@ org.ekstep.contenteditor.basePlugin.extend({
             var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
             if (activeGroup) {
                 event.preventDefault();
+                _.each(activeGroup._objects, function(element) {
+                    var richText = ecEditor.jQuery('#' + element.id);
+                    if (richText.length != 0) {
+                        richText[0].style.top = parseInt(richText[0].style.top, 10) + 1 + 'px';
+                    }
+                })
                 activeGroup.top = activeGroup.top + 1;
                 org.ekstep.contenteditor.api.render();
             } else 
             if (activeElement) {
                 event.preventDefault();
+                var richText = ecEditor.jQuery('#' + activeElement.id);
+                if (richText) {
+                    richText[0].style.top = parseInt(richText[0].style.top, 10) + 1 + 'px';
+                }
                 activeElement.editorObj.top = activeElement.editorObj.top + 1;
                 org.ekstep.contenteditor.api.render();
             }
@@ -397,11 +459,21 @@ org.ekstep.contenteditor.basePlugin.extend({
             var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
             if (activeGroup) {
                 event.preventDefault();
+                _.each(activeGroup._objects, function(element) {
+                    var richText = ecEditor.jQuery('#' + element.id);
+                    if (richText.length != 0) {
+                        richText[0].style.left = parseInt(richText[0].style.left, 10) - 1 + 'px';
+                    }
+                })
                 activeGroup.left = activeGroup.left - 1;
                 org.ekstep.contenteditor.api.render();
             } else 
             if (activeElement) {
                 event.preventDefault();
+                var richText = ecEditor.jQuery('#' + activeElement.id);
+                if (richText) {
+                    richText[0].style.left = parseInt(richText[0].style.left, 10) - 1 + 'px';
+                }
                 activeElement.editorObj.left = activeElement.editorObj.left - 1;
                 org.ekstep.contenteditor.api.render();
             }
@@ -417,11 +489,21 @@ org.ekstep.contenteditor.basePlugin.extend({
             var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
             if (activeGroup) {
                 event.preventDefault();
+                _.each(activeGroup._objects, function(element) {
+                    var richText = ecEditor.jQuery('#' + element.id);
+                    if (richText.length != 0) {
+                        richText[0].style.left = parseInt(richText[0].style.left, 10) + 1 + 'px';
+                    }
+                })
                 activeGroup.left = activeGroup.left + 1;
                 org.ekstep.contenteditor.api.render();
             } else
             if (activeElement) {
                 event.preventDefault();
+                var richText = ecEditor.jQuery('#' + activeElement.id);
+                if (richText) {
+                    richText[0].style.left = parseInt(richText[0].style.left, 10) + 1 + 'px';
+                }
                 activeElement.editorObj.left = activeElement.editorObj.left + 1;
                 org.ekstep.contenteditor.api.render();
             }

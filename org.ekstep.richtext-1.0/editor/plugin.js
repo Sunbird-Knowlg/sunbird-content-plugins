@@ -103,5 +103,45 @@ org.ekstep.contenteditor.basePlugin.extend({
         var childElements = richtextDiv.children();
         richtextDiv.empty();
     },
+    getConfig: function() {
+        var config = {};
+        config.color = ecEditor.jQuery('#' + this.id).css("color");
+        config.fontfamily = ecEditor.jQuery('#' + this.id).css("font-family");
+        config.fontsize = ecEditor.jQuery('#' + this.id).css("font-size");
+        return config;
+    },
+    onConfigChange: function(key, value) {
+      var htmlContent = "";
+        switch (key) {
+            case "fontweight":
+                  _.each(ecEditor.jQuery('#' + this.id).children(), function(child) {
+                        child.innerHTML = "<strong>" + child.innerHTML + "</strong>";
+                        htmlContent = htmlContent + child.outerHTML;
+                  })
+                  this.config.text = htmlContent;
+                break;
+            case "fontstyle":
+                _.each(ecEditor.jQuery('#' + this.id).children(), function(child) {
+                      child.innerHTML = "<em>" + child.innerHTML + "</em>";
+                      htmlContent = htmlContent + child.outerHTML;
+                  })
+                  this.config.text = htmlContent;
+                break;
+            case "fontsize":
+                // _.each(ecEditor.jQuery('#' + this.id).children(), function(child) {
+                    // child.children.style.fontSize = child.children.style.fontSize + value;
+                  // })
+                break;
+            case "align":
+                _.each(ecEditor.jQuery('#' + this.id).children(), function(child) {
+                    child.style.textAlign = value
+                    htmlContent = htmlContent + child.outerHTML
+                })
+                this.config.text = htmlContent;
+                break;
+        }
+        ecEditor.render();
+        ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
+    },
 });
 //# sourceURL=richtextplugin.js
