@@ -53,7 +53,11 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
         }
     };
 
-    $scope.reportIssueLink = ((window.context && window.context.reportIssueLink) ? window.context.reportIssueLink : "");
+    // Condition for portal. If editor opens in iframe
+    if (window.self !== window.top) {
+        $scope.reportIssueLink = ((window.parent.context && window.parent.context.reportIssueLink) ? window.parent.context.reportIssueLink : "");
+    }
+    else $scope.reportIssueLink = ((window.context && window.context.reportIssueLink) ? window.context.reportIssueLink : "");
 
     window.onbeforeunload = function(e) {
         if (!$scope.disableSaveBtn) return "You have unsaved changes";
