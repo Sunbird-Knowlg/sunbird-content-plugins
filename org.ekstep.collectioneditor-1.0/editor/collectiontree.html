@@ -12,8 +12,8 @@ window.loading_screen = window.pleaseWait({
             <div class="ui segments">
                 <div class="ui segment" id="treeAccessToolsSegment">
                     <div id="treeExpandCollapseButtonsContainer">
-                        <button ng-click="expandNode(false); telemetry({ subtype: 'collapse', target: 'collapseNodeBtn'});" class="ui button popup-item" data-content="Collapse all" data-variation="tiny inverted" data-position="right center"><i class="chevron up icon"></i></button>
-                        <button ng-click="expandNode(true); telemetry({ subtype: 'expand', target: 'expandNodeBtn'});" class="ui button popup-item" data-content="Expand all" data-variation="tiny inverted" data-position="right center"><i class="chevron down icon"></i></button>
+                        <button ng-if="expandNodeFlag==false" ng-click="expandNode(); telemetry({ subtype: 'collapse', target: 'collapseNodeBtn'});" class="ui button popup-item" data-content="Collapse all" data-variation="tiny inverted" data-position="right center"><i class="fa fa-angle-double-up" aria-hidden="true"></i></button>
+                        <button ng-if="expandNodeFlag==true" ng-click="expandNode(); telemetry({ subtype: 'expand', target: 'expandNodeBtn'});" class="ui button popup-item" data-content="Expand all" data-variation="tiny inverted" data-position="right center"><i class="fa fa-angle-double-down" aria-hidden="true"></i></button>
                     </div>
                 </div>
                 <div class="ui segment" id="treeWrapper">

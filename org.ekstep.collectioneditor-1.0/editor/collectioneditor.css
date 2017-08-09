@@ -198,8 +198,12 @@ body {
     padding: 1em;
     padding-right: 2em;
     border-radius: 0;
+    background: none;
 }
 
+#treeExpandCollapseButtonsContainer .ui.button:hover{
+    background: #ddd;
+}
 .icon-container {
     color: #9b9b9b;
     float: right;

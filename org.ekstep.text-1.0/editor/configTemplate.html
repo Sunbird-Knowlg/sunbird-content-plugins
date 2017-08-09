@@ -36,7 +36,7 @@
                     <ui-colorpicker id="textcolor"></ui-colorpicker>
                 </div>
                 <div class="inline fields">
-                    <label>Opacity</label>
+                    <label>Transparency</label>
                     <div ui input>
                         <input type="range" id="{{textOpacityConfig.propertyName}}" min="{{textOpacityConfig.minimumValue}}" max="{{textOpacityConfig.maximumValue}}" value="{{textOpacityConfig.defaultValue}}" class="config-slider" ng-model="configData[textOpacityConfig.propertyName]" ng-init="configData[textOpacityConfig.propertyName] = configData[textOpacityConfig.propertyName] || textOpacityConfig.defaultValue" ng-click="fireSidebarTelemetry({id: textOpacityConfig.propertyName}, textOpacityConfig.dataType)">
                         <label class="opacity-percent" ng-bind="configData[textOpacityConfig.propertyName] + '%'"></label>
