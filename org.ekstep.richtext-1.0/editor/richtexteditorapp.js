@@ -19,6 +19,7 @@ angular.module('richtexteditorapp', [])
             var textObj = ecEditor.getCurrentObject();
             if(textObj){
                 textObj.config.text = CKEDITOR.instances.editor1.getData();
+                textObj.attributes.__text = textObj.config.text;
                 ecEditor.jQuery("#richtext-wrapper div#"+textObj.id).html(textObj.config.text);
                 var currentObject = org.ekstep.contenteditor.api.getCurrentObject();
                  currentObject.editorObj.width = $('#' + textObj.id).width();
