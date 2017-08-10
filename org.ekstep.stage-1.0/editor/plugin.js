@@ -92,16 +92,14 @@ org.ekstep.contenteditor.basePlugin.extend({
             this.thumbnail = canvas.toDataURL({format: 'jpeg', quality: 0.1});
         }else{
             var instance = this;
-            // _.debounce(function() {
-                html2canvas($('#canvas-wrapper'), {
-                    onrendered: function(canvas) {
-                        instance.thumbnail = canvas.toDataURL({ format: 'jpeg', quality: 0.1 });
-                        var angScope = ecEditor.getAngularScope();
-                        ecEditor.ngSafeApply(angScope);
-                    },
-                    timeout: 0
-                });
-            // }, 150, { leading: true });
+            html2canvas($('#canvas-wrapper'), {
+                onrendered: function(canvas) {
+                    instance.thumbnail = canvas.toDataURL({ format: 'jpeg', quality: 0.1 });
+                    var angScope = ecEditor.getAngularScope();
+                    ecEditor.ngSafeApply(angScope);
+                },
+                timeout: 0
+            });
         }
         ecEditor.refreshStages();
         ecEditor.dispatchEvent('stage:render:complete', { stageId: this.id });
