@@ -1,5 +1,5 @@
 <div ng-app="contentmetaApp" class="metacontent-wrapper" ng-controller="contentmetaController">
-    <div class="ui segment header-segment">
+    <div class="ui segment header-segment" id="headerSegment">
         <div class="ui breadcrumb">
             <a class="section" ng-repeat="value in path" ng-click="setActiveNode(value.nodeId)">
                 {{value.title}} 
@@ -37,7 +37,7 @@
         </div>
         <div class="metacontent-fields-container">
             <div class="ui fluid grid container">
-                <div class="seven wide column">
+                <!-- <div class="seven wide column">
                     <div class="ui styled accordion collection-metadata-accordion" id="collectionMetadataAccordion">
                         <div class="title">
                             Title1
@@ -45,9 +45,9 @@
                         <div class="content">Content1</div>
                     </div>
                     
-                </div>
+                </div> -->
                 <div class="five wide column">
-                    <table class="ui padded striped selectable table metadata-fields-table">
+                    <table class="ui padded striped table metadata-fields-table">
                         <tbody>
                             <tr>
                                 <td>Keywords</td>
@@ -66,7 +66,7 @@
             </div>
             <div class="ui fluid grid container" style="display:none;">
                 <div class="seven wide column" style="padding-left:0;">
-                    <table class="ui padded striped selectable table">
+                    <table class="ui padded striped table">
                         <tbody>
                             <tr>
                                 <td>Keywords</td>

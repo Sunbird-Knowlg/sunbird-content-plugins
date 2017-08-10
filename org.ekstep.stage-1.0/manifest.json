@@ -7,6 +7,9 @@
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
+        "dependencies": [
+            { "type": "js", "src": "editor/libs/html2canvas.js" }
+        ],
         "help": {
             "src": "editor/help.md",
             "dataType": "text"
@@ -20,12 +23,12 @@
             "iconClass": "icon-newstage icon",
             "onclick": {
                 "id": "stage:create",
-                "data": { "position": "end" }
+                "data": { "position": "afterCurrent" }
             },
             "submenu": [{
                 "id": "beginning",
                 "type": "icon",
-                "title": "beginning",
+                "title": "Beginning",
                 "iconClass": "fast backward icon",
                 "onclick": {
                     "id": "stage:create",
@@ -34,7 +37,7 @@
             }, {
                 "id": "end",
                 "type": "icon",
-                "title": "end",
+                "title": "End",
                 "iconClass": "fast forward icon",
                 "onclick": {
                     "id": "stage:create",
@@ -43,7 +46,7 @@
             }, {
                 "id": "front",
                 "type": "icon",
-                "title": "after current",
+                "title": "After current",
                 "iconClass": "forward icon",
                 "onclick": {
                     "id": "stage:create",
@@ -52,7 +55,7 @@
             }, {
                 "id": "back",
                 "type": "icon",
-                "title": "before current",
+                "title": "Before current",
                 "iconClass": "backward icon",
                 "onclick": {
                     "id": "stage:create",

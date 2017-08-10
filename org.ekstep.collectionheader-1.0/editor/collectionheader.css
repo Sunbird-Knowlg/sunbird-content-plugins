@@ -69,8 +69,8 @@
 .header-icon-container .custom-row-2 {
     display: inline-block;
     position: absolute;
-    bottom: 9px;
-    right: 0px !important;
+    bottom: 0;
+    right: 0;
 }
 
 
@@ -85,10 +85,6 @@
 .custom-container,
 .custom-container>div {
     height: 100% !important;
-}
-
-.content-title-container {
-    line-height: 200%!important;
 }
 
 .collection-header-help-button {
@@ -117,6 +113,20 @@
     color: #fff;
 }
 
+#downloadButton {
+    margin-right: -10px;
+}
+
+#closeButton {
+    padding: 0!important;
+}
+
 #closeButton:hover {
     color: #fd2313;
+}
+
+#contentTitle {
+    position: relative;
+    top: -1vh;
+    color: #4a4a4a;
 }
