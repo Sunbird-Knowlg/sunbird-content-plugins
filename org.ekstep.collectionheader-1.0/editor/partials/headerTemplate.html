@@ -5,7 +5,7 @@
         </div>
         <div class="four wide column custom-6-wide">
             <div class="row custom-row-1 content-title-container">
-                <label class="content-title" ng-bind="contentDetails.contentTitle | limitTo:30">
+                <label class="content-title" id="contentTitle" ng-bind="contentDetails.contentTitle | limitTo:30">
                     <span ng-if="contentDetails.contentTitle.length > 30">...</span></label>
             </div>
         </div>

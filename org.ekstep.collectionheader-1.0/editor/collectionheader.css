@@ -113,12 +113,20 @@
     color: #fff;
 }
 
-#downloadButton{
+#downloadButton {
     margin-right: -10px;
 }
-#closeButton{
+
+#closeButton {
     padding: 0!important;
 }
+
 #closeButton:hover {
     color: #fd2313;
+}
+
+#contentTitle {
+    position: relative;
+    top: -1vh;
+    color: #4a4a4a;
 }
