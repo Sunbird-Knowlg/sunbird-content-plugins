@@ -57,10 +57,12 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
     };
 
     // Condition for portal. If editor opens in iframe
-    if (window.self !== window.top) {
-        $scope.reportIssueLink = ((window.parent.context && window.parent.context.reportIssueLink) ? window.parent.context.reportIssueLink : "");
-    }
-    else $scope.reportIssueLink = ((window.context && window.context.reportIssueLink) ? window.context.reportIssueLink : "");
+    var context = window.context || window.parent.context;
+    $scope.reportIssueLink = ((context && context.reportIssueLink) ? context.reportIssueLink : "");
+
+    // For show/hide help button
+    var config = window.config || window.parent.config;
+    $scope.showHelp = config.showHelp;
 
     window.onbeforeunload = function(e) {
         if (!$scope.disableSaveBtn) return "You have unsaved changes";
