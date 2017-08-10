@@ -20,7 +20,7 @@
             "iconClass": "icon-newstage icon",
             "onclick": {
                 "id": "stage:create",
-                "data": { "position": "end" }
+                "data": { "position": "afterCurrent" }
             },
             "submenu": [{
                 "id": "beginning",
