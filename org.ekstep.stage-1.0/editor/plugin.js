@@ -54,14 +54,19 @@ org.ekstep.contenteditor.basePlugin.extend({
         }
     },
     setThumbnail: function() {
-        /*
-        var thumbnailCanvas = document.getElementById("thumbnailCanvas");
-        var ctx = thumbnailCanvas.getContext("2d");
-        ctx.drawImage(this.canvas.getElement(), 0, 0, 160, 90);
-        this.thumbnail = thumbnailCanvas.toDataURL({format: 'jpeg', quality: 0.8});
-        */
-        this.thumbnail = this.canvas.toDataURL({format: 'jpeg', quality: 0.1});
-        
+        if (org.ekstep.contenteditor.stageManager.contentLoading) {
+            this.thumbnail = this.canvas.toDataURL({format: 'jpeg', quality: 0.1});
+        }else{
+            var stage = ecEditor.getCurrentStage(),
+                canvas = stage.canvas;
+            html2canvas($('#canvas-wrapper'), {  
+                onrendered: function (canvas) {
+                    stage.thumbnail = canvas.toDataURL({format: 'jpeg', quality: 0.1});
+                    var angScope = ecEditor.getAngularScope();
+                    ecEditor.ngSafeApply(angScope);
+                }
+            });
+        }
     },
     updateZIndex: function() {
         var instance = this;
@@ -74,6 +79,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
     },
     render: function(canvas) {
+        var instance = this;
         org.ekstep.contenteditor.stageManager.clearCanvas(canvas);
         this.children = ecEditor._.sortBy(this.children, [function(o) { return o.getAttribute('z-index'); }]);
         ecEditor._.forEach(this.children, function(plugin) {
@@ -81,7 +87,20 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
         if(this.config.color) canvas.setBackgroundColor(this.config.color, canvas.renderAll.bind(canvas));
         canvas.renderAll();
-        this.thumbnail = canvas.toDataURL({format: 'jpeg', quality: 0.1});
+        ecEditor.dispatchEvent('stage:render:complete', { stageId: this.id });
+        if (org.ekstep.contenteditor.stageManager.contentLoading) {
+            this.thumbnail = canvas.toDataURL({format: 'jpeg', quality: 0.1});
+        }else{
+            var instance = this;
+            html2canvas($('#canvas-wrapper'), {
+                onrendered: function(canvas) {
+                    instance.thumbnail = canvas.toDataURL({ format: 'jpeg', quality: 0.1 });
+                    var angScope = ecEditor.getAngularScope();
+                    ecEditor.ngSafeApply(angScope);
+                },
+                timeout: 0
+            });
+        }
         ecEditor.refreshStages();
         ecEditor.dispatchEvent('stage:render:complete', { stageId: this.id });
     },
