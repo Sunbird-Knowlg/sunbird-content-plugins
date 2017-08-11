@@ -18,7 +18,7 @@
             "type": "icon",
             "toolTip": "Add Richtext",
             "title": "Text",
-            "iconClass": "fa fa-file-text-o",
+            "iconClass": "fa-file-text-o icon",
             "onclick": {
                 "id": "org.ekstep.richtext:showpopup"
             }
