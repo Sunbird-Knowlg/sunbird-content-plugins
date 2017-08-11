@@ -31,6 +31,7 @@ Plugin.extend({
         if (data.style)
             div.setAttribute("style", data.style);
         div.id = data.id;
+        div.classList.add('richText');
         div.style.width = dims.w + 'px';
         div.style.height = dims.h + 'px';
         div.style.position = 'absolute';

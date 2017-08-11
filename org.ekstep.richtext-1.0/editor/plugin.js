@@ -20,7 +20,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         if (ecEditor._.isUndefined(this.config.text))
                this.config.text = ecEditor._.isUndefined(this.attributes.__text) ? "" : this.attributes.__text;
         delete props.__text;
-        delete this.attributes.__text;
+        // delete this.attributes.__text;
         this.editorObj = new fabric.Rect(props);
         if (this.editorObj) this.editorObj.setFill(props.fill);
         ecEditor.dispatchEvent(instance.manifest.id + ":adddiv", { data: instance });
