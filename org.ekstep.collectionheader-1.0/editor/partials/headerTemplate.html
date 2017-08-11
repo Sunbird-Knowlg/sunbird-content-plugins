@@ -25,7 +25,7 @@
                 <div id="closeButton" class="ui red icon button button-overrides popup-item" data-content="Close" data-variation="tiny inverted" data-position="bottom center" ng-click="closeCollectionEdtr(); telemetry({ subtype: 'close', target: 'closeBtn'});">
                     <i class="window close icon"></i>
                 </div>
-                <div>
+                <div ng-hide="{{!showHelp}} || {{showHelp}} != undefined && {{showHelp}} != true">
                     <a class="ui compact icon basic big button popup-item collection-header-help-button" ng-click="telemetry({ subtype: 'reportIssue', target: 'reportIssueButton'});" ng-href="{{reportIssueLink}} " target="_blank " data-content="Click to get help" data-position="left center" data-variation="tiny inverted"><i class="help circle medium icon custom-help-button"></i></a>
                 </div>
             </div>
