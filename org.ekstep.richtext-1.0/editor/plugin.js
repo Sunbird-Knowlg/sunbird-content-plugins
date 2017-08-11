@@ -22,6 +22,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         delete props.__text;
         // delete this.attributes.__text;
         this.editorObj = new fabric.Rect(props);
+        this.editorObj.visible = true;
         if (this.editorObj) this.editorObj.setFill(props.fill);
         ecEditor.dispatchEvent(instance.manifest.id + ":adddiv", { data: instance });
     },
@@ -103,7 +104,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         richtextDiv.empty();
     },
     getConfig: function() {
-        var config = {};
+        var config = this._super();
         config.color = ecEditor.jQuery('#' + this.id).css("color");
         config.fontfamily = ecEditor.jQuery('#' + this.id).css("font-family");
         config.fontsize = ecEditor.jQuery('#' + this.id).css("font-size");
