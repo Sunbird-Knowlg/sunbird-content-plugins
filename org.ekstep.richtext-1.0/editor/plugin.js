@@ -74,11 +74,12 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     dblClickHandler: function(event) {
         if (ecEditor.getCurrentObject().manifest.id === "org.ekstep.richtext") {
-               ecEditor.dispatchEvent("org.ekstep.richtext:showpopup");
+               ecEditor.dispatchEvent("org.ekstep.richtext:showpopup", {textSelected: true});
         }
     },
-    loadHtml: function(event, data) {
+    loadHtml: function(event, eventData) {
       if (document.getElementsByClassName('richtextEditor_1').length > 0) {return}; // Dont open popup if already opened
+      this.textSelected  = eventData ?  eventData.textSelected : false;
         currentInstance = this;
         ecEditor.getService('popup').open({
                template: 'richtexteditor',
@@ -89,6 +90,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                            return currentInstance;
                       }
                },
+               data: {'textSelected':this.textSelected},
                width: 500,
                showClose: false,
                className: 'ngdialog-theme-plain richtextEditor_1'

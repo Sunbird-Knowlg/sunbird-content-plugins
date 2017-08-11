@@ -12,7 +12,7 @@ angular.module('richtexteditorapp', [])
                 contentsCss: CKEDITOR.basePath + "contents.css",
             });
             var textObj = ecEditor.getCurrentObject();
-            if(textObj)
+            if(e.currentScope.ngDialogData && e.currentScope.ngDialogData.textSelected && textObj)
                 CKEDITOR.instances.editor1.setData(textObj.config.text);
         });
         ctrl.addText = function() {

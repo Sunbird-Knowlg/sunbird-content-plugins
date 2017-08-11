@@ -24,7 +24,7 @@
             }
         }],
         "behaviour": {
-            "rotatable": true
+            "rotatable": false
         },
         "configManifest": [],
         "help": {
