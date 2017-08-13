@@ -95,6 +95,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             event.preventDefault();
             var canvas = org.ekstep.contenteditor.api.getCanvas();
             canvas.deactivateAll();
+            canvas.on('object:moving',instance.moveRichText)
             var elements = canvas.getObjects().map(function(elem) {
                 return elem.set('active', true);
             });
@@ -508,6 +509,20 @@ org.ekstep.contenteditor.basePlugin.extend({
                 org.ekstep.contenteditor.api.render();
             }
         });
+    },
+    moveRichText: function(event) {
+        var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
+        if (!activeGroup) return;
+        _.each(activeGroup._objects, function(element) {
+                var richText = ecEditor.jQuery('#' + element.id);
+                if (richText.length != 0) {
+                    var canvasCord = ecEditor.jQuery('#canvas').offset();
+                    ecEditor.jQuery("#" + element.id).offset({
+                        'top':canvasCord.top + activeGroup.top + element.top,
+                        'left':canvasCord.left + activeGroup.left + element.left
+                    });
+                }
+            })
     }
 });
 
