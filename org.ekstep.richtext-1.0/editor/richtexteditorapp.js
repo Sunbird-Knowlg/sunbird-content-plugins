@@ -5,6 +5,7 @@ angular.module('richtexteditorapp', [])
         var ctrl = this;
         ctrl.text = '';
         $scope.$on('ngDialog.opened', function (e, $dialog) {
+            ctrl.selectedText = false;
             CKEDITOR.basePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/libs/");
             CKEDITOR.replace( 'editor1', {
                 customConfig: CKEDITOR.basePath + "config.js",
@@ -12,12 +13,14 @@ angular.module('richtexteditorapp', [])
                 contentsCss: CKEDITOR.basePath + "contents.css",
             });
             var textObj = ecEditor.getCurrentObject();
-            if(e.currentScope.ngDialogData && e.currentScope.ngDialogData.textSelected && textObj)
+            if(e.currentScope.ngDialogData && e.currentScope.ngDialogData.textSelected && textObj) {
+                ctrl.selectedText = true;
                 CKEDITOR.instances.editor1.setData(textObj.config.text);
+            }
         });
         ctrl.addText = function() {
             var textObj = ecEditor.getCurrentObject();
-            if(textObj){
+            if(textObj && ctrl.selectedText){
                 textObj.config.text = CKEDITOR.instances.editor1.getData();
                 textObj.attributes.__text = textObj.config.text;
                 ecEditor.jQuery("#richtext-wrapper div#"+textObj.id).html(textObj.config.text);
