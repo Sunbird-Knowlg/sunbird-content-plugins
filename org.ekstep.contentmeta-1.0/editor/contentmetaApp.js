@@ -120,6 +120,10 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.getPath();
         }
         $scope.showImageIcon = true;
+        $scope.getSubCollection(data.data.metadata.identifier, data.data.metadata.status, function(err, res) {
+            if (err) console.log("error when trying to fetch sub collections");
+            if (res) $scope.initFancyTree(res.data.result.content);
+        });
         $scope.$safeApply();
     }
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.onNodeSelect);
@@ -169,5 +173,26 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.generateTelemetry = function(data) {
         if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.contentmeta", "pluginver": "1.0", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
+
+    $scope.getSubCollection = function(contentId, mode, callback) {
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: contentId, mode: mode }, function(err, res) {
+            if (res && res.data && res.data.responseCode === "OK") {
+                callback && callback(err, res);
+            } else {
+                callback && callback('unable to fetch the content!', res);
+            }
+        });
+    };
+
+    $scope.initFancyTree = function(data) {        
+        if (!data) return;
+        data = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE)._buildTree(data);
+        console.log('sub collection data', data);
+        ecEditor.jQuery("#collection-meta-tree").fancytree("getTree").reload(data);
+    }
+
+    ecEditor.jQuery("#collection-meta-tree").fancytree({
+        source: []
+    });
 }]);
 //# sourceURL=contentmetaApp.js
