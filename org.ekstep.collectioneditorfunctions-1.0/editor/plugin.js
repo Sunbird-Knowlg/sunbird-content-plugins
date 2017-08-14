@@ -4,6 +4,9 @@ org.ekstep.collectioneditor.basePlugin.extend({
         ecEditor.addEventListener(this.manifest.id + ':review', this.reviewContent, this);
         ecEditor.addEventListener(this.manifest.id + ':publish', this.publishContent, this);
         ecEditor.addEventListener(this.manifest.id + ':reject', this.rejectContent, this);
+        ecEditor.addEventListener(this.manifest.id + ':acceptFlag', this.acceptContentFlag, this);
+        ecEditor.addEventListener(this.manifest.id + ':discardFlag', this.discardContentFlag, this);
+        ecEditor.addEventListener(this.manifest.id + ':retire', this.retireContent, this);
 	},
 	saveContent: function(event, data) {
 		var contentBody = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy();
@@ -91,6 +94,60 @@ org.ekstep.collectioneditor.basePlugin.extend({
             }else {
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                     message: 'Unable to reject content, try again!',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
+            }
+            data.callback && data.callback(err, res);
+        });
+    },
+    acceptContentFlag: function(event, data){
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).acceptContentFlag({ contentId: ecEditor.getContext('contentId') }, function(err, res) {
+            if (res && res.data && res.data.responseCode == "OK") {
+                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                    title: 'Content flag accepted successfully!',                    
+                    position: 'topCenter',
+                    icon: 'fa fa-check-circle'
+                });
+            }else {
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'Unable to accept content flag, try again!',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
+            }
+            data.callback && data.callback(err, res);
+        });
+    },
+    discardContentFlag: function(event, data){
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).discardContentFlag({ contentId: ecEditor.getContext('contentId') }, function(err, res) {
+            if (res && res.data && res.data.responseCode == "OK") {
+                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                    title: 'Content flag discarded successfully!',                    
+                    position: 'topCenter',
+                    icon: 'fa fa-check-circle'
+                });
+            }else {
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'Unable to discard content flag, try again!',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
+            }
+            data.callback && data.callback(err, res);
+        });
+    },
+    retireContent: function(event, data){
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).retireContent({ contentId: ecEditor.getContext('contentId') }, function(err, res) {
+            if (res && res.data && res.data.responseCode == "OK") {
+                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                    title: 'Content retired successfully!',                    
+                    position: 'topCenter',
+                    icon: 'fa fa-check-circle'
+                });
+            }else {
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'Unable to retire content, try again!',
                     position: 'topCenter',
                     icon: 'fa fa-warning'
                 });
