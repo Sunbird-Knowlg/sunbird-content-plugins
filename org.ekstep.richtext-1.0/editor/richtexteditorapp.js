@@ -71,54 +71,71 @@ angular.module('richtexteditorapp', [])
                 case 'Bold (Ctrl+B)':
                     data.target = 'Bold';
                     data.subtype = subType.select;
+                    break;
                 case 'Italic (Ctrl+I)':
                     data.target = 'Italic';
                     data.subtype = subType.select;
+                    break;
                 case 'Strikethrough':
                     data.target = elementTitle;
                     data.subtype = subType.select;
+                    break;
                 case 'Remove Format':
                     data.target = 'RemoveFromat';
                     data.subtype = subType.select;
+                    break;
                 case 'Insert/Remove Numbered List':
                     data.target = 'NumberedList';
                     data.subtype = subType.select;
+                    break;
                 case 'Insert/Remove Bulleted List':
                     data.target = 'BulletList';
                     data.subtype = subType.select;
+                    break;
                 case 'Align Left':
                     data.target = 'AlignLeft';
                     data.subtype = subType.select;
+                    break;
                 case 'Center':
                     data.target = 'AlignCenter';
                     data.subtype = subType.select;
+                    break;
                 case 'Align Right':
                     data.target = 'AlignRight';
                     data.subtype = subType.select;
+                    break;
                 case 'Justify':
                     data.target = 'Justify';
                     data.subtype = subType.select;
+                    break;
                 case 'Paragraph Format':
                     data.target = 'ParagraphFromat';
                     data.subtype = subType.dropdown;
+                    break;
                 case 'Font Name':
                     data.target = 'FontName';
                     data.subtype = subType.dropdown;
+                    break;
                 case 'Font Size':
                     data.target = 'FontSize';
                     data.subtype = subType.dropdown;
+                    break;
                 case 'Text Color':
                     data.target = 'TextColor';
                     data.subtype = subType.select;
+                    break;
                 case 'Background Color':
                     data.target = 'BackgroundColor';
                     data.subtype = subType.select;
+                    break;
                 case 'Cancel':
                     data.target = 'Cancel';
                     data.subtype = subType.select;
+                    break;
                 case 'Add To Lesson':
                     data.target = 'AddToLesson';
                     data.subtype = subType.select;
+                    break;
             }
             return data;
         }
