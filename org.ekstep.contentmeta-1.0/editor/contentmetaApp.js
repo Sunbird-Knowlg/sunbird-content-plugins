@@ -186,13 +186,35 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
 
     $scope.initFancyTree = function(data) {        
         if (!data) return;
-        data = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE)._buildTree(data);
-        console.log('sub collection data', data);
+        data = $scope.buildSubCollectionTree(data);
         ecEditor.jQuery("#collection-meta-tree").fancytree("getTree").reload(data);
     }
 
     ecEditor.jQuery("#collection-meta-tree").fancytree({
         source: []
     });
+
+    $scope.buildSubCollectionTree = function(data, tree) {
+        var instance = this,
+            tree = tree || [];
+        if (data.children) data.children = _.sortBy(data.children, ['index']);
+        _.forEach(data.children, function(child) {            
+            var childTree = [];            
+            tree.push({
+                "id": child.identifier || UUID(),
+                "title": (child.name.length > 22) ? child.name.substring(0,22)+'...' : child.name,
+                "objectType": child.contentType,
+                "metadata": _.omit(child, ["children", "collections"]),
+                "folder": !_.isEmpty(child.children),
+                "children": childTree,
+                "root": false                
+            });
+            if (child.children && child.children.length > 0) {
+                instance.buildSubCollectionTree(child, childTree);
+            }
+        });
+
+        return tree;
+    }
 }]);
 //# sourceURL=contentmetaApp.js
