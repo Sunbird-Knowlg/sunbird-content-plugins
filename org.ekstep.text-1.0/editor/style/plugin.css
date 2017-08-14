@@ -18,7 +18,7 @@
 
 #readAlongContents .inline.fields>label,
 #wordInfoContents .inline.fields>label {
-    width: 17vw;
+    width: 13vw;
     color: grey;
     font-size: 1em;
     font-weight: normal;
@@ -58,7 +58,7 @@
 }
 
 .config-slider {
-    min-width: 10em!important;
+    min-width: 10em;
 }
 
 .opacity-percent {
@@ -105,4 +105,9 @@
 .sidebar-accordion .content {
     color: #9b9b9b!important;
     overflow: hidden!important;
+}
+
+#opacity{
+    min-width: 0;
+    width: 60%; 
 }
