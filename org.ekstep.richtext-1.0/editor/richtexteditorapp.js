@@ -5,6 +5,14 @@ angular.module('richtexteditorapp', [])
         var ctrl = this;
         ctrl.text = '';
         $scope.$on('ngDialog.opened', function (e, $dialog) {
+            var richTextElement = document.getElementsByClassName('richtextEditor_1');
+            richTextElement = richTextElement[0];
+            richTextElement.addEventListener('click', function(event) {
+                var data = ctrl.mapElementWithName(event.srcElement);
+                if (data) {
+                    ctrl.generateTelemetry({'type': 'click', 'subtype': data.subtype, 'target': data.target});
+                }
+            });
             ctrl.selectedText = false;
             CKEDITOR.basePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/libs/");
             CKEDITOR.replace( 'editor1', {
@@ -18,6 +26,19 @@ angular.module('richtexteditorapp', [])
                 CKEDITOR.instances.editor1.setData(textObj.config.text);
             }
         });
+        ctrl.generateTelemetry = function(data) {
+            if (data) {
+                org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).interact({
+                        "type": data.type,
+                        "subtype": data.subtype,
+                        "target": data.target,
+                        "pluginid": instance.manifest.id,
+                        "pluginver": instance.manifest.ver,
+                        "objectid": ctrl.selectedText ? org.ekstep.contenteditor.api.getCurrentObject().id : "",
+                        "stage": ecEditor.getCurrentStage().id
+                });
+            }
+        };
         ctrl.addText = function() {
             var textObj = ecEditor.getCurrentObject();
             if(textObj && ctrl.selectedText){
@@ -41,5 +62,65 @@ angular.module('richtexteditorapp', [])
                 });
             }
             $scope.closeThisDialog();
+        };
+        ctrl.mapElementWithName = function(element) {
+            var data = {};
+            var subType = {select: 'select', dropdown: 'dropdown'};
+            var elementTitle = element.title || element.parentElement.title || element.outerText || element.parentElement.text;
+            switch (elementTitle) {
+                case 'Bold (Ctrl+B)':
+                    data.target = 'Bold';
+                    data.subtype = subType.select;
+                case 'Italic (Ctrl+I)':
+                    data.target = 'Italic';
+                    data.subtype = subType.select;
+                case 'Strikethrough':
+                    data.target = elementTitle;
+                    data.subtype = subType.select;
+                case 'Remove Format':
+                    data.target = 'RemoveFromat';
+                    data.subtype = subType.select;
+                case 'Insert/Remove Numbered List':
+                    data.target = 'NumberedList';
+                    data.subtype = subType.select;
+                case 'Insert/Remove Bulleted List':
+                    data.target = 'BulletList';
+                    data.subtype = subType.select;
+                case 'Align Left':
+                    data.target = 'AlignLeft';
+                    data.subtype = subType.select;
+                case 'Center':
+                    data.target = 'AlignCenter';
+                    data.subtype = subType.select;
+                case 'Align Right':
+                    data.target = 'AlignRight';
+                    data.subtype = subType.select;
+                case 'Justify':
+                    data.target = 'Justify';
+                    data.subtype = subType.select;
+                case 'Paragraph Format':
+                    data.target = 'ParagraphFromat';
+                    data.subtype = subType.dropdown;
+                case 'Font Name':
+                    data.target = 'FontName';
+                    data.subtype = subType.dropdown;
+                case 'Font Size':
+                    data.target = 'FontSize';
+                    data.subtype = subType.dropdown;
+                case 'Text Color':
+                    data.target = 'TextColor';
+                    data.subtype = subType.select;
+                case 'Background Color':
+                    data.target = 'BackgroundColor';
+                    data.subtype = subType.select;
+                case 'Cancel':
+                    data.target = 'Cancel';
+                    data.subtype = subType.select;
+                case 'Add To Lesson':
+                    data.target = 'AddToLesson';
+                    data.subtype = subType.select;
+            }
+            return data;
         }
+
     }]);
