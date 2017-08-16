@@ -24,12 +24,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/templates/shortcutspopup.html");
         ecEditor.getService('popup').loadNgModules(templatePath);
-        var canvas = org.ekstep.contenteditor.api.getCanvas();
-        canvas.on('object:moving',instance.moveRichText, this)
-        canvas.on('selection:created', function(){
-            this.fromMouse = true;
-        }, instance)
-
         /**
          *  Listen for ctrl/command + c key
          *  copy an object
