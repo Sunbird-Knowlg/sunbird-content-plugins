@@ -100,8 +100,11 @@ org.ekstep.contenteditor.basePlugin.extend({
     pasteItem: function() {
         if (this.clipboard) {
             if (_.isArray(this.clipboard)) {
+                var activeGroup = _.clone(org.ekstep.contenteditor.api.getEditorGroup());
                 ecEditor.getCanvas().discardActiveGroup();
                 this.clipboard.forEach(function(instance) {
+                    instance.editorObj.top = activeGroup.top + instance.editorObj.top;
+                    instance.editorObj.left = activeGroup.left + instance.editorObj.left;
                     ecEditor.cloneInstance(instance);
                 });
             } else ecEditor.cloneInstance(this.clipboard);
