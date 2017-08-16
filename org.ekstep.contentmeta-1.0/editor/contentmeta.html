@@ -41,7 +41,9 @@
                     <!-- <h4 class="ui header">Course structure</h4> -->
                     <div class="ui styled accordion collection-metadata-accordion" id="collectionMetadataAccordion">
                         <div class="title" ng-click="toggleCollectionAccodrion()">
-                            <i class="fa fa-file-o" aria-hidden="true"></i>&nbsp; Contents
+                            <i ng-show="!(toggleCollectionAccodrionState)" class="fa fa-folder-o" aria-hidden="true"></i>
+                            <i ng-show="toggleCollectionAccodrionState" class="fa fa-folder-open-o" aria-hidden="true"></i>
+                            &nbsp; Contents
                             <span class="expand-collection" ng-show="!(toggleCollectionAccodrionState)"><i class="fa fa-plus" aria-hidden="true"></i></span>
                             <span class="collapse-collection" ng-show="toggleCollectionAccodrionState"><i class="fa fa-minus" aria-hidden="true"></i></span>
                         </div>
