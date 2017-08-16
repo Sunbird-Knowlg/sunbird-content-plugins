@@ -146,6 +146,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
 
     $scope.previewContent = function(event, data) {
         $scope.nodeId = data && data.id || $scope.nodeId;
+        var mainContentId = ecEditor.getContext('contentId');
         ecEditor.setContext('contentId', $scope.nodeId);
         org.ekstep.services.contentService.getContent($scope.nodeId, function(err, content) {
             if (!err) {
@@ -160,6 +161,8 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 });
                 org.ekstep.services.telemetryService.error({ "env": "content", "stage": "", "action": "show error", "err": "Unable to fetch content from remote", "type": "API", "data": err, "severity": "fatal" });
             }
+            // reset the ID back to main content ID, otherwise this will break download, save functionalities
+            ecEditor.setContext('contentId', mainContentId);
         });
     }
 
