@@ -26,10 +26,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.getService('popup').loadNgModules(templatePath);
         var canvas = org.ekstep.contenteditor.api.getCanvas();
         canvas.on('object:moving',instance.moveRichText, this)
-        canvas.on('selection:created', function(){
-            this.fromMouse = true;
-        }, instance)
-
         /**
          *  Listen for ctrl/command + c key
          *  copy an object
