@@ -2,7 +2,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
-    $scope.toggleCollectionAccodrionState = true;
+    $scope.toggleCollectionAccodrionState=true;
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.languageList = resp.data.result.ordinals.language;
@@ -189,8 +189,8 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         renderNode: function(event, data) {
             var node = data.node;
             var $nodeSpan = $(node.span);
-            if (!$nodeSpan.data('rendered') && !node.folder) {
-                var contextButton = $('<span class="collection-preview-icon popup-item" data-content="Preview" data-variation="tiny inverted" data-position="top center" onclick="ecEditor.dispatchEvent(\'org.ekstep.contentmeta:preview\', {id: \'' + node.data.id + '\'})"><i class="fa fa-eye"></i></span>');
+            if (!$nodeSpan.data('rendered') && !node.folder && node.data.metadata.mimeType == "application/vnd.ekstep.ecml-archive") {
+                var contextButton = $('<span onclick="ecEditor.dispatchEvent(\'org.ekstep.contentmeta:preview\', {id: \''+ node.data.id +'\'})"><i class="fa fa-eye"></i></span>');
                 $nodeSpan.append(contextButton);
             }
         }
