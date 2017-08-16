@@ -121,7 +121,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.getPath();
         }
         $scope.showImageIcon = true;
-        $scope.getSubCollection(data.data.metadata.identifier, function(err, res) {
+        if (data.data.objectType == "Collection") $scope.getSubCollection(data.data.metadata.identifier, function(err, res) {
             if (err) console.log("error when trying to fetch sub collections");
             if (res) $scope.initFancyTree(res.data.result.content);
         });
