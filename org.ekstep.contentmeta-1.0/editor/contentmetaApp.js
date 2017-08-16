@@ -198,7 +198,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         renderNode: function(event, data) {
             var node = data.node;
             var $nodeSpan = $(node.span);
-            if (!$nodeSpan.data('rendered') && !node.folder) {
+            if (!$nodeSpan.data('rendered') && !node.folder && node.data.metadata.mimeType == "application/vnd.ekstep.ecml-archive") {
                 var contextButton = $('<span onclick="ecEditor.dispatchEvent(\'org.ekstep.contentmeta:preview\', {id: \''+ node.data.id +'\'})"><i class="fa fa-eye"></i></span>');
                 $nodeSpan.append(contextButton);
             }
