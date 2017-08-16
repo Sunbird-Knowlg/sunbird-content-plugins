@@ -2,7 +2,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
-    $scope.toggleCollectionAccodrionState=true;
+    $scope.toggleCollectionAccodrionState = true;
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.languageList = resp.data.result.ordinals.language;
@@ -163,15 +163,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         });
     }
 
-    setTimeout(function() {
-        ecEditor.jQuery('.popup-item').popup();
-        ecEditor.jQuery(".collection-metadata-accordion").accordion({
-            collapsible: true,
-            duration: 500
-        });
-        ecEditor.jQuery('.collection-metadata-accordion .title:first-child').click();
-    }, 0);
-
     $scope.generateTelemetry = function(data) {
         if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.contentmeta", "pluginver": "1.0", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
@@ -187,7 +178,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         });
     };
 
-    $scope.initFancyTree = function(data) {        
+    $scope.initFancyTree = function(data) {
         if (!data) return;
         data = $scope.buildSubCollectionTree(data);
         ecEditor.jQuery("#collection-meta-tree").fancytree("getTree").reload(data);
@@ -199,7 +190,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             var node = data.node;
             var $nodeSpan = $(node.span);
             if (!$nodeSpan.data('rendered') && !node.folder) {
-                var contextButton = $('<span onclick="ecEditor.dispatchEvent(\'org.ekstep.contentmeta:preview\', {id: \''+ node.data.id +'\'})"><i class="fa fa-eye"></i></span>');
+                var contextButton = $('<span class="collection-preview-icon popup-item" data-content="Preview" data-variation="tiny inverted" data-position="top center" onclick="ecEditor.dispatchEvent(\'org.ekstep.contentmeta:preview\', {id: \'' + node.data.id + '\'})"><i class="fa fa-eye"></i></span>');
                 $nodeSpan.append(contextButton);
             }
         }
@@ -209,16 +200,16 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         var instance = this,
             tree = tree || [];
         if (data.children) data.children = _.sortBy(data.children, ['index']);
-        _.forEach(data.children, function(child) {            
-            var childTree = [];            
+        _.forEach(data.children, function(child) {
+            var childTree = [];
             tree.push({
                 "id": child.identifier || UUID(),
-                "title": (child.name.length > 22) ? child.name.substring(0,22)+'...' : child.name,
+                "title": (child.name.length > 22) ? child.name.substring(0, 22) + '...' : child.name,
                 "objectType": child.contentType,
                 "metadata": _.omit(child, ["children", "collections"]),
                 "folder": !_.isEmpty(child.children),
                 "children": childTree,
-                "root": false                
+                "root": false
             });
             if (child.children && child.children.length > 0) {
                 instance.buildSubCollectionTree(child, childTree);
@@ -228,10 +219,19 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         return tree;
     }
 
-    $scope.toggleCollectionAccodrion=function(){
+    $scope.toggleCollectionAccodrion = function() {
         $scope.toggleCollectionAccodrionState = !($scope.toggleCollectionAccodrionState);
     }
 
     ecEditor.addEventListener("org.ekstep.contentmeta:preview", $scope.previewContent);
+
+    setTimeout(function() {
+        ecEditor.jQuery('.popup-item').popup();
+        ecEditor.jQuery(".collection-metadata-accordion").accordion({
+            collapsible: true,
+            duration: 500
+        });
+        ecEditor.jQuery('.collection-metadata-accordion .title:first-child').click();
+    }, 0);
 }]);
 //# sourceURL=contentmetaApp.js

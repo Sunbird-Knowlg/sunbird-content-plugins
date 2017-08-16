@@ -269,7 +269,12 @@
     background: #f5f5f5;
 }
 
-#collection-meta-tree .fancytree-focused .fancytree-title{
+#collection-meta-tree span.fancytree-node:hover .collection-preview-icon {
+    visibility: visible;
+}
+
+
+#collection-meta-tree .fancytree-focused .fancytree-title {
     outline: none;
 }
 
@@ -286,4 +291,13 @@
 .expand-collection,
 .collapse-collection {
     float: right;
+}
+
+.collection-preview-icon {
+    margin-left: 1vw;
+    visibility: hidden;
+}
+
+.collection-preview-icon:hover {
+    color: #2e9fd9;
 }
