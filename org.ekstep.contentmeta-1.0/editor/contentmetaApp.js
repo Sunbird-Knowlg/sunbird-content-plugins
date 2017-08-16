@@ -2,6 +2,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
+    $scope.toggleCollectionAccodrionState=true;
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.languageList = resp.data.result.ordinals.language;
@@ -215,6 +216,10 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         });
 
         return tree;
+    }
+
+    $scope.toggleCollectionAccodrion=function(){
+        $scope.toggleCollectionAccodrionState = !($scope.toggleCollectionAccodrionState);
     }
 }]);
 //# sourceURL=contentmetaApp.js
