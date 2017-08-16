@@ -85,6 +85,12 @@ org.ekstep.contenteditor.basePlugin.extend({
             isValid = 0;
             fieldsToFill.push('Title');
         }
+
+        if (instance.contentObj['description'] == "Write a short description of your lesson") {
+            isValid = 0;
+            fieldsToFill.push('Description');
+        }
+        
         ecEditor._.each(mandatoryFields, function(value, key) {
             if (typeof instance.contentObj[key] == 'undefined' || instance.contentObj[key] == "") {
                 isValid = 0;
