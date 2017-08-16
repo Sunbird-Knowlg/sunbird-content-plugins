@@ -24,6 +24,11 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/templates/shortcutspopup.html");
         ecEditor.getService('popup').loadNgModules(templatePath);
+        var canvas = org.ekstep.contenteditor.api.getCanvas();
+        canvas.on('object:moving',instance.moveRichText, this)
+        canvas.on('selection:created', function(){
+            this.fromMouse = true;
+        }, instance)
 
         /**
          *  Listen for ctrl/command + c key
@@ -94,8 +99,8 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.registerKeyboardCommand('mod+a', function(event) {
             event.preventDefault();
             var canvas = org.ekstep.contenteditor.api.getCanvas();
+            canvas.fromMouse = false;
             canvas.deactivateAll();
-            canvas.on('object:moving',instance.moveRichText)
             var elements = canvas.getObjects().map(function(elem) {
                 return elem.set('active', true);
             });
@@ -517,10 +522,18 @@ org.ekstep.contenteditor.basePlugin.extend({
                 var richText = ecEditor.jQuery('#' + element.id);
                 if (richText.length != 0) {
                     var canvasCord = ecEditor.jQuery('#canvas').offset();
-                    ecEditor.jQuery("#" + element.id).offset({
-                        'top':canvasCord.top + activeGroup.top + element.top,
-                        'left':canvasCord.left + activeGroup.left + element.left
-                    });
+                    var canvas = org.ekstep.contenteditor.api.getCanvas();
+                    if (canvas.fromMouse) {
+                        ecEditor.jQuery("#" + element.id).offset({
+                            'top':canvasCord.top + activeGroup.top + activeGroup.height/2 + element.top,
+                            'left':canvasCord.left + activeGroup.left + activeGroup.width/2 + element.left
+                        });    
+                    } else {
+                        ecEditor.jQuery("#" + element.id).offset({
+                            'top':canvasCord.top + activeGroup.top + element.top,
+                            'left':canvasCord.left + activeGroup.left + element.left
+                        });
+                    }
                 }
             })
     }
