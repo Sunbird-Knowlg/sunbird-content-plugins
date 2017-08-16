@@ -4,6 +4,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         ecEditor.addEventListener("org.ekstep.richtext:showpopup", this.loadHtml, this);
         ecEditor.addEventListener('stage:select', this.removeHtmlElements, this);
+        ecEditor.addEventListener('stage:create', this.removeHtmlElements, this);
         ecEditor.addEventListener(instance.manifest.id + ":adddiv", this.addDivElement, this);
         var canvas = org.ekstep.contenteditor.api.getCanvas();
         canvas.on('object:scaling', this.resizeObject, this);
@@ -102,7 +103,6 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     removeHtmlElements: function() {
         var richtextDiv = org.ekstep.contenteditor.api.jQuery('#richtext-wrapper');
-        var childElements = richtextDiv.children();
         richtextDiv.empty();
     },
     getConfig: function() {

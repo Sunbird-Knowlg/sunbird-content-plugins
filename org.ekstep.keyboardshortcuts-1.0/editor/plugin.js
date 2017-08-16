@@ -292,7 +292,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (activeElement) {
                 event.preventDefault();
                 var richText = ecEditor.jQuery('#' + activeElement.id);
-                if (richText) {
+                if (richText.length != 0) {
                     richText[0].style.top = parseInt(richText[0].style.top, 10) - 3 + 'px';
                 }
                 activeElement.editorObj.top = activeElement.editorObj.top - 3;
@@ -322,7 +322,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (activeElement) {
                 event.preventDefault();
                 var richText = ecEditor.jQuery('#' + activeElement.id);
-                if (richText) {
+                if (richText.length != 0) {
                     richText[0].style.top = parseInt(richText[0].style.top, 10) + 3 + 'px';
                 }
                 activeElement.editorObj.top = activeElement.editorObj.top + 3;
@@ -352,7 +352,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (activeElement) {
                 event.preventDefault();
                 var richText = ecEditor.jQuery('#' + activeElement.id);
-                if (richText) {
+                if (richText.length != 0) {
                     richText[0].style.left = parseInt(richText[0].style.left, 10) - 3 + 'px';
                 }
                 activeElement.editorObj.left = activeElement.editorObj.left - 3;
@@ -382,7 +382,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (activeElement) {
                 event.preventDefault();
                 var richText = ecEditor.jQuery('#' + activeElement.id);
-                if (richText) {
+                if (richText.length != 0) {
                     richText[0].style.left = parseInt(richText[0].style.left, 10) + 3 + 'px';
                 }
                 activeElement.editorObj.left = activeElement.editorObj.left + 3;
@@ -412,7 +412,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (activeElement) {
                 event.preventDefault();
                 var richText = ecEditor.jQuery('#' + activeElement.id);
-                if (richText) {
+                if (richText.length != 0) {
                     richText[0].style.top = parseInt(richText[0].style.top, 10) - 1 + 'px';
                 }
                 activeElement.editorObj.top = activeElement.editorObj.top - 1;
@@ -442,7 +442,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (activeElement) {
                 event.preventDefault();
                 var richText = ecEditor.jQuery('#' + activeElement.id);
-                if (richText) {
+                if (richText.length != 0) {
                     richText[0].style.top = parseInt(richText[0].style.top, 10) + 1 + 'px';
                 }
                 activeElement.editorObj.top = activeElement.editorObj.top + 1;
@@ -472,7 +472,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (activeElement) {
                 event.preventDefault();
                 var richText = ecEditor.jQuery('#' + activeElement.id);
-                if (richText) {
+                if (richText.length != 0) {
                     richText[0].style.left = parseInt(richText[0].style.left, 10) - 1 + 'px';
                 }
                 activeElement.editorObj.left = activeElement.editorObj.left - 1;
@@ -502,7 +502,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (activeElement) {
                 event.preventDefault();
                 var richText = ecEditor.jQuery('#' + activeElement.id);
-                if (richText) {
+                if (richText.length != 0) {
                     richText[0].style.left = parseInt(richText[0].style.left, 10) + 1 + 'px';
                 }
                 activeElement.editorObj.left = activeElement.editorObj.left + 1;
