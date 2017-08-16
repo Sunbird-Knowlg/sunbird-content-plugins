@@ -99,17 +99,17 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.registerKeyboardCommand('mod+a', function(event) {
             event.preventDefault();
             var canvas = org.ekstep.contenteditor.api.getCanvas();
-            canvas.fromMouse = false;
-            canvas.deactivateAll();
+            canvas.deactivateAll();            
             var elements = canvas.getObjects().map(function(elem) {
                 return elem.set('active', true);
             });
             var group = new fabric.Group(elements, {
-                originX: 'center', 
-                originY: 'center'
+                originX: 'left', 
+                originY: 'top'
             });
             canvas.setActiveGroup(group.setCoords()).renderAll();
         });
+        org.ekstep.contenteditor.api.getCanvas().on('object:moving', instance.moveRichText);
 
         /**
          *  Listen for ctrl/command + s key
@@ -518,22 +518,15 @@ org.ekstep.contenteditor.basePlugin.extend({
     moveRichText: function(event) {
         var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
         if (!activeGroup) return;
-        _.each(activeGroup._objects, function(element) {
+        _.each(activeGroup.getObjects(), function(element) {
                 var richText = ecEditor.jQuery('#' + element.id);
                 if (richText.length != 0) {
-                    var canvasCord = ecEditor.jQuery('#canvas').offset();
-                    var canvas = org.ekstep.contenteditor.api.getCanvas();
-                    if (canvas.fromMouse) {
-                        ecEditor.jQuery("#" + element.id).offset({
-                            'top':canvasCord.top + activeGroup.top + activeGroup.height/2 + element.top,
-                            'left':canvasCord.left + activeGroup.left + activeGroup.width/2 + element.left
-                        });    
-                    } else {
-                        ecEditor.jQuery("#" + element.id).offset({
-                            'top':canvasCord.top + activeGroup.top + element.top,
-                            'left':canvasCord.left + activeGroup.left + element.left
-                        });
-                    }
+                    // originX and origin is left/top by default so
+                    // Objects within group have their left/top values relative to group's center
+                    ecEditor.jQuery("#" + element.id).css({
+                        'top': activeGroup.top + activeGroup.height/2 + element.top,
+                        'left': activeGroup.left + activeGroup.width/2 + element.left
+                    });
                 }
             })
     }
