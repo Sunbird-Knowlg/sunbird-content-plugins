@@ -34,7 +34,7 @@ angular.module('org.ekstep.contentprovider', [])
                     }};
 
     // Get accordions functioning
-    setTimeout(function(){$('#applyAccordion').accordion()}, 400);
+    setTimeout(function(){$('#applyAccordion').accordion()}, 500);
 
     //Telemetry
     var collectionService = org.ekstep.collectioneditor.api.getService('collection');
