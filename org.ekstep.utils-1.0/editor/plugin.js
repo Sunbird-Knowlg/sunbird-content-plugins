@@ -23,6 +23,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      *
      */
     clipboard: undefined,
+    activeGroup: undefined,
     initialize: function() {
         var instance = this;
         ecEditor.addEventListener("reorder:bringforward", this.bringforward, this);
@@ -87,6 +88,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     copyItem: function() {
         this.clipboard = _.cloneDeep(ecEditor.getCurrentObject() ? ecEditor.getCurrentObject() : ecEditor.getCurrentGroup());
+        this.activeGroup = ecEditor.getCanvas().getActiveGroup() && ecEditor.getCanvas().getActiveGroup().getObjects();
         if (this.clipboard) {
             ecEditor.updateContextMenu({ id: 'paste', state: 'SHOW', data: {} });
         }
@@ -98,15 +100,16 @@ org.ekstep.contenteditor.basePlugin.extend({
      *   @memberof Utils
      */
     pasteItem: function() {
+        var instance = this;
         if (this.clipboard) {
             if (_.isArray(this.clipboard)) {
-                var activeGroup = _.clone(org.ekstep.contenteditor.api.getEditorGroup());
                 ecEditor.getCanvas().discardActiveGroup();
-                this.clipboard.forEach(function(instance) {
-                    instance.editorObj.top = activeGroup.top + instance.editorObj.top;
-                    instance.editorObj.left = activeGroup.left + instance.editorObj.left;
-                    ecEditor.cloneInstance(instance);
+                this.clipboard.forEach(function(plugin, index) {
+                    plugin.editorObj.top = instance.activeGroup[index].top + 10;
+                    plugin.editorObj.left = instance.activeGroup[index].left + 10;
+                    ecEditor.cloneInstance(plugin);
                 });
+
             } else ecEditor.cloneInstance(this.clipboard);
             this.clipboard = undefined;
             ecEditor.updateContextMenu({ id: 'paste', state: 'HIDE', data: {} });
