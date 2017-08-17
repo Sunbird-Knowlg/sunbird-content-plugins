@@ -192,7 +192,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         renderNode: function(event, data) {
             var node = data.node;
             var $nodeSpan = $(node.span);
-            if (!$nodeSpan.data('rendered') && !node.folder) {
+            if (!$nodeSpan.data('rendered') && !node.folder && !$nodeSpan.find("span.collection-preview-icon.popup-item").length) {
                 var contextButton = $('<span class="collection-preview-icon popup-item" data-content="Preview" data-variation="tiny inverted" data-position="top center" onclick="ecEditor.dispatchEvent(\'org.ekstep.contentmeta:preview\', {id: \'' + node.data.id + '\'})"><i class="fa fa-eye"></i></span>');
                 $nodeSpan.append(contextButton);
             }
