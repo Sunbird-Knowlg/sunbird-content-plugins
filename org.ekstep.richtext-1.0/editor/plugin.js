@@ -116,6 +116,9 @@ org.ekstep.contenteditor.basePlugin.extend({
         config = _.omit(config, ["stroke", "strokeWidth"]);
         return config;
     },
+    toECML: function() {        
+        return _.omit(this._super(), ["__text"]);
+    },
     onConfigChange: function(key, value) {
       var htmlContent = "";
         switch (key) {
