@@ -17,6 +17,9 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     newInstance: function() {
         var instance = this;
+        this.configManifest = _.remove(this.configManifest, function(property) {
+           return property.propertyName != "stroke";
+        });                
         var props = this.convertToFabric(this.attributes);
         if (ecEditor._.isUndefined(this.config.text))
                this.config.text = ecEditor._.isUndefined(this.attributes.__text) ? "" : this.attributes.__text;
@@ -75,7 +78,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         instance.data.editorObj.height = $('#' + instance.data.id).height();
     },
     dblClickHandler: function(event) {
-        if (ecEditor.getCurrentObject().manifest.id === "org.ekstep.richtext") {
+        if (ecEditor.getCurrentObject() && ecEditor.getCurrentObject().manifest.id === "org.ekstep.richtext") {
                ecEditor.dispatchEvent("org.ekstep.richtext:showpopup", {textSelected: true});
         }
     },
@@ -111,6 +114,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         config.color = ecEditor.jQuery('#' + this.id).css("color");
         config.fontfamily = ecEditor.jQuery('#' + this.id).css("font-family");
         config.fontsize = ecEditor.jQuery('#' + this.id).css("font-size");
+        config = _.omit(config, ["stroke", "strokeWidth"]);
         return config;
     },
     onConfigChange: function(key, value) {

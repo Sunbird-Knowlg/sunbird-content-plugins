@@ -55,9 +55,7 @@ angular.module('richtexteditorapp', [])
                     "type": "rect",
                     "x": 10,
                     "y": 20,
-                    "fill": "rgba(0, 0, 0, 0)",
-                    "stroke": "rgba(255, 255, 255, 0)",
-                    "strokeWidth": 1,
+                    "fill": "rgba(0, 0, 0, 0)",                    
                     "opacity": 1
                 });
             }
