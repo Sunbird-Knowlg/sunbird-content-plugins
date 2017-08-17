@@ -125,18 +125,19 @@ angular.module('editorApp')
         }, 0);
 
         $scope.onTextSelect = function(event, data) {
-            if (ecEditor.getCurrentObject().attributes.textType == "readalong") {
+            data = ecEditor.getCurrentObject() || data;
+            if (data.attributes.textType == "readalong") {
                 $scope.hasReadAlong = true;
                 $scope.hasWordInfo = false;
                 $scope.textTypeSelected = "readalong";
                 $scope.updateAdvancedTab();
-                $scope.showReadAlong(ecEditor.getCurrentObject());
-            } else if (ecEditor.getCurrentObject().attributes.textType == "wordinfo") {
+                $scope.showReadAlong(data);
+            } else if (data.attributes.textType == "wordinfo") {
                 $scope.hasWordInfo = true;
                 $scope.hasReadAlong = false;
                 $scope.textTypeSelected = "wordinfo";
                 $scope.updateAdvancedTab();
-                $scope.showWordInfo(ecEditor.getCurrentObject());
+                $scope.showWordInfo(data);
             } else {
                 $scope.textTypeSelected = undefined;
                 $scope.hasReadAlong = false;
@@ -188,7 +189,7 @@ angular.module('editorApp')
         $scope.unregisterListeners = function() {
             ecEditor.removeEventListener("org.ekstep.text:addWordInfo", $scope.onTextSelect, $scope);
             ecEditor.removeEventListener("org.ekstep.text:addReadAlong", $scope.onTextSelect, $scope);
-            ecEditor.removeEventListener("org.ekstep.text:added", $scope.onTextSelect, $scope);
+            ecEditor.removeEventListener("org.ekstep.text:add", $scope.onTextSelect, $scope);
             ecEditor.removeEventListener("org.ekstep.text:modified", $scope.onTextSelect, $scope);
             ecEditor.removeEventListener("org.ekstep.text:unselected", $scope.unregisterListeners, $scope);
             ecEditor.removeEventListener("config:show", $scope.onTextSelect, $scope);
@@ -196,7 +197,7 @@ angular.module('editorApp')
 
         ecEditor.addEventListener("org.ekstep.text:addWordInfo", $scope.onTextSelect, $scope);
         ecEditor.addEventListener("org.ekstep.text:addReadAlong", $scope.onTextSelect, $scope);
-        ecEditor.addEventListener("org.ekstep.text:added", $scope.onTextSelect, $scope);
+        ecEditor.addEventListener("org.ekstep.text:add", $scope.onTextSelect, $scope);
         ecEditor.addEventListener("org.ekstep.text:modified", $scope.onTextSelect, $scope);
         ecEditor.addEventListener("org.ekstep.text:unselected", $scope.unregisterListeners, $scope);
         ecEditor.addEventListener("config:show", $scope.onTextSelect, $scope);
