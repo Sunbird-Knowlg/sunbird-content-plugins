@@ -32,8 +32,8 @@ Plugin.extend({
             div.setAttribute("style", data.style);
         div.id = data.id;
         div.classList.add('richText');
-        div.style.width = dims.w + 'px';
-        div.style.height = dims.h + 'px';
+        div.style.width = 'auto';
+        div.style.height = 'auto';
         div.style.position = 'absolute';
         // div.style.fontSize = fontsize;
         // div.style.fontFamily = data.font;
