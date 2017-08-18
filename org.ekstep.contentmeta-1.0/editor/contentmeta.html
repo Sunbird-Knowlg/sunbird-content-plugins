@@ -30,7 +30,7 @@
                 <div class="content">
                     <div class="header">{{content.name}}</div>
                     <div class="description">
-                        <p>{{content.description}}</p>
+                        <p id="descriptionPara">{{content.description}}</p>
                     </div>
                 </div>
             </div>
@@ -42,8 +42,7 @@
                     <div class="ui styled accordion collection-metadata-accordion" id="collectionMetadataAccordion">
                         <div class="active title" ng-click="toggleCollectionAccodrion()">
                             <i ng-show="!(toggleCollectionAccodrionState)" class="fa fa-folder-o" aria-hidden="true"></i>
-                            <i ng-show="toggleCollectionAccodrionState" class="fa fa-folder-open-o" aria-hidden="true"></i>
-                            &nbsp; Contents
+                            <i ng-show="toggleCollectionAccodrionState" class="fa fa-folder-open-o" aria-hidden="true"></i> &nbsp; Contents
                             <span class="expand-collection" ng-show="!(toggleCollectionAccodrionState)"><i class="fa fa-plus" aria-hidden="true"></i></span>
                             <span class="collapse-collection" ng-show="toggleCollectionAccodrionState"><i class="fa fa-minus" aria-hidden="true"></i></span>
                         </div>
