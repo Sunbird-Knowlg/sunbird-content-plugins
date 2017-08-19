@@ -68,6 +68,7 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             $scope.metadataCloneObj = _.clone($scope.textbook);
             $scope.editMode = false;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+            $scope.getPath();
             $scope.$safeApply();
         }else{
             ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
@@ -168,15 +169,12 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:TextBook', $scope.onNodeSelect);
 
     $scope.getPath = function() {
-        var nodes = [];
+        $scope.path = [];
         var path = ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getKeyPath();
         _.forEach(path.split('/'), function(key) {
             if(key){
                 var node = ecEditor.jQuery("#collection-tree").fancytree("getTree").getNodeByKey(key);
-                $scope.path = {
-                    'title' : node.title,
-                    'nodeId'  : node.key 
-                }
+                $scope.path.push({'title' : node.title, 'nodeId'  : node.key });
             }
         });
     }

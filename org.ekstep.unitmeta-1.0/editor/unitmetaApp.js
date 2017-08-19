@@ -31,6 +31,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             $scope.metadataCloneObj = _.clone($scope.unit);
             $scope.editMode = false;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+            $scope.getPath();
             $scope.$safeApply();
         }else{
             ecEditor.dispatchEvent("org.ekstep.toaster:warning", {

@@ -40,6 +40,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.metadataCloneObj = _.clone($scope.content);
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             $scope.editMode = false;
+            $scope.getPath();
             $scope.$safeApply();
         } else {
             ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
