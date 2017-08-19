@@ -42,6 +42,9 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             if(_.isString($scope.course.language)){
                 $scope.course.language = [$scope.course.language];
             }
+            if(_.isString($scope.course.audience)){
+                $scope.course.audience = [$scope.course.audience];
+            }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.course.name);
             $scope.course.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.course));
@@ -112,7 +115,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             $('.ui.dropdown').dropdown('refresh');
             $scope.metadataCloneObj = _.clone($scope.course);
         }
-        if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
+        if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"]) && _.has(activeNode.data.metadata, ["description"])){
             $scope.editMode = false;
             $('#language').dropdown('set selected', $scope.course.language);
             $('#audience').dropdown('set selected', $scope.course.audience);

@@ -34,11 +34,11 @@
                         <tbody>
                             <tr>
                                 <td>Language</td>
-                                <td>{{textbook.language.toString() | lowercase}}</td>
+                                <td>{{course.language.toString() | lowercase}}</td>
                             </tr>
                             <tr>
                                 <td>Audience</td>
-                                <td>{{textbook.audience.toString() | lowercase}}</td>
+                                <td>{{course.audience.toString() | lowercase}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -67,13 +67,9 @@
                             <tr>
                                 <td>Keywords</td>
                                 <td>
-                                    <span class="field-value" ng-repeat="keyword in textbook.keywords">{{keyword | lowercase}}{{$last ? '' : ', '}}</span>
+                                    <span class="field-value" ng-repeat="keyword in course.keywords">{{keyword | lowercase}}{{$last ? '' : ', '}}</span>
                                 </td>
-                            </tr>
-                            <tr>
-                                <td>Notes</td>
-                                <td>{{textbook.notes.toString() | lowercase}}</td>
-                            </tr>
+                            </tr>                            
                         </tbody>
                     </table>
                 </div>
