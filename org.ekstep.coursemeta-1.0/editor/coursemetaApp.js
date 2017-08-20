@@ -42,12 +42,16 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             if(_.isString($scope.course.language)){
                 $scope.course.language = [$scope.course.language];
             }
+            if(_.isString($scope.course.audience)){
+                $scope.course.audience = [$scope.course.audience];
+            }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.course.name);
             $scope.course.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.course));
             $scope.metadataCloneObj = _.clone($scope.course);
             $scope.editMode = false;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+            $scope.getPath();
             $scope.$safeApply();
         }else{
             ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
@@ -112,7 +116,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             $('.ui.dropdown').dropdown('refresh');
             $scope.metadataCloneObj = _.clone($scope.course);
         }
-        if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
+        if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"]) && _.has(activeNode.data.metadata, ["description"])){
             $scope.editMode = false;
             $('#language').dropdown('set selected', $scope.course.language);
             $('#audience').dropdown('set selected', $scope.course.audience);
@@ -149,15 +153,12 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:Course', $scope.onNodeSelect);
 
     $scope.getPath = function() {
-        var nodes = [];
+        $scope.path = [];
         var path = ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getKeyPath();
         _.forEach(path.split('/'), function(key) {
             if(key){
                 var node = ecEditor.jQuery("#collection-tree").fancytree("getTree").getNodeByKey(key);
-                $scope.path = {
-                    'title' : node.title,
-                    'nodeId'  : node.key 
-                }
+                $scope.path.push({'title' : node.title, 'nodeId'  : node.key });
             }
         });
     }

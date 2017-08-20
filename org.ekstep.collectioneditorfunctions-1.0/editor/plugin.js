@@ -10,6 +10,10 @@ org.ekstep.collectioneditor.basePlugin.extend({
 	},
 	saveContent: function(event, data) {
 		var contentBody = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy();
+        if (contentBody) {
+            //angular.toJson to remove $$hashKey from scope object
+            contentBody = JSON.parse(angular.toJson(contentBody));
+        }
         console.log('contentBody', contentBody);
         // validate save data
         if (!this.isValidSave()) {
