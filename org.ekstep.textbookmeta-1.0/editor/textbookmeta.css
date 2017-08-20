@@ -239,8 +239,8 @@
 
 .edit-metadata:hover,
 .info-item:hover+.edit-metadata {
-
     visibility: visible;
+    color: #2e9fd9;
 }
 
 #descriptionPara+.edit-metadata>i.icon.edit:before {

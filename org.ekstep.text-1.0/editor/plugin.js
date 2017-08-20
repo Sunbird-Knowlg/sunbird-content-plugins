@@ -513,7 +513,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      * @memberof Text
      */
     addReadalongconfigManifest: function(instance) {
-        ecEditor.dispatchEvent('org.ekstep.text:addReadAlong');
+        ecEditor.dispatchEvent('org.ekstep.text:addReadAlong', instance);
         /*//updating readlong configarations in text configManifest
         instance.manifest.editor.configManifest.push({
             "propertyName": "highlight",
@@ -537,7 +537,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      * @memberof Text
      */
     addWordinfoconfigManifest: function(instance) {
-        ecEditor.dispatchEvent('org.ekstep.text:addWordInfo');
+        ecEditor.dispatchEvent('org.ekstep.text:addWordInfo', instance);
         /*//updating wordinfo configarations in text configManifest
         instance.manifest.editor.configManifest.push({
             "propertyName": "wordfontcolor",

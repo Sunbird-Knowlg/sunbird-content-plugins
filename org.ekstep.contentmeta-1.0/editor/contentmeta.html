@@ -30,22 +30,27 @@
                 <div class="content">
                     <div class="header">{{content.name}}</div>
                     <div class="description">
-                        <p>{{content.description}}</p>
+                        <p id="descriptionPara">{{content.description}}</p>
                     </div>
                 </div>
             </div>
         </div>
         <div class="metacontent-fields-container">
-            <div class="ui fluid grid container">
-                <!-- <div class="seven wide column">
+            <div class="ui fluid grid container" style="height:100%">
+                <div ng-show="nodeType == 'Collection'" class="seven wide column">
+                    <!-- <h4 class="ui header">Course structure</h4> -->
                     <div class="ui styled accordion collection-metadata-accordion" id="collectionMetadataAccordion">
-                        <div class="title">
-                            Title1
+                        <div class="active title" ng-click="toggleCollectionAccodrion()">
+                            <i ng-show="!(toggleCollectionAccodrionState)" class="fa fa-folder-o" aria-hidden="true"></i>
+                            <i ng-show="toggleCollectionAccodrionState" class="fa fa-folder-open-o" aria-hidden="true"></i> &nbsp; Contents
+                            <span class="expand-collection" ng-show="!(toggleCollectionAccodrionState)"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                            <span class="collapse-collection" ng-show="toggleCollectionAccodrionState"><i class="fa fa-minus" aria-hidden="true"></i></span>
                         </div>
-                        <div class="content">Content1</div>
+                        <div class="active content">
+                            <div id="collection-meta-tree"></div>
+                        </div>
                     </div>
-                    
-                </div> -->
+                </div>
                 <div class="five wide column">
                     <table class="ui padded striped table metadata-fields-table">
                         <tbody>

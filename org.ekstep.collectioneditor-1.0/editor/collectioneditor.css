@@ -32,10 +32,15 @@ body {
     border-bottom: 0.2px solid rgba(128, 128, 128, 0.43);
 }
 
-.header-wrapper .custom-1-wide .ui.tiny.image {
-    height: 100%!important;
-    width: 100%!important;
+.header-wrapper #headerLogo .ui.tiny.image {
+    height: 32.94px;
+    width: 33.9px;
 }
+
+#headerLogo{
+    background: #2e9fd9;
+}
+
 
 .main-body {
     height: 90%!important;
@@ -225,9 +230,9 @@ body {
 .ui.dropdown .menu .selected.item,
 .ui.dropdown.selected,
 .ui.dropdown .menu .active.item {
-    font-weight: initial;
+    font-weight: normal;
     color: rgba(0, 0, 0, .95);
-    background: initial;
+    background: none;
 }
 
 

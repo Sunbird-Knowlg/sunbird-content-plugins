@@ -45,6 +45,7 @@ angular.module('activityBrowserApp', [])
         ctrl.closePluginDetails = function() {
             ctrl.showPluginDetails = false;
             ctrl.hideMainPage = false;
+            ctrl.applyDimmerToCard();
             $scope.$safeApply();
         };
 

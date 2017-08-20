@@ -4,6 +4,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         ecEditor.addEventListener("org.ekstep.richtext:showpopup", this.loadHtml, this);
         ecEditor.addEventListener('stage:select', this.removeHtmlElements, this);
+        ecEditor.addEventListener('stage:create', this.removeHtmlElements, this);
         ecEditor.addEventListener(instance.manifest.id + ":adddiv", this.addDivElement, this);
         var canvas = org.ekstep.contenteditor.api.getCanvas();
         canvas.on('object:scaling', this.resizeObject, this);
@@ -16,17 +17,20 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     newInstance: function() {
         var instance = this;
+        this.configManifest = _.remove(this.configManifest, function(property) {
+           return property.propertyName != "stroke";
+        });                
         var props = this.convertToFabric(this.attributes);
         if (ecEditor._.isUndefined(this.config.text))
                this.config.text = ecEditor._.isUndefined(this.attributes.__text) ? "" : this.attributes.__text;
         delete props.__text;
-        delete this.attributes.__text;
         this.editorObj = new fabric.Rect(props);
+        this.editorObj.visible = true;
         if (this.editorObj) this.editorObj.setFill(props.fill);
         ecEditor.dispatchEvent(instance.manifest.id + ":adddiv", { data: instance });
     },
     resizeObject: function(e) {
-        if (org.ekstep.contenteditor.api.getCurrentObject().manifest.id == 'org.ekstep.richtext') {
+        if (ecEditor.getCurrentObject() && ecEditor.getCurrentObject().manifest.id == 'org.ekstep.richtext') {
                var canvasCord = ecEditor.jQuery('#canvas').offset();
                ecEditor.jQuery("#" + e.target.id).offset({
                      'top':e.target.top + canvasCord.top, 
@@ -65,6 +69,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.jQuery(".canvas-container #richtext-wrapper").append(div);
         ecEditor.jQuery(".canvas-container #richtext-wrapper div#" + instance.data.id).html(instance.data.config.text);
         ecEditor.jQuery("#" + instance.data.id).offset({'top':instance.data.editorObj.top + canvasCord.top, 'left':Number(parseInt(ecEditor.jQuery(".canvas-container").css('margin-left'))) + (instance.data.editorObj.left + canvasCord.left)});
+        ecEditor.jQuery("#" + instance.data.id).width(ecEditor.jQuery("#" + instance.data.id).width() + 5);
         // ecEditor.jQuery("div#"+this.id).draggable({
         //     containment: "canvas"
         // });
@@ -72,12 +77,13 @@ org.ekstep.contenteditor.basePlugin.extend({
         instance.data.editorObj.height = $('#' + instance.data.id).height();
     },
     dblClickHandler: function(event) {
-        if (ecEditor.getCurrentObject().manifest.id === "org.ekstep.richtext") {
-               ecEditor.dispatchEvent("org.ekstep.richtext:showpopup");
+        if (ecEditor.getCurrentObject() && ecEditor.getCurrentObject().manifest.id === "org.ekstep.richtext") {
+               ecEditor.dispatchEvent("org.ekstep.richtext:showpopup", {textSelected: true});
         }
     },
-    loadHtml: function(event, data) {
+    loadHtml: function(event, eventData) {
       if (document.getElementsByClassName('richtextEditor_1').length > 0) {return}; // Dont open popup if already opened
+      this.textSelected  = eventData ?  eventData.textSelected : false;
         currentInstance = this;
         ecEditor.getService('popup').open({
                template: 'richtexteditor',
@@ -88,6 +94,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                            return currentInstance;
                       }
                },
+               data: {'textSelected':this.textSelected},
                width: 500,
                showClose: false,
                className: 'ngdialog-theme-plain richtextEditor_1'
@@ -99,15 +106,18 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     removeHtmlElements: function() {
         var richtextDiv = org.ekstep.contenteditor.api.jQuery('#richtext-wrapper');
-        var childElements = richtextDiv.children();
         richtextDiv.empty();
     },
     getConfig: function() {
-        var config = {};
+        var config = this._super();
         config.color = ecEditor.jQuery('#' + this.id).css("color");
         config.fontfamily = ecEditor.jQuery('#' + this.id).css("font-family");
         config.fontsize = ecEditor.jQuery('#' + this.id).css("font-size");
+        config = _.omit(config, ["stroke", "strokeWidth"]);
         return config;
+    },
+    toECML: function() {        
+        return _.omit(this._super(), ["__text"]);
     },
     onConfigChange: function(key, value) {
       var htmlContent = "";

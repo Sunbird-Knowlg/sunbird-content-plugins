@@ -59,13 +59,13 @@ org.ekstep.contenteditor.basePlugin.extend({
         }else{
             var stage = ecEditor.getCurrentStage(),
                 canvas = stage.canvas;
-            //html2canvas($('#canvas-wrapper'), {  
-                //onrendered: function (canvas) {
+            html2canvas($('#canvas-wrapper'), {  
+                onrendered: function (canvas) {
                     stage.thumbnail = canvas.toDataURL({format: 'jpeg', quality: 0.1});
                     var angScope = ecEditor.getAngularScope();
                     ecEditor.ngSafeApply(angScope);
-              //  }
-            //});
+                }
+            });
         }
     },
     updateZIndex: function() {
@@ -92,14 +92,14 @@ org.ekstep.contenteditor.basePlugin.extend({
             this.thumbnail = canvas.toDataURL({format: 'jpeg', quality: 0.1});
         }else{
             var instance = this;
-            //html2canvas($('#canvas-wrapper'), {
-                //onrendered: function(canvas) {
+            html2canvas($('#canvas-wrapper'), {
+                onrendered: function(canvas) {
                     instance.thumbnail = canvas.toDataURL({ format: 'jpeg', quality: 0.1 });
                     var angScope = ecEditor.getAngularScope();
                     ecEditor.ngSafeApply(angScope);
-                //},
-                //timeout: 0
-            //});
+                },
+                timeout: 0
+            });
         }
         ecEditor.refreshStages();
         ecEditor.dispatchEvent('stage:render:complete', { stageId: this.id });

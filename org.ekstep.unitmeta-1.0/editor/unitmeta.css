@@ -206,6 +206,16 @@
     font-family: Helvetica!important;
 }
 
+#read-metadata-wrapper .item,
+#read-metadata-wrapper .item .content {
+    height: 100%!important;
+}
+
+#read-metadata-wrapper .item .content .description {
+    height: 55%;
+    overflow-y: hidden;
+}
+
 #read-metadata-wrapper .item .content .description #descriptionPara {
     max-width: 95%;
     max-height: 90%;
@@ -226,8 +236,8 @@
 
 .edit-metadata:hover,
 .info-item:hover+.edit-metadata {
-
     visibility: visible;
+    color: #2e9fd9;
 }
 
 #descriptionPara+.edit-metadata>i.icon.edit:before {
