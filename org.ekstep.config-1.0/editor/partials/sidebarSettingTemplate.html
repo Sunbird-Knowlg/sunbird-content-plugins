@@ -172,9 +172,15 @@ a.item.at-menu-item.popup-item.active {
                         </select>
                     </div>
                     <div class="field">
-                        <select class="ui  dropdown" ng-model="selectedActionTarget" ng-options="key as value for (key , value) in actionTargetObject" id="actionTargetDropdown">
-                            <option value="">select target</option>
-                        </select>
+                        <div class="ui fluid search selection dropdown" id="actionTargetDropdown" ng-model="selectedActionTarget">
+                            <input type="hidden" >
+                            <i class="dropdown icon"></i>
+                            <div class="default text">select target</div>
+                            <div class="menu">
+                                <div class="item" ng-repeat="value in targetOptions" data-value="{{value.selectedActionTarget}}" ng-click="selectOption(value.selectedActionTarget)"><i class="icon {{value.iconClass}}" style="color:{{value.bgColor}}"></i>{{value.name}}
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="field">
                         <button class="ui primary tiny button" ng-disabled="selectedObject.stage || !selectedActionTarget" ng-click="addAction({'command': selectedActionType, 'asset': selectedActionTarget}); showActionForm = false;" id="addActionBtn">Add</button>

@@ -23,7 +23,7 @@ angular.module('editorApp')
         $scope.selectedObject = { stage: true };
         $scope.currentObject = {};
         $scope.currentObjectActions = [];  
-
+        $scope.targetOptions = []; 
         // on load
         $scope.settingsCategory.selected = 'customize';
         $scope.pluginConfig;
@@ -167,6 +167,7 @@ angular.module('editorApp')
                 $scope.setStageObjects();
             }
             org.ekstep.contenteditor.api.jQuery("#actionTargetDropdown").dropdown('clear');
+            $scope.selectedActionTarget = '';
         });
 
         $scope.addAction = function(data) {
@@ -204,8 +205,8 @@ angular.module('editorApp')
         $scope.highlightTargetObject = function() {
             var instance = this;
             ecEditor.jQuery("#actionTargetDropdown:not(.addClick)").parent().on('click', function() {
-                ecEditor.jQuery("#actionTargetDropdown").nextAll(".menu.transition").find(".item").mouseover(function(event) {
-                    var id = ecEditor.jQuery(event.target).attr("data-value").split(":")[1];
+                ecEditor.jQuery("#actionTargetDropdown .menu.transition").find(".item").mouseover(function(event) {
+                    var id = ecEditor.jQuery(event.target).attr("data-value");
                     var pluginInstance = ecEditor.getPluginInstance(id);
                     if (pluginInstance && pluginInstance['editorObj']) {
                         var editorObj = pluginInstance['editorObj'];
@@ -226,17 +227,35 @@ angular.module('editorApp')
 
         $scope.setVisibleObjects = function() {
             var pluginInstanceIds = [];
+            $scope.targetOptions=[];
             var pluginInstances = ecEditor.getStagePluginInstances(ecEditor.getCurrentStage().id, null, ['org.ekstep.audio', 'org.ekstep.image'], [ecEditor.getCurrentObject().id]);
             ecEditor._.forEach(pluginInstances, function(pi) {
-                pluginInstanceIds[pi.id] = pi.getDisplayName() + " (" + pi['id'].substr(0, 15) + "..." + ")";
+            if(pi['shapeType']){
+                for(var s=0;s<pi.manifest.editor.menu[0].submenu.length;s++){
+                    if(pi.manifest.editor.menu[0].submenu[s].onclick.data.type==pi.attributes.type){
+                        pluginInstanceIds[pi.id] = pi.getDisplayName() + " - " + pi.attributes.type;
+                        $scope.targetOptions.push({'name':pi.manifest.editor.menu[0].submenu[s].title,'iconClass':pi.manifest.editor.menu[0].submenu[s].iconClass, "bgColor":pi.attributes.fill, 'selectedActionTarget':pi.id});
+                    }
+                }
+            }
+            else{
+                pluginInstanceIds[pi.id] = pi.getDisplayName();
+                $scope.targetOptions.push({'name':pluginInstanceIds[pi.id],'iconClass':pi.manifest.editor.menu[0].iconClass, "bgColor":pi.attributes.fill, 'selectedActionTarget':pi.id});
+            }
             })
             var imageInstances = ecEditor.getStagePluginInstances(ecEditor.getCurrentStage().id, ['org.ekstep.image'], null, [ecEditor.getCurrentObject().id]);
             ecEditor._.forEach(imageInstances, function(pi) {
                 pluginInstanceIds[pi.id] = pi.getDisplayName();
+                $scope.targetOptions.push({'name':pluginInstanceIds[pi.id],'iconClass':pi.manifest.editor.menu[0].iconClass, "bgColor":pi.attributes.fill, 'selectedActionTarget':pi.id});
+
             })
             $scope.actionTargetObject = pluginInstanceIds;
             $scope.$safeApply();
         };
+
+        $scope.selectOption = function (val) {
+            $scope.selectedActionTarget = val;
+        }
 
         $scope.setPlayableObjects = function() {
             var pluginInstances = ecEditor.getStagePluginInstances(ecEditor.getCurrentStage().id, ['org.ekstep.audio'], null, [ecEditor.getCurrentObject().id]);
@@ -266,6 +285,7 @@ angular.module('editorApp')
             setTimeout(function() {
                 org.ekstep.contenteditor.api.jQuery("#actionTargetDropdown").dropdown('clear');
                 org.ekstep.contenteditor.api.jQuery("#actionTypeDropdown").dropdown('clear');
+                $scope.selectedActionTarget='';
             }, 500);
         };
 
@@ -312,3 +332,4 @@ angular.module('editorApp')
         org.ekstep.contenteditor.api.addEventListener("config:show:customise", $scope.showConfig, $scope);       
         
     }]);
+ //# sourceURL=sidebar-settings-controller.js
