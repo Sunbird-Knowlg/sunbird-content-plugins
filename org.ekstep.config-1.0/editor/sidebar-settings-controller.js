@@ -230,24 +230,31 @@ angular.module('editorApp')
             $scope.targetOptions=[];
             var pluginInstances = ecEditor.getStagePluginInstances(ecEditor.getCurrentStage().id, null, ['org.ekstep.audio', 'org.ekstep.image'], [ecEditor.getCurrentObject().id]);
             ecEditor._.forEach(pluginInstances, function(pi) {
-            if(pi['shapeType']){
-                for(var s=0;s<pi.manifest.editor.menu[0].submenu.length;s++){
-                    if(pi.manifest.editor.menu[0].submenu[s].onclick.data.type==pi.attributes.type){
-                        pluginInstanceIds[pi.id] = pi.getDisplayName() + " - " + pi.attributes.type;
-                        $scope.targetOptions.push({'name':pi.manifest.editor.menu[0].submenu[s].title,'iconClass':pi.manifest.editor.menu[0].submenu[s].iconClass, "bgColor":pi.attributes.fill, 'selectedActionTarget':pi.id});
+                if(pi['shapeType']){
+                    for(var s=0;s<pi.manifest.editor.menu[0].submenu.length;s++){
+                        if(pi.manifest.editor.menu[0].submenu[s].onclick.data.type==pi.attributes.type){
+                            pluginInstanceIds[pi.id] = pi.getDisplayName() + " - " + pi.attributes.type;
+                            $scope.targetOptions.push({'name':pi.manifest.editor.menu[0].submenu[s].title,'iconClass':pi.manifest.editor.menu[0].submenu[s].iconClass, "bgColor":pi.attributes.fill, 'selectedActionTarget':pi.id});
+                        }
                     }
                 }
-            }
-            else{
-                pluginInstanceIds[pi.id] = pi.getDisplayName();
-                $scope.targetOptions.push({'name':pluginInstanceIds[pi.id],'iconClass':pi.manifest.editor.menu[0].iconClass, "bgColor":pi.attributes.fill, 'selectedActionTarget':pi.id});
-            }
+                else if(pi.manifest.shortId=="org.ekstep.text"){
+                    pluginInstanceIds[pi.id] = pi.getDisplayName();
+                    if(pi.editorObj.text.length<=8)
+                        $scope.targetOptions.push({'name':pi.editorObj.text,'iconClass':pi.manifest.editor.menu[0].iconClass, "bgColor":pi.attributes.fill, 'selectedActionTarget':pi.id});      
+                    else{
+                        $scope.targetOptions.push({'name':pi.editorObj.text.slice(0,7)+'...','iconClass':pi.manifest.editor.menu[0].iconClass, "bgColor":pi.attributes.fill, 'selectedActionTarget':pi.id});     
+                    }
+                }
+                else{
+                    pluginInstanceIds[pi.id] = pi.getDisplayName();
+                    $scope.targetOptions.push({'name':pluginInstanceIds[pi.id],'iconClass':pi.manifest.editor.menu[0].iconClass, "bgColor":pi.attributes.fill, 'selectedActionTarget':pi.id});
+                }
             })
             var imageInstances = ecEditor.getStagePluginInstances(ecEditor.getCurrentStage().id, ['org.ekstep.image'], null, [ecEditor.getCurrentObject().id]);
             ecEditor._.forEach(imageInstances, function(pi) {
                 pluginInstanceIds[pi.id] = pi.getDisplayName();
                 $scope.targetOptions.push({'name':pluginInstanceIds[pi.id],'iconClass':pi.manifest.editor.menu[0].iconClass, "bgColor":pi.attributes.fill, 'selectedActionTarget':pi.id});
-
             })
             $scope.actionTargetObject = pluginInstanceIds;
             $scope.$safeApply();
@@ -260,10 +267,12 @@ angular.module('editorApp')
         $scope.setPlayableObjects = function() {
             var pluginInstances = ecEditor.getStagePluginInstances(ecEditor.getCurrentStage().id, ['org.ekstep.audio'], null, [ecEditor.getCurrentObject().id]);
             var optionsList = [];
+            $scope.targetOptions=[];
             ecEditor._.forEach(pluginInstances, function(pi) {
                 if (pi.media) {
                     var mediaObj = pi.media[Object.keys(pi.media)[0]];
                     optionsList[mediaObj.id] = pi.getDisplayName();
+                    $scope.targetOptions.push({'name':mediaObj.name,'iconClass':pi.manifest.editor.menu[0].iconClass, "bgColor":pi.attributes.fill, 'selectedActionTarget':mediaObj.id});
                 }
             });
             $scope.actionTargetObject = optionsList;
