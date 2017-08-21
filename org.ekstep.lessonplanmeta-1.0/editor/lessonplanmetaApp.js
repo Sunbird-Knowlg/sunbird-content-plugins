@@ -1,4 +1,4 @@
-angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanmetaController', ['$scope', function($scope) {    
+angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanmetaController', ['$scope', '$timeout', function($scope, $timeout) {    
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
@@ -36,11 +36,13 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
     }
 
     $scope.initDropdown = function() {
-        $('#lessonplan-board').dropdown('set selected', $scope.lesson.board);
-        $('#lessonplan-medium').dropdown('set selected', $scope.lesson.medium);
-        $('#lessonplan-subject').dropdown('set selected', $scope.lesson.subject);
-        $('#lessonplan-gradeLevel').dropdown('set selected', $scope.lesson.gradeLevel);        
-        $('#lessonplan-language').dropdown('set selected', $scope.lesson.language);    
+        $timeout(function() {
+            $('#lessonplan-board').dropdown('set selected', $scope.lesson.board);
+            $('#lessonplan-medium').dropdown('set selected', $scope.lesson.medium);
+            $('#lessonplan-subject').dropdown('set selected', $scope.lesson.subject);
+            $('#lessonplan-gradeLevel').dropdown('set selected', $scope.lesson.gradeLevel);        
+            $('#lessonplan-language').dropdown('set selected', $scope.lesson.language);    
+        });        
     }
     
     $scope.updateNode = function(){
