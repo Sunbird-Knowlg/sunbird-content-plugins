@@ -1,4 +1,4 @@
-angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', function($scope) {
+angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaController', ['$scope', function($scope) {
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
@@ -21,10 +21,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = $scope.newNode;
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = false;
-            }
-            if(_.isString($scope.unit.keywords)){
-                $scope.unit.keywords = $scope.unit.keywords.split(',');
-            }
+            }            
             $scope.unit.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.unit.name);
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.unit));;
@@ -74,15 +71,14 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
     }
 
-    $scope.onNodeSelect = function(evant, data){
-        var selectedConcepts = [];
+    $scope.onNodeSelect = function(evant, data){        
         $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.unit = {};
         $scope.editMode = $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
-        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.unitmeta", "1.0", "assets/default.png");
+        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.lessonplanunitmeta", "1.0", "assets/default.png");
 
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
         $scope.unit = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
@@ -90,39 +86,17 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             $scope.editMode = true;
             $scope.metadataCloneObj = _.clone($scope.unit);
         }
-        if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
-            $scope.editMode = false;
-            if(!_.isUndefined(activeNode.data.metadata.concepts)){
-                $scope.unit.concepts = activeNode.data.metadata.concepts;
-                if($scope.unit.concepts.length > 0){
-                    $scope.unit.conceptData = '(' + $scope.unit.concepts.length + ') concepts selected';
-                    _.forEach($scope.unit.concepts, function(concept){
-                        selectedConcepts.push(concept.identifier);
-                    });
-                }else{
-                    $scope.unit.conceptData = '';
-                }
-            }
+        if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"]) && _.has(activeNode.data.metadata, ["description"])){
+            $scope.editMode = false;            
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
         }else{
             $scope.newNode = true;
-        }
-        ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
-            element: 'unitConceptSelector',
-            selectedConcepts: selectedConcepts,
-            callback: function(data) {
-                $scope.unit.conceptData = '(' + data.length + ') concepts selected';
-                $scope.unit.concepts = _.map(data, function(concept) {
-                    return { "identifier" : concept.id , "name" : concept.name} ;
-                });
-                $scope.$safeApply();
-            }
-        });
+        }        
         $scope.showImageIcon = true;
         $scope.getPath();
         $scope.$safeApply();
     }
-    ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:TextBookUnit', $scope.onNodeSelect);
+    ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:LessonPlanUnit', $scope.onNodeSelect);
 
     $scope.getPath = function() {
         $scope.path = [];
@@ -147,4 +121,4 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.unitmeta", "pluginver": "1.0", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
 }]);
-//# sourceURL=unitmetaApp.js
+//# sourceURL=lessonplanunitmetaApp.js

@@ -24,7 +24,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/templates/shortcutspopup.html");
         ecEditor.getService('popup').loadNgModules(templatePath);
-
         /**
          *  Listen for ctrl/command + c key
          *  copy an object
@@ -94,16 +93,17 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.registerKeyboardCommand('mod+a', function(event) {
             event.preventDefault();
             var canvas = org.ekstep.contenteditor.api.getCanvas();
-            canvas.deactivateAll();
+            canvas.deactivateAll();            
             var elements = canvas.getObjects().map(function(elem) {
                 return elem.set('active', true);
             });
             var group = new fabric.Group(elements, {
-                originX: 'center', 
-                originY: 'center'
+                originX: 'left', 
+                originY: 'top'
             });
             canvas.setActiveGroup(group.setCoords()).renderAll();
         });
+        org.ekstep.contenteditor.api.getCanvas().on('object:moving', instance.moveRichText);
 
         /**
          *  Listen for ctrl/command + s key
@@ -291,7 +291,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (activeElement) {
                 event.preventDefault();
                 var richText = ecEditor.jQuery('#' + activeElement.id);
-                if (richText) {
+                if (richText.length != 0) {
                     richText[0].style.top = parseInt(richText[0].style.top, 10) - 3 + 'px';
                 }
                 activeElement.editorObj.top = activeElement.editorObj.top - 3;
@@ -321,7 +321,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (activeElement) {
                 event.preventDefault();
                 var richText = ecEditor.jQuery('#' + activeElement.id);
-                if (richText) {
+                if (richText.length != 0) {
                     richText[0].style.top = parseInt(richText[0].style.top, 10) + 3 + 'px';
                 }
                 activeElement.editorObj.top = activeElement.editorObj.top + 3;
@@ -351,7 +351,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (activeElement) {
                 event.preventDefault();
                 var richText = ecEditor.jQuery('#' + activeElement.id);
-                if (richText) {
+                if (richText.length != 0) {
                     richText[0].style.left = parseInt(richText[0].style.left, 10) - 3 + 'px';
                 }
                 activeElement.editorObj.left = activeElement.editorObj.left - 3;
@@ -381,7 +381,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (activeElement) {
                 event.preventDefault();
                 var richText = ecEditor.jQuery('#' + activeElement.id);
-                if (richText) {
+                if (richText.length != 0) {
                     richText[0].style.left = parseInt(richText[0].style.left, 10) + 3 + 'px';
                 }
                 activeElement.editorObj.left = activeElement.editorObj.left + 3;
@@ -411,7 +411,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (activeElement) {
                 event.preventDefault();
                 var richText = ecEditor.jQuery('#' + activeElement.id);
-                if (richText) {
+                if (richText.length != 0) {
                     richText[0].style.top = parseInt(richText[0].style.top, 10) - 1 + 'px';
                 }
                 activeElement.editorObj.top = activeElement.editorObj.top - 1;
@@ -441,7 +441,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (activeElement) {
                 event.preventDefault();
                 var richText = ecEditor.jQuery('#' + activeElement.id);
-                if (richText) {
+                if (richText.length != 0) {
                     richText[0].style.top = parseInt(richText[0].style.top, 10) + 1 + 'px';
                 }
                 activeElement.editorObj.top = activeElement.editorObj.top + 1;
@@ -471,7 +471,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (activeElement) {
                 event.preventDefault();
                 var richText = ecEditor.jQuery('#' + activeElement.id);
-                if (richText) {
+                if (richText.length != 0) {
                     richText[0].style.left = parseInt(richText[0].style.left, 10) - 1 + 'px';
                 }
                 activeElement.editorObj.left = activeElement.editorObj.left - 1;
@@ -501,13 +501,28 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (activeElement) {
                 event.preventDefault();
                 var richText = ecEditor.jQuery('#' + activeElement.id);
-                if (richText) {
+                if (richText.length != 0) {
                     richText[0].style.left = parseInt(richText[0].style.left, 10) + 1 + 'px';
                 }
                 activeElement.editorObj.left = activeElement.editorObj.left + 1;
                 org.ekstep.contenteditor.api.render();
             }
         });
+    },
+    moveRichText: function(event) {
+        var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
+        if (!activeGroup) return;
+        _.each(activeGroup.getObjects(), function(element) {
+                var richText = ecEditor.jQuery('#' + element.id);
+                if (richText.length != 0) {
+                    // originX and origin is left/top by default so
+                    // Objects within group have their left/top values relative to group's center
+                    ecEditor.jQuery("#" + element.id).css({
+                        'top': activeGroup.top + activeGroup.height/2 + element.top,
+                        'left': activeGroup.left + activeGroup.width/2 + element.left
+                    });
+                }
+            })
     }
 });
 

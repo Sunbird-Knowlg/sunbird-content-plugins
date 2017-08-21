@@ -13,6 +13,7 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
     $scope.pendingChanges = false;
     $scope.hideReviewBtn = false;
     $scope.publishMode = ecEditor.getConfig('editorConfig').publishMode || false;
+    $scope.isFalgReviewer = ecEditor.getConfig('editorConfig').isFalgReviewer || false;
 
     $scope.saveContent = function() {
         $scope.disableSaveBtn = true;
@@ -55,6 +56,33 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
 
     $scope.rejectContent = function(){
         ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:reject", {
+            callback: function(err, res) {
+                if(!err)
+                    window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
+            }
+        });
+    };
+
+    $scope.acceptContentFlag = function(){
+        ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:acceptFlag", {
+            callback: function(err, res) {
+                if(!err)
+                    window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
+            }
+        });
+    };
+
+    $scope.discardContentFlag = function(){
+        ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:discardFlag", {
+            callback: function(err, res) {
+                if(!err)
+                    window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
+            }
+        });
+    };
+
+    $scope.retireContent = function(){
+        ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:retire", {
             callback: function(err, res) {
                 if(!err)
                     window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');

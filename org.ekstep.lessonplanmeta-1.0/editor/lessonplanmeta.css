@@ -32,13 +32,13 @@
     font-size: 12px!important;
 }
 
-.ui.form .field>label,
-.form-fields-except-image .field input,
-.form-fields-except-image .field textarea {
+#contents-data-form .ui.form .field>label,
+#contents-data-form .form-fields-except-image .field input,
+#contents-data-form .form-fields-except-image .field textarea {
     font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif!important;
 }
 
-.ui.form .field>label {
+#contents-data-form .ui.form .field>label {
     font-size: .92857143em!important;
     font-weight: bold!important;
     text-transform: none!important;
@@ -108,14 +108,16 @@
 #read-metadata-wrapper {
     border-radius: 0;
     height: calc(100% - 90.4px)!important;
-    border: none;
+    border: none!important;
+    box-shadow: none!important;
     padding-left: 0!important;
     overflow-y: auto;
     margin-top: 0!important;
 }
 
 #contents-data-form::-webkit-scrollbar,
-#read-metadata-wrapper::-webkit-scrollbar {
+#read-metadata-wrapper::-webkit-scrollbar,
+#read-metadata-wrapper .item .content .description::-webkit-scrollbar {
     width: 0!important;
 }
 
@@ -169,7 +171,7 @@
     width: 50%;
     height: 38%;
     padding-right: 0;
-    right: 20px;
+    right: 0!important;
 }
 
 .header-buttons-container .ui.button {
@@ -178,9 +180,10 @@
 }
 
 .button-overrides {
-    font-family: Helvetica;
-    padding: 0.85em 1.5em text-transform: none;
-    border-radius: .25rem;
+    font-family: Helvetica!important;
+    padding: 0.85em 1.5em!important;
+    text-transform: none!important;
+    border-radius: .25rem!important;
 }
 
 .right-float {
@@ -193,11 +196,8 @@
     margin-right: 0;
 }
 
-#update-button {
-    /*display: none!important;*/
-}
-
-#add-lesson-button:hover {
+#add-lesson-button:hover,
+#remove-no-button:hover {
     background: #317bca!important;
     color: #fff!important;
 }
@@ -224,96 +224,47 @@
     display: inline-block;
     overflow: auto;
 }
+
+.edit-metadata {
+    position: relative;
+    visibility: hidden;
+    left: -1vw;
+    cursor: pointer;
+}
+
+
+.info-item {
+    padding-right: 2vw;
+}
+
+.edit-metadata:hover,
+.info-item:hover+.edit-metadata {
+
+    visibility: visible;
+}
+
+#descriptionPara+.edit-metadata>i.icon.edit:before {
+    position: relative;
+    top: -2vh;
+}
+
 .metacontent-fields-container {
-    height: 70%;
+    height: auto;
     box-sizing: border-box;
     padding: 1em!important;
     position: relative;
     padding-left: 0!important;
 }
 
-#collectionMetadataAccordion {
-    border: none;
-    box-shadow: none;
-    font-family: inherit;
-}
-
-#collectionMetadataAccordion .content {
-    padding: 0;
-}
-
-#collectionMetadataAccordion .active.title,
-#collectionMetadataAccordion .title {
-    color: #4a4a4a;
-    outline: none;
-    padding: 1em;
-    border: 0.2px solid rgba(34, 36, 38, .15);
-    border-radius: 0.5em;
-}
-
-#collectionMetadataAccordion .title.ui-state-active {
-    border-bottom: none;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-}
-
-#collection-meta-tree span.fancytree-selected,
-#collectionMetadataAccordion .title.ui-state-active,
-#collectionMetadataAccordion .active.title:hover,
-#collectionMetadataAccordion .title:hover,
-#collectionMetadataAccordion .fancytree-active .fancytree-title {
-    background: #2e9fd9;
-    color: #fff;
-}
-
-#collection-meta-tree {
-    border: 0.2px solid rgba(34, 36, 38, .15);
-    border-top: none;
-    border-bottom-left-radius: 0.5em;
-    border-bottom-right-radius: 0.5em;
-    padding: 0.5em 0;
-    height: auto;
-}
-
-#collection-meta-tree .ui-fancytree .fancytree-node {
-    padding: 1em;
-    font-size: 1.05em;
-    cursor: pointer;
-}
-
-#collection-meta-tree span.fancytree-node:hover {
-    background: #f5f5f5;
-}
-
-#collection-meta-tree span.fancytree-node:hover .collection-preview-icon {
-    visibility: visible;
-}
-
-
-#collection-meta-tree .fancytree-focused .fancytree-title {
-    outline: none;
+.ui.form .error {
+    border-color: red !important;
 }
 
 .metadata-fields-table tr td {
     color: #4a4a4a;
     font-family: Helvetica;
-    text-transform: capitalize;
 }
 
 .metadata-fields-table tr>td:first-child {
     color: grey;
-}
-
-.expand-collection,
-.collapse-collection {
-    float: right;
-}
-
-.collection-preview-icon {
-    margin-left: 1vw;
-    visibility: hidden;
-}
-
-.collection-preview-icon:hover {
-    color: #2e9fd9;
 }

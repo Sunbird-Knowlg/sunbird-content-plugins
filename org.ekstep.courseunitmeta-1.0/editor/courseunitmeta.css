@@ -209,6 +209,23 @@
     font-family: Helvetica!important;
 }
 
+#read-metadata-wrapper .item,
+#read-metadata-wrapper .item .content {
+    height: 100%!important;
+}
+
+#read-metadata-wrapper .item .content .description {
+    height: 55%;
+    overflow-y: hidden;
+}
+
+#read-metadata-wrapper .item .content .description #descriptionPara {
+    max-width: 95%;
+    max-height: 90%;
+    display: inline-block;
+    overflow: auto;
+}
+
 .metacontent-fields-container {
     height: 70%;
     box-sizing: border-box;
