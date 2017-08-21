@@ -124,7 +124,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             $('.ui.dropdown').dropdown('refresh');
             $scope.metadataCloneObj = _.clone($scope.lesson);
         }
-        if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"]) && _.has(activeNode.data.metadata, ["description"])){
+        if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
             $scope.editMode = false;
             $('#lessonplan-board').dropdown('set selected', $scope.lesson.board);
             $('#lessonplan-medium').dropdown('set selected', $scope.lesson.medium);
@@ -144,12 +144,12 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             }
             $scope.lesson.duration = activeNode.data.metadata.duration ? parseInt(activeNode.data.metadata.duration) : "0";
             if (activeNode.data.metadata.learningObjective) $scope.learningObjective = activeNode.data.metadata.learningObjective[0];
-            $scope.duration = activeNode.data.metadata.duration;
+            $scope.duration = activeNode.data.metadata.duration ? parseInt(activeNode.data.metadata.duration) : 0;
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
         }else{
             $scope.newNode = true;
             $scope.learningObjective = undefined;
-            $scope.duration = "0";
+            $scope.duration = 0;
             $('#lessonplan-board').dropdown('clear');
             $('#lessonplan-medium').dropdown('clear');
             $('#lessonplan-subject').dropdown('clear');
