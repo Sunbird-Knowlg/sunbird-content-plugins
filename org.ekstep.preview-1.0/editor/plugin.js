@@ -80,7 +80,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     userData.etags = userData.etags || {};
                     configuration.context = {'mode':'edit','contentId':meta.identifier,'sid':userData.sid,'uid':userData.uid, 'channel': userData.channel, 'pdata': userData.pdata, 'app': userData.etags.app, 'dims': userData.etags.dims, 'partner': userData.etags.partner }; 
                     configuration.config = {'showEndPage':'true','showStartPage':'true'};
-                    configuration.metadata = meta.contentMeta; 
+                    configuration.metadata = meta; 
                     configuration.data = (meta.mimeType == 'application/vnd.ekstep.ecml-archive') ?  instance.contentBody : {};
                     previewContentIframe.contentWindow.initializePreview(configuration);
                 };
