@@ -113,7 +113,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 $scope.content = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
                 $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
                 $('#language').dropdown('set selected', $scope.content.language);
-            } else if (_.has(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, ["name"])) {
+            } else if (org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] && _.has(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, ["name"])) {
                 $scope.editMode = false;
                 $scope.content = _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
                 $scope.metadataCloneObj = _.clone(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
