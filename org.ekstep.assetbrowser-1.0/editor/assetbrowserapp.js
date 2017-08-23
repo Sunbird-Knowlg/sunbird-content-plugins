@@ -643,12 +643,11 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
         ecEditor.jQuery('#audioDropDown')
             .dropdown({
-                onChange: function(value, text, $selectedItem) {
-                    searchText = ctrl.query;
-                    (searchText === "") ? searchText = undefined: null;
-                    var selectedValue = value != 'all' ? new Array(value) : new Array('audio', 'voice');
+                onChange: function(value) {
+                    /**check if searchText is blank**/
+                    searchText = (ctrl.query === "") ? undefined : ctrl.query;
+                    var selectedValue = (value != 'all') ? new Array(value) : new Array('audio', 'voice');
                     instance.getAsset(searchText, selectedValue, ctrl.createdBy, audioAssetCb);
-                    alert(value);
                 }
             });
     }, 100);
