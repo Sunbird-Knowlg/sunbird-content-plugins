@@ -223,8 +223,6 @@ angular.module('editorApp')
             }).addClass("addClick");
         };
 
-
-
         $scope.setVisibleObjects = function() {
             var pluginInstanceIds = [];
             $scope.targetOptions=[];
