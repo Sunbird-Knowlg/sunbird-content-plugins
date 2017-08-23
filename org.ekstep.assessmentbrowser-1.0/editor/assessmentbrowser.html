@@ -230,7 +230,7 @@
         </div>
     </div>
     <div class="actions">
-        <a ng-href="{{$ctrl.context.createItemLink}}" target="_blank">
+        <a ng-href="{{$ctrl.context.createItemLink}}" target="_blank" ng-show="{{$ctrl.context.createItemLink}}">
             <button class="ui blue left floated button" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'createAQuestionButton'})">Create a question</button>
         </a>
         <div class="ui label" ng-show="$ctrl.cart.items.length">
