@@ -124,9 +124,7 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
 
     $scope.sendForeReviewBtnFn = function() {
         var nodeData = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
-        if(ecEditor._.isUndefined(nodeData.children) || nodeData.children == null)
-            $scope.disableReviewBtn = true;
-        else $scope.disableReviewBtn = false;
+        $scope.disableReviewBtn = (ecEditor._.isUndefined(nodeData.children) || nodeData.children == null) ? true : false;
         $scope.$safeApply(); 
     };
 
