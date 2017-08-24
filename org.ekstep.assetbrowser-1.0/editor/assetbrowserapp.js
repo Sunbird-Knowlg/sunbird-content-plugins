@@ -146,18 +146,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         instance.getAsset(undefined, new Array('audio', 'voice'), ctrl.createdBy, audioAssetCb);
     }
 
-   $scope.$on('ngDialog:opened', function() {
-        ecEditor.jQuery('#audioDropDown')
-            .dropdown({
-                onChange: function(value, text, $selectedItem) {
-                    searchText = ctrl.query;
-                    (searchText === "") ? searchText = undefined: null;
-                    var selectedValue = value != 'all' ? new Array(value) : new Array('audio', 'voice');
-                    instance.getAsset(searchText, selectedValue, ctrl.createdBy, audioAssetCb);
-                }
-            });
-	});
-
     ctrl.myAssetTab = function() {
         var callback,
             searchText = ctrl.query;
@@ -652,5 +640,15 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ecEditor.jQuery(document).on('change', '#assetfile', function() {
             ctrl.preFillForm(this.files[0]);
         });
+
+        ecEditor.jQuery('#audioDropDown')
+            .dropdown({
+                onChange: function(value) {
+                    /**check if searchText is blank**/
+                    searchText = (ctrl.query === "") ? undefined : ctrl.query;
+                    var selectedValue = (value != 'all') ? new Array(value) : new Array('audio', 'voice');
+                    instance.getAsset(searchText, selectedValue, ctrl.createdBy, audioAssetCb);
+                }
+            });
     }, 100);
 }]);
