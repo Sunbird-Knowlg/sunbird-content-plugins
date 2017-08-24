@@ -440,7 +440,7 @@
    						</div>
    					</div>
    					<div class="required field {{$ctrl.assetFileError}}" ng-if="$ctrl.upload" ng-hide="$ctrl.editMetaFlag">
-   						<label for="assetfile" title="Enter asset caption">Select file</label>
+   						<label for="assetfile" title="Enter asset caption">Choose or drag and drop your {{$ctrl.plugin}} here</label>
    						<input class="droppable cropit-image-input" id="assetfile" type="file" name="assetfile" accept="{{$ctrl.allowedMimeTypes.join(', ')}}" data-validate="assetfile" />
    						<div ng-if="$ctrl.assetFileError == 'error'" class="ui basic red pointing prompt label transition visible">Please select file</div>
    					</div>
