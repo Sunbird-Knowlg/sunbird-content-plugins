@@ -1,6 +1,8 @@
-angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).controller('headerController', ['$scope', function($scope) {
+angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).controller('headerController', ['$scope', '$window', function($scope,$window) {
 
     var plugin = { id: "org.ekstep.ceheader", ver: "1.0" };
+    
+    $scope.reportIssueLink = (($window.context && $window.context.reportIssueLink) ? $window.context.reportIssueLink : "");
     $scope.lastSaved = undefined;
     $scope.pendingChanges = false;
     $scope.saveBtnEnabled = false;
