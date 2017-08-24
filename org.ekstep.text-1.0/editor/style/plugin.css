@@ -11,7 +11,7 @@
 .text-formatting-options .inline.fields>label {
     width: 5em!important;
     color: grey!important;
-    font-size: 1em!important;
+    font-size: 12px!important;
     font-weight: normal!important;
     margin-right: 3em!important;
 }
