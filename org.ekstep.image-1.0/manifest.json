@@ -41,9 +41,9 @@
                 "description": "Choose a  from the browser",
                 "dataType": "icon",
                 "iconClass": "icon icon-readalong",
+                "toolTip":"Choose a  from the browser",
                 "state": true,
                 "status": "HIDE",
-                "toolTip":"Choose a  from the browser",
                 "onclick": {
                      "id": "org.ekstep.image:assetbrowser:open"
                 }
