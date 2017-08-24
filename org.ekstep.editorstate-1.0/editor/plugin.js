@@ -67,6 +67,8 @@ org.ekstep.contenteditor.basePlugin.extend({
         var editorState = this._getStateFromService();
         if (editorState && editorState.sidebar) {
             ecEditor.showSidebarMenu(editorState.sidebar.selectedMenu);
+        } else {
+            ecEditor.showSidebarMenu("settings");
         }
     }
 });

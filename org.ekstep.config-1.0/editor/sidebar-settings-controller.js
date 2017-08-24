@@ -16,21 +16,6 @@ angular.module('editorApp')
 
         var stageActionsList = { "link": "Link To" };
         var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.config");
-        var stageConfigManifest = [{
-            "propertyName": "genieControls",
-            "title": "Show Player Control",
-            "description": "Toggle genie controls",
-            "dataType": "boolean",
-            "required": true,
-            "defaultValue": true
-        }, {
-            "propertyName": "instructions",
-            "title": "Teacher Instructions",
-            "description": "Teacher Instructions",
-            "dataType": "textarea",
-            "required": true,
-            "defaultValue": ""
-        }];
 
         $scope.actionTargetObject = {};
         $scope.customTemplates = [];
@@ -41,9 +26,7 @@ angular.module('editorApp')
 
         // on load
         $scope.settingsCategory.selected = 'customize';
-        $scope.pluginConfig = stageConfigManifest;
-        $scope.configData = { genieControls: true, instructions: "" };
-
+        $scope.pluginConfig;
 
         $scope.allActionsList = {
             "show": "Show",
@@ -55,10 +38,13 @@ angular.module('editorApp')
             "stop": "Stop",
             "link": "Link To"
         };
+        var addWatch = function() {
+            return $scope.$watch('configData', function(newValue, oldValue) {
+                org.ekstep.contenteditor.api.dispatchEvent("config:updateValue", { newValue: newValue, oldValue: oldValue });
+            }, true);
+        };
 
-        $scope.$watch('configData', function(newValue, oldValue) {
-            org.ekstep.contenteditor.api.dispatchEvent("config:updateValue", { newValue: newValue, oldValue: oldValue });
-        }, true);
+        var unregisterWatch = addWatch();
 
         var canvasOffset = ecEditor.jQuery("#canvas").offset();
 
@@ -101,6 +87,7 @@ angular.module('editorApp')
         };
 
         $scope.showConfig = function() {
+            unregisterWatch();
             $scope.settingsCategory.selected = 'customize';
             var pluginConfigManifest = org.ekstep.contenteditor.api._.clone(org.ekstep.contenteditor.api.getCurrentObject() ? org.ekstep.contenteditor.api.getCurrentObject().getConfigManifest() : org.ekstep.contenteditor.api.getCurrentStage().getConfigManifest());
             $scope.pluginConfig = pluginConfigManifest;
@@ -109,7 +96,7 @@ angular.module('editorApp')
                 pluginConfigManifest = [];
                 org.ekstep.contenteditor.api.getCurrentObject() ? org.ekstep.contenteditor.api.getCurrentObject().renderConfig() : org.ekstep.contenteditor.api.getCurrentStage().renderConfig();
             };
-
+            unregisterWatch = addWatch();
             org.ekstep.contenteditor.api._.forEach(pluginConfigManifest, function(config) {
                 $scope._showConfig(config, $scope.configData);
             });
@@ -223,7 +210,7 @@ angular.module('editorApp')
                     if (pluginInstance && pluginInstance['editorObj']) {
                         var editorObj = pluginInstance['editorObj'];
                         var left = canvasOffset.left + editorObj.left - 5;
-                        var top = canvasOffset.top + editorObj.top;
+                        var top = canvasOffset.top + editorObj.top + 67;
                         ecEditor.jQuery("#objectPointer")
                             .show().offset({ 'left': left, 'top': top })
                             .css({ 'height': editorObj.getHeight() + 10, 'width': editorObj.getWidth() + 10 });
@@ -290,10 +277,16 @@ angular.module('editorApp')
         };
 
         $scope.objectSelected = function(event, data) {
+            org.ekstep.contenteditor.api.dispatchEvent('sidebar:settings', undefined);
             $scope.selectedPluginId = data.id;
             $scope.selectedObject.stage = false;
             $scope.updateActions();
             $scope.showSettingsTab(event, data);
+            $scope.showConfig(event, data);
+            $("#customizeOptionSideBar").addClass('active');
+            $("#customizeOptionSideBar").siblings().removeClass('active');
+            $(".tab.segment[data-tab='settings']").addClass("active");
+            $(".tab.segment[data-tab='settings']").siblings().removeClass("active");
         };
 
         $scope.objectUnselected = function(event, data) {

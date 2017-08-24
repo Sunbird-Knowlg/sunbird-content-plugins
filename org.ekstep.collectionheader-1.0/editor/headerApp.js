@@ -1,7 +1,7 @@
 angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.angular-timeago"]).controller('headerController', ['$scope', function($scope) {
 
     var plugin = { id: "org.ekstep.collectionheader", ver: "1.0" };
-    $scope.contentDetails.contentImage =  ecEditor.getConfig('headerLogo') || ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/default.png");
+    $scope.contentDetails.contentImage =  ecEditor.getConfig('headerLogo') || ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/ekstep_logo_white.png");
     $scope.internetStatusObj = {
         'status': navigator.onLine,
         'text': 'No Internet Connection!'
@@ -39,10 +39,36 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
         });
     };
 
+    $scope.closeCollectionEdtr = function() {
+        // Condition for portal. If editor opens in iframe
+        if (window.self !== window.top) {
+            if (!$scope.disableSaveBtn) {
+                var cf = confirm("Changes that you made may not be saved.");
+                if (cf == true) {
+                    window.onbeforeunload = null;
+                    window.parent.editor.izimodalRef.iziModal("close");
+                }
+            }
+            else {
+                window.parent.editor.izimodalRef.iziModal("close");
+            }
+        }
+        else window.location.reload(); // Can remove this condition.
+    };
+
+    // Condition for portal. If editor opens in iframe
+    var context = window.context || window.parent.context;
+    $scope.reportIssueLink = ((context && context.reportIssueLink) ? context.reportIssueLink : "");
+
+    // For show/hide help button
+    var config = window.config || window.parent.config;
+    $scope.showHelp = config.showHelp;
+
     window.onbeforeunload = function(e) {
         if (!$scope.disableSaveBtn) return "You have unsaved changes";
         e.preventDefault();
     }
+
     window.addEventListener('online', $scope.internetStatusFn, false);
     window.addEventListener('offline', $scope.internetStatusFn, false);
     ecEditor.addEventListener("org.ekstep.collectioneditor:node:added", $scope.onNodeEvent, $scope);

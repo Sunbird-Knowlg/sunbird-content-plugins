@@ -1,5 +1,5 @@
 <div ng-app="unitmetaApp" class="metacontent-wrapper" ng-controller="unitmetaController">
-    <div class="ui segment header-segment">
+    <div class="ui segment header-segment" id="headerSegment">
         <div class="ui breadcrumb">
             <a class="section" ng-repeat="value in path" ng-click="setActiveNode(value.nodeId)">
                 {{value.title}} 
@@ -23,36 +23,43 @@
                     <img ng-if="showImageIcon" ng-src="{{ unit.appIcon || defaultImage }}" alt="">
                 </div>
                 <div class="content">
-                    <div class="header">{{unit.name}}</div>
+                    <div class="header info-item" style="display:inline-block; max-width: 95%;">{{unit.name}}</div>
+                    <span class="edit-metadata" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'}); initDropdown();"><i class="edit icon"></i></span>
                     <div class="description">
-                        <p>{{unit.description}}</p>
+                        <p id="descriptionPara" class="info-item">{{unit.description}}</p>
+                        <span class="edit-metadata" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'}); initDropdown();"><i class="edit icon"></i></span>
                     </div>
                 </div>
             </div>
         </div>
         <div class="metacontent-fields-container">
-            <div class="ui cards">
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Concepts</div>
-                        <div class="description">
-                            <span class="field-value" ng-repeat="concept in unit.concepts track by $index">{{concept.name}}{{$last ? '' : ', '}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Keywords</div>
-                        <div class="description">
-                            <span class="field-value" ng-repeat="tag in unit.keywords track by $index">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="card">
-                    <div class="content">
-                        <div class="header">Notes</div>
-                        <div class="description">{{unit.notes.toString() | lowercase}}</div>
-                    </div>
+            <div class="ui fluid grid container">
+                <div class="seven wide column" style="padding-left:0;">
+                    <table class="ui padded striped table metadata-fields-table">
+                        <tbody>
+                            <tr>
+                                <td>Concepts</td>
+                                <td>
+                                    <span class="info-item" ng-repeat="concept in unit.concepts track by $index">{{concept.name}}{{$last ? '' : ', '}}</span>
+                                    <span class="edit-metadata" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'}); initDropdown();"><i class="edit icon"></i></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Keywords</td>
+                                <td>
+                                    <span class="info-item" ng-repeat="tag in unit.keywords track by $index">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
+                                    <span class="edit-metadata" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'}); initDropdown();"><i class="edit icon"></i></span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Notes</td>
+                                <td>
+                                    <span class="info-item">{{unit.notes.toString() | lowercase}}</span>
+                                    <span class="edit-metadata" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'}); initDropdown();"><i class="edit icon"></i></span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -61,7 +68,7 @@
         <div class="fields">
             <div class="field book-image-field">
                 <label for="bookImage">Add icon</label>
-                <div class="book-image-container" ng-click="showAssestBrowser()">
+                <div class="book-image-container popup-item" data-content="Add or change image" data-variation="tiny inverted" data-position="right center" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
                     <img ng-if="showImageIcon" ng-src="{{unit.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
                 </div>
@@ -70,7 +77,7 @@
                 <div class="field required">
                     <label>Unit Title</label>
                     <div class="ui input">
-                        <input placeholder="Enter title for Book" ng-model="unit.name" ng-class=" {error: submitted && unitMetaForm.name.$error.required}" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" requir5d maxlength="150">
+                        <input placeholder="Enter title for Book" ng-model="unit.name" ng-class=" {error: submitted && unitMetaForm.name.$error.required}" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="150">
                     </div>
                 </div>
                 <div class="field required">

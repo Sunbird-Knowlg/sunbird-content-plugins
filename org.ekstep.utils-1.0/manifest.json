@@ -47,30 +47,52 @@
             "id": "reorder",
             "category": "context",
             "type": "icon",
-            "toolTip": "Re-order",
-            "title": "Reorder",
-            "iconClass": "sort icon",
+            "toolTip": "Arrange",
+            "title": "Arrange",
+            "iconClass": "icon-arrange icon",
             "state": "HIDE",
             "submenu": [{
-                "id": "sendtofront",
+                "id": "bringforward",
                 "category": "context",
                 "type": "icon",
                 "toolTip": "Bring forward",
-                "title": "Bring to front",
-                "iconClass": "icon-bringfront icon",
+                "title": "Bring forward",
+                "iconClass": "icon-bringforward icon",
                 "onclick": {
-                    "id": "reorder:sendtofront",
+                    "id": "reorder:bringforward",
                     "data": {}
                 }
             }, {
-                "id": "sendtoback",
+                "id": "bringfront",
+                "category": "context",
+                "type": "icon",
+                "toolTip": "Bring to front",
+                "title": "Bring to front",
+                "iconClass": "icon-bringfront icon",
+                "onclick": {
+                    "id": "reorder:bringfront",
+                    "data": {}
+                }
+            },{
+                "id": "sendbackward",
                 "category": "context",
                 "type": "icon",
                 "toolTip": "Send backward",
+                "title": "Send backward",
+                "iconClass": "icon-sendbackward icon",
+                "onclick": {
+                    "id": "reorder:sendbackward",
+                    "data": {}
+                }
+            },{
+                "id": "sendback",
+                "category": "context",
+                "type": "icon",
+                "toolTip": "Send to back",
                 "title": "Send to back",
                 "iconClass": "icon-sendback icon",
                 "onclick": {
-                    "id": "reorder:sendtoback",
+                    "id": "reorder:sendback",
                     "data": {}
                 }
             }]

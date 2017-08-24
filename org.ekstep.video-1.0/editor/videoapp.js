@@ -39,7 +39,7 @@ angular.module('videoApp', [])
                         "action": "paly video url", 
                         "err": "Sorry could not load preview of the video link. Please check the link and try again.", 
                         "type": "SYSTEM", 
-                        "data": encodeURI(ctrl.videoUrl),
+                        "data": encodeURIComponent(ctrl.videoUrl),
                         "objecttype": "video",
                         "objectid": ctrl.id,
                         "severity": "error" 

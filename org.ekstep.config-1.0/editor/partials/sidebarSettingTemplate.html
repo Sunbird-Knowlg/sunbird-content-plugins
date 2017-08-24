@@ -1,11 +1,11 @@
 <style>
 .sidebarContent {
-    background: rgb(238, 238, 238) !important;
+    background: #f9f9f9 !important;
     border: none!important;
     -webkit-box-shadow: none!important1;
     box-shadow: none!important;
     margin: 0!important;
-    height: 450px;
+    height: 80vh;
     overflow: hidden;
     overflow-y: scroll;
 }
@@ -62,7 +62,7 @@ a.item.at-menu-item.popup-item.active {
                 <div class="ui form" ng-switch-when="colorpicker">
                     <div class="field">
                         <label ng-show="config.title">{{config.title}}</label>
-                        <ui-colorpicker></ui-colorpicker>
+                        <ui-colorpicker id="{{config.propertyName}}"></ui-colorpicker>
                     </div>
                 </div>
                 <div class="ui form" ng-if='config.type == "custom_template"' compilehtml="config.template"></div>

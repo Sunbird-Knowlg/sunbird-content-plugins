@@ -1,30 +1,15 @@
-<script type="text/javascript">
-window.loading_screen = window.pleaseWait({
-    logo: ecEditor.getConfig('loadingImage'),
-    backgroundColor: '#bbbbbb',
-    loadingHtml: "<div class='sk-cube-grid'> <div class='sk-cube sk-cube1'></div> <div class='sk-cube sk-cube2'></div> <div class='sk-cube sk-cube3'></div> <div class='sk-cube sk-cube4'></div> <div class='sk-cube sk-cube5'></div> <div class='sk-cube sk-cube6'></div> <div class='sk-cube sk-cube7'></div> <div class='sk-cube sk-cube8'></div> <div class='sk-cube sk-cube9'></div> </div><p class='loading-message'>Loading Editor...</p>"
-});
-</script>
 <div ng-app="org.ekstep.collectioneditor" ng-controller="mainController" class="ui masthead vertical segment collection-masterhead">
     <div ng-repeat="header in headers" ng-include="header.templateURL" class="header-wrapper"></div>
     <div class="ui grid main-body">
         <div class="ui column" id="table-of-contents">
             <div class="ui segments">
-                <div class="ui segment tree-access-tools-segment" style="padding-top: 0px !important">
-                    <div class="ui mini menu">
-                        <div class="ui transparent icon input item search-input-container" style="width: 73.5%">
-                            <input class="tree-search-item" type="text" placeholder="Search nodes..." ng-keypress="searchNode($event)" ng-blur="searchNode($event)">
-                            <i class="search link icon" style="margin-right: 10px"></i>
-                        </div>
-                        <div class="ui icon item search-menu-cursor" ng-click="expandNode(true); telemetry({ subtype: 'expand', target: 'expandNodeBtn'});">
-                            <i class="chevron down icon"></i>
-                        </div>
-                        <div class="ui icon item search-menu-cursor" ng-click="expandNode(false); telemetry({ subtype: 'collapse', target: 'collapseNodeBtn'});">
-                            <i class="chevron up icon"></i>
-                        </div>
+                <div class="ui segment" id="treeAccessToolsSegment">
+                    <div id="treeExpandCollapseButtonsContainer">
+                        <button ng-if="expandNodeFlag==false" ng-click="expandNode(); telemetry({ subtype: 'collapse', target: 'collapseNodeBtn'});" class="ui button popup-item" data-content="Collapse all" data-variation="tiny inverted" data-position="right center"><i class="fa fa-angle-double-up" aria-hidden="true"></i></button>
+                        <button ng-if="expandNodeFlag==true" ng-click="expandNode(); telemetry({ subtype: 'expand', target: 'expandNodeBtn'});" class="ui button popup-item" data-content="Expand all" data-variation="tiny inverted" data-position="right center"><i class="fa fa-angle-double-down" aria-hidden="true"></i></button>
                     </div>
                 </div>
-                <div class="ui segment tree-wrapper">
+                <div class="ui segment" id="treeWrapper">
                     <div id="collection-tree"></div>
                 </div>
             </div>

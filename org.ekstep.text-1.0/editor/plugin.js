@@ -158,7 +158,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 this.config.audioObj = audioObj;
             }
             this.addMedia(this.config.audioObj);
-            this.manifest.editor.playable = true;
+            //this.manifest.editor.playable = true;
             this.addReadalongconfigManifest(this);
         } else if (!ecEditor._.isUndefined(this.attributes.words) || this.attributes.textType === 'wordinfo') {
             var instance = this;
@@ -263,7 +263,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 this.editorObj.setFontSize(value);
                 this.attributes.fontSize = value;
                 break;
-            case "color":
+            case "textcolor":
                 this.editorObj.setFill(value);
                 this.attributes.color = value;
                 break;
@@ -271,19 +271,19 @@ org.ekstep.contenteditor.basePlugin.extend({
                 this.editorObj.setTextAlign(value);
                 this.attributes.align = value;
                 break;
-            case "highlight":
+            case "highlightcolorpicker":
                 this.config.highlight = value;
                 break;
             case "autoplay":
                 this.config.autoplay = value;
                 break;
-            case "wordfontcolor":
+            case "wordfontcolorpicker":
                 this.config.wordfontcolor = value;
                 break;
-            case "wordhighlightcolor":
+            case "wordhighlightcolorpicker":
                 this.config.wordhighlightcolor = value;
                 break;
-            case "wordunderlinecolor":
+            case "wordunderlinecolorpicker":
                 this.config.wordunderlinecolor = value;
                 break;
         }
@@ -408,7 +408,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         textObj.config.autoplay = data.autoplay;
         textObj.attributes.autoplay = data.autoplay;
         textObj.attributes.textType = 'readalong';
-        textObj.manifest.editor.playable = true;
+        //textObj.manifest.editor.playable = true;
         textEditor.hide();
         var audioObj = data.audioObj;
         if (!ecEditor._.isUndefined(audioObj))
@@ -464,7 +464,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     $scope.closeThisDialog();
                     var textObj = ecEditor.getCurrentObject();
                     if (textObj.attributes.textType == 'readalong') {
-                        textObj.manifest.editor.playable = false;
+                        /*textObj.manifest.editor.playable = false;
                         //deleting readlong configarations from text configManifest
                         ecEditor._.reject(textObj.manifest.editor.configManifest, { propertyName: 'highlight' });
                         var prop = textObj.manifest.editor.configManifest[ecEditor._.findIndex(textObj.manifest.editor.configManifest, function(value, key) {
@@ -473,7 +473,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                         // updating status value to hide delete button
                         prop.options[0].status = "HIDE";
                         // updating state to show wordinfo button
-                        prop.options[1].state = true;
+                        prop.options[1].state = true;*/
                         delete textObj.config.audio;
                         delete textObj.config.timings;
                         delete textObj.config.highlight;
@@ -481,7 +481,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                         delete textObj.config.autoplay;
                         delete textObj.attributes.autoplay;
                     } else {
-                        //deleting wordinfo configarations from text configManifest
+                        /*//deleting wordinfo configarations from text configManifest
                         ecEditor._.reject(textObj.manifest.editor.configManifest, { propertyName: 'wordfontcolor' });
                         ecEditor._.reject(textObj.manifest.editor.configManifest, { propertyName: 'wordhighlightcolor' });
                         ecEditor._.reject(textObj.manifest.editor.configManifest, { propertyName: 'wordunderlinecolor' });
@@ -492,7 +492,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                         // updating status value to hide delete button
                         prop.options[1].status = "HIDE";
                         // updating state to show reaalong button
-                        prop.options[0].state = true;
+                        prop.options[0].state = true;*/
                         delete textObj.data;
                         delete textObj.config.words;
                         delete textObj.config.wordfontcolor;
@@ -513,7 +513,8 @@ org.ekstep.contenteditor.basePlugin.extend({
      * @memberof Text
      */
     addReadalongconfigManifest: function(instance) {
-        //updating readlong configarations in text configManifest
+        ecEditor.dispatchEvent('org.ekstep.text:addReadAlong', instance);
+        /*//updating readlong configarations in text configManifest
         instance.manifest.editor.configManifest.push({
             "propertyName": "highlight",
             "title": "Read-along Highlight Color",
@@ -529,14 +530,15 @@ org.ekstep.contenteditor.basePlugin.extend({
         // updating status value to show delete button
         prop.options[0].status = "SHOW";
         // updating state to hide wordinfo button
-        prop.options[1].state = false;
+        prop.options[1].state = false;*/
     },
     /**
      * This method is used to add wordinfo configarations to configManifest
      * @memberof Text
      */
     addWordinfoconfigManifest: function(instance) {
-        //updating wordinfo configarations in text configManifest
+        ecEditor.dispatchEvent('org.ekstep.text:addWordInfo', instance);
+        /*//updating wordinfo configarations in text configManifest
         instance.manifest.editor.configManifest.push({
             "propertyName": "wordfontcolor",
             "title": "Word Color",
@@ -566,7 +568,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         // updating status value to show delete button
         prop.options[1].status = "SHOW";
         // updating state to hide readalong button
-        prop.options[0].state = false;
+        prop.options[0].state = false;*/
     },
     getMedia: function(){
         var instance = this;

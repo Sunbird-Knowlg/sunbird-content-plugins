@@ -21,7 +21,14 @@ org.ekstep.contenteditor.basePlugin.extend({
         this.onclick = { id: 'stage:select', data: { stageId: this.id } };
         this.ondelete = { id: 'stage:delete', data: { stageId: this.id } };
         this.duplicate = { id: 'stage:duplicate', data: { stageId: this.id } };
-        ecEditor.addStage(this);        
+        if (this.editorData.stageECML) {
+            var config = JSON.parse(this.editorData.stageECML.config.__cdata);
+            this.addConfig('color', config.color || '#FFFFFF');
+            this.setSlideBackground(config.color || '#FFFFFF');
+        } else {
+            this.addConfig('color', this.config.color || '#FFFFFF');
+        }
+        ecEditor.addStage(this);
         this.attributes = {
             x: 0,
             y: 0,
@@ -47,14 +54,19 @@ org.ekstep.contenteditor.basePlugin.extend({
         }
     },
     setThumbnail: function() {
-        /*
-        var thumbnailCanvas = document.getElementById("thumbnailCanvas");
-        var ctx = thumbnailCanvas.getContext("2d");
-        ctx.drawImage(this.canvas.getElement(), 0, 0, 160, 90);
-        this.thumbnail = thumbnailCanvas.toDataURL({format: 'jpeg', quality: 0.8});
-        */
-        this.thumbnail = this.canvas.toDataURL({format: 'jpeg', quality: 0.1});
-        
+        if (org.ekstep.contenteditor.stageManager.contentLoading) {
+            this.thumbnail = this.canvas.toDataURL({format: 'jpeg', quality: 0.1});
+        }else{
+            var stage = ecEditor.getCurrentStage(),
+                canvas = stage.canvas;
+            html2canvas($('#canvas-wrapper'), {  
+                onrendered: function (canvas) {
+                    stage.thumbnail = canvas.toDataURL({format: 'jpeg', quality: 0.1});
+                    var angScope = ecEditor.getAngularScope();
+                    ecEditor.ngSafeApply(angScope);
+                }
+            });
+        }
     },
     updateZIndex: function() {
         var instance = this;
@@ -62,20 +74,35 @@ org.ekstep.contenteditor.basePlugin.extend({
             if(child.editorObj) {
                 child.attributes['z-index'] = instance.canvas.getObjects().indexOf(child.editorObj);
             } else {
-                child.attributes['z-index'] = instance.canvas.getObjects().length;
+                child.attributes['z-index'] = _.isUndefined(child.attributes['z-index']) ? instance.canvas.getObjects().length : child.attributes['z-index'];
             }
         });
     },
     render: function(canvas) {
+        var instance = this;
         org.ekstep.contenteditor.stageManager.clearCanvas(canvas);
         this.children = ecEditor._.sortBy(this.children, [function(o) { return o.getAttribute('z-index'); }]);
         ecEditor._.forEach(this.children, function(plugin) {
             plugin.render(canvas);
         });
+        if(this.config.color) canvas.setBackgroundColor(this.config.color, canvas.renderAll.bind(canvas));
         canvas.renderAll();
         ecEditor.dispatchEvent('stage:render:complete', { stageId: this.id });
-        this.thumbnail = canvas.toDataURL({format: 'jpeg', quality: 0.1});
+        if (org.ekstep.contenteditor.stageManager.contentLoading) {
+            this.thumbnail = canvas.toDataURL({format: 'jpeg', quality: 0.1});
+        }else{
+            var instance = this;
+            html2canvas($('#canvas-wrapper'), {
+                onrendered: function(canvas) {
+                    instance.thumbnail = canvas.toDataURL({ format: 'jpeg', quality: 0.1 });
+                    var angScope = ecEditor.getAngularScope();
+                    ecEditor.ngSafeApply(angScope);
+                },
+                timeout: 0
+            });
+        }
         ecEditor.refreshStages();
+        ecEditor.dispatchEvent('stage:render:complete', { stageId: this.id });
     },
     modified: function(event, data) {
         ecEditor.getCurrentStage().updateZIndex(); 
@@ -127,7 +154,26 @@ org.ekstep.contenteditor.basePlugin.extend({
                     });
                 }
                 break;
+            case "color":
+                this.setSlideBackground(value);
+                ecEditor.dispatchEvent("stage:modified");
+                ecEditor.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
+                break;
         }
+    },
+    setSlideBackground: function(color) {
+        var shapeInstance;
+        ecEditor._.forEach(ecEditor.getCurrentStage().children, function(child) {
+            if (child.attributes.subtype == 'slidebackground') shapeInstance = child;
+        });
+        if (!shapeInstance) {
+            if (color !== "#FFFFFF") ecEditor.instantiatePlugin('org.ekstep.shape', {"type":"rect","subtype": "slidebackground", "x":0,"y":0,"fill":color,"w": 100,"h": 100,"stroke":"rgba(255, 255, 255, 0)","strokeWidth":1,"opacity":1, "z-index": -999}, ecEditor.getCurrentStage());
+        } else {
+            shapeInstance.attributes.fill = color;
+        }
+        ecEditor.getCurrentStage().canvas.backgroundColor = color;
+        this.config.color = color;
     },
     updateThumbnail: function() {
         $('<canvas>').attr({ id: this.id }).css({ width: '720px', height: '405px' }).appendTo('#thumbnailCanvasContainer');

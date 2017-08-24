@@ -9,7 +9,7 @@
                     <div class="column">
                         <span><i class="icon-activity icon"></i> Activity Browser</span>
                     </div>
-                    <div class="column activity-browser-close-icon-container">
+                    <div class="column activity-browser-close-icon-container right aligned" style="padding-right:0;">
                         <i class="cursor-pointer close icon" ng-click="closeThisDialog();$ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeButton'})"></i>
                     </div>
                 </div>
@@ -17,7 +17,7 @@
         </div>
         <div class="ui grid" style="margin: 0;">
             <div class="row" id="activity_browser_searchbar" ng-show="!$ctrl.showPluginDetails">
-                <div class="ui nine wide column">
+                <div class="ui nine wide column" style="padding-left:20px;">
                     <label>
                         Category
                     </label>
@@ -27,7 +27,7 @@
                                 Type
                             </option>
                         </select>
-                    </div>
+                    </div>&nbsp;&nbsp;
                     <label>
                         Concepts
                     </label>
@@ -35,7 +35,7 @@
                         <input type="text" placeholder="Concepts" ng-model="$ctrl.activityOptions.conceptsPlaceHolder" id="activityConceptSelector" selectable="false" readonly>
                     </div>
                 </div>
-                <div class="right floated three wide column">
+                <div class="right floated three wide right aligned column">
                     <div class="ui icon input">
                         <input ng-model="$ctrl.activityOptions.searchQuery" placeholder="Search for activities" ng-keypress="$event.keyCode === 13 ? $ctrl.getActivities() : null" type="text"></input>
                         <i class="inverted circular search link icon" ng-click="$ctrl.getActivities();$ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'searchActivityCard'})"></i>
@@ -133,8 +133,8 @@
                     </div>
                 </div>
             </div>
-            <div ng-if="!$ctrl.showPluginDetails" class="content" style="width: 100%; padding-right: 0;">
-                <div class="ui row activity-browser-content">
+            <div ng-if="!$ctrl.showPluginDetails" class="content" style="width: 100%; padding: 0;">
+                <div class="ui row activity-browser-content plugin-cards-holder">
                     <div class="ui segment activity-browser-content-loader" ng-if="$ctrl.loading">
                         <div class="ui active inverted dimmer">
                             <div class="ui text loader">Just one second, We're fetching activities for you.</div>
@@ -151,7 +151,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <img ng-src="{{activity.appIcon || $ctrl.defaultActivityImage}}" style="height:242px!important;">
+                                <img ng-src="{{activity.appIcon || $ctrl.defaultActivityImage}}">
                             </div>
                             <div class="content activity-title-content">
                                 <b class="sub-header" title="{{activity.name}}" style="display: inline;">{{activity.name | limitTo:22}}<span ng-if="activity.name.length > 22">...</span></b>

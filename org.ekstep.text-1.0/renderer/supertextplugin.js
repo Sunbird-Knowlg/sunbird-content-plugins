@@ -30,7 +30,8 @@ Plugin.extend({
                 if(_.isUndefined(data.event)){
                     data.event = event;
                 }else{
-                  data.event =  (_.isArray(data.event)) ? data.event.push(event) : new Array(data.event, event);
+                  if(_.isArray(data.event)) data.event.push(event)
+                  else data.event = [event];                  
                 }
                 PluginManager.invoke('htext', data, instance._parent, instance._stage, instance._theme);
                 break;
