@@ -24,9 +24,7 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
                     $scope.lastSaved = Date.now();
                     $scope.pendingChanges = false;
                     $scope.disableReviewBtn = false;
-                    var nodeData = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
-                    if(ecEditor._.isUndefined(nodeData.children) || nodeData.children == null)
-                        $scope.disableReviewBtn = true;
+                    $scope.sendForeReviewBtnFn();
                 } else {
                     $scope.disableSaveBtn = false;
                     $scope.disableReviewBtn = true;
@@ -124,13 +122,19 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
         });
     };
 
+    $scope.sendForeReviewBtnFn = function() {
+        var nodeData = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
+        if(ecEditor._.isUndefined(nodeData.children) || nodeData.children == null)
+            $scope.disableReviewBtn = true;
+        else $scope.disableReviewBtn = false;
+        $scope.$safeApply(); 
+    };
+
     $scope.getContentMetadata = function(){
         var rootNode = org.ekstep.services.collectionService.getNodeById(ecEditor.getContext('contentId'));        
         if(rootNode.data.metadata.status === 'Review')
             $scope.hideReviewBtn = true;
-        var nodeData = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
-        if(ecEditor._.isUndefined(nodeData.children) || nodeData.children == null)
-            $scope.disableReviewBtn = true;
+        $scope.sendForeReviewBtnFn();
         $scope.$safeApply();  
     }
     
