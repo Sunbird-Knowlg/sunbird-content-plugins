@@ -69,20 +69,64 @@
 .header-icon-container .custom-row-2 {
     display: inline-block;
     position: absolute;
-    bottom: 9px;
-    right: 0px !important;
+    bottom: 0;
+    right: 0;
 }
 
-.header-wrapper .custom-row-2{
+
+.header-wrapper .custom-row-2 {
     line-height: 2.8 !important;
 }
-.content-masterhead{
+
+.content-masterhead {
     height: 60px !important;
 }
-.custom-container,.custom-container > div{
+
+.custom-container,
+.custom-container>div {
     height: 100% !important;
 }
 
-.content-title-container{
-    line-height: 200%!important;
+.collection-header-help-button {
+    position: fixed;
+    right: 1vw;
+    bottom: 2vh;
+    z-index: 1;
+    background: white!important;
+}
+
+.custom-help-button {
+    color: rgb(0, 147, 221);
+}
+
+#downloadButton,
+#closeButton,
+#saveButton {
+    background: none;
+    color: #4a4a4a;
+}
+
+
+#saveButton:hover,
+#downloadButton:hover {
+    background: #2E9FD9;
+    color: #fff;
+}
+
+#downloadButton {
+    margin-right: -10px;
+}
+
+#closeButton {
+    padding: 0!important;
+}
+
+#closeButton:hover {
+    color: #fd2313;
+}
+
+#contentTitle {
+    position: relative;
+    top: -1vh;
+    color: #4a4a4a;
 }

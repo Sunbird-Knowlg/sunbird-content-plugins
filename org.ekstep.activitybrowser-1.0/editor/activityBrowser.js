@@ -45,6 +45,7 @@ angular.module('activityBrowserApp', [])
         ctrl.closePluginDetails = function() {
             ctrl.showPluginDetails = false;
             ctrl.hideMainPage = false;
+            ctrl.applyDimmerToCard();
             $scope.$safeApply();
         };
 
@@ -249,7 +250,7 @@ angular.module('activityBrowserApp').directive('slider', function() {
                 $scope.currentIndex = $scope.currentIndex > 0 ? --$scope.currentIndex : $scope.slides.length - 1;
             };
         }],
-        template: '<div class="slides group-{{group}}"><div ng-repeat="slide in slides"><div ng-show="isCurrent($index)" class="slide slide-animation"><div ng-repeat="item in slide" class="image"><img ng-src="{{item}}"/></div></div></div><div class="controls"><div class="navigation"><a ng-click="prev()" class="prev"><span><i class="chevron circle left big icon"></i></span></a><a ng-click="next()" class="next"><span><i class="chevron circle right big icon"></i></span></a></div></div></div>',
+        template: '<div class="slides group-{{group}}"><div ng-repeat="slide in slides"><div ng-show="isCurrent($index)" class="slide slide-animation"><div ng-repeat="item in slide" class="image"><img ng-src="{{item}}"/></div></div></div><div class="controls" ng-if="slides.length > 1"><div class="navigation"><a ng-click="prev()" class="prev"><span><i class="chevron circle left big icon"></i></span></a><a ng-click="next()" class="next"><span><i class="chevron circle right big icon"></i></span></a></div></div></div>',
         link: function(scope, element, attrs) {}
     };
 });

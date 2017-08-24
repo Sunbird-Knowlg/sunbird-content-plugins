@@ -32,10 +32,15 @@ body {
     border-bottom: 0.2px solid rgba(128, 128, 128, 0.43);
 }
 
-.header-wrapper .custom-1-wide .ui.tiny.image {
-    height: 100%!important;
-    width: 100%!important;
+.header-wrapper #headerLogo .ui.tiny.image {
+    height: 32.94px;
+    width: 33.9px;
 }
+
+#headerLogo{
+    background: #2e9fd9;
+}
+
 
 .main-body {
     height: 90%!important;
@@ -95,7 +100,7 @@ body {
 }
 
 #collection-tree::-webkit-scrollbar {
-    width: 0!important; // height: 0!important;
+    width: 0!important;
 }
 
 #collection-tree {
@@ -126,7 +131,7 @@ body {
 }
 
 .primary.button-overrides {
-    background: #2E9FD9!important;
+    background: #2E9FD9;
 }
 
 .tree-access-tools .ui.search,
@@ -135,11 +140,10 @@ body {
     position: relative;
 }
 
-.tree-wrapper {
-    height: 92%!important;
-    border: none!important;
-    padding-left: 0!important;
-    padding-top: 0!important;
+#treeWrapper {
+    height: 100%;
+    border: none;
+    padding: 0;
 }
 
 .tree-access-tools {
@@ -175,11 +179,36 @@ body {
     border-radius: 0;
 }
 
-.tree-access-tools-segment {
-    padding: 0.3em 0.5em 0.3em 0!important;
-    height: 8%!important;
+#treeAccessToolsSegment {
+    position: absolute;
+    right: 0;
+    top: -0.8vh;
+    padding: 0.3em 0em 0.3em 0;
+    height: 8%;
+    z-index: 10;
+    background: transparent;
 }
 
+#treeExpandCollapseButtonsContainer{
+    display: inline-block;
+    position: relative;
+    background: transparent;
+}
+
+#treeExpandCollapseButtonsContainer .ui.button{
+    margin-right: auto;
+    min-width: 0;
+    width: 1vw;
+    display: block;
+    padding: 1em;
+    padding-right: 2em;
+    border-radius: 0;
+    background: none;
+}
+
+#treeExpandCollapseButtonsContainer .ui.button:hover{
+    background: #ddd;
+}
 .icon-container {
     color: #9b9b9b;
     float: right;
@@ -201,9 +230,9 @@ body {
 .ui.dropdown .menu .selected.item,
 .ui.dropdown.selected,
 .ui.dropdown .menu .active.item {
-    font-weight: initial;
+    font-weight: normal;
     color: rgba(0, 0, 0, .95);
-    background: initial;
+    background: none;
 }
 
 

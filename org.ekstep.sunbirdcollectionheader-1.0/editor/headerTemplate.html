@@ -27,20 +27,35 @@
         <div class="five wide column custom-5-wide">
             <div class="row header-icon-container">
                 <div style="float:right;">
-                    <div class="tiny ui button" ng-click="closeEditor();telemetry({ subtype: 'close', target: 'closeButton'});">
-                        close
-                    </div>
-                    <div ng-show="!publishMode" style="display: inline-block;">
-                        <div ng-class="disableReviewBtn ? 'tiny ui blue button disabled' : 'tiny ui blue button'"  data-content="Send for review" data-variation="tiny inverted" data-position="top center" ng-click="sendForReview(); telemetry({ subtype: 'save', target: 'sendforreview'});" ng-hide="hideReviewBtn">
-                            <i class="send icon "></i>&nbsp;&nbsp;Send for review
+                    <div ng-show="!publishMode && !isFalgReviewer" style="display: inline-block;">
+                        <div  id="reviewButton" ng-class="disableReviewBtn ? 'tiny ui blue button button-overrides popup-item disabled' : 'tiny ui blue button button-overrides popup-item'"  data-content="Send for review" data-variation="tiny inverted" data-position="top center" ng-click="sendForReview(); telemetry({ subtype: 'save', target: 'sendforreview'});" ng-hide="hideReviewBtn">
+                            <i class="send icon "></i>&nbsp;Send for review
                         </div>
-                        <div ng-class="disableSaveBtn ? 'tiny ui blue button disabled' : 'tiny ui blue button'" data-content="Save content" data-variation="tiny inverted" data-position="top center" ng-click="saveContent(); telemetry({ subtype: 'save', target: 'saveBtn'});" >
-                            <i class="icon-save"></i>&nbsp;&nbsp;Save
+                        <div  id="saveButton" ng-class="disableSaveBtn ? 'tiny ui blue button button-overrides popup-item disabled' : 'tiny ui blue button button-overrides popup-item'" data-content="Save content" data-variation="tiny inverted" data-position="top center" ng-click="saveContent(); telemetry({ subtype: 'save', target: 'saveBtn'});" >
+                            <i class="icon-save"></i>&nbsp;Save
                         </div>
                     </div>
-                    <div ng-show="publishMode" style="display: inline-block;">
-                        <div class="tiny ui button" data-content="Reject Content" ng-click="rejectContent()">Reject</div>
-                        <div class="tiny ui blue button" data-content="Publish Content" ng-click="publishContent()">Publish</div>
+                    <div ng-show="publishMode && !isFalgReviewer" style="display: inline-block;">
+                        <div id="rejectButton" class="ui primary icon button button-overrides popup-item"  data-variation="tiny inverted" data-position="top center" data-content="Reject Content" ng-click="rejectContent()">
+                            <i class="fa fa-trash"></i>&nbsp;Reject
+                        </div>
+                        <div id="publishButton" class="ui primary icon button button-overrides popup-item"  data-variation="tiny inverted" data-position="top center" data-content="Publish Content" ng-click="publishContent()">
+                            <i class="fa fa-cloud-upload"></i>&nbsp;Publish
+                        </div>
+                    </div>
+                    <div ng-show="isFalgReviewer" style="display: inline-block;">
+                        <div id="retireButton" class="ui primary icon button button-overrides popup-item" data-content="Retire content" data-variation="tiny inverted" data-position="bottom center" ng-click="retireContent(); telemetry({ subtype: 'retire', target: 'retireButton'});">
+                            <i class="fa fa-trash"></i>&nbsp;Retire
+                        </div>
+                        <div id="discardButton" class="ui primary icon button button-overrides popup-item" data-content="Discard flag" data-variation="tiny inverted" data-position="bottom center" ng-click="discardContentFlag(); telemetry({ subtype: 'discardContentFlag', target: 'discardButton'});">
+                            <i class="fa fa-undo"></i>&nbsp;Discard
+                        </div>
+                        <div id="acceptButton" class="ui primary icon button button-overrides popup-item" data-content="Accept Flag" data-variation="tiny inverted" data-position="bottom center" ng-click="acceptContentFlag(); telemetry({ subtype: 'accept', target: 'acceptContentFlag'});">
+                            <i class="fa fa-check"></i>&nbsp;Accept
+                        </div>
+                    </div>
+                    <div id="closeButton" class="ui red icon button button-overrides popup-item" data-content="Close" data-variation="tiny inverted" data-position="bottom center" ng-click="closeEditor();telemetry({ subtype: 'close', target: 'closeButton'});">
+                        <i class="window close icon"></i>
                     </div>
                 </div>
             </div>

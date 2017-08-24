@@ -10,11 +10,24 @@
 
 .text-formatting-options .inline.fields>label {
     width: 5em!important;
-    color: #9b9b9b!important;
-    font-size: 1em!important;
+    color: grey!important;
+    font-size: 12px!important;
     font-weight: normal!important;
+    margin-right: 3em!important;
 }
 
+#readAlongContents .inline.fields>label,
+#wordInfoContents .inline.fields>label {
+    width: 13vw;
+    color: grey;
+    font-size: 1em;
+    font-weight: normal;
+}
+
+#readAlongContents,
+#wordInfoContents {
+    margin-top: 1vh;
+}
 
 .text-formatting-options input,
 .text-formatting-options .ui.dropdown,
@@ -35,21 +48,21 @@
     width: 4em!important;
 }
 
-.text-formatting-options .font-size-dropdown .menu{
+.text-formatting-options .font-size-dropdown .menu {
     max-height: 140px!important;
 }
 
 .bold-italic-buttons-group {
-    margin-left: 2em!important;
+    left: 1em!important;
+    position: relative;
 }
 
 .config-slider {
-    min-width: 10em!important;
+    min-width: 10em;
 }
 
 .opacity-percent {
-    margin-left: 1em!important;
-    max-width: 3em!important;
+    margin-left: 0.8em!important;
     text-align: center;
 }
 
@@ -70,7 +83,6 @@
 }
 
 .sidebar-accordion .active.title {
-    border: none!important;
     color: #4a4a4a!important;
 }
 
@@ -80,7 +92,10 @@
     padding-left: 0!important;
     color: #2e9fd9!important;
     height: 3em;
-    border-top: 0.5px solid #d2d3d5 !important;
+    line-height: 1.8em;
+    border-top: 0.1px solid #d2d3d5 !important;
+    margin-top: 0!important;
+    margin-bottom: 0!important;
 }
 
 .sidebar-accordion .ui-icon {
@@ -89,5 +104,10 @@
 
 .sidebar-accordion .content {
     color: #9b9b9b!important;
-    overflow-y: hidden!important;
+    overflow: hidden!important;
+}
+
+#opacity{
+    min-width: 0;
+    width: 60%; 
 }

@@ -1,4 +1,4 @@
-angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope', function($scope) {
+angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope', '$timeout', function($scope, $timeout) {
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
@@ -42,12 +42,16 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             if(_.isString($scope.course.language)){
                 $scope.course.language = [$scope.course.language];
             }
+            if(_.isString($scope.course.audience)){
+                $scope.course.audience = [$scope.course.audience];
+            }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.course.name);
             $scope.course.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.course));
             $scope.metadataCloneObj = _.clone($scope.course);
             $scope.editMode = false;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+            $scope.getPath();
             $scope.$safeApply();
         }else{
             ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
@@ -60,8 +64,10 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
     };
 
     $scope.initDropdown = function() {
-        $('#language').dropdown('set selected', $scope.course.language);
-        $('#audience').dropdown('set selected', $scope.course.audience);
+        $timeout(function() {
+            $('#language').dropdown('set selected', $scope.course.language);
+            $('#audience').dropdown('set selected', $scope.course.audience);
+        });
     };
 
     $scope.getUpdatedMetadata = function(originalMetadata, currentMetadata){
@@ -149,15 +155,12 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:Course', $scope.onNodeSelect);
 
     $scope.getPath = function() {
-        var nodes = [];
+        $scope.path = [];
         var path = ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getKeyPath();
         _.forEach(path.split('/'), function(key) {
             if(key){
                 var node = ecEditor.jQuery("#collection-tree").fancytree("getTree").getNodeByKey(key);
-                $scope.path = {
-                    'title' : node.title,
-                    'nodeId'  : node.key 
-                }
+                $scope.path.push({'title' : node.title, 'nodeId'  : node.key });
             }
         });
     }
@@ -166,6 +169,9 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
         org.ekstep.collectioneditor.api.getService('collection').setActiveNode(nodeId);
     }
 
+    setTimeout(function(){
+        ecEditor.jQuery('.popup-item').popup();
+    },0);
     $scope.generateTelemetry = function(data) {
         if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.coursemeta", "pluginver": "1.0", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
