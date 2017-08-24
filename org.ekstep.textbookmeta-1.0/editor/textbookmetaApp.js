@@ -64,6 +64,9 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             if(_.isString($scope.textbook.language)){
                 $scope.textbook.language = [$scope.textbook.language];
             }
+            if(_.isString($scope.textbook.audience)){
+                $scope.textbook.audience = [$scope.textbook.audience];
+            }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
             $scope.textbook.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
