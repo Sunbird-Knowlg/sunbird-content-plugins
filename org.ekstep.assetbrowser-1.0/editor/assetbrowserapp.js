@@ -503,27 +503,25 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
     ctrl.uploadFile = function(resp, data, assetName) {
         var assetName = assetName;
-        ecEditor.jQuery.ajax({
-            // @Todo Use the correct URL
 
-            url: ecEditor.getConfig('baseURL') + ecEditor.getConfig('apislug') + "/content/v3/upload/" + resp.data.result.node_id,
-            type: 'POST',
-            contentType: false,
-            data: data,
-            cache: false,
-            processData: false,
-            beforeSend: function(request) {
-                request.setRequestHeader("user-id", "mahesh");
-                request.setRequestHeader("authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiYWYyYzg1OWIxMDg0NzhkYjMyNmYwZDQxNjMwZWMzMSJ9.YZjU6kKNg9F5BvS7JrXTfrxyTEULjR49v7wRD-CT9sg");
-            },
-            success: function(resp) {
+        var requestObj = {
+            'contentId': resp.data.result.node_id,
+            'formData': data
+        };
+        var ajaxSettings = {
+            'contentType': false,
+            'processData': false,
+            'cache': false
+        }
+        ecEditor.getService('content').uploadContnet(requestObj, ajaxSettings, function(err, resp) {
+            if (!err && resp.data.responseCode == "OK") {
                 console.log('response');
                 console.log(resp);
-                assetdata.asset = resp.result.node_id;
-                assetdata.assetMedia = resp;
+                assetdata.asset = resp.data.result.node_id;
+                assetdata.assetMedia = resp.data;
                 assetdata.assetMedia.name = assetName;
-                assetdata.assetMedia.id = resp.result.node_id;
-                assetdata.assetMedia.src = resp.result.content_url;
+                assetdata.assetMedia.id = resp.data.result.node_id;
+                assetdata.assetMedia.src = resp.data.result.content_url;
                 assetdata.assetMedia.type = instance.mediaType;
 
                 console.log("Passing data");
@@ -533,14 +531,10 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
                 instance.cb(assetdata);
                 ctrl.uploadingAsset = false;
+                ctrl.uploadBtnDisabled = false;
                 alert((instance.mediaType).charAt(0).toUpperCase() + (instance.mediaType).slice(1) + ' successfully uploaded');
                 ctrl.cancel();
-            },
-            complete: function() {
-                ctrl.uploadingAsset = false;
-                ctrl.uploadBtnDisabled = false;
-            },
-            error: function() {
+            } else {
                 alert('Error in Uploading image, please try again!');
             }
         });
