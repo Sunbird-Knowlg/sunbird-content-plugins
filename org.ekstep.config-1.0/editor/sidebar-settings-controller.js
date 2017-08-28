@@ -171,11 +171,18 @@ angular.module('editorApp')
         });
 
         $scope.addAction = function(data) {
+            $scope.targetSelected={};
             if (data.command && data.asset) {
+                for(var i=0;i<$scope.targetOptions.length;i++){
+                    if(data.asset==$scope.targetOptions[i].selectedActionTarget){
+                        $scope.targetSelected=$scope.targetOptions[i];
+                        console.log($scope.targetSelected);
+                    }
+                }
                 if (stageActionsList[data.command]) {
-                    ecEditor.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': 'transitionTo', 'asset': 'theme', 'value': data.asset, name: $scope.actionTargetObject[data.asset] }] });
+                    ecEditor.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': 'transitionTo', 'asset': 'theme', 'value': data.asset, name: $scope.targetSelected.name,iconClass:$scope.targetSelected.iconClass,bgColor:$scope.targetSelected.bgColor }] });
                 } else {
-                    ecEditor.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': data.command, 'asset': data.asset, name: $scope.actionTargetObject[data.asset] }] });
+                    ecEditor.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': data.command, 'asset': data.asset, name: $scope.targetSelected.name,iconClass:$scope.targetSelected.iconClass,bgColor:$scope.targetSelected.bgColor }] });
                 }
             }
             $scope.updateActions();
