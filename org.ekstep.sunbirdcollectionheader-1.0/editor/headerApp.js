@@ -130,8 +130,8 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
 
     $scope.getContentMetadata = function(){
         var rootNode = org.ekstep.services.collectionService.getNodeById(ecEditor.getContext('contentId'));        
-        if(rootNode.data.metadata.status === 'Review')
-            $scope.hideReviewBtn = true;
+        var status = rootNode.data.metadata.status;
+        $scope.hideReviewBtn = (status === 'Draft' || status === 'FlagDraft' ) ? false : true;
         $scope.sendForeReviewBtnFn();
         $scope.$safeApply();  
     }
