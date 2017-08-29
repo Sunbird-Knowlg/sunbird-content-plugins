@@ -18,7 +18,7 @@ org.ekstep.genericeditor.basePlugin.extend({
      *   @memberof Preview
      *
      */
-    previewURL: 'preview/preview.html' + '?webview=true',
+    previewURL: (ecEditor.getConfig('previewURL') || 'content/preview/preview.html') + '?webview=true',
     /**
      *   @member contentBody {Object} content body for preview
      *   @memberof Preview
@@ -62,6 +62,9 @@ org.ekstep.genericeditor.basePlugin.extend({
                 'showStartPage': 'true'
             };                       
             configuration.metadata = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+            if(configuration.metadata){
+                document.title = configuration.metadata.name;
+            }
             configuration.data = {};
             previewContentIframe.contentWindow.initializePreview(configuration);
         };
