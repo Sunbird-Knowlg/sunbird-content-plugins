@@ -64,6 +64,7 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
     $scope.loadContent = function(callback) {
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContent(org.ekstep.contenteditor.api.getContext('contentId'), function(err, res) {
             if (res) {
+                ecEditor.dispatchEvent('content:title:update',res.name)
                 ecEditor.dispatchEvent("atpreview:show");
                 $scope.$safeApply();
                 callback && callback(err, res);
