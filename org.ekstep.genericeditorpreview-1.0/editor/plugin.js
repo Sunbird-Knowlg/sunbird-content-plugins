@@ -18,7 +18,7 @@ org.ekstep.genericeditor.basePlugin.extend({
      *   @memberof Preview
      *
      */
-    previewURL: 'preview/preview.html' + '?webview=true',
+    previewURL: (ecEditor.getConfig('previewURL') || 'content/preview/preview.html') + '?webview=true',
     /**
      *   @member contentBody {Object} content body for preview
      *   @memberof Preview
