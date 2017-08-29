@@ -9,6 +9,14 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
         console.log('save content method invoked');
     };
 
+    $scope.titleUpdate = function(event, title) {      
+        if (title) {
+            $scope.name = title;
+            $scope.$safeApply();
+            document.title = title;
+        }
+    };
+
     $scope.sendForReview = function() {
         ecEditor.dispatchEvent('org.ekstep.contenteditor:review');
     }
@@ -51,14 +59,13 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
     setTimeout(function() {
         ecEditor.jQuery('.popup-item').popup();
         $scope.name = (ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name) || 'Untitled-Content';
-        console.log('ecEditor.getService(content).getContentMeta(ecEditor.getContext(contentId))', ecEditor.getContext('contentId'));
         if(!ecEditor.getContext('contentId')) { // TODO: replace the check with lodash isEmpty
             console.log('trigger upload form');
             ecEditor.dispatchEvent('org.ekstep.uploadcontent:show');
         }
         $scope.$safeApply();
-    }, 100);
+    }, 10);
 
+    ecEditor.addEventListener("content:title:update", $scope.titleUpdate, $scope);
     ecEditor.addEventListener('org.ekstep.genericeditor:download', $scope.download, $scope);
-
 }]);

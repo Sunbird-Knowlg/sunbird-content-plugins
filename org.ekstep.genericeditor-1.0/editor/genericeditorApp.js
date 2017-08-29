@@ -64,7 +64,6 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
     $scope.loadContent = function(callback) {
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContent(org.ekstep.contenteditor.api.getContext('contentId'), function(err, res) {
             if (res) {
-                ecEditor.dispatchEvent("atpreview:show");
                 $scope.$safeApply();
                 callback && callback(err, res);
             } else {
@@ -82,6 +81,8 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
         $scope.loadContent(function(err, res) {
             if (res) {                
                 // close the loading screen
+                ecEditor.dispatchEvent('content:title:update',res.name);
+                ecEditor.dispatchEvent("atpreview:show");
                 window.loading_screen && window.loading_screen.finish();
             } else {
                 ecEditor.jQuery('.loading-message').remove();
