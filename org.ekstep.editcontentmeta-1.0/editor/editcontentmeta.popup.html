@@ -1,0 +1,121 @@
+<script type="text/ng-template" ng-app="org.ekstep.editcontentmeta" ng-controller="editcontentmetaController as $ctrl" id="partials_org.ekstep.editcontentmeta.popup.html">
+    <style type="text/css">
+        #meta-modal {
+             top: 3%;
+         }
+        #meta-modal>.close {
+            top: 1rem;
+            right: 1rem;
+            color: #000;
+        }
+        .ngdialog.ngdialog-theme-default .ngdialog-content {
+            margin-top: -100%;
+        }
+        #content-meta{
+            overflow: auto;
+            margin: auto;
+            width: 90%;
+            min-height: 50vh;
+        }
+    </style>
+
+    <div class="ui modal fullscreen active" id="meta-modal">
+        <i class="close icon" ng-click="$ctrl.close()"></i>
+        <div class="ui header">
+            <i class="icon edit"></i>
+            <div class="content">
+                <b>{{($ctrl.review) ? 'Review' : 'Edit'}} Lesson Details</b>
+            </div>
+        </div>
+        <div class="content-meta" id="content-meta">
+            <!--<form class="ui form segment" id="contents-data-form" novalidate ng-submit="updateNode()" ng-show="editMode" name="textbookMetaForm">-->
+            <form class="ui form segment" id="content-meta-form" novalidate name="contentMetaForm">
+                <div class="fields">
+                    <div class="field">
+                        <label><i class="camera icon"></i> App icon</label>
+                        <div onclick="alert('Asset Browser');">
+                            <img ng-src="{{$ctrl.contentMeta.appIcon || 'http://via.placeholder.com/128x128' }}" />
+                        </div>
+                    </div>
+                    <div class="twelve wide field">
+                        <div class="field required">
+                            <label>Name</label>
+                            <div class="ui input">
+                                <input placeholder="Name" ng-model="$ctrl.contentMeta.name" ng-class=" {error: submitted && contentMetaForm.name.$error.required}" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="60">
+                            </div>
+                        </div>
+                        <div class="field required">
+                            <label>Description</label>
+                            <div class="ui input">
+                                <textarea placeholder="Description" ng-model="$ctrl.contentMeta.description" ng-class="{error: submitted && contentMetaForm.description.$error.required}" name="description" rows="2" required></textarea>
+                            </div>
+                        </div>
+                        <div class="four fields">
+                            <div class="four wide field">
+                                <label for="board">Board</label>
+                                <select id="board" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.board">
+                                    <option value="">Board</option>
+                                    <option ng-repeat="board in $ctrl.boardList" value="{{board}}">{{board}}</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="medium">Medium</label>
+                                <select id="medium" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.medium">
+                                    <option value="">Medium</option>
+                                    <option value="{{medium}}" ng-repeat="medium in $ctrl.languageList">{{medium}}</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="subject">Subject</label>
+                                <select id="subject" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.subject">
+                                    <option value="">Subject</option>
+                                    <option value="{{subject}}" ng-repeat="subject in $ctrl.subjectList">{{subject}}</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label>Grade</label>
+                                <select id="gradeLevel" class="ui fluid dropdown" multiple="" ng-model="$ctrl.contentMeta.gradeLevel">
+                                    <option value="">Grade</option>
+                                    <option value="{{gradeLevel}}" ng-repeat="gradeLevel in $ctrl.gradeList">{{gradeLevel}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="two fields">
+                            <div class="field">
+                                <label>Concepts</label>
+                                <input name="concepts" id="metaConceptSelector" value="{{'(' + $ctrl.contentMeta.concepts.length + ') concepts selected'}}" type="text" ng-readonly="true">
+                            </div>
+                            <div class="field">
+                                <label>Keywords</label>
+                                <input type="text" value="{{$ctrl.contentMeta.keywords.join(', ');}}" placeholder="Enter comma separated keywords" />
+                            </div>
+                        </div>
+                        <div class="three fields">
+                            <div class="eight wide field">
+                                <label>Attributions</label>
+                                <input type="text" value="{{$ctrl.contentMeta.attributions.join(', ');}}" placeholder="Attributions" />
+                            </div>
+                            <div class="field">
+                                <label for="language">Language</label>
+                                <select id="language" class="ui fluid search dropdown" ng-model="$ctrl.contentMeta.language">
+                                    <option value="">Language</option>
+                                    <option value="{{language}}" ng-repeat="language in $ctrl.languageList">{{language}}</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="audience">Audience</label>
+                                <select id="audience" class="ui selection dropdown" ng-model="$ctrl.contentMeta.audience">
+                                    <option value="">Audience</option>
+                                    <option value="{{audience}}" ng-repeat="audience in $ctrl.audienceList">{{audience}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <button class="ui primary button">{{ ($ctrl.review) ? 'Send For Review' : 'Update' }}</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>
