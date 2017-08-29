@@ -1,0 +1,18 @@
+{
+    "id": "org.ekstep.genericeditor",
+    "ver": "1.0",
+    "author": "Sunil A S",
+    "title": "generic editor",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [                        
+        ],
+        "container": [{
+            "id": "core_editor_area",
+            "templateURL": "editor/genericeditor.html",
+            "controllerURL": "editor/genericeditorApp.js"
+        }]
+    }
+}
