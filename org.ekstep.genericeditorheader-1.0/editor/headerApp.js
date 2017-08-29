@@ -3,6 +3,7 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
    
    $scope.ekstepLogo = ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/ekstep_logo_white.png");
    $scope.disableSaveBtn = true;
+   $scope.name = 'Untitled-Content';
 
    $scope.saveContent = function(){
    		console.log('save content method invoked');
@@ -45,7 +46,9 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
 
    setTimeout(function(){
       ecEditor.jQuery('.popup-item').popup();
-   },10);
+      $scope.name = (ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name) || 'Untitled-Content'
+      $scope.$safeApply();
+   },100);
    
    ecEditor.addEventListener('org.ekstep.genericeditor:download', $scope.download, $scope);
   
