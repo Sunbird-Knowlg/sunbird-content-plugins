@@ -1,3 +1,9 @@
+@media all{
+    #genericEditorHeader .content-masterhead > .custom-container{
+        width: 100%!important;
+    }
+}
+
 body {
     min-width: 525px !important;
 }
@@ -409,3 +415,11 @@ body {
     right: 10px;
     bottom: 8px;
 }
+
+
+/* generic editor style */
+
+.content-masterhead > .custom-container{
+    background: #fff;
+}
+/* generic editor style */

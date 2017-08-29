@@ -18,6 +18,7 @@
 	margin: 0;
 	padding: 0;
 	height: calc( 100% - 55px );
+	background: #F3F3F3;
 }
 
 #genericEditorPreviewContainer{
