@@ -58,23 +58,21 @@
 /* Upload Button
 ------------------------------------------ */
 .qq-upload-button {
+    position: absolute !important;
+    bottom: 0px;
+    left: 45%;
     display: inline;
     width: 105px;
     margin-bottom: 10px;
     padding: 7px 10px;
     text-align: center;
     float: left;
-    background: #00ABC7;
-    color: #FFFFFF;
+    color: #333333;
     border-radius: 2px;
-    border: 1px solid #2dadc2;
-    box-shadow: 0 1px 1px rgba(255, 255, 255, 0.37) inset,
-                1px 0 1px rgba(255, 255, 255, 0.07) inset,
-                0 1px 0 rgba(0, 0, 0, 0.36),
-                0 -2px 12px rgba(0, 0, 0, 0.08) inset;
+    border: 1px solid #333333;
 }
 .qq-upload-button-hover {
-    background: #33B6CC;
+    background: #F5F5F5;
 }
 .qq-upload-button-focus {
     outline: 1px dotted #000000;

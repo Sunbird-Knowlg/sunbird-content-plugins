@@ -24,7 +24,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 }
             },
             showClose: false,
-            width: 900,
+            width: 800,
             className: 'ngdialog-theme-plain'
         });
     }
