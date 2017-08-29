@@ -48,11 +48,11 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
       ecEditor.jQuery('.popup-item').popup();      
    },10);
 
-   ecEditor.addEventListener("content:title:update",function(event, title){
-        if(title){
-          $scope.name = title;
-          $scope.$safeApply();
-          document.title = title;
+    ecEditor.addEventListener("content:title:update", function(event, title) {
+        if (title) {
+            $scope.name = title;
+            $scope.$safeApply();
+            document.title = title;
         }
     });
    
