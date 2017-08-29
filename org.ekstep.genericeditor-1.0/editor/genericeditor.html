@@ -5,7 +5,7 @@
             <div ng-repeat="canvas in canvaslist" ng-include="canvas.templateURL"></div>
         </div>
         <div class="ui three wide column" id="generiEditorSideBar">
-            <div ng-repeat="menu in sidebarMenus" ng-if="menu.state == 'SHOW'" ng-include="'templates/toolbar.html'"></div>
+            <div ng-repeat="sidebarmenu in registeredCategories" ng-if="sidebarmenu.state == 'SHOW'" ng-include="sidebarmenu.templateURL"></div>
         </div>
     </div>
 </div>
