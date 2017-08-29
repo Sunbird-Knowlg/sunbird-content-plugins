@@ -1,0 +1,51 @@
+ <style>
+    
+    .preview-window .ngdialog-content {
+        background: none !important;
+    }
+    
+    .ngdialog.ngdialog-theme-plain .ngdialog-content{
+      background: none!important;
+    }
+
+    #previewContentIframe {
+        border: 0px;
+    }
+
+    .main {
+      position: relative;
+      /*background: white;*/
+      height: 375px;
+      width: 726px;
+      margin: 0 auto;
+      padding: 20px;
+      /*resize: both;*/
+      overflow: auto;
+    }
+
+    .child {
+      background: black;
+      color: white;
+      width: 100%;
+      transform: translate(-50%, -50%);
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      padding: 20px;
+      overflow: auto;
+    }
+
+    .preview-bgimage {
+        height: 375px;
+        width: 726px;
+        background-size: 726px 375px;
+        padding: 0;
+    }
+
+    .preview-iframe {
+        height: 324px;
+        width: 576px;
+        padding:0;
+        border: none !important;
+        overflow: hidden;
+    }
