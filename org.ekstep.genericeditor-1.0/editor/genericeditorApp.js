@@ -16,6 +16,18 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply"]).controller('main
 
     //Header scope ends
 
+    //canvasarea scope starts
+    $scope.canvaslist = [];
+
+    $scope.addToCanvasArea = function(canvas) {
+        $scope.canvaslist.push(canvas);
+        $scope.$safeApply();
+    }
+
+    org.ekstep.contenteditor.canvasManager.initialize({ loadNgModules: $scope.loadNgModules, scope: $scope });
+
+    //canvasarea scope ends
+
     $scope.loadContent = function(callback) {        
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContent(org.ekstep.contenteditor.api.getContext('contentId'), function(err, res) {
             if (res && res.data && res.data.responseCode === "OK") {
