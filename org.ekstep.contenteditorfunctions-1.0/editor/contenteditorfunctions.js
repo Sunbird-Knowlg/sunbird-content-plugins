@@ -10,6 +10,26 @@ angular.module('org.ekstep.contenteditorfunctions:cefuntions', []).controller('c
         if (data) $scope.editorState = data;
     };
 
+    $scope.reviewContent = function(event, callback) {
+        var contentId = ecEditor.getContext('contentId');
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).sendForReview({ contentId: contentId }, function(err, res) {
+            if (res && res.data && res.data.responseCode == "OK") {
+                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                    title: 'Content sent for review...',                    
+                    position: 'topCenter',
+                    icon: 'fa fa-check-circle'
+                });
+            }else {
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'Sending for review failed, please try again later...',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
+            }
+            callback && callback(err, res);
+        });
+    };
+
 
     $scope.saveContent = function(event, options) {
         console.log('Save invoked:', event, options)
@@ -209,5 +229,7 @@ angular.module('org.ekstep.contenteditorfunctions:cefuntions', []).controller('c
         $scope.previewContent(data.fromBeginning);
     }, $scope);
     ecEditor.addEventListener('org.ekstep.contenteditor:save:force', $scope.saveBrowserContent, $scope);
+    ecEditor.addEventListener('org.ekstep.contenteditor:review', $scope.reviewContent, $scope);
+
 
 }]);
