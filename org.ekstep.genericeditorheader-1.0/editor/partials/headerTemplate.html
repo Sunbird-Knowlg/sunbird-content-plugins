@@ -1,5 +1,117 @@
-<div ng-app="org.ekstep.genericeditor" ng-controller="headerController" class="ui masthead vertical segment" style="background: blue">
-    <div class="ui grid fluid container">
-        <h1>This is placeholder for header plugin</h1>
+<style>
+.spinner {
+    width: 18px;
+    height: 18px;
+    background-color: #ff0c00;
+    border-radius: 100%;
+    display: inline-block;
+    position: relative;
+    top: 4px;
+    margin-right: 3px;
+    -webkit-animation: sk-scaleout 1.0s infinite ease-in-out;
+    animation: sk-scaleout 1.0s infinite ease-in-out;
+}
+
+@-webkit-keyframes sk-scaleout {
+    0% {
+        -webkit-transform: scale(0)
+    }
+    100% {
+        -webkit-transform: scale(1.0);
+        opacity: 0;
+    }
+}
+
+@keyframes sk-scaleout {
+    0% {
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+    100% {
+        -webkit-transform: scale(1.0);
+        transform: scale(1.0);
+        opacity: 0;
+    }
+}
+
+.internet-status-label {
+    visibility: hidden;
+}
+
+.internet-status {
+    position: relative;
+    margin: 0;
+    bottom: -4px;
+    color: #9b9b9b;
+}
+
+.last-saved-label {
+    display: inline-block;
+    float: right;
+    position: relative;
+    bottom: -7px;
+    font-size: 13px;
+    color: #9b9b9b;
+}
+</style>
+<div ng-app="org.ekstep.genericeditorheader:app" ng-controller="headerController" class="ui masthead vertical segment content-masterhead">
+    <div class="ui grid fluid container custom-container">
+        <div class="one wide centered column custom-1-wide">
+            <img class="ui tiny centered image" src="{{ekstepLogo}}" />
+        </div>
+        <div class="six wide column custom-6-wide">
+            <div class="row custom-row-1">
+                <label class="content-title" ng-bind="contentDetails.contentTitle | limitTo:30">
+                    <span ng-if="contentDetails.contentTitle.length > 30">...</span></label>
+            </div>
+            <div class="row custom-row-2">
+                <a class="btn at-btn at-btn-ok" ng-click="">
+                    <i class="edit icon link"></i>&nbsp;Edit Details
+                </a>
+            </div>
+        </div>
+        <div class="five wide column custom-5-wide">
+            <div class="row custom-row-1">
+                <div class="close">
+                    <a href="" target="_self">
+                        <i class="remove icon custom-cursor"></i>
+                    </a>
+                </div>   
+            </div>
+            <div class="row header-icon-container">
+                <div class="custom-row-2">
+                    <div class="icon-group-1">
+                        <div class="icon-box popup-item" data-content="Upload Content" data-variation="tiny inverted" data-position="bottom center" ng-click="">
+                            <i class="upload icon custom-icon"></i>
+                        </div>
+                    </div>
+                    <div class="icon-group-2">
+                        <div class="icon-box popup-item" data-content="Download to try it out on a mobile device" data-variation="tiny inverted" data-position="bottom center" ng-click="">
+                            <i class="download icon custom-icon"></i>
+                        </div>
+                        <div class="preview-icon-group">
+                            <div class="icon-box popup-item" data-content="Preview" data-variation="tiny inverted" data-position="bottom center" ng-click="">
+                                <i class="fa fa-eye custom-icon"></i>
+                            </div>
+                            <div class="ui dropdown pointing icon-box" id="previewDropdown">
+                                <i class="caret down icon custom-icon"></i>
+                                <div class="menu">
+                                    <div class="item" ng-click="">
+                                        Preview from beginning
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="icon-box popup-item label-icon-box" data-content="Save content" data-variation="tiny inverted" data-position="bottom center" ng-click="">
+                            <span class="label-icon-box-text save-button-text" >Save</span>
+                        </div>
+                        <div class="icon-box label-icon-box popup-item" data-content="Send for review" data-variation="tiny inverted" data-position="bottom center" ng-click="">
+                            <i class="send icon"></i>
+                            <span class="label-icon-box-text">Send for review</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
