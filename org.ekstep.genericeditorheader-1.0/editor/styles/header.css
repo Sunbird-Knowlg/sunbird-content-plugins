@@ -44,6 +44,7 @@ body {
     padding: 0;
     display: inline-block;
     position: relative;
+    cursor: pointer;
 }
 
 .icon-box:hover {
