@@ -75,21 +75,38 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
 
     $scope.telemetry = function(data) {
         org.ekstep.services.telemetryService.interact({ "type": 'click', "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.collectioneditor", "pluginver": "1.0", "objectid": ecEditor.getCurrentStage().id, "stage": ecEditor.getCurrentStage().id });
-    };    
+    };
 
-    org.ekstep.genericeditor.api.initEditor(ecEditor.getConfig('editorConfig'), function() {
+    ecEditor.addEventListener('org.ekstep.genericeditor:reload', function() {
         $scope.loadContent(function(err, res) {
             if (res) {                
-                // close the loading screen
                 ecEditor.dispatchEvent('content:title:update',res.name);
                 ecEditor.dispatchEvent("atpreview:show");
-                window.loading_screen && window.loading_screen.finish();
             } else {
                 ecEditor.jQuery('.loading-message').remove();
                 ecEditor.jQuery('.sk-cube-grid').remove();
                 ecEditor.jQuery('.pg-loading-html').prepend('<p class="loading-message">Unable to fetch content! Please try again later</p><button class="ui red button" onclick="ecEditor.dispatchEvent(\'org.ekstep.collectioneditor:content:notfound\');"><i class="window close icon"></i>Close Editor!</button>');
             }
         });
+    }, $scope);
+
+    org.ekstep.genericeditor.api.initEditor(ecEditor.getConfig('editorConfig'), function() {
+        if(ecEditor.getContext('contentId')) {
+            $scope.loadContent(function(err, res) {
+                if (res) {                
+                    // close the loading screen
+                    ecEditor.dispatchEvent('content:title:update',res.name);
+                    ecEditor.dispatchEvent("atpreview:show");
+                    window.loading_screen && window.loading_screen.finish();
+                } else {
+                    ecEditor.jQuery('.loading-message').remove();
+                    ecEditor.jQuery('.sk-cube-grid').remove();
+                    ecEditor.jQuery('.pg-loading-html').prepend('<p class="loading-message">Unable to fetch content! Please try again later</p><button class="ui red button" onclick="ecEditor.dispatchEvent(\'org.ekstep.collectioneditor:content:notfound\');"><i class="window close icon"></i>Close Editor!</button>');
+                }
+            });    
+        } else {
+            window.loading_screen && window.loading_screen.finish();
+        }
     });
 }]);
 //# sourceURL=genericeditorApp.js

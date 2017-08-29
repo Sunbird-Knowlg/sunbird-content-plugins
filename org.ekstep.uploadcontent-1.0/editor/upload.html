@@ -1,6 +1,6 @@
 <script type="text/ng-template" ng-app="org.ekstep.uploadcontent-1.0" ng-controller="uploadController as $ctrl" id="partials_org.ekstep.uploadcontent.html">
 <div type="text/template" id="qq-template-validation" style="display: none">
-    <div class="qq-uploader-selector qq-uploader" qq-drop-area-text="Drop files here">
+    <div class="qq-uploader-selector qq-uploader">
 
         <div class="qq-upload-drop-area-selector qq-upload-drop-area" qq-hide-dropzone>
             <span class="qq-upload-drop-area-text-selector"></span>
@@ -27,8 +27,15 @@
                 <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
             </li>
         </ul>
-        <div class="qq-upload-button-selector qq-upload-button">
-            <div>Browse</div>
+        <div id="qq-upload-actions">
+            <div style="position: absolute;bottom: 65px;left: 44.8%;text-align: center;">
+                <i class="upload huge icon" style="font-size: 3em"></i><br>
+                <strong>Drag &amp; Drop</strong><br>
+                <span>Your files here, or</span>
+            </div>
+            <div class="qq-upload-button-selector qq-upload-button">
+                <div>Browse</div>
+            </div>
         </div>
 
         <dialog class="qq-alert-dialog-selector">
@@ -71,10 +78,19 @@
         <div class="field">
             <label>URL</label>
             <div class="ui fluid transparent input">
-                <input type="text" placeholder="https://" style="border-bottom: 1px solid #ddd !important;">
+                <input type="text" placeholder="https://" ng-model="contentURL" style="border-bottom: 1px solid #ddd !important;">
             </div>
         </div>
         <div id="upload-content-div" style="margin-top: 15px"></div>
+        <div class="ui message">
+            <div class="header">
+                Note
+            </div>
+            <ul class="list">
+                <li>File accepted only pdf, mp4, epub, h5p and html zip (Max size 25mb).</li>
+                <li>When both URL and File are provided, File will be considered and URL is discarded</li>
+            </ul>
+        </div>
     </div>
     <div class="actions">
         <div class="ui buttons">
