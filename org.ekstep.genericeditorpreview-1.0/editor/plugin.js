@@ -31,18 +31,21 @@ org.ekstep.genericeditor.basePlugin.extend({
      *
      */
     initialize: function() {
-        ecEditor.addEventListener("atpreview:show", this.initPreview, this);
-        var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/contentPreview.html");
+        ecEditor.addEventListener("atpreview:show", this.showPreview, this);
     },
-    /**
-     *
-     *   @param event {Object} event object from event bus.
-     *   @param data {Object} ecml
-     *   @memberof preview
-     */
-    initPreview: function(event, data) {
-        //this.contentBody = data.contentBody;
-        this.showPreview();
+
+    getMetadata: function(contentId, cb) {
+        var headers = {
+            Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiYWYyYzg1OWIxMDg0NzhkYjMyNmYwZDQxNjMwZWMzMSJ9.YZjU6kKNg9F5BvS7JrXTfrxyTEULjR49v7wRD-CT9sg"
+        }
+        jQuery.ajax({
+            url: "https://dev.ekstep.in/api/content/v3/read/" + contentId,
+            method: "GET",
+            headers: headers,
+            data: {}
+        }).done(function(resp) {
+            cb(resp.result.content)
+        });
     },
     /**     
      *   @memberof preview
@@ -68,17 +71,22 @@ org.ekstep.genericeditor.basePlugin.extend({
                 'app': userData.etags.app,
                 'dims': userData.etags.dims,
                 'partner': userData.etags.partner,
-                'contentId':'do_1123102903042129921225'
+                'contentId': 'do_1123102903042129921225'
             };
             configuration.config = {
                 'showEndPage': 'true',
                 'showStartPage': 'true'
             };
             configuration.data = {};
-            configuration.metadata = meta.contentMeta;
+            instance.getMetadata('do_1123102913293189121226', function(res) {
+                configuration.metadata = res
+                configuration.data = {};
+                previewContentIframe.contentWindow.initializePreview(configuration);
+            });
+            /*configuration.metadata = meta.contentMeta;
             configuration.data = instance.contentBody;
             previewContentIframe.contentWindow.initializePreview(configuration);
-
+*/
         };
     }
 });
