@@ -1,7 +1,5 @@
 angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-timeago"]).controller('headerController', ['$scope', function($scope) {
-$(".popup-item").popup();
-    $(".ui.accordion").accordion();
-    $(".ui.dropdown").dropdown();
-    $('.ui.checkbox').checkbox();
-    $('.ui.radio.checkbox').checkbox();
+   var plugin = { id: "org.ekstep.genericeditorheader", ver: "1.0" };
+   $scope.ekstepLogo = ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/ekstep_logo_white.png");
+
 }]);

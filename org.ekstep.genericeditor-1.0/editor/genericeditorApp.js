@@ -1,4 +1,4 @@
-angular.module('org.ekstep.genericeditor', ["Scope.safeApply"]).controller('mainController', ['$scope', '$location', function($scope, $location) {
+angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).controller('mainController', ['$scope', '$location', '$ocLazyLoad', function($scope, $location, $ocLazyLoad) {
 
     $scope.contentDetails = {
         contentTitle: ""
@@ -28,7 +28,40 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply"]).controller('main
 
     //canvasarea scope ends
 
-    $scope.loadContent = function(callback) {        
+    //sidebar scope starts
+    $scope.registeredCategories = [];
+    $scope.loadNgModules = function(templatePath, controllerPath) {
+        var files = [];
+        if (templatePath) files.push({ type: 'html', path: templatePath });
+        if (controllerPath) files.push({ type: 'js', path: controllerPath });
+        if (files.length) return $ocLazyLoad.load(files)
+    };
+
+    org.ekstep.contenteditor.sidebarManager.initialize({ loadNgModules: $scope.loadNgModules, scope: $scope });
+
+    $scope.fireSidebarTelemetry = function(menu, menuType) {
+        var pluginId, pluginVer, objectId;        
+        var pluginObject = org.ekstep.contenteditor.api.getCurrentObject() || org.ekstep.contenteditor.api.getCurrentStage();
+        if (pluginObject) {
+            pluginId = pluginObject.manifest.id;
+            pluginVer = pluginObject.manifest.ver;
+            objectId = pluginObject.id;
+        }
+        $scope.telemetryService.interact({ "type": "modify", "subtype": "sidebar", "target": menuType, "pluginid": pluginId || "", 'pluginver': pluginVer || "", "objectid": objectId || "", "stage": org.ekstep.contenteditor.stageManager.currentStage.id });
+    };
+
+    $scope.addToSidebar = function(sidebar) {
+        $scope.registeredCategories.push(sidebar);
+        $scope.$safeApply();
+    };
+
+    $scope.refreshSidebar = function() {
+        $scope.$safeApply();
+    };
+
+    //sidebar scope ends
+
+    $scope.loadContent = function(callback) {
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContent(org.ekstep.contenteditor.api.getContext('contentId'), function(err, res) {
             if (res && res.data && res.data.responseCode === "OK") {
                 //TODO: handle success case
