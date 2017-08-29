@@ -40,7 +40,6 @@ org.ekstep.genericeditor.basePlugin.extend({
         console.log(this.previewURL);
         var instance = this;
         var contentService = ecEditor.getService('content');
-        var meta = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId'));
         var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
         previewContentIframe.src = instance.previewURL;
         var userData = ecEditor.getService('telemetry').context;
@@ -49,7 +48,6 @@ org.ekstep.genericeditor.basePlugin.extend({
             userData.etags = userData.etags || {};
             configuration.context = {
                 'mode': 'edit',
-                'contentId': meta.identifier,
                 'sid': userData.sid,
                 'uid': userData.uid,
                 'channel': userData.channel,
