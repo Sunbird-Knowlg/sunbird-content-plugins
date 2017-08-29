@@ -1,4 +1,4 @@
-<div>
+<div ng-app="org.ekstep.genericeditorsidebar" ng-controller='sidebarController'>
     <div id="sideBarTitle" style="display: flex; justify-content:space-between; padding-right: 1rem; text-align:center;">
         <div class="" style="color:#9b9b9b; width: calc( 100% / 3); display: inline-block; background: rgba(155, 155, 155, 0.2);">Settings</div>
         <div class="" style="color:#9b9b9b; width: calc( 100% / 3); display: inline-block;">Actions</div>
@@ -6,36 +6,28 @@
     </div>
     <div id="sideBarBody">
         <form class="ui fluid form">
+            
             <div class="ui horizontal divider"></div>
             <div class="field">
-                <div class="ui checkbox">
+                <div class="ui toggle checkbox">
+                    <label>Show overlay</label>
                     <input type="checkbox" tabindex="0" class="hidden">
-                    <label>Select</label>
                 </div>
             </div>
             <div class="ui horizontal divider"></div>
             <div class="field">
-                <div class="ui slider checkbox">
+                <div class="ui toggle checkbox">
+                    <label>Show controls</label>
                     <input type="checkbox" tabindex="0" class="hidden">
-                    <label>Slider</label>
                 </div>
-                <label>Zoom level</label>
-            </div>
-            <div class="ui horizontal divider"></div>
-            <div class="field">
-                <div class="ui slider checkbox">
-                    <input type="checkbox" tabindex="0" class="hidden">
-                    <label>Slider</label>
-                </div>
-                <label>Zoom level</label>
             </div>            
             <div class="ui horizontal divider"></div>
             <div class="field">
                 <div class="inline fields">
-                    <label for="fruit">Orientation</label>
+                    <label style="color: #9b9b9b;">Orientation</label>
                     <div class="field">
                         <div class="ui radio checkbox">
-                            <input type="radio" name="fruit" checked="" tabindex="0" class="hidden">
+                            <input type="radio" name="fruit" tabindex="0" class="hidden">
                             <label>Portrait</label>
                         </div>
                     </div>

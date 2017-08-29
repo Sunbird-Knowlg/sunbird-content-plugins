@@ -1,0 +1,1 @@
+angular.module('org.ekstep.genericeditorsidebar', []).controller('sidebarController', ['$scope', function($scope) {}]);

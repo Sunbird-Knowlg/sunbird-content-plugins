@@ -7,7 +7,8 @@
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",        
-        "dependencies": [            
+        "dependencies": [
+        { "type": "js", "src": "editor/partials/sideBarApp.js"}          
         ],        
         "sidebarMenu": [{
             "id": "sidebar",                                 
