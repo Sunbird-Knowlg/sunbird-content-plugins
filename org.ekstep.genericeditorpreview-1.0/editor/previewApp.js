@@ -1,7 +1,12 @@
 angular.module('org.ekstep.genericeditorpreview', []).controller('previewController', ['$scope', function($scope) {
-	this.showPreview = true;
+	$scope.showPreview = false;
 	ecEditor.addEventListener("atpreview:show", function(){
-		console.info("show preview");
-		this.showPreview = true;
+		$scope.showPreview = true;
+		$scope.$safeApply();
+	});
+
+	ecEditor.addEventListener("atpreview:hide", function(){
+		$scope.showPreview = false;
+		$scope.$safeApply();
 	});
 }]);
