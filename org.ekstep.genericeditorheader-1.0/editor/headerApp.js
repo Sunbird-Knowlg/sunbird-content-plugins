@@ -13,8 +13,14 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
     }
 
    $scope.download = function(){
+      ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                        title: 'Content download started!',                    
+                        position: 'topCenter',
+                        icon: 'fa fa-download'
+                    });
+
       var fileName = (ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name).toLowerCase();
-        ecEditor.getService('content').downloadContent(ecEditor.getContext('contentId'), fileName, function(err, resp) {
+      ecEditor.getService('content').downloadContent(ecEditor.getContext('contentId'), fileName, function(err, resp) {
             if (!err && resp.data.responseCode == "OK") {
               var link = document.createElement('a');
               link.href = resp.data.result.ECAR_URL;
@@ -22,13 +28,7 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
               link.style.display = 'none';
               document.body.appendChild(link);
               link.click();
-              document.body.removeChild(link);  
-              
-              ecEditor.dispatchEvent("org.ekstep.toaster:success", {
-                        title: 'Content download started!',                    
-                        position: 'topCenter',
-                        icon: 'fa fa-check-circle'
-                    });     
+              document.body.removeChild(link);    
             } else {
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                     message: 'Unable to download the content, please try again later',
