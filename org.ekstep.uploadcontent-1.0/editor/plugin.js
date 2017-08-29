@@ -5,11 +5,9 @@ org.ekstep.contenteditor.basePlugin.extend({
     initialize: function() {
         var instance = this;
         ecEditor.addEventListener(this.manifest.id + ":show", this.showUploadForm, this);
-        setTimeout(function() {
-            var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/upload.html');
-            var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/uploadapp.js');
-            ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
-        }, 1000);
+        var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/upload.html');
+        var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/uploadapp.js');
+        ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
     },
     showUploadForm: function(event, callback) {
         var instance = this;
@@ -24,6 +22,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                 }
             },
             showClose: false,
+            closeByDocument: false,
+            closeByEscape: false,
             width: 800,
             className: 'ngdialog-theme-plain'
         });
