@@ -8,6 +8,10 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
    		console.log('save content method invoked');
    };
 
+   $scope.sendForReview = function() {
+        ecEditor.dispatchEvent('org.ekstep.contenteditor:review');
+    }
+
    $scope.download = function(){
    		var fileName = (ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name).toLowerCase();
         ecEditor.getService('content').downloadContent(ecEditor.getContext('contentId'), fileName, function(err, resp) {
