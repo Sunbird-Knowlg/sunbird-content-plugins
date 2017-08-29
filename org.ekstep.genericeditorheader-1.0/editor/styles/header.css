@@ -129,130 +129,17 @@ body {
     margin: 0;
     bottom: -4px;
 }
-
-.custom-5-wide .custom-row-1 {
-    position: relative;
-    top: -1px;
-}
-
-#userDetailsWrapper:before {
-    all: initial;
-}
-
-#userDetailsWrapper {
-    height: auto;
-    width: 123px;
-    border-radius: 4px;
-    background-color: #ffffff;
-    display: inline-block;
-    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
-    margin-right: 25px;
-    margin-top: 0;
-}
-
-#userDetailsWrapper img {
-    height: 35px;
-    width: 35px;
-    position: relative;
-    display: block;
-    margin: auto;
-    border-radius: 50%;
-}
-
-#userDetailsWrapper .user-name {
-    font-weight: bold;
-}
-
-#userDetailsWrapper .user-name,
-#userDetailsWrapper .user-email,
-#userDetailsWrapper .user-details-edit {
-    color: #4A4A4A;
-    font-size: 10px;
-    line-height: 11px;
-    padding: 2px 10px;
-    margin-top: 3px;
-    text-align: center;
-}
-
-#userDetailsWrapper .user-email,
-#userDetailsWrapper .user-details-edit,
-#userDetailsWrapper .user-profile-menu>.option {
-    color: #4A4A4A;
-    font-size: 10px;
-    font-weight: normal;
-}
-
-#userDetailsWrapper .user-details-edit {
-    color: #2e9fd9;
-    line-height: 9px;
-}
-
-#userDetailsWrapper .user-details {
-    padding: 5px 0;
-    box-sizing: border-box;
-    margin-top: 5px;
-    border-bottom: 0.02px solid #F3F3F3;
-}
-
-#userDetailsWrapper .user-profile-menu .option {
-    position: relative;
-    color: #9b9b9b;
-    padding: 1px 10px;
-    cursor: default;
-    user-select: none;
-}
-
-#userDetailsWrapper .user-profile-menu .option>* {
-    display: inline-block;
-}
-
-#userDetailsWrapper .user-profile-menu a {
-    width: 100%;
-    color: #9b9b9b;
-    cursor: pointer;
-}
-
-#userDetailsWrapper .user-profile-menu a:hover {
-    color: #4a4a4a;
-}
-
-#userDetailsWrapper .user-profile-menu .option:hover {
-    background-color: #F3F3F3;
-}
-
-.custom-5-wide .user-context {
-    position: relative;
-    z-index: 1000;
-    color: #9b9b9b;
-    margin-right: 2px;
-}
-
-.custom-5-wide .user-context .username {
-    width: 100%;
-    text-align: right;
-    cursor: default;
-    padding-right: 31px;
-}
-
-.custom-5-wide .user-context .username .name {
-    font-size: 12px;
-    line-height: 14px;
-}
-
-.custom-5-wide .user-context .username .caret.down.icon {
-    font-size: 14px;
-    line-height: 14px;
-}
-
-.custom-5-wide .user-context .username .custom-cursor {
-    cursor: pointer;
-}
-
 .custom-5-wide .close {
     position: relative;
     float: right;
     z-index: 10001;
     cursor: pointer;
+    line-height: 2;
+
+}
+
+.custom-5-wide .close:hover{
+    background: transparent;
 }
 
 .custom-5-wide .close a {
