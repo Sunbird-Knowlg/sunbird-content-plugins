@@ -39,6 +39,10 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
    		window.location.reload();
    };
 
+   setTimeout(function(){
+      ecEditor.jQuery('.popup-item').popup();
+   },10);
+   
    ecEditor.addEventListener('org.ekstep.genericeditor:download', $scope.download, $scope);
   
 }]);
