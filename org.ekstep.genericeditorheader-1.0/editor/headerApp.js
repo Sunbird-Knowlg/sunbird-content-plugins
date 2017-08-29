@@ -9,6 +9,14 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
    		console.log('save content method invoked');
    };
 
+    $scope.titleUpdate = function(event, title) {      
+        if (title) {
+            $scope.name = title;
+            $scope.$safeApply();
+            document.title = title;
+        }
+    };
+
    $scope.sendForReview = function() {
         ecEditor.dispatchEvent('org.ekstep.contenteditor:review');
     }
@@ -47,15 +55,7 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
    setTimeout(function(){
       ecEditor.jQuery('.popup-item').popup();      
    },10);
-
-    ecEditor.addEventListener("content:title:update", function(event, title) {
-        if (title) {
-            $scope.name = title;
-            $scope.$safeApply();
-            document.title = title;
-        }
-    });
-   
+   ecEditor.addEventListener("content:title:update", $scope.titleUpdate, $scope);
    ecEditor.addEventListener('org.ekstep.genericeditor:download', $scope.download, $scope);
   
 }]);
