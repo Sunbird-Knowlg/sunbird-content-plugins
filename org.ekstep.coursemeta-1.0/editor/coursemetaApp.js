@@ -51,6 +51,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             $scope.metadataCloneObj = _.clone($scope.course);
             $scope.editMode = false;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+            ecEditor.dispatchEvent("content:title:update", $scope.course.name);
             $scope.getPath();
             $scope.$safeApply();
         }else{
@@ -94,9 +95,6 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
         if(_.isUndefined(metadata['mimeType'])){
             metadata['mimeType'] = "application/vnd.ekstep.content-collection";
         }
-
-        ecEditor.dispatchEvent("content:title:update", metadata['name']);
-        
         return metadata;
     }
 
