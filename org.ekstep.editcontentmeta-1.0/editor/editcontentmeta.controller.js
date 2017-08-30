@@ -229,6 +229,8 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
                 } else {
                     ctrl.notify('reviewSuccess');
                     if (ctrl.contentMeta.name) ecEditor.dispatchEvent("content:title:update", ctrl.contentMeta.name);
+                    // set the content meta data with updated data
+                    ctrl.contentService.getContent(ctrl.contentId, function() {});
                     ctrl.close();  
                 }
             });
