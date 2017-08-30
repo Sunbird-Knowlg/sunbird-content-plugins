@@ -8,7 +8,8 @@
     "editor": {
         "main": "editor/plugin.js",        
         "dependencies": [
-        { "type": "js", "src": "editor/partials/sideBarApp.js"}          
+        { "type": "js", "src": "editor/partials/sideBarApp.js"},
+        { "type": "css", "src": "editor/styles/plugin.css"}
         ],        
         "sidebarMenu": [{
             "id": "sidebar",                                 
