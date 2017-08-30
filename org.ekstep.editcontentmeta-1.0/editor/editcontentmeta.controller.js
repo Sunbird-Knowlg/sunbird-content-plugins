@@ -68,6 +68,10 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
         });
     }
 
+    setTimeout(function(){
+        ecEditor.jQuery('.ui.dropdown').dropdown();
+    }, 10)
+
     ctrl.close = function () {
         $scope.closeThisDialog();
     };

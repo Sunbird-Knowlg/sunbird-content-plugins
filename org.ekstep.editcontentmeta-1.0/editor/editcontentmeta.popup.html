@@ -14,12 +14,15 @@
         #content-meta{
             overflow: auto;
             margin: auto;
-            width: 90%;
             min-height: 50vh;
+        }
+
+        #content-meta-form{
+            border: none;
         }
     </style>
 
-    <div class="ui modal fullscreen active" id="meta-modal">
+    <div class="ui modal active" id="meta-modal">
         <i class="close icon" ng-click="$ctrl.close()"></i>
         <div class="ui header">
             <i class="icon edit"></i>
@@ -37,7 +40,7 @@
                             <img ng-src="{{$ctrl.contentMeta.appIcon || 'http://via.placeholder.com/128x128' }}" />
                         </div>
                     </div>
-                    <div class="twelve wide field">
+                    <div class="sixteen wide field">
                         <div class="field required">
                             <label>Name</label>
                             <div class="ui input">
@@ -50,7 +53,7 @@
                                 <textarea placeholder="Description" ng-model="$ctrl.contentMeta.description" ng-class="{error: submitted && contentMetaForm.description.$error.required}" name="description" rows="2" required></textarea>
                             </div>
                         </div>
-                        <div class="four fields">
+                        <div class="fields">
                             <div class="four wide field">
                                 <label for="board">Board</label>
                                 <select id="board" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.board">
@@ -58,21 +61,14 @@
                                     <option ng-repeat="board in $ctrl.boardList" value="{{board}}">{{board}}</option>
                                 </select>
                             </div>
-                            <div class="field">
-                                <label for="medium">Medium</label>
-                                <select id="medium" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.medium">
-                                    <option value="">Medium</option>
-                                    <option value="{{medium}}" ng-repeat="medium in $ctrl.languageList">{{medium}}</option>
-                                </select>
-                            </div>
-                            <div class="field">
+                            <div class="four wide field">
                                 <label for="subject">Subject</label>
                                 <select id="subject" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.subject">
                                     <option value="">Subject</option>
                                     <option value="{{subject}}" ng-repeat="subject in $ctrl.subjectList">{{subject}}</option>
                                 </select>
                             </div>
-                            <div class="field">
+                            <div class="eight wide field">
                                 <label>Grade</label>
                                 <select id="gradeLevel" class="ui fluid dropdown" multiple="" ng-model="$ctrl.contentMeta.gradeLevel">
                                     <option value="">Grade</option>
@@ -91,7 +87,7 @@
                             </div>
                         </div>
                         <div class="three fields">
-                            <div class="eight wide field">
+                            <div class="field">
                                 <label>Attributions</label>
                                 <input type="text" value="{{$ctrl.contentMeta.attributions.join(', ');}}" placeholder="Attributions" />
                             </div>
@@ -111,7 +107,7 @@
                             </div>
                         </div>
                         <div class="field">
-                            <button class="ui primary button">{{ ($ctrl.review) ? 'Send For Review' : 'Update' }}</button>
+                            <button class="ui primary button" style="float:right;">{{ ($ctrl.review) ? 'Send For Review' : 'Update' }}</button>
                         </div>
                     </div>
                 </div>
