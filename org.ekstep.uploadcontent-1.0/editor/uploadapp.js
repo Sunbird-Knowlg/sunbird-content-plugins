@@ -112,6 +112,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
             console.log('Uploading content by URL', fileURL);
             var data = new FormData();
             data.append("fileUrl", fileURL);
+            data.append("mimeType", mimeType);
             var config = {
                 enctype: 'multipart/form-data',
                 processData: false,
@@ -123,7 +124,6 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                 if(err) {
                     // TODO: throw error message
                 } else {
-                    console.log('File upload successful', res);
                     ecEditor.dispatchEvent("org.ekstep.genericeditor:reload");
                     $scope.closeThisDialog();
                 }
@@ -137,8 +137,10 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
     }
 
     $scope.uploadFile = function(mimeType, cb) {
+
+        var contentType = mimeType;
         if(mimeType === 'application/vnd.ekstep.h5p-archive' || mimeType === 'application/vnd.ekstep.html-archive') {
-            mimeType = 'application/octet-stream';
+            contentType = 'application/octet-stream';
         }
         // 1. Get presigned URL
         $scope.contentService.getPresignedURL(ecEditor.getContext('contentId'), $scope.uploader.getName(0), function(err, res) {
@@ -149,7 +151,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                 var signedURL = res.data.result.pre_signed_url;
                 var config = { 
                     processData: false,
-                    contentType: mimeType
+                    contentType: contentType
                 }
                 console.log('signed url', signedURL);
                 $scope.contentService.uploadDataToSignedURL(signedURL, $scope.uploader.getFile(0), config, function(err, res) {
