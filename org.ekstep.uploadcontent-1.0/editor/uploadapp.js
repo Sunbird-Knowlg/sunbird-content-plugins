@@ -49,7 +49,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                 return 'application/vnd.ekstep.html-archive';
             case 'epub':
                 return 'application/epub';
-             case 'webm':
+            case 'webm':
                 return 'video/webm';    
             default:
                 if($scope.validateYoutubeURL(fileName)) {
@@ -70,7 +70,11 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
 
     $scope.upload = function() {
         if($scope.uploader.getFile(0) == null && !$scope.contentURL) {
-            alert('URL or File is required');
+            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                message: 'URL or File is required to upload',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });
             return;
         }
         
@@ -80,7 +84,11 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
         }
         var mimeType = fileUpload ? $scope.detectMimeType($scope.uploader.getName(0)) : $scope.detectMimeType($scope.contentURL);
         if(!mimeType) {
-            alert('Invalid mime type - Mimetype should be one of pdf, epub, h5p, video, youtube, html-zip');
+            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                message: 'Invalid content type (supported type: pdf, epub, h5p, mp4, youtube, html-zip, webm)',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });            
             return;
         }
         if($scope.newContent) {
@@ -97,7 +105,11 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
 
             $scope.contentService.createContent(data, function(err, res) {
                 if(err) {
-                    // TODO: Show error message
+                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                        message: 'Unable to create content!',
+                        position: 'topCenter',
+                        icon: 'fa fa-warning'
+                    });
                 } else {
                     var result = res.data.result;
                     ecEditor.setContext('contentId', result.node_id);                    
@@ -123,8 +135,17 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
 
             $scope.contentService.uploadContent(ecEditor.getContext('contentId'), data, config, function(err, res) {
                 if(err) {
-                    // TODO: throw error message
+                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                        message: 'Unable to upload content!',
+                        position: 'topCenter',
+                        icon: 'fa fa-warning'
+                    });
                 } else {
+                    ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                        title: 'content uploaded successfully!',                    
+                        position: 'topCenter',
+                        icon: 'fa fa-check-circle'
+                    });
                     console.log('File upload successful', res);
                     ecEditor.dispatchEvent("org.ekstep.genericeditor:reload");
                     $scope.closeThisDialog();
@@ -145,7 +166,11 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
         // 1. Get presigned URL
         $scope.contentService.getPresignedURL(ecEditor.getContext('contentId'), $scope.uploader.getName(0), function(err, res) {
             if(err) {
-                // TODO: Show error message
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'error while uploading!',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
             } else {
                 // 2. Upload File to signed URL
                 var signedURL = res.data.result.pre_signed_url;
@@ -156,7 +181,11 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                 console.log('signed url', signedURL);
                 $scope.contentService.uploadDataToSignedURL(signedURL, $scope.uploader.getFile(0), config, function(err, res) {
                     if(err) {
-                        // TODO: Show error message
+                        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                            message: 'error while uploading!',
+                            position: 'topCenter',
+                            icon: 'fa fa-warning'
+                        });
                     } else {
                         cb(signedURL.split('?')[0]);
                     }
