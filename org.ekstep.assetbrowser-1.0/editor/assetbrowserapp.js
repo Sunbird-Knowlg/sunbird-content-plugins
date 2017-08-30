@@ -503,8 +503,13 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
     ctrl.uploadFile = function(resp, data, assetName) {
         var assetName = assetName;
-
-        ecEditor.getService('content').uploadContent(resp.data.result.node_id, data, function(err, resp) {
+        var config = {
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false
+        };
+        ecEditor.getService('content').uploadContent(resp.data.result.node_id, data, config, function(err, resp) {
             if (!err && resp.data.responseCode == "OK") {
                 console.log('response');
                 console.log(resp);
