@@ -17,6 +17,32 @@
             width: 90%;
             min-height: 50vh;
         }
+        .app-icon {
+            display: inline-block;
+            position: relative;
+            cursor: pointer;
+        }
+        .app-icon-overlay {
+            position: absolute;
+            display: table-cell;
+            text-align: center;
+            vertical-align: baseline;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(200, 200, 200, 0.5);
+        }
+        .app-icon-overlay-message {
+            position: absolute;
+            left: 0;
+            top: 0;
+            line-height: 2em;
+            color: #fff;
+            text-align: center;
+            width: 100%;
+            background-color: rgba(100, 100, 100, 0.5);
+        }
     </style>
 
     <div class="ui modal fullscreen active" id="meta-modal">
@@ -28,20 +54,20 @@
             </div>
         </div>
         <div class="content-meta" id="content-meta">
-            <!--<form class="ui form segment" id="contents-data-form" novalidate ng-submit="updateNode()" ng-show="editMode" name="textbookMetaForm">-->
-            <form class="ui form segment" id="content-meta-form" novalidate name="contentMetaForm">
+            <form class="ui form segment" id="content-meta-form" novalidate ng-submit="$ctrl.saveMeta(contentMetaForm.$valid)" name="contentMetaForm">
                 <div class="fields">
                     <div class="field">
                         <label><i class="camera icon"></i> App icon</label>
-                        <div onclick="alert('Asset Browser');">
-                            <img ng-src="{{$ctrl.contentMeta.appIcon || 'http://via.placeholder.com/128x128' }}" />
+                        <div class="app-icon" ng-mouseenter="$ctrl.appIconHover = true" ng-mouseleave="$ctrl.appIconHover = false" ng-click="$ctrl.launchImageBrowser()">
+                            <div class="app-icon-overlay" ng-show="$ctrl.appIconHover"><p class="app-icon-overlay-message">Edit App Icon</p></div>
+                            <img ng-src="{{$ctrl.contentMeta.appIcon || $ctrl.defaultImage }}" />
                         </div>
                     </div>
                     <div class="twelve wide field">
-                        <div class="field required">
+                        <div class="field required" ng-class="{'error': ($ctrl.submitted && contentMetaForm.name.$error.required)}" >
                             <label>Name</label>
                             <div class="ui input">
-                                <input placeholder="Name" ng-model="$ctrl.contentMeta.name" ng-class=" {error: submitted && contentMetaForm.name.$error.required}" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="60">
+                                <input placeholder="Name" ng-model="$ctrl.contentMeta.name" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="60">
                             </div>
                         </div>
                         <div class="field required">
@@ -50,19 +76,12 @@
                                 <textarea placeholder="Description" ng-model="$ctrl.contentMeta.description" ng-class="{error: submitted && contentMetaForm.description.$error.required}" name="description" rows="2" required></textarea>
                             </div>
                         </div>
-                        <div class="four fields">
+                        <div class="three fields">
                             <div class="four wide field">
                                 <label for="board">Board</label>
                                 <select id="board" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.board">
                                     <option value="">Board</option>
                                     <option ng-repeat="board in $ctrl.boardList" value="{{board}}">{{board}}</option>
-                                </select>
-                            </div>
-                            <div class="field">
-                                <label for="medium">Medium</label>
-                                <select id="medium" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.medium">
-                                    <option value="">Medium</option>
-                                    <option value="{{medium}}" ng-repeat="medium in $ctrl.languageList">{{medium}}</option>
                                 </select>
                             </div>
                             <div class="field">
@@ -80,6 +99,25 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="three fields">
+                            <div class="eight wide field">
+                                <label>Attributions</label>
+                                <input type="text" id="attributions" value="{{$ctrl.contentMeta.attributions.join(', ');}}" placeholder="Attributions" />
+                            </div>
+                            <div class="field">
+                                <label>Medium</label>
+                                <select id="language" class="ui fluid search dropdown" ng-model="$ctrl.language">
+                                    <option value="">Language</option>
+                                    <option value="{{language}}" ng-repeat="language in $ctrl.languageList">{{language}}</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label for="audience">Audience</label>
+                                <select id="audience" class="ui selection dropdown" ng-model="$ctrl.audience">
+                                    <option value="{{audience}}" ng-repeat="audience in $ctrl.audienceList">{{audience}}</option>
+                                </select>
+                            </div>
+                        </div>
                         <div class="two fields">
                             <div class="field">
                                 <label>Concepts</label>
@@ -87,27 +125,7 @@
                             </div>
                             <div class="field">
                                 <label>Keywords</label>
-                                <input type="text" value="{{$ctrl.contentMeta.keywords.join(', ');}}" placeholder="Enter comma separated keywords" />
-                            </div>
-                        </div>
-                        <div class="three fields">
-                            <div class="eight wide field">
-                                <label>Attributions</label>
-                                <input type="text" value="{{$ctrl.contentMeta.attributions.join(', ');}}" placeholder="Attributions" />
-                            </div>
-                            <div class="field">
-                                <label for="language">Language</label>
-                                <select id="language" class="ui fluid search dropdown" ng-model="$ctrl.contentMeta.language">
-                                    <option value="">Language</option>
-                                    <option value="{{language}}" ng-repeat="language in $ctrl.languageList">{{language}}</option>
-                                </select>
-                            </div>
-                            <div class="field">
-                                <label for="audience">Audience</label>
-                                <select id="audience" class="ui selection dropdown" ng-model="$ctrl.contentMeta.audience">
-                                    <option value="">Audience</option>
-                                    <option value="{{audience}}" ng-repeat="audience in $ctrl.audienceList">{{audience}}</option>
-                                </select>
+                                <input id="keywords" type="text" value="{{$ctrl.contentMeta.keywords.join(', ');}}" placeholder="Enter comma separated keywords" />
                             </div>
                         </div>
                         <div class="field">

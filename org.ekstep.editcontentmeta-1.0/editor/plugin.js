@@ -20,16 +20,13 @@ org.ekstep.contenteditor.basePlugin.extend({
     loadHtml: function (event, data) {
         var instance = this;
 
-        instance.data = data;
-        instance.contentMeta = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId'));
-
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
             template: 'partials_org.ekstep.editcontentmeta.popup.html',
             controller: 'editcontentmetaController',
             controllerAs: '$ctrl',
             resolve: {
-                'instance': function () {
-                    return instance;
+                'data': function () {
+                    return data;
                 }
             },
             width: 900,
