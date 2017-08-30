@@ -16,7 +16,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
             autoUpload: false,
             multiple: false,
             validation: {
-                allowedExtensions: ['pdf', 'epub', 'mp4', 'h5p', 'zip'],
+                allowedExtensions: ['pdf', 'epub', 'mp4', 'h5p', 'zip','webm'],
                 itemLimit: 1,
                 sizeLimit: 25000000 // 25 MB = 25 * 1024 * 1024 bytes
             },
@@ -49,6 +49,8 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                 return 'application/vnd.ekstep.html-archive';
             case 'epub':
                 return 'application/epub';
+             case 'webm':
+                return 'video/webm';    
             default:
                 if($scope.validateYoutubeURL(fileName)) {
                     return 'video/x-youtube';
