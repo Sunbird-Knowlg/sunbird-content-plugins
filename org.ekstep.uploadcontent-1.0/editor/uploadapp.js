@@ -5,6 +5,9 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
     $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
     $scope.contentURL = undefined;
     $scope.newContent = false;
+    $scope.showLoaderIcon = false;    
+    $scope.loaderIcon = ecEditor.resolvePluginResource("org.ekstep.uploadcontent", "1.0", "editor/loader.gif");
+
 
     $scope.$on('ngDialog.opened', function() {
         $scope.uploader = new qq.FineUploader({
@@ -69,12 +72,14 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
     }
 
     $scope.upload = function() {
+        $scope.showLoader(true);
         if($scope.uploader.getFile(0) == null && !$scope.contentURL) {
             ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                 message: 'URL or File is required to upload',
                 position: 'topCenter',
                 icon: 'fa fa-warning'
             });
+            $scope.showLoader(false);
             return;
         }
         
@@ -88,7 +93,8 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                 message: 'Invalid content type (supported type: pdf, epub, h5p, mp4, youtube, html-zip, webm)',
                 position: 'topCenter',
                 icon: 'fa fa-warning'
-            });            
+            }); 
+            $scope.showLoader(false);           
             return;
         }
         if($scope.newContent) {
@@ -110,6 +116,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                         position: 'topCenter',
                         icon: 'fa fa-warning'
                     });
+                    $scope.showLoader(false);
                 } else {
                     var result = res.data.result;
                     ecEditor.setContext('contentId', result.node_id);                    
@@ -140,6 +147,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                         position: 'topCenter',
                         icon: 'fa fa-warning'
                     });
+                    $scope.showLoader(false);
                 } else {
                     ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                         title: 'content uploaded successfully!',                    
@@ -167,6 +175,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
         // 1. Get presigned URL
         $scope.contentService.getPresignedURL(ecEditor.getContext('contentId'), $scope.uploader.getName(0), function(err, res) {
             if(err) {
+                $scope.showLoader(false);
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                     message: 'error while uploading!',
                     position: 'topCenter',
@@ -181,6 +190,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                 }
                 $scope.contentService.uploadDataToSignedURL(signedURL, $scope.uploader.getFile(0), config, function(err, res) {
                     if(err) {
+                        $scope.showLoader(false);
                         ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                             message: 'error while uploading!',
                             position: 'topCenter',
@@ -196,5 +206,17 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
 
     if(!ecEditor.getContext('contentId')) {
         $scope.newContent = true;
+    }
+
+    $scope.showLoader = function(flag) {
+        $scope.showLoaderIcon = flag;
+        $scope.$safeApply();
+        if (flag) {
+            $('#qq-upload-actions').hide();
+        } else {
+            if (!$scope.uploader.getFile(0)) {
+                $('#qq-upload-actions').show();
+            }
+        }
     }
 }]);
