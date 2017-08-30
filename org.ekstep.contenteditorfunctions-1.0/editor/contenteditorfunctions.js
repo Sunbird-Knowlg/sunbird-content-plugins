@@ -15,10 +15,17 @@ angular.module('org.ekstep.contenteditorfunctions:cefuntions', []).controller('c
         console.log('Save invoked:', event, options)
         options = ecEditor._.assign({ savingPopup: true, successPopup: true, failPopup: true, callback: function(){} }, options);
         if (options.savingPopup) $scope.saveNotification('saving');
+
+        var contentMeta = {};
+        if (options.contentMeta) {
+            contentMeta = options.contentMeta;
+        }
+        contentMeta.stageIcons = JSON.stringify(org.ekstep.contenteditor.stageManager.getStageIcons());
+
         org.ekstep.pluginframework.eventManager.dispatchEvent('content:before:save');
         // TODO: Show saving dialog
         var contentBody = org.ekstep.contenteditor.stageManager.toECML();
-        $scope.patchContent({ stageIcons: JSON.stringify(org.ekstep.contenteditor.stageManager.getStageIcons()) }, contentBody, function(err, res) {
+        $scope.patchContent(contentMeta, contentBody, function(err, res) {
             if (err) {
                 if (res && !ecEditor._.isUndefined(res.responseJSON)) {
                     // This could be converted to switch..case to handle different error codes
