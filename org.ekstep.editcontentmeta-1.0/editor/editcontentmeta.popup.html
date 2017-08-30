@@ -20,6 +20,32 @@
         #content-meta-form{
             border: none;
         }
+
+        #content-meta-form input,
+        #content-meta-form textarea{
+            border: none;
+            border-bottom: 1px solid #d8d8d8;
+            padding-left: 0;
+            border-radius: 0;
+        }
+        
+        #content-meta-form .content-icon{
+            border: 1px solid #d8d8d8;
+        }
+
+        #content-meta-form .fields,
+        #content-meta-form .field{
+            margin-bottom: 1em;
+        }
+        
+        #content-meta-form label{
+            color: rgba(27, 28, 29, 0.75);
+        }
+
+        #content-meta-form input::placeholder,
+        #content-meta-form .ui.dropdown .default.text{
+            color: #9b9b9b;
+        }
     </style>
 
     <div class="ui modal active" id="meta-modal">
@@ -36,7 +62,7 @@
                 <div class="fields">
                     <div class="field">
                         <label><i class="camera icon"></i> App icon</label>
-                        <div onclick="alert('Asset Browser');">
+                        <div onclick="alert('Asset Browser');" class="content-icon">
                             <img ng-src="{{$ctrl.contentMeta.appIcon || 'http://via.placeholder.com/128x128' }}" />
                         </div>
                     </div>
@@ -76,6 +102,26 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="fields">
+                            <div class="four wide field">
+                                <label for="language">Language</label>
+                                <select id="language" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.language">
+                                    <option value="">Language</option>
+                                    <option value="{{language}}" ng-repeat="language in $ctrl.languageList">{{language}}</option>
+                                </select>
+                            </div>
+                            <div class="four wide field">
+                                <label for="audience">Audience</label>
+                                <select id="audience" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.audience">
+                                    <option value="">Audience</option>
+                                    <option value="{{audience}}" ng-repeat="audience in $ctrl.audienceList">{{audience}}</option>
+                                </select>
+                            </div>
+                            <div class="eight wide field">
+                                <label>Attributions</label>
+                                <input type="text" value="{{$ctrl.contentMeta.attributions.join(', ');}}" placeholder="Attributions"/>
+                            </div>
+                        </div>
                         <div class="two fields">
                             <div class="field">
                                 <label>Concepts</label>
@@ -84,26 +130,6 @@
                             <div class="field">
                                 <label>Keywords</label>
                                 <input type="text" value="{{$ctrl.contentMeta.keywords.join(', ');}}" placeholder="Enter comma separated keywords" />
-                            </div>
-                        </div>
-                        <div class="three fields">
-                            <div class="field">
-                                <label>Attributions</label>
-                                <input type="text" value="{{$ctrl.contentMeta.attributions.join(', ');}}" placeholder="Attributions" />
-                            </div>
-                            <div class="field">
-                                <label for="language">Language</label>
-                                <select id="language" class="ui fluid search dropdown" ng-model="$ctrl.contentMeta.language">
-                                    <option value="">Language</option>
-                                    <option value="{{language}}" ng-repeat="language in $ctrl.languageList">{{language}}</option>
-                                </select>
-                            </div>
-                            <div class="field">
-                                <label for="audience">Audience</label>
-                                <select id="audience" class="ui selection dropdown" ng-model="$ctrl.contentMeta.audience">
-                                    <option value="">Audience</option>
-                                    <option value="{{audience}}" ng-repeat="audience in $ctrl.audienceList">{{audience}}</option>
-                                </select>
                             </div>
                         </div>
                         <div class="field">
