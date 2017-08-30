@@ -94,6 +94,9 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
         if(_.isUndefined(metadata['mimeType'])){
             metadata['mimeType'] = "application/vnd.ekstep.content-collection";
         }
+
+        ecEditor.dispatchEvent("content:title:update", metadata['name']);
+        
         return metadata;
     }
 
