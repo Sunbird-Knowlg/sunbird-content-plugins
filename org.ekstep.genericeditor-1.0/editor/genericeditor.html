@@ -4,7 +4,7 @@
         <div class="ui nine wide column" id="genericEditorPreviewContainer">
             <div ng-repeat="canvas in canvaslist" ng-include="canvas.templateURL"></div>
         </div>
-        <div class="ui three wide column" id="generiEditorSideBar">
+        <div class="ui three wide column" id="genericEditorSideBar">
             <div ng-repeat="sidebarmenu in registeredCategories" ng-if="sidebarmenu.state == 'SHOW'" ng-include="sidebarmenu.templateURL"></div>
         </div>
     </div>
