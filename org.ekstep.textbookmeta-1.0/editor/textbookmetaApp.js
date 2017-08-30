@@ -73,6 +73,7 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             $scope.metadataCloneObj = _.clone($scope.textbook);
             $scope.editMode = false;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+            ecEditor.dispatchEvent("content:title:update", $scope.textbook.name);
             $scope.getPath();
             $scope.$safeApply();
         }else{
