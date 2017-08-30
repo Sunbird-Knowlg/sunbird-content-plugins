@@ -504,16 +504,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.uploadFile = function(resp, data, assetName) {
         var assetName = assetName;
 
-        var requestObj = {
-            'contentId': resp.data.result.node_id,
-            'formData': data
-        };
-        var ajaxSettings = {
-            'contentType': false,
-            'processData': false,
-            'cache': false
-        }
-        ecEditor.getService('content').uploadContnet(requestObj, ajaxSettings, function(err, resp) {
+        ecEditor.getService('content').uploadContent(resp.data.result.node_id, data, function(err, resp) {
             if (!err && resp.data.responseCode == "OK") {
                 console.log('response');
                 console.log(resp);
