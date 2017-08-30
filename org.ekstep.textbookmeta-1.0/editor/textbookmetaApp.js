@@ -109,6 +109,9 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
         if(_.isUndefined(metadata['mimeType'])){
             metadata['mimeType'] = "application/vnd.ekstep.content-collection";
         }
+
+        ecEditor.dispatchEvent("content:title:header:update", metadata['name']);
+
         return metadata;
     }
 
