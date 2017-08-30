@@ -488,7 +488,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ecEditor.getService('asset').saveAsset(ctrl.assetId, content, function(err, resp) {
             if (resp) {
                 ctrl.uploadingAsset = true;
-                ctrl.uploadFile(resp, data, fields.assetName);
+                ctrl.uploadFile(resp, data, fields.name);
             }
         });
     }
