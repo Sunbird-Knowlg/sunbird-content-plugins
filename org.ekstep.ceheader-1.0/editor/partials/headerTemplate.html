@@ -144,7 +144,7 @@
                             <span class="label-icon-box-text save-button-text disabled" ng-if="!saveBtnEnabled">Save</span>
                             <span class="label-icon-box-text save-button-text" ng-if="saveBtnEnabled">Save</span>
                         </div>
-                        <div class="icon-box label-icon-box popup-item" data-content="Send for review" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'org.ekstep.review:review'});">
+                        <div class="icon-box label-icon-box popup-item" data-content="Send for review" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'org.ekstep.editcontentmeta:showpopup', data: {review: true}});">
                             <i class="send icon"></i>
                             <span class="label-icon-box-text">Send for review</span>
                         </div>
