@@ -110,7 +110,7 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             metadata['mimeType'] = "application/vnd.ekstep.content-collection";
         }
 
-        ecEditor.dispatchEvent("content:title:header:update", metadata['name']);
+        ecEditor.dispatchEvent("content:title:update", metadata['name']);
 
         return metadata;
     }

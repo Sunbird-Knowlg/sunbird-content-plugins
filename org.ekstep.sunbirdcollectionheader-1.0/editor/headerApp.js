@@ -136,10 +136,10 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
         $scope.$safeApply();  
     };
 
-    $scope.contentTitleHeaderUpdate = function(data){
-        $scope.contentDetails.contentTitle = "testheaderUpdate";
+    $scope.updateTitle = function(event,data){
+        $scope.contentDetails.contentTitle = data;
+        document.title = data;
         $scope.$safeApply(); 
-        alert('headerUpdate'); 
     };
     
     window.addEventListener('online', $scope.internetStatusFn, false);
@@ -150,6 +150,6 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
     ecEditor.addEventListener("org.ekstep.collectioneditor:node:reorder", $scope.onNodeEvent, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:content:notfound", $scope.showNoContent, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:content:load", $scope.getContentMetadata, $scope);
-    ecEditor.addEventListener("content:title:header:update", $scope.contentTitleHeaderUpdate, $scope);
+    ecEditor.addEventListener("content:title:update", $scope.updateTitle, $scope);
 }]);
 //# sourceURL=sunbirdheaderapp.js
