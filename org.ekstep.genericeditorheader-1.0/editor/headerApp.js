@@ -9,6 +9,10 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
         console.log('save content method invoked');
     };
 
+    $scope.editDetails = function(){
+      $scope.generateTelemetry({ "type": "click", "subtype": "", "target": "editmeta"});
+    },
+
     $scope.titleUpdate = function(event, title) {      
         if (title) {
             $scope.name = title;
@@ -18,6 +22,7 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
     };
 
     $scope.sendForReview = function() {
+        $scope.generateTelemetry({ "type": "click", "subtype": "", "target": "reviewbutton"});
         ecEditor.dispatchEvent('org.ekstep.contenteditor:review');
     }
 
@@ -26,6 +31,7 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
     }
 
     $scope.download = function() {
+        $scope.generateTelemetry({ "type": "click", "subtype": "", "target": "downloadbutton"});
         ecEditor.dispatchEvent("org.ekstep.toaster:success", {
             title: 'Content download started!',
             position: 'topCenter',
@@ -48,6 +54,17 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
                     position: 'topCenter',
                     icon: 'fa fa-warning'
                 });
+                ecEditor.getService('telemetry').error({
+                    "env": 'content',
+                    "stage": '',
+                    "action": 'download',
+                    "objectid": "",
+                    "objecttype": "",
+                    "err": err.status,
+                    "type": "API",
+                    "data": err,
+                    "severity": "fatal"
+                })
             }
         });
     };
@@ -55,6 +72,9 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
     $scope.closeGenericEdtr = function() {
         window.location.reload();
     };
+
+    $scope.generateTelemetry = function(data) {
+        if (data) ecEditor.getService('telemetry').interact({"type": data.type || "", "subtype": data.subtype || "", "target": data.target || "", "pluginid": plugin.id, "pluginver": plugin.ver, "objectid": "", "targetid":"", "stage": ""}) }
 
     setTimeout(function() {
         ecEditor.jQuery('.popup-item').popup();
