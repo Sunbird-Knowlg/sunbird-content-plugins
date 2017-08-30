@@ -1,53 +1,55 @@
 <script type="text/ng-template" ng-app="org.ekstep.editcontentmeta" ng-controller="editcontentmetaController as $ctrl" id="partials_org.ekstep.editcontentmeta.popup.html">
     <style type="text/css">
-        #meta-modal {
-             top: 3%;
-         }
-        #meta-modal>.close {
-            top: 1rem;
-            right: 1rem;
-            color: #000;
-        }
-        .ngdialog.ngdialog-theme-default .ngdialog-content {
-            margin-top: -100%;
-        }
-        #content-meta{
-            overflow: auto;
-            margin: auto;
-            min-height: 50vh;
-        }
+    #meta-modal {
+        top: 3%;
+    }
 
-        #content-meta-form{
-            border: none;
-        }
+    #meta-modal>.close {
+        top: 1rem;
+        right: 1rem;
+        color: #000;
+    }
 
-        #content-meta-form input,
-        #content-meta-form textarea{
-            border: none;
-            border-bottom: 1px solid #d8d8d8;
-            padding-left: 0;
-            border-radius: 0;
-        }
-        
-        #content-meta-form .content-icon{
-            border: 1px solid #d8d8d8;
-        }
+    .ngdialog.ngdialog-theme-default .ngdialog-content {
+        margin-top: -100%;
+    }
 
-        #content-meta-form .fields,
-        #content-meta-form .field{
-            margin-bottom: 1em;
-        }
-        
-        #content-meta-form label{
-            color: rgba(27, 28, 29, 0.75);
-        }
+    #content-meta {
+        overflow: auto;
+        margin: auto;
+        min-height: 50vh;
+    }
 
-        #content-meta-form input::placeholder,
-        #content-meta-form .ui.dropdown .default.text{
-            color: #4a4a4a;
-        }
+    #content-meta-form {
+        border: none;
+    }
+
+    #content-meta-form input,
+    #content-meta-form textarea {
+        border: none;
+        border-bottom: 1px solid #d8d8d8;
+        padding-left: 0;
+        border-radius: 0;
+    }
+
+    #content-meta-form .content-icon {
+        border: 1px solid #d8d8d8;
+    }
+
+    #content-meta-form .fields,
+    #content-meta-form .field {
+        margin-bottom: 1em;
+    }
+
+    #content-meta-form label {
+        color: rgba(27, 28, 29, 0.75);
+    }
+
+    #content-meta-form input::placeholder,
+    #content-meta-form .ui.dropdown .default.text {
+        color: #4a4a4a;
+    }
     </style>
-
     <div class="ui modal active" id="meta-modal">
         <i class="close icon" ng-click="$ctrl.close()"></i>
         <div class="ui header">
@@ -59,7 +61,7 @@
         <div class="content-meta" id="content-meta">
             <!--<form class="ui form segment" id="contents-data-form" novalidate ng-submit="updateNode()" ng-show="editMode" name="textbookMetaForm">-->
             <form class="ui form segment" id="content-meta-form" novalidate name="contentMetaForm">
-                <div class="fields">
+                <div class="fields" style="position: relative;">
                     <div class="field">
                         <label><i class="camera icon"></i> App icon</label>
                         <div onclick="alert('Asset Browser');" class="content-icon">
@@ -119,7 +121,7 @@
                             </div>
                             <div class="eight wide field">
                                 <label>Attributions</label>
-                                <input type="text" value="{{$ctrl.contentMeta.attributions.join(', ');}}" placeholder="Attributions"/>
+                                <input type="text" value="{{$ctrl.contentMeta.attributions.join(', ');}}" placeholder="Attributions" />
                             </div>
                         </div>
                         <div class="two fields">
@@ -133,7 +135,11 @@
                             </div>
                         </div>
                         <div class="field">
-                            <button class="ui primary button" style="float:right;">{{ ($ctrl.review) ? 'Send For Review' : 'Update' }}</button>
+                            <div class="ui buttons" style="position: absolute; right: 0; bottom: -2.5vh;">
+                                <button id="closePopUp" class="ui orange button" type="button">Cancel</button>
+                                <div class="or"></div>
+                                <button class="ui blue button" type="button">{{ ($ctrl.review) ? 'Send For Review' : 'Update' }}</button>
+                            </div>
                         </div>
                     </div>
                 </div>
