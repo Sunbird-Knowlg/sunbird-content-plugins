@@ -205,10 +205,15 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
                 callback: function (err, res) {
                     ctrl.isLoading = false;
                     ctrl.active = '';
-                    if (res && res.data && res.data.responseCode == "OK") {
+                    if (res && res.data && res.data.responseCode == "OK") {                        
                         if (ctrl.review) {
-                            ctrl.sendForReview();
+                            ctrl.sendForReview();                            
+                        } else {
+                            if (ctrl.contentMeta.name) ecEditor.dispatchEvent("content:title:update", ctrl.contentMeta.name);
+                            ctrl.close();   
                         }
+                    } else {
+                        ctrl.notify('reviewError');
                     }
                 }
             });
@@ -223,6 +228,8 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
                     ctrl.notify('reviewError');
                 } else {
                     ctrl.notify('reviewSuccess');
+                    if (ctrl.contentMeta.name) ecEditor.dispatchEvent("content:title:update", ctrl.contentMeta.name);
+                    ctrl.close();  
                 }
             });
         });
@@ -254,3 +261,5 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
     };
 
 }]);
+
+//# sourceURL=editcontentmeta.controller.js
