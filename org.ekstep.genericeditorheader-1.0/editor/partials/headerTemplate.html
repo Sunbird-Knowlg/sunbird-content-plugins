@@ -10,7 +10,7 @@
                 </label>
             </div>
             <div class="row custom-row-2">
-                <a class="btn at-btn at-btn-ok" ng-click="">
+                <a class="btn at-btn at-btn-ok" ng-click="editDetails()">
                     <i class="edit icon link"></i>&nbsp;Edit Details
                 </a>
             </div>
@@ -26,11 +26,11 @@
                             <i class="download icon custom-icon"></i>
                         </div>
                         <div class="close icon-box popup-item" data-content="Close" data-variation="tiny inverted" data-position="bottom center">
-                            <a ng-click="closeGenericEdtr(); telemetry({ subtype: 'close', target: 'closeBtn'})">
+                            <a ng-click="closeGenericEdtr(); generateTelemetry({ subtype: 'close', target: 'closebutton'})">
                                 <i class="remove icon custom-cursor"></i>
                             </a>
                         </div>
-                        <div class="icon-box popup-item label-icon-box" data-content="Save content" data-variation="tiny inverted" data-position="bottom center" ng-click="saveContent(); telemetry({ subtype: 'save', target: 'saveBtn'});">
+                        <div class="icon-box popup-item label-icon-box" data-content="Save content" data-variation="tiny inverted" data-position="bottom center" ng-click="saveContent(); generateTelemetry({ subtype: 'save', target: 'savebutton'});">
                             <i class="icon-save"></i>
                             <span class="label-icon-box-text save-button-text">Save</span>
                         </div>
