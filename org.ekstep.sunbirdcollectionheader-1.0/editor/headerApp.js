@@ -130,11 +130,17 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
 
     $scope.getContentMetadata = function(){
         var rootNode = org.ekstep.services.collectionService.getNodeById(ecEditor.getContext('contentId'));        
-        if(rootNode.data.metadata.status === 'Review')
-            $scope.hideReviewBtn = true;
+        var status = rootNode.data.metadata.status;
+        $scope.hideReviewBtn = (status === 'Draft' || status === 'FlagDraft' ) ? false : true;
         $scope.sendForeReviewBtnFn();
         $scope.$safeApply();  
-    }
+    };
+
+    $scope.updateTitle = function(event,data){
+        $scope.contentDetails.contentTitle = data;
+        document.title = data;
+        $scope.$safeApply(); 
+    };
     
     window.addEventListener('online', $scope.internetStatusFn, false);
     window.addEventListener('offline', $scope.internetStatusFn, false);
@@ -144,5 +150,6 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
     ecEditor.addEventListener("org.ekstep.collectioneditor:node:reorder", $scope.onNodeEvent, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:content:notfound", $scope.showNoContent, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:content:load", $scope.getContentMetadata, $scope);
+    ecEditor.addEventListener("content:title:update", $scope.updateTitle, $scope);
 }]);
 //# sourceURL=sunbirdheaderapp.js

@@ -81,6 +81,7 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
         $scope.loadContent(function(err, res) {
             if (res) {                
                 ecEditor.dispatchEvent('content:title:update',res.name);
+                ecEditor.dispatchEvent('sidebar:show');
                 ecEditor.dispatchEvent("atpreview:show");
             } else {
                 ecEditor.jQuery('.loading-message').remove();

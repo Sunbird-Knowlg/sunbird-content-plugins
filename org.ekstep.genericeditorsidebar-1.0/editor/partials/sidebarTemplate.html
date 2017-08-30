@@ -5,39 +5,6 @@
         </a>
     </div>
     <div id="sideBarBody">
-        <form class="ui fluid form">
-            <div class="ui horizontal divider"></div>
-            <div class="field">
-                <div class="ui toggle checkbox">
-                    <label>Show overlay</label>
-                    <input type="checkbox" tabindex="0" class="hidden">
-                </div>
-            </div>
-            <div class="ui horizontal divider"></div>
-            <div class="field">
-                <div class="ui toggle checkbox">
-                    <label>Show controls</label>
-                    <input type="checkbox" tabindex="0" class="hidden">
-                </div>
-            </div>
-            <div class="ui horizontal divider"></div>
-            <div class="field">
-                <div class="inline fields">
-                    <label style="color: #9b9b9b;">Orientation</label>
-                    <div class="field">
-                        <div class="ui radio checkbox">
-                            <input type="radio" name="fruit" tabindex="0" class="hidden">
-                            <label>Portrait</label>
-                        </div>
-                    </div>
-                    <div class="field">
-                        <div class="ui radio checkbox">
-                            <input type="radio" name="fruit" tabindex="0" class="hidden">
-                            <label>Landscape</label>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
+       <div ng-include="sidebarTemplate"></div>
     </div>
 </div>

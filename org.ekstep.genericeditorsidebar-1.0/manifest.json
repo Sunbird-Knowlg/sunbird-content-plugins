@@ -8,12 +8,13 @@
     "editor": {
         "main": "editor/plugin.js",        
         "dependencies": [
-        { "type": "js", "src": "editor/partials/sideBarApp.js"},
         { "type": "css", "src": "editor/styles/plugin.css"}
         ],        
         "sidebarMenu": [{
             "id": "sidebar",                                 
-            "templateURL": "editor/partials/sidebarTemplate.html"
+            "templateURL": "editor/partials/sidebarTemplate.html",
+            "controllerURL":"editor/partials/sideBarApp.js"
+
         }]
     }
 }
