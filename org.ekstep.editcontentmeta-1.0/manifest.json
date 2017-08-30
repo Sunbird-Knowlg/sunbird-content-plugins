@@ -11,6 +11,7 @@
         "dependencies": [
             { "type": "js", "src": "editor/init.js" },
             { "type": "js", "src": "editor/editcontentmeta.controller.js" },
+            { "type": "css", "src": "editor/editcontentmeta.css" },
             { "plugin": "org.ekstep.assetbrowser", "ver": "1.0", "type": "plugin" },
             { "plugin": "org.ekstep.conceptselector", "ver": "1.0", "type": "plugin" }
         ]

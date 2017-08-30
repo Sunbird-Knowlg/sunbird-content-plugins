@@ -1,51 +1,5 @@
 <script type="text/ng-template" ng-app="org.ekstep.editcontentmeta" ng-controller="editcontentmetaController as $ctrl" id="partials_org.ekstep.editcontentmeta.popup.html">
-    <style type="text/css">
-        #meta-modal {
-             top: 3%;
-         }
-        #meta-modal>.close {
-            top: 1rem;
-            right: 1rem;
-            color: #000;
-        }
-        .ngdialog.ngdialog-theme-default .ngdialog-content {
-            margin-top: -100%;
-        }
-        #content-meta{
-            overflow: auto;
-            margin: auto;
-            width: 90%;
-            min-height: 50vh;
-        }
-        .app-icon {
-            display: inline-block;
-            position: relative;
-            cursor: pointer;
-        }
-        .app-icon-overlay {
-            position: absolute;
-            display: table-cell;
-            text-align: center;
-            vertical-align: baseline;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(200, 200, 200, 0.5);
-        }
-        .app-icon-overlay-message {
-            position: absolute;
-            left: 0;
-            top: 0;
-            line-height: 2em;
-            color: #fff;
-            text-align: center;
-            width: 100%;
-            background-color: rgba(100, 100, 100, 0.5);
-        }
-    </style>
-
-    <div class="ui modal fullscreen active" id="meta-modal">
+    <div class="ui modal active" id="meta-modal">
         <i class="close icon" ng-click="$ctrl.close()"></i>
         <div class="ui header">
             <i class="icon edit"></i>
@@ -55,82 +9,93 @@
         </div>
         <div class="content-meta" id="content-meta">
             <form class="ui form segment" id="content-meta-form" novalidate ng-submit="$ctrl.saveMeta(contentMetaForm.$valid)" name="contentMetaForm">
-                <div class="fields">
-                    <div class="field">
+                <div class="fields fields-area">
+                    <div class="field {{($ctrl.review) ? 'required' : ''}}">
                         <label><i class="camera icon"></i> App icon</label>
-                        <div class="app-icon" ng-mouseenter="$ctrl.appIconHover = true" ng-mouseleave="$ctrl.appIconHover = false" ng-click="$ctrl.launchImageBrowser()">
+                        <div id="appIcon" class="app-icon content-icon" ng-mouseenter="$ctrl.appIconHover = true" ng-mouseleave="$ctrl.appIconHover = false" ng-click="$ctrl.launchImageBrowser()">
                             <div class="app-icon-overlay" ng-show="$ctrl.appIconHover"><p class="app-icon-overlay-message">Edit App Icon</p></div>
-                            <img ng-src="{{$ctrl.contentMeta.appIcon || $ctrl.defaultImage }}" />
+                            <img height="135px" width="135px" ng-src="{{$ctrl.contentMeta.appIcon || $ctrl.defaultImage }}" />
                         </div>
                     </div>
-                    <div class="twelve wide field">
+                    <div class="sixteen wide field">
                         <div class="field required" ng-class="{'error': ($ctrl.submitted && contentMetaForm.name.$error.required)}" >
                             <label>Name</label>
                             <div class="ui input">
-                                <input placeholder="Name" ng-model="$ctrl.contentMeta.name" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="60">
+                                <input id="name" placeholder="Name" ng-model="$ctrl.contentMeta.name" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="60">
                             </div>
                         </div>
-                        <div class="field required">
+                        <div class="field {{($ctrl.review) ? 'required' : ''}}"  ng-class="{'error': ($ctrl.submitted && contentMetaForm.description.$error.required)}">
                             <label>Description</label>
                             <div class="ui input">
-                                <textarea placeholder="Description" ng-model="$ctrl.contentMeta.description" ng-class="{error: submitted && contentMetaForm.description.$error.required}" name="description" rows="2" required></textarea>
+                                <textarea id="description" placeholder="Description" ng-model="$ctrl.contentMeta.description" ng-class="{error: submitted && contentMetaForm.description.$error.required}" name="description" rows="2" required></textarea>
                             </div>
                         </div>
-                        <div class="three fields">
-                            <div class="four wide field">
-                                <label for="board">Board</label>
+                        <div class="fields">
+                            <div class="four wide field {{($ctrl.review) ? 'required' : ''}}">
+                                <label>Board</label>
                                 <select id="board" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.board">
-                                    <option value="">Board</option>
+                                    <option value="" disabled selected>Board</option>
                                     <option ng-repeat="board in $ctrl.boardList" value="{{board}}">{{board}}</option>
                                 </select>
                             </div>
-                            <div class="field">
-                                <label for="subject">Subject</label>
+                            <div class="four wide field {{($ctrl.review) ? 'required' : ''}}">
+                                <label>Subject</label>
                                 <select id="subject" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.subject">
-                                    <option value="">Subject</option>
+                                    <option value="" disabled selected>Subject</option>
                                     <option value="{{subject}}" ng-repeat="subject in $ctrl.subjectList">{{subject}}</option>
                                 </select>
                             </div>
-                            <div class="field">
+                            <div class="eight wide field {{($ctrl.review) ? 'required' : ''}}">
                                 <label>Grade</label>
                                 <select id="gradeLevel" class="ui fluid dropdown" multiple="" ng-model="$ctrl.contentMeta.gradeLevel">
-                                    <option value="">Grade</option>
+                                    <option value="" disabled selected>Grade</option>
                                     <option value="{{gradeLevel}}" ng-repeat="gradeLevel in $ctrl.gradeList">{{gradeLevel}}</option>
                                 </select>
                             </div>
                         </div>
-                        <div class="three fields">
-                            <div class="eight wide field">
-                                <label>Attributions</label>
-                                <input type="text" id="attributions" value="{{$ctrl.contentMeta.attributions.join(', ');}}" placeholder="Attributions" />
-                            </div>
-                            <div class="field">
+                        <div class="fields">
+                            <div class="four wide field {{($ctrl.review) ? 'required' : ''}}">
                                 <label>Medium</label>
-                                <select id="language" class="ui fluid search dropdown" ng-model="$ctrl.language">
-                                    <option value="">Language</option>
+                                <select id="language" class="ui fluid dropdown" ng-model="$ctrl.language">
+                                    <option value="" disabled selected>Language</option>
                                     <option value="{{language}}" ng-repeat="language in $ctrl.languageList">{{language}}</option>
                                 </select>
                             </div>
-                            <div class="field">
-                                <label for="audience">Audience</label>
-                                <select id="audience" class="ui selection dropdown" ng-model="$ctrl.audience">
+                            <div class="four wide field {{($ctrl.review) ? 'required' : ''}}">
+                                <label>Audience</label>
+                                <select id="audience" class="ui fluid dropdown" ng-model="$ctrl.audience">
+                                    <option value="" disabled selected>Audience</option>
                                     <option value="{{audience}}" ng-repeat="audience in $ctrl.audienceList">{{audience}}</option>
                                 </select>
                             </div>
+                            <div class="eight wide field {{($ctrl.review) ? 'required' : ''}}" ng-class="{'error': ($ctrl.submitted && contentMetaForm.attributions.$error.required)}">
+                                <label>Attributions</label>
+                                <div class="ui input">
+                                    <input id="attributions" name="attributions" type="text" value="{{$ctrl.contentMeta.attributions.join(', ');}}" placeholder="Attributions" />
+                                </div>
+                            </div>
                         </div>
                         <div class="two fields">
-                            <div class="field">
+                            <div class="field {{($ctrl.review) ? 'required' : ''}}">
                                 <label>Concepts</label>
-                                <input name="concepts" id="metaConceptSelector" value="{{'(' + $ctrl.contentMeta.concepts.length + ') concepts selected'}}" type="text" ng-readonly="true">
+                                <div class="ui input">
+                                    <input name="concepts" id="metaConceptSelector" value="{{'(' + $ctrl.contentMeta.concepts.length + ') concepts selected'}}" type="text" ng-readonly="true">
+                                </div>
                             </div>
-                            <div class="field">
+                            <div class="field {{($ctrl.review) ? 'required' : ''}}" ng-class="{'error': ($ctrl.submitted && contentMetaForm.keywords.$error.required)}">
                                 <label>Keywords</label>
-                                <input id="keywords" type="text" value="{{$ctrl.contentMeta.keywords.join(', ');}}" placeholder="Enter comma separated keywords" />
+                                <div class="ui input">
+                                    <input name="keywords" id="keywords" type="text" value="{{$ctrl.contentMeta.keywords.join(', ');}}" placeholder="Enter comma separated keywords" />
+                                </div>
                             </div>
                         </div>
-                        <div class="field">
-                            <button class="ui primary button">{{ ($ctrl.review) ? 'Send For Review' : 'Update' }}</button>
-                        </div>
+                    </div>
+                </div>
+                <div class="field" style="position: relative;">
+                    <div class="ui buttons" style="position: absolute; right:0; bottom: 0;">
+                        <button id="closePopUp" class="ui orange button" type="button" ng-click="$ctrl.close()">Cancel</button>
+                        <div class="or"></div>
+                        <button class="ui blue button" type="button" ng-click="$ctrl.saveMeta(contentMetaForm.$valid)">{{ ($ctrl.review) ? 'Save and Send for Review' : 'Save' }}</button>
                     </div>
                 </div>
             </form>

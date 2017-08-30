@@ -4,7 +4,6 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
     var ctrl = this;
 
     data = data || {};
-    console.log(data); //DEBUG!
 
     // Init controller data
     ctrl.plugin = { id: "org.ekstep.editcontentmeta", ver: "1.0" };
@@ -70,21 +69,11 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
         }
     });
 
-    //Init semantic ui dropdowns
-    // $timeout(function () {
-        // $('#board').dropdown('set selected', ctrl.contentMeta.board);
-        // $('#subject').dropdown('set selected', ctrl.contentMeta.subject);
-        // $('#gradeLevel').dropdown('set selected', ctrl.contentMeta.gradeLevel);
-        // $('#audience').dropdown('set selected', ctrl.audience);
-        // $('#language').dropdown('set selected', ctrl.language);
-    // });
-
     ctrl.launchImageBrowser = function () {
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',
             search_filter: {}, // All composite keys except mediaType
             callback: function(data) {
-                console.log(data); //DEBUG!
                 ctrl.contentMeta.appIcon = data.assetMedia.src;
             }
         });
@@ -111,12 +100,103 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
         return metadata;
     };
 
+    ctrl.validateMeta = function (meta) {
+        var error = false;
+
+        // Validate Name
+        if(!(_.isString(meta.name) && meta.name.trim().length > 0)) {
+            jQuery('#name').parent().parent().addClass('error');
+            error = true;
+        }
+
+        // Following validations are mandatory for Review only
+        if(ctrl.review) {
+            // Validate App Icon
+            if (!(_.isString(meta.appIcon) && meta.appIcon.length > 0)) {
+                jQuery('#appIcon').addClass('required-error');
+                jQuery('#appIcon').parent().addClass('error');
+                error = true;
+            }
+
+            // Validate Description
+            if (!(_.isString(meta.description) && meta.description.trim().length > 0)) {
+                jQuery('#description').parent().parent().addClass('error');
+                error = true;
+            }
+
+            // Validate Board
+            if (!(_.isString(meta.board) && meta.board.trim().length > 0)) {
+                jQuery('#board').parent().parent().addClass('error');
+                error = true;
+            }
+
+            // Validate Subject
+            if (!(_.isString(meta.subject) && meta.subject.trim().length > 0)) {
+                jQuery('#subject').parent().parent().addClass('error');
+                error = true;
+            }
+
+            // Validate Grade Level
+            meta.gradeLevel = ctrl.removeEmptyItems(meta.gradeLevel);
+            if (!(_.isArray(meta.gradeLevel) && meta.gradeLevel.length > 0)) {
+                jQuery('#gradeLevel').parent().parent().addClass('error');
+                error = true;
+            }
+
+            // Validate Medium/Language
+            meta.language = ctrl.removeEmptyItems(meta.language);
+            if (!(_.isArray(meta.language) && meta.language.length > 0)) {
+                jQuery('#language').parent().parent().addClass('error');
+                error = true;
+            }
+
+            // Validate Audience
+            meta.audience = ctrl.removeEmptyItems(meta.audience);
+            if (!(_.isArray(meta.audience) && meta.audience.length > 0)) {
+                jQuery('#audience').parent().parent().addClass('error');
+                error = true;
+            }
+
+            // Validate Attributions
+            meta.attributions = ctrl.removeEmptyItems(meta.attributions);
+            if (!(_.isArray(meta.attributions) && meta.attributions.length > 0)) {
+                jQuery('#attributions').parent().parent().addClass('error');
+                error = true;
+            }
+
+            // Validate Keywords
+            meta.keywords = ctrl.removeEmptyItems(meta.keywords);
+            if (!(_.isArray(meta.keywords) && meta.keywords.length > 0)) {
+                jQuery('#keywords').parent().parent().addClass('error');
+                error = true;
+            }
+
+            // Validate Concepts
+            if (!(_.isArray(meta.concepts) && meta.concepts.length > 0)) {
+                jQuery('#metaConceptSelector').parent().parent().addClass('error');
+                error = true;
+            }
+        }
+
+        return !error;
+    };
+
+    ctrl.removeEmptyItems = function (array) {
+        var newArray = _.filter(array, function (item) {
+            return (_.isString(item) && (item.length > 0));
+        });
+        return newArray;
+    };
+
     ctrl.saveMeta = function (isValid) {
         ctrl.submitted = true;
-        if(isValid) {
-            ctrl.contentMeta.keywords = jQuery('#keywords').val().replace(/\s*,\s*/g, ',').split(',');
-            ctrl.contentMeta.attributions = jQuery('#attributions').val().replace(/\s*,\s*/g, ',').split(',');
-            ctrl.contentMeta.language = [ctrl.language];
+        ctrl.contentMeta.keywords = jQuery('#keywords').val().replace(/\s*,\s*/g, ',').split(',');
+        ctrl.contentMeta.attributions = jQuery('#attributions').val().replace(/\s*,\s*/g, ',').split(',');
+        ctrl.contentMeta.language = [ctrl.language];
+        ctrl.contentMeta.gradeLevel = $('#gradeLevel').val();
+        var validated = ctrl.validateMeta(ctrl.contentMeta);
+        // ctrl.contentMeta.board
+        if(isValid && validated) {
             ctrl.contentService.getContent(ctrl.contentId, function (err, content) {
                 if (err) {
                     alert("Failed to get updated content. Please report an issue.");
@@ -134,7 +214,6 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
                                     if(ctrl.review) {
                                         ctrl.contentService.sendForReview({contentId: ctrl.contentId}, function (err, res) {
                                             if(err) {
-                                                console.log(err); //DEBUG!
                                                 ctrl.notify('reviewError');
                                             } else {
                                                 ctrl.notify('reviewSuccess');
@@ -148,8 +227,11 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
                         });
                     } catch (e) {
                         ctrl.close();
-                        ctrl.notify('Error');
+                        ctrl.notify('saveError');
                     }
+                } else {
+                    ctrl.close();
+                    ctrl.notify('saveError');
                 }
             });
         }
@@ -167,8 +249,17 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
         ctrl.popupService.open(config);
     };
 
+    setTimeout(function(){
+        ecEditor.jQuery('.ui.dropdown').dropdown();
+        $('#board').dropdown('set selected', ctrl.contentMeta.board);
+        $('#subject').dropdown('set selected', ctrl.contentMeta.subject);
+        $('#gradeLevel').dropdown('set selected', ctrl.contentMeta.gradeLevel);
+        $('#audience').dropdown('set selected', ctrl.audience);
+        $('#language').dropdown('set selected', ctrl.language);
+    }, 300);
+
     ctrl.close = function () {
         $scope.closeThisDialog();
     };
-    console.log(ctrl); //DEBUG!
+
 }]);
