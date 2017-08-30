@@ -61,7 +61,7 @@
         <div class="content-meta" id="content-meta">
             <!--<form class="ui form segment" id="contents-data-form" novalidate ng-submit="updateNode()" ng-show="editMode" name="textbookMetaForm">-->
             <form class="ui form segment" id="content-meta-form" novalidate name="contentMetaForm">
-                <div class="fields" style="position: relative;">
+                <div class="fields" style="position: relative; max-height: 65vh; overflow-y: scroll; margin-bottom: 7vh;">
                     <div class="field">
                         <label><i class="camera icon"></i> App icon</label>
                         <div onclick="alert('Asset Browser');" class="content-icon">
@@ -134,13 +134,13 @@
                                 <input type="text" value="{{$ctrl.contentMeta.keywords.join(', ');}}" placeholder="Enter comma separated keywords" />
                             </div>
                         </div>
-                        <div class="field">
-                            <div class="ui buttons" style="position: absolute; right: 0; bottom: -2.5vh;">
-                                <button id="closePopUp" class="ui orange button" type="button">Cancel</button>
-                                <div class="or"></div>
-                                <button class="ui blue button" type="button">{{ ($ctrl.review) ? 'Send For Review' : 'Update' }}</button>
-                            </div>
-                        </div>
+                    </div>
+                </div>
+                <div class="field" style="position: relative;">
+                    <div class="ui buttons" style="position: absolute; right:0; bottom: 0;">
+                        <button id="closePopUp" class="ui orange button" type="button">Cancel</button>
+                        <div class="or"></div>
+                        <button class="ui blue button" type="button">{{ ($ctrl.review) ? 'Send For Review' : 'Update' }}</button>
                     </div>
                 </div>
             </form>
