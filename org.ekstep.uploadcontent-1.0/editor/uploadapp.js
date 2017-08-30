@@ -18,7 +18,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
             validation: {
                 allowedExtensions: ['pdf', 'epub', 'mp4', 'h5p', 'zip'],
                 itemLimit: 1,
-                sizeLimit: 26214400 // 25 MB = 25 * 1024 * 1024 bytes
+                sizeLimit: 25000000 // 25 MB = 25 * 1024 * 1024 bytes
             },
             callbacks: {
                 onStatusChange: function(id, oldStatus, newStatus) {
@@ -99,15 +99,15 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                 } else {
                     var result = res.data.result;
                     ecEditor.setContext('contentId', result.node_id);                    
-                    $scope.uploadByURL(fileUpload);
+                    $scope.uploadByURL(fileUpload, mimeType);
                 }
             });
         } else {
-            $scope.uploadByURL(fileUpload);
+            $scope.uploadByURL(fileUpload, mimeType);
         }
     }
 
-    $scope.uploadByURL = function(fileUpload) {
+    $scope.uploadByURL = function(fileUpload, mimeType) {
         var cb = function(fileURL) {
             console.log('Uploading content by URL', fileURL);
             var data = new FormData();
@@ -130,13 +130,16 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
             })
         }
         if(fileUpload) {
-            $scope.uploadFile(cb);
+            $scope.uploadFile(mimeType, cb);
         } else {
             cb($scope.contentURL);
         }
     }
 
-    $scope.uploadFile = function(cb) {
+    $scope.uploadFile = function(mimeType, cb) {
+        if(mimeType === 'application/vnd.ekstep.h5p-archive' || mimeType === 'application/vnd.ekstep.html-archive') {
+            mimeType = 'application/octet-stream';
+        }
         // 1. Get presigned URL
         $scope.contentService.getPresignedURL(ecEditor.getContext('contentId'), $scope.uploader.getName(0), function(err, res) {
             if(err) {
@@ -144,8 +147,12 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
             } else {
                 // 2. Upload File to signed URL
                 var signedURL = res.data.result.pre_signed_url;
+                var config = { 
+                    processData: false,
+                    contentType: mimeType
+                }
                 console.log('signed url', signedURL);
-                $scope.contentService.uploadDataToSignedURL(signedURL, $scope.uploader.getFile(0), function(err, res) {
+                $scope.contentService.uploadDataToSignedURL(signedURL, $scope.uploader.getFile(0), config, function(err, res) {
                     if(err) {
                         // TODO: Show error message
                     } else {
