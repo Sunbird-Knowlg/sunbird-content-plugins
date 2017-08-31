@@ -1,3 +1,7 @@
+body {
+    min-width: 525px !important;
+}
+
 .spinner {
     width: 18px;
     height: 18px;
@@ -73,22 +77,29 @@
 .header-icon-container .custom-row-2 {
     display: inline-block;
     position: absolute;
-    bottom: 9px;
+    bottom: 0;
     right: 0px !important;
 }
 
-.header-wrapper .custom-row-2{
-    line-height: 3.6 !important;
+#headerWrapper .custom-row-2{
+    line-height: 2.8 !important;
 }
-.content-masterhead{
-    height: 70px !important;
+.content-masterhead {
+    padding: 0px !important;
+    width: 98vw !important;
+    height: 60px !important;
+    margin-left: -1rem!important;
+    height: 60px !important;
 }
-.custom-container,.custom-container > div{
+
+#headerWrapper,
+#headerWrapper>div {
     height: 100% !important;
 }
 
 .content-title-container{
-    line-height: 250%!important;
+    position: relative;
+    top: -5px;
 }
 
 .custom-container .custom-5-wide{
@@ -126,4 +137,80 @@
 }
 #closeButton:hover {
     color: #fd2313;
+}
+
+#contentTitle {
+    position: relative;
+    top: -1vh;
+    color: #4a4a4a;
+}
+
+#headerWrapper {
+    padding-left: 0;
+    padding-right: 0;
+    width: 100%!important;
+    padding-left: 0;
+    margin: 0;
+    min-width: 97.8vw;
+    border-bottom: 0.2px solid rgba(128, 128, 128, 0.43);
+}
+
+#headerWrapper #headerLogo .ui.tiny.image {
+    height: 32.94px;
+    width: 33.9px;
+}
+
+#headerLogo{
+    background: #2e9fd9;
+}
+
+
+.no-margin-no-padding,
+.custom-1-wide {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.no-margin,
+.custom-6-wide,
+.custom-5-wide {
+    margin: 0 !important;
+}
+
+.no-padding,
+.custom-5-wide .user-details-wrapper {
+    padding: 0 !important;
+}
+
+.xy-mid-align,
+.custom-icon,
+.custom-1-wide .ui.tiny.image {
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    margin: auto !important;
+}
+
+
+#headerWrapper .one.wide.column,
+#headerWrapper .six.wide.column,
+#headerWrapper .five.wide.column {
+    height: 100%!important;
+}
+
+#headerWrapper .one.wide.column {
+    width: 70px !important;
+}
+
+
+.custom-6-wide .custom-row-1 .content-title {
+    font-size: 16px;
+    font-weight: bold;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    height: 19px;
+    line-height: 19px;
 }

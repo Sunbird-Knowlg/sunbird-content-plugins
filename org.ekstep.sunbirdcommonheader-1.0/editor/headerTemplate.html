@@ -1,8 +1,8 @@
-<div ng-app="org.ekstep.sunbirdcommonheader:app" ng-controller="headerController" class="ui masthead vertical segment content-masterhead" class="header-wrapper">
+<div ng-app="org.ekstep.sunbirdcommonheader:app" ng-controller="headerController" class="ui masthead vertical segment content-masterhead">
     <!-- new header code start -->
-    <div class="ui grid fluid container custom-container">
+    <div class="ui grid fluid container custom-container header-wrapper" id="headerWrapper">
         <!-- header part 1 -->
-        <div class="one wide column custom-1-wide">
+        <div class="one wide column custom-1-wide" id="headerLogo">
             <img class="ui tiny centered image" ng-show="contentDetails.contentImage != ''" ng-src="{{contentDetails.contentImage}}"/>
         </div>
         <!-- header part 1 -->
