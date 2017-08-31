@@ -59,28 +59,33 @@ angular.module('org.ekstep.contenteditorfunctions:cefuntions', []).controller('c
         org.ekstep.pluginframework.eventManager.dispatchEvent('content:before:save');
         // TODO: Show saving dialog
         var contentBody = org.ekstep.contenteditor.stageManager.toECML();
+        contentMeta.editorState = JSON.stringify($scope.editorState);
+        $scope._patchContent(contentMeta, contentBody, options);   
+    }
+
+    $scope._patchContent = function(contentMeta, contentBody, options) {
         $scope.patchContent(contentMeta, contentBody, function(err, res) {
-            if (err) {
-                if (res && !ecEditor._.isUndefined(res.responseJSON)) {
-                    // This could be converted to switch..case to handle different error codes
-                    if (res.responseJSON.params.err == "ERR_STALE_VERSION_KEY")
-                        $scope.showConflictDialog(options);
-                } else {
-                    if(options && options.failPopup) {
-                        if (!options.savingPopup) $scope.saveNotification();
-                        $scope.changePopupValues('error');
+                if (err) {
+                    if (res && !ecEditor._.isUndefined(res.responseJSON)) {
+                        // This could be converted to switch..case to handle different error codes
+                        if (res.responseJSON.params.err == "ERR_STALE_VERSION_KEY")
+                            $scope.showConflictDialog(options);
+                    } else {
+                        if(options && options.failPopup) {
+                            if (!options.savingPopup) $scope.saveNotification();
+                            $scope.changePopupValues('error');
+                        }
+                        
                     }
-                    
+                } else if (res && res.data.responseCode == "OK") {
+                    if(options && options.successPopup) {
+                        if (!options.savingPopup) $scope.saveNotification();
+                        $scope.changePopupValues('success');
+                    }
+                    ecEditor.dispatchEvent("org.ekstep.contenteditor:after-save", {});
                 }
-            } else if (res && res.data.responseCode == "OK") {
-                if(options && options.successPopup) {
-                    if (!options.savingPopup) $scope.saveNotification();
-                    $scope.changePopupValues('success');
-                }
-                ecEditor.dispatchEvent("org.ekstep.contenteditor:after-save", {});
-            }
-            if (typeof options.callback === "function") options.callback(err, res);
-        }, options);
+                if (typeof options.callback === "function") options.callback(err, res);
+            }, options);
     }
 
     $scope.saveBrowserContent = function(event, options) {
@@ -92,20 +97,22 @@ angular.module('org.ekstep.contenteditorfunctions:cefuntions', []).controller('c
     }
 
     $scope.patchContent = function(metadata, body, cb, options) {
-        if (org.ekstep.contenteditor.migration.isMigratedContent()) {
+        if (org.ekstep.contenteditor.migration && org.ekstep.contenteditor.migration.isMigratedContent()) {
             if (!metadata) metadata = {};
-            metadata.oldContentBody = $scope.oldContentBody;
-            metadata.editorState = JSON.stringify($scope.editorState);
+            metadata.oldContentBody = $scope.oldContentBody;            
             var migrationPopupCb = function(err, res) {
                 if (res) $scope.contentService.saveContent(org.ekstep.contenteditor.api.getContext('contentId'), metadata, body, cb);
                 if (err) options && options.callback('save action interrupted by user');
             }
             $scope.showMigratedContentSaveDialog(migrationPopupCb);
-        } else {
-            metadata.editorState = JSON.stringify($scope.editorState);
+        } else {            
             $scope.contentService.saveContent(org.ekstep.contenteditor.api.getContext('contentId'), metadata, body, cb);
         }
     }
+
+    $scope.saveMetadata = function(event, options) {
+        $scope._patchContent(options.contentMeta, undefined, options);
+    };
 
     $scope.showMigratedContentSaveDialog = function(callback) {
         var instance = $scope;
@@ -399,6 +406,7 @@ angular.module('org.ekstep.contenteditorfunctions:cefuntions', []).controller('c
 
     ecEditor.addEventListener('org.ekstep.editorstate:state', $scope.setEditorState, $scope);    
     ecEditor.addEventListener('org.ekstep.contenteditor:save', $scope.resolveSaveFn, $scope);
+    ecEditor.addEventListener('org.ekstep.contenteditor:save:meta', $scope.saveMetadata, $scope);
     ecEditor.addEventListener('org.ekstep.contenteditor:preview', function(event, data) {
         $scope.previewContent(data.fromBeginning);
     }, $scope);
@@ -409,6 +417,4 @@ angular.module('org.ekstep.contenteditorfunctions:cefuntions', []).controller('c
     ecEditor.addEventListener("org.ekstep.contenteditor:acceptFlag", $scope.acceptContentFlag, $scope);
     ecEditor.addEventListener("org.ekstep.contenteditor:discardFlag", $scope.discardContentFlag, $scope);
     ecEditor.addEventListener("org.ekstep.contenteditor:retire", $scope.retireContent, $scope);
-
-
 }]);

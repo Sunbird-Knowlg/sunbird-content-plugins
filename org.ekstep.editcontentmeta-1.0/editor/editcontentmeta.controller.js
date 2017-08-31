@@ -175,7 +175,7 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
         ctrl.contentMeta.gradeLevel = $('#ecm-gradeLevel').val();
         var validated = ctrl.validateMeta(ctrl.contentMeta);
         if (isValid && validated) {
-            ecEditor.dispatchEvent('org.ekstep.contenteditor:save', {
+            ecEditor.dispatchEvent('org.ekstep.contenteditor:save:meta', {
                 savingPopup: false,
                 successPopup: !ctrl.review,
                 failPopup: true,
