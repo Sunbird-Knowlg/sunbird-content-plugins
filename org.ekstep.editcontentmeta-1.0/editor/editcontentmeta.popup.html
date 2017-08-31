@@ -93,7 +93,7 @@
                 </div>
                 <div class="field" style="margin-bottom: 4em; margin-top: -1em;">
                     <div class="ui buttons" style="float: right;">
-                        <button id="closePopUp" class="ui orange button" type="button" ng-click="$ctrl.close(); generateTelemetry({type: 'click', subtype: 'button', target: 'closePopUp'})">Cancel</button>
+                        <button id="closePopUp" class="ui orange button" type="button" ng-click="$ctrl.cancel(); generateTelemetry({type: 'click', subtype: 'button', target: 'closePopUp'})">Cancel</button>
                         <div class="or"></div>
                         <button class="ui blue button" type="button" ng-click="$ctrl.saveMeta(contentMetaForm.$valid); generateTelemetry({type: 'click', subtype: 'button', target: 'save'})">Save</button>
                     </div>
