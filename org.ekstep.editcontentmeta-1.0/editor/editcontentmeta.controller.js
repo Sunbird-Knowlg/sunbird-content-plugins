@@ -150,27 +150,6 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
                 error = true;
             }
 
-            // Validate Audience
-            meta.audience = ctrl.removeEmptyItems(meta.audience);
-            if (!(_.isArray(meta.audience) && meta.audience.length > 0)) {
-                jQuery('#ecm-audience').parent().parent().addClass('error');
-                error = true;
-            }
-
-            // Validate Attributions
-            meta.attributions = ctrl.removeEmptyItems(meta.attributions);
-            if (!(_.isArray(meta.attributions) && meta.attributions.length > 0)) {
-                jQuery('#ecm-attributions').parent().parent().addClass('error');
-                error = true;
-            }
-
-            // Validate Keywords
-            meta.keywords = ctrl.removeEmptyItems(meta.keywords);
-            if (!(_.isArray(meta.keywords) && meta.keywords.length > 0)) {
-                jQuery('#ecm-keywords').parent().parent().addClass('error');
-                error = true;
-            }
-
             // Validate Concepts
             if (!(_.isArray(meta.concepts) && meta.concepts.length > 0)) {
                 jQuery('#metaConceptSelector').parent().parent().addClass('error');
@@ -195,7 +174,6 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
         ctrl.contentMeta.language = [ctrl.language];
         ctrl.contentMeta.gradeLevel = $('#ecm-gradeLevel').val();
         var validated = ctrl.validateMeta(ctrl.contentMeta);
-        // ctrl.contentMeta.board
         if (isValid && validated) {
             ecEditor.dispatchEvent('org.ekstep.contenteditor:save', {
                 savingPopup: false,
@@ -245,7 +223,6 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
             closeByEscape: false,
             closeByDocument: false
         }
-        console.log('config', config);
         ctrl.popupService.open(config);
     };
 
