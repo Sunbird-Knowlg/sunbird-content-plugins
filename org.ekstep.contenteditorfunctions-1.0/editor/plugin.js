@@ -212,7 +212,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     instance.refreshContent();
                 };
                 $scope.firetelemetry = function(menu, menuType) {
-                    instance.telemetryService.interact({ "type": "click", "subtype": "popup", "target": menuType, "pluginid": 'org.ekstep.contenteditorfunctions', 'pluginver': '1.0', "objectid": menu.id, "stage": org.ekstep.contenteditor.stageManager.currentStage.id });
+                    instance.telemetryService.interact({ "type": "click", "subtype": "popup", "target": menuType, "pluginid": 'org.ekstep.contenteditorfunctions', 'pluginver': '1.0', "objectid": menu.id, "stage": ecEditor.getCurrentStage().id });
                 };
                 $scope.showAdvancedOption = false;
             }],

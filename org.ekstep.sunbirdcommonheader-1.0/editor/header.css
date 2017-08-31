@@ -15,6 +15,21 @@
     padding: 2px;
 }
 
+.icon-box {
+    height: 30px;
+    width: 31.67px;
+    border-radius: 4px;
+    background-color: transparent;
+    padding: 0;
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+
+.icon-box:hover {
+    background-color: #E0E1E2;
+}
+
 @-webkit-keyframes sk-scaleout {
     0% {
         -webkit-transform: scale(0)

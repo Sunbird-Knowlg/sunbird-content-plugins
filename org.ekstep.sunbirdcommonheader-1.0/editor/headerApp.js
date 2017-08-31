@@ -30,12 +30,14 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 break;
             default:
                 $scope.editorEnv = "NON-ECML"
+                $scope.showUploadForm();
+                $scope.disableSaveBtn = false;           
                 break;
         };
         $scope.contentDetails = {
             contentImage: ecEditor.getConfig('headerLogo') || meta.appIcon || ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/sunbird_logo.png"),
             contentTitle: meta.name
-        }
+        };            
         $scope.$safeApply();
     };
 
@@ -205,6 +207,61 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.$safeApply();
     }
 
+    $scope.showUploadForm = function() {
+        ecEditor.jQuery('.popup-item').popup();
+        $scope.contentDetails.contentTitle = (ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name) || 'Untitled-Content';
+        if (!ecEditor.getContext('contentId')) { // TODO: replace the check with lodash isEmpty
+            console.log('trigger upload form');
+            ecEditor.dispatchEvent('org.ekstep.uploadcontent:show');
+        }
+        $scope.$safeApply();
+    };
+
+    $scope.upload = function() {
+        ecEditor.dispatchEvent('org.ekstep.uploadcontent:show');        
+    };
+
+    $scope.download = function() {        
+        var fileName = (ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name);
+        if (fileName) {
+            ecEditor.getService('content').downloadContent(ecEditor.getContext('contentId'), fileName.toLowerCase(), function(err, resp) {
+                if (!err && resp.data.responseCode == "OK") {
+                    ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                        title: 'Content download started!',
+                        position: 'topCenter',
+                        icon: 'fa fa-download'
+                    });
+                    var link = document.createElement('a');
+                    link.href = resp.data.result.ECAR_URL;
+                    link.download = link.href;
+                    link.style.display = 'none';
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }else {
+                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                        message: 'Unable to download the content, please try again later',
+                        position: 'topCenter',
+                        icon: 'fa fa-warning'
+                    });
+                    ecEditor.getService('telemetry').error({
+                        "env": 'content',
+                        "stage": '',
+                        "action": 'download',
+                        "objectid": "",
+                        "objecttype": "",
+                        "err": err.status,
+                        "type": "API",
+                        "data": err,
+                        "severity": "fatal"
+                    })
+                }
+            });
+        } else {
+            console.error("File name not found");
+        }
+    };
+
     window.addEventListener('online', $scope.internetStatusFn, false);
     window.addEventListener('offline', $scope.internetStatusFn, false);
     // Collection editor events
@@ -227,5 +284,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     ecEditor.addEventListener('stage:reorder', $scope.setPendingChangingStatus, $scope);
     ecEditor.addEventListener('object:removed', $scope.setPendingChangingStatus, $scope);
     ecEditor.addEventListener('org.ekstep.contenteditor:save', $scope.onSave, $scope);
+
+    //Generic editor events
+    ecEditor.addEventListener("org.ekstep.genericeditor:reload", $scope.setPendingChangingStatus, $scope);
 }]);
 //# sourceURL=sunbirdheaderapp.js
