@@ -16,7 +16,6 @@
             { "type": "js", "src": "editor/libs/jquery.fancytree.filter.js" },            
             { "type": "css", "src": "editor/libs/skin-lion/ui.fancytree.min.css" },
             { "type": "css", "src": "editor/collectioneditor.css" },
-            { "type": "css", "src": "editor/header.css" },
             { "type": "css", "src": "editor/commonStyles.css" }
         ],
         "container": [{

@@ -19,29 +19,6 @@ body {
     background: #fff;
 }
 
-#headerWrapper {
-    width: 100%;
-    padding-left: 0;
-    padding-right: 0;
-    margin-left: -1em;
-}
-
-#headerWrapper .custom-container {
-    margin: 0;
-    min-width: 97.8vw;
-    border-bottom: 0.2px solid rgba(128, 128, 128, 0.43);
-}
-
-.header-wrapper #headerLogo .ui.tiny.image {
-    height: 32.94px;
-    width: 33.9px;
-}
-
-#headerLogo{
-    background: #2e9fd9;
-}
-
-
 #mainBody {
     height: calc(100vh - 60px);
     margin-bottom: 0;

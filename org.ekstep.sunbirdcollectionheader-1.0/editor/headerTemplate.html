@@ -1,14 +1,9 @@
 <div ng-app="org.ekstep.sunbirdcollectionheader:app" ng-controller="headerController" class="ui masthead vertical segment content-masterhead">
-    <!-- new header code start -->
-    <div class="ui grid fluid container custom-container">
-        <!-- header part 1 -->
-        <div class="one wide column custom-1-wide">
+    <div class="ui grid fluid container custom-container header-wrapper" id="headerWrapper">
+        <div class="one wide column custom-1-wide" id="headerLogo">
             <img class="ui tiny centered image" src="{{contentDetails.contentImage}}" />
         </div>
-        <!-- header part 1 -->
-        <!-- header part 2 -->
         <div class="four wide column custom-6-wide">
-            <!-- content title -->
             <div class="row custom-row-1 content-title-container">
                 <label class="content-title" ng-bind="contentDetails.contentTitle | limitTo:30">
                     <span ng-if="contentDetails.contentTitle.length > 30">...</span></label>
@@ -16,17 +11,12 @@
             <a class="btn at-btn at-btn-ok" ng-click="editContentMeta();">
                 <i class="edit icon link"></i>&nbsp;Edit Lesson Details
             </a>
-            <!-- content title -->
         </div>
         <div class="two wide column">
             <div ng-if="lastSaved" class="last-saved-label">
                 <label class="">Last saved {{lastSaved | timeAgo }}</label>
             </div>
         </div>
-        <!-- header part 2 -->
-        <!-- header part 3 -->
-        <!-- header part 3 upper deck -->
-        <!-- header part 3 lower deck -->
         <div class="five wide column custom-5-wide">
             <div class="row header-icon-container">
                 <div style="float:right;">
@@ -64,5 +54,4 @@
             </div>
         </div>
     </div>
-    <!-- header part 3 lower deck -->
 </div>
