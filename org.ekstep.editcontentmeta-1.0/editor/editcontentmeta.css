@@ -1,0 +1,88 @@
+#meta-modal {
+    top: 4% !important;
+}
+#meta-modal>.close {
+    top: 1rem;
+    right: 1rem;
+    color: #000;
+}
+.ngdialog.ngdialog-theme-default .ngdialog-content {
+    -webkit-animation: fadeIn 0.5s;
+    animation: fadeIn 0.5s;
+}
+.ngdialog.ngdialog-theme-default.ngdialog-closing .ngdialog-content {
+    -webkit-animation: fadeOut 0.5s;
+    animation: fadeOut 0.5s;
+}
+#content-meta{
+    overflow: auto;
+    margin: auto;
+    min-height: 50vh;
+}
+.app-icon {
+    display: inline-block;
+    position: relative;
+    cursor: pointer;
+}
+.app-icon-overlay {
+    position: absolute;
+    display: table-cell;
+    text-align: center;
+    vertical-align: baseline;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(200, 200, 200, 0.5);
+}
+.app-icon-overlay-message {
+    position: absolute;
+    left: 0;
+    top: 0;
+    line-height: 2em;
+    color: #fff;
+    text-align: center;
+    width: 100%;
+    background-color: rgba(100, 100, 100, 0.5);
+}
+#content-meta-form {
+    border: none;
+}
+#content-meta-form input,
+#content-meta-form textarea {
+    border: none;
+    border-bottom: 1px solid #d8d8d8;
+    padding-left: 0;
+    border-radius: 0;
+}
+#content-meta-form .content-icon {
+    border: 1px solid #d8d8d8;
+}
+#content-meta-form .fields,
+#content-meta-form .field {
+    margin-bottom: 1em;
+}
+
+#content-meta-form label {
+    color: rgba(27, 28, 29, 0.75);
+}
+
+#content-meta-form input::placeholder,
+#content-meta-form .ui.dropdown .default.text {
+    color: #4a4a4a;
+}
+.fields-area {
+    position: relative;
+    max-height: 70vh;
+    overflow-y: auto;
+    margin-bottom: 7vh;
+}
+#content-meta-form .ui.selection.active.dropdown .menu{
+    max-height: 24vh;
+}
+.required-error {
+    border: 1px solid #e0b4b4 !important;
+}
+#content-meta-form .error label {
+    color: #8c0615;
+}

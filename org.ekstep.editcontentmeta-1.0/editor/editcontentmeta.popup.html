@@ -1,0 +1,104 @@
+<script type="text/ng-template" ng-app="org.ekstep.editcontentmeta" ng-controller="editcontentmetaController as $ctrl" id="partials_org.ekstep.editcontentmeta.popup.html">
+    <div class="ui modal active" id="meta-modal">
+        <i class="close icon" ng-click="$ctrl.close()"></i>
+        <div class="ui header">
+            <i class="icon edit"></i>
+            <div class="content">
+                <b>{{($ctrl.review) ? 'Review' : 'Edit'}} Lesson Details</b>
+            </div>
+        </div>
+        <div class="content-meta" id="content-meta">
+            <form class="ui form segment" id="content-meta-form" novalidate name="contentMetaForm">
+                <div class="fields fields-area">
+                    <div class="field {{($ctrl.review) ? 'required' : ''}}">
+                        <label><i class="camera icon"></i> App icon</label>
+                        <div id="ecm-appIcon" class="app-icon content-icon" ng-mouseenter="$ctrl.appIconHover = true" ng-mouseleave="$ctrl.appIconHover = false" ng-click="$ctrl.launchImageBrowser(); generateTelemetry({type: 'click', subtype: 'div', target: 'appIcon'})">
+                            <div class="app-icon-overlay" ng-show="$ctrl.appIconHover"><p class="app-icon-overlay-message">Edit App Icon</p></div>
+                            <img height="135px" width="135px" ng-src="{{$ctrl.contentMeta.appIcon || $ctrl.defaultImage }}" />
+                        </div>
+                    </div>
+                    <div class="sixteen wide field">
+                        <div class="field required" ng-class="{'error': ($ctrl.submitted && contentMetaForm.name.$error.required)}" >
+                            <label>Name</label>
+                            <div class="ui input">
+                                <input id="ecm-name" placeholder="Name" ng-model="$ctrl.contentMeta.name" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="60">
+                            </div>
+                        </div>
+                        <div class="field {{($ctrl.review) ? 'required' : ''}}"  ng-class="{'error': ($ctrl.submitted && contentMetaForm.description.$error.required)}">
+                            <label>Description</label>
+                            <div class="ui input">
+                                <textarea id="ecm-description" placeholder="Description" ng-model="$ctrl.contentMeta.description" ng-class="{error: submitted && contentMetaForm.description.$error.required}" name="description" rows="2" required ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'description'})"></textarea>
+                            </div>
+                        </div>
+                        <div class="fields">
+                            <div class="four wide field {{($ctrl.review) ? 'required' : ''}}">
+                                <label>Board</label>
+                                <select id="ecm-board" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.board" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'board'})">
+                                    <option value="" disabled selected>Board</option>
+                                    <option ng-repeat="board in $ctrl.boardList" value="{{board}}">{{board}}</option>
+                                </select>
+                            </div>
+                            <div class="four wide field {{($ctrl.review) ? 'required' : ''}}">
+                                <label>Subject</label>
+                                <select id="ecm-subject" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.subject" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'subject'})">
+                                    <option value="" disabled selected>Subject</option>
+                                    <option value="{{subject}}" ng-repeat="subject in $ctrl.subjectList">{{subject}}</option>
+                                </select>
+                            </div>
+                            <div class="eight wide field {{($ctrl.review) ? 'required' : ''}}">
+                                <label>Grade</label>
+                                <select id="ecm-gradeLevel" class="ui fluid dropdown" multiple="" ng-model="$ctrl.contentMeta.gradeLevel" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'gradeLevel'})">
+                                    <option value="" disabled selected>Grade</option>
+                                    <option value="{{gradeLevel}}" ng-repeat="gradeLevel in $ctrl.gradeList">{{gradeLevel}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="fields">
+                            <div class="four wide field {{($ctrl.review) ? 'required' : ''}}">
+                                <label>Medium</label>
+                                <select id="ecm-language" class="ui fluid dropdown" ng-model="$ctrl.language" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'language'})">
+                                    <option value="" disabled selected>Language</option>
+                                    <option value="{{language}}" ng-repeat="language in $ctrl.languageList">{{language}}</option>
+                                </select>
+                            </div>
+                            <div class="four wide field {{($ctrl.review) ? 'required' : ''}}">
+                                <label>Audience</label>
+                                <select id="ecm-audience" class="ui fluid dropdown" ng-model="$ctrl.audience" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'audience'})">
+                                    <option value="" disabled selected>Audience</option>
+                                    <option value="{{audience}}" ng-repeat="audience in $ctrl.audienceList">{{audience}}</option>
+                                </select>
+                            </div>
+                            <div class="eight wide field {{($ctrl.review) ? 'required' : ''}}" ng-class="{'error': ($ctrl.submitted && contentMetaForm.attributions.$error.required)}">
+                                <label>Attributions</label>
+                                <div class="ui input">
+                                    <input id="ecm-attributions" name="attributions" type="text" value="{{$ctrl.contentMeta.attributions.join(', ');}}" placeholder="Attributions" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="two fields">
+                            <div class="field {{($ctrl.review) ? 'required' : ''}}">
+                                <label>Concepts</label>
+                                <div class="ui input">
+                                    <input name="concepts" id="metaConceptSelector" value="{{'(' + $ctrl.contentMeta.concepts.length + ') concepts selected'}}" type="text" ng-readonly="true" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
+                                </div>
+                            </div>
+                            <div class="field {{($ctrl.review) ? 'required' : ''}}" ng-class="{'error': ($ctrl.submitted && contentMetaForm.keywords.$error.required)}">
+                                <label>Keywords</label>
+                                <div class="ui input">
+                                    <input name="keywords" id="ecm-keywords" type="text" value="{{$ctrl.contentMeta.keywords.join(', ');}}" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="field" style="position: relative;">
+                    <div class="ui buttons" style="position: absolute; right:0; bottom: 0;">
+                        <button id="closePopUp" class="ui orange button" type="button" ng-click="$ctrl.close(); generateTelemetry({type: 'click', subtype: 'button', target: 'closePopUp'})">Cancel</button>
+                        <div class="or"></div>
+                        <button class="ui blue button" type="button" ng-click="$ctrl.saveMeta(contentMetaForm.$valid); generateTelemetry({type: 'click', subtype: 'button', target: 'save'})">{{ ($ctrl.review) ? 'Save and Send for Review' : 'Save' }}</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</script>

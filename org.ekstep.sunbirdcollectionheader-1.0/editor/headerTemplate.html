@@ -13,6 +13,9 @@
                 <label class="content-title" ng-bind="contentDetails.contentTitle | limitTo:30">
                     <span ng-if="contentDetails.contentTitle.length > 30">...</span></label>
             </div>
+            <a class="btn at-btn at-btn-ok" ng-click="editContentMeta();">
+                <i class="edit icon link"></i>&nbsp;Edit Lesson Details
+            </a>
             <!-- content title -->
         </div>
         <div class="two wide column">

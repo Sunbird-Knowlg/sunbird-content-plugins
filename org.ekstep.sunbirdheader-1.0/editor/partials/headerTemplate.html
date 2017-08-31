@@ -79,14 +79,16 @@
         <div class="six wide column custom-6-wide">
             <!-- content title -->
             <div class="row custom-row-1">
-
-            </div>
-            <!-- content title -->
-            <!-- edit lesson details -->
-            <div class="row custom-row-2">
                 <label class="content-title" ng-bind="contentDetails.contentTitle | limitTo:30">
                     <span ng-if="contentDetails.contentTitle.length > 30">...</span>
                 </label>
+            </div>
+            <!-- content title -->
+            <!-- edit lesson details -->
+            <div class="row custom-row-2">                
+                <a class="btn at-btn at-btn-ok" ng-click="editContentMeta(); fireToolbarTelemetry({id: 'editMeta'}, 'editMetaButton')">
+                    <i class="edit icon link"></i>&nbsp;Edit Lesson Details
+                </a>
                 <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}"><span class="spinner"></span>{{internetStatusObj.text}}</label>
 
                 <div class="last-saved-label">
