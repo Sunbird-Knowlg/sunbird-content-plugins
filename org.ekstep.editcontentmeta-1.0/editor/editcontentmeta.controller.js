@@ -7,7 +7,7 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
 
     // Init controller data
     ctrl.plugin = {id: "org.ekstep.editcontentmeta", ver: "1.0"};
-    ctrl.review = _.isUndefined(data.review) ? false : data.review;
+    ctrl.callback = _.isFunction(data.callback) ? data.callback : null;
     ctrl.submitted = false;
     ctrl.defaultImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAV4AAAFeBAMAAAA/BWopAAAAG1BMVEXMzMwAAABmZmZMTEx/f3+ZmZmysrIZGRkzMzNdPZZ6AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD00lEQVR4nO3cS1LbQBSFYQoMYdp5D8UOoh2YHUQ7gBHjTDJWdh4Cbl/ZrUd3u0rnKvV/KzhFUf65soqrKwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA40agHlLn5pF5Qpg0/1BNKXIfwUb2hxGMIYa8ekW/3Ojd8Ua/I1/3bG36qZ+S6e5sbfqt35Hp53/vtST0kz92vsKkf8P1hbviuXpLnT9wbevWUHDfHuWETUX6wvaFRj1m2G8wNn9Vrlj0O9/qP8u3JXP9Rfj7dG57Ug+YdWxE5b8bL2VzvUf5zvtd3M+6Tub6j3KZ7PR9y1yNzPR9yj2N7/TZjNzrXb5S78b1eD7m7ibnhq3rZuKQVkc9mJCk2LqM80orIZTPSFJtePS51MzPX4yH3MLfX3yE30YrIXTPGU2z26oGnbhfmejvkuqW9vqI804rIVTMmU2xcRXmuFVGvHmlmUmwcRbnN2evnkBs921JuDrn5FJtGPfTdQoqNkyh3uXt9NGMxxcZFlDNaEXloRkaKjYMoZ7UictCMnBSbXj139mxLyQ+53FZEjXZuZoqNOMpLZ1tqr5xb0IpI2oyufK8yykWtiITNKEixEUa5rBVRr5pblGIji3Jbt1d1yBWm2IiaUZpi0yjmZp9tKckh19XvVTSjIsVGEOWqVkTrN6MqxWb1KH+4aO76zahLsenXnVvdimjlQ+7CX9/1f4G7C/eu/Ql80cev4gO4/NIc2q++t/iSH1L8hdZesFfxF/AFH2map1L1yegle6uTLDrgqpuhegJR+Sel7AFEZTN0T9C6qr26B2hVJ6fyW8Oak74R7q1ohvYBe1u8V/tWQfEjP/U3cKVR7sV7C5sh/wa5MMr6L5C7or36NyCKouzhBYiSQ26vHntVdMj5eEMqP8qNeuqb7CjLXyY4yG1Grx56kBlldYqPMpuhb0WUFWV5ik1WMzy0Iuoy9upTbDIOOScvex4sN2OvnnhiMco+Umzahb1uXgY/WGiGm1YczUe5V89LzDbDUSui2Sj7SbHpZvY+qceNmImypxSb6UNur542ajLKvlJspqLcqIdNmDjkvJxtqfFm9OpZk0aj7C/FR6PN8NiKaCTKDlNsRv5lhdN/VnHQJXs9nW2ppBleWxGdR3mvHrTg7JDzdral2pO93s621EkzHLfiaBjlXj0mw6AZrlsRDaLsOcXmeVM/3sEh5/NsS8Vm+E6x2W0jxeb9kGvUM7K9HXJ+z7ZUu4kUm/ttpPjotRnbaEX0spFWRHfb+vECAAAAAAAAAAAAAAAAAAAAAAAAAAAAAID/yl+hBHJNz9INiwAAAABJRU5ErkJggg==';
     ctrl.gradeList = [];
@@ -18,6 +18,7 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
     ctrl.contentId = org.ekstep.contenteditor.api.getContext('contentId');
     ctrl.contentMeta = ecEditor.getService('content').getContentMeta(ctrl.contentId);
     ctrl.originalContentMeta = _.clone(ctrl.contentMeta);
+    ctrl.conceptsSelected = (ctrl.contentMeta.concepts && ctrl.contentMeta.concepts.length > 0);
     ctrl.language = (_.isArray(ctrl.contentMeta.language) && ctrl.contentMeta.language.length > 0) ? ctrl.contentMeta.language[0] : '';
     ctrl.audience = (_.isArray(ctrl.contentMeta.audience) && ctrl.contentMeta.audience.length > 0) ? ctrl.contentMeta.audience[0] : '';
     ctrl.contentService = org.ekstep.contenteditor.api.getService(ServiceConstants.CONTENT_SERVICE);
@@ -52,6 +53,7 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
             _.forEach(ctrl.contentMeta.concepts, function (concept) {
                 ctrl.conceptIds.push(concept.identifier);
             });
+            ctrl.conceptsSelected = (ctrl.contentMeta.concepts.length > 0);
             $scope.$safeApply();
         }
     });
@@ -100,64 +102,30 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
         return metadata;
     };
 
-    ctrl.validateMeta = function (meta) {
-        var error = false;
+    ctrl.validString = function (string) {
+        return (_.isString(string) && string.trim().length > 0);
+    };
 
-        // Validate Name
-        if (!(_.isString(meta.name) && meta.name.trim().length > 0)) {
-            jQuery('#ecm-name').parent().parent().addClass('error');
-            error = true;
-        }
+    ctrl.validArray = function (array) {
+        array = ctrl.removeEmptyItems(array);
+        return (_.isArray(array) && array.length > 0);
+    };
 
-        // Following validations are mandatory for Review only
-        if (ctrl.review) {
-            // Validate App Icon
-            if (!(_.isString(meta.appIcon) && meta.appIcon.length > 0)) {
-                jQuery('#ecm-appIcon').addClass('required-error');
-                jQuery('#ecm-appIcon').parent().addClass('error');
-                error = true;
-            }
+    ctrl.validateGrade = function () {
+        ctrl.contentMeta.gradeLevel = $('#ecm-gradeLevel').val();
+        $scope.contentMetaForm.gradeLevel.$setValidity("required", ctrl.validArray(ctrl.contentMeta.gradeLevel));
+    };
 
-            // Validate Description
-            if (!(_.isString(meta.description) && meta.description.trim().length > 0)) {
-                jQuery('#ecm-description').parent().parent().addClass('error');
-                error = true;
-            }
+    ctrl.validateLanguage = function () {
+        $scope.contentMetaForm.language.$setValidity("required", ctrl.validString(ctrl.language));
+    };
 
-            // Validate Board
-            if (!(_.isString(meta.board) && meta.board.trim().length > 0)) {
-                jQuery('#ecm-board').parent().parent().addClass('error');
-                error = true;
-            }
+    ctrl.validateSubject = function () {
+        $scope.contentMetaForm.subject.$setValidity("required", ctrl.validString(ctrl.contentMeta.subject));
+    };
 
-            // Validate Subject
-            if (!(_.isString(meta.subject) && meta.subject.trim().length > 0)) {
-                jQuery('#ecm-subject').parent().parent().addClass('error');
-                error = true;
-            }
-
-            // Validate Grade Level
-            meta.gradeLevel = ctrl.removeEmptyItems(meta.gradeLevel);
-            if (!(_.isArray(meta.gradeLevel) && meta.gradeLevel.length > 0)) {
-                jQuery('#ecm-gradeLevel').parent().parent().addClass('error');
-                error = true;
-            }
-
-            // Validate Medium/Language
-            meta.language = ctrl.removeEmptyItems(meta.language);
-            if (!(_.isArray(meta.language) && meta.language.length > 0)) {
-                jQuery('#ecm-language').parent().parent().addClass('error');
-                error = true;
-            }
-
-            // Validate Concepts
-            if (!(_.isArray(meta.concepts) && meta.concepts.length > 0)) {
-                jQuery('#metaConceptSelector').parent().parent().addClass('error');
-                error = true;
-            }
-        }
-
-        return !error;
+    ctrl.validateBoard = function () {
+        $scope.contentMetaForm.board.$setValidity("required", ctrl.validString(ctrl.contentMeta.board));
     };
 
     ctrl.removeEmptyItems = function (array) {
@@ -172,68 +140,62 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
         ctrl.contentMeta.keywords = jQuery('#ecm-keywords').val().replace(/\s*,\s*/g, ',').split(',');
         ctrl.contentMeta.attributions = jQuery('#ecm-attributions').val().replace(/\s*,\s*/g, ',').split(',');
         ctrl.contentMeta.language = [ctrl.language];
+        ctrl.contentMeta.audience = [ctrl.audience];
         ctrl.contentMeta.gradeLevel = $('#ecm-gradeLevel').val();
-        var validated = ctrl.validateMeta(ctrl.contentMeta);
-        if (isValid && validated) {
+
+        if (isValid && ctrl.conceptsSelected && ctrl.contentMeta.appIcon) {
             ecEditor.dispatchEvent('org.ekstep.contenteditor:save:meta', {
                 savingPopup: false,
-                successPopup: !ctrl.review,
-                failPopup: true,
+                successPopup: false,
+                failPopup: false,
                 contentMeta: ctrl.getUpdatedMetadata(ctrl.originalContentMeta, ctrl.contentMeta),
                 callback: function (err, res) {
                     ctrl.isLoading = false;
                     ctrl.active = '';
-                    if (res && res.data && res.data.responseCode == "OK") {                        
-                        if (ctrl.review) {
-                            ctrl.sendForReview();                            
-                        } else {
-                            if (ctrl.contentMeta.name) ecEditor.dispatchEvent("content:title:update", ctrl.contentMeta.name);
-                            ctrl.close();   
+                    if (res && res.data && res.data.responseCode == "OK") {
+                        if (ctrl.contentMeta.name) {
+                            ecEditor.dispatchEvent("content:title:update", ctrl.contentMeta.name);
+                        }
+                        if (ctrl.callback) {
+                            ctrl.callback(undefined, res);
                         }
                     } else {
-                        ctrl.notify('reviewError');
+                        if (ctrl.callback) {
+                            ctrl.callback(err, undefined);
+                        }
                     }
+                    ctrl.close();
                 }
             });
         }
     };
 
-    ctrl.sendForReview = function () {
-        ctrl.contentService.getContent(ctrl.contentId, function (err, content) {
-            ctrl.close();
-            ctrl.contentService.sendForReview({contentId: ctrl.contentId}, function (err, res) {
-                if (err) {
-                    ctrl.notify('reviewError');
-                } else {
-                    ctrl.notify('reviewSuccess');
-                    if (ctrl.contentMeta.name) ecEditor.dispatchEvent("content:title:update", ctrl.contentMeta.name);
-                    // set the content meta data with updated data
-                    ctrl.contentService.getContent(ctrl.contentId, function() {});
-                    ctrl.close();  
-                }
-            });
-        });
-    };
+    ctrl.setInitialState = function () {
+        setTimeout(function () {
+            ecEditor.jQuery('.ui.dropdown').dropdown();
+            $('#ecm-board').dropdown('set selected', ctrl.contentMeta.board);
+            $('#ecm-subject').dropdown('set selected', ctrl.contentMeta.subject);
+            $('#ecm-gradeLevel').dropdown('set selected', ctrl.contentMeta.gradeLevel);
+            $('#ecm-audience').dropdown('set selected', ctrl.audience);
+            $('#ecm-language').dropdown('set selected', ctrl.language);
 
-    ctrl.notify = function (status) {
-        var template = 'editor/templates/' + status + '.html';
-        var config = {
-            template: ecEditor.resolvePluginResource(ctrl.plugin.id, ctrl.plugin.ver, template),
-            showClose: false,
-            closeByEscape: false,
-            closeByDocument: false
-        }
-        ctrl.popupService.open(config);
-    };
+            if (!ctrl.validArray(ctrl.contentMeta.gradeLevel)) {
+                $scope.contentMetaForm.gradeLevel.$setValidity('required', false);
+            }
 
-    setTimeout(function () {
-        ecEditor.jQuery('.ui.dropdown').dropdown();
-        $('#ecm-board').dropdown('set selected', ctrl.contentMeta.board);
-        $('#ecm-subject').dropdown('set selected', ctrl.contentMeta.subject);
-        $('#ecm-gradeLevel').dropdown('set selected', ctrl.contentMeta.gradeLevel);
-        $('#ecm-audience').dropdown('set selected', ctrl.audience);
-        $('#ecm-language').dropdown('set selected', ctrl.language);
-    }, 300);
+            if (!ctrl.validString(ctrl.language)) {
+                $scope.contentMetaForm.language.$setValidity('required', false);
+            }
+
+            if (!ctrl.validString(ctrl.contentMeta.subject)) {
+                $scope.contentMetaForm.subject.$setValidity('required', false);
+            }
+
+            if (!ctrl.validString(ctrl.contentMeta.board)) {
+                $scope.contentMetaForm.board.$setValidity('required', false);
+            }
+        }, 500);
+    };
 
     ctrl.close = function () {
         $scope.closeThisDialog();
