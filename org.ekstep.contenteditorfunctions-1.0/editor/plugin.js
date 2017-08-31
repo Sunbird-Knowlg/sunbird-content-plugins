@@ -125,7 +125,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     	var instance = this;
         if (org.ekstep.contenteditor.migration && org.ekstep.contenteditor.migration.isMigratedContent()) {
             if (!metadata) metadata = {};
-            //metadata.oldContentBody = $scope.oldContentBody;
+            metadata.oldContentBody = org.ekstep.contenteditor.migration.getBackupContent();
             var migrationPopupCb = function(err, res) {
                 if (res) instance.contentService.saveContent(org.ekstep.contenteditor.api.getContext('contentId'), metadata, body, cb);
                 if (err) options && options.callback('save action interrupted by user');
