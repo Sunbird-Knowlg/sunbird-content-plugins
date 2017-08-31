@@ -36,7 +36,8 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                 onSubmit: function(id, name) {
                     $('#qq-upload-actions').hide();
                     $("#url-upload").hide();                    
-                    $("#orLabel").hide();                    
+                    $("#orLabel").hide();  
+                    $scope.upload();                  
                 }
             }
         });
