@@ -39,12 +39,26 @@ angular.module('org.ekstep.contenteditorfunctions:cefuntions', []).controller('c
             case "application/vnd.ekstep.content-collection":
                 $scope.saveCollectionContent(event, data);
                 break;
+            case "application/vnd.ekstep.html-archive":
+            case "application/vnd.ekstep.h5p-archive":
+            case "application/epub":
+            case "video/mp4":
+            case "application/pdf":
+            case "video/x-youtube":
+            case "video/webm":
+                $scope.saveGenericEditorContent(event, data);
+                break;
             default:
-                data.callback && data.callback("unable to resolve save call for the mimetype");                
+                data.callback && data.callback("unable to resolve save call for the mimetype");
                 break;
         }
-    };  
+    };
 
+    $scope.saveGenericEditorContent = function(event, data){
+        var options = ecEditor._.assign({ savingPopup: true, successPopup: true, failPopup: true, callback: function(){} }, options);
+        if (options.savingPopup) $scope.saveNotification('saving');
+        $scope._patchContent(data, data.body, options);
+    };
     $scope.saveContent = function(event, options) {
         console.log('Save invoked:', event, options)
         options = ecEditor._.assign({ savingPopup: true, successPopup: true, failPopup: true, callback: function(){} }, options);

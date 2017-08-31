@@ -9,7 +9,10 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
     $scope.name = 'Untitled-Content';
 
     $scope.saveContent = function() {
-        console.log('save content method invoked');
+        var metadata = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId'));
+        metadata.config = {overlay:true};
+        metadata.body = undefined;
+        ecEditor.dispatchEvent('org.ekstep.contenteditor:save',metadata);
     };
 
     $scope.editDetails = function() {
