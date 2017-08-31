@@ -1,9 +1,9 @@
-<div ng-app="org.ekstep.sunbirdcollectionheader:app" ng-controller="headerController" class="ui masthead vertical segment content-masterhead">
+<div ng-app="org.ekstep.sunbirdcommonheader:app" ng-controller="headerController" class="ui masthead vertical segment content-masterhead" class="header-wrapper">
     <!-- new header code start -->
     <div class="ui grid fluid container custom-container">
         <!-- header part 1 -->
         <div class="one wide column custom-1-wide">
-            <img class="ui tiny centered image" src="{{contentDetails.contentImage}}" />
+            <img class="ui tiny centered image" ng-show="contentDetails.contentImage != ''" ng-src="{{contentDetails.contentImage}}"/>
         </div>
         <!-- header part 1 -->
         <!-- header part 2 -->
@@ -30,6 +30,15 @@
         <div class="five wide column custom-5-wide">
             <div class="row header-icon-container">
                 <div style="float:right;">
+                    <div ng-if="editorEnv == 'ECML'" class="ui tiny buttons">
+                        <div class="ui button" ng-click="previewContent();">Preview</div>
+                        <div class="ui floating dropdown icon button" style="padding-top: 10px !important;">
+                            <i class="dropdown icon"></i>
+                            <div class="menu">
+                                <div class="item" ng-click="previewContent('start');"> Preview from start</div>
+                            </div>
+                        </div>
+                    </div>
                     <div ng-show="!publishMode && !isFalgReviewer" style="display: inline-block;">
                         <div  id="reviewButton" ng-class="disableReviewBtn ? 'tiny ui blue button button-overrides popup-item disabled' : 'tiny ui blue button button-overrides popup-item'"  data-content="Send for review" data-variation="tiny inverted" data-position="top center" ng-click="sendForReview(); telemetry({ subtype: 'save', target: 'sendforreview'});" ng-hide="hideReviewBtn">
                             <i class="send icon "></i>&nbsp;Send for review
