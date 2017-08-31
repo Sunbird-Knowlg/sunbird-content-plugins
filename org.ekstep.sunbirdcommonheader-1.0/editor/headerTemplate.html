@@ -3,7 +3,7 @@
     <div class="ui grid fluid container custom-container header-wrapper" id="headerWrapper">
         <!-- header part 1 -->
         <div class="one wide column custom-1-wide" id="headerLogo">
-            <img class="ui tiny centered image" ng-show="contentDetails.contentImage != ''" ng-src="{{contentDetails.contentImage}}"/>
+            <img class="ui tiny centered image" ng-show="contentDetails.contentImage != ''" ng-src="{{contentDetails.contentImage}}" />
         </div>
         <!-- header part 1 -->
         <!-- header part 2 -->
@@ -29,6 +29,11 @@
         <!-- header part 3 lower deck -->
         <div class="five wide column custom-5-wide">
             <div class="row header-icon-container">
+                <div class="upper-deck">
+                    <div id="closeButton" class="ui red icon button button-overrides popup-item" data-content="Close" data-variation="tiny inverted" data-position="bottom center" ng-click="closeEditor();telemetry({ subtype: 'close', target: 'closeButton'});" style="float:right;">
+                        <i class="close icon"></i>
+                    </div>
+                </div>
                 <div style="float:right;">
                     <div ng-show="editorEnv == 'NON-ECML'" class="icon-box popup-item" data-content="Upload Content" data-variation="tiny inverted" data-position="bottom center" ng-click="upload();">
                         <i class="upload icon custom-icon"></i>
@@ -71,9 +76,6 @@
                         <div id="acceptButton" class="ui primary icon button button-overrides popup-item" data-content="Accept Flag" data-variation="tiny inverted" data-position="bottom center" ng-click="acceptContentFlag(); telemetry({ subtype: 'accept', target: 'acceptContentFlag'});">
                             <i class="fa fa-check"></i>&nbsp;Accept
                         </div>
-                    </div>
-                    <div id="closeButton" class="ui red icon button button-overrides popup-item" data-content="Close" data-variation="tiny inverted" data-position="bottom center" ng-click="closeEditor();telemetry({ subtype: 'close', target: 'closeButton'});">
-                        <i class="window close icon"></i>
                     </div>
                 </div>
             </div>

@@ -115,15 +115,22 @@ body {
 }
 
 .custom-container .custom-5-wide{
-    position: absolute;
+    position: absolute!important;
     right: 0;
-    padding-right: 0!important;
+    padding: 0!important;
+    padding-right: 2em!important;
 }
 
 .custom-container .custom-5-wide .header-icon-container{
-    line-height: 3.5;
+    height: 100%;
     position: relative;
 }
+
+.custom-container .custom-5-wide .header-icon-container .upper-deck{
+    height: 20px;
+    padding-top: 5px;
+}
+
 
 #retireButton,
 #closeButton,
