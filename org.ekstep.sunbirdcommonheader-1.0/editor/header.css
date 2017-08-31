@@ -174,8 +174,8 @@ body {
 }
 
 #headerWrapper #headerLogo .ui.tiny.image {
-    height: 32.94px;
-    width: 33.9px;
+    height: 100%;
+    width: 100%;
 }
 
 .no-margin-no-padding,
@@ -214,7 +214,7 @@ body {
 }
 
 #headerWrapper .one.wide.column {
-    width: 70px !important;
+    width: 60px !important;
 }
 
 
