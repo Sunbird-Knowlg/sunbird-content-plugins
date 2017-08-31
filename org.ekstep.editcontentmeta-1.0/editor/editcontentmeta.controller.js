@@ -105,7 +105,7 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
 
         // Validate Name
         if (!(_.isString(meta.name) && meta.name.trim().length > 0)) {
-            jQuery('#name').parent().parent().addClass('error');
+            jQuery('#ecm-name').parent().parent().addClass('error');
             error = true;
         }
 
@@ -113,61 +113,61 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
         if (ctrl.review) {
             // Validate App Icon
             if (!(_.isString(meta.appIcon) && meta.appIcon.length > 0)) {
-                jQuery('#appIcon').addClass('required-error');
-                jQuery('#appIcon').parent().addClass('error');
+                jQuery('#ecm-appIcon').addClass('required-error');
+                jQuery('#ecm-appIcon').parent().addClass('error');
                 error = true;
             }
 
             // Validate Description
             if (!(_.isString(meta.description) && meta.description.trim().length > 0)) {
-                jQuery('#description').parent().parent().addClass('error');
+                jQuery('#ecm-description').parent().parent().addClass('error');
                 error = true;
             }
 
             // Validate Board
             if (!(_.isString(meta.board) && meta.board.trim().length > 0)) {
-                jQuery('#board').parent().parent().addClass('error');
+                jQuery('#ecm-board').parent().parent().addClass('error');
                 error = true;
             }
 
             // Validate Subject
             if (!(_.isString(meta.subject) && meta.subject.trim().length > 0)) {
-                jQuery('#subject').parent().parent().addClass('error');
+                jQuery('#ecm-subject').parent().parent().addClass('error');
                 error = true;
             }
 
             // Validate Grade Level
             meta.gradeLevel = ctrl.removeEmptyItems(meta.gradeLevel);
             if (!(_.isArray(meta.gradeLevel) && meta.gradeLevel.length > 0)) {
-                jQuery('#gradeLevel').parent().parent().addClass('error');
+                jQuery('#ecm-gradeLevel').parent().parent().addClass('error');
                 error = true;
             }
 
             // Validate Medium/Language
             meta.language = ctrl.removeEmptyItems(meta.language);
             if (!(_.isArray(meta.language) && meta.language.length > 0)) {
-                jQuery('#language').parent().parent().addClass('error');
+                jQuery('#ecm-language').parent().parent().addClass('error');
                 error = true;
             }
 
             // Validate Audience
             meta.audience = ctrl.removeEmptyItems(meta.audience);
             if (!(_.isArray(meta.audience) && meta.audience.length > 0)) {
-                jQuery('#audience').parent().parent().addClass('error');
+                jQuery('#ecm-audience').parent().parent().addClass('error');
                 error = true;
             }
 
             // Validate Attributions
             meta.attributions = ctrl.removeEmptyItems(meta.attributions);
             if (!(_.isArray(meta.attributions) && meta.attributions.length > 0)) {
-                jQuery('#attributions').parent().parent().addClass('error');
+                jQuery('#ecm-attributions').parent().parent().addClass('error');
                 error = true;
             }
 
             // Validate Keywords
             meta.keywords = ctrl.removeEmptyItems(meta.keywords);
             if (!(_.isArray(meta.keywords) && meta.keywords.length > 0)) {
-                jQuery('#keywords').parent().parent().addClass('error');
+                jQuery('#ecm-keywords').parent().parent().addClass('error');
                 error = true;
             }
 
@@ -190,10 +190,10 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
 
     ctrl.saveMeta = function (isValid) {
         ctrl.submitted = true;
-        ctrl.contentMeta.keywords = jQuery('#keywords').val().replace(/\s*,\s*/g, ',').split(',');
-        ctrl.contentMeta.attributions = jQuery('#attributions').val().replace(/\s*,\s*/g, ',').split(',');
+        ctrl.contentMeta.keywords = jQuery('#ecm-keywords').val().replace(/\s*,\s*/g, ',').split(',');
+        ctrl.contentMeta.attributions = jQuery('#ecm-attributions').val().replace(/\s*,\s*/g, ',').split(',');
         ctrl.contentMeta.language = [ctrl.language];
-        ctrl.contentMeta.gradeLevel = $('#gradeLevel').val();
+        ctrl.contentMeta.gradeLevel = $('#ecm-gradeLevel').val();
         var validated = ctrl.validateMeta(ctrl.contentMeta);
         // ctrl.contentMeta.board
         if (isValid && validated) {
@@ -251,11 +251,11 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
 
     setTimeout(function () {
         ecEditor.jQuery('.ui.dropdown').dropdown();
-        $('#board').dropdown('set selected', ctrl.contentMeta.board);
-        $('#subject').dropdown('set selected', ctrl.contentMeta.subject);
-        $('#gradeLevel').dropdown('set selected', ctrl.contentMeta.gradeLevel);
-        $('#audience').dropdown('set selected', ctrl.audience);
-        $('#language').dropdown('set selected', ctrl.language);
+        $('#ecm-board').dropdown('set selected', ctrl.contentMeta.board);
+        $('#ecm-subject').dropdown('set selected', ctrl.contentMeta.subject);
+        $('#ecm-gradeLevel').dropdown('set selected', ctrl.contentMeta.gradeLevel);
+        $('#ecm-audience').dropdown('set selected', ctrl.audience);
+        $('#ecm-language').dropdown('set selected', ctrl.language);
     }, 300);
 
     ctrl.close = function () {
