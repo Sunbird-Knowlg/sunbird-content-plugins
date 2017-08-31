@@ -14,7 +14,7 @@
                         <label><i class="camera icon"></i> App icon</label>
                         <div id="ecm-appIcon" class="app-icon content-icon" ng-mouseenter="$ctrl.appIconHover = true" ng-mouseleave="$ctrl.appIconHover = false" ng-click="$ctrl.launchImageBrowser(); generateTelemetry({type: 'click', subtype: 'div', target: 'appIcon'})">
                             <div class="app-icon-overlay" ng-show="$ctrl.appIconHover"><p class="app-icon-overlay-message">Edit App Icon</p></div>
-                            <img height="135px" width="135px" ng-src="{{$ctrl.contentMeta.appIcon || $ctrl.defaultImage }}" />
+                            <img ng-src="{{$ctrl.contentMeta.appIcon || $ctrl.defaultImage }}" />
                         </div>
                     </div>
                     <div class="sixteen wide field">
@@ -91,8 +91,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="field" style="position: relative;">
-                    <div class="ui buttons" style="position: absolute; right:0; bottom: 0;">
+                <div class="field" style="margin-bottom: 4em; margin-top: -1em;">
+                    <div class="ui buttons" style="float: right;">
                         <button id="closePopUp" class="ui orange button" type="button" ng-click="$ctrl.close(); generateTelemetry({type: 'click', subtype: 'button', target: 'closePopUp'})">Cancel</button>
                         <div class="or"></div>
                         <button class="ui blue button" type="button" ng-click="$ctrl.saveMeta(contentMetaForm.$valid); generateTelemetry({type: 'click', subtype: 'button', target: 'save'})">{{ ($ctrl.review) ? 'Save and Send for Review' : 'Save' }}</button>
