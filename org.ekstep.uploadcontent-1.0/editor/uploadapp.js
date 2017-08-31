@@ -30,11 +30,13 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                         $('#qq-upload-actions').show();
                         $("#url-upload").show();
                         $scope.uploader.reset(); 
+                        $("#orLabel").show();
                     }
                 },
                 onSubmit: function(id, name) {
                     $('#qq-upload-actions').hide();
                     $("#url-upload").hide();                    
+                    $("#orLabel").hide();                    
                 }
             }
         });
