@@ -1,4 +1,4 @@
-angular.module('contentmetaApp', []).controller('contentmetaController', ['$scope', function($scope) {
+angular.module('contentmetaApp', []).controller('contentmetaController', ['$scope', '$timeout', function($scope, $timeout) {
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
@@ -10,6 +10,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         }
     });
     $scope.showImageIcon = true;
+    $scope.showSubCollection = true;
 
     $scope.showAssestBrowser = function() {
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
@@ -54,7 +55,9 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     };
 
     $scope.initDropdown = function() {
-        $('#language').dropdown('set selected', $scope.content.language);
+        $timeout(function() {                        
+            if ($scope.content.language) $('#contentmeta-language').dropdown('set selected', $scope.content.language[0]);            
+        });
     };
 
     $scope.getUpdatedMetadata = function(originalMetadata, currentMetadata) {
@@ -101,21 +104,23 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.contentmeta", "1.0", "assets/default.png");
 
             var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
+            $scope.showSubCollection = !activeNode.folder;
             if ($scope.mode === "Edit" && $scope.editable === true) {
                 $scope.editMode = true;
                 $('.ui.dropdown').dropdown('refresh');
                 $scope.metadataCloneObj = _.clone($scope.content);
+                $('#contentmeta-language').dropdown('clear');
             }
             if (!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])) {
                 $scope.editMode = false;
                 $scope.content = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
                 $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
-                $('#language').dropdown('set selected', $scope.content.language);
-            } else if (_.has(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, ["name"])) {
+                $('#contentmeta-language').dropdown('set selected', $scope.content.language);
+            } else if (org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] && _.has(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, ["name"])) {
                 $scope.editMode = false;
                 $scope.content = _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
                 $scope.metadataCloneObj = _.clone(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
-                $('#language').dropdown('set selected', $scope.content.language);
+                $('#contentmeta-language').dropdown('set selected', $scope.content.language);
             } else {
                 $scope.newNode = true;
             }

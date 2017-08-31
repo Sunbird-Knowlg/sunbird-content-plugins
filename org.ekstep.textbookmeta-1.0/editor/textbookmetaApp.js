@@ -1,4 +1,4 @@
-angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controller('textbookmetaController', ['$scope', function($scope) {    
+angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controller('textbookmetaController', ['$scope', '$timeout', function($scope, $timeout) {    
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
@@ -38,12 +38,14 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
     }
 
     $scope.initDropdown = function() {
-        $('#board').dropdown('set selected', $scope.textbook.board);
-        $('#medium').dropdown('set selected', $scope.textbook.medium);
-        $('#subject').dropdown('set selected', $scope.textbook.subject);
-        $('#gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
-        $('#audience').dropdown('set selected', $scope.textbook.audience);
-        $('#language').dropdown('set selected', $scope.textbook.language);    
+        $timeout(function() {
+            $('#board').dropdown('set selected', $scope.textbook.board);
+            $('#medium').dropdown('set selected', $scope.textbook.medium);
+            $('#subject').dropdown('set selected', $scope.textbook.subject);
+            $('#gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
+            $('#audience').dropdown('set selected', $scope.textbook.audience);
+            $('#language').dropdown('set selected', $scope.textbook.language);    
+        });
     }
     
     $scope.updateNode = function(){
@@ -62,12 +64,16 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             if(_.isString($scope.textbook.language)){
                 $scope.textbook.language = [$scope.textbook.language];
             }
+            if(_.isString($scope.textbook.audience)){
+                $scope.textbook.audience = [$scope.textbook.audience];
+            }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
             $scope.textbook.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
             $scope.metadataCloneObj = _.clone($scope.textbook);
             $scope.editMode = false;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+            ecEditor.dispatchEvent("content:title:update", $scope.textbook.name);
             $scope.getPath();
             $scope.$safeApply();
         }else{

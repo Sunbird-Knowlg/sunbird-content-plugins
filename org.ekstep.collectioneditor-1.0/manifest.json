@@ -7,10 +7,7 @@
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
-        "dependencies": [
-            { "type": "css", "src": "editor/libs/spinkit.css" },
-            { "type": "css", "src": "editor/libs/please-wait.css" },
-            { "type": "js", "src": "editor/libs/please-wait.min.js" },
+        "dependencies": [            
             { "type": "js", "src": "editor/libs/jQuery-ui.js" },
             { "type": "js", "src": "editor/libs/jquery.fancytree.min.js" },
             { "type": "js", "src": "editor/libs/jquery.fancytree.dnd.js" },

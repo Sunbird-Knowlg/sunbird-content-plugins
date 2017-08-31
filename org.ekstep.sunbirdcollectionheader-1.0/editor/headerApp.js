@@ -17,13 +17,14 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
 
     $scope.saveContent = function() {
         $scope.disableSaveBtn = true;
-        ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:save", {
+        ecEditor.dispatchEvent("org.ekstep.contenteditor:save", {
             showNotification: true,
             callback: function(err, res) {
                 if (res && res.data && res.data.responseCode == "OK") {
                     $scope.lastSaved = Date.now();
                     $scope.pendingChanges = false;
                     $scope.disableReviewBtn = false;
+                    $scope.sendForeReviewBtnFn();
                 } else {
                     $scope.disableSaveBtn = false;
                     $scope.disableReviewBtn = true;
@@ -33,20 +34,30 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
         });
     };
 
+    $scope.editContentMeta = function() {
+        ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup");
+    }
+
     $scope.sendForReview = function(){
         $scope.disableReviewBtn = true;
-        ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:review", {
-            callback: function(err, res) {                
-                if(err){
-                    $scope.disableReviewBtn = false;
+        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        if (meta.status === "Draft") {
+            ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup", { review: true });
+            $scope.disableReviewBtn = false;
+        } else {
+            ecEditor.dispatchEvent("org.ekstep.contenteditor:review", {
+                callback: function(err, res) {                
+                    if(err){
+                        $scope.disableReviewBtn = false;
+                    }
+                    $scope.$safeApply();               
                 }
-                $scope.$safeApply();               
-            }
-        });
+            });
+        }
     };
 
     $scope.publishContent = function(){
-        ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:publish", {
+        ecEditor.dispatchEvent("org.ekstep.contenteditor:publish", {
             callback: function(err, res) {
                 if(!err)
                     window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
@@ -55,7 +66,7 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
     };
 
     $scope.rejectContent = function(){
-        ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:reject", {
+        ecEditor.dispatchEvent("org.ekstep.contenteditor:reject", {
             callback: function(err, res) {
                 if(!err)
                     window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
@@ -64,7 +75,7 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
     };
 
     $scope.acceptContentFlag = function(){
-        ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:acceptFlag", {
+        ecEditor.dispatchEvent("org.ekstep.contenteditor:acceptFlag", {
             callback: function(err, res) {
                 if(!err)
                     window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
@@ -73,7 +84,7 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
     };
 
     $scope.discardContentFlag = function(){
-        ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:discardFlag", {
+        ecEditor.dispatchEvent("org.ekstep.contenteditor:discardFlag", {
             callback: function(err, res) {
                 if(!err)
                     window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
@@ -82,7 +93,7 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
     };
 
     $scope.retireContent = function(){
-        ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:retire", {
+        ecEditor.dispatchEvent("org.ekstep.contenteditor:retire", {
             callback: function(err, res) {
                 if(!err)
                     window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
@@ -121,12 +132,25 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
         });
     };
 
+    $scope.sendForeReviewBtnFn = function() {
+        var nodeData = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
+        $scope.disableReviewBtn = (!nodeData.children) ? true : false;
+        $scope.$safeApply(); 
+    };
+
     $scope.getContentMetadata = function(){
         var rootNode = org.ekstep.services.collectionService.getNodeById(ecEditor.getContext('contentId'));        
-        if(rootNode.data.metadata.status === 'Review')
-            $scope.hideReviewBtn = true;
+        var status = rootNode.data.metadata.status;
+        $scope.hideReviewBtn = (status === 'Draft' || status === 'FlagDraft' ) ? false : true;
+        $scope.sendForeReviewBtnFn();
         $scope.$safeApply();  
-    }
+    };
+
+    $scope.updateTitle = function(event,data){
+        $scope.contentDetails.contentTitle = data;
+        document.title = data;
+        $scope.$safeApply(); 
+    };
     
     window.addEventListener('online', $scope.internetStatusFn, false);
     window.addEventListener('offline', $scope.internetStatusFn, false);
@@ -136,5 +160,6 @@ angular.module('org.ekstep.sunbirdcollectionheader:app', ["Scope.safeApply", "ya
     ecEditor.addEventListener("org.ekstep.collectioneditor:node:reorder", $scope.onNodeEvent, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:content:notfound", $scope.showNoContent, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:content:load", $scope.getContentMetadata, $scope);
+    ecEditor.addEventListener("content:title:update", $scope.updateTitle, $scope);
 }]);
 //# sourceURL=sunbirdheaderapp.js

@@ -11,7 +11,7 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
 
     $scope.saveContent = function() {
         $scope.disableSaveBtn = true;
-        ecEditor.dispatchEvent("org.ekstep.collectioneditorfunctions:save", {
+        ecEditor.dispatchEvent("org.ekstep.contenteditorfunctions:save", {
             showNotification: true,
             callback: function(err, res) {
                 if(res && res.data && res.data.responseCode == "OK") $scope.lastSaved = Date.now();
@@ -67,7 +67,13 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
     window.onbeforeunload = function(e) {
         if (!$scope.disableSaveBtn) return "You have unsaved changes";
         e.preventDefault();
-    }
+    };
+
+    $scope.updateTitle = function(event,data){
+        $scope.contentDetails.contentTitle = data;
+        document.title = data;
+        $scope.$safeApply(); 
+    };
 
     window.addEventListener('online', $scope.internetStatusFn, false);
     window.addEventListener('offline', $scope.internetStatusFn, false);
@@ -75,4 +81,6 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
     ecEditor.addEventListener("org.ekstep.collectioneditor:node:modified", $scope.onNodeEvent, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:node:removed", $scope.onNodeEvent, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:node:reorder", $scope.onNodeEvent, $scope);
+    ecEditor.addEventListener("content:title:update", $scope.updateTitle, $scope);
+
 }]);

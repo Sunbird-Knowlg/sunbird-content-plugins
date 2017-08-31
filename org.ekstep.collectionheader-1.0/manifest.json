@@ -12,7 +12,9 @@
     	}],
         "dependencies": [
             { "type": "css", "src": "editor/collectionheader.css"},
-            { "type": "js", "src": "lib/angular-timeago.min.js"}
+            { "type": "js", "src": "lib/angular-timeago.min.js"},
+            { "type": "plugin", "plugin": "org.ekstep.toaster", "ver": "1.0" },
+            { "type": "plugin", "plugin": "org.ekstep.contenteditorfunctions", "ver": "1.0" }
         ]
     }
 }
