@@ -100,10 +100,7 @@ body {
     line-height: 2.8 !important;
 }
 .content-masterhead {
-    padding: 0px !important;
-    width: 98vw !important;
-    height: 60px !important;
-    margin-left: -1rem!important;
+    padding: 0!important;
     height: 60px !important;
 }
 
@@ -118,12 +115,14 @@ body {
 }
 
 .custom-container .custom-5-wide{
-    right: -3vw;
+    position: absolute;
+    right: 0;
     padding-right: 0!important;
 }
 
 .custom-container .custom-5-wide .header-icon-container{
     line-height: 3.5;
+    position: relative;
 }
 
 #retireButton,
@@ -161,12 +160,9 @@ body {
 }
 
 #headerWrapper {
-    padding-left: 0;
-    padding-right: 0;
+    position: relative;
     width: 100%!important;
-    padding-left: 0;
     margin: 0;
-    min-width: 97.8vw;
     border-bottom: 0.2px solid rgba(128, 128, 128, 0.43);
 }
 
