@@ -18,17 +18,15 @@
                 <span class="qq-upload-spinner-selector qq-upload-spinner"></span>
                 <img class="qq-thumbnail-selector" qq-max-size="100" qq-server-scale>
                 <span class="qq-upload-file-selector qq-upload-file custom-qq-upload-file"></span>
-                <span class="qq-edit-filename-icon-selector qq-edit-filename-icon" aria-label="Edit filename"></span>
-                <input class="qq-edit-filename-selector qq-edit-filename" tabindex="0" type="text">
                 <span class="qq-upload-size-selector qq-upload-size"></span>
-                <button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel custom-qq-upload-cancel">Cancel</button>
+                <!--<button type="button" class="qq-btn qq-upload-cancel-selector qq-upload-cancel custom-qq-upload-cancel">Cancel</button>-->
                 <button type="button" class="qq-btn qq-upload-retry-selector qq-upload-retry">Retry</button>
                 <button type="button" class="qq-btn qq-upload-delete-selector qq-upload-delete">Delete</button>
                 <span role="status" class="qq-upload-status-text-selector qq-upload-status-text"></span>
             </li>
         </ul>
         <div id="qq-upload-actions">
-            <div style="position: absolute;bottom: 65px;left: 44.8%;text-align: center; color: #9b9b9b; user-select: none; cursor: default;">
+            <div style="position: absolute;bottom: 140px;left: 44.8%;text-align: center; color: #9b9b9b; user-select: none; cursor: default;">
                 <i class="upload huge icon" style="font-size: 3em"></i><br>
                 <strong>Drag &amp; Drop</strong><br>
                 <span>your files here, or</span>
@@ -76,29 +74,25 @@
     </div>
     <div class="content">
         <div class="field" id='url-upload'>
-            <label class="url-upload-label">URL</label>
+            <label>URL</label>
             <div class="ui fluid transparent input">
                 <input type="text" placeholder="https://" ng-model="contentURL">
             </div>
         </div>
-        <div class="field" id="orLabel" style="text-align:center; text-transform: uppercase; margin-top: 15px;">or</div>
         <div id="upload-content-div" style="margin-top: 15px"></div>
         <div id="upload-content-loader-area" ng-if='showLoaderIcon' style="width:69px;height:89px; top:38%;left:45%; position:absolute; padding:2px;"><img ng-src = "{{loaderIcon}}" width="64" height="64" /><br>Uploading..</div>
-        <div class="ui info message">
-            <div class="header">
-                Note
-            </div>
+        <div class="ui message">
             <ul class="list">
-                <li>File accepted only pdf, mp4, epub, h5p and html zip (Max size 25mb).</li>
-                <li>When both URL and File are provided, File will be considered and URL is discarded</li>
+                <li>File accepted - pdf, mp4, webm, epub, youtube, h5p and html zip</li>
+                <li>Max file size - 25 Mb</li>
             </ul>
         </div>
     </div>
     <div class="actions">
         <div class="ui buttons">
-            <button class="ui orange button" ng-click="closeThisDialog();">Cancel</button>
+            <button class="ui orange button" ng-click="closeThisDialog();" ng-disabled="showLoaderIcon">Cancel</button>
             <div class="or"></div>
-            <button class="ui blue button" ng-click="upload()">Upload</button>
+            <button class="ui blue button" ng-click="upload()" ng-disabled="showLoaderIcon">Upload</button>
         </div>
     </div>
 </div>

@@ -197,6 +197,11 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
         }, 500);
     };
 
+    ctrl.cancel = function () {
+        angular.copy(ctrl.originalContentMeta, ctrl.contentMeta);
+        ctrl.close();
+    };
+
     ctrl.close = function () {
         $scope.closeThisDialog();
     };

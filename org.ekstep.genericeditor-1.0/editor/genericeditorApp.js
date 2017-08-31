@@ -66,6 +66,7 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
             if (res) {
                 $scope.$safeApply();
                 callback && callback(err, res);
+                ecEditor.dispatchEvent("content:load:complete");
             } else {
                 callback && callback('unable to fetch the content!', res);
             }
