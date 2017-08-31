@@ -75,14 +75,14 @@
         </div>
     </div>
     <div class="content">
-        <div class="field">
+        <div class="field" id='url-upload'>
             <label>URL</label>
             <div class="ui fluid transparent input">
                 <input type="text" placeholder="https://" ng-model="contentURL" style="border-bottom: 1px solid #ddd !important;">
             </div>
         </div>
         <div id="upload-content-div" style="margin-top: 15px"></div>
-        <div id="upload-content-loader-area" ng-if='showLoaderIcon' style="width:69px;height:89px; top:43%;left:45%; position:absolute; padding:2px;"><img ng-src = "{{loaderIcon}}" width="64" height="64" /><br>Uploading..</div>
+        <div id="upload-content-loader-area" ng-if='showLoaderIcon' style="width:69px;height:89px; top:38%;left:45%; position:absolute; padding:2px;"><img ng-src = "{{loaderIcon}}" width="64" height="64" /><br>Uploading..</div>
         <div class="ui message">
             <div class="header">
                 Note

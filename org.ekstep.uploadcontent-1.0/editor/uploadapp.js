@@ -26,11 +26,15 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
             callbacks: {
                 onStatusChange: function(id, oldStatus, newStatus) {
                     if(newStatus === 'canceled') {
+                        //$scope.uploader.reset(id); 
+                        $scope.showLoader(false);
                         $('#qq-upload-actions').show();
+                        $("#url-upload").show();
                     }
                 },
                 onSubmit: function(id, name) {
                     $('#qq-upload-actions').hide();
+                    $("#url-upload").hide();                    
                 }
             }
         });
