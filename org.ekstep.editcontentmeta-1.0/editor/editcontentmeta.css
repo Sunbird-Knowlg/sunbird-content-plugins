@@ -33,7 +33,7 @@
     background-color: rgba(200, 200, 200, 0.5);
 }
 
-#appIcon img{
+.app-icon img{
     position: absolute;
     height: 100%;
     width: 100%;
