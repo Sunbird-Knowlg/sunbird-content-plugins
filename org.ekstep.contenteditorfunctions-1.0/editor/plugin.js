@@ -5,6 +5,9 @@ org.ekstep.contenteditor.basePlugin.extend({
     popUpValues: {},
 	contentService: org.ekstep.contenteditor.api.getService(ServiceConstants.CONTENT_SERVICE),
 	popupService: org.ekstep.contenteditor.api.getService(ServiceConstants.POPUP_SERVICE),
+	conflictdialogOptions: {
+		showPlatformPreview: false
+	},
     initialize: function() {
     	var instance = this;
         ecEditor.addEventListener('org.ekstep.editorstate:state', this.setEditorState, this);
@@ -48,6 +51,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         switch (meta.mimeType) {
             case "application/vnd.ekstep.ecml-archive":
                 this.saveContent(event, data);
+                this.conflictdialogOptions.showPlatformPreview = true;
                 break;
             case "application/vnd.ekstep.content-collection":
                 this.saveCollectionContent(event, data);
@@ -196,7 +200,10 @@ org.ekstep.contenteditor.basePlugin.extend({
         this.popupService.open({
             template: ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/partials/conflictDialog.html"),
             controller: ['$scope', function($scope) {
-                //Platform copy
+            	//Platform copy 
+            	$scope.showPlatformPreview = false;           	
+            	if (instance.conflictdialogOptions.showPlatformPreview) $scope.showPlatformPreview = true;
+                
                 $scope.previewPlatformContent = function() {
                     instance.previewPlatformContent();
                 };
