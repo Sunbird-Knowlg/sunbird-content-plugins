@@ -68,24 +68,31 @@
                                     <option value="{{audience}}" ng-repeat="audience in $ctrl.audienceList">{{audience}}</option>
                                 </select>
                             </div>
-                            <div class="eight wide field">
-                                <label>Attributions</label>
-                                <div class="ui input">
-                                    <input id="ecm-attributions" name="attributions" type="text" value="{{$ctrl.contentMeta.attributions.join(', ');}}" placeholder="Attributions" />
-                                </div>
+                            <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.resource.$error.required}" ng-click="$ctrl.validateResource()">
+                                <label>Resource Type</label>
+                                <select id="ecm-resource" name="resource" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.resourceType" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'resource'})">
+                                    <option value="" disabled selected>Resource Type</option>
+                                    <option value="{{resource}}" ng-repeat="resource in $ctrl.resourceList">{{resource}}</option>
+                                </select>
                             </div>
-                        </div>
-                        <div class="two fields">
-                            <div class="field required" ng-class="{error: $ctrl.submitted && !$ctrl.conceptsSelected}">
+                            <div class="four wide field required" ng-class="{error: $ctrl.submitted && !$ctrl.conceptsSelected}">
                                 <label>Concepts</label>
                                 <div class="ui input">
                                     <input name="concepts" id="metaConceptSelector" value="{{'(' + $ctrl.contentMeta.concepts.length + ') concepts selected'}}" type="text" ng-readonly="true" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
                                 </div>
                             </div>
+                        </div>
+                        <div class="two fields">
+                            <div class="eight wide field">
+                                <label>Attributions</label>
+                                <div class="ui input">
+                                    <textarea id="ecm-attributions" name="attributions" type="text" placeholder="Attributions" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'attributions'})">{{$ctrl.contentMeta.attributions.join(', ');}}</textarea>
+                                </div>
+                            </div>
                             <div class="field">
                                 <label>Keywords</label>
                                 <div class="ui input">
-                                    <input name="keywords" id="ecm-keywords" type="text" value="{{$ctrl.contentMeta.keywords.join(', ');}}" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})" />
+                                    <textarea name="keywords" id="ecm-keywords" rows="2" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})">{{$ctrl.contentMeta.keywords.join(', ');}}</textarea>
                                 </div>
                             </div>
                         </div>
