@@ -197,6 +197,10 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
                 $scope.contentMetaForm.subject.$setValidity('required', false);
             }
 
+            if (!ctrl.validString(ctrl.contentMeta.resourceType)) {
+                $scope.contentMetaForm.resource.$setValidity('required', false);
+            }
+
             if (!ctrl.validString(ctrl.contentMeta.board)) {
                 $scope.contentMetaForm.board.$setValidity('required', false);
             }

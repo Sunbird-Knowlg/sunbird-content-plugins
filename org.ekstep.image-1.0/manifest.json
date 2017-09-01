@@ -33,13 +33,21 @@
         "configManifest": [{
             "propertyName": "imagebrowser",
             "title": "Image Browser",
-            "description": "Choose a  from the browser",
-            "dataType": "browser",
-            "required": true,
-            "onclick":{
-                "id": "org.ekstep.assetbrowser:show",
-                "type": "image"
-            }
+            "dataType": "featureButtonToggle",
+            "description": "Choose from the browser",
+            "options": [{
+                "value": "Image Browser",
+                "title": "Image Browser",
+                "description": "Choose from the browser",
+                "dataType": "icon",
+                "iconClass": "icon icon-media",
+                "toolTip":"Choose from the browser",
+                "state": true,
+                "status": "HIDE",
+                "onclick": {
+                     "id": "org.ekstep.image:assetbrowser:open"
+                }
+                 }]
         }]
     }
 }
