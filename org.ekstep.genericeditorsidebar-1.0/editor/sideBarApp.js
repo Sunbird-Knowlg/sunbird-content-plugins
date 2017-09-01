@@ -34,7 +34,7 @@ angular.module('org.ekstep.genericeditorsidebar', []).controller('sidebarControl
         $scope.$safeApply();
         setTimeout(function(){
 	        ecEditor.jQuery('.ui.checkbox').checkbox();
-        },100)
+        },1000)
 
     };
 
