@@ -179,10 +179,6 @@ body {
     float: right;
 }
 
-.custom-5-wide .custom-row-2 .icon-group-2 .icon-save,
-.save-button-text {
-    color: #2e9fd9;
-}
 
 /* for labelled icons in header */
 
@@ -234,7 +230,7 @@ body {
 .preview-dropdown .ui.button.text-part{
     padding-top:9px; background: transparent; padding-left: 1em; padding-right: 1em; height:30px;
     width: 31.2px;
-    color: #2e9fd9!important;
+    color: #9b9b9b!important;
     border: 1px solid transparent!important;
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
@@ -268,5 +264,12 @@ body {
 #commonHeader .icon-box.popup-item.disabled .label-icon-box-text{
     color: #D7D7D7 !important;
 }
-
+.last-saved-label{
+    display: inline-block;
+    float: right;
+    position: relative;
+    bottom: -7px;
+    font-size: 13px;
+    color: #9b9b9b;
+}
 
