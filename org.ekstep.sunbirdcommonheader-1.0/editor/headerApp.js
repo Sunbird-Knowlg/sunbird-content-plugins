@@ -29,9 +29,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.editorEnv = "COLLECTION"
                 break;
             default:
-                $scope.editorEnv = "NON-ECML"
-                $scope.showUploadForm();
-                $scope.disableSaveBtn = false;           
+                $scope.editorEnv = "NON-ECML"                                          
                 break;
         };
         $scope.contentDetails = {
@@ -262,6 +260,14 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         }
     };
 
+    (function() {
+        $scope.setEditorDetails();
+        if ($scope.editorEnv == "NON-ECML" && !ecEditor.getContext('contentId')) {
+            $scope.disableSaveBtn = false; 
+            $scope.showUploadForm();
+        }
+    })()
+
     window.addEventListener('online', $scope.internetStatusFn, false);
     window.addEventListener('offline', $scope.internetStatusFn, false);
     // Collection editor events
@@ -286,6 +292,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     ecEditor.addEventListener('org.ekstep.contenteditor:save', $scope.onSave, $scope);
 
     //Generic editor events
-    ecEditor.addEventListener("org.ekstep.genericeditor:reload", $scope.setPendingChangingStatus, $scope);
+    ecEditor.addEventListener("org.ekstep.genericeditor:reload", $scope.setPendingChangingStatus, $scope);    
+
+    //others
+    ecEditor.addEventListener("org.ekstep:sunbirdcommonheader:close:editor", $scope.closeEditor, $scope);
 }]);
 //# sourceURL=sunbirdheaderapp.js

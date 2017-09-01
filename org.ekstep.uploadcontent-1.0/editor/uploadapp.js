@@ -7,7 +7,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
     $scope.newContent = false;
     $scope.showLoaderIcon = false;    
     $scope.loaderIcon = ecEditor.resolvePluginResource("org.ekstep.uploadcontent", "1.0", "editor/loader.gif");
-
+    $scope.uploadCancel = ecEditor.getContext('contentId') ? 'Cancel' : 'Close Editor';
 
     $scope.$on('ngDialog.opened', function() {
         $scope.uploader = new qq.FineUploader({
@@ -225,5 +225,9 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                 $('#qq-upload-actions').show();
             }
         }
+    }
+
+    $scope.uploadFormClose = function() {
+        ecEditor.getContext('contentId') ? $scope.closeThisDialog() : ecEditor.dispatchEvent("org.ekstep:sunbirdcommonheader:close:editor");
     }
 }]);

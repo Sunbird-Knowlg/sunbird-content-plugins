@@ -90,7 +90,7 @@
     </div>
     <div class="actions">
         <div class="ui buttons">
-            <button class="ui orange button" ng-click="closeThisDialog();" ng-disabled="showLoaderIcon">Cancel</button>
+            <button class="ui orange button" ng-click="uploadFormClose()" ng-disabled="showLoaderIcon" ng-bind="uploadCancel"></button>
             <div class="or"></div>
             <button class="ui blue button" ng-click="upload()" ng-disabled="showLoaderIcon">Upload</button>
         </div>
