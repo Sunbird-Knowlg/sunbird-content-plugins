@@ -34,14 +34,14 @@
             "propertyName": "imagebrowser",
             "title": "Image Browser",
             "dataType": "featureButtonToggle",
-            "description": "Choose a  from the browser",
+            "description": "Choose from the browser",
             "options": [{
                 "value": "Image Browser",
                 "title": "Image Browser",
-                "description": "Choose a  from the browser",
+                "description": "Choose from the browser",
                 "dataType": "icon",
-                "iconClass": "icon icon-readalong",
-                "toolTip":"Choose a  from the browser",
+                "iconClass": "icon icon-media",
+                "toolTip":"Choose from the browser",
                 "state": true,
                 "status": "HIDE",
                 "onclick": {

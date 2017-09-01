@@ -29,17 +29,17 @@
         }],
          "configManifest": [{
            "propertyName": "assessmentbrowser",
-            "title": "assessment Browser",
+            "title": "Assessment Browser",
             "description": "Choose a  from the browser",
             "dataType": "featureButtonToggle",
              "options": [{
-                "value": "assessment Browser",
-                "title": "assessment Browser",
-                "description": "Choose a  from the browser",
+                "value": "Assessment Browser",
+                "title": "Assessment Browser",
+                "description": "Choose from the browser",
                 "dataType": "icon",
-                "iconClass": "icon icon-readalong",
+                "iconClass": "icon icon-questions",
                 "state": true,
-                "toolTip":"Choose a  from the browser",
+                "toolTip":"Choose from the browser",
                 "status": "HIDE",
                 "onclick": {
                      "id": "org.ekstep.quiz:showPopup",
@@ -49,18 +49,18 @@
         },
         {
             "propertyName": "quizConfig",
-            "title": "question config",
+            "title": "Question Config",
             "description": "quizConfig",
             "dataType": "featureButtonToggle",
              "options": [{
-                "value": "question config",
-                "title": "question config",
+                "value": "Question Config",
+                "title": "Question Config",
                 "description": "quizConfig",
                 "dataType": "icon",
                 "iconClass":"settings icon",
                 "state": true,
                 "status": "HIDE",
-                "toolTip":"Question config",
+                "toolTip":"Question Config",
                 "onclick": {
                      "id": "org.ekstep.quiz:showQuizConfig",
                 "type": "quiz"
