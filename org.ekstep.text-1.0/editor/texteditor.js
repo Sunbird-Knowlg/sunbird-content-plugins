@@ -81,30 +81,12 @@ var textEditor = (function() {
             $editor = ecEditor.jQuery("#authoringTextEditor");
             $btnGrpParent.insertAfter($editor);
             $btnGrpParent.append($buttonGrp);
-        } else if (editorText.length <= 0) {
-            $editor.show().val(editorText);
-            ecEditor.jQuery("#textEditorContainer").css({
-                "top": ecEditor.jQuery("#canvas").offset().top,
-                "left": ecEditor.jQuery("#canvas").offset().left,
-                "position": "absolute"
-            });
-            ecEditor.jQuery("#authoringTextEditor").css({
-                "width": "30.5em",
-                "height": "auto"
-            });
-
         } else {
-            var CurrentEditorobj = ecEditor.getEditorObject();
             $editor.show().val(editorText);
-            var CurrentPointer = ecEditor.getCanvas().getActiveObject();
-            var left = CurrentPointer.absoluteCoords.bl.x;
-            var top = CurrentPointer.absoluteCoords.tl.y
-            ecEditor.jQuery("#textEditorContainer").css({ "top": top + 80, "left": left + 250 });
-            ecEditor.jQuery("#authoringTextEditor").css({ "width": CurrentEditorobj.cacheWidth, "max-width": "690px", "height": CurrentEditorobj.height+30, "max-height": "347px", "min-height": "100px" });
-
         }
          $("body").css("pointer-events","none");
         $("#textEditorContainer").css("pointer-events","auto");
+
         if (!$doneBtn.length) {
             $doneBtn = ecEditor.jQuery("<button>",{text: 'Done',id: 'authoringTextEditorBtn', class: 'ui primary button'})
                 .click(function() {
