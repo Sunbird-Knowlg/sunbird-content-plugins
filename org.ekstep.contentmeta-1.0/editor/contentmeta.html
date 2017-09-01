@@ -102,7 +102,7 @@
                         <textarea placeholder="brief description about the content" ng-model="content.description" ng-class=" {error: submitted && contentMetaForm.description.$error.required}" name="description" rows="2" ng-disabled="isDisabled" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})" required></textarea>
                     </div>
                 </div>
-                <div class="field">
+                <div class="field" ng-class="{'disabled': isDisabled}">
                         <label>Keywords</label>
                         <ng-token-field ng-model="content.keywords" id="contentmeta-keywords" placeholder="Enter comma separated keywords" ng-disabled="isDisabled" ng-click="isDisabled || generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
                 </div>
