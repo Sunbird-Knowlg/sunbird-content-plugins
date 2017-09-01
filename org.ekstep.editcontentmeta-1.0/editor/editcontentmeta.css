@@ -53,8 +53,11 @@
     box-shadow: none;
 }
 #content-meta-form input,
-#content-meta-form textarea {
+#content-meta-form input:focus,
+#content-meta-form textarea,
+#content-meta-form textarea:focus {
     border: none;
+    box-shadow: none;
     background: none;
     border-bottom: 1px solid #d8d8d8;
     padding-left: 0;

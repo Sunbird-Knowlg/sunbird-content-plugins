@@ -27,7 +27,7 @@
     <!-- content -->
     <div class="actions" style="height: 66px; ">
         <div class="ui left floated buttons">
-            <div class="ui secondary button" ng-click="previewPlatformContent();firetelemetry({id: 'previewplatformcopy'}, 'preview_platform_copy_button')"><i class="icon-preview icon"></i> Preview platform copy</div>
+            <div class="ui secondary button" ng-show="showPlatformPreview" ng-click="previewPlatformContent();firetelemetry({id: 'previewplatformcopy'}, 'preview_platform_copy_button')"><i class="icon-preview icon"></i> Preview platform copy</div>
         </div>
         <div class="ui right floated buttons">
             <div class="ui orange button" ng-click="saveBrowserContent();firetelemetry({id: 'forceupdate'}, 'force_update_button')"><i class="cloud upload icon"></i> Force update</div>

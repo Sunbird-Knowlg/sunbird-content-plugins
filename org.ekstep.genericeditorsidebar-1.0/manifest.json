@@ -13,7 +13,7 @@
         "sidebarMenu": [{
             "id": "sidebar",                                 
             "templateURL": "editor/partials/sidebarTemplate.html",
-            "controllerURL":"editor/partials/sideBarApp.js"
+            "controllerURL":"editor/sideBarApp.js"
 
         }]
     }

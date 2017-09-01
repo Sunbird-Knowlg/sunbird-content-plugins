@@ -10,14 +10,17 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         'text': 'No Internet Connection!'
     };
     $scope.disableSaveBtn = true;
-    $scope.disableReviewBtn = false;
+    $scope.disableReviewBtn = true;
     $scope.lastSaved;
     $scope.alertOnUnload = ecEditor.getConfig('alertOnUnload');
     $scope.pendingChanges = false;
     $scope.hideReviewBtn = false;
-    $scope.publishMode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').publishMode || false;
-    $scope.isFalgReviewer = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').isFalgReviewer || false;
+    $scope.publishMode = false;
+    $scope.isFalgReviewer = false;
     $scope.editorEnv = "";
+    $scope.headerSettings = {
+        showEditMeta: true
+    }
 
     $scope.setEditorDetails = function() {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
@@ -27,6 +30,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 break;
             case "application/vnd.ekstep.content-collection":
                 $scope.editorEnv = "COLLECTION"
+                $scope.publishMode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').publishMode;
+                $scope.isFalgReviewer = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').isFalgReviewer;
+                $scope.headerSettings.showEditMeta = false;
                 break;
             default:
                 $scope.editorEnv = "NON-ECML"                                          
@@ -69,7 +75,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope._sendReview = function() {
         ecEditor.dispatchEvent("org.ekstep.contenteditor:review", function(err, res) {
-            if (err) {
+            if (res) {
+                if ($scope.editorEnv === "COLLECTION") {
+                    $scope.closeEditor();
+                }
+            } else {                
                 $scope.disableReviewBtn = false;
             }
             $scope.$safeApply();
@@ -85,7 +95,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     if (res) {
                         $scope.saveContent(function(err, res) {
                             if (res) {
-                                $scope._sendReview()
+                                $scope._sendReview();
                             }
                         });
                     } else {
