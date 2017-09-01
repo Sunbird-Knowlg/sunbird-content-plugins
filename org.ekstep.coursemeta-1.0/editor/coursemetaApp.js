@@ -49,9 +49,14 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             $scope.course.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.course));
             $scope.metadataCloneObj = _.clone($scope.course);
-            $scope.editMode = false;
+            $scope.editMode = true;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             ecEditor.dispatchEvent("content:title:update", $scope.course.name);
+             ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+             title: 'Content details updated successfully',
+             position: 'topCenter',
+             icon: 'fa fa-check-circle'
+            });
             $scope.getPath();
             $scope.$safeApply();
         }else{
@@ -108,7 +113,8 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.course = {};
-        $scope.editMode = $scope.newNode = false;
+        $scope.editMode = true;
+        $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
         $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.coursemeta", "1.0", "assets/default.png");
 
@@ -120,7 +126,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             $scope.metadataCloneObj = _.clone($scope.course);
         }
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
-            $scope.editMode = false;
+            $scope.editMode = true;
             $('#language').dropdown('set selected', $scope.course.language);
             $('#audience').dropdown('set selected', $scope.course.audience);
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
