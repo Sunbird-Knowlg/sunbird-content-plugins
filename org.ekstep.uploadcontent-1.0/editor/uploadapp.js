@@ -56,7 +56,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                         "err": "",
                         "type": "API",
                         "data": errorReason,
-                        "severity": "fatal"
+                        "severity": "error"
                     })
                     $scope.uploader.reset();
                 }
