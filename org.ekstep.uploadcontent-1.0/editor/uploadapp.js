@@ -124,7 +124,9 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                     content: {
                         "name": "Untitled Content",
                         "code": UUID(),
-                        "mimeType": mimeType
+                        "mimeType": mimeType,
+                        "createdBy": ecEditor.getContext('user').id,
+                        "createdFor": ecEditor.getContext('user').orgIds
                     }
                 }
             }
