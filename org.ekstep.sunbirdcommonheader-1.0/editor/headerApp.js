@@ -281,6 +281,19 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         }
     };
 
+    $scope.generateTelemetry = function(data) {
+        if (data) ecEditor.getService('telemetry').interact({
+            "type": data.type || "",
+            "subtype": data.subtype || "",
+            "target": data.target || "",
+            "pluginid": plugin.id,
+            "pluginver": plugin.ver,
+            "objectid": "",
+            "targetid": "",
+            "stage": ""
+        })
+    };
+
     (function() {
         $scope.setEditorDetails();
         if ($scope.editorEnv == "NON-ECML" && !ecEditor.getContext('contentId')) {
