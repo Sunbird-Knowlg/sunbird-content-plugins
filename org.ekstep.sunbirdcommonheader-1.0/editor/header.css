@@ -192,7 +192,7 @@ body {
     line-height: 2;
     float: right;
     margin-left: 5px;
-    color: #9b9b9b!important
+    color: #9B9B9B!important;
 }
 
 .label-icon-box-text {
@@ -201,6 +201,8 @@ body {
     font-family: HelveticaNeueLTStd-Lt, 'Helvetica Neue', Arial, Helvetica, sans-serif;
     cursor: pointer;
     font-size: 11px;
+    color: #9B9B9B!important;
+    font-weight: bold !important;
 }
 
 .label-icon-box .icon-save{
@@ -241,13 +243,12 @@ body {
 }
 
 .preview-dropdown .ui.dropdown{
-      padding-top: 10px;
+    padding-top: 10px;
     background: transparent;
     height: 30px;
     border-left: 1px solid transparent;
     padding-left: 3px!important;
     padding-right: 0!important;
-    
     line-height: 0.8;
     padding-left: 11px;
 }
@@ -260,6 +261,12 @@ body {
 }
 
 #commonHeader .icon-box.popup-item.disabled{
-    color: #D7D7D7 !important;
     pointer-events: none!important;
 }
+#commonHeader .icon-box.popup-item.disabled .icon,
+#commonHeader .icon-box.popup-item.disabled .icon-save,
+#commonHeader .icon-box.popup-item.disabled .label-icon-box-text{
+    color: #D7D7D7 !important;
+}
+
+
