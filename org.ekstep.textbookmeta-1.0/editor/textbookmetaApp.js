@@ -8,19 +8,23 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
     $scope.languageList = [];
     $scope.audienceList = [];
     $scope.subjectList = [];
-
+    $scope.defaultSubjectList = ["Biology","Chemistry","Physics","Mathematics","Environmental","Geography","History","Political Science","Economics","Sanskrit"];
 
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.gradeList = resp.data.result.ordinals.gradeLevel;
             $scope.languageList = resp.data.result.ordinals.language;
             $scope.audienceList = resp.data.result.ordinals.audience;
-            $scope.subjectList = resp.data.result.ordinals.language;
+            $scope.subjectList = _.uniq(_.union(_.clone(resp.data.result.ordinals.language), $scope.defaultSubjectList));
             //TODO: Replace below list with API resplonse            
             $scope.boardList["CBSE"]  = "CBSE";
             $scope.boardList["NCERT"] = "NCERT";
             $scope.boardList["ICSE"] = "ICSE"
             $scope.boardList["MSCERT"] = "MSCERT";
+            $scope.boardList["UP Board"]  = "UP Board";
+            $scope.boardList["AP Board"]  = "AP Board";
+            $scope.boardList["TN Board"]  = "TN Board";
+            $scope.boardList["NCTE"]  = "NCTE";
             $scope.boardList["Other"] = "Others";
             $scope.$safeApply();                   
         }
@@ -44,7 +48,8 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             $('#subject').dropdown('set selected', $scope.textbook.subject);
             $('#gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
             $('#audience').dropdown('set selected', $scope.textbook.audience);
-            $('#language').dropdown('set selected', $scope.textbook.language);    
+            $('#language').dropdown('set selected', $scope.textbook.language);
+            $('#resource').dropdown('set selected', $scope.textbook.resource);      
         });
     }
     
