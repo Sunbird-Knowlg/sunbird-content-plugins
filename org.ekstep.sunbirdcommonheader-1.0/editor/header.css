@@ -5,6 +5,7 @@
 }
 .custom-container .one.wide.column,
 .custom-container .four.wide.column,
+.custom-container .two.wide.column,
 .custom-container .five.wide.column,
 #commonHeader {
     height: 55px !important;
@@ -66,17 +67,12 @@ body {
 .custom-container {
     margin-top: 0 !important;
     margin-bottom: 1rem !important;
-}
-
-.custom-container .one.wide.column,
-.custom-container .four.wide.column,
-.custom-container .five.wide.column,
-#genericEditorHeader {
-    height: 55px !important;
+    border-bottom: 1px solid #d8d8d8;
 }
 
 .custom-container .one.wide.column {
     width: 60px !important;
+    border: 1px solid transparent!important;
 }
 
 .custom-container .five.wide.column {
@@ -188,11 +184,6 @@ body {
     color: #2e9fd9;
 }
 
-.icon-save.disabled,
-.save-button-text.disabled {
-    color: #D7D7D7 !important;
-}
-
 /* for labelled icons in header */
 
 .label-icon-box {
@@ -266,4 +257,9 @@ body {
 }
 .ui.grid.toolbar{
     margin-top: 0 !important;
+}
+
+#commonHeader .icon-box.popup-item.disabled{
+    color: #D7D7D7 !important;
+    pointer-events: none!important;
 }
