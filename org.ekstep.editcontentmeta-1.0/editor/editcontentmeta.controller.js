@@ -218,6 +218,19 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
         $scope.closeThisDialog();
     };
 
+    $scope.generateTelemetry = function(data) {
+        if (data) ecEditor.getService('telemetry').interact({
+            "type": data.type || "click",
+            "subtype": data.subtype || "",
+            "target": data.target || "",
+            "pluginid": ctrl.plugin.id,
+            "pluginver": ctrl.plugin.ver,
+            "objectid": "",
+            "targetid": "",
+            "stage": ""
+        })
+    };
+
 }]);
 
 //# sourceURL=editcontentmeta.controller.js

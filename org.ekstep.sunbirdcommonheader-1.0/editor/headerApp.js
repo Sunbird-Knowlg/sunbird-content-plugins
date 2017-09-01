@@ -283,7 +283,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope.generateTelemetry = function(data) {
         if (data) ecEditor.getService('telemetry').interact({
-            "type": data.type || "",
+            "type": data.type || "click",
             "subtype": data.subtype || "",
             "target": data.target || "",
             "pluginid": plugin.id,
