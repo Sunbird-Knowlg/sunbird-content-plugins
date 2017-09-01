@@ -226,6 +226,7 @@ body {
     color: #9b9b9b!important;
     display: inline-block;
     height: 30px!important;
+    right: -11px;
 }
 
 .preview-dropdown .ui.button.text-part{
