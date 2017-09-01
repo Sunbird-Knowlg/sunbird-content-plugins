@@ -176,7 +176,6 @@ angular.module('editorApp')
                 for(var i=0;i<$scope.targetOptions.length;i++){
                     if(data.asset==$scope.targetOptions[i].selectedActionTarget){
                         $scope.targetSelected=$scope.targetOptions[i];
-                        console.log($scope.targetSelected);
                     }
                 }
                 if (stageActionsList[data.command]) {
@@ -237,7 +236,6 @@ angular.module('editorApp')
             ecEditor._.forEach(pluginInstances, function(pi) {
                 if(pi['shapeType']){
                     pluginInstanceIds[pi.id] = pi.getDisplayName() + " - " + pi.attributes.type.substr(0,1).toUpperCase() + pi.attributes.type.substr(1).toLowerCase();
-                    console.log(pluginInstanceIds[pi.id]);
                     if(pluginInstanceIds[pi.id] == "Shape - Ellipse")
                         $scope.targetOptions.push({'name':"Shape - Circle", "bgColor":pi.attributes.fill, 'selectedActionTarget':pi.id});
                     else if(pluginInstanceIds[pi.id] == "Shape - Rect")
