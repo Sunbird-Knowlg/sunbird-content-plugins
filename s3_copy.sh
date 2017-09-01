@@ -48,5 +48,6 @@ aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.g
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.editcontentmeta-1.0/ --recursive
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.uploadcontent-1.0/ --recursive
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.contenteditorfunctions-1.0/ --recursive
+aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.sunbirdcommonheader-1.0/ --recursive
 
 aws s3 --region ap-south-1 cp ansible/content-plugins s3://ekstep-public-$1/content-plugins/ --recursive --acl public-read
