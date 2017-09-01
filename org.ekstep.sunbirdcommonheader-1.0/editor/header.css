@@ -229,18 +229,18 @@ body {
 }
 
 .preview-dropdown .ui.button.text-part{
-    padding-top:9px; background: transparent; padding-left: 1em; padding-right: 1em; height:30px;
+    padding-top:7px; background: transparent; padding-left: 1em; padding-right: 1em; height:30px;
     width: 31.2px;
     color: #9b9b9b!important;
     border: 1px solid transparent!important;
-    border-top-right-radius: 4px;
-    border-bottom-right-radius: 4px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
     border: 1px solid;
     padding-left: 8px!important;
 }
 
 .preview-dropdown .ui.dropdown{
-    padding-top: 10px;
+    padding-top: 8px;
     background: transparent;
     height: 30px;
     border-left: 1px solid transparent;
@@ -250,9 +250,25 @@ body {
     padding-left: 11px;
 }
 
-.preview-dropdown:hover >.ui.button.text-part{
+.preview-dropdown .ui.dropdown .menu{
+    width: auto!important;
+    top: 30px;
+}
+
+.preview-dropdown .ui.dropdown .menu .item{
+    font-size: 11px !important;
+    line-height: 11px;
+    padding: 9px 10px !important;
+    font-family: Helvetica;
+    color: #9b9b9b!important;
+    font-weight: normal!important;
+}
+
+.preview-dropdown:hover >.ui.button.text-part,
+.preview-dropdown:hover >.ui.button.dropdown{
     background-color: #E0E1E2;
 }
+
 .ui.grid.toolbar{
     margin-top: 0 !important;
 }
