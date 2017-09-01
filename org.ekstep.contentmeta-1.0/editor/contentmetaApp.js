@@ -11,6 +11,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     });
     $scope.showImageIcon = true;
     $scope.showSubCollection = true;
+    $scope.isDisabled = false ;
 
     $scope.showAssestBrowser = function() {
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
@@ -41,9 +42,14 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.content));;
             $scope.metadataCloneObj = _.clone($scope.content);
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
-            $scope.editMode = false;
+            $scope.editMode = true;
             $scope.getPath();
             $scope.$safeApply();
+            ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                title: 'Content details updated successfully.',
+                position: 'topCenter',
+                icon: 'fa fa-check-circle'
+            });
         } else {
             ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
                 title: 'Please fill in all required fields',
@@ -92,6 +98,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     }
 
     $scope.onNodeSelect = function(evant, data) {
+        console.log(data);
         $scope.showImageIcon = false;
         var contentArr = ["Story", "Collection", "Game", "Worksheet"];
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
@@ -99,7 +106,8 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.nodeId = data.data.id;
             $scope.nodeType = data.data.objectType;
             $scope.content = {};
-            $scope.editMode = $scope.newNode = false;
+            $scope.editMode = true;
+            $scope.newNode = false;
             $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
             $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.contentmeta", "1.0", "assets/default.png");
 
@@ -112,7 +120,8 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 $('#contentmeta-language').dropdown('clear');
             }
             if (!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])) {
-                $scope.editMode = false;
+                $scope.isDisabled = $scope.nodeType!='Collection' ? true : false;
+                $scope.editMode = true;
                 $scope.content = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
                 $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
                 $('#contentmeta-language').dropdown('set selected', $scope.content.language);

@@ -317,3 +317,7 @@
 .collection-preview-icon:hover {
     color: #2e9fd9;
 }
+
+#contents-data-form.ui.form .disabled.field, #contents-data-form.ui.form .disabled.fields .field, #contents-data-form.ui.form .field :disabled{
+        opacity:1 !important;
+}
