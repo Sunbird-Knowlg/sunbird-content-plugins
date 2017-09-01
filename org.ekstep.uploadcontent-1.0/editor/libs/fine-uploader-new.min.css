@@ -59,7 +59,7 @@
 ------------------------------------------ */
 .qq-upload-button {
     position: absolute !important;
-    bottom: 0px;
+    bottom: 80px;
     left: 45%;
     display: inline;
     width: 105px;
@@ -83,7 +83,7 @@
 ------------------------------------------ */
 .qq-uploader {
     position: relative;
-    min-height: 200px;
+    min-height: 300px;
     max-height: 490px;
     overflow-y: hidden;
     width: inherit;

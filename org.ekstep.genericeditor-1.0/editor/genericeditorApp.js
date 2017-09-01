@@ -66,6 +66,7 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
             if (res) {
                 $scope.$safeApply();
                 callback && callback(err, res);
+                ecEditor.dispatchEvent("content:load:complete");
             } else {
                 callback && callback('unable to fetch the content!', res);
             }
@@ -97,6 +98,7 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
                 if (res) {                
                     // close the loading screen
                     ecEditor.dispatchEvent('content:title:update',res.name);
+                    ecEditor.dispatchEvent('sidebar:show');
                     ecEditor.dispatchEvent("atpreview:show");
                     window.loading_screen && window.loading_screen.finish();
                 } else {

@@ -32,8 +32,12 @@ angular.module('org.ekstep.genericeditorsidebar', []).controller('sidebarControl
                 $scope.sidebarTemplate = $scope.html_h5pTemplate;
         }
         $scope.$safeApply();
+        setTimeout(function(){
+	        ecEditor.jQuery('.ui.checkbox').checkbox();
+        },1000)
+
     };
 
-    ecEditor.addEventListener('sidebar:show',$scope.updateSideBarTemplate,$scope)
-
+    ecEditor.addEventListener('sidebar:show',$scope.updateSideBarTemplate,$scope);
+   
 }]);

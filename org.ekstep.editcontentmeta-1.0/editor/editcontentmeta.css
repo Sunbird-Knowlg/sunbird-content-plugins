@@ -20,20 +20,23 @@
     min-height: 50vh;
 }
 .app-icon {
-    display: inline-block;
     position: relative;
+    height: 7vw;
+    width: 7vw;
     cursor: pointer;
 }
 .app-icon-overlay {
     position: absolute;
-    display: table-cell;
-    text-align: center;
-    vertical-align: baseline;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 2;
     background-color: rgba(200, 200, 200, 0.5);
+}
+
+.app-icon img{
+    position: absolute;
+    height: 100%;
+    width: 100%;
 }
 .app-icon-overlay-message {
     position: absolute;
@@ -47,10 +50,15 @@
 }
 #content-meta-form {
     border: none;
+    box-shadow: none;
 }
 #content-meta-form input,
-#content-meta-form textarea {
+#content-meta-form input:focus,
+#content-meta-form textarea,
+#content-meta-form textarea:focus {
     border: none;
+    box-shadow: none;
+    background: none;
     border-bottom: 1px solid #d8d8d8;
     padding-left: 0;
     border-radius: 0;
