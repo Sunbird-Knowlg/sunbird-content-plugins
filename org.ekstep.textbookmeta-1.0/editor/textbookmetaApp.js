@@ -71,11 +71,16 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             $scope.textbook.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
             $scope.metadataCloneObj = _.clone($scope.textbook);
-            $scope.editMode = false;
+            $scope.editMode = true;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             ecEditor.dispatchEvent("content:title:update", $scope.textbook.name);
             $scope.getPath();
             $scope.$safeApply();
+            ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                title: 'Content details updated successfully',
+                position: 'topCenter',
+                icon: 'fa fa-check-circle'
+            });
         }else{
             ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
                 title: 'Please fill in all required fields',
@@ -135,7 +140,7 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             $scope.metadataCloneObj = _.clone($scope.textbook);
         }
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
-            $scope.editMode = false;
+            $scope.editMode = true;
             $('#board').dropdown('set selected', $scope.textbook.board);
             $('#medium').dropdown('set selected', $scope.textbook.medium);
             $('#subject').dropdown('set selected', $scope.textbook.subject);
