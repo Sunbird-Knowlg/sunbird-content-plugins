@@ -64,7 +64,7 @@ var textEditor = (function() {
         pluginId = id;
         editorText = ecEditor.getPluginInstance(pluginId).editorObj.text;
         if (!$editor.length) {
-            var form = ecEditor.jQuery("<div>", { class: "ui form", id: "textEditorContainer"});
+            var form = ecEditor.jQuery("<div>", { class: "ui form", id: "textEditorContainer", style:"margin-left: 10px; margin-top: 10px;" });
             form.css({
                 "top": ecEditor.jQuery("#canvas").offset().top,
                 "left": ecEditor.jQuery("#canvas").offset().left,
@@ -81,30 +81,12 @@ var textEditor = (function() {
             $editor = ecEditor.jQuery("#authoringTextEditor");
             $btnGrpParent.insertAfter($editor);
             $btnGrpParent.append($buttonGrp);
-        } else if (editorText.length <= 0) {
-            $editor.show().val(editorText);
-            ecEditor.jQuery("#textEditorContainer").css({
-                "top": ecEditor.jQuery("#canvas").offset().top,
-                "left": ecEditor.jQuery("#canvas").offset().left,
-                "position": "absolute"
-            });
-            ecEditor.jQuery("#authoringTextEditor").css({
-                "width": "30.5em",
-                "height": "auto"
-            });
-
         } else {
             $editor.show().val(editorText);
-            var txtarealeft = ecEditor.jQuery("#canvas").offset().left + ecEditor.getCurrentObject().editorObj.left-10;
-            var txtareatop = ecEditor.jQuery("#canvas").offset().top + ecEditor.getCurrentObject().editorObj.top-5;
-            var txtareawidth=ecEditor.getCurrentObject().editorObj.width+20;
-            var txtareaheight=ecEditor.getCurrentObject().editorObj.height+15;
-            ecEditor.jQuery("#textEditorContainer").css({ "top": txtareatop, "left": txtarealeft });
-            ecEditor.jQuery("#authoringTextEditor").css({ "width": txtareawidth, "max-width": "690px", "height": txtareaheight, "max-height": "347px", "min-height": "100px" });
-
         }
          $("body").css("pointer-events","none");
         $("#textEditorContainer").css("pointer-events","auto");
+
         if (!$doneBtn.length) {
             $doneBtn = ecEditor.jQuery("<button>",{text: 'Done',id: 'authoringTextEditorBtn', class: 'ui primary button'})
                 .click(function() {
@@ -171,4 +153,3 @@ var textEditor = (function() {
         generateTelemetry: generateTelemetry
     };
 })();
-
