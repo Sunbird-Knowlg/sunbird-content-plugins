@@ -9,7 +9,10 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
     $scope.name = 'Untitled-Content';
 
     $scope.saveContent = function() {
-        console.log('save content method invoked');
+        var metadata = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId'));
+        metadata.config = {overlay:true};
+        metadata.body = undefined;
+        ecEditor.dispatchEvent('org.ekstep.contenteditor:save',metadata);
     };
 
     $scope.editDetails = function() {
@@ -88,8 +91,26 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
     };
 
     $scope.closeGenericEdtr = function() {
-        window.location.reload();
+        // Condition for portal. If editor opens in iframe
+        if (window.self !== window.top) {
+            if (!$scope.disableSaveBtn) {
+                var cf = confirm("Changes that you made may not be saved.");
+                if (cf == true) {
+                    window.onbeforeunload = null;
+                    window.parent.editor.izimodalRef.iziModal("close");
+                }
+            }
+            else {
+                window.parent.editor.izimodalRef.iziModal("close");
+            }
+        }
+        else window.location.reload();
     };
+
+    window.onbeforeunload = function(e) {
+        if (!$scope.disableSaveBtn) return "You have unsaved changes";
+        e.preventDefault();
+    }
 
     $scope.generateTelemetry = function(data) {
         if (data) ecEditor.getService('telemetry').interact({

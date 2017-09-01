@@ -41,5 +41,13 @@ aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.s
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.contenteditorfunctions-1.0/ --recursive
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.lessonplanmeta-1.0/ --recursive
 aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.lessonplanunitmeta-1.0/ --recursive
+aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.genericeditorheader-1.0/ --recursive
+aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.genericeditor-1.0/ --recursive
+aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.genericeditorpreview-1.0/ --recursive
+aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.genericeditorsidebar-1.0/ --recursive
+aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.editcontentmeta-1.0/ --recursive
+aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.uploadcontent-1.0/ --recursive
+aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.contenteditorfunctions-1.0/ --recursive
+aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.sunbirdcommonheader-1.0/ --recursive
 
 aws s3 --region ap-south-1 cp ansible/content-plugins s3://ekstep-public-$1/content-plugins/ --recursive --acl public-read

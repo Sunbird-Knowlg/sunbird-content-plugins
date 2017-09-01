@@ -25,8 +25,8 @@
                         <div class="icon-box popup-item" data-content="Download to try it out on a mobile device" data-variation="tiny inverted" data-position="bottom center" ng-click="download();">
                             <i class="download icon custom-icon"></i>
                         </div>
-                        <div class="close icon-box popup-item" data-content="Close" data-variation="tiny inverted" data-position="bottom center">
-                            <a ng-click="closeGenericEdtr(); generateTelemetry({ subtype: 'close', target: 'closebutton'})">
+                        <div id="closeButton" class="close icon-box popup-item" data-content="Close" data-variation="tiny inverted" data-position="bottom center">
+                            <a ng-click="closeGenericEdtr(); generateTelemetry({ subtype: 'close', target: 'closeButton'})">
                                 <i class="remove icon custom-cursor"></i>
                             </a>
                         </div>
