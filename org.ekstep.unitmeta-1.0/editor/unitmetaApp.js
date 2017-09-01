@@ -29,9 +29,14 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.unit.name);
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.unit));;
             $scope.metadataCloneObj = _.clone($scope.unit);
-            $scope.editMode = false;
+            $scope.editMode = true;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             $scope.getPath();
+            ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                title: 'Content details updated successfully.',
+                position: 'topCenter',
+                icon: 'fa fa-check-circle'
+            });
             $scope.$safeApply();
         }else{
             ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
@@ -80,7 +85,8 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.unit = {};
-        $scope.editMode = $scope.newNode = false;
+        $scope.editMode = true;
+        $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
         $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.unitmeta", "1.0", "assets/default.png");
 
@@ -91,7 +97,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             $scope.metadataCloneObj = _.clone($scope.unit);
         }
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
-            $scope.editMode = false;
+            $scope.editMode = true;
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.unit.concepts = activeNode.data.metadata.concepts;
                 if($scope.unit.concepts.length > 0){
