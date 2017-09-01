@@ -253,7 +253,14 @@ body {
 
 .preview-dropdown .ui.dropdown .menu{
     width: auto!important;
-    top: 30px;
+    right: -16px!important;
+    top: 80%;
+
+}
+
+.preview-dropdown .ui.dropdown .menu:after {
+    left: inherit !important;
+    right: 17%!important;
 }
 
 .preview-dropdown .ui.dropdown .menu .item{
