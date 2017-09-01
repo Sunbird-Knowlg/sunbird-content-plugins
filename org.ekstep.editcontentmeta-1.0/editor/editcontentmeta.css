@@ -90,9 +90,19 @@
     overflow-y: auto;
     margin-bottom: 7vh;
 }
-#content-meta-form .ui.selection.active.dropdown .menu{
-    max-height: 24vh;
+
+@media all{
+    #content-meta-form .ui.dropdown.short-dropdown .menu{
+        max-height: 17vh;
+    }
 }
+
+@media all{
+    #content-meta-form .ui.dropdown.long-dropdown .menu{
+        max-height: 24vh;
+    }
+}
+
 .required-error {
     border: 1px solid #e0b4b4 !important;
 }
