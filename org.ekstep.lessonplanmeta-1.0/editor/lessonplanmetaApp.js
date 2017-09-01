@@ -71,6 +71,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             $scope.metadataCloneObj = _.clone($scope.lesson);
             $scope.editMode = false;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+            ecEditor.dispatchEvent("content:title:update", $scope.lesson.name);
             $scope.getPath();
             $scope.$safeApply();
         }else{
