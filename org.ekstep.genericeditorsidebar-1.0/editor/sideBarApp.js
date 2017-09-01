@@ -34,8 +34,7 @@ angular.module('org.ekstep.genericeditorsidebar', []).controller('sidebarControl
         $scope.$safeApply();
         setTimeout(function(){
 	        ecEditor.jQuery('.ui.checkbox').checkbox();
-        },1000)
-
+        },1000) //TODO: Need to remove the timeout
     };
 
     ecEditor.addEventListener('sidebar:show',$scope.updateSideBarTemplate,$scope);
