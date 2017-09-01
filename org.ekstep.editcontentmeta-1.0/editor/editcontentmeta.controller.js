@@ -17,13 +17,14 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
     ctrl.subjectList = [];
     ctrl.boardList = [];
     ctrl.contentId = org.ekstep.contenteditor.api.getContext('contentId');
-    ctrl.contentMeta = ecEditor.getService('content').getContentMeta(ctrl.contentId);
+    ctrl.contentMeta = data.contentMeta || ecEditor.getService('content').getContentMeta(ctrl.contentId);
     ctrl.originalContentMeta = _.clone(ctrl.contentMeta);
     ctrl.conceptsSelected = (ctrl.contentMeta.concepts && ctrl.contentMeta.concepts.length > 0);
     ctrl.language = (_.isArray(ctrl.contentMeta.language) && ctrl.contentMeta.language.length > 0) ? ctrl.contentMeta.language[0] : '';
     ctrl.audience = (_.isArray(ctrl.contentMeta.audience) && ctrl.contentMeta.audience.length > 0) ? ctrl.contentMeta.audience[0] : '';
     ctrl.contentService = org.ekstep.contenteditor.api.getService(ServiceConstants.CONTENT_SERVICE);
     ctrl.popupService = org.ekstep.contenteditor.api.getService(ServiceConstants.POPUP_SERVICE);
+    ctrl.defaultSubjectList = ["Biology", "Chemistry", "Physics", "Mathematics", "Environmental Studies", "Geography", "History", "Political Science", "Economics", "Sanskrit"];
 
     // If appIcon is empty, set it to null
     if (ctrl.contentMeta.appIcon && ctrl.contentMeta.appIcon.length <= 0) {
@@ -66,7 +67,7 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
             ctrl.languageList = res.data.result.ordinals.language;
             ctrl.audienceList = res.data.result.ordinals.audience;
             //TODO: Replace below lists with API response, once available
-            ctrl.subjectList = ["Biology", "Chemistry", "Physics", "Mathematics", "Environmental Studies", "Geography", "History", "Political Science", "Economics", "Sanskrit"];
+            ctrl.subjectList = _.uniq(_.union(_.clone(res.data.result.ordinals.language), ctrl.defaultSubjectList));
             ctrl.boardList = ["CBSE", "NCERT", "ICSE", "MSCERT", "UP Board", "AP Board", "TN Board", "NCTE"];
             ctrl.resourceList = ["Story", "Worksheet", "Game", "Course", "Book", "Diagnostic", "Puzzle", "Benchmark assessment", "Daily test", "Summative exam", "(Annual / Half-yearly / Semester) Examination", "Article", "Learning / Study material", "Reference material", "Simulation", "Activity", "Quiz", "Lesson plan", "Unit plan", "Academic calendar", "Classroom assessments", "Reflective journals", "Timed worksheets", "Teaching resources", "E-resources for Professional Development", "Micro practice videos"];
             $scope.$safeApply();
@@ -161,6 +162,7 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
                     if (res && res.data && res.data.responseCode == "OK") {
                         if (ctrl.contentMeta.name) {
                             ecEditor.dispatchEvent("content:title:update", ctrl.contentMeta.name);
+                            ecEditor.dispatchEvent("content:icon:update", ctrl.contentMeta.appIcon);
                         }
                         if (ctrl.callback) {
                             ctrl.callback(undefined, res);

@@ -90,7 +90,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.disableReviewBtn = true;
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         if (meta.status === "Draft") {
-            ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup", {
+            var editMetaOptions = {
                 callback: function(err, res) {
                     if (res) {
                         $scope.saveContent(function(err, res) {
@@ -106,7 +106,13 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         });
                     }
                 }
-            });
+            };            
+            if ($scope.editorEnv == "COLLECTION") {
+                var rootNode = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(ecEditor.getContext('contentId'));
+                if (rootNode) editMetaOptions.contentMeta = rootNode.data && rootNode.data.metadata;
+            }
+
+            ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup", editMetaOptions);
             $scope.disableReviewBtn = false;
         } else {
             $scope._sendReview();
@@ -209,6 +215,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.$safeApply();
     };
 
+    $scope.updateIcon = function(event, data) {
+        $scope.contentDetails.contentImage = data
+        $scope.$safeApply();
+    };
+
     $scope.onSave = function() {
         $scope.pendingChanges = false;
         $scope.lastSaved = Date.now();
@@ -226,10 +237,10 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.upload = function() {
-        ecEditor.dispatchEvent('org.ekstep.uploadcontent:show');        
+        ecEditor.dispatchEvent('org.ekstep.uploadcontent:show');
     };
 
-    $scope.download = function() {        
+    $scope.download = function() {
         var fileName = (ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name);
         if (fileName) {
             ecEditor.getService('content').downloadContent(ecEditor.getContext('contentId'), fileName.toLowerCase(), function(err, resp) {
@@ -246,7 +257,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
-                }else {
+                } else {
                     ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                         message: 'Unable to download the content, please try again later',
                         position: 'topCenter',
@@ -273,7 +284,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     (function() {
         $scope.setEditorDetails();
         if ($scope.editorEnv == "NON-ECML" && !ecEditor.getContext('contentId')) {
-            $scope.disableSaveBtn = false; 
+            $scope.disableSaveBtn = false;
             $scope.showUploadForm();
         }
     })()
@@ -288,6 +299,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     ecEditor.addEventListener("org.ekstep.collectioneditor:content:notfound", $scope.showNoContent, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:content:load", $scope.getContentMetadata, $scope);
     ecEditor.addEventListener("content:title:update", $scope.updateTitle, $scope);
+    ecEditor.addEventListener("content:icon:update", $scope.updateIcon, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:content:load", $scope.setEditorDetails, $scope);
     ecEditor.addEventListener("content:load:complete", $scope.setEditorDetails, $scope);
 
@@ -302,7 +314,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     ecEditor.addEventListener('org.ekstep.contenteditor:save', $scope.onSave, $scope);
 
     //Generic editor events
-    ecEditor.addEventListener("org.ekstep.genericeditor:reload", $scope.setPendingChangingStatus, $scope);    
+    ecEditor.addEventListener("org.ekstep.genericeditor:reload", $scope.setPendingChangingStatus, $scope);
 
     //others
     ecEditor.addEventListener("org.ekstep:sunbirdcommonheader:close:editor", $scope.closeEditor, $scope);
