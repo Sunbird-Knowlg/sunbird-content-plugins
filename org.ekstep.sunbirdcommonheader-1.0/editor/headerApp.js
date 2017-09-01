@@ -10,13 +10,13 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         'text': 'No Internet Connection!'
     };
     $scope.disableSaveBtn = true;
-    $scope.disableReviewBtn = false;
+    $scope.disableReviewBtn = true;
     $scope.lastSaved;
     $scope.alertOnUnload = ecEditor.getConfig('alertOnUnload');
     $scope.pendingChanges = false;
     $scope.hideReviewBtn = false;
-    $scope.publishMode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').publishMode || false;
-    $scope.isFalgReviewer = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').isFalgReviewer || false;
+    $scope.publishMode = false;
+    $scope.isFalgReviewer = false;
     $scope.editorEnv = "";
 
     $scope.setEditorDetails = function() {
@@ -27,6 +27,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 break;
             case "application/vnd.ekstep.content-collection":
                 $scope.editorEnv = "COLLECTION"
+                $scope.publishMode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').publishMode;
+                $scope.isFalgReviewer = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').isFalgReviewer;
                 break;
             default:
                 $scope.editorEnv = "NON-ECML"                                          
