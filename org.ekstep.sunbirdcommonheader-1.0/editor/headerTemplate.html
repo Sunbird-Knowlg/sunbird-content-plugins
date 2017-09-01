@@ -10,7 +10,7 @@
                 </label>
             </div>
             <div class="row custom-row-2">
-                <a class="btn at-btn at-btn-ok" ng-click="editContentMeta()" ng-show="headerSettings.showEditMeta">
+                <a class="btn at-btn at-btn-ok" ng-click="editContentMeta();generateTelemetry({subtype:'',target:'editmeta'})" ng-show="headerSettings.showEditMeta">
                     <i class="edit icon link"></i>&nbsp;Edit Details
                 </a>
             </div>
@@ -24,7 +24,7 @@
             <div class="row header-icon-container">
                 <div class="custom-row-2">
                     <div class="icon-group-2">
-                        <div ng-show="editorEnv == 'NON-ECML'" class="icon-box popup-item" data-content="Upload Content" data-variation="tiny inverted" data-position="bottom center" ng-click="upload();">
+                        <div ng-show="editorEnv == 'NON-ECML'" class="icon-box popup-item" data-content="Upload Content" data-variation="tiny inverted" data-position="bottom center" ng-click="upload(); generateTelemetry({subtype:'upload',target:'uploadButton'})">
                             <i class="upload icon custom-icon"></i>
                         </div>
                         <div ng-show="editorEnv == 'NON-ECML'" class="icon-box popup-item" data-content="Download to try it out on a mobile device" data-variation="tiny inverted" data-position="bottom center" ng-click="download(); generateTelemetry({ subtype: 'download', target: 'downloadButton'})">
