@@ -53,6 +53,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             callback: function(err, res) {
                 if (res && res.data && res.data.responseCode == "OK") {
                     $scope.lastSaved = Date.now();
+                    if ($scope.editorEnv == "COLLECTION") 
+                        $scope.resolveReviewBtnStatus();
                     $scope.pendingChanges = false;                                        
                 } else {
                     $scope.disableSaveBtn = false;                    
