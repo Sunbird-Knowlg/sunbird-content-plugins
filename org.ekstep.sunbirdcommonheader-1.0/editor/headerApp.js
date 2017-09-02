@@ -10,7 +10,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         'text': 'No Internet Connection!'
     };
     $scope.disableSaveBtn = true;
-    $scope.disableReviewBtn = true;
+    $scope.disableReviewBtn = false;
     $scope.lastSaved;
     $scope.alertOnUnload = ecEditor.getConfig('alertOnUnload');
     $scope.pendingChanges = false;
@@ -33,9 +33,10 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.publishMode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').publishMode;
                 $scope.isFalgReviewer = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').isFalgReviewer;
                 $scope.headerSettings.showEditMeta = false;
+                $scope.resolveReviewBtnStatus();
                 break;
             default:
-                $scope.editorEnv = "NON-ECML"                                          
+                $scope.editorEnv = "NON-ECML" 
                 break;
         };
         $scope.contentDetails = {
@@ -52,12 +53,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             callback: function(err, res) {
                 if (res && res.data && res.data.responseCode == "OK") {
                     $scope.lastSaved = Date.now();
-                    $scope.pendingChanges = false;
-                    $scope.disableReviewBtn = false;
-                    if ($scope.editorEnv == "COLLECTION") $scope.sendForeReviewBtnFn();
+                    $scope.pendingChanges = false;                                        
                 } else {
-                    $scope.disableSaveBtn = false;
-                    $scope.disableReviewBtn = true;
+                    $scope.disableSaveBtn = false;                    
                 }
                 cb && cb(err, res);
                 $scope.$safeApply();
@@ -75,19 +73,12 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope._sendReview = function() {
         ecEditor.dispatchEvent("org.ekstep.contenteditor:review", function(err, res) {
-            if (res) {
-                if ($scope.editorEnv === "COLLECTION") {
-                    $scope.closeEditor();
-                }
-            } else {                
-                $scope.disableReviewBtn = false;
-            }
+            if (res) $scope.closeEditor();
             $scope.$safeApply();
         });
     };
 
-    $scope.sendForReview = function() {
-        $scope.disableReviewBtn = true;
+    $scope.sendForReview = function() {        
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         if (meta.status === "Draft") {
             var editMetaOptions = {
@@ -112,11 +103,10 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 if (rootNode) editMetaOptions.contentMeta = rootNode.data && rootNode.data.metadata;
             }
 
-            ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup", editMetaOptions);
-            $scope.disableReviewBtn = false;
+            ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup", editMetaOptions);            
         } else {
             $scope._sendReview();
-        }
+        }        
     };
 
     $scope.publishContent = function() {
@@ -166,8 +156,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope.setPendingChangingStatus = function(event, data) {
         $scope.pendingChanges = true;
-        $scope.disableSaveBtn = false;
-        $scope.disableReviewBtn = true;
+        $scope.disableSaveBtn = false;        
         $scope.$safeApply();
     };
 
@@ -195,7 +184,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         });
     };
 
-    $scope.sendForeReviewBtnFn = function() {
+    $scope.resolveReviewBtnStatus = function() {
         var nodeData = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
         $scope.disableReviewBtn = (!nodeData.children) ? true : false;
         $scope.$safeApply();
@@ -205,7 +194,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         var rootNode = org.ekstep.services.collectionService.getNodeById(ecEditor.getContext('contentId'));
         var status = rootNode.data.metadata.status;
         $scope.hideReviewBtn = (status === 'Draft' || status === 'FlagDraft') ? false : true;
-        $scope.sendForeReviewBtnFn();
+        $scope.resolveReviewBtnStatus();
         $scope.$safeApply();
     };
 
