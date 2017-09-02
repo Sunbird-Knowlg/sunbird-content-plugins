@@ -95,7 +95,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
 
     $scope.onNodeSelect = function(evant, data) {
         $scope.showImageIcon = false;
-        var contentArr = ["Story", "Collection", "Game", "Worksheet"];
+        var contentArr = ["Story", "Collection", "Game", "Worksheet", "Resource"];
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
         if (_.indexOf(contentArr, data.data.objectType) != -1) {
             $scope.nodeId = data.data.id;
