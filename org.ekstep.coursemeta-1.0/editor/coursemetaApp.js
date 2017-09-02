@@ -39,10 +39,10 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             if(_.isString($scope.course.tutor)){
                 $scope.course.tutor = $scope.course.tutor.split(',');
             }
-            if(_.isString($scope.course.language)){
+            if (!_.isEmpty($scope.content.language) && _.isString($scope.content.language)) {
                 $scope.course.language = [$scope.course.language];
             }
-            if(_.isString($scope.course.audience)){
+            if (!_.isEmpty($scope.content.audience) && _.isString($scope.content.audience)) {
                 $scope.course.audience = [$scope.course.audience];
             }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.course.name);

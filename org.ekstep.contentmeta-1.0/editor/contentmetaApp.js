@@ -33,7 +33,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             if (_.isString($scope.content.keywords)) {
                 $scope.content.keywords = $scope.content.keywords.split(',');
             }
-            if (_.isString($scope.content.language)) {
+            if (!_.isEmpty($scope.content.language) && _.isString($scope.content.language)) {
                 $scope.content.language = [$scope.content.language];
             }
             var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();

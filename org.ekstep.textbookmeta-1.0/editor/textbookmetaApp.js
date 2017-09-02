@@ -63,13 +63,13 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             if(_.isString($scope.textbook.keywords)){
                 $scope.textbook.keywords = $scope.textbook.keywords.split(',');
             }
-            if(_.isString($scope.textbook.gradeLevel)){
+            if (!_.isEmpty($scope.content.gradeLevel) && _.isString($scope.content.gradeLevel)) {
                 $scope.textbook.gradeLevel = [$scope.textbook.gradeLevel];
             }
-            if(_.isString($scope.textbook.language)){
+            if (!_.isEmpty($scope.content.language) && _.isString($scope.content.language)) {
                 $scope.textbook.language = [$scope.textbook.language];
             }
-            if(_.isString($scope.textbook.audience)){
+            if (!_.isEmpty($scope.content.audience) && _.isString($scope.textbook.audience)){
                 $scope.textbook.audience = [$scope.textbook.audience];
             }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
