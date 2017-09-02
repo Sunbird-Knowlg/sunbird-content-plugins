@@ -144,10 +144,11 @@ angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaCont
 
     ctrl.saveMeta = function (isValid) {
         ctrl.submitted = true;
-        ctrl.contentMeta.keywords = jQuery('#ecm-keywords').val().replace(/\s*,\s*/g, ',').split(',');
-        ctrl.contentMeta.attributions = jQuery('#ecm-attributions').val().replace(/\s*,\s*/g, ',').split(',');
-        ctrl.contentMeta.language = [ctrl.language];
-        ctrl.contentMeta.audience = [ctrl.audience];
+
+        ctrl.contentMeta.keywords = _.isEmpty(jQuery('#ecm-keywords').val()) ? [] : jQuery('#ecm-keywords').val().replace(/\s*,\s*/g, ',').split(',');
+        ctrl.contentMeta.attributions = _.isEmpty(jQuery('#ecm-attributions').val()) ? [] : jQuery('#ecm-attributions').val().replace(/\s*,\s*/g, ',').split(',');
+        ctrl.contentMeta.language = _.isEmpty(ctrl.language) ? [] : [ctrl.language];
+        ctrl.contentMeta.audience = _.isEmpty(ctrl.audience) ? [] : [ctrl.audience];
         ctrl.contentMeta.gradeLevel = $('#ecm-gradeLevel').val();
 
         if (isValid && ctrl.conceptsSelected && ctrl.contentMeta.appIcon) {
