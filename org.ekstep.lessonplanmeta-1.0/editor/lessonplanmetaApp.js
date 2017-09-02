@@ -60,7 +60,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             if(_.isString($scope.lesson.gradeLevel)){
                 $scope.lesson.gradeLevel = [$scope.lesson.gradeLevel];
             }            
-            if (!_.isEmpty($scope.content.language) && _.isString($scope.content.language)) {
+            if (!_.isEmpty($scope.lesson.language) && _.isString($scope.lesson.language)) {
                 $scope.lesson.language = [$scope.lesson.language];
             }
             $scope.lesson.duration = $scope.duration ? $scope.duration.toString() : "0";
