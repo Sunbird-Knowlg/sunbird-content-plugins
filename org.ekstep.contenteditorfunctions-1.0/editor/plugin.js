@@ -95,7 +95,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     _patchContent: function(contentMeta, contentBody, options) {
     	var instance = this;
         // to remove angular's $$hashkey from meta object
-        contentMeta = JSON.parse(angular.toJson(contentMeta));
+        if (contentMeta) contentMeta = JSON.parse(angular.toJson(contentMeta));
         this.patchContent(contentMeta, contentBody, function(err, res) {
             if (err) {
                 if (res && !ecEditor._.isUndefined(res.responseJSON)) {
