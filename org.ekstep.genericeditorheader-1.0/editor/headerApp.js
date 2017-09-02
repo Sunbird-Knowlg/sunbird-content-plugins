@@ -114,7 +114,7 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
 
     $scope.generateTelemetry = function(data) {
         if (data) ecEditor.getService('telemetry').interact({
-            "type": data.type || "",
+            "type": data.type || "click",
             "subtype": data.subtype || "",
             "target": data.target || "",
             "pluginid": plugin.id,

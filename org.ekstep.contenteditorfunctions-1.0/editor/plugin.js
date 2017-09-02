@@ -71,7 +71,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         }
     },
     saveGenericEditorContent: function(event, data) {
-        var options = ecEditor._.assign({ savingPopup: true, successPopup: true, failPopup: true, callback: function() {} }, options);
+        var options = ecEditor._.assign({ savingPopup: true, successPopup: true, failPopup: true }, data);
         if (options.savingPopup) this.saveNotification('saving');
         this._patchContent(data, data.body, options);
     },

@@ -7,18 +7,23 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
     $scope.gradeList = [];
     $scope.languageList = [];    
     $scope.subjectList = [];
+    $scope.defaultSubjectList = ["Biology","Chemistry","Physics","Mathematics","Environmental","Geography","History","Political Science","Economics","Sanskrit"];
 
 
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.gradeList = resp.data.result.ordinals.gradeLevel;
             $scope.languageList = resp.data.result.ordinals.language;            
-            $scope.subjectList = resp.data.result.ordinals.language;
-            //TODO: Replace below list with API resplonse            
+            $scope.subjectList = _.uniq(_.union(_.clone(resp.data.result.ordinals.language), $scope.defaultSubjectList));
+                        //TODO: Replace below list with API resplonse            
             $scope.boardList["CBSE"]  = "CBSE";
             $scope.boardList["NCERT"] = "NCERT";
             $scope.boardList["ICSE"] = "ICSE"
             $scope.boardList["MSCERT"] = "MSCERT";
+            $scope.boardList["UP Board"]  = "UP Board";
+            $scope.boardList["AP Board"]  = "AP Board";
+            $scope.boardList["TN Board"]  = "TN Board";
+            $scope.boardList["NCTE"]  = "NCTE";
             $scope.boardList["Other"] = "Others";
             $scope.$safeApply();                   
         }
@@ -66,6 +71,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             $scope.metadataCloneObj = _.clone($scope.lesson);
             $scope.editMode = false;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+            ecEditor.dispatchEvent("content:title:update", $scope.lesson.name);
             $scope.getPath();
             $scope.$safeApply();
         }else{

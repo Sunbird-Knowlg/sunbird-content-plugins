@@ -33,22 +33,22 @@
                         <div class="fields">
                             <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.board.$error.required}" ng-click="$ctrl.validateBoard()">
                                 <label>Board</label>
-                                <select id="ecm-board" name="board" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.board" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'board'})">
-                                    <option value="" disabled selected>Board</option>
+                                <select id="ecm-board" name="board" class="ui fluid dropdown long-dropdown" ng-model="$ctrl.contentMeta.board" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'board'})">
+                                    <option value="" disabled selected>Select</option>
                                     <option ng-repeat="board in $ctrl.boardList" value="{{board}}">{{board}}</option>
                                 </select>
                             </div>
                             <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.subject.$error.required}" ng-click="$ctrl.validateSubject()">
                                 <label>Subject</label>
-                                <select id="ecm-subject" name="subject" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.subject" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'subject'})">
-                                    <option value="" disabled selected>Subject</option>
+                                <select id="ecm-subject" name="subject" class="ui fluid dropdown long-dropdown" ng-model="$ctrl.contentMeta.subject" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'subject'})">
+                                    <option value="" disabled selected>Select</option>
                                     <option value="{{subject}}" ng-repeat="subject in $ctrl.subjectList">{{subject}}</option>
                                 </select>
                             </div>
                             <div class="eight wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.gradeLevel.$error.required}" ng-click="$ctrl.validateGrade()">
                                 <label>Grade</label>
-                                <select id="ecm-gradeLevel" name="gradeLevel" class="ui fluid dropdown" multiple="" ng-model="$ctrl.contentMeta.gradeLevel" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'gradeLevel'})">
-                                    <option value="" disabled selected>Grade</option>
+                                <select id="ecm-gradeLevel" name="gradeLevel" class="ui fluid dropdown long-dropdown" multiple="" ng-model="$ctrl.contentMeta.gradeLevel" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'gradeLevel'})">
+                                    <option value="" disabled selected>Select</option>
                                     <option value="{{gradeLevel}}" ng-repeat="gradeLevel in $ctrl.gradeList">{{gradeLevel}}</option>
                                 </select>
                             </div>
@@ -56,22 +56,22 @@
                         <div class="fields">
                             <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.language.$error.required}" ng-click="$ctrl.validateLanguage()">
                                 <label>Medium</label>
-                                <select id="ecm-language" name="language" class="ui fluid dropdown" ng-model="$ctrl.language" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'language'})">
-                                    <option value="" disabled selected>Language</option>
+                                <select id="ecm-language" name="language" class="ui fluid dropdown short-dropdown" ng-model="$ctrl.language" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'language'})">
+                                    <option value="" disabled selected>Select</option>
                                     <option value="{{language}}" ng-repeat="language in $ctrl.languageList">{{language}}</option>
                                 </select>
                             </div>
                             <div class="four wide field">
                                 <label>Audience</label>
-                                <select id="ecm-audience" class="ui fluid dropdown" ng-model="$ctrl.audience" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'audience'})">
-                                    <option value="" disabled selected>Audience</option>
+                                <select id="ecm-audience" class="ui fluid dropdown short-dropdown" ng-model="$ctrl.audience" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'audience'})">
+                                    <option value="" disabled selected>Select</option>
                                     <option value="{{audience}}" ng-repeat="audience in $ctrl.audienceList">{{audience}}</option>
                                 </select>
                             </div>
                             <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.resource.$error.required}" ng-click="$ctrl.validateResource()">
                                 <label>Resource Type</label>
-                                <select id="ecm-resource" name="resource" class="ui fluid dropdown" ng-model="$ctrl.contentMeta.resourceType" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'resource'})">
-                                    <option value="" disabled selected>Resource Type</option>
+                                <select id="ecm-resource" name="resource" class="ui fluid dropdown short-dropdown" ng-model="$ctrl.contentMeta.resourceType" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'resource'})">
+                                    <option value="" disabled selected>Select</option>
                                     <option value="{{resource}}" ng-repeat="resource in $ctrl.resourceList">{{resource}}</option>
                                 </select>
                             </div>

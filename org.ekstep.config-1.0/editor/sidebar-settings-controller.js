@@ -23,7 +23,7 @@ angular.module('editorApp')
         $scope.selectedObject = { stage: true };
         $scope.currentObject = {};
         $scope.currentObjectActions = [];  
-
+        $scope.targetOptions = []; 
         // on load
         $scope.settingsCategory.selected = 'customize';
         $scope.pluginConfig;
@@ -167,14 +167,21 @@ angular.module('editorApp')
                 $scope.setStageObjects();
             }
             org.ekstep.contenteditor.api.jQuery("#actionTargetDropdown").dropdown('clear');
+            $scope.selectedActionTarget = '';
         });
 
         $scope.addAction = function(data) {
+            $scope.targetSelected={};
             if (data.command && data.asset) {
+                for(var i=0;i<$scope.targetOptions.length;i++){
+                    if(data.asset==$scope.targetOptions[i].selectedActionTarget){
+                        $scope.targetSelected=$scope.targetOptions[i];
+                    }
+                }
                 if (stageActionsList[data.command]) {
-                    ecEditor.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': 'transitionTo', 'asset': 'theme', 'value': data.asset, name: $scope.actionTargetObject[data.asset] }] });
+                    ecEditor.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': 'transitionTo', 'asset': 'theme', 'value': data.asset, name: $scope.targetSelected.name,iconClass:$scope.targetSelected.iconClass,bgColor:$scope.targetSelected.bgColor }] });
                 } else {
-                    ecEditor.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': data.command, 'asset': data.asset, name: $scope.actionTargetObject[data.asset] }] });
+                    ecEditor.getCurrentObject().addEvent({ 'type': 'click', 'action': [{ 'id': UUID(), 'type': 'command', 'command': data.command, 'asset': data.asset, name: $scope.targetSelected.name,iconClass:$scope.targetSelected.iconClass,bgColor:$scope.targetSelected.bgColor }] });
                 }
             }
             $scope.updateActions();
@@ -204,8 +211,8 @@ angular.module('editorApp')
         $scope.highlightTargetObject = function() {
             var instance = this;
             ecEditor.jQuery("#actionTargetDropdown:not(.addClick)").parent().on('click', function() {
-                ecEditor.jQuery("#actionTargetDropdown").nextAll(".menu.transition").find(".item").mouseover(function(event) {
-                    var id = ecEditor.jQuery(event.target).attr("data-value").split(":")[1];
+                ecEditor.jQuery("#actionTargetDropdown .menu.transition").find(".item").mouseover(function(event) {
+                    var id = ecEditor.jQuery(event.target).attr("data-value");
                     var pluginInstance = ecEditor.getPluginInstance(id);
                     if (pluginInstance && pluginInstance['editorObj']) {
                         var editorObj = pluginInstance['editorObj'];
@@ -222,29 +229,62 @@ angular.module('editorApp')
             }).addClass("addClick");
         };
 
-
-
         $scope.setVisibleObjects = function() {
             var pluginInstanceIds = [];
+            $scope.targetOptions=[];
             var pluginInstances = ecEditor.getStagePluginInstances(ecEditor.getCurrentStage().id, null, ['org.ekstep.audio', 'org.ekstep.image'], [ecEditor.getCurrentObject().id]);
             ecEditor._.forEach(pluginInstances, function(pi) {
-                pluginInstanceIds[pi.id] = pi.getDisplayName() + " (" + pi['id'].substr(0, 15) + "..." + ")";
+                if(pi['shapeType']){
+                    pluginInstanceIds[pi.id] = pi.getDisplayName() + " - " + pi.attributes.type.substr(0,1).toUpperCase() + pi.attributes.type.substr(1).toLowerCase();
+                    if(pluginInstanceIds[pi.id] == "Shape - Ellipse")
+                        $scope.targetOptions.push({'name':"Shape - Circle", "bgColor":pi.attributes.fill, 'selectedActionTarget':pi.id});
+                    else if(pluginInstanceIds[pi.id] == "Shape - Rect")
+                        $scope.targetOptions.push({'name':"Shape - Rectangle", "bgColor":pi.attributes.fill, 'selectedActionTarget':pi.id});
+                    else if(pluginInstanceIds[pi.id] == "Shape - Roundrect")
+                        $scope.targetOptions.push({'name':"Shape - Rounded Rectangle", "bgColor":pi.attributes.fill, 'selectedActionTarget':pi.id});
+                    else if(pluginInstanceIds[pi.id] == "Shape - Rarrow")
+                        $scope.targetOptions.push({'name':"Shape - Arrow", "bgColor":pi.attributes.fill, 'selectedActionTarget':pi.id});
+                    else if(pluginInstanceIds[pi.id] == "Shape - Harrow")
+                        $scope.targetOptions.push({'name':"Shape - Double Arrow", "bgColor":pi.attributes.fill, 'selectedActionTarget':pi.id});
+                    else
+                        $scope.targetOptions.push({'name':pluginInstanceIds[pi.id], "bgColor":pi.attributes.fill, 'selectedActionTarget':pi.id});
+
+                }
+                else if(pi.manifest.shortId=="org.ekstep.text"){
+                    pluginInstanceIds[pi.id] = pi.getDisplayName();
+                    if(pi.editorObj.text.length<=8)
+                        $scope.targetOptions.push({'name':pluginInstanceIds[pi.id] + " - " + pi.editorObj.text, "bgColor":'#000', 'selectedActionTarget':pi.id});      
+                    else{
+                        $scope.targetOptions.push({'name':pluginInstanceIds[pi.id] + " - " + pi.editorObj.text.slice(0,7)+'...', "bgColor":'#000', 'selectedActionTarget':pi.id});     
+                    }
+                }
+                else{
+                    pluginInstanceIds[pi.id] = pi.getDisplayName();
+                    $scope.targetOptions.push({'name':pluginInstanceIds[pi.id], "bgColor":'#000', 'selectedActionTarget':pi.id});
+                }
             })
             var imageInstances = ecEditor.getStagePluginInstances(ecEditor.getCurrentStage().id, ['org.ekstep.image'], null, [ecEditor.getCurrentObject().id]);
             ecEditor._.forEach(imageInstances, function(pi) {
                 pluginInstanceIds[pi.id] = pi.getDisplayName();
+                $scope.targetOptions.push({'name':"Image - " + pluginInstanceIds[pi.id], "bgColor":'#000', 'selectedActionTarget':pi.id});
             })
             $scope.actionTargetObject = pluginInstanceIds;
             $scope.$safeApply();
         };
 
+        $scope.selectOption = function (val) {
+            $scope.selectedActionTarget = val;
+        }
+
         $scope.setPlayableObjects = function() {
             var pluginInstances = ecEditor.getStagePluginInstances(ecEditor.getCurrentStage().id, ['org.ekstep.audio'], null, [ecEditor.getCurrentObject().id]);
             var optionsList = [];
+            $scope.targetOptions=[];
             ecEditor._.forEach(pluginInstances, function(pi) {
                 if (pi.media) {
                     var mediaObj = pi.media[Object.keys(pi.media)[0]];
                     optionsList[mediaObj.id] = pi.getDisplayName();
+                    $scope.targetOptions.push({'name':mediaObj.type.substr(0,1).toUpperCase() + mediaObj.type.substr(1).toLowerCase() + " - " + mediaObj.name, "bgColor":'#000', 'selectedActionTarget':mediaObj.id});
                 }
             });
             $scope.actionTargetObject = optionsList;
@@ -266,6 +306,7 @@ angular.module('editorApp')
             setTimeout(function() {
                 org.ekstep.contenteditor.api.jQuery("#actionTargetDropdown").dropdown('clear');
                 org.ekstep.contenteditor.api.jQuery("#actionTypeDropdown").dropdown('clear');
+                $scope.selectedActionTarget='';
             }, 500);
         };
 
@@ -312,3 +353,4 @@ angular.module('editorApp')
         org.ekstep.contenteditor.api.addEventListener("config:show:customise", $scope.showConfig, $scope);       
         
     }]);
+ //# sourceURL=sidebar-settings-controller.js

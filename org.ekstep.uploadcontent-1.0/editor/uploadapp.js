@@ -47,8 +47,19 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                         position: 'topCenter',
                         icon: 'fa fa-warning'
                     });
+                    ecEditor.getService('telemetry').error({
+                        "env": 'content',
+                        "stage": '',
+                        "action": 'upload',
+                        "objectid": "",
+                        "objecttype": "content",
+                        "err": "",
+                        "type": "API",
+                        "data": errorReason,
+                        "severity": "error"
+                    })
                     $scope.uploader.reset();
-                },
+                }
             },
             showMessage: function(messages) {
                 console.info(" hiding the alert messages from fine uploader");                
@@ -92,6 +103,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
     }
 
     $scope.upload = function() {
+        $scope.generateTelemetry({subtype:"upload",target:"browseButton",objecttype:'content'})
         $scope.showLoader(true);
         if ($scope.uploader.getFile(0) == null && !$scope.contentURL) {
             ecEditor.dispatchEvent("org.ekstep.toaster:error", {
@@ -124,7 +136,9 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                     content: {
                         "name": "Untitled Content",
                         "code": UUID(),
-                        "mimeType": mimeType
+                        "mimeType": mimeType,
+                        "createdBy": ecEditor.getContext('user').id,
+                        "createdFor": ecEditor.getContext('user').orgIds
                     }
                 }
             }
@@ -241,4 +255,17 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
     $scope.uploadFormClose = function() {
         ecEditor.getContext('contentId') ? $scope.closeThisDialog() : ecEditor.dispatchEvent("org.ekstep:sunbirdcommonheader:close:editor");
     }
+
+    $scope.generateTelemetry = function(data) {
+        if (data) ecEditor.getService('telemetry').interact({
+            "type": data.type || "click",
+            "subtype": data.subtype || "",
+            "target": data.target || "",
+            "pluginid": "org.ekstep.uploadcontent",
+            "pluginver": "1.0",
+            "objectid": "",
+            "targetid": "",
+            "stage": ""
+        })
+    }    
 }]);
