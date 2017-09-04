@@ -34,15 +34,21 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             if (_.isString($scope.content.keywords)) {
                 $scope.content.keywords = $scope.content.keywords.split(',');
             }
-            if (_.isString($scope.content.language)) {
+            if (!_.isEmpty($scope.content.language) && _.isString($scope.content.language)) {
                 $scope.content.language = [$scope.content.language];
             }
+            var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
             $scope.content.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.content));;
             $scope.metadataCloneObj = _.clone($scope.content);
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+<<<<<<< HEAD
             $scope.editMode = true;
+=======
+            if (activeNode.data && activeNode.data.root) ecEditor.dispatchEvent("content:title:update", $scope.content.name);
+            $scope.editMode = false;
+>>>>>>> release-2.5
             $scope.getPath();
             $scope.$safeApply();
             ecEditor.dispatchEvent("org.ekstep.toaster:success", {
@@ -100,7 +106,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.onNodeSelect = function(evant, data) {
         console.log(data);
         $scope.showImageIcon = false;
-        var contentArr = ["Story", "Collection", "Game", "Worksheet"];
+        var contentArr = ["Story", "Collection", "Game", "Worksheet", "Resource"];
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
         if (_.indexOf(contentArr, data.data.objectType) != -1) {
             $scope.nodeId = data.data.id;

@@ -71,7 +71,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         }
     },
     saveGenericEditorContent: function(event, data) {
-        var options = ecEditor._.assign({ savingPopup: true, successPopup: true, failPopup: true, callback: function() {} }, options);
+        var options = ecEditor._.assign({ savingPopup: true, successPopup: true, failPopup: true }, data);
         if (options.savingPopup) this.saveNotification('saving');
         this._patchContent(data, data.body, options);
     },
@@ -94,6 +94,8 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     _patchContent: function(contentMeta, contentBody, options) {
     	var instance = this;
+        // to remove angular's $$hashkey from meta object
+        if (contentMeta) contentMeta = JSON.parse(angular.toJson(contentMeta));
         this.patchContent(contentMeta, contentBody, function(err, res) {
             if (err) {
                 if (res && !ecEditor._.isUndefined(res.responseJSON)) {

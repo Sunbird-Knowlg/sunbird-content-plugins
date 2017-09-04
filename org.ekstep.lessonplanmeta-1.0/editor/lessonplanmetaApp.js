@@ -60,7 +60,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             if(_.isString($scope.lesson.gradeLevel)){
                 $scope.lesson.gradeLevel = [$scope.lesson.gradeLevel];
             }            
-            if(_.isString($scope.lesson.language)){
+            if (!_.isEmpty($scope.lesson.language) && _.isString($scope.lesson.language)) {
                 $scope.lesson.language = [$scope.lesson.language];
             }
             $scope.lesson.duration = $scope.duration ? $scope.duration.toString() : "0";
@@ -71,6 +71,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             $scope.metadataCloneObj = _.clone($scope.lesson);
             $scope.editMode = false;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+            ecEditor.dispatchEvent("content:title:update", $scope.lesson.name);
             $scope.getPath();
             $scope.$safeApply();
         }else{
