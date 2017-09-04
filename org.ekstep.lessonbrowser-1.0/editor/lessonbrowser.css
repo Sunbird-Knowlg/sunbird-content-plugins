@@ -1,10 +1,8 @@
 .add-lessons-popup-wrapper {
     position: relative;
-    height: 590px;
+    height: auto;
     width: 851px;
-    border-radius: 1em!important;
     font-family: Helvetica!important;
-    padding: 1em 2em;
     color: #888!important;
 }
 
@@ -28,10 +26,10 @@
     background: #317bca!important;
 }
 
-.f6f7f8-background {
-    background: #f6f7f8!important;
+#search-button:hover i.icon,
+#reset-button:hover i.icon{
+    opacity: 1;
 }
-
 
 /* from repoEkstep.html */
 
@@ -70,7 +68,6 @@
 .source-filter-container .content .list label {
     box-shadow: none!important;
     color: inherit!important;
-    background: #f6f7f8!important;
 }
 
 .source-filter-container .title {
@@ -83,12 +80,6 @@
     color: inherit!important;
 }
 
-.source-filter-container .content,
-#search-reset-keyword-field-wrapper,
-#search-reset-keyword-field,
-#filters-and-lessons-wrapper {
-    background: #f6f7f8!important;
-}
 
 .lesson-lang-separator {
     margin-left: 5px;
@@ -154,13 +145,8 @@
 .lesson-row .ui.checkbox input[type=checkbox],
 .lesson-row .ui.checkbox input[type=radio] {
     top: 15px!important;
-    background: #f6f7f8!important;
 }
 
-.source-filter-container .ui.checkbox .box:before,
-.source-filter-container .ui.checkbox label:before {
-    background: #f6f7f8!important;
-}
 
 .source-result-container::-webkit-scrollbar-thumb,
 .source-filter-container::-webkit-scrollbar-thumb {

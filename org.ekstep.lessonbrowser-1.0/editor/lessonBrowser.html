@@ -6,23 +6,31 @@
     }
      */
     </style>
-    <div class="ui modal active add-lessons-popup-wrapper f6f7f8-background" style="top: 12px">
-        <div class="ui grid f6f7f8-background">
-            <div class="row popup-heading">
-                <div class="column">
-                    <h5>Lesson browser</h5>
+    <div class="ui modal active add-lessons-popup-wrapper " style="top: 12px">
+        <div class="header" style="margin-bottom: 1rem;">
+            <div class="ui two column grid">
+                <div class="row">
+                    <div class="column">
+                        <span>
+                            <span><i class="browser icon"></i> Select Lesson</span>
+                        </span>
+                    </div>
+                    <div class="column right aligned">
+                        <i class="cursor-pointer close icon" ng-click="closeThisDialog(); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target:     'closeLessonBrowser'})"></i>
+                    </div>
                 </div>
             </div>
-            <div class="ui top attached tabular menu repo-names-menu-bar">
-                <div class="item f6f7f8-background" ng-class='{active:$first}' ng-repeat="(rid, repo) in $ctrl.lessonbrowser.repos" data-repo-id="{{repo.id}}" data-tab="{{repo.id}}{{rid}}">{{repo.label}}</div>
-            </div>
-            <div class="ui bottom attached tab segment f6f7f8-background" ng-class='{active:$first}' ng-repeat="(rid, repo) in $ctrl.lessonbrowser.repos" ng-include="repo.templateUrl" data-tab="{{repo.id}}{{rid}}" style="max-height:450px;">
+        </div>
+        <div class="ui grid" style="padding: 1rem;">
+            <div class="ui segment " ng-class='{active:$first}' ng-repeat="(rid, repo) in $ctrl.lessonbrowser.repos" ng-include="repo.templateUrl" data-tab="{{repo.id}}{{rid}}" style="max-height:450px; box-shadow: none; border: none;">
             </div>
             <div class="row">
-                <div class="column">
-                    <!-- <button class="ui right floated button primary" ng-click="returnSelectedLessons()" ng-disabled="!lessonSelection.length">Add</button> -->
-                    <button class="ui right floated button primary button-overrides" ng-click="returnSelectedLessons(selectedLessons.list)" ng-disabled="!selectedLessons.list.length">Add</button>
-                    <button id="cancel-lesson-browser-popup" class="ui right floated basic primary button button-overrides" ng-click="closePopup()">Cancel</button>
+                <div class="right aligned column">
+                    <div class="ui buttons">
+                        <button class="ui orange button" ng-click="$ctrl.cancel(); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeAssetBrowser'})" type="button">Cancel</button>
+                        <div class="or"></div>
+                        <button class="ui blue button submit button" class="ui right floated basic primary button button-overrides" ng-click="closePopup()" type="button">Select</button>
+                    </div>
                 </div>
             </div>
         </div>

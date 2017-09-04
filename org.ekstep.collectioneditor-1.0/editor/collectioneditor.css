@@ -23,7 +23,6 @@ body {
     height: calc(100vh - 60px);
     margin-bottom: 0;
     margin-top: 0em;
-    border-top: 0.2px solid rgba(128, 128, 128, 0.43); 
 }
 
 .ui-fancytree:focus {
