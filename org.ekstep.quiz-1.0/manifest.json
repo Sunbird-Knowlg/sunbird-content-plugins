@@ -28,44 +28,27 @@
             }
         }],
          "configManifest": [{
-           "propertyName": "assessmentbrowser",
-            "title": "Assessment Browser",
+            "propertyName": "assessmentbrowser",
+            "title": "assessment Browser",
             "description": "Choose a  from the browser",
-            "dataType": "featureButtonToggle",
-             "options": [{
-                "value": "Assessment Browser",
-                "title": "Assessment Browser",
-                "description": "Choose from the browser",
-                "dataType": "icon",
-                "iconClass": "icon icon-questions",
-                "state": true,
-                "toolTip":"Choose from the browser",
-                "status": "HIDE",
-                "onclick": {
-                     "id": "org.ekstep.quiz:showPopup",
+            "dataType": "browser",
+            "required": true,
+            "onclick":{
+                "id": "org.ekstep.quiz:showPopup",
                 "type": "quiz"
-                }
-                 }]
+            }
         },
         {
             "propertyName": "quizConfig",
-            "title": "Question Config",
+            "title": "question config",
+            "dataType": "browser",
             "description": "quizConfig",
-            "dataType": "featureButtonToggle",
-             "options": [{
-                "value": "Question Config",
-                "title": "Question Config",
-                "description": "quizConfig",
-                "dataType": "icon",
-                "iconClass":"settings icon",
-                "state": true,
-                "status": "HIDE",
-                "toolTip":"Question Config",
-                "onclick": {
-                     "id": "org.ekstep.quiz:showQuizConfig",
+            "iconClass":"settings icon",
+            "required": true,
+            "onclick":{
+                "id": "org.ekstep.quiz:showQuizConfig",
                 "type": "quiz"
-                }
-                 }]
+            }
         },
 
         {

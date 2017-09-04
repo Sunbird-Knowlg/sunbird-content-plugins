@@ -76,7 +76,7 @@ var textEditor = (function() {
             ecEditor.jQuery(document.createElement("textarea"))
                 .text(editorText)
                 .attr({ "id": "authoringTextEditor", "placeholder": "Add text here", "rows": 12 })
-                .css({ "width": "30.5em","box-shadow":  "0px 0px 0px 9999px rgba(0, 0, 0, 0.5)" })
+                .css({ "width": "30.5em" })
                 .appendTo(field);
             $editor = ecEditor.jQuery("#authoringTextEditor");
             $btnGrpParent.insertAfter($editor);
@@ -84,8 +84,6 @@ var textEditor = (function() {
         } else {
             $editor.show().val(editorText);
         }
-         $("body").css("pointer-events","none");
-        $("#textEditorContainer").css("pointer-events","auto");
 
         if (!$doneBtn.length) {
             $doneBtn = ecEditor.jQuery("<button>",{text: 'Done',id: 'authoringTextEditorBtn', class: 'ui primary button'})
@@ -101,7 +99,6 @@ var textEditor = (function() {
                     } else {
                         _removeObject();
                     }
-                    addAutoPointerStyle();
                     $editor.val("");
                 });
         } else {
@@ -113,11 +110,9 @@ var textEditor = (function() {
                 .click(function() {
                     generateTelemetry({type: 'click', subtype: 'cancel', target: 'cancelTextEditor'});
                     _commonBtnClickAction();
-                     addAutoPointerStyle();
                     /* istanbul ignore next*/
                     if (!editorText.trim().length) {
                         _removeObject();
-                        addAutoPointerStyle();
                     }
                 });
         } else {
@@ -132,9 +127,6 @@ var textEditor = (function() {
         ecEditor.ngSafeApply(angScope, function () {
           angScope.configStyle = "";
         });
-    }
-    function addAutoPointerStyle(){
-         $("body").css("pointer-events","auto");
     }
 
     function hideEditor() {
