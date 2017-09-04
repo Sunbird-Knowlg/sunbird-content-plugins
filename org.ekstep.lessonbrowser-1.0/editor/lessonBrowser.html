@@ -27,9 +27,9 @@
             <div class="row">
                 <div class="right aligned column">
                     <div class="ui buttons">
-                        <button class="ui orange button" ng-click="$ctrl.cancel(); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeAssetBrowser'})" type="button">Cancel</button>
+                        <button class="ui orange button" ng-click="closePopup()" type="button">Cancel</button>
                         <div class="or"></div>
-                        <button class="ui blue button submit button" class="ui right floated basic primary button button-overrides" ng-click="closePopup()" type="button">Select</button>
+                        <button class="ui blue button submit button" ng-click="returnSelectedLessons(selectedLessons.list)" ng-disabled="!selectedLessons.list.length" type="button">Add</button>
                     </div>
                 </div>
             </div>
