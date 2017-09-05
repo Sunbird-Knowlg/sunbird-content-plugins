@@ -84,7 +84,7 @@
         <div class="fields">
             <div class="field book-image-field">
                 <label for="bookImage">Add icon</label>
-                <div class="book-image-container popup-item" data-content="Add or change image" data-variation="tiny inverted" data-position="right center" ng-click="isDisabled || showAssestBrowser()">
+                <div class="book-image-container popup-item" data-content="{{addIconTooltip}}" data-variation="tiny inverted" data-position="right center" ng-click="isDisabled || showAssestBrowser()">
                     <i class="camera icon"></i>
                     <img ng-if="showImageIcon" ng-src="{{content.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
                 </div>
@@ -104,7 +104,7 @@
                 </div>
                 <div class="field" ng-class="{'disabled': isDisabled}">
                         <label>Keywords</label>
-                        <ng-token-field ng-model="content.keywords" id="contentmeta-keywords" placeholder="Enter comma separated keywords" ng-disabled="isDisabled" ng-click="isDisabled || generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
+                        <ng-token-field ng-model="content.keywords" id="contentmeta-keywords" placeholder="{{hasPlaceholder}}" ng-click="isDisabled || generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
                 </div>
             </div>
         </div>

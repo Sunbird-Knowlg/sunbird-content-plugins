@@ -158,13 +158,6 @@
                             <option value="{{board}}" ng-repeat="board in boardList">{{board}}</option>
                         </select>
                     </div>
-                   <!--  <div class="field">
-                        <label for="medium">Medium</label>
-                        <select id="medium" class="ui selection dropdown" ng-model="textbook.medium" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'medium'})">
-                            <option value="">Select</option>
-                            <option value="{{medium}}" ng-repeat="medium in languageList">{{medium}}</option>
-                        </select>
-                    </div> -->
                     <div class="field">
                         <label for="subject">Subject</label>
                         <select id="subject" class="ui selection dropdown" ng-model="textbook.subject" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'subject'})">
@@ -217,43 +210,6 @@
                 <div class="twelve wide field left-margin-9px">
                     <label>Keywords</label>
                     <ng-token-field ng-model="textbook.keywords" id="textbookmeta-keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
-                <!-- <div class="field required">
-                    <label>Description</label>
-                    <div class="ui input">
-                        <textarea placeholder="brief description about the unit" ng-model="textbook.description" ng-class="{error: submitted && textbookMetaForm.description.$error.required}" name="description" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})" required></textarea>
-                    </div>
-                </div> -->
-                <!-- <div class="field">
-                    <label for="grade">Grade</label>
-                    <select id="gradeLevel" class="ui fluid dropdown" ng-model="textbook.gradeLevel" multiple="" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'gradeLevel'})">
-                        <option value="">Select</option>
-                        <option value="{{gradeLevel}}" ng-repeat="gradeLevel in gradeList">{{gradeLevel}}</option>
-                    </select>
-                </div> -->
-                <div class="field">
-                    <label>Concepts</label>
-                    <input name="concepts" id="textbookConceptSelector" ng-model="textbook.conceptData" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
-                </div>                
-                <!-- <div class="three fields">
-                    <div class=" twelve wide field">
-                        <label>Keywords</label>
-                        <ng-token-field ng-model="textbook.keywords" id="textbookmeta-keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
-                    </div>
-                    <div class="field">
-                        <label for="language">Language</label>
-                        <select id="language" class="ui selection dropdown" ng-model="textbook.language" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'language'})">
-                            <option value="">Select</option>
-                            <option value="{{language}}" ng-repeat="language in languageList">{{language}}</option>
-                        </select>
-                    </div>
-                    <div class="four wide field">
-                        <label for="audience">Audience</label>
-                        <select id="audience" class="ui selection dropdown" ng-model="textbook.audience" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'audience'})">
-                            <option value="">Select</option>
-                            <option value="{{audience}}" ng-repeat="audience in audienceList">{{audience}}</option>
-                        </select>
-                    </div>
-                </div> -->
                 <div class="field">
                     <label>Notes to Teacher</label>
                     <input placeholder="Add Notes" ng-model="textbook.notes" name="notes" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'notes'})">

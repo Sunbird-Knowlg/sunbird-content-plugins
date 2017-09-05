@@ -11,7 +11,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     });
     $scope.showImageIcon = true;
     $scope.showSubCollection = true;
-    $scope.isDisabled = false ;
 
     $scope.showAssestBrowser = function() {
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
@@ -45,7 +44,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             $scope.editMode = true;
             if (activeNode.data && activeNode.data.root) ecEditor.dispatchEvent("content:title:update", $scope.content.name);
-            //$scope.editMode = false;
             $scope.getPath();
             $scope.$safeApply();
             ecEditor.dispatchEvent("org.ekstep.toaster:success", {
@@ -111,6 +109,9 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.content = {};
             $scope.editMode = true;
             $scope.newNode = false;
+            $scope.isDisabled = false ;
+            $scope.hasPlaceholder = 'Enter comma separated keywords';
+            $scope.addIconTooltip = 'Add or change image';
             $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
             $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.contentmeta", "1.0", "assets/default.png");
 
@@ -124,7 +125,10 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 $('#contentmeta-language').dropdown('clear');
             }
             if (!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])) {
-                $scope.isDisabled = $scope.nodeType!='Collection' ? true : false;
+                if($scope.nodeType!='Collection'){
+                    $scope.isDisabled = true;
+                    $scope.hasPlaceholder = $scope.addIconTooltip = '';
+                } 
                 $scope.editMode = true;
                 $scope.content = (_.isUndefined(cache)) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, cache.metadata);
                 $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
