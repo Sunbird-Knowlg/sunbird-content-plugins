@@ -144,15 +144,12 @@
                         <input placeholder="Enter title for Book" ng-model="textbook.name" ng-class=" {error: submitted && textbookMetaForm.name.$error.required}" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="150">
                     </div>
                 </div>
-<<<<<<< HEAD
                  <div class="field required">
                     <label>Description</label>
                     <div class="ui input">
                         <textarea placeholder="brief description about the unit" ng-model="textbook.description" ng-class="{error: submitted && textbookMetaForm.description.$error.required}" name="description" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})" required></textarea>
                     </div>
                 </div>
-=======
->>>>>>> release-2.5
                 <div class="three fields">
                     <div class="field">
                         <label for="board">Board</label>
@@ -161,21 +158,25 @@
                             <option value="{{board}}" ng-repeat="board in boardList">{{board}}</option>
                         </select>
                     </div>
-                    <div class="field">
-<<<<<<< HEAD
-=======
+                   <!--  <div class="field">
                         <label for="medium">Medium</label>
                         <select id="medium" class="ui selection dropdown" ng-model="textbook.medium" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'medium'})">
                             <option value="">Select</option>
                             <option value="{{medium}}" ng-repeat="medium in languageList">{{medium}}</option>
                         </select>
-                    </div>
+                    </div> -->
                     <div class="field">
->>>>>>> release-2.5
                         <label for="subject">Subject</label>
                         <select id="subject" class="ui selection dropdown" ng-model="textbook.subject" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'subject'})">
                             <option value="">Select</option>
                             <option value="{{subject}}" ng-repeat="subject in subjectList">{{subject}}</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="grade">Grade</label>
+                        <select id="gradeLevel" class="ui fluid dropdown" ng-model="textbook.gradeLevel" multiple="" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'gradeLevel'})">
+                            <option value="">Select</option>
+                            <option value="{{gradeLevel}}" ng-repeat="gradeLevel in gradeList">{{gradeLevel}}</option>
                         </select>
                     </div>
                 </div>
@@ -183,7 +184,7 @@
                      <div class="field">
                         <label for="medium">Medium</label>
                         <select id="medium" class="ui selection dropdown" ng-model="textbook.medium" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'medium'})">
-                            <option value="">Medium</option>
+                            <option value="">Select</option>
                             <option value="{{medium}}" ng-repeat="medium in languageList">{{medium}}</option>
                         </select>
                     </div>
@@ -213,29 +214,27 @@
                         <input type="text" placeholder="Edition (optional)" ng-model="textbook.edition" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'edition'})" />
                     </div>
                 </div>
-<<<<<<< HEAD
                 <div class="twelve wide field left-margin-9px">
                     <label>Keywords</label>
                     <ng-token-field ng-model="textbook.keywords" id="textbookmeta-keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
-=======
-                <div class="field required">
+                <!-- <div class="field required">
                     <label>Description</label>
                     <div class="ui input">
                         <textarea placeholder="brief description about the unit" ng-model="textbook.description" ng-class="{error: submitted && textbookMetaForm.description.$error.required}" name="description" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})" required></textarea>
                     </div>
-                </div>
-                <div class="field">
+                </div> -->
+                <!-- <div class="field">
                     <label for="grade">Grade</label>
                     <select id="gradeLevel" class="ui fluid dropdown" ng-model="textbook.gradeLevel" multiple="" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'gradeLevel'})">
                         <option value="">Select</option>
                         <option value="{{gradeLevel}}" ng-repeat="gradeLevel in gradeList">{{gradeLevel}}</option>
                     </select>
-                </div>
+                </div> -->
                 <div class="field">
                     <label>Concepts</label>
                     <input name="concepts" id="textbookConceptSelector" ng-model="textbook.conceptData" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
                 </div>                
-                <div class="three fields">
+                <!-- <div class="three fields">
                     <div class=" twelve wide field">
                         <label>Keywords</label>
                         <ng-token-field ng-model="textbook.keywords" id="textbookmeta-keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
@@ -254,8 +253,7 @@
                             <option value="{{audience}}" ng-repeat="audience in audienceList">{{audience}}</option>
                         </select>
                     </div>
->>>>>>> release-2.5
-                </div>
+                </div> -->
                 <div class="field">
                     <label>Notes to Teacher</label>
                     <input placeholder="Add Notes" ng-model="textbook.notes" name="notes" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'notes'})">

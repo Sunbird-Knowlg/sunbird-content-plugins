@@ -45,7 +45,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             $scope.editMode = true;
             if (activeNode.data && activeNode.data.root) ecEditor.dispatchEvent("content:title:update", $scope.content.name);
-            $scope.editMode = false;
+            //$scope.editMode = false;
             $scope.getPath();
             $scope.$safeApply();
             ecEditor.dispatchEvent("org.ekstep.toaster:success", {
