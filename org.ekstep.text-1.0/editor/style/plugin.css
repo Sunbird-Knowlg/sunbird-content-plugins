@@ -111,6 +111,3 @@
     min-width: 0;
     width: 60%; 
 }
-button#authoringTextEditorCancel , button#authoringTextEditorBtn  {
-    z-index: 2;
-}

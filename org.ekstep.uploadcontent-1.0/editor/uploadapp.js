@@ -7,7 +7,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
     $scope.newContent = false;
     $scope.showLoaderIcon = false;
     $scope.loaderIcon = ecEditor.resolvePluginResource("org.ekstep.uploadcontent", "1.0", "editor/loader.gif");
-    $scope.uploadCancel = ecEditor.getContext('contentId') ? 'Cancel' : 'Close Editor';
+    $scope.uploadCancelLabel = ecEditor.getContext('contentId') ? 'Cancel' : 'Close Editor';
 
     $scope.$on('ngDialog.opened', function() {
         $scope.uploader = new qq.FineUploader({
@@ -151,10 +151,11 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                         position: 'topCenter',
                         icon: 'fa fa-warning'
                     });
-                    $scope.showLoader(false);
+                    $scope.showLoader(false);                    
                 } else {
                     var result = res.data.result;
                     ecEditor.setContext('contentId', result.node_id);
+                    $scope.uploadCancelLabel = "Cancel";
                     $scope.uploadByURL(fileUpload, mimeType);
                 }
             });
