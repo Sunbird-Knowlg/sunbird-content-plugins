@@ -1,4 +1,4 @@
-angular.module('contentmetaApp', []).controller('contentmetaController', ['$scope', function($scope) {
+angular.module('contentmetaApp', []).controller('contentmetaController', ['$scope', '$timeout', function($scope, $timeout) {
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
@@ -10,6 +10,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         }
     });
     $scope.showImageIcon = true;
+    $scope.showSubCollection = true;
 
     $scope.showAssestBrowser = function() {
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
@@ -32,14 +33,16 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             if (_.isString($scope.content.keywords)) {
                 $scope.content.keywords = $scope.content.keywords.split(',');
             }
-            if (_.isString($scope.content.language)) {
+            if (!_.isEmpty($scope.content.language) && _.isString($scope.content.language)) {
                 $scope.content.language = [$scope.content.language];
             }
+            var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
             $scope.content.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.content));;
             $scope.metadataCloneObj = _.clone($scope.content);
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+            if (activeNode.data && activeNode.data.root) ecEditor.dispatchEvent("content:title:update", $scope.content.name);
             $scope.editMode = false;
             $scope.getPath();
             $scope.$safeApply();
@@ -54,7 +57,9 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     };
 
     $scope.initDropdown = function() {
-        $('#language').dropdown('set selected', $scope.content.language);
+        $timeout(function() {                        
+            if ($scope.content.language) $('#contentmeta-language').dropdown('set selected', $scope.content.language[0]);            
+        });
     };
 
     $scope.getUpdatedMetadata = function(originalMetadata, currentMetadata) {
@@ -90,10 +95,11 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
 
     $scope.onNodeSelect = function(evant, data) {
         $scope.showImageIcon = false;
-        var contentArr = ["Story", "Collection", "Game", "Worksheet"];
+        var contentArr = ["Story", "Collection", "Game", "Worksheet", "Resource"];
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
         if (_.indexOf(contentArr, data.data.objectType) != -1) {
             $scope.nodeId = data.data.id;
+            var cache = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId];            
             $scope.nodeType = data.data.objectType;
             $scope.content = {};
             $scope.editMode = $scope.newNode = false;
@@ -101,28 +107,31 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.contentmeta", "1.0", "assets/default.png");
 
             var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
+            $scope.content = (_.isUndefined(cache)) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, cache.metadata);
+            $scope.showSubCollection = !activeNode.folder;
             if ($scope.mode === "Edit" && $scope.editable === true) {
                 $scope.editMode = true;
                 $('.ui.dropdown').dropdown('refresh');
                 $scope.metadataCloneObj = _.clone($scope.content);
+                $('#contentmeta-language').dropdown('clear');
             }
             if (!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])) {
                 $scope.editMode = false;
-                $scope.content = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
+                $scope.content = (_.isUndefined(cache)) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, cache.metadata);
                 $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
-                $('#language').dropdown('set selected', $scope.content.language);
-            } else if (_.has(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, ["name"])) {
+                $('#contentmeta-language').dropdown('set selected', $scope.content.language);
+            } else if (cache && _.has(cache.metadata, ["name"])) {
                 $scope.editMode = false;
-                $scope.content = _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
-                $scope.metadataCloneObj = _.clone(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
-                $('#language').dropdown('set selected', $scope.content.language);
+                $scope.content = _.assign(activeNode.data.metadata, cache.metadata);
+                $scope.metadataCloneObj = _.clone(cache.metadata);
+                $('#contentmeta-language').dropdown('set selected', $scope.content.language);
             } else {
                 $scope.newNode = true;
             }
             $scope.getPath();
         }
         $scope.showImageIcon = true;
-        if (data.data.objectType == "Collection") $scope.getSubCollection(data.data.metadata.identifier, function(err, res) {
+        if (data.data.objectType == "Collection" && $scope.showSubCollection) $scope.getSubCollection(data.data.metadata.identifier, function(err, res) {
             if (err) console.log("error when trying to fetch sub collections");
             if (res) $scope.initFancyTree(res.data.result.content);
         });

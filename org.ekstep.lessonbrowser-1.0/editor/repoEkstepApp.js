@@ -115,21 +115,23 @@ angular.module('org.ekstep.contentprovider', [])
             } else {
                 ctrl.meta.languages = res.data.result.medium.values;
                 ctrl.meta.grades = res.data.result.gradeLevel.values;
+                ctrl.meta.lessonTypes = ["Story", "Collection", "Worksheet", "Resource"]
             }
             $scope.$safeApply();
         });
     };
-    ctrl.configOrdinals = function() {
-        metaService.getConfigOrdinals(function(err, res){
-            if (err) {
-                ctrl.langErr = "Oops! Something went wrong with config ordinals. Please try again later.";
-            } else {
-                ctrl.meta.lessonTypes = res.data.result.ordinals.contentType;
-                ctrl.meta.domains = res.data.result.ordinals.domain;
-            }
-            $scope.$safeApply();
-        });
-    };
+    // ctrl.configOrdinals = function() {
+    //     metaService.getConfigOrdinals(function(err, res){
+    //         if (err) {
+    //             ctrl.langErr = "Oops! Something went wrong with config ordinals. Please try again later.";
+    //         } else {
+    //             //ctrl.meta.lessonTypes = res.data.result.ordinals.contentType;
+    //             ctrl.meta.lessonTypes = ["Story", "Collection", "Worksheet", "Resource"]
+    //             ctrl.meta.domains = res.data.result.ordinals.domain;
+    //         }
+    //         $scope.$safeApply();
+    //     });
+    // };
 
     // Title filter
     $scope.searchByKeyword = function(){
@@ -294,7 +296,7 @@ angular.module('org.ekstep.contentprovider', [])
 
     // Fetch sidebar filters through APIs
     ctrl.learningConfig();
-    ctrl.configOrdinals();
+    //ctrl.configOrdinals();
 
     // Fetch and apply initial filters for first load
     var repoId = 'ekstep';
@@ -333,3 +335,4 @@ angular.module('org.ekstep.contentprovider', [])
         return value + (tail || ' …');
     };
 });
+//# sourceURL=resourceBrowser.js

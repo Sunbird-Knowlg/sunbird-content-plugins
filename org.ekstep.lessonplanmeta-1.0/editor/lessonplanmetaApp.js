@@ -1,4 +1,4 @@
-angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanmetaController', ['$scope', function($scope) {    
+angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanmetaController', ['$scope', '$timeout', function($scope, $timeout) {    
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
@@ -7,18 +7,23 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
     $scope.gradeList = [];
     $scope.languageList = [];    
     $scope.subjectList = [];
+    $scope.defaultSubjectList = ["Biology","Chemistry","Physics","Mathematics","Environmental","Geography","History","Political Science","Economics","Sanskrit"];
 
 
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.gradeList = resp.data.result.ordinals.gradeLevel;
             $scope.languageList = resp.data.result.ordinals.language;            
-            $scope.subjectList = resp.data.result.ordinals.language;
-            //TODO: Replace below list with API resplonse            
+            $scope.subjectList = _.uniq(_.union(_.clone(resp.data.result.ordinals.language), $scope.defaultSubjectList));
+                        //TODO: Replace below list with API resplonse            
             $scope.boardList["CBSE"]  = "CBSE";
             $scope.boardList["NCERT"] = "NCERT";
             $scope.boardList["ICSE"] = "ICSE"
             $scope.boardList["MSCERT"] = "MSCERT";
+            $scope.boardList["UP Board"]  = "UP Board";
+            $scope.boardList["AP Board"]  = "AP Board";
+            $scope.boardList["TN Board"]  = "TN Board";
+            $scope.boardList["NCTE"]  = "NCTE";
             $scope.boardList["Other"] = "Others";
             $scope.$safeApply();                   
         }
@@ -36,11 +41,13 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
     }
 
     $scope.initDropdown = function() {
-        $('#lessonplan-board').dropdown('set selected', $scope.lesson.board);
-        $('#lessonplan-medium').dropdown('set selected', $scope.lesson.medium);
-        $('#lessonplan-subject').dropdown('set selected', $scope.lesson.subject);
-        $('#lessonplan-gradeLevel').dropdown('set selected', $scope.lesson.gradeLevel);        
-        $('#lessonplan-language').dropdown('set selected', $scope.lesson.language);    
+        $timeout(function() {
+            $('#lessonplan-board').dropdown('set selected', $scope.lesson.board);
+            $('#lessonplan-medium').dropdown('set selected', $scope.lesson.medium);
+            $('#lessonplan-subject').dropdown('set selected', $scope.lesson.subject);
+            $('#lessonplan-gradeLevel').dropdown('set selected', $scope.lesson.gradeLevel);        
+            $('#lessonplan-language').dropdown('set selected', $scope.lesson.language);    
+        });        
     }
     
     $scope.updateNode = function(){
@@ -53,7 +60,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             if(_.isString($scope.lesson.gradeLevel)){
                 $scope.lesson.gradeLevel = [$scope.lesson.gradeLevel];
             }            
-            if(_.isString($scope.lesson.language)){
+            if (!_.isEmpty($scope.lesson.language) && _.isString($scope.lesson.language)) {
                 $scope.lesson.language = [$scope.lesson.language];
             }
             $scope.lesson.duration = $scope.duration ? $scope.duration.toString() : "0";
@@ -64,6 +71,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             $scope.metadataCloneObj = _.clone($scope.lesson);
             $scope.editMode = false;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+            ecEditor.dispatchEvent("content:title:update", $scope.lesson.name);
             $scope.getPath();
             $scope.$safeApply();
         }else{
@@ -124,7 +132,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             $('.ui.dropdown').dropdown('refresh');
             $scope.metadataCloneObj = _.clone($scope.lesson);
         }
-        if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"]) && _.has(activeNode.data.metadata, ["description"])){
+        if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
             $scope.editMode = false;
             $('#lessonplan-board').dropdown('set selected', $scope.lesson.board);
             $('#lessonplan-medium').dropdown('set selected', $scope.lesson.medium);
@@ -144,12 +152,12 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             }
             $scope.lesson.duration = activeNode.data.metadata.duration ? parseInt(activeNode.data.metadata.duration) : "0";
             if (activeNode.data.metadata.learningObjective) $scope.learningObjective = activeNode.data.metadata.learningObjective[0];
-            $scope.duration = activeNode.data.metadata.duration;
+            $scope.duration = activeNode.data.metadata.duration ? parseInt(activeNode.data.metadata.duration) : 0;
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
         }else{
             $scope.newNode = true;
             $scope.learningObjective = undefined;
-            $scope.duration = "0";
+            $scope.duration = 0;
             $('#lessonplan-board').dropdown('clear');
             $('#lessonplan-medium').dropdown('clear');
             $('#lessonplan-subject').dropdown('clear');

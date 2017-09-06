@@ -1,4 +1,4 @@
-angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controller('textbookmetaController', ['$scope', function($scope) {    
+angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controller('textbookmetaController', ['$scope', '$timeout', function($scope, $timeout) {    
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
@@ -8,19 +8,23 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
     $scope.languageList = [];
     $scope.audienceList = [];
     $scope.subjectList = [];
-
+    $scope.defaultSubjectList = ["Biology","Chemistry","Physics","Mathematics","Environmental","Geography","History","Political Science","Economics","Sanskrit"];
 
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.gradeList = resp.data.result.ordinals.gradeLevel;
             $scope.languageList = resp.data.result.ordinals.language;
             $scope.audienceList = resp.data.result.ordinals.audience;
-            $scope.subjectList = resp.data.result.ordinals.language;
+            $scope.subjectList = _.uniq(_.union(_.clone(resp.data.result.ordinals.language), $scope.defaultSubjectList));
             //TODO: Replace below list with API resplonse            
             $scope.boardList["CBSE"]  = "CBSE";
             $scope.boardList["NCERT"] = "NCERT";
             $scope.boardList["ICSE"] = "ICSE"
             $scope.boardList["MSCERT"] = "MSCERT";
+            $scope.boardList["UP Board"]  = "UP Board";
+            $scope.boardList["AP Board"]  = "AP Board";
+            $scope.boardList["TN Board"]  = "TN Board";
+            $scope.boardList["NCTE"]  = "NCTE";
             $scope.boardList["Other"] = "Others";
             $scope.$safeApply();                   
         }
@@ -38,12 +42,15 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
     }
 
     $scope.initDropdown = function() {
-        $('#board').dropdown('set selected', $scope.textbook.board);
-        $('#medium').dropdown('set selected', $scope.textbook.medium);
-        $('#subject').dropdown('set selected', $scope.textbook.subject);
-        $('#gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
-        $('#audience').dropdown('set selected', $scope.textbook.audience);
-        $('#language').dropdown('set selected', $scope.textbook.language);    
+        $timeout(function() {
+            $('#board').dropdown('set selected', $scope.textbook.board);
+            $('#medium').dropdown('set selected', $scope.textbook.medium);
+            $('#subject').dropdown('set selected', $scope.textbook.subject);
+            $('#gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
+            $('#audience').dropdown('set selected', $scope.textbook.audience);
+            $('#language').dropdown('set selected', $scope.textbook.language);
+            $('#resource').dropdown('set selected', $scope.textbook.resource);      
+        });
     }
     
     $scope.updateNode = function(){
@@ -56,11 +63,14 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             if(_.isString($scope.textbook.keywords)){
                 $scope.textbook.keywords = $scope.textbook.keywords.split(',');
             }
-            if(_.isString($scope.textbook.gradeLevel)){
+            if (!_.isEmpty($scope.textbook.gradeLevel) && _.isString($scope.textbook.gradeLevel)) {
                 $scope.textbook.gradeLevel = [$scope.textbook.gradeLevel];
             }
-            if(_.isString($scope.textbook.language)){
+            if (!_.isEmpty($scope.textbook.language) && _.isString($scope.textbook.language)) {
                 $scope.textbook.language = [$scope.textbook.language];
+            }
+            if (!_.isEmpty($scope.textbook.audience) && _.isString($scope.textbook.audience)){
+                $scope.textbook.audience = [$scope.textbook.audience];
             }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
             $scope.textbook.contentType = $scope.nodeType;
@@ -68,6 +78,7 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             $scope.metadataCloneObj = _.clone($scope.textbook);
             $scope.editMode = false;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+            ecEditor.dispatchEvent("content:title:update", $scope.textbook.name);
             $scope.getPath();
             $scope.$safeApply();
         }else{

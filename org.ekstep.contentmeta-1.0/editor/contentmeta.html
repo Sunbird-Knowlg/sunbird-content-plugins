@@ -37,7 +37,7 @@
         </div>
         <div class="metacontent-fields-container">
             <div class="ui fluid grid container" style="height:100%">
-                <div ng-show="nodeType == 'Collection'" class="seven wide column">
+                <div ng-show="nodeType == 'Collection' && showSubCollection" class="seven wide column">
                     <!-- <h4 class="ui header">Course structure</h4> -->
                     <div class="ui styled accordion collection-metadata-accordion" id="collectionMetadataAccordion">
                         <div class="active title" ng-click="toggleCollectionAccodrion()">
@@ -119,7 +119,7 @@
                     </div>
                     <div class="field">
                         <label for="language">Language</label>
-                        <select id="language" class="ui selection dropdown" ng-model="content.language" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'language'})">
+                        <select id="contentmeta-language" class="ui selection dropdown" ng-model="content.language" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'language'})">
                             <option value="">Language</option>
                             <option value="{{language}}" ng-repeat="language in languageList">{{language}}</option>
                         </select>

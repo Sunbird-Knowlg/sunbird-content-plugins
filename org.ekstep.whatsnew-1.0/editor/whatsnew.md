@@ -1,55 +1,45 @@
-<!-- Update plugin.js with a new version number every time this file is changed. -->
 ## Welcome! Here's what has changed
 
+---
 
-### Add videos to a lesson
+### <b>Keyboard shortcuts</b>
+
+<p> ☼ <b>NEW</b> - Be more efficient by using keyboard shortcuts:
+ View all keyboard shortcuts currently supported using  ```Ctrl + /``` in Windows and Mac
+
+---
+
+### <b>Add videos to a lesson</b>
 
 <p> ☼ <b>NEW</b> - You can add videos to a slide by providing direct link to the video. We also support videos stored on Google Drive
-
 Support for other websites coming soon!
 
 ---
 
-### Recommendation for Creators
-<p> ☼ <b>NEW</b> - We now offer suggestions to you about content you could create, based on your history and needs of the community.
+### <b>Edit details and Send for review</b>
 
-As we learn more about the community we will be able to provide accurate suggestions on what you could create best!
+<p> ☼ <b>NEW</b> - Now you can edit details and send for review directly from content studio
 
 ---
 
-### Content creation for an organisation
+### <b>Content creation for organisation</b>
+
 <p> ☼ <b>NEW</b> - You will be able to specify the organisation for which you are creating the content
 
-
 ---
 
-### Send for review 
-<p> ☼ <b>NEW</b> - You will be able to Send content for review from Content Editor
+### <b>Recommendation for Creators</b>
 
+<p> ☼ <b>NEW</b> - We now offer suggestions to you about content you could create, based on your history and needs of the community.
+As we learn more about the community we will be able to provide accurate suggestions on what you could create best!
+  
 ---
 
-### Keyboard shortcuts
-<p> ☼ <b>NEW</b> - Be more efficient by using keyboard shortcuts:
+### <b>We love to make things better!</b>
 
- * Ctrl+S / Cmd+S to save
- * Ctrl+Shift+backspace / Cmd+Shift+backspace to choose to save as Markdown or HTML
-
-
----
-
-### We love to make things work! :+1:
-<p> ☂ Bug fix - Word Info now supports new line character (enter)
-<p> ☂ Bug fix - Saving content has become more robust
+<p> ☂ New look for toolbar and right side pane
+<p> ☂ Easier to upload and browse images & audio now!
 
 ---
 
 Visit <b>[Creators Resource](https://community.ekstep.in/creators)</b> and <b>[Content Creators group](https://community.ekstep.in/groups/item/5-content-creators)</b> if you need help getting started.
-
----
-
-```
-## Heading
-### Sub-heading
-<p> ☼ <b>NEW</b> - value proposition
-<p> ☂ Bug fix - 
-```

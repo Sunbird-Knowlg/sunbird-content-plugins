@@ -18,7 +18,7 @@ org.ekstep.genericeditor.basePlugin.extend({
      *   @memberof Preview
      *
      */
-    previewURL: 'preview/preview.html' + '?webview=true',
+    previewURL: (ecEditor.getConfig('previewURL') || 'content/preview/preview.html') + '?webview=true',
     /**
      *   @member contentBody {Object} content body for preview
      *   @memberof Preview
@@ -31,18 +31,7 @@ org.ekstep.genericeditor.basePlugin.extend({
      *
      */
     initialize: function() {
-        ecEditor.addEventListener("atpreview:show", this.initPreview, this);
-        var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/contentPreview.html");
-    },
-    /**
-     *
-     *   @param event {Object} event object from event bus.
-     *   @param data {Object} ecml
-     *   @memberof preview
-     */
-    initPreview: function(event, data) {
-        //this.contentBody = data.contentBody;
-        this.showPreview();
+        ecEditor.addEventListener("atpreview:show", this.showPreview, this);
     },
     /**     
      *   @memberof preview
@@ -51,7 +40,6 @@ org.ekstep.genericeditor.basePlugin.extend({
         console.log(this.previewURL);
         var instance = this;
         var contentService = ecEditor.getService('content');
-        var meta = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId'));
         var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
         previewContentIframe.src = instance.previewURL;
         var userData = ecEditor.getService('telemetry').context;
@@ -60,7 +48,6 @@ org.ekstep.genericeditor.basePlugin.extend({
             userData.etags = userData.etags || {};
             configuration.context = {
                 'mode': 'edit',
-                'contentId': meta.identifier,
                 'sid': userData.sid,
                 'uid': userData.uid,
                 'channel': userData.channel,
@@ -68,17 +55,15 @@ org.ekstep.genericeditor.basePlugin.extend({
                 'app': userData.etags.app,
                 'dims': userData.etags.dims,
                 'partner': userData.etags.partner,
-                'contentId':'do_1123102903042129921225'
+                'contentId': ecEditor.getContext('contentId')
             };
             configuration.config = {
                 'showEndPage': 'true',
                 'showStartPage': 'true'
-            };
+            };                       
+            configuration.metadata = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
             configuration.data = {};
-            configuration.metadata = meta.contentMeta;
-            configuration.data = instance.contentBody;
             previewContentIframe.contentWindow.initializePreview(configuration);
-
         };
     }
 });

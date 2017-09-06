@@ -59,6 +59,18 @@ angular.module('org.ekstep.sunbirdheader:headerApp', ['yaru22.angular-timeago'])
         $scope.$safeApply();
     }
 
+    $scope.editContentMeta = function() {
+        ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup");
+    }
+
+    $scope.setTitle = function(event, title) {
+        if(title) {
+            $scope.contentDetails.contentTitle = title;
+            document.title = title;
+        }
+        $scope.$safeApply();
+    }
+
     window.addEventListener('online', $scope.internetStatusFn, false);
     window.addEventListener('offline', $scope.internetStatusFn, false);
     ecEditor.addEventListener('object:modified', $scope.setSaveStatus, $scope);
@@ -71,6 +83,5 @@ angular.module('org.ekstep.sunbirdheader:headerApp', ['yaru22.angular-timeago'])
 
     ecEditor.addEventListener('org.ekstep.contenteditor:save', $scope.onSave, $scope);
     ecEditor.addEventListener('org.ekstep.editorstate:state', $scope.setEditorState, $scope);
-    ecEditor.addEventListener('org.ekstep.ceheader:meta:edit', $scope.editContentMeta, $scope);
-
+    ecEditor.addEventListener('content:title:update', $scope.setTitle, $scope);
 }]);

@@ -7,7 +7,8 @@
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
-        "dependencies": [                        
+        "dependencies": [
+            { "type": "css", "src": "editor/styles/plugin.css"}
         ],
         "container": [{
             "id": "core_editor_area",
