@@ -17,7 +17,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div>      
     <form class="ui form segment" id="contents-data-form" novalidate ng-submit="updateNode()" ng-show="editMode" name="contentMetaForm">
         <div class="fields">
             <div class="field book-image-field">
@@ -47,4 +47,23 @@
             </div>
         </div>
     </form>
+    <div class="metacontent-fields-container" ng-show="!editMode">
+            <div class="ui fluid grid container" style="height:100%">
+                <div ng-show="nodeType == 'Collection' && showSubCollection" class="seven wide column">
+                    <!-- <h4 class="ui header">Course structure</h4> -->
+                    <div class="ui styled accordion collection-metadata-accordion" id="collectionMetadataAccordion">
+                        <div class="active title" ng-click="toggleCollectionAccodrion()">
+                            <i ng-show="!(toggleCollectionAccodrionState)" class="fa fa-folder-o" aria-hidden="true"></i>
+                            <i ng-show="toggleCollectionAccodrionState" class="fa fa-folder-open-o" aria-hidden="true"></i> &nbsp; Contents
+                            <span class="expand-collection" ng-show="!(toggleCollectionAccodrionState)"><i class="fa fa-plus" aria-hidden="true"></i></span>
+                            <span class="collapse-collection" ng-show="toggleCollectionAccodrionState"><i class="fa fa-minus" aria-hidden="true"></i></span>
+                        </div>
+                        <div class="active content">
+                            <div id="collection-meta-tree"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
