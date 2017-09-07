@@ -110,7 +110,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.content = {};
             $scope.editMode = true;
             $scope.newNode = false;
-            $scope.tokenMode = 'view';
+            $scope.tokenMode = 'edit';
             $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
             $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.contentmeta", "1.0", "assets/default.png");
             
@@ -123,7 +123,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 $('#contentmeta-language').dropdown('clear');
             }
             if (!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])) {
-                if($scope.nodeType!='Collection'){
+                if(!$scope.editable){
                     $scope.editMode = false;
                     $scope.tokenMode = 'view';
                 }

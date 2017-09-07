@@ -22,7 +22,7 @@
         <div class="fields">
             <div class="field book-image-field">
                 <label ng-show="editMode" for="bookImage">Add Icon</label>
-                <div class="book-image-container popup-item" data-content="{{editMode ? 'Add or change image': 'Icon'}}" data-variation="tiny inverted" data-position="right center" ng-click="!editMode || showAssestBrowser()">
+                <div class="book-image-container popup-item" data-content="{{editMode ? 'Add or change image': ''}}" data-variation="tiny inverted" data-position="right center" ng-click="!editMode || showAssestBrowser()">
                     <i class="camera icon"></i>
                     <img ng-if="showImageIcon" ng-src="{{content.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
                 </div>
