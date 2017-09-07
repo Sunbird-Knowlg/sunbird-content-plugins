@@ -241,10 +241,19 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         return tree;
     }
 
+    $scope.toggleCollectionAccodrion = function() {
+        $scope.toggleCollectionAccodrionState = !($scope.toggleCollectionAccodrionState);
+    }
+
     ecEditor.addEventListener("org.ekstep.contentmeta:preview", $scope.previewContent);
 
     setTimeout(function() {
         ecEditor.jQuery('.popup-item').popup();
+        ecEditor.jQuery(".collection-metadata-accordion").accordion({
+            collapsible: true,
+            duration: 500
+        });
+        ecEditor.jQuery('.collection-metadata-accordion .title:first-child').click();
     }, 0);
 }]);
 //# sourceURL=contentmetaApp.js
