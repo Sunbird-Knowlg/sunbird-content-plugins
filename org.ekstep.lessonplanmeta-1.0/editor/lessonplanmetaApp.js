@@ -69,10 +69,15 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             $scope.lesson.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.lesson));
             $scope.metadataCloneObj = _.clone($scope.lesson);
-            $scope.editMode = false;
+            $scope.editMode = true;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             ecEditor.dispatchEvent("content:title:update", $scope.lesson.name);
             $scope.getPath();
+            ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                title: 'Content details updated successfully.',
+                position: 'topCenter',
+                icon: 'fa fa-check-circle'
+            });
             $scope.$safeApply();
         }else{
             ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
@@ -121,19 +126,18 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.lesson = {};
-        $scope.editMode = $scope.newNode = false;
+        $scope.editMode = true;
+        $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
         $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.lessonplanmeta", "1.0", "assets/default.png");
 
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
         $scope.lesson = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
         if($scope.mode === "Edit" && $scope.editable === true){
-            $scope.editMode = true;
             $('.ui.dropdown').dropdown('refresh');
             $scope.metadataCloneObj = _.clone($scope.lesson);
         }
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
-            $scope.editMode = false;
             $('#lessonplan-board').dropdown('set selected', $scope.lesson.board);
             $('#lessonplan-medium').dropdown('set selected', $scope.lesson.medium);
             $('#lessonplan-subject').dropdown('set selected', $scope.lesson.subject);

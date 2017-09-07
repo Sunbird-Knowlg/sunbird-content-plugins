@@ -109,9 +109,8 @@ angular.module('ngTokenField', []).directive('ngTokenField', ["$parse", "$timeou
 
                         tokenWrapper.append(token);
 
-                        var close = $("<div>");
-                        close.addClass("close");
-                        close.append(document.createTextNode('✕'));
+                        var close = $("<i>");
+                        close.addClass("remove icon custom-cursor"); 
 
                         var onclickWrapper = function(w) {
                             return function callback() {
