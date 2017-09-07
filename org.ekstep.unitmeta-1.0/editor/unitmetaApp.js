@@ -93,11 +93,9 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
         $scope.unit = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
         if($scope.mode === "Edit" && $scope.editable === true){
-            $scope.editMode = true;
             $scope.metadataCloneObj = _.clone($scope.unit);
         }
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
-            $scope.editMode = true;
             $scope.unit.conceptData = '(0) concepts selected';
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.unit.concepts = activeNode.data.metadata.concepts;
