@@ -224,6 +224,8 @@
     padding: 1em!important;
     position: relative;
     padding-left: 0!important;
+    position: relative;
+    left: -27px;
 }
 
 #collectionMetadataAccordion {
@@ -238,11 +240,9 @@
 
 #collectionMetadataAccordion .active.title,
 #collectionMetadataAccordion .title {
-    color: #4a4a4a;
     outline: none;
-    padding: 1em;
-    border: 0.2px solid rgba(34, 36, 38, .15);
-    border-radius: 0.5em;
+    font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif!important;
+}
 }
 
 #collectionMetadataAccordion .title.ui-state-active {
@@ -251,23 +251,23 @@
     border-bottom-right-radius: 0;
 }
 
-#collection-meta-tree span.fancytree-selected,
+/*#collection-meta-tree span.fancytree-selected,
 #collectionMetadataAccordion .title.ui-state-active,
 #collectionMetadataAccordion .active.title:hover,
 #collectionMetadataAccordion .title:hover,
 #collectionMetadataAccordion .fancytree-active .fancytree-title {
     background: #2e9fd9;
     color: #fff;
-}
+}*/
 
-#collection-meta-tree {
+/*#collection-meta-tree {
     border: 0.2px solid rgba(34, 36, 38, .15);
     border-top: none;
     border-bottom-left-radius: 0.5em;
     border-bottom-right-radius: 0.5em;
     padding: 0.5em 0;
     height: auto;
-}
+}*/
 
 #collection-meta-tree .ui-fancytree .fancytree-node {
     padding: 1em;
