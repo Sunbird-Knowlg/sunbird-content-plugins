@@ -153,6 +153,7 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             $('#gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
             $('#audience').dropdown('set selected', $scope.textbook.audience);
             $('#language').dropdown('set selected', $scope.textbook.language);
+            $scope.textbook.conceptData = '(0) concepts selected';
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.textbook.concepts = activeNode.data.metadata.concepts;
                 if($scope.textbook.concepts.length > 0){
@@ -161,7 +162,7 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
                         selectedConcepts.push(concept.identifier);
                     });
                 }else{
-                    $scope.textbook.conceptData = '';
+                    $scope.textbook.conceptData = '(0) concepts selected';
                 }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);

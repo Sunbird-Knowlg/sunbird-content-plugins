@@ -139,6 +139,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             $('#lessonplan-subject').dropdown('set selected', $scope.lesson.subject);
             $('#lessonplan-gradeLevel').dropdown('set selected', $scope.lesson.gradeLevel);            
             $('#lessonplan-language').dropdown('set selected', $scope.lesson.language);
+            $scope.lesson.conceptData = '(0) concepts selected';
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.lesson.concepts = activeNode.data.metadata.concepts;
                 if($scope.lesson.concepts.length > 0){
@@ -147,7 +148,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
                         selectedConcepts.push(concept.identifier);
                     });
                 }else{
-                    $scope.lesson.conceptData = '';
+                    $scope.lesson.conceptData = '(0) concepts selected';
                 }
             }
             $scope.lesson.duration = activeNode.data.metadata.duration ? parseInt(activeNode.data.metadata.duration) : "0";

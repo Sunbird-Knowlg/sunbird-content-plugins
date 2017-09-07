@@ -98,6 +98,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         }
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
             $scope.editMode = true;
+            $scope.unit.conceptData = '(0) concepts selected';
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.unit.concepts = activeNode.data.metadata.concepts;
                 if($scope.unit.concepts.length > 0){
@@ -106,7 +107,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                         selectedConcepts.push(concept.identifier);
                     });
                 }else{
-                    $scope.unit.conceptData = '';
+                    $scope.unit.conceptData = '(0) concepts selected';
                 }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);

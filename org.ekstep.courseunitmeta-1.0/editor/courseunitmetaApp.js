@@ -92,6 +92,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
         }
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
             $scope.editMode = false;
+            $scope.courseunit.conceptData = '(0) concepts selected';
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.courseunit.concepts = activeNode.data.metadata.concepts;
                 if($scope.courseunit.concepts.length > 0){
@@ -100,7 +101,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
                         selectedConcepts.push(concept.identifier);
                     });
                 }else{
-                    $scope.courseunit.conceptData = '';
+                    $scope.courseunit.conceptData = '(0) concepts selected';
                 }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
