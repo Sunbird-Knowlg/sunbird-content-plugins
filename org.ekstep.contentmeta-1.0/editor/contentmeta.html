@@ -41,8 +41,8 @@
                     </div>
                 </div>
                 <div class="field" ng-class="{'disabled': fieldDisabled}">
-                        <label>Keywords</label>
-                        <ng-token-field ng-model="content.keywords" id="contentmeta-keywords" placeholder="{{hasPlaceholder}}" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
+                        <label>Keywords preview</label>
+                        <ng-token-field ng-model="content.keywords" id="contentmeta-keywords" placeholder="{{hasPlaceholder}}" mode="{{tokenMode}}" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
                 </div>
             </div>
         </div>

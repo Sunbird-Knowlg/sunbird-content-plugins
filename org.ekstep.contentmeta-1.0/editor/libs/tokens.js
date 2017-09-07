@@ -11,7 +11,8 @@ angular.module('ngTokenField', []).directive('ngTokenField', ["$parse", "$timeou
             id: '@id',
             ngModel: '=?',
             placeholder: '@placeholder',
-            validator: '&'
+            validator: '&',
+            mode:'@mode'
         },
         template: '<div class="ng-token-field"><input type="text" placeholder={{placeholder}}></div>',
         link: function(scope, element, attrs) {
@@ -126,7 +127,10 @@ angular.module('ngTokenField', []).directive('ngTokenField', ["$parse", "$timeou
                         tokenText.append(document.createTextNode(text));
 
                         token.append(tokenText);
-                        token.append(close);
+                        //show close icon only on edit mode
+                        if(scope.mode == 'edit' || scope.mode == undefined){
+                            token.append(close);
+                        }
                         tokenWrapper.insertBefore(_input);
 
                         // Resize input field accordingly
@@ -264,6 +268,7 @@ angular.module('ngTokenField', []).directive('ngTokenField', ["$parse", "$timeou
             function validateValue(value) {
                 //return scope.validator()(value);
             }
+
         }
     }
 }]);

@@ -114,6 +114,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.hasPlaceholder = 'Enter comma separated keywords';
             $scope.iconTooltip = 'Add or change image';
             $scope.iconTitle = 'Add icon';
+            $scope.tokenMode = 'view';
             $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
             $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.contentmeta", "1.0", "assets/default.png");
             
@@ -129,8 +130,8 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 if($scope.nodeType!='Collection'){
                     $scope.fieldDisabled = true;
                     $scope.hasPlaceholder = $scope.iconTooltip = '';
-                    $scope.iconTitle = 'Icon';
-                } 
+                    $scope.tokenMode = 'view';
+                }
                 $scope.content = (_.isUndefined(cache)) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, cache.metadata);
                 $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
                 $('#contentmeta-language').dropdown('set selected', $scope.content.language);
