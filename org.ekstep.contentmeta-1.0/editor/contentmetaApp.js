@@ -105,36 +105,36 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         if (_.indexOf(contentArr, data.data.objectType) != -1) {
             $scope.nodeId = data.data.id;
             var cache = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId];            
+           
             $scope.nodeType = data.data.objectType;
             $scope.content = {};
             $scope.editMode = true;
             $scope.newNode = false;
-            $scope.isDisabled = false ;
+            $scope.fieldDisabled = false ;
             $scope.hasPlaceholder = 'Enter comma separated keywords';
-            $scope.addIconTooltip = 'Add or change image';
+            $scope.iconTooltip = 'Add or change image';
+            $scope.iconTitle = 'Add icon';
             $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
             $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.contentmeta", "1.0", "assets/default.png");
-
+            
             var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
             $scope.content = (_.isUndefined(cache)) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, cache.metadata);
             $scope.showSubCollection = !activeNode.folder;
             if ($scope.mode === "Edit" && $scope.editable === true) {
-                $scope.editMode = true;
                 $('.ui.dropdown').dropdown('refresh');
                 $scope.metadataCloneObj = _.clone($scope.content);
                 $('#contentmeta-language').dropdown('clear');
             }
             if (!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])) {
                 if($scope.nodeType!='Collection'){
-                    $scope.isDisabled = true;
-                    $scope.hasPlaceholder = $scope.addIconTooltip = '';
+                    $scope.fieldDisabled = true;
+                    $scope.hasPlaceholder = $scope.iconTooltip = '';
+                    $scope.iconTitle = 'Icon';
                 } 
-                $scope.editMode = true;
                 $scope.content = (_.isUndefined(cache)) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, cache.metadata);
                 $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
                 $('#contentmeta-language').dropdown('set selected', $scope.content.language);
             } else if (cache && _.has(cache.metadata, ["name"])) {
-                $scope.editMode = false;
                 $scope.content = _.assign(activeNode.data.metadata, cache.metadata);
                 $scope.metadataCloneObj = _.clone(cache.metadata);
                 $('#contentmeta-language').dropdown('set selected', $scope.content.language);
@@ -245,19 +245,10 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         return tree;
     }
 
-    $scope.toggleCollectionAccodrion = function() {
-        $scope.toggleCollectionAccodrionState = !($scope.toggleCollectionAccodrionState);
-    }
-
     ecEditor.addEventListener("org.ekstep.contentmeta:preview", $scope.previewContent);
 
     setTimeout(function() {
         ecEditor.jQuery('.popup-item').popup();
-        ecEditor.jQuery(".collection-metadata-accordion").accordion({
-            collapsible: true,
-            duration: 500
-        });
-        ecEditor.jQuery('.collection-metadata-accordion .title:first-child').click();
     }, 0);
 }]);
 //# sourceURL=contentmetaApp.js

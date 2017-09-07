@@ -12,70 +12,8 @@
                 Preview
             </div>
             <div ng-show="mode == 'Edit' && editable == true">
-                <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'}); initDropdown();" ng-show="!editMode">
-                    Edit
-                </div>
                 <div class="ui primary button right-float button-overrides" id="update-button" ng-click="updateNode(); generateTelemetry({type: 'click', subtype: 'update', target: 'updatemeta'})" ng-show="editMode">
                     Update
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="ui segment" id="read-metadata-wrapper" ng-show="!editMode">
-        <div class="ui items">
-            <div class="item">
-                <div class="ui tiny image">
-                    <img ng-if="showImageIcon" ng-src="{{content.appIcon || defaultImage}}" alt="">
-                </div>
-                <div class="content">
-                    <div class="header">{{content.name}}</div>
-                    <div class="description">
-                        <p id="descriptionPara">{{content.description}}</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="metacontent-fields-container">
-            <div class="ui fluid grid container" style="height:100%">
-                <div ng-show="nodeType == 'Collection' && showSubCollection" class="seven wide column">
-                    <!-- <h4 class="ui header">Course structure</h4> -->
-                    <div class="ui styled accordion collection-metadata-accordion" id="collectionMetadataAccordion">
-                        <div class="active title" ng-click="toggleCollectionAccodrion()">
-                            <i ng-show="!(toggleCollectionAccodrionState)" class="fa fa-folder-o" aria-hidden="true"></i>
-                            <i ng-show="toggleCollectionAccodrionState" class="fa fa-folder-open-o" aria-hidden="true"></i> &nbsp; Contents
-                            <span class="expand-collection" ng-show="!(toggleCollectionAccodrionState)"><i class="fa fa-plus" aria-hidden="true"></i></span>
-                            <span class="collapse-collection" ng-show="toggleCollectionAccodrionState"><i class="fa fa-minus" aria-hidden="true"></i></span>
-                        </div>
-                        <div class="active content">
-                            <div id="collection-meta-tree"></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="five wide column">
-                    <table class="ui padded striped table metadata-fields-table">
-                        <tbody>
-                            <tr>
-                                <td>Keywords</td>
-                                <td>
-                                    <span class="field-value" ng-repeat="tag in content.keywords track by $index">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="ui fluid grid container" style="display:none;">
-                <div class="seven wide column" style="padding-left:0;">
-                    <table class="ui padded striped table">
-                        <tbody>
-                            <tr>
-                                <td>Keywords</td>
-                                <td>
-                                    <span class="field-value" ng-repeat="tag in content.keywords track by $index">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
         </div>
@@ -83,8 +21,8 @@
     <form class="ui form segment" id="contents-data-form" novalidate ng-submit="updateNode()" ng-show="editMode" name="contentMetaForm">
         <div class="fields">
             <div class="field book-image-field">
-                <label for="bookImage">Add icon</label>
-                <div class="book-image-container popup-item" data-content="{{addIconTooltip}}" data-variation="tiny inverted" data-position="right center" ng-click="isDisabled || showAssestBrowser()">
+                <label for="bookImage">{{iconTitle}}</label>
+                <div class="book-image-container popup-item" data-content="{{iconTooltip}}" data-variation="tiny inverted" data-position="right center" ng-click="fieldDisabled || showAssestBrowser()">
                     <i class="camera icon"></i>
                     <img ng-if="showImageIcon" ng-src="{{content.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
                 </div>
@@ -93,18 +31,18 @@
                 <div class="field required">
                     <label>Content Title</label>
                     <div class="ui input">
-                        <input placeholder="Enter title for Book" ng-model="content.name" ng-class=" {error: submitted && contentMetaForm.name.$error.required}" name="name" type="text" ng-disabled="isDisabled" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="150">
+                        <input placeholder="Enter title for Book" ng-model="content.name" ng-class=" {error: submitted && contentMetaForm.name.$error.required}" name="name" type="text" ng-disabled="fieldDisabled" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="150">
                     </div>
                 </div>
                 <div class="field required">
                     <label>Description</label>
                     <div class="ui input">
-                        <textarea placeholder="brief description about the content" ng-model="content.description" ng-class=" {error: submitted && contentMetaForm.description.$error.required}" name="description" rows="2" ng-disabled="isDisabled" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})" required></textarea>
+                        <textarea placeholder="brief description about the content" ng-model="content.description" ng-class=" {error: submitted && contentMetaForm.description.$error.required}" name="description" rows="2" ng-disabled="fieldDisabled" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})" required></textarea>
                     </div>
                 </div>
-                <div class="field" ng-class="{'disabled': isDisabled}">
+                <div class="field" ng-class="{'disabled': fieldDisabled}">
                         <label>Keywords</label>
-                        <ng-token-field ng-model="content.keywords" id="contentmeta-keywords" placeholder="{{hasPlaceholder}}" ng-click="isDisabled || generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
+                        <ng-token-field ng-model="content.keywords" id="contentmeta-keywords" placeholder="{{hasPlaceholder}}" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
                 </div>
             </div>
         </div>
