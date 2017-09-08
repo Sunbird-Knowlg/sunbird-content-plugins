@@ -143,9 +143,9 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             $('.ui.dropdown').dropdown('refresh');
             $scope.metadataCloneObj = _.clone($scope.textbook);
         }
+        $scope.textbook.conceptData = '(0) concepts selected';
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
             $scope.initDropdown();
-            $scope.textbook.conceptData = '(0) concepts selected';
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.textbook.concepts = activeNode.data.metadata.concepts;
                 if($scope.textbook.concepts.length > 0){

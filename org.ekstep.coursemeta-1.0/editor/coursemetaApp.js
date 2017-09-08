@@ -70,10 +70,10 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
     };
 
     $scope.initDropdown = function() {
-        $timeout(function() {
-            $('#language').dropdown('set selected', $scope.course.language);
-            $('#audience').dropdown('set selected', $scope.course.audience);
-        });
+        setTimeout(function() {
+            $('#course-language').dropdown('set selected', $scope.course.language);
+            $('#course-audience').dropdown('set selected', $scope.course.audience);
+        },1000);
     };
 
     $scope.getUpdatedMetadata = function(originalMetadata, currentMetadata){
@@ -124,9 +124,9 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             $('.ui.dropdown').dropdown('refresh');
             $scope.metadataCloneObj = _.clone($scope.course);
         }
+        $scope.course.conceptData = '(0) concepts selected';
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
             $scope.initDropdown();
-            $scope.course.conceptData = '(0) concepts selected'
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.course.concepts = activeNode.data.metadata.concepts;
                 if($scope.course.concepts.length > 0){
