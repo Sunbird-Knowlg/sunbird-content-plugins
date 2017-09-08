@@ -95,8 +95,8 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
         if($scope.mode === "Edit" && $scope.editable === true){
             $scope.metadataCloneObj = _.clone($scope.courseunit);
         }
+        $scope.courseunit.conceptData = '(0) concepts selected';
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
-            $scope.courseunit.conceptData = '(0) concepts selected';
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.courseunit.concepts = activeNode.data.metadata.concepts;
                 if($scope.courseunit.concepts.length > 0){
