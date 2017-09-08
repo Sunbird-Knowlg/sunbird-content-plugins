@@ -41,13 +41,13 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
     }
 
     $scope.initDropdown = function() {
-        $timeout(function() {
+        setTimeout(function() {
             $('#lessonplan-board').dropdown('set selected', $scope.lesson.board);
             $('#lessonplan-medium').dropdown('set selected', $scope.lesson.medium);
             $('#lessonplan-subject').dropdown('set selected', $scope.lesson.subject);
             $('#lessonplan-gradeLevel').dropdown('set selected', $scope.lesson.gradeLevel);        
             $('#lessonplan-language').dropdown('set selected', $scope.lesson.language);    
-        });        
+        },1000);        
     }
     
     $scope.updateNode = function(){
@@ -138,13 +138,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             $scope.metadataCloneObj = _.clone($scope.lesson);
         }
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
-            $timeout(function() {
-                $('#lessonplan-board').dropdown('set selected', $scope.lesson.board);
-                $('#lessonplan-medium').dropdown('set selected', $scope.lesson.medium);
-                $('#lessonplan-subject').dropdown('set selected', $scope.lesson.subject);
-                $('#lessonplan-gradeLevel').dropdown('set selected', $scope.lesson.gradeLevel);            
-                $('#lessonplan-language').dropdown('set selected', $scope.lesson.language);
-            });
+            $scope.initDropdown();
             $scope.lesson.conceptData = '(0) concepts selected';
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.lesson.concepts = activeNode.data.metadata.concepts;
