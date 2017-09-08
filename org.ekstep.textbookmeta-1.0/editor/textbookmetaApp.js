@@ -144,14 +144,7 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             $scope.metadataCloneObj = _.clone($scope.textbook);
         }
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
-            $timeout(function() {
-                $('#board').dropdown('set selected', $scope.textbook.board);
-                $('#medium').dropdown('set selected', $scope.textbook.medium);
-                $('#subject').dropdown('set selected', $scope.textbook.subject);
-                $('#gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
-                $('#audience').dropdown('set selected', $scope.textbook.audience);
-                $('#language').dropdown('set selected', $scope.textbook.language);
-            });
+            $scope.initDropdown();
             $scope.textbook.conceptData = '(0) concepts selected';
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.textbook.concepts = activeNode.data.metadata.concepts;
