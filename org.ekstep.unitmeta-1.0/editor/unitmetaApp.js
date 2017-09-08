@@ -95,8 +95,8 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         if($scope.mode === "Edit" && $scope.editable === true){
             $scope.metadataCloneObj = _.clone($scope.unit);
         }
+        $scope.unit.conceptData = '(0) concepts selected';
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
-            $scope.unit.conceptData = '(0) concepts selected';
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.unit.concepts = activeNode.data.metadata.concepts;
                 if($scope.unit.concepts.length > 0){

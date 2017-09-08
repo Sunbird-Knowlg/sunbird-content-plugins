@@ -137,9 +137,9 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             $('.ui.dropdown').dropdown('refresh');
             $scope.metadataCloneObj = _.clone($scope.lesson);
         }
+        $scope.lesson.conceptData = '(0) concepts selected';
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
             $scope.initDropdown();
-            $scope.lesson.conceptData = '(0) concepts selected';
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.lesson.concepts = activeNode.data.metadata.concepts;
                 if($scope.lesson.concepts.length > 0){
