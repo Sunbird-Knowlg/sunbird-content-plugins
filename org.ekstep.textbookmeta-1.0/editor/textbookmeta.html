@@ -35,21 +35,21 @@
                 <div class="three fields">
                     <div class="field">
                         <label for="board">Board</label>
-                        <select id="board" class="ui selection dropdown" ng-model="textbook.board" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'board'})">
+                        <select id="textbookmeta-board" class="ui selection dropdown" ng-model="textbook.board" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'board'})">
                             <option value="">Select</option>
                             <option value="{{board}}" ng-repeat="board in boardList">{{board}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="subject">Subject</label>
-                        <select id="subject" class="ui selection dropdown" ng-model="textbook.subject" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'subject'})">
+                        <select id="textbookmeta-subject" class="ui selection dropdown" ng-model="textbook.subject" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'subject'})">
                             <option value="">Select</option>
                             <option value="{{subject}}" ng-repeat="subject in subjectList">{{subject}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="grade">Grade</label>
-                        <select id="gradeLevel" class="ui fluid dropdown" ng-model="textbook.gradeLevel" multiple="" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'gradeLevel'})">
+                        <select id="textbookmeta-gradeLevel" class="ui fluid dropdown" ng-model="textbook.gradeLevel" multiple="" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'gradeLevel'})">
                             <option value="">Select</option>
                             <option value="{{gradeLevel}}" ng-repeat="gradeLevel in gradeList">{{gradeLevel}}</option>
                         </select>
@@ -58,14 +58,14 @@
                 <div class="three fields">
                      <div class="field">
                         <label for="medium">Medium</label>
-                        <select id="medium" class="ui selection dropdown" ng-model="textbook.medium" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'medium'})">
+                        <select id="textbookmeta-medium" class="ui selection dropdown" ng-model="textbook.medium" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'medium'})">
                             <option value="">Select</option>
                             <option value="{{medium}}" ng-repeat="medium in languageList">{{medium}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="audience">Audience</label>
-                        <select id="audience" class="ui selection dropdown" ng-model="textbook.audience" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'audience'})">
+                        <select id="textbookmeta-audience" class="ui selection dropdown" ng-model="textbook.audience" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'audience'})">
                             <option value="">Audience</option>
                             <option value="{{audience}}" ng-repeat="audience in audienceList">{{audience}}</option>
                         </select>
@@ -96,7 +96,7 @@
                     </div>
                     <div class="field">
                         <label for="language">Language</label>
-                        <select id="language" class="ui selection dropdown" ng-model="textbook.language" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'language'})">
+                        <select id="textbookmeta-language" class="ui selection dropdown" ng-model="textbook.language" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'language'})">
                             <option value="">Select</option>
                             <option value="{{language}}" ng-repeat="language in languageList">{{language}}</option>
                         </select>

@@ -43,13 +43,13 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
 
     $scope.initDropdown = function() {
         $timeout(function() {
-            $('#board').dropdown('set selected', $scope.textbook.board);
-            $('#medium').dropdown('set selected', $scope.textbook.medium);
-            $('#subject').dropdown('set selected', $scope.textbook.subject);
-            $('#gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
-            $('#audience').dropdown('set selected', $scope.textbook.audience);
-            $('#language').dropdown('set selected', $scope.textbook.language);
-            $('#resource').dropdown('set selected', $scope.textbook.resource);      
+            $('#textbookmeta-board').dropdown('set selected', $scope.textbook.board);
+            $('#textbookmeta-medium').dropdown('set selected', $scope.textbook.medium);
+            $('#textbookmeta-subject').dropdown('set selected', $scope.textbook.subject);
+            $('#textbookmeta-gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
+            $('#textbookmeta-audience').dropdown('set selected', $scope.textbook.audience);
+            $('#textbookmeta-language').dropdown('set selected', $scope.textbook.language);
+            $('#textbookmeta-resource').dropdown('set selected', $scope.textbook.resource);      
         });
     }
     
