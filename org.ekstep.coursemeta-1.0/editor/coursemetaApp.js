@@ -125,8 +125,10 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             $scope.metadataCloneObj = _.clone($scope.course);
         }
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
-            $('#language').dropdown('set selected', $scope.course.language);
-            $('#audience').dropdown('set selected', $scope.course.audience);
+            $timeout(function() {
+                $('#language').dropdown('set selected', $scope.course.language);
+                $('#audience').dropdown('set selected', $scope.course.audience);
+            });
             $scope.course.conceptData = '(0) concepts selected'
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.course.concepts = activeNode.data.metadata.concepts;
