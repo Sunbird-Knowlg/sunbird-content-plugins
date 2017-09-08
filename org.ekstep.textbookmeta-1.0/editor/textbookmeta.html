@@ -89,14 +89,23 @@
                         <input type="text" placeholder="Edition (optional)" ng-model="textbook.edition" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'edition'})" />
                     </div>
                 </div>
-                <div class="twelve wide field left-margin-9px">
-                    <label>Keywords</label>
-                    <ng-token-field ng-model="textbook.keywords" id="textbookmeta-keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
+                <div class="two fields">
+                    <div class=" twelve wide field">
+                        <label>Keywords</label>
+                        <ng-token-field ng-model="textbook.keywords" id="textbookmeta-keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
+                    </div>
+                    <div class="field">
+                        <label for="language">Language</label>
+                        <select id="language" class="ui selection dropdown" ng-model="textbook.language" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'language'})">
+                            <option value="">Select</option>
+                            <option value="{{language}}" ng-repeat="language in languageList">{{language}}</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="field">
                     <label>Notes to Teacher</label>
                     <input placeholder="Add Notes" ng-model="textbook.notes" name="notes" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'notes'})">
                 </div>
-            </div>
         </div>
     </form>
 </div>
