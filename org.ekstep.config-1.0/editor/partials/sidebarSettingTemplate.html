@@ -14,6 +14,13 @@
     text-transform: capitalize !important;
 }
 
+.sidebarContent .ui.form .field>label,
+.sidebarContent .ui.header,
+.sidebarContent .ui.table{
+    font-size: 12px;
+}
+
+
 .sidebarHeadTab {
     box-shadow: none !important;
     border: 0px !important;
@@ -158,10 +165,12 @@ a.item.at-menu-item.popup-item.active {
         </div>
     </div>
     <div class="ui tab segment sidebarContent" data-tab="actions">
-        <h5 class="ui header actions-header">On click</h5>
-        <button class="ui tiny circular twitter icon button show-action-form-btn" id="showActionFormBtn" ng-click="showActionForm = !showActionForm" ng-init="showActionForm = false;">
-            <i class="plus icon"></i>
-        </button>
+        <div class="row" style="height:40px; display:flex; align-items:center;">
+            <h5 class="ui header actions-header" style="margin:0;">On click</h5>
+            <button class="ui tiny circular twitter icon button show-action-form-btn" id="showActionFormBtn" ng-click="showActionForm = !showActionForm" ng-init="showActionForm = false;">
+                <i class="plus icon"></i>
+            </button>
+        </div>
         <div class="ui divider" style="border-top: 1px solid transparent; border-bottom: 1px solid transparent;"></div>
         <div class="ui segment" ng-show="showActionForm">
             <div id="addActionForm">

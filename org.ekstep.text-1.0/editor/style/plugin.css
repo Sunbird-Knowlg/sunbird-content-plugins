@@ -34,8 +34,12 @@
 .text-formatting-options .ui.selection.dropdown .menu>.item,
 .buttons {
     color: #9b9b9b!important;
-    font-size: 1em!important;
+    font-size: 12px!important;
     font-weight: normal!important;
+}
+
+.text-formatting-options i.icon{
+    font-size: 12px;
 }
 
 .text-formatting-options .font-face-dropdown {
