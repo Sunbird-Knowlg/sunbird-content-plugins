@@ -84,6 +84,7 @@ Plugin.extend({
                 div.style.fontStyle = this._plginConfig.fontstyle ?  "italic" : "normal";
                 div.style.color = data.color;
                 div.style.textAlign = data.align;
+                div.style.lineHeight = data.lineHeight;
 
                 var parentDiv = document.getElementById(Renderer.divIds.gameArea);
                 parentDiv.insertBefore(div, parentDiv.childNodes[0]);
