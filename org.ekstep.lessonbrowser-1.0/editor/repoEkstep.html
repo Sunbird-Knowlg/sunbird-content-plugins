@@ -13,8 +13,7 @@
                 </div>
             </div>
             <div class="one wide right floated right aligned column no-padding">
-                <button class="ui icon button" ng-click="resetSearchByKeyword()" style="margin:0;">
-                    <i class="repeat icon"></i>
+                <button class="ui tiny fluid button" ng-click="resetSearchByKeyword()" style="margin:0; height:100%;">Reset
                 </button>
             </div>
         </div>
@@ -95,8 +94,8 @@
                     </div>
                 </div>
                 <div class="row" style="position: absolute; bottom: 0; width:90%;">
-                    <button class="ui right floated blue button" ng-click="applyFilters()">Apply</button>
-                    <button id="reset-lesson-filter-button" class="ui left floated basic blue button" ng-click="resetFilters()">Reset</button>
+                    <button class="ui right floated blue tiny button" ng-click="applyFilters()">Apply</button>
+                    <button id="reset-lesson-filter-button" class="ui left floated basic blue tiny button" ng-click="resetFilters()">Reset</button>
                 </div>
             </div>
             <!-- Filters end -->
@@ -107,7 +106,7 @@
                 <span style="font-size: 0.8em">({{ $ctrl.res.count }})</span>
                 </h5>
                 </div>
-                <div class="row" style="height:92.2%; overflow-y:auto;">
+                <div class="row" style="height:91.5%; overflow-y:auto;">
                     <div class="ui divided items">
                         <div class="item lesson-row" ng-repeat="lesson in $ctrl.res.content">
                             <div class="image" style="width:auto;">
@@ -135,7 +134,7 @@
                             </div>
                         </div>
                         <div class="item">
-                            <button class="ui button primary" ng-click="loadmore()" ng-disabled="!loadmoreEnabledFlag" ng-show="loadmoreVisibleFlag">Load more</button>
+                            <button class="ui tiny button primary" ng-click="loadmore()" ng-disabled="!loadmoreEnabledFlag" ng-show="loadmoreVisibleFlag">Load more</button>
                         </div>
                     </div>
                 </div>
