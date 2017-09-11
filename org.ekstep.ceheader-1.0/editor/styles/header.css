@@ -40,9 +40,12 @@ body {
     position: relative;
 }
 
-.icon-box:hover {
+.icon-box:hover,
+.preview-icon-group:hover #previewDropdown,
+#previewDropdown:hover {
     background-color: #E0E1E2;
 }
+
 
 .custom-icon {
     line-height: normal;
@@ -314,10 +317,6 @@ body {
 
 .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown {
     box-shadow: none;
-}
-
-.custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown:hover {
-    background: none !important;
 }
 
 .custom-5-wide .custom-row-2 .icon-group-2 .ui.dropdown:hover .custom-icon {
