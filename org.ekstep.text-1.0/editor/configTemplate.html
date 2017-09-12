@@ -5,12 +5,12 @@
             <div class="ui form text-formatting-options">
                 <div class="inline fields">
                     <label>Font</label>
-                    <select class="ui  dropdown font-face-dropdown" ng-model="configData['fontfamily']" ng-options="val for val in fontFamily" ng-change="fireSidebarTelemetry({id: 'fontfamily'}, 'select')">
+                    <select class="ui dropdown font-face-dropdown custom-dropdown" ng-model="configData['fontfamily']" ng-options="val for val in fontFamily" ng-change="fireSidebarTelemetry({id: 'fontfamily'}, 'select')">
                     </select>
                 </div>
                 <div class="inline fields">
                     <label>Size</label>
-                    <select class="ui  dropdown font-size-dropdown" ng-model="configData['fontsize']" ng-options="val for val in fontSize" ng-change="fireSidebarTelemetry({id: 'fontSize'}, 'inputSelect')">
+                    <select class="ui dropdown font-size-dropdown custom-dropdown" ng-model="configData['fontsize']" ng-options="val for val in fontSize" ng-change="fireSidebarTelemetry({id: 'fontSize'}, 'inputSelect')">
                     </select>
                     <div class="ui icon buttons bold-italic-buttons-group">
                         <button class="ui button {{configData[dd.propertyName] ? 'primary': ''}}" ng-repeat="dd in fontGroupConfig.config" ng-click="configData[dd.propertyName] = !configData[dd.propertyName]; fireSidebarTelemetry({id: config.propertyName}, config.dataType)" data-tooltip="{{dd.toolTip}}">
