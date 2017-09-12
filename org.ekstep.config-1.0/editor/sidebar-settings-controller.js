@@ -209,8 +209,8 @@ angular.module('editorApp')
                     var pluginInstance = ecEditor.getPluginInstance(id);
                     if (pluginInstance && pluginInstance['editorObj']) {
                         var editorObj = pluginInstance['editorObj'];
-                        var left = canvasOffset.left + editorObj.left-5;
-                        var top = canvasOffset.top + editorObj.top-5;
+                        var left = canvasOffset.left + editorObj.left - 5;
+                        var top = canvasOffset.top + editorObj.top + 67;
                         ecEditor.jQuery("#objectPointer")
                             .show().offset({ 'left': left, 'top': top })
                             .css({ 'height': editorObj.getHeight() + 10, 'width': editorObj.getWidth() + 10 });
