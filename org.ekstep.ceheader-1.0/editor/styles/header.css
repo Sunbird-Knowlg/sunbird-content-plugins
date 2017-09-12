@@ -292,7 +292,8 @@ body {
 
 .custom-5-wide .custom-row-2 .icon-group-1 {
     float: left;
-    border-right: 0.2px solid rgba(128, 128, 128, 0.15);
+    padding-right: 5px;
+    border-right: 1px solid rgba(128, 128, 128, 0.15);
 }
 
 .custom-5-wide .custom-row-2 .icon-group-1 .comments-icon-group {
