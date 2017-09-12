@@ -43,6 +43,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             media.src = ecEditor.getMediaReverseProxyURL(media.src);
             var imageURL = ecEditor.getConfig('useProxyForURL') ? "image/get/" + encodeURIComponent(media.src) : media.src;
             fabric.Image.fromURL(imageURL, function(img) {
+                img.strokeWidth = 1;
                 instance.editorObj = img;
                 instance.parent = _parent;
                 if (instance.attributes.from == 'plugin') {
