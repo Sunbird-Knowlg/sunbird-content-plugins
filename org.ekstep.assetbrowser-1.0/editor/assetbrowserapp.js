@@ -514,15 +514,12 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                 console.log('response');
                 console.log(resp);
                 assetdata.asset = resp.data.result.node_id;
-                assetdata.assetMedia = resp.data;
                 assetdata.assetMedia.name = assetName;
                 assetdata.assetMedia.id = resp.data.result.node_id;
                 assetdata.assetMedia.src = resp.data.result.content_url;
                 assetdata.assetMedia.type = instance.mediaType;
 
                 console.log("Passing data");
-                delete assetdata.assetMedia.params;
-                delete assetdata.assetMedia.result;
                 console.log(assetdata.assetMedia);
 
                 instance.cb(assetdata);
