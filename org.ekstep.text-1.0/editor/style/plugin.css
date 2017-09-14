@@ -14,6 +14,7 @@
     font-size: 12px!important;
     font-weight: normal!important;
     margin-right: 3em!important;
+    font-family: Helvetica;
 }
 
 #readAlongContents .inline.fields>label,
@@ -34,8 +35,28 @@
 .text-formatting-options .ui.selection.dropdown .menu>.item,
 .buttons {
     color: #9b9b9b!important;
-    font-size: 1em!important;
+    font-size: 12px!important;
     font-weight: normal!important;
+}
+
+.text-formatting-options i.icon{
+    font-size: 12px;
+}
+
+.text-formatting-options .ui.dropdown.custom-dropdown{
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    border-bottom: 1px solid #d8d8d8;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.text-formatting-options .ui.dropdown.custom-dropdown .dropdown.icon{
+    width: 0;
+}
+.text-formatting-options .ui.selection.active.dropdown:hover{
+    box-shadow: none;
 }
 
 .text-formatting-options .font-face-dropdown {
@@ -48,8 +69,12 @@
     width: 4em!important;
 }
 
-.text-formatting-options .font-size-dropdown .menu {
-    max-height: 140px!important;
+.text-formatting-options .ui.dropdown.font-size-dropdown .menu {
+    max-height: 140px;
+}
+
+.text-formatting-options .ui.dropdown.font-face-dropdown .menu{
+    max-height: 15.5em;
 }
 
 .bold-italic-buttons-group {

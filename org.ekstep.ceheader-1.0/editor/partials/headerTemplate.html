@@ -117,14 +117,17 @@
             <div class="row header-icon-container">
                 <div class="custom-row-2">
                     <div class="icon-group-1">
+                        <div ng-show="whatsNewBadge" class="icon-box popup-item" data-content="Whats's New" data-variation="tiny inverted" data-position="bottom center" ng-click="displayWhatsNew()">
+                            <i class="gift red icon custom-icon"></i>
+                        </div>
                         <div class="icon-box popup-item" data-content="Add Collaborator" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'collaborator:add'});">
                             <i class="add user icon custom-icon"></i>
                         </div>
-                    </div>
-                    <div class="icon-group-2">
                         <div class="icon-box popup-item" data-content="Download to try it out on a mobile device" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'download:content'});">
                             <i class="download icon custom-icon"></i>
                         </div>
+                    </div>
+                    <div class="icon-group-2">
                         <div class="preview-icon-group">
                             <div class="icon-box popup-item" data-content="Preview" data-variation="tiny inverted" data-position="bottom center" ng-click="previewContent(); fireTelemetry({id: 'preview'}, 'previewButton');">
                                 <i class="fa fa-eye custom-icon"></i>
