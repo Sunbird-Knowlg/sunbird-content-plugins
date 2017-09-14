@@ -34,7 +34,9 @@ angular.module('org.ekstep.contentprovider', [])
                     }};
 
     // Get accordions functioning
-    setTimeout(function(){$('#applyAccordion').accordion()}, 500);
+    setTimeout(function(){$('#applyAccordion').accordion({
+        collapsible: true
+    })}, 500);
 
     //Telemetry
     var collectionService = org.ekstep.collectioneditor.api.getService('collection');
@@ -242,6 +244,8 @@ angular.module('org.ekstep.contentprovider', [])
             });
             $scope.isAllSelected[selectionKey] = optionsStatus;
         }
+
+        $scope.applyFilters();
     };
 
     // Toggle select all
@@ -261,6 +265,8 @@ angular.module('org.ekstep.contentprovider', [])
         }
 
         $scope.isAllSelected[selectionKey] = toggleStatus;
+
+        $scope.applyFilters();
     };
 
     // Toggle selection for lessons

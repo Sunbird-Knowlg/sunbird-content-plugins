@@ -19,9 +19,26 @@
         </div>
         <div class="row filters-and-lessons-wrapper" ng-if="!$ctrl.err">
             <!-- Filters start -->
-            <div class="four wide column filters">
-                <div class="row">
-                    <h5>Filters</h5>
+            <div class="four wide column filters" style="overflow-y: hidden;">
+                <div class="row" style="min-height: 10%; max-height: 20%; overflow-y: auto; position:relative;">
+                    <p class="left floated" style="width: 85%; margin:0;">
+                        <span>Filters</span>
+                        <a class="ui label" style="margin: .14285714em;" ng-model="selectedLang" ng-repeat="selectedLang in filterSelection.lang">
+                            {{selectedLang}}
+                            <i class="delete icon" ng-click="toggleSelectionFilter('lang', selectedLang, 'languages', 'value')"></i>
+                        </a>
+                        <a class="ui label" style="margin: .14285714em;" ng-model="selectedGrade" ng-repeat="selectedGrade in filterSelection.grade">
+                            {{selectedGrade}}
+                            <i class="delete icon" ng-click="toggleSelectionFilter('grade', selectedGrade, 'grades', 'label')"></i>
+                        </a>
+                        <a class="ui label" style="margin: .14285714em;" ng-model="selectedLessonType" ng-repeat="selectedLessonType in filterSelection.lessonType">
+                            {{selectedLessonType}}
+                            <i class="delete icon" ng-click="toggleSelectionFilter('lessonType', selectedLessonType, 'lessonTypes', false)"></i>
+                        </a>
+                    </p>
+                    <button class="ui transparent icon mini button" style="position:absolute; right:0; top:2px; padding: 0; font-size: 1.5em; background: transparent;" ng-click="resetFilters()">
+                        <i class="delete icon"></i>
+                    </button>
                 </div>
                 <div class="row source-filter-container">
                     <div id="applyAccordion" class="ui styled accordion">
@@ -92,10 +109,6 @@
                             <input type="button" class="ui button" name="" id="lessonBrowserConceptSelector" value="Select concepts" ng-click="telemetryConceptSelector()">
                         </div>
                     </div>
-                </div>
-                <div class="row" style="position: absolute; bottom: 0; width:90%;">
-                    <button class="ui right floated blue tiny button" ng-click="applyFilters()">Apply</button>
-                    <button id="reset-lesson-filter-button" class="ui left floated basic blue tiny button" ng-click="resetFilters()">Reset</button>
                 </div>
             </div>
             <!-- Filters end -->
