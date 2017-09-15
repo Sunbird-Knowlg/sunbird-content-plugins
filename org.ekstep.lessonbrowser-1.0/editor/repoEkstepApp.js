@@ -43,7 +43,8 @@ angular.module('org.ekstep.contentprovider', ['infinite-scroll'])
     setTimeout(function(){
         
         $('#applyAccordion').accordion({
-        collapsible: true
+        collapsible: true,
+        animate: false
         });
 
     }, 500);

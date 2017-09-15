@@ -74,6 +74,14 @@
     border-bottom: 1px solid rgba(34,36,38,.15);
 }
 
+#applyAccordion .title.ui-accordion-header-active.ui-state-active{
+    border-bottom: none;
+}
+
+#applyAccordion .content{
+    height: auto!important;
+}
+
 .lesson-row {
     padding: 1em!important;
     height: 100px;
