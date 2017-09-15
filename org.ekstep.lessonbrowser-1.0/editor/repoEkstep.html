@@ -123,8 +123,8 @@
                 <span style="font-size: 0.8em">({{ $ctrl.res.count }})</span>
                 </h5>
                 </div>
-                <div class="row" style="height:91.5%; overflow-y:auto;">
-                    <div class="ui divided items">
+                <div class="row" style="height:91.5%; overflow-y:auto;" >
+                    <div class="ui divided items" infinite-scroll-parent="true" infinite-scroll="loadmore()">
                         <div class="item lesson-row" ng-repeat="lesson in $ctrl.res.content">
                             <div class="image" style="width:auto;">
                                 <div class="ui checkbox">
@@ -150,10 +150,15 @@
                                 <div class="desc">No lessons found. Please try changing the filters.</div>
                             </div>
                         </div>
-                        <div class="item">
+                        <div class="item lesson-row" ng-if="!$ctrl.res.content.length">
+                            <div class="content">
+                                <div class="desc">Loading more lessons</div>
+                            </div>
+                        </div>
+<!--                         <div class="item">
                             <button class="ui tiny button primary" ng-click="loadmore()" ng-disabled="!loadmoreEnabledFlag" ng-show="loadmoreVisibleFlag">Load more</button>
                         </div>
-                    </div>
+ -->                    </div>
                 </div>
             </div>
             <!-- Result end -->

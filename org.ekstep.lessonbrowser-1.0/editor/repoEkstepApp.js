@@ -1,4 +1,4 @@
-angular.module('org.ekstep.contentprovider', [])
+angular.module('org.ekstep.contentprovider', ['infinite-scroll'])
 .controller('contentproviderekstepController', ['$scope', function($scope) {
     var ctrl = this;
 
@@ -40,9 +40,14 @@ angular.module('org.ekstep.contentprovider', [])
                     }};
 
     // Get accordions functioning
-    setTimeout(function(){$('#applyAccordion').accordion({
+    setTimeout(function(){
+        
+        $('#applyAccordion').accordion({
         collapsible: true
-    })}, 500);
+        });
+
+    }, 500);
+
 
     //to transform the dropdown arrow of clicked accordion title
     $scope.openSidebarFilerAccordion = function(clickEvent){
