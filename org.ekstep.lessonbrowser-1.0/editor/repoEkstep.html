@@ -42,8 +42,9 @@
                 </div>
                 <div class="row source-filter-container">
                     <div id="applyAccordion" class="ui styled accordion">
-                        <div class="title">
-                            Language ({{filterSelection.lang.length}})
+                        <div class="title" id="languageFilter" ng-click="openSidebarFilerAccordion($event)">
+                            <i class="dropdown icon" ng-if="!openLangFilter"></i>
+                            <i class="dropdown icon" ng-if="openLangFilter" style="transform: rotate(90deg);"></i> Language ({{filterSelection.lang.length}})
                         </div>
                         <div class="content">
                             <div class="ui list">
@@ -57,8 +58,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="title">
-                            Grade ({{filterSelection.grade.length}})
+                        <div class="title" id="gradeFilter" ng-click="openSidebarFilerAccordion($event)">
+                            <i class="dropdown icon" ng-if="!openGradeFilter"></i>
+                            <i class="dropdown icon" ng-if="openGradeFilter" style="transform: rotate(90deg);"></i> Grade ({{filterSelection.grade.length}})
                         </div>
                         <div class="content">
                             <div class="ui list">
@@ -72,8 +74,9 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="title">
-                            Content type ({{filterSelection.lessonType.length}})
+                        <div class="title" id="lessonTypeFilter" ng-click="openSidebarFilerAccordion($event)">
+                            <i class="dropdown icon" ng-if="!openLessonTypeFilter"></i>
+                            <i class="dropdown icon" ng-if="openLessonTypeFilter" style="transform: rotate(90deg);"></i> Content type ({{filterSelection.lessonType.length}})
                         </div>
                         <div class="content">
                             <div class="ui list">
@@ -102,8 +105,9 @@
                             </div>
                         </div>
                     </div> -->
-                        <div class="title">
-                            Concept ({{filterSelection.concept.length}})
+                        <div class="title" id="conceptsFilter" ng-click="openSidebarFilerAccordion($event)">
+                            <i class="dropdown icon" ng-if="!openConceptsFilter"></i>
+                            <i class="dropdown icon" ng-if="openConceptsFilter" style="transform: rotate(90deg);"></i> Concept ({{filterSelection.concept.length}})
                         </div>
                         <div class="content">
                             <input type="button" class="ui button" name="" id="lessonBrowserConceptSelector" value="Select concepts" ng-click="telemetryConceptSelector()">
