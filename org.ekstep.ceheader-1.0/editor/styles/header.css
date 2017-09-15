@@ -158,6 +158,12 @@ body {
 
 #userDetailsWrapper .user-name {
     font-weight: bold;
+    margin-top: 10px;
+}
+
+#userDetailsWrapper .user-email{
+    margin-top: 5px;
+    margin-bottom: 5px;
 }
 
 #userDetailsWrapper .user-name,
@@ -167,7 +173,6 @@ body {
     font-size: 12px;
     line-height: 11px;
     padding: 2px 10px;
-    margin-top: 3px;
     text-align: center;
 }
 
@@ -197,6 +202,7 @@ body {
     padding: 1px 10px;
     cursor: default;
     user-select: none;
+    margin-top: 5px;
 }
 
 #userDetailsWrapper .user-profile-menu .option>* {
@@ -271,6 +277,7 @@ body {
     float: right;
     font-size: 12px !important;
     top: 0;
+    padding-right: 5px;
 }
 
 .custom-5-wide .custom-row-2 .icon,
@@ -293,8 +300,17 @@ body {
 .custom-5-wide .custom-row-2 .icon-group-1 {
     float: left;
     padding-right: 5px;
+}
+
+.custom-5-wide .custom-row-2 .icon-group-1:after{
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    right: 0;
+    height: 20px;
     border-right: 1px solid rgba(128, 128, 128, 0.15);
 }
+
 
 .custom-5-wide .custom-row-2 .icon-group-1 .comments-icon-group {
     position: relative;
@@ -303,6 +319,7 @@ body {
 
 .custom-5-wide .custom-row-2 .icon-group-2 {
     float: right;
+    padding-left: 5px;
 }
 
 .custom-5-wide .custom-row-2 .icon-group-2 .icon-save,
