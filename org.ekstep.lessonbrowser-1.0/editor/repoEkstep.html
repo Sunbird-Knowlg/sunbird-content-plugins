@@ -19,7 +19,7 @@
         </div>
         <div class="row filters-and-lessons-wrapper" ng-if="!$ctrl.err">
             <!-- Filters start -->
-            <div class="four wide column filters" style="overflow-y: hidden;">
+            <div class="four wide column filters" style="overflow-y: hidden; padding-right:0; border-right: 1px solid #e0e1e2;">
                 <div class="row" style="min-height: 10%; max-height: 20%; overflow-y: auto; position:relative; padding:0;">
                     <p class="left floated" style="width: 85%; margin:0;">
                         <i class="fa fa-filter"></i>
@@ -36,7 +36,7 @@
                             <i class="delete icon" ng-click="toggleSelectionFilter('lessonType', selectedLessonType, 'lessonTypes', false)"></i>
                         </a>
                     </p>
-                    <button class="ui transparent icon mini button" style="position:absolute; right:0; top:7px; font-size: 1em; background: transparent; padding:0;" ng-click="resetFilters()">
+                    <button class="ui mini icon button" style="position:absolute; right:0; top:7px; font-size: 1em; background: transparent; padding:0;" ng-click="resetFilters()">
                         Clear
                     </button>
                 </div>
@@ -117,7 +117,7 @@
             </div>
             <!-- Filters end -->
             <!-- Result start -->
-            <div class="eight wide column lessons" style="padding-left:0; padding-right:0;">
+            <div class="eight wide column lessons" style="padding-right:0;">
                 <div class="row">
                     <h5>Resources
                 <span style="font-size: 0.8em">({{ $ctrl.res.count }})</span>
