@@ -16,29 +16,50 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
     };
 
     $scope.editDetails = function() {
-            $scope.generateTelemetry({
-                "type": "click",
-                "subtype": "",
-                "target": "editmeta"
-            });
-        },
+        ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup");
+    },
 
-        $scope.titleUpdate = function(event, title) {
-            if (title) {
-                $scope.name = title;
-                $scope.$safeApply();
-                document.title = title;
-            }
-        };
+    $scope.titleUpdate = function(event, title) {
+        if (title) {
+            $scope.name = title;
+            $scope.$safeApply();
+            document.title = title;
+        }
+    };
 
-    $scope.sendForReview = function() {
-        $scope.generateTelemetry({
-            "type": "click",
-            "subtype": "",
-            "target": "reviewbutton"
+    $scope._sendReview = function() {
+        ecEditor.dispatchEvent("org.ekstep.contenteditor:review", function(err, res) {
+            if (res) $scope.closeEditor();
+            $scope.$safeApply();
         });
-        ecEditor.dispatchEvent('org.ekstep.contenteditor:review');
-    }
+    };
+
+    $scope.sendForReview = function() {        
+        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        if (meta.status === "Draft") {
+            var editMetaOptions = {
+                callback: function(err, res) {
+                    if (res) {
+                        $scope.saveContent(function(err, res) {
+                            if (res) {
+                                $scope._sendReview();
+                            }
+                        });
+                    } else {
+                        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                            message: 'Unable to save content, try again!',
+                            position: 'topCenter',
+                            icon: 'fa fa-warning'
+                        });
+                    }
+                }
+            };
+
+            ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup", editMetaOptions);            
+        } else {
+            $scope._sendReview();
+        }        
+    };
 
     $scope.upload = function() {
         ecEditor.dispatchEvent('org.ekstep.uploadcontent:show');
