@@ -214,6 +214,7 @@ body {
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 #userDetailsWrapper .user-profile-menu a:hover {
@@ -422,6 +423,4 @@ body {
     border-radius: 1em;
     font-size: 2px;
     padding: 0px 1.1px;
-    position: absolute;
-    right: 10px;
 }
