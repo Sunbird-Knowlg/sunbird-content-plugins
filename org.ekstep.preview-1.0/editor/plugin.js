@@ -67,6 +67,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         console.log(this.previewURL);
         var instance = this;
         var contentService = ecEditor.getService('content');
+        var defaultPreviewConfig = {showEndpage:true};
         var meta = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId'));
         var modalController = function($scope) {
             $scope.$on('ngDialog.opened', function() {
@@ -79,7 +80,11 @@ org.ekstep.contenteditor.basePlugin.extend({
                     var configuration = {};
                     userData.etags = userData.etags || {};
                     configuration.context = {'mode':'edit','contentId':meta.identifier,'sid':userData.sid,'uid':userData.uid, 'channel': userData.channel, 'pdata': userData.pdata, 'app': userData.etags.app, 'dims': userData.etags.dims, 'partner': userData.etags.partner }; 
-                    configuration.config = {'showEndPage':'true','showStartPage':'true'};
+                    if (ecEditor.getConfig('previewConfig')) {
+                        configuration.config = ecEditor.getConfig('previewConfig');
+                    } else {
+                        configuration.config = defaultPreviewConfig;
+                    }
                     configuration.metadata = meta; 
                     configuration.data = (meta.mimeType == 'application/vnd.ekstep.ecml-archive') ?  instance.contentBody : {};
                     previewContentIframe.contentWindow.initializePreview(configuration);
