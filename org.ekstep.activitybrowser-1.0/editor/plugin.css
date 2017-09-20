@@ -5,16 +5,9 @@
 }
 
 .activity-browser-content {
-    margin: 25px 0px 10px 10px;
-    height: 435px;
+    height: 65vh;
     overflow-y: auto;
     overflow-x: hidden;
-    padding-right: 12px;
-}
-
-.plugin-cards-holder {
-    margin: 15px 0px 16px 10px;
-    padding-right: 15px;
 }
 
 .activity-browser-content-loader {
@@ -169,13 +162,11 @@
 
 /* image slider */
 
-
-/* activity -card-holder */
-
-#activity-cards {
-    padding-top: 0.5em!important;
-    padding-left: 0.5em!important;
+.round-borders{
+    border-bottom-left-radius: .28571429rem;
+    border-bottom-right-radius: .28571429rem;
 }
 
-
-/* activity -card-holder */
+.special.cards{
+    margin-top: 0;
+}

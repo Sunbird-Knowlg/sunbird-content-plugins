@@ -9,43 +9,43 @@
                     <div class="column">
                         <span><i class="icon-activity icon"></i> Activity Browser</span>
                     </div>
-                    <div class="column activity-browser-close-icon-container right aligned" style="padding-right:0;">
+                    <div class="column activity-browser-close-icon-container right aligned">
                         <i class="cursor-pointer close icon" ng-click="closeThisDialog();$ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeButton'})"></i>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="ui grid" style="margin: 0;">
-            <div class="row" id="activity_browser_searchbar" ng-show="!$ctrl.showPluginDetails">
-                <div class="ui nine wide column" style="padding-left:20px;">
-                    <label>
-                        Category
-                    </label>
-                    <div class="ui input" ng-init="$ctrl.activityOptions.categories = []">
-                        <select multiple="" class="ui dropdown search lableCls" ng-model="$ctrl.activityOptions.categories" ng-options="type for type in $ctrl.categories" ng-change="$ctrl.getActivities();$ctrl.generateTelemetry({type: 'click', subtype: 'advanceSearch', target: 'searchActivityCard'})">
-                            <option value="">
-                                Type
-                            </option>
-                        </select>
-                    </div>&nbsp;&nbsp;
-                    <label>
-                        Concepts
-                    </label>
-                    <div class="ui input">
-                        <input type="text" placeholder="Concepts" ng-model="$ctrl.activityOptions.conceptsPlaceHolder" id="activityConceptSelector" selectable="false" readonly>
+        <div ng-class="$ctrl.showPluginDetails ? 'content' : 'content round-borders'">
+            <div class="ui grid">
+                <div class="row" id="activity_browser_searchbar" ng-show="!$ctrl.showPluginDetails">
+                    <div class="ui nine wide column">
+                        <label>
+                            Category
+                        </label>
+                        <div class="ui input" ng-init="$ctrl.activityOptions.categories = []">
+                            <select multiple="" class="ui dropdown search lableCls" ng-model="$ctrl.activityOptions.categories" ng-options="type for type in $ctrl.categories" ng-change="$ctrl.getActivities();$ctrl.generateTelemetry({type: 'click', subtype: 'advanceSearch', target: 'searchActivityCard'})">
+                                <option value="">
+                                    Type
+                                </option>
+                            </select>
+                        </div>&nbsp;&nbsp;
+                        <label>
+                            Concepts
+                        </label>
+                        <div class="ui input">
+                            <input type="text" placeholder="Concepts" ng-model="$ctrl.activityOptions.conceptsPlaceHolder" id="activityConceptSelector" selectable="false" readonly>
+                        </div>
+                    </div>
+                    <div class="right floated three wide right aligned column">
+                        <div class="ui icon input">
+                            <input ng-model="$ctrl.activityOptions.searchQuery" placeholder="Search for activities" ng-keypress="$event.keyCode === 13 ? $ctrl.getActivities() : null" type="text"></input>
+                            <i class="inverted circular search link icon" ng-click="$ctrl.getActivities();$ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'searchActivityCard'})"></i>
+                        </div>
                     </div>
                 </div>
-                <div class="right floated three wide right aligned column">
-                    <div class="ui icon input">
-                        <input ng-model="$ctrl.activityOptions.searchQuery" placeholder="Search for activities" ng-keypress="$event.keyCode === 13 ? $ctrl.getActivities() : null" type="text"></input>
-                        <i class="inverted circular search link icon" ng-click="$ctrl.getActivities();$ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'searchActivityCard'})"></i>
-                    </div>
-                </div>
-            </div>
-            <div class="ui divider" style="margin: 0;" ng-if="!$ctrl.showPluginDetails"></div>
-            <div ng-if="$ctrl.showPluginDetails" class="ui divided grid" style="width: 103%">
-                <div class="ui row activity-browser-content">
-                    <div class="ui six wide column">
+                <div class="ui divider" style="margin: 0;" ng-if="!$ctrl.showPluginDetails"></div>
+                <div ng-if="$ctrl.showPluginDetails" class="row">
+                    <div class="six wide column">
                         <h3 class="ui header">                        
                                 <span><i class="fa fa-puzzle-piece fa-2x" aria-hidden="true"></i></span>
                                 <div class="top aligned content">
@@ -56,7 +56,7 @@
                             <slider images="$ctrl.images"></slider>
                         </div>
                     </div>
-                    <div class="ui six wide column">
+                    <div class="six wide column">
                         <h4>Plugin Details:</h4>
                         <div style="overflow-y: auto; height: 370px;">
                             <table class="ui striped table">
@@ -132,44 +132,44 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div ng-if="!$ctrl.showPluginDetails" class="content" style="width: 100%; padding: 0;">
-                <div class="ui row activity-browser-content plugin-cards-holder">
-                    <div class="ui segment activity-browser-content-loader" ng-if="$ctrl.loading">
-                        <div class="ui active inverted dimmer">
-                            <div class="ui text loader">Just one second, We're fetching activities for you.</div>
+                <div ng-if="!$ctrl.showPluginDetails" class="row">
+                    <div class="column activity-browser-content">
+                        <div class="ui segment activity-browser-content-loader" ng-if="$ctrl.loading">
+                            <div class="ui active inverted dimmer">
+                                <div class="ui text loader">Just one second, We're fetching activities for you.</div>
+                            </div>
                         </div>
-                    </div>
-                    <div class="ui four stackable special cards" ng-show="$ctrl.activitiesList.length > 0 && !$ctrl.hideMainPage" id="activity-cards">
-                        <div class="ui link card" ng-repeat="activity in $ctrl.activitiesList track by $index" ng-click="$ctrl.viewPluginDetails(activity); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'activityCard'});">
-                            <div class="blurring dimmable image">
-                                <div class="ui dimmer">
-                                    <div class="content">
-                                        <div class="center">
-                                            <div class="ui tiny inverted header" title="{{activity.name}}">{{activity.name| limitTo:80}}<span ng-if="activity.name.length > 80">...</span></div>
-                                            <p title="{{activity.description}}">{{activity.description | limitTo:100}}<span ng-if="activity.description.length > 100">...</span></p>
+                        <div class="ui four stackable special cards" ng-show="$ctrl.activitiesList.length > 0 && !$ctrl.hideMainPage" id="activity-cards">
+                            <div class="ui link card" ng-repeat="activity in $ctrl.activitiesList track by $index" ng-click="$ctrl.viewPluginDetails(activity); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'activityCard'});">
+                                <div class="blurring dimmable image">
+                                    <div class="ui dimmer">
+                                        <div class="content">
+                                            <div class="center">
+                                                <div class="ui tiny inverted header" title="{{activity.name}}">{{activity.name| limitTo:80}}<span ng-if="activity.name.length > 80">...</span></div>
+                                                <p title="{{activity.description}}">{{activity.description | limitTo:100}}<span ng-if="activity.description.length > 100">...</span></p>
+                                            </div>
                                         </div>
                                     </div>
+                                    <img ng-src="{{activity.appIcon || $ctrl.defaultActivityImage}}">
                                 </div>
-                                <img ng-src="{{activity.appIcon || $ctrl.defaultActivityImage}}">
-                            </div>
-                            <div class="content activity-title-content">
-                                <b class="sub-header" title="{{activity.name}}" style="display: inline;">{{activity.name | limitTo:22}}<span ng-if="activity.name.length > 22">...</span></b>
-                                <span class="right floated">
+                                <div class="content activity-title-content">
+                                    <b class="sub-header" title="{{activity.name}}" style="display: inline;">{{activity.name | limitTo:22}}<span ng-if="activity.name.length > 22">...</span></b>
+                                    <span class="right floated">
                                 <a class="sub-header" ng-click="$ctrl.addPlugin(activity);$ctrl.generateTelemetry({type: 'click', subtype: 'add', target: 'addActivityCard'})">ADD<i class="plus icon"></i></a>    
                             </span>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="ui huge info message activity-browser-center" ng-show="$ctrl.noActivities">
-                        <p>No activities found.</p>
-                    </div>
-                    <div ng-if="$ctrl.errorLoadingActivities" class="ui negative message activity-browser-center">
-                        <div class="header">
-                            We're sorry!
+                        <div class="ui huge info message activity-browser-center" ng-show="$ctrl.noActivities">
+                            <p>No activities found.</p>
                         </div>
-                        <p>There's an error while fetching activities, <a href ng-click="$ctrl.getActivities();$ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'searchActivityCard'})">Click here</a> to try again.
-                        </p>
+                        <div ng-if="$ctrl.errorLoadingActivities" class="ui negative message activity-browser-center">
+                            <div class="header">
+                                We're sorry!
+                            </div>
+                            <p>There's an error while fetching activities, <a href ng-click="$ctrl.getActivities();$ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'searchActivityCard'})">Click here</a> to try again.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
