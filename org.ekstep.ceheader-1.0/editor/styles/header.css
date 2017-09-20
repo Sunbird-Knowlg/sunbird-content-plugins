@@ -271,6 +271,7 @@ body {
 .custom-5-wide .header-icon-container {
     position: relative;
     height: 30px;
+    border: 1px solid transparent;
 }
 
 .custom-5-wide .custom-row-2 {
