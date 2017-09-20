@@ -8,11 +8,21 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
     $scope.disableSaveBtn = true;
     $scope.name = 'Untitled-Content';
 
-    $scope.saveContent = function() {
-        var metadata = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId'));
-        metadata.config = {overlay:true};
-        metadata.body = undefined;
-        ecEditor.dispatchEvent('org.ekstep.contenteditor:save',metadata);
+    $scope.saveContent = function(cb) {
+        $scope.disableSaveBtn = true;
+        ecEditor.dispatchEvent("org.ekstep.contenteditor:save", {
+            showNotification: true,
+            callback: function(err, res) {
+                if (res && res.data && res.data.responseCode == "OK") {
+                    $scope.lastSaved = Date.now();
+                    $scope.pendingChanges = false;                                        
+                } else {
+                    $scope.disableSaveBtn = false;                    
+                }
+                cb && cb(err, res);
+                $scope.$safeApply();
+            }
+        });
     };
 
     $scope.editDetails = function() {
