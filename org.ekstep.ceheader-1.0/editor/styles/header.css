@@ -146,7 +146,6 @@ body {
     background-color: #ffffff;
     display: inline-block;
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.3);
-    margin-right: 25px;
     margin-top: 0;
 }
 
@@ -272,6 +271,7 @@ body {
     position: relative;
     height: 30px;
     border: 1px solid transparent;
+    cursor: default;
 }
 
 .custom-5-wide .custom-row-2 {
