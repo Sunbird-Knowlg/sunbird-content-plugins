@@ -185,7 +185,7 @@
    					<span ng-if="$ctrl.uploadView && $ctrl.plugin == 'audio'"><i class="upload icon"></i> Upload/ Record</span>
    				</div>
    				<div class="column right aligned">
-   					<i class="cursor-pointer close icon" ng-click="closeThisDialog(); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeAssetBrowser'})"></i>
+   					<i class="close link icon" ng-click="closeThisDialog(); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeAssetBrowser'})"></i>
    				</div>
    			</div>
    		</div>
@@ -235,7 +235,13 @@
    			<div class="content" ng-if="$ctrl.plugin =='audio'">
    				<div class="ui big loader {{$ctrl.loading}}"></div>
    				<div class="ui grid">
-   					<div class="two wide column">
+            <div class="ten wide column">
+              <div class="ui icon input assetbrowser_searchBox">
+                <input ng-model="$ctrl.query" placeholder="Search Audio..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
+                <i class="circular search link icon inverted" ng-click="$ctrl.search(); $ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'searchAudioAsset'})"></i>
+              </div>
+            </div>
+   					<div class="two wide right aligned column">
    						<div id="audioDropDown" class="ui floating labeled icon dropdown button audio">
    						  <i class="filter icon"></i>
    						  <span class="text">All</span>
@@ -251,12 +257,6 @@
    							  <span class="text">Voice</span>
    							</div>
    						  </div>
-   						</div>
-   					</div>
-   					<div class="ten wide column">
-   						<div class="ui icon input assetbrowser_searchBox">
-   							<input ng-model="$ctrl.query" placeholder="Search Audio..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
-   							<i class="circular search link icon inverted" ng-click="$ctrl.search(); $ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'searchAudioAsset'})"></i>
    						</div>
    					</div>
    				</div>
@@ -353,7 +353,7 @@
    				{{$ctrl.plugin=='image' ? 'Upload and use': 'Upload/ Record'}}</button>
    			</div>
    			<div class="nine wide column right aligned">
-   				<div class="ui buttons">
+   				<div class="ui buttons" style="margin:0;">
    					<button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel(); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeAssetBrowser'})" type="button">Cancel</button>
    					<div class="or"></div>
    					<button ng-switch-when="select" class="ui blue button" ng-disabled="$ctrl.selectBtnDisable" ng-click="$ctrl.select(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'selectAndUseAsset'})" type="button">Select</button>
