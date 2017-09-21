@@ -57,11 +57,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.assetId = undefined;
     ctrl.tabSelected = "my";
     ctrl.assetMeta = {
-        'body': '',
         'name': '',
         'keywords': [],
         'creator': '',
-        'status': 'Draft',
         'createdBy': ecEditor._.isUndefined(ctrl.context) ? '' : ctrl.context.user.id,
         'code': "org.ekstep" + Math.random(),
         'mimeType': "",
@@ -514,11 +512,19 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                 console.log('response');
                 console.log(resp);
                 assetdata.asset = resp.data.result.node_id;
-                assetdata.assetMedia.name = assetName;
-                assetdata.assetMedia.id = resp.data.result.node_id;
-                assetdata.assetMedia.src = resp.data.result.content_url;
-                assetdata.assetMedia.type = instance.mediaType;
-
+                if(_.isUndefined(assetdata.assetMedia)){
+                    assetdata.assetMedia = {
+                        name : assetName,
+                        id: resp.data.result.node_id,
+                        src: resp.data.result.content_url,
+                        type: instance.mediaType
+                    };
+                }else{
+                    assetdata.assetMedia.name = assetName;
+                    assetdata.assetMedia.id = resp.data.result.node_id;
+                    assetdata.assetMedia.src = resp.data.result.content_url;
+                    assetdata.assetMedia.type = instance.mediaType;
+                }
                 console.log("Passing data");
                 console.log(assetdata.assetMedia);
 
