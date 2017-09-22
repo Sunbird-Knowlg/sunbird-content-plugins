@@ -10,7 +10,9 @@
         "dependencies": [
         	{ "plugin": "org.ekstep.assetbrowser", "ver": "1.0", "type": "plugin" },
         	{ "plugin": "org.ekstep.conceptselector", "ver": "1.0", "type": "plugin" },
-            { "type": "css", "src": "editor/coursemeta.css" }       
+            { "type": "css", "src": "editor/coursemeta.css" },
+            { "type": "css", "src": "editor/libs/tokens.css" },
+            { "type": "js", "src": "editor/libs/tokens.js" }     
         ]
     }
 }
