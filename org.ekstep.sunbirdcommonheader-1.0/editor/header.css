@@ -129,7 +129,6 @@ body {
     position: relative;
     float: right;
     right: -0.3vw;
-    z-index: 10001;
     cursor: pointer;
     line-height: 2;
 
