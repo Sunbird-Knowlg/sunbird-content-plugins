@@ -10,6 +10,7 @@ angular.module('assetbrowserapp', ['angularAudioRecorder']).config(['recorderSer
 
     recorderServiceProvider.withMp3Conversion(true, config);
 }]);
+
 angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
     var audiodata = {},
         assetMedia,
@@ -46,6 +47,9 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.languagecode = 'en';
     ctrl.assetFileError = "";
     ctrl.createdBy = ecEditor._.isUndefined(ctrl.context) ? '' : ctrl.context.user.id;
+    ctrl.offset = 0;
+    ctrl.myTabScrollElement = "";
+    ctrl.allTabScrollElement = "";
     ctrl.asset = {
         'requiredField': '',
     };
@@ -104,6 +108,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         $scope.$safeApply();
     };
 
+    
     function audioAssetCb(err, res) {
 
         if (res && res.data.result.content) {
@@ -139,12 +144,14 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
     //load image on opening window
     if (instance.mediaType == 'image') {
-        instance.getAsset(undefined, new Array(instance.mediaType), ctrl.createdBy, imageAssetCb);
+        instance.getAsset(undefined, new Array(instance.mediaType), ctrl.createdBy, ctrl.offset, imageAssetCb);
     } else {
-        instance.getAsset(undefined, new Array('audio', 'voice'), ctrl.createdBy, audioAssetCb);
+        instance.getAsset(undefined, new Array('audio', 'voice'), ctrl.createdBy, ctrl.offset, audioAssetCb);
     }
 
     ctrl.myAssetTab = function() {
+        /**rebind the scoll event to the element**/
+        ecEditor.jQuery("#" + ctrl.myTabScrollElement).scroll(ctrl.bindScroll);
         var callback,
             searchText = ctrl.query;
 
@@ -166,7 +173,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
         ctrl.selectBtnDisable = true;
         var mediaType = ctrl.getMediaType();
-        callback && instance.getAsset(searchText, mediaType, ctrl.createdBy, callback);
+        callback && instance.getAsset(searchText, mediaType, ctrl.createdBy, ctrl.offset=0, callback);
     }
 
     ctrl.getMediaType = function() {
@@ -184,6 +191,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     }
 
     ctrl.allAssetTab = function() {
+        /**rebind the scoll event to the element**/
+        ecEditor.jQuery("#" + ctrl.allTabScrollElement).scroll(ctrl.bindScroll);
         var callback,
             searchText = ctrl.query;
 
@@ -203,7 +212,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ctrl.selectBtnDisable = true;
 
         var mediaType = instance.mediaType != "image" ? new Array('audio', 'voice') : new Array(instance.mediaType);
-        callback && instance.getAsset(searchText, mediaType, undefined, callback);
+        callback && instance.getAsset(searchText, mediaType, undefined, ctrl.offset=0 , callback);
     }
 
     function showLoader() {
@@ -266,10 +275,10 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
         if (ctrl.tabSelected == "my") {
             var mediaType = ctrl.getMediaType();
-            callback && instance.getAsset(searchText, mediaType, ctrl.createdBy, callback);
+            callback && instance.getAsset(searchText, mediaType, ctrl.createdBy, ctrl.offset=0, callback);
         } else {
             var mediaType = instance.mediaType != "image" ? new Array('audio', 'voice') : new Array(instance.mediaType);
-            callback && instance.getAsset(searchText, mediaType, undefined, callback);
+            callback && instance.getAsset(searchText, mediaType, undefined, ctrl.offset=0, callback);
         }
 
     }
@@ -592,7 +601,46 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ecEditor.ngSafeApply(ecEditor.getAngularScope());
     }
 
+    ctrl.loadMoreAsset = function(data) {
+        /**Increment offset by 50**/
+        ctrl.offset = ctrl.offset+50;
+        var callback,
+            searchText = ctrl.query;
+
+        // Show loader
+        showLoader();
+
+        ctrl.selectBtnDisable = false;
+        var createdBy = ctrl.tabSelected == "all" ? undefined :  ctrl.createdBy;
+        imageTabSelected = true;
+        audioTabSelected = false;
+        (searchText === "") ? searchText = undefined: null;
+
+        var mediaType = ctrl.getMediaType();
+        instance.getAsset(searchText, mediaType, createdBy, ctrl.offset, function(err, res) {
+            if (res && res.data.result.content) {
+                ecEditor._.forEach(res.data.result.content, function(obj, index) {
+                    if (!ecEditor._.isUndefined(obj.downloadUrl)) {
+                        ctrl.imageList.push(obj);
+                    }
+                });
+                ctrl.initPopup(res.data.result.content);
+                ecEditor.jQuery("#"+data.target.id).bind('scroll',ctrl.bindScroll); 
+            } else {
+               ecEditor.jQuery("#"+data.target.id).unbind('scroll'); 
+            };
+
+            // Hide loader
+            hideLoader();
+            ecEditor.ngSafeApply(ecEditor.getAngularScope());
+        });
+        $scope.$safeApply();
+    };
+
     setTimeout(function() {
+        ctrl.myTabScrollElement = (instance.mediaType === "image") ?  "my-image-tab" : "my-audio-tab";
+        ctrl.allTabScrollElement = (instance.mediaType === "image") ?  "all-image-tab" : "all-audio-tab";
+        
         ecEditor.jQuery('.assetbrowser .menu .item').tab();
         ecEditor.jQuery('.assetbrowser .ui.dropdown').dropdown();
         ecEditor.jQuery('.assetbrowser .ui.radio.checkbox').checkbox();
@@ -634,14 +682,28 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             ctrl.preFillForm(this.files[0]);
         });
 
+        
+        ctrl.bindScroll = function(data){
+            var a = ecEditor.jQuery("#"+data.target.id);
+            var b = ecEditor.jQuery("#"+data.target.id)[0];   
+            if(a.scrollTop() + a.height() + 40 >= b.scrollHeight) {
+               ecEditor.jQuery("#"+data.target.id).unbind('scroll');
+               ctrl.loadMoreAsset(data);
+            }   
+        };
+
+        ecEditor.jQuery("#" + ctrl.myTabScrollElement).scroll(ctrl.bindScroll);
+        ecEditor.jQuery("#" + ctrl.allTabScrollElement).scroll(ctrl.bindScroll);
+
         ecEditor.jQuery('#audioDropDown')
             .dropdown({
                 onChange: function(value) {
                     /**check if searchText is blank**/
                     searchText = (ctrl.query === "") ? undefined : ctrl.query;
                     var selectedValue = (value != 'all') ? new Array(value) : new Array('audio', 'voice');
-                    instance.getAsset(searchText, selectedValue, ctrl.createdBy, audioAssetCb);
+                    instance.getAsset(searchText, selectedValue, ctrl.createdBy, ctrl.offset, audioAssetCb);
                 }
             });
     }, 100);
 }]);
+
