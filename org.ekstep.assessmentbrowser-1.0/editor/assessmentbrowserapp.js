@@ -272,7 +272,6 @@ angular.module('assessmentbrowserapp', [])
                                 ctrl.itemPreviewContent = { "error": 'Preview could not be shown.' };
                                 ctrl.itemPreviewDisplay = ctrl.itemPreviewContent.error;
                                 ctrl.itemPreviewLoading = false;
-                                ctrl.errorMessage = true;
                                 $scope.$safeApply();
                                 return;
                             }
@@ -284,7 +283,6 @@ angular.module('assessmentbrowserapp', [])
                         $scope.$safeApply();
                     }
                 }else{
-                    ctrl.errorMessage = true;
                     $scope.$safeApply();
                     return;
                 }

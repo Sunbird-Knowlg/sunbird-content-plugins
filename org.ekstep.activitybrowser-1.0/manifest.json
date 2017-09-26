@@ -16,7 +16,7 @@
             "type": "icon",
             "toolTip": "Add Activity",
             "title": "Activity Browser",
-            "iconClass": "icon-activity icon",
+            "iconClass": "fa fa-magic",
             "onclick": {
                 "id": "org.ekstep.activitybrowser:showpopup"
             }

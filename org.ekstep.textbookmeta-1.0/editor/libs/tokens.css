@@ -59,24 +59,39 @@
     margin: 0;
 }
 
+i.remove.icon.custom-cursor{
+    cursor: pointer;
+    opacity: 0.5;
+}
+
+i.remove.icon.custom-cursor:hover{
+    opacity: 1;
+}
+
 .ng-token-field .token {
-    border-radius: 3px;
-    padding-left: 5px;
-    padding-right: 30px;
-    height: 30px;
-    color: #404040;
-    display: table-cell;
-    vertical-align: middle;
-    word-break: break-all;
     position: relative;
+    display: table-cell;
+    height: auto;
+    word-break: break-all;
+    line-height: 1;
+    margin: 0 .14285714em;
+    background-color: #E8E8E8;
+    padding: .4em .33em .4833em .833em;
+    color: rgba(0,0,0,.6);
+    text-transform: none;
+    font-weight: 700;
+    border: 0 solid transparent;
+    border-radius: .28571429rem;
+    cursor: pointer;
 }
 
 .ng-token-field .token.valid {
-    background-color: rgba(0, 3, 19, 0.18);
+    background-color: #E8E8E8;
 }
 
 .ng-token-field .token.valid:hover {
-    background-color: rgba(0, 3, 19, 0.5);
+    background-color: #E0E0E0;
+    border-color: #E0E0E0;
 }
 
 .ng-token-field .token.invalid {

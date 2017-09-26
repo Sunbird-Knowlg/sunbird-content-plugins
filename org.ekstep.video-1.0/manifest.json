@@ -14,7 +14,7 @@
             "type": "icon",
             "toolTip": "Add Video",
             "title": "Add Video",
-            "iconClass": "video play outline large icon",
+            "iconClass": "fa fa-play-circle-o",
             "iconStyle": "",
             "onclick": {
                 "id": "org.ekstep.video:showpopup"

@@ -1,11 +1,8 @@
 org.ekstep.contenteditor.basePlugin.extend({
     initialize: function(config) {
         var _default = {
-            timeout: 10000,
             resetOnHover: true,
-            icon: 'material-icons',
-            transitionIn: 'flipInX',
-            transitionOut: 'flipOutX',
+            icon: 'material-icons',            
             onOpening: function() {                
             },
             onClosing: function() {                
@@ -40,3 +37,5 @@ org.ekstep.contenteditor.basePlugin.extend({
     	iziToast.error(data);	
     }
 });
+
+//# sourceURL=toasterplugin.js

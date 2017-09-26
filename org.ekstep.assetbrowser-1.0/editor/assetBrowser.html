@@ -84,10 +84,11 @@
        margin-top: 15px;
     }
 
-   .assetbrowser.ui.floating.label {
+   .assetbrowser .ui.floating.label {
        top: 0;
    	padding: 6px;
-       right: -7px;
+       right: 0;
+       left: unset;
    }
 
     .assetbrowser .ui.images .image, .ui.images img, .ui.images svg {
@@ -440,7 +441,7 @@
    						</div>
    					</div>
    					<div class="required field {{$ctrl.assetFileError}}" ng-if="$ctrl.upload" ng-hide="$ctrl.editMetaFlag">
-   						<label for="assetfile" title="Enter asset caption">Select file</label>
+   						<label for="assetfile" title="Enter asset caption">Choose or drag and drop your {{$ctrl.plugin}} here</label>
    						<input class="droppable cropit-image-input" id="assetfile" type="file" name="assetfile" accept="{{$ctrl.allowedMimeTypes.join(', ')}}" data-validate="assetfile" />
    						<div ng-if="$ctrl.assetFileError == 'error'" class="ui basic red pointing prompt label transition visible">Please select file</div>
    					</div>

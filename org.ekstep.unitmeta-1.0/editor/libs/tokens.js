@@ -11,7 +11,8 @@ angular.module('ngTokenField', []).directive('ngTokenField', ["$parse", "$timeou
             id: '@id',
             ngModel: '=?',
             placeholder: '@placeholder',
-            validator: '&'
+            validator: '&',
+            mode:'@mode'
         },
         template: '<div class="ng-token-field"><input type="text" placeholder={{placeholder}}></div>',
         link: function(scope, element, attrs) {
@@ -20,12 +21,12 @@ angular.module('ngTokenField', []).directive('ngTokenField', ["$parse", "$timeou
             var _SEPARATOR = ",";
             var _triggeredUpdate = false;
             var _unbindWatcher = scope.$watch('ngModel', function(newTokens, oldTokens) {                
-                  deleteAllTokens();
-                  createTokens(newTokens);
-                  togglePlaceholder();
+                    deleteAllTokens();
+                    createTokens(newTokens);
+                    togglePlaceholder();
             }, true);
 
-            _tokenField = $('#' + scope.id);
+            _tokenField = element;
             _input = _tokenField.find('input');
 
             ////////////////////////////////////////////////
@@ -108,9 +109,8 @@ angular.module('ngTokenField', []).directive('ngTokenField', ["$parse", "$timeou
 
                         tokenWrapper.append(token);
 
-                        var close = $("<div>");
-                        close.addClass("close");
-                        close.append(document.createTextNode('✕'));
+                        var close = $("<i>");
+                        close.addClass("remove icon custom-cursor");
 
                         var onclickWrapper = function(w) {
                             return function callback() {
@@ -126,11 +126,12 @@ angular.module('ngTokenField', []).directive('ngTokenField', ["$parse", "$timeou
                         tokenText.append(document.createTextNode(text));
 
                         token.append(tokenText);
-                        token.append(close);
+                        //show close icon only on edit mode
+                        if(scope.mode == 'edit' || scope.mode == undefined){
+                            token.append(close);
+                        }
                         tokenWrapper.insertBefore(_input);
 
-                        // Resize input field accordingly
-                        resizeInput(tokenWrapper);
                     }
                 }
 

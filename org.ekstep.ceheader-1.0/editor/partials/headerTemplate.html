@@ -82,33 +82,33 @@
                     </a>
                 </div>
                 <div id="userprofile" ng-show="userDetails.id" class="user-context">
-                    <div class="browse item at username">
-                        <span ng-bind="userDetails.name" class="custom-cursor name"></span>
-                        <i class="caret down icon custom-cursor"></i>
-                    </div>
-                    <div class="ui fluid popup transition hidden user-details-wrapper" id="userDetailsWrapper">
-                        <div class="user-details">
-                            <div class="row user avtar">
-                                <img src="{{userDetails.avtar}}" />
+                    <div class="username">
+                        <span class="browse item at custom-cursor name">{{userDetails.name}} <i class="caret down icon custom-cursor"></i></span>
+                        <div class="ui fluid popup transition hidden user-details-wrapper" id="userDetailsWrapper">
+                            <div class="user-details">
+                                <div class="row user avtar">
+                                    <img src="{{userDetails.avtar}}" />
+                                </div>
+                                <div class="row user-name">
+                                    <span ng-bind="userDetails.name"></span>
+                                </div>
+                                <div class="row meta user-email">
+                                    <span ng-bind="userDetails.email"></span>
+                                </div>
                             </div>
-                            <div class="row user-name">
-                                <span ng-bind="userDetails.name"></span>
-                            </div>
-                            <div class="row meta user-email">
-                                <span ng-bind="userDetails.email"></span>
-                            </div>
-                        </div>
-                        <div class="user-profile-menu">
-                            <div class="row option">
-                                <a ng-click="displayWhatsNew()">Whats's new
+                            <div class="user-profile-menu">
+                                <div class="row option">
+                                    <a ng-click="displayWhatsNew()">
+                                    <span><i class="gift icon"></i>&nbsp;Whats's new</span>
                                 <span class="icon-badge" id="whatsnew-badge" ng-show="whatsNewBadge">&nbsp;</span>
                                 </a>
-                            </div>
-                            <div class="row option">
-                                <a ng-click="fireTelemetry({id: 'reportIssue'}, 'reportIssueButton') " ng-href="{{reportIssueLink}} " target="_blank ">Help</a>
-                            </div>
-                            <div id="logout" class="row option" ng-init="disableRedirectBtn = false">
-                                <a ng-class="disableRedirectBtn ? 'disabled': ''" ng-href="{{userDetails.logout}}" ng-click="disableRedirectBtn = true; fireToolbarTelemetry({id: 'logout'}, 'logoutButton')" target="_self">Logout</a>
+                                </div>
+                                <div class="row option">
+                                    <a ng-click="fireTelemetry({id: 'reportIssue'}, 'reportIssueButton') " ng-href="{{reportIssueLink}} " target="_blank "><span><i class="help icon"></i>&nbsp;Help</span></a>
+                                </div>
+                                <div id="logout" class="row option" ng-init="disableRedirectBtn = false">
+                                    <a ng-class="disableRedirectBtn ? 'disabled': ''" ng-href="{{userDetails.logout}}" ng-click="disableRedirectBtn = true; fireToolbarTelemetry({id: 'logout'}, 'logoutButton')" target="_self"><span><i class="sign out icon"></i>&nbsp;Logout</span></a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -117,14 +117,17 @@
             <div class="row header-icon-container">
                 <div class="custom-row-2">
                     <div class="icon-group-1">
+                        <div ng-show="whatsNewBadge" class="icon-box popup-item" data-content="Whats's New" data-variation="tiny inverted" data-position="bottom center" ng-click="displayWhatsNew()">
+                            <i class="gift red icon custom-icon"></i>
+                        </div>
+                        <div class="icon-box popup-item" data-content="Download to try it out on a mobile device" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'download:content'});">
+                            <i class="download icon custom-icon"></i>
+                        </div>
                         <div class="icon-box popup-item" data-content="Add Collaborator" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'collaborator:add'});">
                             <i class="add user icon custom-icon"></i>
                         </div>
                     </div>
                     <div class="icon-group-2">
-                        <div class="icon-box popup-item" data-content="Download to try it out on a mobile device" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'download:content'});">
-                            <i class="download icon custom-icon"></i>
-                        </div>
                         <div class="preview-icon-group">
                             <div class="icon-box popup-item" data-content="Preview" data-variation="tiny inverted" data-position="bottom center" ng-click="previewContent(); fireTelemetry({id: 'preview'}, 'previewButton');">
                                 <i class="fa fa-eye custom-icon"></i>
@@ -138,7 +141,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="icon-box popup-item label-icon-box" data-content="Save content" data-variation="tiny inverted" data-position="bottom center" ng-click="!saveBtnEnabled||saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')">
+                        <div class="icon-box popup-item label-icon-box" data-content="Save Content" data-variation="tiny inverted" data-position="bottom center" ng-click="!saveBtnEnabled||saveContent(); fireToolbarTelemetry({id: 'save'}, 'saveButton')">
                             <i class="ui icon-save disabled" ng-if="!saveBtnEnabled"></i>
                             <i class="ui primary icon-save" ng-if="saveBtnEnabled"></i>
                             <span class="label-icon-box-text save-button-text disabled" ng-if="!saveBtnEnabled">Save</span>

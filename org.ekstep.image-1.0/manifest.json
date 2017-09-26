@@ -22,7 +22,7 @@
             "type": "icon",
             "toolTip": "Add Image",
             "title": "Image",
-            "iconClass": "icon-media icon",
+            "iconClass": "fa fa-picture-o",
             "onclick": {
                 "id": "org.ekstep.image:assetbrowser:open"
             }
@@ -33,21 +33,13 @@
         "configManifest": [{
             "propertyName": "imagebrowser",
             "title": "Image Browser",
-            "dataType": "featureButtonToggle",
             "description": "Choose a  from the browser",
-            "options": [{
-                "value": "Image Browser",
-                "title": "Image Browser",
-                "description": "Choose a  from the browser",
-                "dataType": "icon",
-                "iconClass": "icon icon-readalong",
-                "state": true,
-                "status": "HIDE",
-                "toolTip":"Choose a  from the browser",
-                "onclick": {
-                     "id": "org.ekstep.image:assetbrowser:open"
-                }
-                 }]
+            "dataType": "browser",
+            "required": true,
+            "onclick":{
+                "id": "org.ekstep.assetbrowser:show",
+                "type": "image"
+            }
         }]
     }
 }

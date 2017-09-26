@@ -39,10 +39,10 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             if(_.isString($scope.course.tutor)){
                 $scope.course.tutor = $scope.course.tutor.split(',');
             }
-            if(_.isString($scope.course.language)){
+            if (!_.isEmpty($scope.course.language) && _.isString($scope.course.language)) {
                 $scope.course.language = [$scope.course.language];
             }
-            if(_.isString($scope.course.audience)){
+            if (!_.isEmpty($scope.course.audience) && _.isString($scope.course.audience)) {
                 $scope.course.audience = [$scope.course.audience];
             }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.course.name);
@@ -51,6 +51,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             $scope.metadataCloneObj = _.clone($scope.course);
             $scope.editMode = false;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+            ecEditor.dispatchEvent("content:title:update", $scope.course.name);
             $scope.getPath();
             $scope.$safeApply();
         }else{
