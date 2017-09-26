@@ -151,7 +151,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
     ctrl.myAssetTab = function() {
         /**rebind the scoll event to the element**/
-        ecEditor.jQuery("#" + ctrl.myTabScrollElement).scroll(ctrl.bindScroll);
+        ecEditor.jQuery("#" + ctrl.myTabScrollElement).unbind('scroll').scroll(ctrl.bindScroll);
         var callback,
             searchText = ctrl.query;
 
@@ -192,7 +192,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
 
     ctrl.allAssetTab = function() {
         /**rebind the scoll event to the element**/
-        ecEditor.jQuery("#" + ctrl.allTabScrollElement).scroll(ctrl.bindScroll);
+        ecEditor.jQuery("#" + ctrl.allTabScrollElement).unbind('scroll').scroll(ctrl.bindScroll);
         var callback,
             searchText = ctrl.query;
 
@@ -700,8 +700,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             }   
         };
 
-        ecEditor.jQuery("#" + ctrl.myTabScrollElement).scroll(ctrl.bindScroll);
-        ecEditor.jQuery("#" + ctrl.allTabScrollElement).scroll(ctrl.bindScroll);
+        ecEditor.jQuery("#" + ctrl.myTabScrollElement).unbind('scroll').scroll(ctrl.bindScroll);
+        ecEditor.jQuery("#" + ctrl.allTabScrollElement).unbind('scroll').scroll(ctrl.bindScroll);
 
         ecEditor.jQuery('#audioDropDown')
             .dropdown({
