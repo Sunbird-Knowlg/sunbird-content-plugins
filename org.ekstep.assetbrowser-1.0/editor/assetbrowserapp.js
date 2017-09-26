@@ -620,8 +620,16 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         instance.getAsset(searchText, mediaType, createdBy, ctrl.offset, function(err, res) {
             if (res && res.data.result.content) {
                 ecEditor._.forEach(res.data.result.content, function(obj, index) {
-                    if (!ecEditor._.isUndefined(obj.downloadUrl)) {
+                    if(mediaType == 'image'){
                         ctrl.imageList.push(obj);
+                    }else{
+                        ctrl.audioList.push({
+                            downloadUrl: trustResource(obj.downloadUrl),
+                            identifier: obj.identifier,
+                            name: obj.name,
+                            mimeType: obj.mimeType,
+                            license: obj.license
+                        });
                     }
                 });
                 ctrl.initPopup(res.data.result.content);
