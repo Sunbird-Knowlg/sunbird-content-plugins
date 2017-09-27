@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editcontentmetaController', ['$scope', '$q', '$rootScope', '$http', '$timeout', 'data', function ($scope, $q, $rootScope, $http, $timeout, data) {
+angular.module('org.ekstep.editcontentmeta', []).controller('editcontentmetaController', ['$scope', '$q', '$rootScope', '$http', '$timeout', 'data', function ($scope, $q, $rootScope, $http, $timeout, data) {
     var ctrl = this;
 
     data = data || {};
@@ -145,7 +145,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
     ctrl.saveMeta = function (isValid) {
         ctrl.submitted = true;
 
-        ctrl.contentMeta.keywords = _.isEmpty(ctrl.contentMeta.keywords) ? [] : ctrl.contentMeta.keywords;
+        ctrl.contentMeta.keywords = _.isEmpty(jQuery('#ecm-keywords').val()) ? [] : jQuery('#ecm-keywords').val().replace(/\s*,\s*/g, ',').split(',');
         ctrl.contentMeta.attributions = _.isEmpty(jQuery('#ecm-attributions').val()) ? [] : jQuery('#ecm-attributions').val().replace(/\s*,\s*/g, ',').split(',');
         ctrl.contentMeta.language = _.isEmpty(ctrl.language) ? [] : [ctrl.language];
         ctrl.contentMeta.audience = _.isEmpty(ctrl.audience) ? [] : [ctrl.audience];
