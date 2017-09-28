@@ -4,10 +4,11 @@
     top: 4% !important;
 }
 
-.activity-browser-content {
+.ui.modal.activity-browser-modal .content .activity-browser-content {
     height: 65vh;
     overflow-y: auto;
     overflow-x: hidden;
+    padding-left: 0;
 }
 
 .activity-browser-content-loader {
