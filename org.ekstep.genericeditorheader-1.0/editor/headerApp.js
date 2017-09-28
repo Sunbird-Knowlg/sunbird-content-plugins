@@ -8,37 +8,68 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "yaru22.angular-t
     $scope.disableSaveBtn = true;
     $scope.name = 'Untitled-Content';
 
-    $scope.saveContent = function() {
-        var metadata = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId'));
-        metadata.config = {overlay:true};
-        metadata.body = undefined;
-        ecEditor.dispatchEvent('org.ekstep.contenteditor:save',metadata);
+    $scope.saveContent = function(cb) {
+        $scope.disableSaveBtn = true;
+        ecEditor.dispatchEvent("org.ekstep.contenteditor:save", {
+            showNotification: true,
+            callback: function(err, res) {
+                if (res && res.data && res.data.responseCode == "OK") {
+                    $scope.lastSaved = Date.now();
+                    $scope.pendingChanges = false;                                        
+                } else {
+                    $scope.disableSaveBtn = false;                    
+                }
+                cb && cb(err, res);
+                $scope.$safeApply();
+            }
+        });
     };
 
     $scope.editDetails = function() {
-            $scope.generateTelemetry({
-                "type": "click",
-                "subtype": "",
-                "target": "editmeta"
-            });
-        },
+        ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup");
+    },
 
-        $scope.titleUpdate = function(event, title) {
-            if (title) {
-                $scope.name = title;
-                $scope.$safeApply();
-                document.title = title;
-            }
-        };
+    $scope.titleUpdate = function(event, title) {
+        if (title) {
+            $scope.name = title;
+            $scope.$safeApply();
+            document.title = title;
+        }
+    };
 
-    $scope.sendForReview = function() {
-        $scope.generateTelemetry({
-            "type": "click",
-            "subtype": "",
-            "target": "reviewbutton"
+    $scope._sendReview = function() {
+        ecEditor.dispatchEvent("org.ekstep.contenteditor:review", function(err, res) {
+            if (res) $scope.closeEditor();
+            $scope.$safeApply();
         });
-        ecEditor.dispatchEvent('org.ekstep.contenteditor:review');
-    }
+    };
+
+    $scope.sendForReview = function() {        
+        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        if (meta.status === "Draft") {
+            var editMetaOptions = {
+                callback: function(err, res) {
+                    if (res) {
+                        $scope.saveContent(function(err, res) {
+                            if (res) {
+                                $scope._sendReview();
+                            }
+                        });
+                    } else {
+                        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                            message: 'Unable to save content, try again!',
+                            position: 'topCenter',
+                            icon: 'fa fa-warning'
+                        });
+                    }
+                }
+            };
+
+            ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup", editMetaOptions);            
+        } else {
+            $scope._sendReview();
+        }        
+    };
 
     $scope.upload = function() {
         ecEditor.dispatchEvent('org.ekstep.uploadcontent:show');

@@ -10,7 +10,7 @@
                 </label>
             </div>
             <div class="row custom-row-2">
-                <a class="btn at-btn at-btn-ok" ng-click="editDetails()">
+                <a class="btn at-btn at-btn-ok" ng-click="editDetails(); generateTelemetry({'type': 'click', 'subtype': '', 'target': 'editmeta' });">
                     <i class="edit icon link"></i>&nbsp;Edit Details
                 </a>
             </div>
@@ -34,7 +34,7 @@
                             <i class="icon-save"></i>
                             <span class="label-icon-box-text save-button-text">Save</span>
                         </div>
-                        <div class="icon-box label-icon-box popup-item" data-content="Send for review" data-variation="tiny inverted" data-position="bottom center" ng-click="sendForReview()">
+                        <div class="icon-box label-icon-box popup-item" data-content="Send for review" data-variation="tiny inverted" data-position="bottom center" ng-click="sendForReview(); generateTelemetry({'type': 'click', 'subtype': '', 'target': 'reviewbutton' });">
                             <i class="send icon"></i>
                             <span class="label-icon-box-text">Send for review</span>
                         </div>

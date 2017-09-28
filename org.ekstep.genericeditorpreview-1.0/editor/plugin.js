@@ -40,6 +40,7 @@ org.ekstep.genericeditor.basePlugin.extend({
         console.log(this.previewURL);
         var instance = this;
         var contentService = ecEditor.getService('content');
+        var defaultPreviewConfig = {showEndpage:true};
         var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
         previewContentIframe.src = instance.previewURL;
         var userData = ecEditor.getService('telemetry').context;
@@ -57,10 +58,11 @@ org.ekstep.genericeditor.basePlugin.extend({
                 'partner': userData.etags.partner,
                 'contentId': ecEditor.getContext('contentId')
             };
-            configuration.config = {
-                'showEndPage': 'true',
-                'showStartPage': 'true'
-            };                       
+            if (ecEditor.getConfig('previewConfig')) {
+                configuration.config = ecEditor.getConfig('previewConfig');
+            } else {
+                configuration.config = defaultPreviewConfig;
+            }
             configuration.metadata = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
             configuration.data = {};
             previewContentIframe.contentWindow.initializePreview(configuration);

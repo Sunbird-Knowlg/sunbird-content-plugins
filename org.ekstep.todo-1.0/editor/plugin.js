@@ -23,7 +23,15 @@ org.ekstep.contenteditor.basePlugin.extend({
         ctrl.initializeTodoWidget = function() {
             var requestParams = {};
             var widgetRef;
-            ecEditor.jQuery("#todo-sidebar-tab .item").tab();            
+            ecEditor.jQuery("#todo-sidebar-tab .item").tab('change tab', 'reviewerTab');
+            /**Check for collabortors tab**/
+            isCollaborators = _.isUndefined(ecEditor.getService('content').getContentMeta(ctrl.context.contentId).collaborators) ? false : true;
+            if(isCollaborators)ecEditor.jQuery("#collaboratorTab").removeClass("disabled");
+            else{
+                ecEditor.jQuery("#collaboratorTab").addClass("disabled");
+                ecEditor.jQuery("#collaboratorTab").removeAttr("data-tab");
+            }
+
             if (!ecEditor._.isUndefined(ctrl.context)) {
                 if (!ecEditor._.isUndefined(ctrl.context.contentId) && ctrl.context.contentId != "") {
                     // Content url
