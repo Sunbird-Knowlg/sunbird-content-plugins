@@ -59,7 +59,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      *   @memberof assetBrowser
      *
      */
-    getAsset: function(searchText, mediaType, createdBy, cb) {
+    getAsset: function(searchText, mediaType, createdBy, offset, cb) {
         var instance = this,
             requestObj,
             requestHeaders,
@@ -76,7 +76,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                     },
                     "status": new Array("Live", "Review", "Draft")
                 },
-                "limit": 50
+                "limit": 50,
+                "offset": offset
             }
         };
 

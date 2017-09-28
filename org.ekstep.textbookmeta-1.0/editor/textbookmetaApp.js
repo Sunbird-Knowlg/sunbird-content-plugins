@@ -43,13 +43,13 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
 
     $scope.initDropdown = function() {
         $timeout(function() {
-            $('#board').dropdown('set selected', $scope.textbook.board);
-            $('#medium').dropdown('set selected', $scope.textbook.medium);
-            $('#subject').dropdown('set selected', $scope.textbook.subject);
-            $('#gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
-            $('#audience').dropdown('set selected', $scope.textbook.audience);
-            $('#language').dropdown('set selected', $scope.textbook.language);
-            $('#resource').dropdown('set selected', $scope.textbook.resource);      
+            $('#textbookmeta-board').dropdown('set selected', $scope.textbook.board);
+            $('#textbookmeta-medium').dropdown('set selected', $scope.textbook.medium);
+            $('#textbookmeta-subject').dropdown('set selected', $scope.textbook.subject);
+            $('#textbookmeta-gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
+            $('#textbookmeta-audience').dropdown('set selected', $scope.textbook.audience);
+            $('#textbookmeta-language').dropdown('set selected', $scope.textbook.language);
+            $('#textbookmeta-resource').dropdown('set selected', $scope.textbook.resource);      
         });
     }
     
@@ -76,10 +76,15 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             $scope.textbook.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
             $scope.metadataCloneObj = _.clone($scope.textbook);
-            $scope.editMode = false;
+            $scope.editMode = true;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             ecEditor.dispatchEvent("content:title:update", $scope.textbook.name);
             $scope.getPath();
+            ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                title: 'Content details updated successfully.',
+                position: 'topCenter',
+                icon: 'fa fa-check-circle'
+            });
             $scope.$safeApply();
         }else{
             ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
@@ -128,25 +133,19 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.textbook = {};
-        $scope.editMode = $scope.newNode = false;
+        $scope.editMode = true;
+        $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
         $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.textbookmeta", "1.0", "assets/default.png");
-
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
         $scope.textbook = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
         if($scope.mode === "Edit" && $scope.editable === true){
-            $scope.editMode = true;
             $('.ui.dropdown').dropdown('refresh');
             $scope.metadataCloneObj = _.clone($scope.textbook);
         }
+        $scope.textbook.conceptData = '(0) concepts selected';
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
-            $scope.editMode = false;
-            $('#board').dropdown('set selected', $scope.textbook.board);
-            $('#medium').dropdown('set selected', $scope.textbook.medium);
-            $('#subject').dropdown('set selected', $scope.textbook.subject);
-            $('#gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
-            $('#audience').dropdown('set selected', $scope.textbook.audience);
-            $('#language').dropdown('set selected', $scope.textbook.language);
+            $scope.initDropdown();
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.textbook.concepts = activeNode.data.metadata.concepts;
                 if($scope.textbook.concepts.length > 0){
@@ -155,7 +154,7 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
                         selectedConcepts.push(concept.identifier);
                     });
                 }else{
-                    $scope.textbook.conceptData = '';
+                    $scope.textbook.conceptData = '(0) concepts selected';
                 }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);

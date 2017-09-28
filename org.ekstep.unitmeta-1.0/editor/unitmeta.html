@@ -8,59 +8,8 @@
         </div>
         <h3 class="header-bottom-segment inline-block">{{unit.name | limitTo:50 }}<span ng-if="unit.name.length > 100"> ...</span></h3>
         <div class="header-buttons-container header-bottom-segment inline-block" ng-show="mode == 'Edit' && editable == true">
-            <div class="ui primary submit button inline-block right-float button-overrides" id="save-button" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'})" ng-show="!editMode">
-                Edit
-            </div>
             <div class="ui primary button right-float button-overrides" id="update-button" ng-click="updateNode(); generateTelemetry({type: 'click', subtype: 'update', target: 'updatemeta'})" ng-show="editMode">
                 Update
-            </div>
-        </div>
-    </div>
-    <div class="ui segment" id="read-metadata-wrapper" ng-show="!editMode">
-        <div class="ui items">
-            <div class="item">
-                <div class="ui tiny image">
-                    <img ng-if="showImageIcon" ng-src="{{ unit.appIcon || defaultImage }}" alt="">
-                </div>
-                <div class="content">
-                    <div class="header info-item" style="display:inline-block; max-width: 95%;">{{unit.name}}</div>
-                    <span class="edit-metadata" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'}); initDropdown();"><i class="edit icon"></i></span>
-                    <div class="description">
-                        <p id="descriptionPara" class="info-item">{{unit.description}}</p>
-                        <span class="edit-metadata" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'}); initDropdown();"><i class="edit icon"></i></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="metacontent-fields-container">
-            <div class="ui fluid grid container">
-                <div class="seven wide column" style="padding-left:0;">
-                    <table class="ui padded striped table metadata-fields-table">
-                        <tbody>
-                            <tr>
-                                <td>Concepts</td>
-                                <td>
-                                    <span class="info-item" ng-repeat="concept in unit.concepts track by $index">{{concept.name}}{{$last ? '' : ', '}}</span>
-                                    <span class="edit-metadata" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'}); initDropdown();"><i class="edit icon"></i></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Keywords</td>
-                                <td>
-                                    <span class="info-item" ng-repeat="tag in unit.keywords track by $index">{{tag | lowercase}}{{$last ? '' : ', '}}</span>
-                                    <span class="edit-metadata" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'}); initDropdown();"><i class="edit icon"></i></span>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>Notes</td>
-                                <td>
-                                    <span class="info-item">{{unit.notes.toString() | lowercase}}</span>
-                                    <span class="edit-metadata" ng-click="editMode =true; generateTelemetry({type: 'click', subtype: 'edit', target: 'editmetaform'}); initDropdown();"><i class="edit icon"></i></span>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
             </div>
         </div>
     </div>
