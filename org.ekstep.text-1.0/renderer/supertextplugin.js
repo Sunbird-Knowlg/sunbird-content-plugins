@@ -84,6 +84,7 @@ Plugin.extend({
                 div.style.fontStyle = this._plginConfig.fontstyle ?  "italic" : "normal";
                 div.style.color = data.color;
                 div.style.textAlign = data.align;
+                div.style.lineHeight = data.lineHeight;
 
                 var parentDiv = document.getElementById(Renderer.divIds.gameArea);
                 parentDiv.insertBefore(div, parentDiv.childNodes[0]);
@@ -104,9 +105,45 @@ Plugin.extend({
                         instance._stage.events.event.push({ 'type': value+'_click', 'action' : [{'type':'command', 'command' : 'show' , 'asset': value+'_info'}, {'type':'command', 'command' : 'HIDEHTMLELEMENTS' , 'asset': value+'_info'}]});
                     });
                 }
-                if(_.isUndefined(instance._stage._data.events)){
-                    instance._stage._data.events = {'event': event}
-                }
+                // if(_.isUndefined(instance._stage._data.events)){
+                //     instance._stage._data.events = {'event': event}
+                // } else {
+                //     if (!this._stage._data.events.event) this._stage._data.events.event = [];
+                //         _.each(event, function(ev) {
+                //             instance._stage._data.events.event.push(ev);
+                //         });
+                // }
+
+                if (this._stage._data.events) {
+                        if (!this._stage._data.events.event) this._stage._data.events.event = [];
+                        _.each(event, function(ev) {
+                            instance._stage._data.events.event.push(ev);
+                        });
+                    } else 
+                    if (this._stage._data.event) {
+                        if (!this._stage._data.events) {
+                            this._stage._data.events = {};
+                            this._stage._data.events.event = [];
+                        }
+                        if (!_.isArray(this._stage._data.event)) {
+                            var allEvents = _.clone(this._stage._data.event);
+                            allEvents = [allEvents];
+                            _.each(allEvents, function(e) {
+                                instance._stage._data.events.event.push(e);
+                            });
+                        } else {
+                            this._stage._data.events.event = this._stage._data.event;
+                        }
+                        _.each(event, function(ev) {
+                            instance._stage._data.events.event.push(ev);
+                        });
+                    } else {
+                        this._stage._data.events = {};
+                        this._stage._data.events.event = [];
+                        _.each(event, function(ev) {
+                            instance._stage._data.events.event.push(ev);
+                        });
+                    }
 
                 this.invokeController();
                 this.invokeTemplate();

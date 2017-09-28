@@ -30,7 +30,7 @@
             "type": "icon",
             "toolTip": "Add Text",
             "title": "Text",
-            "iconClass": "icon-text icon",
+            "iconClass": "fa fa-font",
             "onclick":
             {
                 "id": "org.ekstep.text:create",
