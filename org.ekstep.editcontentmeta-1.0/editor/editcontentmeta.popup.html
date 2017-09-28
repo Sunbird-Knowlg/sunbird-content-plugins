@@ -94,7 +94,7 @@
                             <div class="field">
                                 <label>Keywords</label>
                                 <div class="ui input">
-                                    <textarea name="keywords" id="ecm-keywords" rows="2" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})">{{$ctrl.contentMeta.keywords.join(', ');}}</textarea>
+                                    <ng-token-field ng-model="$ctrl.contentMeta.keywords" id="ecm-keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
                                 </div>
 
                             </div>
