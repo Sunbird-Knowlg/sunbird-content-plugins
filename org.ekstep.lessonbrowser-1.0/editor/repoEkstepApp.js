@@ -1,4 +1,4 @@
-angular.module('org.ekstep.contentprovider', ['infinite-scroll'])
+angular.module('org.ekstep.contentprovider', [])
 .controller('contentproviderekstepController', ['$scope', function($scope) {
     var ctrl = this;
 
@@ -20,12 +20,6 @@ angular.module('org.ekstep.contentprovider', ['infinite-scroll'])
     $scope.loadmoreVisibleFlag = true;
     var loadedLessonCount = 0;
 
-    //accordion open/close icon status
-    $openLangFilter = false;
-    $openGradeFilter = false;
-    $openLessonTypeFilter = false;
-    $openConceptsFilter = false;
-
     // Select all - Sidebar filters
     $scope.isAllSelected = {"lang": false, "grade": false, "lessonType": false, "domain": false};
 
@@ -40,37 +34,7 @@ angular.module('org.ekstep.contentprovider', ['infinite-scroll'])
                     }};
 
     // Get accordions functioning
-    setTimeout(function(){
-        
-        $('#applyAccordion').accordion({
-        collapsible: true,
-        animate: false
-        });
-
-    }, 500);
-
-
-    //to transform the dropdown arrow of clicked accordion title
-    $scope.openSidebarFilerAccordion = function(clickEvent){
-        switch (clickEvent.target.id) {
-            case 'languageFilter':
-                $scope.openLangFilter = !($scope.openLangFilter);
-                $scope.openGradeFilter = $scope.openLessonTypeFilter = $scope.openConceptFilter = false;
-                break;
-            case 'gradeFilter':
-                $scope.openGradeFilter = !($scope.openGradeFilter);
-                $scope.openLangFilter = $scope.openLessonTypeFilter = $scope.openConceptsFilter = false;
-                break;
-            case 'lessonTypeFilter':
-                $scope.openLessonTypeFilter = !($scope.openLessonTypeFilter);
-                $scope.openLangFilter = $scope.openGradeFilter = $scope.openConceptsFilter = false;
-                break;
-            case 'conceptsFilter':
-                $scope.openConceptsFilter = !($scope.openConceptsFilter);
-                $scope.openLangFilter = $scope.openGradeFilter = $scope.openLessonTypeFilter = false;
-                break;
-        }
-    }
+    setTimeout(function(){$('#applyAccordion').accordion()}, 500);
 
     //Telemetry
     var collectionService = org.ekstep.collectioneditor.api.getService('collection');
@@ -277,8 +241,6 @@ angular.module('org.ekstep.contentprovider', ['infinite-scroll'])
             });
             $scope.isAllSelected[selectionKey] = optionsStatus;
         }
-
-        $scope.applyFilters();
     };
 
     // Toggle select all
@@ -298,8 +260,6 @@ angular.module('org.ekstep.contentprovider', ['infinite-scroll'])
         }
 
         $scope.isAllSelected[selectionKey] = toggleStatus;
-
-        $scope.applyFilters();
     };
 
     // Toggle selection for lessons
