@@ -209,7 +209,7 @@
    					</div>
    				</div>
    				<div class="clearfix">&nbsp;</div>
-   				<div class="asset_item_container">
+   				<div class="asset_item_container" id="my-image-tab">
    					<div class="ui grid">
    						<div ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
    							<div class="column templatebrowser_thumbnail">
@@ -261,7 +261,7 @@
    					</div>
    				</div>
    				<div class="clearfix">&nbsp;</div>
-   				<div class="asset_item_container">
+   				<div class="asset_item_container" id="my-audio-tab">
    					<div class="ui grid">
    						<div class="three wide column" ng-show="$ctrl.audioList.length > 0" ng-repeat="audio in $ctrl.audioList track by $index">
    							<div class="audioitem infopopover" ng-click="$ctrl.AudioSource(audio, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected}; $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'selectAudioAsset'});" id="{{audio.identifier}}" src="{{audio.downloadUrl}}" data-html="<b>{{audio.name}}</b> <br/> License: {{audio.license}}">
@@ -293,7 +293,7 @@
    					</div>
    				</div>
    				<div class="clearfix">&nbsp;</div>
-   				<div class="ui grid asset_item_container">
+   				<div class="ui grid asset_item_container" id="all-image-tab">
    					<div ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
    						<div class="column templatebrowser_thumbnail">
    							<div class="ui small images templatecard infopopover" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected}; $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'selectImageAsset'});" data-html="<b>{{image.name}}</b> <br/> License:{{image.license}} ">
@@ -325,7 +325,7 @@
    					</div>
    				</div>
    				<div class="clearfix">&nbsp;</div>
-   				<div class="asset_item_container">
+   				<div class="asset_item_container" id="all-audio-tab">
    					<div class="ui grid">
    						<div class="three wide column" ng-show="$ctrl.audioList.length > 0" ng-repeat="audio in $ctrl.audioList track by $index">
    							<div class="audioitem infopopover" ng-click="$ctrl.AudioSource(audio, $index); $ctrl.selected_audios[$index]={selected: !$ctrl.selected_audios[$index].selected}; $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'selectAudioAsset'});" id="{{audio.identifier}}" src="{{audio.downloadUrl}}" data-html="<b>{{audio.name}}</b> <br/> License: {{audio.license}}">
