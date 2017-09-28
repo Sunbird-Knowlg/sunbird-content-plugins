@@ -71,11 +71,8 @@
 .book-image-container img {
     max-height: 100%;
     max-width: 100%;
-<<<<<<< HEAD
-=======
     position: relative;
     display: inline-block;
->>>>>>> upstream/master
 }
 
 .book-image-container:hover {
