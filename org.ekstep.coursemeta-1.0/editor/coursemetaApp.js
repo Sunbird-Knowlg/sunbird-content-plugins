@@ -49,9 +49,14 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             $scope.course.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.course));
             $scope.metadataCloneObj = _.clone($scope.course);
-            $scope.editMode = false;
+            $scope.editMode = true;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             ecEditor.dispatchEvent("content:title:update", $scope.course.name);
+             ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+             title: 'Content details updated successfully',
+             position: 'topCenter',
+             icon: 'fa fa-check-circle'
+            });
             $scope.getPath();
             $scope.$safeApply();
         }else{
@@ -65,10 +70,10 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
     };
 
     $scope.initDropdown = function() {
-        $timeout(function() {
-            $('#language').dropdown('set selected', $scope.course.language);
-            $('#audience').dropdown('set selected', $scope.course.audience);
-        });
+        setTimeout(function() {
+            $('#course-language').dropdown('set selected', $scope.course.language);
+            $('#course-audience').dropdown('set selected', $scope.course.audience);
+        },1000);
     };
 
     $scope.getUpdatedMetadata = function(originalMetadata, currentMetadata){
@@ -108,21 +113,20 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.course = {};
-        $scope.editMode = $scope.newNode = false;
+        $scope.editMode = true;
+        $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
         $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.coursemeta", "1.0", "assets/default.png");
 
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
         $scope.course = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
         if($scope.mode === "Edit" && $scope.editable === true){
-            $scope.editMode = true;
             $('.ui.dropdown').dropdown('refresh');
             $scope.metadataCloneObj = _.clone($scope.course);
         }
+        $scope.course.conceptData = '(0) concepts selected';
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
-            $scope.editMode = false;
-            $('#language').dropdown('set selected', $scope.course.language);
-            $('#audience').dropdown('set selected', $scope.course.audience);
+            $scope.initDropdown();
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.course.concepts = activeNode.data.metadata.concepts;
                 if($scope.course.concepts.length > 0){
@@ -131,7 +135,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
                         selectedConcepts.push(concept.identifier);
                     });
                 }else{
-                    $scope.course.conceptData = '';
+                    $scope.course.conceptData = '(0) concepts selected';
                 }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);

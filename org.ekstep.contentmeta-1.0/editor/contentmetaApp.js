@@ -42,10 +42,15 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.content));;
             $scope.metadataCloneObj = _.clone($scope.content);
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+            $scope.editMode = true;
             if (activeNode.data && activeNode.data.root) ecEditor.dispatchEvent("content:title:update", $scope.content.name);
-            $scope.editMode = false;
             $scope.getPath();
             $scope.$safeApply();
+            ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                title: 'Content details updated successfully.',
+                position: 'topCenter',
+                icon: 'fa fa-check-circle'
+            });
         } else {
             ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
                 title: 'Please fill in all required fields',
@@ -100,28 +105,32 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         if (_.indexOf(contentArr, data.data.objectType) != -1) {
             $scope.nodeId = data.data.id;
             var cache = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId];            
+           
             $scope.nodeType = data.data.objectType;
             $scope.content = {};
-            $scope.editMode = $scope.newNode = false;
+            $scope.editMode = true;
+            $scope.newNode = false;
+            $scope.tokenMode = 'edit';
             $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
             $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.contentmeta", "1.0", "assets/default.png");
-
+            
             var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
             $scope.content = (_.isUndefined(cache)) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, cache.metadata);
             $scope.showSubCollection = !activeNode.folder;
             if ($scope.mode === "Edit" && $scope.editable === true) {
-                $scope.editMode = true;
                 $('.ui.dropdown').dropdown('refresh');
                 $scope.metadataCloneObj = _.clone($scope.content);
                 $('#contentmeta-language').dropdown('clear');
             }
             if (!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])) {
-                $scope.editMode = false;
+                if(!$scope.editable){
+                    $scope.editMode = false;
+                    $scope.tokenMode = 'view';
+                }
                 $scope.content = (_.isUndefined(cache)) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, cache.metadata);
                 $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
                 $('#contentmeta-language').dropdown('set selected', $scope.content.language);
             } else if (cache && _.has(cache.metadata, ["name"])) {
-                $scope.editMode = false;
                 $scope.content = _.assign(activeNode.data.metadata, cache.metadata);
                 $scope.metadataCloneObj = _.clone(cache.metadata);
                 $('#contentmeta-language').dropdown('set selected', $scope.content.language);

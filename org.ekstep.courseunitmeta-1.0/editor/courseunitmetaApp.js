@@ -29,9 +29,14 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.courseunit.name);
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.courseunit));;
             $scope.metadataCloneObj = _.clone($scope.courseunit);
-            $scope.editMode = false;
+            $scope.editMode = true;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             $scope.getPath();
+            ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                title: 'Content details updated successfully.',
+                position: 'topCenter',
+                icon: 'fa fa-check-circle'
+            });
             $scope.$safeApply();
         }else{
             ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
@@ -80,18 +85,18 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.courseunit = {};
-        $scope.editMode = $scope.newNode = false;
+        $scope.editMode = true;
+        $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
         $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.courseunitmeta", "1.0", "assets/default.png");
 
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
         $scope.courseunit = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
         if($scope.mode === "Edit" && $scope.editable === true){
-            $scope.editMode = true;
             $scope.metadataCloneObj = _.clone($scope.courseunit);
         }
+        $scope.courseunit.conceptData = '(0) concepts selected';
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
-            $scope.editMode = false;
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.courseunit.concepts = activeNode.data.metadata.concepts;
                 if($scope.courseunit.concepts.length > 0){
@@ -100,7 +105,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
                         selectedConcepts.push(concept.identifier);
                     });
                 }else{
-                    $scope.courseunit.conceptData = '';
+                    $scope.courseunit.conceptData = '(0) concepts selected';
                 }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
