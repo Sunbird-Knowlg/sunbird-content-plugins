@@ -102,7 +102,7 @@
 #contents-data-form,
 #read-metadata-wrapper {
     border-radius: 0;
-    height: calc(100% - 90.4px)!important;
+    height: 80%;
     border: none!important;
     box-shadow: none!important;
     padding-left: 0!important;
