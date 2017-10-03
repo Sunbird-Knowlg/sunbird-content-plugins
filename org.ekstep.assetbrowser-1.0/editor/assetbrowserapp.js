@@ -48,6 +48,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.assetFileError = "";
     ctrl.createdBy = ecEditor._.isUndefined(ctrl.context) ? '' : ctrl.context.user.id;
     ctrl.offset = 0;
+    ctrl.maxLimit = 200;
     ctrl.myTabScrollElement = "";
     ctrl.allTabScrollElement = "";
     ctrl.asset = {
@@ -604,6 +605,13 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.loadMoreAsset = function(data) {
         /**Increment offset by 50**/
         ctrl.offset = ctrl.offset+50;
+
+        if (ctrl.offset == ctrl.maxLimit){
+            ecEditor.jQuery("#"+data.target.id).unbind('scroll');
+            alert('Didn’t find what you were looking for? Try searching for something more specific');
+            return false;
+        }
+        
         var callback,
             searchText = ctrl.query;
 
