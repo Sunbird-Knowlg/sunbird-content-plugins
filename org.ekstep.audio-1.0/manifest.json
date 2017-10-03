@@ -11,7 +11,7 @@
         "main": "editor/plugin.js",
         "dependencies": [
             { "type": "js", "src": "editor/libs/jquery.jplayer.min.js" },
-            { "type": "plugin", "plugin": "org.ekstep.assetbrowser", "ver": "1.0" }
+            { "type": "plugin", "plugin": "org.ekstep.assetbrowser", "ver": "1.1" }
         ],
         "menu": [{
             "id": "audio",
