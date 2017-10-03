@@ -1,53 +1,58 @@
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.activitybrowser-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.assessmentbrowser-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.assetbrowser-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.audio-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.collaborator-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.colorpicker-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.conceptselector-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.config-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.developer-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.download-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.hotspot-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.image-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.preview-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.quiz-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.readalongbrowser-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.scribblepad-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.shape-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.stage-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.stageconfig-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.telemetry-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.templatebrowser-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.text-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.todo-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.unsupported-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.utils-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.viewecml-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.wordinfobrowser-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.video-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.ceheader-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.review-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.keyboardshortcuts-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.collectioneditor-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.collectionheader-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.textbookmeta-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.lessonbrowser-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.unitmeta-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.contentmeta-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.coursemeta-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.courseunitmeta-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.sunbirdcollectionheader-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.contenteditorfunctions-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.lessonplanmeta-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.lessonplanunitmeta-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.genericeditorheader-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.genericeditor-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.genericeditorpreview-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.genericeditorsidebar-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.editcontentmeta-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.uploadcontent-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.contenteditorfunctions-1.0/ --recursive
-aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/org.ekstep.sunbirdcommonheader-1.0/ --recursive
+declare -a coreplugins=("org.ekstep.activitybrowser-1.0"
+                "org.ekstep.assessmentbrowser-1.0"
+                "org.ekstep.audio-1.0"
+                "org.ekstep.collaborator-1.0"
+                "org.ekstep.colorpicker-1.0"
+                "org.ekstep.conceptselector-1.0"
+                "org.ekstep.config-1.0"
+                "org.ekstep.developer-1.0"
+                "org.ekstep.download-1.0"
+                "org.ekstep.hotspot-1.0"
+                "org.ekstep.quiz-1.0"
+                "org.ekstep.readalongbrowser-1.0"
+                "org.ekstep.scribblepad-1.0"
+                "org.ekstep.shape-1.0"
+                "org.ekstep.stage-1.0"
+                "org.ekstep.stageconfig-1.0"
+                "org.ekstep.telemetry-1.0"
+                "org.ekstep.templatebrowser-1.0"
+                "org.ekstep.todo-1.0"
+                "org.ekstep.unsupported-1.0"
+                "org.ekstep.utils-1.0"
+                "org.ekstep.viewecml-1.0"
+                "org.ekstep.video-1.0"
+                "org.ekstep.ceheader-1.0"
+                "org.ekstep.review-1.0"
+                "org.ekstep.keyboardshortcuts-1.0"
+                "org.ekstep.collectioneditor-1.0"
+                "org.ekstep.collectionheader-1.0"
+                "org.ekstep.sunbirdcollectionheader-1.0"
+                "org.ekstep.contenteditorfunctions-1.0"
+                "org.ekstep.genericeditorheader-1.0"
+                "org.ekstep.genericeditor-1.0"
+                "org.ekstep.genericeditorsidebar-1.0"
+                "org.ekstep.uploadcontent-1.0"
+                "org.ekstep.contenteditorfunctions-1.0"
+                "org.ekstep.image-1.1"
+                "org.ekstep.assetbrowser-1.1"
+                "org.ekstep.preview-1.1"
+                "org.ekstep.text-1.1"
+                "org.ekstep.wordinfobrowser-1.1"
+                "org.ekstep.textbookmeta-1.1"
+                "org.ekstep.lessonbrowser-1.1"
+                "org.ekstep.unitmeta-1.1"
+                "org.ekstep.contentmeta-1.1"
+                "org.ekstep.coursemeta-1.1"
+                "org.ekstep.courseunitmeta-1.1"
+                "org.ekstep.lessonplanmeta-1.1"
+                "org.ekstep.lessonplanunitmeta-1.1"
+                "org.ekstep.genericeditorpreview-1.1"
+                "org.ekstep.editcontentmeta-1.1"
+                "org.ekstep.sunbirdcommonheader-1.1");
 
-aws s3 --region ap-south-1 cp ansible/content-plugins s3://ekstep-public-$1/content-plugins/ --recursive --acl public-read
+for i in "${coreplugins[@]}"
+do
+   aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/$i/ --recursive
+   aws s3 --region ap-south-1 cp ansible/content-plugins s3://ekstep-public-$1/content-plugins/$i --recursive --acl public-read
+done
+
