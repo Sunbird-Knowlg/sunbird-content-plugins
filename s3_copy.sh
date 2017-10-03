@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 declare -a coreplugins=("org.ekstep.activitybrowser-1.0"
                 "org.ekstep.assessmentbrowser-1.0"
                 "org.ekstep.audio-1.0"
