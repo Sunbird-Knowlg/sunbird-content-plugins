@@ -21,9 +21,10 @@ org.ekstep.contenteditor.basePlugin.extend({
      *
      */
     initialize: function() {
+        var instance = this;
         org.ekstep.contenteditor.api.addEventListener(this.manifest.id + ":show", this.initPreview, this);
-        var templatePath = org.ekstep.contenteditor.api.resolvePluginResource("org.ekstep.assetbrowser", "1.0", "editor/assetBrowser.html");
-        var controllerPath = org.ekstep.contenteditor.api.resolvePluginResource("org.ekstep.assetbrowser", "1.0", "editor/assetbrowserapp.js");
+        var templatePath = org.ekstep.contenteditor.api.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assetBrowser.html");
+        var controllerPath = org.ekstep.contenteditor.api.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assetbrowserapp.js");
         org.ekstep.contenteditor.api.getService('popup').loadNgModules(templatePath, controllerPath);
     },
     /**
