@@ -603,12 +603,12 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     }
 
     ctrl.loadMoreAsset = function(data) {
+        /**Check for max limit and Increment offset by 50**/
         if (ctrl.offset >= ctrl.maxLimit-50){
             ecEditor.jQuery("#"+data.target.id).unbind('scroll');
             alert('Didn’t find what you were looking for? Try searching for something more specific');
             return false;
         }else{
-            /**Increment offset by 50**/
             ctrl.offset = ctrl.offset+50;
         }
         
