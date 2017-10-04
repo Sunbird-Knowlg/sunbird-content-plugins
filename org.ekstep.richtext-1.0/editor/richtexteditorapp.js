@@ -14,7 +14,6 @@ angular.module('richtexteditorapp', [])
                 }
             });
             ctrl.selectedText = false;
-            CKEDITOR.basePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/libs/");
             CKEDITOR.replace( 'editor1', {
                 customConfig: CKEDITOR.basePath + "config.js",
                 skin: 'moono-lisa,'+CKEDITOR.basePath + "skins/moono-lisa/",
@@ -45,10 +44,6 @@ angular.module('richtexteditorapp', [])
                 textObj.config.text = CKEDITOR.instances.editor1.getData();
                 textObj.attributes.__text = textObj.config.text;
                 ecEditor.jQuery("#richtext-wrapper div#"+textObj.id).html(textObj.config.text);
-                var currentObject = org.ekstep.contenteditor.api.getCurrentObject();
-                 currentObject.editorObj.width = $('#' + textObj.id).width();
-                 currentObject.editorObj.height = $('#' + textObj.id).height();
-                ecEditor.render();
             }else{
                 ecEditor.dispatchEvent('org.ekstep.richtext:create', {
                     "__text":  CKEDITOR.instances.editor1.getData(),
@@ -59,6 +54,7 @@ angular.module('richtexteditorapp', [])
                     "opacity": 1
                 });
             }
+            org.ekstep.contenteditor.api.dispatchEvent('object:modified');
             $scope.closeThisDialog();
         };
         ctrl.mapElementWithName = function(element) {

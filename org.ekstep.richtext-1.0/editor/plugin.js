@@ -1,9 +1,38 @@
 org.ekstep.contenteditor.basePlugin.extend({
+  /**
+     * This expains the type of the plugin
+     * @member {String} type
+     * @memberof RichText
+     */
     type: "org.ekstep.richtext",
+    /**
+     * Magic Number is used to calculate the from and to ECML conversion
+     * It is the target value which is used for refrence in calculating text size in percentage
+     * @member {Number} magicNumber
+     * @memberof RichText
+     */
+    magicNumber: 1920,
+    /**
+     * Editor Width is used to calculate the from and to ECML conversion
+     * @member {Number} editorWidth
+     * @memberof RichText
+     */
+    editorWidth: 720,
+    /**
+     * Richtextid is used to append richtext wrapper inside html
+     * @member {Sttring} richTextId
+     * @memberof RichText
+     */
+    richTextId: 'richtext-wrapper',
+    /**
+     * The events are registred which are used which are used to add or remove fabric events and other custom events
+     * @memberof RichText
+     */
     initialize: function() {
         var instance = this;
-        ecEditor.addEventListener("org.ekstep.richtext:showpopup", this.loadHtml, this);
-        ecEditor.addEventListener('stage:select', this.removeHtmlElements, this);
+        CKEDITOR.basePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/libs/");
+        ecEditor.addEventListener(this.type + ":showpopup", this.loadHtml, this);
+        ecEditor.addEventListener('stage:unselect', this.removeHtmlElements, this);
         ecEditor.addEventListener('stage:create', this.removeHtmlElements, this);
         ecEditor.addEventListener(instance.manifest.id + ":adddiv", this.addDivElement, this);
         var canvas = org.ekstep.contenteditor.api.getCanvas();
@@ -12,7 +41,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/richtexteditorapp.js");
         ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
         var divWrapper = document.createElement('div');
-        divWrapper.setAttribute("id", 'richtext-wrapper');
+        divWrapper.setAttribute("id", this.richTextId);
         ecEditor.jQuery(".canvas-container").append(divWrapper);
     },
     newInstance: function() {
@@ -61,23 +90,24 @@ org.ekstep.contenteditor.basePlugin.extend({
         var div = document.createElement('div');
         div.setAttribute("id", instance.data.id);
         div.style.position = 'absolute';
-        div.style.fontSize = '18px';
+        div.style.fontSize = '14px';
         div.style.fontFamily = 'NotoSans';
-        div.style.width = "auto";
-        div.style.height = "auto";
+        div.style.width = instance.data.editorObj.width ? instance.data.editorObj.width + 1 + 'px' : "auto";
+        div.style.height = instance.data.editorObj.height ? instance.data.editorObj.height + 1 + 'px' : "auto";
         div.style.pointerEvents = "none";
-        ecEditor.jQuery(".canvas-container #richtext-wrapper").append(div);
-        ecEditor.jQuery(".canvas-container #richtext-wrapper div#" + instance.data.id).html(instance.data.config.text);
+        ecEditor.jQuery(".canvas-container #" + this.richTextId).append(div);
+        ecEditor.jQuery(".canvas-container #" + this.richTextId + " div#" + instance.data.id).html(instance.data.config.text);
         ecEditor.jQuery("#" + instance.data.id).offset({'top':instance.data.editorObj.top + canvasCord.top, 'left':Number(parseInt(ecEditor.jQuery(".canvas-container").css('margin-left'))) + (instance.data.editorObj.left + canvasCord.left)});
-        ecEditor.jQuery("#" + instance.data.id).width(ecEditor.jQuery("#" + instance.data.id).width() + 5);
-        // ecEditor.jQuery("div#"+this.id).draggable({
-        //     containment: "canvas"
-        // });
-        instance.data.editorObj.width = $('#' + instance.data.id).width();
-        instance.data.editorObj.height = $('#' + instance.data.id).height();
+        var elemWidth = ecEditor.jQuery('#' + instance.data.id).width();
+        var elemHeight = ecEditor.jQuery('#' + instance.data.id).height();
+        ecEditor.jQuery("#" + instance.data.id).width(elemWidth);
+        ecEditor.jQuery("#" + instance.data.id).height(elemHeight);
+        instance.data.editorObj.width = elemWidth;
+        instance.data.editorObj.height = elemHeight;
     },
     dblClickHandler: function(event) {
-        if (ecEditor.getCurrentObject() && ecEditor.getCurrentObject().manifest.id === "org.ekstep.richtext") {
+        // Checking if tagret element is canvas and richtext is selected then only open richtext popup
+        if (event.target.tagName.toLowerCase() == 'canvas' && ecEditor.getCurrentObject() && ecEditor.getCurrentObject().manifest.id === 'org.ekstep.richtext') {
                ecEditor.dispatchEvent("org.ekstep.richtext:showpopup", {textSelected: true});
         }
     },
@@ -105,12 +135,17 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.dispatchEvent(this.manifest.id + ":adddiv", { data: this });
     },
     removeHtmlElements: function() {
-        var richtextDiv = org.ekstep.contenteditor.api.jQuery('#richtext-wrapper');
+        var richtextDiv = org.ekstep.contenteditor.api.jQuery('#' + this.richTextId);
         richtextDiv.empty();
+    },
+     getAttributes: function() {
+        var attributes = this._super();
+        attributes.fontSize = this.updateFontSize(ecEditor.jQuery('#' + this.richTextId).css("font-size"), false);
+        return attributes;
     },
     getConfig: function() {
         var config = this._super();
-        config.color = ecEditor.jQuery('#' + this.id).css("color");
+        // config.color = ecEditor.jQuery('#' + this.id).css("color");
         config.fontfamily = ecEditor.jQuery('#' + this.id).css("font-family");
         config.fontsize = ecEditor.jQuery('#' + this.id).css("font-size");
         config = _.omit(config, ["stroke", "strokeWidth"]);
@@ -152,5 +187,25 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.render();
         ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
     },
+    /**
+     * This method is used to convert font size when we are doing from or to conversion
+     * @memberof RichText
+     * @param {Number} initFontSize  This is font size need to be converted
+     * @param {Boolean} The flag  It provides the flag on conversion to ecml or from ecml with values false, true
+     * @return {Number} fontsize The fontsize is converted font size
+     */
+    updateFontSize: function(initFontSize, flag) {
+      var fontsize,  exp, width = undefined;
+        if (flag) { // from ECML conversion
+            exp = this.attributes.w * (this.magicNumber / 100);
+            width = this.editorWidth * this.attributes.w / 100;
+            fontsize = parseInt(Math.round(initFontSize * (width / exp)).toString());
+        } else { // to ECML conversion
+          exp = (this.editorObj.width / this.magicNumber) * 100;
+          width = (this.editorObj.width / this.editorWidth) * 100;
+          fontsize = parseFloat((parseInt(initFontSize) * (width / exp)).toFixed(2));
+        }
+        return fontsize;
+    }
 });
 //# sourceURL=richtextplugin.js
