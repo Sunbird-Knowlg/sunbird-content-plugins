@@ -12,17 +12,6 @@
         "dependencies": [
             { "type": "js", "src": "editor/libs/ckeditor.js" }
         ],
-        "menu": [{
-            "id": "org.ekstep.richtext",
-            "category": "main",
-            "type": "icon",
-            "toolTip": "Add Richtext",
-            "title": "Text",
-            "iconClass": "fa-file-text-o icon",
-            "onclick": {
-                "id": "org.ekstep.richtext:showpopup"
-            }
-        }],
         "behaviour": {
             "rotatable": false
         },
@@ -33,6 +22,6 @@
         }
     },
     "renderer": {
-        "main": "renderer/supertextplugin.js"
+        "main": "renderer/richtextrendererplugin.js"
     }
 }
