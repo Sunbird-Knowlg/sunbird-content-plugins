@@ -15,7 +15,7 @@ angular.module('videoApp', [])
                 ctrl.videoUrl = gdrive;
             }
             var videoelement = ctrl.creteVideoElement(ctrl.videoUrl);
-            ecEditor.jQuery('.video-content .container #previewVideo').html(videoelement);
+            ecEditor.jQuery('.content .container #previewVideo').html(videoelement);
             var video = document.getElementsByTagName('video')[0];
             video.play()
                 .then(function() {
