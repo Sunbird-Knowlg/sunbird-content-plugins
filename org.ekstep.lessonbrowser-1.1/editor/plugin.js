@@ -19,8 +19,8 @@ org.ekstep.collectioneditor.basePlugin.extend({
         // Listen if someone calls for lesson browser
         org.ekstep.contenteditor.api.addEventListener(this.manifest.id + ":show", this.initPreview, this);
 
-        var templatePath = org.ekstep.contenteditor.api.resolvePluginResource("org.ekstep.lessonbrowser", "1.0", "editor/lessonBrowser.html");
-        var controllerPath = org.ekstep.contenteditor.api.resolvePluginResource("org.ekstep.lessonbrowser", "1.0", "editor/lessonBrowserApp.js");
+        var templatePath = org.ekstep.contenteditor.api.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/lessonBrowser.html");
+        var controllerPath = org.ekstep.contenteditor.api.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/lessonBrowserApp.js");
         org.ekstep.contenteditor.api.getService('popup').loadNgModules(templatePath, controllerPath);
 
         this.registerRepo(this.getEkstepRepo());
@@ -74,8 +74,8 @@ org.ekstep.collectioneditor.basePlugin.extend({
                 controllerUrl: undefined,
 
                 init: function() {
-                    this.templateUrl = org.ekstep.contenteditor.api.resolvePluginResource("org.ekstep.lessonbrowser", "1.0", "editor/repoEkstep.html");
-                    this.controllerUrl = org.ekstep.contenteditor.api.resolvePluginResource("org.ekstep.lessonbrowser", "1.0", "editor/repoEkstepApp.js");
+                    this.templateUrl = org.ekstep.contenteditor.api.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/repoEkstep.html");
+                    this.controllerUrl = org.ekstep.contenteditor.api.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/repoEkstepApp.js");
                 },
                 getFilters: function(){
                     return {"language":[], "grade": [], "lessonType": [], "domain": []};
