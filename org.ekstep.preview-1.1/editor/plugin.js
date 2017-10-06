@@ -96,7 +96,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             template: 'partials_org.ekstep.preview.html',
             controller: ['$scope', modalController],
             showClose: false,
-            width: 900,
+            width: 710,
             className: 'ngdialog-theme-plain preview-window'
         });
 
