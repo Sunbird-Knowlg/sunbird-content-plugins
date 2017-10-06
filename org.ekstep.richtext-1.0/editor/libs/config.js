@@ -42,4 +42,7 @@ CKEDITOR.editorConfig = function( config ) {
 	config.extraPlugins = 'colorbutton,font,justify';
 };
 
+// Overrride ckeditor line-height css to 1.3
+CKEDITOR.addCss( '.cke_editable { line-height: 1.3 !important; }' );
+
 //# sourceURL=editorConfig.js
