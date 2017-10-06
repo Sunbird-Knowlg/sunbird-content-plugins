@@ -1,3 +1,12 @@
+/**
+ * Text
+ * The purpose of {@link RichTextPlugin} is used to create or modifiy the richtext in editor
+ *
+ * @class RichText
+ * @extends org.ekstep.contenteditor.basePlugin
+ *
+ * @author Akash Gupta <akash.gupta@tarento.com>
+ */
 org.ekstep.contenteditor.basePlugin.extend({
   /**
      * This expains the type of the plugin
@@ -25,7 +34,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     richTextId: 'richtext-wrapper',
     /**
-     * The events are registred which are used which are used to add or remove fabric events and other custom events
+     * The events are registred which are used to add or remove fabric events and other custom events
      * @memberof RichText
      */
     initialize: function() {
@@ -44,6 +53,12 @@ org.ekstep.contenteditor.basePlugin.extend({
         divWrapper.setAttribute("id", this.richTextId);
         ecEditor.jQuery(".canvas-container").append(divWrapper);
     },
+
+    /**
+     * This method used to create the richtext html element object and assigns it to editor of the instance
+     * It shows the richtext popup to enter text to add it to canvas editor
+     * @memberof RichText
+     */
     newInstance: function() {
         var instance = this;
         this.configManifest = _.remove(this.configManifest, function(property) {
@@ -58,6 +73,11 @@ org.ekstep.contenteditor.basePlugin.extend({
         if (this.editorObj) this.editorObj.setFill(props.fill);
         ecEditor.dispatchEvent(instance.manifest.id + ":adddiv", { data: instance });
     },
+
+    /**
+     * Resize the richtext element 
+     * @memberof RichText
+     */
     resizeObject: function(e) {
         if (ecEditor.getCurrentObject() && ecEditor.getCurrentObject().manifest.id == 'org.ekstep.richtext') {
                var canvasCord = ecEditor.jQuery('#canvas').offset();
@@ -69,6 +89,11 @@ org.ekstep.contenteditor.basePlugin.extend({
                ecEditor.jQuery("#" + e.target.id).height(e.target.getHeight());
         }
     },
+
+    /**
+     * Move the richtext element across canvas
+     * @memberof RichText
+     */
     moving: function(instance) {
         var canvasCord = ecEditor.jQuery('#canvas').offset();
         ecEditor.jQuery("#" + this.editorObj.id).offset({
@@ -76,15 +101,33 @@ org.ekstep.contenteditor.basePlugin.extend({
                'left':this.editorObj.left + canvasCord.left
         });
     },
+
+    /**
+     * Add listener for double click event on selection of richtext
+     * @memberof RichText
+     */
     selected: function(instance) {
         fabric.util.addListener(fabric.document, 'dblclick', this.dblClickHandler);
     },
+
+    /**
+     * Remove listener of double click event on selection of richtext
+     * @memberof RichText
+     */
     deselected: function(instance, options, event) {
         fabric.util.removeListener(fabric.document, 'dblclick', this.dblClickHandler);
     },
+
     removed: function(instance, options, event) {
         ecEditor.jQuery("div#" + instance.id).remove();
     },
+
+    /**
+     * Create the html div element and add it on canvas
+     * @memberof RichText
+     * @param {Object} event Click event of richtext
+     * @param {Object} instance Instance of richrtext element
+     */
     addDivElement: function(event, instance) {
         var canvasCord = ecEditor.jQuery('#canvas').offset();
         var div = document.createElement('div');
@@ -105,12 +148,25 @@ org.ekstep.contenteditor.basePlugin.extend({
         instance.data.editorObj.width = elemWidth;
         instance.data.editorObj.height = elemHeight;
     },
+
+    /**
+     * Dispatch event to open template on double click of eichtext element
+     * @memberof RichText
+     * @param {Object} event Click event of richtext
+     */
     dblClickHandler: function(event) {
         // Checking if tagret element is canvas and richtext is selected then only open richtext popup
         if (event.target.tagName.toLowerCase() == 'canvas' && ecEditor.getCurrentObject() && ecEditor.getCurrentObject().manifest.id === 'org.ekstep.richtext') {
                ecEditor.dispatchEvent("org.ekstep.richtext:showpopup", {textSelected: true});
         }
     },
+
+    /**
+     * Open template of richtext
+     * @memberof RichText
+     * @param {Object} event Click event of richtext
+     * @param {Object} eventData Richtext html element data
+     */
     loadHtml: function(event, eventData) {
       if (document.getElementsByClassName('richtextEditor_1').length > 0) {return}; // Dont open popup if already opened
       this.textSelected  = eventData ?  eventData.textSelected : false;
@@ -130,19 +186,40 @@ org.ekstep.contenteditor.basePlugin.extend({
                className: 'ngdialog-theme-plain richtextEditor_1'
         });
     },
+
+    /**
+     * his method overridden from org.ekstep.contenteditor.basePlugin and renders the richtext plugin to canvas.
+     * @memberof RichText
+     * @param {Object} canvas this is canvas element
+     */
     render: function(canvas) {
         canvas.add(this.editorObj);
         ecEditor.dispatchEvent(this.manifest.id + ":adddiv", { data: this });
     },
+
+    /**
+     * Remove existing richtext element available in canvas
+     * @memberof RichText
+     */
     removeHtmlElements: function() {
         var richtextDiv = org.ekstep.contenteditor.api.jQuery('#' + this.richTextId);
         richtextDiv.empty();
     },
+
+    /**
+     * This method overridden from org.ekstep.contenteditor.basePlugin and this will provide attributes to generate content for Genie
+     * @memberof RichText
+     */
      getAttributes: function() {
         var attributes = this._super();
         attributes.fontSize = this.updateFontSize(ecEditor.jQuery('#' + this.richTextId).css("font-size"), false);
         return attributes;
     },
+
+    /**
+     * This method overridden from org.ekstep.contenteditor.basePlugin and it will provide the config of this plugin
+     * @memberof RichText
+     */
     getConfig: function() {
         var config = this._super();
         // config.color = ecEditor.jQuery('#' + this.id).css("color");
@@ -151,9 +228,22 @@ org.ekstep.contenteditor.basePlugin.extend({
         config = _.omit(config, ["stroke", "strokeWidth"]);
         return config;
     },
+
+    /**
+     * Generates and returns the ECML string for this plugin.
+     * @memberof RichText
+     */
     toECML: function() {        
         return _.omit(this._super(), ["__text"]);
     },
+
+    /**
+     * This method overridden from org.ekstep.contenteditor.basePlugin and it will be called on change of config plugin,
+     * It will update the fontweight, fontstyle and alignment of the plugin
+     * @param {String} key Property need to be changed
+     * @param {String} value Property value that has to be updated
+     * @memberof RichText
+     */
     onConfigChange: function(key, value) {
       var htmlContent = "";
         switch (key) {
