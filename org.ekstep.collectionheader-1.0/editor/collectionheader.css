@@ -84,9 +84,8 @@ body {
 
 .content-masterhead {
     padding: 0px !important;
-    width: 98vw !important;
+    width: 100% !important;
     height: 60px !important;
-    margin-left: -1rem!important;
     height: 60px !important;
 }
 
@@ -141,12 +140,8 @@ body {
 }
 
 #headerWrapper {
-    padding-left: 0;
-    padding-right: 0;
     width: 100%!important;
-    padding-left: 0;
     margin: 0;
-    min-width: 97.8vw;
     border-bottom: 0.2px solid rgba(128, 128, 128, 0.43);
 }
 
