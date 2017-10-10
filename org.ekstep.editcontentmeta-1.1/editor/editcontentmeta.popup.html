@@ -41,32 +41,32 @@
                                         </div>
                                     </div>
                                     <div class="fields">
-                                        <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.board.$error.required}" ng-click="$ctrl.validateBoard()">
+                                        <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.board.$error.required}">
                                             <label>Board</label>
-                                            <select id="ecm-board" name="board" class="ui fluid dropdown long-dropdown" ng-model="$ctrl.contentMeta.board" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'board'})">
+                                            <select id="ecm-board" name="board" class="ui fluid dropdown long-dropdown" ng-model="$ctrl.contentMeta.board" ng-change="$ctrl.validateBoard()" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'board'})">
                                                 <option value="" disabled selected>Select</option>
                                                 <option ng-repeat="board in $ctrl.boardList" value="{{board}}">{{board}}</option>
                                             </select>
                                         </div>
-                                        <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.subject.$error.required}" ng-click="$ctrl.validateSubject()">
+                                        <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.subject.$error.required}">
                                             <label>Subject</label>
-                                            <select id="ecm-subject" name="subject" class="ui fluid dropdown long-dropdown" ng-model="$ctrl.contentMeta.subject" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'subject'})">
+                                            <select id="ecm-subject" name="subject" class="ui fluid dropdown long-dropdown" ng-model="$ctrl.contentMeta.subject" ng-change="$ctrl.validateSubject()" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'subject'})">
                                                 <option value="" disabled selected>Select</option>
                                                 <option value="{{subject}}" ng-repeat="subject in $ctrl.subjectList">{{subject}}</option>
                                             </select>
                                         </div>
-                                        <div class="eight wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.gradeLevel.$error.required}" ng-click="$ctrl.validateGrade()">
+                                        <div class="eight wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.gradeLevel.$error.required}">
                                             <label>Grade</label>
-                                            <select id="ecm-gradeLevel" name="gradeLevel" class="ui fluid dropdown long-dropdown" multiple="" ng-model="$ctrl.contentMeta.gradeLevel" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'gradeLevel'})">
+                                            <select id="ecm-gradeLevel" name="gradeLevel" class="ui fluid dropdown long-dropdown" multiple="" ng-model="$ctrl.contentMeta.gradeLevel" ng-change="$ctrl.validateGrade()" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'gradeLevel'})">
                                                 <option value="" disabled selected>Select</option>
                                                 <option value="{{gradeLevel}}" ng-repeat="gradeLevel in $ctrl.gradeList">{{gradeLevel}}</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="fields">
-                                        <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.language.$error.required}" ng-click="$ctrl.validateLanguage()">
+                                        <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.language.$error.required}">
                                             <label>Medium</label>
-                                            <select id="ecm-language" name="language" class="ui fluid dropdown short-dropdown" ng-model="$ctrl.language" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'language'})">
+                                            <select id="ecm-language" name="language" class="ui fluid dropdown short-dropdown" ng-model="$ctrl.language" ng-change="$ctrl.validateLanguage()" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'language'})">
                                                 <option value="" disabled selected>Select</option>
                                                 <option value="{{language}}" ng-repeat="language in $ctrl.languageList">{{language}}</option>
                                             </select>
@@ -78,9 +78,9 @@
                                                 <option value="{{audience}}" ng-repeat="audience in $ctrl.audienceList">{{audience}}</option>
                                             </select>
                                         </div>
-                                        <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.resource.$error.required}" ng-click="$ctrl.validateResource()">
+                                        <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.resource.$error.required}">
                                             <label>Resource Type</label>
-                                            <select id="ecm-resource" name="resource" class="ui fluid dropdown short-dropdown" ng-model="$ctrl.contentMeta.resourceType" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'resource'})">
+                                            <select id="ecm-resource" name="resource" class="ui fluid dropdown short-dropdown" ng-model="$ctrl.contentMeta.resourceType" ng-change="$ctrl.validateResource()" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'resource'})">
                                                 <option value="" disabled selected>Select</option>
                                                 <option value="{{resource}}" ng-repeat="resource in $ctrl.resourceList">{{resource}}</option>
                                             </select>
