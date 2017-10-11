@@ -136,3 +136,16 @@
     min-width: 0;
     width: 60%; 
 }
+
+/* for active buttons */
+    
+    .ui.button.active-button{
+        background: #C0C1C2;
+    }
+
+    .ui.button.active-button,
+    .ui.button.active-button i.icon{
+        color: #ffffff;
+    }
+
+/* for active buttons */

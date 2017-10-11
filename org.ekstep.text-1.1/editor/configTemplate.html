@@ -12,8 +12,8 @@
                     <label>Size</label>
                     <select class="ui dropdown font-size-dropdown custom-dropdown" ng-model="configData['fontsize']" ng-options="val for val in fontSize" ng-change="fireSidebarTelemetry({id: 'fontSize'}, 'inputSelect')">
                     </select>
-                    <div class="ui icon buttons bold-italic-buttons-group">
-                        <button class="ui button {{configData[dd.propertyName] ? 'primary': ''}}" ng-repeat="dd in fontGroupConfig.config" ng-click="configData[dd.propertyName] = !configData[dd.propertyName]; fireSidebarTelemetry({id: config.propertyName}, config.dataType)" data-tooltip="{{dd.toolTip}}">
+                    <div class="ui mini icon buttons bold-italic-buttons-group">
+                        <button class="ui button {{configData[dd.propertyName] ? 'active-button': ''}}" ng-repeat="dd in fontGroupConfig.config" ng-click="configData[dd.propertyName] = !configData[dd.propertyName]; fireSidebarTelemetry({id: config.propertyName}, config.dataType)" data-tooltip="{{dd.toolTip}}">
                             <div ng-switch on="dd.dataType">
                                 <span ng-show="dd.text" ng-switch-when="text" class="{{dd.textClass}}" style="{{dd.textStyle}}">{{dd.text}}</span>
                                 <i class="{{dd.iconClass}} " ng-show="dd.iconClass" style="{{dd.iconStyle}}" ng-switch-when="icon"></i>
@@ -23,8 +23,8 @@
                 </div>
                 <div class="inline fields">
                     <label>Alignment</label>
-                    <div class="ui icon buttons">
-                        <button class="ui button {{configData[textAlignmentConfig.propertyName] === option.value ? 'primary': ''}}" ng-repeat="option in textAlignmentConfig.options" ng-click="configData[textAlignmentConfig.propertyName] = option.value; fireSidebarTelemetry({id: textAlignmentConfig.propertyName}, textAlignmentConfig.dataType)" data-tooltip="{{option.toolTip}}">
+                    <div class="ui mini icon buttons">
+                        <button class="ui button {{configData[textAlignmentConfig.propertyName] === option.value ? 'active-button': ''}}" ng-repeat="option in textAlignmentConfig.options" ng-click="configData[textAlignmentConfig.propertyName] = option.value; fireSidebarTelemetry({id: textAlignmentConfig.propertyName}, textAlignmentConfig.dataType)" data-tooltip="{{option.toolTip}}">
                             <div ng-switch on="option.dataType">
                                 <i class="{{option.iconClass}} " ng-show="option.iconClass" style="{{option.iconStyle}}" ng-switch-when="icon"></i>
                             </div>
@@ -48,10 +48,10 @@
         <div class="content">
             <div ng-if="refreshTab">
                 <div style="display: inline-block;">
-                    <button class="ui icon button"  ng-show="hasReadAlong && !hasWordInfo" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'})">
+                    <button class="ui mini icon button"  ng-show="hasReadAlong && !hasWordInfo" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'})">
                         <i class="trash icon"></i>
                     </button>
-                    <div class="ui {{(!hasWordInfo) ? '' : 'disabled'}} grey button {{hasReadAlong ? 'primary': ''}}" ng-click="fireEvent({id:'org.ekstep.text:readalong:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-readalong"></i>Read-along</div>
+                    <div class="ui mini {{(!hasWordInfo) ? '' : 'disabled'}} grey button {{hasReadAlong ? 'primary': ''}}" ng-click="fireEvent({id:'org.ekstep.text:readalong:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-readalong"></i>Read-along</div>
                     <div class="ui form" id="readAlongContents">
                         <div class="inline fields" ng-show="hasReadAlong && !hasWordInfo" ng-repeat="colorpicker in readAlongColorpicker">
                             <label>{{colorpicker.title}}</label>
@@ -74,10 +74,10 @@
         <div class="content">
             <div ng-if="refreshTab">
                 <div style="display: inline-block;">
-                    <button class="ui icon button" ng-show="hasWordInfo && !hasReadAlong" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'})">
+                    <button class="ui mini icon button" ng-show="hasWordInfo && !hasReadAlong" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'})">
                         <i class="trash icon"></i>
                     </button>
-                    <div class="ui {{(!hasReadAlong) ? '' : 'disabled'}} grey button {{hasWordInfo ? 'primary': ''}}" ng-click="fireEvent({id:'org.ekstep.text:wordinfo:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-wordinfo"></i>Word Info</div>
+                    <div class="ui mini {{(!hasReadAlong) ? '' : 'disabled'}} grey button {{hasWordInfo ? 'primary': ''}}" ng-click="fireEvent({id:'org.ekstep.text:wordinfo:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-wordinfo"></i>Word Info</div>
                     <div class="ui form" id="wordInfoContents">
                         <div class="inline fields" ng-show="hasWordInfo && !hasReadAlong" ng-repeat="colorpicker in wordInfoColorpicker">
                             <label>{{colorpicker.title}}</label>
@@ -89,7 +89,7 @@
         </div>
         <div class="title" id="transliterate" ng-click="toggleActiveAcordionTitle($event);">Transliterate</div>
         <div class="content">
-            <button class="small ui grey button" ng-click="openTransliterator()">
+            <button class="ui mini grey button" ng-click="openTransliterator()">
                 <strong>Transliterate</strong>
             </button>
         </div>
