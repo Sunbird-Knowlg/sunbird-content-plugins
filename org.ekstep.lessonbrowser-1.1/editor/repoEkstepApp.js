@@ -135,7 +135,7 @@ angular.module('org.ekstep.contentprovider', [])
     // Title filter
     $scope.searchByKeyword = function(){
         ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'search',targetid: 'button-search'});
-        searchBody.request.filters.name = {"startsWith": this.searchKeyword};
+        searchBody.request.query = this.searchKeyword;
         ctrl.searchLessons();
     };
 
