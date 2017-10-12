@@ -7,6 +7,7 @@ angular.module('editorApp')
         $scope.config = $scope.config;
         $scope.textTypeSelected;
         $scope.refreshTab = true;
+        $scope.activeTextPluginControlItem = "";
         $scope.wordInfoColorpicker = [{
             id: "wordfontcolorpicker",
             title: "Word Color"
@@ -106,7 +107,6 @@ angular.module('editorApp')
         };
 
         ecEditor.jQuery('.ui.accordion').accordion({
-            "collapsible": true,
             "duration": "500"
         });
 
@@ -179,7 +179,7 @@ angular.module('editorApp')
 
 
         $scope.toggleActiveAcordionTitle = function(clickEvent) {
-            let targetId = clickEvent.target.id;
+            let targetId = $scope.activeTextPluginControlItem = clickEvent.target.id;
             ecEditor.jQuery(".sidebar-accordion>.title").removeClass('active');
             ecEditor.jQuery('#' + targetId + '').addClass('active');
 
