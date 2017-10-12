@@ -181,3 +181,12 @@
         top: 4px;
     }
 /* for color selection */
+
+.display-none{
+    display: none !important;
+}
+
+#readAlong .controls i.fa,
+#WordInfo .controls i.fa{
+    color: #9a9a9a;
+}

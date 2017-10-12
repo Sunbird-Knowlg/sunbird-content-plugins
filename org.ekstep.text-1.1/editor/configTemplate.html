@@ -44,14 +44,17 @@
                 </div>
             </div>
         </div>
-        <div class="title" id="readAlong" ng-click="toggleActiveAcordionTitle($event);">Read-along</div>
+        <div class="title" id="readAlong" ng-click="toggleActiveAcordionTitle($event);">
+            <span ng-if="hasReadAlong && !hasWordInfo"><i class="blue check icon"></i>&nbsp;</span>Read-along
+            <span ng-if="hasReadAlong && !hasWordInfo" style="float:right; color:#9a9a9a !important;">
+                <i class="fa fa-pencil" ng-click="fireEvent({id:'org.ekstep.text:readalong:show'}); $event.stopPropagation();" style="margin-right:10px;"></i>
+                <i class="fa fa-trash-o" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'}); $event.stopPropagation();"></i>
+            </span>
+        </div>
         <div class="content">
             <div ng-if="refreshTab">
                 <div style="display: inline-block;">
-                    <button class="ui mini icon button"  ng-show="hasReadAlong && !hasWordInfo" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'})">
-                        <i class="trash icon"></i>
-                    </button>
-                    <div class="ui mini {{(!hasWordInfo) ? '' : 'disabled'}} grey button {{hasReadAlong ? 'primary': ''}}" ng-click="fireEvent({id:'org.ekstep.text:readalong:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-readalong"></i>Read-along</div>
+                    <div class="ui mini {{(!hasWordInfo) ? '' : 'disabled'}} grey button {{hasReadAlong ? 'display-none': ''}}" ng-click="fireEvent({id:'org.ekstep.text:readalong:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-readalong"></i>Read-along</div>
                     <div class="ui form" id="readAlongContents">
                         <div class="inline fields" ng-show="hasReadAlong && !hasWordInfo" ng-repeat="colorpicker in readAlongColorpicker">
                             <label>{{colorpicker.title}}</label>
@@ -70,14 +73,17 @@
                 </div>
             </div>
         </div>
-        <div class="title" id="WordInfo" ng-click="toggleActiveAcordionTitle($event);">Word Info</div>
+        <div class="title" id="WordInfo" ng-click="toggleActiveAcordionTitle($event);">
+            <span ng-if="hasWordInfo && !hasReadAlong"><i class="blue check icon"></i>&nbsp;</span>Word Info
+            <span ng-if="hasWordInfo && !hasReadAlong" style="float:right; color:#9a9a9a !important;">
+                <i class="fa fa-pencil" ng-click="fireEvent({id:'org.ekstep.text:wordinfo:show'}); $event.stopPropagation();" style="margin-right:10px;"></i>
+                <i class="fa fa-trash-o" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'}); $event.stopPropagation();"></i>
+            </span>
+        </div>
         <div class="content">
             <div ng-if="refreshTab">
                 <div style="display: inline-block;">
-                    <button class="ui mini icon button" ng-show="hasWordInfo && !hasReadAlong" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'})">
-                        <i class="trash icon"></i>
-                    </button>
-                    <div class="ui mini {{(!hasReadAlong) ? '' : 'disabled'}} grey button {{hasWordInfo ? 'primary': ''}}" ng-click="fireEvent({id:'org.ekstep.text:wordinfo:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-wordinfo"></i>Word Info</div>
+                    <div class="ui mini {{(!hasReadAlong) ? '' : 'disabled'}} grey button {{hasWordInfo ? 'display-none': ''}}" ng-click="fireEvent({id:'org.ekstep.text:wordinfo:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-wordinfo"></i>Word Info</div>
                     <div class="ui form" id="wordInfoContents">
                         <div class="inline fields" ng-show="hasWordInfo && !hasReadAlong" ng-repeat="colorpicker in wordInfoColorpicker">
                             <label>{{colorpicker.title}}</label>
