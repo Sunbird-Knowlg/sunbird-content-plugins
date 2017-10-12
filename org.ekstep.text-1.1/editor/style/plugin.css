@@ -148,4 +148,36 @@
         color: #ffffff;
     }
 
+    .ui.button.active-button:hover{
+        background: #cacbcd;
+    }
+
 /* for active buttons */
+
+/* for color selection pallete*/
+    
+    .ui.accordion.sidebar-accordion .sp-replacer{
+        background: #f9f9f9;
+        border-color: transparent;
+        border-radius: 4px;
+    }
+
+    .ui.accordion.sidebar-accordion .sp-replacer .sp-preview{
+        border-radius: 4px;
+        height: 26px;
+        width: 26px;
+    }
+
+    .ui.accordion.sidebar-accordion .sp-replacer .sp-preview .sp-preview-inner{
+        border-radius: 4px;
+    }
+
+    .ui.accordion.sidebar-accordion .sp-replacer i.icon{
+        color: #9b9b9b;
+    }
+
+    .ui.accordion.sidebar-accordion .sp-replacer .sp-dd{
+        position: relative;
+        top: 4px;
+    }
+/* for color selection */
