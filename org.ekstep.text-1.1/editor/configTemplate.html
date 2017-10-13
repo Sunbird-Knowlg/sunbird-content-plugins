@@ -44,7 +44,7 @@
                 </div>
             </div>
         </div>
-        <div class="title" id="readAlong" ng-click="toggleActiveAcordionTitle($event);">
+        <div class="title {{hasWordInfo && !hasReadAlong ? 'disabled' : ''}}" id="readAlong" ng-click="toggleActiveAcordionTitle($event);">
             <span ng-if="hasReadAlong && !hasWordInfo"><i class="blue check icon"></i>&nbsp;</span>Read-along
             <span ng-if="hasReadAlong && !hasWordInfo && activeTextPluginControlItem=='readAlong'" style="float:right; color:#9a9a9a !important;">
                 <i class="fa fa-pencil" ng-click="fireEvent({id:'org.ekstep.text:readalong:show'}); $event.stopPropagation();" style="margin-right:10px;"></i>
@@ -73,7 +73,7 @@
                 </div>
             </div>
         </div>
-        <div class="title" id="WordInfo" ng-click="toggleActiveAcordionTitle($event);">
+        <div class="title {{hasReadAlong && !hasWordInfo ? 'disabled' : ''}}" id="WordInfo" ng-click="toggleActiveAcordionTitle($event);">
             <span ng-if="hasWordInfo && !hasReadAlong"><i class="blue check icon"></i>&nbsp;</span>Word Info
             <span ng-if="hasWordInfo && !hasReadAlong && activeTextPluginControlItem=='WordInfo'" style="float:right; color:#9a9a9a !important;">
                 <i class="fa fa-pencil" ng-click="fireEvent({id:'org.ekstep.text:wordinfo:show'}); $event.stopPropagation();" style="margin-right:10px;"></i>

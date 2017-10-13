@@ -124,9 +124,12 @@
     color: #4a4a4a!important;
 }
 
+.sidebar-accordion .disabled.title{
+    color: #d2d3d5 !important;
+    pointer-events: none;
+}
+
 .sidebar-accordion .title {
-    display: flex;
-    align-items: center;
     padding-left: 0!important;
     color: #2e9fd9!important;
     height: 3em;
@@ -134,6 +137,7 @@
     border-top: 0.1px solid #d2d3d5 !important;
     margin-top: 0!important;
     margin-bottom: 0!important;
+    user-select: none;
 }
 
 #textFormatting{
