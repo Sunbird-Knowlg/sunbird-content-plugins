@@ -54,8 +54,8 @@
         <div class="content">
             <div ng-if="refreshTab">
                 <div style="display: inline-block;">
-                    <div class="ui mini {{(!hasWordInfo) ? '' : 'disabled'}} grey button {{hasReadAlong ? 'display-none': ''}}" ng-click="fireEvent({id:'org.ekstep.text:readalong:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-readalong"></i>Read-along</div>
                     <div class="ui form" id="readAlongContents">
+                        <div class="ui mini {{(!hasWordInfo) ? '' : 'disabled'}} grey button {{hasReadAlong ? 'display-none': ''}}" ng-click="fireEvent({id:'org.ekstep.text:readalong:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-readalong"></i>Read-along</div>
                         <div class="inline fields" ng-show="hasReadAlong && !hasWordInfo" ng-repeat="colorpicker in readAlongColorpicker">
                             <label>{{colorpicker.title}}</label>
                             <ui-colorpicker id={{colorpicker.id}}></ui-colorpicker>
@@ -83,8 +83,8 @@
         <div class="content">
             <div ng-if="refreshTab">
                 <div style="display: inline-block;">
-                    <div class="ui mini {{(!hasReadAlong) ? '' : 'disabled'}} grey button {{hasWordInfo ? 'display-none': ''}}" ng-click="fireEvent({id:'org.ekstep.text:wordinfo:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-wordinfo"></i>Word Info</div>
                     <div class="ui form" id="wordInfoContents">
+                        <div class="ui mini {{(!hasReadAlong) ? '' : 'disabled'}} grey button {{hasWordInfo ? 'display-none': ''}}" ng-click="fireEvent({id:'org.ekstep.text:wordinfo:show'})" style="padding: 0.8em 0.8em;"><i class="icon icon-wordinfo"></i>Word Info</div>
                         <div class="inline fields" ng-show="hasWordInfo && !hasReadAlong" ng-repeat="colorpicker in wordInfoColorpicker">
                             <label>{{colorpicker.title}}</label>
                             <ui-colorpicker id={{colorpicker.id}}></ui-colorpicker>
@@ -95,9 +95,11 @@
         </div>
         <div class="title" id="transliterate" ng-click="toggleActiveAcordionTitle($event);">Transliterate</div>
         <div class="content">
-            <button class="ui mini grey button" ng-click="openTransliterator()">
-                <strong>Transliterate</strong>
-            </button>
+            <div class="ui form">
+                <div class="field">
+                    <button class="ui mini grey button" ng-click="openTransliterator()">Transliterate</button>
+                </div>
+            </div>
         </div>
     </div>
 </div>

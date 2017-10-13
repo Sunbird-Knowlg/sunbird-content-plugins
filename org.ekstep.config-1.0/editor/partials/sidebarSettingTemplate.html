@@ -1,13 +1,14 @@
 <style>
-.sidebarContent {
-    background: #f9f9f9 !important;
-    border: none!important;
-    -webkit-box-shadow: none!important1;
-    box-shadow: none!important;
-    margin: 0!important;
+.ui.segment.tab.sidebarContent {
+    background: #f9f9f9;
+    border: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    margin: 0;
     height: 80vh;
     overflow: hidden;
     overflow-y: auto;
+    padding: 1em 0;
 }
 
 .sidebarContent div label {
@@ -22,6 +23,15 @@
     font-weight: normal;
 }
 
+.active.sidebarContent .ui.form{
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.active.sidebarContent div[class*='custom-template'].ui.form{
+    padding-left: 0;
+    padding-right: 0;
+}
 
 .sidebarHeadTab {
     box-shadow: none !important;
@@ -54,7 +64,8 @@ a.item.at-menu-item.popup-item.active {
 
 .actions-header{
     float: left;
-    padding: 0.6em!important;
+    padding-right: 0.6em!important;
+    padding-top: 0.6em !important;
 }
 </style>
 <div ng-controller="org.ekstep.config:configController">
@@ -74,7 +85,7 @@ a.item.at-menu-item.popup-item.active {
                         <ui-colorpicker id="{{config.propertyName}}"></ui-colorpicker>
                     </div>
                 </div>
-                <div class="ui form" ng-if='config.type == "custom_template"' compilehtml="config.template"></div>
+                <div class="ui form custom-template" ng-if='config.type == "custom_template"' compilehtml="config.template"></div>
                 <div class="ui form" ng-switch-when="input">
                     <div class="field">
                         <label ng-show="config.title">{{config.title}}</label>
@@ -167,11 +178,13 @@ a.item.at-menu-item.popup-item.active {
         </div>
     </div>
     <div class="ui tab segment sidebarContent" data-tab="actions">
-        <div class="row" style="height:40px; display:flex; align-items:center;">
-            <h5 class="ui header actions-header" style="margin:0;">On click</h5>
-            <button class="ui tiny circular twitter icon button show-action-form-btn" id="showActionFormBtn" ng-click="showActionForm = !showActionForm" ng-init="showActionForm = false;">
-                <i class="plus icon"></i>
-            </button>
+        <div class="ui form" style="height:40px; display:flex; align-items:center;">
+            <div class="field">
+                <h5 class="ui header actions-header" style="margin:0;">On click</h5>
+                <button class="ui tiny circular twitter icon button show-action-form-btn" id="showActionFormBtn" ng-click="showActionForm = !showActionForm" ng-init="showActionForm = false;">
+                    <i class="plus icon"></i>
+                </button>
+            </div>
         </div>
         <div class="ui divider" style="border-top: 1px solid transparent; border-bottom: 1px solid transparent;"></div>
         <div class="ui segment" ng-show="showActionForm">
