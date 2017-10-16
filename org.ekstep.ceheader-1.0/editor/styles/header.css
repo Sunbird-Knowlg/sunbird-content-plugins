@@ -226,7 +226,7 @@ body {
 
 .custom-5-wide .user-context {
     position: relative;
-    z-index: 1000;
+    z-index: 1;
     color: #9b9b9b;
     margin-right: 2px;
 }
@@ -255,7 +255,7 @@ body {
 .custom-5-wide .close {
     position: relative;
     float: right;
-    z-index: 10001;
+    z-index: 2;
     cursor: pointer;
 }
 
