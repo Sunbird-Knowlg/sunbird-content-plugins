@@ -21,7 +21,7 @@ angular.module('editorApp')
 
         $scope.readAlongColorpicker = [{
             id: "highlightcolorpicker",
-            title: "Read-along Highlight Color"
+            title: "Highlight Color"
         }]
 
         $scope.fontFamily = ["Arial", "Courier", "Georgia", "Helvetica", "Monospace", "Sans-serif", "Serif", "Tahoma", "Times", "Trebuchet MS", "Verdana", "NotoSans", "NotoSansKannada", "NotoSansGujarati", "NotoSansBengali", "NotoSansGurmukhi", "NotoSansOriya", "NotoSansDevanagari", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu", "NotoSansMalayalam"];
