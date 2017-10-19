@@ -106,9 +106,33 @@ angular.module('editorApp')
             "maximumValue": 100
         };
 
-        ecEditor.jQuery('.ui.accordion').accordion({
-            "duration": "500"
+
+        ecEditor.jQuery("#WordInfo").click(function(event){
+            if (!$(this).hasClass('disabled') && !$(this).hasClass('word-info-enabled')) {
+                $scope.fireEvent({id:'org.ekstep.text:wordinfo:show'});
+                event.stopImmediatePropagation();
+            }
         });
+
+        ecEditor.jQuery("#readAlong").click(function(event){
+            if (!$(this).hasClass('disabled') && !$(this).hasClass('read-along-enabled')) {
+                $scope.fireEvent({id:'org.ekstep.text:readalong:show'});
+                event.stopImmediatePropagation();
+            }
+        });
+
+        ecEditor.jQuery("#transliterate").click(function(event){
+            $scope.openTransliterator();
+            event.stopImmediatePropagation();
+        });
+
+        ecEditor.jQuery('.ui.accordion').accordion();
+
+        $scope.collapseAllAccordionItems = function(){
+            ecEditor.jQuery(".sidebar-accordion > .title").removeClass('active');
+            ecEditor.jQuery('#textFormatting').addClass('active');
+            ecEditor.jQuery('.sidebar-accordion').accordion({active:0});
+        }
 
         setTimeout(function() {
             ecEditor.jQuery('.font-face-dropdown').dropdown();
