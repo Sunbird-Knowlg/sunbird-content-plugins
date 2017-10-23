@@ -129,7 +129,7 @@ a.item.at-menu-item.popup-item.active {
                     <div class="field">
                         <label ng-show="config.title">{{config.title}}</label>
                         <div>
-                            <input type="range" id="{{config.propertyName}}" min="{{config.minimumValue}}" max="{{config.maximumValue}}" value="{{config.defaultValue}}" class="config-slider" ng-model="configData[config.propertyName]" ng-init="configData[config.propertyName] = configData[config.propertyName] || config.defaultValue" ng-click="fireSidebarTelemetry({id: config.propertyName}, config.dataType)">
+                            <input type="range" id="{{config.propertyName}}" min="{{config.minimumValue}}" max="{{config.maximumValue}}" value="{{config.defaultValue}}" class="config-slider" ng-model="configData[config.propertyName]" ng-init="configData[config.propertyName] = configData[config.propertyName]" ng-click="fireSidebarTelemetry({id: config.propertyName}, config.dataType)">
                             <div class="ui label" style="background:transparent;">
                                 {{configData[config.propertyName]}}{{config.labelSuffix}}
                             </div>

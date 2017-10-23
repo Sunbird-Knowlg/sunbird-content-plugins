@@ -18,10 +18,10 @@ org.ekstep.contenteditor.basePlugin.extend({
     */
     newInstance: function() {
         var props = this.convertToFabric(this.attributes);
-        props.stroke = 1;
-        props.strokeWidth = 2;
-        props.strokeDashArray = [5, 5];
-        props.fill = this.attributes.fill;        
+        props.stroke = this.attributes.stroke;
+        props.strokeWidth = this.attributes.strokeWidth;
+        props.fill = this.attributes.fill;
+
         if (this.attributes.type === 'roundrect') {
             this.editorObj = new fabric.Rect(props);
             this.addMedia({

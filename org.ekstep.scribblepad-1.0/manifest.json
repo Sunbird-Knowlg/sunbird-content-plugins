@@ -27,7 +27,7 @@
                     "w": 27,
                     "h": 60,
                     "stroke": "rgba(255, 255, 255, 0)",
-                    "strokeWidth": 1,
+                    "strokeWidth": 2,
                     "opacity": 0.3
                 }
             },
@@ -51,7 +51,6 @@
             "dataType": "rangeslider",
             "labelSuffix": "%",
             "required": true,
-            "defaultValue": 30,
             "minimumValue": 0,
             "maximumValue": 100
         }],
