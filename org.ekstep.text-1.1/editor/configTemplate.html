@@ -46,6 +46,7 @@
         </div>
         <div class="title {{hasReadAlong && !hasWordInfo ? 'read-along-enabled' : ''}} {{hasWordInfo && !hasReadAlong ? 'disabled' : ''}}" id="readAlong" ng-click="toggleActiveAcordionTitle($event);">
             <span ng-if="hasReadAlong && !hasWordInfo"><i class="blue check icon"></i>&nbsp;</span>Read-along
+            <span ng-if="hasWordInfo && !hasReadAlong" style="pointer-events:all !important; margin-left:1.5em;" data-tooltip="Disable word info to use &#xa; read along on same text"><i class="fa fa-exclamation-triangle"></i></span>
             <span ng-if="hasReadAlong && !hasWordInfo && activeTextPluginControlItem=='readAlong'" style="float:right; color:#9a9a9a !important;">
                 <i class="fa fa-pencil" ng-click="fireEvent({id:'org.ekstep.text:readalong:show'}); $event.stopPropagation();" style="margin-right:10px;"></i>
                 <i class="fa fa-trash-o" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'}); collapseAllAccordionItems(); $event.stopPropagation();"></i>
@@ -74,6 +75,7 @@
         </div>
         <div class="title {{hasWordInfo && !hasReadAlong ? 'word-info-enabled' : ''}} {{hasReadAlong && !hasWordInfo ? 'disabled' : ''}}" id="WordInfo" ng-click="toggleActiveAcordionTitle($event);">
             <span ng-if="hasWordInfo && !hasReadAlong"><i class="blue check icon"></i>&nbsp;</span>Word Info
+            <span ng-if="hasReadAlong && !hasWordInfo" style="pointer-events:all !important; margin-left:1.5em;" data-tooltip="Disable read along to use &#xa; word info on same text"><i class="fa fa-exclamation-triangle"></i></span>
             <span ng-if="hasWordInfo && !hasReadAlong && activeTextPluginControlItem=='WordInfo'" style="float:right; color:#9a9a9a !important;">
                 <i class="fa fa-pencil" ng-click="fireEvent({id:'org.ekstep.text:wordinfo:show'}); $event.stopPropagation();" style="margin-right:10px;"></i>
                 <i class="fa fa-trash-o" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'}); collapseAllAccordionItems(); $event.stopPropagation();"></i>
