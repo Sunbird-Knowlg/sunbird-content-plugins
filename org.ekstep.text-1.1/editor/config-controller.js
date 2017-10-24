@@ -128,6 +128,16 @@ angular.module('editorApp')
 
         ecEditor.jQuery('.ui.accordion').accordion();
 
+        $scope.disabledIndicator = function(){
+            ecEditor.jQuery("#disabledReadAlongIndicator").click(function(event){
+                event.stopImmediatePropagation();
+            });
+
+            ecEditor.jQuery("#disabledWordInfoIndicator").click(function(event){
+                event.stopImmediatePropagation();
+            });
+        };
+        
         $scope.collapseAllAccordionItems = function(){
             ecEditor.jQuery(".sidebar-accordion > .title").removeClass('active');
             ecEditor.jQuery('#textFormatting').addClass('active');

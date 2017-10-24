@@ -2,7 +2,7 @@
     <div class="ui accordion sidebar-accordion">
         <div class="active title" id="textFormatting" ng-click="toggleActiveAcordionTitle($event);">Text Formatting</div>
         <div class="active content text-formatting-section">
-            <div class="ui form text-formatting-options">
+            <div class="ui form text-formatting-options" id="textFormattingContents">
                 <div class="inline fields">
                     <label>Font</label>
                     <select class="ui dropdown font-face-dropdown custom-dropdown" ng-model="configData['fontfamily']" ng-options="val for val in fontFamily" ng-change="fireSidebarTelemetry({id: 'fontfamily'}, 'select')">
@@ -35,9 +35,9 @@
                     <label>Color</label>
                     <ui-colorpicker id="textcolor"></ui-colorpicker>
                 </div>
-                <div class="inline fields">
+                <div class="inline fields transparency-field">
                     <label>Transparency</label>
-                    <div ui input>
+                    <div class="ui transparent input transparency-input">
                         <input type="range" id="{{textOpacityConfig.propertyName}}" min="{{textOpacityConfig.minimumValue}}" max="{{textOpacityConfig.maximumValue}}" value="{{textOpacityConfig.defaultValue}}" class="config-slider" ng-model="configData[textOpacityConfig.propertyName]" ng-init="configData[textOpacityConfig.propertyName] = configData[textOpacityConfig.propertyName] || textOpacityConfig.defaultValue" ng-click="fireSidebarTelemetry({id: textOpacityConfig.propertyName}, textOpacityConfig.dataType)">
                         <label class="opacity-percent" ng-bind="configData[textOpacityConfig.propertyName] + '%'"></label>
                     </div>
@@ -46,7 +46,7 @@
         </div>
         <div class="title {{hasReadAlong && !hasWordInfo ? 'read-along-enabled' : ''}} {{hasWordInfo && !hasReadAlong ? 'disabled' : ''}}" id="readAlong" ng-click="toggleActiveAcordionTitle($event);">
             <span ng-if="hasReadAlong && !hasWordInfo"><i class="blue check icon"></i>&nbsp;</span>Read-along
-            <span ng-if="hasWordInfo && !hasReadAlong" style="pointer-events:all !important; margin-left:1.5em;" data-tooltip="Disable word info to use &#xa; read along on same text"><i class="fa fa-exclamation-triangle"></i></span>
+            <span id="disabledReadAlongIndicator" ng-if="hasWordInfo && !hasReadAlong" ng-init="disabledIndicator();" style="margin-left:1.5em; pointer-events:all !important;" data-tooltip="Disable word info to use &#xa; read along on same text"><i class="fa fa-exclamation-triangle"></i></span>
             <span ng-if="hasReadAlong && !hasWordInfo && activeTextPluginControlItem=='readAlong'" style="float:right; color:#9a9a9a !important;">
                 <i class="fa fa-pencil" ng-click="fireEvent({id:'org.ekstep.text:readalong:show'}); $event.stopPropagation();" style="margin-right:10px;"></i>
                 <i class="fa fa-trash-o" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'}); collapseAllAccordionItems(); $event.stopPropagation();"></i>
@@ -75,7 +75,7 @@
         </div>
         <div class="title {{hasWordInfo && !hasReadAlong ? 'word-info-enabled' : ''}} {{hasReadAlong && !hasWordInfo ? 'disabled' : ''}}" id="WordInfo" ng-click="toggleActiveAcordionTitle($event);">
             <span ng-if="hasWordInfo && !hasReadAlong"><i class="blue check icon"></i>&nbsp;</span>Word Info
-            <span ng-if="hasReadAlong && !hasWordInfo" style="pointer-events:all !important; margin-left:1.5em;" data-tooltip="Disable read along to use &#xa; word info on same text"><i class="fa fa-exclamation-triangle"></i></span>
+            <span id="disabledWordInfoIndicator" ng-if="hasReadAlong && !hasWordInfo" ng-init="disabledIndicator();" style="margin-left:1.5em; pointer-events:all !important;" data-tooltip="Disable read along to use &#xa; word info on same text"><i class="fa fa-exclamation-triangle"></i></span>
             <span ng-if="hasWordInfo && !hasReadAlong && activeTextPluginControlItem=='WordInfo'" style="float:right; color:#9a9a9a !important;">
                 <i class="fa fa-pencil" ng-click="fireEvent({id:'org.ekstep.text:wordinfo:show'}); $event.stopPropagation();" style="margin-right:10px;"></i>
                 <i class="fa fa-trash-o" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'}); collapseAllAccordionItems(); $event.stopPropagation();"></i>
