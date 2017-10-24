@@ -141,6 +141,7 @@ angular.module('editorApp')
         $scope.collapseAllAccordionItems = function(){
             ecEditor.jQuery(".sidebar-accordion > .title").removeClass('active');
             ecEditor.jQuery('#textFormatting').addClass('active');
+            $scope.activeTextPluginControlItem='textFormatting';
             ecEditor.jQuery('.sidebar-accordion').accordion({active:0});
         }
 
