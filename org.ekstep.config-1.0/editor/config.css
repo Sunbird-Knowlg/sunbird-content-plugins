@@ -134,3 +134,28 @@ input[type=range].config-slider:focus::-ms-fill-lower {
 input[type=range].config-slider:focus::-ms-fill-upper {
   background: #e8e8e9;
 }
+
+/* toggle checkbox */
+
+ .ui.checkbox .box:after,
+.ui.checkbox label:after,
+.ui.toggle.checkbox .box:after,
+.ui.toggle.checkbox label:after{
+  height: 15px;
+  width: 15px;
+  border: 1px solid #DEDEDF;
+  background: linear-gradient(180deg, #FDFDFD 0%, #F2F2F2 100%);
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.15);
+}
+
+.ui.toggle.checkbox .box:before, .ui.toggle.checkbox label:before{
+  height: 15px;
+  width: 30px;
+  border-radius: 11px;
+  background-color: #D2D3D5;
+}
+
+.ui.toggle.checkbox input:checked~.box:after, .ui.toggle.checkbox input:checked~label:after{
+  left: 16px;
+} 
+/* toggle checkbox */
