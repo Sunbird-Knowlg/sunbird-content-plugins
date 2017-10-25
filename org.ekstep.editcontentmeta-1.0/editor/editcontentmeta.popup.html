@@ -42,7 +42,7 @@
                                     </div>
                                     <div class="fields">
                                         <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.board.$error.required}" ng-click="$ctrl.validateBoard()">
-                                            <label>Board</label>
+                                            <label>Curriculum</label>
                                             <select id="ecm-board" name="board" class="ui fluid dropdown long-dropdown" ng-model="$ctrl.contentMeta.board" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'board'})">
                                                 <option value="" disabled selected>Select</option>
                                                 <option ng-repeat="board in $ctrl.boardList" value="{{board}}">{{board}}</option>
