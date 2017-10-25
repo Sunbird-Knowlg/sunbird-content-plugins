@@ -54,7 +54,6 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
     }
     
     $scope.updateNode = function(){
-        alert("herer in the updateNode");
         if($scope.textbookMetaForm.$valid){ 
             if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
