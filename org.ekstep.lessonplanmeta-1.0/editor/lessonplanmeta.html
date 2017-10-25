@@ -37,7 +37,7 @@
                 </div>
                 <div class="three fields">
                     <div class="field">
-                        <label for="board">Board</label>
+                        <label for="board">Curriculum</label>
                         <select id="lessonplan-board" class="ui selection dropdown" ng-model="lesson.board" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'board'})">
                             <option value="">Select</option>
                             <option value="{{board}}" ng-repeat="board in boardList track by $index">{{board}}</option>
