@@ -41,6 +41,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.context = org.ekstep.contenteditor.globalContext;
     ctrl.selected_images = {};
     ctrl.selected_audios = {};
+    ctrl.contentNotFoundImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/contentNotFound.jpg");
     ctrl.selectBtnDisable = true;
     ctrl.buttonToShow = 'select';
     ctrl.uploadView = false;
@@ -76,6 +77,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     };
 
     ctrl.loading = 'active';
+    ctrl.loadMoreAssetSpinner = false;
+    ctrl.showLoadMoreWarningMsg = false;
     ctrl.plugin = instance.mediaType;
     ctrl.upload = (instance.mediaType == 'image') ? true : false;
     ctrl.fileTypes = (instance.mediaType == "image") ? "jpeg, jpg, png" : "mp3, mp4, mpeg, ogg, wav, webm";
@@ -153,6 +156,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.myAssetTab = function() {
         /**rebind the scoll event to the element**/
         ecEditor.jQuery("#" + ctrl.myTabScrollElement).unbind('scroll').scroll(ctrl.bindScroll);
+        ctrl.showLoadMoreWarningMsg = false;
         var callback,
             searchText = ctrl.query;
 
@@ -194,6 +198,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     ctrl.allAssetTab = function() {
         /**rebind the scoll event to the element**/
         ecEditor.jQuery("#" + ctrl.allTabScrollElement).unbind('scroll').scroll(ctrl.bindScroll);
+        ctrl.showLoadMoreWarningMsg = false;
         var callback,
             searchText = ctrl.query;
 
@@ -273,6 +278,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         callback = (instance.mediaType === "audio") ? audioAssetCb : callback;
         callback && ctrl.toggleImageCheck() && ctrl.toggleAudioCheck()
         ctrl.selectBtnDisable = true;
+        ctrl.showLoadMoreWarningMsg = false;
 
         if (ctrl.tabSelected == "my") {
             var mediaType = ctrl.getMediaType();
@@ -608,17 +614,19 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         /**Check for max limit and Increment offset by 50**/
         if (ctrl.offset+50 >= ctrl.maxLimit){
             ecEditor.jQuery("#"+data.target.id).unbind('scroll');
-            alert('Didn’t find what you were looking for? Try searching for something more specific');
+            ctrl.showLoadMoreWarningMsg = true;
+            ecEditor.ngSafeApply(ecEditor.getAngularScope());
             return false;
         }else{
             ctrl.offset = ctrl.offset+50;
+            ctrl.showLoadMoreWarningMsg = false;
         }
         
         var callback,
             searchText = ctrl.query;
 
         // Show loader
-        showLoader();
+        ctrl.loadMoreAssetSpinner = true;
 
         ctrl.selectBtnDisable = false;
         var createdBy = ctrl.tabSelected == "all" ? undefined :  ctrl.createdBy;
@@ -649,11 +657,25 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             };
 
             // Hide loader
-            hideLoader();
+            ctrl.loadMoreAssetSpinner = false;
             ecEditor.ngSafeApply(ecEditor.getAngularScope());
         });
         $scope.$safeApply();
     };
+
+    ctrl.searchTextClicked = function(){
+        /**Check for my asset search tab**/
+        if(ctrl.myTabScrollElement === "my-image-tab") ecEditor.jQuery('#searchMyImageAssets').focus();
+        else ecEditor.jQuery('#searchMyAudioAssets').focus();
+
+        /**Check for all asset search tab**/
+        if(ctrl.allTabScrollElement === "all-image-tab") ecEditor.jQuery('#searchAllImageAssets').focus();
+        else ecEditor.jQuery('#searchAllAudioAssets').focus();
+
+        /**Reset scroll window**/
+        ecEditor.jQuery("#" + ctrl.myTabScrollElement).scrollTo(0, 0);
+        ecEditor.jQuery("#" + ctrl.allTabScrollElement).scrollTo(0, 0);
+    }
 
     setTimeout(function() {
         ctrl.myTabScrollElement = (instance.mediaType === "image") ?  "my-image-tab" : "my-audio-tab";
