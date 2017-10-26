@@ -31,7 +31,7 @@
                                     <div class="field required" ng-class="{'error': ($ctrl.submitted && contentMetaForm.name.$error.required)}">
                                         <label>Name</label>
                                         <div class="ui input">
-                                            <input id="ecm-name" placeholder="Name" ng-model="$ctrl.contentMeta.name" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="60">
+                                            <input id="ecm-name" placeholder="Name" ng-model="$ctrl.contentMeta.name" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="100">
                                         </div>
                                     </div>
                                     <div class="field required" ng-class="{'error': ($ctrl.submitted && contentMetaForm.description.$error.required)}">
