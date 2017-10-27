@@ -67,6 +67,7 @@ org.ekstep.collectioneditor.basePlugin.extend({
     },
 
     getEkstepRepo: function() {
+        var instance = this;
         var repo = new(org.ekstep.collectioneditor.contentProviderRepo.extend({
                 id: 'ekstep',
                 label: 'EkStep',
@@ -74,8 +75,8 @@ org.ekstep.collectioneditor.basePlugin.extend({
                 controllerUrl: undefined,
 
                 init: function() {
-                    this.templateUrl = org.ekstep.contenteditor.api.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/repoEkstep.html");
-                    this.controllerUrl = org.ekstep.contenteditor.api.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/repoEkstepApp.js");
+                    this.templateUrl = org.ekstep.contenteditor.api.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/repoEkstep.html");
+                    this.controllerUrl = org.ekstep.contenteditor.api.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/repoEkstepApp.js");
                 },
                 getFilters: function(){
                     return {"language":[], "grade": [], "lessonType": [], "domain": []};
