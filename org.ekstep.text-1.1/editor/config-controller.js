@@ -7,6 +7,7 @@ angular.module('editorApp')
         $scope.config = $scope.config;
         $scope.textTypeSelected;
         $scope.refreshTab = true;
+        $scope.activeTextPluginControlItem = "";
         $scope.wordInfoColorpicker = [{
             id: "wordfontcolorpicker",
             title: "Word Color"
@@ -20,7 +21,7 @@ angular.module('editorApp')
 
         $scope.readAlongColorpicker = [{
             id: "highlightcolorpicker",
-            title: "Read-along Highlight Color"
+            title: "Highlight Color"
         }]
 
         $scope.fontFamily = ["Arial", "Courier", "Georgia", "Helvetica", "Monospace", "Sans-serif", "Serif", "Tahoma", "Times", "Trebuchet MS", "Verdana", "NotoSans", "NotoSansKannada", "NotoSansGujarati", "NotoSansBengali", "NotoSansGurmukhi", "NotoSansOriya", "NotoSansDevanagari", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu", "NotoSansMalayalam"];
@@ -105,10 +106,44 @@ angular.module('editorApp')
             "maximumValue": 100
         };
 
-        ecEditor.jQuery('.ui.accordion').accordion({
-            "collapsible": true,
-            "duration": "500"
+
+        ecEditor.jQuery("#WordInfo").click(function(event){
+            if (!$(this).hasClass('disabled') && !$(this).hasClass('word-info-enabled')) {
+                $scope.fireEvent({id:'org.ekstep.text:wordinfo:show'});
+                event.stopImmediatePropagation();
+            }
         });
+
+        ecEditor.jQuery("#readAlong").click(function(event){
+            if (!$(this).hasClass('disabled') && !$(this).hasClass('read-along-enabled')) {
+                $scope.fireEvent({id:'org.ekstep.text:readalong:show'});
+                event.stopImmediatePropagation();
+            }
+        });
+
+        ecEditor.jQuery("#transliterate").click(function(event){
+            $scope.openTransliterator();
+            event.stopImmediatePropagation();
+        });
+
+        ecEditor.jQuery('.ui.accordion').accordion();
+
+        $scope.disabledIndicator = function(){
+            ecEditor.jQuery("#disabledReadAlongIndicator").click(function(event){
+                event.stopImmediatePropagation();
+            });
+
+            ecEditor.jQuery("#disabledWordInfoIndicator").click(function(event){
+                event.stopImmediatePropagation();
+            });
+        };
+        
+        $scope.collapseAllAccordionItems = function(){
+            ecEditor.jQuery(".sidebar-accordion > .title").removeClass('active');
+            ecEditor.jQuery('#textFormatting').addClass('active');
+            $scope.activeTextPluginControlItem='textFormatting';
+            ecEditor.jQuery('.sidebar-accordion').accordion({active:0});
+        }
 
         setTimeout(function() {
             ecEditor.jQuery('.font-face-dropdown').dropdown();
@@ -179,7 +214,7 @@ angular.module('editorApp')
 
 
         $scope.toggleActiveAcordionTitle = function(clickEvent) {
-            let targetId = clickEvent.target.id;
+            let targetId = $scope.activeTextPluginControlItem = clickEvent.target.id;
             ecEditor.jQuery(".sidebar-accordion>.title").removeClass('active');
             ecEditor.jQuery('#' + targetId + '').addClass('active');
 
