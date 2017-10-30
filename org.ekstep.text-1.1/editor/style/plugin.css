@@ -186,35 +186,6 @@
 
 /* for active buttons */
 
-/* for color selection pallete*/
-    
-    .ui.accordion.sidebar-accordion .sp-replacer{
-        background: #f9f9f9;
-        border-color: transparent;
-        border-radius: 4px;
-        padding: 0;
-    }
-
-    .ui.accordion.sidebar-accordion .sp-replacer .sp-preview{
-        border-radius: 4px;
-        height: 26px;
-        width: 26px;
-        margin-right: 0;
-    }
-
-    .ui.accordion.sidebar-accordion .sp-replacer .sp-preview .sp-preview-inner{
-        border-radius: 4px;
-    }
-
-    .ui.accordion.sidebar-accordion .sp-replacer i.icon{
-        color: #9b9b9b;
-    }
-
-    .ui.accordion.sidebar-accordion .sp-replacer .sp-dd{
-        display: none;
-    }
-/* for color selection */
-
 .display-none{
     display: none !important;
 }
