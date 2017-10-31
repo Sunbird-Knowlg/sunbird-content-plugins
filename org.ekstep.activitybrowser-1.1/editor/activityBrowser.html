@@ -67,8 +67,9 @@
                                     <div class="description" style="display:flex; justify-content:space-between; margin-top:20px; color:#4a4a4a;">
                                         <p>
                                             Grade&nbsp;:&nbsp;<span ng-repeat="grade in $ctrl.pluginDetails.gradeLevel">
+                                                <span ng-if="$last">&nbsp;and&nbsp;</span>
                                                 {{grade.replace('Grade ','')}}
-                                                <span ng-if="!$last">,</span>
+                                                <span ng-if="!$last && ($index < $ctrl.pluginDetails.gradeLevel.length-2)">,</span>
                                             </span>
                                         </p>
                                         <p>
