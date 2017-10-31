@@ -91,7 +91,7 @@
                                 <div class="content">
                                     <div class="header" style="color:#4a4a4a;">Description</div>
                                     <div class="description" style="color:#9b9b9b; max-height:100px; overflow-y:auto; overflow-x:hidden;">
-                                        {{$ctrl.pluginDetails.description | limitTo : 200}}
+                                        {{$ctrl.pluginDetails.description | limitTo : 350}}
                                     </div>
                                 </div>
                             </div>
@@ -139,7 +139,7 @@
                                                 </div>
                                                 <div ng-if="activity.subject">
                                                     Subject :
-                                                    <span>activity.subject</span>
+                                                    <span>{{activity.subject}}</span>
                                                 </div>
                                                 <div ng-if="activity.language">
                                                     Language :
@@ -187,7 +187,7 @@
                                                 </div>
                                                 <div ng-if="activity.subject">
                                                     Subject :
-                                                    <span>activity.subject</span>
+                                                    <span>{{activity.subject}}</span>
                                                 </div>
                                                 <div ng-if="activity.language">
                                                     Language :
