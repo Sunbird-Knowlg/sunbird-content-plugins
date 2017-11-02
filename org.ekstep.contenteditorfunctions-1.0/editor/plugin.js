@@ -23,6 +23,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.addEventListener("org.ekstep.contenteditor:acceptFlag", this.acceptContentFlag, this);
         ecEditor.addEventListener("org.ekstep.contenteditor:discardFlag", this.discardContentFlag, this);
         ecEditor.addEventListener("org.ekstep.contenteditor:retire", this.retireContent, this);
+        ecEditor.addEventListener("org.ekstep.contenteditor:unlistedPublish", this.unlistedPublishContent, this);
     },
     setEditorState: function(event, data) {
         if (data) this.editorState = data;
@@ -414,6 +415,25 @@ org.ekstep.contenteditor.basePlugin.extend({
             } else {
                 if (data.showNotification) ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                     message: 'Unable to save the content, try again!',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
+            }
+            data.callback && data.callback(err, res);
+        });
+    },
+    unlistedPublishContent: function(event, data) {
+        var contentId = ecEditor.getContext('contentId');
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).unlistedPublishContent({ contentId: contentId }, function(err, res) {
+            if (res && res.data && res.data.responseCode == "OK") {
+                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                    title: 'Content limited shared successfully!',
+                    position: 'topCenter',
+                    icon: 'fa fa-check-circle'
+                });
+            } else {
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'Unable to share content, try again!',
                     position: 'topCenter',
                     icon: 'fa fa-warning'
                 });

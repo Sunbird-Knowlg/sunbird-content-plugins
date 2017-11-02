@@ -39,9 +39,16 @@
                             <i class="icon-save"></i>
                             <span class="label-icon-box-text save-button-text">Save</span>
                         </div>
-                        <div ng-show="!publishMode && !isFalgReviewer && !hideReviewBtn" id="reviewButton" ng-class="disableReviewBtn ? 'icon-box label-icon-box popup-item disabled' : 'icon-box label-icon-box popup-item'" data-content="Send for review" data-variation="tiny inverted" data-position="bottom center" ng-click="sendForReview(); generateTelemetry({ subtype: 'review', target: 'reviewbutton'});">
-                            <i class="send icon"></i>
-                            <span class="label-icon-box-text">Send for review</span>
+                        <div ng-show="!publishMode && !isFalgReviewer && !hideReviewBtn" id="reviewButton" ng-class="disableReviewBtn ? 'ui buttons preview-dropdown popup-item disabled' : 'ui buttons preview-dropdown'">
+                            <div class="ui button text-part popup-item" data-content="Send for review" data-variation="tiny inverted" data-position="bottom center" ng-click="sendForReview(); generateTelemetry({ subtype: 'review', target: 'reviewbutton'});">
+                                <i class="send icon"></i>
+                            </div>
+                            <div class="ui pointing dropdown icon button">
+                                <i class="dropdown icon"></i>
+                                <div class="menu">
+                                    <div class="item" ng-click="limitedSharing();"> Limited sharing</div>
+                                </div>
+                            </div>
                         </div>
                         <div ng-show="publishMode && !isFalgReviewer" class="icon-box popup-item label-icon-box" data-content="Reject content" data-variation="tiny inverted" data-position="bottom center" ng-click="rejectContent();">
                             <i class="fa fa-trash"></i>
@@ -64,9 +71,9 @@
                             <span class="label-icon-box-text">Accept</span>
                         </div>
                         <div ng-if="editorEnv == 'ECML'" class="ui buttons preview-dropdown">
-                            <div class="ui button text-part" ng-click="previewContent();">
-                            <i class="fa fa-eye"></i>
-                                </div>
+                            <div class="ui button text-part popup-item" data-content="Preview" data-variation="tiny inverted" data-position="bottom center" ng-click="previewContent();">
+                                <i class="fa fa-eye"></i>
+                            </div>
                             <div class="ui pointing dropdown icon button">
                                 <i class="dropdown icon"></i>
                                 <div class="menu">
