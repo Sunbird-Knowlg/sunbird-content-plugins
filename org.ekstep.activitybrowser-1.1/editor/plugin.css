@@ -281,5 +281,31 @@
     width: 0;
 }
 
+/* expanded activity-cards section */
+.expanded-segment{
+    flex-wrap: wrap;
+}
+/* expanded activity-cards section */
+
+/* collapsed activity-cards section */
+.collapsed-segment{
+    flex-wrap: nowrap !important;
+    width:100%;
+    overflow-x:auto;
+}
+/* collapsed activity-cards section */
+
+/* to show card-segment */
+.show-segment{
+    display: block;
+}
+/* to show card-segment */
+
+/* to hide card-segment */
+.hide-segment{
+    display: none;
+}
+/* to hide card-segment */
+
 
 /* for activity-card */

@@ -114,10 +114,10 @@
                                     <div class="ui text loader">Just one second, We're fetching activities for you.</div>
                                 </div>
                             </div>
-                            <div class="ui vertical segment" ng-show="$ctrl.activitiesList.length > 0 && !$ctrl.hideMainPage">
-                                <p>Popular (10)<a style="float:right; cursor:pointer;">View More&nbsp;<i class="angle right icon"></i></a></p>
-                                <div class="ui stackable cards activity-cards" style="flex-wrap:nowrap; width:100%; overflow-x:auto;" ng-show="$ctrl.activitiesList.length > 0 && !$ctrl.hideMainPage">
-                                    <div class="ui link card activity-card" ng-repeat="activity in $ctrl.activitiesList track by $index" ng-click="$ctrl.viewPluginDetails(activity); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'activityCard'});">
+                            <div ng-if="$ctrl.activityPageApiResponse" ng-class=" $ctrl.expandedGroupId !='' && $ctrl.expandedGroupId != '{{activityGroup.name | camelize}}' ? 'ui vertical segment hide-segment' : 'ui vertical segment show-segment'" ng-show="$ctrl.activityGroupsList.length > 0 && !$ctrl.hideMainPage" id="{{activityGroup.name | camelize}}" ng-repeat="activityGroup in $ctrl.activityGroupsList">
+                                <p>{{activityGroup.name}} ({{activityGroup.contents.length}})<a ng-show="($ctrl.clickedViewMoreLinkId != '{{activityGroup.name | camelize}}ViewMore')" id="{{activityGroup.name | camelize}}ViewMore" style="float:right; cursor:pointer;" ng-click="$ctrl.viewMorePlugins($event)">View More&nbsp;<i class="angle right icon"></i></a></p>
+                                <div ng-class="$ctrl.expandedGroupId == '{{activityGroup.name | camelize}}' ? 'ui stackable cards activity-cards expanded-segment' : 'ui stackable cards activity-cards collapsed-segment'" ng-show="$ctrl.activitiesList.length > 0 && !$ctrl.hideMainPage">
+                                    <div class="ui link card activity-card" ng-repeat="activity in activityGroup.contents track by $index" ng-click="$ctrl.viewPluginDetails(activity); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'activityCard'});">
                                         <div class="blurring dimmable image">
                                             <div class="ui dimmer">
                                                 <div class="content">
@@ -162,9 +162,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="ui vertical segment" ng-show="$ctrl.activitiesList.length > 0 && !$ctrl.hideMainPage">
-                                <p>Popular (10)<a style="float:right; cursor:pointer;">View More&nbsp;<i class="angle right icon"></i></a></p>
-                                <div class="ui stackable cards activity-cards" style="flex-wrap:nowrap; width:100%; overflow-x:auto;" ng-show="$ctrl.activitiesList.length > 0 && !$ctrl.hideMainPage">
+                            <div ng-if="!$ctrl.activityPageApiResponse" class="ui vertical segment" ng-show="$ctrl.activitiesList.length > 0 && !$ctrl.hideMainPage">
+                                <div class="ui stackable cards activity-cards" ng-show="$ctrl.activitiesList.length > 0 && !$ctrl.hideMainPage">
                                     <div class="ui link card activity-card" ng-repeat="activity in $ctrl.activitiesList track by $index" ng-click="$ctrl.viewPluginDetails(activity); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'activityCard'});">
                                         <div class="blurring dimmable image">
                                             <div class="ui dimmer">
@@ -228,7 +227,7 @@
                 </div>
             </div>
         </div>
-        <div class="actions" ng-show="$ctrl.showPluginDetails">
+        <div class="actions" ng-show="$ctrl.showPluginDetails || $ctrl.viewMorePluginsFlag">
             <div class="ui grid">
                 <div class="ui two wide column left aligned">
                     <div class="ui basic primary button" ng-click="$ctrl.closePluginDetails();$ctrl.generateTelemetry({type: 'click', subtype: 'back', target: 'backButton'})">Back</div>
