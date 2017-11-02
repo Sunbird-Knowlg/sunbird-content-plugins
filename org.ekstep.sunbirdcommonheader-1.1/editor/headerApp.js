@@ -113,6 +113,25 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         }        
     };
 
+    $scope.limitedSharing = function() {
+        ecEditor.getService('popup').open({
+            templateUrl: 'limitedSharingConfirm',
+            controller: ['$scope', function($scope) {
+                ecEditor.dispatchEvent("org.ekstep.contenteditor:unlistedPublish", {
+                    callback: function(err, res) {
+                        if (!err){
+                            $scope.closeThisDialog();
+                            window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
+                        }
+                    }
+                });
+            }],
+            width: 900,
+            background: 'transparent!important',
+            className: 'ngdialog-theme-default'
+        });
+    };
+
     $scope.publishContent = function() {
         ecEditor.dispatchEvent("org.ekstep.contenteditor:publish", {
             callback: function(err, res) {

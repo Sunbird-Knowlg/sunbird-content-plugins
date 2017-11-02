@@ -18,7 +18,7 @@
                     <div class="column content-meta" id="content-meta">
                         <form class="ui form" id="content-meta-form" novalidate name="contentMetaForm" ng-init="$ctrl.setInitialState()">
                             <div class="fields">
-                                <div class="field required" ng-class="{'error': $ctrl.submitted && !($ctrl.contentMeta.appIcon)}">
+                                <div class="field required" ng-class="{'error': $ctrl.submitted && !($ctrl.contentMeta.appIcon)}" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('appicon') !== -1)">
                                     <label><i class="camera icon"></i> App icon</label>
                                     <div id="ecm-appIcon" class="app-icon content-icon" ng-class="{'required-error': $ctrl.submitted && !($ctrl.contentMeta.appIcon)}" ng-mouseenter="$ctrl.appIconHover = true" ng-mouseleave="$ctrl.appIconHover = false" ng-click="$ctrl.launchImageBrowser(); generateTelemetry({type: 'click', subtype: 'div', target: 'appIcon'})">
                                         <div class="app-icon-overlay" ng-show="$ctrl.appIconHover">
@@ -28,34 +28,34 @@
                                     </div>
                                 </div>
                                 <div class="sixteen wide field">
-                                    <div class="field required" ng-class="{'error': ($ctrl.submitted && contentMetaForm.name.$error.required)}">
+                                    <div class="field required" ng-class="{'error': ($ctrl.submitted && contentMetaForm.name.$error.required)}" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('name') !== -1)">
                                         <label>Name</label>
                                         <div class="ui input">
                                             <input id="ecm-name" placeholder="Name" ng-model="$ctrl.contentMeta.name" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="100">
                                         </div>
                                     </div>
-                                    <div class="field required" ng-class="{'error': ($ctrl.submitted && contentMetaForm.description.$error.required)}">
+                                    <div class="field required" ng-class="{'error': ($ctrl.submitted && contentMetaForm.description.$error.required)}" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('description') !== -1)">
                                         <label>Description</label>
                                         <div class="ui input">
                                             <textarea id="ecm-description" placeholder="Description" ng-model="$ctrl.contentMeta.description" ng-class="{error: submitted && contentMetaForm.description.$error.required}" name="description" rows="2" required ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'description'})"></textarea>
                                         </div>
                                     </div>
-                                    <div class="fields">
-                                        <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.board.$error.required}">
+                                    <div class="equal width fields">
+                                        <div class="field required" ng-class="{error: $ctrl.submitted && contentMetaForm.board.$error.required}" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('curriculum') !== -1)">
                                             <label>Curriculum</label>
                                             <select id="ecm-board" name="board" class="ui fluid dropdown long-dropdown" ng-model="$ctrl.contentMeta.board" ng-change="$ctrl.validateBoard()" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'board'})">
                                                 <option value="" disabled selected>Select</option>
                                                 <option ng-repeat="board in $ctrl.boardList" value="{{board}}">{{board}}</option>
                                             </select>
                                         </div>
-                                        <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.subject.$error.required}">
+                                        <div class="field required" ng-class="{error: $ctrl.submitted && contentMetaForm.subject.$error.required}" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('subject') !== -1)">
                                             <label>Subject</label>
                                             <select id="ecm-subject" name="subject" class="ui fluid dropdown long-dropdown" ng-model="$ctrl.contentMeta.subject" ng-change="$ctrl.validateSubject()" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'subject'})">
                                                 <option value="" disabled selected>Select</option>
                                                 <option value="{{subject}}" ng-repeat="subject in $ctrl.subjectList">{{subject}}</option>
                                             </select>
                                         </div>
-                                        <div class="eight wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.gradeLevel.$error.required}">
+                                        <div class="field required" ng-class="{error: $ctrl.submitted && contentMetaForm.gradeLevel.$error.required}" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('grade') !== -1)">
                                             <label>Grade</label>
                                             <select id="ecm-gradeLevel" name="gradeLevel" class="ui fluid dropdown long-dropdown" multiple="" ng-model="$ctrl.contentMeta.gradeLevel" ng-change="$ctrl.validateGrade()" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'gradeLevel'})">
                                                 <option value="" disabled selected>Select</option>
@@ -63,43 +63,43 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="fields">
-                                        <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.language.$error.required}">
+                                    <div class="equal width fields">
+                                        <div class="field required" ng-class="{error: $ctrl.submitted && contentMetaForm.language.$error.required}" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('medium') !== -1)">
                                             <label>Medium</label>
                                             <select id="ecm-language" name="language" class="ui fluid dropdown short-dropdown" ng-model="$ctrl.language" ng-change="$ctrl.validateLanguage()" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'language'})">
                                                 <option value="" disabled selected>Select</option>
                                                 <option value="{{language}}" ng-repeat="language in $ctrl.languageList">{{language}}</option>
                                             </select>
                                         </div>
-                                        <div class="four wide field">
+                                        <div class="field" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('audience') !== -1)">
                                             <label>Audience</label>
                                             <select id="ecm-audience" class="ui fluid dropdown short-dropdown" ng-model="$ctrl.audience" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'audience'})">
                                                 <option value="" disabled selected>Select</option>
                                                 <option value="{{audience}}" ng-repeat="audience in $ctrl.audienceList">{{audience}}</option>
                                             </select>
                                         </div>
-                                        <div class="four wide field required" ng-class="{error: $ctrl.submitted && contentMetaForm.resource.$error.required}">
+                                        <div class="field required" ng-class="{error: $ctrl.submitted && contentMetaForm.resource.$error.required}" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('resourcetype') !== -1)">
                                             <label>Resource Type</label>
                                             <select id="ecm-resource" name="resource" class="ui fluid dropdown short-dropdown" ng-model="$ctrl.contentMeta.resourceType" ng-change="$ctrl.validateResource()" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'resource'})">
                                                 <option value="" disabled selected>Select</option>
                                                 <option value="{{resource}}" ng-repeat="resource in $ctrl.resourceList">{{resource}}</option>
                                             </select>
                                         </div>
-                                        <div class="four wide field required" ng-class="{error: $ctrl.submitted && !$ctrl.conceptsSelected}">
+                                        <div class="field required" ng-class="{error: $ctrl.submitted && !$ctrl.conceptsSelected}" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('concepts') !== -1)">
                                             <label>Concepts</label>
                                             <div class="ui input">
                                                 <input name="concepts" id="metaConceptSelector" value="{{'(' + $ctrl.contentMeta.concepts.length + ') concepts selected'}}" type="text" ng-readonly="true" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="two fields">
-                                        <div class="eight wide field">
+                                    <div class="equal width fields">
+                                        <div class="field" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('attributes') !== -1)">
                                             <label>Attributions</label>
                                             <div class="ui input">
                                                 <textarea id="ecm-attributions" name="attributions" type="text" placeholder="Attributions" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'attributions'})">{{$ctrl.contentMeta.attributions.join(', ');}}</textarea>
                                             </div>
                                         </div>
-                                        <div class="field">
+                                        <div class="field" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('keywords') !== -1)">
                                             <label>Keywords</label>
                                                <ng-token-field ng-model="$ctrl.contentMeta.keywords" id="ecm-keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
                                         </div>

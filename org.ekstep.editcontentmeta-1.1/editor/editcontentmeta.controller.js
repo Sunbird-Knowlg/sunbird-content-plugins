@@ -25,6 +25,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
     ctrl.contentService = org.ekstep.contenteditor.api.getService(ServiceConstants.CONTENT_SERVICE);
     ctrl.popupService = org.ekstep.contenteditor.api.getService(ServiceConstants.POPUP_SERVICE);
     ctrl.defaultSubjectList = ["Biology", "Chemistry", "Physics", "Mathematics", "Environmental Studies", "Geography", "History", "Political Science", "Economics", "Sanskrit"];
+    ctrl.metadatafields = ecEditor.getConfig('metaDataFields');
 
     // If appIcon is empty, set it to null
     if (ctrl.contentMeta.appIcon && ctrl.contentMeta.appIcon.length <= 0) {
