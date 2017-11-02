@@ -26,7 +26,12 @@ angular.module('org.ekstep.lessonbrowserapp', [])
 
     // Delay init of tabs till DOM is loaded
     $scope.$on('ngDialog.opened', function(){
-        setTimeout(function(){$('.tabular.menu .item').tab()}, 200);
+        setTimeout(function(){
+            $('.tabular.menu .item').tab();
+            $('.ui.multiple.selection.dropdown').dropdown({
+                forceSelection: false
+            });
+        }, 200);
     });
 
     // Get and return the selected lessons

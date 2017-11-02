@@ -158,19 +158,27 @@ angular.module('org.ekstep.contentprovider', [])
     // Sidebar - filters
     $scope.applyFilters = function(){
         ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'filter',targetid: 'button-filter-apply'});
+        
+        /** Get value from dropdown**/
+        $scope.filterSelection.lang = $('#lessonBrowser_language').dropdown('get value');
+        $scope.filterSelection.grade = $('#lessonBrowser_grade').dropdown('get value');
+        $scope.filterSelection.lessonType = $('#lessonBrowser_lessonType').dropdown('get value');
         if ($scope.filterSelection.lang.length) {
+            $scope.filterSelection.lang = $scope.filterSelection.lang.split(",");
             searchBody.request.filters.language = $scope.filterSelection.lang;
         } else {
             delete searchBody.request.filters.language;
         }
 
         if ($scope.filterSelection.grade && $scope.filterSelection.grade.length) {
+            $scope.filterSelection.grade = $scope.filterSelection.grade.split(",");
             searchBody.request.filters.gradeLevel = $scope.filterSelection.grade;
         } else {
             delete searchBody.request.filters.gradeLevel;
         }
 
         if ($scope.filterSelection.lessonType && $scope.filterSelection.lessonType.length) {
+            $scope.filterSelection.lessonType = $scope.filterSelection.lessonType.split(",");
             searchBody.request.filters.contentType = $scope.filterSelection.lessonType;
         } else {
             delete searchBody.request.filters.contentType;
@@ -305,7 +313,13 @@ angular.module('org.ekstep.contentprovider', [])
     $scope.filterSelection.grade = filter.grade;
     $scope.filterSelection.lessonType = filter.lessonType;
     $scope.filterSelection.domain = filter.domain;
-    $scope.applyFilters();
+
+    setTimeout(function(){
+        $('#lessonBrowser_language').dropdown('set selected', $scope.filterSelection.lang);
+        $('#lessonBrowser_grade').dropdown('set selected', $scope.filterSelection.grade);
+        $('#lessonBrowser_lessonType').dropdown('set selected', $scope.filterSelection.lessonType);
+        $scope.applyFilters();
+    }, 500);
 
 }]).filter('removeHTMLTags', function() {
     return function(text) {
