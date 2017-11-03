@@ -1849,28 +1849,18 @@ angular.module('activityBrowserApp', [])
         };
 
         ctrl.getPluginDetails = function(pluginId) {
+            pluginId = 'org.ekstep.plugins.wordcard';
             ctrl.loading = true;
             ctrl.imageAvailable = false;
             ctrl.errorLoadingActivities = false;
             ctrl.pluginDetails = {};
             ctrl.images = $scope.images = [];
-            var request = {
-                "request": {
-                    "filters": {
-                        "objectType": ["Content"],
-                        "contentType": ["plugin"],
-                        "status": ["live"],
-                        "identifier": pluginId
-                    }
-                }
-            };
 
-            ecEditor.getService('search').search(request, function(err, res) {
-                ctrl.loading = false;
-                if (res.data) res = res.data;
-                if (res && res.responseCode === "OK" && res.result.count > 0) {
-                    ctrl.pluginDetails = res.result.content[0];
-                    if (res.result.content[0].usesContent && res.result.content[0].usesContent.length) ctrl.getPluginScreenshots(res.result.content[0].usesContent);
+            ecEditor.getService('content').getContent(pluginId, function(err, res) {
+                ctrl.loading = false
+                if (res) {
+                    ctrl.pluginDetails = res;
+                    if (res.usedByContent && res.usedByContent.length) ctrl.getPluginScreenshots(res.usedByContent);
                     else {
                         ctrl.images.push({
                             image: ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'assets/default-activity.png')

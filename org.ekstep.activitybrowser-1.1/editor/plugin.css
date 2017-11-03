@@ -232,7 +232,6 @@
 .ui.cards.activity-cards{
     margin-left: 0;
     margin-right: 0;
-    padding-bottom: 1em;
 }
 
 .ui.segment.activity-segment::-webkit-scrollbar{
@@ -252,7 +251,7 @@
 
 .activity-cards .activity-card>.blurring.dimmable.image{
     height: 120px;
-    width: 226px;
+    width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -280,20 +279,6 @@
     height: 0;
     width: 0;
 }
-
-/* expanded activity-cards section */
-.expanded-segment{
-    flex-wrap: wrap;
-}
-/* expanded activity-cards section */
-
-/* collapsed activity-cards section */
-.collapsed-segment{
-    flex-wrap: nowrap !important;
-    width:100%;
-    overflow-x:auto;
-}
-/* collapsed activity-cards section */
 
 /* to show card-segment */
 .show-segment{
