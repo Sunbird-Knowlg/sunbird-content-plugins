@@ -61,6 +61,12 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     newInstance: function() {
         var instance = this;
+        var data = CKEDITOR.instances.editor1.plugins.readalong.data;
+        if (data) {
+            instance.config = ecEditor._.assignIn(instance.config, data.config);
+            instance.attributes = ecEditor._.assignIn(instance.attributes, data.attributes);
+            delete CKEDITOR.instances.editor1.plugins.readalong.data;
+        }
         this.configManifest = _.remove(this.configManifest, function(property) {
            return property.propertyName != "stroke";
         });                
@@ -71,6 +77,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         this.editorObj = new fabric.Rect(props);
         this.editorObj.visible = true;
         if (this.editorObj) this.editorObj.setFill(props.fill);
+        instance.attributes.textType = instance.attributes.textType ? instance.attributes.textType : "text";
         ecEditor.dispatchEvent(instance.manifest.id + ":adddiv", { data: instance });
     },
 
