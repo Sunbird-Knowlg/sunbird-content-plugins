@@ -280,12 +280,14 @@ body {
     margin-top: 0 !important;
 }
 
-#commonHeader .icon-box.popup-item.disabled{
+#commonHeader .icon-box.popup-item.disabled, 
+#commonHeader .ui.buttons.preview-dropdown.disabled{
     pointer-events: none!important;
 }
 #commonHeader .icon-box.popup-item.disabled .icon,
 #commonHeader .icon-box.popup-item.disabled .icon-save,
-#commonHeader .icon-box.popup-item.disabled .label-icon-box-text{
+#commonHeader .icon-box.popup-item.disabled .label-icon-box-text,
+#commonHeader .preview-dropdown.popup-item.disabled .ui.button .icon{
     color: #D7D7D7 !important;
 }
 .last-saved-label{
