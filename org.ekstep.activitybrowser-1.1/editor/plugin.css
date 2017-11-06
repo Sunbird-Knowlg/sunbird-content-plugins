@@ -245,8 +245,10 @@
     box-sizing: border-box;
     height: 261px;
     width: 226px;
+    min-width: 226px;
     border-radius: 4px;
     background-color: #FFFFFF;
+    margin: .875em 1.3em;
 }
 
 .activity-cards .activity-card>.blurring.dimmable.image{
@@ -279,6 +281,20 @@
     height: 0;
     width: 0;
 }
+
+/* expanded activity-cards section */
+.expanded-segment{
+    justify-content: center;
+}
+/* expanded activity-cards section */
+
+/* collapsed activity-cards section */
+.collapsed-segment{
+    flex-wrap: nowrap !important;
+    width:100%;
+    overflow-x:hidden;
+}
+/* collapsed activity-cards section */
 
 /* to show card-segment */
 .show-segment{
