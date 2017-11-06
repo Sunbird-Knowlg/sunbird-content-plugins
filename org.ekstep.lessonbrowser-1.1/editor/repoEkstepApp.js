@@ -219,9 +219,9 @@ angular.module('org.ekstep.contentprovider', [])
     // Sidebar filters - Reset
     $scope.resetFilters = function() {
         ctrl.generateTelemetry({type: 'click', subtype: 'reset', target: 'filter',targetid: 'button-filter-reset'});
-        $scope.filterSelection.lang.splice(0, $scope.filterSelection.lang.length);
-        $scope.filterSelection.grade.splice(0, $scope.filterSelection.grade.length);
-        $scope.filterSelection.lessonType.splice(0, $scope.filterSelection.lessonType.length);
+        $('#lessonBrowser_language').dropdown('clear');
+        $('#lessonBrowser_grade').dropdown('clear');
+        $('#lessonBrowser_lessonType').dropdown('clear');
         $scope.filterSelection.domain.splice(0, $scope.filterSelection.domain.length);
         $scope.filterSelection.concept.splice(0, $scope.filterSelection.concept.length);
 
