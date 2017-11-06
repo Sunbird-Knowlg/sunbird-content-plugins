@@ -183,30 +183,40 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
     ctrl.setInitialState = function () {
         setTimeout(function () {
             ecEditor.jQuery('.ui.dropdown').dropdown();
-            $('#ecm-board').dropdown('set selected', ctrl.contentMeta.board);
-            $('#ecm-subject').dropdown('set selected', ctrl.contentMeta.subject);
-            $('#ecm-gradeLevel').dropdown('set selected', ctrl.contentMeta.gradeLevel);
             $('#ecm-audience').dropdown('set selected', ctrl.audience);
-            $('#ecm-language').dropdown('set selected', ctrl.language);
 
-            if (!ctrl.validArray(ctrl.contentMeta.gradeLevel)) {
-                $scope.contentMetaForm.gradeLevel.$setValidity('required', false);
+            if(_.isUndefined(ctrl.metadatafields) || (ctrl.metadatafields.indexOf('gradeLevel') !== -1)){
+                $('#ecm-gradeLevel').dropdown('set selected', ctrl.contentMeta.gradeLevel);
+                if (!ctrl.validArray(ctrl.contentMeta.gradeLevel)) {
+                    $scope.contentMetaForm.gradeLevel.$setValidity('required', false);
+                }
             }
 
-            if (!ctrl.validString(ctrl.language)) {
-                $scope.contentMetaForm.language.$setValidity('required', false);
+            if(_.isUndefined(ctrl.metadatafields) || (ctrl.metadatafields.indexOf('language') !== -1)){
+                $('#ecm-language').dropdown('set selected', ctrl.language);
+                if (!ctrl.validString(ctrl.language)) {
+                    $scope.contentMetaForm.language.$setValidity('required', false);
+                }
             }
 
-            if (!ctrl.validString(ctrl.contentMeta.subject)) {
-                $scope.contentMetaForm.subject.$setValidity('required', false);
+            if(_.isUndefined(ctrl.metadatafields) || (ctrl.metadatafields.indexOf('subject') !== -1)){
+                $('#ecm-subject').dropdown('set selected', ctrl.contentMeta.subject);
+                if (!ctrl.validString(ctrl.contentMeta.subject)) {
+                    $scope.contentMetaForm.subject.$setValidity('required', false);
+                }
             }
 
-            if (!ctrl.validString(ctrl.contentMeta.resourceType)) {
-                $scope.contentMetaForm.resource.$setValidity('required', false);
+            if(_.isUndefined(ctrl.metadatafields) || (ctrl.metadatafields.indexOf('resourcetype') !== -1)){
+                if (!ctrl.validString(ctrl.contentMeta.resourceType)) {
+                    $scope.contentMetaForm.resource.$setValidity('required', false);
+                }
             }
 
-            if (!ctrl.validString(ctrl.contentMeta.board)) {
-                $scope.contentMetaForm.board.$setValidity('required', false);
+            if(_.isUndefined(ctrl.metadatafields) || (ctrl.metadatafields.indexOf('board') !== -1)){
+                $('#ecm-board').dropdown('set selected', ctrl.contentMeta.board);
+                if (!ctrl.validString(ctrl.contentMeta.board)) {
+                    $scope.contentMetaForm.board.$setValidity('required', false);
+                }
             }
         }, 500);
     };
