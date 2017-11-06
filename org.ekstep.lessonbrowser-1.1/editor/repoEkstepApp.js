@@ -34,7 +34,15 @@ angular.module('org.ekstep.contentprovider', [])
                     }};
 
     // Get accordions functioning
-    setTimeout(function(){$('#applyAccordion').accordion()}, 500);
+    setTimeout(function(){
+        $('#applyAccordion').accordion();
+        $('.ui.multiple.selection.dropdown').dropdown({
+            forceSelection: false,
+            onChange: function() {
+                $scope.getFiltersValue();
+            }
+        });
+    }, 500);
 
     //Telemetry
     var collectionService = org.ekstep.collectioneditor.api.getService('collection');
@@ -155,14 +163,12 @@ angular.module('org.ekstep.contentprovider', [])
         ctrl.searchLessons();
     };
 
-    // Sidebar - filters
-    $scope.applyFilters = function(){
-        ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'filter',targetid: 'button-filter-apply'});
-        
+    $scope.getFiltersValue = function(){
         /** Get value from dropdown**/
         $scope.filterSelection.lang = $('#lessonBrowser_language').dropdown('get value');
         $scope.filterSelection.grade = $('#lessonBrowser_grade').dropdown('get value');
         $scope.filterSelection.lessonType = $('#lessonBrowser_lessonType').dropdown('get value');
+        
         if ($scope.filterSelection.lang.length) {
             $scope.filterSelection.lang = $scope.filterSelection.lang.split(",");
             searchBody.request.filters.language = $scope.filterSelection.lang;
@@ -195,6 +201,17 @@ angular.module('org.ekstep.contentprovider', [])
         } else {
             delete searchBody.request.filters.concepts;
         }
+
+        $scope.$safeApply();
+    }
+
+
+    // Sidebar - filters
+    $scope.applyFilters = function(){
+        ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'filter',targetid: 'button-filter-apply'});
+        
+        /**Get filters values**/
+        $scope.getFiltersValue();
 
         ctrl.searchLessons();
     };

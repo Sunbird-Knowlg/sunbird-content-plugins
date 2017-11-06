@@ -28,9 +28,6 @@ angular.module('org.ekstep.lessonbrowserapp', [])
     $scope.$on('ngDialog.opened', function(){
         setTimeout(function(){
             $('.tabular.menu .item').tab();
-            $('.ui.multiple.selection.dropdown').dropdown({
-                forceSelection: false
-            });
         }, 200);
     });
 
