@@ -105,7 +105,8 @@ angular.module('org.ekstep.contentprovider', [])
             }
             $scope.$safeApply();
         });
-        
+        // Reset the lesson selection on re-search
+        $scope.lessonSelection.splice(0, $scope.lessonSelection.length);
     };
 
     // Meta APIs integration
