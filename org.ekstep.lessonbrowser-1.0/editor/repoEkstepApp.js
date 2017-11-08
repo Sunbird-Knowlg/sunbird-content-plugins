@@ -59,6 +59,9 @@ angular.module('org.ekstep.contentprovider', [])
         }
         searchBody.request.limit = limit;
         searchBody.request.offset = offset;
+        if(!_.isUndefined(ecEditor.getConfig('searchConfig')) && !_.isUndefined(ecEditor.getConfig('searchConfig').channel)){
+            searchBody.request.filters.channel = ecEditor.getConfig('searchConfig').channel;
+        }
 
         searchService.search(searchBody, function(err, res){
             if (err) {
@@ -102,7 +105,8 @@ angular.module('org.ekstep.contentprovider', [])
             }
             $scope.$safeApply();
         });
-        
+        // Reset the lesson selection on re-search
+        $scope.lessonSelection.splice(0, $scope.lessonSelection.length);
     };
 
     // Meta APIs integration

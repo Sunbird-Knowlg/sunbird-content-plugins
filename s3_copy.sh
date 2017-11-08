@@ -50,7 +50,8 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.1"
                 "org.ekstep.genericeditorpreview-1.1"
                 "org.ekstep.editcontentmeta-1.1"
                 "org.ekstep.sunbirdcommonheader-1.1"
-                "org.ekstep.audio-1.1");
+                "org.ekstep.audio-1.1"
+                "org.ekstep.lessonbrowser-1.0");
 
 for i in "${coreplugins[@]}"
 do
