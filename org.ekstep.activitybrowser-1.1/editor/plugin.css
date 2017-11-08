@@ -319,3 +319,7 @@
 }
 
 /* for activity-card */
+
+.activity-browser-controls .ui.selection.dropdown.custom-dropdown{
+    min-width: unset;
+}
