@@ -122,6 +122,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         if (!err){
                             $scope.closeThisDialog();
                             window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
+                        }else{
+                            $scope.closeThisDialog();
                         }
                     }
                 });
