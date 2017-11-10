@@ -223,7 +223,7 @@ body {
     width: auto; 
     position: relative;
     color: #9b9b9b!important;
-    display: inline-block;
+    display: inline-block !important;
     height: 30px!important;
     right: -11px;
 }
