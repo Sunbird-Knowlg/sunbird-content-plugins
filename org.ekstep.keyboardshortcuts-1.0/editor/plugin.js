@@ -42,6 +42,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.registerKeyboardCommand('mod+v', function(event) {
             event.preventDefault();
             ecEditor.dispatchEvent(instance.events.pasteElem);
+            ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
         });
 
         /**
@@ -52,6 +53,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.registerKeyboardCommand(['del', 'backspace'], function(event) {
             event.preventDefault();
             ecEditor.dispatchEvent(instance.events.deleteElem);
+            ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
         });
 
         /**
@@ -62,6 +64,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.registerKeyboardCommand('ctrl+m', function(event) {
             event.preventDefault();
             ecEditor.dispatchEvent(instance.events.createStage, {position:"afterCurrent"});
+            ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
         });
 
         /**
@@ -72,6 +75,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.registerKeyboardCommand('mod+d', function(event) {
             event.preventDefault();
             ecEditor.dispatchEvent(instance.events.duplicateStage, {stageId: org.ekstep.contenteditor.api.getCurrentStage().id});
+            ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
         });
 
         /**
@@ -161,6 +165,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (elem) {
                 event.preventDefault();
                 elem.onConfigChange('fontweight', 'bold');
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             }
         });
 
@@ -174,6 +179,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (elem) {
                 event.preventDefault();
                 elem.onConfigChange('fontstyle', 'italic');
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             }
         });
 
@@ -191,6 +197,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 var fontSize = elem.getConfig().fontsize;
                 fontSize = parseInt(fontSize, 10);
                 elem.onConfigChange('fontsize', fontSize+1);
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             }
         });
 
@@ -206,6 +213,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 var fontSize = elem.getConfig().fontsize;
                 fontSize = parseInt(fontSize, 10);
                 elem.onConfigChange('fontsize', fontSize-1);
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             }
         });
 
@@ -219,6 +227,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (elem) {
                 event.preventDefault();
                 elem.onConfigChange('align', 'left');
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             }
         });
 
@@ -232,6 +241,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (elem) {
                 event.preventDefault();
                 elem.onConfigChange('align', 'right');
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             }
         });
 
@@ -246,6 +256,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             if (elem) {
                 event.preventDefault();
                 elem.onConfigChange('align', 'center');
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             }
         });
 
@@ -257,6 +268,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.registerKeyboardCommand('mod+down', function(event) {
             event.preventDefault();
             ecEditor.dispatchEvent(instance.events.sendToBack);
+            ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
         });
 
         /**
@@ -267,6 +279,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.registerKeyboardCommand('mod+up', function(event) {
             event.preventDefault();
             ecEditor.dispatchEvent(instance.events.sendToFront);
+            ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
         });
 
         /**
@@ -279,14 +292,16 @@ org.ekstep.contenteditor.basePlugin.extend({
             var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
             if (activeGroup) {
                 event.preventDefault();
-                _.each(activeGroup._objects, function(element) {
+                _.each(org.ekstep.contenteditor.api.getCurrentGroup(), function(element) {
                     var richText = ecEditor.jQuery('#' + element.id);
                     if (richText.length != 0) {
                         richText[0].style.top = parseInt(richText[0].style.top, 10) - 3 + 'px';
                     }
+                    element.setAttribute('y', element.attributes.y - 3);
                 })
                 activeGroup.top = activeGroup.top - 3;
                 org.ekstep.contenteditor.api.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             } else
             if (activeElement) {
                 event.preventDefault();
@@ -295,7 +310,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                     richText[0].style.top = parseInt(richText[0].style.top, 10) - 3 + 'px';
                 }
                 activeElement.editorObj.top = activeElement.editorObj.top - 3;
+                activeElement.setAttribute('y', activeElement.editorObj.top);
                 org.ekstep.contenteditor.api.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             }
         });
 
@@ -309,14 +326,16 @@ org.ekstep.contenteditor.basePlugin.extend({
             var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
             if (activeGroup) {
                 event.preventDefault();
-                _.each(activeGroup._objects, function(element) {
+                _.each(org.ekstep.contenteditor.api.getCurrentGroup(), function(element) {
                     var richText = ecEditor.jQuery('#' + element.id);
                     if (richText.length != 0) {
                         richText[0].style.top = parseInt(richText[0].style.top, 10) + 3 + 'px';
                     }
+                    element.setAttribute('y', element.attributes.y + 3);
                 })
                 activeGroup.top = activeGroup.top + 3;
                 org.ekstep.contenteditor.api.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             } else 
             if (activeElement) {
                 event.preventDefault();
@@ -325,7 +344,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                     richText[0].style.top = parseInt(richText[0].style.top, 10) + 3 + 'px';
                 }
                 activeElement.editorObj.top = activeElement.editorObj.top + 3;
+                activeElement.setAttribute('y', activeElement.editorObj.top);
                 org.ekstep.contenteditor.api.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             }
         });
 
@@ -339,14 +360,16 @@ org.ekstep.contenteditor.basePlugin.extend({
             var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
             if (activeGroup) {
                 event.preventDefault();
-                _.each(activeGroup._objects, function(element) {
+                _.each(org.ekstep.contenteditor.api.getCurrentGroup(), function(element) {
                     var richText = ecEditor.jQuery('#' + element.id);
                     if (richText.length != 0) {
                         richText[0].style.left = parseInt(richText[0].style.left, 10) - 3 + 'px';
                     }
+                    element.setAttribute('x', element.attributes.x - 3);
                 })
                 activeGroup.left = activeGroup.left - 3;
                 org.ekstep.contenteditor.api.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             } else 
             if (activeElement) {
                 event.preventDefault();
@@ -355,7 +378,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                     richText[0].style.left = parseInt(richText[0].style.left, 10) - 3 + 'px';
                 }
                 activeElement.editorObj.left = activeElement.editorObj.left - 3;
+                activeElement.setAttribute('x', activeElement.editorObj.left);
                 org.ekstep.contenteditor.api.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             }
         });
 
@@ -369,14 +394,16 @@ org.ekstep.contenteditor.basePlugin.extend({
             var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
             if (activeGroup) {
                 event.preventDefault();
-                _.each(activeGroup._objects, function(element) {
+                _.each(org.ekstep.contenteditor.api.getCurrentGroup(), function(element) {
                     var richText = ecEditor.jQuery('#' + element.id);
                     if (richText.length != 0) {
                         richText[0].style.left = parseInt(richText[0].style.left, 10) + 3 + 'px';
                     }
+                    element.setAttribute('x', element.attributes.x + 3);
                 })
                 activeGroup.left = activeGroup.left + 3;
                 org.ekstep.contenteditor.api.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             } else
             if (activeElement) {
                 event.preventDefault();
@@ -385,7 +412,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                     richText[0].style.left = parseInt(richText[0].style.left, 10) + 3 + 'px';
                 }
                 activeElement.editorObj.left = activeElement.editorObj.left + 3;
+                activeElement.setAttribute('x', activeElement.editorObj.left);
                 org.ekstep.contenteditor.api.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             }
         });
 
@@ -399,14 +428,16 @@ org.ekstep.contenteditor.basePlugin.extend({
             var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
             if (activeGroup) {
                 event.preventDefault();
-                _.each(activeGroup._objects, function(element) {
+                _.each(org.ekstep.contenteditor.api.getCurrentGroup(), function(element) {
                     var richText = ecEditor.jQuery('#' + element.id);
                     if (richText.length != 0) {
                         richText[0].style.top = parseInt(richText[0].style.top, 10) - 1 + 'px';
                     }
+                    element.setAttribute('x', element.attributes.x - 1);
                 })
                 activeGroup.top = activeGroup.top - 1;
                 org.ekstep.contenteditor.api.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             } else
             if (activeElement) {
                 event.preventDefault();
@@ -415,7 +446,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                     richText[0].style.top = parseInt(richText[0].style.top, 10) - 1 + 'px';
                 }
                 activeElement.editorObj.top = activeElement.editorObj.top - 1;
+                activeElement.setAttribute('y', activeElement.editorObj.top);
                 org.ekstep.contenteditor.api.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             }
         });
 
@@ -429,14 +462,16 @@ org.ekstep.contenteditor.basePlugin.extend({
             var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
             if (activeGroup) {
                 event.preventDefault();
-                _.each(activeGroup._objects, function(element) {
+                _.each(org.ekstep.contenteditor.api.getCurrentGroup(), function(element) {
                     var richText = ecEditor.jQuery('#' + element.id);
                     if (richText.length != 0) {
                         richText[0].style.top = parseInt(richText[0].style.top, 10) + 1 + 'px';
                     }
+                    element.setAttribute('x', element.attributes.x + 1);
                 })
                 activeGroup.top = activeGroup.top + 1;
                 org.ekstep.contenteditor.api.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             } else 
             if (activeElement) {
                 event.preventDefault();
@@ -445,7 +480,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                     richText[0].style.top = parseInt(richText[0].style.top, 10) + 1 + 'px';
                 }
                 activeElement.editorObj.top = activeElement.editorObj.top + 1;
+                activeElement.setAttribute('y', activeElement.editorObj.top);
                 org.ekstep.contenteditor.api.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             }
         });
 
@@ -459,14 +496,16 @@ org.ekstep.contenteditor.basePlugin.extend({
             var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
             if (activeGroup) {
                 event.preventDefault();
-                _.each(activeGroup._objects, function(element) {
+                _.each(org.ekstep.contenteditor.api.getCurrentGroup(), function(element) {
                     var richText = ecEditor.jQuery('#' + element.id);
                     if (richText.length != 0) {
                         richText[0].style.left = parseInt(richText[0].style.left, 10) - 1 + 'px';
                     }
+                    element.setAttribute('x', element.attributes.x - 1);
                 })
                 activeGroup.left = activeGroup.left - 1;
                 org.ekstep.contenteditor.api.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             } else 
             if (activeElement) {
                 event.preventDefault();
@@ -475,7 +514,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                     richText[0].style.left = parseInt(richText[0].style.left, 10) - 1 + 'px';
                 }
                 activeElement.editorObj.left = activeElement.editorObj.left - 1;
+                activeElement.setAttribute('x', activeElement.editorObj.left);
                 org.ekstep.contenteditor.api.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             }
         });
 
@@ -489,14 +530,16 @@ org.ekstep.contenteditor.basePlugin.extend({
             var activeGroup = org.ekstep.contenteditor.api.getEditorGroup();
             if (activeGroup) {
                 event.preventDefault();
-                _.each(activeGroup._objects, function(element) {
+                _.each(org.ekstep.contenteditor.api.getCurrentGroup(), function(element) {
                     var richText = ecEditor.jQuery('#' + element.id);
                     if (richText.length != 0) {
                         richText[0].style.left = parseInt(richText[0].style.left, 10) + 1 + 'px';
                     }
+                    element.setAttribute('x', element.attributes.x + 1);
                 })
                 activeGroup.left = activeGroup.left + 1;
                 org.ekstep.contenteditor.api.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             } else
             if (activeElement) {
                 event.preventDefault();
@@ -505,7 +548,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                     richText[0].style.left = parseInt(richText[0].style.left, 10) + 1 + 'px';
                 }
                 activeElement.editorObj.left = activeElement.editorObj.left + 1;
+                activeElement.setAttribute('x', activeElement.editorObj.left);
                 org.ekstep.contenteditor.api.render();
+                ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
             }
         });
     },
