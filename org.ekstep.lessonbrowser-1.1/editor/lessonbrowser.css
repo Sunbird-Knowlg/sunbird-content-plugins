@@ -196,4 +196,18 @@
     letter-spacing: 1px;
 }
 
+.padding-top-3px{
+    padding: 12px;
+}
+
+.filters-wrapper{
+    height: 88%;
+    overflow-y: scroll;
+    border-right: 1px solid #d8d8d8;
+}
+
+.width-100{
+    width: 100%;
+}
+
 /* from lessonBrowser.html */

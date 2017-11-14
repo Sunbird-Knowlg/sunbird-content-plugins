@@ -1,11 +1,11 @@
-<div ng-app="org.ekstep.contentprovider" ng-controller="contentproviderekstepController as $ctrl" id="partials/repoEkstep.html" style="padding-top:0; height: 100%; padding-bottom: 0;">
-    <div class="ui grid full-height" style='padding-top:1em;'>
+<div ng-app="org.ekstep.contentprovider" ng-controller="contentproviderekstepController as $ctrl" id="partials/repoEkstep.html" style="padding-top:0; background:#f6f7f8; height: 100%; padding-bottom: 0;">
+    <div class="ui grid full-height">
         <div class="row" ng-if="$ctrl.err">
             <div class="column">
                 {{ $ctrl.err }}
             </div>
         </div>
-        <div class="row search-reset-keyword-field-wrapper" ng-if="!$ctrl.err">
+        <div class="row search-reset-keyword-field-wrapper f6f7f8-background" ng-if="!$ctrl.err">
             <div class="column">
                 <div class="ui fluid action input search-reset-keyword-field">
                     <input type="text" placeholder="Search for keyword" autocomplete="off" spellcheck="false" ng-model="searchKeyword" ng-keypress="searchOnKeypress()">
