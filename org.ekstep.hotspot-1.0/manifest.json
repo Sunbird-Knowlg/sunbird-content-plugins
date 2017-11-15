@@ -21,29 +21,23 @@
             "onclick": {
                 "id": "org.ekstep.hotspot:create",
                 "data": {
-                    "type": "roundrect",
+                    "type": "rect",
                     "y": 20,
                     "x": 20,
-                    "fill": "rgb(255,0,0)",
+                    "fill": "rgba(0,0,255, 0)",
                     "w": 15,
                     "h": 25,
-                    "opacity": 0.3,
-                    "stroke": "rgba(255, 255, 255, 0)",
-                    "strokeWidth": 1
+                    "opacity": 1,
+                    "stroke": "rgba(0, 0, 255, 0.6)",
+                    "strokeWidth": 1,
+                    "strokeDashArray": [1, 0]
                 }
             }
         }],
         "behaviour": {
             "rotatable": true
         },
-        "configManifest": [{
-            "propertyName": "color",
-            "title": "Fill color",
-            "description": "Choose a color from the color picker",
-            "dataType": "colorpicker",
-            "required": true,
-            "defaultValue": "rgb(255,0,0)"
-        }],
+
         "help": {
             "src": "editor/help.md",
             "dataType": "text"

@@ -17,9 +17,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     newInstance: function() {
         this.attributes.opacity = ecEditor._.isUndefined(this.attributes.opacity) ? 0.4 : this.attributes.opacity;
         var props = this.convertToFabric(this.attributes);
-        if (this.attributes.type === 'roundrect') {
-            this.editorObj = new fabric.Rect(props);
-        }
+        this.editorObj = new fabric.Rect(props);
     },
     onRemove: function(event) {
 
@@ -62,8 +60,9 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     getConfig: function() {
         var config = this._super();
-        config.opacity = this.attributes.opacity * 100;        
+        config.opacity = this.attributes.opacity * 100;
         config.color = this.attributes.fill;
+        config.stroke = this.attributes.stroke;
         return config;
     }
 });
