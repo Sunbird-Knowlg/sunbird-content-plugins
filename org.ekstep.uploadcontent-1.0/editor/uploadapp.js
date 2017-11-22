@@ -139,7 +139,8 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                         "mimeType": mimeType,
                         "createdBy": ecEditor.getContext('user').id,
                         "createdFor": ecEditor.getContext('user').orgIds,
-                        "contentType": "Resource"
+                        "contentType": "Resource",
+                        "creator": ecEditor.getContext('user').name
                     }
                 }
             }

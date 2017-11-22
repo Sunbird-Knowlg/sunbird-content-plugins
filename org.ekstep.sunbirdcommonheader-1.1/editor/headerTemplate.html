@@ -39,7 +39,7 @@
                             <i class="icon-save"></i>
                             <span class="label-icon-box-text save-button-text">Save</span>
                         </div>
-                        <div ng-show="!publishMode && !isFalgReviewer && !hideReviewBtn" id="reviewButton" ng-class="disableReviewBtn ? 'ui buttons preview-dropdown popup-item disabled' : 'ui buttons preview-dropdown'">
+                        <div ng-show="!publishMode && !isFalgReviewer && !hideReviewBtn" id="reviewButton" class="ui buttons preview-dropdown " ng-class="{ 'preview-dropdown-nonecml': editorEnv == 'NON-ECML', 'popup-item disabled': disableReviewBtn }">
                             <div class="ui button text-part popup-item" data-content="Send for review" data-variation="tiny inverted" data-position="bottom center" ng-click="sendForReview(); generateTelemetry({ subtype: 'review', target: 'reviewbutton'});">
                                 <i class="send icon"></i>
                             </div>

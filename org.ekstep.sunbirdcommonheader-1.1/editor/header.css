@@ -223,9 +223,11 @@ body {
     width: auto; 
     position: relative;
     color: #9b9b9b!important;
-    display: inline-flex !important;
     height: 30px!important;
-    right: -11px;
+    right: -11px !important;
+}
+.preview-dropdown-nonecml{
+    display: inline-block !important;
 }
 
 .preview-dropdown .ui.button.text-part{
