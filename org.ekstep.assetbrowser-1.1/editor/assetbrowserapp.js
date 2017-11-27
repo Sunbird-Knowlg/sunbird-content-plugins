@@ -568,7 +568,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             } else {
                 // Validate file if not editing meta data
                 var validateFile = instance.fileValidation('assetfile', ctrl.allowedFileSize, ctrl.allowedMimeTypes);
-
                 if (validateFile) {
                     ctrl.uploadAsset(event, ctrl.assetMeta);
                 } else {
@@ -576,7 +575,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                     return false;
                 }
             }
-        ctrl.uploadBtnDisabled = false;
         }
         else {
             console.log("fields validation failed");
