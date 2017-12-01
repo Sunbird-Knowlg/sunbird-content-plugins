@@ -10,7 +10,7 @@
 				</h2>
 				<div class="ui grid">
 					<div class="six wide right floated column">
-						<div class="ui green ok button"  ng-click="this.closeThisDialog()">
+						<div class="ui green ok button"  ng-click="this.closeThisDialog(); generateTelemetry({type: 'click', subtype: 'close', target: 'closeAddCollaboratorPopUp', targetid:contentId})">
 						  <i class="checkmark icon"></i>
 						  Ok
 						</div>
@@ -39,7 +39,7 @@
 			<label>URL</label>
 			<div class="ui action input">
 			  <input readonly="" type="text" value="{{viewContentLink}}" id="copyTarget">
-			  <div class="ui right labeled icon button" id="copyButton"  ng-click="getUrlLink()"><i class="copy icon"></i>{{copyAnswer}}</div>
+			  <div class="ui right labeled icon button" id="copyButton"  ng-click="getUrlLink(); generateTelemetry({type: 'click', subtype: 'copy', target: 'copyMetaFormUrl', targetid:contentId})"><i class="copy icon"></i>{{copyAnswer}}</div>
 			</div>
 		</div>
 
@@ -74,9 +74,9 @@
 			<div class="ui grid">
 				<div class="wide column right aligned">
 					<div class="ui buttons">
-						<button class="ui orange button" ng-click="closeThisDialog()" type="button">Cancel</button>
+						<button class="ui orange button" ng-click="closeThisDialog(); generateTelemetry({type: 'click', subtype: 'close', target: 'closeAddCollaboratorPopUp', targetid:contentId})" type="button">Cancel</button>
 						<div class="or"></div>
-						<button class="ui blue button submit button" ng-click="sendInvites()" type="button">Send Invites</button>
+						<button class="ui blue button submit button" ng-click="sendInvites(); generateTelemetry({type: 'click', subtype: 'send', target: 'sendInvitesToCollaborator', targetid:contentId})" type="button">Send Invites</button>
 					</div>
 				</div>
 			</div>

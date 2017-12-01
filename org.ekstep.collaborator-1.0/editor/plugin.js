@@ -194,6 +194,23 @@ org.ekstep.contenteditor.basePlugin.extend({
                 console.log("Error");
             }
         });
+    },
+    /**
+     *   To generate telemetry events
+     *   @memberof collaborator
+     */
+    generateTelemetry: function(data) {
+        var instance = this;
+        if (data) ecEditor.getService('telemetry').interact({
+            "type": data.type,
+            "subtype": data.subtype,
+            "target": data.target,
+            "pluginid": instance.manifest.id,
+            "pluginver": instance.manifest.ver,
+            "objectid": ecEditor.getCurrentObject().id || "", 
+            "targetid":data.targetid,
+            "stage": ecEditor.getCurrentStage().id || ""
+        })
     }
 });
 
