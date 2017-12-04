@@ -138,12 +138,18 @@ angular.module('org.ekstep.review', [])
             if (data) ecEditor.getService('telemetry').interact({
                 "type": data.type,
                 "subtype": data.subtype,
-                "target": data.target,
-                "pluginid": instance.manifest.id,
-                "pluginver": instance.manifest.ver,
-                "objectid": ecEditor.getCurrentObject().id || "", 
-                "targetid":data.targetid,
-                "stage": ecEditor.getCurrentStage().id || ""
+                "id": data.target;
+                "pageid": org.ekstep.contenteditor.api.getCurrentStage().id || "",
+                "target":{
+                    "id":  data.targetid || "",
+                    "type": "plugin"
+                },
+                "plugin":{
+                    "id": instance.manifest.id,
+                    "ver": instance.manifest.ver,
+                    "category": "core"
+                },
+                "ver": "3.0"
             })
         };
     }]);
