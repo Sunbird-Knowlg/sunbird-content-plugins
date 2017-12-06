@@ -138,7 +138,7 @@ angular.module('org.ekstep.review', [])
             if (data) ecEditor.getService('telemetry').interact({
                 "type": data.type,
                 "subtype": data.subtype,
-                "id": data.target;
+                "id": data.target,
                 "pageid": org.ekstep.contenteditor.api.getCurrentStage().id || "",
                 "target":{
                     "id":  data.targetid || "",
