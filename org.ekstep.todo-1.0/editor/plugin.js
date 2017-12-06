@@ -151,6 +151,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 apiPostParams["status"] = "C";
 
                 ecEditor.jQuery(widgetRef).hybridtodo({ apiPostParams: apiPostParams, action: 'createTodo' });
+                ctrl.generateTelemetry({type: 'click', subtype: 'todo', target: 'createTodo',targetid: ctrl.context.contentId});
             }
 
         /**
@@ -250,6 +251,29 @@ org.ekstep.contenteditor.basePlugin.extend({
                 ecEditor.jQuery(todoThreadsWrapperDiv).html(emptyMessage);
             }
         }
+    },
+    /**
+     *   To generate telemetry events
+     *   @memberof collaborator
+     */
+    generateTelemetry: function(data) {
+        var instance = this;
+        if (data) ecEditor.getService('telemetry').interact({
+            "type": data.type,
+            "subtype": data.subtype,
+            "id": data.target;
+            "pageid": org.ekstep.contenteditor.api.getCurrentStage().id || "",
+            "target":{
+                "id":  data.targetid || "",
+                "type": "plugin"
+            },
+            "plugin":{
+                "id": instance.manifest.id,
+                "ver": instance.manifest.ver,
+                "category": "core"
+            },
+            "ver": "3.0"
+        })
     }
 });
 //# sourceURL=todo.js

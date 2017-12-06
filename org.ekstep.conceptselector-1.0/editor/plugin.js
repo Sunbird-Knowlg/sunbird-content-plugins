@@ -142,6 +142,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     picked: data.selectedConcepts,
                     onSubmit: function(nodes) {
                         data.callback(nodes);
+                        instance.generateTelemetry({type: 'click', subtype: 'submit', target: 'ConceptSelectorSubmit'});
                     },
                     nodeName:"conceptSelector_" + data.element,
                     /**displayFormat: function(picked) { return "Concepts ("+picked.length+" selected)"; },**/
@@ -149,6 +150,29 @@ org.ekstep.contenteditor.basePlugin.extend({
                 });
             }, 1000);
         }
+    },
+    /**
+     *   To generate telemetry events
+     *   @memberof collaborator
+     */
+    generateTelemetry: function(data) {
+        var instance = this;
+        if (data) ecEditor.getService('telemetry').interact({
+            "type": data.type,
+            "subtype": data.subtype,
+            "id": data.target;
+            "pageid": org.ekstep.contenteditor.api.getCurrentStage().id || "",
+            "target":{
+                "id":  data.targetid || "",
+                "type": "plugin"
+            },
+            "plugin":{
+                "id": instance.manifest.id,
+                "ver": instance.manifest.ver,
+                "category": "core"
+            },
+            "ver": "3.0"
+        })
     }
 });
 //# sourceURL=conceptplugin.js
