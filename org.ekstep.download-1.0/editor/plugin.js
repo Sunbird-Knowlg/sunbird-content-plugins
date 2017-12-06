@@ -67,6 +67,8 @@ org.ekstep.contenteditor.basePlugin.extend({
             background: 'transparent!important',
             className: 'ngdialog-theme-plain dwContent'
         });
+
+        instance.generateTelemetry({type: 'click', subtype: 'download', target: 'downloadContent',targetid: ecEditor.getContext('contentId')});
     },
     getDownloadUrl: function(callback) {
         var fileName = (ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name).toLowerCase();
@@ -105,5 +107,28 @@ org.ekstep.contenteditor.basePlugin.extend({
             }
         });
     },
+    /**
+     *   To generate telemetry events
+     *   @memberof collaborator
+     */
+    generateTelemetry: function(data) {
+        var instance = this;
+        if (data) ecEditor.getService('telemetry').interact({
+            "type": data.type,
+            "subtype": data.subtype,
+            "id": data.target,
+            "pageid": org.ekstep.contenteditor.api.getCurrentStage().id || "",
+            "target":{
+                "id":  data.targetid || "",
+                "type": "plugin"
+            },
+            "plugin":{
+                "id": instance.manifest.id,
+                "ver": instance.manifest.ver,
+                "category": "core"
+            },
+            "ver": "3.0"
+        })
+    }
 });
 //# sourceURL=downloadplugin.js

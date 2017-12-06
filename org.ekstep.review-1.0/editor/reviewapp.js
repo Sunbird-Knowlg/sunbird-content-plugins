@@ -131,6 +131,26 @@ angular.module('org.ekstep.review', [])
                     ctrl.success = false;
                 }
             });
-        }
+        };
+
+        /**To generate telemetry events**/
+        ctrl.generateTelemetry = function(data) {
+            if (data) ecEditor.getService('telemetry').interact({
+                "type": data.type,
+                "subtype": data.subtype,
+                "id": data.target,
+                "pageid": org.ekstep.contenteditor.api.getCurrentStage().id || "",
+                "target":{
+                    "id":  data.targetid || "",
+                    "type": "plugin"
+                },
+                "plugin":{
+                    "id": instance.manifest.id,
+                    "ver": instance.manifest.ver,
+                    "category": "core"
+                },
+                "ver": "3.0"
+            })
+        };
     }]);
 //# sourceURL="reviewapp.js"
