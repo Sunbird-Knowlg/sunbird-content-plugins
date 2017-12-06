@@ -265,7 +265,8 @@ org.ekstep.contenteditor.basePlugin.extend({
             "pageid": org.ekstep.contenteditor.api.getCurrentStage().id || "",
             "target":{
                 "id":  data.targetid || "",
-                "type": "plugin"
+                "type": "plugin",
+                "ver": ""
             },
             "plugin":{
                 "id": instance.manifest.id,
