@@ -207,13 +207,13 @@
         <div class="actions">
             <div class="ui grid">
                 <div class="three wide column left aligned">
-                    <div class="ui button" ng-click="$ctrl.editContentMeta()">EDIT DETAILS</div>
+                    <div class="ui button" ng-click="$ctrl.editContentMeta(); $ctrl.generateTelemetry({type: 'click', subtype: 'open', target: 'openEditMetaForm', targetid:$ctrl.contentMeta.identifier})">EDIT DETAILS</div>
                 </div>
                 <div class="nine wide column right aligned">
                     <div class="ui buttons">
-                        <button id="closePopUp" class="ui orange button" ng-click="$ctrl.closeThisDialog(true);" type="button">Cancel</button>
+                        <button id="closePopUp" class="ui orange button" ng-click="$ctrl.closeThisDialog(true); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeSendForReviewPopUp', targetid:$ctrl.contentMeta.identifier})" type="button">Cancel</button>
                         <div class="or"></div>
-                        <button class="ui blue button submit button" ng-click="$ctrl.saveBeforeReview()">Submit</button>
+                        <button class="ui blue button submit button" ng-click="$ctrl.saveBeforeReview(); $ctrl.generateTelemetry({type: 'click', subtype: 'send', target: 'SubmitSendForReviewForm', targetid:$ctrl.contentMeta.identifier})">Submit</button>
                     </div>
                 </div>
             </div>
