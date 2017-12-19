@@ -84,8 +84,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                         'contentId': ecEditor.getContext('contentId'),
                         'sid': ecEditor.getContext('sid'),
                         'uid': ecEditor.getContext('uid'), 
-                        'channel': ecEditor.getContext('channel'), 
-                        'pdata': ecEditor.getContext('pdata'), 
+                        'channel': ecEditor.getContext('channel') || "in.ekstep", 
+                        'pdata': ecEditor.getContext('pdata') || {id: "in.ekstep", pid: "", ver: "1.0"}, 
                         'app': userData.etags.app || [], 
                         'dims': userData.etags.dims || [], 
                         'partner': userData.etags.partner || []
