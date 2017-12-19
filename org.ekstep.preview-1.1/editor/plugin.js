@@ -78,8 +78,18 @@ org.ekstep.contenteditor.basePlugin.extend({
                 var userData = ecEditor.getService('telemetry').context;
                 previewContentIframe.onload = function() {
                     var configuration = {};
-                    userData.etags = userData.etags || {};
-                    configuration.context = {'mode':'edit','contentId':meta.identifier,'sid':userData.sid,'uid':userData.uid, 'channel': userData.channel, 'pdata': userData.pdata, 'app': userData.etags.app, 'dims': userData.etags.dims, 'partner': userData.etags.partner }; 
+                    userData.etags = ecEditor.getContext('etags') || [];
+                    configuration.context = {
+                        'mode':'edit',
+                        'contentId': ecEditor.getContext('contentId'),
+                        'sid': ecEditor.getContext('sid'),
+                        'uid': ecEditor.getContext('uid'), 
+                        'channel': ecEditor.getContext('channel'), 
+                        'pdata': ecEditor.getContext('pdata'), 
+                        'app': userData.etags.app || [], 
+                        'dims': userData.etags.dims || [], 
+                        'partner': userData.etags.partner || []
+                    }; 
                     if (ecEditor.getConfig('previewConfig')) {
                         configuration.config = ecEditor.getConfig('previewConfig');
                     } else {
