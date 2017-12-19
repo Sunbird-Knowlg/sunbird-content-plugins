@@ -43,21 +43,21 @@ org.ekstep.genericeditor.basePlugin.extend({
         var defaultPreviewConfig = {showEndpage:true};
         var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
         previewContentIframe.src = instance.previewURL;
-        var userData = ecEditor.getService('telemetry').context;
         previewContentIframe.onload = function() {
             var configuration = {};
-            userData.etags = userData.etags || {};
+            var userData = {};
+            userData.etags = ecEditor.getContext('etags') || [];
             configuration.context = {
-                'mode': 'edit',
-                'sid': userData.sid,
-                'uid': userData.uid,
-                'channel': userData.channel,
-                'pdata': userData.pdata,
-                'app': userData.etags.app,
-                'dims': userData.etags.dims,
-                'partner': userData.etags.partner,
-                'contentId': ecEditor.getContext('contentId')
-            };
+                'mode':'edit',
+                'contentId': ecEditor.getContext('contentId'),
+                'sid': ecEditor.getContext('sid'),
+                'uid': ecEditor.getContext('uid'), 
+                'channel': ecEditor.getContext('channel') || "in.ekstep", 
+                'pdata': ecEditor.getContext('pdata') || {id: "in.ekstep", pid: "", ver: "1.0"}, 
+                'app': userData.etags.app || [], 
+                'dims': userData.etags.dims || [], 
+                'partner': userData.etags.partner || []
+            }; 
             if (ecEditor.getConfig('previewConfig')) {
                 configuration.config = ecEditor.getConfig('previewConfig');
             } else {
