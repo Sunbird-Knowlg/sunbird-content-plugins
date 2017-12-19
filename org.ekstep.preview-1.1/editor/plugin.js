@@ -75,7 +75,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                 ecEditor.jQuery('.preview-bgimage').css('background', 'url(' + imageUrl + ')');
                 var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
                 previewContentIframe.src = instance.previewURL;
-                var userData = ecEditor.getService('telemetry').context;
+                var userData = {
+                    etags: ecEditor.getContext('etags') || [];
+                }
                 previewContentIframe.onload = function() {
                     var configuration = {};
                     userData.etags = ecEditor.getContext('etags') || [];
