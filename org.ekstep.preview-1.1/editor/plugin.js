@@ -75,11 +75,21 @@ org.ekstep.contenteditor.basePlugin.extend({
                 ecEditor.jQuery('.preview-bgimage').css('background', 'url(' + imageUrl + ')');
                 var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
                 previewContentIframe.src = instance.previewURL;
-                var userData = ecEditor.getService('telemetry').context;
+                var userData = {};
                 previewContentIframe.onload = function() {
                     var configuration = {};
-                    userData.etags = userData.etags || {};
-                    configuration.context = {'mode':'edit','contentId':meta.identifier,'sid':userData.sid,'uid':userData.uid, 'channel': userData.channel, 'pdata': userData.pdata, 'app': userData.etags.app, 'dims': userData.etags.dims, 'partner': userData.etags.partner }; 
+                    userData.etags = ecEditor.getContext('etags') || [];
+                    configuration.context = {
+                        'mode':'edit',
+                        'contentId': ecEditor.getContext('contentId'),
+                        'sid': ecEditor.getContext('sid'),
+                        'uid': ecEditor.getContext('uid'), 
+                        'channel': ecEditor.getContext('channel') || "in.ekstep", 
+                        'pdata': ecEditor.getContext('pdata') || {id: "in.ekstep", pid: "", ver: "1.0"}, 
+                        'app': userData.etags.app || [], 
+                        'dims': userData.etags.dims || [], 
+                        'partner': userData.etags.partner || []
+                    }; 
                     if (ecEditor.getConfig('previewConfig')) {
                         configuration.config = ecEditor.getConfig('previewConfig');
                     } else {

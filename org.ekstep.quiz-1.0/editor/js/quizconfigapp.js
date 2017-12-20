@@ -69,10 +69,20 @@ angular.module('quizconfigapp', ['ui.sortable'])
             itemIframe.addEventListener('load', function() {
                 if (ctrl.itemPreviewContent) {                    
                     //itemIframe.contentWindow.onload = function() {
-                        var userData = ecEditor.getService('telemetry').context;
+                        var userData = {};
                         var configuration = {};
                         userData.etags = userData.etags || {};
-                        configuration.context = {'mode':'edit','contentId': ctrl.activePreviewItem,'sid':userData.sid,'uid':userData.uid, 'channel': userData.channel, 'pdata': userData.pdata, 'app': userData.etags.app, 'dims': userData.etags.dims, 'partner': userData.etags.partner }; 
+                        configuration.context = {
+                            'mode':'edit',
+                            'contentId': ecEditor.getContext('contentId'),
+                            'sid': ecEditor.getContext('sid'),
+                            'uid': ecEditor.getContext('uid'), 
+                            'channel': ecEditor.getContext('channel') || "in.ekstep", 
+                            'pdata': ecEditor.getContext('pdata') || {id: "in.ekstep", pid: "", ver: "1.0"}, 
+                            'app': userData.etags.app || [], 
+                            'dims': userData.etags.dims || [], 
+                            'partner': userData.etags.partner || []
+                        }; 
                         configuration.config = config;
                         configuration.data = ctrl.itemPreviewContent;
                         itemIframe.contentWindow.initializePreview(configuration);
