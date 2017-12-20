@@ -1,0 +1,18 @@
+{
+    "id": "org.ekstep.question",
+    "ver": "1.0",
+    "author": "Manoj Chandrashekar",
+    "title": "Question Plugin",
+    "description": "Plugin to add questions to question sets.",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "menu": [],
+        "configManifest": [],
+        "dependencies": []
+    }
+}

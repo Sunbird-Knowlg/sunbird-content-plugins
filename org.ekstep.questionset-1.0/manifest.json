@@ -1,0 +1,39 @@
+{
+    "id": "org.ekstep.questionset",
+    "ver": "1.0",
+    "author": "Manoj Chandrashekar",
+    "title": "Question Set Plugin",
+    "description": "Plugin to add question set to content",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "dependencies": [
+            {
+                "type": "plugin",
+                "plugin": "org.ekstep.question",
+                "ver": "1.0"
+            }
+        ],
+        "menu": [
+            {
+                "id": "question-set",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Add Question Set",
+                "title": "Question Set",
+                "iconClass": "fa fa-question",
+                "onclick": {
+                    "id": "org.ekstep.questionset:showpopup"
+                }
+            }
+        ],
+        "configManifest": []
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    }
+}
