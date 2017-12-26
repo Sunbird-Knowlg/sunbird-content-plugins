@@ -2,11 +2,11 @@
     <div class="ui segment header-segment" id="headerSegment">
         <div class="ui breadcrumb">
             <a class="section" ng-repeat="value in path" ng-click="setActiveNode(value.nodeId)">
-                {{value.title}} 
+                {{value.title | limitTo:25}} <span ng-if="value.title.length > 25">...</span>
                 <div class="divider"> / </div>
             </a>
         </div>
-        <h3 class="header-bottom-segment inline-block">{{course.name | limitTo:70}}<span ng-if="course.name.length > 70"> ...</span></h3>
+        <!-- <h3 class="header-bottom-segment inline-block">{{course.name | limitTo:70}}<span ng-if="course.name.length > 70"> ...</span></h3> -->
         <div class="header-buttons-container header-bottom-segment inline-block" ng-show="mode == 'Edit' && editable == true">
             <div class="ui primary button right-float button-overrides" id="update-button" ng-click="updateNode(); generateTelemetry({type: 'click', subtype: 'update', target: 'updatemeta'})" ng-show="editMode">
                 Update

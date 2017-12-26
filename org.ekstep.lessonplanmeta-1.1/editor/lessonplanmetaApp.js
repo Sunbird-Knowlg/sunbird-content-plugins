@@ -9,7 +9,12 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
     $scope.subjectList = [];
     $scope.defaultSubjectList = ["Biology","Chemistry","Physics","Mathematics","Environmental","Geography","History","Political Science","Economics","Sanskrit"];
 
-
+    $scope.updateTitle = function(event, title) {
+        $scope.lesson.name = title;
+        $scope.getPath();
+        $scope.$safeApply();
+    }
+    ecEditor.addEventListener("org.ekstep.collectioneditor:title:update:LessonPlan",$scope.updateTitle,$scope);
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.gradeList = resp.data.result.ordinals.gradeLevel;

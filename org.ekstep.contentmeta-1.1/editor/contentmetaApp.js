@@ -3,6 +3,12 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
     $scope.toggleCollectionAccodrionState = true;
+    $scope.updateTitle = function(event, title) {
+        $scope.content.name = title;
+        $scope.getPath();
+        $scope.$safeApply();
+    }
+    ecEditor.addEventListener("org.ekstep.collectioneditor:title:update:Collection",$scope.updateTitle,$scope);
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.languageList = resp.data.result.ordinals.language;
@@ -49,7 +55,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                 title: 'Content details updated successfully.',
                 position: 'topCenter',
-                icon: 'fa fa-check-circle'
+                icon: 'fa fa-check-circle',
             });
         } else {
             ecEditor.dispatchEvent("org.ekstep.toaster:warning", {

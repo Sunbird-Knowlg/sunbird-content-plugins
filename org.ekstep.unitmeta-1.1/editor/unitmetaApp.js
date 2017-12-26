@@ -3,7 +3,12 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
     $scope.showImageIcon = true;
-    
+    $scope.updateTitle = function(event, title) {
+        $scope.unit.name = title;
+        $scope.getPath();
+        $scope.$safeApply();
+    }
+    ecEditor.addEventListener("org.ekstep.collectioneditor:title:update:TextBookUnit",$scope.updateTitle,$scope);
     $scope.showAssestBrowser = function(){
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',
@@ -14,7 +19,6 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             }
         });
     }
-    
     $scope.updateNode = function(){
         if($scope.unitMetaForm.$valid){ 
             if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {

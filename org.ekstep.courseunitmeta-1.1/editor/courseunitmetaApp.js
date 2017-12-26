@@ -4,6 +4,12 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
     $scope.nodeId = $scope.nodeType = '';
     $scope.showImageIcon = true;
 
+    $scope.updateTitle = function(event, title) {
+        $scope.courseunit.name = title;
+        $scope.getPath();
+        $scope.$safeApply();
+    }
+    ecEditor.addEventListener("org.ekstep.collectioneditor:title:update:CourseUnit",$scope.updateTitle,$scope);
     $scope.showAssestBrowser = function(){
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',
