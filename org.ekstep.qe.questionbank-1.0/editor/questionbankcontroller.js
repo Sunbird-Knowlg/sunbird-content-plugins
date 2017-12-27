@@ -7,16 +7,10 @@
 angular.module('createquestionapp', [])
     .controller('QuestionFormController', ['$scope', function($scope) {
         var ctrl = this;
-        $scope.config = [];
-        $scope.questionData = [];
-        $scope.isQuestionset = true;
 
-        var popuplocation = "editor/popup.html";
+        $scope.isQuestionTab = true;
 
-
-        ctrl.selectedMenuItem = 'data';
-
-
+        $scope.selectedQuestions = [];
 
         ctrl.showQuestionSet = true;
 
@@ -227,6 +221,13 @@ angular.module('createquestionapp', [])
                 "isSelected": false
             }
         ]
+
+
+        $scope.selectQuestion = function(selQuestion){
+        	$scope.selectedQuestions.push(selQuestion);
+
+
+        }
 
 
         $scope.cancel = function() {
