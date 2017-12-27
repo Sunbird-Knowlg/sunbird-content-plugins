@@ -100,7 +100,7 @@
     }
 
     .previewContainer {
-        width: 40% !important;
+        width: 50% !important;
     }
     /* Style the tab */
 
@@ -133,14 +133,27 @@
     .tab button.active {
         background-color: #ccc;
     }
+
+
+    .configForm {
+        border: 1px solid #ccc;
+        background-color: #F1F1F1;
+        width: 100% !important;
+        padding: 3%;
+        margin-bottom: 3%;
+    }
+
+    .preview-config {
+        margin-left: 5%;
+    }
     </style>
     <div class="ui modal questionbank fullscreen active">
         <div class="content wizard">
-            <div class="ui grid wizard-header">
+            <!-- <div class="ui grid wizard-header">
                 <div class="two wide column wizard-title">
                     <h2>Question</h2>
                 </div>
-            </div>
+            </div> -->
             <div class="filters-container">
                 <div class="filters-container" ng-if="!$ctrl.errorMessage">
                     <div class="ui form">
@@ -230,12 +243,12 @@
             <div>
                 <div class="ui three column horizontally padded grid" ng-show="!$ctrl.itemsLoading">
                     <div class="row tab">
-                        <button class="tablinks" ng-click="isQuestionTab = true">London</button>
-                        <button class="tablinks" ng-click="isQuestionTab = false">Paris</button>
+                        <button class="tablinks" ng-click="isQuestionTab = true">Question bank</button>
+                        <button class="tablinks" ng-click="isQuestionTab = false">Selected Questions</button>
                     </div>
                     <div class="column listContainer" ng-if="isQuestionTab">
                         <div class="ui large divided items">
-                            <div class="item select" ng-repeat="question in questions">
+                            <div class="item select" ng-repeat="question in questions" ng-show="!question.isSelected">
                                 <div class="middle aligned content" ng-click="$ctrl.previewItem(cartItem, true);">
                                     <div class="header">{{ question.config.metadata.title }}</div>
                                     <div class="meta">{{question.config.metadata.language}} | {{ question.config.metadata.type}} | {{ question.config.metadata.difficulty }}</div>
@@ -244,6 +257,9 @@
                                 <div>
                                     <input type="checkbox" checked="" name="check" ng-model="question.isSelected" ng-click="selectQuestion(question)">
                                 </div>
+                            </div>
+                            <div ng-if="questions.length == 0">
+                                <p>No questions available</p>
                             </div>
                         </div>
                     </div>
@@ -255,10 +271,45 @@
                                     <div class="meta">{{selQuestion.config.metadata.language}} | {{ selQuestion.config.metadata.type}} | {{ selQuestion.config.metadata.difficulty }}</div>
                                     <div class="description">{{ selQuestion.config.metadata.description }}</div>
                                 </div>
+                                <div>
+                                    <span><i class="edit icon" ng-click="editConfig(selQuestion)"></i></span>
+                                </div>
+                                <div>
+                                    <span><i class="remove icon"></i></span>
+                                </div>
+                            </div>
+                            <div ng-if="selectedQuestions.length == 0">
+                                <p>No questions selected</p>
                             </div>
                         </div>
                     </div>
-                    <div class="column right floated previewContainer">
+                    <div class="column preview-config">
+                        <div class="configForm" ng-if="showConfigForm">
+                            <h3>Config Data</h3>
+                            <div class="ui form">
+                                <div class="fields">
+                                    <div class="field">
+                                        <label>Max time</label>
+                                        <input type="number" placeholder="In minutes" ng-model="questionObj.config.max_time">
+                                    </div>
+                                    <div class="field">
+                                        <label>Max score</label>
+                                        <input type="number" ng-model="questionObj.config.max_score">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui form">
+                                <div class="fields">
+                                    <div class="inline field">
+                                        <div class="ui checkbox">
+                                            <label>Partial Scoring</label>
+                                            <input type="checkbox" tabindex="0" class="hidden" ng-model="questionObj.config.partial_scoring">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui submit button" ng-click="saveConfig()">Submit</div>
+                        </div>
                         <iframe id="itemIframe" class="previewContainer" ng-hide="!$ctrl.itemPreviewLoading && ($ctrl.itemPreviewContent.error || ($ctrl.itemPreviewDisplay == $ctrl.itemPreviewDefaultMessage))"></iframe>
                         <div class="itemIframeMessages" ng-show="!$ctrl.itemPreviewLoading && ($ctrl.itemPreviewContent.error || ($ctrl.itemPreviewDisplay == $ctrl.itemPreviewDefaultMessage))">{{$ctrl.itemPreviewDisplay}}</div>
                     </div>

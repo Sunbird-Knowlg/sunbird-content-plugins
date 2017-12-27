@@ -14,6 +14,8 @@ angular.module('createquestionapp', [])
 
         ctrl.showQuestionSet = true;
 
+        $scope.showConfigForm = false;
+
         //ctrl.selectedMenuItemData = ctrl.config[0].data;
         ctrl.cancel = function() {
             $scope.closeThisDialog();
@@ -223,10 +225,40 @@ angular.module('createquestionapp', [])
         ]
 
 
-        $scope.selectQuestion = function(selQuestion){
-        	$scope.selectedQuestions.push(selQuestion);
+        $scope.selectQuestion = function(selQuestion) {
+            $scope.selectedQuestions.push(selQuestion);
+        }
+
+        $scope.editConfig = function(quesObj) {
+            $scope.questionObj = angular.copy(quesObj);
+            $scope.showConfigForm = true;
+        }
+
+        $scope.saveConfig = function() {
+            console.log($scope.questionObj);
+            /*  angular.forEach($scope.selectedQuestions, function(selQueObj) {
+              	console.log(selQueObj);
+              	console.log($scope.questionObj);
+                  if ($scope.questionObj.questionId == selQueObj.questionId) {
+                  		selQueObj = $scope.questionObj;
+                  		$scope.showConfigForm = false;
+                  }
+
+              });*/
 
 
+            for (var i = 0; i < $scope.selectedQuestions.length; i++) {
+                if ($scope.questionObj.questionId == $scope.selectedQuestions[i].questionId) {
+                    $scope.selectedQuestions[i] = $scope.questionObj;
+                    $scope.showConfigForm = false;
+                }
+            }
+            for (var i = 0; i < $scope.questions.length; i++) {
+                if ($scope.questionObj.questionId == $scope.questions[i].questionId) {
+                    $scope.selectedQuestions[i] = $scope.questionObj;
+                }
+            }
+            delete $scope.questionObj;
         }
 
 
