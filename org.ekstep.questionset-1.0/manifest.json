@@ -27,11 +27,50 @@
                 "title": "Question Set",
                 "iconClass": "fa fa-question",
                 "onclick": {
-                    "id": "org.ekstep.questionset:openQuestionBank"
+                    "id": "org.ekstep.questionset:showPopup"
                 }
             }
         ],
-        "configManifest": []
+        "configManifest": [{
+            "propertyName": "question bank",
+            "title": "question Bank",
+            "description": "Choose a question from the question bank",
+            "dataType": "browser",
+            "required": true,
+            "onclick":{
+                "id": "org.ekstep.questionset:showPopup"
+            }
+        },
+        {
+            "propertyName": "allow_skip",
+            "title": "Allow skip",
+            "description": "Allow to skip the Question",
+            "dataType": "boolean",
+            "required": true
+        },
+        {
+            "propertyName": "show_feedback",
+            "title": "Show Immediate Feedback",
+            "description": "Show the feedback popup",
+            "dataType": "boolean",
+            "required": true
+        },
+        {
+            "propertyName": "shuffle_questions",
+            "title": "Shuffle Options",
+            "description": "Shuffle the options",
+            "dataType": "boolean",            
+            "required": true 
+        },
+        {
+            "propertyName": "reattempts",
+            "title": "Reattempts",
+            "description": "Reattempts number",
+            "dataType": "input",
+            "valueType":"number",
+            "required": true,
+            "minimumValue":"0"
+        }]
     },
     "renderer": {
         "main": "renderer/plugin.js"

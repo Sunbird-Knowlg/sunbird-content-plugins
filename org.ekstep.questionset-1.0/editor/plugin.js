@@ -15,10 +15,9 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     initialize: function() {
 		var instance = this;
+        ecEditor.addEventListener(instance.manifest.id + ":showPopup", instance.openQuestionBank, instance);
         ecEditor.addEventListener(instance.manifest.id + ":addQS", instance.addQS, instance);
         //ecEditor.addEventListener(instance.manifest.id + ":addQ", instance.addQ, instance);
-        ecEditor.addEventListener(instance.manifest.id + ":openQuestionBank", instance.openQuestionBank, instance);
-        //ecEditor.addEventListener(this.manifest.id + ":questionset", this.addToStage, this);
     },
     newInstance: function() {
        var instance = this;
@@ -69,9 +68,17 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.dispatchEvent(instance.manifest.id + ':create', []);
     },*/
     addQS: function () {
+        this.addQ();
         var qdata = {};
+        var config =  {
+            "allow_skip": true, // true/false. Allow user to skip this question
+            "show_feedback": true, // true/false. Allow user to show feedback question set
+            "reattempts": 2,// Number of times user to reattempt the question Ex:2
+            "shuffle_questions": true, // true/false.  
+            "shuffle_options": true // true/false.  
+        };
         //TODO: Replace this with questionSet config from question plugin
-        qdata.config = {__cdata: JSON.stringify({config: 'QuestionSet config'})};
+        qdata.config = {__cdata: JSON.stringify({config: config})};
         ecEditor.dispatchEvent(this.manifest.id + ':create', qdata);
     },
     addQ: function () {
@@ -155,6 +162,15 @@ org.ekstep.contenteditor.basePlugin.extend({
             });
         }
         return questionSetECML;
+    },
+    getConfig: function() {
+        var config = this._super();
+        config.allow_skip =  true; // true/false. Allow user to skip this question
+        config.show_feedback = true; // true/false. Allow user to show feedback question set
+        config.reattempts = 2; // Number of times user to reattempt the question Ex:2
+        config.shuffle_questions = true; // true/false.
+      
+        return config;
     },
     /**    
      *      
