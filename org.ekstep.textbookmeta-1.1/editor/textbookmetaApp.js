@@ -15,7 +15,7 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
         $scope.getPath();
         $scope.$safeApply();
     }
-    ecEditor.addEventListener("title:update:TextBook",$scope.updateTitle,$scope);
+    ecEditor.addEventListener("title:update:textbook", $scope.updateTitle, $scope);
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.gradeList = resp.data.result.ordinals.gradeLevel;

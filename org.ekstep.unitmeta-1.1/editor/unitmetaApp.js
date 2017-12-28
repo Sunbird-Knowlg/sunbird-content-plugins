@@ -8,7 +8,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         $scope.getPath();
         $scope.$safeApply();
     }
-    ecEditor.addEventListener("title:update:TextBookUnit",$scope.updateTitle,$scope);
+    ecEditor.addEventListener("title:update:textbookunit", $scope.updateTitle, $scope);
     $scope.showAssestBrowser = function(){
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',

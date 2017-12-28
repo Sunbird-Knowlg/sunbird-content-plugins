@@ -14,7 +14,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
         $scope.getPath();
         $scope.$safeApply();
     }
-    ecEditor.addEventListener("title:update:LessonPlan",$scope.updateTitle,$scope);
+    ecEditor.addEventListener("title:update:lessonplan", $scope.updateTitle, $scope);
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.gradeList = resp.data.result.ordinals.gradeLevel;
