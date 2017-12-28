@@ -2,7 +2,7 @@
     "id": "org.ekstep.qe.questionbank",
     "ver": "1.0",
     "shortId": "questionbank",
-    "author": "Swati",
+    "author": "Swati Singh",
     "type": "plugin",
     "title": "questionbank",
     "description": "This plugin is for question bank",
@@ -12,29 +12,7 @@
             { "type": "js", "src": "editor/init.js" },
             { "type": "html", "src": "editor/popup.js" }
         ],
-        "menu": [{
-            "id": "questionbank",
-            "category": "main",
-            "type": "image",
-            "toolTip": "Add Questions",
-            "title": "create Questions",
-            "iconImage": "assets/createquestion.png",
-            "onclick": {
-                 "id": "org.ekstep.qe.questionbank:showpopup",
-                "data": {
-                    "type": "roundrect",
-                    "x": 5,
-                    "y": 5,
-                    "fill": "#0000",
-                    "w": 90,
-                    "h": 90,
-                    "radius": 10,
-                    "stroke": "rgba(255, 255, 255, 255)",
-                    "strokeWidth": 1,
-                    "opacity": 0.01
-                }
-            }
-        }],
+        "menu": [],
         "help": {
             "src": "editor/help.md",
             "dataType": "text"
