@@ -226,20 +226,27 @@
             <div class="filters-container" ng-if="isQuestionSetConfig">
                 <div class="ui form">
                     <div class="five fields">
-
+                        <div ng-class="questionSetConfigObj.title ? 'field' :'field error'">
+                            <div class="ui corner labeled input">
+                                <input name="title" ng-model="questionSetConfigObj.title" type="text" placeholder="Question Set Title" maxlength="100" autocomplete="off" >
+                                <div class="ui corner label">
+                                    <i class="asterisk icon"></i>
+                                </div>
+                            </div>
+                        </div>
                         <div class="field">
                             <div class="ui fluid labeled input">
-                                <div class="ui label">Total Re-attempts</div>
-                                <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="questionSetConfigObj.reattempts" min='0' required="" type="number" />
+                                <div class="ui label">Max score</div>
+                                <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="questionSetConfigObj.max_score" min='0' required="" type="number" />
                             </div>
                         </div>
-                        <div class="field">
-                            <div class="ui toggle checkbox verticalcenter">
-                                <input type="checkbox" ng-model="questionSetConfigObj.allow_skip" >
-                                <label>Allow Skip</label>
+                        <div ng-class="questionSetConfigObj.total_items ? 'field' : 'field error' ">
+                            <div class="ui fluid labeled input displayCount">
+                                <div class="ui label">Display</div>
+                                <select class="ui fluid dropdown" id="total_items" ng-model="questionSetConfigObj.total_items" ng-options="option as option for option in selectedQuestions.length" >
+                                </select>
                             </div>
                         </div>
-
                         <div class="field">
                             <div class="ui toggle checkbox verticalcenter">
                                 <input type="checkbox" ng-model="questionSetConfigObj.show_feedback">
@@ -248,7 +255,7 @@
                         </div>
                         <div class="field">
                             <div class="ui toggle checkbox verticalcenter">
-                                <input type="checkbox" ng-model="questionSetConfigObj.shuffle_questions" >
+                                <input type="checkbox" ng-model="questionSetConfigObj.shuffle_questions">
                                 <label>Shuffle Questions</label>
                             </div>
                         </div>
@@ -261,14 +268,7 @@
                     <div class="ui text loader">Just one second, We're fetching that content for you.</div>
                 </div>
             </div>
-            <div ng-if="$ctrl.errorMessage" class=" question-bank-error">
-                <div class="ui negative message">
-                    <div class="header">
-                        We're sorry!
-                    </div>
-                    <p>Unable to fetch the Questions! Please try again later!</p>
-                </div>
-            </div>
+
             <div>
                 <div class="ui three column horizontally padded grid" ng-show="!$ctrl.itemsLoading">
                     <div class="row tab">
@@ -351,9 +351,9 @@
         </div>
         <div class="actions">
             <div class="ui buttons">
-                <button class="ui orange button" ng-click="cancel()" type="button">Cancel</button>
+                <button class="ui orange button" ng-click="cancel();isQuestionSetConfig = false;" type="button">Cancel</button>
                 <div class="or"></div>
-                <button class="ui blue button" ng-show="!isQuestionSetConfig" ng-click="isQuestionSetConfig = true" type="button">Next</button>
+                <button class="ui blue button" ng-show="!isQuestionSetConfig" ng-click="saveQuestionSet()" type="button">Next</button>
                 <button class="ui blue button" ng-show="isQuestionSetConfig" ng-click="addQuestionSet()" type="button">Add</button>
             </div>
         </div>

@@ -5,7 +5,7 @@
  */
 'use strict';
 angular.module('createquestionapp', [])
-    .controller('QuestionFormController', ['$scope','instance', function($scope,instance) {
+    .controller('QuestionFormController', ['$scope', 'instance', function($scope, instance) {
         var ctrl = this;
 
         $scope.isQuestionTab = true;
@@ -220,7 +220,15 @@ angular.module('createquestionapp', [])
             "isSelected": false
         }]
 
-        $scope.questionSetConfigObj = {};
+        $scope.questionSetConfigObj = {
+            "title": "",
+            "max_score": 1,
+            "allow_skip": true,
+            "show_feedback": true,
+            "shuffle_questions": false,
+            "shuffle_options": false,
+            "total_items" : 1
+        };
 
 
         $scope.selectQuestion = function(selQuestion) {
@@ -261,14 +269,23 @@ angular.module('createquestionapp', [])
             delete $scope.questionObj;
         }
 
-        $scope.addQuestionSet = function(){
-          var questionSet = {};
-          questionSet.data = [];
-          questionSet.config = $scope.questionSetConfigObj;
-          questionSet.data = $scope.selectedQuestions;
-          ecEditor.dispatchEvent("org.ekstep.plugins.questionset:addQS", questionSet);
+
+
+        $scope.saveQuestionSet =  function(){
+            $scope.questionSetConfigObj.total_items = $scope.selectedQuestions.length;
+            $scope.isQuestionSetConfig = true;
         }
 
+
+  $scope.addQuestionSet = function() {
+            var questionSet = {};
+            questionSet.data = [];
+            questionSet.config = $scope.questionSetConfigObj;
+            questionSet.data = $scope.selectedQuestions;
+            console.log("----------------------questionSet data--------------", questionSet);
+            ecEditor.dispatchEvent("org.ekstep.questionset:addQS", questionSet);
+            $scope.cancel();
+        }
 
         $scope.cancel = function() {
             $scope.closeThisDialog();

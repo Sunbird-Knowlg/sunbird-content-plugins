@@ -16,6 +16,11 @@
                 "type": "plugin",
                 "plugin": "org.ekstep.question",
                 "ver": "1.0"
+            },
+            {
+                "type": "plugin",
+                "plugin": "org.ekstep.qe.questionbank",
+                "ver": "1.0"
             }
         ],
         "menu": [
@@ -59,8 +64,8 @@
             "propertyName": "shuffle_questions",
             "title": "Shuffle Options",
             "description": "Shuffle the options",
-            "dataType": "boolean",            
-            "required": true 
+            "dataType": "boolean",
+            "required": true
         },
         {
             "propertyName": "reattempts",
