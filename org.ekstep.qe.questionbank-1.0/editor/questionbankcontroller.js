@@ -234,19 +234,21 @@ angular.module('createquestionapp', [])
             $scope.showConfigForm = true;
         }
 
+
+        $scope.removeQuestion = function(selQuestion) {
+            for(var i = 0; i < $scope.selectedQuestions.length; i++) {
+                if (selQuestion.questionId == $scope.selectedQuestions[i].questionId) {
+                		$scope.selectedQuestions.splice(i, 1);
+                }
+            }
+            for (var i = 0; i < $scope.questions.length; i++) {
+                if (selQuestion.questionId == $scope.questions[i].questionId) {
+                    $scope.questions[i].isSelected = false;
+                }
+            }
+        }
+
         $scope.saveConfig = function() {
-            console.log($scope.questionObj);
-            /*  angular.forEach($scope.selectedQuestions, function(selQueObj) {
-              	console.log(selQueObj);
-              	console.log($scope.questionObj);
-                  if ($scope.questionObj.questionId == selQueObj.questionId) {
-                  		selQueObj = $scope.questionObj;
-                  		$scope.showConfigForm = false;
-                  }
-
-              });*/
-
-
             for (var i = 0; i < $scope.selectedQuestions.length; i++) {
                 if ($scope.questionObj.questionId == $scope.selectedQuestions[i].questionId) {
                     $scope.selectedQuestions[i] = $scope.questionObj;
