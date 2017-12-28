@@ -15,7 +15,7 @@
             {
                 "type": "plugin",
                 "plugin": "org.ekstep.questionunit",
-                "ver": "1.0",
+                "ver": "1.0"
             }
         ],
         "menu": [],
