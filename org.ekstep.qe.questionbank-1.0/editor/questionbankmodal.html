@@ -1,5 +1,4 @@
 <script type="text/ng-template" id="QuestionFormTemplate" ng-controller="QuestionFormController as $ctrl">
-    <!-- <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/jquery.slick/1.6.0/slick.css" /> -->
     <style type="text/css">
     .filters-container {
         padding: 8px 10px 4px 18px;
@@ -154,73 +153,103 @@
                     <h2>Question</h2>
                 </div>
             </div> -->
-            <div class="filters-container">
-                <div class="filters-container" ng-if="!$ctrl.errorMessage">
-                    <div class="ui form">
-                        <div class="field">
-                            <div class="ui fluid icon input">
-                                <input ng-disabled="isFilterAdded()" ng-model="$ctrl.activity.question_title" placeholder="Search by question, or question title" ng-keypress="$event.keyCode === 13 ? $ctrl.searchQuestions() : null" ng-click="$ctrl.generateTelemetry({type: 'select', subtype: 'keyPress', target: 'searchBox'})" type="text"></input>
-                                <i class="inverted circular search link icon" ng-click="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'keyPress', target: 'searchIcon'})"></i>
+            <div class="filters-container" ng-if="!isQuestionSetConfig">
+                <div class="ui form">
+                    <div class="field">
+                        <div class="ui fluid icon input">
+                            <input ng-disabled="isFilterAdded()" ng-model="$ctrl.activity.question_title" placeholder="Search by question, or question title" ng-keypress="$event.keyCode === 13 ? $ctrl.searchQuestions() : null" ng-click="$ctrl.generateTelemetry({type: 'select', subtype: 'keyPress', target: 'searchBox'})" type="text"></input>
+                            <i class="inverted circular search link icon" ng-click="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'keyPress', target: 'searchIcon'})"></i>
+                        </div>
+                    </div>
+                    <div class="ui accordion field" id="assessmentAdvancedFields">
+                        <div class="content transition">
+                            <div class="three fields">
+                                <div class="field">
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">Language</div>
+                                        <select class="ui fluid dropdown search" ng-model="$ctrl.activity.language" ng-options="lang for lang in $ctrl.assessment.language" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'languageDropDown'})">
+                                            <option value="">
+                                                All
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">Difficulty</div>
+                                        <select class="ui fluid dropdown search" ng-model="$ctrl.activity.qlevel" ng-options="level for level in $ctrl.assessment.qlevel" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'difficultyDropDown'})">
+                                            <option value="">
+                                                Difficulty
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">Question Type</div>
+                                        <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.type" ng-options="type for type in $ctrl.assessment.type" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'questionTypeDropDown'})">
+                                            <option value="">
+                                                Type
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="three fields">
+                                <div class="field">
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">&emsp;Grade&nbsp;&nbsp;&nbsp;</div>
+                                        <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.gradeLevel" ng-options="grade for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'gradeDropDown'})">
+                                            <option value="">
+                                                Grade
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">Concepts</div>
+                                        <input type="text" placeholder="Concepts" ng-model="$ctrl.activityOptions.concepts" class="fluid" id="assessmentConceptSelector" ng-click="$ctrl.showConceptSelector(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'conceptSelector'})" selectable="false" readonly>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui toggle checkbox verticalcenter">
+                                        <input type="checkbox" ng-model="$ctrl.activityOptions.myQuestions" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'toggle', target: 'myQuestionsToggle'})">
+                                        <label>My Questions</label>
+                                    </div>
+                                </div>
                             </div>
                         </div>
-                        <div class="ui accordion field" id="assessmentAdvancedFields">
-                            <div class="content transition">
-                                <div class="three fields">
-                                    <div class="field">
-                                        <div class="ui fluid labeled input">
-                                            <div class="ui label">Language</div>
-                                            <select class="ui fluid dropdown search" ng-model="$ctrl.activity.language" ng-options="lang for lang in $ctrl.assessment.language" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'languageDropDown'})">
-                                                <option value="">
-                                                    All
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="field">
-                                        <div class="ui fluid labeled input">
-                                            <div class="ui label">Difficulty</div>
-                                            <select class="ui fluid dropdown search" ng-model="$ctrl.activity.qlevel" ng-options="level for level in $ctrl.assessment.qlevel" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'difficultyDropDown'})">
-                                                <option value="">
-                                                    Difficulty
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="field">
-                                        <div class="ui fluid labeled input">
-                                            <div class="ui label">Question Type</div>
-                                            <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.type" ng-options="type for type in $ctrl.assessment.type" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'questionTypeDropDown'})">
-                                                <option value="">
-                                                    Type
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="three fields">
-                                    <div class="field">
-                                        <div class="ui fluid labeled input">
-                                            <div class="ui label">&emsp;Grade&nbsp;&nbsp;&nbsp;</div>
-                                            <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.gradeLevel" ng-options="grade for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'gradeDropDown'})">
-                                                <option value="">
-                                                    Grade
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="ui fluid labeled input">
-                                            <div class="ui label">Concepts</div>
-                                            <input type="text" placeholder="Concepts" ng-model="$ctrl.activityOptions.concepts" class="fluid" id="assessmentConceptSelector" ng-click="$ctrl.showConceptSelector(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'conceptSelector'})" selectable="false" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="field">
-                                        <div class="ui toggle checkbox verticalcenter">
-                                            <input type="checkbox" ng-model="$ctrl.activityOptions.myQuestions" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'toggle', target: 'myQuestionsToggle'})">
-                                            <label>My Questions</label>
-                                        </div>
-                                    </div>
-                                </div>
+                    </div>
+                </div>
+            </div>
+            <div class="filters-container" ng-if="isQuestionSetConfig">
+                <div class="ui form">
+                    <div class="five fields">
+
+                        <div class="field">
+                            <div class="ui fluid labeled input">
+                                <div class="ui label">Total Re-attempts</div>
+                                <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="questionSetConfigObj.reattempts" min='0' required="" type="number" />
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui toggle checkbox verticalcenter">
+                                <input type="checkbox" ng-model="questionSetConfigObj.allow_skip" >
+                                <label>Allow Skip</label>
+                            </div>
+                        </div>
+
+                        <div class="field">
+                            <div class="ui toggle checkbox verticalcenter">
+                                <input type="checkbox" ng-model="questionSetConfigObj.show_feedback">
+                                <label>Show Immediate Feedback</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui toggle checkbox verticalcenter">
+                                <input type="checkbox" ng-model="questionSetConfigObj.shuffle_questions" >
+                                <label>Shuffle Questions</label>
                             </div>
                         </div>
                     </div>
@@ -322,9 +351,10 @@
         </div>
         <div class="actions">
             <div class="ui buttons">
-                <button class="ui orange button" ng-click="$ctrl.cancel()" type="button">Cancel</button>
+                <button class="ui orange button" ng-click="cancel()" type="button">Cancel</button>
                 <div class="or"></div>
-                <button class="ui blue button" ng-click="" type="button">Next</button>
+                <button class="ui blue button" ng-show="!isQuestionSetConfig" ng-click="isQuestionSetConfig = true" type="button">Next</button>
+                <button class="ui blue button" ng-show="isQuestionSetConfig" ng-click="addQuestionSet()" type="button">Add</button>
             </div>
         </div>
     </div>

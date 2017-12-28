@@ -1,7 +1,7 @@
 /**
  *
- * Plugin to create question set and add it to stage.
- * @class question
+ * Plugin to add questions in question stage.
+ * @class questionbank
  * @extends org.ekstep.contenteditor.basePlugin
  * @author Swati Singh <swati.singh@tarento.com>
  */
@@ -9,7 +9,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     type: "org.ekstep.qe.questionbank",
     /**
      * Register events.
-     * @memberof questionbank
+     * @member of questionbank
      */
     initialize: function() {
          var instance = this;
@@ -24,7 +24,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
      /**
      *  Open window to add question and options
-     *  @memberof org.ekstep.plugins.mcqplugin.EditorPlugin#
+     *  @memberof org.ekstep.qe.questionbank
      */
     loadHtml: function() {
         var currentInstance = this;
