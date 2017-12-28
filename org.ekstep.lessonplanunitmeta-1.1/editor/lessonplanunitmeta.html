@@ -6,7 +6,6 @@
                 <div class="divider"> / </div>
             </a>
         </div>
-        <!-- <h3 class="header-bottom-segment inline-block">{{unit.name | limitTo:50 }}<span ng-if="unit.name.length > 100"> ...</span></h3> -->
         <div class="header-buttons-container header-bottom-segment inline-block" ng-show="mode == 'Edit' && editable == true">
             <div class="ui primary button right-float button-overrides" id="update-button" ng-click="updateNode(); generateTelemetry({type: 'click', subtype: 'update', target: 'updatemeta'})" ng-show="editMode">
                 Update

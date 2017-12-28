@@ -9,7 +9,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
         $scope.getPath();
         $scope.$safeApply();
     }
-    ecEditor.addEventListener("org.ekstep.collectioneditor:title:update:CourseUnit",$scope.updateTitle,$scope);
+    ecEditor.addEventListener("title:update:CourseUnit",$scope.updateTitle,$scope);
     $scope.showAssestBrowser = function(){
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',

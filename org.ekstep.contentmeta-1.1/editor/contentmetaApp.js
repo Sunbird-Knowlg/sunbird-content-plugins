@@ -8,7 +8,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         $scope.getPath();
         $scope.$safeApply();
     }
-    ecEditor.addEventListener("org.ekstep.collectioneditor:title:update:Collection",$scope.updateTitle,$scope);
+    ecEditor.addEventListener("title:update:Collection",$scope.updateTitle,$scope);
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.languageList = resp.data.result.ordinals.language;
