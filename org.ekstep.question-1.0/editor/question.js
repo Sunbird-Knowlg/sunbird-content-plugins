@@ -14,6 +14,11 @@ angular.module('createquestionapp1', [])
         ctrl.Totalconcepts = 0;
         ctrl.qt = 0;
 
+        /**
+         * Invoke conceptselector plugin to get concepts
+         * @param  {[type]}   data) {                           ctrl.Totalconcepts [description]
+         * @return {Function}       [description]
+         */
         ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
             element: 'conceptsTextBox',
             selectedConcepts: [], // All composite keys except mediaType
@@ -38,6 +43,9 @@ angular.module('createquestionapp1', [])
 
 
         ctrl.menuItems = {};
+        /**
+         * Create menu
+         */
         ctrl.menuItems['mcq'] = {
             'category': 'mcq',
             'data': { 'name': 'Multiple Choice', 'icon': 'list icon' },
@@ -59,9 +67,15 @@ angular.module('createquestionapp1', [])
             'templatesData': []
         };
 
-
-
         var questionplugininstance = org.ekstep.pluginframework.pluginManager.getPluginManifest('org.ekstep.question');
+        /**
+         * Get org.ekstep.question plugin instance using that instance get manifest,
+         * In manifest we will dependency plugins using that create instance for every plugins get manifest of each plugin.
+         * Using each plugin instance get templates from manifest.
+         * @param  {[type]} val  [description]
+         * @param  {[type]} key) {                       if (val.type [description]
+         * @return {[type]}      [description]
+         */
         _.each(questionplugininstance.editor.dependencies, function(val, key) {
             if (val.type == 'plugin') {
                 var instance = org.ekstep.pluginframework.pluginManager.getPluginManifest(val.plugin);
@@ -81,22 +95,40 @@ angular.module('createquestionapp1', [])
         });
 
         // console.log("All menu items", ctrl.menuItems);
+        /**
+         * By default always mcq is selected
+         * @type {[type]}
+         */
         ctrl.selectedMenuItemData = ctrl.menuItems['mcq'].templatesData;
+        /**
+         * [cancel description]
+         * @return {[type]} [Close the modal window]
+         */
         ctrl.cancel = function() {
             $scope.closeThisDialog();
         }
+        /**
+         * [back description]
+         * @return {[type]} [description]
+         */
         ctrl.back = function() {
             if (ctrl.second) {
                 ctrl.first = true;
                 ctrl.second = false;
                 ctrl.third = false;
+                 $("#breadcumb_1").addClass('activeBreadcumb').siblings().removeClass('activeBreadcumb');
             } else if (ctrl.third) {
                 ctrl.first = false;
                 ctrl.second = true;
                 ctrl.third = false;
+                 $("#breadcumb_2").addClass('activeBreadcumb').siblings().removeClass('activeBreadcumb');
             }
 
         }
+        /**
+         * [onLoadDropDown description]
+         * @return {[type]} [description]
+         */
         ctrl.onLoadDropDown = function() {
             setTimeout(function() {
                 $('.no.label.example .ui.dropdown')
@@ -107,17 +139,27 @@ angular.module('createquestionapp1', [])
 
         }
 
-
+        /**
+         * [switchTab description]
+         * @param  {[type]} id  [description]
+         * @param  {[type]} res [description]
+         * @return {[type]}     [description]
+         */
         ctrl.switchTab = function(id, res) {
             //console.log(res);
             ctrl.selectedMenuItemData = ctrl.menuItems[res.category].templatesData;
             $("#first_" + id).addClass('activeItem').siblings().removeClass('activeItem');
         }
+        /**
+         * [addCreateQuestionForm description]
+         * @param {[type]} obj [description]
+         */
         ctrl.addCreateQuestionForm = function(obj) {
-            console.log("Check", obj);
+            //console.log("Check", obj);
             ctrl.first = false;
             ctrl.second = true;
             ctrl.third = false;
+            $("#breadcumb_2").addClass('activeBreadcumb').siblings().removeClass('activeBreadcumb');
             var templatePath = ecEditor.resolvePluginResource(obj.pluginID, obj.ver, obj.editor.templateURL);
             var controllerPath = ecEditor.resolvePluginResource(obj.pluginID, obj.ver, obj.editor.controllerURL);
             ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath);
@@ -128,8 +170,11 @@ angular.module('createquestionapp1', [])
             };
 
         }
-        // Preview
+        
         ctrl.showPreview = true;
+        /**
+         * [setPreviewData Get data form form and show in preivew]
+         */
         ctrl.setPreviewData = function() {
             $scope.getdetails();
             this.previewURL = (ecEditor.getConfig('previewURL') || 'content/preview/preview.html') + '?webview=true';
@@ -165,13 +210,33 @@ angular.module('createquestionapp1', [])
             };
         }
 
+        /**
+         * Close the modal window
+         * @return {[type]} [description]
+         */
         $scope.cancel = function() {
             $scope.closeThisDialog();
         }
 
+        /**
+         * Dynamically created form validation
+         * @return {[boolean]} based on form validation it will return true/false
+         */
+        ctrl.validateQuestionCreationForm = function(){
+          if($scope.validateForm()){
+            ctrl.first = false;
+            ctrl.second = false;
+            ctrl.third = true;
+             $("#breadcumb_3").addClass('activeBreadcumb').siblings().removeClass('activeBreadcumb');
+          }
+        }
 
-
+        /**
+         * Collect data from 3 screens
+         * @return {[type]} [description]
+         */
         ctrl.sendData = function() {
+          //console.log("In parent",$scope.getData());
             var qt = false;
             var lang = false;
             var lev = false;
@@ -230,28 +295,28 @@ angular.module('createquestionapp1', [])
             }
         }
     }])
-
-    .directive('angularData', function() {
+/**
+ * [description]
+ * @param  {[type]} )           {                                                                       return {                        restrict: 'A',                        link: function postLink(scope, element, attrs) {                var tempURL;                scope.$watch(attrs.angularData, function(value) {                                        if (value ! [description]
+ * @param  {[type]} controller: 'QuestionFormController' [description]
+ * @param  {String} template:   '<div                    ng-include    [description]
+ * @param  {[type]} }                                                               } [description]
+ * @return {[type]}             [description]
+ */
+    .directive('fooDirective', function() {
         return {
-            //template: false,
-            restrict: 'A',
-            //scope: true,
-            link: function postLink(scope, element, attrs) {
+    scope: {},
+    name: 'ctrl',
+    controller: '@',
+    link: function postLink(scope, element, attrs) {
                 var tempURL;
-                scope.$watch(attrs.angularData, function(value) {
-                    // console.log("Value---->", value);
-                    if (value != undefined) {
-                        tempURL = value.templateURL;
-                    }
-                });
-                // }
+                console.log(attrs);
+                tempURL = attrs.template;
                 scope.getContentUrl = function() {
-                    //console.log("return URL",tempURL);
                     return tempURL;
                 }
             },
-            controller: 'QuestionFormController',
-            template: '<div ng-include="getContentUrl()"></div>',
-        }
+     template: '<div ng-include="getContentUrl()"></div>'
+  };
     });
 //# sourceURL=question.js

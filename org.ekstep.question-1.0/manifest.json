@@ -13,6 +13,10 @@
             "src": "editor/init.js"
         },
         {
+            "type": "css",
+            "src": "editor/style.css"
+        },
+        {
             "type": "js",
             "src": "editor/question.js"
         },
@@ -25,10 +29,6 @@
             "type": "plugin",
             "plugin": "org.ekstep.plugins.ftbplugin",
             "ver": "1.0"
-        },
-        {
-            "type": "css",
-            "src": "editor/style.css"
         }],
         "menu": [
         {

@@ -3,10 +3,31 @@
 
     </style>
     <div class="ui modal fullscreen active questioncreation" style="display: block !important;">
-        <div class="header">
+      <div class="two column row ui grid">
+        <div class="two wide column" id="questionHeader">
+        <h2>Create question</h2>
+      </div>
+      <div class="six wide column">
+        <div class="ui huge breadcrumb" style="padding-top: 1.4rem;">
+                <div class="activeBreadcumb section" id="breadcumb_1">Home</div>
+                <i class="right chevron icon divider"></i>
+                <div class="section" id="breadcumb_2">Registration</div>
+                <i class="right chevron icon divider"></i>
+                <div class="section" id="breadcumb_3">Personal Information</div>
+            </div>
+      </div>
+      </div>
+        <!-- <div class="header">
             Create question
             <i class="close cancel icon" ng-click="$ctrl.cancel()" style="float: right;"></i>
-        </div>
+            <div class="ui small breadcrumb" style="margin-left: 25%;">
+                <div class="activeBreadcumb section" id="breadcumb_1">Home</div>
+                <i class="right chevron icon divider"></i>
+                <div class="section" id="breadcumb_2">Registration</div>
+                <i class="right chevron icon divider"></i>
+                <div class="section" id="breadcumb_3">Personal Information</div>
+            </div>
+        </div> -->
         <!-- Main page -->
         <div class="ui grid">
             <div class="two column row first" style="margin-top: 2%; overflow-y: scroll; margin-left: 3%; max-height: 70vh; width: 100%; margin-right: 2%;" ng-show="$ctrl.first">
@@ -40,10 +61,12 @@
                     </div>
                 </div>
             </div>
-            <div class="two column row second" style="margin-top: 2%;" ng-show="$ctrl.second">
+            <div class="two column row second" style="margin-top: 1%;margin-right: 2%;" ng-show="$ctrl.second">
                 <div class="seven wide column">
-                    <div angular-data="dynamicTemplatesData"></div>
+                  <!-- {{dynamicTemplatesData}} -->
+                    <!-- <jags test="dynamicTemplatesData" controller-name="QuestionFormController"></jags> -->
                     <!-- <communicator controller-name="QuestionFormController" template-name="dynamicTemplatesData.templateURL" ></communicator> -->
+                    <foo-directive ctrl="QuestionFormController" template="/plugins/org.ekstep.plugins.mcqplugin-1.0/editor/createquestionui.html"></foo-directive>
                 </div>
                 <div class="five wide column" style="background-color: #f3f3f3;">
                     <div style="margin-top: 3%;">
@@ -153,7 +176,7 @@
                 <button class="ui large button deny cancel" ng-show="$ctrl.second || $ctrl.third" ng-click="$ctrl.back()">Back</button>
                 <button class="ui large button deny cancel" ng-hide="$ctrl.second || $ctrl.third" ng-click="$ctrl.cancel()">Cancel</button>
                 <div class="or" ng-show="$ctrl.second || $ctrl.third"></div>
-                <button class="ui large blue button" ng-show="$ctrl.second" ng-click="addToLesson()">Next</button>
+                <button class="ui large blue button" ng-show="$ctrl.second" ng-click="$ctrl.validateQuestionCreationForm()">Next</button>
                 <button class="ui large blue button" ng-show="$ctrl.third" ng-click="$ctrl.sendData()">Submit</button>
             </div>
         </div>

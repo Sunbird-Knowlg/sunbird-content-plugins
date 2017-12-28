@@ -147,6 +147,20 @@
     outline: none;
 }
 
+.activeBreadcumb{
+  color: #6c6cdc;
+}
+.wizard .ui.breadcrumb .section {
+    color: rgba(0, 0, 0, .4);
+    margin-left: 1rem;
+    margin-right: 1rem;
+}
+#questionHeader{
+      text-align: center;
+    background-color: #eee;
+    padding-top: 1.2rem;
+    padding-bottom: 1.2rem;
+}
 
 /*Custom css*/
 
