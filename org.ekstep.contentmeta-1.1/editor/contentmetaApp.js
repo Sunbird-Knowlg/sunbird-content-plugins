@@ -55,7 +55,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                 title: 'Content details updated successfully.',
                 position: 'topCenter',
-                icon: 'fa fa-check-circle',
+                icon: 'fa fa-check-circle'
             });
         } else {
             ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
