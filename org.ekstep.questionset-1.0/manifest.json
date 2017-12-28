@@ -27,7 +27,7 @@
                 "title": "Question Set",
                 "iconClass": "fa fa-question",
                 "onclick": {
-                    "id": "org.ekstep.questionset:showpopup"
+                    "id": "org.ekstep.questionset:openQuestionBrowser"
                 }
             }
         ],

@@ -13,32 +13,32 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     initialize: function() {
 		var instance = this;
-        ecEditor.addEventListener(instance.manifest.id + ":showpopup", instance.showpopup, instance);
-        setTimeout(function() {
-			var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/popup.html");
-			var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/questionsetapp.js");
-			ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
-		}, 1000);
+        ecEditor.addEventListener(instance.manifest.id + ":openQuestionBrowser", instance.openQuestionBrowser, instance);
+        ecEditor.addEventListener(this.manifest.id + ":questionset", this.addToStage, this);
     },
     newInstance: function() {
-        // TODO: Logic here
+       alert(1);
     },
-    showpopup: function (event, questions) {
+    addToStage: function (event, data) {
         var instance = this;
-        instance.questions = [{"data":{"plugin":{"id":"String","version":"String","templateId":"String"},"type":"String","data":{"name": "first question name"}},"config":{"metadata":{"title":"Question title","description":"Question description","language":"question language","type":"mcq","qlevel":"EASY"},"max_time":"","max_score":"","partial_scoring":false}},{"data":{"plugin":{"id":"String","version":"String","templateId":"String"},"type":"String","data":{"name": "second question name"}},"config":{"metadata":{"title":"Question title second","description":"Question description","language":"question language","type":"mcq","qlevel":"EASY"},"max_time":"","max_score":"","partial_scoring":false}}];
-        ecEditor.getService('popup').open({
-            template: 'questionsetbrowser',
-            controller: 'questionsetcontroller',
-            controllerAs: '$ctrl',
-            resolve: {
-                'instance': function() {
-                    return instance;
-                },
-            },
-            width: 900,
-            showClose: false,
-            className: 'ngdialog-theme-plain'
-        });
+        ecEditor.dispatchEvent(instance.manifest.id + ':create', []);
+    },
+    /**    
+     *      
+     * open question bank. 
+     * @memberof assessment
+     * 
+     */
+    openQuestionBrowser: function(event, callback) {
+        var instance = this,
+            data = undefined;        
+        
+        callback = function(data) {
+            var questionsetData = {"data":{"plugin":{"id":"String","version":"String","templateId":"String"},"type":"String","data":{"name": "first Questoin name"}},"config":{"metadata":{"title":"Question title second","description":"Question description","language":"question language","type":"mcq","qlevel":"EASY"},"max_time":"","max_score":"","partial_scoring":false}};
+            ecEditor.dispatchEvent(instance.manifest.id + ':renderQuestionset', questionsetData);
+        };
+     
+        ecEditor.dispatchEvent("org.ekstep.assessmentbrowser:show", {callback : callback, data : data});  
     }
 });
 //# sourceURL=questionsetPlugin.js
