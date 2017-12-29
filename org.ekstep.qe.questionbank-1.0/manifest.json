@@ -9,8 +9,11 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-            { "type": "js", "src": "editor/init.js" },
-            { "type": "html", "src": "editor/popup.js" }
+            {
+                "type": "plugin",
+                "plugin": "org.ekstep.question",
+                "ver": "1.0"
+            }
         ],
         "menu": [],
         "help": {

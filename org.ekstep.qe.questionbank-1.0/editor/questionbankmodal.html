@@ -93,7 +93,13 @@
     }
 
     .listContainer {
-        width: 100% !important;
+        width: 55% !important;
+        height: 60vh;
+        overflow-y: scroll;
+    }
+
+    .questionListContainer{
+      width: 100% !important;
         height: 60vh;
         overflow-y: scroll;
     }
@@ -143,7 +149,7 @@
     }
 
     .questionContainer{
-        width: 55% !important;
+      width:  55% !important;
     }
 
     .preview-config {
@@ -244,7 +250,7 @@
                                 <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="questionSetConfigObj.max_score" min='0' required="" type="number" />
                             </div>
                         </div>
-                        <div ng-class="questionSetConfigObj.total_items ? 'field' : 'field error' ">
+                        <div >
                             <div class="ui fluid labeled input displayCount">
                                 <div class="ui label">Display</div>
                                 <select class="ui fluid dropdown" id="total_items" ng-model="questionSetConfigObj.total_items" ng-options="option as option for option in item_range" >
@@ -280,7 +286,7 @@
                         <button class="tablinks" ng-click="isQuestionTab = false">Selected Questions</button>
                     </div>
                     <div class="column questionContainer" ng-if="isQuestionTab">
-                    <div class="row listContainer" ng-if="isQuestionTab">
+                    <div class="row questionListContainer" ng-if="isQuestionTab">
                         <div class="ui large divided items">
                             <div class="item select" ng-repeat="question in questions" ng-show="!question.isSelected">
                                 <div class="middle aligned content" ng-click="$ctrl.previewItem(question, true);">
@@ -364,7 +370,7 @@
                 <button class="ui orange button" ng-click="cancel();isQuestionSetConfig = false;" type="button">Cancel</button>
                 <div class="or"></div>
                 <button class="ui blue button" ng-show="!isQuestionSetConfig" ng-click="saveQuestionSet()" type="button">Next</button>
-                <button class="ui blue button" ng-show="isQuestionSetConfig" ng-click="addQuestionSet()" type="button">Add</button>
+                <button class="ui blue button" ng-disabled="(questionSetConfigObj.title == '')" ng-show="isQuestionSetConfig" ng-click="addQuestionSet()" type="button">Add</button>
             </div>
         </div>
     </div>
