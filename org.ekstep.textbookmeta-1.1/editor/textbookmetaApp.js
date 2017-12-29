@@ -10,12 +10,6 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
     $scope.subjectList = [];
     $scope.defaultSubjectList = ["Biology","Chemistry","Physics","Mathematics","Environmental","Geography","History","Political Science","Economics","Sanskrit"];
 
-    $scope.updateTitle = function(event, title) {
-        $scope.textbook.name = title;
-        $scope.getPath();
-        $scope.$safeApply();
-    }
-    ecEditor.addEventListener("title:update:textbook", $scope.updateTitle, $scope);
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.gradeList = resp.data.result.ordinals.gradeLevel;

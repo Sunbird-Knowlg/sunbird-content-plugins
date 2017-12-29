@@ -4,12 +4,6 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
     $scope.nodeId = $scope.nodeType = '';
     $scope.showImageIcon = true;
 
-    $scope.updateTitle = function(event, title) {
-        $scope.course.name = title;
-        $scope.getPath();
-        $scope.$safeApply();
-    }
-    ecEditor.addEventListener("title:update:course", $scope.updateTitle, $scope);
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.languageList = resp.data.result.ordinals.language;

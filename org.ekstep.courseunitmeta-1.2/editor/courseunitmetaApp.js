@@ -148,6 +148,10 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
                 $scope.path.push({'title' : node.title, 'nodeId'  : node.key })
             }
         });
+        if (ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getLevel() > 5) {
+            $scope.path = _.takeRight($scope.path, 6);
+            $scope.path[0].title = "...";
+        }
     }
 
     $scope.setActiveNode = function(nodeId){
