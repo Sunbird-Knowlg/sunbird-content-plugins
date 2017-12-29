@@ -3,6 +3,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
     $scope.showImageIcon = true;
+
     $scope.showAssestBrowser = function(){
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',
