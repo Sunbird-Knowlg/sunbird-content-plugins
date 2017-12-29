@@ -178,7 +178,6 @@ angular.module('createquestionapp1', [])
          * [setPreviewData Get data form form and show in preivew]
          */
         ctrl.setPreviewData = function() {
-            $scope.getdetails();
             this.previewURL = (ecEditor.getConfig('previewURL') || 'content/preview/preview.html') + '?webview=true';
             var instance = this;
             var contentService = ecEditor.getService('content');
@@ -290,15 +289,14 @@ angular.module('createquestionapp1', [])
                     "type": "",
                     "preload": true
                 }];
-                questionUnitFinalData.questionID = "q_id" + Math.floor(Math.random() * 1000000000);
+                questionUnitFinalData.questionID = "qid_" + Math.floor(Math.random() * 1000000000);
                 questionUnitFinalData.data = ctrl.selectedTemplatePluginData;
                 questionUnitFinalData.data.type = "unit";
                 questionUnitFinalData.data.data = ctrl.questionCreationFormData;
                 questionUnitFinalData.config = ctrl.metaDataFormData;
                 console.log("Final object", questionUnitFinalData);
-
-            } else {
-                console.log("Please check all fields");
+                /*Dispatch event from here*/
+               //ecEditor.dispatchEvent(ctrl.selectedTemplatePluginData.plugin.id + ':val', ctrl.validateQuestionCreationFormCallBackFunc, ctrl);
             }
         }
 
