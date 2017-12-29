@@ -9,7 +9,6 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
     $scope.audienceList = [];
     $scope.subjectList = [];
     $scope.defaultSubjectList = ["Biology","Chemistry","Physics","Mathematics","Environmental","Geography","History","Political Science","Economics","Sanskrit"];
-    const DEFAULT_NODETYPE = 'TextBook';
 
     $scope.updateTitle = function(event, title) {
         $scope.textbook.name = title;
@@ -54,19 +53,20 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             $('#textbookmeta-medium').dropdown('set selected', $scope.textbook.medium);
             $('#textbookmeta-subject').dropdown('set selected', $scope.textbook.subject);
             $('#textbookmeta-gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
-            $('#textbookmeta-year').dropdown('set selected', $scope.textbook.year);
+            $('#textbookmeta-audience').dropdown('set selected', $scope.textbook.audience);
+            $('#textbookmeta-language').dropdown('set selected', $scope.textbook.language);
             $('#textbookmeta-resource').dropdown('set selected', $scope.textbook.resource);      
         });
     }
     
-    $scope.updateNode = function() {
-        if (!_.isEmpty($scope.nodeId) && !_.isUndefined($scope.nodeId)) {
-            if (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
+    $scope.updateNode = function(){
+        if($scope.textbookMetaForm.$valid){ 
+            if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = $scope.newNode;
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = true;
             }
-            if (_.isString($scope.textbook.keywords)) {
+            if(_.isString($scope.textbook.keywords)){
                 $scope.textbook.keywords = $scope.textbook.keywords.split(',');
             }
             if (!_.isEmpty($scope.textbook.gradeLevel) && _.isString($scope.textbook.gradeLevel)) {
@@ -75,19 +75,30 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             if (!_.isEmpty($scope.textbook.language) && _.isString($scope.textbook.language)) {
                 $scope.textbook.language = [$scope.textbook.language];
             }
-            if (!_.isEmpty($scope.textbook.audience) && _.isString($scope.textbook.audience)) {
+            if (!_.isEmpty($scope.textbook.audience) && _.isString($scope.textbook.audience)){
                 $scope.textbook.audience = [$scope.textbook.audience];
             }
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
             $scope.textbook.contentType = $scope.nodeType;
-            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
             $scope.metadataCloneObj = _.clone($scope.textbook);
             $scope.editMode = true;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             ecEditor.dispatchEvent("content:title:update", $scope.textbook.name);
             $scope.getPath();
-            $scope.submitted = true;
+            ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                title: 'Content details updated successfully.',
+                position: 'topCenter',
+                icon: 'fa fa-check-circle'
+            });
             $scope.$safeApply();
+        }else{
+            ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
+                title: 'Please fill in all required fields',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });
+            $scope.submitted = true; 
         }
     }
 
@@ -107,13 +118,7 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
             });
         }
         if(_.isUndefined(metadata['name'])){
-            metadata['name'] = currentMetadata['name'];
-        }
-        if(_.isUndefined(metadata['description'])){
-            metadata['description'] = currentMetadata['description'];
-        }
-        if(_.isUndefined(metadata['contentType'])){
-            metadata['contentType'] = currentMetadata['contentType'];
+            metadata['name'] = originalMetadata['name'];
         }
         if(_.isUndefined(metadata['code'])){
             metadata['code'] = $scope.nodeId;
@@ -137,7 +142,7 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
         $scope.editMode = true;
         $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
-        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.textbookmeta", "1.1", "assets/default.png");
+        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.textbookmeta", "1.0", "assets/default.png");
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
         $scope.textbook = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
         if($scope.mode === "Edit" && $scope.editable === true){
@@ -199,30 +204,7 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
     }
 
     $scope.generateTelemetry = function(data) {
-        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.textbookmeta", "pluginver": "1.1", "objectid": $scope.nodeId, "stage": $scope.nodeId })
+        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.textbookmeta", "pluginver": "1.0", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
-
-    $scope.initYearDropDown = function(){
-        $scope.currentYear = new Date().getFullYear();
-        $scope.years = [];
-        const FROM_YEAR_INDEX = 15;
-        const TO_YEAR_INDEX = 5;
-        $scope.fromYear = $scope.currentYear - FROM_YEAR_INDEX;
-        $scope.toYear = $scope.currentYear + TO_YEAR_INDEX;
-        for (var i = $scope.fromYear; i < $scope.toYear; i++) {
-            $scope.years.push(i);
-        }
-    }
-    $scope.init = function() {
-        $scope.initYearDropDown();
-        $scope.$watch('textbook', function() {
-            if($scope.textbook){
-                if($scope.nodeType === DEFAULT_NODETYPE){
-                    $scope.updateNode();
-                }
-            }
-        }, true);
-    }
-    $scope.init();
 }]);
 //# sourceURL=textbookmetaApp.js

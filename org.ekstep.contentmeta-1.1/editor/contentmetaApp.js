@@ -3,14 +3,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
     $scope.toggleCollectionAccodrionState = true;
-
-    $scope.updateTitle = function(event, title) {
-        $scope.content.name = title;
-        $scope.getPath();
-        $scope.$safeApply();
-    }
-    ecEditor.addEventListener("title:update:collection", $scope.updateTitle, $scope);
-    const DEFAULT_NODETYPE = 'Collection';
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.languageList = resp.data.result.ordinals.language;
@@ -32,12 +24,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     }
 
     $scope.updateNode = function() {
-        if (!_.isEmpty($scope.nodeId) && !_.isUndefined($scope.nodeId)) {
-            var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
-            $scope.nodeId = activeNode.data.id;
-            if (!_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
-                $scope.newNode = false;
-            }
+        if ($scope.contentMetaForm.$valid) {
             if (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = $scope.newNode;
@@ -55,12 +42,23 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.content));;
             $scope.metadataCloneObj = _.clone($scope.content);
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
-            $scope.editMode = $scope.editable;
+            $scope.editMode = true;
             if (activeNode.data && activeNode.data.root) ecEditor.dispatchEvent("content:title:update", $scope.content.name);
             $scope.getPath();
-            $scope.submitted = true;
             $scope.$safeApply();
-        } 
+            ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                title: 'Content details updated successfully.',
+                position: 'topCenter',
+                icon: 'fa fa-check-circle'
+            });
+        } else {
+            ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
+                title: 'Please fill in all required fields',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });
+            $scope.submitted = true;
+        }
     };
 
     $scope.initDropdown = function() {
@@ -85,19 +83,13 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             });
         }
         if (_.isUndefined(metadata['name'])) {
-            metadata['name'] = currentMetadata['name'];
+            metadata['name'] = originalMetadata['name'];
         }
         if (_.isUndefined(metadata['code'])) {
             metadata['code'] = $scope.nodeId;
         }
         if (_.isUndefined(metadata['mimeType'])) {
             metadata['mimeType'] = "application/vnd.ekstep.content-collection";
-        }
-        if(_.isUndefined(metadata['description'])){
-            metadata['description'] = currentMetadata['description'];
-        }
-        if(_.isUndefined(metadata['contentType'])){
-            metadata['contentType'] = currentMetadata['contentType'];
         }
         return metadata;
     }
@@ -113,13 +105,15 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         if (_.indexOf(contentArr, data.data.objectType) != -1) {
             $scope.nodeId = data.data.id;
             var cache = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId];            
+           
             $scope.nodeType = data.data.objectType;
             $scope.content = {};
             $scope.editMode = true;
             $scope.newNode = false;
             $scope.tokenMode = 'edit';
             $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
-            $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.contentmeta", "1.1", "assets/default.png");
+            $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.contentmeta", "1.0", "assets/default.png");
+            
             var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
             $scope.content = (_.isUndefined(cache)) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, cache.metadata);
             $scope.showSubCollection = !activeNode.folder;
@@ -143,7 +137,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             } else {
                 $scope.newNode = true;
             }
-            $scope.content.name = $scope.content.name || 'Untitled Collection';
             $scope.getPath();
         }
         $scope.showImageIcon = true;
@@ -197,7 +190,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     }
 
     $scope.generateTelemetry = function(data) {
-        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.contentmeta", "pluginver": "1.1", "objectid": $scope.nodeId, "stage": $scope.nodeId })
+        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.contentmeta", "pluginver": "1.0", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
 
     $scope.getSubCollection = function(contentId, callback) {
@@ -266,14 +259,5 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         });
         ecEditor.jQuery('.collection-metadata-accordion .title:first-child').click();
     }, 0);
-
-    $scope.init = function() {
-        $scope.$watch('content', function() {
-            if ($scope.nodeType === DEFAULT_NODETYPE) {
-                $scope.updateNode();
-            }
-        }, true);
-    }
-    $scope.init();
 }]);
 //# sourceURL=contentmetaApp.js

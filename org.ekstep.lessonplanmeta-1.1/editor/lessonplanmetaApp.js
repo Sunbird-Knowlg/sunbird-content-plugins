@@ -56,7 +56,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
     }
     
     $scope.updateNode = function(){
-        if(!_.isEmpty($scope.nodeId) && !_.isUndefined($scope.nodeId)){ 
+        if($scope.lessonMetaForm.$valid){ 
             if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = $scope.newNode;
@@ -78,8 +78,19 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             ecEditor.dispatchEvent("content:title:update", $scope.lesson.name);
             $scope.getPath();
-            $scope.submitted = true; 
+            ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                title: 'Content details updated successfully.',
+                position: 'topCenter',
+                icon: 'fa fa-check-circle'
+            });
             $scope.$safeApply();
+        }else{
+            ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
+                title: 'Please fill in all required fields',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });
+            $scope.submitted = true; 
         }
     }
 
@@ -99,19 +110,13 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             });
         }
         if(_.isUndefined(metadata['name'])){
-            metadata['name'] = currentMetadata['name'];
+            metadata['name'] = originalMetadata['name'];
         }
         if(_.isUndefined(metadata['code'])){
             metadata['code'] = $scope.nodeId;
         }
         if(_.isUndefined(metadata['mimeType'])){
             metadata['mimeType'] = "application/vnd.ekstep.content-collection";
-        }
-        if(_.isUndefined(metadata['description'])){
-            metadata['description'] = currentMetadata['description'];
-        }
-        if(_.isUndefined(metadata['contentType'])){
-            metadata['contentType'] = currentMetadata['contentType'];
         }
         return metadata;
     }
@@ -129,7 +134,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
         $scope.editMode = true;
         $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
-        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.lessonplanmeta", "1.1", "assets/default.png");
+        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.lessonplanmeta", "1.0", "assets/default.png");
 
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
         $scope.lesson = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
@@ -202,18 +207,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
     }
 
     $scope.generateTelemetry = function(data) {
-        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.textbookmeta", "pluginver": "1.1", "objectid": $scope.nodeId, "stage": $scope.nodeId })
+        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.textbookmeta", "pluginver": "1.0", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
-    
-    $scope.init = function() {
-        $scope.$watch('lesson', function() {
-            if($scope.lesson){
-                if($scope.nodeType === 'LessonPlan'){
-                    $scope.updateNode();
-                }
-            }
-        }, true);
-    }
-    $scope.init();
 }]);
 //# sourceURL=lessonplanmetaApp.js
