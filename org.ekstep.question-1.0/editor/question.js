@@ -246,31 +246,31 @@ angular.module('createquestionapp1', [])
             var metadata = {};
             //Third screen data
             if ($scope.qcInput != undefined) {
-                metadata.qcName = $scope.qcInput;
+                metadata.title = $scope.qcInput;
                 $scope.qcTitle = false;
             } else {
                 $scope.qcTitle = true;
             }
             if ($scope.qcLanguage != undefined) {
-                metadata.qcLanguage = $scope.qcLanguage;
+                metadata.language = $scope.qcLanguage;
                 $scope.qclangerr = false;
             } else {
                 $scope.qclangerr = true;
             }
             if ($scope.qcLevel != undefined) {
-                metadata.qcLevel = $scope.qcLevel;
+                metadata.qlevel = $scope.qcLevel;
                 $scope.qclevelerr = false;
             } else {
                 $scope.qclevelerr = true;
             }
             if ($scope.qcGrade != undefined) {
-                metadata.qcLevel = $scope.qcGrade;
+                metadata.gradeLevel = $scope.qcGrade;
                 $scope.qcgardeerr = false;
             } else {
                 $scope.qcgardeerr = true;
             }
             if (ctrl.Totalconcepts > 0) {
-                metadata.qcConcept = ctrl.selectedConceptsData;
+                metadata.concepts = ctrl.selectedConceptsData;
                 $scope.qcconcepterr = false;
             } else {
                 $scope.qcconcepterr = true;
@@ -297,6 +297,7 @@ angular.module('createquestionapp1', [])
                 console.log("Final object", questionUnitFinalData);
                 /*Dispatch event from here*/
                ecEditor.dispatchEvent('org.ekstep.qe.questionbank:saveQuestion',questionUnitFinalData);
+               $scope.closeThisDialog();
             }
         }
 
