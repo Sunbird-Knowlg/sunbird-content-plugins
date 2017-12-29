@@ -17,7 +17,6 @@ org.ekstep.contenteditor.basePlugin.extend({
 		var instance = this;
         ecEditor.addEventListener(instance.manifest.id + ":showPopup", instance.openQuestionBank, instance);
         ecEditor.addEventListener(instance.manifest.id + ":addQS", instance.addQS, instance);
-        //ecEditor.addEventListener(instance.manifest.id + ":addQ", instance.addQ, instance);
     },
     newInstance: function() {
        var instance = this;
@@ -63,76 +62,17 @@ org.ekstep.contenteditor.basePlugin.extend({
             instance.postInit();
         }, props);
     },
-    /*addToStage: function (event, data) {
+    addQS: function (event, data) {
         var instance = this;
-        ecEditor.dispatchEvent(instance.manifest.id + ':create', []);
-    },*/
-    addQS: function () {
-        this.addQ();
+        if(_.isArray(data.data)) {
+            data.data.forEach(function(question) {
+                instance._questions.push(question);
+            });
+        }
         var qdata = {};
-        var config =  {
-            "allow_skip": true, // true/false. Allow user to skip this question
-            "show_feedback": true, // true/false. Allow user to show feedback question set
-            "reattempts": 2,// Number of times user to reattempt the question Ex:2
-            "shuffle_questions": true, // true/false.  
-            "shuffle_options": true // true/false.  
-        };
-        //TODO: Replace this with questionSet config from question plugin
-        qdata.config = {__cdata: JSON.stringify({config: config})};
+        qdata.config = {__cdata: JSON.stringify(data.config)};
+        qdata.data = instance._questions;
         ecEditor.dispatchEvent(this.manifest.id + ':create', qdata);
-    },
-    addQ: function () {
-        // TODO: Replace this with actual questions from question plugin
-        var mock_question = {
-            "data": {
-                "plugin": {  // Question Unit Plugin Information
-                    "id": 'org.ekstep.questionunit.mcq', // Id of plugin
-                    "version": '1.0', // Version of plugin
-                    "templateId": 'horizontalMCQ'// Template Id of the question unit
-                },
-                "type": 'unit', //Type of question (unit, set, dynamic) -- redundant?
-                "data": { // Question Unit Form Data
-                    "title": 'What is the answer?',
-                    "options": [
-                        {
-                            "text": 'Yes',
-                            "image": 'renderer/assets/yes.png'
-                        },
-                        {
-                            "text": 'No',
-                            "image": 'renderer/assets/no.png'
-                        }
-                    ]
-                },
-            },
-            "config": { // Default question configuration applicable to all questions
-                "metadata": { // Question Metadata fields
-                    "title": 'question title',
-                    "description": 'question description',
-                    "language": 'English'
-                },
-                "max_time": 0, // Maximum time allowed for solving question (0 for no limit)
-                "max_score": 1, // Maximum score for the correct answer
-                "partial_scoring": false // Allow partial score to be awarded in case user answers
-            },
-            "media": [
-                {
-                    "id": 'yes.png', // Unique identifier
-                    "src": ecEditor.resolvePluginResource('org.ekstep.questionunit.mcq', '1.0', 'renderer/assets/yes.png'), // Media URL
-                    "assetId": 'yes.png', // Asset identifier
-                    "type": 'image', // Type of asset (image, audio, etc)
-                    "preload": true // true or false
-                },
-                {
-                    "id": 'no.png', // Unique identifier
-                    "src": ecEditor.resolvePluginResource('org.ekstep.questionunit.mcq', '1.0', 'renderer/assets/no.png'), // Media URL
-                    "assetId": 'no.png', // Asset identifier
-                    "type": 'image', // Type of asset (image, audio, etc)
-                    "preload": true // true or false
-                }
-            ]
-        };
-        this._questions.push(mock_question);
     },
     toECML: function () {
         var instance = this;
@@ -164,11 +104,15 @@ org.ekstep.contenteditor.basePlugin.extend({
         return questionSetECML;
     },
     getConfig: function() {
-        var config = this._super();
-        config.allow_skip =  true; // true/false. Allow user to skip this question
-        config.show_feedback = true; // true/false. Allow user to show feedback question set
-        config.reattempts = 2; // Number of times user to reattempt the question Ex:2
-        config.shuffle_questions = true; // true/false.
+        var instance = this;
+        var config = instance._super();
+        config.title = instance.config.title;
+        config.max_score = instance.config.max_score;
+        config.allow_skip = instance.config.allow_skip;
+        config.show_feedback = instance.config.show_feedback;
+        config.shuffle_questions = instance.config.shuffle_questions;
+        config.shuffle_options = instance.config.shuffle_options;
+        config.total_items = instance.config.total_items;
       
         return config;
     },
@@ -178,8 +122,15 @@ org.ekstep.contenteditor.basePlugin.extend({
      * @memberof questionset
      * 
      */
-    openQuestionBank: function(event, callback) {    
-        ecEditor.dispatchEvent('org.ekstep.qe.questionbank:showpopup', []); 
+    openQuestionBank: function(event, callback) {
+        var data;        
+        if(ecEditor._.isUndefined(callback)){
+            data = undefined;
+        }else{
+            callback = callback.callback;
+            data = {data : ecEditor.getCurrentObject().data, config : ecEditor.getCurrentObject().config};
+        }
+        ecEditor.dispatchEvent('org.ekstep.qe.questionbank:showpopup', data); 
     }
 });
 //# sourceURL=questionsetPlugin.js
