@@ -3,7 +3,6 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
     $scope.showImageIcon = true;
-    const DEFAULT_NODETYPE = 'LessonPlanUnit';
     
     $scope.showAssestBrowser = function(){
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
@@ -17,27 +16,32 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
     }
     
     $scope.updateNode = function(){
-        if(!_.isEmpty($scope.nodeId) && !_.isUndefined($scope.nodeId)){ 
-            var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
-            $scope.nodeId = activeNode.data.id;
-            if (!_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
-                $scope.newNode = false;
-            }
+        if($scope.unitMetaForm.$valid){ 
             if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId] = {};
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["isNew"] = $scope.newNode;
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = false;
             }            
             $scope.unit.contentType = $scope.nodeType;
-            console.log("node title:",$scope.unit.name)
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.unit.name);
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.unit));;
             $scope.metadataCloneObj = _.clone($scope.unit);
             $scope.editMode = true;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             $scope.getPath();
-            $scope.submitted = true; 
+            ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                title: 'Content details updated successfully.',
+                position: 'topCenter',
+                icon: 'fa fa-check-circle'
+            });
             $scope.$safeApply();
+        }else{
+            ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
+                title: 'Please fill in all required fields',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });
+            $scope.submitted = true; 
         }
     }
 
@@ -57,19 +61,13 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
             });
         }
         if(_.isUndefined(metadata['name'])){
-            metadata['name'] = currentMetadata['name'];
+            metadata['name'] = originalMetadata['name'];
         }
         if(_.isUndefined(metadata['code'])){
             metadata['code'] = $scope.nodeId;
         }
         if(_.isUndefined(metadata['mimeType'])){
             metadata['mimeType'] = "application/vnd.ekstep.content-collection";
-        }
-        if(_.isUndefined(metadata['description'])){
-            metadata['description'] = currentMetadata['description'];
-        }
-        if(_.isUndefined(metadata['contentType'])){
-            metadata['contentType'] = currentMetadata['contentType'];
         }
         return metadata;
     }
@@ -86,7 +84,7 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
         $scope.editMode = true;
         $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
-        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.lessonplanunitmeta", "1.1", "assets/default.png");
+        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.lessonplanunitmeta", "1.0", "assets/default.png");
 
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
         $scope.unit = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
@@ -100,7 +98,6 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
         }        
         $scope.showImageIcon = true;
         $scope.getPath();
-        $scope.unit.name = $scope.unit.name || 'Untitled Lesson';
         $scope.$safeApply();
     }
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:LessonPlanUnit', $scope.onNodeSelect);
@@ -125,18 +122,7 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
     },0);
 
     $scope.generateTelemetry = function(data) {
-        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.unitmeta", "pluginver": "1.1", "objectid": $scope.nodeId, "stage": $scope.nodeId })
+        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.unitmeta", "pluginver": "1.0", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
-    
-     $scope.init = function() {
-        $scope.$watch('unit', function() {
-            if($scope.unit){
-                if($scope.nodeType === DEFAULT_NODETYPE){
-                    $scope.updateNode();
-                }
-            }
-        }, true);
-    }
-    $scope.init();
 }]);
 //# sourceURL=lessonplanunitmetaApp.js

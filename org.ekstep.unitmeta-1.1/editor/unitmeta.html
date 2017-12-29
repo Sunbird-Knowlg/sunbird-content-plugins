@@ -8,9 +8,12 @@
         </div>
         <h3 class="header-bottom-segment inline-block">{{unit.name | limitTo:50 }}<span ng-if="unit.name.length > 100"> ...</span></h3>
         <div class="header-buttons-container header-bottom-segment inline-block" ng-show="mode == 'Edit' && editable == true">
+            <div class="ui primary button right-float button-overrides" id="update-button" ng-click="updateNode(); generateTelemetry({type: 'click', subtype: 'update', target: 'updatemeta'})" ng-show="editMode">
+                Update
+            </div>
         </div>
     </div>
-    <form class="ui form segment" id="contents-data-form" novalidate  ng-show="editMode" name="unitMetaForm">
+    <form class="ui form segment" id="contents-data-form" novalidate ng-submit="updateNode()" ng-show="editMode" name="unitMetaForm">
         <div class="fields">
             <div class="field book-image-field">
                 <label for="bookImage">Add icon</label>
@@ -26,15 +29,24 @@
                         <input placeholder="Enter title for Book" ng-model="unit.name" ng-class=" {error: submitted && unitMetaForm.name.$error.required}" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="100">
                     </div>
                 </div>
-                <div class="field">
+                <div class="field required">
                     <label>Description</label>
                     <div class="ui input">
-                        <textarea placeholder="brief description about the unit" ng-model="unit.description" name="description" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})"></textarea>
+                        <textarea placeholder="brief description about the unit" ng-model="unit.description" ng-class=" {error: submitted && unitMetaForm.description.$error.required}" name="description" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})" required></textarea>
                     </div>
+                </div>
+                <div class="field">
+                    <label>Concepts</label>
+                    <input name="concepts" id="unitConceptSelector" ng-model="unit.conceptData" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
                 </div>
                 <div class="field">
                     <label>Keywords</label>
                     <ng-token-field ng-model="unit.keywords" id="unitmeta-keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
+                    <!-- <input id="keywords" name="keywords" ng-blur="unit.keywords.split(',');" ng-model="unit.keywords" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})" > -->
+                </div>
+                <div class="field">
+                    <label>Notes to Teacher</label>
+                    <input placeholder="Add Notes" ng-model="unit.notes" name="notes" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'notes'})">
                 </div>
             </div>
         </div>
