@@ -296,7 +296,7 @@ angular.module('createquestionapp1', [])
                 questionUnitFinalData.config = ctrl.metaDataFormData;
                 console.log("Final object", questionUnitFinalData);
                 /*Dispatch event from here*/
-               //ecEditor.dispatchEvent(ctrl.selectedTemplatePluginData.plugin.id + ':val', ctrl.validateQuestionCreationFormCallBackFunc, ctrl);
+               ecEditor.dispatchEvent('org.ekstep.qe.questionbank:saveQuestion',questionUnitFinalData);
             }
         }
 
