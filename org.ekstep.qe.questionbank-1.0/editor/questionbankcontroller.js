@@ -12,213 +12,12 @@ angular.module('createquestionapp', [])
 
         $scope.selectedQuestions = [];
 
-        ctrl.showQuestionSet = true;
-
         $scope.showConfigForm = false;
 
         $scope.isQuestionSetConfig = false;
 
-
-
-        $scope.questions = [{
-            "questionId": "qTestId1",
-            "data": {
-                "plugin": { // Question Unit Plugin Information
-                    "id": "testplugin1", // Id of plugin
-                    "version": "1.0", // Version of plugin
-                    "templateId": "testPluginTemp1" // Template Id of the question unit
-                },
-                "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                "data": {}, // Question Unit Form Data
-            },
-            "config": { // Default question configuration applicable to all questions
-                "metadata": { // Question Metadata fields
-                    "title": "Addition of two numbers",
-                    "description": "2 + 2",
-                    "language": "english"
-                },
-                "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                "max_score": 1, // Maximum score for the correct answer
-                "partial_scoring": false // Allow partial score to be awarded in case user answers
-            },
-            "isSelected": false
-        }, {
-            "questionId": "qTestId2",
-            "data": {
-                "plugin": { // Question Unit Plugin Information
-                    "id": "testplugin2", // Id of plugin
-                    "version": "1.0", // Version of plugin
-                    "templateId": "testPlugin2Temp1" // Template Id of the question unit
-                },
-                "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                "data": {}, // Question Unit Form Data
-            },
-            "config": { // Default question configuration applicable to all questions
-                "metadata": { // Question Metadata fields
-                    "title": "Subtraction of two numbers",
-                    "description": "12 - 5",
-                    "language": "english"
-                },
-                "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                "max_score": 1, // Maximum score for the correct answer
-                "partial_scoring": false // Allow partial score to be awarded in case user answers
-            },
-            "isSelected": false
-        }, {
-            "questionId": "qTestId3",
-            "data": {
-                "plugin": { // Question Unit Plugin Information
-                    "id": "testplugin3", // Id of plugin
-                    "version": "1.0", // Version of plugin
-                    "templateId": "testPlugin3Temp1" // Template Id of the question unit
-                },
-                "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                "data": {}, // Question Unit Form Data
-            },
-            "config": { // Default question configuration applicable to all questions
-                "metadata": { // Question Metadata fields
-                    "title": "Multiplication of two numbers",
-                    "description": "5 * 6",
-                    "language": "english"
-                },
-                "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                "max_score": 1, // Maximum score for the correct answer
-                "partial_scoring": false // Allow partial score to be awarded in case user answers
-            },
-            "isSelected": false
-        }, {
-            "questionId": "qTestId4",
-            "data": {
-                "plugin": { // Question Unit Plugin Information
-                    "id": "testplugin4", // Id of plugin
-                    "version": "1.0", // Version of plugin
-                    "templateId": "testPlugin3Temp1" // Template Id of the question unit
-                },
-                "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                "data": {}, // Question Unit Form Data
-            },
-            "config": { // Default question configuration applicable to all questions
-                "metadata": { // Question Metadata fields
-                    "title": "Multiplication of two numbers",
-                    "description": "5 * 6",
-                    "language": "english"
-                },
-                "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                "max_score": 1, // Maximum score for the correct answer
-                "partial_scoring": false // Allow partial score to be awarded in case user answers
-            },
-            "isSelected": false
-        }, {
-            "questionId": "qTestId5",
-            "data": {
-                "plugin": { // Question Unit Plugin Information
-                    "id": "testplugin5", // Id of plugin
-                    "version": "1.0", // Version of plugin
-                    "templateId": "testPlugin3Temp1" // Template Id of the question unit
-                },
-                "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                "data": {}, // Question Unit Form Data
-            },
-            "config": { // Default question configuration applicable to all questions
-                "metadata": { // Question Metadata fields
-                    "title": "Multiplication of two numbers",
-                    "description": "5 * 6",
-                    "language": "english"
-                },
-                "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                "max_score": 1, // Maximum score for the correct answer
-                "partial_scoring": false // Allow partial score to be awarded in case user answers
-            },
-            "isSelected": false
-        }, {
-            "questionId": "qTestId6",
-            "data": {
-                "plugin": { // Question Unit Plugin Information
-                    "id": "testplugin6", // Id of plugin
-                    "version": "1.0", // Version of plugin
-                    "templateId": "testPlugin3Temp1" // Template Id of the question unit
-                },
-                "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                "data": {}, // Question Unit Form Data
-            },
-            "config": { // Default question configuration applicable to all questions
-                "metadata": { // Question Metadata fields
-                    "title": "Multiplication of two numbers",
-                    "description": "5 * 6",
-                    "language": "english"
-                },
-                "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                "max_score": 1, // Maximum score for the correct answer
-                "partial_scoring": false // Allow partial score to be awarded in case user answers
-            },
-            "isSelected": false
-        }, {
-            "questionId": "qTestId7",
-            "data": {
-                "plugin": { // Question Unit Plugin Information
-                    "id": "testplugin7", // Id of plugin
-                    "version": "1.0", // Version of plugin
-                    "templateId": "testPlugin3Temp1" // Template Id of the question unit
-                },
-                "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                "data": {}, // Question Unit Form Data
-            },
-            "config": { // Default question configuration applicable to all questions
-                "metadata": { // Question Metadata fields
-                    "title": "Multiplication of two numbers",
-                    "description": "5 * 6",
-                    "language": "english"
-                },
-                "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                "max_score": 1, // Maximum score for the correct answer
-                "partial_scoring": false // Allow partial score to be awarded in case user answers
-            },
-            "isSelected": false
-        }, {
-            "questionId": "qTestId8",
-            "data": {
-                "plugin": { // Question Unit Plugin Information
-                    "id": "testplugin8", // Id of plugin
-                    "version": "1.0", // Version of plugin
-                    "templateId": "testPlugin3Temp1" // Template Id of the question unit
-                },
-                "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                "data": {}, // Question Unit Form Data
-            },
-            "config": { // Default question configuration applicable to all questions
-                "metadata": { // Question Metadata fields
-                    "title": "Multiplication of two numbers",
-                    "description": "5 * 6",
-                    "language": "english"
-                },
-                "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                "max_score": 1, // Maximum score for the correct answer
-                "partial_scoring": false // Allow partial score to be awarded in case user answers
-            },
-            "isSelected": false
-        }, {
-            "questionId": "qTestId9",
-            "data": {
-                "plugin": { // Question Unit Plugin Information
-                    "id": "testplugin9", // Id of plugin
-                    "version": "1.0", // Version of plugin
-                    "templateId": "testPlugin3Temp1" // Template Id of the question unit
-                },
-                "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                "data": {}, // Question Unit Form Data
-            },
-            "config": { // Default question configuration applicable to all questions
-                "metadata": { // Question Metadata fields
-                    "title": "Multiplication of two numbers",
-                    "description": "5 * 6",
-                    "language": "english"
-                },
-                "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                "max_score": 1, // Maximum score for the correct answer
-                "partial_scoring": false // Allow partial score to be awarded in case user answers
-            },
-            "isSelected": false
-        }]
+        $scope.filterObj = {};
+        $scope.questions = [];
 
         $scope.questionSetConfigObj = {
             "title": "",
@@ -227,8 +26,41 @@ angular.module('createquestionapp', [])
             "show_feedback": true,
             "shuffle_questions": false,
             "shuffle_options": false,
-            "total_items" : 1
+            "total_items": 1
         };
+        $scope.createTotalItemRange = function() {
+            $scope.item_range = [];
+            for (var i = 1; i <= $scope.selectedQuestions.length; i++) {
+                $scope.item_range.push(i);
+            }
+        }
+
+
+        if (instance.editData) {
+            $scope.selectedQuestions = instance.editData.data;
+            $scope.questionSetConfigObj = instance.editData.config;
+            $scope.isQuestionTab = false;
+            $scope.isQuestionSetConfig  = true;
+            $scope.createTotalItemRange();
+            for (var i = 0; i < $scope.selectedQuestions.length; i++) {
+                for (var j = 0; j < $scope.questions.length; j++) {
+                    if ($scope.selectedQuestions[i].questionId == $scope.questions[j].questionId) {
+                        $scope.questions[j].isSelected = true;
+                    }
+                }
+            }
+        }
+
+
+        ecEditor.addEventListener("org.ekstep.qe.questionbank:saveQuestion", function(event, data) {
+            data.isSelected = false;
+            $scope.questions.push(data);
+
+        }, false);
+
+
+
+
 
 
         $scope.selectQuestion = function(selQuestion) {
@@ -271,13 +103,14 @@ angular.module('createquestionapp', [])
 
 
 
-        $scope.saveQuestionSet =  function(){
+        $scope.saveQuestionSet = function() {
             $scope.questionSetConfigObj.total_items = $scope.selectedQuestions.length;
             $scope.isQuestionSetConfig = true;
+            $scope.createTotalItemRange();
         }
 
 
-  $scope.addQuestionSet = function() {
+        $scope.addQuestionSet = function() {
             var questionSet = {};
             questionSet.data = [];
             questionSet.config = $scope.questionSetConfigObj;
@@ -286,6 +119,47 @@ angular.module('createquestionapp', [])
             ecEditor.dispatchEvent("org.ekstep.questionset:addQS", questionSet);
             $scope.cancel();
         }
+
+        $scope.createQuestion = function() {
+            ecEditor.dispatchEvent("org.ekstep.question:showpopup", {});
+        }
+
+
+        ctrl.previewItem = function(item) {
+
+            item = resp.data.result.assessment_item ? resp.data.result.assessment_item : item;
+            ctrl.itemPreviewLoading = true;
+            ctrl.itemPreviewDisplay = "";
+            ctrl.activePreviewItem = item.questionId;
+            var templateRef = item.template_id ? item.template_id : item.template;
+            if (templateRef) {
+                ecEditor.getService('assessment').getTemplate(templateRef, function(err, response) {
+                    if (!err) {
+                        var x2js = new X2JS({ attributePrefix: 'none', enableToStringFunc: false });
+                        var templateJson = x2js.xml_str2json(response.data.result.content.body);
+                        ctrl.itemPreviewContent = assessmentBrowserUtil.getQuestionPreviwContent(templateJson, item);
+                        ctrl.itemPreviewDisplay = !ecEditor._.isUndefined(ctrl.itemPreviewContent.error) ? ctrl.itemPreviewContent.error : '';
+                        ctrl.itemPreviewLoading = false;
+                        itemIframe.contentWindow.location.reload();
+                        $scope.$safeApply();
+                    } else {
+                        ctrl.itemPreviewContent = { "error": 'Preview could not be shown.' };
+                        ctrl.itemPreviewDisplay = ctrl.itemPreviewContent.error;
+                        ctrl.itemPreviewLoading = false;
+                        $scope.$safeApply();
+                        return;
+                    }
+                });
+            } else {
+                ctrl.itemPreviewContent = { "error": 'Item does not have a template selected.' };
+                ctrl.itemPreviewDisplay = ctrl.itemPreviewContent.error;
+                ctrl.itemPreviewLoading = false;
+                $scope.$safeApply();
+            }
+
+
+
+        };
 
         $scope.cancel = function() {
             $scope.closeThisDialog();

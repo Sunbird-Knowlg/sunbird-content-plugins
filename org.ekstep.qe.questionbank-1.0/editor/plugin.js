@@ -26,7 +26,11 @@ org.ekstep.contenteditor.basePlugin.extend({
      *  Open window to add question and options
      *  @memberof org.ekstep.qe.questionbank
      */
-    loadHtml: function() {
+    loadHtml: function(event, data) {
+        console.log("==================data=========", data);
+        if(data){
+                this.editData = data;
+        }
         var currentInstance = this;
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
             template: 'QuestionFormTemplate',
@@ -36,9 +40,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 'instance': function() {
                     return currentInstance;
                 }
-            },
-            width: 900,
-            showClose: false,
+            }
         }, function() {
              if (!ecEditor._.isUndefined(currentInstance.editorObj)) {
                  //currentInstance.editorObj.remove();
