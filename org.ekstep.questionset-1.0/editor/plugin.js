@@ -56,11 +56,23 @@ org.ekstep.contenteditor.basePlugin.extend({
             preload: true
         });
         fabric.Image.fromURL(stageImage, function (img) {
-            instance.editorObj = img;
+            var count = instance.config.total_items + '/' + instance._questions.length;
+            var quizDetails = instance.getPropsForEditor(instance.config.title, count, instance.config.max_score);
+            instance.editorObj = new fabric.Group([img, quizDetails]);
+            //instance.editorObj = img;
             instance.parent = _parent;
             instance.editorObj.scaleToWidth(props.w);
             instance.postInit();
         }, props);
+    },
+    getPropsForEditor: function(qTittle, qCount, maxscore) {
+        /* Display the all properties(title,count and maxscore) on the editor*/
+        var instance = this;
+        qTittle = new fabric.Text(qTittle.toUpperCase(), { fontSize: 15, fill: 'black', textAlign: 'center', top: 32, left: 105 });
+        qCount = new fabric.Text(qCount + "  Questions,", { fontSize: 12, fill: 'black', top: 49, left: 105 });
+        maxscore = new fabric.Text(maxscore + " Marks", { fontSize: 12, fill: 'black', top: 49, left: 190, });
+        fabricGroup = new fabric.Group([qTittle, qCount, maxscore]);
+        return fabricGroup;
     },
     addQS: function (event, data) {
         var instance = this;
@@ -116,6 +128,42 @@ org.ekstep.contenteditor.basePlugin.extend({
       
         return config;
     },
+    onConfigChange: function(key, value) {
+        if (!_.isUndefined(value)) {
+            var itemLength = this.data.length;
+            switch (key) {
+                case 'title':
+                    this.config.title = value;
+                    this.editorObj._objects[1]._objects[0].setText(value.toUpperCase());
+                    break;
+                case 'total_items':
+                    this.config.total_items = value;
+                    this.editorObj._objects[1]._objects[1].setText(value + "/" + itemLength + "Questions,");
+                    break;
+                case 'max_score':
+                    this.config.max_score = value;
+                    this.editorObj._objects[1]._objects[2].setText(value + "Marks");
+                    break;
+                case 'shuffle_questions':
+                    this.config.shuffle_questions = value;
+                    break;
+                case 'show_feedback':
+                    this.config.show_feedback = value;
+                    break;
+                case 'optionShuffle':
+                    this.config.optionShuffle = value;
+                    break;
+                case 'questionbankbrowser':
+                    ecEditor.dispatchEvent('delete:invoke');
+                    ecEditor.dispatchEvent(this.manifest.id + ':renderQuiz', { items: value.items, config: value.config })
+                    break;
+                }
+        }
+        ecEditor.render();
+        ecEditor.dispatchEvent('object:modified', {
+            target: ecEditor.getEditorObject()
+        });
+    },
     /**    
      *      
      * open question bank. 
@@ -130,7 +178,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             callback = callback.callback;
             data = {data : ecEditor.getCurrentObject().data, config : ecEditor.getCurrentObject().config};
         }
-        ecEditor.dispatchEvent('org.ekstep.qe.questionbank:showpopup', data); 
+        ecEditor.dispatchEvent('org.ekstep.qe.questionbank:showpopup', {callback : callback, data: data}); 
     }
 });
 //# sourceURL=questionsetPlugin.js

@@ -37,13 +37,14 @@
             }
         ],
         "configManifest": [{
-            "propertyName": "question bank",
+            "propertyName": "questionbankbrowser",
             "title": "question Bank",
             "description": "Choose a question from the question bank",
             "dataType": "browser",
             "required": true,
             "onclick":{
-                "id": "org.ekstep.questionset:showPopup"
+                "id": "org.ekstep.questionset:showPopup",
+                "type": "questionset"
             }
         },
         {
