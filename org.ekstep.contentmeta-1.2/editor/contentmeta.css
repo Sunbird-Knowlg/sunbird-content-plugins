@@ -119,13 +119,11 @@
     margin-bottom: 0;
     border-radius: 0;
     border-right: none;
-    height: 90.4px;
     border: none;
     padding-left: 0;
     padding-top: 0;
     padding-right: 0;
     margin-left: -1em;
-    box-shadow: -8px 10px 10px -10px #c0c0c0;
     z-index: 1;
 }
 
@@ -162,9 +160,10 @@
 .header-buttons-container {
     float: right;
     width: 50%;
-    height: 38%;
+    height: 35px !important;
     padding-right: 0;
     right: 20px;
+    top: 50px !important
 }
 
 .header-buttons-container .ui.button {
