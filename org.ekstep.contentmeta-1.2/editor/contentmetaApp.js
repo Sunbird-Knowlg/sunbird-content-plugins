@@ -4,6 +4,14 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.nodeId = $scope.nodeType = '';
     $scope.toggleCollectionAccodrionState = true;
     const DEFAULT_NODETYPE = 'Collection';
+
+    $scope.updateTitle = function(event, title) {
+        $scope.content.name = title;
+        $scope.getPath();
+        $scope.$safeApply();
+    }
+    ecEditor.addEventListener("title:update:collection", $scope.updateTitle, $scope);
+
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
             $scope.languageList = resp.data.result.ordinals.language;
@@ -157,6 +165,10 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 $scope.path.push({ 'title': node.title, 'nodeId': node.key })
             }
         });
+        if (ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getLevel() > 5) {
+            $scope.path = _.takeRight($scope.path, 6);
+            $scope.path[0].title = "...";
+        }
     }
 
     $scope.setActiveNode = function(nodeId) {

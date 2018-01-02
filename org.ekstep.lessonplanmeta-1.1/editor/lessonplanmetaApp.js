@@ -28,7 +28,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             $scope.$safeApply();                   
         }
     });
-
+    
     $scope.showAssestBrowser = function(){
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',

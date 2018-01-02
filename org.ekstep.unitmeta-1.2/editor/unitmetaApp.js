@@ -4,7 +4,13 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     $scope.nodeId = $scope.nodeType = '';
     $scope.showImageIcon = true;
     const DEFAULT_NODETYPE = 'TextBookUnit';
-    
+
+    $scope.updateTitle = function(event, title) {
+        $scope.unit.name = title;
+        $scope.getPath();
+        $scope.$safeApply();
+    }
+    ecEditor.addEventListener("title:update:textbookunit", $scope.updateTitle, $scope);
     $scope.showAssestBrowser = function(){
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',
@@ -135,6 +141,10 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                 $scope.path.push({'title' : node.title, 'nodeId'  : node.key })
             }
         });
+        if (ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getLevel() > 5) {
+            $scope.path = _.takeRight($scope.path, 6);
+            $scope.path[0].title = "...";
+        }
     }
 
     $scope.setActiveNode = function(nodeId){
