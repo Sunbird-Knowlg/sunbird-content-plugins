@@ -8,8 +8,7 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-        	{ "plugin": "org.ekstep.assetbrowser", "ver": "1.1", "type": "plugin" },        	
-            { "type": "css", "src": "editor/lessonplanunitmeta.css" }                  
+        	{ "plugin": "org.ekstep.assetbrowser", "ver": "1.1", "type": "plugin" }               
         ]
     }
 }
