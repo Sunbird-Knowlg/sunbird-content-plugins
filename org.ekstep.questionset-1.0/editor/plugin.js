@@ -74,16 +74,22 @@ org.ekstep.contenteditor.basePlugin.extend({
         fabricGroup = new fabric.Group([qTittle, qCount, maxscore]);
         return fabricGroup;
     },
-    addQS: function (event, data) {
+    addQS: function (event, dataObj) {
         var instance = this;
-        if(_.isArray(data.data)) {
-            data.data.forEach(function(question) {
+
+        if(!_.isUndefined(instance.callback)){
+            ecEditor.dispatchEvent('delete:invoke');
+        }
+
+        if(_.isArray(dataObj.data)) {
+            dataObj.data.forEach(function(question) {
                 instance._questions.push(question);
             });
         }
         var qdata = {};
-        qdata.config = {__cdata: JSON.stringify(data.config)};
+        qdata.config = {__cdata: JSON.stringify(dataObj.config)};
         qdata.data = instance._questions;
+
         ecEditor.dispatchEvent(this.manifest.id + ':create', qdata);
     },
     toECML: function () {
@@ -153,9 +159,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 case 'optionShuffle':
                     this.config.optionShuffle = value;
                     break;
-                case 'questionbankbrowser':
-                    ecEditor.dispatchEvent('delete:invoke');
-                    ecEditor.dispatchEvent(this.manifest.id + ':renderQuiz', { items: value.items, config: value.config })
+                case 'browser':
                     break;
                 }
         }
@@ -171,14 +175,15 @@ org.ekstep.contenteditor.basePlugin.extend({
      * 
      */
     openQuestionBank: function(event, callback) {
-        var data;        
+        var data, 
+            instance = this;        
         if(ecEditor._.isUndefined(callback)){
             data = undefined;
         }else{
-            callback = callback.callback;
+            instance.callback = callback.callback;
             data = {data : ecEditor.getCurrentObject().data, config : ecEditor.getCurrentObject().config};
         }
-        ecEditor.dispatchEvent('org.ekstep.qe.questionbank:showpopup', {callback : callback, data: data}); 
+        ecEditor.dispatchEvent('org.ekstep.qe.questionbank:showpopup', data); 
     }
 });
 //# sourceURL=questionsetPlugin.js
