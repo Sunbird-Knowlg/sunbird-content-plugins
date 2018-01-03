@@ -98,8 +98,8 @@
         overflow-y: scroll;
     }
 
-    .questionListContainer{
-      width: 100% !important;
+    .questionListContainer {
+        width: 100% !important;
         height: 60vh;
         overflow-y: scroll;
     }
@@ -148,21 +148,20 @@
         margin-bottom: 3%;
     }
 
-    .questionContainer{
-      width:  55% !important;
+    .questionContainer {
+        width: 55% !important;
     }
 
     .preview-config {
         margin-left: 5%;
     }
 
-    .pull-right{
-      float: right;
+    .pull-right {
+        float: right;
     }
     </style>
     <div class="ui modal questionbank fullscreen active">
         <div class="content wizard">
-
             <!-- <div class="filters-container" ng-if="!isQuestionSetConfig">
                 <div class="ui form">
                     <div class="field">
@@ -238,7 +237,7 @@
                     <div class="five fields">
                         <div ng-class="questionSetConfigObj.title ? 'field' :'field error'">
                             <div class="ui corner labeled input">
-                                <input name="title" ng-model="questionSetConfigObj.title" type="text" placeholder="Question Set Title" maxlength="100" autocomplete="off" >
+                                <input name="title" ng-model="questionSetConfigObj.title" type="text" placeholder="Question Set Title" maxlength="100" autocomplete="off">
                                 <div class="ui corner label">
                                     <i class="asterisk icon"></i>
                                 </div>
@@ -250,10 +249,10 @@
                                 <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="questionSetConfigObj.max_score" min='0' required="" type="number" />
                             </div>
                         </div>
-                        <div >
+                        <div>
                             <div class="ui fluid labeled input displayCount">
                                 <div class="ui label">Display</div>
-                                <select class="ui fluid dropdown" id="total_items" ng-model="questionSetConfigObj.total_items" ng-options="option as option for option in item_range" >
+                                <select class="ui fluid dropdown" id="total_items" ng-model="questionSetConfigObj.total_items" ng-options="option as option for option in item_range">
                                 </select>
                             </div>
                         </div>
@@ -278,7 +277,6 @@
                     <div class="ui text loader">Just one second, We're fetching that content for you.</div>
                 </div>
             </div>
-
             <div>
                 <div class="ui three column horizontally padded grid" ng-show="!$ctrl.itemsLoading">
                     <div class="row tab">
@@ -286,28 +284,30 @@
                         <button class="tablinks" ng-click="isQuestionTab = false">Selected Questions</button>
                     </div>
                     <div class="column questionContainer" ng-if="isQuestionTab">
-                    <div class="row questionListContainer" ng-if="isQuestionTab">
-                        <div class="ui large divided items">
-                            <div class="item select" ng-repeat="question in questions" ng-show="!question.isSelected">
-                                <div class="middle aligned content" ng-click="$ctrl.previewItem(question, true);">
-                                    <div class="header">{{ question.config.metadata.title }}</div>
-                                    <div class="meta">{{question.config.metadata.language}} | {{ question.config.metadata.type}} | {{ question.config.metadata.difficulty }}</div>
-                                    <div class="description">{{ question.config.metadata.description }}</div>
+                        <div class="row questionListContainer" ng-if="isQuestionTab">
+                            <div class="ui large divided items">
+                                <div class="item select" ng-repeat="question in questions" ng-show="!question.isSelected">
+                                    <div class="middle aligned content" ng-click="$ctrl.previewItem(question, true);">
+                                        <div class="header">{{ question.config.metadata.title }}</div>
+                                        <div class="meta">{{question.config.metadata.language}} | {{ question.config.metadata.type}} | {{ question.config.metadata.difficulty }}</div>
+                                        <div class="description">{{ question.config.metadata.description }}</div>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" checked="" name="check" ng-model="question.isSelected" ng-click="selectQuestion(question)">
+                                        <button class="mini ui button" ng-click="editQuestion(question)">
+                                            Edit
+                                        </button>
+                                    </div>
                                 </div>
-                                <div>
-                                    <input type="checkbox" checked="" name="check" ng-model="question.isSelected" ng-click="selectQuestion(question)">
+                                <div ng-if="questions.length == 0">
+                                    <p>No questions available</p>
                                 </div>
-                            </div>
-
-                            <div ng-if="questions.length == 0">
-                                <p>No questions available</p>
                             </div>
                         </div>
+                        <div>
+                            <button class="ui blue button pull-right" ng-click="createQuestion()" type="button">Create Question</button>
+                        </div>
                     </div>
-                    <div>
-                      <button class="ui blue button pull-right"  ng-click="createQuestion()" type="button">Create Question</button>
-                    </div>
-                    </div >
                     <div class="column listContainer" ng-if="!isQuestionTab">
                         <div class="ui large divided items">
                             <div class="item select" ng-repeat="selQuestion in selectedQuestions">
