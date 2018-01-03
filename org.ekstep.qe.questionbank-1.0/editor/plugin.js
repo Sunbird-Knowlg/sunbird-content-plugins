@@ -28,9 +28,8 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     loadHtml: function(event, data) {
         console.log("==================data=========", data);
-        if(data){
-                this.editData = data;
-        }
+        this.editData = (!ecEditor._.isUndefined(data)) ? data : '';
+        
         var currentInstance = this;
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
             template: 'QuestionFormTemplate',
