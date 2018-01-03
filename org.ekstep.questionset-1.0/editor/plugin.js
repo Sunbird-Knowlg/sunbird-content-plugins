@@ -35,6 +35,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         delete props.width;
         delete props.height;
 
+        instance._questions = data.data ? data.data : [];
         // Add all question media to media manifest
         if (_.isArray(this._questions)) {
             this._questions.forEach(function (question) {
@@ -76,20 +77,19 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     addQS: function (event, dataObj) {
         var instance = this;
-
-        if(!_.isUndefined(instance.callback)){
-            ecEditor.dispatchEvent('delete:invoke');
-        }
-
-        if(_.isArray(dataObj.data)) {
-            dataObj.data.forEach(function(question) {
-                instance._questions.push(question);
+        var questions = [];
+        if(_.isArray(dataObj.data.data)) {
+            dataObj.data.data.forEach(function(question) {
+                questions.push(question);
             });
         }
         var qdata = {};
-        qdata.config = {__cdata: JSON.stringify(dataObj.config)};
-        qdata.data = instance._questions;
+        qdata.config = {__cdata: JSON.stringify(dataObj.data.config)};
+        qdata.data = questions;
 
+        if(!ecEditor._.isUndefined(dataObj.callback)){
+            ecEditor.dispatchEvent('delete:invoke');
+        } 
         ecEditor.dispatchEvent(this.manifest.id + ':create', qdata);
     },
     toECML: function () {
@@ -98,8 +98,8 @@ org.ekstep.contenteditor.basePlugin.extend({
         // Generate the questionSet ECML by using the basePlugin `toECML` function.
         var questionSetECML = this._super();
 
-        if (_.isArray(this._questions)) {
-            this._questions.forEach(function (question) {
+        if (_.isArray(instance.data)) {
+            instance.data.forEach(function (question) {
                 if (_.isUndefined(questionSetECML[instance._questionPlugin])) questionSetECML[instance._questionPlugin] = [];
 
                 // Build Question ECML for each question that is added.
@@ -159,7 +159,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                 case 'optionShuffle':
                     this.config.optionShuffle = value;
                     break;
-                case 'browser':
+                case 'questionbankbrowser':
+                    ecEditor.dispatchEvent('delete:invoke');
                     break;
                 }
         }
@@ -175,15 +176,14 @@ org.ekstep.contenteditor.basePlugin.extend({
      * 
      */
     openQuestionBank: function(event, callback) {
-        var data, 
-            instance = this;        
+        var data;        
         if(ecEditor._.isUndefined(callback)){
             data = undefined;
         }else{
-            instance.callback = callback.callback;
+            callback = callback.callback;
             data = {data : ecEditor.getCurrentObject().data, config : ecEditor.getCurrentObject().config};
         }
-        ecEditor.dispatchEvent('org.ekstep.qe.questionbank:showpopup', data); 
+        ecEditor.dispatchEvent('org.ekstep.qe.questionbank:showpopup', {callback: callback, data: data}); 
     }
 });
 //# sourceURL=questionsetPlugin.js

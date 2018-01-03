@@ -26,11 +26,12 @@ org.ekstep.contenteditor.basePlugin.extend({
      *  Open window to add question and options
      *  @memberof org.ekstep.qe.questionbank
      */
-    loadHtml: function(event, data) {
+    loadHtml: function(event, dataObj) {
         console.log("==================data=========", data);
-        this.editData = (!ecEditor._.isUndefined(data)) ? data : '';
         
         var currentInstance = this;
+        currentInstance.callback = dataObj.callback;
+        currentInstance.editData = (!ecEditor._.isUndefined(dataObj.data)) ? dataObj.data : ''; 
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
             template: 'QuestionFormTemplate',
             controller: 'QuestionFormController',
