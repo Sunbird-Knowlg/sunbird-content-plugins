@@ -1,10 +1,10 @@
 /**
  * Plugin to create question
  * @class org.ekstep.question:createquestionController
- * Jagadish P<jagadish.pujari@tarento.com>
+ * Jagadish Pujari<jagadish.pujari@tarento.com>
  */
 angular.module('createquestionapp1', [])
-    .controller('QuestionFormController1', ['$scope', '$sce', '$compile', 'instance', 'questionData', function($scope, $sce, $compile, instance, questionData) {
+    .controller('QuestionCreationFormController', ['$scope', '$sce', '$compile', 'instance', 'questionData', function($scope, $sce, $compile, instance, questionData) {
         var ctrl = this;
         ctrl.first = true;
         ctrl.second = false;
@@ -26,8 +26,8 @@ angular.module('createquestionapp1', [])
         ctrl.defaultLang = 'Choose language';
         ctrl.level = ['Easy', 'Medium', 'difficult'];
 
+
         if (!ecEditor._.isEmpty(questionData)) {
-            console.log("Edit question data", questionData.config.metadata.language);
             $scope.qcLanguage = questionData.config.metadata.language;
             $scope.qcInput = questionData.config.metadata.title;
             $scope.qcLevel = questionData.config.metadata.qlevel;
@@ -38,7 +38,7 @@ angular.module('createquestionapp1', [])
             ctrl.first = false;
             ctrl.second = true;
             ctrl.third = false;
-            ecEditor.dispatchEvent(questionData.data.plugin.id + ':editForm', questionData);
+            //ecEditor.dispatchEvent(questionData.data.plugin.id + ':editForm', questionData);
             var editCreateQuestionFormInstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(questionData.data.plugin.id);
             _.each(editCreateQuestionFormInstance.templates, function(value, key) {
                 if (value.editor.template == questionData.data.plugin.templateId) {
@@ -60,7 +60,7 @@ angular.module('createquestionapp1', [])
         }
 
         /**
-         * [init description]
+         * OnLoad of the controller
          * @return {[type]} [description]
          */
         ctrl.init = function() {
@@ -206,8 +206,6 @@ angular.module('createquestionapp1', [])
             ctrl.templateId = obj.editor.template;
             var controllerPath = ecEditor.resolvePluginResource(obj.pluginID, obj.ver, obj.editor.controllerURL);
             var templatePath = ecEditor.resolvePluginResource(obj.pluginID, obj.ver, obj.editor.templateURL);
-            console.log('obj', obj);
-            console.log('template', templatePath, obj.editor.controller);
             $scope.questionUniTemplateURL = templatePath;
             ctrl.questionUniTemplateURL = templatePath;
             $scope.questionUnitController = obj.editor.controller;
@@ -264,7 +262,6 @@ angular.module('createquestionapp1', [])
          * @return {[boolean]} based on form validation it will return true/false
          */
         ctrl.validateQuestionCreationForm = function() {
-            console.log(ctrl.selectedTemplatePluginData);
             ecEditor.dispatchEvent(ctrl.selectedTemplatePluginData.plugin.id + ':val', ctrl.validateQuestionCreationFormCallBackFunc, ctrl);
 
         }
@@ -356,12 +353,7 @@ angular.module('createquestionapp1', [])
         return {
             restrict: 'E',
             scope: { qtemplate: "=", questionData: "=" },
-            // template: '<div ng-include="qtemplate"></div>',
             template: '<div ng-include="getTemplateURL()" ng-transclude"></div>',
-            /*templateUrl: function(el, attr) {
-              console.log('----------------->directive', attr);
-              return attr.qtemplate;
-            },*/
             controller: ['$scope', function($scope) {
                 $scope.getTemplateURL = function() {
                     return $scope.qtemplate;
