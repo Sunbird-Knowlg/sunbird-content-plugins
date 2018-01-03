@@ -1,18 +1,59 @@
 {
     "id": "org.ekstep.question",
     "ver": "1.0",
-    "author": "Manoj Chandrashekar",
+    "author": "Jagadish",
     "title": "Question Plugin",
     "description": "Plugin to add questions to question sets.",
-    "publishedDate": "",
-    "editor": {
+    "editor":
+    {
         "main": "editor/plugin.js",
-        "help": {
+        "dependencies": [
+        {
+            "type": "js",
+            "src": "editor/init.js"
+        },
+        {
+            "type": "css",
+            "src": "editor/style.css"
+        },
+        {
+            "type": "js",
+            "src": "editor/question.js"
+        },
+        {
+            "type": "plugin",
+            "plugin": "org.ekstep.plugins.mcqplugin",
+            "ver": "1.0"
+        },
+        {
+            "type": "plugin",
+            "plugin": "org.ekstep.plugins.ftbplugin",
+            "ver": "1.0"
+        }],
+        "menu": [],
+        "init-data":
+        {
+            "type": "rect",
+            "x": 10,
+            "y": 2,
+            "w": 80,
+            "h": 80,
+            "fill": "#DCDCDC"
+        },
+        "configManifest": [
+        {}],
+        "help":
+        {
             "src": "editor/help.md",
             "dataType": "text"
-        },
-        "menu": [],
-        "configManifest": [],
-        "dependencies": []
-    }
+        }
+    },
+    "renderer":
+    {
+        "main": "renderer/plugin.js"
+    },
+    "icon": "assets/icon.png",
+    "languages": ["English"],
+    "categories": [""],
+    "keywords": [""]
 }

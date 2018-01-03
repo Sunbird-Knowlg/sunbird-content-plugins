@@ -1,0 +1,138 @@
+<script type="text/ng-template" id="QuestionFormTemplate1" ng-controller="QuestionFormController1 as $ctrl">
+  <!-- ng-init="$ctrl.init()" -->
+    <style type="text/css">
+
+    </style>
+    <div class="ui modal fullscreen active" id="qcFull" style="display: block !important;">
+      <div class="two column row ui grid">
+        <div class="two wide column" id="questionHeader">
+        <h2>Create question</h2>
+      </div>
+      <div class="six wide column">
+        <div class="ui huge breadcrumb" style="padding-top: 1.4rem;">
+                <div class="activeBreadcumb section" id="breadcumb_1">Choose template</div>
+                <i class="right chevron icon divider"></i>
+                <div class="section" id="breadcumb_2">Create question</div>
+                <i class="right chevron icon divider"></i>
+                <div class="section" id="breadcumb_3">Metadata form</div>
+            </div>
+      </div>
+      </div>
+        <!-- Main page -->
+        <form name="myForm">
+        <div class="ui grid">
+            <div class="two column row first qcFirst" style="" ng-show="$ctrl.first">
+                <div class="three wide column">
+                    <div class="ui secondary vertical menu" id="qcSideMenu">
+                        <div class="item" ng-repeat="(key, value) in $ctrl.menuItems" ng-class="{activeItem:(activeIndex?activeIndex==$index:$first)}" id="first_{{$index}}" ng-if="value.templatesData.length > 0">
+                            <div class="content">
+                                <a class="header" ng-click="$ctrl.switchTab($index,value)"><i class="{{value.data.icon}}"></i> {{value.data.name}}</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="nine wide column">
+                    <div class="ui grid three column row" style="margin-right: 0%;margin-bottom: 0%;">
+                        <div class="column" ng-repeat="(key, value) in $ctrl.selectedMenuItemData">
+                            <div class="ui card">
+                                <div class="content" style="background-color: #41474f;">
+                                    <div class="left floated meta" style="color: white;">{{value.title}}</div>
+                                </div>
+                                <div class="content vividworknav">
+                                    <img src="{{value.thumbnail}}" />
+                                    <span ng-click="$ctrl.addCreateQuestionForm(value)">
+                                    <div class="work-text-content" style="cursor: pointer;">
+                                        <p style="margin-top: 20%">Standard Multiple choice question.</p>
+                                        <i class="plus icon"></i>
+                                </div>
+                                </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="two column row second" style="margin-top: 1%;margin-right: 2%;" ng-show="$ctrl.second">
+                <div class="seven wide column">
+                    <question-unit template="questionUniTemplateURL"></question-unit>
+                </div>
+                <div class="five wide column" style="background-color: #f3f3f3;">
+                    <div style="margin-top: 3%;">
+                        <span class="ui left floated">Preview</span>
+                        <i class="icon undo ui right floated" style="float: right;" ng-click="$ctrl.setPreviewData()"></i>
+                        <div style="text-align: center;">
+                            <div class="ui raised child preview-iframe-wrapper" id="previewContentIframeWrapper" ng-show='$ctrl.showPreview'>
+                                <iframe id="previewContentIframe" style="height: 100%;background-color: white;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="five column row third qcThird" style="" ng-show="$ctrl.third">
+              <form name="qcForm">
+                <div class="column">
+                    <label data-toggle="tooltip" id="jform_title-lbl" for="jform_title" class="control-label hasTooltip required qt_title" title="" data-placement="bottom" data-original-title="Question title">
+                        Question title <span class="star">&nbsp;*</span>
+                    </label>
+                    <input type="text" name="jform[title]" id="questionTitle" placeholder="Question title" name="qcInput" ng-model="qcInput" required>
+                    <small ng-show="qcTitle" class="qcError">Enter question title</small>
+                </div>
+                <div class="column">
+                    <label data-toggle="tooltip" id="jform_title-lbl" for="jform_title" class="control-label hasTooltip required lang1" title="" data-placement="bottom" data-original-title="Question title">
+                        Language <span class="star">&nbsp;*</span></label>
+                    <select id="jform_language" name="qcLanguage" ng-model="qcLanguage" required>
+                      <option value="" selected="selected">Choose language</option>
+                     <option ng-selected="{{lang == $ctrl.defaultLang}}" ng-repeat="lang in $ctrl.languages" value="{{lang}}">{{lang}}</option>
+                    </select>
+                    <small ng-show="qclangerr" class="qcError">Select language</small>
+                </div>
+                <div class="column">
+                    <label data-toggle="tooltip" id="jform_title-lbl" for="jform_title" class="control-label hasTooltip required level1" title="" data-placement="bottom" data-original-title="Question title">
+                        Level <span class="star">&nbsp;*</span>
+                    </label>
+                    <select id="jform_language" name="qcLevel" ng-model="qcLevel" required>
+                        <option value="" selected="selected">Choose level</option>
+                        <option ng-repeat="lev in $ctrl.level" value="{{lev}">{{lev}}</option>
+                    </select>
+                    <small ng-show="qclevelerr" class="qcError">Select level</small>
+                </div>
+                <div class="column">
+                    <label data-toggle="tooltip" id="jform_title-lbl" for="jform_title" class="control-label hasTooltip required grade1" title="" data-placement="bottom" data-original-title="Question title">
+                        Grade <span class="star">&nbsp;*</span>
+                    </label>
+                    <div class="no label example" ng-init="$ctrl.onLoadDropDown()">
+                        <div class="ui fluid dropdown selection multiple" tabindex="0">
+                            <select multiple="" name="binary" class="grade" name="qcGrade" ng-model="qcGrade" required>
+                              <option ng-repeat="g in $ctrl.grades" value="{{g}}">{{g}}</option>
+                            </select><i class="dropdown icon"></i>
+                            <div class="default text">Select Tag</div>
+                            <div class="menu" tabindex="-1">
+                              <div class="item" ng-repeat="gr in $ctrl.grades" data-value="{{gr}}">{{gr}}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <small ng-show="qcgardeerr" class="qcError">Select grade</small>
+                </div>
+                <div class="column">
+                    <label data-toggle="tooltip" id="jform_title-lbl" for="jform_title" class="control-label hasTooltip required con" title="" data-placement="bottom" data-original-title="Question title">
+                        Concepts <span class="star">&nbsp;*</span>
+                    </label>
+                    <input type="text" name="jform[title]" id="conceptsTextBox" class="required invalid" data-telemetry-type="click" data-telemetry-target="" data-telemetry-subtype="change" data-telemetry-dont-track="click" placeholder="Question title" required="required" aria-required="true" aria-invalid="true" value="Choose concepts" readonly="true" />
+                    <span id="concepts_dummy" class="disabled">{{$ctrl.Totalconcepts}} concept(s) chosen</span>
+                    <small ng-show="qcconcepterr" class="qcError">Select concept</small>
+                </div>
+              </form>
+            </div>
+        </div>
+</form>
+        <div class="actions" id="bottomActionButtons">
+            <div class="ui buttons">
+                <button class="ui large button deny cancel" ng-show="$ctrl.second || $ctrl.third" ng-click="$ctrl.back()">Back</button>
+                <button class="ui large button deny cancel" ng-hide="$ctrl.second || $ctrl.third" ng-click="$ctrl.cancel()">Cancel</button>
+                <div class="or" ng-show="$ctrl.second || $ctrl.third"></div>
+                <button class="ui large blue button" ng-show="$ctrl.second" ng-click="$ctrl.validateQuestionCreationForm()">Next</button>
+                <button class="ui large blue button" ng-show="$ctrl.third" ng-click="$ctrl.sendData()">Submit</button>
+            </div>
+        </div>
+    </div>
+</script>

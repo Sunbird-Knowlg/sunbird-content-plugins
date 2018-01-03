@@ -16,6 +16,11 @@
                 "type": "plugin",
                 "plugin": "org.ekstep.question",
                 "ver": "1.0"
+            },
+            {
+                "type": "plugin",
+                "plugin": "org.ekstep.qe.questionbank",
+                "ver": "1.0"
             }
         ],
         "menu": [
@@ -27,11 +32,76 @@
                 "title": "Question Set",
                 "iconClass": "fa fa-question",
                 "onclick": {
-                    "id": "org.ekstep.questionset:showpopup"
+                    "id": "org.ekstep.questionset:showPopup"
                 }
             }
         ],
-        "configManifest": []
+        "configManifest": [{
+            "propertyName": "question bank",
+            "title": "question Bank",
+            "description": "Choose a question from the question bank",
+            "dataType": "browser",
+            "required": true,
+            "onclick":{
+                "id": "org.ekstep.questionset:showPopup"
+            }
+        },
+        {
+            "propertyName": "title",
+            "title": "Question Set Title",
+            "description": "Question Set Title",
+            "dataType": "input",
+            "valueType":"text",
+            "required": true
+        },
+        {
+            "propertyName": "shuffle_questions",
+            "title": "Shuffle Questions",
+            "description": "Shuffle the Questions",
+            "dataType": "boolean",
+            "required": true
+        },
+        {
+            "propertyName": "shuffle_options",
+            "title": "Shuffle Options",
+            "description": "Shuffle the options",
+            "dataType": "boolean",
+            "required": true
+        },
+        {
+            "propertyName": "show_feedback",
+            "title": "Show Immediate Feedback",
+            "description": "Show the feedback popup",
+            "dataType": "boolean",
+            "required": true
+        },
+        {
+            "propertyName": "allow_skip",
+            "title": "Allow skip",
+            "description": "Allow to skip the Question",
+            "dataType": "boolean",
+            "required": true
+        },
+        {
+            "propertyName": "total_items",
+            "title": "Display",
+            "description": "Toal marks to display",
+            "dataType": "input",
+            "valueType":"number",
+            "required": true,
+            "minimumValue":"0"
+        },
+        {
+            "propertyName": "max_score",
+            "title": "Total Marks",
+            "description": "Toal marks to display",
+            "dataType": "input",
+            "valueType":"number",
+            "required": true,
+            "minimumValue":"1",
+            "maximumValue":"99"
+
+        }]
     },
     "renderer": {
         "main": "renderer/plugin.js"

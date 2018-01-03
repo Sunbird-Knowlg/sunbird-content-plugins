@@ -1,0 +1,376 @@
+<script type="text/ng-template" id="QuestionFormTemplate" ng-controller="QuestionFormController as $ctrl">
+    <style type="text/css">
+    .filters-container {
+        padding: 8px 10px 4px 18px;
+        background: #f1f1f1;
+    }
+
+    .itemIframeMessages {
+        border: 2px solid #E4E4E4;
+        padding: 110px 20px;
+        background: #FFFFFF;
+        text-align: center;
+        font-weight: bold;
+        height: 270px;
+        width: 480px;
+    }
+
+    .grid .items .item:hover {
+        background: #f1f1f1;
+    }
+
+    .verticalcenter {
+        display: flex;
+        align-items: center;
+    }
+    /*
+    .questionbank.ui.modal {
+        position: inherit !important;
+        top: 0 !important;
+    } */
+
+    .ngdialog-content {
+        top: 0% !important;
+        width: 100% !important;
+        position: absolute !important;
+        background: none !important;
+    }
+
+    .question-bank-error {
+        height: 350px;
+    }
+
+
+
+    .wizard .ui.breadcrumb .section {
+        color: rgba(0, 0, 0, .4);
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+
+    .wizard .ui.breadcrumb .active.section {
+        color: #5588BF;
+        font-weight: 700;
+    }
+
+    .wizard h2 {
+        font-weight: 700;
+        font-family: 'Noto Sans', sans-serif;
+    }
+
+    .wizard .ui.grid>.column.wizard-title {
+        text-align: center;
+        background-color: #eee;
+        padding-top: 1.2rem;
+        padding-bottom: 1.2rem;
+    }
+
+    .wizard .ui.grid>.column.breadcrumb-container {
+        padding-top: 1.4rem;
+    }
+
+    .wizard .ui.grid.wizard-header {
+        margin-left: -21px;
+        margin-top: -21px;
+        margin-bottom: 20px;
+    }
+
+
+    .ui.modal.questionbank {
+        position: inherit !important;
+        top: 0 !important;
+        left: 0 !important;
+        height: 100vh;
+        width: 100% !important;
+        margin: 0 auto;
+        border-radius: 0;
+        display: flex;
+        -webkit-flex-flow: column;
+        -moz-flex-flow: column;
+        -ms-flex-flow: column;
+        -o-flex-flow: column;
+        flex-flow: column;
+    }
+
+    .listContainer {
+        width: 55% !important;
+        height: 60vh;
+        overflow-y: scroll;
+    }
+
+    .questionListContainer {
+        width: 100% !important;
+        height: 60vh;
+        overflow-y: scroll;
+    }
+
+    .previewContainer {
+        width: 50% !important;
+    }
+    /* Style the tab */
+
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+        height: 20%;
+        width: 55% !important;
+    }
+    /* Style the buttons inside the tab */
+
+    .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 0px 0px 0px 22px;
+        transition: 0.3s;
+        font-size: 17px;
+    }
+    /* Change background color of buttons on hover */
+
+    .tab button:hover {
+        background-color: #ddd;
+    }
+    /* Create an active/current tablink class */
+
+    .tab button.active {
+        background-color: #ccc;
+    }
+
+
+    .configForm {
+        border: 1px solid #ccc;
+        background-color: #F1F1F1;
+        width: 100% !important;
+        padding: 3%;
+        margin-bottom: 3%;
+    }
+
+    .questionContainer {
+        width: 55% !important;
+    }
+
+    .preview-config {
+        margin-left: 5%;
+    }
+
+    .pull-right {
+        float: right;
+    }
+    </style>
+    <div class="ui modal questionbank fullscreen active">
+        <div class="content wizard">
+            <!-- <div class="filters-container" ng-if="!isQuestionSetConfig">
+                <div class="ui form">
+                    <div class="field">
+                        <div class="ui fluid icon input">
+                            <input ng-model="filterObj.question_title" placeholder="Search by question, or question title" ng-keypress="$event.keyCode === 13 ? $ctrl.searchQuestions() : null"  type="text"></input>
+                            <i class="inverted circular search link icon" ng-click="$ctrl.searchQuestions();" ></i>
+                        </div>
+                    </div>
+                    <div class="ui accordion field" id="assessmentAdvancedFields">
+                        <div class="content transition">
+                            <div class="three fields">
+                                <div class="field">
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">Language</div>
+                                        <select class="ui fluid dropdown search" ng-model="$ctrl.activity.language" ng-options="lang for lang in $ctrl.assessment.language" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'languageDropDown'})">
+                                            <option value="">
+                                                All
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">Difficulty</div>
+                                        <select class="ui fluid dropdown search" ng-model="$ctrl.activity.qlevel" ng-options="level for level in $ctrl.assessment.qlevel" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'difficultyDropDown'})">
+                                            <option value="">
+                                                Difficulty
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">Question Type</div>
+                                        <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.type" ng-options="type for type in $ctrl.assessment.type" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'questionTypeDropDown'})">
+                                            <option value="">
+                                                Type
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="three fields">
+                                <div class="field">
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">&emsp;Grade&nbsp;&nbsp;&nbsp;</div>
+                                        <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.gradeLevel" ng-options="grade for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'gradeDropDown'})">
+                                            <option value="">
+                                                Grade
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="ui fluid labeled input">
+                                        <div class="ui label">Concepts</div>
+                                        <input type="text" placeholder="Concepts" ng-model="$ctrl.activityOptions.concepts" class="fluid" id="assessmentConceptSelector" ng-click="$ctrl.showConceptSelector(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'conceptSelector'})" selectable="false" readonly>
+                                    </div>
+                                </div>
+                                <div class="field">
+                                    <div class="ui toggle checkbox verticalcenter">
+                                        <input type="checkbox" ng-model="$ctrl.activityOptions.myQuestions" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'toggle', target: 'myQuestionsToggle'})">
+                                        <label>My Questions</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+            <div class="filters-container" ng-if="isQuestionSetConfig">
+                <div class="ui form">
+                    <div class="five fields">
+                        <div ng-class="questionSetConfigObj.title ? 'field' :'field error'">
+                            <div class="ui corner labeled input">
+                                <input name="title" ng-model="questionSetConfigObj.title" type="text" placeholder="Question Set Title" maxlength="100" autocomplete="off">
+                                <div class="ui corner label">
+                                    <i class="asterisk icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui fluid labeled input">
+                                <div class="ui label">Max score</div>
+                                <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="questionSetConfigObj.max_score" min='0' required="" type="number" />
+                            </div>
+                        </div>
+                        <div>
+                            <div class="ui fluid labeled input displayCount">
+                                <div class="ui label">Display</div>
+                                <select class="ui fluid dropdown" id="total_items" ng-model="questionSetConfigObj.total_items" ng-options="option as option for option in item_range">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui toggle checkbox verticalcenter">
+                                <input type="checkbox" ng-model="questionSetConfigObj.show_feedback">
+                                <label>Show Immediate Feedback</label>
+                            </div>
+                        </div>
+                        <div class="field">
+                            <div class="ui toggle checkbox verticalcenter">
+                                <input type="checkbox" ng-model="questionSetConfigObj.shuffle_questions">
+                                <label>Shuffle Questions</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui divider"></div>
+            <div class="ui segment" style="width: 100%;height: 270px;" ng-show="$ctrl.itemsLoading">
+                <div class="ui active inverted dimmer">
+                    <div class="ui text loader">Just one second, We're fetching that content for you.</div>
+                </div>
+            </div>
+            <div>
+                <div class="ui three column horizontally padded grid" ng-show="!$ctrl.itemsLoading">
+                    <div class="row tab">
+                        <button class="tablinks" ng-click="isQuestionTab = true">Question bank</button>
+                        <button class="tablinks" ng-click="isQuestionTab = false">Selected Questions</button>
+                    </div>
+                    <div class="column questionContainer" ng-if="isQuestionTab">
+                        <div class="row questionListContainer" ng-if="isQuestionTab">
+                            <div class="ui large divided items">
+                                <div class="item select" ng-repeat="question in questions" ng-show="!question.isSelected">
+                                    <div class="middle aligned content" ng-click="$ctrl.previewItem(question, true);">
+                                        <div class="header">{{ question.config.metadata.title }}</div>
+                                        <div class="meta">{{question.config.metadata.language}} | {{ question.config.metadata.type}} | {{ question.config.metadata.difficulty }}</div>
+                                        <div class="description">{{ question.config.metadata.description }}</div>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" checked="" name="check" ng-model="question.isSelected" ng-click="selectQuestion(question)">
+                                        <button class="mini ui button" ng-click="editQuestion(question)">
+                                            Edit
+                                        </button>
+                                    </div>
+                                </div>
+                                <div ng-if="questions.length == 0">
+                                    <p>No questions available</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <button class="ui blue button pull-right" ng-click="createQuestion()" type="button">Create Question</button>
+                        </div>
+                    </div>
+                    <div class="column listContainer" ng-if="!isQuestionTab">
+                        <div class="ui large divided items">
+                            <div class="item select" ng-repeat="selQuestion in selectedQuestions">
+                                <div class="middle aligned content" ng-click="$ctrl.previewItem(selQuestion, true);">
+                                    <div class="header">{{ selQuestion.config.metadata.title }}</div>
+                                    <div class="meta">{{selQuestion.config.metadata.language}} | {{ selQuestion.config.metadata.type}} | {{ selQuestion.config.metadata.difficulty }}</div>
+                                    <div class="description">{{ selQuestion.config.metadata.description }}</div>
+                                </div>
+                                <div>
+                                    <span><i class="edit icon" ng-click="editConfig(selQuestion)"></i></span>
+                                </div>
+                                <div>
+                                    <span><i class="remove icon" ng-click="removeQuestion(selQuestion)"></i></span>
+                                </div>
+                            </div>
+                            <div ng-if="selectedQuestions.length == 0">
+                                <p>No questions selected</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="column preview-config">
+                        <div class="configForm" ng-if="showConfigForm">
+                            <h3>Config Data</h3>
+                            <div class="ui form">
+                                <div class="fields">
+                                    <div class="field">
+                                        <label>Max time</label>
+                                        <input type="number" placeholder="In minutes" ng-model="questionObj.config.max_time">
+                                    </div>
+                                    <div class="field">
+                                        <label>Max score</label>
+                                        <input type="number" ng-model="questionObj.config.max_score">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui form">
+                                <div class="fields">
+                                    <div class="inline field">
+                                        <div class="ui checkbox">
+                                            <label>Partial Scoring</label>
+                                            <input type="checkbox" tabindex="0" class="hidden" ng-model="questionObj.config.partial_scoring">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui submit button" ng-click="saveConfig()">Submit</div>
+                        </div>
+                        <iframe id="itemIframe" class="previewContainer" ng-hide="!$ctrl.itemPreviewLoading && ($ctrl.itemPreviewContent.error || ($ctrl.itemPreviewDisplay == $ctrl.itemPreviewDefaultMessage))"></iframe>
+                        <div class="itemIframeMessages" ng-show="!$ctrl.itemPreviewLoading && ($ctrl.itemPreviewContent.error || ($ctrl.itemPreviewDisplay == $ctrl.itemPreviewDefaultMessage))">{{$ctrl.itemPreviewDisplay}}</div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui center aligned segment" ng-show="($ctrl.items && !$ctrl.items.length) && $ctrl.isAdvanceOptionOpen">
+                No Data Found
+                <br> Redefine your search filters!
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui buttons">
+                <button class="ui orange button" ng-click="cancel();isQuestionSetConfig = false;" type="button">Cancel</button>
+                <div class="or"></div>
+                <button class="ui blue button" ng-show="!isQuestionSetConfig" ng-click="saveQuestionSet()" type="button">Next</button>
+                <button class="ui blue button" ng-disabled="(questionSetConfigObj.title == '')" ng-show="isQuestionSetConfig" ng-click="addQuestionSet()" type="button">Add</button>
+            </div>
+        </div>
+    </div>

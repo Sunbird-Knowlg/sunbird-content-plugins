@@ -1,0 +1,27 @@
+{
+    "id": "org.ekstep.qe.questionbank",
+    "ver": "1.0",
+    "shortId": "questionbank",
+    "author": "Swati Singh",
+    "type": "plugin",
+    "title": "questionbank",
+    "description": "This plugin is for question bank",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            {
+                "type": "plugin",
+                "plugin": "org.ekstep.question",
+                "ver": "1.0"
+            }
+        ],
+        "menu": [],
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        }
+    },
+    "renderer": {
+        "main": "renderer/plugin.js"
+    }
+}
