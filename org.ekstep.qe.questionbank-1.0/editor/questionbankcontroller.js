@@ -116,7 +116,7 @@ angular.module('createquestionapp', [])
             questionSet.config = $scope.questionSetConfigObj;
             questionSet.data = $scope.selectedQuestions;
             console.log("----------------------questionSet data--------------", questionSet);
-            ecEditor.dispatchEvent("org.ekstep.questionset:addQS", questionSet);
+            ecEditor.dispatchEvent("org.ekstep.questionset:addQS", {callback: instance.callback, data:questionSet});
             $scope.cancel();
         }
 
