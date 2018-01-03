@@ -1,0 +1,18 @@
+{
+    "id": "org.ekstep.questionbank",
+    "ver": "1.0",
+    "author": "Manoj Chandrashekar",
+    "title": "Question Bank Plugin",
+    "description": "Plugin to list questions for users to select from.",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "help": {
+            "src": "editor/help.md",
+            "dataType": "text"
+        },
+        "menu": [],
+        "configManifest": [],
+        "dependencies": []
+    }
+}
