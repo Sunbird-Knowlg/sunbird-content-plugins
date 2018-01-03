@@ -30,32 +30,7 @@
             "plugin": "org.ekstep.plugins.ftbplugin",
             "ver": "1.0"
         }],
-        "menu": [
-        {
-            "id": "question",
-            "category": "main",
-            "type": "image",
-            "toolTip": "Add Question",
-            "title": "question",
-            "iconImage": "assets/question.png",
-            "onclick":
-            {
-                "id": "org.ekstep.question:showpopup",
-                "data":
-                {
-                    "type": "roundrect",
-                    "x": 5,
-                    "y": 5,
-                    "fill": "#0000",
-                    "w": 90,
-                    "h": 90,
-                    "radius": 10,
-                    "stroke": "rgba(255, 255, 255, 255)",
-                    "strokeWidth": 1,
-                    "opacity": 0.01
-                }
-            }
-        }],
+        "menu": [],
         "init-data":
         {
             "type": "rect",

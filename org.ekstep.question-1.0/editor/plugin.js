@@ -21,7 +21,7 @@ org.ekstep.question.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend({
      *  Open window to add question and options
      *  @memberof org.ekstep.question.EditorPlugin#
      */
-    loadHtml: function() {
+    loadHtml: function(event, data) {
         var currentInstance = this;
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
             template: 'QuestionFormTemplate1',
@@ -30,6 +30,9 @@ org.ekstep.question.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend({
             resolve: {
                 'instance': function() {
                     return currentInstance;
+                },
+                'questionData': function() {
+                    return data;
                 }
             },
             width: 900,

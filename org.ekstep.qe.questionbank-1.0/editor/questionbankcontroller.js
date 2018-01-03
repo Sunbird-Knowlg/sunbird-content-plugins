@@ -306,6 +306,10 @@ angular.module('createquestionapp', [])
             delete $scope.questionObj;
         }
 
+        $scope.editQuestion = function(qObj){
+            ecEditor.dispatchEvent("org.ekstep.question:showpopup", qObj);
+        }
+
 
 
         $scope.saveQuestionSet = function() {

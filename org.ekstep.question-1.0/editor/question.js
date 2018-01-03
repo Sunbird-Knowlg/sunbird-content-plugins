@@ -5,7 +5,7 @@
  */
 'use strict';
 angular.module('createquestionapp1', [])
-    .controller('QuestionFormController1', ['$scope', '$sce', '$compile', function($scope, $sce, $compile) {
+    .controller('QuestionFormController1', ['$scope', '$sce', '$compile', 'instance', 'questionData', function($scope, $sce, $compile, instance, questionData) {
         var ctrl = this;
         ctrl.first = true;
         ctrl.second = false;
@@ -26,6 +26,33 @@ angular.module('createquestionapp1', [])
         ctrl.questionUnitValidated = false
         ctrl.defaultLang = 'Choose language';
         ctrl.level = ['Easy', 'Medium', 'difficult'];
+
+        if (!ecEditor._.isEmpty(questionData)) {
+            ctrl.questionData = questionData;
+            ctrl.first = false;
+            ctrl.second = true;
+            ctrl.third = false;
+            ecEditor.jQuery("#breadcumb_2").addClass('activeBreadcumb').siblings().removeClass('activeBreadcumb');
+            ecEditor.dispatchEvent(questionData.data.plugin.id + ':editForm', questionData);
+            var editCreateQuestionFormInstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(questionData.data.plugin.id);
+            console.log(editCreateQuestionFormInstance);
+            _.each(editCreateQuestionFormInstance.templates, function(value,key) {
+                if (value.editor.template == questionData.data.plugin.templateId) {
+                    var controllerPathEdit = ecEditor.resolvePluginResource(questionData.data.plugin.id, questionData.data.plugin.version, value.editor.controllerURL);
+                    var templatePathEdit = ecEditor.resolvePluginResource(questionData.data.plugin.id, questionData.data.plugin.version, value.editor.templateURL);
+                    $scope.questionUniTemplateURL = templatePathEdit;
+                    $scope.questionUnitController = value.editor.controller;
+                    $scope.$safeApply();
+                }
+            });
+
+            ctrl.selectedTemplatePluginData.plugin = { // Question Unit Plugin Information  
+                "id": questionData.data.plugin.id, // Id of plugin
+                "version": questionData.data.plugin.version, // Version of plugin
+                "templateId": questionData.data.plugin.template // Template Id of the question unit
+            };
+        }
+
         /**
          * [init description]
          * @return {[type]} [description]
@@ -296,8 +323,8 @@ angular.module('createquestionapp1', [])
                 questionUnitFinalData.config = ctrl.metaDataFormData;
                 console.log("Final object", questionUnitFinalData);
                 /*Dispatch event from here*/
-               ecEditor.dispatchEvent('org.ekstep.qe.questionbank:saveQuestion',questionUnitFinalData);
-               $scope.closeThisDialog();
+                ecEditor.dispatchEvent('org.ekstep.qe.questionbank:saveQuestion', questionUnitFinalData);
+                $scope.closeThisDialog();
             }
         }
 
