@@ -3,12 +3,12 @@
  * @class org.ekstep.question:createquestionController
  * Jagadish Pujari<jagadish.pujari@tarento.com>
  */
-angular.module('createquestionapp1', [])
+angular.module('createQuestionApp', [])
     .controller('QuestionCreationFormController', ['$scope', '$sce', '$compile', 'instance', 'questionData', function($scope, $sce, $compile, instance, questionData) {
         var ctrl = this;
-        ctrl.first = true;
-        ctrl.second = false;
-        ctrl.third = false;
+        ctrl.templatesScreen = true;
+        ctrl.createQuestionScreen = false;
+        ctrl.metadaFormScreen = false;
         ctrl.selectedMenuItem = 'data';
         ctrl.Totalconcepts = 0;
         ctrl.qt = 0;
@@ -35,10 +35,9 @@ angular.module('createquestionapp1', [])
             ctrl.Totalconcepts = questionData.config.metadata.concepts.length;
             ctrl.questionData = questionData;
             $scope.questionEditData = questionData;
-            ctrl.first = false;
-            ctrl.second = true;
-            ctrl.third = false;
-            //ecEditor.dispatchEvent(questionData.data.plugin.id + ':editForm', questionData);
+            ctrl.templatesScreen = false;
+            ctrl.createQuestionScreen = true;
+            ctrl.metadaFormScreen = false;
             var editCreateQuestionFormInstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(questionData.data.plugin.id);
             _.each(editCreateQuestionFormInstance.templates, function(value, key) {
                 if (value.editor.template == questionData.data.plugin.templateId) {
@@ -56,7 +55,6 @@ angular.module('createquestionapp1', [])
                 "version": questionData.data.plugin.version, // Version of plugin
                 "templateId": questionData.data.plugin.template // Template Id of the question unit
             };
-            ecEditor.jQuery("#breadcumb_2").addClass('activeBreadcumb').siblings().removeClass('activeBreadcumb');
         }
 
         /**
@@ -163,16 +161,14 @@ angular.module('createquestionapp1', [])
          * @return {[type]} [description]
          */
         ctrl.back = function() {
-            if (ctrl.second) {
-                ctrl.first = true;
-                ctrl.second = false;
-                ctrl.third = false;
-                $("#breadcumb_1").addClass('activeBreadcumb').siblings().removeClass('activeBreadcumb');
-            } else if (ctrl.third) {
-                ctrl.first = false;
-                ctrl.second = true;
-                ctrl.third = false;
-                $("#breadcumb_2").addClass('activeBreadcumb').siblings().removeClass('activeBreadcumb');
+            if (ctrl.createQuestionScreen) {
+                ctrl.templatesScreen = true;
+                ctrl.createQuestionScreen = false;
+                ctrl.metadaFormScreen = false;
+            } else if (ctrl.metadaFormScreen) {
+                ctrl.templatesScreen = false;
+                ctrl.createQuestionScreen = true;
+                ctrl.metadaFormScreen = false;
             }
 
         }
@@ -185,17 +181,15 @@ angular.module('createquestionapp1', [])
         ctrl.switchTab = function(id, res) {
             ctrl.selectedMenuItemData = ctrl.menuItems[res.category].templatesData;
             ecEditor.jQuery("#first_" + id).addClass('activeItem').siblings().removeClass('activeItem');
-            //ecEditor.jQuery
         }
         /**
          * [addCreateQuestionForm description]
          * @param {[type]} obj [description]
          */
         ctrl.addCreateQuestionForm = function(obj) {
-            ctrl.first = false;
-            ctrl.second = true;
-            ctrl.third = false;
-            ecEditor.jQuery("#breadcumb_2").addClass('activeBreadcumb').siblings().removeClass('activeBreadcumb');
+            ctrl.templatesScreen = false;
+            ctrl.createQuestionScreen = true;
+            ctrl.metadaFormScreen = false;
             ctrl.selectedTemplatePluginData.plugin = { // Question Unit Plugin Information  
                 "id": obj.pluginID, // Id of plugin
                 "version": obj.ver, // Version of plugin
@@ -268,10 +262,9 @@ angular.module('createquestionapp1', [])
 
         ctrl.validateQuestionCreationFormCallBackFunc = function(valid, formData) {
             if (valid) {
-                ctrl.first = false;
-                ctrl.second = false;
-                ctrl.third = true;
-                ecEditor.jQuery("#breadcumb_3").addClass('activeBreadcumb').siblings().removeClass('activeBreadcumb');
+                ctrl.templatesScreen = false;
+                ctrl.createQuestionScreen = false;
+                ctrl.metadaFormScreen = true;
                 ctrl.questionCreationFormData = formData;
             } else {}
         }

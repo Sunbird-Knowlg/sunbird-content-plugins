@@ -25,7 +25,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     loadHtml: function(event, data) {
         var currentInstance = this;
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
-            template: 'QuestionCreationFormTemplate',
+            template: 'QuestionUnitBrowser',
             controller: 'QuestionCreationFormController',
             controllerAs: '$ctrl',
             resolve: {

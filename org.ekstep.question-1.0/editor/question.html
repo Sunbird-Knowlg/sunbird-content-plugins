@@ -1,26 +1,25 @@
-<script type="text/ng-template" id="QuestionCreationFormTemplate" ng-controller="QuestionCreationFormController as $ctrl">
-    <!-- ng-init="$ctrl.init()" -->
-    <div class="ui modal fullscreen active" id="qcFull">
+<script type="text/ng-template" id="QuestionUnitBrowser" ng-controller="QuestionCreationFormController as $ctrl">
+    <div class="ui modal fullscreen active" id="QuestionUnitBrowserFullScreen">
         <div class="two column row ui grid">
             <div class="two wide column" id="questionHeader">
                 <h2>Create question</h2>
             </div>
             <div class="six wide column">
-                <div class="ui huge breadcrumb" id="breadcrumbStyle">
-                    <div ng-class="{activeBreadcumb: $ctrl.first == 'true'}" class="activeBreadcumb section" id="breadcumb_1">Choose template</div>
+                <div class="ui huge breadcrumb breadcrumbTitle">
+                    <div ng-class="{activeBreadcumb: $ctrl.templatesScreen == true}" class="section">Choose template</div>
                     <i class="right chevron icon divider"></i>
-                    <div class="section" id="breadcumb_2">Create question</div>
+                    <div class="section" ng-class="{activeBreadcumb: $ctrl.createQuestionScreen == true}">Create question</div>
                     <i class="right chevron icon divider"></i>
-                    <div class="section" id="breadcumb_3">Metadata form</div>
+                    <div class="section" ng-class="{activeBreadcumb: $ctrl.metadaFormScreen == true}">Metadata form</div>
                 </div>
             </div>
         </div>
         <!-- Main page -->
-        <form name="myForm">
+        <form name="questionUnitBrowserForm">
             <div class="ui grid">
-                <div class="two column row first qcFirst" ng-show="$ctrl.first">
+                <div class="two column row" ng-show="$ctrl.templatesScreen">
                     <div class="three wide column">
-                        <div class="ui secondary vertical menu" id="qcSideMenu">
+                        <div class="ui secondary vertical menu" id="questionUnitBrowserSideMenu">
                             <div class="item" ng-repeat="(key, value) in $ctrl.menuItems" ng-class="{activeItem:(activeIndex?activeIndex==$index:$first)}" id="first_{{$index}}" ng-if="value.templatesData.length > 0">
                                 <div class="content">
                                     <a class="header" ng-click="$ctrl.switchTab($index,value)"><i class="{{value.data.icon}}"></i> {{value.data.name}}</a>
@@ -32,8 +31,8 @@
                         <div class="ui grid three column row">
                             <div class="column" ng-repeat="(key, value) in $ctrl.selectedMenuItemData">
                                 <div class="ui card">
-                                    <div class="content" id="cardHeader">
-                                        <div class="left floated meta" id="cardHeaderText">{{value.title}}</div>
+                                    <div class="content" id="templateCardHeader">
+                                        <div class="left floated meta" id="templateCardHeaderText">{{value.title}}</div>
                                     </div>
                                     <div class="content vividworknav">
                                         <img src="{{value.thumbnail}}" />
@@ -49,7 +48,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="two column row second" ng-show="$ctrl.second">
+                <div class="two column row" ng-show="$ctrl.createQuestionScreen">
                     <div class="seven wide column">
                         <ng-include src="questionUniTemplateURL"></ng-include>
                         <!-- <question-unit plugin="$ctrl.unitPlugin" ver="$ctrl.pluginVer" templateId="$ctrl.templateId"></question-unit> -->
@@ -66,13 +65,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="five column row third qcThird" ng-show="$ctrl.third">
-                    <form name="qcForm">
+                <div class="five column row QuestionMetaForm" ng-show="$ctrl.metadaFormScreen">
+                    <form name="qcMetadateForm">
                         <div class="column">
-                            <label data-toggle="tooltip" id="jform_title-lbl" for="jform_title" class="control-label hasTooltip required qt_title" title="" data-placement="bottom" data-original-title="Question title">
+                            <label data-toggle="tooltip" id="qcMetadateForm-lbl" class="control-label hasTooltip required qt_title" title="" data-placement="bottom" data-original-title="Question title">
                                 Question title <span class="star">&nbsp;*</span>
                             </label>
-                            <input type="text" name="jform[title]" id="questionTitle" placeholder="Question title" name="qcInput" ng-model="qcInput" required>
+                            <input type="text" id="questionTitle" placeholder="Question title" name="qcInput" ng-model="qcInput" required>
                             <small ng-show="qcTitle" class="qcError">Enter question title</small>
                         </div>
                         <div class="column">
@@ -126,10 +125,10 @@
         <div class="actions" id="bottomActionButtons">
             <button class="ui large button left floated" ng-click="$ctrl.cancel()">Cancel</button>
             <div class="ui buttons">
-                <button class="ui large button deny cancel" ng-show="$ctrl.second || $ctrl.third" ng-click="$ctrl.back()">Back</button>
-                <div class="or" ng-show="$ctrl.second || $ctrl.third"></div>
-                <button class="ui large blue button" ng-show="$ctrl.second" ng-click="$ctrl.validateQuestionCreationForm()">Next</button>
-                <button class="ui large blue button" ng-show="$ctrl.third" ng-click="$ctrl.sendData()">Submit</button>
+                <button class="ui large button deny cancel" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen" ng-click="$ctrl.back()">Back</button>
+                <div class="or" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen"></div>
+                <button class="ui large blue button" ng-show="$ctrl.createQuestionScreen" ng-click="$ctrl.validateQuestionCreationForm()">Next</button>
+                <button class="ui large blue button" ng-show="$ctrl.metadaFormScreen" ng-click="$ctrl.sendData()">Submit</button>
             </div>
         </div>
     </div>

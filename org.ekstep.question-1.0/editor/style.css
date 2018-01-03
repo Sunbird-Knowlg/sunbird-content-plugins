@@ -88,7 +88,7 @@
       border-bottom: 1px solid rgb(230, 231, 232);
   }
 
-  #jform_title-lbl {
+  #qcMetadateForm-lbl {
       font-family: Museo700;
       line-height: 18px;
       margin-bottom: 0px;
@@ -157,7 +157,7 @@
   }
   /*Custom css*/
 
-  #qcFull {
+  #QuestionUnitBrowserFullScreen {
       display: block !important;
       position: inherit !important;
       top: 0 !important;
@@ -190,7 +190,7 @@
       margin-right: 2%;
   }
 
-  .qcThird {
+  .QuestionMetaForm {
       margin-top: 6%;
       margin-left: 2%;
       margin-bottom: 7%;
@@ -201,19 +201,19 @@
       color: red;
   }
 
-  #qcSideMenu {
+  #questionUnitBrowserSideMenu {
       font-size: 16px;
       margin-top: 3%;
       margin-left: 4%;
   }
 
-  #breadcrumbStyle{
+  .breadcrumbTitle{
     padding-top: 1.4rem;
   }
-  #cardHeader{
+  #templateCardHeader{
     background-color: #41474f;
   }
-  #cardHeaderText{
+  #templateCardHeaderText{
     color: white;
   }
   .second{
