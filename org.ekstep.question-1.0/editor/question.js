@@ -3,7 +3,6 @@
  * @class org.ekstep.question:createquestionController
  * Jagadish P<jagadish.pujari@tarento.com>
  */
-'use strict';
 angular.module('createquestionapp1', [])
     .controller('QuestionFormController1', ['$scope', '$sce', '$compile', 'instance', 'questionData', function($scope, $sce, $compile, instance, questionData) {
         var ctrl = this;
@@ -28,19 +27,25 @@ angular.module('createquestionapp1', [])
         ctrl.level = ['Easy', 'Medium', 'difficult'];
 
         if (!ecEditor._.isEmpty(questionData)) {
+            console.log("Edit question data", questionData.config.metadata.language);
+            $scope.qcLanguage = questionData.config.metadata.language;
+            $scope.qcInput = questionData.config.metadata.title;
+            $scope.qcLevel = questionData.config.metadata.qlevel;
+            $scope.qcGrade = questionData.config.metadata.gradeLevel;
+            ctrl.Totalconcepts = questionData.config.metadata.concepts.length;
             ctrl.questionData = questionData;
+            $scope.questionEditData = questionData;
             ctrl.first = false;
             ctrl.second = true;
             ctrl.third = false;
-            ecEditor.jQuery("#breadcumb_2").addClass('activeBreadcumb').siblings().removeClass('activeBreadcumb');
             ecEditor.dispatchEvent(questionData.data.plugin.id + ':editForm', questionData);
             var editCreateQuestionFormInstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(questionData.data.plugin.id);
-            console.log(editCreateQuestionFormInstance);
-            _.each(editCreateQuestionFormInstance.templates, function(value,key) {
+            _.each(editCreateQuestionFormInstance.templates, function(value, key) {
                 if (value.editor.template == questionData.data.plugin.templateId) {
                     var controllerPathEdit = ecEditor.resolvePluginResource(questionData.data.plugin.id, questionData.data.plugin.version, value.editor.controllerURL);
                     var templatePathEdit = ecEditor.resolvePluginResource(questionData.data.plugin.id, questionData.data.plugin.version, value.editor.templateURL);
                     $scope.questionUniTemplateURL = templatePathEdit;
+                    ctrl.questionUniTemplateURL = templatePathEdit;
                     $scope.questionUnitController = value.editor.controller;
                     $scope.$safeApply();
                 }
@@ -51,6 +56,7 @@ angular.module('createquestionapp1', [])
                 "version": questionData.data.plugin.version, // Version of plugin
                 "templateId": questionData.data.plugin.template // Template Id of the question unit
             };
+            ecEditor.jQuery("#breadcumb_2").addClass('activeBreadcumb').siblings().removeClass('activeBreadcumb');
         }
 
         /**
@@ -104,7 +110,8 @@ angular.module('createquestionapp1', [])
                 'data': { 'name': 'Other', 'icon': 'ellipsis horizontal icon' },
                 'templatesData': []
             };
-            var questionplugininstance = org.ekstep.pluginframework.pluginManager.getPluginManifest('org.ekstep.question');
+
+            var questionplugininstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(instance.manifest.id);
             _.each(questionplugininstance.editor.dependencies, function(val, key) {
                 if (val.type == 'plugin') {
                     var instance = org.ekstep.pluginframework.pluginManager.getPluginManifest(val.plugin);
@@ -194,9 +201,15 @@ angular.module('createquestionapp1', [])
                 "version": obj.ver, // Version of plugin
                 "templateId": obj.editor.template // Template Id of the question unit
             };
+            ctrl.unitPlugin = obj.pluginID;
+            ctrl.pluginVer = obj.ver;
+            ctrl.templateId = obj.editor.template;
             var controllerPath = ecEditor.resolvePluginResource(obj.pluginID, obj.ver, obj.editor.controllerURL);
             var templatePath = ecEditor.resolvePluginResource(obj.pluginID, obj.ver, obj.editor.templateURL);
+            console.log('obj', obj);
+            console.log('template', templatePath, obj.editor.controller);
             $scope.questionUniTemplateURL = templatePath;
+            ctrl.questionUniTemplateURL = templatePath;
             $scope.questionUnitController = obj.editor.controller;
         }
 
@@ -321,7 +334,6 @@ angular.module('createquestionapp1', [])
                 questionUnitFinalData.data.type = "unit";
                 questionUnitFinalData.data.data = ctrl.questionCreationFormData;
                 questionUnitFinalData.config = ctrl.metaDataFormData;
-                console.log("Final object", questionUnitFinalData);
                 /*Dispatch event from here*/
                 ecEditor.dispatchEvent('org.ekstep.qe.questionbank:saveQuestion', questionUnitFinalData);
                 $scope.closeThisDialog();
@@ -329,6 +341,10 @@ angular.module('createquestionapp1', [])
         }
 
         ctrl.init();
+
+        ctrl.getUnitTemplate = function() {
+            return ctrl.questionUniTemplateURL;
+        }
     }])
     /**
      * Dynamically add templates
@@ -338,8 +354,22 @@ angular.module('createquestionapp1', [])
      */
     .directive('questionUnit', function() {
         return {
-            scope: { template: "=" },
-            template: '<div ng-include="template"></div>'
+            restrict: 'E',
+            scope: { qtemplate: "=", questionData: "=" },
+            // template: '<div ng-include="qtemplate"></div>',
+            template: '<div ng-include="getTemplateURL()" ng-transclude"></div>',
+            /*templateUrl: function(el, attr) {
+              console.log('----------------->directive', attr);
+              return attr.qtemplate;
+            },*/
+            controller: ['$scope', function($scope) {
+                $scope.getTemplateURL = function() {
+                    return $scope.qtemplate;
+                }
+                $scope.loadData = function() {
+                    //$scope.
+                }
+            }]
         };
     });
 //# sourceURL=question.js

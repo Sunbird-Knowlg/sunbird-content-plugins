@@ -54,7 +54,8 @@
             </div>
             <div class="two column row second" style="margin-top: 1%;margin-right: 2%;" ng-show="$ctrl.second">
                 <div class="seven wide column">
-                    <question-unit template="questionUniTemplateURL"></question-unit>
+                    <ng-include src="questionUniTemplateURL"></ng-include>
+                    <!-- <question-unit plugin="$ctrl.unitPlugin" ver="$ctrl.pluginVer" templateId="$ctrl.templateId"></question-unit> -->
                 </div>
                 <div class="five wide column" style="background-color: #f3f3f3;">
                     <div style="margin-top: 3%;">
@@ -82,7 +83,7 @@
                         Language <span class="star">&nbsp;*</span></label>
                     <select id="jform_language" name="qcLanguage" ng-model="qcLanguage" required>
                       <option value="" selected="selected">Choose language</option>
-                     <option ng-selected="{{lang == $ctrl.defaultLang}}" ng-repeat="lang in $ctrl.languages" value="{{lang}}">{{lang}}</option>
+                     <option ng-selected="{{qcLanguage}}" ng-repeat="lang in $ctrl.languages" value="{{lang}}">{{lang}}</option>
                     </select>
                     <small ng-show="qclangerr" class="qcError">Select language</small>
                 </div>
@@ -92,7 +93,7 @@
                     </label>
                     <select id="jform_language" name="qcLevel" ng-model="qcLevel" required>
                         <option value="" selected="selected">Choose level</option>
-                        <option ng-repeat="lev in $ctrl.level" value="{{lev}">{{lev}}</option>
+                        <option ng-selected="{{qcLevel}}" ng-repeat="lev in $ctrl.level" value="{{lev}}">{{lev}}</option>
                     </select>
                     <small ng-show="qclevelerr" class="qcError">Select level</small>
                 </div>
@@ -103,7 +104,7 @@
                     <div class="no label example" ng-init="$ctrl.onLoadDropDown()">
                         <div class="ui fluid dropdown selection multiple" tabindex="0">
                             <select multiple="" name="binary" class="grade" name="qcGrade" ng-model="qcGrade" required>
-                              <option ng-repeat="g in $ctrl.grades" value="{{g}}">{{g}}</option>
+                              <option ng-selected="{{qcGrade}}" ng-repeat="g in $ctrl.grades" value="{{g}}">{{g}}</option>
                             </select><i class="dropdown icon"></i>
                             <div class="default text">Select Tag</div>
                             <div class="menu" tabindex="-1">
@@ -126,9 +127,9 @@
         </div>
 </form>
         <div class="actions" id="bottomActionButtons">
+          <button class="ui large button left floated" ng-click="$ctrl.cancel()">Cancel</button>
             <div class="ui buttons">
                 <button class="ui large button deny cancel" ng-show="$ctrl.second || $ctrl.third" ng-click="$ctrl.back()">Back</button>
-                <button class="ui large button deny cancel" ng-hide="$ctrl.second || $ctrl.third" ng-click="$ctrl.cancel()">Cancel</button>
                 <div class="or" ng-show="$ctrl.second || $ctrl.third"></div>
                 <button class="ui large blue button" ng-show="$ctrl.second" ng-click="$ctrl.validateQuestionCreationForm()">Next</button>
                 <button class="ui large blue button" ng-show="$ctrl.third" ng-click="$ctrl.sendData()">Submit</button>
