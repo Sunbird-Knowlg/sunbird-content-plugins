@@ -204,3 +204,10 @@ body {
     height: 19px;
     line-height: 19px;
 }
+
+.content-title-container {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    padding-top: 10px;
+}
