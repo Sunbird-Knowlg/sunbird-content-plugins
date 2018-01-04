@@ -1,1 +1,231 @@
-<!-- TODO: HTML template for horizontal MCQ -->
+<div ng-controller="QuestionFormController123">
+    <style type="text/css">
+        /*.ui.modal {
+            top: 3%;
+        }
+
+        @media only screen and (max-height: 799px) {
+            .ui.modal {
+                top: 1%;
+            }
+        }*/
+
+        .headBred {
+            margin-top: 1px;
+            margin-left: 10px;
+        }
+
+        input:focus {
+            border-width: 0px 0px 1px 0px !important solid blue;
+            outline: 0;
+            border-color: blue;
+        }
+
+        .textbox {
+            width: 50%;
+            border-width: 0px 0px 1px 0px !important;
+            height: 33px;
+            color: inherit;
+        }
+
+        .cretateQuestion {
+            padding-left: 7%;
+        }
+
+        .questionbox:focus {
+            box-shadow: 1px 1px 1px #9c60f7;
+        }
+
+        input[type="radio"] {
+            -webkit-appearance: checkbox;
+            /* Chrome, Safari, Opera */
+            -moz-appearance: checkbox;
+            /* Firefox */
+            -ms-appearance: checkbox;
+            /* not currently supported */
+        }
+
+        .preview-window .ngdialog-content {
+            background: none !important;
+        }
+
+        .ngdialog.ngdialog-theme-plain .ngdialog-content {
+            background: none!important;
+        }
+
+        .main {
+            position: relative;
+            height: auto;
+        }
+
+        #previewContentIframeWrapper {
+            position: relative;
+            /*width: 900px;*/
+            height: calc( 400px / (16/9));
+            margin-left: auto;
+            margin-right: auto;
+            border-radius: 0;
+        }
+
+        #previewContentIframe {
+            height: 100%;
+            width: 100%;
+            border: none;
+        }
+    </style>
+    <!-- <div class="ui modal large active" style="display: block !important;"> -->
+    <!--  <div class="header">
+            Create question
+            <i class="close cancel icon" ng-click="cancel()" style="float: right;"></i>
+        </div> -->
+    <div class="ui grid" style="max-height: 75vh;width: 100%;margin-left: 0%;">
+        <div class="one column row">
+            <div class="column" style="padding-left: 4%;overflow-y: scroll;overflow-x:hidden;">
+                <div style="margin-top: 3%;">
+                    <editor1 ng-repeat="item in config" config="item" index="$index" questionData="$scope.questionData" jags="questionData"></editor1>
+                    {{$scope.editorObj}}
+                    <div class="one column row">
+                        <div class="column" style="text-align: center;margin: 2%;">
+                            <button class="ui primary basic button large" ng-click="addAnswerField()">Add answer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="five wide column" style="background-color: #f3f3f3;">
+                    <div style="margin-top: 3%;">
+                        <span class="ui left floated">Preview</span>
+                        <i class="icon undo ui right floated" style="float: right;" ng-click="setPreviewData()"></i>
+                        <div style="text-align: center;">
+                            <div class="ui raised child preview-iframe-wrapper" id="previewContentIframeWrapper" ng-show='showPreview'>
+                                <iframe id="previewContentIframe" style="height: 100%;background-color: white;"></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+        </div>
+    </div>
+    <!--  <div class="actions">
+            <div class="ui buttons">
+                <button class="ui large button deny cancel" ng-click="cancel()">Cancel</button>
+                <div class="or"></div>
+                <button class="ui large positive button" ng-click="addToLesson()">Add to lesson</button>
+            </div>
+        </div> -->
+</div>
+<!-- </div> -->
+<script type="text/ng-template" id="editortemplate1">
+    <div class="one column row">
+        <span class="ui " ng-show="isHeader">{{headerName}}</span>
+        <span class="ui small  right floated" ng-show="isHeader && isAnswer" style="color: grey;float: right;font-size: small;">All answers will be automatically shuffled</span>
+    </div>
+    <div class="ui segments" tabindex="100" style="box-shadow: 1px 1px 1px #9da1a5;margin-bottom: 2%" id="main_{{index}}">
+        <div class="ui segment">
+            <div class="ui pointing secondary demo menu ">
+                <a class="item active" data-tab="first_{{index}}" id="first_{{index}}"><i class="checkmark icon" ng-show="isQuestion ? editorObj1.question.text.length > 2 : editorObj1.answers[index-1].text.length > 2"></i> Text</a>
+                <!-- <a class="item active" data-tab="first_{{index}}" id="first_{{index}}" ng-show="isAnswer"><i class="checkmark icon" ng-if="editorObj1.answers[index-1].text.length > 2"></i> Text</a> -->
+                <a class="item" data-tab="second_{{index}}" ng-show="isQuestion ? image || editorObj1.question.image.length > 0 : image || editorObj1.answers[index-1].image.length > 0" id="second_{{index}}">
+                    <i class="checkmark icon" ng-show="isQuestion ? selectedImageURL.length > 0 || editorObj1.question.image.length > 0 : selectedImageURL.length > 0 || editorObj1.answers[index-1].image.length > 0" ></i>
+                    Image</a>
+                <a class="item" data-tab="third_{{index}}" ng-show="isQuestion ? audio || editorObj1.question.audio.length > 0 : audio || editorObj1.answers[index-1].audio.length > 0" id="third_{{index}}">
+                    <i class="checkmark icon" ng-show="isQuestion ? selectedAudioURL.length > 0 || editorObj1.question.audio.length > 0 : selectedAudioURL.length > 0 || editorObj1.answers[index-1].audio.length > 0"></i>
+                    Audio</a>
+                <div class="ui dropdown right floated item" style="color: blue;float: right;" ng-show="isOption">
+                    Customize
+                    <div class="menu">
+                        <div class="item" ng-show="isImage"><span ng-click="addTab('image',index)">Insert image</span></div>
+                        <div class="item" ng-show="isAudio"><span ng-click="addTab('audio',index)">Insert audio</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui tab active" data-tab="first_{{index}}" id="firstTab_{{index}}">
+                <div class="form-group segment" style="text-align: center;margin-bottom: 2%" ng-show="isAnswer">
+                    <input type="text" class="textbox" placeholder="Enter answer" ng-model="editorObj1.answers[index-1].text" maxlength="{{maxLen}}" id="answerField_{{index}}">
+                </div>
+                <div class="form-group segment" style="text-align: center;" ng-show="isQuestion">
+                    <input type="text" class="textbox" placeholder="Enter the question" ng-model="editorObj1.question.text" maxlength="{{maxLen}}" id="textQ">
+                </div>
+            </div>
+            <div class="ui tab" data-tab="second_{{index}}" ng-show="isImage" id="secondTab_{{index}}">
+                <div class="ui three column grid">
+                    <!-- Question Image -->
+                    <div class="two wide column" ng-if="isQuestion && (editorObj1.question.image.length == 0 || selectedImageURL.length > 0)">
+                        <img class="mediaupload-image" style="display:block;width: 70%;" src="{{selectedImageURL}}" id="imageQ">
+                    </div>
+                    <div class="two wide column" ng-if="isQuestion && (editorObj1.question.image.length > 0 || selectedImageURL.length == 0)">
+                        <img class="mediaupload-image" style="display:block;width: 70%;" src="{{editorObj1.question.image}}" id="imageQ">
+                    </div>
+                    <!-- Answer Image -->
+                    <div class="two wide column" ng-if="isAnswer && (editorObj1.answers[index-1].image.length > 0 || selectedImageURL.length == 0)">
+                        <img class="mediaupload-image" style="display:block;width: 70%;" src="{{editorObj1.answers[index-1].image}}" id="image_{{index}}">
+                    </div>
+                    <div class="two wide column" ng-if="isAnswer && (editorObj1.answers[index-1].image.length == 0 || selectedImageURL.length > 0)">
+                        <img class="mediaupload-image" style="display:block;width: 70%;" src="{{selectedImageURL}}" id="image_{{index}}">
+                    </div>
+                    <div class="one column" style="margin-top: 3%;">
+                        <div class="ui grid two column row">
+                            <div class="column">
+                                <a href="" class="" ng-click="deleteImage(index,isQuestion)"><i class="trash icon"></i>Delete</a>
+                            </div>
+                            <div class="column">
+                                <a href="" class=""><i class="repeat icon"></i>Repeat</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="ui tab" data-tab="third_{{index}}" ng-show="isAudio" id="thirdTab_{{index}}">
+                <div class="ui two column grid">
+                    <!-- Question Audio -->
+                    <div class="one wide column" ng-if="isQuestion && (editorObj1.question.audio.length == 0 || selectedAudioURL.length > 0)">
+                        <audio src="{{selectedAudioURL}}" controls="" class="audio-container" style="display: none" id="audioQ">
+                        </audio>
+                        <i ng-class="play ? 'play large icon blue' : 'pause large icon blue'" ng-click="playAudio(play)"></i>
+                    </div>
+                    <div class="one wide column" ng-if="isQuestion && (editorObj1.question.audio.length > 0 || selectedAudioURL.length == 0)">
+                        <audio src="{{editorObj1.question.audio}}" controls="" class="audio-container" style="display: none" id="audioQ">
+                        </audio>
+                        <i ng-class="play ? 'play large icon blue' : 'pause large icon blue'" ng-click="playAudio(play)"></i>
+                    </div>
+                    <!-- Answer Audio -->
+                    <div class="one wide column" ng-if="isAnswer && (editorObj1.answers[index-1].audio.length == 0 || selectedAudioURL.length > 0)">
+                        <audio src="{{selectedAudioURL}}" controls="" class="audio-container" style="display: none" id="audio_{{index}}">
+                        </audio>
+                        <i ng-class="play ? 'play large icon blue' : 'pause large icon blue'" ng-click="playAudio(play)"></i>
+                    </div>
+                    <div class="one wide column" ng-if="isAnswer && (editorObj1.answers[index-1].audio.length > 0 || selectedAudioURL.length == 0)">
+                        <audio src="{{editorObj1.answers[index-1].audio}}" controls="" class="audio-container" style="display: none" id="audio_{{index}}">
+                        </audio>
+                        <i ng-class="play ? 'play large icon blue' : 'pause large icon blue'" ng-click="playAudio(play,index-1)"></i>
+                    </div>
+                    <div class="column">
+                        <a href="" class="" ng-click="deleteAudio(index)" s><i class="trash icon"></i>Delete</a>&nbsp;&nbsp;
+                        <a href="" class=""><i class="repeat icon"></i>Repeat</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="ui secondary segment">
+            <div class="ui grid">
+                <div class="three column row">
+                    <div class="column">
+                        <label ng-show="isAnsOption">
+                            <a href="" ng-click="deleteAnswer(index)" style="color: #8b8c8d"><i class="trash icon"></i> Delete</a>
+                        </label>
+                    </div>
+                    <div class="column">
+                        <div class="ui checkbox" ng-show="isAnsOption">
+                            <input type="radio" name="example" id="correctAnswer_{{index}}" ng-checked="editorObj1.answers[index-1].isAnswerCorrect">
+                            <label style="color: #8b8c8d" id="correctAnswerLabel_{{index}}">Correct answer</label>
+                        </div>
+                    </div>
+                    <div class="column" ng-if="isAnswer">
+                        <p style="float: right;">{{editorObj1.answers[index-1].text.length}}/{{maxLen}}</p>
+                    </div>
+                    <div class="column" ng-show="isQuestion">
+                        <p style="float: right;">{{editorObj1.question.text.length}}/{{maxLen}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

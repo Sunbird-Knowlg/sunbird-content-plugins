@@ -16,6 +16,10 @@
                 "type": "plugin",
                 "plugin": "org.ekstep.questionunit",
                 "ver": "1.0"
+            },
+            {
+                "type": "js",
+                "src": "editor/controllers/horizontalTemplate.js"
             }
         ],
         "menu": [],
@@ -34,17 +38,22 @@
     ],
     "templates": [
         {
-            "id": "horizontalTemplate",
-            "thumbnail": "",
-            "description": "",
-            "title": "",
+            "id": "horizontalMCQ",
+            "thumbnail": "editor/assets/mcq-horizontal.png",
+            "title": "Horizontal MCQ",
+            "description": "Horizontal MCQ template",
+            "category": "mcq",
             "editor": {
-                "template": "editor/templates/horizontalTemplate.html",
-                "controller": "editor/controllers/horizontalTemplate.js"
+                "templateURL": "editor/templates/horizontalTemplate.html",
+                "controllerURL": "editor/controllers/horizontalTemplate.js",
+                "template": "mcqtemplate",
+                "controller": "QuestionFormController"
             },
             "renderer": {
-                "template": "renderer/templates/horizontalTemplate.html",
-                "controller": "renderer/controllers/horizontalRenderer.js"
+                "templateURL": "URL",
+                "controllerURL": "controllerPath",
+                "template": "templateID",
+                "controller": "controllerName"
             }
         }
     ]

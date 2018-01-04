@@ -22,12 +22,7 @@
         },
         {
             "type": "plugin",
-            "plugin": "org.ekstep.plugins.mcqplugin",
-            "ver": "1.0"
-        },
-        {
-            "type": "plugin",
-            "plugin": "org.ekstep.plugins.ftbplugin",
+            "plugin": "org.ekstep.questionunit.mcq",
             "ver": "1.0"
         }],
         "menu": [],
