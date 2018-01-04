@@ -131,7 +131,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         config.shuffle_questions = instance.config.shuffle_questions;
         config.shuffle_options = instance.config.shuffle_options;
         config.total_items = instance.config.total_items;
-      
+
         return config;
     },
     onConfigChange: function(key, value) {
@@ -168,22 +168,22 @@ org.ekstep.contenteditor.basePlugin.extend({
             target: ecEditor.getEditorObject()
         });
     },
-    /**    
-     *      
-     * open question bank. 
+    /**
+     *
+     * open question bank.
      * @memberof questionset
-     * 
+     *
      */
     openQuestionBank: function(event, callback) {
-        var data, 
-            instance = this;        
+        var data,
+            instance = this;
         if(ecEditor._.isUndefined(callback)){
             data = undefined;
         }else{
             instance.callback = callback.callback;
             data = {data : ecEditor.getCurrentObject().data, config : ecEditor.getCurrentObject().config};
         }
-        ecEditor.dispatchEvent('org.ekstep.qe.questionbank:showpopup', data); 
+        ecEditor.dispatchEvent('org.ekstep.questionbank:showpopup', data);
     }
 });
 //# sourceURL=questionsetPlugin.js

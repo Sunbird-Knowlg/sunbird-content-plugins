@@ -69,7 +69,7 @@
         padding-top: 1.4rem;
     }
 
-    .wizard .ui.grid.wizard-header {
+     .wizard .ui.grid.wizard-header {
         margin-left: -21px;
         margin-top: -21px;
         margin-bottom: 20px;
@@ -94,12 +94,12 @@
 
     .listContainer {
         width: 55% !important;
-        height: 60vh;
+        height: 75vh;
         overflow-y: scroll;
     }
 
-    .questionListContainer{
-      width: 100% !important;
+    .questionListContainer {
+        width: 100% !important;
         height: 60vh;
         overflow-y: scroll;
     }
@@ -148,27 +148,35 @@
         margin-bottom: 3%;
     }
 
-    .questionContainer{
-      width:  55% !important;
+    .questionContainer {
+        width: 55% !important;
     }
 
     .preview-config {
         margin-left: 5%;
     }
 
-    .pull-right{
-      float: right;
+    .pull-right {
+        float: right;
     }
     </style>
-    <div class="ui modal questionbank fullscreen active">
+    <div class="ui modal questionbank fullscreen active" ng-init="init()">
+        <div class="header" style="padding-right:1em;">
+            <div class="ui two column grid">
+                <div class="row">
+                    <div class="column">
+                        <span>Question Set</span>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="content wizard">
-
-            <!-- <div class="filters-container" ng-if="!isQuestionSetConfig">
+            <div class="filters-container" ng-if="!isQuestionSetConfig">
                 <div class="ui form">
                     <div class="field">
                         <div class="ui fluid icon input">
-                            <input ng-model="filterObj.question_title" placeholder="Search by question, or question title" ng-keypress="$event.keyCode === 13 ? $ctrl.searchQuestions() : null"  type="text"></input>
-                            <i class="inverted circular search link icon" ng-click="$ctrl.searchQuestions();" ></i>
+                            <input ng-model="filterObj.question_title" placeholder="Search by question, or question title" ng-keypress="$event.keyCode === 13 ? $ctrl.searchQuestions() : null" type="text"></input>
+                            <i class="inverted circular search link icon" ng-click="$ctrl.searchQuestions();"></i>
                         </div>
                     </div>
                     <div class="ui accordion field" id="assessmentAdvancedFields">
@@ -232,13 +240,13 @@
                         </div>
                     </div>
                 </div>
-            </div> -->
+            </div>
             <div class="filters-container" ng-if="isQuestionSetConfig">
                 <div class="ui form">
                     <div class="five fields">
                         <div ng-class="questionSetConfigObj.title ? 'field' :'field error'">
                             <div class="ui corner labeled input">
-                                <input name="title" ng-model="questionSetConfigObj.title" type="text" placeholder="Question Set Title" maxlength="100" autocomplete="off" >
+                                <input name="title" ng-model="questionSetConfigObj.title" type="text" placeholder="Question Set Title" maxlength="100" autocomplete="off">
                                 <div class="ui corner label">
                                     <i class="asterisk icon"></i>
                                 </div>
@@ -250,10 +258,10 @@
                                 <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="questionSetConfigObj.max_score" min='0' required="" type="number" />
                             </div>
                         </div>
-                        <div >
+                        <div>
                             <div class="ui fluid labeled input displayCount">
                                 <div class="ui label">Display</div>
-                                <select class="ui fluid dropdown" id="total_items" ng-model="questionSetConfigObj.total_items" ng-options="option as option for option in item_range" >
+                                <select class="ui fluid dropdown" id="total_items" ng-model="questionSetConfigObj.total_items" ng-options="option as option for option in itemRange">
                                 </select>
                             </div>
                         </div>
@@ -278,37 +286,32 @@
                     <div class="ui text loader">Just one second, We're fetching that content for you.</div>
                 </div>
             </div>
-
             <div>
                 <div class="ui three column horizontally padded grid" ng-show="!$ctrl.itemsLoading">
-                    <div class="row tab">
+                    <!-- <div class="row tab">
                         <button class="tablinks" ng-click="isQuestionTab = true">Question bank</button>
                         <button class="tablinks" ng-click="isQuestionTab = false">Selected Questions</button>
-                    </div>
-                    <div class="column questionContainer" ng-if="isQuestionTab">
-                    <div class="row questionListContainer" ng-if="isQuestionTab">
-                        <div class="ui large divided items">
-                            <div class="item select" ng-repeat="question in questions" ng-show="!question.isSelected">
-                                <div class="middle aligned content" ng-click="$ctrl.previewItem(question, true);">
-                                    <div class="header">{{ question.config.metadata.title }}</div>
-                                    <div class="meta">{{question.config.metadata.language}} | {{ question.config.metadata.type}} | {{ question.config.metadata.difficulty }}</div>
-                                    <div class="description">{{ question.config.metadata.description }}</div>
+                    </div> -->
+                    <div class="column questionContainer" ng-if="!isQuestionSetConfig">
+                        <div class="row questionListContainer" >
+                            <div class="ui large divided items">
+                                <div class="item select" ng-repeat="question in questions">
+                                    <div class="middle aligned content" ng-click="$ctrl.previewItem(question, true);">
+                                        <div class="header">{{ question.config.metadata.title }}</div>
+                                        <div class="meta">{{question.config.metadata.language}} | {{ question.config.metadata.type}} | {{ question.config.metadata.difficulty }}</div>
+                                        <div class="description">{{ question.config.metadata.description }}</div>
+                                    </div>
+                                    <div>
+                                        <input type="checkbox" checked="" name="check" ng-model="question.isSelected" ng-click="selectQuestion(question)">
+                                    </div>
                                 </div>
-                                <div>
-                                    <input type="checkbox" checked="" name="check" ng-model="question.isSelected" ng-click="selectQuestion(question)">
+                                <div ng-if="questions.length == 0">
+                                    <p>No questions available</p>
                                 </div>
-                            </div>
-
-                            <div ng-if="questions.length == 0">
-                                <p>No questions available</p>
                             </div>
                         </div>
                     </div>
-                    <div>
-                      <button class="ui blue button pull-right"  ng-click="createQuestion()" type="button">Create Question</button>
-                    </div>
-                    </div >
-                    <div class="column listContainer" ng-if="!isQuestionTab">
+                    <div class="column listContainer" ng-if="isQuestionSetConfig">
                         <div class="ui large divided items">
                             <div class="item select" ng-repeat="selQuestion in selectedQuestions">
                                 <div class="middle aligned content" ng-click="$ctrl.previewItem(selQuestion, true);">
@@ -335,11 +338,11 @@
                                 <div class="fields">
                                     <div class="field">
                                         <label>Max time</label>
-                                        <input type="number" placeholder="In minutes" ng-model="questionObj.config.max_time">
+                                        <input type="number" placeholder="In minutes" ng-model="selQuestionObj.config.max_time">
                                     </div>
                                     <div class="field">
                                         <label>Max score</label>
-                                        <input type="number" ng-model="questionObj.config.max_score">
+                                        <input type="number" ng-model="selQuestionObj.config.max_score">
                                     </div>
                                 </div>
                             </div>
@@ -348,7 +351,7 @@
                                     <div class="inline field">
                                         <div class="ui checkbox">
                                             <label>Partial Scoring</label>
-                                            <input type="checkbox" tabindex="0" class="hidden" ng-model="questionObj.config.partial_scoring">
+                                            <input type="checkbox" ng-model="selQuestionObj.config.partial_scoring">
                                         </div>
                                     </div>
                                 </div>
@@ -366,10 +369,12 @@
             </div>
         </div>
         <div class="actions">
+            <button class="ui blue left floated button" ng-click="createQuestion()">Create question</button>
             <div class="ui buttons">
-                <button class="ui orange button" ng-click="cancel();isQuestionSetConfig = false;" type="button">Cancel</button>
+                <button class="ui orange button" ng-click="cancel();" ng-show="!isQuestionSetConfig" type="button">Cancel</button>
+                <button class="ui orange button" ng-click="isQuestionSetConfig = false;" ng-show="isQuestionSetConfig" type="button">Add More Questions</button>
                 <div class="or"></div>
-                <button class="ui blue button" ng-show="!isQuestionSetConfig" ng-click="saveQuestionSet()" type="button">Next</button>
+                <button class="ui blue button" ng-show="!isQuestionSetConfig" ng-click="createQuestionSet()" type="button">Next</button>
                 <button class="ui blue button" ng-disabled="(questionSetConfigObj.title == '')" ng-show="isQuestionSetConfig" ng-click="addQuestionSet()" type="button">Add</button>
             </div>
         </div>

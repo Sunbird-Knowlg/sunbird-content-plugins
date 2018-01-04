@@ -1,24 +1,41 @@
 /**
  *
- * Plugin to create question set and add it to stage.
+ * Plugin to add questions in question stage.
  * @class questionbank
  * @extends org.ekstep.contenteditor.basePlugin
- * @author Manoj Chandrashekar <manoj.chandrashekar@tarento.com>
+ * @author Swati Singh <swati.singh@tarento.com>
  */
 org.ekstep.contenteditor.basePlugin.extend({
     type: "org.ekstep.questionbank",
     /**
      * Register events.
-     * @memberof questionbank
+     * @member of questionbank
      */
-    initPlugin: function (data) {
-        // TODO: Logic here
+    initialize: function() {
+        ecEditor.addEventListener(this.manifest.id +":showpopup", this.loadHtml, this);
+        var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/questionbankmodal.html');
+        var controllerPath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/questionbankcontroller.js');
+        ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath);
+
     },
-    initialize: function () {
-        // TODO: Logic here
+     /**
+     *  Open window to add question and options
+     *  @memberof org.ekstep.questionbank
+     */
+    loadHtml: function(event, data) {
+        this.editData = (!ecEditor._.isUndefined(data)) ? data : '';
+
+        var currentInstance = this;
+        ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
+            template: 'QuestionFormTemplate',
+            controller: 'QuestionFormController',
+            controllerAs: '$ctrl',
+            resolve: {
+                'instance': function() {
+                    return currentInstance;
+                }
+            }
+        });
     },
-    newInstance: function () {
-        // TODO: Logic here
-    }
 });
 //# sourceURL=questionBankPlugin.js
