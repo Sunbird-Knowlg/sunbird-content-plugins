@@ -9,10 +9,6 @@
         "main": "editor/plugin.js",
         "dependencies": [
         {
-            "type": "js",
-            "src": "editor/init.js"
-        },
-        {
             "type": "css",
             "src": "editor/style.css"
         },
@@ -31,15 +27,7 @@
             "ver": "1.0"
         }],
         "menu": [],
-        "init-data":
-        {
-            "type": "rect",
-            "x": 10,
-            "y": 2,
-            "w": 80,
-            "h": 80,
-            "fill": "#DCDCDC"
-        },
+        "init-data":{},
         "configManifest": [
         {}],
         "help":
