@@ -7,6 +7,7 @@
  */
 org.ekstep.contenteditor.basePlugin.extend({
     type: "org.ekstep.questionbank",
+    _pluginInstance:  undefined,
     /**
      * Register events.
      * @member of questionbank
@@ -22,17 +23,17 @@ org.ekstep.contenteditor.basePlugin.extend({
      *  Open window to add question and options
      *  @memberof org.ekstep.questionbank
      */
-    loadHtml: function(event, data) {
-        this.editData = (!ecEditor._.isUndefined(data)) ? data : '';
-
-        var currentInstance = this;
+    loadHtml: function(event, dataObj) {
+        _pluginInstance = this;
+        _pluginInstance.callback = dataObj.callback;
+        _pluginInstance.editData = (!ecEditor._.isUndefined(dataObj.data)) ? dataObj.data : '';
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
             template: 'QuestionFormTemplate',
             controller: 'QuestionFormController',
             controllerAs: '$ctrl',
             resolve: {
-                'instance': function() {
-                    return currentInstance;
+                'pluginInstance': function() {
+                    return _pluginInstance;
                 }
             }
         });

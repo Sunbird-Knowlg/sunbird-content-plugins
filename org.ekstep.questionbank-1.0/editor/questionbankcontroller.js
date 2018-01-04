@@ -5,7 +5,7 @@
  */
 'use strict';
 angular.module('createquestionapp', [])
-    .controller('QuestionFormController', ['$scope', 'instance', function($scope, instance) {
+    .controller('QuestionFormController', ['$scope', 'pluginInstance', function($scope, pluginInstance) {
 
         $scope.isQuestionTab = true;
         $scope.selectedQuestions = [];
@@ -14,215 +14,10 @@ angular.module('createquestionapp', [])
         $scope.filterObj = {};
         $scope.questions = [];
         $scope.itemRange = [];
-        $scope.pluginIdObj = {}
-
-        $scope.questions = [{
-                "questionId": "qTestId1",
-                "data": {
-                    "plugin": { // Question Unit Plugin Information
-                        "id": "testplugin1", // Id of plugin
-                        "version": "1.0", // Version of plugin
-                        "templateId": "testPluginTemp1" // Template Id of the question unit
-                    },
-                    "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                    "data": {}, // Question Unit Form Data
-                },
-                "config": { // Default question configuration applicable to all questions
-                    "metadata": { // Question Metadata fields
-                        "title": "Addition of two numbers",
-                        "description": "2 + 2",
-                        "language": "english"
-                    },
-                    "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                    "max_score": 1, // Maximum score for the correct answer
-                    "partial_scoring": false // Allow partial score to be awarded in case user answers
-                },
-                "isSelected": false
-            },
-            {
-                "questionId": "qTestId2",
-                "data": {
-                    "plugin": { // Question Unit Plugin Information
-                        "id": "testplugin2", // Id of plugin
-                        "version": "1.0", // Version of plugin
-                        "templateId": "testPlugin2Temp1" // Template Id of the question unit
-                    },
-                    "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                    "data": {}, // Question Unit Form Data
-                },
-                "config": { // Default question configuration applicable to all questions
-                    "metadata": { // Question Metadata fields
-                        "title": "Subtraction of two numbers",
-                        "description": "12 - 5",
-                        "language": "english"
-                    },
-                    "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                    "max_score": 1, // Maximum score for the correct answer
-                    "partial_scoring": false // Allow partial score to be awarded in case user answers
-                },
-                "isSelected": false
-            }, {
-                "questionId": "qTestId3",
-                "data": {
-                    "plugin": { // Question Unit Plugin Information
-                        "id": "testplugin3", // Id of plugin
-                        "version": "1.0", // Version of plugin
-                        "templateId": "testPlugin3Temp1" // Template Id of the question unit
-                    },
-                    "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                    "data": {}, // Question Unit Form Data
-                },
-                "config": { // Default question configuration applicable to all questions
-                    "metadata": { // Question Metadata fields
-                        "title": "Multiplication of two numbers",
-                        "description": "5 * 6",
-                        "language": "english"
-                    },
-                    "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                    "max_score": 1, // Maximum score for the correct answer
-                    "partial_scoring": false // Allow partial score to be awarded in case user answers
-                },
-                "isSelected": false
-            }, {
-                "questionId": "qTestId4",
-                "data": {
-                    "plugin": { // Question Unit Plugin Information
-                        "id": "testplugin4", // Id of plugin
-                        "version": "1.0", // Version of plugin
-                        "templateId": "testPlugin3Temp1" // Template Id of the question unit
-                    },
-                    "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                    "data": {}, // Question Unit Form Data
-                },
-                "config": { // Default question configuration applicable to all questions
-                    "metadata": { // Question Metadata fields
-                        "title": "Multiplication of two numbers",
-                        "description": "5 * 6",
-                        "language": "english"
-                    },
-                    "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                    "max_score": 1, // Maximum score for the correct answer
-                    "partial_scoring": false // Allow partial score to be awarded in case user answers
-                },
-                "isSelected": false
-            }, {
-                "questionId": "qTestId5",
-                "data": {
-                    "plugin": { // Question Unit Plugin Information
-                        "id": "testplugin5", // Id of plugin
-                        "version": "1.0", // Version of plugin
-                        "templateId": "testPlugin3Temp1" // Template Id of the question unit
-                    },
-                    "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                    "data": {}, // Question Unit Form Data
-                },
-                "config": { // Default question configuration applicable to all questions
-                    "metadata": { // Question Metadata fields
-                        "title": "Multiplication of two numbers",
-                        "description": "5 * 6",
-                        "language": "english"
-                    },
-                    "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                    "max_score": 1, // Maximum score for the correct answer
-                    "partial_scoring": false // Allow partial score to be awarded in case user answers
-                },
-                "isSelected": false
-            },
-            {
-                "questionId": "qTestId6",
-                "data": {
-                    "plugin": { // Question Unit Plugin Information
-                        "id": "testplugin6", // Id of plugin
-                        "version": "1.0", // Version of plugin
-                        "templateId": "testPlugin3Temp1" // Template Id of the question unit
-                    },
-                    "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                    "data": {}, // Question Unit Form Data
-                },
-                "config": { // Default question configuration applicable to all questions
-                    "metadata": { // Question Metadata fields
-                        "title": "Multiplication of two numbers",
-                        "description": "5 * 6",
-                        "language": "english"
-                    },
-                    "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                    "max_score": 1, // Maximum score for the correct answer
-                    "partial_scoring": false // Allow partial score to be awarded in case user answers
-                },
-                "isSelected": false
-            }, {
-                "questionId": "qTestId7",
-                "data": {
-                    "plugin": { // Question Unit Plugin Information
-                        "id": "testplugin7", // Id of plugin
-                        "version": "1.0", // Version of plugin
-                        "templateId": "testPlugin3Temp1" // Template Id of the question unit
-                    },
-                    "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                    "data": {}, // Question Unit Form Data
-                },
-                "config": { // Default question configuration applicable to all questions
-                    "metadata": { // Question Metadata fields
-                        "title": "Multiplication of two numbers",
-                        "description": "5 * 6",
-                        "language": "english"
-                    },
-                    "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                    "max_score": 1, // Maximum score for the correct answer
-                    "partial_scoring": false // Allow partial score to be awarded in case user answers
-                },
-                "isSelected": false
-            }, {
-                "questionId": "qTestId8",
-                "data": {
-                    "plugin": { // Question Unit Plugin Information
-                        "id": "testplugin8", // Id of plugin
-                        "version": "1.0", // Version of plugin
-                        "templateId": "testPlugin3Temp1" // Template Id of the question unit
-                    },
-                    "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                    "data": {}, // Question Unit Form Data
-                },
-                "config": { // Default question configuration applicable to all questions
-                    "metadata": { // Question Metadata fields
-                        "title": "Multiplication of two numbers",
-                        "description": "5 * 6",
-                        "language": "english"
-                    },
-                    "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                    "max_score": 1, // Maximum score for the correct answer
-                    "partial_scoring": false // Allow partial score to be awarded in case user answers
-                },
-                "isSelected": false
-            }, {
-                "questionId": "qTestId9",
-                "data": {
-                    "plugin": { // Question Unit Plugin Information
-                        "id": "testplugin9", // Id of plugin
-                        "version": "1.0", // Version of plugin
-                        "templateId": "testPlugin3Temp1" // Template Id of the question unit
-                    },
-                    "type": "unit", //Type of question (unit, set, dynamic) -- redundant?
-                    "data": {}, // Question Unit Form Data
-                },
-                "config": { // Default question configuration applicable to all questions
-                    "metadata": { // Question Metadata fields
-                        "title": "Multiplication of two numbers",
-                        "description": "5 * 6",
-                        "language": "english"
-                    },
-                    "max_time": 2, // Maximum time allowed for solving question (0 for no limit)
-                    "max_score": 1, // Maximum score for the correct answer
-                    "partial_scoring": false // Allow partial score to be awarded in case user answers
-                },
-                "isSelected": false
-            }
-        ]
-
-
-
-
-
+        $scope.pluginIdObj = {
+            "question_set_id" : "org.ekstep.questionset",
+            "question_create_id" : "org.ekstep.question"
+        }
 
         $scope.questionSetConfigObj = {
             "title": "",
@@ -236,9 +31,9 @@ angular.module('createquestionapp', [])
 
 
         $scope.init = function() {
-            if (instance.editData) {
-                $scope.selectedQuestions = instance.editData.data;
-                $scope.questionSetConfigObj = instance.editData.config;
+            if (pluginInstance.editData) {
+                $scope.selectedQuestions = pluginInstance.editData.data;
+                $scope.questionSetConfigObj = pluginInstance.editData.config;
                 $scope.isQuestionTab = false;
                 $scope.isQuestionSetConfig = true;
                 $scope.createTotalItemRange();
@@ -252,7 +47,7 @@ angular.module('createquestionapp', [])
             }
 
 
-            ecEditor.addEventListener("org.ekstep.questionbank:saveQuestion", function(event, data) {
+            ecEditor.addEventListener(pluginInstance.manifest.id +":saveQuestion", function(event, data) {
                 data.isSelected = false;
                 $scope.questions.push(data);
 
@@ -353,7 +148,7 @@ angular.module('createquestionapp', [])
             questionSet.data = [];
             questionSet.config = $scope.questionSetConfigObj;
             questionSet.data = $scope.selectedQuestions;
-            ecEditor.dispatchEvent("org.ekstep.questionset:addQS", questionSet);
+            ecEditor.dispatchEvent($scope.pluginIdObj.question_set_id + ":addQS", questionSet);
             $scope.closeThisDialog();
         }
 
@@ -363,7 +158,7 @@ angular.module('createquestionapp', [])
          *  @memberof QuestionFormController
          */
         $scope.createQuestion = function() {
-            ecEditor.dispatchEvent("org.ekstep.question:showpopup", {});
+            ecEditor.dispatchEvent( $scope.pluginIdObj.question_create_id +":showpopup", {});
         }
 
 
