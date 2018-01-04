@@ -25,9 +25,12 @@ angular.module('createQuestionApp', [])
         ctrl.questionUnitValidated = false
         ctrl.defaultLang = 'Choose language';
         ctrl.level = ['Easy', 'Medium', 'difficult'];
-
+        $scope.selected = 0;
+        $scope.questionID = 0;
 
         if (!ecEditor._.isEmpty(questionData)) {
+            console.log("Edit mode", questionData);
+            $scope.questionID = questionData.questionID;
             $scope.qcLanguage = questionData.config.metadata.language;
             $scope.qcInput = questionData.config.metadata.title;
             $scope.qcLevel = questionData.config.metadata.qlevel;
@@ -128,6 +131,11 @@ angular.module('createQuestionApp', [])
                 }
             });
 
+            $scope.select = function(parentIndex, index) {
+                $scope.selected = parentIndex + '.' + index;
+            };
+
+
             /**
              * By default always mcq is selected
              * @type {[type]}
@@ -180,7 +188,6 @@ angular.module('createQuestionApp', [])
          */
         ctrl.switchTab = function(id, res) {
             ctrl.selectedMenuItemData = ctrl.menuItems[res.category].templatesData;
-            ecEditor.jQuery("#first_" + id).addClass('activeItem').siblings().removeClass('activeItem');
         }
         /**
          * [addCreateQuestionForm description]
@@ -319,7 +326,13 @@ angular.module('createQuestionApp', [])
                     "type": "",
                     "preload": true
                 }];
-                questionUnitFinalData.questionID = "qid_" + Math.floor(Math.random() * 1000000000);
+                questionUnitFinalData.questionID = $scope.questionID.length > 0 ? $scope.questionID : "qid_" + Math.floor(Math.random() * 1000000000);
+                // if ($scope.questionID.length > 0) {
+                //     questionUnitFinalData.questionID = $scope.questionID;
+                // } else {
+                //     questionUnitFinalData.questionID = "qid_" + Math.floor(Math.random() * 1000000000);
+                // }
+                console.log(questionUnitFinalData.questionID);
                 questionUnitFinalData.data = ctrl.selectedTemplatePluginData;
                 questionUnitFinalData.data.type = "unit";
                 questionUnitFinalData.data.data = ctrl.questionCreationFormData;

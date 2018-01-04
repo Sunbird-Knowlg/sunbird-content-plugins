@@ -20,7 +20,7 @@
                 <div class="two column row" ng-show="$ctrl.templatesScreen">
                     <div class="three wide column">
                         <div class="ui secondary vertical menu" id="questionUnitBrowserSideMenu">
-                            <div class="item" ng-repeat="(key, value) in $ctrl.menuItems" ng-class="{activeItem:(activeIndex?activeIndex==$index:$first)}" id="first_{{$index}}" ng-if="value.templatesData.length > 0">
+                            <div class="item" ng-repeat="(key, value) in $ctrl.menuItems" ng-click="select($parent.$index, $index)" ng-class="{active: $parent.$index + '.' + $index == selected}" ng-if="value.templatesData.length > 0">
                                 <div class="content">
                                     <a class="header" ng-click="$ctrl.switchTab($index,value)"><i class="{{value.data.icon}}"></i> {{value.data.name}}</a>
                                 </div>
@@ -53,13 +53,13 @@
                         <ng-include src="questionUniTemplateURL"></ng-include>
                         <!-- <question-unit plugin="$ctrl.unitPlugin" ver="$ctrl.pluginVer" templateId="$ctrl.templateId"></question-unit> -->
                     </div>
-                    <div class="five wide column" id="previewArea">
-                        <div id="previewArea1">
+                    <div class="five wide column previewArea">
+                        <div class="previewAreaHead">
                             <span class="ui left floated">Preview</span>
                             <i class="icon undo ui right-floated" id="replyIcon" ng-click="$ctrl.setPreviewData()"></i>
                             <div>
-                                <div class="ui raised child preview-iframe-wrapper" id="previewContentIframeWrapper" ng-show='$ctrl.showPreview'>
-                                    <iframe id="previewContentIframe" id="IframeArea"></iframe>
+                                <div class="ui raised child preview-iframe-wrapper" ng-show='$ctrl.showPreview'>
+                                    <iframe class="IframeArea"></iframe>
                                 </div>
                             </div>
                         </div>

@@ -219,16 +219,16 @@
   .second{
     margin-top: 1%;margin-right: 2%;
   }
-  #previewArea{
+  .previewArea{
     background-color: #f3f3f3;
   }
-  #previewArea1{
+  .previewAreaHead{
     margin-top: 3%;
   }
   #replyIcon{
     float: right;
   }
-  #IframeArea{
+  .IframeArea{
     /*height: 100%;*/
     background-color: white;
   }
