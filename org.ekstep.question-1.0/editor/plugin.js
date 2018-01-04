@@ -1,15 +1,15 @@
 /**
  *
- * Plugin to create question in question stage.
+ * Plugin to create question.
  * @class question
  * @extends org.ekstep.contenteditor.basePlugin
- * @author Swati Singh <swati.singh@tarento.com>
+ * @author Jagadish P <jagadish.pujari@tarento.com>
  */
 org.ekstep.contenteditor.basePlugin.extend({
     type: "org.ekstep.question",
     /**
      * Register events.
-     * @member of question
+     * @memberof org.ekstep.question
      */
     initialize: function() {
         var instance = this;
