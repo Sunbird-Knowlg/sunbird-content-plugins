@@ -50,7 +50,9 @@
                 </div>
                 <div class="two column row" ng-show="$ctrl.createQuestionScreen">
                     <div class="seven wide column">
+                        <div ng-if="$ctrl.questionUnitTemplateURL">
                         <ng-include src="$ctrl.questionUnitTemplateURL"></ng-include>
+                    </div>
                     </div>
                     <div class="five wide column previewArea">
                         <div class="previewAreaHead">

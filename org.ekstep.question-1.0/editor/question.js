@@ -196,7 +196,7 @@ angular.module('org.ekstep.question', [])
             ctrl.templateId = obj.editor.template;
             var controllerPath = ecEditor.resolvePluginResource(obj.pluginID, obj.ver, obj.editor.controllerURL);
             var templatePath = ecEditor.resolvePluginResource(obj.pluginID, obj.ver, obj.editor.templateURL);
-            ctrl.questionUnitTemplateURL = templatePath;
+            ctrl.questionUnitTemplateURL = templatePath+'?BUILDNUMBER';
         }
 
 

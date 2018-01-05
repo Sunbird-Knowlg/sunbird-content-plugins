@@ -1,78 +1,77 @@
-
-<div ng-controller="horizontalMCQController">
+<div ng-controller="QuestionFormController123">
     <style type="text/css">
-        /*.ui.modal {
-            top: 3%;
-        }
+    /*.ui.modal {
+        top: 3%;
+    }
 
-        @media only screen and (max-height: 799px) {
-            .ui.modal {
-                top: 1%;
-            }
-        }*/
-
-        .headBred {
-            margin-top: 1px;
-            margin-left: 10px;
+    @media only screen and (max-height: 799px) {
+        .ui.modal {
+            top: 1%;
         }
+    }*/
 
-        input:focus {
-            border-width: 0px 0px 1px 0px !important solid blue;
-            outline: 0;
-            border-color: blue;
-        }
+    .headBred {
+        margin-top: 1px;
+        margin-left: 10px;
+    }
 
-        .textbox {
-            width: 50%;
-            border-width: 0px 0px 1px 0px !important;
-            height: 33px;
-            color: inherit;
-        }
+    input:focus {
+        border-width: 0px 0px 1px 0px !important solid blue;
+        outline: 0;
+        border-color: blue;
+    }
 
-        .cretateQuestion {
-            padding-left: 7%;
-        }
+    .textbox {
+        width: 50%;
+        border-width: 0px 0px 1px 0px !important;
+        height: 33px;
+        color: inherit;
+    }
 
-        .questionbox:focus {
-            box-shadow: 1px 1px 1px #9c60f7;
-        }
+    .cretateQuestion {
+        padding-left: 7%;
+    }
 
-        input[type="radio"] {
-            -webkit-appearance: checkbox;
-            /* Chrome, Safari, Opera */
-            -moz-appearance: checkbox;
-            /* Firefox */
-            -ms-appearance: checkbox;
-            /* not currently supported */
-        }
+    .questionbox:focus {
+        box-shadow: 1px 1px 1px #9c60f7;
+    }
 
-        .preview-window .ngdialog-content {
-            background: none !important;
-        }
+    input[type="radio"] {
+        -webkit-appearance: checkbox;
+        /* Chrome, Safari, Opera */
+        -moz-appearance: checkbox;
+        /* Firefox */
+        -ms-appearance: checkbox;
+        /* not currently supported */
+    }
 
-        .ngdialog.ngdialog-theme-plain .ngdialog-content {
-            background: none!important;
-        }
+    .preview-window .ngdialog-content {
+        background: none !important;
+    }
 
-        .main {
-            position: relative;
-            height: auto;
-        }
+    .ngdialog.ngdialog-theme-plain .ngdialog-content {
+        background: none!important;
+    }
 
-        #previewContentIframeWrapper {
-            position: relative;
-            /*width: 900px;*/
-            height: calc( 400px / (16/9));
-            margin-left: auto;
-            margin-right: auto;
-            border-radius: 0;
-        }
+    .main {
+        position: relative;
+        height: auto;
+    }
 
-        #previewContentIframe {
-            height: 100%;
-            width: 100%;
-            border: none;
-        }
+    #previewContentIframeWrapper {
+        position: relative;
+        /*width: 900px;*/
+        height: calc( 400px / (16/9));
+        margin-left: auto;
+        margin-right: auto;
+        border-radius: 0;
+    }
+
+    #previewContentIframe {
+        height: 100%;
+        width: 100%;
+        border: none;
+    }
     </style>
     <!-- <div class="ui modal large active" style="display: block !important;"> -->
     <!--  <div class="header">
@@ -125,11 +124,11 @@
                 <a class="item active" data-tab="first_{{index}}" id="first_{{index}}"><i class="checkmark icon" ng-show="isQuestion ? editorObj1.question.text.length > 2 : editorObj1.answers[index-1].text.length > 2"></i> Text</a>
                 <!-- <a class="item active" data-tab="first_{{index}}" id="first_{{index}}" ng-show="isAnswer"><i class="checkmark icon" ng-if="editorObj1.answers[index-1].text.length > 2"></i> Text</a> -->
                 <a class="item" data-tab="second_{{index}}" ng-show="isQuestion ? image || editorObj1.question.image.length > 0 : image || editorObj1.answers[index-1].image.length > 0" id="second_{{index}}">
-                    <i class="checkmark icon" ng-show="isQuestion ? selectedImageURL.length > 0 || editorObj1.question.image.length > 0 : selectedImageURL.length > 0 || editorObj1.answers[index-1].image.length > 0" ></i>
-                    Image</a>
+                    <i class="checkmark icon" ng-show="isQuestion ? selectedImageURL.length > 0 || editorObj1.question.image.length > 0 : selectedImageURL.length > 0 || editorObj1.answers[index-1].image.length > 0" ></i> 
+                Image</a>
                 <a class="item" data-tab="third_{{index}}" ng-show="isQuestion ? audio || editorObj1.question.audio.length > 0 : audio || editorObj1.answers[index-1].audio.length > 0" id="third_{{index}}">
                     <i class="checkmark icon" ng-show="isQuestion ? selectedAudioURL.length > 0 || editorObj1.question.audio.length > 0 : selectedAudioURL.length > 0 || editorObj1.answers[index-1].audio.length > 0"></i>
-                    Audio</a>
+                Audio</a>
                 <div class="ui dropdown right floated item" style="color: blue;float: right;" ng-show="isOption">
                     Customize
                     <div class="menu">

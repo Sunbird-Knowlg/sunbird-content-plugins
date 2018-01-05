@@ -4,10 +4,10 @@
  * Jagadish P<jagadish.pujari@tarento.com>
  */
 
-angular.module('org.ekstep.question', [])
-    .controller('horizontalMCQController', ['$scope', function($scope) {
+angular.module('createquestionapp', [])
+    .controller('QuestionFormController123', ['$scope', function($scope) {
 
-        console.log("Validation data from question plugin",$scope.questionEditData);
+        console.log("Validation data from question plugin", $scope.questionEditData);
 
         $scope.config = [];
         $scope.questionData = [];
@@ -21,32 +21,16 @@ angular.module('org.ekstep.question', [])
         $scope.image = false;
         $scope.audio = false;
         $scope.question = "";
-        // if (!ecEditor._.isUndefined(instance.editorObj)) {
-        //     $scope.questionData = instance.config;
-        //     if ($scope.questionData.answers.length > 2) {
-        //         for (var j = 2; j < $scope.questionData.answers.length; j++) {
-        //             $scope.config.push({ maxLen: 25, isImage: true, isText: true, isAudio: true, isOption: true, isAnsOption: true, isHeader: true, headerName: ' ', isQuestion: false, isAnswer: true });
-        //         }
-        //     }
-        // }
-        //
-        //image2 == undefined || image2.length == 0 ? false : true
-        // if( $scope.questionEditData != undefined){
-        $scope.questionData = $scope.questionEditData == undefined ? [] : $scope.questionEditData.data.data;
-        //}
-        //$scope.questionData = $scope.questionEditData == undefined ? 0 $scope.questionEditData.data.data;
-        // ecEditor.addEventListener('org.ekstep.plugins.mcqplugin:editForm', function(event, data) {
-        //     $scope.questionData = data.data.data;
-        //     console.log("MCQ edit object", $scope.questionData);
-        // });
 
-        ecEditor.addEventListener('org.ekstep.plugins.mcqplugin:val', function(ctrl) {
+        $scope.questionData = $scope.questionEditData == undefined ? [] : $scope.questionEditData.data.data;
+
+
+        ecEditor.addEventListener('org.ekstep.questionunit.mcq:val', function(ctrl) {
             //var data = {};
             if ($scope.getdetails()) {
-                console.log("I am listening", $scope.finalDataObj);
-                ctrl.target.validateQuestionCreationFormCallBackFunc(true, $scope.finalDataObj);
+                ctrl.target.validateQuestionForm(true, $scope.finalDataObj);
             } else {
-                ctrl.target.validateQuestionCreationFormCallBackFunc(false, $scope.finalDataObj);
+                ctrl.target.validateQuestionForm(false, $scope.finalDataObj);
             }
 
         }, false);
