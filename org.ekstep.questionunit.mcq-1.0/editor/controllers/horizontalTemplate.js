@@ -11,9 +11,9 @@ angular.module('createquestionapp', [])
 
         $scope.config = [];
         $scope.questionData = [];
-        $scope.config = [{ maxLen: 220, isImage: true, isText: true, isAudio: true, isOption: true, isAnsOption: false, isHeader: true, headerName: 'Enter the question', isQuestion: true, isAnswer: false },
-            { maxLen: 25, isImage: true, isText: true, isAudio: true, isOption: true, isAnsOption: true, isHeader: true, headerName: 'Set answer', isQuestion: false, isAnswer: true },
-            { maxLen: 25, isImage: true, isText: true, isAudio: true, isOption: true, isAnsOption: true, isHeader: false, headerName: '', isQuestion: false, isAnswer: true }
+        $scope.config = [{ maxLen: 220, isImage: true, isText: true, isAudio: true, isOption: false, isAnsOption: false, isHeader: true, headerName: 'Enter the question', isQuestion: true, isAnswer: false },
+            { maxLen: 25, isImage: true, isText: true, isAudio: true, isOption: false, isAnsOption: true, isHeader: true, headerName: 'Set answer', isQuestion: false, isAnswer: true },
+            { maxLen: 25, isImage: true, isText: true, isAudio: true, isOption: false, isAnsOption: true, isHeader: false, headerName: '', isQuestion: false, isAnswer: true }
         ];
 
         $scope.finalDataObj = {};
