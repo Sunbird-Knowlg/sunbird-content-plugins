@@ -8,7 +8,9 @@
 org.ekstep.contenteditor.questionUnitPlugin.extend({
     type: "org.ekstep.questionunit.mcq",
     initialize: function() {
-        // TODO: Implement logic and define interfaces from org.ekstep.questionunit
+        var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/templates/horizontalTemplate.html');
+        var controllerPath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/controllers/horizontalTemplate.js');
+        ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath);
     },
 });
 //# sourceURL=questionunitMCQPlugin.js

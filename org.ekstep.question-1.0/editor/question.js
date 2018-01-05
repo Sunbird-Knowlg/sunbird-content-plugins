@@ -3,7 +3,7 @@
  * @class org.ekstep.question:createquestionController
  * Jagadish Pujari<jagadish.pujari@tarento.com>
  */
-angular.module('createQuestionApp', [])
+angular.module('org.ekstep.question', [])
     .controller('QuestionCreationFormController', ['$scope', 'instance', 'questionData', function($scope, instance, questionData) {
         var ctrl = this;
         ctrl.screens = {

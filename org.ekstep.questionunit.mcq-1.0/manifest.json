@@ -39,7 +39,7 @@
     "templates": [
         {
             "id": "horizontalMCQ",
-            "thumbnail": "https://assets.learnosity.com/questiontypes/templates/qev3/mcqdefault.png",
+            "thumbnail": "editor/assets/mcq-horizontal.png",
             "title": "Horizantal MCQ",
             "disc": "Horizantal MCQ template",
             "category": "mcq",
