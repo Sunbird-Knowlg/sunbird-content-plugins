@@ -18,12 +18,12 @@
         },
         {
             "type": "plugin",
-            "plugin": "org.ekstep.plugins.mcqplugin",
+            "plugin": "org.ekstep.questionunit.mcq",
             "ver": "1.0"
         },
         {
             "type": "plugin",
-            "plugin": "org.ekstep.plugins.ftbplugin",
+            "plugin": "org.ekstep.questionunit.ftb",
             "ver": "1.0"
         }],
         "menu": [],
