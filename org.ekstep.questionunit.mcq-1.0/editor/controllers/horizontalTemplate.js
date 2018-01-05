@@ -4,8 +4,8 @@
  * Jagadish P<jagadish.pujari@tarento.com>
  */
 
-angular.module('createquestionapp', [])
-    .controller('QuestionFormController123', ['$scope', function($scope) {
+angular.module('org.ekstep.question', [])
+    .controller('horizontalMCQController', ['$scope', function($scope) {
 
         console.log("Validation data from question plugin",$scope.questionEditData);
 

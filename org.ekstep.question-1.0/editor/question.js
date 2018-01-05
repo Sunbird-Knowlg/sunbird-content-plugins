@@ -4,58 +4,85 @@
  * Jagadish Pujari<jagadish.pujari@tarento.com>
  */
 angular.module('createQuestionApp', [])
-    .controller('QuestionCreationFormController', ['$scope', '$sce', '$compile', 'instance', 'questionData', function($scope, $sce, $compile, instance, questionData) {
+    .controller('QuestionCreationFormController', ['$scope', 'instance', 'questionData', function($scope, instance, questionData) {
         var ctrl = this;
+        ctrl.screens = {
+            'template': "S1",
+            'form': "S2",
+            'metadata': "S3"
+        };
+        ctrl.screenName = ctrl.screens.template;
         ctrl.templatesScreen = true;
         ctrl.createQuestionScreen = false;
         ctrl.metadaFormScreen = false;
-        ctrl.selectedMenuItem = 'data';
         ctrl.Totalconcepts = 0;
-        ctrl.qt = 0;
-        $scope.questionUniTemplateURL = '';
-        $scope.questionUnitController = undefined;
-        $scope.viewController = '';
+        ctrl.questionUnitTemplateURL = '';
         ctrl.menuItems = {};
         ctrl.showPreview = true;
         ctrl.defaultActiveMenu = 'mcq';
         ctrl.metaDataFormData = {};
         ctrl.selectedTemplatePluginData = {};
         ctrl.questionCreationFormData = {};
-        $scope.qcInput = undefined;
         ctrl.questionUnitValidated = false
         ctrl.defaultLang = 'Choose language';
-        ctrl.level = ['Easy', 'Medium', 'difficult'];
-        $scope.selected = 0;
-        $scope.questionID = 0;
+        ctrl.level = ['Easy', 'Medium', 'Difficult'];
+        ctrl.selected = 0;
+        ctrl.questionID = 0;
+        ctrl.questionData = {};
+        ctrl.plugins = {'concepts':'org.ekstep.conceptselector:init'};
+
+        ctrl.menuItems['mcq'] = {
+            'category': 'mcq',
+            'data': { 'name': 'Multiple Choice', 'icon': 'list icon' },
+            'templatesData': []
+        };
+        ctrl.menuItems['ftb'] = {
+            'category': 'ftb',
+            'data': { 'name': 'Fill in the Blanks', 'icon': 'minus square outline icon' },
+            'templatesData': []
+        };
+        ctrl.menuItems['mtf'] = {
+            'category': 'mtf',
+            'data': { 'name': 'Match the following', 'icon': 'block layout icon' },
+            'templatesData': []
+        };
+        ctrl.menuItems['other'] = {
+            'category': 'other',
+            'data': { 'name': 'Other', 'icon': 'ellipsis horizontal icon' },
+            'templatesData': []
+        };
+        $('.no.label.example .ui.dropdown')
+            .dropdown({
+                useLabels: false
+            });
 
         if (!ecEditor._.isEmpty(questionData)) {
-            console.log("Edit mode", questionData);
-            $scope.questionID = questionData.questionID;
-            $scope.qcLanguage = questionData.config.metadata.language;
-            $scope.qcInput = questionData.config.metadata.title;
-            $scope.qcLevel = questionData.config.metadata.qlevel;
-            $scope.qcGrade = questionData.config.metadata.gradeLevel;
-            ctrl.Totalconcepts = questionData.config.metadata.concepts.length;
             ctrl.questionData = questionData;
-            $scope.questionEditData = questionData;
+            ctrl.questionID = questionData.questionID;
+            ctrl.questionData.qcLanguage = questionData.config.metadata.language;
+            ctrl.questionData.questionTitle = questionData.config.metadata.title;
+            ctrl.questionData.qcLevel = questionData.config.metadata.qlevel;
+            ctrl.questionData.qcGrade = questionData.config.metadata.gradeLevel;
+            ctrl.Totalconcepts = _.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
+            $scope.questionEditData = questionData; //Using this variable in question unit plugin for editing question
             ctrl.templatesScreen = false;
             ctrl.createQuestionScreen = true;
             ctrl.metadaFormScreen = false;
+            var pluginID = questionData.data.plugin.id;
+            var pluginVer = questionData.data.plugin.version;
             var editCreateQuestionFormInstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(questionData.data.plugin.id);
             _.each(editCreateQuestionFormInstance.templates, function(value, key) {
                 if (value.editor.template == questionData.data.plugin.templateId) {
-                    var controllerPathEdit = ecEditor.resolvePluginResource(questionData.data.plugin.id, questionData.data.plugin.version, value.editor.controllerURL);
-                    var templatePathEdit = ecEditor.resolvePluginResource(questionData.data.plugin.id, questionData.data.plugin.version, value.editor.templateURL);
-                    $scope.questionUniTemplateURL = templatePathEdit;
-                    ctrl.questionUniTemplateURL = templatePathEdit;
-                    $scope.questionUnitController = value.editor.controller;
+                    var controllerPathEdit = ecEditor.resolvePluginResource(pluginID, pluginVer, value.editor.controllerURL);
+                    var templatePathEdit = ecEditor.resolvePluginResource(pluginID, pluginVer, value.editor.templateURL);
+                    ctrl.questionUnitTemplateURL = templatePathEdit;
                     $scope.$safeApply();
                 }
             });
 
             ctrl.selectedTemplatePluginData.plugin = { // Question Unit Plugin Information  
-                "id": questionData.data.plugin.id, // Id of plugin
-                "version": questionData.data.plugin.version, // Version of plugin
+                "id": pluginID, // Id of plugin
+                "version": pluginVer, // Version of plugin
                 "templateId": questionData.data.plugin.template // Template Id of the question unit
             };
         }
@@ -70,7 +97,7 @@ angular.module('createQuestionApp', [])
              * @param  {[type]}   data) {                           ctrl.Totalconcepts [description]
              * @return {Function}       [description]
              */
-            ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
+            ecEditor.dispatchEvent(ctrl.plugins.concepts, {
                 element: 'conceptsTextBox',
                 selectedConcepts: [], // All composite keys except mediaType
                 callback: function(data) {
@@ -84,33 +111,8 @@ angular.module('createQuestionApp', [])
                 if (!err) {
                     ctrl.grades = res.data.result.ordinals.gradeLevel;
                     ctrl.languages = res.data.result.ordinals.language;
-                    $scope.$safeApply();
                 }
             });
-
-            /**
-             * Create menu
-             */
-            ctrl.menuItems['mcq'] = {
-                'category': 'mcq',
-                'data': { 'name': 'Multiple Choice', 'icon': 'list icon' },
-                'templatesData': []
-            };
-            ctrl.menuItems['ftb'] = {
-                'category': 'ftb',
-                'data': { 'name': 'Fill in the Blanks', 'icon': 'minus square outline icon' },
-                'templatesData': []
-            };
-            ctrl.menuItems['mtf'] = {
-                'category': 'mtf',
-                'data': { 'name': 'Match the following', 'icon': 'block layout icon' },
-                'templatesData': []
-            };
-            ctrl.menuItems['other'] = {
-                'category': 'other',
-                'data': { 'name': 'Other', 'icon': 'ellipsis horizontal icon' },
-                'templatesData': []
-            };
 
             var questionplugininstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(instance.manifest.id);
             _.each(questionplugininstance.editor.dependencies, function(val, key) {
@@ -118,10 +120,12 @@ angular.module('createQuestionApp', [])
                     var instance = org.ekstep.pluginframework.pluginManager.getPluginManifest(val.plugin);
                     var pluginID = val.plugin;
                     var ver = val.ver;
-                    if (instance.templates != undefined)
+                    if (!_.isUndefined(instance.templates))
                         _.each(instance.templates, function(v, k) {
                             v.pluginID = pluginID;
                             v.ver = ver;
+                            var thumbnail = ecEditor.resolvePluginResource(pluginID, ver, v.thumbnail); //Get image source and update in template object
+                            v.thumbnail = thumbnail;
                             if (ctrl.menuItems.hasOwnProperty(v.category)) {
                                 ctrl.menuItems[v.category].templatesData.push(v);
                             } else {
@@ -130,9 +134,8 @@ angular.module('createQuestionApp', [])
                         });
                 }
             });
-
-            $scope.select = function(parentIndex, index) {
-                $scope.selected = parentIndex + '.' + index;
+            ctrl.select = function(parentIndex, index) {
+                ctrl.selected = parentIndex + '.' + index;
             };
 
 
@@ -141,20 +144,6 @@ angular.module('createQuestionApp', [])
              * @type {[type]}
              */
             ctrl.selectedMenuItemData = ctrl.menuItems[ctrl.defaultActiveMenu].templatesData;
-            /**
-             * [onLoadDropDown description]
-             * @return {[type]} [description]
-             */
-            ctrl.onLoadDropDown = function() {
-                setTimeout(function() {
-                    $('.no.label.example .ui.dropdown')
-                        .dropdown({
-                            useLabels: false
-                        });
-                }, 500);
-
-            }
-
         }
 
         /**
@@ -207,73 +196,25 @@ angular.module('createQuestionApp', [])
             ctrl.templateId = obj.editor.template;
             var controllerPath = ecEditor.resolvePluginResource(obj.pluginID, obj.ver, obj.editor.controllerURL);
             var templatePath = ecEditor.resolvePluginResource(obj.pluginID, obj.ver, obj.editor.templateURL);
-            $scope.questionUniTemplateURL = templatePath;
-            ctrl.questionUniTemplateURL = templatePath;
-            $scope.questionUnitController = obj.editor.controller;
+            ctrl.questionUnitTemplateURL = templatePath;
         }
 
-
-        /**
-         * [setPreviewData Get data form form and show in preivew]
-         */
-        ctrl.setPreviewData = function() {
-            this.previewURL = (ecEditor.getConfig('previewURL') || 'content/preview/preview.html') + '?webview=true';
-            var instance = this;
-            var contentService = ecEditor.getService('content');
-            var defaultPreviewConfig = { showEndpage: true };
-            var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
-            previewContentIframe.src = instance.previewURL;
-            var userData = ecEditor.getService('telemetry').context;
-            previewContentIframe.onload = function() {
-                var configuration = {};
-                userData.etags = userData.etags || {};
-                configuration.context = {
-                    'mode': 'edit',
-                    'sid': userData.sid,
-                    'uid': userData.uid,
-                    'channel': userData.channel,
-                    'pdata': userData.pdata,
-                    'app': userData.etags.app,
-                    'dims': userData.etags.dims,
-                    'partner': userData.etags.partner,
-                    'contentId': ecEditor.getContext('contentId'),
-                };
-                if (ecEditor.getConfig('previewConfig')) {
-                    configuration.config = ecEditor.getConfig('previewConfig');
-                } else {
-                    configuration.config = defaultPreviewConfig;
-                }
-                configuration.metadata = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
-                configuration.data = org.ekstep.contenteditor.stageManager.toECML();
-                previewContentIframe.contentWindow.initializePreview(configuration);
-
-            };
-        }
-
-        /**
-         * Close the modal window
-         * @return {[type]} [description]
-         */
-        $scope.cancel = function() {
-            $scope.closeThisDialog();
-        }
 
         /**
          * Dynamically created form validation
          * @return {[boolean]} based on form validation it will return true/false
          */
         ctrl.validateQuestionCreationForm = function() {
-            ecEditor.dispatchEvent(ctrl.selectedTemplatePluginData.plugin.id + ':val', ctrl.validateQuestionCreationFormCallBackFunc, ctrl);
-
+            ecEditor.dispatchEvent(ctrl.selectedTemplatePluginData.plugin.id + ':val', ctrl.validateQuestionForm, ctrl);
         }
 
-        ctrl.validateQuestionCreationFormCallBackFunc = function(valid, formData) {
+        ctrl.validateQuestionForm = function(valid, formData) {
             if (valid) {
                 ctrl.templatesScreen = false;
                 ctrl.createQuestionScreen = false;
                 ctrl.metadaFormScreen = true;
                 ctrl.questionCreationFormData = formData;
-            } else {}
+            }
         }
         /**
          * Collect data from 3 screens
@@ -282,38 +223,38 @@ angular.module('createQuestionApp', [])
         ctrl.sendData = function() {
             var metadata = {};
             //Third screen data
-            if ($scope.qcInput != undefined) {
-                metadata.title = $scope.qcInput;
-                $scope.qcTitle = false;
+            if (!_.isUndefined(ctrl.questionData.questionTitle)) {
+                metadata.title = ctrl.questionData.questionTitle;
+                ctrl.qcTitle = false;
             } else {
-                $scope.qcTitle = true;
+                ctrl.qcTitle = true;
             }
-            if ($scope.qcLanguage != undefined) {
-                metadata.language = $scope.qcLanguage;
-                $scope.qclangerr = false;
+            if (!_.isUndefined(ctrl.questionData.qcLanguage)) {
+                metadata.language = ctrl.questionData.qcLanguage;
+                ctrl.qclangerr = false;
             } else {
-                $scope.qclangerr = true;
+                ctrl.qclangerr = true;
             }
-            if ($scope.qcLevel != undefined) {
-                metadata.qlevel = $scope.qcLevel;
-                $scope.qclevelerr = false;
+            if (!_.isUndefined(ctrl.questionData.qcLevel)) {
+                metadata.qlevel = ctrl.questionData.qcLevel;
+                ctrl.qclevelerr = false;
             } else {
-                $scope.qclevelerr = true;
+                ctrl.qclevelerr = true;
             }
-            if ($scope.qcGrade != undefined) {
-                metadata.gradeLevel = $scope.qcGrade;
-                $scope.qcgardeerr = false;
+            if (!_.isUndefined(ctrl.questionData.qcGrade)) {
+                metadata.gradeLevel = ctrl.questionData.qcGrade;
+                ctrl.qcgardeerr = false;
             } else {
-                $scope.qcgardeerr = true;
+                ctrl.qcgardeerr = true;
             }
             if (ctrl.Totalconcepts > 0) {
                 metadata.concepts = ctrl.selectedConceptsData;
-                $scope.qcconcepterr = false;
+                ctrl.qcconcepterr = false;
             } else {
-                $scope.qcconcepterr = true;
+                ctrl.qcconcepterr = true;
             }
 
-            if (!$scope.qcTitle && !$scope.qclangerr && !$scope.qclevelerr && !$scope.qcgardeerr && !$scope.qcconcepterr) {
+            if (!ctrl.questionData.qcTitle && !ctrl.questionData.qclangerr && !ctrl.questionData.qclevelerr && !ctrl.questionData.qcgardeerr && !ctrl.qcconcepterr) {
                 ctrl.metaDataFormData.metadata = metadata;
                 ctrl.metaDataFormData.max_time = 1;
                 ctrl.metaDataFormData.max_score = 1;
@@ -326,48 +267,16 @@ angular.module('createQuestionApp', [])
                     "type": "",
                     "preload": true
                 }];
-                questionUnitFinalData.questionID = $scope.questionID.length > 0 ? $scope.questionID : "qid_" + Math.floor(Math.random() * 1000000000);
-                // if ($scope.questionID.length > 0) {
-                //     questionUnitFinalData.questionID = $scope.questionID;
-                // } else {
-                //     questionUnitFinalData.questionID = "qid_" + Math.floor(Math.random() * 1000000000);
-                // }
-                console.log(questionUnitFinalData.questionID);
+                questionUnitFinalData.questionID = ctrl.questionID.length > 0 ? ctrl.questionID : "qid_" + Math.floor(Math.random() * 1000000000);
                 questionUnitFinalData.data = ctrl.selectedTemplatePluginData;
                 questionUnitFinalData.data.type = "unit";
                 questionUnitFinalData.data.data = ctrl.questionCreationFormData;
                 questionUnitFinalData.config = ctrl.metaDataFormData;
                 /*Dispatch event from here*/
-                ecEditor.dispatchEvent('org.ekstep.qe.questionbank:saveQuestion', questionUnitFinalData);
+                ecEditor.dispatchEvent('org.ekstep.questionbank:saveQuestion', questionUnitFinalData);
                 $scope.closeThisDialog();
             }
         }
-
         ctrl.init();
-
-        ctrl.getUnitTemplate = function() {
-            return ctrl.questionUniTemplateURL;
-        }
-    }])
-    /**
-     * Dynamically add templates
-     * @param  {String} )         {                                          return {            scope: { template: " [description]
-     * @param  {String} template: '<div         ng-include [description]
-     * @return {[type]}           [description]
-     */
-    .directive('questionUnit', function() {
-        return {
-            restrict: 'E',
-            scope: { qtemplate: "=", questionData: "=" },
-            template: '<div ng-include="getTemplateURL()" ng-transclude"></div>',
-            controller: ['$scope', function($scope) {
-                $scope.getTemplateURL = function() {
-                    return $scope.qtemplate;
-                }
-                $scope.loadData = function() {
-                    //$scope.
-                }
-            }]
-        };
-    });
+    }]);
 //# sourceURL=question.js
