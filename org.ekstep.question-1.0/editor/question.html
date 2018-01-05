@@ -27,7 +27,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="nine wide column">
+                    <div class="nine wide column" id="templatsCards">
                         <div class="ui grid three column row">
                             <div class="column" ng-repeat="(key, value) in $ctrl.selectedMenuItemData">
                                 <div class="ui card">
@@ -70,13 +70,13 @@
                             <label class="qcMetadateFormLbl" data-original-title="Question title">
                                 Question title <span class="star">&nbsp;*</span>
                             </label>
-                            <input type="text" id="questionTitle" placeholder="Question title" name="questionTitle" ng-model="$ctrl.questionTitle" required>
+                            <input type="text" id="questionTitle" placeholder="Question title" name="questionTitle" ng-model="$ctrl.questionData.questionTitle" required>
                             <small ng-show="$ctrl.qcTitle" class="qcError">Enter question title</small>
                         </div>
                         <div class="column">
                             <label class="qcMetadateFormLbl">
                                 Language <span class="star">&nbsp;*</span></label>
-                            <select class="dropdownBox" name="qcLanguage" ng-model="$ctrl.qcLanguage" required>
+                            <select class="dropdownBox" name="qcLanguage" ng-model="$ctrl.questionData.qcLanguage" required>
                                 <option value="" selected="selected">Choose language</option>
                                 <option ng-selected="{{$ctrl.qcLanguage}}" ng-repeat="lang in $ctrl.languages" value="{{lang}}">{{lang}}</option>
                             </select>
@@ -86,7 +86,7 @@
                             <label class="qcMetadateFormLbl">
                                 Level <span class="star">&nbsp;*</span>
                             </label>
-                            <select class="dropdownBox" name="qcLevel" ng-model="$ctrl.qcLevel" required>
+                            <select class="dropdownBox" name="qcLevel" ng-model="$ctrl.questionData.qcLevel" required>
                                 <option value="" selected="selected">Choose level</option>
                                 <option ng-selected="{{$ctrl.qcLevel}}" ng-repeat="lev in $ctrl.level" value="{{lev}}">{{lev}}</option>
                             </select>
@@ -98,7 +98,7 @@
                             </label>
                             <div class="no label example">
                                 <div class="ui fluid dropdown selection multiple" tabindex="0">
-                                    <select multiple="" name="binary" class="grade" name="qcGrade" ng-model="$ctrl.qcGrade" required>
+                                    <select multiple="" name="binary" class="grade" name="qcGrade" ng-model="$ctrl.questionData.qcGrade" required>
                                         <option ng-selected="{{$ctrl.qcGrade}}" ng-repeat="g in $ctrl.grades" value="{{g}}">{{g}}</option>
                                     </select><i class="dropdown icon"></i>
                                     <div class="default text">Select grade</div>

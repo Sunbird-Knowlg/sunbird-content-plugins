@@ -4,12 +4,17 @@
  * Jagadish Pujari<jagadish.pujari@tarento.com>
  */
 angular.module('createQuestionApp', [])
-    .controller('QuestionCreationFormController', ['$scope', '$sce', '$compile', 'instance', 'questionData', function($scope, $sce, $compile, instance, questionData) {
+    .controller('QuestionCreationFormController', ['$scope', 'instance', 'questionData', function($scope, instance, questionData) {
         var ctrl = this;
+        ctrl.screens = {
+            'template': "S1",
+            'form': "S2",
+            'metadata': "S3"
+        };
+        ctrl.screenName = ctrl.screens.template;
         ctrl.templatesScreen = true;
         ctrl.createQuestionScreen = false;
         ctrl.metadaFormScreen = false;
-        ctrl.selectedMenuItem = 'data';
         ctrl.Totalconcepts = 0;
         ctrl.questionUnitTemplateURL = '';
         ctrl.menuItems = {};
@@ -23,56 +28,61 @@ angular.module('createQuestionApp', [])
         ctrl.level = ['Easy', 'Medium', 'Difficult'];
         ctrl.selected = 0;
         ctrl.questionID = 0;
+        ctrl.questionData = {};
+        ctrl.plugins = {'concepts':'org.ekstep.conceptselector:init'};
 
         ctrl.menuItems['mcq'] = {
-                'category': 'mcq',
-                'data': { 'name': 'Multiple Choice', 'icon': 'list icon' },
-                'templatesData': []
-            };
-            ctrl.menuItems['ftb'] = {
-                'category': 'ftb',
-                'data': { 'name': 'Fill in the Blanks', 'icon': 'minus square outline icon' },
-                'templatesData': []
-            };
-            ctrl.menuItems['mtf'] = {
-                'category': 'mtf',
-                'data': { 'name': 'Match the following', 'icon': 'block layout icon' },
-                'templatesData': []
-            };
-            ctrl.menuItems['other'] = {
-                'category': 'other',
-                'data': { 'name': 'Other', 'icon': 'ellipsis horizontal icon' },
-                'templatesData': []
-            };
+            'category': 'mcq',
+            'data': { 'name': 'Multiple Choice', 'icon': 'list icon' },
+            'templatesData': []
+        };
+        ctrl.menuItems['ftb'] = {
+            'category': 'ftb',
+            'data': { 'name': 'Fill in the Blanks', 'icon': 'minus square outline icon' },
+            'templatesData': []
+        };
+        ctrl.menuItems['mtf'] = {
+            'category': 'mtf',
+            'data': { 'name': 'Match the following', 'icon': 'block layout icon' },
+            'templatesData': []
+        };
+        ctrl.menuItems['other'] = {
+            'category': 'other',
+            'data': { 'name': 'Other', 'icon': 'ellipsis horizontal icon' },
+            'templatesData': []
+        };
         $('.no.label.example .ui.dropdown')
             .dropdown({
                 useLabels: false
             });
 
         if (!ecEditor._.isEmpty(questionData)) {
+            ctrl.questionData = questionData;
             ctrl.questionID = questionData.questionID;
-            ctrl.qcLanguage = questionData.config.metadata.language;
-            ctrl.questionTitle = questionData.config.metadata.title;
-            ctrl.qcLevel = questionData.config.metadata.qlevel;
-            ctrl.qcGrade = questionData.config.metadata.gradeLevel;
+            ctrl.questionData.qcLanguage = questionData.config.metadata.language;
+            ctrl.questionData.questionTitle = questionData.config.metadata.title;
+            ctrl.questionData.qcLevel = questionData.config.metadata.qlevel;
+            ctrl.questionData.qcGrade = questionData.config.metadata.gradeLevel;
             ctrl.Totalconcepts = _.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
             $scope.questionEditData = questionData; //Using this variable in question unit plugin for editing question
             ctrl.templatesScreen = false;
             ctrl.createQuestionScreen = true;
             ctrl.metadaFormScreen = false;
+            var pluginID = questionData.data.plugin.id;
+            var pluginVer = questionData.data.plugin.version;
             var editCreateQuestionFormInstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(questionData.data.plugin.id);
             _.each(editCreateQuestionFormInstance.templates, function(value, key) {
                 if (value.editor.template == questionData.data.plugin.templateId) {
-                    var controllerPathEdit = ecEditor.resolvePluginResource(questionData.data.plugin.id, questionData.data.plugin.version, value.editor.controllerURL);
-                    var templatePathEdit = ecEditor.resolvePluginResource(questionData.data.plugin.id, questionData.data.plugin.version, value.editor.templateURL);
+                    var controllerPathEdit = ecEditor.resolvePluginResource(pluginID, pluginVer, value.editor.controllerURL);
+                    var templatePathEdit = ecEditor.resolvePluginResource(pluginID, pluginVer, value.editor.templateURL);
                     ctrl.questionUnitTemplateURL = templatePathEdit;
                     $scope.$safeApply();
                 }
             });
 
             ctrl.selectedTemplatePluginData.plugin = { // Question Unit Plugin Information  
-                "id": questionData.data.plugin.id, // Id of plugin
-                "version": questionData.data.plugin.version, // Version of plugin
+                "id": pluginID, // Id of plugin
+                "version": pluginVer, // Version of plugin
                 "templateId": questionData.data.plugin.template // Template Id of the question unit
             };
         }
@@ -87,7 +97,7 @@ angular.module('createQuestionApp', [])
              * @param  {[type]}   data) {                           ctrl.Totalconcepts [description]
              * @return {Function}       [description]
              */
-            ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
+            ecEditor.dispatchEvent(ctrl.plugins.concepts, {
                 element: 'conceptsTextBox',
                 selectedConcepts: [], // All composite keys except mediaType
                 callback: function(data) {
@@ -213,26 +223,26 @@ angular.module('createQuestionApp', [])
         ctrl.sendData = function() {
             var metadata = {};
             //Third screen data
-            if (!_.isUndefined(ctrl.questionTitle)) {
-                metadata.title = ctrl.questionTitle;
+            if (!_.isUndefined(ctrl.questionData.questionTitle)) {
+                metadata.title = ctrl.questionData.questionTitle;
                 ctrl.qcTitle = false;
             } else {
                 ctrl.qcTitle = true;
             }
-            if (!_.isUndefined(ctrl.qcLanguage)) {
-                metadata.language = ctrl.qcLanguage;
+            if (!_.isUndefined(ctrl.questionData.qcLanguage)) {
+                metadata.language = ctrl.questionData.qcLanguage;
                 ctrl.qclangerr = false;
             } else {
                 ctrl.qclangerr = true;
             }
-            if (!_.isUndefined(ctrl.qcLevel)) {
-                metadata.qlevel = ctrl.qcLevel;
+            if (!_.isUndefined(ctrl.questionData.qcLevel)) {
+                metadata.qlevel = ctrl.questionData.qcLevel;
                 ctrl.qclevelerr = false;
             } else {
                 ctrl.qclevelerr = true;
             }
-            if (!_.isUndefined(ctrl.qcGrade)) {
-                metadata.gradeLevel = ctrl.qcGrade;
+            if (!_.isUndefined(ctrl.questionData.qcGrade)) {
+                metadata.gradeLevel = ctrl.questionData.qcGrade;
                 ctrl.qcgardeerr = false;
             } else {
                 ctrl.qcgardeerr = true;
@@ -244,7 +254,7 @@ angular.module('createQuestionApp', [])
                 ctrl.qcconcepterr = true;
             }
 
-            if (!ctrl.qcTitle && !ctrl.qclangerr && !ctrl.qclevelerr && !ctrl.qcgardeerr && !ctrl.qcconcepterr) {
+            if (!ctrl.questionData.qcTitle && !ctrl.questionData.qclangerr && !ctrl.questionData.qclevelerr && !ctrl.questionData.qcgardeerr && !ctrl.qcconcepterr) {
                 ctrl.metaDataFormData.metadata = metadata;
                 ctrl.metaDataFormData.max_time = 1;
                 ctrl.metaDataFormData.max_score = 1;
@@ -263,7 +273,7 @@ angular.module('createQuestionApp', [])
                 questionUnitFinalData.data.data = ctrl.questionCreationFormData;
                 questionUnitFinalData.config = ctrl.metaDataFormData;
                 /*Dispatch event from here*/
-                ecEditor.dispatchEvent('org.ekstep.qe.questionbank:saveQuestion', questionUnitFinalData);
+                ecEditor.dispatchEvent('org.ekstep.questionbank:saveQuestion', questionUnitFinalData);
                 $scope.closeThisDialog();
             }
         }

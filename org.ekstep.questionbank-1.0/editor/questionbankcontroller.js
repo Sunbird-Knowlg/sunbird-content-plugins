@@ -161,6 +161,13 @@ angular.module('createquestionapp', [])
             ecEditor.dispatchEvent( $scope.pluginIdObj.question_create_id +":showpopup", {});
         }
 
+        /**
+         * [createQuestion description]
+         * @return {[type]} [description]
+         */
+        $scope.editQuestion = function(questionObj) {
+            ecEditor.dispatchEvent( $scope.pluginIdObj.question_create_id +":showpopup", questionObj);
+        }
 
         ctrl.previewItem = function() {};
 

@@ -38,10 +38,6 @@ org.ekstep.contenteditor.basePlugin.extend({
             },
             width: 900,
             showClose: false,
-        }, function() {
-            if (!ecEditor._.isUndefined(currentInstance.editorObj)) {
-                ecEditor.render();
-            }
         });
     }
 });
