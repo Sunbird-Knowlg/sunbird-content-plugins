@@ -14,10 +14,19 @@ angular.module('createquestionapp', [])
         $scope.filterObj = {};
         $scope.questions = [];
         $scope.itemRange = [];
+        $scope.Totalconcepts;
+        $scope.selectedConceptsData;
+        $scope.grades;
+        $scope.languages = [];
+        $scope.difficultyLevels = ['Easy', 'Medium', 'Difficult'];
+        $scope.questionTypes = ['mcq','ftb','mtf'];
+        $scope.filterObj={};
         $scope.pluginIdObj = {
-            "question_set_id" : "org.ekstep.questionset",
-            "question_create_id" : "org.ekstep.question"
+            "question_set_id": "org.ekstep.questionset",
+            "question_create_id": "org.ekstep.question",
+            "concepts_id": "org.ekstep.conceptselector"
         }
+        $scope.csspath = ecEditor.resolvePluginResource(pluginInstance.manifest.id, pluginInstance.manifest.ver, 'editor/style.css');
 
         $scope.questionSetConfigObj = {
             "title": "",
@@ -46,10 +55,38 @@ angular.module('createquestionapp', [])
                 }
             }
 
+            ecEditor.dispatchEvent($scope.pluginIdObj.concepts_id + ':init', {
+                element: 'conceptsTextBox',
+                selectedConcepts: [], // All composite keys except mediaType
+                callback: function(data) {
+                    $scope.Totalconcepts = data.length;
+                    $scope.selectedConceptsData = data;
+                    $scope.$safeApply();
+                }
+            });
 
-            ecEditor.addEventListener(pluginInstance.manifest.id +":saveQuestion", function(event, data) {
+            ecEditor.getService('meta').getConfigOrdinals(function(err, res) {
+
+                console.log("meta", res);
+                if (!err) {
+                    $scope.grades = res.data.result.ordinals.gradeLevel;
+                    $scope.languages = res.data.result.ordinals.language;
+                    $scope.$safeApply();
+                }
+                ecEditor.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});
+            });
+
+            ecEditor.addEventListener(pluginInstance.manifest.id + ":saveQuestion", function(event, data) {
                 data.isSelected = false;
-                $scope.questions.push(data);
+                var selQueIndex = _.findLastIndex($scope.questions, {
+                    questionId: data.questionId
+                });
+                if (selQueIndex < 0) {
+                    $scope.questions.push(data);
+                } else {
+                    $scope.questions[selQueIndex] = data;
+                }
+
 
             }, false);
 
@@ -105,9 +142,6 @@ angular.module('createquestionapp', [])
          *  @memberof QuestionFormController
          */
         $scope.saveConfig = function() {
-
-
-
             var selectedObjIndex = _.findLastIndex($scope.selectedQuestions, {
                 questionId: $scope.selQuestionObj.questionId
             });
@@ -158,7 +192,7 @@ angular.module('createquestionapp', [])
          *  @memberof QuestionFormController
          */
         $scope.createQuestion = function() {
-            ecEditor.dispatchEvent( $scope.pluginIdObj.question_create_id +":showpopup", {});
+            ecEditor.dispatchEvent($scope.pluginIdObj.question_create_id + ":showpopup", {});
         }
 
         /**
@@ -166,7 +200,7 @@ angular.module('createquestionapp', [])
          * @return {[type]} [description]
          */
         $scope.editQuestion = function(questionObj) {
-            ecEditor.dispatchEvent( $scope.pluginIdObj.question_create_id +":showpopup", questionObj);
+            ecEditor.dispatchEvent($scope.pluginIdObj.question_create_id + ":showpopup", questionObj);
         }
 
         ctrl.previewItem = function() {};
