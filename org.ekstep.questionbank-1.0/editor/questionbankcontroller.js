@@ -66,8 +66,6 @@ angular.module('createquestionapp', [])
             });
 
             ecEditor.getService('meta').getConfigOrdinals(function(err, res) {
-
-                console.log("meta", res);
                 if (!err) {
                     $scope.grades = res.data.result.ordinals.gradeLevel;
                     $scope.languages = res.data.result.ordinals.language;
