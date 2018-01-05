@@ -34,18 +34,26 @@
     ],
     "templates": [
         {
-            "id": "horizontalTemplate",
-            "thumbnail": "",
-            "description": "",
-            "title": "",
-            "editor": {
-                "template": "editor/templates/horizontalTemplate.html",
-                "controller": "editor/controllers/horizontalTemplate.js"
-            },
-            "renderer": {
-                "template": "renderer/templates/horizontalTemplate.html",
-                "controller": "renderer/controllers/horizontalRenderer.js"
-            }
+        "id": "horizontalMCQ",
+        "thumbnail": "https://assets.learnosity.com/questiontypes/templates/qev3/mcqdefault.png",
+        "title": "Horizantal MCQ",
+        "disc": "Horizantal MCQ template",
+        "category": "mcq",
+        "editor":
+        {
+            "templateURL": "editor/templates/horizontalTemplate.html",
+            "controllerURL": "editor/controllers/horizontalTemplate.js",
+            "template": "mcqtemplate",
+            "controller": "QuestionFormController"
+        },
+        "renderer":
+        {
+            "templateURL": "URL",
+            "controllerURL": "controllerPath",
+            "template": "templateID",
+            "controller": "controllerName"
         }
+
+    }
     ]
 }
