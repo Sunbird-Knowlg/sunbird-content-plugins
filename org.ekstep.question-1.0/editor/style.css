@@ -50,6 +50,7 @@
   }
 
   .templateDisc {
+      padding-top: 18%;
       position: absolute;
       color: black;
       left: 0;
@@ -109,7 +110,7 @@
       border-width: 0px 0px 1px !important;
   }
 
-  #conceptsTextBox {
+  #conceptsTextBoxMeta {
       width: 100%;
       padding-left: 0px;
       height: 33px;

@@ -98,7 +98,7 @@ angular.module('org.ekstep.question', [])
              * @return {Function}       [description]
              */
             ecEditor.dispatchEvent(ctrl.plugins.concepts, {
-                element: 'conceptsTextBox',
+                element: 'conceptsTextBoxMeta',
                 selectedConcepts: [], // All composite keys except mediaType
                 callback: function(data) {
                     ctrl.Totalconcepts = data.length;
@@ -199,6 +199,9 @@ angular.module('org.ekstep.question', [])
             ctrl.questionUnitTemplateURL = templatePath+'?BUILDNUMBER';
         }
 
+        ctrl.setPreviewData = function(){
+            
+        }
 
         /**
          * Dynamically created form validation
