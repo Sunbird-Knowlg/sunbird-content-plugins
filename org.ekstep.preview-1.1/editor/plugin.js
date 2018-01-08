@@ -43,13 +43,15 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     initPreview: function(event, data) {
         this.contentBody = data.contentBody;
-        if(data.currentStage){
+        if (data.currentStage) {
             this.contentBody.theme.startStage = ecEditor.getCurrentStage().id;
         }
         var scope = ecEditor.getAngularScope();
         if (scope.developerMode) {
-            if(!this.contentBody.theme['plugin-manifest']) this.contentBody.theme['plugin-manifest'] = {"plugin": []};
-            if(!_.isArray(this.contentBody.theme['plugin-manifest'].plugin)) this.contentBody.theme['plugin-manifest'].plugin = [this.contentBody.theme['plugin-manifest'].plugin];
+            if (!this.contentBody.theme['plugin-manifest']) this.contentBody.theme['plugin-manifest'] = {
+                "plugin": []
+            };
+            if (!_.isArray(this.contentBody.theme['plugin-manifest'].plugin)) this.contentBody.theme['plugin-manifest'].plugin = [this.contentBody.theme['plugin-manifest'].plugin];
             this.contentBody.theme['plugin-manifest'].plugin.splice(0, 0, {
                 "id": "org.ekstep.developer",
                 "ver": "1.0",
@@ -58,20 +60,21 @@ org.ekstep.contenteditor.basePlugin.extend({
                 "preload": true
             });
         }
-        this.showPreview();
+        this.showPreview(data);
     },
     /**     
      *   @memberof preview
      */
-    showPreview: function() {        
-        console.log(this.previewURL);
+    showPreview: function(data) {
         var instance = this;
         var contentService = ecEditor.getService('content');
-        var defaultPreviewConfig = {showEndpage:true};
+        var defaultPreviewConfig = {
+            showEndpage: true
+        };
         var meta = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId'));
         var modalController = function($scope) {
             $scope.$on('ngDialog.opened', function() {
-                var imageUrl = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/images/editor-frame.png'); 
+                var imageUrl = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/images/editor-frame.png');
                 ecEditor.jQuery('.preview-bgimage').css('background', 'url(' + imageUrl + ')');
                 var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
                 previewContentIframe.src = instance.previewURL;
@@ -80,35 +83,77 @@ org.ekstep.contenteditor.basePlugin.extend({
                     var configuration = {};
                     userData.etags = ecEditor.getContext('etags') || [];
                     configuration.context = {
-                        'mode':'edit',
+                        'mode': 'edit',
                         'contentId': ecEditor.getContext('contentId'),
                         'sid': ecEditor.getContext('sid'),
-                        'uid': ecEditor.getContext('uid'), 
-                        'channel': ecEditor.getContext('channel') || "in.ekstep", 
-                        'pdata': ecEditor.getContext('pdata') || {id: "in.ekstep", pid: "", ver: "1.0"}, 
-                        'app': userData.etags.app || [], 
-                        'dims': userData.etags.dims || [], 
+                        'uid': ecEditor.getContext('uid'),
+                        'channel': ecEditor.getContext('channel') || "in.ekstep",
+                        'pdata': ecEditor.getContext('pdata') || {
+                            id: "in.ekstep",
+                            pid: "",
+                            ver: "1.0"
+                        },
+                        'app': userData.etags.app || [],
+                        'dims': userData.etags.dims || [],
                         'partner': userData.etags.partner || []
-                    }; 
+                    };
                     if (ecEditor.getConfig('previewConfig')) {
                         configuration.config = ecEditor.getConfig('previewConfig');
                     } else {
                         configuration.config = defaultPreviewConfig;
                     }
-                    configuration.metadata = meta; 
-                    configuration.data = (meta.mimeType == 'application/vnd.ekstep.ecml-archive') ?  instance.contentBody : {};
+                    configuration.metadata = meta;
+                    configuration.data = (meta.mimeType == 'application/vnd.ekstep.ecml-archive') ? instance.contentBody : {};
                     previewContentIframe.contentWindow.initializePreview(configuration);
                 };
             });
         };
-
-        ecEditor.getService('popup').open({
-            template: 'partials_org.ekstep.preview.html',
-            controller: ['$scope', modalController],
-            showClose: false,
-            width: 710,
-            className: 'ngdialog-theme-plain preview-window'
-        });
+        if (data.parentElement) {
+            var config = {
+                    "showStartPage": false,
+                    "showEndPage": false
+                },
+                itemIframe = org.ekstep.contenteditor.jQuery("." + data.parentElementClass)[0];
+            if (itemIframe.src == "")
+                itemIframe.src = instance.previewURL;
+            itemIframe.addEventListener('load', function() {
+                var userData = {};
+                var configuration = {};
+                userData.etags = ecEditor.getContext('etags') || [];
+                configuration.context = {
+                    'mode': 'edit',
+                    'contentId': ecEditor.getContext('contentId'),
+                    'sid': ecEditor.getContext('sid'),
+                    'uid': ecEditor.getContext('uid'),
+                    'channel': ecEditor.getContext('channel') || "in.ekstep",
+                    'pdata': ecEditor.getContext('pdata') || {
+                        id: "in.ekstep",
+                        pid: "",
+                        ver: "1.0"
+                    },
+                    'app': userData.etags.app || [],
+                    'dims': userData.etags.dims || [],
+                    'partner': userData.etags.partner || []
+                };
+                if (ecEditor.getConfig('previewConfig')) {
+                    configuration.config = ecEditor.getConfig('previewConfig');
+                } else {
+                    configuration.config = defaultPreviewConfig;
+                }
+                configuration.metadata = meta;
+                configuration.data = (meta.mimeType == 'application/vnd.ekstep.ecml-archive') ? instance.contentBody : {};
+                itemIframe.contentWindow.initializePreview(configuration);
+            });
+            itemIframe.contentWindow.location.reload();
+        } else {
+            ecEditor.getService('popup').open({
+                template: 'partials_org.ekstep.preview.html',
+                controller: ['$scope', modalController],
+                showClose: false,
+                width: 710,
+                className: 'ngdialog-theme-plain preview-window'
+            });
+        }
 
     }
 });

@@ -1,0 +1,12 @@
+{
+    "id": "org.ekstep.questionset.preview",
+    "ver": "1.0",
+    "shortId": "qs",
+    "author": "Rajeev Sathish",
+    "title": "questionsetPreview Plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js"
+    }
+}
