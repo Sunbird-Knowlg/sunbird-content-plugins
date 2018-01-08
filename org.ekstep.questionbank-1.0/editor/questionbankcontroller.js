@@ -56,7 +56,7 @@ angular.module('createquestionapp', [])
             }
 
             ecEditor.dispatchEvent($scope.pluginIdObj.concepts_id + ':init', {
-                element: 'conceptsTextBox',
+                element: 'queSetConceptsTextBox',
                 selectedConcepts: [], // All composite keys except mediaType
                 callback: function(data) {
                     $scope.Totalconcepts = data.length;
