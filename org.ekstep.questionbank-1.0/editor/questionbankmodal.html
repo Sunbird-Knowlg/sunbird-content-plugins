@@ -11,7 +11,7 @@
             </div>
         </div>
         <div class="content wizard">
-            <div class="filters-container" ng-show="!isQuestionSetConfig">
+            <div class="qs-filters-container" ng-show="!isQuestionSetConfig">
                 <div class="ui form">
                     <div class="field">
                         <div class="ui fluid icon input">
@@ -125,8 +125,8 @@
                     <div class="ui text loader">Just one second, We're fetching that content for you.</div>
                 </div>
             </div>
-            <div>
-                <div class="ui three column horizontally padded grid" ng-show="!itemsLoading">
+            <div class="qs-questions-list">
+                <div class="ui two column horizontally padded grid" ng-show="!itemsLoading">
                     <div class="column questionContainer" ng-show="!isQuestionSetConfig">
                         <div class="row questionListContainer">
                             <div class="ui large divided items">
@@ -197,7 +197,9 @@
                             <div class="ui submit button" ng-click="saveConfig()">Submit</div>
                         </div>
                         <iframe id="itemIframe" class="previewContainer" ng-hide="!itemPreviewLoading && (itemPreviewContent.error || (itemPreviewDisplay == itemPreviewDefaultMessage))"></iframe>
-                        <div class="itemIframeMessages" ng-show="!itemPreviewLoading && (itemPreviewContent.error || (itemPreviewDisplay == itemPreviewDefaultMessage))">{{itemPreviewDisplay}}</div>
+                        <div>
+                          <div class="itemIframeMessages" ng-show="!itemPreviewLoading && (itemPreviewContent.error || (itemPreviewDisplay == itemPreviewDefaultMessage))">{{itemPreviewDisplay}}</div>
+                        </div>
                     </div>
                 </div>
             </div>

@@ -1,5 +1,5 @@
-.filters-container {
-    padding: 8px 10px 4px 18px;
+.qs-filters-container {
+    padding: 1em 1em .05em 1em;
     background: #f1f1f1;
 }
 
@@ -11,6 +11,7 @@
     font-weight: bold;
     height: 270px;
     width: 480px;
+    margin: 0 auto;
 }
 
 .grid .items .item:hover {
@@ -92,6 +93,15 @@
     flex-flow: column;
 }
 
+.questionbank .content.wizard{
+  height: 83%;
+  padding: 0;
+}
+
+.qs-questions-list{
+  height: 70%;
+}
+
 .listContainer {
     width: 55% !important;
     height: 75vh;
@@ -153,14 +163,6 @@
     width: 100% !important;
     padding: 3%;
     margin-bottom: 3%;
-}
-
-.questionContainer {
-    width: 55% !important;
-}
-
-.preview-config {
-    margin-left: 5%;
 }
 
 .pull-right {
