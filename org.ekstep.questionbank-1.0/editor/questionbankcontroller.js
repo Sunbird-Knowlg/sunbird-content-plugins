@@ -106,7 +106,13 @@ angular.module('createquestionapp', [])
          *  @memberof QuestionFormController
          */
         $scope.selectQuestion = function(selQuestion) {
-            $scope.selectedQuestions.push(selQuestion);
+            var selObjindex = $scope.selectedQuestions.indexOf(selQuestion);
+             if (selObjindex > -1) {
+                $scope.selectedQuestions.splice(selObjindex, 1);
+            }else{
+                $scope.selectedQuestions.push(selQuestion);
+            }
+
         }
 
         /**
