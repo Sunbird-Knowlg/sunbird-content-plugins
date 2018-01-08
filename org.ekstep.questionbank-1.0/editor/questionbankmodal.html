@@ -64,7 +64,7 @@
                                 <div class="field">
                                     <div class="ui fluid labeled input">
                                         <div class="ui label">Concepts <span class="star">&nbsp;*</span></div>
-                                        <input type="text" class="fluid" id="conceptsTextBox" placeholder="Choose concepts" ng-model="filterObj.concepts" ng-change="searchQuestions()" readonly="true" />
+                                        <input type="text" class="fluid" id="queSetConceptsTextBox" placeholder="Choose concepts" ng-model="filterObj.concepts" ng-change="searchQuestions()" readonly="true" />
                                         <span id="concepts_dummy" class="disabled">{{totalconcepts}} concept(s) choosen</span>
                                         <small ng-show="qcconcepterr" class="qcError">Select concept</small>
                                     </div>
@@ -80,7 +80,7 @@
                     </div>
                 </div>
             </div>
-            <div class="filters-container" ng-show="isQuestionSetConfig">
+            <div class="qs-filters-container" ng-show="isQuestionSetConfig">
                 <div class="ui form">
                     <div class="five fields">
                         <div ng-class="questionSetConfigObj.title ? 'field' :'field error'">
@@ -127,8 +127,8 @@
             </div>
             <div class="qs-questions-list">
                 <div class="ui two column horizontally padded grid" ng-show="!itemsLoading">
-                    <div class="column questionContainer" ng-show="!isQuestionSetConfig">
-                        <div class="row questionListContainer">
+                    <div class="column question-container" ng-show="!isQuestionSetConfig">
+                        <div class="row question-list-container">
                             <div class="ui large divided items">
                                 <div class="item select" ng-repeat="question in questions">
                                     <div class="middle aligned content" ng-click="previewItem(question, true);">
@@ -149,7 +149,8 @@
                             </div>
                         </div>
                     </div>
-                    <div class="column listContainer" ng-show="isQuestionSetConfig">
+                     <div class="column question-container" ng-show="isQuestionSetConfig">
+                    <div class="column list-container" ng-show="isQuestionSetConfig">
                         <div class="ui large divided items">
                             <div class="item select" ng-repeat="selQuestion in selectedQuestions">
                                 <div class="middle aligned content" ng-click="previewItem(selQuestion, true);">
@@ -168,6 +169,7 @@
                                 <p>No questions selected</p>
                             </div>
                         </div>
+                    </div>
                     </div>
                     <div class="column preview-config">
                         <div class="configForm" ng-show="showConfigForm">
