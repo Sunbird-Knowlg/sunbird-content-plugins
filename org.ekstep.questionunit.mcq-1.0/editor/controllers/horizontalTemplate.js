@@ -1,11 +1,11 @@
 /**
- * Plugin to create question
- * @class org.ekstep.plugins.mcqplugin:createquestionController
+ * Plugin to create MCQ question
+ * @class org.ekstep.questionunitmcq:mcqQuestionFormController
  * Jagadish P<jagadish.pujari@tarento.com>
  */
 
 angular.module('createquestionapp', [])
-    .controller('QuestionFormController123', ['$scope', function($scope) {
+    .controller('mcqQuestionFormController', ['$scope', function($scope) {
 
         $scope.config = [];
         $scope.questionData = [];
@@ -20,7 +20,15 @@ angular.module('createquestionapp', [])
         $scope.audio = false;
         $scope.question = "";
 
-        $scope.questionData = $scope.questionEditData == undefined ? [] : $scope.questionEditData.data.data;
+       // $scope.questionData = $scope.questionEditData == undefined ? [] : $scope.questionEditData.data.data;
+        if (!ecEditor._.isUndefined($scope.questionEditData)) {
+            $scope.questionData = $scope.questionEditData.data.data;
+            if ($scope.questionData.options.length > 2) {
+                for (var j = 2; j < $scope.questionData.options.length; j++) {
+                    $scope.config.push({ maxLen: 25, isImage: true, isText: true, isAudio: true, isOption: false, isAnsOption: true, isHeader: false, headerName: ' ', isQuestion: false, isAnswer: true });
+                }
+            }
+        }
         ecEditor.addEventListener('org.ekstep.questionunit.mcq:val', function(ctrl,data) {
             if ($scope.getdetails()) {
                 data(true, $scope.finalDataObj);
@@ -183,20 +191,20 @@ angular.module('createquestionapp', [])
 
         $scope.init();
     }])
-    .directive('editor1', function() {
+    .directive('mcqEditor', function() {
         return {
             scope: {
                 "config": "=?",
                 "index": "=?",
-                "questionData": "=?",
-                "jags": "=?"
+               // "questionData": "=?",
+                "data": "=?"
             },
-            controller: 'createquestionController',
-            templateUrl: 'editortemplate1',
+            controller: 'createMcqQuestionController',
+            templateUrl: 'mcqQuestionSubTemplate',
         }
     })
 
-    .controller('createquestionController', ['$scope', '$compile', '$injector', function($scope, $compile, $injector) {
+    .controller('createMcqQuestionController', ['$scope', '$compile', '$injector', function($scope, $compile, $injector) {
         $scope.config = $scope.config || {};
         $scope.maxLen = $scope.config.maxLen;
         $scope.isText = $scope.config.isText;
@@ -211,7 +219,7 @@ angular.module('createquestionapp', [])
         var count = $scope.index;
 
         //$scope.editorObj1 = {"question":{"text":"What is sky color?"},"options":[{"text":"Red","image":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/do_1123553273100124161194/artifact/assetsb91f07a9debf690080dc529ec88933be_636_1508218495_1508218665895.jpg","audio":"","isAnswerCorrect":false},{"text":"blue","image":"","audio":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/1b_1466487334574.mp3","isAnswerCorrect":true}]};
-        $scope.editorObj1 = $scope.jags || {};
+        $scope.editorObj1 = $scope.data || {};
         $scope.question = '';
         $scope.activeMenu = 'Text'
         $scope.selectedImageURL = '';

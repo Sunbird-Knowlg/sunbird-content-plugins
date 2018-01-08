@@ -1,4 +1,4 @@
-<div ng-controller="QuestionFormController123">
+<div ng-controller="mcqQuestionFormController">
     <style type="text/css">
     /*.ui.modal {
         top: 3%;
@@ -82,10 +82,9 @@
         <div class="one column row">
             <div class="column" style="padding-left: 4%;overflow-y: scroll;overflow-x:hidden;">
                 <div style="margin-top: 3%;">
-                    <editor1 ng-repeat="item in config" config="item" index="$index" questionData="$scope.questionData" jags="questionData"></editor1>
-                    {{$scope.editorObj}}
+                    <mcq-editor ng-repeat="item in config" config="item" index="$index" data="questionData"></mcq-editor>
                     <div class="one column row">
-                        <div class="column" style="text-align: center;margin: 2%;">
+                        <div class="column" style="text-align: center;margin-top: 2%;margin-bottom: 6%;">
                             <button class="ui primary basic button large" ng-click="addAnswerField()">Add answer</button>
                         </div>
                     </div>
@@ -113,7 +112,7 @@
         </div> -->
 </div>
 <!-- </div> -->
-<script type="text/ng-template" id="editortemplate1">
+<script type="text/ng-template" id="mcqQuestionSubTemplate">
     <div class="one column row">
         <span class="ui " ng-show="isHeader">{{headerName}}</span>
         <span class="ui small  right floated" ng-show="isHeader && isAnswer" style="color: grey;float: right;font-size: small;">All options will be automatically shuffled</span>

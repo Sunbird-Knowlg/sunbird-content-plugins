@@ -196,7 +196,7 @@
 
   #qcSideMenu {
       font-size: 16px;
-      margin-top: 10%;
+      margin-top: 5%;
       margin-left: 4%;
   }
 
@@ -247,5 +247,8 @@
       margin-top: 8%;
   }
   #templatsCards{
-    margin-top: 2%
+    margin-top: 1%
+  }
+  .bar{
+    margin-top: 2%;
   }
