@@ -31,7 +31,7 @@ angular.module('createquestionapp', [])
         }, false);
         $scope.addAnswerField = function() {
             if ($scope.config.length <= 8)
-                $scope.config.push({ maxLen: 25, isImage: true, isText: true, isAudio: true, isOption: false, isAnsOption: true, isHeader: true, headerName: ' ', isQuestion: false, isAnswer: true });
+                $scope.config.push({ maxLen: 25, isImage: true, isText: true, isAudio: true, isOption: false, isAnsOption: true, isHeader: false, headerName: ' ', isQuestion: false, isAnswer: true });
         }
 
 
