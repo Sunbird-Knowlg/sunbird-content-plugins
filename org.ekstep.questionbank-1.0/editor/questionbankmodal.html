@@ -212,9 +212,10 @@
         </div>
         <div class="actions">
             <button class="ui blue left floated button" ng-show="!isQuestionSetConfig" ng-click="createQuestion()">Create question</button>
+            <button class="ui orange button" ng-click="cancel();" ng-show="isQuestionSetConfig"  type="button">Cancel</button>
             <div class="ui buttons">
 
-                <button class="ui orange button" ng-click="cancel();"  type="button">Cancel</button>
+                <button class="ui orange button" ng-click="cancel();" ng-show="!isQuestionSetConfig"  type="button">Cancel</button>
                  <!-- <div class="or" ng-show="isQuestionSetConfig"></div> -->
                 <button class="ui orange button" ng-click="isQuestionSetConfig = false;" ng-show="isQuestionSetConfig" type="button">Add More Questions</button>
                 <div class="or"></div>
