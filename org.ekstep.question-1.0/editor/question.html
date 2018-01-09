@@ -15,6 +15,7 @@
             </div>
         </div>
         <!-- Main page -->
+        <!-- <div class="ui divider bar"></div> -->
         <form name="questionUnitBrowserForm">
             <div class="ui grid">
                 <div class="two column row" ng-show="$ctrl.templatesScreen">
@@ -101,7 +102,7 @@
                             <div class="no label example">
                                 <div class="ui fluid dropdown selection multiple" tabindex="0">
                                     <select multiple="" name="binary" class="grade" name="qcGrade" ng-model="$ctrl.questionData.qcGrade" required>
-                                        <option ng-selected="{{$ctrl.qcGrade}}" ng-repeat="g in $ctrl.grades" value="{{g}}">{{g}}</option>
+                                        <option ng-repeat="g in $ctrl.grades" value="{{g}}" selected="{{$ctrl.questionData.qcGrade[$index]}}">{{g}}</option>
                                     </select><i class="dropdown icon"></i>
                                     <div class="default text">Select grade</div>
                                     <div class="menu" tabindex="-1">

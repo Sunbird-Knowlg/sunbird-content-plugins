@@ -1,49 +1,49 @@
 /**
- * Plugin to create MCQ question
- * @class org.ekstep.questionunitmcq:mcqQuestionFormController
- * Jagadish P<jagadish.pujari@tarento.com>
+ * Plugin to create question
+ * @class org.ekstep.plugins.ftbplugin:createquestionController
+ * Gourav More<gourav_m@tekditechnologies.com>
  */
-
+'use strict';
 angular.module('createquestionapp', [])
-    .controller('mcqQuestionFormController', ['$scope','$rootScope', function($scope,$rootScope) {
+    .controller('ftbQuestionFormController', ['$scope', function($scope) {
 
         $scope.config = [];
         $scope.questionData = [];
         $scope.config = [{ maxLen: 220, isImage: true, isText: true, isAudio: true, isOption: false, isAnsOption: false, isHeader: true, headerName: 'Enter the question', isQuestion: true, isAnswer: false },
-            { maxLen: 25, isImage: true, isText: true, isAudio: true, isOption: false, isAnsOption: true, isHeader: true, headerName: 'Set answer', isQuestion: false, isAnswer: true },
-            { maxLen: 25, isImage: true, isText: true, isAudio: true, isOption: false, isAnsOption: true, isHeader: false, headerName: '', isQuestion: false, isAnswer: true }
+            { maxLen: 25, isImage: false, isText: true, isAudio: false, isOption: false, isAnsOption: true, isHeader: true, headerName: 'Set answer', isQuestion: false, isAnswer: true }
         ];
-
-        $rootScope.defaultConfigData = $scope.config;
-        $scope.finalDataObj = {};
 
         $scope.image = false;
         $scope.audio = false;
         $scope.question = "";
-console.log("Edit mode",$scope.questionEditData);
-       // $scope.questionData = $scope.questionEditData == undefined ? [] : $scope.questionEditData.data.data;
-        if (!ecEditor._.isUndefined($scope.questionEditData)) {
-            $scope.questionData = $scope.questionEditData.data.data;
-            if ($scope.questionData.options.length > 2) {
-                for (var j = 2; j < $scope.questionData.options.length; j++) {
-                    $scope.config.push({ maxLen: 25, isImage: true, isText: true, isAudio: true, isOption: false, isAnsOption: true, isHeader: false, headerName: ' ', isQuestion: false, isAnswer: true });
-                }
+        // if (!ecEditor._.isUndefined(instance.editorObj)) {
+        //     $scope.questionData = instance.config;
+        //     if ($scope.questionData.answers.length > 2) {
+        //         for (var j = 2; j < $scope.questionData.answers.length; j++) {
+        //             $scope.config.push({ maxLen: 25, isImage: true, isText: true, isAudio: true, isOption: true, isAnsOption: true, isHeader: true, headerName: ' ', isQuestion: false, isAnswer: true });
+        //         }
+        //     }
+        // }
+        // 
+        ecEditor.addEventListener('org.ekstep.questionunit.ftb:val' ,function(ctrl){
+            //var data = {};
+            if($scope.getdetails()){
+                console.log("I am listening",$scope.finalDataObj);
+                ctrl.target.validateQuestionForm(true,$scope.finalDataObj);
+            }else{
+                ctrl.target.validateQuestionForm(false,$scope.finalDataObj);
             }
-            if ($scope.questionData.options.length < 2){
-                $scope.config.splice(2,1);
-            }
+               
+        },false);
+        $scope.init = function(){
+            console.log("i am loading..FTB plugin");
         }
-        ecEditor.addEventListener('org.ekstep.questionunit.mcq:val', function(ctrl,data) {
-            if ($scope.getdetails()) {
-                data(true, $scope.finalDataObj);
-            } else {
-                data(false, $scope.finalDataObj);
-            }
 
-        }, false);
+        $scope.init();
+
         $scope.addAnswerField = function() {
-            if ($scope.config.length <= 8)
-                $scope.config.push({ maxLen: 25, isImage: true, isText: true, isAudio: true, isOption: false, isAnsOption: true, isHeader: false, headerName: ' ', isQuestion: false, isAnswer: true });
+            if ($scope.config.length <= 4)
+                $scope.config.push({ maxLen: 25, isImage: false, isText: true, isAudio: false, isOption: false, isAnsOption: true, isHeader: true, headerName: ' ', isQuestion: false, isAnswer: true });
         }
 
 
@@ -88,31 +88,14 @@ console.log("Edit mode",$scope.questionEditData);
         }
 
         $scope.addToLesson = function() {
-            if ($scope.getdetails()) {
-                return true;
-            } else {
-                return false;
-            }
-
-        }
-
-        $scope.validateForm = function() {
-            if ($scope.getdetails()) {
-                return true;
-            } else {
-                return false;
-            }
-
-        }
-
-        $scope.getData = function() {
-            return $scope.finalDataObj;
+            $scope.getdetails();
+            $scope.cancel();
         }
 
         $scope.getdetails = function() {
             var data = {};
             data.question = {};
-            data.options = [];
+            data.answers = [];
             var result = false;
             var check = false;
             var temp = {};
@@ -121,7 +104,7 @@ console.log("Edit mode",$scope.questionEditData);
             var audio1 = $('#audioQ').attr('src');
             if (text1.length > 0) {
                 data.question.text = text1;
-
+                $("#textQ").css('border-bottom-color', 'inherit');
             }
             if (image1 && image1.length > 0) {
                 data.question.image = image1;
@@ -130,37 +113,17 @@ console.log("Edit mode",$scope.questionEditData);
                 data.question.audio = audio1;
             }
             if (text1 || image1 || audio1) {
-                result = true;
-                $("#textQ").css('border-bottom-color', 'inherit');
-            } else {
                 result = false;
-                $("#textQ").css('border-bottom-color', 'red');
+                // $("#textQ").css('border-bottom-color', 'red');
             }
             for (var i = 1; i < $scope.config.length; i++) {
 
                 var temp = {};
-                temp.isAnswerCorrect = false;
-                temp.score = 0;
-                if ($("#correctAnswer_" + i).is(":checked") || check) {
-                    $("#correctAnswerLabel_" + i).css('color', 'inherit');
-                    check = true;
-                } else {
-                    check = false;
-                    $("#correctAnswerLabel_" + i).css('color', 'red');
-                }
+              
                 var text2 = $("#answerField_" + i).val();
                 var text3 = $("#answerField_" + i).val().length > 0 ? true : false;
-
-                var image2 = $('#image_' + i).attr('src');
-                var image3 = image2 == undefined || image2.length == 0 ? false : true;
-
-                var audio2 = $('#audio_' + i).attr('src');
-
-                var audio3 = audio2 == undefined || audio2.length == 0 ? false : true;
-                if (text3 || image3 || audio3) {
+                if (text3) {
                     temp.text = text2;
-                    temp.image = image2;
-                    temp.audio = audio2;
                     $("#answerField_" + i).css('border-bottom-color', 'inherit');
                     result = true;
                 } else {
@@ -168,46 +131,40 @@ console.log("Edit mode",$scope.questionEditData);
                     $("#answerField_" + i).css('border-bottom-color', 'red');
                     break;
                 }
-                data.options.push(temp);
-            }
-            var checks = [];
-            for (var j = 1; j < $scope.config.length; j++) {
-                if ($("#correctAnswer_" + j).is(":checked")) {
-                    data.options[j - 1].isAnswerCorrect = true;
-                    data.options[j - 1].score = 1;
-                }
-            }
+                temp.text=temp.text.toLowerCase();
 
-            if (result && check) {
+
+                data.answers.push(temp);
+            }
+            if(result){
                 var configData = {};
                 $scope.finalDataObj = data;
                 configData["config"] = { __cdata: JSON.stringify(data) };
-                //ecEditor.dispatchEvent("org.ekstep.plugins.mcqplugin:create", configData);
-                return true;
+                ecEditor.dispatchEvent("org.ekstep.plugins.ftbplugin:create", configData);
+                console.log("configData",data);
+                 return true;
             } else {
                 return false;
             }
+
+           // }
         }
 
-        $scope.init = function() {
-            console.log("i am loading..MCQ plugin");
-        }
-
-        $scope.init();
     }])
-    .directive('mcqEditor', function() {
+    .directive('ftbEditor', function() {
         return {
             scope: {
                 "config": "=?",
                 "index": "=?",
-                "data": "=?"
+                "questionData": "=?",
+                "jags": "=?"
             },
-            controller: 'createMcqQuestionController',
-            templateUrl: 'mcqQuestionSubTemplate',
+            controller: 'createquestionController',
+            templateUrl: 'editortemplate1',
         }
     })
 
-    .controller('createMcqQuestionController', ['$scope','$rootScope', function($scope,$rootScope) {
+    .controller('createquestionController', ['$scope', '$compile', '$injector', function($scope, $compile, $injector) {
         $scope.config = $scope.config || {};
         $scope.maxLen = $scope.config.maxLen;
         $scope.isText = $scope.config.isText;
@@ -220,8 +177,9 @@ console.log("Edit mode",$scope.questionEditData);
         $scope.isAnswer = $scope.config.isAnswer;
         $scope.isHeader = $scope.config.isHeader;
         var count = $scope.index;
-        console.log($rootScope.defaultConfigData);        
-        $scope.editorObj1 = $scope.data || {};
+
+        //$scope.editorObj1 = {"question":{"text":"What is sky color?"},"answers":[{"text":"Red","image":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/do_1123553273100124161194/artifact/assetsb91f07a9debf690080dc529ec88933be_636_1508218495_1508218665895.jpg","audio":"","isAnswerCorrect":false},{"text":"blue","image":"","audio":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/1b_1466487334574.mp3","isAnswerCorrect":true}]};
+        $scope.editorObj1 = $scope.jags || {};
         $scope.question = '';
         $scope.activeMenu = 'Text'
         $scope.selectedImageURL = '';
@@ -237,12 +195,12 @@ console.log("Edit mode",$scope.questionEditData);
                 $scope.quesAudioSelectedURL = new Audio($scope.editorObj1.question.audio);
                 $scope.play = true;
             }
-            if ($scope.editorObj1.options.length != 0) {
-                for (var i = 0; i < $scope.editorObj1.options.length; i++) {
-                    if ($scope.editorObj1.options[i].audio == undefined) {
+            if ($scope.editorObj1.answers.length != 0) {
+                for (var i = 0; i < $scope.editorObj1.answers.length; i++) {
+                    if ($scope.editorObj1.answers[i].audio == undefined) {
                         $scope.ansAudioSelectedURL.push('');
                     } else {
-                        $scope.ansAudioSelectedURL.push(new Audio($scope.editorObj1.options[i].audio));
+                        $scope.ansAudioSelectedURL.push(new Audio($scope.editorObj1.answers[i].audio));
                         $scope.play = true;
                     }
                 }
@@ -278,10 +236,10 @@ console.log("Edit mode",$scope.questionEditData);
                     data.from = 'plugin';
                     $scope.selectedImageURL = data.assetMedia.src;
                     if ($scope.editorObj1 != undefined && $scope.editorObj1.question != undefined && $scope.editorObj1.question.image != undefined ? true : false) {
-                        //$scope.editorObj1.question.image = "";
+                        $scope.editorObj1.question.image = "";
                     }
-                    if ($scope.editorObj1 != undefined && $scope.editorObj1.options != undefined && $scope.editorObj1.options[id - 1] != undefined && $scope.editorObj1.options[id - 1].image != undefined ? true : false) {
-                        $scope.editorObj1.options[id - 1].image = "";
+                    if ($scope.editorObj1 != undefined && $scope.editorObj1.answers != undefined && $scope.editorObj1.answers[id - 1] != undefined && $scope.editorObj1.answers[id - 1].image != undefined ? true : false) {
+                        $scope.editorObj1.answers[id - 1].image = "";
                     }
 
                     $scope.image = true;
@@ -302,15 +260,15 @@ console.log("Edit mode",$scope.questionEditData);
                     $scope.selectedAudioURL = data.assetMedia.src;
                     $scope.audioSelectedURL = new Audio($scope.selectedAudioURL);
                     if ($scope.editorObj1 != undefined && $scope.editorObj1.question != undefined && $scope.editorObj1.question.audio != undefined ? true : false) {
-                        //$scope.editorObj1.question.audio = "";
+                        $scope.editorObj1.question.audio = "";
                     }
-                    if ($scope.editorObj1 != undefined && $scope.editorObj1.options != undefined && $scope.editorObj1.options[id - 1] != undefined && $scope.editorObj1.options[id - 1].audio != undefined ? true : false) {
-                        $scope.editorObj1.options[id - 1].audio = "";
+                    if ($scope.editorObj1 != undefined && $scope.editorObj1.answers != undefined && $scope.editorObj1.answers[id - 1] != undefined && $scope.editorObj1.answers[id - 1].audio != undefined ? true : false) {
+                        $scope.editorObj1.answers[id - 1].audio = "";
                     }
                     $scope.audio = true;
                     //$scope.image = false;
                     $scope.play = true;
-                    //$scope.pause = false;
+                    // $scope.pause = false;
 
                     $("#third_" + id).addClass('active');
                     $("#thirdTab_" + id).addClass('active');
@@ -321,7 +279,7 @@ console.log("Edit mode",$scope.questionEditData);
         }
 
         $scope.playAudio = function(status, id) {
-            if (status == true) {
+            if (status == true) {          
                 if (id != undefined && $scope.ansAudioSelectedURL[id] != '') {
                     $scope.ansAudioSelectedURL[id].play();
                 } else if ($scope.quesAudioSelectedURL != '') {
@@ -344,8 +302,8 @@ console.log("Edit mode",$scope.questionEditData);
 
         $scope.deleteAudio = function(id, isQAud) {
             $scope.audio = false;
-            if ($scope.editorObj1 != undefined && $scope.editorObj1.options != undefined && $scope.editorObj1.options[id - 1] != undefined && $scope.editorObj1.options[id - 1].audio != undefined ? true : false) {
-                $scope.editorObj1.options[id - 1].audio = "";
+            if ($scope.editorObj1 != undefined && $scope.editorObj1.answers != undefined && $scope.editorObj1.answers[id - 1] != undefined && $scope.editorObj1.answers[id - 1].audio != undefined ? true : false) {
+                $scope.editorObj1.answers[id - 1].audio = "";
             }
             if ($scope.editorObj1 != undefined && $scope.editorObj1.question != undefined && $scope.editorObj1.question.audio != undefined ? true : false) {
                 $scope.editorObj1.question.audio = "";
@@ -365,8 +323,8 @@ console.log("Edit mode",$scope.questionEditData);
 
         $scope.deleteImage = function(id, isQImg) {
             $scope.image = false;
-            if ($scope.editorObj1 != undefined && $scope.editorObj1.options != undefined && $scope.editorObj1.options[id - 1] != undefined && $scope.editorObj1.options[id - 1].image != undefined ? true : false) {
-                $scope.editorObj1.options[id - 1].image = "";
+            if ($scope.editorObj1 != undefined && $scope.editorObj1.answers != undefined && $scope.editorObj1.answers[id - 1] != undefined && $scope.editorObj1.answers[id - 1].image != undefined ? true : false) {
+                $scope.editorObj1.answers[id - 1].image = "";
             }
             if ($scope.editorObj1 != undefined && $scope.editorObj1.question != undefined && $scope.editorObj1.question.image != undefined ? true : false) {
                 $scope.editorObj1.question.image = "";
@@ -384,11 +342,10 @@ console.log("Edit mode",$scope.questionEditData);
 
         $scope.deleteAnswer = function(id) {
             $("#main_" + id).hide();
-            $rootScope.defaultConfigData.splice(id,1); 
-            console.log($rootScope.defaultConfigData);
         }
+
 
 
     }]);
 
-//# sourceURL=horizontalMCQ.js
+//# sourceURL=ftbcreatequestion.js

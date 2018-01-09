@@ -183,10 +183,11 @@
          */
          $scope.addQuestionSet = function() {
             var questionSet = {};
+            var callback = pluginInstance.callback;
             questionSet.data = [];
             questionSet.config = $scope.questionSetConfigObj;
             questionSet.data = $scope.selectedQuestions;
-            ecEditor.dispatchEvent($scope.pluginIdObj.question_set_id + ":addQS", questionSet);
+            ecEditor.dispatchEvent($scope.pluginIdObj.question_set_id + ":addQS", {callback: callback, data: questionSet});
             $scope.closeThisDialog();
         }
 

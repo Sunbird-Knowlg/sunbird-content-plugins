@@ -1,14 +1,14 @@
 {
-    "id": "org.ekstep.questionunit.mcq",
+    "id": "org.ekstep.questionunit.ftb",
     "ver": "1.0",
-    "author": "Jagadish",
-    "title": "Add question",
+    "author": "Gourav More",
+    "title": "FTB question",
     "description": "",
     "publishedDate": "",
     "icon": "assets/createquestion.png",
     "languages": ["English"],
     "categories": [],
-    "keywords": ["mcqplugin"],
+    "keywords": ["ftbplugin"],
     "editor":
     {
         "main": "editor/plugin.js",
@@ -17,11 +17,8 @@
             "type": "plugin",
             "plugin": "org.ekstep.questionunit",
             "ver": "1.0"
-        },
-        {
-            "type": "css",
-            "src": "editor/templates/style.css"
-        }],
+        }
+        ],
         "menu": [],
         "init-data":
         {
@@ -45,15 +42,15 @@
     "templates": [
     {
         "id": "horizontalMCQ",
-        "thumbnail": "editor/assets/mcq-horizontal.png",
-        "title": "Horizantal MCQ",
-        "disc": "Horizantal MCQ template",
-        "category": "mcq",
+        "thumbnail": "editor/assets/ftb-horizontal.png",
+        "title": "Horizantal FTB",
+        "disc": "Horizantal FTB template",
+        "category": "ftb",
         "editor":
         {
             "templateURL": "editor/templates/horizontalTemplate.html",
             "controllerURL": "editor/controllers/horizontalTemplate.js",
-            "template": "mcqtemplate",
+            "template": "ftbtemplate",
             "controller": "QuestionFormController"
         },
         "renderer":

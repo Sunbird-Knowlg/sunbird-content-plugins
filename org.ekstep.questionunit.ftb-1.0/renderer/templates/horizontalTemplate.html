@@ -1,0 +1,10 @@
+<!-- TODO: HTML template for horizontal FTB -->
+<link rel="stylesheet" type="text/css" href="styles/horizontalTemplate.css">
+<div id="preview" ng-app="FTBRendererApp" ng-controller="FTBRendererController as $ctrl">
+	<div class="question-text">{{questionObj.question}}</div>
+	<div class="option-container">
+		<div ng-repeat="val in questionObj.options" class="option-value">
+			<div id={{val.value.id}} ng-click="$ctrl.selectedValue(val.value.text, $event)">{{val.value.text}}</div>
+		</div>
+	</div>
+</div>

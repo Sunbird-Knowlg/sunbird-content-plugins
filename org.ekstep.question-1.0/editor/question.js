@@ -23,6 +23,7 @@ angular.module('org.ekstep.question', [])
         ctrl.metaDataFormData = {};
         ctrl.selectedTemplatePluginData = {};
         ctrl.questionCreationFormData = {};
+        ctrl.TotalconceptsData = 0;
         ctrl.questionUnitValidated = false
         ctrl.defaultLang = 'Choose language';
         ctrl.level = ['Easy', 'Medium', 'Difficult'];
@@ -58,18 +59,21 @@ angular.module('org.ekstep.question', [])
 
         if (!ecEditor._.isEmpty(questionData)) {
             ctrl.questionData = questionData;
-            ctrl.questionID = questionData.questionID;
+            ctrl.questionID = questionData.questionId;
             ctrl.questionData.qcLanguage = questionData.config.metadata.language;
             ctrl.questionData.questionTitle = questionData.config.metadata.title;
             ctrl.questionData.qcLevel = questionData.config.metadata.qlevel;
             ctrl.questionData.qcGrade = questionData.config.metadata.gradeLevel;
-            ctrl.Totalconcepts = _.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
+            ctrl.Totalconcepts = questionData.config.metadata.concepts.length;//_.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
+            ctrl.TotalconceptsData = questionData.config.metadata.concepts;
+            $scope.$safeApply();
             $scope.questionEditData = questionData; //Using this variable in question unit plugin for editing question
             ctrl.templatesScreen = false;
             ctrl.createQuestionScreen = true;
             ctrl.metadaFormScreen = false;
             var pluginID = questionData.data.plugin.id;
             var pluginVer = questionData.data.plugin.version;
+            var pluginTemplateId = questionData.data.plugin.templateId;
             var editCreateQuestionFormInstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(questionData.data.plugin.id);
             _.each(editCreateQuestionFormInstance.templates, function(value, key) {
                 if (value.editor.template == questionData.data.plugin.templateId) {
@@ -83,7 +87,7 @@ angular.module('org.ekstep.question', [])
             ctrl.selectedTemplatePluginData.plugin = { // Question Unit Plugin Information  
                 "id": pluginID, // Id of plugin
                 "version": pluginVer, // Version of plugin
-                "templateId": questionData.data.plugin.template // Template Id of the question unit
+                "templateId": pluginTemplateId // Template Id of the question unit
             };
         }
 
@@ -200,7 +204,7 @@ angular.module('org.ekstep.question', [])
         }
 
         ctrl.setPreviewData = function(){
-            
+
         }
 
         /**
@@ -251,7 +255,9 @@ angular.module('org.ekstep.question', [])
                 ctrl.qcgardeerr = true;
             }
             if (ctrl.Totalconcepts > 0) {
+                //if(ctrl.TotalconceptsData)
                 metadata.concepts = ctrl.selectedConceptsData;
+                metadata.concepts = _.isUndefined(ctrl.selectedConceptsData) ? ctrl.TotalconceptsData : ctrl.selectedConceptsData;
                 ctrl.qcconcepterr = false;
             } else {
                 ctrl.qcconcepterr = true;
@@ -270,7 +276,7 @@ angular.module('org.ekstep.question', [])
                     "type": "",
                     "preload": true
                 }];
-                questionUnitFinalData.questionID = ctrl.questionID.length > 0 ? ctrl.questionID : "qid_" + Math.floor(Math.random() * 1000000000);
+                questionUnitFinalData.questionId = ctrl.questionID.length > 0 ? ctrl.questionID : "qid_" + Math.floor(Math.random() * 1000000000);
                 questionUnitFinalData.data = ctrl.selectedTemplatePluginData;
                 questionUnitFinalData.data.type = "unit";
                 questionUnitFinalData.data.data = ctrl.questionCreationFormData;
