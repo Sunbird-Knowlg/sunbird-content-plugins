@@ -279,6 +279,24 @@ angular.module('org.ekstep.question', [])
         $scope.closeThisDialog();
       }
     }
+    ctrl.generateTelemetry = function(data,event) {
+      console.log(event.target.id);
+      if (data) ecEditor.getService('telemetry').interact({
+        "type": data.type,
+        "subtype": data.subtype,
+        "id": data.id,
+        "pageId": ecEditor.getCurrentStage().id ,
+        "target": {
+          "id": event.target.id,
+          "ver": "1.0",
+          "type": data.type
+        },
+        "plugin": {
+          "id": instance.manifest.id,
+          "ver": instance.manifest.ver
+        }
+      })
+    }
   ctrl.init();
 }]);
 //# sourceURL=question.js
