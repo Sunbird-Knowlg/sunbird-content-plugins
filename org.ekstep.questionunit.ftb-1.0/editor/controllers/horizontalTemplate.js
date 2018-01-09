@@ -5,7 +5,7 @@
  */
 'use strict';
 angular.module('createquestionapp', [])
-  .controller('ftbQuestionFormController', ['$scope', function($scope) {
+  .controller('ftbQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope) {
 
     $scope.config = [];
     $scope.questionData = [];
@@ -38,11 +38,22 @@ angular.module('createquestionapp', [])
     $scope.image = false;
     $scope.audio = false;
     $scope.question = "";
+    $rootScope.defaultConfigData = $scope.config;
+
+    if (!ecEditor._.isUndefined($scope.questionEditData)) {
+      $scope.questionData = $scope.questionEditData.data.data;
+      if ($scope.questionData.answers.length > 2) {
+        for (var j = 2; j < $scope.questionData.answers.length; j++) {
+          $scope.config.push({ maxLen: 25, isImage: true, isText: true, isAudio: true, isOption: false, isAnsOption: false, isHeader: false, headerName: ' ', isQuestion: false, isAnswer: true });
+        }
+      }
+      if ($scope.questionData.answers.length < 2) {
+        $scope.config.splice(2, 1);
+      }
+    }
 
     ecEditor.addEventListener('org.ekstep.questionunit.ftb:val', function(ctrl) {
-      //var data = {};
       if ($scope.getdetails()) {
-        console.log("I am listening", $scope.finalDataObj);
         ctrl.target.validateQuestionForm(true, $scope.finalDataObj);
       } else {
         ctrl.target.validateQuestionForm(false, $scope.finalDataObj);
@@ -207,7 +218,6 @@ angular.module('createquestionapp', [])
     $scope.isHeader = $scope.config.isHeader;
     var count = $scope.index;
 
-    //$scope.editorObj1 = {"question":{"text":"What is sky color?"},"answers":[{"text":"Red","image":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/do_1123553273100124161194/artifact/assetsb91f07a9debf690080dc529ec88933be_636_1508218495_1508218665895.jpg","audio":"","isAnswerCorrect":false},{"text":"blue","image":"","audio":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/1b_1466487334574.mp3","isAnswerCorrect":true}]};
     $scope.editorObj1 = $scope.jags || {};
     $scope.question = '';
     $scope.activeMenu = 'Text'
