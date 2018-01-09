@@ -5,7 +5,7 @@
  */
 
 angular.module('createquestionapp', [])
-    .controller('mcqQuestionFormController', ['$scope', function($scope) {
+    .controller('mcqQuestionFormController', ['$scope','$rootScope', function($scope,$rootScope) {
 
         $scope.config = [];
         $scope.questionData = [];
@@ -14,12 +14,13 @@ angular.module('createquestionapp', [])
             { maxLen: 25, isImage: true, isText: true, isAudio: true, isOption: false, isAnsOption: true, isHeader: false, headerName: '', isQuestion: false, isAnswer: true }
         ];
 
+        $rootScope.defaultConfigData = $scope.config;
         $scope.finalDataObj = {};
 
         $scope.image = false;
         $scope.audio = false;
         $scope.question = "";
-
+console.log("Edit mode",$scope.questionEditData);
        // $scope.questionData = $scope.questionEditData == undefined ? [] : $scope.questionEditData.data.data;
         if (!ecEditor._.isUndefined($scope.questionEditData)) {
             $scope.questionData = $scope.questionEditData.data.data;
@@ -27,6 +28,9 @@ angular.module('createquestionapp', [])
                 for (var j = 2; j < $scope.questionData.options.length; j++) {
                     $scope.config.push({ maxLen: 25, isImage: true, isText: true, isAudio: true, isOption: false, isAnsOption: true, isHeader: false, headerName: ' ', isQuestion: false, isAnswer: true });
                 }
+            }
+            if ($scope.questionData.options.length < 2){
+                $scope.config.splice(2,1);
             }
         }
         ecEditor.addEventListener('org.ekstep.questionunit.mcq:val', function(ctrl,data) {
@@ -196,7 +200,6 @@ angular.module('createquestionapp', [])
             scope: {
                 "config": "=?",
                 "index": "=?",
-               // "questionData": "=?",
                 "data": "=?"
             },
             controller: 'createMcqQuestionController',
@@ -204,7 +207,7 @@ angular.module('createquestionapp', [])
         }
     })
 
-    .controller('createMcqQuestionController', ['$scope', '$compile', '$injector', function($scope, $compile, $injector) {
+    .controller('createMcqQuestionController', ['$scope','$rootScope', function($scope,$rootScope) {
         $scope.config = $scope.config || {};
         $scope.maxLen = $scope.config.maxLen;
         $scope.isText = $scope.config.isText;
@@ -217,8 +220,7 @@ angular.module('createquestionapp', [])
         $scope.isAnswer = $scope.config.isAnswer;
         $scope.isHeader = $scope.config.isHeader;
         var count = $scope.index;
-
-        //$scope.editorObj1 = {"question":{"text":"What is sky color?"},"options":[{"text":"Red","image":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/do_1123553273100124161194/artifact/assetsb91f07a9debf690080dc529ec88933be_636_1508218495_1508218665895.jpg","audio":"","isAnswerCorrect":false},{"text":"blue","image":"","audio":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/1b_1466487334574.mp3","isAnswerCorrect":true}]};
+        console.log($rootScope.defaultConfigData);        
         $scope.editorObj1 = $scope.data || {};
         $scope.question = '';
         $scope.activeMenu = 'Text'
@@ -382,6 +384,8 @@ angular.module('createquestionapp', [])
 
         $scope.deleteAnswer = function(id) {
             $("#main_" + id).hide();
+            $rootScope.defaultConfigData.splice(id,1); 
+            console.log($rootScope.defaultConfigData);
         }
 
 
