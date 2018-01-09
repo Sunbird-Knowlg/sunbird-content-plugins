@@ -77,8 +77,8 @@
             <div class="column">
               <label class="qcMetadateFormLbl">Language <span class="star">&nbsp;*</span></label>
               <select class="dropdownBox" name="qcLanguage" ng-model="$ctrl.questionData.qcLanguage" required>
-                <option value="" selected="selected">Choose language></option>
-                <option ng-selected="{{$ctrl.qcLanguage}}" ng-repeat="lang in $ctrl.languages" value="{{lang}}">{{lang}}></option>.
+                <option value="" selected="selected">Choose language</option>
+                <option ng-selected="{{$ctrl.qcLanguage}}" ng-repeat="lang in $ctrl.languages" value="{{lang}}">{{lang}}</option>
               </select>
               <small ng-show="$ctrl.qclangerr" class="qcError">Select language</small>
             </div>
