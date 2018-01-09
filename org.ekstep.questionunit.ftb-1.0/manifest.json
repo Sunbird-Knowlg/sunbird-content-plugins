@@ -9,15 +9,18 @@
   "languages": ["English"],
   "categories": [],
   "keywords": ["ftbplugin"],
-  "editor": {
+  "editor":
+  {
     "main": "editor/plugin.js",
-    "dependencies": [{
+    "dependencies": [
+    {
       "type": "plugin",
       "plugin": "org.ekstep.questionunit",
       "ver": "1.0"
     }],
     "menu": [],
-    "init-data": {
+    "init-data":
+    {
       "type": "rect",
       "x": 10,
       "y": 2,
@@ -25,27 +28,32 @@
       "h": 80,
       "fill": "#DCDCDC"
     },
-    "configManifest": [{
+    "configManifest": [
+    {
 
     }],
-    "help": {
+    "help":
+    {
       "src": "editor/help.md",
       "dataType": "text"
     }
   },
-  "templates": [{
+  "templates": [
+  {
     "id": "horizontalMCQ",
     "thumbnail": "editor/assets/ftb-horizontal.png",
     "title": "Horizantal FTB",
     "disc": "Horizantal FTB template",
     "category": "ftb",
-    "editor": {
+    "editor":
+    {
       "templateURL": "editor/templates/horizontalTemplate.html",
       "controllerURL": "editor/controllers/horizontalTemplate.js",
       "template": "ftbtemplate",
       "controller": "QuestionFormController"
     },
-    "renderer": {
+    "renderer":
+    {
       "templateURL": "URL",
       "controllerURL": "controllerPath",
       "template": "templateID",
@@ -53,22 +61,21 @@
     }
 
   }],
-  "renderer": {
+  "renderer":
+  {
     "main": "renderer/plugin.js",
-    "dependencies": [{
-        "type": "css",
-        "src": "renderer/libs/style.css"
-      },
-      {
-        "type": "css",
-        "src": "renderer/libs/magnific-popup.css"
-      },
-      {
-        "type": "js",
-        "src": "renderer/libs/jquery.magnific-popup.js"
-      }
-
-
-    ]
+    "dependencies": [
+    {
+      "type": "css",
+      "src": "renderer/libs/style.css"
+    },
+    {
+      "type": "css",
+      "src": "renderer/libs/magnific-popup.css"
+    },
+    {
+      "type": "js",
+      "src": "renderer/libs/jquery.magnific-popup.js"
+    }]
   }
 }

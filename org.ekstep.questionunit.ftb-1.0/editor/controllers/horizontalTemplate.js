@@ -3,43 +3,43 @@
  * @class org.ekstep.plugins.ftbplugin:createquestionController
  * Gourav More<gourav_m@tekditechnologies.com>
  */
- 'use strict';
- angular.module('createquestionapp', [])
- .controller('ftbQuestionFormController', ['$scope', function($scope) {
+'use strict';
+angular.module('createquestionapp', [])
+  .controller('ftbQuestionFormController', ['$scope', function($scope) {
 
-  $scope.config = [];
-  $scope.questionData = [];
-  $scope.config = [{
-    maxLen: 220,
-    isImage: true,
-    isText: true,
-    isAudio: true,
-    isOption: false,
-    isAnsOption: false,
-    isHeader: true,
-    headerName: 'Enter the question',
-    isQuestion: true,
-    isAnswer: false
-  },
-  {
-    maxLen: 25,
-    isImage: false,
-    isText: true,
-    isAudio: false,
-    isOption: false,
-    isAnsOption: true,
-    isHeader: true,
-    headerName: 'Set answer',
-    isQuestion: false,
-    isAnswer: true
-  }
-  ];
+    $scope.config = [];
+    $scope.questionData = [];
+    $scope.config = [{
+        maxLen: 220,
+        isImage: true,
+        isText: true,
+        isAudio: true,
+        isOption: false,
+        isAnsOption: false,
+        isHeader: true,
+        headerName: 'Enter the question',
+        isQuestion: true,
+        isAnswer: false
+      },
+      {
+        maxLen: 25,
+        isImage: false,
+        isText: true,
+        isAudio: false,
+        isOption: false,
+        isAnsOption: true,
+        isHeader: true,
+        headerName: 'Set answer',
+        isQuestion: false,
+        isAnswer: true
+      }
+    ];
 
-  $scope.image = false;
-  $scope.audio = false;
-  $scope.question = "";
-  
-  ecEditor.addEventListener('org.ekstep.questionunit.ftb:val', function(ctrl) {
+    $scope.image = false;
+    $scope.audio = false;
+    $scope.question = "";
+
+    ecEditor.addEventListener('org.ekstep.questionunit.ftb:val', function(ctrl) {
       //var data = {};
       if ($scope.getdetails()) {
         console.log("I am listening", $scope.finalDataObj);
@@ -49,98 +49,98 @@
       }
 
     }, false);
-  $scope.init = function() {
-    console.log("i am loading..FTB plugin");
-  }
+    $scope.init = function() {
+      console.log("i am loading..FTB plugin");
+    }
 
-  $scope.init();
+    $scope.init();
 
-  $scope.addAnswerField = function() {
-    if ($scope.config.length <= 4)
-      $scope.config.push({
-        maxLen: 25,
-        isImage: false,
-        isText: true,
-        isAudio: false,
-        isOption: false,
-        isAnsOption: true,
-        isHeader: true,
-        headerName: ' ',
-        isQuestion: false,
-        isAnswer: true
-      });
-  }
+    $scope.addAnswerField = function() {
+      if ($scope.config.length <= 4)
+        $scope.config.push({
+          maxLen: 25,
+          isImage: false,
+          isText: true,
+          isAudio: false,
+          isOption: false,
+          isAnsOption: true,
+          isHeader: true,
+          headerName: ' ',
+          isQuestion: false,
+          isAnswer: true
+        });
+    }
 
 
-  $scope.cancel = function() {
-    $scope.closeThisDialog();
-  }
+    $scope.cancel = function() {
+      $scope.closeThisDialog();
+    }
 
-  $scope.showPreview = true;
-  $scope.setPreviewData = function() {
-    $scope.getdetails();
-    this.previewURL = (ecEditor.getConfig('previewURL') || 'content/preview/preview.html') + '?webview=true';
-    var instance = this;
-    var contentService = ecEditor.getService('content');
-    var defaultPreviewConfig = {
-      showEndpage: true
-    };
-    var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
-    previewContentIframe.src = instance.previewURL;
-    var userData = ecEditor.getService('telemetry').context;
-    previewContentIframe.onload = function() {
-      var configuration = {};
-      userData.etags = userData.etags || {};
-      configuration.context = {
-        'mode': 'edit',
-        'sid': userData.sid,
-        'uid': userData.uid,
-        'channel': userData.channel,
-        'pdata': userData.pdata,
-        'app': userData.etags.app,
-        'dims': userData.etags.dims,
-        'partner': userData.etags.partner,
-        'contentId': ecEditor.getContext('contentId'),
+    $scope.showPreview = true;
+    $scope.setPreviewData = function() {
+      $scope.getdetails();
+      this.previewURL = (ecEditor.getConfig('previewURL') || 'content/preview/preview.html') + '?webview=true';
+      var instance = this;
+      var contentService = ecEditor.getService('content');
+      var defaultPreviewConfig = {
+        showEndpage: true
       };
-      if (ecEditor.getConfig('previewConfig')) {
-        configuration.config = ecEditor.getConfig('previewConfig');
-      } else {
-        configuration.config = defaultPreviewConfig;
+      var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
+      previewContentIframe.src = instance.previewURL;
+      var userData = ecEditor.getService('telemetry').context;
+      previewContentIframe.onload = function() {
+        var configuration = {};
+        userData.etags = userData.etags || {};
+        configuration.context = {
+          'mode': 'edit',
+          'sid': userData.sid,
+          'uid': userData.uid,
+          'channel': userData.channel,
+          'pdata': userData.pdata,
+          'app': userData.etags.app,
+          'dims': userData.etags.dims,
+          'partner': userData.etags.partner,
+          'contentId': ecEditor.getContext('contentId'),
+        };
+        if (ecEditor.getConfig('previewConfig')) {
+          configuration.config = ecEditor.getConfig('previewConfig');
+        } else {
+          configuration.config = defaultPreviewConfig;
+        }
+        configuration.metadata = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        configuration.data = org.ekstep.contenteditor.stageManager.toECML();
+        previewContentIframe.contentWindow.initializePreview(configuration);
+
+      };
+    }
+
+    $scope.addToLesson = function() {
+      $scope.getdetails();
+      $scope.cancel();
+    }
+
+    $scope.getdetails = function() {
+      var data = {};
+      data.question = {};
+      data.answers = [];
+      var result = false;
+      var check = false;
+      var temp = {};
+      var text1 = $("#textQ").val();
+      var image1 = $('#imageQ').attr('src');
+      var audio1 = $('#audioQ').attr('src');
+      if (text1.length > 0) {
+        data.question.text = text1;
+        $("#textQ").css('border-bottom-color', 'inherit');
       }
-      configuration.metadata = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
-      configuration.data = org.ekstep.contenteditor.stageManager.toECML();
-      previewContentIframe.contentWindow.initializePreview(configuration);
-
-    };
-  }
-
-  $scope.addToLesson = function() {
-    $scope.getdetails();
-    $scope.cancel();
-  }
-
-  $scope.getdetails = function() {
-    var data = {};
-    data.question = {};
-    data.answers = [];
-    var result = false;
-    var check = false;
-    var temp = {};
-    var text1 = $("#textQ").val();
-    var image1 = $('#imageQ').attr('src');
-    var audio1 = $('#audioQ').attr('src');
-    if (text1.length > 0) {
-      data.question.text = text1;
-      $("#textQ").css('border-bottom-color', 'inherit');
-    }
-    if (image1 && image1.length > 0) {
-      data.question.image = image1;
-    }
-    if (audio1 && audio1.length > 0) {
-      data.question.audio = audio1;
-    }
-    if (text1 || image1 || audio1) {
-      result = false;
+      if (image1 && image1.length > 0) {
+        data.question.image = image1;
+      }
+      if (audio1 && audio1.length > 0) {
+        data.question.audio = audio1;
+      }
+      if (text1 || image1 || audio1) {
+        result = false;
         // $("#textQ").css('border-bottom-color', 'red');
       }
       for (var i = 1; i < $scope.config.length; i++) {
@@ -180,32 +180,32 @@
     }
 
   }])
-.directive('ftbEditor', function() {
-  return {
-    scope: {
-      "config": "=?",
-      "index": "=?",
-      "questionData": "=?",
-      "jags": "=?"
-    },
-    controller: 'createquestionController',
-    templateUrl: 'editortemplate1',
-  }
-})
+  .directive('ftbEditor', function() {
+    return {
+      scope: {
+        "config": "=?",
+        "index": "=?",
+        "questionData": "=?",
+        "jags": "=?"
+      },
+      controller: 'createquestionController',
+      templateUrl: 'editortemplate1',
+    }
+  })
 
-.controller('createquestionController', ['$scope', '$compile', '$injector', function($scope, $compile, $injector) {
-  $scope.config = $scope.config || {};
-  $scope.maxLen = $scope.config.maxLen;
-  $scope.isText = $scope.config.isText;
-  $scope.isImage = $scope.config.isImage;
-  $scope.isAudio = $scope.config.isAudio;
-  $scope.isOption = $scope.config.isOption;
-  $scope.isAnsOption = $scope.config.isAnsOption;
-  $scope.headerName = $scope.config.headerName;
-  $scope.isQuestion = $scope.config.isQuestion;
-  $scope.isAnswer = $scope.config.isAnswer;
-  $scope.isHeader = $scope.config.isHeader;
-  var count = $scope.index;
+  .controller('createquestionController', ['$scope', '$compile', '$injector', function($scope, $compile, $injector) {
+    $scope.config = $scope.config || {};
+    $scope.maxLen = $scope.config.maxLen;
+    $scope.isText = $scope.config.isText;
+    $scope.isImage = $scope.config.isImage;
+    $scope.isAudio = $scope.config.isAudio;
+    $scope.isOption = $scope.config.isOption;
+    $scope.isAnsOption = $scope.config.isAnsOption;
+    $scope.headerName = $scope.config.headerName;
+    $scope.isQuestion = $scope.config.isQuestion;
+    $scope.isAnswer = $scope.config.isAnswer;
+    $scope.isHeader = $scope.config.isHeader;
+    var count = $scope.index;
 
     //$scope.editorObj1 = {"question":{"text":"What is sky color?"},"answers":[{"text":"Red","image":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/do_1123553273100124161194/artifact/assetsb91f07a9debf690080dc529ec88933be_636_1508218495_1508218665895.jpg","audio":"","isAnswerCorrect":false},{"text":"blue","image":"","audio":"https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/1b_1466487334574.mp3","isAnswerCorrect":true}]};
     $scope.editorObj1 = $scope.jags || {};
@@ -241,13 +241,13 @@
       useLabels: false
     });
     $('.longer.modal')
-    .modal('show');
+      .modal('show');
 
     $('.demo.menu .item').tab({
       history: false
     });
     $('.test.modal')
-    .modal('show');
+      .modal('show');
     $scope.addTab = function(type, id) {
 
       if (type == 'image') {
@@ -283,11 +283,11 @@
           $("#secondTab_" + id).siblings().removeClass('active');
         }
       });
-}
+    }
 
-$scope.addAudio = function(id) {
-  ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
-    type: 'audio',
+    $scope.addAudio = function(id) {
+      ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
+        type: 'audio',
         search_filter: {}, // All composite keys except mediaType
         callback: function(data) {
           $scope.selectedAudioURL = data.assetMedia.src;
@@ -309,73 +309,73 @@ $scope.addAudio = function(id) {
           $("#thirdTab_" + id).siblings().removeClass('active');
         }
       });
-}
-
-$scope.playAudio = function(status, id) {
-  if (status == true) {
-    if (id != undefined && $scope.ansAudioSelectedURL[id] != '') {
-      $scope.ansAudioSelectedURL[id].play();
-    } else if ($scope.quesAudioSelectedURL != '') {
-      $scope.quesAudioSelectedURL.play();
-    } else {
-      $scope.audioSelectedURL.play();
     }
-    $scope.play = false;
-  } else {
-    if (id != undefined && $scope.ansAudioSelectedURL[id] != '') {
-      $scope.ansAudioSelectedURL[id].pause();
-    } else if ($scope.quesAudioSelectedURL != '') {
-      $scope.quesAudioSelectedURL.pause();
-    } else {
-      $scope.audioSelectedURL.pause();
+
+    $scope.playAudio = function(status, id) {
+      if (status == true) {
+        if (id != undefined && $scope.ansAudioSelectedURL[id] != '') {
+          $scope.ansAudioSelectedURL[id].play();
+        } else if ($scope.quesAudioSelectedURL != '') {
+          $scope.quesAudioSelectedURL.play();
+        } else {
+          $scope.audioSelectedURL.play();
+        }
+        $scope.play = false;
+      } else {
+        if (id != undefined && $scope.ansAudioSelectedURL[id] != '') {
+          $scope.ansAudioSelectedURL[id].pause();
+        } else if ($scope.quesAudioSelectedURL != '') {
+          $scope.quesAudioSelectedURL.pause();
+        } else {
+          $scope.audioSelectedURL.pause();
+        }
+        $scope.play = true;
+      }
     }
-    $scope.play = true;
-  }
-}
 
-$scope.deleteAudio = function(id, isQAud) {
-  $scope.audio = false;
-  if ($scope.editorObj1 != undefined && $scope.editorObj1.answers != undefined && $scope.editorObj1.answers[id - 1] != undefined && $scope.editorObj1.answers[id - 1].audio != undefined ? true : false) {
-    $scope.editorObj1.answers[id - 1].audio = "";
-  }
-  if ($scope.editorObj1 != undefined && $scope.editorObj1.question != undefined && $scope.editorObj1.question.audio != undefined ? true : false) {
-    $scope.editorObj1.question.audio = "";
-  }
-  if (isQAud == false) {
-    $('#audio_' + id).attr('src', '');
-  } else {
-    $('#audioQ').attr('src', '');
-  }
+    $scope.deleteAudio = function(id, isQAud) {
+      $scope.audio = false;
+      if ($scope.editorObj1 != undefined && $scope.editorObj1.answers != undefined && $scope.editorObj1.answers[id - 1] != undefined && $scope.editorObj1.answers[id - 1].audio != undefined ? true : false) {
+        $scope.editorObj1.answers[id - 1].audio = "";
+      }
+      if ($scope.editorObj1 != undefined && $scope.editorObj1.question != undefined && $scope.editorObj1.question.audio != undefined ? true : false) {
+        $scope.editorObj1.question.audio = "";
+      }
+      if (isQAud == false) {
+        $('#audio_' + id).attr('src', '');
+      } else {
+        $('#audioQ').attr('src', '');
+      }
 
-  $("#first_" + id).addClass('active');
-  $("#firstTab_" + id).addClass('active');
-  $("#first_" + id).siblings().removeClass('active');
-  $("#firstTab_" + id).siblings().removeClass('active');
+      $("#first_" + id).addClass('active');
+      $("#firstTab_" + id).addClass('active');
+      $("#first_" + id).siblings().removeClass('active');
+      $("#firstTab_" + id).siblings().removeClass('active');
 
-}
+    }
 
-$scope.deleteImage = function(id, isQImg) {
-  $scope.image = false;
-  if ($scope.editorObj1 != undefined && $scope.editorObj1.answers != undefined && $scope.editorObj1.answers[id - 1] != undefined && $scope.editorObj1.answers[id - 1].image != undefined ? true : false) {
-    $scope.editorObj1.answers[id - 1].image = "";
-  }
-  if ($scope.editorObj1 != undefined && $scope.editorObj1.question != undefined && $scope.editorObj1.question.image != undefined ? true : false) {
-    $scope.editorObj1.question.image = "";
-  }
-  if (isQImg == true) {
-    $('#imageQ').attr('src', '');
-  } else {
-    $('#image_' + id).attr('src', '');
-  }
-  $("#first_" + id).addClass('active');
-  $("#firstTab_" + id).addClass('active');
-  $("#first_" + id).siblings().removeClass('active');
-  $("#firstTab_" + id).siblings().removeClass('active');
-}
+    $scope.deleteImage = function(id, isQImg) {
+      $scope.image = false;
+      if ($scope.editorObj1 != undefined && $scope.editorObj1.answers != undefined && $scope.editorObj1.answers[id - 1] != undefined && $scope.editorObj1.answers[id - 1].image != undefined ? true : false) {
+        $scope.editorObj1.answers[id - 1].image = "";
+      }
+      if ($scope.editorObj1 != undefined && $scope.editorObj1.question != undefined && $scope.editorObj1.question.image != undefined ? true : false) {
+        $scope.editorObj1.question.image = "";
+      }
+      if (isQImg == true) {
+        $('#imageQ').attr('src', '');
+      } else {
+        $('#image_' + id).attr('src', '');
+      }
+      $("#first_" + id).addClass('active');
+      $("#firstTab_" + id).addClass('active');
+      $("#first_" + id).siblings().removeClass('active');
+      $("#firstTab_" + id).siblings().removeClass('active');
+    }
 
-$scope.deleteAnswer = function(id) {
-  $("#main_" + id).hide();
-}
-}]);
+    $scope.deleteAnswer = function(id) {
+      $("#main_" + id).hide();
+    }
+  }]);
 
 //# sourceURL=ftbcreatequestion.js

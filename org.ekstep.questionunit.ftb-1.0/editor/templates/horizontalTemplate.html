@@ -1,78 +1,78 @@
 <!-- <script type="text/ng-template" id="QuestionFormTemplate" ng-controller="QuestionFormController2 as $ctrl"> -->
 <div ng-controller="ftbQuestionFormController">
   <style type="text/css">
+  .ui.modal {
+    top: 3%;
+  }
+
+  @media only screen and (max-height: 799px) {
     .ui.modal {
-      top: 3%;
+      top: 1%;
     }
+  }
 
-    @media only screen and (max-height: 799px) {
-      .ui.modal {
-        top: 1%;
-      }
-    }
+  .headBred {
+    margin-top: 1px;
+    margin-left: 10px;
+  }
 
-    .headBred {
-      margin-top: 1px;
-      margin-left: 10px;
-    }
+  input:focus {
+    border-width: 0px 0px 1px 0px !important solid blue;
+    outline: 0;
+    border-color: blue;
+  }
 
-    input:focus {
-      border-width: 0px 0px 1px 0px !important solid blue;
-      outline: 0;
-      border-color: blue;
-    }
+  .textbox {
+    width: 50%;
+    border-width: 0px 0px 1px 0px !important;
+    height: 33px;
+    color: inherit;
+  }
 
-    .textbox {
-      width: 50%;
-      border-width: 0px 0px 1px 0px !important;
-      height: 33px;
-      color: inherit;
-    }
+  .cretateQuestion {
+    padding-left: 7%;
+  }
 
-    .cretateQuestion {
-      padding-left: 7%;
-    }
+  .questionbox:focus {
+    box-shadow: 1px 1px 1px #9c60f7;
+  }
 
-    .questionbox:focus {
-      box-shadow: 1px 1px 1px #9c60f7;
-    }
+  input[type="radio"] {
+    -webkit-appearance: checkbox;
+    /* Chrome, Safari, Opera */
+    -moz-appearance: checkbox;
+    /* Firefox */
+    -ms-appearance: checkbox;
+    /* not currently supported */
+  }
 
-    input[type="radio"] {
-      -webkit-appearance: checkbox;
-      /* Chrome, Safari, Opera */
-      -moz-appearance: checkbox;
-      /* Firefox */
-      -ms-appearance: checkbox;
-      /* not currently supported */
-    }
+  .preview-window .ngdialog-content {
+    background: none !important;
+  }
 
-    .preview-window .ngdialog-content {
-      background: none !important;
-    }
+  .ngdialog.ngdialog-theme-plain .ngdialog-content {
+    background: none !important;
+  }
 
-    .ngdialog.ngdialog-theme-plain .ngdialog-content {
-      background: none !important;
-    }
+  .main {
+    position: relative;
+    height: auto;
+  }
 
-    .main {
-      position: relative;
-      height: auto;
-    }
+  #previewContentIframeWrapper {
+    position: relative;
+    /*width: 900px;*/
+    height: calc( 400px / (16/9));
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 0;
+  }
 
-    #previewContentIframeWrapper {
-      position: relative;
-      /*width: 900px;*/
-      height: calc( 400px / (16/9));
-      margin-left: auto;
-      margin-right: auto;
-      border-radius: 0;
-    }
-
-    #previewContentIframe {
-      height: 100%;
-      width: 100%;
-      border: none;
-    }
+  #previewContentIframe {
+    height: 100%;
+    width: 100%;
+    border: none;
+  }
   </style>
   <!-- <div class="ui modal large active" style="display: block !important;"> -->
   <!--  <div class="header">
@@ -179,24 +179,23 @@
           <!-- Question Audio -->
           <div class="one wide column" ng-if="isQuestion && (editorObj1.question.audio.length == 0 || selectedAudioURL.length > 0)">
             <audio src="{{selectedAudioURL}}" controls="" class="audio-container" style="display: none" id="audioQ">
-        </audio>
+            </audio>
             <i ng-class="play ? 'play large icon blue' : 'pause large icon blue'" ng-click="playAudio(play)"></i>
           </div>
           <div class="one wide column" ng-if="isQuestion && (editorObj1.question.audio.length > 0 || selectedAudioURL.length == 0)">
             <audio src="{{editorObj1.question.audio}}" controls="" class="audio-container" style="display: none" id="audioQ">
-        </audio>
+            </audio>
             <i ng-class="play ? 'play large icon blue' : 'pause large icon blue'" ng-click="playAudio(play)"></i>
           </div>
-
           <!-- Answer Audio -->
           <div class="one wide column" ng-if="isAnswer && (editorObj1.answers[index-1].audio.length == 0 || selectedAudioURL.length > 0)">
             <audio src="{{selectedAudioURL}}" controls="" class="audio-container" style="display: none" id="audio_{{index}}">
-        </audio>
+            </audio>
             <i ng-class="play ? 'play large icon blue' : 'pause large icon blue'" ng-click="playAudio(play)"></i>
           </div>
           <div class="one wide column" ng-if="isAnswer && (editorObj1.answers[index-1].audio.length > 0 || selectedAudioURL.length == 0)">
             <audio src="{{editorObj1.answers[index-1].audio}}" controls="" class="audio-container" style="display: none" id="audio_{{index}}">
-        </audio>
+            </audio>
             <i ng-class="play ? 'play large icon blue' : 'pause large icon blue'" ng-click="playAudio(play,index-1)"></i>
           </div>
           <div class="column">
@@ -211,11 +210,10 @@
         <div class="three column row">
           <div class="column">
             <label ng-show="isAnsOption">
-        <a href="" ng-click="deleteAnswer(index)" style="color: #8b8c8d"><i class="trash icon"></i> Delete</a>
-        </label>
+              <a href="" ng-click="deleteAnswer(index)" style="color: #8b8c8d"><i class="trash icon"></i> Delete</a>
+            </label>
           </div>
           <div class="column">
-
           </div>
           <div class="column" ng-if="isAnswer">
             <p style="float: right;">{{editorObj1.answers[index-1].text.length}}/{{maxLen}}</p>
