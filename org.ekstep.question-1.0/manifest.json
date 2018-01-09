@@ -1,46 +1,46 @@
 {
-    "id": "org.ekstep.question",
-    "ver": "1.0",
-    "author": "Jagadish",
-    "title": "Question Plugin",
-    "description": "Plugin to add questions to question sets.",
-    "editor":
+  "id": "org.ekstep.question",
+  "ver": "1.0",
+  "author": "Jagadish",
+  "title": "Question Plugin",
+  "description": "Plugin to add questions to question sets.",
+  "editor":
+  {
+    "main": "editor/plugin.js",
+    "dependencies": [
+      {
+        "type": "css",
+        "src": "editor/style.css"
+      },
+      {
+        "type": "js",
+        "src": "editor/question.js"
+      },
+      {
+        "type": "plugin",
+        "plugin": "org.ekstep.questionunit.mcq",
+        "ver": "1.0"
+      },{
+        "type": "plugin",
+        "plugin": "org.ekstep.questionunit.ftb",
+        "ver": "1.0"
+      }],
+    "menu": [],
+    "init-data":{},
+    "configManifest": [
+      {}],
+    "help":
     {
-        "main": "editor/plugin.js",
-        "dependencies": [
-        {
-            "type": "css",
-            "src": "editor/style.css"
-        },
-        {
-            "type": "js",
-            "src": "editor/question.js"
-        },
-        {
-            "type": "plugin",
-            "plugin": "org.ekstep.questionunit.mcq",
-            "ver": "1.0"
-        },{
-            "type": "plugin",
-            "plugin": "org.ekstep.questionunit.ftb",
-            "ver": "1.0"
-        }],
-        "menu": [],
-        "init-data":{},
-        "configManifest": [
-        {}],
-        "help":
-        {
-            "src": "editor/help.md",
-            "dataType": "text"
-        }
-    },
-    "renderer":
-    {
-        "main": "renderer/plugin.js"
-    },
-    "icon": "assets/icon.png",
-    "languages": ["English"],
-    "categories": [""],
-    "keywords": [""]
+      "src": "editor/help.md",
+      "dataType": "text"
+    }
+  },
+  "renderer":
+  {
+    "main": "renderer/plugin.js"
+  },
+  "icon": "assets/icon.png",
+  "languages": ["English"],
+  "categories": [""],
+  "keywords": [""]
 }

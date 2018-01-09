@@ -1,137 +1,137 @@
 <script type="text/ng-template" id="QuestionUnitBrowser" ng-controller="QuestionCreationFormController as $ctrl">
-    <div class="ui modal questionbank fullscreen active">
-        <div class="two column row ui grid">
-            <div class="two wide column questionHeader">
-                <h2>Create question</h2>
-            </div>
-            <div class="six wide column">
-                <div class="ui huge breadcrumb breadcrumbTitle">
-                    <div ng-class="{activeBreadcumb: $ctrl.templatesScreen == true}" class="section">Choose template</div>
-                    <i class="right chevron icon divider"></i>
-                    <div class="section" ng-class="{activeBreadcumb: $ctrl.createQuestionScreen == true}">Create question</div>
-                    <i class="right chevron icon divider"></i>
-                    <div class="section" ng-class="{activeBreadcumb: $ctrl.metadaFormScreen == true}">Question Details</div>
-                </div>
-            </div>
+  <div class="ui modal questionbank fullscreen active">
+    <div class="two column row ui grid">
+      <div class="two wide column questionHeader">
+        <h2>Create question</h2>
+      </div>
+      <div class="six wide column">
+        <div class="ui huge breadcrumb breadcrumbTitle">
+          <div ng-class="{activeBreadcumb: $ctrl.templatesScreen == true}" class="section">Choose template</div>
+          <i class="right chevron icon divider"></i>
+          <div class="section" ng-class="{activeBreadcumb: $ctrl.createQuestionScreen == true}">Create question</div>
+          <i class="right chevron icon divider"></i>
+          <div class="section" ng-class="{activeBreadcumb: $ctrl.metadaFormScreen == true}">Question Details</div>
         </div>
-        <!-- Main page -->
-        <!-- <div class="ui divider bar"></div> -->
-        <form name="questionUnitBrowserForm">
-            <div class="ui grid">
-                <div class="two column row" ng-show="$ctrl.templatesScreen">
-                    <div class="three wide column">
-                        <div class="ui secondary vertical menu" id="qcSideMenu">
-                            <div class="item" ng-repeat="(key, value) in $ctrl.menuItems" ng-click="$ctrl.select($parent.$index, $index)" ng-class="{active: $parent.$index + '.' + $index == $ctrl.selected}" ng-if="value.templatesData.length > 0">
-                                <div class="content">
-                                    <a class="header" ng-click="$ctrl.switchTab($index,value)"><i class="{{value.data.icon}}"></i> {{value.data.name}}</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="nine wide column" id="templatsCards">
-                        <div class="ui grid three column row">
-                            <div class="column" ng-repeat="(key, value) in $ctrl.selectedMenuItemData">
-                                <div class="ui card">
-                                    <div class="content" id="templateCardHeader">
-                                        <div class="left floated meta" id="templateCardHeaderText">{{value.title}}</div>
-                                    </div>
-                                    <div class="content templateCard">
-                                        <img src="{{value.thumbnail}}" />
-                                        <span ng-click="$ctrl.addCreateQuestionForm(value)">
-                                    <div class="templateDisc">
-                                        <p>Standard Multiple choice question.</p>
-                                        <i class="plus icon"></i>
-                                </div>
-                                </span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="two column row" ng-show="$ctrl.createQuestionScreen">
-                    <div class="seven wide column">
-                        <div ng-if="$ctrl.questionUnitTemplateURL">
-                        <ng-include src="$ctrl.questionUnitTemplateURL"></ng-include>
-                    </div>
-                    </div>
-                    <div class="five wide column previewArea">
-                        <div class="previewAreaHead">
-                            <span class="ui left floated">Preview</span>
-                            <i class="icon undo ui right-floated replyIcon" ng-click="$ctrl.setPreviewData()"></i>
-                            <div>
-                                <div class="ui raised child preview-iframe-wrapper" ng-show='$ctrl.showPreview'>
-                                    <iframe class="IframeArea"></iframe>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="five column row QuestionMetaForm" ng-show="$ctrl.metadaFormScreen">
-                    <form name="qcMetadateForm">
-                        <div class="column">
-                            <label class="qcMetadateFormLbl" data-original-title="Question title">
-                                Question title <span class="star">&nbsp;*</span>
-                            </label>
-                            <input type="text" id="questionTitle" placeholder="Question title" name="questionTitle" ng-model="$ctrl.questionData.questionTitle" required>
-                            <small ng-show="$ctrl.qcTitle" class="qcError">Enter question title</small>
-                        </div>
-                        <div class="column">
-                            <label class="qcMetadateFormLbl">
-                                Language <span class="star">&nbsp;*</span></label>
-                            <select class="dropdownBox" name="qcLanguage" ng-model="$ctrl.questionData.qcLanguage" required>
-                                <option value="" selected="selected">Choose language</option>
-                                <option ng-selected="{{$ctrl.qcLanguage}}" ng-repeat="lang in $ctrl.languages" value="{{lang}}">{{lang}}</option>
-                            </select>
-                            <small ng-show="$ctrl.qclangerr" class="qcError">Select language</small>
-                        </div>
-                        <div class="column">
-                            <label class="qcMetadateFormLbl">
-                                Level <span class="star">&nbsp;*</span>
-                            </label>
-                            <select class="dropdownBox" name="qcLevel" ng-model="$ctrl.questionData.qcLevel" required>
-                                <option value="" selected="selected">Choose level</option>
-                                <option ng-selected="{{$ctrl.qcLevel}}" ng-repeat="lev in $ctrl.level" value="{{lev}}">{{lev}}</option>
-                            </select>
-                            <small ng-show="$ctrl.qclevelerr" class="qcError">Select level</small>
-                        </div>
-                        <div class="column">
-                            <label class="qcMetadateFormLbl">
-                                Grade <span class="star">&nbsp;*</span>
-                            </label>
-                            <div class="no label example">
-                                <div class="ui fluid dropdown selection multiple" tabindex="0">
-                                    <select multiple="" name="binary" class="grade" name="qcGrade" ng-model="$ctrl.questionData.qcGrade" required>
-                                        <option ng-repeat="g in $ctrl.grades" value="{{g}}" selected="{{$ctrl.questionData.qcGrade[$index]}}">{{g}}</option>
-                                    </select><i class="dropdown icon"></i>
-                                    <div class="default text">Select grade</div>
-                                    <div class="menu" tabindex="-1">
-                                        <div class="item" ng-repeat="gr in $ctrl.grades" data-value="{{gr}}">{{gr}}</div>
-                                    </div>
-                                </div>
-                            </div>
-                            <small ng-show="$ctrl.qcgardeerr" class="qcError">Select grade</small>
-                        </div>
-                        <div class="column">
-                            <label class="qcMetadateFormLbl">
-                                Concepts <span class="star">&nbsp;*</span>
-                            </label>
-                            <input type="text" id="conceptsTextBoxMeta" value="Choose concepts" readonly="true" />
-                            <span id="concepts_dummy" class="disabled">{{$ctrl.Totalconcepts}} concept(s) choosen</span>
-                            <small ng-show="$ctrl.qcconcepterr" class="qcError">Select concept</small>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </form>
-        <div class="actions bottomActionButtons">
-            <button class="ui large button left floated" ng-click="$ctrl.cancel()">Cancel</button>
-            <div class="ui buttons">
-                <button class="ui large button deny cancel" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen" ng-click="$ctrl.back()">Back</button>
-                <div class="or" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen"></div>
-                <button class="ui large blue button" ng-show="$ctrl.createQuestionScreen" ng-click="$ctrl.validateQuestionCreationForm()">Next</button>
-                <button class="ui large blue button" ng-show="$ctrl.metadaFormScreen" ng-click="$ctrl.sendData()">Submit</button>
-            </div>
-        </div>
+      </div>
     </div>
-</script>
+    <!-- Main page -->
+    <!-- <div class="ui divider bar"></div> -->
+    <form name="questionUnitBrowserForm">
+      <div class="ui grid">
+        <div class="two column row" ng-show="$ctrl.templatesScreen">
+          <div class="three wide column">
+            <div class="ui secondary vertical menu" id="qcSideMenu">
+              <div class="item" ng-repeat="(key, value) in $ctrl.menuItems" ng-click="$ctrl.select($parent.$index, $index)" ng-class="{active: $parent.$index + '.' + $index == $ctrl.selected}" ng-if="value.templatesData.length > 0">
+                <div class="content">
+                  <a class="header" ng-click="$ctrl.switchTab($index,value)"><i class="{{value.data.icon}}"></i> {{value.data.name}}</a>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="nine wide column" id="templatsCards">
+            <div class="ui grid three column row">
+              <div class="column" ng-repeat="(key, value) in $ctrl.selectedMenuItemData">
+                <div class="ui card">
+                  <div class="content" id="templateCardHeader">
+                    <div class="left floated meta" id="templateCardHeaderText">{{value.title}}</div>
+                  </div>
+                  <div class="content templateCard">
+                    <img src="{{value.thumbnail}}" />
+                    <span ng-click="$ctrl.addCreateQuestionForm(value)">
+                      <div class="templateDisc">
+                        <p>Standard Multiple choice question.</p>
+                        <i class="plus icon"></i>
+                      </div>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="two column row" ng-show="$ctrl.createQuestionScreen">
+          <div class="seven wide column">
+            <div ng-if="$ctrl.questionUnitTemplateURL">
+              <ng-include src="$ctrl.questionUnitTemplateURL"></ng-include>
+            </div>
+          </div>
+          <div class="five wide column previewArea">
+            <div class="previewAreaHead">
+              <span class="ui left floated">Preview</span>
+              <i class="icon undo ui right-floated replyIcon" ng-click="$ctrl.setPreviewData()"></i>
+              <div>
+                <div class="ui raised child preview-iframe-wrapper" ng-show='$ctrl.showPreview'>
+                  <iframe class="IframeArea"></iframe>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="five column row QuestionMetaForm" ng-show="$ctrl.metadaFormScreen">
+          <form name="qcMetadateForm">
+            <div class="column">
+              <label class="qcMetadateFormLbl" data-original-title="Question title">
+                Question title <span class="star">&nbsp;*</span>
+              </label>
+              <input type="text" id="questionTitle" placeholder="Question title" name="questionTitle" ng-model="$ctrl.questionData.questionTitle" required>
+              <small ng-show="$ctrl.qcTitle" class="qcError">Enter question title</small>
+            </div>
+            <div class="column">
+              <label class="qcMetadateFormLbl">
+                Language <span class="star">&nbsp;*</span></label>
+                <select class="dropdownBox" name="qcLanguage" ng-model="$ctrl.questionData.qcLanguage" required>
+                  <option value="" selected="selected">Choose language</option>
+                  <option ng-selected="{{$ctrl.qcLanguage}}" ng-repeat="lang in $ctrl.languages" value="{{lang}}">{{lang}}</option>
+                </select>
+                <small ng-show="$ctrl.qclangerr" class="qcError">Select language</small>
+              </div>
+              <div class="column">
+                <label class="qcMetadateFormLbl">
+                  Level <span class="star">&nbsp;*</span>
+                </label>
+                <select class="dropdownBox" name="qcLevel" ng-model="$ctrl.questionData.qcLevel" required>
+                  <option value="" selected="selected">Choose level</option>
+                  <option ng-selected="{{$ctrl.qcLevel}}" ng-repeat="lev in $ctrl.level" value="{{lev}}">{{lev}}</option>
+                </select>
+                <small ng-show="$ctrl.qclevelerr" class="qcError">Select level</small>
+              </div>
+              <div class="column">
+                <label class="qcMetadateFormLbl">
+                  Grade <span class="star">&nbsp;*</span>
+                </label>
+                <div class="no label example">
+                  <div class="ui fluid dropdown selection multiple" tabindex="0">
+                    <select multiple="" name="binary" class="grade" name="qcGrade" ng-model="$ctrl.questionData.qcGrade" required>
+                      <option ng-repeat="g in $ctrl.grades" value="{{g}}" selected="{{$ctrl.questionData.qcGrade[$index]}}">{{g}}</option>
+                    </select><i class="dropdown icon"></i>
+                    <div class="default text">Select grade</div>
+                    <div class="menu" tabindex="-1">
+                      <div class="item" ng-repeat="gr in $ctrl.grades" data-value="{{gr}}">{{gr}}</div>
+                    </div>
+                  </div>
+                </div>
+                <small ng-show="$ctrl.qcgardeerr" class="qcError">Select grade</small>
+              </div>
+              <div class="column">
+                <label class="qcMetadateFormLbl">
+                  Concepts <span class="star">&nbsp;*</span>
+                </label>
+                <input type="text" id="conceptsTextBoxMeta" value="Choose concepts" readonly="true" />
+                <span id="concepts_dummy" class="disabled">{{$ctrl.Totalconcepts}} concept(s) choosen</span>
+                <small ng-show="$ctrl.qcconcepterr" class="qcError">Select concept</small>
+              </div>
+            </form>
+          </div>
+        </div>
+      </form>
+      <div class="actions bottomActionButtons">
+        <button class="ui large button left floated" ng-click="$ctrl.cancel()">Cancel</button>
+        <div class="ui buttons">
+          <button class="ui large button deny cancel" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen" ng-click="$ctrl.back()">Back</button>
+          <div class="or" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen"></div>
+          <button class="ui large blue button" ng-show="$ctrl.createQuestionScreen" ng-click="$ctrl.validateQuestionCreationForm()">Next</button>
+          <button class="ui large blue button" ng-show="$ctrl.metadaFormScreen" ng-click="$ctrl.sendData()">Submit</button>
+        </div>
+      </div>
+    </div>
+  </script>
