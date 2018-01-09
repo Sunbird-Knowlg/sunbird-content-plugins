@@ -97,7 +97,7 @@ $scope.getdetails = function() {
       result = false;
       $("#textQ").css('border-bottom-color', 'red');
   }
-  for (var i = 1; i < $scope.config.length; i++) {
+  for (var i = 1; i < $rootScope.defaultConfigData.length; i++) {
 
       var temp = {};
       temp.isAnswerCorrect = false;
@@ -132,7 +132,7 @@ $scope.getdetails = function() {
     data.options.push(temp);
 }
 var checks = [];
-for (var j = 1; j < $scope.config.length; j++) {
+for (var j = 1; j < $rootScope.defaultConfigData.length; j++) {
   if ($("#correctAnswer_" + j).is(":checked")) {
     data.options[j - 1].isAnswerCorrect = true;
     data.options[j - 1].score = 1;
@@ -156,6 +156,7 @@ $scope.init = function() {
 
 $scope.init();
 }])
+
 .directive('mcqEditor', function() {
   return {
     scope: {
@@ -339,5 +340,4 @@ $scope.deleteAnswer = function(id) {
     $rootScope.defaultConfigData.splice(id, 1);
 }
 }]);
-
 //# sourceURL=horizontalMCQ.js

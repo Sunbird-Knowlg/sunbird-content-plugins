@@ -19,7 +19,7 @@
         <div class="two column row" ng-show="$ctrl.templatesScreen">
           <div class="three wide column">
             <div class="ui secondary vertical menu" id="qcSideMenu">
-              <div class="item" ng-repeat="(key, value) in $ctrl.menuItems" ng-click="$ctrl.select($parent.$index, $index)" ng-class="{active: $parent.$index + '.' + $index == $ctrl.selected}" ng-if="value.templatesData.length > 0">
+              <div class="item" ng-repeat="(key, value) in $ctrl.menuItems" ng-click="$ctrl.select($parent.$index, $index)" ng-class="{activeItem: $parent.$index + '.' + $index == $ctrl.selected}" ng-if="value.templatesData.length > 0">
                 <div class="content">
                   <a class="header" ng-click="$ctrl.switchTab($index,value)"><i class="{{value.data.icon}}"></i> {{value.data.name}}</a>
                 </div>

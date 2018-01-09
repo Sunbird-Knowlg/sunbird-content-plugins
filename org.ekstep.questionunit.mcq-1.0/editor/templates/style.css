@@ -4,14 +4,14 @@
 }
 
 input:focus {
-  border-width: 0px 0px 1px 0px !important solid blue;
+  border-width: 0px 0px 1px 0px solid blue;
   outline: 0;
   border-color: blue;
 }
 
 .textbox {
   width: 50%;
-  border-width: 0px 0px 1px 0px !important;
+  border-width: 0px 0px 1px 0px ;
   height: 33px;
   color: inherit;
 }
@@ -34,11 +34,11 @@ input[type="radio"] {
 }
 
 .preview-window .ngdialog-content {
-  background: none !important;
+  background: none ;
 }
 
 .ngdialog.ngdialog-theme-plain .ngdialog-content {
-  background: none!important;
+  background: none;
 }
 
 .main {

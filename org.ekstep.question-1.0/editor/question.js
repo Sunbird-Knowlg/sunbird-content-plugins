@@ -249,7 +249,6 @@ angular.module('org.ekstep.question', [])
         ctrl.qcgardeerr = true;
       }
       if (ctrl.Totalconcepts > 0) {
-        //if(ctrl.TotalconceptsData)
         metadata.concepts = ctrl.selectedConceptsData;
         metadata.concepts = _.isUndefined(ctrl.selectedConceptsData) ? ctrl.TotalconceptsData : ctrl.selectedConceptsData;
         ctrl.qcconcepterr = false;
