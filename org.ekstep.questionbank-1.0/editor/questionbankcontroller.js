@@ -39,8 +39,8 @@ angular.module('createquestionapp', [])
     };
 
 
-
-    /* $scope.searchQuestions = function() {
+/*
+     $scope.searchQuestions = function() {
        var data = {
                 request: {
                     filters: {
@@ -64,15 +64,15 @@ angular.module('createquestionapp', [])
                     return;
                 }
             });
-        };
-*/
+        };*/
+
 
     /**
      *  init funtion is called when html is loaded
      *  @memberof QuestionFormController
      */
     $scope.init = function() {
-      $scope.searchQuestions();
+     // $scope.searchQuestions();
       if (pluginInstance.editData) {
         $scope.selectedQuestions = pluginInstance.editData.data;
         $scope.questionSetConfigObj = pluginInstance.editData.config;
@@ -108,15 +108,19 @@ angular.module('createquestionapp', [])
       });
 
       ecEditor.addEventListener(pluginInstance.manifest.id + ":saveQuestion", function(event, data) {
-        data.isSelected = false;
+        if(!data.isSelected){
+          data.isSelected = true;
+        }
+
         var selQueIndex = _.findLastIndex($scope.questions, {
           questionId: data.questionId
         });
         if (selQueIndex < 0) {
-          $scope.questions.push(data);
+          $scope.questions.unshift(data);
         } else {
           $scope.questions[selQueIndex] = data;
         }
+        $scope.selectQuestion(data);
 
 
       }, false);
@@ -146,7 +150,7 @@ angular.module('createquestionapp', [])
       if (selObjindex > -1) {
         $scope.selectedQuestions.splice(selObjindex, 1);
       } else {
-        $scope.selectedQuestions.push(selQuestion);
+        $scope.selectedQuestions.unshift(selQuestion);
       }
 
     }

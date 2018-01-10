@@ -336,8 +336,10 @@ $scope.deleteImage = function(id, isQImg) {
 }
 
 $scope.deleteAnswer = function(id) {
-    $("#main_" + id).hide();
     $rootScope.defaultConfigData.splice(id, 1);
+    $("#main_" + (id)).remove();
+    console.log(id);
+    console.log($rootScope.defaultConfigData);
 }
 $scope.generateTelemetry = function(data,event) {
       if (data) ecEditor.getService('telemetry').interact({
