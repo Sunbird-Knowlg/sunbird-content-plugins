@@ -24,7 +24,12 @@
         "type": "plugin",
         "plugin": "org.ekstep.questionunit.ftb",
         "ver": "1.0"
-      }],
+      }, {
+        "type": "plugin",
+        "plugin": "org.ekstep.questionset.preview",
+        "ver": "1.0"
+      }
+    ],
     "menu": [],
     "init-data":{},
     "configManifest": [

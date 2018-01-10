@@ -155,6 +155,50 @@ angular.module('org.ekstep.question', [])
     }
 
     /**
+     * Validate question form to preview the question
+     * @return {function} to check question form is valid/not 
+     * @return {object} actual form data filled by user for the question template
+     */
+    ctrl.valideateFormForPreview = function(valid, formData) {
+      if (valid) {
+        ctrl.questionCreationFormData = formData;
+      } else {
+        ctrl.questionCreationFormData = null;
+      }
+    }
+
+    /**
+     * To create questionset or question content body
+     * @return {object} actual content/theme object which can be used to preview the question/question-set
+     */
+    ctrl.setPreviewData = function() {
+      ecEditor.dispatchEvent(ctrl.selectedTemplatePluginData.plugin.id + ':val', ctrl.valideateFormForPreview, ctrl);
+      var qObj = {
+        "config": "{'metadata':{'title':'question title','description':'question description','language':'English'},'max_time':0,'max_score':1,'partial_scoring':false}",
+        "data": "{'title':'What is the question?','options':[{'text':'Yes','image':'renderer/assets/yes.png'},{'text':'No','image':'renderer/assets/no.png'}]}",
+        "id": "c943d0a907274471a0572e593eab49c2",
+        "pluginId": "org.ekstep.questionunit.mcq",
+        "pluginVer": "1.0",
+        "templateId": "horizontalMCQ",
+        "type": "unit"
+      }
+      var data = {
+        "org.ekstep.questionset": {
+          "config": {
+            'questionCount': 1,
+            'isShuffle': true
+          },
+          "org.ekstep.question": []
+        }
+      }
+      data["org.ekstep.questionset"]['org.ekstep.question'].push(qObj);
+      var confData={"contentBody":{},"parentElement":true,"element":"#iframeArea"};
+      var questionSetInstance = ecEditor.instantiatePlugin('org.ekstep.questionset.preview');
+      confData.contentBody = questionSetInstance.getQuestionPreviwContent(data['org.ekstep.questionset']);
+      ecEditor.dispatchEvent("atpreview:show", confData);
+    }
+
+    /**
      * [cancel description]
      * @return {[type]} [Close the modal window]
      */

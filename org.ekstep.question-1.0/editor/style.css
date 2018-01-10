@@ -221,9 +221,11 @@
     float: right;
   }
 
-  .IframeArea {
+  .iframe-preview {
     /*height: 100%;*/
     background-color: white;
+    width: 480px;
+    height: 270px;
   }
 
   .work-text-content {
