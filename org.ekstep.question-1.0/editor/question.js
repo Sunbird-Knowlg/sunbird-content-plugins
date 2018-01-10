@@ -24,12 +24,14 @@ angular.module('org.ekstep.question', [])
     ctrl.metaDataFormData = {};
     ctrl.selectedTemplatePluginData = {};
     ctrl.questionCreationFormData = {};
-    ctrl.TotalconceptsData = 0;
+    ctrl.TotalconceptsData = [];
+    ctrl.selectedConceptsData = [];
     ctrl.questionUnitValidated = false
     ctrl.defaultLang = 'Choose language';
     ctrl.level = ['Easy', 'Medium', 'Difficult'];
     ctrl.selected = 0;
     ctrl.questionID = 0;
+    ctrl.conceptsCheck = false;
     ctrl.questionData = {};
     ctrl.plugins = { 'concepts': 'org.ekstep.conceptselector:init' };
 
@@ -53,15 +55,19 @@ angular.module('org.ekstep.question', [])
       'data': { 'name': 'Other', 'icon': 'ellipsis horizontal icon' },
       'templatesData': []
     };
-    $('.no.label.example .ui.dropdown')
+
+    $('.ui.dropdown')
       .dropdown({
         useLabels: false
       });
 
-    if (!ecEditor._.isEmpty(questionData)) {
-      // console.log(ctrl.menuItems);
-      // console.log("Edit data info", questionData);
+    /**
+     * OnLoad of the controller
+     * @return {[type]} [description]
+     */
+    ctrl.init = function() {
 
+      if (!ecEditor._.isEmpty(questionData)) {
       ctrl.questionData = questionData;
       ctrl.questionID = questionData.questionId;
       ctrl.questionData.qcLanguage = questionData.config.metadata.language;
@@ -70,6 +76,7 @@ angular.module('org.ekstep.question', [])
       ctrl.questionData.qcGrade = questionData.config.metadata.gradeLevel;
       ctrl.Totalconcepts = questionData.config.metadata.concepts.length; //_.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
       ctrl.TotalconceptsData = questionData.config.metadata.concepts;
+      ctrl.conceptsCheck = true;
       $scope.$safeApply();
       $scope.questionEditData = questionData; //Using this variable in question unit plugin for editing question
       ctrl.templatesScreen = false;
@@ -94,12 +101,6 @@ angular.module('org.ekstep.question', [])
         "templateId": pluginTemplateId // Template Id of the question unit
       };
     }
-
-    /**
-     * OnLoad of the controller
-     * @return {[type]} [description]
-     */
-    ctrl.init = function() {
       /**
        * Invoke conceptselector plugin to get concepts
        * @param  {[type]}   data) {                           ctrl.Totalconcepts [description]
@@ -107,13 +108,22 @@ angular.module('org.ekstep.question', [])
        */
       ecEditor.dispatchEvent(ctrl.plugins.concepts, {
         element: 'conceptsTextBoxMeta',
-        selectedConcepts: [], // All composite keys except mediaType
+        selectedConcepts: ctrl.TotalconceptsData, // All composite keys except mediaType
         callback: function(data) {
           ctrl.Totalconcepts = data.length;
-          ctrl.selectedConceptsData = data;
+          ctrl.conceptsCheck = true;
+          _.each(data, function(val, key) {
+            ctrl.selectedConceptsData[key] = val.id;
+          });
           $scope.$safeApply();
         }
       });
+      setTimeout(function() {
+        $('.ui.dropdown')
+          .dropdown({
+            useLabels: false
+          });
+      }, 3000);
 
       ecEditor.getService('meta').getConfigOrdinals(function(err, res) {
         if (!err) {
@@ -226,41 +236,18 @@ angular.module('org.ekstep.question', [])
      * Collect data from 3 screens
      * @return {[type]} [description]
      */
-    ctrl.sendData = function() {
+    ctrl.sendData = function(isValid) {
+
+      console.log(isValid);
       var metadata = {};
       //Third screen data
-      if (!_.isUndefined(ctrl.questionData.questionTitle)) {
-        metadata.title = ctrl.questionData.questionTitle;
-        ctrl.qcTitle = false;
-      } else {
-        ctrl.qcTitle = true;
-      }
-      if (!_.isUndefined(ctrl.questionData.qcLanguage)) {
-        metadata.language = ctrl.questionData.qcLanguage;
-        ctrl.qclangerr = false;
-      } else {
-        ctrl.qclangerr = true;
-      }
-      if (!_.isUndefined(ctrl.questionData.qcLevel)) {
-        metadata.qlevel = ctrl.questionData.qcLevel;
-        ctrl.qclevelerr = false;
-      } else {
-        ctrl.qclevelerr = true;
-      }
-      if (!_.isUndefined(ctrl.questionData.qcGrade)) {
-        metadata.gradeLevel = ctrl.questionData.qcGrade;
-        ctrl.qcgardeerr = false;
-      } else {
-        ctrl.qcgardeerr = true;
-      }
-      if (ctrl.Totalconcepts > 0) {
+      if(isValid && ctrl.Totalconcepts > 0){
         metadata.concepts = ctrl.selectedConceptsData;
         metadata.concepts = _.isUndefined(ctrl.selectedConceptsData) ? ctrl.TotalconceptsData : ctrl.selectedConceptsData;
-        ctrl.qcconcepterr = false;
-      } else {
-        ctrl.qcconcepterr = true;
-      }
-
+        metadata.title = ctrl.questionData.questionTitle;
+        metadata.language = ctrl.questionData.qcLanguage;
+        metadata.qlevel = ctrl.questionData.qcLevel;
+        metadata.gradeLevel = ctrl.questionData.qcGrade;
       if (!ctrl.questionData.qcTitle && !ctrl.questionData.qclangerr && !ctrl.questionData.qclevelerr && !ctrl.questionData.qcgardeerr && !ctrl.qcconcepterr) {
         ctrl.metaDataFormData.metadata = metadata;
         ctrl.metaDataFormData.max_time = 1;
@@ -281,18 +268,45 @@ angular.module('org.ekstep.question', [])
         questionUnitFinalData.data.data = ctrl.questionCreationFormData;
         questionUnitFinalData.config = ctrl.metaDataFormData;
         /*Dispatch event from here*/
+        console.log("Before save ",questionUnitFinalData);
         ecEditor.dispatchEvent('org.ekstep.questionbank:saveQuestion', questionUnitFinalData);
         $scope.closeThisDialog();
       }
+      }
+      // if (!_.isUndefined(ctrl.questionData.questionTitle)) {
+      //   metadata.title = ctrl.questionData.questionTitle;
+      //   ctrl.qcTitle = false;
+      // } else {
+      //   ctrl.qcTitle = true;
+      // }
+      // if (!_.isUndefined(ctrl.questionData.qcLanguage)) {
+      //   metadata.language = ctrl.questionData.qcLanguage;
+      //   ctrl.qclangerr = false;
+      // } else {
+      //   ctrl.qclangerr = true;
+      // }
+      // if (!_.isUndefined(ctrl.questionData.qcLevel)) {
+      //   metadata.qlevel = ctrl.questionData.qcLevel;
+      //   ctrl.qclevelerr = false;
+      // } else {
+      //   ctrl.qclevelerr = true;
+      // }
+      // if (!_.isUndefined(ctrl.questionData.qcGrade)) {
+      //   metadata.gradeLevel = ctrl.questionData.qcGrade;
+      //   ctrl.qcgardeerr = false;
+      // } else {
+      //   ctrl.qcgardeerr = true;
+      // }
+      
     }
 
-    ctrl.generateTelemetry = function(data,event) {
+    ctrl.generateTelemetry = function(data, event) {
       console.log(event.target.id);
       if (data) ecEditor.getService('telemetry').interact({
         "type": data.type,
         "subtype": data.subtype,
         "id": data.id,
-        "pageId": ecEditor.getCurrentStage().id ,
+        "pageId": ecEditor.getCurrentStage().id,
         "target": {
           "id": event.target.id,
           "ver": "1.0",
@@ -304,7 +318,7 @@ angular.module('org.ekstep.question', [])
         }
       })
     }
-  ctrl.init();
-}]);
+    ctrl.init();
+  }]);
 
 //# sourceURL=question.js

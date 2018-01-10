@@ -30,14 +30,6 @@ if ($scope.questionData.options.length < 2) {
   $scope.config.splice(2, 1);
 }
 }
-ecEditor.addEventListener('org.ekstep.questionunit.mcq:val', function(ctrl, data) {
-    if ($scope.getdetails()) {
-      data(true, $scope.finalDataObj);
-  } else {
-      data(false, $scope.finalDataObj);
-  }
-
-}, false);
 $scope.addAnswerField = function() {
     if ($scope.config.length <= 8)
       $scope.config.push({ maxLen: 25, isImage: true, isText: true, isAudio: true, isOption: false, isAnsOption: true, isHeader: false, headerName: ' ', isQuestion: false, isAnswer: true });
@@ -70,88 +62,7 @@ $scope.getData = function() {
     return $scope.finalDataObj;
 }
 
-$scope.getdetails = function() {
-    var data = {};
-    data.question = {};
-    data.options = [];
-    var result = false;
-    var check = false;
-    var temp = {};
-    var text1 = $("#textQ").val();
-    var image1 = $('#imageQ').attr('src');
-    var audio1 = $('#audioQ').attr('src');
-    if (text1.length > 0) {
-      data.question.text = text1;
-
-  }
-  if (image1 && image1.length > 0) {
-      data.question.image = image1;
-  }
-  if (audio1 && audio1.length > 0) {
-      data.question.audio = audio1;
-  }
-  if (text1 || image1 || audio1) {
-      result = true;
-      $("#textQ").css('border-bottom-color', 'inherit');
-  } else {
-      result = false;
-      $("#textQ").css('border-bottom-color', 'red');
-  }
-  for (var i = 1; i < $rootScope.defaultConfigData.length; i++) {
-
-      var temp = {};
-      temp.isAnswerCorrect = false;
-      temp.score = 0;
-      if ($("#correctAnswer_" + i).is(":checked") || check) {
-        $("#correctAnswerLabel_" + i).css('color', 'inherit');
-        check = true;
-    } else {
-        check = false;
-        $("#correctAnswerLabel_" + i).css('color', 'red');
-    }
-    var text2 = $("#answerField_" + i).val();
-    var text3 = $("#answerField_" + i).val().length > 0 ? true : false;
-
-    var image2 = $('#image_' + i).attr('src');
-    var image3 = image2 == undefined || image2.length == 0 ? false : true;
-
-    var audio2 = $('#audio_' + i).attr('src');
-
-    var audio3 = audio2 == undefined || audio2.length == 0 ? false : true;
-    if (text3 || image3 || audio3) {
-        temp.text = text2;
-        temp.image = image2;
-        temp.audio = audio2;
-        $("#answerField_" + i).css('border-bottom-color', 'inherit');
-        result = true;
-    } else {
-        result = false;
-        $("#answerField_" + i).css('border-bottom-color', 'red');
-        break;
-    }
-    data.options.push(temp);
-}
-var checks = [];
-for (var j = 1; j < $rootScope.defaultConfigData.length; j++) {
-  if ($("#correctAnswer_" + j).is(":checked")) {
-    data.options[j - 1].isAnswerCorrect = true;
-    data.options[j - 1].score = 1;
-}
-}
-
-if (result && check) {
-  var configData = {};
-  $scope.finalDataObj = data;
-  configData["config"] = { __cdata: JSON.stringify(data) };
-        //ecEditor.dispatchEvent("org.ekstep.plugins.mcqplugin:create", configData);
-        return true;
-    } else {
-        return false;
-    }
-}
-
 $scope.init = function() {
-  console.log("i am loading..MCQ plugin");
 }
 
 $scope.init();
@@ -170,6 +81,16 @@ $scope.init();
 })
 
 .controller('createMcqQuestionController', ['$scope', '$rootScope', function($scope, $rootScope) {
+
+
+    ecEditor.addEventListener('org.ekstep.questionunit.mcq:val', function(ctrl, data) {
+    if ($scope.getdetails()) {
+      data(true, $scope.finalDataObj);
+  } else {
+      data(false, $scope.finalDataObj);
+  }
+
+}, false);
   $scope.config = $scope.config || {};
   $scope.maxLen = $scope.config.maxLen;
   $scope.isText = $scope.config.isText;
@@ -210,13 +131,7 @@ $scope.init();
 
 }
 }
-ecEditor.jQuery('.ui.dropdown').dropdown({ useLabels: false });
-$('.longer.modal')
-.modal('show');
 
-$('.demo.menu .item').tab({ history: false });
-$('.test.modal')
-.modal('show');
 $scope.addTab = function(type, id) {
 
     if (type == 'image') {
@@ -358,5 +273,86 @@ $scope.generateTelemetry = function(data,event) {
         }
       })
     }
+
+$scope.getdetails = function() {
+    console.log($scope.editorObj1);
+    var data = {};
+    data.question = {};
+    data.options = [];
+    var result = false;
+    var check = false;
+    var temp = {};
+    var text1 = $("#textQ").val();
+    var image1 = $('#imageQ').attr('src');
+    var audio1 = $('#audioQ').attr('src');
+    if (text1.length > 0) {
+      data.question.text = text1;
+
+  }
+  if (image1 && image1.length > 0) {
+      data.question.image = image1;
+  }
+  if (audio1 && audio1.length > 0) {
+      data.question.audio = audio1;
+  }
+  if (text1 || image1 || audio1) {
+      result = true;
+      $("#textQ").css('border-bottom-color', 'inherit');
+  } else {
+      result = false;
+      $("#textQ").css('border-bottom-color', 'red');
+  }
+  for (var i = 1; i < $rootScope.defaultConfigData.length; i++) {
+
+      var temp = {};
+      temp.isAnswerCorrect = false;
+      temp.score = 0;
+      if ($("#correctAnswer_" + i).is(":checked") || check) {
+        $("#correctAnswerLabel_" + i).css('color', 'inherit');
+        check = true;
+    } else {
+        check = false;
+        $("#correctAnswerLabel_" + i).css('color', 'red');
+    }
+    var text2 = $("#answerField_" + i).val();
+    var text3 = $("#answerField_" + i).val().length > 0 ? true : false;
+
+    var image2 = $('#image_' + i).attr('src');
+    var image3 = image2 == undefined || image2.length == 0 ? false : true;
+
+    var audio2 = $('#audio_' + i).attr('src');
+
+    var audio3 = audio2 == undefined || audio2.length == 0 ? false : true;
+    if (text3 || image3 || audio3) {
+        temp.text = text2;
+        temp.image = image2;
+        temp.audio = audio2;
+        $("#answerField_" + i).css('border-bottom-color', 'inherit');
+        result = true;
+    } else {
+        result = false;
+        $("#answerField_" + i).css('border-bottom-color', 'red');
+        break;
+    }
+    data.options.push(temp);
+}
+var checks = [];
+for (var j = 1; j < $rootScope.defaultConfigData.length; j++) {
+  if ($("#correctAnswer_" + j).is(":checked")) {
+    data.options[j - 1].isAnswerCorrect = true;
+    data.options[j - 1].score = 1;
+}
+}
+
+if (result && check) {
+  var configData = {};
+  $scope.finalDataObj = data;
+  configData["config"] = { __cdata: JSON.stringify(data) };
+        //ecEditor.dispatchEvent("org.ekstep.plugins.mcqplugin:create", configData);
+        return true;
+    } else {
+        return false;
+    }
+}
 }]);
 //# sourceURL=horizontalMCQ.js
