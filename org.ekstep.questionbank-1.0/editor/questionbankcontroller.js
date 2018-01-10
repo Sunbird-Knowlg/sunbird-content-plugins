@@ -218,13 +218,16 @@ angular.module('createquestionapp', [])
     }
 
     $scope.generateTelemetry = function(data,event) {
+      var eventId;
+      if(event.target) eventId = event.target.id;
+      else eventId = event;
       if (data) ecEditor.getService('telemetry').interact({
         "type": data.type,
         "subtype": data.subtype,
         "id": data.id,
         "pageId": ecEditor.getCurrentStage().id ,
         "target": {
-          "id": event.target.id,
+          "id": eventId,
           "ver": "1.0",
           "type": data.type
         },
