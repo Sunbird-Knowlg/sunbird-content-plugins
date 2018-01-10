@@ -21,6 +21,7 @@ body {
     height: calc(100vh - 60px);
     margin-bottom: 0;
     margin-top: 0em;
+    border-top: 1px solid #ccc;
 }
 
 .ui-fancytree:focus {
@@ -35,7 +36,6 @@ body {
     min-width: 320px;
     box-shadow: none;
     border: none;
-    border-right: 0.2px solid rgba(128, 128, 128, 0.43);
 }
 
 #table-of-contents .ui.dropdown .menu>.item {
@@ -62,7 +62,7 @@ body {
     width: calc(100% - 320px);
     height: 100%;
     padding: 0;
-    padding-left: 1em;
+    padding-left: 2px;
 }
 
 #collection-tree {
@@ -81,14 +81,15 @@ body {
 
 #collection-tree span.fancytree-active span.fancytree-title,
 #collection-tree span.fancytree-selected span.fancytree-title {
-    color: #fff;
-    background: #2E9FD9;
+    /*color: #fff;*/
+    /*background: #2E9FD9;*/
+    background: rgba(126,192,238, 0);
 }
 
 #collection-tree span.fancytree-node {
     min-height: 24px;
     font-size: 1.1em;
-    width: 310px
+    /*width: 310px*/
 }
 
 .primary.button-overrides {
@@ -102,9 +103,16 @@ body {
 }
 
 #treeWrapper {
-    height: 100%;
-    border: none;
-    padding: 0;
+    height: 88%;
+    border-right: 1px solid rgb(224, 225, 226);
+    border-left: 0;
+    border-top: 0;
+    border-bottom: 0;
+    margin-right: 0px;
+    margin-left: 0px;
+    padding-top: 10px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 .book-image-container i.icon {
@@ -161,6 +169,20 @@ body {
     background: none;
 }
 
+#treeAccessToolsSegment .ui.button{
+    margin-right: auto;
+    min-width: 0;
+    display: block;
+    padding: 1em;
+    padding-right: 2em;
+    border-radius: 0;
+    background: none;
+}
+
+#treeAccessToolsSegment .ui.button i{
+    color: #007AFF;    
+}
+
 #treeExpandCollapseButtonsContainer .ui.button:hover{
     background: #ddd;
 }
@@ -175,7 +197,10 @@ body {
 }
 
 #collection-tree span.fancytree-node:hover {
-    background: #f5f5f5;
+    /*background: #f5f5f5;*/
+    border-radius: 3px;
+    border: 0.8px solid rgba(0, 122, 255, 0.3);
+    background: rgba(0, 122, 255, 0.2)
 }
 
 #collection-tree span i:hover {
@@ -190,7 +215,9 @@ body {
     background: none;
 }
 
-
+ul.fancytree-container{
+    padding-left: 15px;
+}
 
 /* for not able to fetch content */
 
@@ -222,6 +249,49 @@ body {
 .search-menu-cursor {
     cursor: pointer;
 }
+
+.ui.segment.content-editor-segment {
+    background: #F8F8F8;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0.68em;
+    border: none;
+    margin-right: -2px;
+    border-right: 1px solid rgba(151, 151, 151, 0.4);
+}
+
+.header-title{
+    font-weight: bold;
+    color: #000000;
+    box-shadow: none;
+}
+
+.border-right{
+    border-right: 0.2px solid rgba(128, 128, 128, 0.43);
+}
+
+
+/* Table of contents*/
+.table-of-contents-fixed-btns {
+    z-index: 99999;
+    bottom: 0;
+    position: fixed;
+}
+
+.ui.two.buttons.table-of-contents-btn {
+    width: 111.5%;
+    box-shadow: 0 -1px 4px 0 rgba(194, 194, 194, 0.5);
+}
+.ui.two.buttons.table-of-contents-btn > .ui.basic.button {
+    border-radius: 0;
+    border: 1px solid #ddd;
+}
+
+.table-of-contents-child-icon {
+    transform: rotate(180deg);
+    line-height: 1.2;
+}
+
 
 
 /* for not able to fetch content */
