@@ -21,7 +21,7 @@
             <div class="ui secondary vertical menu" id="qcSideMenu">
               <div class="item" ng-repeat="(key, value) in $ctrl.menuItems" ng-click="$ctrl.select($parent.$index, $index)" ng-class="{activeItem: $parent.$index + '.' + $index == $ctrl.selected}" ng-if="value.templatesData.length > 0">
                 <div class="content">
-                  <a class="header" ng-click="$ctrl.switchTab($index,value)"><i class="{{value.data.icon}}"></i> {{value.data.name}}</a>
+                  <a class="header" id={{value.category}} ng-click="$ctrl.switchTab($index,value);$ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)"><i class="{{value.data.icon}}"></i> {{value.data.name}}</a>
                 </div>
               </div>
             </div>
@@ -76,7 +76,7 @@
             </div>
             <div class="column">
               <label class="qcMetadateFormLbl">Language <span class="star">&nbsp;*</span></label>
-              <select class="dropdownBox" name="qcLanguage" ng-model="$ctrl.questionData.qcLanguage" required>
+              <select class="dropdownBox" name="qcLanguage" ng-model="$ctrl.questionData.qcLanguage"  id="language-drop-down" ng-click="$ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', 'id': 'dropDown'},$event)" required>
                 <option value="" selected="selected">Choose language</option>
                 <option ng-selected="{{$ctrl.qcLanguage}}" ng-repeat="lang in $ctrl.languages" value="{{lang}}">{{lang}}</option>
               </select>
@@ -86,7 +86,7 @@
               <label class="qcMetadateFormLbl">
                 Level <span class="star">&nbsp;*</span>
               </label>
-              <select class="dropdownBox" name="qcLevel" ng-model="$ctrl.questionData.qcLevel" required>
+              <select class="dropdownBox" name="qcLevel" ng-model="$ctrl.questionData.qcLevel" id="level-drop-down" ng-click="$ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', 'id': 'dropDown'},$event)" required>
                 <option value="" selected="selected">Choose level</option>
                 <option ng-selected="{{$ctrl.qcLevel}}" ng-repeat="lev in $ctrl.level" value="{{lev}}">{{lev}}</option>
               </select>
@@ -97,7 +97,7 @@
                 Grade <span class="star">&nbsp;*</span>
               </label>
               <div class="no label example">
-                <div class="ui fluid dropdown selection multiple" tabindex="0">
+                <div class="ui fluid dropdown selection multiple" tabindex="0" id="grade-drop-down" ng-click="$ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)">
                   <select multiple="" name="binary" class="grade" name="qcGrade" ng-model="$ctrl.questionData.qcGrade" required>
                     <option ng-repeat="g in $ctrl.grades" value="{{g}}" selected="{{$ctrl.questionData.qcGrade[$index]}}">{{g}}</option>
                   </select><i class="dropdown icon"></i>
@@ -113,7 +113,7 @@
               <label class="qcMetadateFormLbl">
                 Concepts <span class="star">&nbsp;*</span>
               </label>
-              <input type="text" id="conceptsTextBoxMeta" value="Choose concepts" readonly="true" />
+              <input type="text" id="conceptsTextBoxMeta" value="Choose concepts" readonly="true" id="concepts-drop-down" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'dropDown'},$event)"/>
               <span id="concepts_dummy" class="disabled">{{$ctrl.Totalconcepts}} concept(s) choosen</span>
               <small ng-show="$ctrl.qcconcepterr" class="qcError">Select concept</small>
             </div>
@@ -122,12 +122,12 @@
       </div>
     </form>
     <div class="actions bottomActionButtons">
-      <button class="ui large button left floated" ng-click="$ctrl.cancel()">Cancel</button>
+      <button class="ui large button left floated"  id="ques-cancel-button" ng-click="$ctrl.cancel();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Cancel</button>
       <div class="ui buttons">
-        <button class="ui large button deny cancel" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen" ng-click="$ctrl.back()">Back</button>
+        <button class="ui large button deny cancel" id="back-button" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen" ng-click="$ctrl.back();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Back</button>
         <div class="or" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen"></div>
-        <button class="ui large blue button" ng-show="$ctrl.createQuestionScreen" ng-click="$ctrl.validateQuestionCreationForm()">Next</button>
-        <button class="ui large blue button" ng-show="$ctrl.metadaFormScreen" ng-click="$ctrl.sendData()">Submit</button>
+        <button class="ui large blue button" ng-show="$ctrl.createQuestionScreen" id="back-button" ng-click="$ctrl.validateQuestionCreationForm();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Next</button>
+        <button class="ui large blue button" ng-show="$ctrl.metadaFormScreen" id="save-question-button" ng-click="$ctrl.sendData();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Submit</button>
       </div>
     </div>
   </div>

@@ -38,11 +38,41 @@ angular.module('createquestionapp', [])
       "total_items": 1
     };
 
+
+
+    /* $scope.searchQuestions = function() {
+       var data = {
+                request: {
+                    filters: {
+                        objectType: ["AssessmentItem"],
+                        status: [],
+                    },
+
+                    sort_by: { "name": "desc" },
+                    limit: 200
+                }
+            };
+      ecEditor.getService('assessment').getQuestions(data, function(err, resp) {
+        console.log("response", resp);
+                if (!err) {
+                    $scope.questions = resp.data.result.items;
+                    $scope.$safeApply();
+                } else {
+                    ctrl.itemsLoading = false;
+                    ctrl.errorMessage = true;
+                    $scope.$safeApply();
+                    return;
+                }
+            });
+        };
+*/
+
     /**
      *  init funtion is called when html is loaded
      *  @memberof QuestionFormController
      */
     $scope.init = function() {
+      $scope.searchQuestions();
       if (pluginInstance.editData) {
         $scope.selectedQuestions = pluginInstance.editData.data;
         $scope.questionSetConfigObj = pluginInstance.editData.config;
@@ -92,6 +122,9 @@ angular.module('createquestionapp', [])
       }, false);
 
     }
+
+
+
 
     /**
      *  creating range of number of items to display as per number of question selected
@@ -218,13 +251,16 @@ angular.module('createquestionapp', [])
     }
 
     $scope.generateTelemetry = function(data,event) {
+      var eventId;
+      if(event.target) eventId = event.target.id;
+      else eventId = event;
       if (data) ecEditor.getService('telemetry').interact({
         "type": data.type,
         "subtype": data.subtype,
         "id": data.id,
         "pageId": ecEditor.getCurrentStage().id ,
         "target": {
-          "id": event.target.id,
+          "id": eventId,
           "ver": "1.0",
           "type": data.type
         },

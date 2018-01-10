@@ -1,4 +1,4 @@
-.qs-filters-container {
+.qb-filters-container {
   padding: 1em 1em .05em 1em;
   background: #f1f1f1;
 }
@@ -32,7 +32,7 @@
   background: none !important;
 }
 
-.question-bank-error {
+.qb-question-bank-error {
   height: 350px;
 }
 
@@ -72,7 +72,7 @@
 }
 
 
-.ui.modal.questionbank {
+.ui.modal.qb-question-bank {
   position: inherit !important;
   top: 0 !important;
   left: 0 !important;
@@ -88,22 +88,22 @@
   flex-flow: column;
 }
 
-.questionbank .content.wizard {
+.qb-question-bank .content.wizard {
   height: 83%;
   padding: 0;
 }
 
-.qs-questions-list {
+.qb-questions-list {
   height: 70%;
 }
 
-.list-container {
-  max-height: 75vh;
+.qb-list-container {
+  max-height: 70vh;
   overflow-y: scroll;
 }
 
-.question-list-container {
-  max-height: 60vh;
+.qb-question-list-container {
+  max-height: 57vh;
   overflow-y: scroll;
 }
 
@@ -123,7 +123,7 @@
 }
 
 
-.config-form {
+.qb-config-form {
   border: 1px solid #ccc;
   background-color: #F1F1F1;
   /*width: 100% !important;*/

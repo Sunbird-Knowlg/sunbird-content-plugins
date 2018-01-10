@@ -1,6 +1,6 @@
 <script type="text/ng-template" id="QuestionFormTemplate" ng-controller="QuestionFormController">
-<link rel="stylesheet" type="text/css" href="{{csspath}}" />
-<div class="ui modal questionbank fullscreen active" ng-init="init()">
+  <link rel="stylesheet" type="text/css" href="{{csspath}}" />
+<div class="ui modal qb-question-bank fullscreen active" ng-init="init()">
   <div class="header">
     <div class="ui two column grid">
       <div class="row">
@@ -11,7 +11,7 @@
     </div>
   </div>
   <div class="content wizard">
-    <div class="qs-filters-container" ng-show="!isQuestionSetConfig">
+    <div class="qb-filters-container" ng-show="!isQuestionSetConfig">
       <div class="ui form">
         <div class="field">
           <div class="ui fluid icon input">
@@ -19,13 +19,13 @@
             <i class="inverted circular search link icon" id="qb-search-button" ng-click="searchQuestions();generateTelemetry({type: 'select', subtype: 'keyPress', id: 'text'},$event)"></i>
           </div>
         </div>
-        <div class="ui accordion field" id="assessmentAdvancedFields">
+        <div class="ui accordion field">
           <div class="content transition">
             <div class="three fields">
               <div class="field">
                 <div class="ui fluid labeled input">
                   <div class="ui label">Language</div>
-                  <select class="ui fluid dropdown search" ng-model="filterObj.language" ng-options="lang for lang in languages" id="language-drop-down" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', 'id': 'dropDown'},$event)" ng-change="searchQuestions();">
+                  <select class="ui fluid dropdown search" ng-model="filterObj.language" ng-options="lang for lang in languages" id="language-drop-down" ng-change="searchQuestions();generateTelemetry({type: 'select', subtype: 'dropDown', 'id': 'dropDown'},'language-drop-down')">
                     <option value="">
                       All
                     </option>
@@ -35,14 +35,14 @@
               <div class="field">
                 <div class="ui fluid labeled input">
                   <div class="ui label">Difficulty</div>
-                  <select class="ui fluid dropdown search" ng-model="filterObj.qlevel" ng-options="level for level in difficultyLevels" id="difficulty-drop-down" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" ng-change="searchQuestions();">
+                  <select class="ui fluid dropdown search" ng-model="filterObj.qlevel" ng-options="level for level in difficultyLevels" id="difficulty-drop-down" ng-change="searchQuestions();generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},'difficulty-drop-down')">
                   </select>
                 </div>
               </div>
               <div class="field">
                 <div class="ui fluid labeled input">
                   <div class="ui label">Question Type</div>
-                  <select multiple="" class="ui fluid dropdown search lableCls" ng-model="filterObj.type" ng-options="type for type in questionTypes" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" id="question-type-drop-down" ng-change="searchQuestions(); ">
+                  <select multiple="" class="ui fluid dropdown search lableCls" ng-model="filterObj.type" ng-options="type for type in questionTypes" id="question-type-drop-down" ng-change="searchQuestions();generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},'question-type-drop-down')">
                     <option value="">
                       Type
                     </option>
@@ -54,7 +54,7 @@
               <div class="field">
                 <div class="ui fluid labeled input">
                   <div class="ui label">&emsp;Grade&nbsp;&nbsp;&nbsp;</div>
-                  <select multiple="" class="ui fluid dropdown search lableCls" ng-model="filterObj.gradeLevel" ng-options="grade for grade in grades" data-bind="options:assessment.gradeLevel" id="grade-drop-down" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" ng-change="searchQuestions();">
+                  <select multiple="" class="ui fluid dropdown search lableCls" ng-model="filterObj.gradeLevel" ng-options="grade for grade in grades" data-bind="options:assessment.gradeLevel" id="grade-drop-down" ng-click="" ng-change="searchQuestions();generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},'grade-drop-down')">
                     <option value="">
                       Grade
                     </option>
@@ -64,9 +64,15 @@
               <div class="field">
                 <div class="ui fluid labeled input">
                   <div class="ui label">Concepts</div>
-                  <input type="text" class="fluid" id="queSetConceptsTextBox" placeholder="Choose concepts" ng-model="filterObj.concepts" id="concepts-drop-down" ng-click="generateTelemetry({type: 'click', subtype: 'select', id: 'dropDown'},$event)" ng-change="searchQuestions();" readonly="true" />
+                  <input type="text" class="fluid" id="queSetConceptsTextBox" placeholder="Choose concepts" ng-model="filterObj.concepts" id="concepts-drop-down" ng-change="searchQuestions();generateTelemetry({type: 'click', subtype: 'select', id: 'dropDown'},'concepts-drop-down')" readonly="true" />
                   <span class="disabled">{{totalconcepts}} concept(s) choosen</span>
                   <small ng-show="qcconcepterr">Select concept</small>
+                </div>
+              </div>
+              <div class="field">
+                <div class="ui toggle checkbox verticalcenter">
+                  <input type="checkbox" ng-model="$ctrl.activityOptions.myQuestions" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'toggle', target: 'myQuestionsToggle'})">
+                  <label>My Questions</label>
                 </div>
               </div>
             </div>
@@ -74,7 +80,7 @@
         </div>
       </div>
     </div>
-    <div class="qs-filters-container" ng-show="isQuestionSetConfig">
+    <div class="qb-filters-container" ng-show="isQuestionSetConfig">
       <div class="ui form">
         <div class="five fields">
           <div ng-class="questionSetConfigObj.title ? 'field' :'field error'">
@@ -114,15 +120,15 @@
       </div>
     </div>
     <div class="ui divider"></div>
-    <div class="ui segment" style="width: 100%;height: 270px;" ng-show="itemsLoading">
+    <div class="ui segment" ng-show="itemsLoading">
       <div class="ui active inverted dimmer">
         <div class="ui text loader">Just one second, We're fetching that content for you.</div>
       </div>
     </div>
-    <div class="qs-questions-list">
+    <div class="qb-questions-list">
       <div class="ui two column horizontally padded grid" ng-show="!itemsLoading">
-        <div class="seven wide column question-container" ng-show="!isQuestionSetConfig">
-          <div class="row question-list-container">
+        <div class="seven wide column qb-question-container" ng-show="!isQuestionSetConfig">
+          <div class="row qb-question-list-container">
             <div class="ui large divided items">
               <div class="item select" ng-repeat="question in questions">
                 <div class="middle aligned content" ng-click="previewItem(question, true);">
@@ -143,8 +149,8 @@
             </div>
           </div>
         </div>
-        <div class="seven wide column column question-container" ng-show="isQuestionSetConfig">
-          <div class="column list-container" ng-show="isQuestionSetConfig">
+        <div class="seven wide column column qb-question-container" ng-show="isQuestionSetConfig">
+          <div class="column qb-list-container" ng-show="isQuestionSetConfig">
             <div class="ui large divided items">
               <div class="item select" ng-repeat="selQuestion in selectedQuestions">
                 <div class="middle aligned content" ng-click="previewItem(selQuestion, true);">
@@ -166,7 +172,7 @@
           </div>
         </div>
         <div class=" four widecolumn preview-config">
-          <div class="config-form" ng-show="showConfigForm">
+          <div class="qb-config-form" ng-show="showConfigForm">
             <h3>Config Data</h3>
             <div class="ui form">
               <div class="fields">
@@ -212,7 +218,7 @@
       <!-- <div class="or" ng-show="isQuestionSetConfig"></div> -->
       <button class="ui orange button" id="add-more-ques-button" ng-click="isQuestionSetConfig = false;generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" ng-show="isQuestionSetConfig" type="button">Add More Questions</button>
       <div class="or"></div>
-      <button class="ui blue button" ng-show="!isQuestionSetConfig" id="next-button" ng-click="createQuestionSet();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" type="button">Next</button>
+      <button class="ui blue button" ng-show="!isQuestionSetConfig" id="next-button" ng-disabled="selectedQuestions.length==0" ng-click="createQuestionSet();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" type="button">Next</button>
       <button class="ui blue button" ng-disabled="(questionSetConfigObj.title == '')" ng-show="isQuestionSetConfig" id="add-to-stage" ng-click="addQuestionSet();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" type="button">Add</button>
     </div>
   </div>
