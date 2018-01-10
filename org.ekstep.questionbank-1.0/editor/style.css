@@ -88,6 +88,13 @@
   flex-flow: column;
 }
 
+.qb-toggle-label {
+  height: 94%;
+    width: 24.5%;
+    font-size: 14px !important;
+    padding-top: 2.3% !important;
+}
+
 .qb-question-bank .content.wizard {
   height: 83%;
   padding: 0;
@@ -97,6 +104,7 @@
   height: 70%;
 }
 
+
 .qb-list-container {
   max-height: 70vh;
   overflow-y: scroll;
@@ -105,6 +113,9 @@
 .qb-question-list-container {
   max-height: 57vh;
   overflow-y: scroll;
+}
+.qb-list-container>.ui.large.divided.items>.active {
+  background-color: grey;
 }
 
 
