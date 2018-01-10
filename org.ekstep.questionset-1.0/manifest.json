@@ -15,10 +15,13 @@
         "type": "plugin",
         "plugin": "org.ekstep.question",
         "ver": "1.0"
-      },
-      {
+      },{
         "type": "plugin",
         "plugin": "org.ekstep.questionbank",
+        "ver": "1.0"
+      },{
+        "type": "plugin",
+        "plugin": "org.ekstep.questionset.preview",
         "ver": "1.0"
       }
     ],
