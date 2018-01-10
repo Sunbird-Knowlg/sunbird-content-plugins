@@ -66,7 +66,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      *   @memberof preview
      */
     showPreview: function(data) {
-        var instance = this;
+        var instance = this,itemIframe=null;
         var contentService = ecEditor.getService('content');
         var defaultPreviewConfig = {
             showEndpage: true
@@ -110,13 +110,14 @@ org.ekstep.contenteditor.basePlugin.extend({
         };
         if (data.parentElement) {
             var config = {
-                    "showStartPage": false,
-                    "showEndPage": false
-                },
-                itemIframe = org.ekstep.contenteditor.jQuery("." + data.parentElementClass)[0];
-            if (itemIframe.src == "")
-                itemIframe.src = instance.previewURL;
-            itemIframe.addEventListener('load', function() {
+                "showStartPage": false,
+                "showEndPage": false
+            },
+            itemIframe = ecEditor.jQuery(data.element)[0];
+            if (itemIframe.src == ""){
+                itemIframe.src = instance.previewURL;              
+            }
+            itemIframe.onload = function() {
                 var userData = {};
                 var configuration = {};
                 userData.etags = ecEditor.getContext('etags') || [];
@@ -143,8 +144,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 configuration.metadata = meta;
                 configuration.data = (meta.mimeType == 'application/vnd.ekstep.ecml-archive') ? instance.contentBody : {};
                 itemIframe.contentWindow.initializePreview(configuration);
-            });
-            itemIframe.contentWindow.location.reload();
+            }
         } else {
             ecEditor.getService('popup').open({
                 template: 'partials_org.ekstep.preview.html',

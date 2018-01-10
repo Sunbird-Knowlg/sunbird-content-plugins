@@ -6,7 +6,7 @@
           <mcq-editor ng-repeat="item in config" config="item" index="$index" data="questionData"></mcq-editor>
           <div class="one column row">
             <div class="column" style="text-align: center;margin-top: 2%;margin-bottom: 6%;">
-              <button class="ui primary basic button large" ng-click="addAnswerField()">Add answer</button>
+              <button class="ui primary basic button large" id="mcq-add-ans-button" ng-click="addAnswerField();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Add answer</button>
             </div>
           </div>
         </div>
@@ -39,10 +39,10 @@
       </div>
       <div class="ui tab active" data-tab="first_{{index}}" id="firstTab_{{index}}">
         <div class="form-group segment" style="text-align: center;margin-bottom: 2%" ng-show="isAnswer">
-          <input type="text" class="textbox" placeholder="Enter answer" ng-model="editorObj1.options[index-1].text" maxlength="{{maxLen}}" id="answerField_{{index}}">
+          <input type="text" class="textbox" placeholder="Enter answer" ng-model="editorObj1.options[index-1].text" maxlength="{{maxLen}}" id="answerField_{{index}}"  ng-click="generateTelemetry({type: 'select', subtype: 'keyPress', id: 'text'},$event)">
         </div>
         <div class="form-group segment" style="text-align: center;" ng-show="isQuestion">
-          <input type="text" class="textbox" placeholder="Enter the question" ng-model="editorObj1.question.text" maxlength="{{maxLen}}" id="textQ">
+          <input type="text" class="textbox" placeholder="Enter the question" ng-model="editorObj1.question.text" maxlength="{{maxLen}}" id="textQ" ng-click="generateTelemetry({type: 'select', subtype: 'keyPress', id: 'text'},$event)">
         </div>
       </div>
       <div class="ui tab" data-tab="second_{{index}}" ng-show="isImage" id="secondTab_{{index}}">
@@ -109,12 +109,12 @@
         <div class="three column row">
           <div class="column">
             <label ng-show="isAnsOption">
-              <a href="" ng-click="deleteAnswer(index)" style="color: #8b8c8d"><i class="trash icon"></i> Delete</a>
+              <a href="" id="deleteAnswer-button" ng-click="deleteAnswer(index);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" style="color: #8b8c8d"><i class="trash icon"></i> Delete</a>
             </label>
           </div>
           <div class="column">
             <div class="ui checkbox" ng-show="isAnsOption">
-              <input type="radio" name="example" id="correctAnswer_{{index}}" ng-checked="editorObj1.options[index-1].isAnswerCorrect">
+              <input type="radio" name="example" id="correctAnswer_{{index}}" ng-checked="editorObj1.options[index-1].isAnswerCorrect"  ng-click="generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)">
               <label style="color: #8b8c8d" id="correctAnswerLabel_{{index}}">Correct answer</label>
             </div>
           </div>

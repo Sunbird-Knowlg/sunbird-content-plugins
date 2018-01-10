@@ -62,23 +62,7 @@
   }
 
   .dropdownBox {
-    -webkit-appearance: none;
-    min-width: inherit;
     width: 100%;
-    border-top-style: initial;
-    border-right-style: initial;
-    border-left-style: initial;
-    border-top-color: initial;
-    border-right-color: initial;
-    border-left-color: initial;
-    min-height: 32px;
-    line-height: 22px;
-    color: rgb(136, 136, 136);
-    height: 33px;
-    padding: 5px 20px 5px 0px;
-    border-width: 0px 0px 1px;
-    border-image: initial;
-    border-bottom: 1px solid rgb(230, 231, 232);
   }
 
   .qcMetadateFormLbl {
@@ -221,9 +205,11 @@
     float: right;
   }
 
-  .IframeArea {
+  .iframe-preview {
     /*height: 100%;*/
     background-color: white;
+    width: 480px;
+    height: 270px;
   }
 
   .work-text-content {

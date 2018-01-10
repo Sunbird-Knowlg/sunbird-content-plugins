@@ -25,7 +25,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 "plugin-manifest": {}
             }
         };
-        qAndMediaObj = getQuestionList(questionSet['org.ekstep.question']);
+        qAndMediaObj = this.getQuestionList(questionSet['org.ekstep.question']);
         story.theme.stage[0]['org.ekstep.questionset']['org.ekstep.question'] = qAndMediaObj["org.ekstep.question"];
         questionMedia = _.uniqBy(qAndMediaObj.media);
         pluginIds = _.uniqBy(qAndMediaObj.pluginIds)
