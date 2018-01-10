@@ -4,13 +4,11 @@
             <img class="ui tiny centered image" ng-show="contentDetails.contentImage != ''" ng-src="{{contentDetails.contentImage}}" />
         </div>
         <div class="four wide column custom-6-wide">
-            <div class="row custom-row-1">
-                <label class="content-title" ng-bind="contentDetails.contentTitle | limitTo:30">
-                    <span ng-if="contentDetails.contentTitle.length > 30">...</span>
-                </label>
+            <div class="content-title-container" ng-class="(headerSettings.showEditMeta) ? 'row custom-row-1' : 'content-title-align'">
+                <label class="content-title">{{contentDetails.contentTitle}}</label>
             </div>
-            <div class="row custom-row-2">
-                <a class="btn at-btn at-btn-ok" ng-click="editContentMeta();generateTelemetry({subtype:'',target:'editmeta'})" ng-show="headerSettings.showEditMeta">
+            <div class="row custom-row-2" ng-show="headerSettings.showEditMeta">
+                <a class="btn at-btn at-btn-ok" ng-click="editContentMeta();generateTelemetry({subtype:'',target:'editmeta'})">
                     <i class="edit icon link"></i>&nbsp;Edit Details
                 </a>
             </div>

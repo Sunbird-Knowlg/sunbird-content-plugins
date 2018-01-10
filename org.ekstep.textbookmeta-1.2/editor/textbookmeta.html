@@ -77,9 +77,9 @@
                         <label for="publication">Publisher</label>
                         <input type="text" placeholder="Publication (optional)" ng-model="textbook.publication" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'publication'})" />
                     </div>
-                    <div class=" twelve wide field">
+                    <div class="field">
                         <label>Keywords</label>
-                        <ng-token-field ng-model="textbook.keywords" id="textbookmeta-keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
+                        <ng-token-field class='meta-keywords' ng-model="textbook.keywords" id="textbookmeta-keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
                     </div>
                 </div>
         </div>
