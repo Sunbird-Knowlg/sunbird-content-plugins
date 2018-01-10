@@ -40,7 +40,7 @@ angular.module('createquestionapp', [])
 
 
 
-    /* $scope.searchQuestions = function() {
+     $scope.searchQuestions = function() {
        var data = {
                 request: {
                     filters: {
@@ -65,7 +65,7 @@ angular.module('createquestionapp', [])
                 }
             });
         };
-*/
+
 
     /**
      *  init funtion is called when html is loaded
@@ -113,7 +113,7 @@ angular.module('createquestionapp', [])
           questionId: data.questionId
         });
         if (selQueIndex < 0) {
-          $scope.questions.push(data);
+          $scope.questions.unshift(data);
         } else {
           $scope.questions[selQueIndex] = data;
         }
@@ -146,7 +146,7 @@ angular.module('createquestionapp', [])
       if (selObjindex > -1) {
         $scope.selectedQuestions.splice(selObjindex, 1);
       } else {
-        $scope.selectedQuestions.push(selQuestion);
+        $scope.selectedQuestions.unshift(selQuestion);
       }
 
     }
