@@ -39,7 +39,7 @@ angular.module('createquestionapp', [])
     };
 
 
-
+/*
      $scope.searchQuestions = function() {
        var data = {
                 request: {
@@ -64,7 +64,7 @@ angular.module('createquestionapp', [])
                     return;
                 }
             });
-        };
+        };*/
 
 
     /**
@@ -72,7 +72,7 @@ angular.module('createquestionapp', [])
      *  @memberof QuestionFormController
      */
     $scope.init = function() {
-      $scope.searchQuestions();
+     // $scope.searchQuestions();
       if (pluginInstance.editData) {
         $scope.selectedQuestions = pluginInstance.editData.data;
         $scope.questionSetConfigObj = pluginInstance.editData.config;
@@ -108,7 +108,10 @@ angular.module('createquestionapp', [])
       });
 
       ecEditor.addEventListener(pluginInstance.manifest.id + ":saveQuestion", function(event, data) {
-        data.isSelected = false;
+        if(!data.isSelected){
+          data.isSelected = true;
+        }
+
         var selQueIndex = _.findLastIndex($scope.questions, {
           questionId: data.questionId
         });
@@ -117,6 +120,7 @@ angular.module('createquestionapp', [])
         } else {
           $scope.questions[selQueIndex] = data;
         }
+        $scope.selectQuestion(data);
 
 
       }, false);

@@ -15,7 +15,7 @@
       <div class="ui form">
         <div class="field">
           <div class="ui fluid icon input">
-            <input ng-model="filterObj.question_title" placeholder="Search by question, or question title" ng-keypress="$event.keyCode === 13 ? searchQuestions() : null" type="text" id="qb-search-box" ng-click="generateTelemetry({type: 'select', subtype: 'keyPress', id: 'text'},$event)"/>
+            <input ng-model="filterObj.question_title" placeholder="Search by question, or question title" ng-keypress="$event.keyCode === 13 ? searchQuestions() : null" type="text" id="qb-search-box" ng-click="generateTelemetry({type: 'select', subtype: 'keyPress', id: 'text'},$event)" />
             <i class="inverted circular search link icon" id="qb-search-button" ng-click="searchQuestions();generateTelemetry({type: 'select', subtype: 'keyPress', id: 'text'},$event)"></i>
           </div>
         </div>
@@ -71,7 +71,7 @@
               </div>
               <div class="field">
                 <div class="ui toggle checkbox verticalcenter">
-                  <input type="checkbox" ng-model="$ctrl.activityOptions.myQuestions" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'toggle', target: 'myQuestionsToggle'})">
+                  <input type="checkbox" ng-model="filterObj.myQuestions" ng-change="searchQuestions();generateTelemetry({type: 'select', subtype: 'toggle', target: 'myQuestionsToggle'})">
                   <label>My Questions</label>
                 </div>
               </div>
@@ -94,7 +94,7 @@
           <div class="field">
             <div class="ui fluid labeled input">
               <div class="ui label">Max score</div>
-              <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="questionSetConfigObj.max_score" min='0' required="" type="number" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)"/>
+              <input class="total-marks ui dropdown" id="max_score" name="max_score" ng-model="questionSetConfigObj.max_score" min='0' required="" type="number" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" />
             </div>
           </div>
           <div>
@@ -106,13 +106,13 @@
           </div>
           <div class="field">
             <div class="ui toggle checkbox verticalcenter">
-              <input type="checkbox" ng-model="questionSetConfigObj.show_feedback" id="show-feedback" ng-click="generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)"/>
+              <input type="checkbox" ng-model="questionSetConfigObj.show_feedback" id="show-feedback" ng-click="generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)" />
               <label>Show Immediate Feedback</label>
             </div>
           </div>
           <div class="field">
             <div class="ui toggle checkbox verticalcenter">
-              <input type="checkbox" ng-model="questionSetConfigObj.shuffle_questions" id="shuffle0questions" ng-click="generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)"/>
+              <input type="checkbox" ng-model="questionSetConfigObj.shuffle_questions" id="shuffle0questions" ng-click="generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)" />
               <label>Shuffle Questions</label>
             </div>
           </div>
@@ -178,7 +178,7 @@
               <div class="fields">
                 <div class="field">
                   <label>Max time</label>
-                  <input type="number" placeholder="In minutes" id="max-time" ng-model="selQuestionObj.config.max_time"  ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)">
+                  <input type="number" placeholder="In minutes" id="max-time" ng-model="selQuestionObj.config.max_time" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)">
                 </div>
                 <div class="field">
                   <label>Max score</label>
