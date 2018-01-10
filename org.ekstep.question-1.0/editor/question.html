@@ -1,5 +1,5 @@
 <script type="text/ng-template" id="QuestionUnitBrowser" ng-controller="QuestionCreationFormController as $ctrl">
-  <div class="ui modal questionbank fullscreen active">
+  <div class="ui modal questioncreation fullscreen active">
     <div class="two column row ui grid">
       <div class="two wide column questionHeader">
         <h2>Create question</h2>
@@ -34,7 +34,7 @@
                     <div class="left floated meta" id="templateCardHeaderText">{{value.title}}</div>
                   </div>
                   <div class="content templateCard">
-                    <img src="{{value.thumbnail}}" />
+                    <img src="{{value.thumbnail1}}" />
                     <span ng-click="$ctrl.addCreateQuestionForm(value)">
                       <div class="templateDisc">
                         <p>Standard Multiple choice question.</p>

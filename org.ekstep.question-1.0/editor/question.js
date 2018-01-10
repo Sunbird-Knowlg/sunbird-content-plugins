@@ -16,6 +16,7 @@ angular.module('org.ekstep.question', [])
     ctrl.createQuestionScreen = false;
     ctrl.metadaFormScreen = false;
     ctrl.Totalconcepts = 0;
+    ctrl.category = '';
     ctrl.questionUnitTemplateURL = '';
     ctrl.menuItems = {};
     ctrl.showPreview = true;
@@ -58,6 +59,9 @@ angular.module('org.ekstep.question', [])
       });
 
     if (!ecEditor._.isEmpty(questionData)) {
+      // console.log(ctrl.menuItems);
+      // console.log("Edit data info", questionData);
+
       ctrl.questionData = questionData;
       ctrl.questionID = questionData.questionId;
       ctrl.questionData.qcLanguage = questionData.config.metadata.language;
@@ -129,7 +133,7 @@ angular.module('org.ekstep.question', [])
               v.pluginID = pluginID;
               v.ver = ver;
               var thumbnail = ecEditor.resolvePluginResource(pluginID, ver, v.thumbnail); //Get image source and update in template object
-              v.thumbnail = thumbnail;
+              v.thumbnail1 = thumbnail;
               if (ctrl.menuItems.hasOwnProperty(v.category)) {
                 ctrl.menuItems[v.category].templatesData.push(v);
               } else {
@@ -186,6 +190,7 @@ angular.module('org.ekstep.question', [])
      * @param {[type]} obj [description]
      */
     ctrl.addCreateQuestionForm = function(obj) {
+      ctrl.category = obj.category;
       ctrl.templatesScreen = false;
       ctrl.createQuestionScreen = true;
       ctrl.metadaFormScreen = false;
@@ -260,6 +265,7 @@ angular.module('org.ekstep.question', [])
         ctrl.metaDataFormData.metadata = metadata;
         ctrl.metaDataFormData.max_time = 1;
         ctrl.metaDataFormData.max_score = 1;
+        ctrl.metaDataFormData.category = ctrl.category
         ctrl.metaDataFormData.partial_scoring = true;
         var questionUnitFinalData = {};
         questionUnitFinalData.media = [{
@@ -279,6 +285,6 @@ angular.module('org.ekstep.question', [])
         $scope.closeThisDialog();
       }
     }
-  ctrl.init();
-}]);
+    ctrl.init();
+  }]);
 //# sourceURL=question.js
