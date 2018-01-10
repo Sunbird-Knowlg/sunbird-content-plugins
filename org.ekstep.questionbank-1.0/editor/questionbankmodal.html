@@ -25,7 +25,7 @@
               <div class="field">
                 <div class="ui fluid labeled input">
                   <div class="ui label">Language</div>
-                  <select class="ui fluid dropdown search" ng-model="filterObj.language" ng-options="lang for lang in languages" id="language-drop-down" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', 'id': 'dropDown'},$event)" ng-change="searchQuestions();">
+                  <select class="ui fluid dropdown search" ng-model="filterObj.language" ng-options="lang for lang in languages" id="language-drop-down" ng-change="searchQuestions();generateTelemetry({type: 'select', subtype: 'dropDown', 'id': 'dropDown'},'language-drop-down')">
                     <option value="">
                       All
                     </option>
@@ -35,14 +35,14 @@
               <div class="field">
                 <div class="ui fluid labeled input">
                   <div class="ui label">Difficulty</div>
-                  <select class="ui fluid dropdown search" ng-model="filterObj.qlevel" ng-options="level for level in difficultyLevels" id="difficulty-drop-down" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" ng-change="searchQuestions();">
+                  <select class="ui fluid dropdown search" ng-model="filterObj.qlevel" ng-options="level for level in difficultyLevels" id="difficulty-drop-down" ng-change="searchQuestions();generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},'difficulty-drop-down')">
                   </select>
                 </div>
               </div>
               <div class="field">
                 <div class="ui fluid labeled input">
                   <div class="ui label">Question Type</div>
-                  <select multiple="" class="ui fluid dropdown search lableCls" ng-model="filterObj.type" ng-options="type for type in questionTypes" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" id="question-type-drop-down" ng-change="searchQuestions(); ">
+                  <select multiple="" class="ui fluid dropdown search lableCls" ng-model="filterObj.type" ng-options="type for type in questionTypes" id="question-type-drop-down" ng-change="searchQuestions();generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},'question-type-drop-down')">
                     <option value="">
                       Type
                     </option>
@@ -54,7 +54,7 @@
               <div class="field">
                 <div class="ui fluid labeled input">
                   <div class="ui label">&emsp;Grade&nbsp;&nbsp;&nbsp;</div>
-                  <select multiple="" class="ui fluid dropdown search lableCls" ng-model="filterObj.gradeLevel" ng-options="grade for grade in grades" data-bind="options:assessment.gradeLevel" id="grade-drop-down" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" ng-change="searchQuestions();">
+                  <select multiple="" class="ui fluid dropdown search lableCls" ng-model="filterObj.gradeLevel" ng-options="grade for grade in grades" data-bind="options:assessment.gradeLevel" id="grade-drop-down" ng-click="" ng-change="searchQuestions();generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},'grade-drop-down')">
                     <option value="">
                       Grade
                     </option>
@@ -64,7 +64,7 @@
               <div class="field">
                 <div class="ui fluid labeled input">
                   <div class="ui label">Concepts</div>
-                  <input type="text" class="fluid" id="queSetConceptsTextBox" placeholder="Choose concepts" ng-model="filterObj.concepts" id="concepts-drop-down" ng-click="generateTelemetry({type: 'click', subtype: 'select', id: 'dropDown'},$event)" ng-change="searchQuestions();" readonly="true" />
+                  <input type="text" class="fluid" id="queSetConceptsTextBox" placeholder="Choose concepts" ng-model="filterObj.concepts" id="concepts-drop-down" ng-change="searchQuestions();generateTelemetry({type: 'click', subtype: 'select', id: 'dropDown'},'concepts-drop-down')" readonly="true" />
                   <span class="disabled">{{totalconcepts}} concept(s) choosen</span>
                   <small ng-show="qcconcepterr">Select concept</small>
                 </div>
