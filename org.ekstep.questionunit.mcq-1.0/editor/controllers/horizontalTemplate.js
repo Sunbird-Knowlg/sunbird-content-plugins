@@ -339,5 +339,22 @@ $scope.deleteAnswer = function(id) {
     $("#main_" + id).hide();
     $rootScope.defaultConfigData.splice(id, 1);
 }
+$scope.generateTelemetry = function(data,event) {
+      if (data) ecEditor.getService('telemetry').interact({
+        "type": data.type,
+        "subtype": data.subtype,
+        "id": data.id,
+        "pageId": ecEditor.getCurrentStage().id ,
+        "target": {
+          "id": event.target.id,
+          "ver": "1.0",
+          "type": data.type
+        },
+        "plugin": {
+          "id": "org.ekstep.questionunit.mcq",
+          "ver": "1.0"
+        }
+      })
+    }
 }]);
 //# sourceURL=horizontalMCQ.js
