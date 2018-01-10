@@ -250,6 +250,23 @@ angular.module('createquestionapp', [])
       $scope.closeThisDialog();
     }
 
+    $scope.generateTelemetry = function(data,event) {
+      if (data) ecEditor.getService('telemetry').interact({
+        "type": data.type,
+        "subtype": data.subtype,
+        "id": data.id,
+        "pageId": ecEditor.getCurrentStage().id ,
+        "target": {
+          "id": event.target.id,
+          "ver": "1.0",
+          "type": data.type
+        },
+        "plugin": {
+          "id": pluginInstance.manifest.id,
+          "ver": pluginInstance.manifest.ver
+        }
+      })
+    }
 
 
   }])
