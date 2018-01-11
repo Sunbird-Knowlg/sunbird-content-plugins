@@ -28,11 +28,13 @@ org.ekstep.contenteditor.basePlugin.extend({
         qAndMediaObj = this.getQuestionList(questionSet['org.ekstep.question']);
         story.theme.stage[0]['org.ekstep.questionset']['org.ekstep.question'] = qAndMediaObj["org.ekstep.question"];
         questionMedia = _.uniqBy(qAndMediaObj.media);
-        pluginIds = _.uniqBy(qAndMediaObj.pluginIds)
+        pluginIds = _.uniqBy(qAndMediaObj.pluginIds);
         pluginsUsed = {};
         _.forEach(pluginIds, function(plugin) {
             pluginsUsed[plugin] = plugin;
         });
+        pluginsUsed["org.ekstep.questionset"] = "org.ekstep.questionset";   //Adding Question set plugin into plugin-manifest
+
         ManifestGenerator.generate(pluginsUsed);
         pluginMedia = _.uniqBy(ManifestGenerator.getMediaManifest());
         if (questionMedia.length > 0) {
