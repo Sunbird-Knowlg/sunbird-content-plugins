@@ -308,7 +308,31 @@ angular.module('createquestionapp', [])
       ecEditor.dispatchEvent($scope.pluginIdObj.question_create_id + ":showpopup", questionObj);
     }
 
-    ctrl.previewItem = function() {};
+    $scope.previewItem = function(question, bool) {
+      // var prevData={};
+      // prevData.config = question.config;
+      // prevData.data=question.data.data;
+      // prevData.pluginId=question.data.plugin.id;
+      // prevData.pluginVer=question.data.plugin.version;
+      // prevData.templateId=question.data.plugin.templateId;
+      // prevData.id = question.questionId;
+      // prevData.type="unit";
+      // ecEditor.instantiatePlugin(prevData.id);
+      // var data = {
+      //   "org.ekstep.questionset": {
+      //     "config": {
+      //       'questionCount': 1,
+      //       'isShuffle': true
+      //     },
+      //     "org.ekstep.question": []
+      //   }
+      // }
+      // data["org.ekstep.questionset"]['org.ekstep.question'].push(prevData)
+      // var confData={"contentBody":{},"parentElement":true,"element":"#itemIframe"};
+      // var questionSetInstance = ecEditor.instantiatePlugin('org.ekstep.questionset.preview');
+      // confData.contentBody = questionSetInstance.getQuestionPreviwContent(data['org.ekstep.questionset']);
+      // ecEditor.dispatchEvent("atpreview:show", confData);
+    }
 
     $scope.cancel = function() {
       $scope.closeThisDialog();

@@ -34,7 +34,7 @@ Plugin.extend({
         this.showCustomPrevNavigation();
       }
     } else {
-      this._questionSetConfig = JSON.parse(data.config.__cdata);
+      this._questionSetConfig = (data.config && data.config.__cdata) ? JSON.parse(data.config.__cdata) : {isShuffle: false, };
       this._shuffle = JSON.parse(this._questionSetConfig.isShuffle);
       this._questionSet = _.clone(data[this._constants.questionPluginId]);
       var qobj = this.getNextQuestion();
@@ -82,8 +82,8 @@ Plugin.extend({
       return template.id === qobj.templateId;
     });
     var pluginVer = (qobj.pluginVer === 1) ? '1.0' : qobj.pluginVer.toString();
-    var templatePath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(qobj.pluginId, pluginVer, templateData.renderer.template);
-    var controllerPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(qobj.pluginId, pluginVer, templateData.renderer.controller);
+    var templatePath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(qobj.pluginId, pluginVer, templateData.renderer.templateURL);
+    var controllerPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(qobj.pluginId, pluginVer, templateData.renderer.controllerURL);
     org.ekstep.service.controller.loadNgModules(templatePath, controllerPath);
     setTimeout(function() {
       EkstepRendererAPI.dispatchEvent(qobj.pluginId + ":show", instance);

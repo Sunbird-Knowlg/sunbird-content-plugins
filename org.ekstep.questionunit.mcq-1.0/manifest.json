@@ -58,9 +58,9 @@
       },
       "renderer":
       {
-        "templateURL": "URL",
-        "controllerURL": "controllerPath",
-        "template": "templateID",
+        "templateURL": "renderer/templates/horizontalTemplate.html",
+        "controllerURL": "renderer/controllers/horizontalTemplate.js",
+        "template": "mcqtemplate",
         "controller": "controllerName"
       }
 
@@ -80,8 +80,11 @@
       {
         "type": "js",
         "src": "renderer/libs/jquery.magnific-popup.js"
+      },
+      {
+        "type": "css",
+        "src": "renderer/styles/horizontalTemplate.css"
       }
-
 
     ]
   }
