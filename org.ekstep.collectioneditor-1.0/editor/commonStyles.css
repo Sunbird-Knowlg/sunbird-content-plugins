@@ -32,8 +32,12 @@ body {
    text-transform: none !important;
 }
 
-.margin-bottom-none{
+.margin-bottom-none {
     margin-bottom: 0 !important;
+}
+
+.margin-left-20 {
+    margin-left: 20px !important;
 }
 
 
