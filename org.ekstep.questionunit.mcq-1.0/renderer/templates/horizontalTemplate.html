@@ -1,18 +1,18 @@
 <div id="preview-mcq-horizontal" ng-app="MCQRendererApp" ng-controller="MCQRendererController" ng-show="showTemplate">
-    <link rel="stylesheet" type="text/css" href="{{cssPath}}">
-    <div class="qc-mcqlayout">
-        <header class="qc-long-text-header">
-            <div class="qc-question-text">{{questionObj.question.text}}</div>
-        </header>
-        <table class="qc-option-container">
+  <link rel="stylesheet" type="text/css" href="{{cssPath}}">
+  <div class="qc-mcqlayout">
+    <header class="qc-long-text-header">
+      <div class="qc-question-text">{{questionObj.question.text}}</div>
+    </header>
+    <table class="qc-option-container">
             <tr ng-repeat="val in questionObj.options" class="qc-option-value" ng-class="{qsselectedopt: $index == selectedIndex}">
-                <td class="qc-option-text" id="{{val.id}}" align="left" valign="middle" ng-click="selectedvalue(val, $index)">
-                    <label for="{{'value' + $index}}">{{val.text}}</label>
-                </td>
-                <td class="qc-option-checkbox" ng-click="selectedvalue(val, $index)">
-                    <input type="radio" name="radio" value="pass" id="{{'value' + $index}}" class="qc-option-input-checkbox">
-                </td>
+                    <td class="qc-option-text" id="{{val.id}}" align="left" valign="middle" ng-click="selectedvalue(val, $index)">
+                      <label for="{{'value' + $index}}">{{val.text}}</label>
+                    </td>
+                    <td class="qc-option-checkbox" ng-click="selectedvalue(val, $index)">
+                        <input type="radio" name="radio" value="pass" id="{{'value' + $index}}"  class="qc-option-input-checkbox">
+                    </td>
             </tr>
-        </table>
-    </div>
+    </table>
+  </div>
 </div>

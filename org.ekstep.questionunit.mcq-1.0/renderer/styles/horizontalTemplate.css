@@ -118,3 +118,12 @@ input.qc-option-input-checkbox:checked::after {
 .qsselectedopt {
     border-left-color: #4a90e2;
 }
+table.qc-option-container{
+    height: 18em;
+    overflow-y: scroll;
+    display: block;
+}
+table.qc-option-container > tbody{
+    width: 100%;
+    display: inline-table;
+}
