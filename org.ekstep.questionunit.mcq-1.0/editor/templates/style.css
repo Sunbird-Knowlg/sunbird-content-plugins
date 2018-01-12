@@ -1,62 +1,83 @@
-.headBred {
-  margin-top: 1px;
-  margin-left: 10px;
-}
-
-input:focus {
+.textbox:focus {
   border-width: 0px 0px 1px 0px solid blue;
   outline: 0;
-  border-color: blue;
+  box-shadow: 0 4px 6px -6px #000000;
+  border-color: #9090e4;
 }
 
 .textbox {
   width: 50%;
-  border-width: 0px 0px 1px 0px ;
+  border-width: 0px 0px 1px 0px;
   height: 33px;
   color: inherit;
 }
-
-.cretateQuestion {
-  padding-left: 7%;
+.cardBorder{
+  background-color: #9090e4;
+  box-shadow: 0 4px 6px -6px #9090e4;
+  color: #9090e4;
 }
 
-.questionbox:focus {
-  box-shadow: 1px 1px 1px #9c60f7;
+.maxLengthText {
+  float: right;
 }
 
-input[type="radio"] {
-  -webkit-appearance: checkbox;
-  /* Chrome, Safari, Opera */
-  -moz-appearance: checkbox;
-  /* Firefox */
-  -ms-appearance: checkbox;
-  /* not currently supported */
+.optionError {
+  color: red;
 }
 
-.preview-window .ngdialog-content {
-  background: none ;
+.optionTab {
+  text-align: center;
 }
 
-.ngdialog.ngdialog-theme-plain .ngdialog-content {
-  background: none;
+.has-error {
+  border-bottom-color: red;
 }
 
-.main {
-  position: relative;
-  height: auto;
+.has-success {
+  border-bottom-color: #dfcfcf;
 }
 
-#previewContentIframeWrapper {
-  position: relative;
-  /*width: 900px;*/
-  height: calc( 400px / (16/9));
-  margin-left: auto;
-  margin-right: auto;
-  border-radius: 0;
+.has-error-text {
+  color: inherit;
 }
 
-#previewContentIframe {
-  height: 100%;
+.has-success-text {
+  color: red;
+}
+
+.mcqFullGrid {
+  max-height: 86vh;
   width: 100%;
-  border: none;
+  margin-left: 0%;
+  margin-top: 0%
+}
+
+.innerScroll {
+  padding-left: 4%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  margin-left: 2%;
+}
+
+#eachCard {
+  box-shadow: 1px 1px 1px #9da1a5;
+  margin-bottom: 2%
+}
+
+.textBoxDiv {
+  text-align: center;
+}
+
+.deleteText {
+  color: #8b8c8d;
+}
+
+.addAns {
+  text-align: center;
+  margin-top: 2%;
+  margin-bottom: 6%;
+}
+
+.headQA {
+  margin-top: 3%;
 }

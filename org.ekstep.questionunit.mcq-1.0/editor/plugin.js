@@ -7,12 +7,10 @@
  org.ekstep.contenteditor.questionUnitPlugin.extend({
  	
  	initialize: function() {  
- 		var instance = this;
  		ecEditor.addEventListener("org.ekstep.plugins.mcqplugin:showpopup", this.loadHtml, this);
- 		var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/templates/horizontalTemplate.html');
- 		var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/controllers/horizontalTemplate.js');
+ 		var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/templates/horizontalTemplate.html');
+ 		var controllerPath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/controllers/horizontalTemplate.js');
  		ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath);
- 		
  	}
  });
 //# sourceURL=mcqpluginEditorPlugin.js

@@ -14,67 +14,68 @@
         </div>
       </div>
     </div>
-    <form name="questionUnitBrowserForm" novalidate>
-      <div class="ui grid">
-        <div class="two column row" ng-show="$ctrl.templatesScreen">
-          <div class="three wide column">
-            <div class="ui secondary vertical menu" id="qcSideMenu">
-              <div class="item" ng-repeat="(key, value) in $ctrl.menuItems" ng-click="$ctrl.select($parent.$index, $index)" ng-class="{activeItem: $parent.$index + '.' + $index == $ctrl.selected}" ng-if="value.templatesData.length > 0">
-                <div class="content">
-                  <a class="header" id={{value.category}} ng-click="$ctrl.switchTab($index,value);$ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)"><i class="{{value.data.icon}}"></i> {{value.data.name}}</a>
-                </div>
+    <div class="ui grid">
+      <div class="two column row" ng-show="$ctrl.templatesScreen">
+        <div class="three wide column">
+          <div class="ui secondary vertical menu" id="qcSideMenu">
+            <div class="item" ng-repeat="(key, value) in $ctrl.menuItems" ng-click="$ctrl.select($parent.$index, $index)" ng-class="{activeItem: $parent.$index + '.' + $index == $ctrl.selected}" ng-if="value.templatesData.length > 0">
+              <div class="content">
+                <a class="header" id={{value.category}} ng-click="$ctrl.switchTab($index,value);$ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)"><i class="{{value.data.icon}}"></i> {{value.data.name}}</a>
               </div>
             </div>
           </div>
-          <div class="nine wide column" id="templatsCards">
-            <div class="ui grid three column row">
-              <div class="column" ng-repeat="(key, value) in $ctrl.selectedMenuItemData">
-                <div class="ui card">
-                  <div class="content" id="templateCardHeader">
-                    <div class="left floated meta" id="templateCardHeaderText">{{value.title}}</div>
-                  </div>
-                  <div class="content templateCard">
-                    <img src="{{value.thumbnail1}}" />
-                    <span ng-click="$ctrl.addCreateQuestionForm(value)">
-                      <div class="templateDisc">
-                        <p>Standard Multiple choice question.</p>
-                        <i class="plus icon"></i>
-                      </div>
-                    </span>
-                  </div>
+        </div>
+        <div class="nine wide column" id="templatsCards">
+          <div class="ui grid three column row">
+            <div class="column" ng-repeat="(key, value) in $ctrl.selectedMenuItemData">
+              <div class="ui card">
+                <div class="content" id="templateCardHeader">
+                  <div class="left floated meta" id="templateCardHeaderText">{{value.title}}</div>
+                </div>
+                <div class="content templateCard">
+                  <img src="{{value.thumbnail1}}" />
+                  <span ng-click="$ctrl.addCreateQuestionForm(value)">
+                    <div class="templateDisc">
+                      <p>Standard Multiple choice question.</p>
+                      <i class="plus icon"></i>
+                    </div>
+                  </span>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        <div class="two column row" ng-show="$ctrl.createQuestionScreen">
-          <div class="seven wide column">
-            <div ng-if="$ctrl.questionUnitTemplateURL">
-              <ng-include src="$ctrl.questionUnitTemplateURL"></ng-include>
-            </div>
+      </div>
+      <div class="two column row" ng-show="$ctrl.createQuestionScreen">
+        <div class="seven wide column">
+          <span class="templateHead">{{$ctrl.templateName}}</span>
+          <div ng-if="$ctrl.questionUnitTemplateURL">
+            <ng-include src="$ctrl.questionUnitTemplateURL"></ng-include>
           </div>
-          <div class="five wide column previewArea">
-            <div class="previewAreaHead">
-              <span class="ui left floated">Preview</span>
-              <i class="icon undo ui right-floated replyIcon" ng-click="$ctrl.setPreviewData()"></i>
-              <div>
-                <div class="ui raised child preview-iframe-wrapper" ng-show='$ctrl.showPreview'>
-                  <iframe id="iframeArea" class="iframe-preview"></iframe>
-                </div>
+        </div>
+        <div class="five wide column previewArea">
+          <div class="previewAreaHead">
+            <span class="ui left floated">Preview</span>
+            <i class="icon undo ui right-floated replyIcon" ng-click="$ctrl.setPreviewData()"></i>
+            <div>
+              <div class="ui raised child preview-iframe-wrapper" ng-show='$ctrl.showPreview'>
+                <iframe id="iframeArea" class="iframe-preview"></iframe>
               </div>
             </div>
           </div>
         </div>
-        <div class="five column row QuestionMetaForm" ng-show="$ctrl.metadaFormScreen">
-          <!-- <form name="qcMetadateForm"> -->
-            <div class="column">
+      </div>
+      <div class="QuestionMetaForm" ng-show="$ctrl.metadaFormScreen">
+        <form name="questionUnitBrowserForm" novalidate>
+          <div class="ui grid five column row">
+            <div class="two wide column">
               <label class="qcMetadateFormLbl" data-original-title="Question title">
                 Question title <span class="star">&nbsp;*</span>
               </label>
               <input type="text" class="form-control" id="questionTitle" placeholder="Question title" name="questionTitle" ng-model="$ctrl.questionData.questionTitle" required/>
               <small ng-show="questionUnitBrowserForm.questionTitle.$invalid && !questionUnitBrowserForm.questionTitle.$pristine" class="qcError">Enter question title.</small>
             </div>
-            <div class="column">
+            <div class="two wide column">
               <label class="qcMetadateFormLbl">Language <span class="star">&nbsp;*</span></label>
               <select class="ui dropdown dropdownBox form-control" name="qcLanguage" ng-model="$ctrl.questionData.qcLanguage" id="language-drop-down" ng-click="$ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', 'id': 'dropDown'},$event)" required>
                 <option value="" selected="selected">Choose language</option>
@@ -82,7 +83,7 @@
               </select>
               <small ng-show="questionUnitBrowserForm.qcLanguage.$invalid && !questionUnitBrowserForm.qcLanguage.$pristine" class="qcError">Select language.</small>
             </div>
-            <div class="column">
+            <div class="two wide column">
               <label class="qcMetadateFormLbl">
                 Level <span class="star">&nbsp;*</span>
               </label>
@@ -92,7 +93,7 @@
               </select>
               <small ng-show="questionUnitBrowserForm.qcLevel.$invalid && !questionUnitBrowserForm.qcLevel.$pristine" class="qcError">Select level.</small>
             </div>
-            <div class="column">
+            <div class="two wide column">
               <label class="qcMetadateFormLbl">
                 Grade <span class="star">&nbsp;*</span>
               </label>
@@ -109,26 +110,25 @@
               </div>
               <small ng-show="questionUnitBrowserForm.qcGrade.$invalid && !questionUnitBrowserForm.qcGrade.$pristine" class="qcError">Select grade.</small>
             </div>
-            <div class="column">
+            <div class="two wide column">
               <label class="qcMetadateFormLbl">
                 Concepts <span class="star">&nbsp;*</span>
               </label>
-              <input type="text" id="conceptsTextBoxMeta" value="Choose concepts" readonly="true" id="concepts-drop-down" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'dropDown'},$event)"/>
+              <input type="text" id="conceptsTextBoxMeta" value="Choose concepts" readonly="true" id="concepts-drop-down" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'dropDown'},$event)" />
               <span id="concepts_dummy" class="disabled">{{$ctrl.Totalconcepts}} concept(s) choosen</span>
               <small ng-show="$ctrl.qcconcepterr" class="qcError">Select concept</small>
             </div>
-          <!-- </form> -->
-        </div>
+          </div>
+        </form>
       </div>
-    </form>
+    </div>
     <div class="actions bottomActionButtons">
-      <button class="ui large button left floated"  id="ques-cancel-button" ng-click="$ctrl.cancel();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Cancel</button>
+      <button class="ui large button left floated" id="ques-cancel-button" ng-click="$ctrl.cancel();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Cancel</button>
       <div class="ui buttons">
-        <button class="ui large button deny cancel" id="back-button" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen" ng-click="$ctrl.back();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Back</button>
+        <button class="ui basic primary button" id="back-button" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen" ng-click="$ctrl.back();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Back</button>
         <div class="or" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen"></div>
         <button class="ui large blue button" ng-show="$ctrl.createQuestionScreen" id="back-button" ng-click="$ctrl.validateQuestionCreationForm();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Next</button>
-        <button class="ui large blue button" ng-show="$ctrl.metadaFormScreen" id="save-question-button" ng-click="$ctrl.sendData(questionUnitBrowserForm.$valid);$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" 
-        ng-disabled="(!questionUnitBrowserForm.$valid) || (!$ctrl.conceptsCheck)">Submit</button>
+        <button class="ui large blue button" ng-show="$ctrl.metadaFormScreen" id="save-question-button" ng-click="$ctrl.sendData(questionUnitBrowserForm.$valid);$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" ng-disabled="(!questionUnitBrowserForm.$valid) || (!$ctrl.conceptsCheck)">Submit</button>
       </div>
     </div>
   </div>
