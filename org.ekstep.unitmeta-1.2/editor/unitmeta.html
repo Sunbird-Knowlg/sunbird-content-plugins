@@ -30,8 +30,12 @@
                     </div>
                 </div>
                 <div class="field">
-                    <label>Keywords</label>
-                    <ng-token-field ng-model="unit.keywords" id="unitmeta-keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
+                    <label >Keywords</label>
+                    <select id="unitmeta-keywords" class="ui search dropdown border-bottom-only" ng-model="unit.keywords" multiple="" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'keyword'})">
+                        <option value="">Select</option>
+                        <option value="{{keyword}}" ng-repeat="keyword in keywords">{{keyword}}
+                        </option>
+                    </select>
                 </div>
             </div>
         </div>
