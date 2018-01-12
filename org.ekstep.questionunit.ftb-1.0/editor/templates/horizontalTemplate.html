@@ -111,8 +111,8 @@
         <div class="form-group segment" style="text-align: center;margin-bottom: 2%" ng-show="isAnswer">
           <input type="text" class="textbox" placeholder="Enter answer" ng-model="editorObj1.answers[index-1].text" maxlength="{{maxLen}}" id="answerField_{{index}}">
         </div>
-        <div class="form-group segment" style="text-align: center;" ng-show="isQuestion">
-          <input type="text" class="textbox" placeholder="Enter the question" ng-model="editorObj1.question.text" maxlength="{{maxLen}}" id="textQ">
+        <div class="form-group segment" ng-show="isQuestion">
+          <textarea class="textbox" style="width: 100%;" placeholder="Enter the question" ng-model="editorObj1.question.text" maxlength="{{maxLen}}" id="textQ"></textarea>
         </div>
       </div>
       <div class="ui tab" data-tab="second_{{index}}" ng-show="isImage" id="secondTab_{{index}}">
@@ -185,10 +185,10 @@
           <div class="column">
           </div>
           <div class="column" ng-if="isAnswer">
-            <p style="float: right;">{{editorObj1.answers[index-1].text.length}}/{{maxLen}}</p>
+            <p style="float: right;">{{editorObj1.answers[index-1].text.length ? editorObj1.answers[index-1].text.length : 0;}}/{{maxLen}}</p>
           </div>
           <div class="column" ng-show="isQuestion">
-            <p style="float: right;">{{editorObj1.question.text.length}}/{{maxLen}}</p>
+            <p style="float: right;">{{editorObj1.question.text.length ? editorObj1.question.text.length : 0; }}/{{maxLen}}</p>
           </div>
         </div>
       </div>

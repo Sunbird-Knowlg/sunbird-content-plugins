@@ -1,12 +1,13 @@
 // TODO: Controller for horizontalTemplate.html
 'use strict';
-angular.module('MCQRendererApp', []).controller("MCQRendererController", function($scope) {
-  //var ctrl = this;
+angular.module('MCQlongtextRendererApp', []).controller("MCQlongtextRendererController", function($scope) {
+  var ctrl = this;
+  $scope.selectedAns;
   $scope.showTemplate = true;
-  $scope.question;
-  $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/styles/horizontalTemplate.css");
+  $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcqlongtext", "1.0", "renderer/styles/style.css");
+  $scope.headerImagePath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcqlongtext", "1.0", "renderer/assets/qsheader.png");
   $scope.init = function() {
-    $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.mcq");
+    $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.mcqlongtext");
     // To show template/plugin  
     EkstepRendererAPI.addEventListener($scope.pluginInstance._manifest.id + ":show", function(event, question) {
 
@@ -16,6 +17,7 @@ angular.module('MCQRendererApp', []).controller("MCQRendererController", functio
       $scope.showTemplate = true;
       $scope.safeApply();
     });
+    //hide template in render side
     EkstepRendererAPI.addEventListener($scope.pluginInstance._manifest.id + ":hide", function(event) {
       $scope.showTemplate = false;
       $scope.safeApply();
@@ -26,29 +28,24 @@ angular.module('MCQRendererApp', []).controller("MCQRendererController", functio
     });
 
   }
-
   $scope.init();
-  $scope.selectedValue = function(value, event) {
-    $scope.selectedOption = value.isAnswerCorrect;
-    console.log(value);
-    $scope.safeApply();
-    $("#" + event.target.id).parent().addClass('option-value-select');
-    $("#" + event.target.id).parent().siblings().removeClass('option-value-select');
+  $scope.selectedvalue = function(val, index) {
+    $scope.selectedIndex = index;
+    $scope.selectedAns = val.isAnswerCorrect;
   }
-
   $scope.evaluate = function() {
     var correctAnswer;
     $scope.questionObj.options.forEach(function(option) {
-      if (option.isAnswerCorrect === $scope.selectedOption) {
+      if (option.isAnswerCorrect === $scope.selectedAns) {
         correctAnswer = option.isAnswerCorrect;
 
       }
     });
     if (correctAnswer) {
-      console.log("right answere");
+      alert("right answere");
 
     } else {
-      console.log("wrong");
+      alert("wrong");
     }
   }
 
