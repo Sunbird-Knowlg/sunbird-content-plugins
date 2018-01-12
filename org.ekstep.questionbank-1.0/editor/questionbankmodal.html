@@ -215,10 +215,12 @@
             </div> -->
               <!--  <div class="ui submit button" id="save-config" ng-click="saveConfig();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Submit</div> -->
             </div>
+            <iframe id="itemIframe" class="previewContainer" ng-show="!itemPreviewLoading && (itemPreviewContent.error || (itemPreviewDisplay == itemPreviewDefaultMessage))"></iframe>
+            <!-- Preview code
             <iframe id="itemIframe" class="previewContainer" ng-hide="!itemPreviewLoading && (itemPreviewContent.error || (itemPreviewDisplay == itemPreviewDefaultMessage))"></iframe>
             <div>
               <div class="itemIframeMessages" ng-show="!itemPreviewLoading && (itemPreviewContent.error || (itemPreviewDisplay == itemPreviewDefaultMessage))">{{itemPreviewDisplay}}</div>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
