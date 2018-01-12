@@ -40,55 +40,57 @@ angular.module('createquestionapp', [])
       "total_items": 1
     };
 
-
-
-
-
     $scope.searchQuestions = function() {
       var data = {
         request: {
-          filters: {
-            objectType: ["AssessmentItem"],
-            status: [],
-          },
-
-          sort_by: { "name": "desc" },
-          limit: 200
+          "sortOrder": [
+            { "sortField": "code", "sortOrder": "ASC" }
+          ]
         }
       };
+
+      for (var key in $scope.filterObj) {
+        if ($scope.filterObj.hasOwnProperty(key)){
+          data.request.metadata = {};
+          data.request.metadata.filters = [];
+        }else{
+          delete data.request.metadata;
+          delete data.request.metadata.filters;
+        }
+      }
 
       // setting filters values and title to request data
       ecEditor._.forEach($scope.filterObj, function(value, key) {
         if (value) {
           switch (key) {
             case "question_title":
-              data.request.query = value;
+              data.request.metadata.filters.push({ "property": "title", "operator": "startwith", "value": value });
               break;
             case "gradeLevel":
               if (value.length) {
-                data.request.filters.gradeLevel = value;
+                data.request.metadata.filters.push({ "property": "gradeLevel", "operator": "=", "value": value });
               }
               break;
             case "language":
-              data.request.filters.language = [value];
+              data.request.metadata.filters.push({ "property": "language", "operator": "=", "value": value });
               break;
             case "qlevel":
-              data.request.filters.qlevel = value;
+              data.request.metadata.filters.push({ "property": "qlevel", "operator": "=", "value": value });
               break;
             case "type":
               if (value.length) {
-                data.request.filters.type = value;
+                data.request.metadata.filters.push({ "property": "type", "operator": "=", "value": value });
               }
               break;
             case "concepts":
-              data.request.filters.concepts = value;
+              data.request.metadata.filters.push({ "property": "concepts", "operator": "=", "value": value });
               break;
           }
         }
       });
-      ecEditor.getService('assessment').getQuestions(data, function(err, resp) {
+      ecEditor.getService('assessment').getItems(data, function(err, resp) {
         if (!err) {
-          $scope.questions = resp.data.result.items;
+          $scope.questions = resp.data.result.assessment_items;
           $scope.getUnselectedQuestionList();
           $scope.$safeApply();
         } else {
