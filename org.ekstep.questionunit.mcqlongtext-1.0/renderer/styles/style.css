@@ -1,5 +1,6 @@
-#preview-mcq-horizontal {
-	 height: 90vh;
+
+  #qc-mcqlong-text {
+    height: 90vh;
     margin: auto;
     text-align: center;
     line-height: 2em;
@@ -7,11 +8,11 @@
     margin-top: 2%;
     background-color: #f5f6fa;
     position: relative;
+    overflow-y: auto;
         display: grid;
-}
+  }
 
-
- .qc-mcqlayout {
+  .qc-mcqlayout {
     width: 80%;
     top: 10px;
     position: relative;
@@ -25,10 +26,17 @@
     min-height: 70px;
   }
 
+  .qc-header-image {
+    width: 17%;
+    float: left;
+    height: 100%;
+  }
+
   .qc-question-text {
     padding: 17px 0px 3px 7px;
     color: white;
-    text-align: center;
+    line-height: 1.5;
+    text-align: initial;
     display: block;
     overflow: auto;
   }
@@ -53,7 +61,7 @@
 
   td.qc-option-text {
     float: left;
-    padding: 7px 13px;
+    padding: 12px 13px;
     margin:5px; 
   }
 

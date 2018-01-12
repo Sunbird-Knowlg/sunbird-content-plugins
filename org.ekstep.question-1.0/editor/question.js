@@ -185,24 +185,21 @@
       ecEditor.dispatchEvent(ctrl.selectedTemplatePluginData.plugin.id + ':val', ctrl.valideateFormForPreview, ctrl);
       var qObj = {
         "config": "{'metadata':{'title':'question title','description':'question description','language':'English'},'max_time':0,'max_score':1,'partial_scoring':false}",
-        "data": "{'title':'What is the question?','options':[{'text':'Yes','image':'renderer/assets/yes.png'},{'text':'No','image':'renderer/assets/no.png'}]}",
+        "data": ctrl.questionCreationFormData,
         "id": "c943d0a907274471a0572e593eab49c2",
         "pluginId": "org.ekstep.questionunit.mcq",
         "pluginVer": "1.0",
         "templateId": "horizontalMCQ",
         "type": "unit"
       }
+      var quetions = [];
       var data = {
-        "org.ekstep.questionset": {
-          "config": {
-            'questionCount': 1,
-            'isShuffle': true
-          },
-          "org.ekstep.question": []
-        }
+        "org.ekstep.questionset": {}
       }
-      data["org.ekstep.questionset"]['org.ekstep.question'].push(qObj);
-      var confData = { "contentBody": {}, "parentElement": true, "element": "#iframeArea" };
+
+      quetions.push(qObj);
+      data["org.ekstep.questionset"]['org.ekstep.question'] = quetions;
+      var confData={"contentBody":{}, "parentElement":true, "element":"#iframeArea"};
       var questionSetInstance = ecEditor.instantiatePlugin('org.ekstep.questionset.preview');
       confData.contentBody = questionSetInstance.getQuestionPreviwContent(data['org.ekstep.questionset']);
       ecEditor.dispatchEvent("atpreview:show", confData);
@@ -288,7 +285,7 @@
      * Collect data from 3 screens
      * @return {[type]} [description]
      */
-     ctrl.sendData = function(isValid) {
+    ctrl.sendData = function(isValid) {
       var metadata = {};
       if (isValid && ctrl.Totalconcepts > 0) {
         var metadataObj = { concepts: ctrl.selectedConceptsData, title: ctrl.questionData.questionTitle, language: ctrl.questionData.qcLanguage, qlevel: ctrl.questionData.qcLevel, gradeLevel: ctrl.questionData.qcGrade };

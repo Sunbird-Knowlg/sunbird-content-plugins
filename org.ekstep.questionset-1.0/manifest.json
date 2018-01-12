@@ -38,7 +38,7 @@
     }],
     "configManifest": [{
         "propertyName": "questionbankbrowser",
-        "title": "question Bank",
+        "title": "Edit question set",
         "description": "Choose a question from the question bank",
         "dataType": "browser",
         "required": true,
@@ -63,23 +63,9 @@
         "required": true
       },
       {
-        "propertyName": "shuffle_options",
-        "title": "Shuffle Options",
-        "description": "Shuffle the options",
-        "dataType": "boolean",
-        "required": true
-      },
-      {
         "propertyName": "show_feedback",
         "title": "Show Immediate Feedback",
         "description": "Show the feedback popup",
-        "dataType": "boolean",
-        "required": true
-      },
-      {
-        "propertyName": "allow_skip",
-        "title": "Allow skip",
-        "description": "Allow to skip the Question",
         "dataType": "boolean",
         "required": true
       },

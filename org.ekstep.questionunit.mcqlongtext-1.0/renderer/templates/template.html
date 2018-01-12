@@ -1,7 +1,10 @@
-<div id="preview-mcq-horizontal" ng-app="MCQRendererApp" ng-controller="MCQRendererController" ng-show="showTemplate">
+<!-- TODO: HTML template for horizontal MCQlongtext -->
+
+<div id="qc-mcqlong-text" ng-app="MCQlongtextRendererApp" ng-controller="MCQlongtextRendererController" ng-show="showTemplate">
   <link rel="stylesheet" type="text/css" href="{{cssPath}}">
   <div class="qc-mcqlayout">
     <header class="qc-long-text-header">
+      <span><img class="qc-header-image" src={{headerImagePath}}></span>
       <span class="qc-question-text">{{questionObj.question.text}}</span>
     </header>
     <table class="qc-option-container">

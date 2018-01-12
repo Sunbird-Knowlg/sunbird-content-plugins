@@ -1,13 +1,13 @@
 // TODO: Controller for horizontalTemplate.html
 'use strict';
-angular.module('MCQRendererApp', []).controller("MCQRendererController", function($scope) {
-  //var ctrl = this;
-  $scope.showTemplate = true;
-  $scope.question;
+angular.module('MCQlongtextRendererApp', []).controller("MCQlongtextRendererController", function($scope) {
+  var ctrl = this;
   $scope.selectedAns;
-  $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/styles/horizontalTemplate.css");
+  $scope.showTemplate = true;
+  $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcqlongtext", "1.0", "renderer/styles/style.css");
+  $scope.headerImagePath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcqlongtext", "1.0", "renderer/assets/qsheader.png");
   $scope.init = function() {
-    $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.mcq");
+    $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.mcqlongtext");
     // To show template/plugin  
     EkstepRendererAPI.addEventListener($scope.pluginInstance._manifest.id + ":show", function(event, question) {
 
@@ -17,6 +17,7 @@ angular.module('MCQRendererApp', []).controller("MCQRendererController", functio
       $scope.showTemplate = true;
       $scope.safeApply();
     });
+    //hide template in render side
     EkstepRendererAPI.addEventListener($scope.pluginInstance._manifest.id + ":hide", function(event) {
       $scope.showTemplate = false;
       $scope.safeApply();
@@ -27,8 +28,7 @@ angular.module('MCQRendererApp', []).controller("MCQRendererController", functio
     });
 
   }
-
-   $scope.init();
+  $scope.init();
   $scope.selectedvalue = function(val, index) {
     $scope.selectedIndex = index;
     $scope.selectedAns = val.isAnswerCorrect;
@@ -42,10 +42,10 @@ angular.module('MCQRendererApp', []).controller("MCQRendererController", functio
       }
     });
     if (correctAnswer) {
-      console.log("right answere");
+      alert("right answere");
 
     } else {
-      console.log("wrong");
+      alert("wrong");
     }
   }
 

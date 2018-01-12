@@ -1,12 +1,12 @@
 /**
  *
- * Question Unit plugin to render a MCQ question
- * @class org.ekstep.questionunit.mcq
+ * Question Unit plugin to render a mcqlongtext question
+ * @class org.ekstep.questionunit.mcqlongtext
  * @extends org.ekstep.contentrenderer.questionUnitPlugin
  * @author Manoj Chandrashekar <manoj.chandrashekar@tarento.com>
  */
 org.ekstep.contentrenderer.questionUnitPlugin.extend({
-    _type: 'org.ekstep.questionunit.mcq',
+    _type: 'org.ekstep.questionunit.mcqlongtext',
     _isContainer: true,
     _render: true,
     _selectedanswere:undefined,
@@ -23,4 +23,4 @@ org.ekstep.contentrenderer.questionUnitPlugin.extend({
         // return evaluator.evaluate(data);
     }
 });
-//# sourceURL=questionunitMCQPlugin.js
+//# sourceURL=questionunitMCQlongtextPlugin.js

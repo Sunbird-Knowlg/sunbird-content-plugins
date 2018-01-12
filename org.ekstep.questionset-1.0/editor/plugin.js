@@ -115,7 +115,7 @@ org.ekstep.contenteditor.basePlugin.extend({
 
         // Instantiate the question unit plugin to add it to <plugin-manifest>
         ecEditor.instantiatePlugin(question.data.plugin.id, {});
-
+        questionSetECML.data = { __cdata: [] };
         questionSetECML[instance._questionPlugin].push(questionECML);
       });
     }
