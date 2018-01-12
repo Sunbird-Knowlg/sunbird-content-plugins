@@ -1,9 +1,19 @@
 <div id="preview-mcq-horizontal" ng-app="MCQRendererApp" ng-controller="MCQRendererController" ng-show="showTemplate">
   <link rel="stylesheet" type="text/css" href="{{cssPath}}">
-  <div class="question-text">{{questionObj.question.text}}</div>
-  <div class="option-container">
-    <div ng-repeat="val in questionObj.options" class="option-value">
-      <div id="{{val.id}}" ng-click="selectedValue(val, $event)">{{val.text}}</div>
-    </div>
+  <div class="qc-mcqlayout">
+    <header class="qc-long-text-header">
+      <span class="qc-question-text">{{questionObj.question.text}}</span>
+    </header>
+    <table class="qc-option-container">
+      <label>
+            <tr ng-repeat="val in questionObj.options" class="qc-option-value" ng-class="{qsselectedopt: $index == selectedIndex}">
+                    <td class="qc-option-text" id="{{val.id}}" align="left" valign="middle">
+                        {{val.text}}</td>
+                    <td class="qc-option-checkbox">
+                        <input type="radio" name="radio" value="pass" ng-click="selectedvalue(val, $index)" class="qc-option-input-checkbox">
+                    </td>
+            </tr>
+            </label>
+    </table>
   </div>
 </div>

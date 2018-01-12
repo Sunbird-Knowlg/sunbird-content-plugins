@@ -4,6 +4,7 @@ angular.module('MCQRendererApp', []).controller("MCQRendererController", functio
   //var ctrl = this;
   $scope.showTemplate = true;
   $scope.question;
+  $scope.selectedAns;
   $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/styles/horizontalTemplate.css");
   $scope.init = function() {
     $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.mcq");
@@ -27,19 +28,15 @@ angular.module('MCQRendererApp', []).controller("MCQRendererController", functio
 
   }
 
-  $scope.init();
-  $scope.selectedValue = function(value, event) {
-    $scope.selectedOption = value.isAnswerCorrect;
-    console.log(value);
-    $scope.safeApply();
-    $("#" + event.target.id).parent().addClass('option-value-select');
-    $("#" + event.target.id).parent().siblings().removeClass('option-value-select');
+   $scope.init();
+  $scope.selectedvalue = function(val, index) {
+    $scope.selectedIndex = index;
+    $scope.selectedAns = val.isAnswerCorrect;
   }
-
   $scope.evaluate = function() {
     var correctAnswer;
     $scope.questionObj.options.forEach(function(option) {
-      if (option.isAnswerCorrect === $scope.selectedOption) {
+      if (option.isAnswerCorrect === $scope.selectedAns) {
         correctAnswer = option.isAnswerCorrect;
 
       }
