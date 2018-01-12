@@ -223,5 +223,123 @@ body {
     cursor: pointer;
 }
 
+/*
+https://semantic-ui.com/
+Instagram API for posts,
+switched to Github for the search after API changes
+*/
+.padding-none {
+    padding: 0 !important;
+}
+.padding-15 {
+    padding: 15px !important;
+}
+.padding-top-10 {
+    padding-top: 10px !important;
+}
+
+.ui.items>.item.custom-segment>.image:not(.ui) {
+    width: 170px;
+}
+
+.ui.items>.item.custom-segment>.content>.header:not(.ui) {
+    font-size: 1.3em;
+}
+.ui.items>.item.custom-segment>.content>.meta {
+    font-size: 1.17em;
+    color: #434343;
+}
+
+.ui.items>.item.custom-segment>.content>.extra {
+    font-size: 1em;
+}
+
+i.bright-blue {
+    color: #007aff;
+}
+i.pig-pink {
+    color: #e66f7e;
+}
+
 
 /* for not able to fetch content */
+
+/* Content tree css */
+
+.tree-container, .tree-container .ui.label {
+    background-color: #f5f5f5!important;
+}
+
+#tree-table {
+    background: #f5f5f5;
+    margin: 0;
+    font-weight: bold;
+    border-collapse: separate;
+    border-spacing: 0px 10px;
+    border: none;
+}
+
+#tree-table tr {
+    box-shadow: 0px 1px 5px grey;
+    border-radius: 4px;
+}
+
+.tree-leftHeader {
+    color: #8e8e8e!important;
+    padding-left: 1px!important;
+    font-size: 0.9em!important;
+}
+
+.tree-rightHeader {
+    color: #1779ff!important;
+    float: right;
+    padding-right: 0px!important;
+    font-size: 0.9em!important;
+}
+
+.delete-node {
+    color: #da0808;
+    cursor: pointer;
+}
+
+.tree-structure {
+    display: flex;
+}
+
+.tree-structure-title {
+    width: 97%;
+}
+
+.tree-no-content {
+    color: #8e8e8e!important;
+    text-align: center!important;
+}
+
+#tree-table tbody tr td {
+    background-color: #fcfcfcfa!important;
+    border-radius: 4px;
+}
+
+.content-details {
+    padding: 0!important;
+}
+
+.floatContentRight {
+    float:right;
+    cursor: pointer;
+}
+
+.custom-modal-heading {
+  height: 34px;
+  font-size: 17px;
+  font-weight: 800;
+  color: #4a4a4a;
+}
+
+.custom-modal-content {  
+  padding-top:10px;
+  font-size: 13px;
+  color: #4a4a4a;
+}
+
+/* Content tree css */

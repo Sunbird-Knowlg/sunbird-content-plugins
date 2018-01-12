@@ -14,8 +14,63 @@
                 </div>
             </div>
         </div>
-        <div class="ui column" id="contents-pane">
-            <div class="metacontent-holder metadata-form-container" ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" ng-include="page.templateURL"></div>
+        <div class="ui grid column" id="contents-pane">
+            <div class="row content-manifest">
+                <div class="sixteen wide column metacontent-holder metadata-form-container" ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" ng-include="page.templateURL"></div>
+            </div>
+            <div class="row content-tree">
+                <div class="sixteen wide column tree-container">
+                    <div class="padding-top-10">
+                        <div class="ui label tree-leftHeader">CONTENT</div>
+                        <div class="ui label tree-rightHeader">View Library</div>
+                    </div>
+                    <div>
+                        <table class="ui celled table" id="tree-table">
+                            <tbody>
+                                <tr ng-repeat="child in collectionData.children" ng-if="collectionData.children.length>0">
+                                    <td class="tree-structure" ng-if="child.folder">
+                                        <div class="tree-structure-title">{{child.data.metadata.name}}</div>
+                                        <div ng-click="deleteNode(child, $event);" class="delete-node">
+                                            <i class="fa fa-trash" aria-hidden="true"></i>
+                                        </div>
+                                    </td>
+                                    <td ng-if="!child.folder" class="content-details">
+                                        <div class="ui raised segment padding-none">
+                                            <div class="ui divided items">
+                                                <div class="item custom-segment">
+                                                    <div class="image">
+                                                        <img ng-src="{{child.data.metadata.appIcon || defaultImage}}">
+                                                    </div>
+                                                    <div class="content padding-15">
+                                                        <a class="header">{{child.data.metadata.name}}</a>
+                                                        <div class="meta">
+                                                            <span>{{child.data.metadata.description}}</span>
+                                                        </div>
+                                                        <div class="extra padding-top-10 ">
+                                                            <p>
+                                                                <span ng-repeat="grade in child.data.metadata.gradeLevel | limitTo: 2">{{grade}} &nbsp;</span>
+                                                                <span ng-repeat="genre in child.data.metadata.genre | limitTo: 2">{{genre}} &nbsp;</span>
+                                                            </p>
+                                                        </div>
+                                                        <div class="extra">
+                                                            Created by {{child.data.metadata.owner}}
+                                                            <i class="long arrow right medium icon right floated bright-blue"></i>
+                                                            <i class="fa fa-trash right floated delete-node" aria-hidden="true" ng-click="deleteNode(child, $event);"></i>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr ng-if="!collectionData.children && collectionData.folder">
+                                    <td class="tree-no-content">You have not added any content yet.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
