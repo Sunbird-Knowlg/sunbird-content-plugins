@@ -5,14 +5,13 @@
     line-height: 2em;
     width: 80%;
     margin-top: 2%;
-    background-color: #f5f6fa;
     position: relative;
     display: grid;
 }
 
 
 .qc-mcqlayout {
-    width: 80%;
+    width: 100%;
     top: 10px;
     position: relative;
     margin: auto;
@@ -27,6 +26,7 @@ header.qc-long-text-header {
 .qc-question-text {
     padding: 17px 10px 16px 10px;
     color: white;
+    font-size: 100%;
     line-height: normal;
     text-align: center;
 }
@@ -52,6 +52,7 @@ header.qc-long-text-header {
 td.qc-option-text {
     float: left;
     padding: 7px 13px;
+    font-size: 100%;
     margin: 5px;
 }
 
