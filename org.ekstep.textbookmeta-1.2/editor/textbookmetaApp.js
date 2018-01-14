@@ -128,6 +128,19 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
     }
 
+    $scope.showTooltip = function(event, title) {
+        if(title.length > 25 ) {
+            $('.section').popup({
+                content: title,
+                inverted:'',
+                on: 'hover',
+                position:'bottom left'
+            });
+        } else {
+            $('.section').popup('destroy');
+        }
+    }
+
     $scope.onNodeSelect = function(evant, data){
         var selectedConcepts = [];
         $scope.showImageIcon = false;

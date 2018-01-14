@@ -107,6 +107,19 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
     }
 
+    $scope.showTooltip = function(event, title) {
+        if(title.length > 25 ) {
+            $('.section').popup({
+                content: title,
+                variation: "wide",
+                on: 'hover',
+                position:'bottom left'
+            });
+        } else {
+            $('.section').popup('destroy');
+        }
+   }
+
     $scope.onNodeSelect = function(evant, data) {
         $scope.showImageIcon = false;
         var contentArr = ["Story", "Collection", "Game", "Worksheet", "Resource"];
