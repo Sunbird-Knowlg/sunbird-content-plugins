@@ -87,7 +87,7 @@ Plugin.extend({
     org.ekstep.service.controller.loadNgModules(templatePath, controllerPath);
     setTimeout(function() {
       EkstepRendererAPI.dispatchEvent(qobj.pluginId + ":show", instance);
-    }, 300);
+    }, 1000);
 
   },
   showCustomNextNavigation: function() {

@@ -32,7 +32,7 @@
   ctrl.conceptsCheck = false;
   ctrl.questionData = {};
   ctrl.plugins = { 'concepts': 'org.ekstep.conceptselector:init' };
-
+  ctrl.previewCheck = false;
   ctrl.menuItems['mcq'] = {
     'category': 'mcq',
     'data': { 'name': 'Multiple Choice', 'icon': 'list icon' },
@@ -169,37 +169,39 @@
      * @return {function} to check question form is valid/not 
      * @return {object} actual form data filled by user for the question template
      */
-     ctrl.valideateFormForPreview = function(valid, formData) {
-      if (valid) {
-        ctrl.questionCreationFormData = formData;
-      } else {
-        ctrl.questionCreationFormData = null;
-      }
-    }
+    //  ctrl.valideateFormForPreview = function(valid, formData) {
+    //   if (valid) {
+    //     ctrl.questionCreationFormData = formData;
+    //   } else {
+    //     ctrl.questionCreationFormData = null;
+    //   }
+    // }
 
     /**
      * To create questionset or question content body
      * @return {object} actual content/theme object which can be used to preview the question/question-set
      */
      ctrl.setPreviewData = function() {
-      ecEditor.dispatchEvent(ctrl.selectedTemplatePluginData.plugin.id + ':val', ctrl.valideateFormForPreview, ctrl);
+      //ecEditor.dispatchEvent(ctrl.selectedTemplatePluginData.plugin.id + ':val', ctrl.valideateFormForPreview, ctrl);
+      var confData = {};
       var qObj = {
         "config": "{'metadata':{'title':'question title','description':'question description','language':'English'},'max_time':0,'max_score':1,'partial_scoring':false}",
-        "data": ctrl.questionCreationFormData,
+        "data": JSON.stringify(ctrl.questionCreationFormData),
         "id": "c943d0a907274471a0572e593eab49c2",
-        "pluginId": "org.ekstep.questionunit.mcq",
-        "pluginVer": "1.0",
-        "templateId": "horizontalMCQ",
+        "pluginId": ctrl.selectedTemplatePluginData.plugin.id,
+        "pluginVer": ctrl.selectedTemplatePluginData.plugin.version,
+        "templateId": ctrl.selectedTemplatePluginData.plugin.templateId,
         "type": "unit"
       }
-      var quetions = [];
+      var questions = [];
       var data = {
         "org.ekstep.questionset": {}
       }
 
-      quetions.push(qObj);
-      data["org.ekstep.questionset"]['org.ekstep.question'] = quetions;
-      var confData={"contentBody":{}, "parentElement":true, "element":"#iframeArea"};
+      questions.push(qObj);
+      data["org.ekstep.questionset"]['org.ekstep.question'] = questions;
+      confData={"contentBody":{}, "parentElement":true, "element":"#iframeArea"};
+      document.getElementById("iframeArea").contentDocument.location.reload(true);
       var questionSetInstance = ecEditor.instantiatePlugin('org.ekstep.questionset.preview');
       confData.contentBody = questionSetInstance.getQuestionPreviwContent(data['org.ekstep.questionset']);
       ecEditor.dispatchEvent("atpreview:show", confData);
@@ -262,14 +264,22 @@
      * Dynamically created form validation
      * @return {[boolean]} based on form validation it will return true/false
      */
-     ctrl.validateQuestionCreationForm = function() {
+     ctrl.validateQuestionCreationForm = function(event) {
       // ecEditor.dispatchEvent(ctrl.selectedTemplatePluginData.plugin.id + ':val', ctrl.validateQuestionForm, ctrl);
+      if(event.target.id=="preview-icon") ctrl.previewCheck = true;
+      else ctrl.previewCheck = false;
       $scope.$broadcast('question:form:val');
     }
 
     ctrl.formValid = function(event, data) {
       ctrl.questionCreationFormData = data;
-      ctrl.formIsValid();
+      if(!ctrl.previewCheck){
+        ctrl.formIsValid();
+      }
+      else{
+        ctrl.setPreviewData();
+        ctrl.previewCheck = false;
+      }
     }
 
     ctrl.formInValid = function(event, data) {

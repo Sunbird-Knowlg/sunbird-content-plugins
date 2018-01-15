@@ -61,7 +61,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 "pluginId": question.pluginId,
                 "pluginVer": question.pluginVer,
                 "templateId": question.templateId,
-                "data": question.data.data,
+                "data": question.data,
                 "config": question.config
             }
             object.pluginIds.push(question.pluginId);
