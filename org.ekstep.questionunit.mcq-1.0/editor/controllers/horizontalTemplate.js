@@ -51,6 +51,7 @@ angular.module('createquestionapp', [])
     var opSel = false;
     var valid = false;
     var formValid = $scope.mcqForm.$valid;
+    $scope.mcqFormData.media = [{}];
     if (!_.isUndefined($scope.selectedOption)) {
       _.each($scope.mcqFormData.options, function(k, v) {
         $scope.mcqFormData.options[v].isCorrect = false;
