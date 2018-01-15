@@ -1,10 +1,13 @@
-<!-- TODO: HTML template for horizontal FTB -->
-<link rel="stylesheet" type="text/css" href="styles/horizontalTemplate.css">
-<div id="preview" ng-app="FTBRendererApp" ng-controller="FTBRendererController as $ctrl">
-	<div class="question-text">{{questionObj.question}}</div>
-	<div class="option-container">
-		<div ng-repeat="val in questionObj.options" class="option-value">
-			<div id={{val.value.id}} ng-click="$ctrl.selectedValue(val.value.text, $event)">{{val.value.text}}</div>
-		</div>
-	</div>
+<div id="preview-ftb-horizontal" ng-app="FTBRendererApp" ng-controller="FTBRendererController" ng-show="showTemplate">
+    <link rel="stylesheet" type="text/css" href="{{cssPath}}">
+    <div class="qc-ftb-layout">
+        <header>
+            <div class="qc-ftb-question-text" ng-show="qcquestion">
+                <p>{{questionObj.question.text}}</p>
+            </div>
+        </header>
+        <div class="ftbanswer-container" ng-show="qcblank">
+            <input id="ftbanswerInput" type="text" name="answer" ng-model="ftbAnswer">
+        </div>
+    </div>
 </div>
