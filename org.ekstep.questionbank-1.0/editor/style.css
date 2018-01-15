@@ -114,7 +114,8 @@
   max-height: 57vh;
   overflow-y: scroll;
 }
-.qb-list-container>.ui.large.divided.items>.active {
+
+.quesSelector {
   background-color: grey;
 }
 

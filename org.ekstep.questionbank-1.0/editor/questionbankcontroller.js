@@ -23,6 +23,7 @@ angular.module('createquestionapp', [])
     $scope.difficultyLevels = ['Easy', 'Medium', 'Difficult'];
     $scope.questionTypes = ['mcq', 'ftb', 'mtf'];
     $scope.filterObj = {};
+    $scope.selectedIndex;
     $scope.pluginIdObj = {
       "question_set_id": "org.ekstep.questionset",
       "question_create_id": "org.ekstep.question",
@@ -64,7 +65,7 @@ angular.module('createquestionapp', [])
         if (value) {
           switch (key) {
             case "question_title":
-              data.request.metadata.filters.push({ "property": "title", "operator": "startwith", "value": value });
+              data.request.metadata.filters.push({ "property": "title", "operator": "contains", "value": value });
               break;
             case "gradeLevel":
               if (value.length) {
@@ -88,7 +89,7 @@ angular.module('createquestionapp', [])
           }
         }
       });
-      ecEditor.getService('assessment').getItems(data, function(err, resp) {
+      ecEditor.getService('assessment').getQuestionItems(data, function(err, resp) {
         if (!err) {
           $scope.questions = resp.data.result.assessment_items;
           $scope.getUnselectedQuestionList();
@@ -113,6 +114,7 @@ angular.module('createquestionapp', [])
      */
     $scope.init = function() {
       $scope.searchQuestions();
+      $scope.selectedIndex = undefined;
       if (pluginInstance.editData) {
         $scope.selectedQuestions = pluginInstance.editData.data;
         $scope.questionSetConfigObj = pluginInstance.editData.config;
@@ -205,7 +207,7 @@ angular.module('createquestionapp', [])
      *  Funtion to edit the config data of question
      *  @memberof QuestionFormController
      */
-    $scope.editConfig = function(quesObj) {
+    $scope.editConfig = function(quesObj, index) {
       /*var length = $scope.selectedQuestions.length;
       for(var i =0 ; i<length; i++){
           if(quesObj.questionId != $scope.selectedQuestions.questionId){
@@ -213,6 +215,7 @@ angular.module('createquestionapp', [])
           }
       }
       quesObj.isDivSelected = true;*/
+      $scope.selectedIndex = index;
       $scope.selQuestionObj = {};
       $scope.selQuestionObj = quesObj;
       $scope.showConfigForm = true;
@@ -310,7 +313,7 @@ angular.module('createquestionapp', [])
       ecEditor.dispatchEvent($scope.pluginIdObj.question_create_id + ":showpopup", questionObj);
     }
 
-    $scope.previewItem = function(question, bool) {   
+    $scope.previewItem = function(question, bool) {
       var qObj = {
         "config": "{'metadata':{'title':'question title','description':'question description','language':'English'},'max_time':0,'max_score':1,'partial_scoring':false}",
         "data": question.data.data,
