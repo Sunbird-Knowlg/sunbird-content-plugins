@@ -48,7 +48,7 @@
       </div>
       <div class="two column row" ng-show="$ctrl.createQuestionScreen">
         <div class="seven wide column">
-          <span class="templateHead">{{$ctrl.templateName}}</span>
+          <div class="templateHead"><span class="">{{$ctrl.templateName}}</span></div>
           <div ng-if="$ctrl.questionUnitTemplateURL">
             <ng-include src="$ctrl.questionUnitTemplateURL"></ng-include>
           </div>
@@ -56,7 +56,7 @@
         <div class="five wide column previewArea">
           <div class="previewAreaHead">
             <span class="ui left floated">Preview</span>
-            <i class="icon undo ui right-floated replyIcon" ng-click="$ctrl.setPreviewData()"></i>
+            <i class="icon undo ui right-floated replyIcon" id="preview-icon" ng-click="$ctrl.validateQuestionCreationForm($event);"></i>
             <div>
               <div class="ui raised child preview-iframe-wrapper" ng-show='$ctrl.showPreview'>
                 <iframe id="iframeArea" class="iframe-preview"></iframe>
@@ -67,7 +67,7 @@
       </div>
       <div class="QuestionMetaForm" ng-show="$ctrl.metadaFormScreen">
         <form name="questionUnitBrowserForm" novalidate>
-          <div class="ui grid five column row">
+          <div class="ui grid seven column row">
             <div class="two wide column">
               <label class="qcMetadateFormLbl" data-original-title="Question title">
                 Question title <span class="star">&nbsp;*</span>
@@ -118,16 +118,30 @@
               <span id="concepts_dummy" class="disabled">{{$ctrl.Totalconcepts}} concept(s) choosen</span>
               <small ng-show="$ctrl.qcconcepterr" class="qcError">Select concept</small>
             </div>
+            <div class="two wide column">
+              <label class="qcMetadateFormLbl" data-original-title="Question desc">
+                Question description <span class="star">&nbsp;*</span>
+              </label>
+              <textarea type="text" class="form-control" id="questionTitle" placeholder="Question description" name="questionDesc" ng-model="$ctrl.questionData.questionDesc" required></textarea>
+              <small ng-show="questionUnitBrowserForm.questionDesc.$invalid && !questionUnitBrowserForm.questionDesc.$pristine" class="qcError">Enter question description.</small>
+            </div>
+             <div class="two wide column">
+              <label class="qcMetadateFormLbl" data-original-title="Question max score">
+                Max score <span class="star">&nbsp;*</span>
+              </label>
+              <input type="number" class="form-control" id="questionTitle" min="1" max="12" name="questionMaxScore" ng-model="$ctrl.questionData.questionMaxScore" required/>
+              <small ng-show="questionUnitBrowserForm.questionMaxScore.$invalid && !questionUnitBrowserForm.questionMaxScore.$pristine" class="qcError">Enter question title.</small>
+            </div>
           </div>
         </form>
       </div>
     </div>
     <div class="actions bottomActionButtons">
-      <button class="ui large button left floated" id="ques-cancel-button" ng-click="$ctrl.cancel();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Cancel</button>
+      <button class="ui large orange button left floated" id="ques-cancel-button" ng-click="$ctrl.cancel();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Cancel</button>
       <div class="ui buttons">
         <button class="ui basic primary button" id="back-button" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen" ng-click="$ctrl.back();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Back</button>
         <div class="or" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen"></div>
-        <button class="ui large blue button" ng-show="$ctrl.createQuestionScreen" id="back-button" ng-click="$ctrl.validateQuestionCreationForm();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Next</button>
+        <button class="ui large blue button" ng-show="$ctrl.createQuestionScreen" id="back-button" ng-click="$ctrl.validateQuestionCreationForm($event);$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Next</button>
         <button class="ui large blue button" ng-show="$ctrl.metadaFormScreen" id="save-question-button" ng-click="$ctrl.sendData(questionUnitBrowserForm.$valid);$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" ng-disabled="(!questionUnitBrowserForm.$valid) || (!$ctrl.conceptsCheck)">Submit</button>
       </div>
     </div>

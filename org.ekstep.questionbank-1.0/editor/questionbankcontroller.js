@@ -251,7 +251,6 @@ angular.module('createquestionapp', [])
          $scope.selectedQuestions[selectedObjIndex] = $scope.selQuestionObj;
          $scope.showConfigForm = false;
        }*/
-      debugger;
       selectedObjIndex = _.findLastIndex($scope.questions, {
         questionId: $scope.selQuestionObj.questionId
       });
@@ -323,16 +322,15 @@ angular.module('createquestionapp', [])
         "templateId": "horizontalMCQ",
         "type": "unit"
       }
-      var quetions = [];
+      var questions = [];
       var data = {
         "org.ekstep.questionset": {}
       }
-      quetions.push(qObj);
-      data["org.ekstep.questionset"]['org.ekstep.question'] = quetions;
+      questions.push(qObj);
+      data["org.ekstep.questionset"]['org.ekstep.question'] = questions;
       var confData={"contentBody":{}, "parentElement":true, "element":"#itemIframe"};
       var questionSetInstance = ecEditor.instantiatePlugin('org.ekstep.questionset.preview');
       confData.contentBody = questionSetInstance.getQuestionPreviwContent(data['org.ekstep.questionset']);
-      console.log(confData);
       ecEditor.dispatchEvent("atpreview:show", confData);
     }
 

@@ -29,6 +29,10 @@ angular.module('MCQRendererApp', []).controller("MCQRendererController", functio
   }
 
   $scope.init();
+  //clear index when stage is reload
+   $scope.clearSelectIndex=function(){
+     $scope.selectedIndex=undefined;
+   }
   $scope.selectedvalue = function(val, index) {
     $scope.selectedIndex = index;
     $scope.selectedAns = val.isAnswerCorrect;
