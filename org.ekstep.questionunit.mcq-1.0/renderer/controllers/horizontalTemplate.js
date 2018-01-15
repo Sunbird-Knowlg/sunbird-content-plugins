@@ -28,7 +28,7 @@ angular.module('MCQRendererApp', []).controller("MCQRendererController", functio
 
   }
 
-   $scope.init();
+  $scope.init();
   $scope.selectedvalue = function(val, index) {
     $scope.selectedIndex = index;
     $scope.selectedAns = val.isAnswerCorrect;
@@ -42,10 +42,10 @@ angular.module('MCQRendererApp', []).controller("MCQRendererController", functio
       }
     });
     if (correctAnswer) {
-      console.log("right answere");
+      alert("right answere");
 
     } else {
-      console.log("wrong");
+      alert("wrong");
     }
   }
 

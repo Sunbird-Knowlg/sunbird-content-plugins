@@ -126,7 +126,7 @@
       <div class="ui divider"></div>
       <div class="ui segment" ng-show="itemsLoading">
         <div class="ui active inverted dimmer">
-          <div class="ui text loader">Just one second, We're fetching that content for you.</div>
+          <div class="ui text loader">Just one second, We re fetching that content for you.</div>
         </div>
       </div>
       <div class="qb-questions-list">
@@ -136,9 +136,9 @@
               <div class="ui large divided items">
                 <div class="item select" ng-repeat="question in selectedQuestions">
                   <div class="middle aligned content" ng-click="previewItem(question, true);">
-                    <div class="header">{{ question.config.metadata.title }}</div>
-                    <div class="meta">{{question.config.metadata.language}} | {{ question.config.metadata.type}} | {{ question.config.metadata.difficulty }}</div>
-                    <div class="description">{{ question.config.metadata.description }}</div>
+                    <div class="header">{{ question.title }}</div>
+                    <div class="meta">{{question.language}} | {{ question.type}} | {{ question.qlevel }}</div>
+                    <div class="description">{{ question.description }}</div>
                   </div>
                   <div>
                     <input type="checkbox" checked="" name="check" ng-model="question.isSelected" id="select-question" ng-click="removeQuestion(question);generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)">
@@ -147,11 +147,11 @@
                     </button>
                   </div>
                 </div>
-                <div class="item select" ng-repeat="question in unselectedQuestions">
+                <div class="item select" ng-repeat="question in unselectedQuestions">   
                   <div class="middle aligned content" ng-click="previewItem(question, true);">
-                    <div class="header">{{ question.config.metadata.title }}</div>
-                    <div class="meta">{{question.config.metadata.language}} | {{ question.config.metadata.type}} | {{ question.config.metadata.difficulty }}</div>
-                    <div class="description">{{ question.config.metadata.description }}</div>
+                    <div class="header">{{ question.title }}</div>
+                    <div class="meta">{{question.language}} | {{ question.type}} | {{ question.qlevel }}</div>
+                    <div class="description">{{ question.description }}</div>
                   </div>
                   <div>
                     <input type="checkbox" checked="" name="check" ng-model="question.isSelected" id="select-question" ng-click="selectQuestion(question);generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)">
@@ -161,7 +161,8 @@
                   </div>
                 </div>
                 <div ng-show="questions.length == 0">
-                  <p>No questions available</p>
+                  <p>No Data Found Redefine your search filters!.</p>
+                  Please click on "Create question" button to create new question
                 </div>
               </div>
             </div>

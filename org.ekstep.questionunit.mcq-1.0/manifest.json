@@ -53,14 +53,14 @@
       {
         "templateURL": "editor/templates/horizontalTemplate.html",
         "controllerURL": "editor/controllers/horizontalTemplate.js",
-        "template": "mcqtemplate",
+        "template": "horizontalMCQ",
         "controller": "QuestionFormController"
       },
       "renderer":
       {
-        "templateURL": "URL",
-        "controllerURL": "controllerPath",
-        "template": "templateID",
+        "templateURL": "renderer/templates/horizontalTemplate.html",
+        "controllerURL": "renderer/controllers/horizontalTemplate.js",
+        "template": "horizontalMCQ",
         "controller": "controllerName"
       }
 
