@@ -7,7 +7,7 @@
             <span class="ui">Enter the question</span>
           </div>
           <form name="mcqForm">
-            <div class="ui segments" id="eachCard" ng-class="{cardBorder: focused}" tabindex="100">
+            <div class="ui segments" ng-class="{cardBorder: $ctrl.focused}">
               <div class="ui segment">
                 <div class="ui pointing secondary demo menu ">
                   <a class="item active" data-tab="questionTextTab"><i class="checkmark icon" ng-show="mcqFormData.question.text.length > 2"></i> Text</a>
@@ -23,7 +23,7 @@
                 </div>
                 <div class="ui tab active optionTab" data-tab="questionTextTab">
                   <div class="form-group segment textBoxDiv">
-                    <input type="text" class="form-control textbox" ng-class="{'has-success':mcqForm.question.$valid, 'has-error': mcqForm.question.$invalid}" placeholder="Enter the question" name="question" ng-model="mcqFormData.question.text" maxlength="220" ng-init="focused = false" ng-focus="focused = true" ng-blur="focused = false" required/>
+                    <input type="text" class="form-control textboxQ" ng-class="{'has-success':mcqForm.question.$valid, 'has-error': mcqForm.question.$invalid}" placeholder="Enter the question" name="question" ng-model="mcqFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true" ng-blur="$ctrl.focused = false" required/>
                   </div>
                 </div>
                 <div class="ui tab" data-tab="questionImageTab" ng-show="false">

@@ -65,17 +65,18 @@
           </div>
         </div>
       </div>
-      <div class="QuestionMetaForm" ng-show="$ctrl.metadaFormScreen">
+      <div class="QuestionMetaForm two column row" ng-show="$ctrl.metadaFormScreen">
+        <div class="seven wide column md" style="margin-right: 1%">
         <form name="questionUnitBrowserForm" novalidate>
-          <div class="ui grid seven column row">
-            <div class="two wide column">
+          <div class="ui grid three column row">
+            <div class="column">
               <label class="qcMetadateFormLbl" data-original-title="Question title">
                 Question title <span class="star">&nbsp;*</span>
               </label>
               <input type="text" class="form-control" id="questionTitle" placeholder="Question title" name="questionTitle" ng-model="$ctrl.questionData.questionTitle" required/>
               <small ng-show="questionUnitBrowserForm.questionTitle.$invalid && !questionUnitBrowserForm.questionTitle.$pristine" class="qcError">Enter question title.</small>
             </div>
-            <div class="two wide column">
+            <div class="column">
               <label class="qcMetadateFormLbl">Language <span class="star">&nbsp;*</span></label>
               <select class="ui dropdown dropdownBox form-control" name="qcLanguage" ng-model="$ctrl.questionData.qcLanguage" id="language-drop-down" ng-click="$ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', 'id': 'dropDown'},$event)" required>
                 <option value="" selected="selected">Choose language</option>
@@ -83,7 +84,7 @@
               </select>
               <small ng-show="questionUnitBrowserForm.qcLanguage.$invalid && !questionUnitBrowserForm.qcLanguage.$pristine" class="qcError">Select language.</small>
             </div>
-            <div class="two wide column">
+            <div class="column">
               <label class="qcMetadateFormLbl">
                 Level <span class="star">&nbsp;*</span>
               </label>
@@ -93,7 +94,9 @@
               </select>
               <small ng-show="questionUnitBrowserForm.qcLevel.$invalid && !questionUnitBrowserForm.qcLevel.$pristine" class="qcError">Select level.</small>
             </div>
-            <div class="two wide column">
+          </div>
+          <div class="ui grid three column row">
+            <div class="column">
               <label class="qcMetadateFormLbl">
                 Grade <span class="star">&nbsp;*</span>
               </label>
@@ -110,7 +113,7 @@
               </div>
               <small ng-show="questionUnitBrowserForm.qcGrade.$invalid && !questionUnitBrowserForm.qcGrade.$pristine" class="qcError">Select grade.</small>
             </div>
-            <div class="two wide column">
+            <div class="column">
               <label class="qcMetadateFormLbl">
                 Concepts <span class="star">&nbsp;*</span>
               </label>
@@ -118,14 +121,14 @@
               <span id="concepts_dummy" class="disabled">{{$ctrl.Totalconcepts}} concept(s) choosen</span>
               <small ng-show="$ctrl.qcconcepterr" class="qcError">Select concept</small>
             </div>
-            <div class="two wide column">
+            <div class="column">
               <label class="qcMetadateFormLbl" data-original-title="Question desc">
                 Question description <span class="star">&nbsp;*</span>
               </label>
               <textarea type="text" class="form-control" id="questionTitle" placeholder="Question description" name="questionDesc" ng-model="$ctrl.questionData.questionDesc" required></textarea>
               <small ng-show="questionUnitBrowserForm.questionDesc.$invalid && !questionUnitBrowserForm.questionDesc.$pristine" class="qcError">Enter question description.</small>
             </div>
-             <div class="two wide column">
+             <div class="column">
               <label class="qcMetadateFormLbl" data-original-title="Question max score">
                 Max score <span class="star">&nbsp;*</span>
               </label>
@@ -134,6 +137,18 @@
             </div>
           </div>
         </form>
+        </div>
+        <div class="five wide column previewArea">
+           <div class="previewAreaHead">
+            <span class="ui left floated">Preview</span>
+            <i class="icon undo ui right-floated replyIcon" id="preview-icon" ng-click="$ctrl.validateQuestionCreationForm($event);"></i>
+            <div>
+              <div class="ui raised child preview-iframe-wrapper" ng-show='$ctrl.showPreview'>
+                <iframe id="iframeArea" class="iframe-preview"></iframe>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="actions bottomActionButtons">
