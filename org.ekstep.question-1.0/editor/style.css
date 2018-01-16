@@ -211,11 +211,11 @@
   }
 
   .iframe-preview {
-    /*height: 100%;*/
     background-color: white;
     width: 624px;
     height: 351px;
     border-style: initial;
+    box-shadow: 0 0 10px grey;
   }
 
   .work-text-content {
