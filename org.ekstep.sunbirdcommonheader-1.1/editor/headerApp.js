@@ -227,6 +227,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.contentDetails.contentTitle = data;
         document.title = data;
         $scope.$safeApply();
+        $('.popup-item').popup();
     };
 
     $scope.updateIcon = function(event, data) {
