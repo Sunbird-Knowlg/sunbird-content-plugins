@@ -8,6 +8,7 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
     $scope.languageList = [];
     $scope.audienceList = [];
     $scope.subjectList = [];
+    $scope.keywords = ["numbers", "systems"];
     $scope.defaultSubjectList = ["Biology","Chemistry","Physics","Mathematics","Environmental","Geography","History","Political Science","Economics","Sanskrit"];
     const DEFAULT_NODETYPE = 'TextBook';
 
