@@ -70,9 +70,7 @@
                 <div class="field">
                   <div class="ui fluid labeled input">
                     <div class="ui label">Concepts</div>
-                    <input type="text" class="fluid" id="queSetConceptsTextBox" placeholder="Choose concepts" ng-model="filterObj.concepts" placeholder="Choose Concept" id="concepts-drop-down" ng-change="searchQuestions();generateTelemetry({type: 'click', subtype: 'select', id: 'dropDown'},'concepts-drop-down')" readonly="true" />
-                    <!-- <span class="disabled">{{totalconcepts}} concept(s) choosen</span> -->
-                    <!-- <small ng-show="qcconcepterr">Select concept</small> -->
+                    <input type="text" class="fluid" id="queSetConceptsTextBox" ng-model="conceptsText" ng-change="searchQuestions();generateTelemetry({type: 'click', subtype: 'select', id: 'dropDown'},'concepts-drop-down')" readonly="true" />
                   </div>
                 </div>
                 <div class="field">

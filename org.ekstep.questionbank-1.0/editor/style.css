@@ -122,7 +122,7 @@
 }
 
 
-#queSetConceptsTextBox {
+/*#queSetConceptsTextBox {
   width: 100%;
   padding-left: 0px;
   height: 33px;
@@ -134,7 +134,7 @@
   border-color: rgb(230, 231, 232) !important;
   border-width: 0px 0px 1px !important;
   color: #5f5fd2;
-}
+}*/
 
 
 .qb-config-form {
