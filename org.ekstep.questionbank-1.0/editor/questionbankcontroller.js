@@ -7,6 +7,7 @@
 angular.module('createquestionapp', [])
   .controller('QuestionFormController', ['$scope', 'pluginInstance', function($scope, pluginInstance) {
 
+    $scope.currentUserId = ecEditor._.isUndefined(ctrl.context) ? '' : (ctrl.context.uid || ctrl.context.user.id);
     $scope.isQuestionTab = true;
     $scope.selectedQuestions = [];
     $scope.showConfigForm = false;
@@ -68,8 +69,9 @@ angular.module('createquestionapp', [])
 
       // For my Questions option
       if ($scope.isMyQuestions) {
+
         var userId = ecEditor._.isUndefined(ctrl.context) ? '' : (ctrl.context.uid || ctrl.context.user.id);
-        data.request.metadata.filters.push({ "property": "createdBy", "operator": "=", "value": userId }); 
+        data.request.metadata.filters.push({ "property": "createdBy", "operator": "=", "value": userId });
       }
 
       // setting filters values and title to request data
@@ -109,8 +111,8 @@ angular.module('createquestionapp', [])
           $scope.getUnselectedQuestionList();
           $scope.$safeApply();
         } else {
-          ctrl.itemsLoading = false;
-          ctrl.errorMessage = true;
+          $scope.itemsLoading = false;
+          $scope.errorMessage = true;
           $scope.$safeApply();
           return;
         }
