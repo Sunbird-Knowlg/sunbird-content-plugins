@@ -102,19 +102,20 @@ org.ekstep.contenteditor.basePlugin.extend({
       instance.data.forEach(function(question) {
         if (_.isUndefined(questionSetECML[instance._questionPlugin])) questionSetECML[instance._questionPlugin] = [];
 
+        var questionBody = JSON.parse(question.body);
         // Build Question ECML for each question that is added.
         var questionECML = {
           id: UUID(),
-          type: question.data.type,
-          pluginId: question.data.plugin.id,
-          pluginVer: question.data.plugin.version,
-          templateId: question.data.plugin.templateId,
-          data: { __cdata: JSON.stringify(question.data.data) },
-          config: { __cdata: JSON.stringify(question.config) }
+          type: question.type,
+          pluginId: questionBody.data.plugin.id,
+          pluginVer: questionBody.data.plugin.version,
+          templateId: questionBody.data.plugin.templateId,
+          data: { __cdata: JSON.stringify(questionBody.data.data) },
+          config: { __cdata: JSON.stringify(questionBody.data.config) }
         };
 
         // Instantiate the question unit plugin to add it to <plugin-manifest>
-        ecEditor.instantiatePlugin(question.data.plugin.id, {});
+        ecEditor.instantiatePlugin(questionBody.data.plugin.id, {});
         delete questionSetECML.data;
         questionSetECML[instance._questionPlugin].push(questionECML);
       });
