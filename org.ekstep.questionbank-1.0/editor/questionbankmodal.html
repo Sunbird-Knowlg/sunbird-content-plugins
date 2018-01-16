@@ -147,7 +147,7 @@
                   </div>
                   <div>
                     <input type="checkbox" checked="" name="check" ng-model="question.isSelected" id="select-question" ng-click="removeQuestion(question);generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)">
-                    <span ng-show="currentUserId == question.owner"><i class="edit icon" id="edit-question-config" ng-click="editQuestion(question);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)"></i></span>
+                    <span ng-show="currentUserId == question.createdBy"><i class="edit icon" id="edit-question-config" ng-click="editQuestion(question);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)"></i></span>
                   </div>
                 </div>
                 <div class="item select" ng-repeat="question in unselectedQuestions">

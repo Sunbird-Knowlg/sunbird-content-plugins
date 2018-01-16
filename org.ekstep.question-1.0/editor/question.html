@@ -58,7 +58,7 @@
           <div class="QuestionMetaForm" ng-show="$ctrl.metadaFormScreen">
             <div class="seven wide column md" style="margin-right: 1%">
               <form name="questionUnitBrowserForm" novalidate>
-                <div class="ui grid three column row">
+                <div class="ui grid two column row">
                   <div class="column">
                     <label class="qcMetadateFormLbl" data-original-title="Question title">
                       Question title <span class="star">&nbsp;*</span>
@@ -74,6 +74,8 @@
                     </select>
                     <small ng-show="questionUnitBrowserForm.qcLanguage.$invalid && !questionUnitBrowserForm.qcLanguage.$pristine" class="qcError">Select language.</small>
                   </div>
+                </div>
+                <div class="ui grid two column row">
                   <div class="column">
                     <label class="qcMetadateFormLbl">
                       Level <span class="star">&nbsp;*</span>
@@ -84,8 +86,6 @@
                     </select>
                     <small ng-show="questionUnitBrowserForm.qcLevel.$invalid && !questionUnitBrowserForm.qcLevel.$pristine" class="qcError">Select level.</small>
                   </div>
-                </div>
-                <div class="ui grid three column row">
                   <div class="column">
                     <label class="qcMetadateFormLbl">
                       Grade <span class="star">&nbsp;*</span>
@@ -103,6 +103,8 @@
                     </div>
                     <small ng-show="questionUnitBrowserForm.qcGrade.$invalid && !questionUnitBrowserForm.qcGrade.$pristine" class="qcError">Select grade.</small>
                   </div>
+                </div>
+                <div class="ui grid two column row">
                   <div class="column">
                     <label class="qcMetadateFormLbl">
                       Concepts <span class="star">&nbsp;*</span>
@@ -118,12 +120,14 @@
                     <textarea type="text" class="form-control" id="questionTitle" placeholder="Question description" name="questionDesc" ng-model="$ctrl.questionData.questionDesc" required></textarea>
                     <small ng-show="questionUnitBrowserForm.questionDesc.$invalid && !questionUnitBrowserForm.questionDesc.$pristine" class="qcError">Enter question description.</small>
                   </div>
+                </div>
+                <div class="ui grid two column row">
                   <div class="column">
                     <label class="qcMetadateFormLbl" data-original-title="Question max score">
                       Max score <span class="star">&nbsp;*</span>
                     </label>
                     <input type="number" class="form-control" id="questionTitle" min="1" max="12" name="questionMaxScore" ng-model="$ctrl.questionData.questionMaxScore" required/>
-                    <small ng-show="questionUnitBrowserForm.questionMaxScore.$invalid && !questionUnitBrowserForm.questionMaxScore.$pristine" class="qcError">Enter question title.</small>
+                    <small ng-show="questionUnitBrowserForm.questionMaxScore.$invalid && !questionUnitBrowserForm.questionMaxScore.$pristine" class="qcError">Enter max score.</small>
                   </div>
                 </div>
               </form>

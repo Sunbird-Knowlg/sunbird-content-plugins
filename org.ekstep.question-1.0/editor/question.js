@@ -71,9 +71,8 @@
     ctrl.init = function() {
 
       if (!ecEditor._.isEmpty(questionData)) {
-        console.log("Edit mode--->",questionData);
         var questionData1 = JSON.parse(questionData.body);
-        ctrl.assessmentId = 0;
+        ctrl.assessmentId = questionData.identifier;
         ctrl.questionData = questionData1;
         ctrl.questionData.qcLanguage = questionData1.data.config.metadata.language;
         ctrl.questionData.questionTitle = questionData1.data.config.metadata.title;
@@ -170,24 +169,10 @@
     }
 
     /**
-     * Validate question form to preview the question
-     * @return {function} to check question form is valid/not 
-     * @return {object} actual form data filled by user for the question template
-     */
-    //  ctrl.valideateFormForPreview = function(valid, formData) {
-    //   if (valid) {
-    //     ctrl.questionCreationFormData = formData;
-    //   } else {
-    //     ctrl.questionCreationFormData = null;
-    //   }
-    // }
-
-    /**
      * To create questionset or question content body
      * @return {object} actual content/theme object which can be used to preview the question/question-set
      */
      ctrl.setPreviewData = function() {
-      //ecEditor.dispatchEvent(ctrl.selectedTemplatePluginData.plugin.id + ':val', ctrl.valideateFormForPreview, ctrl);
       var confData = {};
       var qObj = {
         "config": "{'metadata':{'title':'question title','description':'question description','language':'English'},'max_time':0,'max_score':1,'partial_scoring':false}",
@@ -297,9 +282,10 @@
       ctrl.metadaFormScreen = true;
     }
     ctrl.saveQuestion = function(assessmentId, data){
+      //If identifier present update the question data
       ecEditor.getService('assessment').saveQuestionV3(assessmentId, data, function(err, resp) {
             if (!err) {
-              ctrl.qFormData.request.assessment_item.identifier = resp.data.result.node_id;
+              ctrl.qFormData.request.assessment_item.metadata.identifier = resp.data.result.node_id;
               $scope.$safeApply();
             } else {
               ctrl.itemsLoading = false;
@@ -321,11 +307,10 @@
         var data = {};  // TODO: You have to get this from Q.Unit plugin(getData())
         data.plugin = ctrl.selectedTemplatePluginData.plugin;
         data.data = ctrl.questionCreationFormData; //{"question":ctrl.questionCreationFormData.question.text,"options":ctrl.questionCreationFormData.options};   
-        var metadataObj = {title: ctrl.questionData.questionTitle, language: ctrl.questionData.qcLanguage, description:ctrl.questionData.questionDesc,concepts:ctrl.selectedConceptsData, description: ctrl.questionData.questionDesc,gradeLevel:ctrl.questionData.qcLevel, max_score: ctrl.questionData.questionMaxScore,gradeLevel:ctrl.questionData.qcGrade};
+        var metadataObj = {title: ctrl.questionData.questionTitle, language: ctrl.questionData.qcLanguage, qlevel: ctrl.questionData.qcLevel, gradeLevel:ctrl.questionData.qcGrade, concepts:ctrl.selectedConceptsData, description:ctrl.questionData.questionDesc, max_score: ctrl.questionData.questionMaxScore};
         data.config = {"metadata":metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": false};
         data.media = ctrl.questionCreationFormData.media;
         questionFormData.data = data;
-        
         
         ctrl.qFormData = {
           "request": {
@@ -343,6 +328,7 @@
                 "version": 2,
                 "category": ctrl.category,
                 "description": ctrl.questionData.questionDesc,
+                "createdBy": window.context.user.id,
                 "channel": "in.ekstep",    //default value
                 "type": ctrl.category,  // backward compatibility
                 "template": "NA",       // backward compatibility
@@ -358,12 +344,10 @@
             }
           }
         };
-        //console.log("Final data",qFormData);
         /*Save data and get response and dispatch event with response to questionbank plugin*/
-        // console.log("Before",ctrl.qFormData);
         ctrl.saveQuestion(ctrl.assessmentId, ctrl.qFormData);
-        // console.log("After",ctrl.qFormData);
         /*Dispatch event from here*/
+        console.log("Final",ctrl.qFormData.request.assessment_item.metadata);
         ecEditor.dispatchEvent('org.ekstep.questionbank:saveQuestion', ctrl.qFormData.request.assessment_item.metadata);
         $scope.closeThisDialog();
 
