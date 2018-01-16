@@ -90,9 +90,9 @@
 
 .qb-toggle-label {
   height: 94%;
-    width: 24.5%;
-    font-size: 14px !important;
-    padding-top: 2.3% !important;
+  width: 24.5%;
+  font-size: 14px !important;
+  padding-top: 2.3% !important;
 }
 
 .qb-question-bank .content.wizard {
@@ -114,8 +114,11 @@
   max-height: 57vh;
   overflow-y: scroll;
 }
-.qb-list-container>.ui.large.divided.items>.active {
-  background-color: grey;
+
+.quesSelector {
+  border: 1px solid #2e9fd9 !important;
+  border-radius: 4px !important;
+   box-shadow: 2px !important;
 }
 
 
