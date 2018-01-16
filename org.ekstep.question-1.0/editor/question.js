@@ -32,6 +32,7 @@
   ctrl.questionData = {};
   ctrl.plugins = { 'concepts': 'org.ekstep.conceptselector:init' };
   ctrl.previewCheck = false;
+  ctrl.allMenuItems = [];
   ctrl.menuItems['mcq'] = {
     'category': 'mcq',
     'data': { 'name': 'Multiple Choice', 'icon': 'list icon' },
@@ -144,6 +145,7 @@
               v.ver = ver;
               var thumbnail = ecEditor.resolvePluginResource(pluginID, ver, v.thumbnail); //Get image source and update in template object
               v.thumbnail1 = thumbnail;
+              ctrl.allMenuItems.push(v);
               if (ctrl.menuItems.hasOwnProperty(v.category)) {
                 ctrl.menuItems[v.category].templatesData.push(v);
               } else {

@@ -328,12 +328,12 @@ angular.module('createquestionapp', [])
 
     $scope.previewItem = function(question, bool) {
       var qObj = {
-        "config": "{'metadata':{'title':'question title','description':'question description','language':'English'},'max_time':0,'max_score':1,'partial_scoring':false}",
-        "data": question.data.data,
+        "config": JSON.stringify(question.body.data.config),
+        "data": JSON.stringify(question.body.data.data),
         "id": "c943d0a907274471a0572e593eab49c2",
-        "pluginId": question.data.plugin.id,
-        "pluginVer": question.data.plugin.version,
-        "templateId": "horizontalMCQ",
+        "pluginId": question.body.data.plugin.id,
+        "pluginVer": question.body.data.plugin.version,
+        "templateId": question.body.data.plugin.templateId,
         "type": "unit"
       }
       var questions = [];
@@ -343,6 +343,7 @@ angular.module('createquestionapp', [])
       questions.push(qObj);
       data["org.ekstep.questionset"]['org.ekstep.question'] = questions;
       var confData = { "contentBody": {}, "parentElement": true, "element": "#itemIframe" };
+      document.getElementById("itemIframe").contentDocument.location.reload(true);
       var questionSetInstance = ecEditor.instantiatePlugin('org.ekstep.questionset.preview');
       confData.contentBody = questionSetInstance.getQuestionPreviwContent(data['org.ekstep.questionset']);
       ecEditor.dispatchEvent("atpreview:show", confData);

@@ -175,7 +175,21 @@
 .pull-right {
   float: right;
 }
-
+.preview-iframe{
+  width: 624px;
+  height: 351px;
+  border-style: initial;
+  box-shadow: 0 0 10px grey;
+}
+.preview-head{
+  padding: 10px 0;
+  font-size: 1.2em;
+}
+.preview-body{
+  text-align: center;
+  border: 1px solid #e5e6e7;
+  padding: 2rem 0;
+}
 .filterField{
   padding-top: 3.5%;
 }

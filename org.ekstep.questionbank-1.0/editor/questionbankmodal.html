@@ -190,7 +190,7 @@
               </div>
             </div>
           </div>
-          <div class=" four widecolumn preview-config">
+          <div class="five wide column preview-config">
             <div class="qb-config-form" ng-show="showConfigForm">
               <h3>Config Data</h3>
               <div class="ui form">
@@ -211,9 +211,13 @@
             </div> -->
               <!--  <div class="ui submit button" id="save-config" ng-click="saveConfig();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Submit</div> -->
             </div>
-            <iframe id="itemIframe" class="previewContainer" ng-show="!itemPreviewLoading && (itemPreviewContent.error || (itemPreviewDisplay == itemPreviewDefaultMessage))"></iframe>
-            <!-- Preview code
-            <iframe id="itemIframe" class="previewContainer" ng-hide="!itemPreviewLoading && (itemPreviewContent.error || (itemPreviewDisplay == itemPreviewDefaultMessage))"></iframe>
+            <div class="preview-container">
+              <div class="preview-head">Preview</div>
+              <div class="preview-body">
+                <iframe id="itemIframe" class="preview-iframe"></iframe>
+              </div>
+            </div>
+            <!-- <iframe id="itemIframe" class="previewContainer" ng-hide="!itemPreviewLoading && (itemPreviewContent.error || (itemPreviewDisplay == itemPreviewDefaultMessage))"></iframe>
             <div>
               <div class="itemIframeMessages" ng-show="!itemPreviewLoading && (itemPreviewContent.error || (itemPreviewDisplay == itemPreviewDefaultMessage))">{{itemPreviewDisplay}}</div>
             </div> -->

@@ -1,10 +1,10 @@
 <script type="text/ng-template" id="QuestionUnitBrowser" ng-controller="QuestionCreationFormController as $ctrl">
   <div class="ui modal questioncreation fullscreen active">
-    <div class="two column row ui grid">
+    <div class="ui grid qcHeader">
       <div class="two wide column questionHeader">
-        <h2>Create question</h2>
+        <h3>Create question</h3>
       </div>
-      <div class="six wide column">
+      <div class="eight wide column center aligned">
         <div class="ui huge breadcrumb breadcrumbTitle">
           <div ng-class="{activeBreadcumb: $ctrl.templatesScreen == true}" class="section">Choose template</div>
           <i class="right chevron icon divider"></i>
@@ -13,10 +13,13 @@
           <div class="section" ng-class="{activeBreadcumb: $ctrl.metadaFormScreen == true}">Question Details</div>
         </div>
       </div>
+      <div class="two wide column right aligned qcCloseIcon">
+        <i class="close link icon" id="ques-cancel-button" ng-click="$ctrl.cancel();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)"></i>
+      </div>
     </div>
     <div class="ui grid">
       <div class="two column row" ng-show="$ctrl.templatesScreen">
-        <div class="three wide column">
+        <!-- <div class="three wide column">
           <div class="ui secondary vertical menu" id="qcSideMenu">
             <div class="item" ng-repeat="(key, value) in $ctrl.menuItems" ng-click="$ctrl.select($parent.$index, $index)" ng-class="{activeItem: $parent.$index + '.' + $index == $ctrl.selected}" ng-if="value.templatesData.length > 0">
               <div class="content">
@@ -24,11 +27,11 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="nine wide column" id="templatsCards">
-          <div class="ui grid three column row">
-            <div class="column" ng-repeat="(key, value) in $ctrl.selectedMenuItemData">
-              <div class="ui card">
+        </div> -->
+        <div class="twelve wide column" id="templatsCards">
+          <div class="ui stackable five column grid qcCustomGrid">
+            <div class="column" ng-repeat="(key, value) in $ctrl.allMenuItems">
+              <div class="ui card qcTemplateCard">
                 <div class="content" id="templateCardHeader">
                   <div class="left floated meta" id="templateCardHeaderText">{{value.title}}</div>
                 </div>
@@ -129,9 +132,9 @@
         </div>
         <div class="five wide column previewArea" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen">
           <div class="previewAreaHead">
-            <span class="ui left floated">Preview</span>
+            <span class="ui left floated previewHeading">Preview</span>
             <i class="icon undo ui right-floated replyIcon" id="preview-icon" ng-click="$ctrl.validateQuestionCreationForm($event);"></i>
-            <div>
+            <div class="qc-show-preview">
               <div class="ui raised child preview-iframe-wrapper" ng-show='$ctrl.showPreview'>
                 <iframe id="iframeArea" class="iframe-preview"></iframe>
               </div>
@@ -215,7 +218,7 @@
       </div> -->
     </div>
     <div class="actions bottomActionButtons">
-      <button class="ui large orange button left floated" id="ques-cancel-button" ng-click="$ctrl.cancel();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Cancel</button>
+      <!-- <button class="ui large orange button left floated" id="ques-cancel-button" ng-click="$ctrl.cancel();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Cancel</button> -->
       <div class="ui buttons">
         <button class="ui basic primary button" id="back-button" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen" ng-click="$ctrl.back();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Back</button>
         <div class="or" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen"></div>
