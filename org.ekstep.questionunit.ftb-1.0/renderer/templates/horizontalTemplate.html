@@ -1,6 +1,6 @@
 <div id="preview-ftb-horizontal" ng-app="FTBRendererApp" ng-controller="FTBRendererController" ng-show="showTemplate">
     <link rel="stylesheet" type="text/css" href="{{cssPath}}">
-    <div class="qc-ftb-layout">
+    <div class="qc-ftb-layout" ng-class="{qcalgin:qcmiddlealign}">
         <header>
             <div class="qc-ftb-question-text" ng-show="qcquestion">
                 <p>{{questionObj.question.text}}</p>

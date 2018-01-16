@@ -16,6 +16,7 @@ angular.module('FTBRendererApp', []).controller("FTBRendererController", functio
      */
     EkstepRendererAPI.addEventListener($scope.pluginInstance._manifest.id + ":show", function(event, question) {
       $scope.question = event.target;
+      $scope.ftbAnswer="";
       var questionData = JSON.parse($scope.question._currentQuestion.data);
       $scope.questionObj = questionData;
       $scope.showTemplate = true;
@@ -49,6 +50,7 @@ angular.module('FTBRendererApp', []).controller("FTBRendererController", functio
      */
   window.addEventListener('native.keyboardshow', function(e) {
     $scope.qcquestion = false;
+    $scope.qcmiddlealign=true;
     $scope.safeApply();
   });
    /**
@@ -59,9 +61,19 @@ angular.module('FTBRendererApp', []).controller("FTBRendererController", functio
   window.addEventListener('native.keyboardhide', function() {
     $scope.qcquestion = true;
     $scope.qcblank = true;
+    $scope.qcmiddlealign=false;
     $scope.safeApply();
   });
-
+   /**
+     * renderer:questionunit.ftb:max length 25 because max length not working in andirod.
+     * @event renderer:questionunit.ftb:watch
+     * @memberof org.ekstep.questionunit.ftb
+     */
+  $scope.$watch("ftbAnswer", function(newValue, oldValue){
+        if (newValue.length > 25){
+            $scope.ftbAnswer = oldValue;
+        }
+    });
   $scope.evaluate = function() {
     var correctAnswer = false;
     if ($scope.questionObj.answers[0].text.toLowerCase().replace(/ /g, '') === $scope.ftbAnswer.toLowerCase().replace(/ /g, '')) {

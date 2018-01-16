@@ -327,13 +327,18 @@ angular.module('createquestionapp', [])
     }
 
     $scope.previewItem = function(question, bool) {
+      var questionBody;
+      if(_.isString(question.body))
+        questionBody = JSON.parse(question.body);
+      else
+        questionBody = question.body;
       var qObj = {
-        "config": JSON.stringify(question.body.data.config),
-        "data": JSON.stringify(question.body.data.data),
+        "config": JSON.stringify(questionBody.data.config),
+        "data": JSON.stringify(questionBody.data.data),
         "id": "c943d0a907274471a0572e593eab49c2",
-        "pluginId": question.body.data.plugin.id,
-        "pluginVer": question.body.data.plugin.version,
-        "templateId": question.body.data.plugin.templateId,
+        "pluginId": questionBody.data.plugin.id,
+        "pluginVer": questionBody.data.plugin.version,
+        "templateId": questionBody.data.plugin.templateId,
         "type": "unit"
       }
       var questions = [];
