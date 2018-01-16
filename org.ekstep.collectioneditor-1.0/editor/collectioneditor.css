@@ -63,6 +63,7 @@ body {
     height: 100%;
     padding: 0;
     padding-left: 1em;
+    overflow-y: scroll;
 }
 
 #collection-tree {
@@ -343,3 +344,41 @@ i.pig-pink {
 }
 
 /* Content tree css */
+
+
+/* Mini modal css */
+@media only screen and (max-width: 767px) {
+    .ui.mini.modal {
+        width:95%;
+        margin: 0 0 0 -47.5%
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .ui.mini.modal {
+        width:35.2%;
+        margin: 0 0 0 -17.6%
+    }
+}
+
+@media only screen and (min-width: 992px) {
+    .ui.mini.modal {
+        width:340px;
+        margin: 0 0 0 -170px
+    }
+}
+
+@media only screen and (min-width: 1200px) {
+    .ui.mini.modal {
+        width:360px;
+        margin: 0 0 0 -180px
+    }
+}
+
+@media only screen and (min-width: 1920px) {
+    .ui.mini.modal {
+        width:380px;
+        margin: 0 0 0 -190px
+    }
+}
+/* Mini modal css */

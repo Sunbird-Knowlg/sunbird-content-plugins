@@ -1,4 +1,4 @@
-angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('mainController', ['$scope', '$location', function($scope, $location) {
+angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('mainController', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location) {
     //do_112272630392659968130
     $scope.contentDetails = {
         contentTitle: ""
@@ -31,7 +31,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     $scope.deleteNode = function(node, event) {
         if (!node.data.root) {
             ecEditor.getService('popup').open({
-                template: '<div class="ui mini modal active" style="top:' + event.clientY + 'px;right:' + event.clientX + 'px;"><div class="content"><span class="custom-modal-heading">Are you sure you want to delete this content?</span> <i class="close large icon floatContentRight" ng-click="closeThisDialog()"></i><p class="custom-modal-content">All content within this folder will also be deleted from this textbook.</p><button class="ui red button" ng-click="confirm()">YES,  DELETE</button></div></div>',
+                template: '<div class="ui mini modal active" id="deletePopup"> <div class="content"> <div class="ui grid"> <div class="ten wide column"> <span class="custom-modal-heading">Are you sure you want to delete this content?</span> </div><div class="two wide column"> <i class="close large icon four wide column floatContentRight" ng-click="closeThisDialog()"></i></div></div><p class="custom-modal-content">All content within this folder will also be deleted from this textbook.</p><button class="ui red button" ng-click="confirm()">YES, DELETE</button> </div></div>',
                 // '<div class="ui icon negative message remove-unit-popup"><i class="close icon" ></i><div class="content"><div class="header"><i class="fa fa-exclamation-triangle"></i> Do you want to remove this?</div><div class="remove-unit-buttons" style="padding-right:0; text-align:right;"><div class="ui red button button-overrides" id="remove-yes-button" >Yes</div><div class="ui basic primary button button-overrides" id="remove-no-button" >No</div></div></div></div>',
                 controller: ["$scope", function($scope) {
                     $scope.confirm = function() {
@@ -43,6 +43,16 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
                 }],
                 plain: true,
                 showClose: false
+            });
+            var ngDialogEventListener = $rootScope.$on('ngDialog.opened', function (e, $dialog) {
+                var dialogWidth = $('#deletePopup').width();
+                var dialogHeight = $('#deletePopup').height();
+                var height = event.pageY;
+                var viewPortHeight = $(window).height();
+                if ((viewPortHeight-(event.pageY + dialogHeight)) < 0)
+                    height = height-dialogHeight;
+                $('#deletePopup').offset({ top: height, left:  (event.pageX-dialogWidth)}).fadeIn(); 
+                ngDialogEventListener();
             });
         }
     }
