@@ -29,6 +29,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             $scope.boardList["AP Board"]  = "AP Board";
             $scope.boardList["TN Board"]  = "TN Board";
             $scope.boardList["NCTE"]  = "NCTE";
+            $scope.boardList["BSER"]  = "BSER";
             $scope.boardList["Other"] = "Others";
             $scope.$safeApply();                   
         }

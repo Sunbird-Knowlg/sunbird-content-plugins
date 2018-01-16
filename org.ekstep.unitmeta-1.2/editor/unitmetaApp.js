@@ -3,6 +3,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
     $scope.showImageIcon = true;
+    $scope.keywords = ["numbers", "systems"];
     const DEFAULT_NODETYPE = 'TextBookUnit';
 
     $scope.updateTitle = function(event, title) {
