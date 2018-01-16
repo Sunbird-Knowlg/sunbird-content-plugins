@@ -3,7 +3,7 @@
         <div class="ui breadcrumb">
             <a class="section" ng-repeat="value in path" ng-click="setActiveNode(value.nodeId)">
                 {{value.title | limitTo:25}} <span ng-if="value.title.length > 25">...</span>
-                <div class="divider"> / </div>
+                <div class="divider"> > </div>
             </a>
         </div>
     </div>

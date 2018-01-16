@@ -9,6 +9,7 @@ body.pg-loaded>.inner {
 body {
     min-width: 800px;
     color: #9b9b9b !important;
+    font-family: 'Open Sans' !important;
 }
 
 #collectionMasterhead {
