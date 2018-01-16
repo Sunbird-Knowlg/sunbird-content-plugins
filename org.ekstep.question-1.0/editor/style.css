@@ -108,7 +108,7 @@
   }
 
   .activeBreadcumb {
-    color: #6c6cdc;
+    color: #32a1da;
   }
 
   .wizard .ui.breadcrumb .section {
@@ -117,13 +117,12 @@
     margin-right: 1rem;
   }
 
-  .questionHeader {
+  .ui.grid >.column.questionHeader {
     text-align: center;
-    background-color: #eee;
+    background-color: #fff;
     padding-top: 1.2rem;
     padding-bottom: 1.2rem;
-    margin-top: 1%;
-    margin-left: 1%;
+    margin: 0;
   }
 
   .QuestionUnitBrowserFullScreen {
@@ -175,8 +174,10 @@
     margin-left: 4%;
   }
 
-  .breadcrumbTitle {
-    padding-top: 1.4rem;
+  .ui.breadcrumb.breadcrumbTitle {
+    padding-top: 0;
+    font-size:1.2rem;
+    color: #aaaaaa;
   }
 
   #templateCardHeader {
@@ -193,23 +194,28 @@
   }
 
   .previewArea {
-    background-color: #f3f3f3;
+    background-color: #fff;
     margin-left: -1%;
   }
 
   .previewAreaHead {
-    margin-top: 3%;
+    background-color: #fff;
+    margin: auto;
+    padding: 15px;
   }
 
   .replyIcon {
     float: right;
+    display: inline-block;
+    padding: 10px;
   }
 
   .iframe-preview {
     /*height: 100%;*/
     background-color: white;
-    width: 480px;
-    height: 270px;
+    width: 624px;
+    height: 351px;
+    border-style: initial;
   }
 
   .work-text-content {
@@ -251,4 +257,27 @@
   font-size: 1.5em;
   color: #9f9f9f;
   text-align: center;
+}
+.qc-show-preview{
+  display: inline-block;
+  padding: 5px;
+  border: 1px solid #E6E7E8;
+}
+.ui.card.qcTemplateCard{
+  margin: auto;
+}
+.ui.grid.qcCustomGrid{
+  padding: 0 20px;  
+}
+.ui.grid >.column.qcCloseIcon{
+  padding: 1.2rem;
+}
+.ui.grid.qcHeader{
+  margin: 0;
+  border-bottom: 1px solid rgba(34,36,38,.15);
+}
+.previewHeading{
+  display: inline-block;
+  padding: 10px 0;
+  text-align: left;
 }
