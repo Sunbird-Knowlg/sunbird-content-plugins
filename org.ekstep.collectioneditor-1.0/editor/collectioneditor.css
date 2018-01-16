@@ -8,7 +8,7 @@ body.pg-loaded>.inner {
 
 body {
     min-width: 800px;
-    color: #9b9b9b!important;
+    color: #9b9b9b !important;
 }
 
 #collectionMasterhead {
@@ -66,7 +66,7 @@ body {
 }
 
 #collection-tree {
-    height: 100%;
+    height: calc(100% - 30px);
     overflow: auto;
 }
 
@@ -103,7 +103,7 @@ body {
 }
 
 #treeWrapper {
-    height: 88%;
+    height: calc(100vh - 100px);
     border-right: 1px solid rgb(224, 225, 226);
     border-left: 0;
     border-top: 0;
@@ -219,6 +219,7 @@ body {
 
 ul.fancytree-container{
     padding-left: 15px;
+    margin-right: 1px;
 }
 
 /* for not able to fetch content */
@@ -275,12 +276,12 @@ ul.fancytree-container{
 
 /* Table of contents*/
 .table-of-contents-fixed-btns {
-    z-index: 99999;
     bottom: 0;
     position: fixed;
 }
 
 .ui.two.buttons.table-of-contents-btn {
+    background: white;
     width: 111.5%;
     box-shadow: 0 -1px 4px 0 rgba(194, 194, 194, 0.5);
 }
@@ -313,6 +314,23 @@ span.fancytree-expander {
     border-radius: 3px;
     border: 0.8px solid rgba(0, 122, 255, 0.3);
     background: rgba(0, 122, 255, 0.2)
+}
+
+
+.ui-contextmenu.ui-menu.ui-widget.ui-widget-content {
+     width: 270px;
+     padding:10px;
+     box-shadow: 0 2px 4px 0 rgba(164, 164, 164, 0.5);
+     font-size:1em !important;
+     border: solid 1px #dedede;
+     line-height: 1.3;
+     color: #434343;
+}
+
+.ui-menu.ui-widget.ui-widget-content kbd{
+    font-size: 0.9em; 
+    opacity: 0.6;
+    color: #434343;
 }
 
 
