@@ -207,6 +207,7 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
 
     setTimeout(function(){
         ecEditor.jQuery('.popup-item').popup();
+        ecEditor.jQuery('.ui.dropdown').dropdown({ forceSelection: false });
     },0);
     
     $scope.setActiveNode = function(nodeId){

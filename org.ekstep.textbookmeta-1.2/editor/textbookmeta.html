@@ -25,18 +25,18 @@
                     </div>
                 </div>
                 <div class="two fields">
-                     <div class="field">
-                        <label for="medium">Medium</label>
-                        <select id="textbookmeta-medium" class="ui search dropdown" ng-model="textbook.medium" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'medium'})">
-                            <option value="">Select</option>
-                            <option value="{{medium}}" ng-repeat="medium in languageList">{{medium}}</option>
-                        </select>
-                    </div>
                     <div class="field">
                         <label for="board">Curriculum</label>
                         <select id="textbookmeta-board" class="ui search dropdown" ng-model="textbook.board" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'board'})">
                             <option value="">Select</option>
                             <option value="{{board}}" ng-repeat="board in boardList">{{board}}</option>
+                        </select>
+                    </div>
+                    <div class="field">
+                        <label for="grade">Class</label>
+                        <select id="textbookmeta-gradeLevel" class="ui search dropdown" ng-model="textbook.gradeLevel" multiple="" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'gradeLevel'})">
+                            <option value="">Select</option>
+                            <option value="{{gradeLevel}}" ng-repeat="gradeLevel in gradeList">{{gradeLevel}}</option>
                         </select>
                     </div>
                 </div>
@@ -49,10 +49,10 @@
                         </select>
                     </div>
                     <div class="field">
-                        <label for="grade">Class</label>
-                        <select id="textbookmeta-gradeLevel" class="ui search dropdown" ng-model="textbook.gradeLevel" multiple="" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'gradeLevel'})">
+                        <label for="medium">Medium</label>
+                        <select id="textbookmeta-medium" class="ui search dropdown" ng-model="textbook.medium" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'medium'})">
                             <option value="">Select</option>
-                            <option value="{{gradeLevel}}" ng-repeat="gradeLevel in gradeList">{{gradeLevel}}</option>
+                            <option value="{{medium}}" ng-repeat="medium in languageList">{{medium}}</option>
                         </select>
                     </div>
                 </div>
