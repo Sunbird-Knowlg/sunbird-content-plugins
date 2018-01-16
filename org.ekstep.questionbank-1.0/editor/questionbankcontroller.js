@@ -100,6 +100,7 @@ angular.module('createquestionapp', [])
               }
               break;
             case "concepts":
+              console.log("value ", value);
               data.request.metadata.filters.push({ "property": "concepts", "operator": "=", "value": value });
               break;
           }

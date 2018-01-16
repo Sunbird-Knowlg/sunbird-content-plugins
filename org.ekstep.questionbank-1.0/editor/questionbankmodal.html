@@ -158,7 +158,7 @@
                   </div>
                   <div>
                     <input type="checkbox" checked="" name="check" ng-model="question.isSelected" id="select-question" ng-click="selectQuestion(question);generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)">
-                    <span><i class="edit icon" id="edit-question-config" ng-show="currentUserId == question.owner" ng-click="editQuestion(question);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)"></i></span>
+                    <span><i class="edit icon" id="edit-question-config" ng-show="currentUserId == question.createdBy" ng-click="editQuestion(question);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)"></i></span>
                   </div>
                 </div>
                 <div ng-show="questions.length == 0">
