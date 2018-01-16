@@ -66,6 +66,12 @@ angular.module('createquestionapp', [])
         }
       }
 
+      // For my Questions option
+      if ($scope.isMyQuestions) {
+        var userId = ecEditor._.isUndefined(ctrl.context) ? '' : (ctrl.context.uid || ctrl.context.user.id);
+        data.request.metadata.filters.push({ "property": "createdBy", "operator": "=", "value": userId }); 
+      }
+
       // setting filters values and title to request data
       ecEditor._.forEach($scope.filterObj, function(value, key) {
         if (value) {
