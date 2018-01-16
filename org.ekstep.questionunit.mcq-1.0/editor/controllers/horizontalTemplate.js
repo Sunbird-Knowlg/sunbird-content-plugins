@@ -20,8 +20,10 @@ angular.module('createquestionapp', [])
     $('.ui.dropdown').dropdown({ useLabels: false });
 
     if (!ecEditor._.isUndefined($scope.questionEditData)) {
-      var data = $scope.questionEditData.data.data;
-      $scope.mcqFormData = data;
+      var data = $scope.questionEditData.data;
+      // $scope.mcqFormData = data;
+      $scope.mcqFormData.question = data.question;
+      $scope.mcqFormData.options = data.options;
       if (data.length > 2) {
         for (var j = 2; j < data.length; j++) {
           $scope.mcqFormData.options.push({ 'text': '', 'image': '', 'audio': '', 'isCorrect': false });

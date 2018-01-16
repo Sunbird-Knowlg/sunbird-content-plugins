@@ -28,7 +28,6 @@
   ctrl.questionUnitValidated = false
   ctrl.level = ['Easy', 'Medium', 'Difficult'];
   ctrl.selected = 0;
-  ctrl.questionID = 0;
   ctrl.conceptsCheck = false;
   ctrl.questionData = {};
   ctrl.plugins = { 'concepts': 'org.ekstep.conceptselector:init' };
@@ -72,27 +71,30 @@
     ctrl.init = function() {
 
       if (!ecEditor._.isEmpty(questionData)) {
-        // console.log("Edit mode--->",questionData.request);
-        ctrl.questionData = questionData;
-        ctrl.questionID = questionData.questionId;
-        ctrl.questionData.qcLanguage = questionData.config.metadata.language;
-        ctrl.questionData.questionTitle = questionData.config.metadata.title;
-        ctrl.questionData.qcLevel = questionData.config.metadata.qlevel;
-        ctrl.questionData.qcGrade = questionData.config.metadata.gradeLevel;
-        ctrl.Totalconcepts = questionData.config.metadata.concepts.length; //_.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
-        ctrl.TotalconceptsData = questionData.config.metadata.concepts;
+        console.log("Edit mode--->",questionData);
+        var questionData1 = JSON.parse(questionData.body);
+        ctrl.assessmentId = 0;
+        ctrl.questionData = questionData1;
+        ctrl.questionData.qcLanguage = questionData1.data.config.metadata.language;
+        ctrl.questionData.questionTitle = questionData1.data.config.metadata.title;
+        ctrl.questionData.qcLevel = questionData1.data.config.metadata.qlevel;
+        ctrl.questionData.qcGrade = questionData1.data.config.metadata.gradeLevel;
+        ctrl.Totalconcepts = questionData1.data.config.metadata.concepts.length; //_.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
+        ctrl.TotalconceptsData = questionData1.data.config.metadata.concepts;
+        ctrl.questionData.questionDesc = questionData1.data.config.metadata.description;
+        ctrl.questionData.questionMaxScore = questionData1.data.config.metadata.max_score;
         ctrl.conceptsCheck = true;
         $scope.$safeApply();
-        $scope.questionEditData = questionData; //Using this variable in question unit plugin for editing question
+        $scope.questionEditData = questionData1.data; //Using this variable in question unit plugin for editing question
         ctrl.templatesScreen = false;
         ctrl.createQuestionScreen = true;
         ctrl.metadaFormScreen = false;
-        var pluginID = questionData.data.plugin.id;
-        var pluginVer = questionData.data.plugin.version;
-        var pluginTemplateId = questionData.data.plugin.templateId;
-        var editCreateQuestionFormInstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(questionData.data.plugin.id);
+        var pluginID = questionData1.data.plugin.id;
+        var pluginVer = questionData1.data.plugin.version;
+        var pluginTemplateId = questionData1.data.plugin.templateId;
+        var editCreateQuestionFormInstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(questionData1.data.plugin.id);
         _.each(editCreateQuestionFormInstance.templates, function(value, key) {
-          if (value.editor.template == questionData.data.plugin.templateId) {
+          if (value.editor.template == questionData1.data.plugin.templateId) {
             var controllerPathEdit = ecEditor.resolvePluginResource(pluginID, pluginVer, value.editor.controllerURL);
             var templatePathEdit = ecEditor.resolvePluginResource(pluginID, pluginVer, value.editor.templateURL);
             ctrl.questionUnitTemplateURL = templatePathEdit;
@@ -315,13 +317,16 @@
       var metadata = {};
       if (isValid && ctrl.Totalconcepts > 0) {
         var questionFormData = {};
-        var data = {};
-        var metadataObj = {title: ctrl.questionData.questionTitle, language: ctrl.questionData.qcLanguage, description:ctrl.questionData.questionDesc};
+        
+        var data = {};  // TODO: You have to get this from Q.Unit plugin(getData())
         data.plugin = ctrl.selectedTemplatePluginData.plugin;
-        data.data = {"question":ctrl.questionCreationFormData.question.text,"options":ctrl.questionCreationFormData.options};
-        data.config = {"metadata":metadataObj};
+        data.data = ctrl.questionCreationFormData; //{"question":ctrl.questionCreationFormData.question.text,"options":ctrl.questionCreationFormData.options};   
+        var metadataObj = {title: ctrl.questionData.questionTitle, language: ctrl.questionData.qcLanguage, description:ctrl.questionData.questionDesc,concepts:ctrl.selectedConceptsData, description: ctrl.questionData.questionDesc,gradeLevel:ctrl.questionData.qcLevel, max_score: ctrl.questionData.questionMaxScore,gradeLevel:ctrl.questionData.qcGrade};
+        data.config = {"metadata":metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": false};
         data.media = ctrl.questionCreationFormData.media;
         questionFormData.data = data;
+        
+        
         ctrl.qFormData = {
           "request": {
             "assessment_item": {
@@ -329,26 +334,26 @@
               "metadata": {
                 "code": "NA",
                 "name": ctrl.questionData.questionTitle,
-                "type": ctrl.category,
-                "template": "NA",
-                "template_id": "NA",
                 "qlevel": ctrl.questionData.qcLevel,
                 "title": ctrl.questionData.questionTitle,
-                "question": ctrl.questionCreationFormData.question,
-                "options": [{
+                "question": ctrl.questionCreationFormData.question.text,
+                "max_score": ctrl.questionData.questionMaxScore,
+                "body": JSON.stringify(questionFormData),
+                "itemType": "unit",
+                "version": 2,
+                "category": ctrl.category,
+                "description": ctrl.questionData.questionDesc,
+                "channel": "in.ekstep",    //default value
+                "type": ctrl.category,  // backward compatibility
+                "template": "NA",       // backward compatibility
+                "template_id": "NA",    // backward compatibility
+                "options": [{           // backward compatibility
                   "answer": true,
                   "value": {
                     "type": "text",
                     "asset": "1"
                   }
                 }],
-                "max_score": ctrl.questionData.questionMaxScore,
-                "body": JSON.stringify(questionFormData),
-                "itemType": "unit",
-                "version": 2,
-                "category": ctrl.category,
-                "channel": "ekstep",
-                "description": ctrl.questionData.questionDesc
               }
             }
           }
@@ -359,7 +364,7 @@
         ctrl.saveQuestion(ctrl.assessmentId, ctrl.qFormData);
         // console.log("After",ctrl.qFormData);
         /*Dispatch event from here*/
-        //ecEditor.dispatchEvent('org.ekstep.questionbank:saveQuestion', ctrl.qFormData);
+        ecEditor.dispatchEvent('org.ekstep.questionbank:saveQuestion', ctrl.qFormData.request.assessment_item.metadata);
         $scope.closeThisDialog();
 
       } else {

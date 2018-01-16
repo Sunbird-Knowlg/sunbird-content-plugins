@@ -7,6 +7,7 @@
 angular.module('createquestionapp', [])
   .controller('QuestionFormController', ['$scope', 'pluginInstance', function($scope, pluginInstance) {
 
+    $scope.currentUserId = ecEditor._.isUndefined(ctrl.context) ? '' : (ctrl.context.uid || ctrl.context.user.id);
     $scope.isQuestionTab = true;
     $scope.selectedQuestions = [];
     $scope.showConfigForm = false;
@@ -24,6 +25,7 @@ angular.module('createquestionapp', [])
     $scope.questionTypes = ['mcq', 'ftb', 'mtf'];
     $scope.filterObj = {};
     $scope.selectedIndex;
+    $scope.conceptsText = '(0) Concepts';
     $scope.pluginIdObj = {
       "question_set_id": "org.ekstep.questionset",
       "question_create_id": "org.ekstep.question",
@@ -65,6 +67,13 @@ angular.module('createquestionapp', [])
         }
       }
 
+      // For my Questions option
+      if ($scope.isMyQuestions) {
+
+        var userId = ecEditor._.isUndefined(ctrl.context) ? '' : (ctrl.context.uid || ctrl.context.user.id);
+        data.request.metadata.filters.push({ "property": "createdBy", "operator": "=", "value": userId });
+      }
+
       // setting filters values and title to request data
       ecEditor._.forEach($scope.filterObj, function(value, key) {
         if (value) {
@@ -102,8 +111,8 @@ angular.module('createquestionapp', [])
           $scope.getUnselectedQuestionList();
           $scope.$safeApply();
         } else {
-          ctrl.itemsLoading = false;
-          ctrl.errorMessage = true;
+          $scope.itemsLoading = false;
+          $scope.errorMessage = true;
           $scope.$safeApply();
           return;
         }
@@ -147,10 +156,15 @@ angular.module('createquestionapp', [])
 
       ecEditor.dispatchEvent($scope.pluginIdObj.concepts_id + ':init', {
         element: 'queSetConceptsTextBox',
-        selectedConcepts: [], // All composite keys except mediaType
+        selectedConcepts:[], // All composite keys except mediaType
         callback: function(data) {
           $scope.Totalconcepts = data.length;
+          $scope.conceptsText = '(' + data.length + ') concepts selected';
+          $scope.filterObj.concepts = _.map(data, function(concept) {
+            return concept.id;
+          });
           $scope.selectedConceptsData = data;
+          $scope.searchQuestions();
           $scope.$safeApply();
         }
       });

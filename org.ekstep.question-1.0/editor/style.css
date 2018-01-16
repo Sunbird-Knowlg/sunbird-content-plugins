@@ -8,7 +8,9 @@
     margin: 0 0 .35714286em !important;
     border-radius: .28571429rem!important;
   }
-
+.md{
+  margin-right: 1%
+}
   .templateCard {
     /*width: 33.333%;*/
     height: auto;
