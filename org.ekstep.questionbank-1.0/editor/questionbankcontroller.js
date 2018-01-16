@@ -24,6 +24,7 @@ angular.module('createquestionapp', [])
     $scope.questionTypes = ['mcq', 'ftb', 'mtf'];
     $scope.filterObj = {};
     $scope.selectedIndex;
+    $scope.conceptsText = '(0) Concepts';
     $scope.pluginIdObj = {
       "question_set_id": "org.ekstep.questionset",
       "question_create_id": "org.ekstep.question",
@@ -147,10 +148,15 @@ angular.module('createquestionapp', [])
 
       ecEditor.dispatchEvent($scope.pluginIdObj.concepts_id + ':init', {
         element: 'queSetConceptsTextBox',
-        selectedConcepts: [], // All composite keys except mediaType
+        selectedConcepts:[], // All composite keys except mediaType
         callback: function(data) {
           $scope.Totalconcepts = data.length;
+          $scope.conceptsText = '(' + data.length + ') concepts selected';
+          $scope.filterObj.concepts = _.map(data, function(concept) {
+            return concept.id;
+          });
           $scope.selectedConceptsData = data;
+          $scope.searchQuestions();
           $scope.$safeApply();
         }
       });
