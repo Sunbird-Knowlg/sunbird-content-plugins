@@ -120,7 +120,7 @@ input.qc-option-input-checkbox:checked::after {
 }
 table.qc-option-container{
     height: 18em;
-    overflow-y: scroll;
+    overflow-y: auto;
     display: block;
 }
 table.qc-option-container > tbody{
