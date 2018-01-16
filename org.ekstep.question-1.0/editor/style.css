@@ -260,8 +260,11 @@
 }
 .qc-show-preview{
   display: inline-block;
-  padding: 5px;
   border: 1px solid #E6E7E8;
+  width: 100%;
+  margin: auto;
+  text-align: center;
+  padding: 2rem;
 }
 .ui.card.qcTemplateCard{
   margin: auto;
