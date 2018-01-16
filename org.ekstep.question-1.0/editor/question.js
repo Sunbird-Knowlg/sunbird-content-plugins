@@ -78,6 +78,7 @@
         ctrl.questionData.questionTitle = questionData1.data.config.metadata.title;
         ctrl.questionData.qcLevel = questionData1.data.config.metadata.qlevel;
         ctrl.questionData.qcGrade = questionData1.data.config.metadata.gradeLevel;
+        ctrl.category = questionData1.data.config.metadata.category;
         ctrl.Totalconcepts = questionData1.data.config.metadata.concepts.length; //_.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
         ctrl.TotalconceptsData = questionData1.data.config.metadata.concepts;
         ctrl.questionData.questionDesc = questionData1.data.config.metadata.description;
@@ -285,12 +286,15 @@
       //If identifier present update the question data
       ecEditor.getService('assessment').saveQuestionV3(assessmentId, data, function(err, resp) {
             if (!err) {
-              ctrl.qFormData.request.assessment_item.metadata.identifier = resp.data.result.node_id;
-              $scope.$safeApply();
+              //ctrl.qFormData.request.assessment_item.metadata.identifier = resp.data.result.node_id;
+              var qMetadata = ctrl.qFormData.request.assessment_item.metadata;
+              qMetadata.identifier = resp.data.result.node_id;
+              debugger;
+              console.log("Response---",resp);
+              ecEditor.dispatchEvent('org.ekstep.questionbank:saveQuestion', qMetadata);
+              $scope.closeThisDialog();
             } else {
-              ctrl.itemsLoading = false;
-              ctrl.errorMessage = true;
-              $scope.$safeApply();
+              //Alert with message
               return;
             }
           });
@@ -311,46 +315,45 @@
         data.config = {"metadata":metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": false};
         data.media = ctrl.questionCreationFormData.media;
         questionFormData.data = data;
-        
+        var bodyData = '';
+
+        var metadata = {
+          "code": "NA",
+          "name": ctrl.questionData.questionTitle,
+          "qlevel": ctrl.questionData.qcLevel,
+          "title": ctrl.questionData.questionTitle,
+          "question": ctrl.questionCreationFormData.question.text,
+          "max_score": ctrl.questionData.questionMaxScore,
+          "body": JSON.stringify(questionFormData),
+          "itemType": "unit",
+          "version": 2,
+          "category": ctrl.category,
+          "description": ctrl.questionData.questionDesc,
+          "createdBy": window.context.user.id,
+          "channel": "in.ekstep",    //default value
+          "type": ctrl.category,  // backward compatibility
+          "template": "NA",       // backward compatibility
+          "template_id": "NA",    // backward compatibility
+          "options": [{           // backward compatibility
+            "answer": true,
+            "value": {
+              "type": "text",
+              "asset": "1"
+            }
+          }],
+        }
+
         ctrl.qFormData = {
           "request": {
             "assessment_item": {
               "objectType": "AssessmentItem",
-              "metadata": {
-                "code": "NA",
-                "name": ctrl.questionData.questionTitle,
-                "qlevel": ctrl.questionData.qcLevel,
-                "title": ctrl.questionData.questionTitle,
-                "question": ctrl.questionCreationFormData.question.text,
-                "max_score": ctrl.questionData.questionMaxScore,
-                "body": JSON.stringify(questionFormData),
-                "itemType": "unit",
-                "version": 2,
-                "category": ctrl.category,
-                "description": ctrl.questionData.questionDesc,
-                "createdBy": window.context.user.id,
-                "channel": "in.ekstep",    //default value
-                "type": ctrl.category,  // backward compatibility
-                "template": "NA",       // backward compatibility
-                "template_id": "NA",    // backward compatibility
-                "options": [{           // backward compatibility
-                  "answer": true,
-                  "value": {
-                    "type": "text",
-                    "asset": "1"
-                  }
-                }],
-              }
+              "metadata" : metadata
             }
           }
         };
+
         /*Save data and get response and dispatch event with response to questionbank plugin*/
         ctrl.saveQuestion(ctrl.assessmentId, ctrl.qFormData);
-        /*Dispatch event from here*/
-        console.log("Final",ctrl.qFormData.request.assessment_item.metadata);
-        ecEditor.dispatchEvent('org.ekstep.questionbank:saveQuestion', ctrl.qFormData.request.assessment_item.metadata);
-        $scope.closeThisDialog();
-
       } else {
         ctrl.qcconcepterr = true;
       }
