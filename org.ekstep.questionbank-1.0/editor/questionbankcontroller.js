@@ -44,6 +44,11 @@ angular.module('createquestionapp', [])
     $scope.searchQuestions = function() {
       var data = {
         request: {
+          "metadata": {
+            "filters": [
+              { "property": "version", "operator": "=", "value": 2 }
+            ]
+          },
           "sortOrder": [
             { "sortField": "code", "sortOrder": "ASC" }
           ]
@@ -51,10 +56,10 @@ angular.module('createquestionapp', [])
       };
 
       for (var key in $scope.filterObj) {
-        if ($scope.filterObj.hasOwnProperty(key)){
+        if ($scope.filterObj.hasOwnProperty(key)) {
           data.request.metadata = {};
           data.request.metadata.filters = [];
-        }else{
+        } else {
           delete data.request.metadata;
           delete data.request.metadata.filters;
         }
@@ -73,7 +78,9 @@ angular.module('createquestionapp', [])
               }
               break;
             case "language":
-              data.request.metadata.filters.push({ "property": "language", "operator": "=", "value": value });
+              var lan = [];
+              lan.push(value);
+              data.request.metadata.filters.push({ "property": "language", "operator": "=", "value": lan });
               break;
             case "qlevel":
               data.request.metadata.filters.push({ "property": "qlevel", "operator": "=", "value": value });
@@ -124,14 +131,14 @@ angular.module('createquestionapp', [])
         $scope.questions = $scope.selectedQuestions.concat($scope.questions);
         for (var i = 0; i < $scope.selectedQuestions.length; i++) {
           for (var j = 0; j < $scope.questions.length; j++) {
-            if ($scope.selectedQuestions[i].questionId == $scope.questions[j].questionId) {
+            if ($scope.selectedQuestions[i].identifier == $scope.questions[j].identifier) {
               $scope.questions[j].isSelected = true;
             }
           }
         }
         for (var i = 0; i < $scope.selectedQuestions.length; i++) {
           for (var j = 0; j < $scope.questions.length; j++) {
-            if ($scope.selectedQuestions[i].questionId == $scope.questions[j].questionId) {
+            if ($scope.selectedQuestions[i].identifier == $scope.questions[j].identifier) {
               $scope.questions[j].isSelected = true;
             }
           }
@@ -163,7 +170,7 @@ angular.module('createquestionapp', [])
         }
 
         var selQueIndex = _.findLastIndex($scope.questions, {
-          questionId: data.questionId
+          identifier: data.identifier
         });
         if (selQueIndex < 0) {
           $scope.questions.unshift(data);
@@ -208,13 +215,6 @@ angular.module('createquestionapp', [])
      *  @memberof QuestionFormController
      */
     $scope.editConfig = function(quesObj, index) {
-      /*var length = $scope.selectedQuestions.length;
-      for(var i =0 ; i<length; i++){
-          if(quesObj.questionId != $scope.selectedQuestions.questionId){
-              $scope.selectedQuestions[i].isDivSelected = false;
-          }
-      }
-      quesObj.isDivSelected = true;*/
       $scope.selectedIndex = index;
       $scope.selQuestionObj = {};
       $scope.selQuestionObj = quesObj;
@@ -252,7 +252,7 @@ angular.module('createquestionapp', [])
          $scope.showConfigForm = false;
        }*/
       selectedObjIndex = _.findLastIndex($scope.questions, {
-        questionId: $scope.selQuestionObj.questionId
+        identifier: $scope.selQuestionObj.identifier
       });
       if (selectedObjIndex > -1) {
         $scope.questions[selectedObjIndex] = $scope.selQuestionObj;
@@ -328,7 +328,7 @@ angular.module('createquestionapp', [])
       }
       questions.push(qObj);
       data["org.ekstep.questionset"]['org.ekstep.question'] = questions;
-      var confData={"contentBody":{}, "parentElement":true, "element":"#itemIframe"};
+      var confData = { "contentBody": {}, "parentElement": true, "element": "#itemIframe" };
       var questionSetInstance = ecEditor.instantiatePlugin('org.ekstep.questionset.preview');
       confData.contentBody = questionSetInstance.getQuestionPreviwContent(data['org.ekstep.questionset']);
       ecEditor.dispatchEvent("atpreview:show", confData);

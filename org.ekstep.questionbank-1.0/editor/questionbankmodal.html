@@ -7,6 +7,9 @@
           <div class="column">
             <span>Question Set</span>
           </div>
+          <div class="column right aligned">
+            <i class="cursor-pointer close link icon" ng-click="cancel()"></i>
+          </div>
         </div>
       </div>
     </div>
@@ -172,9 +175,9 @@
               <div class="ui large divided items">
                 <div class="item select" ng-repeat="selQuestion in selectedQuestions" ng-class="{quesSelector: $index === selectedIndex}">
                   <div class="middle aligned content" ng-click="previewItem(selQuestion, true);">
-                    <div class="header">{{ selQuestion.config.metadata.title }}</div>
-                    <div class="meta">{{selQuestion.config.metadata.language}} | {{ selQuestion.config.metadata.type}} | {{ selQuestion.config.metadata.difficulty }}</div>
-                    <div class="description">{{ selQuestion.config.metadata.description }}</div>
+                    <div class="header">{{selQuestion.title }}</div>
+                    <div class="meta">{{question.language}} | {{ selQuestion.type}} | {{ selQuestion.qlevel }}</div>
+                    <div class="description">{{ selQuestion.description }}</div>
                   </div>
                   <div>
                     <span><i class="edit icon" id="edit-question-config" ng-click="editConfig(selQuestion, $index);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)"></i></span>
