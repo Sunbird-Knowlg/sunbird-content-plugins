@@ -56,14 +56,11 @@ angular.module('createquestionapp', [])
     };
 
     $scope.searchQuestions = function() {
-      debugger;
-
       for (var key in $scope.filterObj) {
         if ($scope.filterObj.hasOwnProperty(key)) {
           $scope.filterData.request.metadata = {};
           $scope.filterData.request.metadata.filters = [{ "property": "version", "operator": "=", "value": 2 }];
-        } else {
-          debugger;
+        } else {s
           delete $scope.filterData.request.metadata;
           delete $scope.filterData.request.metadata.filters;
         }
@@ -187,14 +184,14 @@ angular.module('createquestionapp', [])
           data.isSelected = true;
         }
 
-        var selQueIndex = _.findLastIndex($scope.questions, {
+       /* var selQueIndex = _.findLastIndex($scope.questions, {
           identifier: data.identifier
         });
         if (selQueIndex < 0) {
           $scope.questions.unshift(data);
         } else {
           $scope.questions[selQueIndex] = data;
-        }
+        }*/
         var selQueIndex = _.findLastIndex($scope.selectedQuestions, {
           identifier: data.identifier
         });
@@ -203,7 +200,8 @@ angular.module('createquestionapp', [])
         } else {
           $scope.selectedQuestions[selQueIndex] = data;
         }
-        $scope.getUnselectedQuestionList();
+        $scope.searchQuestions();
+        //$scope.getUnselectedQuestionList();
 
         // $scope.selectQuestion(data);
 

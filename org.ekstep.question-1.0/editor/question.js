@@ -286,11 +286,8 @@
       //If identifier present update the question data
       ecEditor.getService('assessment').saveQuestionV3(assessmentId, data, function(err, resp) {
             if (!err) {
-              //ctrl.qFormData.request.assessment_item.metadata.identifier = resp.data.result.node_id;
               var qMetadata = ctrl.qFormData.request.assessment_item.metadata;
               qMetadata.identifier = resp.data.result.node_id;
-              debugger;
-              console.log("Response---",resp);
               ecEditor.dispatchEvent('org.ekstep.questionbank:saveQuestion', qMetadata);
               $scope.closeThisDialog();
             } else {
