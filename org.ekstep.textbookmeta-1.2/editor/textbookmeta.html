@@ -63,7 +63,7 @@
                 </div>
                 <div class="one field">
                     <div class="field">
-                        <label >Keywords</label>
+                        <label>Keywords</label>
                         <select id="textbookmeta-keywords" class="ui search dropdown border-bottom-only" ng-model="textbook.keywords" multiple="" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'keyword'})">
                             <option value="">Select</option>
                             <option value="{{keyword}}" ng-repeat="keyword in keywords">{{keyword}}

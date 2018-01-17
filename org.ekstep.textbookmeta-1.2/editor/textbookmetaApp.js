@@ -219,6 +219,9 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
         $scope.initYearDropDown();
         $scope.$watch('textbook', function() {
             if($scope.textbook){
+                if(/^[a-z\d\-_\s]+$/i.test($scope.textbook.name) == false) $scope.textbook.name = $scope.removeSpecialChars($scope.textbook.name);
+                if(/^[a-z\d\-_\s]+$/i.test($scope.textbook.description) == false) $scope.textbook.description = $scope.removeSpecialChars($scope.textbook.description);
+                if(/^[a-z\d\-_\s]+$/i.test($scope.textbook.publication) == false) $scope.textbook.publication = $scope.removeSpecialChars($scope.textbook.publication);
                 if($scope.nodeType === DEFAULT_NODETYPE){
                     $scope.updateNode();
                 }
@@ -226,5 +229,19 @@ angular.module('textbookmetaApp', ['ngTokenField', 'Scope.safeApply']).controlle
         }, true);
     }
     $scope.init();
+    $scope.removeSpecialChars = function(text) {
+        var iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?";
+        for (var i = 0; i < text.length; i++) {
+            if (iChars.indexOf(text.charAt(i)) != -1) {
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: "Special characters are not allowed",
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
+                text = text.replace(/[^a-zA-Z ]/g, "")
+            }
+        }
+        return text;
+    }
 }]);
 //# sourceURL=textbookmetaApp.js

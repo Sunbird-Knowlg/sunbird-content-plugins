@@ -270,11 +270,29 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
 
     $scope.init = function() {
         $scope.$watch('content', function() {
-            if ($scope.nodeType === DEFAULT_NODETYPE) {
-                $scope.updateNode();
+            if($scope.content) {
+                if(/^[a-z\d\-_\s]+$/i.test($scope.content.name) == false && $scope.editMode) $scope.content.name = $scope.removeSpecialChars($scope.content.name);
+                if(/^[a-z\d\-_\s]+$/i.test($scope.content.description) == false && $scope.editMode) $scope.content.description = $scope.removeSpecialChars($scope.content.description);
+                if ($scope.nodeType === DEFAULT_NODETYPE) {
+                    $scope.updateNode();
+                }
             }
         }, true);
     }
     $scope.init();
+    $scope.removeSpecialChars = function(text) {
+        var iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?";
+        for (var i = 0; i < text.length; i++) {
+            if (iChars.indexOf(text.charAt(i)) != -1) {
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: "Special characters are not allowed",
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
+                text = text.replace(/[^a-zA-Z ]/g, "")
+            }
+        }
+        return text;
+    }
 }]);
 //# sourceURL=contentmetaApp.js
