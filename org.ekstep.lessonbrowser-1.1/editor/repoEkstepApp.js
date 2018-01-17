@@ -314,6 +314,9 @@ angular.module('org.ekstep.contentprovider', [])
             angular.forEach(concepts, function(concept){
                 $scope.filterSelection.concept.push(concept.id);
             });
+            if(concepts.length == 0) {
+                $scope.filterSelection.concept = [];
+            }
             $scope.$safeApply();
         }
     });
