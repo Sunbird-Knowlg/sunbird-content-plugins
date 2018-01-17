@@ -148,6 +148,10 @@
    box-shadow: 2px !important;
 }
 
+.qb-question-container{
+  padding: 1%;
+}
+
 
 /*#queSetConceptsTextBox {
   width: 100%;

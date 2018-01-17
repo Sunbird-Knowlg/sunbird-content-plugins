@@ -71,7 +71,7 @@
     ctrl.init = function() {
 
       if (!ecEditor._.isEmpty(questionData)) {
-        var questionData1 = JSON.parse(questionData.body);
+        var questionData1 = typeof questionData.body == "string" ? JSON.parse(questionData.body) : questionData.body;
         ctrl.assessmentId = questionData.identifier;
         ctrl.questionData = questionData1;
         ctrl.questionData.qcLanguage = questionData1.data.config.metadata.language;
@@ -311,7 +311,7 @@
         var data = {};  // TODO: You have to get this from Q.Unit plugin(getData())
         data.plugin = ctrl.selectedTemplatePluginData.plugin;
         data.data = ctrl.questionCreationFormData; //{"question":ctrl.questionCreationFormData.question.text,"options":ctrl.questionCreationFormData.options};   
-        var metadataObj = {title: ctrl.questionData.questionTitle, language: ctrl.questionData.qcLanguage, qlevel: ctrl.questionData.qcLevel, gradeLevel:ctrl.questionData.qcGrade, concepts:ctrl.selectedConceptsData, description:ctrl.questionData.questionDesc, max_score: ctrl.questionData.questionMaxScore};
+        var metadataObj = {category: ctrl.category, title: ctrl.questionData.questionTitle, language: ctrl.questionData.qcLanguage, qlevel: ctrl.questionData.qcLevel, gradeLevel:ctrl.questionData.qcGrade, concepts:ctrl.selectedConceptsData, description:ctrl.questionData.questionDesc, max_score: ctrl.questionData.questionMaxScore};
         data.config = {"metadata":metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": false};
         data.media = ctrl.questionCreationFormData.media;
         questionFormData.data = data;
