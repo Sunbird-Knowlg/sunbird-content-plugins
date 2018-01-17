@@ -42,7 +42,8 @@
 }
 
 .has-error {
-  border-bottom-color: red;
+  border-bottom-color: #ea7575;
+    border-bottom-width: 1.5px;
 }
 
 .has-success {
@@ -68,7 +69,7 @@
   padding-left: 4%;
   overflow-y: scroll;
   overflow-x: hidden;
-  margin-left: 2%;
+  margin-left: 5%;
 }
 
 #eachCard {
@@ -92,4 +93,7 @@
 
 .headQA {
   margin-top: 3%;
+}
+.qHeader{
+  padding-bottom: 2%;
 }

@@ -3,7 +3,7 @@
     <div class="one column row">
       <div class="column innerScroll">
         <div class="headQA">
-          <div class="one column row">
+          <div class="one column row qHeader">
             <span class="ui header">Enter the question</span>
           </div>
           <form name="mcqForm">
@@ -23,7 +23,7 @@
                 </div>
                 <div class="ui tab active optionTab" data-tab="questionTextTab">
                   <div class="form-group segment textBoxDiv">
-                    <textarea class="form-control textboxQ" ng-class="{'has-success':mcqForm.question.$valid, 'has-error': mcqForm.question.$invalid}" placeholder="Enter the question" name="question" ng-model="mcqFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true" ng-blur="$ctrl.focused = false" required></textarea>
+                    <textarea class="form-control textboxQ" ng-class="{'has-success':mcqForm.question.$valid, 'has-error': mcqForm.question.$invalid}" placeholder="Enter the question" name="question" ng-model="mcqFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true" ng-blur="$ctrl.focused = false"  required></textarea>
                   </div>
                 </div>
                 <div class="ui tab" data-tab="questionImageTab" ng-show="false">
@@ -68,10 +68,12 @@
               </div>
             </div>
             <div class="one column row" ng-if="mcqFormData.options.length > 0">
+              <div class="qHeader">
               <span class="ui header">Set answer</span>
+              </div>
             </div>
             <div ng-repeat="(key, value) in mcqFormData.options">
-              <div class="ui segments" ng-class="{cardBorder: focused}" tabindex="100" id="eachCard">
+              <div class="ui segments" ng-class="{cardBorder: focused}" id="eachCard">
                 <div class="ui segment">
                   <div class="ui pointing secondary demo menu ">
                     <a class="item active" data-tab="optionTextTab"><i class="checkmark icon" ng-show="mcqFormData.options[key].text.length > 1"></i> Text</a>
@@ -131,8 +133,8 @@
                       </div>
                       <div class="column">
                         <div class="ui radio">
-                          <input type="radio" name="correctans_{{$index}}" ng-checked="value.isCorrect" ng-model="$parent.selectedOption" value="{{$index}}"/>
-                          <label ng-class="{'has-success-text':selLbl == 'error' , 'has-error-text':selLbl == 'success' }">Correct answer</label>
+                          <input type="radio" id="{{$index}}" name="correctans_{{$index}}" ng-checked="value.isCorrect" ng-model="$parent.selectedOption" value="{{$index}}"/>
+                          <label for="{{$index}}" ng-class="{'has-success-text':selLbl == 'error' , 'has-error-text':selLbl == 'success' }">Correct answer</label>
                         </div>
                       </div>
                       <div class="column">

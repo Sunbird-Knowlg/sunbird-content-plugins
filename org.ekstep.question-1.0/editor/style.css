@@ -22,10 +22,14 @@
 
   .templateCard:hover img {
     opacity: 0.3;
+    -moz-box-shadow: 0 0 10px #ccc;
+    -webkit-box-shadow: 0 0 10px #ccc;
+    box-shadow: 0 0 10px #ccc;
   }
 
   .templateCard:hover .templateDisc {
     opacity: 1;
+    background: rgba(16, 1, 1, 0.5);
   }
 
   .templateCard img {
@@ -46,7 +50,7 @@
   .templateDisc {
     padding-top: 18%;
     position: absolute;
-    color: black;
+    color: white;
     left: 0;
     top: 25%;
     right: 0;
@@ -125,6 +129,7 @@
     padding-top: 1.2rem;
     padding-bottom: 1.2rem;
     margin: 0;
+    padding-left: 0;
   }
 
   .QuestionUnitBrowserFullScreen {
