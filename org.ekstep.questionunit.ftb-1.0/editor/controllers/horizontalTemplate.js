@@ -52,18 +52,18 @@ angular.module('createquestionapp', [])
       }
     }
 
-    ecEditor.addEventListener('org.ekstep.questionunit.ftb:val', function(ctrl) {
+    $scope.$parent.$on('question:form:val', function(event) {
       if ($scope.getdetails()) {
-        ctrl.target.validateQuestionForm(true, $scope.finalDataObj);
+        $scope.$emit('question:form:valid', $scope.finalDataObj);
       } else {
-        ctrl.target.validateQuestionForm(false, $scope.finalDataObj);
+        $scope.$emit('question:form:inValid', $scope.finalDataObj);
       }
+    });
 
-    }, false);
     $scope.init = function() {
       console.log("i am loading..FTB plugin");
     }
-
+ 
     $scope.init();
 
     $scope.addAnswerField = function() {
