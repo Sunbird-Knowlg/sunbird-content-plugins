@@ -23,7 +23,7 @@
                 </div>
                 <div class="ui tab active optionTab" data-tab="questionTextTab">
                   <div class="form-group segment textBoxDiv">
-                    <input type="text" class="form-control textboxQ" ng-class="{'has-success':mcqForm.question.$valid, 'has-error': mcqForm.question.$invalid}" placeholder="Enter the question" name="question" ng-model="mcqFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true" ng-blur="$ctrl.focused = false" required/>
+                    <textarea class="form-control textboxQ" ng-class="{'has-success':mcqForm.question.$valid, 'has-error': mcqForm.question.$invalid}" placeholder="Enter the question" name="question" ng-model="mcqFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true" ng-blur="$ctrl.focused = false" required></textarea>
                   </div>
                 </div>
                 <div class="ui tab" data-tab="questionImageTab" ng-show="false">
