@@ -60,14 +60,6 @@ angular.module('createquestionapp', [])
       }
     });
 
-    /*ecEditor.addEventListener('org.ekstep.questionunit.ftb:val', function(ctrl) {
-      if ($scope.getdetails()) {
-        ctrl.target.validateQuestionForm(true, $scope.finalDataObj);
-      } else {
-        ctrl.target.validateQuestionForm(false, $scope.finalDataObj);
-      }
-
-    }, false);*/
     $scope.init = function() {
       console.log("i am loading..FTB plugin");
     }
