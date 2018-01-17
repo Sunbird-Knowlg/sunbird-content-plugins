@@ -194,14 +194,15 @@
 .filterField{
   padding-top: 3.5%;
 }
-.preview-config{
+/*.preview-config{
   max-height: 60vh;
   overflow: auto;
   padding: 1rem;
-}
+}*/
 .preview-and-config{
   border: 1px solid #ccc;
   padding: 1rem;
+  overflow: auto;
 }
 .button-actions{
   z-index: 1;
