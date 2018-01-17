@@ -82,6 +82,19 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
     }
 
+    $scope.showTooltip = function(event, title) {
+        if(title.length > 25 ) {
+            $('.section').popup({
+                content: title,
+                variation: "wide",
+                on: 'hover',
+                position:'bottom left'
+            });
+        } else {
+            $('.section').popup('destroy');
+        }
+   }
+
     $scope.onNodeSelect = function(evant, data){
         var selectedConcepts = [];
         $scope.showImageIcon = false;

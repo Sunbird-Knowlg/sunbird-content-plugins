@@ -72,7 +72,8 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
     $scope.updateTitle = function(event,data){
         $scope.contentDetails.contentTitle = data;
         document.title = data;
-        $scope.$safeApply(); 
+        $scope.$safeApply();
+        $('.popup-item').popup();
     };
 
     window.addEventListener('online', $scope.internetStatusFn, false);

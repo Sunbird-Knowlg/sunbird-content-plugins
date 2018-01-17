@@ -90,6 +90,15 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         });
     });
 
+    $scope.addNodeType = function(nodeType) {
+        if (nodeType == 'sibling') {
+            org.ekstep.services.collectionService.addSibling()
+        }
+        if (nodeType == 'child') {
+            org.ekstep.services.collectionService.addChild()
+        }
+    }
+
 
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
 }]);
