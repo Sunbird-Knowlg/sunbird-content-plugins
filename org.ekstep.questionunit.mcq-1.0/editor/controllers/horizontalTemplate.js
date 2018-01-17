@@ -21,7 +21,6 @@ angular.module('createquestionapp', [])
 
     if (!ecEditor._.isUndefined($scope.questionEditData)) {
       var data = $scope.questionEditData.data;
-      // $scope.mcqFormData = data;
       $scope.mcqFormData.question = data.question;
       $scope.mcqFormData.options = data.options;
       if (data.length > 2) {

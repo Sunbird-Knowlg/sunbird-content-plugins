@@ -4,7 +4,7 @@
       <div class="column innerScroll">
         <div class="headQA">
           <div class="one column row">
-            <span class="ui">Enter the question</span>
+            <span class="ui header">Enter the question</span>
           </div>
           <form name="mcqForm">
             <div class="ui segments" ng-class="{cardBorder: $ctrl.focused}">
@@ -23,7 +23,7 @@
                 </div>
                 <div class="ui tab active optionTab" data-tab="questionTextTab">
                   <div class="form-group segment textBoxDiv">
-                    <input type="text" class="form-control textboxQ" ng-class="{'has-success':mcqForm.question.$valid, 'has-error': mcqForm.question.$invalid}" placeholder="Enter the question" name="question" ng-model="mcqFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true" ng-blur="$ctrl.focused = false" required/>
+                    <textarea class="form-control textboxQ" ng-class="{'has-success':mcqForm.question.$valid, 'has-error': mcqForm.question.$invalid}" placeholder="Enter the question" name="question" ng-model="mcqFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true" ng-blur="$ctrl.focused = false" required></textarea>
                   </div>
                 </div>
                 <div class="ui tab" data-tab="questionImageTab" ng-show="false">
@@ -68,7 +68,7 @@
               </div>
             </div>
             <div class="one column row" ng-if="mcqFormData.options.length > 0">
-              <span class="ui">Set answer</span>
+              <span class="ui header">Set answer</span>
             </div>
             <div ng-repeat="(key, value) in mcqFormData.options">
               <div class="ui segments" ng-class="{cardBorder: focused}" tabindex="100" id="eachCard">
