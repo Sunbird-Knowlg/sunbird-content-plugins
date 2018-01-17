@@ -20,7 +20,7 @@ angular.module('createquestionapp', [])
     $scope.Totalconcepts;
     $scope.selectedConceptsData;
     $scope.grades;
-    $scope.languages = [];
+    $scope.languages;
     $scope.difficultyLevels = ['Easy', 'Medium', 'Difficult'];
     $scope.questionTypes = ['mcq', 'ftb', 'mtf'];
     $scope.filterObj = {};
@@ -60,7 +60,8 @@ angular.module('createquestionapp', [])
         if ($scope.filterObj.hasOwnProperty(key)) {
           $scope.filterData.request.metadata = {};
           $scope.filterData.request.metadata.filters = [{ "property": "version", "operator": "=", "value": 2 }];
-        } else {s
+        } else {
+          s
           delete $scope.filterData.request.metadata;
           delete $scope.filterData.request.metadata.filters;
         }
@@ -174,9 +175,11 @@ angular.module('createquestionapp', [])
         if (!err) {
           $scope.grades = res.data.result.ordinals.gradeLevel;
           $scope.languages = res.data.result.ordinals.language;
+          ecEditor.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false });
           $scope.$safeApply();
+
         }
-        ecEditor.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false });
+
       });
 
       ecEditor.addEventListener(pluginInstance.manifest.id + ":saveQuestion", function(event, data) {
@@ -184,18 +187,18 @@ angular.module('createquestionapp', [])
           data.isSelected = true;
         }
 
-       /* var selQueIndex = _.findLastIndex($scope.questions, {
-          identifier: data.identifier
-        });
-        if (selQueIndex < 0) {
-          $scope.questions.unshift(data);
-        } else {
-          $scope.questions[selQueIndex] = data;
-        }*/
+        /* var selQueIndex = _.findLastIndex($scope.questions, {
+           identifier: data.identifier
+         });
+         if (selQueIndex < 0) {
+           $scope.questions.unshift(data);
+         } else {
+           $scope.questions[selQueIndex] = data;
+         }*/
         var selQueIndex = _.findLastIndex($scope.selectedQuestions, {
           identifier: data.identifier
         });
-         if (selQueIndex < 0) {
+        if (selQueIndex < 0) {
           $scope.selectedQuestions.unshift(data);
         } else {
           $scope.selectedQuestions[selQueIndex] = data;
