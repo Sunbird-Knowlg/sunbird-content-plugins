@@ -195,7 +195,17 @@ angular.module('createquestionapp', [])
         } else {
           $scope.questions[selQueIndex] = data;
         }
-        $scope.selectQuestion(data);
+        var selQueIndex = _.findLastIndex($scope.selectedQuestions, {
+          identifier: data.identifier
+        });
+         if (selQueIndex < 0) {
+          $scope.selectedQuestions.unshift(data);
+        } else {
+          $scope.selectedQuestions[selQueIndex] = data;
+        }
+        $scope.getUnselectedQuestionList();
+
+        // $scope.selectQuestion(data);
 
 
       }, false);
@@ -328,7 +338,7 @@ angular.module('createquestionapp', [])
 
     $scope.previewItem = function(question, bool) {
       var questionBody;
-      if(_.isString(question.body))
+      if (_.isString(question.body))
         questionBody = JSON.parse(question.body);
       else
         questionBody = question.body;
