@@ -214,8 +214,8 @@
 
   .iframe-preview {
     background-color: white;
-    width: 624px;
-    height: 351px;
+    width: 480px;
+    height: 270px;
     border-style: initial;
     box-shadow: 0 0 10px grey;
   }
@@ -259,6 +259,7 @@
   font-size: 1.5em;
   color: #9f9f9f;
   text-align: center;
+  padding-bottom: 2%;
 }
 .qc-show-preview{
   display: inline-block;
