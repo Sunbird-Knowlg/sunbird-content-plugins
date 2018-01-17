@@ -61,7 +61,6 @@ angular.module('createquestionapp', [])
           $scope.filterData.request.metadata = {};
           $scope.filterData.request.metadata.filters = [{ "property": "version", "operator": "=", "value": 2 }];
         } else {
-          s
           delete $scope.filterData.request.metadata;
           delete $scope.filterData.request.metadata.filters;
         }
