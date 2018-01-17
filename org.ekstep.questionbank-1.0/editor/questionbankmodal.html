@@ -174,7 +174,7 @@
                 <div class="item select" ng-repeat="selQuestion in selectedQuestions" ng-class="{quesSelector: $index === selectedIndex}">
                   <div class="middle aligned content" ng-click="previewItem(selQuestion, true);">
                     <div class="header">{{selQuestion.title }}</div>
-                    <div class="meta">{{question.language[0]}} | {{ selQuestion.type}} | {{ selQuestion.qlevel }}</div>
+                    <div class="meta">{{selQuestion.language[0]}} | {{ selQuestion.type}} | {{ selQuestion.qlevel }}</div>
                     <div class="description">{{ selQuestion.description }}</div>
                   </div>
                   <div>
@@ -196,20 +196,10 @@
               <div class="ui form">
                 <div class="field">
                   <label>Score</label>
-                  <input type="number" ng-model="selQuestionObj.config.max_score" id="max-score" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" ng-change="saveConfig()">
+                  <input type="number" ng-model="selQuestionObj.max_score" id="max-score" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" ng-change="saveConfig()">
                 </div>
               </div>
-              <!-- <div class="ui form">
-              <div class="fields">
-                <div class="inline field">
-                  <div class="ui checkbox">
-                    <label>Partial Scoring</label>
-                    <input type="checkbox" name="partialScoring" id="partial-scoring" ng-click="generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)">
-                  </div>
-                </div>
-              </div>
-            </div> -->
-              <!--  <div class="ui submit button" id="save-config" ng-click="saveConfig();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Submit</div> -->
+
             </div>
             <div class="preview-container">
               <div class="preview-head">Preview</div>

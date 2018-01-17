@@ -31,6 +31,18 @@ angular.module('createquestionapp', [])
       "question_create_id": "org.ekstep.question",
       "concepts_id": "org.ekstep.conceptselector"
     }
+    $scope.filterData = {
+      request: {
+        "metadata": {
+          "filters": [
+            { "property": "version", "operator": "=", "value": 2 }
+          ]
+        },
+        "sortOrder": [
+          { "sortField": "code", "sortOrder": "ASC" }
+        ]
+      }
+    };
     $scope.csspath = ecEditor.resolvePluginResource(pluginInstance.manifest.id, pluginInstance.manifest.ver, 'editor/style.css');
 
     $scope.questionSetConfigObj = {
@@ -44,26 +56,16 @@ angular.module('createquestionapp', [])
     };
 
     $scope.searchQuestions = function() {
-      var data = {
-        request: {
-          "metadata": {
-            "filters": [
-              { "property": "version", "operator": "=", "value": 2 }
-            ]
-          },
-          "sortOrder": [
-            { "sortField": "code", "sortOrder": "ASC" }
-          ]
-        }
-      };
+      debugger;
 
       for (var key in $scope.filterObj) {
         if ($scope.filterObj.hasOwnProperty(key)) {
-          data.request.metadata = {};
-          data.request.metadata.filters = [];
+          $scope.filterData.request.metadata = {};
+          $scope.filterData.request.metadata.filters = [{ "property": "version", "operator": "=", "value": 2 }];
         } else {
-          delete data.request.metadata;
-          delete data.request.metadata.filters;
+          debugger;
+          delete $scope.filterData.request.metadata;
+          delete $scope.filterData.request.metadata.filters;
         }
       }
 
@@ -71,7 +73,7 @@ angular.module('createquestionapp', [])
       if ($scope.isMyQuestions) {
 
         var userId = ecEditor._.isUndefined(ctrl.context) ? '' : (ctrl.context.uid || ctrl.context.user.id);
-        data.request.metadata.filters.push({ "property": "createdBy", "operator": "=", "value": userId });
+        $scope.filterData.request.metadata.filters.push({ "property": "createdBy", "operator": "=", "value": userId });
       }
 
       // setting filters values and title to request data
@@ -79,33 +81,35 @@ angular.module('createquestionapp', [])
         if (value) {
           switch (key) {
             case "question_title":
-              data.request.metadata.filters.push({ "property": "title", "operator": "contains", "value": value });
+              $scope.filterData.request.metadata.filters.push({ "property": "title", "operator": "contains", "value": value });
               break;
             case "gradeLevel":
               if (value.length) {
-                data.request.metadata.filters.push({ "property": "gradeLevel", "operator": "=", "value": value });
+                $scope.filterData.request.metadata.filters.push({ "property": "gradeLevel", "operator": "=", "value": value });
               }
               break;
             case "language":
               var lan = [];
               lan.push(value);
-              data.request.metadata.filters.push({ "property": "language", "operator": "=", "value": lan });
+              $scope.filterData.request.metadata.filters.push({ "property": "language", "operator": "=", "value": lan });
               break;
             case "qlevel":
-              data.request.metadata.filters.push({ "property": "qlevel", "operator": "=", "value": value });
+              $scope.filterData.request.metadata.filters.push({ "property": "qlevel", "operator": "=", "value": value });
               break;
             case "type":
               if (value.length) {
-                data.request.metadata.filters.push({ "property": "type", "operator": "=", "value": value });
+                $scope.filterData.request.metadata.filters.push({ "property": "type", "operator": "=", "value": value });
               }
               break;
             case "concepts":
-              data.request.metadata.filters.push({ "property": "concepts", "operator": "=", "value": value });
+              if (value.length > 0) {
+                $scope.filterData.request.metadata.filters.push({ "property": "concepts", "operator": "=", "value": value });
+              }
               break;
           }
         }
       });
-      ecEditor.getService('assessment').getQuestionItems(data, function(err, resp) {
+      ecEditor.getService('assessment').getQuestionItems($scope.filterData, function(err, resp) {
         if (!err) {
           $scope.questions = resp.data.result.assessment_items;
           $scope.getUnselectedQuestionList();
@@ -156,7 +160,7 @@ angular.module('createquestionapp', [])
 
       ecEditor.dispatchEvent($scope.pluginIdObj.concepts_id + ':init', {
         element: 'queSetConceptsTextBox',
-        selectedConcepts:[], // All composite keys except mediaType
+        selectedConcepts: [], // All composite keys except mediaType
         callback: function(data) {
           $scope.Totalconcepts = data.length;
           $scope.conceptsText = '(' + data.length + ') concepts selected';
