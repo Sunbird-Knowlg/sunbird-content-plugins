@@ -1,8 +1,8 @@
 <script type="text/ng-template" id="QuestionUnitBrowser" ng-controller="QuestionCreationFormController as $ctrl">
   <div class="ui modal questioncreation fullscreen active">
-    <div class="ui grid qcHeader">
+    <!-- <div class="ui grid qcHeader">
       <div class="two wide column questionHeader">
-        <h3>Create question</h3>
+        <h3></h3>
       </div>
       <div class="eight wide column center aligned">
         <div class="ui huge breadcrumb breadcrumbTitle">
@@ -16,6 +16,27 @@
       <div class="two wide column right aligned qcCloseIcon">
         <i class="close link icon" id="ques-cancel-button" ng-click="$ctrl.cancel();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)"></i>
       </div>
+    </div> -->
+    <div class="header" style="padding-right:1em;">
+        <div class="ui two column grid">
+            <div class="row">
+                <div class="two wide column">
+                    <span>Create question</span>
+                </div>
+                <div class="eight wide column center aligned">
+                  <div class="ui huge breadcrumb breadcrumbTitle">
+                    <div ng-class="{activeBreadcumb: $ctrl.templatesScreen == true}" class="section">Choose template</div>
+                    <i class="right chevron icon divider"></i>
+                    <div class="section" ng-class="{activeBreadcumb: $ctrl.createQuestionScreen == true}">Create question</div>
+                    <i class="right chevron icon divider"></i>
+                    <div class="section" ng-class="{activeBreadcumb: $ctrl.metadaFormScreen == true}">Question Details</div>
+                  </div>
+                </div>
+                <div class="two wide column right aligned">
+                    <i class="cursor-pointer close link icon" ng-click="closeThisDialog();$ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeButton'})"></i>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="ui grid">
       <div class="two column row" ng-show="$ctrl.templatesScreen">
@@ -136,7 +157,7 @@
         </div>
         <div class="five wide column previewArea" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen">
           <div class="previewAreaHead">
-            <span class="ui left floated previewHeading">Preview</span>
+            <h3 class="ui left floated previewHeading">Preview</h3>
             <i class="icon undo ui right-floated replyIcon" id="preview-icon" ng-click="$ctrl.validateQuestionCreationForm($event);"></i>
             <div class="qc-show-preview">
               <div class="ui raised child preview-iframe-wrapper" ng-show='$ctrl.showPreview'>

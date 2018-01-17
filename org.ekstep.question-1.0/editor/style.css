@@ -123,14 +123,14 @@
     margin-right: 1rem;
   }
 
-  .ui.grid >.column.questionHeader {
+ /* .ui.grid >.column.questionHeader {
     text-align: center;
     background-color: #fff;
     padding-top: 1.2rem;
     padding-bottom: 1.2rem;
     margin: 0;
-    padding-left: 0;
-  }
+  }*/
+
 
   .QuestionUnitBrowserFullScreen {
     display: block !important;
@@ -185,6 +185,7 @@
     padding-top: 0;
     font-size:1.2rem;
     color: #aaaaaa;
+    font-weight: 500;
   }
 
   #templateCardHeader {
@@ -214,7 +215,6 @@
   .replyIcon {
     float: right;
     display: inline-block;
-    padding: 10px;
   }
 
   .iframe-preview {
@@ -280,15 +280,14 @@
 .ui.grid.qcCustomGrid{
   padding: 0 20px;  
 }
-.ui.grid >.column.qcCloseIcon{
+/*.ui.grid >.column.qcCloseIcon{
   padding: 1.2rem;
 }
 .ui.grid.qcHeader{
   margin: 0;
   border-bottom: 1px solid rgba(34,36,38,.15);
-}
+}*/
 .previewHeading{
   display: inline-block;
-  padding: 10px 0;
   text-align: left;
 }
