@@ -64,14 +64,11 @@
           useLabels: false
         });
     }, 300);
-    /**
-     * OnLoad of the controller
-     * @return {[type]} [description]
-     */
+
     ctrl.init = function() {
 
       if (!ecEditor._.isEmpty(questionData)) {
-        var questionData1 = JSON.parse(questionData.body);
+        var questionData1 = typeof questionData.body == "string" ? JSON.parse(questionData.body) : questionData.body;
         ctrl.assessmentId = questionData.identifier;
         ctrl.questionData = questionData1;
         ctrl.questionData.qcLanguage = questionData1.data.config.metadata.language;
@@ -108,11 +105,6 @@
           "templateId": pluginTemplateId // Template Id of the question unit
         };
       }
-      /**
-       * Invoke conceptselector plugin to get concepts
-       * @param  {[type]}   data) {                           ctrl.Totalconcepts [description]
-       * @return {Function}       [description]
-       */
       ecEditor.dispatchEvent(ctrl.plugins.concepts, {
         element: 'conceptsTextBoxMeta',
         selectedConcepts: ctrl.TotalconceptsData, // All composite keys except mediaType
@@ -158,22 +150,13 @@
         ctrl.selected = parentIndex + '.' + index;
       };
 
-
-      /**
-       * By default always mcq is selected
-       * @type {[type]}
-       */
       ctrl.selectedMenuItemData = ctrl.menuItems[ctrl.defaultActiveMenu].templatesData;
 
       $scope.$on('question:form:valid', ctrl.formValid);
       $scope.$on('question:form:inValid', ctrl.formInValid);
     }
 
-    /**
-     * To create questionset or question content body
-     * @return {object} actual content/theme object which can be used to preview the question/question-set
-     */
-     ctrl.setPreviewData = function() {
+    ctrl.setPreviewData = function() {
       var confData = {};
       var qObj = {
         "config": "{'metadata':{'title':'question title','description':'question description','language':'English'},'max_time':0,'max_score':1,'partial_scoring':false}",
@@ -198,17 +181,10 @@
       ecEditor.dispatchEvent("atpreview:show", confData);
     }
 
-    /**
-     * [cancel description]
-     * @return {[type]} [Close the modal window]
-     */
     ctrl.cancel = function() {
       $scope.closeThisDialog();
     }
-    /**
-     * [back description]
-     * @return {[type]} [description]
-     */
+
     ctrl.back = function() {
       if (ctrl.createQuestionScreen) {
         ctrl.templatesScreen = true;
@@ -220,19 +196,11 @@
         ctrl.metadaFormScreen = false;
       }
     }
-    /**
-     * [switchTab description]
-     * @param  {[type]} id  [description]
-     * @param  {[type]} res [description]
-     * @return {[type]}     [description]
-     */
+
     ctrl.switchTab = function(id, res) {
       ctrl.selectedMenuItemData = ctrl.menuItems[res.category].templatesData;
     }
-    /**
-     * [addCreateQuestionForm description]
-     * @param {[type]} obj [description]
-     */
+
     ctrl.addCreateQuestionForm = function(obj) {
       ctrl.category = obj.category;
       ctrl.templatesScreen = false;
@@ -251,11 +219,8 @@
       var templatePath = ecEditor.resolvePluginResource(obj.pluginID, obj.ver, obj.editor.templateURL);
       ctrl.questionUnitTemplateURL = templatePath + '?BUILDNUMBER';
     }
-    /**
-     * Dynamically created form validation
-     * @return {[boolean]} based on form validation it will return true/false
-     */
-     ctrl.validateQuestionCreationForm = function(event) {
+
+    ctrl.validateQuestionCreationForm = function(event) {
       // ecEditor.dispatchEvent(ctrl.selectedTemplatePluginData.plugin.id + ':val', ctrl.validateQuestionForm, ctrl);
       if(event.target.id=="preview-icon") ctrl.previewCheck = true;
       else ctrl.previewCheck = false;
@@ -286,11 +251,8 @@
       //If identifier present update the question data
       ecEditor.getService('assessment').saveQuestionV3(assessmentId, data, function(err, resp) {
             if (!err) {
-              //ctrl.qFormData.request.assessment_item.metadata.identifier = resp.data.result.node_id;
               var qMetadata = ctrl.qFormData.request.assessment_item.metadata;
               qMetadata.identifier = resp.data.result.node_id;
-              debugger;
-              console.log("Response---",resp);
               ecEditor.dispatchEvent('org.ekstep.questionbank:saveQuestion', qMetadata);
               $scope.closeThisDialog();
             } else {
@@ -299,10 +261,7 @@
             }
           });
     }
-    /**
-     * Collect data from 3 screens
-     * @return {[type]} [description]
-     */
+
     ctrl.sendData = function(isValid) {
       var metadata = {};
       if (isValid && ctrl.Totalconcepts > 0) {
@@ -311,7 +270,7 @@
         var data = {};  // TODO: You have to get this from Q.Unit plugin(getData())
         data.plugin = ctrl.selectedTemplatePluginData.plugin;
         data.data = ctrl.questionCreationFormData; //{"question":ctrl.questionCreationFormData.question.text,"options":ctrl.questionCreationFormData.options};   
-        var metadataObj = {title: ctrl.questionData.questionTitle, language: ctrl.questionData.qcLanguage, qlevel: ctrl.questionData.qcLevel, gradeLevel:ctrl.questionData.qcGrade, concepts:ctrl.selectedConceptsData, description:ctrl.questionData.questionDesc, max_score: ctrl.questionData.questionMaxScore};
+        var metadataObj = {category: ctrl.category, title: ctrl.questionData.questionTitle, language: ctrl.questionData.qcLanguage, qlevel: ctrl.questionData.qcLevel, gradeLevel:ctrl.questionData.qcGrade, concepts:ctrl.selectedConceptsData, description:ctrl.questionData.questionDesc, max_score: ctrl.questionData.questionMaxScore};
         data.config = {"metadata":metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": false};
         data.media = ctrl.questionCreationFormData.media;
         questionFormData.data = data;

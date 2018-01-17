@@ -1,20 +1,23 @@
 <script type="text/ng-template" id="QuestionFormTemplate" ng-controller="QuestionFormController">
   <link rel="stylesheet" type="text/css" href="{{csspath}}" />
   <div class="ui modal qb-question-bank fullscreen active" ng-init="init()">
-    <div class="ui grid qcHeader">
-      <div class="two wide column questionHeader">
-        <h3>Create question</h3>
-      </div>
-      <div class="eight wide column center aligned">
-        <div class="ui huge breadcrumb breadcrumbTitle">
+    <div class="header" style="padding-right:1em;">
+      <div class="ui three column grid">
 
-          <div class="section" ng-class="{activeBreadcumb: isQuestionSetConfig == false}">Pick Questions</div>
-          <i class="right chevron icon divider"></i>
-          <div class="section" ng-class="{activeBreadcumb: isQuestionSetConfig == true}">Configurations</div>
-        </div>
-      </div>
-      <div class="two wide column right aligned qcCloseIcon">
-        <i class="close link icon" id="ques-cancel-button" ng-click="cancel();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)"></i>
+          <div class="column">
+            <span>Question bank</span>
+          </div>
+          <div class="column center aligned">
+            <div class="ui huge breadcrumb breadcrumbTitle qb-breadcrumb">
+              <div class="section" ng-class="{activeBreadcumb: isQuestionSetConfig == false}">Pick Questions</div>
+              <i class="right chevron icon divider"></i>
+              <div class="section" ng-class="{activeBreadcumb: isQuestionSetConfig == true}">Configurations</div>
+            </div>
+          </div>
+          <div class="column right aligned">
+            <i class="cursor-pointer close link icon" ng-click="closeThisDialog();$ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeButton'})"></i>
+          </div>
+
       </div>
     </div>
     <div class="content wizard">
@@ -32,7 +35,7 @@
                 <div class="field">
                   <div class="ui fluid labeled input">
                     <div class="ui label">Language</div>
-                    <select class="ui fluid dropdown search" ng-model="filterObj.language" ng-options="lang for lang in languages" id="language-drop-down" ng-change="searchQuestions();generateTelemetry({type: 'select', subtype: 'dropDown', 'id': 'dropDown'},'language-drop-down')">
+                    <select class="ui fluid dropdown search lableCls" ng-model="filterObj.language" ng-options="lang for lang in languages" id="language-drop-down" ng-change="searchQuestions();generateTelemetry({type: 'select', subtype: 'dropDown', 'id': 'dropDown'},'language-drop-down')">
                       <option value="">
                         All
                       </option>
@@ -42,7 +45,7 @@
                 <div class="field">
                   <div class="ui fluid labeled input">
                     <div class="ui label">Difficulty</div>
-                    <select class="ui fluid dropdown search" ng-model="filterObj.qlevel" ng-options="level for level in difficultyLevels" id="difficulty-drop-down" ng-change="searchQuestions();generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},'difficulty-drop-down')">
+                    <select class="ui fluid dropdown search lableCls" ng-model="filterObj.qlevel" ng-options="level for level in difficultyLevels" id="difficulty-drop-down" ng-change="searchQuestions();generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},'difficulty-drop-down')">
                       <option value="">
                         All
                       </option>
@@ -174,7 +177,7 @@
                 <div class="item select" ng-repeat="selQuestion in selectedQuestions" ng-class="{quesSelector: $index === selectedIndex}">
                   <div class="middle aligned content" ng-click="previewItem(selQuestion, true);">
                     <div class="header">{{selQuestion.title }}</div>
-                    <div class="meta">{{question.language[0]}} | {{ selQuestion.type}} | {{ selQuestion.qlevel }}</div>
+                    <div class="meta">{{selQuestion.language[0]}} | {{ selQuestion.type}} | {{ selQuestion.qlevel }}</div>
                     <div class="description">{{ selQuestion.description }}</div>
                   </div>
                   <div>
@@ -190,37 +193,24 @@
               </div>
             </div>
           </div>
-          <div class="five wide column preview-config">
-            <div class="qb-config-form" ng-show="showConfigForm">
-              <h3>Config Data</h3>
-              <div class="ui form">
-                <div class="field">
-                  <label>Score</label>
-                  <input type="number" ng-model="selQuestionObj.config.max_score" id="max-score" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" ng-change="saveConfig()">
-                </div>
-              </div>
-              <!-- <div class="ui form">
-              <div class="fields">
-                <div class="inline field">
-                  <div class="ui checkbox">
-                    <label>Partial Scoring</label>
-                    <input type="checkbox" name="partialScoring" id="partial-scoring" ng-click="generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)">
+          <div class="five wide column qb-question-container">
+            <div class="preview-and-config">
+              <div class="qb-config-form" ng-show="showConfigForm">
+                <h3>Configuration</h3>
+                <div class="ui form">
+                  <div class="field">
+                    <label>Score</label>
+                    <input type="number" ng-model="selQuestionObj.config.max_score" id="max-score" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" ng-change="saveConfig()">
                   </div>
                 </div>
               </div>
-            </div> -->
-              <!--  <div class="ui submit button" id="save-config" ng-click="saveConfig();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Submit</div> -->
-            </div>
-            <div class="preview-container">
-              <div class="preview-head">Preview</div>
-              <div class="preview-body">
-                <iframe id="itemIframe" class="preview-iframe"></iframe>
+              <div class="preview-container">
+                <h3>Preview</h3>
+                <div class="preview-body">
+                  <iframe id="itemIframe" class="preview-iframe"></iframe>
+                </div>
               </div>
             </div>
-            <!-- <iframe id="itemIframe" class="previewContainer" ng-hide="!itemPreviewLoading && (itemPreviewContent.error || (itemPreviewDisplay == itemPreviewDefaultMessage))"></iframe>
-            <div>
-              <div class="itemIframeMessages" ng-show="!itemPreviewLoading && (itemPreviewContent.error || (itemPreviewDisplay == itemPreviewDefaultMessage))">{{itemPreviewDisplay}}</div>
-            </div> -->
           </div>
         </div>
       </div>
@@ -229,10 +219,9 @@
         <br> Redefine your search filters!
       </div>
     </div>
-    <div class="actions">
+    <div class="actions button-actions">
       <button class="ui blue left floated button" ng-show="!isQuestionSetConfig" id="create-question-button" ng-click="createQuestion();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Create question</button>
       <div class="ui buttons">
-        <!-- <div class="or" ng-show="isQuestionSetConfig"></div> -->
         <button class="ui orange button" id="add-more-ques-button" ng-click="isQuestionSetConfig = false;generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event);closeConfigForm()" ng-show="isQuestionSetConfig" type="button">Add More Questions</button>
         <div class="or" ng-show="isQuestionSetConfig"></div>
         <button class="ui blue button" ng-show="!isQuestionSetConfig" id="next-button" ng-disabled="selectedQuestions.length==0" ng-click="createQuestionSet();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" type="button">Next</button>

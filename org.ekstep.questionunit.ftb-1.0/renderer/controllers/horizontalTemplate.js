@@ -80,10 +80,10 @@ angular.module('FTBRendererApp', []).controller("FTBRendererController", functio
       correctAnswer = true;
     }
     if (correctAnswer) {
-      alert("right ftbAnswer");
+      alert("Right Answere");
 
     } else {
-      alert("wrong ftbAnswer");
+      alert("Wrong Answer");
     }
   }
 });

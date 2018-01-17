@@ -7,7 +7,7 @@ Plugin.extend({
   _type: 'org.ekstep.questionset',
   _isContainer: true,
   _render: true,
-  _questionSetConfig: undefined,
+  _questionSetConfig: {'total_items': 1,'show_feedback' : true,'shuffle_questions' : false},
   _masterQuestionSet: [],
   _renderedQuestions: [],
   _questionStates: {},
@@ -35,21 +35,24 @@ Plugin.extend({
     qsPrefix: 'qs',
   },
   initPlugin: function (data) {
+    var instance = this;
     EkstepRendererAPI.addEventListener('renderer:content:start', this.resetQS, this);
-    EkstepRendererAPI.addEventListener(this._manifest.id + ':saveQuestionState', this.saveQuestionState, this);
+    EkstepRendererAPI.addEventListener(this._manifest.id + ':saveQuestionState', function (event) {
+      var state = event.target;
+      instance.saveQuestionState(instance._currentQuestion.id, state);
+    }, this);
     this.loadTemplateContainer();
-    this._questionSetConfig = JSON.parse(this._data.config);
+    this._questionSetConfig = this._data.config ? JSON.parse(this._data.config) : this._questionSetConfig;
     this.setupNavigation();
+    this._masterQuestionSet = angular.copy(data[this._constants.questionPluginId]);
 
     var savedQSState = this.getQuestionSetState();
     if (savedQSState) {
-      this._masterQuestionSet = savedQSState.masterQuestionSet;
       this._renderedQuestions = savedQSState.renderedQuestions;
       this._currentQuestion = savedQSState.currentQuestion;
       this._currentQuestionState = this.getQuestionState();
       this._questionStates = savedQSState.questionStates;
     } else {
-      this._masterQuestionSet = angular.copy(data[this._constants.questionPluginId]);
       this._currentQuestion = this.getNextQuestion();
     }
     this.saveQuestionSetState();
