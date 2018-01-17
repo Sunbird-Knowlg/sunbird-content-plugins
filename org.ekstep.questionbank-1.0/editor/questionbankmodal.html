@@ -191,37 +191,39 @@
             </div>
           </div>
           <div class="five wide column preview-config">
-            <div class="qb-config-form" ng-show="showConfigForm">
-              <h3>Config Data</h3>
-              <div class="ui form">
-                <div class="field">
-                  <label>Score</label>
-                  <input type="number" ng-model="selQuestionObj.config.max_score" id="max-score" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" ng-change="saveConfig()">
-                </div>
-              </div>
-              <!-- <div class="ui form">
-              <div class="fields">
-                <div class="inline field">
-                  <div class="ui checkbox">
-                    <label>Partial Scoring</label>
-                    <input type="checkbox" name="partialScoring" id="partial-scoring" ng-click="generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)">
+            <div class="preview-and-config">
+              <div class="qb-config-form" ng-show="showConfigForm">
+                <h3>Configuration</h3>
+                <div class="ui form">
+                  <div class="field">
+                    <label>Score</label>
+                    <input type="number" ng-model="selQuestionObj.config.max_score" id="max-score" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" ng-change="saveConfig()">
                   </div>
                 </div>
+                <!-- <div class="ui form">
+                <div class="fields">
+                  <div class="inline field">
+                    <div class="ui checkbox">
+                      <label>Partial Scoring</label>
+                      <input type="checkbox" name="partialScoring" id="partial-scoring" ng-click="generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)">
+                    </div>
+                  </div>
+                </div>
+              </div> -->
+                <!--  <div class="ui submit button" id="save-config" ng-click="saveConfig();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Submit</div> -->
               </div>
-            </div> -->
-              <!--  <div class="ui submit button" id="save-config" ng-click="saveConfig();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Submit</div> -->
-            </div>
-            <div class="preview-container">
-              <div class="preview-head">Preview</div>
-              <div class="preview-body">
-                <iframe id="itemIframe" class="preview-iframe"></iframe>
+              <div class="preview-container">
+                <h3>Preview</h3>
+                <div class="preview-body">
+                  <iframe id="itemIframe" class="preview-iframe"></iframe>
+                </div>
               </div>
+              <!-- <iframe id="itemIframe" class="previewContainer" ng-hide="!itemPreviewLoading && (itemPreviewContent.error || (itemPreviewDisplay == itemPreviewDefaultMessage))"></iframe>
+              <div>
+                <div class="itemIframeMessages" ng-show="!itemPreviewLoading && (itemPreviewContent.error || (itemPreviewDisplay == itemPreviewDefaultMessage))">{{itemPreviewDisplay}}</div>
+              </div> -->
             </div>
-            <!-- <iframe id="itemIframe" class="previewContainer" ng-hide="!itemPreviewLoading && (itemPreviewContent.error || (itemPreviewDisplay == itemPreviewDefaultMessage))"></iframe>
-            <div>
-              <div class="itemIframeMessages" ng-show="!itemPreviewLoading && (itemPreviewContent.error || (itemPreviewDisplay == itemPreviewDefaultMessage))">{{itemPreviewDisplay}}</div>
-            </div> -->
-          </div>
+        </div>
         </div>
       </div>
       <div class="ui center aligned segment" ng-show="(items && !items.length) && isAdvanceOptionOpen">
@@ -229,7 +231,7 @@
         <br> Redefine your search filters!
       </div>
     </div>
-    <div class="actions">
+    <div class="actions button-actions">
       <button class="ui blue left floated button" ng-show="!isQuestionSetConfig" id="create-question-button" ng-click="createQuestion();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Create question</button>
       <div class="ui buttons">
         <!-- <div class="or" ng-show="isQuestionSetConfig"></div> -->
