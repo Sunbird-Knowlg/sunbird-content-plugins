@@ -58,10 +58,8 @@
       },
       "renderer":
       {
-        "templateURL": "renderer/templates/horizontalTemplate.html",
-        "controllerURL": "renderer/controllers/horizontalTemplate.js",
-        "template": "horizontalMCQ",
-        "controller": "controllerName"
+        "template": "renderer/templates/horizontalTemplate.html",
+        "controller": "renderer/controllers/horizontalTemplate.js"
       }
 
     }],

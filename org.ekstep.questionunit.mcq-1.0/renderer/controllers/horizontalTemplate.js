@@ -1,6 +1,6 @@
 // TODO: Controller for horizontalTemplate.html
 'use strict';
-angular.module('MCQRendererApp', []).controller("MCQRendererController", function($scope) {
+angular.module('genie-canvas').controllerProvider.register("MCQRendererController", function($scope, $rootScope) {
   //var ctrl = this;
   $scope.showTemplate = true;
   $scope.question;
@@ -8,11 +8,15 @@ angular.module('MCQRendererApp', []).controller("MCQRendererController", functio
   $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/styles/horizontalTemplate.css");
   $scope.init = function() {
     $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.mcq");
+    $scope.pluginInstance.initPlugin($scope.pluginInstance);
     // To show template/plugin  
     EkstepRendererAPI.addEventListener($scope.pluginInstance._manifest.id + ":show", function(event, question) {
-
       $scope.question = event.target;
       var questionData = JSON.parse($scope.question._currentQuestion.data);
+      var qState = $scope.question._currentQuestionState;
+      if(qState && qState.val) {
+        $scope.selectedIndex = qState.val;
+      }
       $scope.questionObj = questionData;
       $scope.showTemplate = true;
       $scope.safeApply();
@@ -22,35 +26,37 @@ angular.module('MCQRendererApp', []).controller("MCQRendererController", functio
       $scope.safeApply();
     });
     EkstepRendererAPI.addEventListener($scope.pluginInstance._manifest.id + ":evaluate", function(event) {
-      $scope.evaluate();
+      var callback = event.target;
+      $scope.evaluate(callback);
       $scope.safeApply();
     });
-
   }
 
   $scope.init();
-  //clear index when stage is reload
-   $scope.clearSelectIndex=function(){
-     $scope.selectedIndex=undefined;
-   }
+
   $scope.selectedvalue = function(val, index) {
     $scope.selectedIndex = index;
     $scope.selectedAns = val.isAnswerCorrect;
+    var state = {
+        val: $scope.selectedIndex
+    }
+    EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
   }
-  $scope.evaluate = function() {
+  
+  $scope.evaluate = function(callback) {
     var correctAnswer;
     $scope.questionObj.options.forEach(function(option) {
       if (option.isAnswerCorrect === $scope.selectedAns) {
         correctAnswer = option.isAnswerCorrect;
-
       }
     });
-    if (correctAnswer) {
-      alert("right answere");
-
-    } else {
-      alert("wrong");
+    var result = {
+        eval: correctAnswer,
+        state: {
+            val: $scope.selectedIndex
+        }
     }
+    if(_.isFunction(callback)) callback(result);
   }
 
 });
