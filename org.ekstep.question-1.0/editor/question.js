@@ -64,10 +64,7 @@
           useLabels: false
         });
     }, 300);
-    /**
-     * OnLoad of the controller
-     * @return {[type]} [description]
-     */
+
     ctrl.init = function() {
 
       if (!ecEditor._.isEmpty(questionData)) {
@@ -108,11 +105,6 @@
           "templateId": pluginTemplateId // Template Id of the question unit
         };
       }
-      /**
-       * Invoke conceptselector plugin to get concepts
-       * @param  {[type]}   data) {                           ctrl.Totalconcepts [description]
-       * @return {Function}       [description]
-       */
       ecEditor.dispatchEvent(ctrl.plugins.concepts, {
         element: 'conceptsTextBoxMeta',
         selectedConcepts: ctrl.TotalconceptsData, // All composite keys except mediaType
@@ -158,22 +150,13 @@
         ctrl.selected = parentIndex + '.' + index;
       };
 
-
-      /**
-       * By default always mcq is selected
-       * @type {[type]}
-       */
       ctrl.selectedMenuItemData = ctrl.menuItems[ctrl.defaultActiveMenu].templatesData;
 
       $scope.$on('question:form:valid', ctrl.formValid);
       $scope.$on('question:form:inValid', ctrl.formInValid);
     }
 
-    /**
-     * To create questionset or question content body
-     * @return {object} actual content/theme object which can be used to preview the question/question-set
-     */
-     ctrl.setPreviewData = function() {
+    ctrl.setPreviewData = function() {
       var confData = {};
       var qObj = {
         "config": "{'metadata':{'title':'question title','description':'question description','language':'English'},'max_time':0,'max_score':1,'partial_scoring':false}",
@@ -198,17 +181,10 @@
       ecEditor.dispatchEvent("atpreview:show", confData);
     }
 
-    /**
-     * [cancel description]
-     * @return {[type]} [Close the modal window]
-     */
     ctrl.cancel = function() {
       $scope.closeThisDialog();
     }
-    /**
-     * [back description]
-     * @return {[type]} [description]
-     */
+
     ctrl.back = function() {
       if (ctrl.createQuestionScreen) {
         ctrl.templatesScreen = true;
@@ -220,19 +196,11 @@
         ctrl.metadaFormScreen = false;
       }
     }
-    /**
-     * [switchTab description]
-     * @param  {[type]} id  [description]
-     * @param  {[type]} res [description]
-     * @return {[type]}     [description]
-     */
+
     ctrl.switchTab = function(id, res) {
       ctrl.selectedMenuItemData = ctrl.menuItems[res.category].templatesData;
     }
-    /**
-     * [addCreateQuestionForm description]
-     * @param {[type]} obj [description]
-     */
+
     ctrl.addCreateQuestionForm = function(obj) {
       ctrl.category = obj.category;
       ctrl.templatesScreen = false;
@@ -251,11 +219,8 @@
       var templatePath = ecEditor.resolvePluginResource(obj.pluginID, obj.ver, obj.editor.templateURL);
       ctrl.questionUnitTemplateURL = templatePath + '?BUILDNUMBER';
     }
-    /**
-     * Dynamically created form validation
-     * @return {[boolean]} based on form validation it will return true/false
-     */
-     ctrl.validateQuestionCreationForm = function(event) {
+
+    ctrl.validateQuestionCreationForm = function(event) {
       // ecEditor.dispatchEvent(ctrl.selectedTemplatePluginData.plugin.id + ':val', ctrl.validateQuestionForm, ctrl);
       if(event.target.id=="preview-icon") ctrl.previewCheck = true;
       else ctrl.previewCheck = false;
@@ -296,10 +261,7 @@
             }
           });
     }
-    /**
-     * Collect data from 3 screens
-     * @return {[type]} [description]
-     */
+
     ctrl.sendData = function(isValid) {
       var metadata = {};
       if (isValid && ctrl.Totalconcepts > 0) {
