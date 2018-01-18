@@ -16,6 +16,10 @@
             "type": "plugin",
             "plugin": "org.ekstep.questionunit",
             "ver": "1.0"
+        },
+        {
+            "type": "css",
+            "src": "editor/styles/horizontalTemplate.css"
         }],
         "menu": [],
         "init-data":

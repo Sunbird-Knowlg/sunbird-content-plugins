@@ -1,79 +1,5 @@
 <div ng-controller="ftbQuestionFormController">
-  <style type="text/css">
-  .ui.modal {
-    top: 3%;
-  }
-
-  @media only screen and (max-height: 799px) {
-    .ui.modal {
-      top: 1%;
-    }
-  }
-
-  .headBred {
-    margin-top: 1px;
-    margin-left: 10px;
-  }
-
-  input:focus {
-    border-width: 0px 0px 1px 0px !important solid blue;
-    outline: 0;
-    border-color: blue;
-  }
-
-  .textbox {
-    width: 50%;
-    border-width: 0px 0px 1px 0px !important;
-    height: 33px;
-    color: inherit;
-  }
-
-  .cretateQuestion {
-    padding-left: 7%;
-  }
-
-  .questionbox:focus {
-    box-shadow: 1px 1px 1px #9c60f7;
-  }
-
-  input[type="radio"] {
-    -webkit-appearance: checkbox;
-    /* Chrome, Safari, Opera */
-    -moz-appearance: checkbox;
-    /* Firefox */
-    -ms-appearance: checkbox;
-    /* not currently supported */
-  }
-
-  .preview-window .ngdialog-content {
-    background: none !important;
-  }
-
-  .ngdialog.ngdialog-theme-plain .ngdialog-content {
-    background: none !important;
-  }
-
-  .main {
-    position: relative;
-    height: auto;
-  }
-
-  #previewContentIframeWrapper {
-    position: relative;
-    /*width: 900px;*/
-    height: calc( 400px / (16/9));
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 0;
-  }
-
-  #previewContentIframe {
-    height: 100%;
-    width: 100%;
-    border: none;
-  }
-  </style>
-  <div class="ui grid" style="max-height: 75vh;width: 100%;margin-left: 0%;">
+   <div class="ui grid" style="max-height: 75vh;width: 100%;margin-left: 0%;">
     <div class="one column row">
       <div class="column" style="padding-left: 4%;overflow-y: scroll;overflow-x:hidden;">
         <div style="margin-top: 3%;">
@@ -91,13 +17,13 @@
   <div class="ui segments" tabindex="100" style="box-shadow: 1px 1px 1px #9da1a5;margin-bottom: 2%" id="main_{{index}}">
     <div class="ui segment">
       <div class="ui pointing secondary demo menu ">
-        <a class="item active" data-tab="first_{{index}}" id="first_{{index}}"><i class="checkmark icon" ng-show="isQuestion ? editorObj1.question.text.length > 2 : editorObj1.answers[index-1].text.length > 2"></i> Text</a>
-        <!-- <a class="item active" data-tab="first_{{index}}" id="first_{{index}}" ng-show="isAnswer"><i class="checkmark icon" ng-if="editorObj1.answers[index-1].text.length > 2"></i> Text</a> -->
-        <a class="item" data-tab="second_{{index}}" ng-show="isQuestion ? image || editorObj1.question.image.length > 0 : image || editorObj1.answers[index-1].image.length > 0" id="second_{{index}}">
-        <i class="checkmark icon" ng-show="isQuestion ? selectedImageURL.length > 0 || editorObj1.question.image.length > 0 : selectedImageURL.length > 0 || editorObj1.answers[index-1].image.length > 0" ></i> 
+        <a class="item active" data-tab="first_{{index}}" id="first_{{index}}"><i class="checkmark icon" ng-show="isQuestion ? editorObj1.question.text.length > 2 : editorObj1.answer[index-1].text.length > 2"></i> Text</a>
+        <!-- <a class="item active" data-tab="first_{{index}}" id="first_{{index}}" ng-show="isAnswer"><i class="checkmark icon" ng-if="editorObj1.answer[index-1].text.length > 2"></i> Text</a> -->
+        <a class="item" data-tab="second_{{index}}" ng-show="isQuestion ? image || editorObj1.question.image.length > 0 : image || editorObj1.answer[index-1].image.length > 0" id="second_{{index}}">
+        <i class="checkmark icon" ng-show="isQuestion ? selectedImageURL.length > 0 || editorObj1.question.image.length > 0 : selectedImageURL.length > 0 || editorObj1.answer[index-1].image.length > 0" ></i> 
         Image</a>
-        <a class="item" data-tab="third_{{index}}" ng-show="isQuestion ? audio || editorObj1.question.audio.length > 0 : audio || editorObj1.answers[index-1].audio.length > 0" id="third_{{index}}">
-        <i class="checkmark icon" ng-show="isQuestion ? selectedAudioURL.length > 0 || editorObj1.question.audio.length > 0 : selectedAudioURL.length > 0 || editorObj1.answers[index-1].audio.length > 0"></i>
+        <a class="item" data-tab="third_{{index}}" ng-show="isQuestion ? audio || editorObj1.question.audio.length > 0 : audio || editorObj1.answer[index-1].audio.length > 0" id="third_{{index}}">
+        <i class="checkmark icon" ng-show="isQuestion ? selectedAudioURL.length > 0 || editorObj1.question.audio.length > 0 : selectedAudioURL.length > 0 || editorObj1.answer[index-1].audio.length > 0"></i>
         Audio</a>
         <div class="ui dropdown right floated item" style="color: blue;float: right;" ng-show="isOption">
           Customize
@@ -109,7 +35,7 @@
       </div>
       <div class="ui tab active" data-tab="first_{{index}}" id="firstTab_{{index}}">
         <div class="form-group segment" style="text-align: center;margin-bottom: 2%" ng-show="isAnswer">
-          <input type="text" class="textbox" placeholder="Enter answer" ng-model="editorObj1.answers[index-1].text" maxlength="{{maxLen}}" id="answerField_{{index}}">
+          <input type="text" class="textbox" placeholder="Enter answer" ng-model="editorObj1.answer[index-1].text" maxlength="{{maxLen}}" id="answerField_{{index}}">
         </div>
         <div class="form-group segment" ng-show="isQuestion">
           <textarea class="textbox" style="width: 100%;" placeholder="Enter the question" ng-model="editorObj1.question.text" maxlength="{{maxLen}}" id="textQ"></textarea>
@@ -125,10 +51,10 @@
             <img class="mediaupload-image" style="display:block;width: 70%;" src="{{editorObj1.question.image}}" id="imageQ">
           </div>
           <!-- Answer Image -->
-          <div class="two wide column" ng-if="isAnswer && (editorObj1.answers[index-1].image.length > 0 || selectedImageURL.length == 0)">
-            <img class="mediaupload-image" style="display:block;width: 70%;" src="{{editorObj1.answers[index-1].image}}" id="image_{{index}}">
+          <div class="two wide column" ng-if="isAnswer && (editorObj1.answer[index-1].image.length > 0 || selectedImageURL.length == 0)">
+            <img class="mediaupload-image" style="display:block;width: 70%;" src="{{editorObj1.answer[index-1].image}}" id="image_{{index}}">
           </div>
-          <div class="two wide column" ng-if="isAnswer && (editorObj1.answers[index-1].image.length == 0 || selectedImageURL.length > 0)">
+          <div class="two wide column" ng-if="isAnswer && (editorObj1.answer[index-1].image.length == 0 || selectedImageURL.length > 0)">
             <img class="mediaupload-image" style="display:block;width: 70%;" src="{{selectedImageURL}}" id="image_{{index}}">
           </div>
           <div class="one column" style="margin-top: 3%;">
@@ -157,13 +83,13 @@
             <i ng-class="play ? 'play large icon blue' : 'pause large icon blue'" ng-click="playAudio(play)"></i>
           </div>
           <!-- Answer Audio -->
-          <div class="one wide column" ng-if="isAnswer && (editorObj1.answers[index-1].audio.length == 0 || selectedAudioURL.length > 0)">
+          <div class="one wide column" ng-if="isAnswer && (editorObj1.answer[index-1].audio.length == 0 || selectedAudioURL.length > 0)">
             <audio src="{{selectedAudioURL}}" controls="" class="audio-container" style="display: none" id="audio_{{index}}">
             </audio>
             <i ng-class="play ? 'play large icon blue' : 'pause large icon blue'" ng-click="playAudio(play)"></i>
           </div>
-          <div class="one wide column" ng-if="isAnswer && (editorObj1.answers[index-1].audio.length > 0 || selectedAudioURL.length == 0)">
-            <audio src="{{editorObj1.answers[index-1].audio}}" controls="" class="audio-container" style="display: none" id="audio_{{index}}">
+          <div class="one wide column" ng-if="isAnswer && (editorObj1.answer[index-1].audio.length > 0 || selectedAudioURL.length == 0)">
+            <audio src="{{editorObj1.answer[index-1].audio}}" controls="" class="audio-container" style="display: none" id="audio_{{index}}">
             </audio>
             <i ng-class="play ? 'play large icon blue' : 'pause large icon blue'" ng-click="playAudio(play,index-1)"></i>
           </div>
@@ -185,7 +111,7 @@
           <div class="column">
           </div>
           <div class="column" ng-if="isAnswer">
-            <p style="float: right;">{{editorObj1.answers[index-1].text.length ? editorObj1.answers[index-1].text.length : 0;}}/{{maxLen}}</p>
+            <p style="float: right;">{{editorObj1.answer[index-1].text.length ? editorObj1.answer[index-1].text.length : 0;}}/{{maxLen}}</p>
           </div>
           <div class="column" ng-show="isQuestion">
             <p style="float: right;">{{editorObj1.question.text.length ? editorObj1.question.text.length : 0; }}/{{maxLen}}</p>
