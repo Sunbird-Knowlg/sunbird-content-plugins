@@ -30,6 +30,7 @@
   ctrl.selected = 0;
   ctrl.conceptsCheck = false;
   ctrl.questionData = { 'questionMaxScore' : 1};
+  ctrl.backBtn = false;
   ctrl.plugins = { 'concepts': 'org.ekstep.conceptselector:init' };
   ctrl.previewCheck = false;
   ctrl.allMenuItems = [];
@@ -81,6 +82,7 @@
         ctrl.questionData.questionDesc = questionData1.data.config.metadata.description;
         ctrl.questionData.questionMaxScore = questionData1.data.config.metadata.max_score;
         ctrl.conceptsCheck = true;
+        ctrl.backBtn = true;
         $scope.$safeApply();
         $scope.questionEditData = questionData1.data; //Using this variable in question unit plugin for editing question
         ctrl.templatesScreen = false;
