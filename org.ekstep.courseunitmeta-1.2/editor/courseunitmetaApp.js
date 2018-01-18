@@ -183,7 +183,6 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
         $scope.$watch('courseunit', function() {
             if($scope.courseunit){
                 if(/^[a-z\d\-_\s]+$/i.test($scope.courseunit.name) == false) $scope.courseunit.name = $scope.removeSpecialChars($scope.courseunit.name);
-                if(/^[a-z\d\-_\s]+$/i.test($scope.courseunit.description) == false) $scope.courseunit.description = $scope.removeSpecialChars($scope.courseunit.description);
                 if($scope.nodeType === DEFAULT_NODETYPE){
                     $scope.updateNode();
                 }
@@ -192,7 +191,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
     }
     $scope.init();
     $scope.removeSpecialChars = function(text) {
-        var iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?";
+        var iChars = "!@#$%^&*()+=-[]\\\';,/{}|\":<>?";
         for (var i = 0; i < text.length; i++) {
             if (iChars.indexOf(text.charAt(i)) != -1) {
                 console.log("test", i);

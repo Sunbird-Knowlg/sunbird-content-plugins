@@ -223,9 +223,6 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
         $scope.$watch('lesson', function() {
             if($scope.lesson){
                 if(/^[a-z\d\-_\s]+$/i.test($scope.lesson.name) == false) $scope.lesson.name = $scope.removeSpecialChars($scope.lesson.name);
-                if(/^[a-z\d\-_\s]+$/i.test($scope.lesson.description) == false) $scope.lesson.description = $scope.removeSpecialChars($scope.lesson.description);
-                if(/^[a-z\d\-_\s]+$/i.test($scope.lesson.notes) == false) $scope.lesson.notes = $scope.removeSpecialChars($scope.lesson.notes);
-                if(/^[a-z\d\-_\s]+$/i.test($scope.learningObjective) == false) $scope.learningObjective = $scope.removeSpecialChars($scope.learningObjective);
                 if($scope.nodeType === 'LessonPlan'){
                     $scope.updateNode();
                 }
@@ -234,7 +231,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
     }
     $scope.init();
     $scope.removeSpecialChars = function(text) {
-        var iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?";
+        var iChars = "!@#$%^&*()+=-[]\\\';,/{}|\":<>?";
         for (var i = 0; i < text.length; i++) {
             if (iChars.indexOf(text.charAt(i)) != -1) {
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {

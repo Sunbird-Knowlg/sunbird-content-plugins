@@ -178,7 +178,6 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         $scope.$watch('unit', function() {
             if ($scope.unit) {
                 if(/^[a-z\d\-_\s]+$/i.test($scope.unit.name) == false) $scope.unit.name = $scope.removeSpecialChars($scope.unit.name);
-                if(/^[a-z\d\-_\s]+$/i.test($scope.unit.description) == false) $scope.unit.description = $scope.removeSpecialChars($scope.unit.description);
                 if($scope.nodeType === DEFAULT_NODETYPE){
                     activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
                     $scope.nodeId = activeNode.data.id;
@@ -192,7 +191,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     }
     $scope.init();
     $scope.removeSpecialChars = function(text) {
-        var iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?";
+        var iChars = "!@#$%^&*()+=-[]\\\';,/{}|\":<>?";
         for (var i = 0; i < text.length; i++) {
             if (iChars.indexOf(text.charAt(i)) != -1) {
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {

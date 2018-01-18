@@ -155,8 +155,6 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
         $scope.$watch('unit', function() {
             if($scope.unit){
                 if(/^[a-z\d\-_\s]+$/i.test($scope.unit.name) == false) $scope.unit.name = $scope.removeSpecialChars($scope.unit.name);
-                if(/^[a-z\d\-_\s]+$/i.test($scope.unit.description) == false) $scope.unit.description = $scope.removeSpecialChars($scope.unit.description);
-                if(/^[a-z\d\-_\s]+$/i.test($scope.unit.notes) == false) $scope.unit.notes = $scope.removeSpecialChars($scope.unit.notes);
                 if($scope.nodeType === DEFAULT_NODETYPE){
                     $scope.updateNode();
                 }
@@ -165,7 +163,7 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
     }
     $scope.init();
     $scope.removeSpecialChars = function(text) {
-        var iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?";
+        var iChars = "!@#$%^&*()+=-[]\\\';,/{}|\":<>?";
         for (var i = 0; i < text.length; i++) {
             if (iChars.indexOf(text.charAt(i)) != -1) {
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {

@@ -200,7 +200,6 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
         $scope.$watch('course', function() {
             if($scope.course) {
                 if(/^[a-z\d\-_\s]+$/i.test($scope.course.name) == false) $scope.course.name = $scope.removeSpecialChars($scope.course.name);
-                if(/^[a-z\d\-_\s]+$/i.test($scope.course.description) == false) $scope.course.description = $scope.removeSpecialChars($scope.course.description);
                 if ($scope.nodeType === DEFAULT_NODETYPE) {
                     $scope.updateNode();
                 }
@@ -210,7 +209,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
     $scope.init();
     $scope.removeSpecialChars = function(text) {
         console.log("hegrhgagsdsdhgs");
-        var iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?";
+        var iChars = "!@#$%^&*()+=-[]\\\';,/{}|\":<>?";
         for (var i = 0; i < text.length; i++) {
             if (iChars.indexOf(text.charAt(i)) != -1) {
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {

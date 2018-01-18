@@ -285,7 +285,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         $scope.$watch('content', function() {
             if($scope.content) {
                 if(/^[a-z\d\-_\s]+$/i.test($scope.content.name) == false && $scope.editMode) $scope.content.name = $scope.removeSpecialChars($scope.content.name);
-                if(/^[a-z\d\-_\s]+$/i.test($scope.content.description) == false && $scope.editMode) $scope.content.description = $scope.removeSpecialChars($scope.content.description);
                 if ($scope.nodeType === DEFAULT_NODETYPE) {
                     $scope.updateNode();
                 }
@@ -294,7 +293,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     }
     $scope.init();
     $scope.removeSpecialChars = function(text) {
-        var iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?";
+        var iChars = "!@#$%^&*()+=-[]\\\';,/{}|\":<>?";
         for (var i = 0; i < text.length; i++) {
             if (iChars.indexOf(text.charAt(i)) != -1) {
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
