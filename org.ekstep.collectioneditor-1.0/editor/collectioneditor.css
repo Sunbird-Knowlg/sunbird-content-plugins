@@ -251,7 +251,7 @@ ul.fancytree-container{
     font-family: "raleway", sans-serif;
 }
 
-.search-menu-cursor {
+.search-menu-cursor, .preview-play-image {
     cursor: pointer;
 }
 
@@ -395,7 +395,7 @@ i.pig-pink {
     border: none;
 }
 
-#tree-table tr {
+.tree-table-row {
     box-shadow: 0px 1px 5px grey;
     border-radius: 4px;
 }
@@ -407,10 +407,9 @@ i.pig-pink {
 }
 
 .tree-rightHeader {
-    color: #1779ff!important;
     float: right;
     padding-right: 0px!important;
-    font-size: 0.9em!important;
+    font-size: 1em!important;
 }
 
 .delete-node {
@@ -431,9 +430,15 @@ i.pig-pink {
     text-align: center!important;
 }
 
-#tree-table tbody tr td {
+.tree-table-row td {
     background-color: #fcfcfcfa!important;
     border-radius: 4px;
+}
+
+.tree-table-drag {
+    border: 1px dashed #c5c3c3 !important;
+    height: 90px;
+    text-align: center !important;
 }
 
 .content-details {
@@ -496,4 +501,39 @@ i.pig-pink {
         margin: 0 0 0 -190px
     }
 }
+
+.extra > i {
+    width: 3%;
+}
+
+.tree-left-footer, .tree-rightHeader, .tree-right-footer{
+    color: #1779ff!important;
+}
+
+.contentType {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    color: gray;
+}
+
+.tree-left-footer {
+    cursor: pointer;
+}
+
+#contentPreview {
+    background-color: gainsboro;
+}
+
+#contentPreview {
+    height: 405px;
+    width: 720px;
+}
+
+.preview-image {
+    position: absolute;
+    top: 210px;
+    left: 360px;
+}
+
 /* Mini modal css */

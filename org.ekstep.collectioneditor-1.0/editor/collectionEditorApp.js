@@ -9,6 +9,10 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     $scope.nodeFilter = "";
     $scope.expandNodeFlag = true;
     $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.collectioneditor", "1.0", "assets/default.png");
+    $scope.playImage = ecEditor.resolvePluginResource("org.ekstep.collectioneditor", "1.0", "assets/icn_play.png");
+    $scope.collectionData = [];
+    $scope.selectedContent;
+    $scope.isContent = false;
     $scope.getObjectType = function(objectType) {
         return _.find(objectType, function(type) {
             return type == $scope.selectedObjectType
@@ -20,8 +24,86 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         org.ekstep.services.collectionService.filterNode(event.target.value);
     };
 
+    $scope.generateLevel1Content = function(data, child) {
+        $scope.isContent = false;
+        if (data.children) {
+            org.ekstep.collectioneditor._.each(data.children, function(content) {
+                if (!content.isFolder())
+                    $scope.collectionData.push(content);
+            })
+        } else
+        if (child && !child.isFolder())
+            $scope.collectionData.push(child)
+        else if (!data.isFolder()) {
+            $scope.selectedContent = data;
+            $scope.isContent = true;
+        }
+    }
+
+    $scope.setFooter = function(data) {
+        if (data.children) { // when selected node has children
+            org.ekstep.collectioneditor._.each(data.children, function(child) {
+                if (child.isFolder()) {
+                    $scope.nextTextBook = child
+                    return false;
+                }
+            })
+        } else 
+        if ((data.parent.children.length - 1) == data.getIndex()){ // When selected node is last node of parent
+            $scope.nextTextBook = data.parent.getNextSibling();
+        } else {
+            $scope.nextTextBook = data.getNextSibling();
+            $scope.prevTextBook = data.getPrevSibling();
+        }
+        if (data.getPrevSibling()) {
+            if (data.getPrevSibling().hasChildren()) {
+                $scope.prevTextBook = data.getPrevSibling().getLastChild();
+            } else {
+                $scope.prevTextBook = data.getPrevSibling();
+            }
+        } else
+        if(data.parent) {
+            $scope.prevTextBook = data.parent;;
+        }
+    }
+
+    $scope.playContent = function(data) {
+        var previewButton = document.getElementsByClassName('preview-image')[0];
+        previewButton.style.display = 'none';
+        var previewIframe = document.getElementById('previewContentIframe');
+        previewIframe.src = (ecEditor.getConfig('previewURL') || '/content/preview/preview.html') + '?webview=true';
+        previewIframe.onload = function() {
+            org.ekstep.services.contentService.getContent(data.data.metadata.identifier, function(err, content) {
+                var configuration = {};
+                var userData = {};
+                userData.etags = ecEditor.getContext('etags') || [];
+                configuration.context = {
+                    'mode':'edit',
+                    'contentId': ecEditor.getContext('contentId'),
+                    'sid': ecEditor.getContext('sid'),
+                    'uid': ecEditor.getContext('uid'), 
+                    'channel': ecEditor.getContext('channel') || "in.ekstep", 
+                    'pdata': ecEditor.getContext('pdata') || {id: "in.ekstep", pid: "", ver: "1.0"}, 
+                    'app': userData.etags.app || [], 
+                    'dims': userData.etags.dims || [], 
+                    'partner': userData.etags.partner || []
+                }; 
+                if (ecEditor.getConfig('previewConfig')) {
+                    configuration.config = ecEditor.getConfig('previewConfig');
+                } else {
+                    configuration.config = {showEndpage:true};
+                }
+                configuration.metadata = content.metadata; 
+                configuration.data = (content.mimeType == 'application/vnd.ekstep.ecml-archive') ?  content.body : {};
+                previewIframe.contentWindow.initializePreview(configuration);
+            })
+        }
+    }
+
     $scope.setSelectedNode = function(event, data) {
-        $scope.collectionData = data;
+        $scope.collectionData = [];
+        $scope.generateLevel1Content(data);
+        $scope.setFooter(data);
         if (data.data.objectType) {
             $scope.selectedObjectType = data.data.objectType
             $scope.$safeApply();
@@ -123,5 +205,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
 
 
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
+    ecEditor.addEventListener('org.ekstep.collectioneditor:node:added', $scope.generateLevel1Content, $scope);
 }]);
 //# sourceURL=collectiontreeApp.js
