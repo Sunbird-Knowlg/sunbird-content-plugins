@@ -54,28 +54,28 @@
     'templatesData': []
   };
 
+  $('.ui.dropdown')
+  .dropdown({
+    useLabels: false
+  });
+  setTimeout(function() {
     $('.ui.dropdown')
-      .dropdown({
-        useLabels: false
-      });
-    setTimeout(function() {
-      $('.ui.dropdown')
-        .dropdown({
-          useLabels: false
-        });
-    }, 300);
+    .dropdown({
+      useLabels: false
+    });
+  }, 300);
 
-    ctrl.init = function() {
+  ctrl.init = function() {
 
-      if (!ecEditor._.isEmpty(questionData)) {
-        var questionData1 = typeof questionData.body == "string" ? JSON.parse(questionData.body) : questionData.body;
-        ctrl.assessmentId = questionData.identifier;
-        ctrl.questionData = questionData1;
-        ctrl.questionData.qcLanguage = questionData1.data.config.metadata.language;
-        ctrl.questionData.questionTitle = questionData1.data.config.metadata.title;
-        ctrl.questionData.qcLevel = questionData1.data.config.metadata.qlevel;
-        ctrl.questionData.qcGrade = questionData1.data.config.metadata.gradeLevel;
-        ctrl.category = questionData1.data.config.metadata.category;
+    if (!ecEditor._.isEmpty(questionData)) {
+      var questionData1 = typeof questionData.body == "string" ? JSON.parse(questionData.body) : questionData.body;
+      ctrl.assessmentId = questionData.identifier;
+      ctrl.questionData = questionData1;
+      ctrl.questionData.qcLanguage = questionData1.data.config.metadata.language;
+      ctrl.questionData.questionTitle = questionData1.data.config.metadata.title;
+      ctrl.questionData.qcLevel = questionData1.data.config.metadata.qlevel;
+      ctrl.questionData.qcGrade = questionData1.data.config.metadata.gradeLevel;
+      ctrl.category = questionData1.data.config.metadata.category;
         ctrl.Totalconcepts = questionData1.data.config.metadata.concepts.length; //_.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
         ctrl.TotalconceptsData = questionData1.data.config.metadata.concepts;
         ctrl.questionData.questionDesc = questionData1.data.config.metadata.description;
@@ -174,7 +174,7 @@
 
       questions.push(qObj);
       data["org.ekstep.questionset"]['org.ekstep.question'] = questions;
-      confData={"contentBody":{}, "parentElement":true, "element":"#iframeArea"};
+      confData = { "contentBody": {}, "parentElement": true, "element": "#iframeArea" };
       document.getElementById("iframeArea").contentDocument.location.reload(true);
       var questionSetInstance = ecEditor.instantiatePlugin('org.ekstep.questionset.preview');
       confData.contentBody = questionSetInstance.getQuestionPreviwContent(data['org.ekstep.questionset']);
@@ -222,17 +222,16 @@
 
     ctrl.validateQuestionCreationForm = function(event) {
       // ecEditor.dispatchEvent(ctrl.selectedTemplatePluginData.plugin.id + ':val', ctrl.validateQuestionForm, ctrl);
-      if(event.target.id=="preview-icon") ctrl.previewCheck = true;
+      if (event.target.id == "preview-icon") ctrl.previewCheck = true;
       else ctrl.previewCheck = false;
       $scope.$broadcast('question:form:val');
     }
 
     ctrl.formValid = function(event, data) {
       ctrl.questionCreationFormData = data;
-      if(!ctrl.previewCheck){
+      if (!ctrl.previewCheck) {
         ctrl.formIsValid();
-      }
-      else{
+      } else {
         ctrl.setPreviewData();
         ctrl.previewCheck = false;
       }
@@ -247,31 +246,31 @@
       ctrl.createQuestionScreen = false;
       ctrl.metadaFormScreen = true;
     }
-    ctrl.saveQuestion = function(assessmentId, data){
+    ctrl.saveQuestion = function(assessmentId, data) {
       //If identifier present update the question data
       ecEditor.getService('assessment').saveQuestionV3(assessmentId, data, function(err, resp) {
-            if (!err) {
-              var qMetadata = ctrl.qFormData.request.assessment_item.metadata;
-              qMetadata.identifier = resp.data.result.node_id;
-              ecEditor.dispatchEvent('org.ekstep.questionbank:saveQuestion', qMetadata);
-              $scope.closeThisDialog();
-            } else {
-              //Alert with message
-              return;
-            }
-          });
+        if (!err) {
+          var qMetadata = ctrl.qFormData.request.assessment_item.metadata;
+          qMetadata.identifier = resp.data.result.node_id;
+          ecEditor.dispatchEvent('org.ekstep.questionbank:saveQuestion', qMetadata);
+          $scope.closeThisDialog();
+        } else {
+          //Alert with message
+          return;
+        }
+      });
     }
 
     ctrl.sendData = function(isValid) {
       var metadata = {};
       if (isValid && ctrl.Totalconcepts > 0) {
         var questionFormData = {};
-        
-        var data = {};  // TODO: You have to get this from Q.Unit plugin(getData())
+
+        var data = {}; // TODO: You have to get this from Q.Unit plugin(getData())
         data.plugin = ctrl.selectedTemplatePluginData.plugin;
         data.data = ctrl.questionCreationFormData; //{"question":ctrl.questionCreationFormData.question.text,"options":ctrl.questionCreationFormData.options};   
-        var metadataObj = {category: ctrl.category, title: ctrl.questionData.questionTitle, language: ctrl.questionData.qcLanguage, qlevel: ctrl.questionData.qcLevel, gradeLevel:ctrl.questionData.qcGrade, concepts:ctrl.selectedConceptsData, description:ctrl.questionData.questionDesc, max_score: ctrl.questionData.questionMaxScore};
-        data.config = {"metadata":metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": false};
+        var metadataObj = { category: ctrl.category, title: ctrl.questionData.questionTitle, language: ctrl.questionData.qcLanguage, qlevel: ctrl.questionData.qcLevel, gradeLevel: ctrl.questionData.qcGrade, concepts: ctrl.selectedConceptsData, description: ctrl.questionData.questionDesc, max_score: ctrl.questionData.questionMaxScore };
+        data.config = { "metadata": metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": false };
         data.media = ctrl.questionCreationFormData.media;
         questionFormData.data = data;
         var bodyData = '';
@@ -289,24 +288,28 @@
           "category": ctrl.category,
           "description": ctrl.questionData.questionDesc,
           "createdBy": window.context.user.id,
-          "channel": "in.ekstep",    //default value
-          "type": ctrl.category,  // backward compatibility
-          "template": "NA",       // backward compatibility
-          "template_id": "NA",    // backward compatibility
-          "options": [{           // backward compatibility
-            "answer": true,
-            "value": {
-              "type": "text",
-              "asset": "1"
-            }
-          }],
+          "channel": "in.ekstep", //default value
+          "type": ctrl.category, // backward compatibility
+          "template": "NA", // backward compatibility
+          "template_id": "NA", // backward compatibility
         }
-
+        var dynamicOptions = [{ "answer": true, "value": { "type": "text", "asset": "1" } }];
+        switch (ctrl.category) {
+          case 'mcq':
+          metadata.options = dynamicOptions;
+          break;
+          case 'ftb':
+          metadata.answer = dynamicOptions;
+          break;
+          default:
+          metadata.options = dynamicOptions;
+          break;
+        }
         ctrl.qFormData = {
           "request": {
             "assessment_item": {
               "objectType": "AssessmentItem",
-              "metadata" : metadata
+              "metadata": metadata
             }
           }
         };
