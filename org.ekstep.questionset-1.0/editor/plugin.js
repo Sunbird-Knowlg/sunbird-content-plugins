@@ -57,7 +57,7 @@ org.ekstep.contenteditor.basePlugin.extend({
       preload: true
     });
     fabric.Image.fromURL(stageImage, function(img) {
-      var count = instance.config.total_items + '/' + instance._questions.length;
+      var count = instance.config.total_items + '/' + instance.data.length;
       var quizDetails = instance.getPropsForEditor(instance.config.title, count, instance.config.max_score);
       instance.editorObj = new fabric.Group([img, quizDetails]);
       //instance.editorObj = img;
@@ -69,9 +69,9 @@ org.ekstep.contenteditor.basePlugin.extend({
   getPropsForEditor: function(qTittle, qCount, maxscore) {
     /* Display the all properties(title,count and maxscore) on the editor*/
     var instance = this;
-    qTittle = new fabric.Text(qTittle.toUpperCase(), { fontSize: 15, fill: 'black', textAlign: 'center', top: 32, left: 105 });
-    qCount = new fabric.Text(qCount + "  Questions,", { fontSize: 12, fill: 'black', top: 49, left: 105 });
-    maxscore = new fabric.Text(maxscore + " Marks", { fontSize: 12, fill: 'black', top: 49, left: 190, });
+    qTittle = new fabric.Text(qTittle.toUpperCase(), { fontSize: 15, fill: 'black', textAlign: 'center', top: 33, left: 105 });
+    qCount = new fabric.Text(qCount + "  Questions,", { fontSize: 12, fill: 'black', top: 50, left: 105 });
+    maxscore = new fabric.Text(maxscore + " Marks", { fontSize: 12, fill: 'black', top: 50, left: 190, });
     fabricGroup = new fabric.Group([qTittle, qCount, maxscore]);
     return fabricGroup;
   },
@@ -116,7 +116,7 @@ org.ekstep.contenteditor.basePlugin.extend({
 
         // Instantiate the question unit plugin to add it to <plugin-manifest>
         ecEditor.instantiatePlugin(questionBody.data.plugin.id, {});
-        delete questionSetECML.data;
+        // delete questionSetECML.data;
         questionSetECML[instance._questionPlugin].push(questionECML);
       });
     }
