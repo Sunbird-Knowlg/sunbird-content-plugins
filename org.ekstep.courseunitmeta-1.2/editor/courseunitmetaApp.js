@@ -182,7 +182,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
      $scope.init = function() {
         $scope.$watch('courseunit', function() {
             if($scope.courseunit){
-                if(/^[a-z\d\-_\s]+$/i.test($scope.courseunit.name) == false) $scope.courseunit.name = $scope.removeSpecialChars($scope.courseunit.name);
+                if(/^[a-z\d\-_\s]+$/i.test($scope.courseunit.name) == false) $scope.courseunit.name = org.ekstep.services.collectionService.removeSpecialChars($scope.courseunit.name);
                 if($scope.nodeType === DEFAULT_NODETYPE){
                     $scope.updateNode();
                 }
@@ -190,20 +190,5 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
         }, true);
     }
     $scope.init();
-    $scope.removeSpecialChars = function(text) {
-        var iChars = "!@#$%^&*()+=-[]\\\';,/{}|\":<>?";
-        for (var i = 0; i < text.length; i++) {
-            if (iChars.indexOf(text.charAt(i)) != -1) {
-                console.log("test", i);
-                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                    message: "Special characters are not allowed",
-                    position: 'topCenter',
-                    icon: 'fa fa-warning'
-                });
-                text = text.replace(/[^a-zA-Z ]/g, "")
-            }
-        }
-        return text;
-    }
 }]);
 //# sourceURL=courseunitmetaApp.js

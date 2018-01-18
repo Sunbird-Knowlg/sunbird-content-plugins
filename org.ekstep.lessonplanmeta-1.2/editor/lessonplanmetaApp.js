@@ -222,7 +222,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
     $scope.init = function() {
         $scope.$watch('lesson', function() {
             if($scope.lesson){
-                if(/^[a-z\d\-_\s]+$/i.test($scope.lesson.name) == false) $scope.lesson.name = $scope.removeSpecialChars($scope.lesson.name);
+                if(/^[a-z\d\-_\s]+$/i.test($scope.lesson.name) == false) $scope.lesson.name = org.ekstep.services.collectionService.removeSpecialChars($scope.lesson.name);
                 if($scope.nodeType === 'LessonPlan'){
                     $scope.updateNode();
                 }
@@ -230,19 +230,5 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
         }, true);
     }
     $scope.init();
-    $scope.removeSpecialChars = function(text) {
-        var iChars = "!@#$%^&*()+=-[]\\\';,/{}|\":<>?";
-        for (var i = 0; i < text.length; i++) {
-            if (iChars.indexOf(text.charAt(i)) != -1) {
-                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                    message: "Special characters are not allowed",
-                    position: 'topCenter',
-                    icon: 'fa fa-warning'
-                });
-                text = text.replace(/[^a-zA-Z ]/g, "")
-            }
-        }
-        return text;
-    }
 }]);
 //# sourceURL=lessonplanmetaApp.js
