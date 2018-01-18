@@ -38,7 +38,7 @@
             </div>
         </div>
     </div>
-    <div class="ui grid">
+    <div class="ui grid custom-grid">
       <div class="two column row" ng-show="$ctrl.templatesScreen">
         <!-- <div class="three wide column">
           <div class="ui secondary vertical menu" id="qcSideMenu">
@@ -50,7 +50,7 @@
           </div>
         </div> -->
         <div class="twelve wide column" id="templatsCards">
-          <div class="ui stackable five column grid qcCustomGrid">
+          <!-- <div class="ui stackable five column grid qcCustomGrid">
             <div class="column" ng-repeat="(key, value) in $ctrl.allMenuItems">
               <div class="ui card qcTemplateCard">
                 <div class="content" id="templateCardHeader">
@@ -64,6 +64,24 @@
                       <i class="plus icon"></i>
                     </div>
                   </span>
+                </div>
+              </div>
+            </div>
+          </div> -->
+          <div class="ui five stackable cards">
+            <div class="card card-hover-effect" ng-repeat="(key, value) in $ctrl.allMenuItems">
+              <div class="image">
+                <img src="{{value.thumbnail1}}"/>
+              </div>
+              <div class="content">
+                <a class="header">{{value.title}}</a>
+                <div class="meta">
+                  <span>{{value.data.name}}</span>
+                </div>
+              </div>
+              <div class="extra content">
+                <div class="right floated">
+                  <div class="ui small primary button" ng-click="$ctrl.addCreateQuestionForm(value)">Select</div>
                 </div>
               </div>
             </div>
@@ -135,20 +153,20 @@
                     <small ng-show="$ctrl.qcconcepterr" class="qcError">Select concept</small>
                   </div>
                   <div class="column">
-                    <label class="qcMetadateFormLbl" data-original-title="Question desc">
-                      Question description <span class="star">&nbsp;*</span>
-                    </label>
-                    <textarea type="text" class="form-control" id="questionTitle" placeholder="Question description" name="questionDesc" ng-model="$ctrl.questionData.questionDesc" required></textarea>
-                    <small ng-show="questionUnitBrowserForm.questionDesc.$invalid && !questionUnitBrowserForm.questionDesc.$pristine" class="qcError">Enter question description.</small>
-                  </div>
-                </div>
-                <div class="ui grid two column row">
-                  <div class="two wide column">
                     <label class="qcMetadateFormLbl" data-original-title="Question max score">
                       Max score <span class="star">&nbsp;*</span>
                     </label>
                     <input type="number" class="form-control" id="questionTitle" min="1" max="12" name="questionMaxScore" ng-model="$ctrl.questionData.questionMaxScore" required/>
                     <small ng-show="questionUnitBrowserForm.questionMaxScore.$invalid && !questionUnitBrowserForm.questionMaxScore.$pristine" class="qcError">Enter max score.</small>
+                  </div>
+                </div>
+                <div class="ui grid two column row">
+                  <div class="twelve wide column">
+                    <label class="qcMetadateFormLbl" data-original-title="Question desc">
+                      Question description <span class="star">&nbsp;*</span>
+                    </label>
+                    <textarea type="text" class="form-control" id="questionTitle" placeholder="Question description" name="questionDesc" ng-model="$ctrl.questionData.questionDesc" required></textarea>
+                    <small ng-show="questionUnitBrowserForm.questionDesc.$invalid && !questionUnitBrowserForm.questionDesc.$pristine" class="qcError">Enter question description.</small>
                   </div>
                 </div>
               </form>

@@ -29,7 +29,7 @@
   ctrl.level = ['Easy', 'Medium', 'Difficult'];
   ctrl.selected = 0;
   ctrl.conceptsCheck = false;
-  ctrl.questionData = {};
+  ctrl.questionData = { 'questionMaxScore' : 1};
   ctrl.plugins = { 'concepts': 'org.ekstep.conceptselector:init' };
   ctrl.previewCheck = false;
   ctrl.allMenuItems = [];
@@ -137,7 +137,9 @@
               v.ver = ver;
               var thumbnail = ecEditor.resolvePluginResource(pluginID, ver, v.thumbnail); //Get image source and update in template object
               v.thumbnail1 = thumbnail;
-              ctrl.allMenuItems.push(v);
+              var allMenus = v;
+              allMenus.data = ctrl.menuItems[v.category].data;
+              ctrl.allMenuItems.push(allMenus);
               if (ctrl.menuItems.hasOwnProperty(v.category)) {
                 ctrl.menuItems[v.category].templatesData.push(v);
               } else {
