@@ -294,8 +294,15 @@
   margin: 0;
 }
 .card-hover-effect:hover{
-  cursor: pointer;
   z-index: 5;
   -webkit-transform: translateY(-3px);
   transform: translateY(-3px);
+}
+.ui.button.qc-next-button{
+  border-top-right-radius: .28571429rem;
+  border-bottom-right-radius: .28571429rem;
+}
+.ui.cards>.card>.content>a.header.card-header:hover{
+  cursor: default;
+  color: rgba(0,0,0,.85);
 }

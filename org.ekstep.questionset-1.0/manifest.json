@@ -37,10 +37,11 @@
       }
     }],
     "configManifest": [{
-        "propertyName": "questionbankbrowser",
+        "PropertyName": "btn_edit",
         "title": "Edit question set",
         "description": "Choose a question from the question bank",
-        "dataType": "browser",
+        "dataType": "button",
+        "valueType": "text",
         "required": true,
         "onclick": {
           "id": "org.ekstep.questionset:showPopup",
