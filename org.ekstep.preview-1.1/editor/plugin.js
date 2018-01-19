@@ -69,7 +69,8 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this,itemIframe=null;
         var contentService = ecEditor.getService('content');
         var defaultPreviewConfig = {
-            showEndpage: true
+          "repos": ecEditor.getConfig('pluginRepo'),   // plugins repo path where all the plugins are pushed s3 or absolute folder path
+          showEndpage: true
         };
         var meta = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId'));
         var modalController = function($scope) {
@@ -109,10 +110,10 @@ org.ekstep.contenteditor.basePlugin.extend({
             });
         };
         if (data.parentElement) {
-            var config = {
+            var config = _.extend(defaultPreviewConfig, {
                 "showStartPage": false,
                 "showEndPage": false
-            },
+            });
             itemIframe = ecEditor.jQuery(data.element)[0];
             if (itemIframe.src == ""){
                 itemIframe.src = instance.previewURL;              
@@ -139,7 +140,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 if (ecEditor.getConfig('previewConfig')) {
                     configuration.config = ecEditor.getConfig('previewConfig');
                 } else {
-                    configuration.config = defaultPreviewConfig;
+                    configuration.config = config;
                 }
                 configuration.metadata = meta;
                 configuration.data = (meta.mimeType == 'application/vnd.ekstep.ecml-archive') ? instance.contentBody : {};

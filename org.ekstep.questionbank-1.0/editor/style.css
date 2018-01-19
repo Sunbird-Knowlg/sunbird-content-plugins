@@ -116,6 +116,11 @@
   overflow-y: scroll;
 }
 
+.list-items{
+padding-left: 1% !important;
+padding-right: : 1% !important;
+}
+
 .qb-question-list-container {
   max-height: 57vh;
   overflow-y: scroll;
@@ -171,16 +176,11 @@
   border-radius: .28571429rem !important;
 }
 
-/* .qb-question-action{
-  padding : 2%;
-  display: flex;
-  float: left;
+ .qb-question-action{
+  padding-top:  : 2%;
+  padding-right:  : 2%;
 }
 
-.qb-question-action > span > i, .qb-sel-question-action > span > i{
+.qb-question-action > span > i{
   font-size: 20px;
 }
-
-.qb-sel-question-action{
-  padding : 2%;
-} */
