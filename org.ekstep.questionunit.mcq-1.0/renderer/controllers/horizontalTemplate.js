@@ -12,7 +12,8 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     // To show template/plugin  
     EkstepRendererAPI.addEventListener($scope.pluginInstance._manifest.id + ":show", function(event, question) {
       $scope.question = event.target;
-      var questionData = JSON.parse($scope.question._currentQuestion.data);
+      var qData=$scope.question._currentQuestion.data.__cdata||$scope.question._currentQuestion.data;
+      var questionData = JSON.parse(qData);
       var qState = $scope.question._currentQuestionState;
       if(qState && qState.val) {
         $scope.selectedIndex = qState.val;

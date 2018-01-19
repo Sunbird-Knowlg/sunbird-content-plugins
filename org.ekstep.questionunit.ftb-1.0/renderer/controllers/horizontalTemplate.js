@@ -17,7 +17,8 @@ angular.module('FTBRendererApp', []).controller("FTBRendererController", functio
     EkstepRendererAPI.addEventListener($scope.pluginInstance._manifest.id + ":show", function(event, question) {
       $scope.question = event.target;
       $scope.ftbAnswer="";
-      var questionData = JSON.parse($scope.question._currentQuestion.data);
+     var qData=$scope.question._currentQuestion.data.__cdata||$scope.question._currentQuestion.data;
+      var questionData = JSON.parse(qData);
       $scope.questionObj = questionData;
       $scope.showTemplate = true;
       $scope.safeApply();
@@ -37,7 +38,8 @@ angular.module('FTBRendererApp', []).controller("FTBRendererController", functio
      * @memberof org.ekstep.questionunit.ftb
      */
     EkstepRendererAPI.addEventListener($scope.pluginInstance._manifest.id + ":evaluate", function(event) {
-      $scope.evaluate();
+      var callback = event.target;
+      $scope.evaluate(callback);
       $scope.safeApply();
     });
 
@@ -70,21 +72,22 @@ angular.module('FTBRendererApp', []).controller("FTBRendererController", functio
      * @memberof org.ekstep.questionunit.ftb
      */
   $scope.$watch("ftbAnswer", function(newValue, oldValue){
-        if (newValue.length > 25){
+        if (typeof newValue!="undefined" &&newValue.length > 25){
             $scope.ftbAnswer = oldValue;
         }
     });
-  $scope.evaluate = function() {
+  $scope.evaluate = function(callback) {
     var correctAnswer = false;
-    if ($scope.questionObj.answers[0].text.toLowerCase().replace(/ /g, '') === $scope.ftbAnswer.toLowerCase().replace(/ /g, '')) {
+    if ($scope.questionObj.answer[0].text.toLowerCase().replace(/ /g, '') === $scope.ftbAnswer.toLowerCase().replace(/ /g, '')) {
       correctAnswer = true;
     }
-    if (correctAnswer) {
-      alert("Right Answere");
-
-    } else {
-      alert("Wrong Answer");
+    var result = {
+        eval: correctAnswer,
+        state: {
+            val: $scope.ftbAnswer
+        }
     }
+    if(_.isFunction(callback)) callback(result);
   }
 });
 //# sourceURL=questionunitFtbRenderereTmpPlugin.js
