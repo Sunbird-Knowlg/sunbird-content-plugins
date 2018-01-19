@@ -140,18 +140,18 @@
           <div class="seven wide column qb-question-container" ng-show="!isQuestionSetConfig">
             <div class="row qb-question-list-container">
               <div class="ui large divided items">
-                <div class="item select" ng-repeat="question in questions">
+                <div class="item select list-items" ng-repeat="question in questions">
                   <div class="middle aligned content" ng-click="previewItem(question, true);">
                     <div class="header">{{ question.title }}</div>
                     <div class="meta">{{question.language[0]}} | {{ question.type}} | {{ question.qlevel }}</div>
                     <div class="description">{{ question.description }}</div>
                   </div>
                   <div class="qb-question-action">
-                    <!--    <span class="ui checkbox" ng-class="question.isSelected ? 'checked' : '' " >
-                 <input type="checkbox"  ng-checked="question.isSelected ? 'checked' : ''" name="check" ng-click="selectQuestion(question);generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)">
-                 <label></label>
-               </span> -->
-                    <input type="checkbox" checked="" name="check" ng-model="question.isSelected" id="select-question" ng-click="selectQuestion(question);generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)">
+                    <div class="ui checkbox" ng-class="question.isSelected ? 'checked' : '' " >
+                                    <input type="checkbox"  ng-checked="question.isSelected ? 'checked' : ''" name="check" ng-click="selectQuestion(question);generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)">
+                                    <label></label>
+                                  </div>
+                  <!--   <input type="checkbox" checked="" name="check" ng-model="question.isSelected" id="select-question" ng-click="selectQuestion(question);generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)"> -->
                     <span><i class="edit icon" id="edit-question-config" ng-show="currentUserId == question.createdBy" ng-click="editQuestion(question);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)"></i></span>
                   </div>
                 </div>
@@ -165,13 +165,13 @@
           <div class="seven wide column column qb-question-container" ng-show="isQuestionSetConfig">
             <div class="column qb-list-container" ng-show="isQuestionSetConfig">
               <div class="ui large divided items">
-                <div class="item select" ng-repeat="selQuestion in selectedQuestions" ng-class="{quesSelector: $index === selectedIndex}">
+                <div class="item select list-items" ng-repeat="selQuestion in selectedQuestions" ng-class="{quesSelector: $index === selectedIndex}">
                   <div class="middle aligned content" ng-click="previewItem(selQuestion, true);editConfig(selQuestion, $index);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">
                     <div class="header">{{selQuestion.title }}</div>
                     <div class="meta">{{selQuestion.language[0]}} | {{ selQuestion.type}} | {{ selQuestion.qlevel }}</div>
                     <div class="description">{{ selQuestion.description }}</div>
                   </div>
-                  <div class="qb-sel-question-action">
+                  <div class="qb-question-action">
                     <span ng-show="currentUserId == selQuestion.createdBy"><i class="edit icon" id="edit-question-config" ng-click="editQuestion(selQuestion);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)"></i></span>
                     <!--  </div>
                  <div> -->
