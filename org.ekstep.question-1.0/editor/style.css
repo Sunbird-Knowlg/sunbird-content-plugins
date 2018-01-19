@@ -11,8 +11,7 @@
 .md{
   margin-right: 1%
 }
-  .templateCard {
-    /*width: 33.333%;*/
+  /*.templateCard {
     height: auto;
     float: left;
     padding: 0;
@@ -59,7 +58,7 @@
     opacity: 0;
     background-color: #e6e6e6;
     margin-top: -15%;
-  }
+  }*/
 
   .item:hover {
     color: #1e70bf;
@@ -188,13 +187,13 @@
     font-weight: 500;
   }
 
-  #templateCardHeader {
+  /*#templateCardHeader {
     background-color: #41474f;
-  }
+  */}
 
-  #templateCardHeaderText {
+  /*#templateCardHeaderText {
     color: white;
-  }
+  }*/
 
   .second {
     margin-top: 1%;
@@ -246,7 +245,7 @@
   left: 0 !important;
   height: 100vh;
   width: 100% !important;
-  margin: 0 auto;
+  margin: 0;
   border-radius: 0;
   display: flex;
   -webkit-flex-flow: column;
@@ -274,12 +273,12 @@
   text-align: center;
   padding: 2rem;
 }
-.ui.card.qcTemplateCard{
+/*.ui.card.qcTemplateCard{
   margin: auto;
-}
-.ui.grid.qcCustomGrid{
+}*/
+/*.ui.grid.qcCustomGrid{
   padding: 0 20px;  
-}
+}*/
 /*.ui.grid >.column.qcCloseIcon{
   padding: 1.2rem;
 }
@@ -290,4 +289,13 @@
 .previewHeading{
   display: inline-block;
   text-align: left;
+}
+.ui.grid.custom-grid{
+  margin: 0;
+}
+.card-hover-effect:hover{
+  cursor: pointer;
+  z-index: 5;
+  -webkit-transform: translateY(-3px);
+  transform: translateY(-3px);
 }
