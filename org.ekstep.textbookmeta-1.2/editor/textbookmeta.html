@@ -27,7 +27,7 @@
                 <div class="two fields">
                     <div class="field">
                         <label for="board">Curriculum</label>
-                        <select id="textbookmeta-board" class="ui search dropdown" ng-model="textbook.board" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'board'})">
+                        <select id="textbookmeta-board" class="ui search dropdown placeholder-padding" ng-model="textbook.board" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'board'})">
                             <option value="">Select</option>
                             <option value="{{board}}" ng-repeat="board in boardList">{{board}}</option>
                         </select>
@@ -43,14 +43,14 @@
                 <div class="two fields">
                     <div class="field">
                         <label for="subject">Subject</label>
-                        <select id="textbookmeta-subject" class="ui search dropdown" ng-model="textbook.subject" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'subject'})">
+                        <select id="textbookmeta-subject" class="ui search dropdown placeholder-padding" ng-model="textbook.subject" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'subject'})">
                             <option value="">Select</option>
                             <option value="{{subject}}" ng-repeat="subject in subjectList">{{subject}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="medium">Medium</label>
-                        <select id="textbookmeta-medium" class="ui search dropdown" ng-model="textbook.medium" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'medium'})">
+                        <select id="textbookmeta-medium" class="ui search dropdown placeholder-padding" ng-model="textbook.medium" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'medium'})">
                             <option value="">Select</option>
                             <option value="{{medium}}" ng-repeat="medium in languageList">{{medium}}</option>
                         </select>
@@ -84,7 +84,7 @@
                 <div class="fields">
                     <div class="field">
                         <label for="audience">Year</label>
-                        <select id="textbookmeta-year" class="ui search dropdown" ng-model="textbook.year" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'year'})">
+                        <select id="textbookmeta-year" class="ui search dropdown placeholder-padding" ng-model="textbook.year" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'year'})">
                             <option value="">Year</option>
                             <option value="{{year}}" ng-repeat="year in years">{{year}}</option>
                         </select>
