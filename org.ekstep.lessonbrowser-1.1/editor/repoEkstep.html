@@ -1,13 +1,11 @@
-<div ng-app="org.ekstep.contentprovider" ng-controller="contentproviderekstepController as $ctrl" id="partials/repoEkstep.html"
-    style="" class="resourcesContent">
-    <div class="ui grid full-height resourcesContent" style=''>
+<div ng-app="org.ekstep.contentprovider" ng-controller="contentproviderekstepController as $ctrl" id="partials/repoEkstep.html" class="resourcesContent">
+    <div class="ui grid full-height resourcesContent">
         <div class="row" ng-if="$ctrl.err">
             <div class="column">
                 {{ $ctrl.err }}
             </div>
         </div>
         <div class="row two column filters-and-lessons-wrapper" ng-if="!$ctrl.err">
-            <!-- Filters start -->
             <div class="four wide column">
                 <div class="filters-wrapper">
                     <div class="row filterSidebar">
@@ -78,8 +76,6 @@
                 </div>
 
             </div>
-            <!-- Filters end -->
-            <!-- Result start -->
             <div class="eight wide column" style="padding-left:0; padding-right:0;">
                 <div class="row ui" id="resourceHeading">
                     <p class="padding-top-3px" style="display:inline;font-weight: bold;">
@@ -89,22 +85,16 @@
                 <div class="ui bottom attached grid source-result-container">
                     <div class="row three column lesson-row" ng-repeat="lesson in $ctrl.res.content">
                         <div class="one wide column lesson-image-box" style="margin-top: 4%;">
-                            <div class="ui checkbox  resourceContentImage">
-                                <input type="checkbox" name="lessons[]" ng-click="toggleSelectionLesson(lesson)">
-                                <label>
-                                    <!-- <img class="ui middle aligned tiny right floated image resourceContentImageAllign" src="{{lesson.appIcon}}" ng-if="lesson.appIcon">
-                                    <img class="ui middle aligned tiny right floated image resourceContentImageAllign" src="http://via.placeholder.com/80x80" ng-if="!lesson.appIcon"> -->
-                                </label>
+                            <div class="ui checkbox">
+                                    <input type="checkbox" name="lessons[]" ng-click="toggleSelectionLesson(lesson)">
+                                    <label></label>
                             </div>
                         </div>
                         <div class="two wide column lesson-image-box" style="padding-top: 3px;">
                             <div class="ui checkbox  resourceContentImage">
-                                <!-- <input type="checkbox" name="lessons[]" ng-click="toggleSelectionLesson(lesson)"> -->
-                                <!-- <label> -->
                                 <img class="ui middle aligned tiny right floated image resourceContentImageAllign" src="{{lesson.appIcon}}" ng-if="lesson.appIcon">
                                 <img class="ui middle aligned tiny right floated image resourceContentImageAllign" src="http://via.placeholder.com/80x80"
                                     ng-if="!lesson.appIcon">
-                                <!-- </label> -->
                             </div>
                         </div>
                         <div class="eight wide column resourcePanelBodyContent">
@@ -130,11 +120,10 @@
                         </div>
                     </div>
                     <div class="row" style="margin: 1.2%">
-                        <button class="ui button primary button-overrides" ng-click="loadmore()" ng-hide="!loadmoreEnabledFlag" ng-show="loadmoreVisibleFlag">Load more</button>
+                        <button class="ui button primary button-overrides" ng-click="loadmore()" ng-hide="!loadmoreEnabledFlag" ng-show="loadmoreEnabledFlag">Load more</button>
                     </div>
                 </div>
             </div>
-            <!-- Result end -->
         </div>
     </div>
 </div>

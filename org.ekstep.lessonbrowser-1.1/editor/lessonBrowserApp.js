@@ -90,88 +90,17 @@ angular.module('org.ekstep.lessonbrowserapp', [])
         return a;
     }
         // search changes
-        // Load more results
-        $scope.loadmore = function () {
-            $scope.loadmoreEnabledFlag = false;
-            ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'loadmore', targetid: 'button-load-more' });
-            offset = limit + offset;
-            ctrl.searchLessons(true);
-        }
 
         // Title filter
         $scope.searchByKeyword = function () {
             ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'button-search' });
-            console.log('search value..', this.searchKeyword);
             searchBody.request.query = this.searchKeyword;
             ecEditor.dispatchEvent("lessonplan:category:searchKey",this.searchKeyword);
-            // ctrl.searchLessons();
         };
-
-        // Title filter - search on enter
-        $scope.searchOnKeypress = function () {
-            if (event.keyCode === 13) {
-                ctrl.generateTelemetry({ type: 'keypress', subtype: 'submit', target: 'search', targetid: 'keypress-search' });
-                this.searchByKeyword();
-            }
-        }
         // Title filter - Reset
         $scope.resetSearchByKeyword = function () {
             ctrl.generateTelemetry({ type: 'click', subtype: 'reset', target: 'search', targetid: 'button-reset' });
             this.searchKeyword = '';
-            delete searchBody.request.filters.name;
-            ctrl.searchLessons();
-        };
-        // Search API Integration
-        var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
-        ctrl.searchLessons = function (loadmore = false) {
-            if (!loadmore) {
-                offset = 0;
-            }
-            searchBody.request.limit = limit;
-            searchBody.request.offset = offset;
-            console.log('search body...', searchBody);
-            searchService.search(searchBody, function (err, res) {
-                if (err) {
-                    ctrl.err = "Oops! Something went wrong. Please try again later.";
-                } else {
-                    ctrl.res.count = res.data.result.count;
-
-                    if (loadmore) {
-                        if (res.data.result.content) {
-                            loadedLessonCount += res.data.result.content.length;
-                        }
-
-                        angular.forEach(res.data.result.content, function (lessonContent) {
-                            ctrl.res.content.push(lessonContent);
-                        });
-                    } else {
-                        if (res.data.result.content) {
-                            loadedLessonCount = res.data.result.content.length;
-                        }
-
-                        ctrl.res.content = [];
-                        angular.forEach(res.data.result.content, function (lessonContent) {
-                            ctrl.res.content.push(lessonContent);
-                        });
-
-                    }
-                    $scope.loadmoreVisibleFlag = true;
-                    $scope.loadmoreEnabledFlag = true;
-
-                    if (loadedLessonCount >= ctrl.res.count) {
-                        $scope.loadmoreEnabledFlag = false;
-                    }
-
-                    if (!res.data.result.content) {
-                        $scope.loadmoreEnabledFlag = false;
-                    }
-
-                    if (!ctrl.res.count) {
-                        $scope.loadmoreVisibleFlag = false;
-                    }
-                }
-                $scope.$safeApply();
-            });
-
+            ecEditor.dispatchEvent("lessonplan:category:searchKey",this.searchKeyword);
         };
 }]);
