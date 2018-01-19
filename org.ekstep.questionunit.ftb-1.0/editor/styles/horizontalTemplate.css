@@ -24,14 +24,11 @@
     box-shadow: 1px 1px 1px #9c60f7;
   }
 
-  input[type="radio"] {
+  /*input[type="radio"] {
     -webkit-appearance: checkbox;
-    /* Chrome, Safari, Opera */
     -moz-appearance: checkbox;
-    /* Firefox */
     -ms-appearance: checkbox;
-    /* not currently supported */
-  }
+  }*/
 
   .preview-window .ngdialog-content {
     background: none !important;

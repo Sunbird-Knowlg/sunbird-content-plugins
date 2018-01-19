@@ -43,19 +43,23 @@
 
 .has-error {
   border-bottom-color: #ea7575;
-    border-bottom-width: 1.5px;
+  border-bottom-width: 1.5px;
+  transition:all linear 0.5s;
 }
 
 .has-success {
   border-bottom-color: #dfcfcf;
+  transition:all linear 0.5s;
 }
 
 .has-error-text {
   color: inherit;
+  transition:all linear 0.5s;
 }
 
 .has-success-text {
   color: red;
+  transition:all linear 0.5s;
 }
 
 .mcqFullGrid {
