@@ -63,7 +63,7 @@ body {
     width: calc(100% - 320px);
     height: 100%;
     padding: 0;
-    overflow-y: scroll;
+    overflow-y: auto;
     padding-left: 2px;
 }
 
@@ -366,13 +366,6 @@ switched to Github for the search after API changes
     font-size: 1em;
 }
 
-i.bright-blue {
-    color: #007aff;
-}
-i.pig-pink {
-    color: #e66f7e;
-}
-
 
 /* for not able to fetch content */
 
@@ -382,22 +375,12 @@ i.pig-pink {
     background-color: #f5f5f5!important;
 }
 
-.tree-container {
-    margin-left: 14px;
-}
-
 #tree-table {
-    background: #f5f5f5;
-    margin: 0;
     font-weight: bold;
-    border-collapse: separate;
-    border-spacing: 0px 10px;
-    border: none;
 }
 
 .tree-table-row {
     box-shadow: 0px 1px 5px grey;
-    border-radius: 4px;
 }
 
 .tree-leftHeader {
@@ -409,7 +392,8 @@ i.pig-pink {
 .tree-rightHeader {
     float: right;
     padding-right: 0px!important;
-    font-size: 1em!important;
+    font-size: 0.9em!important;
+    cursor: pointer;
 }
 
 .delete-node {
@@ -417,32 +401,12 @@ i.pig-pink {
     cursor: pointer;
 }
 
-.tree-structure {
-    display: flex;
-}
-
-.tree-structure-title {
-    width: 97%;
-}
-
-.tree-no-content {
-    color: #8e8e8e!important;
-    text-align: center!important;
-}
-
-.tree-table-row td {
-    background-color: #fcfcfcfa!important;
-    border-radius: 4px;
-}
-
 .tree-table-drag {
     border: 1px dashed #c5c3c3 !important;
     height: 90px;
     text-align: center !important;
-}
-
-.content-details {
-    padding: 0!important;
+    line-height: 90px;
+    color: black;
 }
 
 .floatContentRight {
@@ -502,38 +466,65 @@ i.pig-pink {
     }
 }
 
-.extra > i {
-    width: 3%;
-}
-
-.tree-left-footer, .tree-rightHeader, .tree-right-footer{
-    color: #1779ff!important;
+.blue-color{
+    color: #066fff!important;
+    cursor: pointer;
 }
 
 .contentType {
     position: absolute;
-    top: 10px;
+    top: 5px;
     left: 10px;
     color: gray;
 }
 
-.tree-left-footer {
-    cursor: pointer;
-}
-
 #contentPreview {
     background-color: gainsboro;
-}
-
-#contentPreview {
     height: 405px;
     width: 720px;
 }
 
 .preview-image {
     position: absolute;
-    top: 210px;
-    left: 360px;
+    top: 220px;
+    left: 330px;
+}
+
+#previewContentIframe {
+    border: none!important;
+}
+
+.contentWidth {
+    max-width: 720px !important;
+}
+
+.content-grade {
+    color: rgba(0,0,0,.4);
+    float: right;
+}
+
+.content-owner {
+    margin: 15px 0 5px 0!important;
+}
+
+.content-desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.content-name {
+    width: 30em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.tree-footer {
+    padding-top: 10px;
+    padding-bottom: 20px;
 }
 
 /* Mini modal css */

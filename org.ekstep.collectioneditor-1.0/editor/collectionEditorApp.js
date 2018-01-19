@@ -24,8 +24,18 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         org.ekstep.services.collectionService.filterNode(event.target.value);
     };
 
-    $scope.generateLevel1Content = function(data, child) {
+    $scope.resetContentData = function() {
+        $scope.collectionData = [];
         $scope.isContent = false;
+        var iframe = document.getElementById('previewContentIframe');
+        if (iframe) {
+            iframe.src = "";
+            var previewImage = document.getElementsByClassName('preview-image')[0];
+            previewImage.style.display = 'block';
+        }
+    }
+
+    $scope.generateLevel1Content = function(data, child) {
         if (data.children) {
             org.ekstep.collectioneditor._.each(data.children, function(content) {
                 if (!content.isFolder())
@@ -101,7 +111,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     }
 
     $scope.setSelectedNode = function(event, data) {
-        $scope.collectionData = [];
+        $scope.resetContentData();
         $scope.generateLevel1Content(data);
         $scope.setFooter(data);
         if (data.data.objectType) {

@@ -36,77 +36,77 @@
                 </div>
             </div> -->
         </div>
-        <div class="ui grid column" id="contents-pane">
+        <div class="ui padded grid column" id="contents-pane">
             <div class="row content-manifest">
                 <div class="sixteen wide column metacontent-holder metadata-form-container" ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" ng-include="page.templateURL"></div>
             </div>
-            <div class="row content-tree">
-                <div class="sixteen wide column tree-container">
-                    <div class="padding-top-10">
+            <div class="row">
+                <div class="twelve wide column tree-container">
+                    <div class="tree-header padding-top-10" ng-if="!isContent">
                         <div class="ui label tree-leftHeader">ADD CONTENT</div>
-                        <div class="ui label tree-rightHeader">View Library</div>
+                        <div class="ui label tree-rightHeader blue-color">View Library</div>
                     </div>
-                    <table class="ui celled table" id="tree-table">
-                        <tbody>
-                            <tr ng-if="!isContent">
-                                <td class="tree-table-drag">
-                                    Drag and Drop Suggested Content here or <a href="">View Library</a>
-                                </td>
-                            </tr>
-                            <tr class="tree-table-row" ng-repeat="child in collectionData" ng-if="!isContent">
-                                <td class="content-details">
-                                    <div class="ui raised segment padding-none">
-                                        <div class="ui divided items">
-                                            <div class="item custom-segment">
-                                                <div class="image">
-                                                    <img ng-src="{{child.data.metadata.appIcon || defaultImage}}">
-                                                    <p class="contentType">{{child.data.metadata.contentType}}</p>
-                                                </div>
-                                                <div class="content padding-15">
-                                                    <a class="header">{{child.data.metadata.name}}</a>
-                                                    <div class="meta">
-                                                        <span>{{child.data.metadata.description}}</span>
-                                                    </div>
-                                                    <div class="extra padding-top-10 ">
-                                                        <p>
-                                                            <span ng-repeat="grade in child.data.metadata.gradeLevel | limitTo: 2">{{grade}} &nbsp;</span>
-                                                            <span ng-repeat="genre in child.data.metadata.genre | limitTo: 2">{{genre}} &nbsp;</span>
-                                                        </p>
-                                                    </div>
-                                                    <div class="extra">
-                                                        <span ng-if="child.data.metadata.owner">Created by {{child.data.metadata.owner}}</span>
-                                                        <i class="long arrow right medium icon right floated bright-blue"></i>
-                                                        <i class="fa fa-trash right floated delete-node" aria-hidden="true" ng-click="deleteNode(child, $event);"></i>
-                                                    </div>
-                                                </div>
+                    <div class="contentWidth padding-top-10" ng-if="isContent">
+                        <div class="ui label tree-leftHeader">CONTENT PREVIEW</div>
+                        <div class="ui label tree-rightHeader"><i class="fa fa-trash right floated delete-node" aria-hidden="true" ng-click="deleteNode(selectedContent, $event);"> REMOVE</i></div>
+                    </div>
+                    <div class="ui" id="tree-table">
+                        <div ng-if="!isContent">
+                            <div class="tree-table-drag">
+                                Drag and Drop Suggested Content here or <span class="blue-color">View Library</span>
+                            </div>
+                        </div>
+                        <div class="ui raised segment padding-none" ng-repeat="child in collectionData" ng-if="!isContent">
+                            <div class="tree-table-row">
+                                <div class="ui divided items">
+                                    <div class="item custom-segment">
+                                        <div class="image">
+                                            <img ng-src="{{child.data.metadata.posterImage || defaultImage}}">
+                                            <p class="contentType">{{child.data.metadata.contentType}}</p>
+                                        </div>
+                                        <div class="content padding-15">
+                                            <a class="header content-name">{{child.data.metadata.name}}</a>
+                                            <div class="meta">
+                                                <p class="content-desc">{{child.data.metadata.description}}</p>
+                                            </div>
+                                            <div class="extra padding-top-10 ">
+                                                <p>
+                                                    <span ng-repeat="grade in child.data.metadata.gradeLevel | limitTo: 2">{{grade}} &nbsp;</span>
+                                                    <span ng-repeat="genre in child.data.metadata.genre | limitTo: 2">{{genre}} &nbsp;</span>
+                                                </p>
+                                            </div>
+                                            <div class="extra">
+                                                <span ng-if="child.data.metadata.owner">Created by {{child.data.metadata.owner}}</span>
+                                                <i class="long arrow right medium icon right floated blue-color"></i>
+                                                <i class="fa fa-trash right floated delete-node" aria-hidden="true" ng-click="deleteNode(child, $event);"></i>
                                             </div>
                                         </div>
                                     </div>
-                                </td>
-                            </tr>
-                            <tr ng-if="isContent">
-                                <td class="container">
-                                    <div id="contentPreview">
-                                        <div class="preview-image">
-                                            <img class="preview-play-image" ng-click="playContent(selectedContent);" src="{{playImage}}">
-                                        </div>
-                                        <iframe id="previewContentIframe" width=100% height=100%></iframe>
+                                </div>
+                            </div>
+                        </div>
+                        <div ng-if="isContent">
+                            <div class="content-details">
+                                <div id="contentPreview">
+                                    <div class="preview-image">
+                                        <img class="preview-play-image" ng-click="playContent(selectedContent);" src="{{playImage}}">
                                     </div>
-                                    <p>OWNER</p>
-                                    <div class="footer">
-                                        <span>{{selectedContent.data.metadata.owner}}</span>
-                                        <span>
-                                            <span ng-repeat="grade in selectedContent.data.metadata.gradeLevel | limitTo: 2">{{grade}} &nbsp;</span>
-                                            <span ng-repeat="genre in selectedContent.data.metadata.genre | limitTo: 2">{{genre}} &nbsp;</span>
-                                        </span>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class=tree-footer>
-                        <span class="tree-left-footer" ng-if="prevTextBook.data.metadata.name">Go to {{prevTextBook.data.metadata.name}}</span>
-                        <span class="tree-right-footer floatContentRight" ng-if="nextTextBook.data.metadata.name">Go to {{nextTextBook.data.metadata.name}}</span>
+                                    <iframe id="previewContentIframe" width=100% height=100%></iframe>
+                                </div>
+                                <p class="tree-leftHeader content-owner contentWidth">OWNER</p>
+                                <div class="footer contentWidth">
+                                    <span>{{selectedContent.data.metadata.owner}}</span>
+                                    <span class="content-grade">
+                                        <span ng-repeat="grade in selectedContent.data.metadata.gradeLevel | limitTo: 2">{{grade}} &nbsp;</span>
+                                        <span ng-repeat="genre in selectedContent.data.metadata.genre | limitTo: 2">{{genre}} &nbsp;</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tree-footer" ng-class="{'contentWidth':isContent}">
+                        <span class="blue-color" ng-if="prevTextBook.data.metadata.name">Go to {{prevTextBook.data.metadata.name}}</span>
+                        <span class="blue-color floatContentRight" ng-if="nextTextBook.data.metadata.name">Go to {{nextTextBook.data.metadata.name}}</span>
                     </div>
                 </div>
             </div>
