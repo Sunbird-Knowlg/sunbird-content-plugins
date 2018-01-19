@@ -110,6 +110,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         };
         if (data.parentElement) {
             var config = {
+                "repos": ecEditor.getConfig('pluginRepo'),   // plugins repo path where all the plugins are pushed s3 or absolute folder path
                 "showStartPage": false,
                 "showEndPage": false
             },
