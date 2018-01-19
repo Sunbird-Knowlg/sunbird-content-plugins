@@ -4,11 +4,11 @@
             <a class="section" ng-repeat="value in path" ng-click="setActiveNode(value.nodeId)">
                 <span data-inverted="" ng-mouseover="showTooltip($event, value.title)">{{value.title | limitTo:25}}</span>
                 <span ng-if="value.title.length > 25">...</span>
-                <div class="divider"> > </div>
+                <div ng-if="!$last" class="divider"> > </div>
             </a>
         </div>
     </div>
-    <form class="ui form segment" id="contents-data-form" novalidate  ng-show="editMode" name="textbookMetaForm">
+    <form class="ui form segment" id="contents-data-form" novalidate ng-show="editMode" name="textbookMetaForm">
         <div class="fields form-fields-overflow">
             <div class="field book-image-field margin-left-20 ">
                 <label for="bookImage">Add icon</label>
@@ -56,7 +56,7 @@
                         </select>
                     </div>
                 </div>
-                 <div class="field">
+                <div class="field">
                     <label>Description</label>
                     <div class="ui input">
                         <textarea placeholder="brief description about the unit" ng-model="textbook.description" name="description" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})"></textarea>
@@ -65,14 +65,17 @@
                 <div class="one field">
                     <div class="field">
                         <label>Keywords</label>
-                        <select id="textbookmeta-keywords" class="ui search dropdown border-bottom-only" ng-model="textbook.keywords" multiple="" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'keyword'})">
-                            <option value="">Select</option>
-                            <option value="{{keyword}}" ng-repeat="keyword in keywords">{{keyword}}
-                            </option>
-                        </select>
+                        <tags-input ng-model="textbook.keywords" display-property="lemma" placeholder="Enter Keywords" replace-spaces-with-dashes="false">
+                            <auto-complete source="loadKeywords($query)" min-length="0" load-on-focus="true" load-on-empty="true" max-results-to-show="100" template="my-custom-template"></auto-complete>
+                        </tags-input>
+                        <script type="text/ng-template" id="my-custom-template">
+                            <div class="right-panel">
+                                <span ng-bind-html="$highlight($getDisplayText())"></span>
+                            </div>
+                        </script>
                     </div>
                 </div>
-                <div class="one field">
+                <div class="onefield">
                     <div class="field">
                         <label for="publication">Publisher</label>
                         <input type="text" placeholder="Publication (optional)" ng-model="textbook.publication" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'publication'})" />
