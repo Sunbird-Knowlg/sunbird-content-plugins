@@ -42,7 +42,7 @@ Plugin.extend({
       instance.saveQuestionState(instance._currentQuestion.id, state);
     }, this);
     this.loadTemplateContainer();
-    this._questionSetConfig = this._data.config ? JSON.parse(this._data.config) : this._questionSetConfig;
+    this._questionSetConfig = this._data.config ? JSON.parse(this._data.config.__cdata) : this._questionSetConfig;
     this.setupNavigation();
     this._masterQuestionSet = angular.copy(data[this._constants.questionPluginId]);
 
