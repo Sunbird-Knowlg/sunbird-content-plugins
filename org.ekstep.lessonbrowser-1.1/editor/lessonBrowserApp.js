@@ -1,21 +1,8 @@
 angular.module('org.ekstep.lessonbrowserapp', [])
 .controller('lessonController', ['$scope', 'instance', 'callback', 'callerFilters', function($scope, instance, callback, callerFilters) {
     var ctrl = this;
-        ctrl.res = { count: 0, content: [] };
     // QUICK FIX - Return selected lesson from repo. Service should be implemented
     $scope.selectedLessons = {};
-        // Fetch lessons related params
-        var limit = 10;
-        var offset = 0;
-        var searchBody = {
-            "request": {
-                "filters": {
-                    "objectType": ["Content"],
-                    "status": ["Live"]
-                }
-            }
-        };
-        var loadedLessonCount = 0;
     ctrl.lessonbrowser = instance;
 
     $scope.telemetry = {"pluginid":ctrl.lessonbrowser.manifest.id, "pluginver":ctrl.lessonbrowser.manifest.ver};
@@ -94,7 +81,6 @@ angular.module('org.ekstep.lessonbrowserapp', [])
         // Title filter
         $scope.searchByKeyword = function () {
             ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'button-search' });
-            searchBody.request.query = this.searchKeyword;
             ecEditor.dispatchEvent("lessonplan:category:searchKey",this.searchKeyword);
         };
         // Title filter - Reset

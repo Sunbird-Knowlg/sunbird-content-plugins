@@ -4,7 +4,7 @@ angular.module('org.ekstep.contentprovider', [])
 
 
     ctrl.err = null;
-        ctrl.meta = { "languages": {}, "grades": {}, "lessonTypes": {}, "domains": {},"subjects":{} };
+    ctrl.meta = { "languages": {}, "grades": {}, "lessonTypes": {}, "domains": {},"subjects":{} };
     ctrl.res = {count:0, content:[]};
 
     // Selected filters
@@ -12,7 +12,6 @@ angular.module('org.ekstep.contentprovider', [])
 
     // Selected lessons
     $scope.lessonSelection = [];
-       
     // QUICK FIX - Return selected lesson from repo. Service should be implemented
     $scope.selectedLessons.list = $scope.lessonSelection;
 
@@ -201,7 +200,7 @@ angular.module('org.ekstep.contentprovider', [])
         $scope.filterSelection.domain.splice(0, $scope.filterSelection.domain.length);
         $scope.filterSelection.concept.splice(0, $scope.filterSelection.concept.length);
         $scope.applyFilters();
-        };
+    };
 
     // Load more results
     $scope.loadmore = function() {
