@@ -182,6 +182,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
      $scope.init = function() {
         $scope.$watch('courseunit', function() {
             if($scope.courseunit){
+                if(/^[a-z\d\-_\s]+$/i.test($scope.courseunit.name) == false) $scope.courseunit.name = org.ekstep.services.collectionService.removeSpecialChars($scope.courseunit.name);
                 if($scope.nodeType === DEFAULT_NODETYPE){
                     $scope.updateNode();
                 }

@@ -263,6 +263,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         $scope.clearInMemory();
         $scope.$watch('unit', function() {
             if ($scope.unit) {
+                if(/^[a-z\d\-_\s]+$/i.test($scope.unit.name) == false) $scope.unit.name = org.ekstep.services.collectionService.removeSpecialChars($scope.unit.name);
                 if($scope.nodeType === DEFAULT_NODETYPE){
                     activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
                     $scope.nodeId = activeNode.data.id;
@@ -275,6 +276,5 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         }, true);
     }
     $scope.init();
-   
 }]);
 //# sourceURL=unitmetaApp.js

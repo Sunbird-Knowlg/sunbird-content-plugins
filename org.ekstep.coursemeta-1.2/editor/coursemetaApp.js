@@ -198,8 +198,11 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
     
     $scope.init = function() {
         $scope.$watch('course', function() {
-            if ($scope.nodeType === DEFAULT_NODETYPE) {
-                $scope.updateNode();
+            if($scope.course) {
+                if(/^[a-z\d\-_\s]+$/i.test($scope.course.name) == false) $scope.course.name = org.ekstep.services.collectionService.removeSpecialChars($scope.course.name);
+                if ($scope.nodeType === DEFAULT_NODETYPE) {
+                    $scope.updateNode();
+                }
             }
         }, true);
     }

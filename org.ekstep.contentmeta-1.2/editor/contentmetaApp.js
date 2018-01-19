@@ -283,8 +283,11 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
 
     $scope.init = function() {
         $scope.$watch('content', function() {
-            if ($scope.nodeType === DEFAULT_NODETYPE) {
-                $scope.updateNode();
+            if($scope.content) {
+                if(/^[a-z\d\-_\s]+$/i.test($scope.content.name) == false && $scope.editMode) $scope.content.name = org.ekstep.services.collectionService.removeSpecialChars($scope.content.name);
+                if ($scope.nodeType === DEFAULT_NODETYPE) {
+                    $scope.updateNode();
+                }
             }
         }, true);
     }

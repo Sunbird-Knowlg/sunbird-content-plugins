@@ -334,8 +334,9 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
         $scope.clearInMemory();
         $scope.initYearDropDown();
         $scope.$watch('textbook', function() {
-            if ($scope.textbook) {
-                if ($scope.nodeType === DEFAULT_NODETYPE) {
+            if($scope.textbook){
+                if(/^[a-z\d\-_\s]+$/i.test($scope.textbook.name) == false) $scope.textbook.name = org.ekstep.services.collectionService.removeSpecialChars($scope.textbook.name);
+                if($scope.nodeType === DEFAULT_NODETYPE){
                     $scope.updateNode();
                 }
             }
