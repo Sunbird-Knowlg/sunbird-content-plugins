@@ -37,7 +37,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
 
   $scope.selectedvalue = function(val, index) {
     $scope.selectedIndex = index;
-    $scope.selectedAns = val.isAnswerCorrect;
+    $scope.selectedAns = val.isCorrect;
     var state = {
         val: $scope.selectedIndex
     }
@@ -47,8 +47,8 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
   $scope.evaluate = function(callback) {
     var correctAnswer;
     $scope.questionObj.options.forEach(function(option) {
-      if (option.isAnswerCorrect === $scope.selectedAns) {
-        correctAnswer = option.isAnswerCorrect;
+      if (option.isCorrect === $scope.selectedAns) {
+        correctAnswer = option.isCorrect;
       }
     });
     var result = {
