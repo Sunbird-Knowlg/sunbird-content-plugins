@@ -9,9 +9,7 @@
         "main": "editor/plugin.js",
         "dependencies": [
         	{ "plugin": "org.ekstep.assetbrowser", "ver": "1.1", "type": "plugin" },
-        	{ "plugin": "org.ekstep.conceptselector", "ver": "1.0", "type": "plugin" },
-            { "type": "css", "src": "editor/libs/ng-tags-input.css" },
-            { "type": "js", "src": "editor/libs/ng-tags-input.js" }      
+        	{ "plugin": "org.ekstep.conceptselector", "ver": "1.0", "type": "plugin" }
         ]
     }
 }
