@@ -298,7 +298,7 @@ angular.module('org.ekstep.contentprovider', [])
         }
 
         $scope.init = function () {
-            org.ekstep.contenteditor.api.addEventListener("lessonplan:category:searchKey", this.searchKey, this);
+            org.ekstep.contenteditor.api.addEventListener("lessonplan:category:searchkey", this.searchKey, this);
 
         };
         $scope.init();
