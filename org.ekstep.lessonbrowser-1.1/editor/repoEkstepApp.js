@@ -4,7 +4,7 @@ angular.module('org.ekstep.contentprovider', [])
 
 
     ctrl.err = null;
-    ctrl.meta = {"languages":{}, "grades":{}, "lessonTypes":{}, "domains":{}};
+    ctrl.meta = { "languages": {}, "grades": {}, "lessonTypes": {}, "domains": {},"subjects":{} };
     ctrl.res = {count:0, content:[]};
 
     // Selected filters
@@ -122,45 +122,12 @@ angular.module('org.ekstep.contentprovider', [])
             } else {
                 ctrl.meta.languages = res.data.result.medium.values;
                 ctrl.meta.grades = res.data.result.gradeLevel.values;
-                ctrl.meta.lessonTypes = ["Story", "Collection", "Worksheet", "Resource"]
+                ctrl.meta.subjects = res.data.result.subject.values;
+                ctrl.meta.lessonTypes = collectionService.getObjectTypeByAddType('Browser');
+                $('#lessonBrowser_lessonType').dropdown('set value', ctrl.meta.lessonTypes[0]);
             }
             $scope.$safeApply();
         });
-    };
-    // ctrl.configOrdinals = function() {
-    //     metaService.getConfigOrdinals(function(err, res){
-    //         if (err) {
-    //             ctrl.langErr = "Oops! Something went wrong with config ordinals. Please try again later.";
-    //         } else {
-    //             //ctrl.meta.lessonTypes = res.data.result.ordinals.contentType;
-    //             ctrl.meta.lessonTypes = ["Story", "Collection", "Worksheet", "Resource"]
-    //             ctrl.meta.domains = res.data.result.ordinals.domain;
-    //         }
-    //         $scope.$safeApply();
-    //     });
-    // };
-
-    // Title filter
-    $scope.searchByKeyword = function(){
-        ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'search',targetid: 'button-search'});
-        searchBody.request.query = this.searchKeyword;
-        ctrl.searchLessons();
-    };
-
-    // Title filter - search on enter
-    $scope.searchOnKeypress = function() {
-        if (event.keyCode === 13) {
-            ctrl.generateTelemetry({type: 'keypress', subtype: 'submit', target: 'search',targetid: 'keypress-search'});
-            this.searchByKeyword();
-        }
-    }
-
-    // Title filter - Reset
-    $scope.resetSearchByKeyword = function(){
-        ctrl.generateTelemetry({type: 'click', subtype: 'reset', target: 'search',targetid: 'button-reset'});
-        this.searchKeyword = '';
-        delete searchBody.request.filters.name;
-        ctrl.searchLessons();
     };
 
     $scope.getFiltersValue = function(){
@@ -168,6 +135,7 @@ angular.module('org.ekstep.contentprovider', [])
         $scope.filterSelection.lang = $('#lessonBrowser_language').dropdown('get value');
         $scope.filterSelection.grade = $('#lessonBrowser_grade').dropdown('get value');
         $scope.filterSelection.lessonType = $('#lessonBrowser_lessonType').dropdown('get value');
+        $scope.filterSelection.subject = $('#lessonBrowser_subject').dropdown('get value');
         
         if ($scope.filterSelection.lang.length) {
             $scope.filterSelection.lang = $scope.filterSelection.lang.split(",");
@@ -188,6 +156,12 @@ angular.module('org.ekstep.contentprovider', [])
             searchBody.request.filters.contentType = $scope.filterSelection.lessonType;
         } else {
             delete searchBody.request.filters.contentType;
+        }
+        if ($scope.filterSelection.subject.length) {
+            $scope.filterSelection.subject =  $scope.filterSelection.subject.split(",");
+            searchBody.request.filters.subject = $scope.filterSelection.subject;
+        } else {
+            delete searchBody.request.filters.subject;
         }
 
         if ($scope.filterSelection.domain && $scope.filterSelection.domain.length) {
@@ -219,12 +193,12 @@ angular.module('org.ekstep.contentprovider', [])
     // Sidebar filters - Reset
     $scope.resetFilters = function() {
         ctrl.generateTelemetry({type: 'click', subtype: 'reset', target: 'filter',targetid: 'button-filter-reset'});
-        $('#lessonBrowser_language').dropdown('clear');
-        $('#lessonBrowser_grade').dropdown('clear');
-        $('#lessonBrowser_lessonType').dropdown('clear');
+        $('#lessonBrowser_language').dropdown('restore defaults');
+        $('#lessonBrowser_grade').dropdown('restore defaults');
+        $('#lessonBrowser_lessonType').dropdown('restore defaults');
+        $('#lessonBrowser_subject').dropdown('restore defaults');
         $scope.filterSelection.domain.splice(0, $scope.filterSelection.domain.length);
         $scope.filterSelection.concept.splice(0, $scope.filterSelection.concept.length);
-
         $scope.applyFilters();
     };
 
@@ -318,6 +292,16 @@ angular.module('org.ekstep.contentprovider', [])
         }
     });
 
+        $scope.searchKey = function (event, searchKey) {
+            searchBody.request.query = searchKey;
+            ctrl.searchLessons();
+        }
+
+        $scope.init = function () {
+            org.ekstep.contenteditor.api.addEventListener("lessonplan:category:searchkey", this.searchKey, this);
+
+        };
+        $scope.init();
     // Fetch sidebar filters through APIs
     ctrl.learningConfig();
     //ctrl.configOrdinals();
@@ -329,12 +313,14 @@ angular.module('org.ekstep.contentprovider', [])
     $scope.filterSelection.lang = filter.language;
     $scope.filterSelection.grade = filter.grade;
     $scope.filterSelection.lessonType = filter.lessonType;
+    $scope.filterSelection.subject = filter.subject;
     $scope.filterSelection.domain = filter.domain;
 
     setTimeout(function(){
         $('#lessonBrowser_language').dropdown('set selected', $scope.filterSelection.lang);
         $('#lessonBrowser_grade').dropdown('set selected', $scope.filterSelection.grade);
         $('#lessonBrowser_lessonType').dropdown('set selected', $scope.filterSelection.lessonType);
+        $('#lessonBrowser_subject').dropdown('set selected', $scope.filterSelection.subject);
         $scope.applyFilters();
     }, 500);
 

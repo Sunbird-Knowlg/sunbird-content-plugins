@@ -222,6 +222,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
     $scope.init = function() {
         $scope.$watch('lesson', function() {
             if($scope.lesson){
+                if(/^[a-z\d\-_\s]+$/i.test($scope.lesson.name) == false) $scope.lesson.name = org.ekstep.services.collectionService.removeSpecialChars($scope.lesson.name);
                 if($scope.nodeType === 'LessonPlan'){
                     $scope.updateNode();
                 }

@@ -1,10 +1,8 @@
 angular.module('org.ekstep.lessonbrowserapp', [])
 .controller('lessonController', ['$scope', 'instance', 'callback', 'callerFilters', function($scope, instance, callback, callerFilters) {
     var ctrl = this;
-
     // QUICK FIX - Return selected lesson from repo. Service should be implemented
     $scope.selectedLessons = {};
-
     ctrl.lessonbrowser = instance;
 
     $scope.telemetry = {"pluginid":ctrl.lessonbrowser.manifest.id, "pluginver":ctrl.lessonbrowser.manifest.ver};
@@ -78,4 +76,17 @@ angular.module('org.ekstep.lessonbrowserapp', [])
         }
         return a;
     }
+        // search changes
+
+        // Title filter
+        $scope.searchByKeyword = function () {
+            ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'button-search' });
+            ecEditor.dispatchEvent("lessonplan:category:searchkey",this.searchKeyword);
+        };
+        // Title filter - Reset
+        $scope.resetSearchByKeyword = function () {
+            ctrl.generateTelemetry({ type: 'click', subtype: 'reset', target: 'search', targetid: 'button-reset' });
+            this.searchKeyword = '';
+            ecEditor.dispatchEvent("lessonplan:category:searchkey",this.searchKeyword);
+        };
 }]);

@@ -154,6 +154,7 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
      $scope.init = function() {
         $scope.$watch('unit', function() {
             if($scope.unit){
+                if(/^[a-z\d\-_\s]+$/i.test($scope.unit.name) == false) $scope.unit.name = org.ekstep.services.collectionService.removeSpecialChars($scope.unit.name);
                 if($scope.nodeType === DEFAULT_NODETYPE){
                     $scope.updateNode();
                 }
