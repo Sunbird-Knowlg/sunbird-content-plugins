@@ -13,15 +13,7 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
     const MEMORY_MAP = 'collection_editor';
     $scope.suggestVocabularyRequest = {
         request: {
-            suggest: {
-                text: "",
-                "completion": {
-                    "field": "lemma",
-                    "context": {
-                        "categories": ["keywords"]
-                    }
-                }
-            }
+            text:""
         }
     }
     $scope.updateTitle = function(event, title) {
@@ -269,9 +261,9 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
 
     $scope.loadKeywords = function($query) {
         if ($query.length >= 3) {
-            return fetchKeywords($query).then(function(countries) {
-                return countries.filter(function(country) {
-                    return country.lemma.toLowerCase().indexOf($query.toLowerCase()) != -1;
+            return fetchKeywords($query).then(function(keywords) {
+                return keywords.filter(function(keyword) {
+                    return keyword.lemma.toLowerCase().indexOf($query.toLowerCase()) != -1;
                 });
             })
         }
@@ -281,13 +273,12 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
         return new Promise(function(resolve, reject) {
             var keyword = $scope.isKeywordPresent($query);
             if (!keyword.isPresent) {
-                var data = $scope.suggestVocabularyRequest;
-                data.request.suggest.text = $query;
-                org.ekstep.services.metaService.suggestVocabulary(data, function(err, resp) {
+                $scope.suggestVocabularyRequest.request.text = $query;
+                org.ekstep.services.metaService.suggestVocabulary($scope.suggestVocabularyRequest, function(err, resp) {
                     if (resp) {
                         if (resp.data.result.terms) {
                             var result = {};
-                            result[$query] = resp.data.result.terms;
+                            result[$query] = _.uniqBy(resp.data.result.terms,'lemma');
                             $scope.storeKeywordsInMemory(result);
                             resolve(result[$query]);
                         }

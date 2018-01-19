@@ -7,15 +7,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     const MEMORY_MAP = 'collection_editor';
     $scope.suggestVocabularyRequest = {
         request: {
-            suggest: {
-                text: "",
-                "completion": {
-                    "field": "lemma",
-                    "context": {
-                        "categories": ["keywords"]
-                    }
-                }
-            }
+            text:""
         }
     }
 
@@ -209,13 +201,12 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         return new Promise(function(resolve, reject) {
             var keyword = $scope.isKeywordPresent($query);
             if (!keyword.isPresent) {
-                var data = $scope.suggestVocabularyRequest;
-                data.request.suggest.text = $query;
-                org.ekstep.services.metaService.suggestVocabulary(data, function(err, resp) {
+                $scope.suggestVocabularyRequest.request.text = $query;
+                org.ekstep.services.metaService.suggestVocabulary($scope.suggestVocabularyRequest, function(err, resp) {
                     if (resp) {
                         if (resp.data.result.terms) {
                             var result = {};
-                            result[$query] = resp.data.result.terms;
+                            result[$query] = _.uniqBy(resp.data.result.terms,'lemma');
                             $scope.storeKeywordsInMemory(result);
                             resolve(result[$query]);
                         }
