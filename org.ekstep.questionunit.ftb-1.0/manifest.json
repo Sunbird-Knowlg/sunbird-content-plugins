@@ -78,5 +78,13 @@
     "renderer":
     {
         "main": "renderer/plugin.js"
-    }
+    },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.questionunit",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
 }

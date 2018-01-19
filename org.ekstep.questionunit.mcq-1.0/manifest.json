@@ -70,20 +70,19 @@
             {
                 "type": "css",
                 "src": "renderer/styles/horizontalTemplate.css"
+            },
+            {
+                "type": "js",
+                "src": "renderer/util/evaluator.js"
             }
-
         ]
     },
     "dependencies": [
-    {
-        "type": "plugin",
-        "plugin": "org.ekstep.questionunit",
-        "ver": "1.0",
-        "scope": "renderer"
-    },
-    {
-        "type": "js",
-        "src": "renderer/util/evaluator.js",
-        "scope": "renderer"
-    }]
+        {
+            "plugin": "org.ekstep.questionunit",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "all"
+        }
+    ]
 }
