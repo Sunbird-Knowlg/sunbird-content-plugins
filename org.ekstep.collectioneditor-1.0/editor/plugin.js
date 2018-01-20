@@ -1,8 +1,5 @@
 org.ekstep.collectioneditor.basePlugin.extend({
-	initialize: function() {
-		setTimeout(function() {
-            ecEditor.jQuery('.popup-item').popup();
-        }, 0);
+	initialize: function() {		
 	}
 });
 //# sourceURL=collectiontree.js

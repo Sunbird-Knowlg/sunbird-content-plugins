@@ -1,27 +1,21 @@
 <script type="text/ng-template" ng-app="org.ekstep.lessonbrowserapp" ng-controller="lessonController as $ctrl" id="partials/lessonbrowser.html">
     <div class="ui active modal lessonbrowser">
-        <div class="header bottomBorder">
+        <div class="header">
             <div class="ui fluid equal width container grid">
-                <div class="row three column">
-                    <div class="column add-resource">
-                        <span>Add Resource</span>
+                <div class="row">
+                    <div class="column" style="padding-left:0;">
+                        <span><i class="grid layout icon"></i> Add Resource</span>
                     </div>
-                    <div class="column search-reset-keyword-field-wrapper" ng-if="!$ctrl.err">
-                            <div class="column">
-                                <div class="ui fluid action input search-reset-keyword-field">
-                                    <input type="text" id="resourceSearch" placeholder="Search for keyword" autocomplete="off" spellcheck="false" ng-model="searchKeyword" ng-keyup="$event.keyCode == 13 ? searchByKeyword() : null">
-                                    <button id="reset-button" class="ui black basic button button-overrides" ng-click="resetSearchByKeyword()" title="Reset"><i class="undo icon"></i></button>
-                                    <button id="search-button" class="ui primary basic button button-overrides" ng-click="searchByKeyword() " title="Start search"><i class="search icon"></i></button>&nbsp;        
-                                </div>
-                            </div>
-                        </div>
-                    <div class="right aligned" style="padding-top: 10px;margin-right: 2px;margin-left: 10%;">
-                        <i class="close link icon" id="resourceCloseBtn" ng-click="closeThisDialog(); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeLessonBrowser'})"></i>
+                    <div class="right aligned column" style="padding-right:0;">
+                        <i class="close link icon" ng-click="closeThisDialog(); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeLessonBrowser'})"></i>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="ui padded grid content">
+        <div class="ui fluid container padded grid content">
+            <div class="ui pointing secondary menu no-padding">
+                <a class="item" ng-class='{active:$first}' ng-repeat="(rid, repo) in $ctrl.lessonbrowser.repos" data-repo-id="{{repo.id}}" data-tab="{{repo.id}}{{rid}}">{{repo.label}}</a>
+            </div>
             <div class="ui tab no-padding" ng-class='{active:$first}' ng-repeat="(rid, repo) in $ctrl.lessonbrowser.repos" ng-include="repo.templateUrl" data-tab="{{repo.id}}{{rid}}"></div>
         </div>
         <div class="actions">
