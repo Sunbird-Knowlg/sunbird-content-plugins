@@ -19,6 +19,7 @@ angular.module('createquestionapp', [])
     $scope.itemRange = [];
     $scope.Totalconcepts;
     $scope.selectedConceptsData;
+    $scope.selectedQueIndex;
     $scope.grades;
     $scope.languages;
     $scope.difficultyLevels = ['Easy', 'Medium', 'Difficult'];
@@ -340,6 +341,11 @@ angular.module('createquestionapp', [])
       questionSet.data = $scope.selectedQuestions;
       ecEditor.dispatchEvent($scope.pluginIdObj.question_set_id + ":addQS", { callback: callback, data: questionSet });
       $scope.closeThisDialog();
+    }
+
+    $scope.showSelectedQue = function (index) {
+      delete $scope.selectedQueIndex;
+      $scope.selectedQueIndex = index;
     }
 
 

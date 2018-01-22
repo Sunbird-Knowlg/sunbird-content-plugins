@@ -101,3 +101,6 @@
 .qHeader{
   padding-bottom: 2%;
 }
+.has-errorCard{
+  border: 1px solid red !important;
+}
