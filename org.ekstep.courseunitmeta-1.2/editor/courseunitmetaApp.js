@@ -40,7 +40,6 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
             }
             $scope.courseunit.contentType = $scope.nodeType;
             console.log("Name:",$scope.courseunit.name)
-            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.courseunit.name);
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.courseunit));;
             $scope.metadataCloneObj = _.clone($scope.courseunit);
             $scope.editMode = true;
@@ -188,6 +187,9 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
                 }
             }
         }, true);
+    }
+    $scope.changeTitle = function(){
+        org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.courseunit.name);
     }
     $scope.init();
 }]);

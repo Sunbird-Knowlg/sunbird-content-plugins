@@ -71,7 +71,6 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             }
             $scope.lesson.duration = $scope.duration ? $scope.duration.toString() : "0";
             $scope.lesson.learningObjective = $scope.learningObjective ? [$scope.learningObjective] : [];
-            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.lesson.name);
             $scope.lesson.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.lesson));
             $scope.metadataCloneObj = _.clone($scope.lesson);
@@ -228,6 +227,10 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
                 }
             }
         }, true);
+    }
+
+    $scope.changeTitle = function(){
+        org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.lesson.name);
     }
     $scope.init();
 }]);

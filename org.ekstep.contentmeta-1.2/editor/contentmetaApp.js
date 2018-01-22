@@ -52,7 +52,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             }
             var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
             $scope.content.contentType = $scope.nodeType;
-            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.content));;
             $scope.metadataCloneObj = _.clone($scope.content);
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
@@ -290,6 +289,9 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 }
             }
         }, true);
+    }
+    $scope.changeTitle = function(){
+        org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
     }
     $scope.init();
 }]);
