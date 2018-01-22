@@ -53,7 +53,6 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             if (!_.isEmpty($scope.course.audience) && _.isString($scope.course.audience)) {
                 $scope.course.audience = [$scope.course.audience];
             }
-            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.course.name);
             $scope.course.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.course));
             $scope.metadataCloneObj = _.clone($scope.course);
@@ -108,6 +107,19 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
     $scope.addlesson = function(){
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
     }
+
+    $scope.showTooltip = function(event, title) {
+        if(title.length > 25 ) {
+            $('.section').popup({
+                content: title,
+                variation: "wide",
+                on: 'hover',
+                position:'bottom left'
+            });
+        } else {
+            $('.section').popup('destroy');
+        }
+   }
 
     $scope.onNodeSelect = function(evant, data){
         var selectedConcepts = [];
@@ -185,10 +197,16 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
     
     $scope.init = function() {
         $scope.$watch('course', function() {
-            if ($scope.nodeType === DEFAULT_NODETYPE) {
-                $scope.updateNode();
+            if($scope.course) {
+                if(/^[a-z\d\-_\s]+$/i.test($scope.course.name) == false) $scope.course.name = org.ekstep.services.collectionService.removeSpecialChars($scope.course.name);
+                if ($scope.nodeType === DEFAULT_NODETYPE) {
+                    $scope.updateNode();
+                }
             }
         }, true);
+    }
+    $scope.changeTitle = function(){
+        org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.course.name);
     }
     $scope.init();
 }]);

@@ -36,7 +36,6 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
             }            
             $scope.unit.contentType = $scope.nodeType;
             console.log("node title:",$scope.unit.name)
-            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.unit.name);
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.unit));;
             $scope.metadataCloneObj = _.clone($scope.unit);
             $scope.editMode = true;
@@ -83,6 +82,19 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
     $scope.addlesson = function(){
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
     }
+
+    $scope.showTooltip = function(event, title) {
+        if(title.length > 25 ) {
+            $('.section').popup({
+                content: title,
+                variation: "wide",
+                on: 'hover',
+                position:'bottom left'
+            });
+        } else {
+            $('.section').popup('destroy');
+        }
+   }
 
     $scope.onNodeSelect = function(evant, data){        
         $scope.showImageIcon = false;
@@ -141,11 +153,15 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
      $scope.init = function() {
         $scope.$watch('unit', function() {
             if($scope.unit){
+                if(/^[a-z\d\-_\s]+$/i.test($scope.unit.name) == false) $scope.unit.name = org.ekstep.services.collectionService.removeSpecialChars($scope.unit.name);
                 if($scope.nodeType === DEFAULT_NODETYPE){
                     $scope.updateNode();
                 }
             }
         }, true);
+    }
+    $scope.changeTitle = function(){
+        org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.unit.name);
     }
     $scope.init();
 }]);

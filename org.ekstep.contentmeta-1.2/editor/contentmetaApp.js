@@ -52,7 +52,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             }
             var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
             $scope.content.contentType = $scope.nodeType;
-            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.content));;
             $scope.metadataCloneObj = _.clone($scope.content);
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
@@ -106,6 +105,19 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.addlesson = function() {
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
     }
+
+    $scope.showTooltip = function(event, title) {
+        if(title.length > 25 ) {
+            $('.section').popup({
+                content: title,
+                variation: "wide",
+                on: 'hover',
+                position:'bottom left'
+            });
+        } else {
+            $('.section').popup('destroy');
+        }
+   }
 
     $scope.onNodeSelect = function(evant, data) {
         $scope.showImageIcon = false;
@@ -270,10 +282,16 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
 
     $scope.init = function() {
         $scope.$watch('content', function() {
-            if ($scope.nodeType === DEFAULT_NODETYPE) {
-                $scope.updateNode();
+            if($scope.content) {
+                if(/^[a-z\d\-_\s]+$/i.test($scope.content.name) == false && $scope.editMode) $scope.content.name = org.ekstep.services.collectionService.removeSpecialChars($scope.content.name);
+                if ($scope.nodeType === DEFAULT_NODETYPE) {
+                    $scope.updateNode();
+                }
             }
         }, true);
+    }
+    $scope.changeTitle = function(){
+        org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
     }
     $scope.init();
 }]);

@@ -5,7 +5,8 @@
         </div>
         <div class="four wide column custom-6-wide">
             <div class="content-title-container" ng-class="(headerSettings.showEditMeta) ? 'row custom-row-1' : 'content-title-align'">
-                <label class="content-title">{{contentDetails.contentTitle}}</label>
+                <label ng-if="contentDetails.contentTitle.length < 52" class="content-title popup-item">{{contentDetails.contentTitle}}</label>
+                <label ng-if="contentDetails.contentTitle.length >= 52" class="content-title popup-item" data-content="{{contentDetails.contentTitle}}" data-variation="wide" data-position="bottom left">{{contentDetails.contentTitle}}</label>
             </div>
             <div class="row custom-row-2" ng-show="headerSettings.showEditMeta">
                 <a class="btn at-btn at-btn-ok" ng-click="editContentMeta();generateTelemetry({subtype:'',target:'editmeta'})">

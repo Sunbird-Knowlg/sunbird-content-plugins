@@ -71,7 +71,6 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             }
             $scope.lesson.duration = $scope.duration ? $scope.duration.toString() : "0";
             $scope.lesson.learningObjective = $scope.learningObjective ? [$scope.learningObjective] : [];
-            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.lesson.name);
             $scope.lesson.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.lesson));
             $scope.metadataCloneObj = _.clone($scope.lesson);
@@ -120,6 +119,19 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
     $scope.addlesson = function(){
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
     }
+
+    $scope.showTooltip = function(event, title) {
+        if(title.length > 25 ) {
+            $('.section').popup({
+                content: title,
+                variation: "wide",
+                on: 'hover',
+                position:'bottom left'
+            });
+        } else {
+            $('.section').popup('destroy');
+        }
+   }
 
     $scope.onNodeSelect = function(evant, data){
         var selectedConcepts = [];
@@ -209,11 +221,16 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
     $scope.init = function() {
         $scope.$watch('lesson', function() {
             if($scope.lesson){
+                if(/^[a-z\d\-_\s]+$/i.test($scope.lesson.name) == false) $scope.lesson.name = org.ekstep.services.collectionService.removeSpecialChars($scope.lesson.name);
                 if($scope.nodeType === 'LessonPlan'){
                     $scope.updateNode();
                 }
             }
         }, true);
+    }
+
+    $scope.changeTitle = function(){
+        org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.lesson.name);
     }
     $scope.init();
 }]);

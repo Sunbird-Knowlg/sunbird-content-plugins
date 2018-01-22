@@ -44,7 +44,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         } else
         if (child && !child.isFolder())
             $scope.collectionData.push(child)
-        else if (!data.isFolder()) {
+        else if (!data.type && !data.isFolder()) {
             $scope.selectedContent = data;
             $scope.isContent = true;
         }
@@ -52,15 +52,14 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
 
     $scope.setFooter = function(data) {
         if (data.children) { // when selected node has children
-            org.ekstep.collectioneditor._.each(data.children, function(child) {
-                if (child.isFolder()) {
-                    $scope.nextTextBook = child
-                    return false;
-                }
-            })
+            $scope.nextTextBook = data.getFirstChild();
         } else 
         if ((data.parent.children.length - 1) == data.getIndex()){ // When selected node is last node of parent
-            $scope.nextTextBook = data.parent.getNextSibling();
+            if (data.parent.getNextSibling()) {
+                $scope.nextTextBook = data.parent.getNextSibling();
+            } else {
+                data.parent.parent.getNextSibling()
+            }
         } else {
             $scope.nextTextBook = data.getNextSibling();
             $scope.prevTextBook = data.getPrevSibling();
@@ -124,7 +123,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         if (!node.data.root) {
             ecEditor.getService('popup').open({
                 template: '<div class="ui mini modal active" id="deletePopup"> <div class="content"> <div class="ui grid"> <div class="ten wide column"> <span class="custom-modal-heading">Are you sure you want to delete this content?</span> </div><div class="two wide column"> <i class="close large icon four wide column floatContentRight" ng-click="closeThisDialog()"></i></div></div><p class="custom-modal-content">All content within this folder will also be deleted from this textbook.</p><button class="ui red button" ng-click="confirm()">YES, DELETE</button> </div></div>',
-                // '<div class="ui icon negative message remove-unit-popup"><i class="close icon" ></i><div class="content"><div class="header"><i class="fa fa-exclamation-triangle"></i> Do you want to remove this?</div><div class="remove-unit-buttons" style="padding-right:0; text-align:right;"><div class="ui red button button-overrides" id="remove-yes-button" >Yes</div><div class="ui basic primary button button-overrides" id="remove-no-button" >No</div></div></div></div>',
                 controller: ["$scope", function($scope) {
                     $scope.confirm = function() {
                         node.remove();
@@ -212,6 +210,10 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
             }
         });
     });
+
+    $scope.setActiveNode = function(nodeId) {
+        org.ekstep.collectioneditor.api.getService('collection').setActiveNode(nodeId);
+    }
 
 
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
