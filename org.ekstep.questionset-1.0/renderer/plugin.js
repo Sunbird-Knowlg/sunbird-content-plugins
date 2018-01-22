@@ -44,7 +44,8 @@ Plugin.extend({
     this.loadTemplateContainer();
     this._questionSetConfig = this._data.config ? JSON.parse(this._data.config.__cdata) : this._questionSetConfig;
     this.setupNavigation();
-    this._masterQuestionSet = angular.copy(data[this._constants.questionPluginId]);
+    var quesArray = angular.copy(data[this._constants.questionPluginId]);
+    this._masterQuestionSet = _.isArray(quesArray) ? quesArray : _.toArray({quesArray});
 
     var savedQSState = this.getQuestionSetState();
     if (savedQSState) {
@@ -283,7 +284,7 @@ Plugin.extend({
         EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
     }
     //if first stage is question set show custom next navigation
-    if (this._renderedQuestions.length != this._masterQuestionSet.length) {
+    if (this._renderedQuestions.length != this._masterQuestionSet.length||this._masterQuestionSet.length==1) {
       this.showCustomNextNav();
     }
 }
