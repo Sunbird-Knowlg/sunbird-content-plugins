@@ -1,4 +1,4 @@
-angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('mainController', ['$scope', '$rootScope', '$location', function($scope, $rootScope, $location) {
+angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('mainController', ['$scope', '$location', function($scope, $location) {
     //do_112272630392659968130
     $scope.contentDetails = {
         contentTitle: ""
@@ -8,11 +8,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     $scope.selectedObjectType = undefined;
     $scope.nodeFilter = "";
     $scope.expandNodeFlag = true;
-    $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.collectioneditor", "1.0", "assets/default.png");
-    $scope.playImage = ecEditor.resolvePluginResource("org.ekstep.collectioneditor", "1.0", "assets/icn_play.png");
-    $scope.collectionData = [];
-    $scope.selectedContent;
-    $scope.isContent = false;
     $scope.getObjectType = function(objectType) {
         return _.find(objectType, function(type) {
             return type == $scope.selectedObjectType
@@ -24,128 +19,12 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         org.ekstep.services.collectionService.filterNode(event.target.value);
     };
 
-    $scope.resetContentData = function() {
-        $scope.collectionData = [];
-        $scope.isContent = false;
-        var iframe = document.getElementById('previewContentIframe');
-        if (iframe) {
-            iframe.src = "";
-            var previewImage = document.getElementsByClassName('preview-image')[0];
-            previewImage.style.display = 'block';
-        }
-    }
-
-    $scope.generateLevel1Content = function(data, child) {
-        if (data.children) {
-            org.ekstep.collectioneditor._.each(data.children, function(content) {
-                if (!content.isFolder())
-                    $scope.collectionData.push(content);
-            })
-        } else
-        if (child && !child.isFolder())
-            $scope.collectionData.push(child)
-        else if (!data.type && !data.isFolder()) {
-            $scope.selectedContent = data;
-            $scope.isContent = true;
-        }
-    }
-
-    $scope.setFooter = function(data) {
-        if (data.children) { // when selected node has children
-            $scope.nextTextBook = data.getFirstChild();
-        } else 
-        if ((data.parent.children.length - 1) == data.getIndex()){ // When selected node is last node of parent
-            if (data.parent.getNextSibling()) {
-                $scope.nextTextBook = data.parent.getNextSibling();
-            } else {
-                data.parent.parent.getNextSibling()
-            }
-        } else {
-            $scope.nextTextBook = data.getNextSibling();
-            $scope.prevTextBook = data.getPrevSibling();
-        }
-        if (data.getPrevSibling()) {
-            if (data.getPrevSibling().hasChildren()) {
-                $scope.prevTextBook = data.getPrevSibling().getLastChild();
-            } else {
-                $scope.prevTextBook = data.getPrevSibling();
-            }
-        } else
-        if(data.parent) {
-            $scope.prevTextBook = data.parent;;
-        }
-    }
-
-    $scope.playContent = function(data) {
-        var previewButton = document.getElementsByClassName('preview-image')[0];
-        previewButton.style.display = 'none';
-        var previewIframe = document.getElementById('previewContentIframe');
-        previewIframe.src = (ecEditor.getConfig('previewURL') || '/content/preview/preview.html') + '?webview=true';
-        previewIframe.onload = function() {
-            org.ekstep.services.contentService.getContent(data.data.metadata.identifier, function(err, content) {
-                var configuration = {};
-                var userData = {};
-                userData.etags = ecEditor.getContext('etags') || [];
-                configuration.context = {
-                    'mode':'edit',
-                    'contentId': ecEditor.getContext('contentId'),
-                    'sid': ecEditor.getContext('sid'),
-                    'uid': ecEditor.getContext('uid'), 
-                    'channel': ecEditor.getContext('channel') || "in.ekstep", 
-                    'pdata': ecEditor.getContext('pdata') || {id: "in.ekstep", pid: "", ver: "1.0"}, 
-                    'app': userData.etags.app || [], 
-                    'dims': userData.etags.dims || [], 
-                    'partner': userData.etags.partner || []
-                }; 
-                if (ecEditor.getConfig('previewConfig')) {
-                    configuration.config = ecEditor.getConfig('previewConfig');
-                } else {
-                    configuration.config = {showEndpage:true};
-                }
-                configuration.metadata = content.metadata; 
-                configuration.data = (content.mimeType == 'application/vnd.ekstep.ecml-archive') ?  content.body : {};
-                previewIframe.contentWindow.initializePreview(configuration);
-            })
-        }
-    }
-
     $scope.setSelectedNode = function(event, data) {
-        $scope.resetContentData();
-        $scope.generateLevel1Content(data);
-        $scope.setFooter(data);
         if (data.data.objectType) {
             $scope.selectedObjectType = data.data.objectType
             $scope.$safeApply();
         }
     };
-
-    $scope.deleteNode = function(node, event) {
-        if (!node.data.root) {
-            ecEditor.getService('popup').open({
-                template: '<div class="ui mini modal active" id="deletePopup"> <div class="content"> <div class="ui grid"> <div class="ten wide column"> <span class="custom-modal-heading">Are you sure you want to delete this content?</span> </div><div class="two wide column"> <i class="close large icon four wide column floatContentRight" ng-click="closeThisDialog()"></i></div></div><p class="custom-modal-content">All content within this folder will also be deleted from this textbook.</p><button class="ui red button" ng-click="confirm()">YES, DELETE</button> </div></div>',
-                controller: ["$scope", function($scope) {
-                    $scope.confirm = function() {
-                        node.remove();
-                        $scope.closeThisDialog();
-                        delete org.ekstep.collectioneditor.cache.nodesModified[node.data.id];
-                        ecEditor.dispatchEvent("org.ekstep.collectioneditor:node:removed", node.data.id);
-                    };
-                }],
-                plain: true,
-                showClose: false
-            });
-            var ngDialogEventListener = $rootScope.$on('ngDialog.opened', function (e, $dialog) {
-                var dialogWidth = $('#deletePopup').width();
-                var dialogHeight = $('#deletePopup').height();
-                var height = event.pageY;
-                var viewPortHeight = $(window).height();
-                if ((viewPortHeight-(event.pageY + dialogHeight)) < 0)
-                    height = height-dialogHeight;
-                $('#deletePopup').offset({ top: height, left:  (event.pageX-dialogWidth)}).fadeIn(); 
-                ngDialogEventListener();
-            });
-        }
-    }
     //Header scope starts
     $scope.headers = [];
 
@@ -211,12 +90,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         });
     });
 
-    $scope.setActiveNode = function(nodeId) {
-        org.ekstep.collectioneditor.api.getService('collection').setActiveNode(nodeId);
-    }
-
 
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
-    ecEditor.addEventListener('org.ekstep.collectioneditor:node:added', $scope.generateLevel1Content, $scope);
 }]);
 //# sourceURL=collectiontreeApp.js

@@ -63,6 +63,7 @@ body {
     width: calc(100% - 320px);
     height: 100%;
     padding: 0;
+    overflow-y: auto;
     padding-left: 2px;
 }
 
@@ -250,7 +251,7 @@ ul.fancytree-container{
     font-family: "raleway", sans-serif;
 }
 
-.search-menu-cursor {
+.search-menu-cursor, .preview-play-image {
     cursor: pointer;
 }
 
@@ -334,5 +335,277 @@ span.fancytree-expander {
     color: #434343;
 }
 
+/**/
+.ui.segment.content-editor-segment {
+    background: #F8F8F8;
+    box-shadow: none;
+    border-radius: 0;
+    padding: 0.68em;
+    border: none;
+    margin-right: -2px;
+    border-right: 1px solid rgba(151, 151, 151, 0.4);
+}
+
+.header-title{
+    font-weight: bold;
+    color: #000000;
+    box-shadow: none;
+}
+
+.border-right{
+    border-right: 0.2px solid rgba(128, 128, 128, 0.43);
+}
+
+
+/* Table of contents*/
+.table-of-contents-fixed-btns {
+    bottom: 0;
+    position: fixed;
+}
+
+.ui.two.buttons.table-of-contents-btn {
+    background: white;
+    width: 111.5%;
+    box-shadow: 0 -1px 4px 0 rgba(194, 194, 194, 0.5);
+}
+.ui.two.buttons.table-of-contents-btn > .ui.basic.button {
+    border-radius: 0;
+    border: 1px solid #ddd;
+}
+
+.table-of-contents-child-icon {
+    transform: rotate(180deg);
+    line-height: 1.2;
+}
+
+span.fancytree-custom-icon {
+    font-size: 13px;
+    margin-top: 4px;
+}
+span.fancytree-title {
+    margin: 0px 0 0 2px;
+    font-size: 14px;
+}
+
+span.fancytree-expander {
+    margin-top:2px;
+}
+
+#collection-tree span.fancytree-active {
+    font-weight: bold;
+    color: #434343;
+    border-radius: 3px;
+    border: 0.8px solid rgba(0, 122, 255, 0.3);
+    background: rgba(0, 122, 255, 0.2)
+}
+
+
+.ui-contextmenu.ui-menu.ui-widget.ui-widget-content {
+     width: 270px;
+     padding:10px;
+     box-shadow: 0 2px 4px 0 rgba(164, 164, 164, 0.5);
+     font-size:1em !important;
+     border: solid 1px #dedede;
+     line-height: 1.3;
+     color: #434343;
+}
+
+.ui-menu.ui-widget.ui-widget-content kbd{
+    font-size: 0.9em; 
+    opacity: 0.6;
+    color: #434343;
+}
+
+/*
+https://semantic-ui.com/
+Instagram API for posts,
+switched to Github for the search after API changes
+*/
+.padding-none {
+    padding: 0 !important;
+}
+.padding-15 {
+    padding: 15px !important;
+}
+.padding-top-10 {
+    padding-top: 10px !important;
+}
+
+.ui.items>.item.custom-segment>.image:not(.ui) {
+    width: 170px;
+}
+
+.ui.items>.item.custom-segment>.content>.header:not(.ui) {
+    font-size: 1.3em;
+}
+.ui.items>.item.custom-segment>.content>.meta {
+    font-size: 1.17em;
+    color: #434343;
+}
+
+.ui.items>.item.custom-segment>.content>.extra {
+    font-size: 1em;
+}
+
+
+/* for not able to fetch content */
+
+/* Content tree css */
+
+.tree-container, .tree-container .ui.label {
+    background-color: #f5f5f5!important;
+}
+
+#tree-table {
+    font-weight: bold;
+}
+
+.tree-table-row {
+    box-shadow: 0px 1px 5px grey;
+}
+
+.tree-leftHeader {
+    color: #8e8e8e!important;
+    padding-left: 1px!important;
+    font-size: 0.9em!important;
+}
+
+.tree-rightHeader {
+    float: right;
+    padding-right: 0px!important;
+    font-size: 0.9em!important;
+    cursor: pointer;
+}
+
+.delete-node {
+    color: #da0808;
+    cursor: pointer;
+}
+
+.tree-table-drag {
+    border: 1px dashed #c5c3c3 !important;
+    height: 90px;
+    text-align: center !important;
+    line-height: 90px;
+    color: black;
+}
+
+.floatContentRight {
+    float:right;
+    cursor: pointer;
+}
+
+.custom-modal-heading {
+  height: 34px;
+  font-size: 17px;
+  font-weight: 800;
+  color: #4a4a4a;
+}
+
+.custom-modal-content {  
+  padding-top:10px;
+  font-size: 13px;
+  color: #4a4a4a;
+}
+
+/* Content tree css */
+
+
+/* Mini modal css */
+@media only screen and (max-width: 767px) {
+    .ui.mini.modal {
+        width:95%;
+        margin: 0 0 0 -47.5%
+    }
+}
+
+@media only screen and (min-width: 768px) {
+    .ui.mini.modal {
+        width:35.2%;
+        margin: 0 0 0 -17.6%
+   }
+}
+
+@media only screen and (min-width: 992px) {
+    .ui.mini.modal {
+        width:340px;
+        margin: 0 0 0 -170px
+   }
+}
+
+@media only screen and (min-width: 1200px) {
+    .ui.mini.modal {
+        width:360px;
+        margin: 0 0 0 -180px
+    }
+}
+
+@media only screen and (min-width: 1920px) {
+    .ui.mini.modal {
+        width:380px;
+        margin: 0 0 0 -190px
+    }
+}
+
+.blue-color{
+    color: #066fff!important;
+    cursor: pointer;
+}
+
+.contentType {
+    position: absolute;
+    top: 5px;
+    left: 10px;
+    color: gray;
+}
+
+#contentPreview {
+    background-color: gainsboro;
+    height: 405px;
+    width: 720px;
+}
+
+.preview-image {
+    position: absolute;
+    top: 220px;
+    left: 330px;
+}
+
+#previewContentIframe {
+    border: none!important;
+}
+
+.contentWidth {
+    max-width: 720px !important;
+}
+
+.content-grade {
+    color: rgba(0,0,0,.4);
+    float: right;
+}
+
+.content-owner {
+    margin: 15px 0 5px 0!important;
+}
+
+.content-desc {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.content-name {
+    width: 30em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.tree-footer {
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
 
 /* for not able to fetch content */
