@@ -77,11 +77,11 @@
             },
              {
                 "type": "js",
-                "src": "renderer/controllers/horizontalTemplate.js"
+                "src": "renderer/controllers/horizontal_controller.js"
             },
             {
                 "type": "html",
-                "src": "renderer/templates/horizontalTemplate.html"
+                "src": "renderer/templates/horizontal_template.html"
             }
 
         ]
