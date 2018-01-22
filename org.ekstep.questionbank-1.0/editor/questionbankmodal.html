@@ -214,7 +214,7 @@
     <div class="actions button-actions">
       <button class="ui blue left floated button" ng-show="!isQuestionSetConfig" id="create-question-button" ng-click="createQuestion();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Create question</button>
       <div class="ui buttons">
-        <button class="ui orange button" id="add-more-ques-button" ng-click="isQuestionSetConfig = false;generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event);closeConfigForm()" ng-show="isQuestionSetConfig" type="button">Add More Questions</button>
+        <button class="ui orange button" id="add-more-ques-button" ng-click="searchQuestions();isQuestionSetConfig = false;generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event);closeConfigForm()" ng-show="isQuestionSetConfig" type="button">Add More Questions</button>
         <div class="or" ng-show="isQuestionSetConfig"></div>
         <button class="ui blue button next-button" ng-show="!isQuestionSetConfig" ng-disabled="selectedQuestions.length==0" ng-click="createQuestionSet();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" type="button">Next</button>
         <button class="ui blue button" ng-disabled="(questionSetConfigObj.title == '')" ng-show="isQuestionSetConfig" id="add-to-stage" ng-click="addQuestionSet();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" type="button">Add</button>
