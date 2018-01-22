@@ -7,7 +7,7 @@
             <span class="ui header">Enter the question</span>
           </div>
           <form name="mcqForm">
-            <div class="ui segments" ng-class="{cardBorder: $ctrl.focused}">
+            <div class="ui segments" ng-class="{cardBorder: $ctrl.focused, 'has-errorCard': submitted && mcqForm.question.$error.required}">
               <div class="ui segment">
                 <div class="ui pointing secondary demo menu ">
                   <a class="item active" data-tab="questionTextTab"><i class="checkmark icon" ng-show="mcqFormData.question.text.length > 2"></i> Text</a>
@@ -73,7 +73,7 @@
               </div>
             </div>
             <div ng-repeat="(key, value) in mcqFormData.options">
-              <div class="ui segments" ng-class="{cardBorder: focused}" id="eachCard">
+              <div class="ui segments" ng-class="{cardBorder: focused, 'has-errorCard': submitted && mcqForm['options_' + $index].$error.required}" id="eachCard">
                 <div class="ui segment">
                   <div class="ui pointing secondary demo menu ">
                     <a class="item active" data-tab="optionTextTab"><i class="checkmark icon" ng-show="mcqFormData.options[key].text.length > 1"></i> Text</a>
