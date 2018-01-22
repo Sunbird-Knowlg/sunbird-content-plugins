@@ -76,37 +76,37 @@
       ctrl.questionData.questionTitle = questionData1.data.config.metadata.title;
       ctrl.questionData.qcLevel = questionData1.data.config.metadata.qlevel;
       ctrl.questionData.qcGrade = questionData1.data.config.metadata.gradeLevel;
-      ctrl.category = questionData1.data.config.metadata.category;
-        ctrl.Totalconcepts = questionData1.data.config.metadata.concepts.length; //_.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
-        ctrl.TotalconceptsData = questionData1.data.config.metadata.concepts;
-        ctrl.questionData.questionDesc = questionData1.data.config.metadata.description;
-        ctrl.questionData.questionMaxScore = questionData1.data.config.metadata.max_score;
-        ctrl.conceptsCheck = true;
-        ctrl.backBtn = true;
-        $scope.$safeApply();
-        $scope.questionEditData = questionData1.data; //Using this variable in question unit plugin for editing question
-        ctrl.templatesScreen = false;
-        ctrl.createQuestionScreen = true;
-        ctrl.metadaFormScreen = false;
-        var pluginID = questionData1.data.plugin.id;
-        var pluginVer = questionData1.data.plugin.version;
-        var pluginTemplateId = questionData1.data.plugin.templateId;
-        var editCreateQuestionFormInstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(questionData1.data.plugin.id);
-        _.each(editCreateQuestionFormInstance.templates, function(value, key) {
-          if (value.editor.template == questionData1.data.plugin.templateId) {
-            var controllerPathEdit = ecEditor.resolvePluginResource(pluginID, pluginVer, value.editor.controllerURL);
-            var templatePathEdit = ecEditor.resolvePluginResource(pluginID, pluginVer, value.editor.templateURL);
-            ctrl.questionUnitTemplateURL = templatePathEdit;
-            $scope.$safeApply();
-          }
-        });
+      ctrl.category = questionData.category;
+      ctrl.Totalconcepts = questionData1.data.config.metadata.concepts.length; //_.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
+      ctrl.TotalconceptsData = questionData1.data.config.metadata.concepts;
+      ctrl.questionData.questionDesc = questionData1.data.config.metadata.description;
+      ctrl.questionData.questionMaxScore = questionData1.data.config.metadata.max_score;
+      ctrl.conceptsCheck = true;
+      ctrl.backBtn = true;
+      $scope.$safeApply();
+      $scope.questionEditData = questionData1.data; //Using this variable in question unit plugin for editing question
+      ctrl.templatesScreen = false;
+      ctrl.createQuestionScreen = true;
+      ctrl.metadaFormScreen = false;
+      var pluginID = questionData1.data.plugin.id;
+      var pluginVer = questionData1.data.plugin.version;
+      var pluginTemplateId = questionData1.data.plugin.templateId;
+      var editCreateQuestionFormInstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(questionData1.data.plugin.id);
+      _.each(editCreateQuestionFormInstance.templates, function(value, key) {
+        if (value.editor.template == questionData1.data.plugin.templateId) {
+          var controllerPathEdit = ecEditor.resolvePluginResource(pluginID, pluginVer, value.editor.controllerURL);
+          var templatePathEdit = ecEditor.resolvePluginResource(pluginID, pluginVer, value.editor.templateURL);
+          ctrl.questionUnitTemplateURL = templatePathEdit;
+          $scope.$safeApply();
+        }
+      });
 
-        ctrl.selectedTemplatePluginData.plugin = { // Question Unit Plugin Information  
-          "id": pluginID, // Id of plugin
-          "version": pluginVer, // Version of plugin
-          "templateId": pluginTemplateId // Template Id of the question unit
-        };
-      }
+      ctrl.selectedTemplatePluginData.plugin = { // Question Unit Plugin Information  
+        "id": pluginID, // Id of plugin
+        "version": pluginVer, // Version of plugin
+        "templateId": pluginTemplateId // Template Id of the question unit
+      };
+    }
       ecEditor.dispatchEvent(ctrl.plugins.concepts, {
         element: 'conceptsTextBoxMeta',
         selectedConcepts: ctrl.TotalconceptsData, // All composite keys except mediaType

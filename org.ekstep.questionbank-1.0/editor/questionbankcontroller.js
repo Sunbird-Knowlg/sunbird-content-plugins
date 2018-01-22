@@ -56,15 +56,18 @@ angular.module('createquestionapp', [])
     };
 
     $scope.searchQuestions = function() {
-      for (var key in $scope.filterObj) {
+       $scope.filterData.request.metadata = {};
+          $scope.filterData.request.metadata.filters = [{ "property": "version", "operator": "=", "value": 2 }];
+     /* for (var key in $scope.filterObj) {
         if ($scope.filterObj.hasOwnProperty(key)) {
+          delete $scope.filterData.request.metadata.filters;
           $scope.filterData.request.metadata = {};
           $scope.filterData.request.metadata.filters = [{ "property": "version", "operator": "=", "value": 2 }];
         } else {
           delete $scope.filterData.request.metadata;
           delete $scope.filterData.request.metadata.filters;
         }
-      }
+      }*/
 
       // For my Questions option
       if ($scope.isMyQuestions) {
@@ -110,6 +113,13 @@ angular.module('createquestionapp', [])
         if (!err) {
           $scope.questions = resp.data.result.assessment_items;
           // $scope.getUnselectedQuestionList();
+          for (var i = 0; i < $scope.selectedQuestions.length; i++) {
+            for (var j = 0; j < $scope.questions.length; j++) {
+              if ($scope.selectedQuestions[i].identifier == $scope.questions[j].identifier) {
+                $scope.questions[j].isSelected = true;
+              }
+            }
+          }
           $scope.$safeApply();
         } else {
           $scope.itemsLoading = false;
@@ -146,13 +156,7 @@ angular.module('createquestionapp', [])
             }
           }
         }
-        for (var i = 0; i < $scope.selectedQuestions.length; i++) {
-          for (var j = 0; j < $scope.questions.length; j++) {
-            if ($scope.selectedQuestions[i].identifier == $scope.questions[j].identifier) {
-              $scope.questions[j].isSelected = true;
-            }
-          }
-        }
+
       }
 
       ecEditor.dispatchEvent($scope.pluginIdObj.concepts_id + ':init', {
@@ -228,7 +232,6 @@ angular.module('createquestionapp', [])
      *  @memberof QuestionFormController
      */
     $scope.selectQuestion = function(selQuestion) {
-      //debugger;
       //selQuestion.isSelected = !selQuestion.isSelected;
       var selObjindex = $scope.selectedQuestions.indexOf(selQuestion);
       if (selObjindex > -1) {
@@ -261,7 +264,10 @@ angular.module('createquestionapp', [])
       if (selObjindex > -1) {
         $scope.selectedQuestions.splice(selObjindex, 1);
       }
-      selObjindex = $scope.questions.indexOf(selQuestion);
+
+      selObjindex = _.findLastIndex($scope.questions, {
+        identifier: selQuestion.identifier
+      });
       if (selObjindex > -1) {
         $scope.questions[selObjindex].isSelected = false;
       }

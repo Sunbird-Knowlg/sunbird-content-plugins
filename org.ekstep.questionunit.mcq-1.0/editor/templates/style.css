@@ -43,7 +43,7 @@
 
 .has-error {
   border-bottom-color: #ea7575;
-  border-bottom-width: 1.5px;
+  /*border-bottom-width: 1.5px;*/
   transition:all linear 0.5s;
 }
 
@@ -63,7 +63,7 @@
 }
 
 .mcqFullGrid {
-  max-height: 86vh;
+  max-height: 80vh;
   width: 100%;
   margin-left: 0%;
   margin-top: 0%
@@ -92,7 +92,7 @@
 .addAns {
   text-align: center;
   margin-top: 2%;
-  margin-bottom: 10%;
+  margin-bottom: 2%;
 }
 
 .headQA {

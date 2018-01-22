@@ -21,6 +21,7 @@ org.ekstep.contenteditor.basePlugin.extend({
   newInstance: function() {
     var instance = this;
     delete this.configManifest;
+    instance.config.btn_edit = "Edit";
     var _parent = this.parent;
     this.parent = undefined;
     /*istanbul ignore else*/

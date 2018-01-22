@@ -1,22 +1,5 @@
 <script type="text/ng-template" id="QuestionUnitBrowser" ng-controller="QuestionCreationFormController as $ctrl">
   <div class="ui modal questioncreation fullscreen active">
-    <!-- <div class="ui grid qcHeader">
-      <div class="two wide column questionHeader">
-        <h3></h3>
-      </div>
-      <div class="eight wide column center aligned">
-        <div class="ui huge breadcrumb breadcrumbTitle">
-          <div ng-class="{activeBreadcumb: $ctrl.templatesScreen == true}" class="section">Choose template</div>
-          <i class="right chevron icon divider"></i>
-          <div class="section" ng-class="{activeBreadcumb: $ctrl.createQuestionScreen == true}">Create question</div>
-          <i class="right chevron icon divider"></i>
-          <div class="section" ng-class="{activeBreadcumb: $ctrl.metadaFormScreen == true}">Question Details</div>
-        </div>
-      </div>
-      <div class="two wide column right aligned qcCloseIcon">
-        <i class="close link icon" id="ques-cancel-button" ng-click="$ctrl.cancel();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)"></i>
-      </div>
-    </div> -->
     <div class="header" style="padding-right:1em;">
         <div class="ui two column grid">
             <div class="row">
@@ -74,7 +57,7 @@
                 <img src="{{value.thumbnail1}}"/>
               </div>
               <div class="content">
-                <a class="header">{{value.title}}</a>
+                <a class="header card-header">{{value.title}}</a>
                 <div class="meta">
                   <span>{{value.data.name}}</span>
                 </div>
@@ -132,7 +115,8 @@
                     <div class="no label example">
                       <div class="ui fluid dropdown selection multiple" tabindex="0" id="grade-drop-down" ng-click="$ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)">
                         <select multiple="" name="binary" class="grade form-control" name="qcGrade" ng-model="$ctrl.questionData.qcGrade" required>
-                          <option ng-repeat="g in $ctrl.grades" value="{{g}}" selected="{{$ctrl.questionData.qcGrade[$index]}}">{{g}}</option>
+                          <option value="" selected="selected">Choose Grade</option>
+                          <option ng-repeat="g in $ctrl.grades" value="{{g}}" ng-selected="{{$ctrl.questionData.qcGrade[$index]}}">{{g}}</option>
                         </select><i class="dropdown icon"></i>
                         <div class="default text">Select grade</div>
                         <div class="menu" tabindex="-1">
@@ -152,7 +136,7 @@
                     <span id="concepts_dummy" class="disabled">{{$ctrl.Totalconcepts}} concept(s) choosen</span>
                     <small ng-show="$ctrl.qcconcepterr" class="qcError">Select concept</small>
                   </div>
-                  <div class="column">
+                  <div class="two wide column">
                     <label class="qcMetadateFormLbl" data-original-title="Question max score">
                       Max score <span class="star">&nbsp;*</span>
                     </label>
@@ -187,12 +171,11 @@
       </div>
     </div>
     <div class="actions bottomActionButtons">
-      <!-- <button class="ui large orange button left floated" id="ques-cancel-button" ng-click="$ctrl.cancel();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Cancel</button> -->
       <div class="ui buttons">
         <button class="ui basic primary button" id="back-button" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen" ng-click="$ctrl.back();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" ng-disabled="$ctrl.backBtn">Back</button>
         <div class="or" ng-show="$ctrl.createQuestionScreen || $ctrl.metadaFormScreen"></div>
         <button class="ui large blue button" ng-show="$ctrl.createQuestionScreen" id="back-button" ng-click="$ctrl.validateQuestionCreationForm($event);$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Next</button>
-        <button class="ui large blue button" ng-show="$ctrl.metadaFormScreen" id="save-question-button" ng-click="$ctrl.sendData(questionUnitBrowserForm.$valid);$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" ng-disabled="(!questionUnitBrowserForm.$valid) || (!$ctrl.conceptsCheck)">Submit</button>
+        <button class="ui large blue button" ng-if="$ctrl.metadaFormScreen" id="save-question-button" ng-click="$ctrl.sendData(questionUnitBrowserForm.$valid);$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" ng-disabled="(!questionUnitBrowserForm.$valid) || (!$ctrl.conceptsCheck)">Submit</button>
       </div>
     </div>
   </div>
