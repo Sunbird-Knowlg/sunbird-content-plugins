@@ -74,7 +74,16 @@
             {
                 "type": "js",
                 "src": "renderer/util/evaluator.js"
+            },
+             {
+                "type": "js",
+                "src": "renderer/controllers/horizontalTemplate.js"
+            },
+            {
+                "type": "html",
+                "src": "renderer/templates/horizontalTemplate.html"
             }
+
         ]
     },
     "dependencies": [
@@ -84,5 +93,6 @@
             "type": "plugin",
             "scope": "all"
         }
+
     ]
 }
