@@ -64,6 +64,8 @@ Plugin.extend({
     if (this._currentQuestion) {
       EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
     }
+    //if render question second then show custom prev navigaion
+    if(this._renderedQuestions.length >= 1)this.showCustomPrevNav();
     this.setRendered(question);
     this._currentQuestion = question;
     this._currentQuestionState = this.getQuestionState(this._currentQuestion.id);
@@ -122,6 +124,10 @@ Plugin.extend({
     var prevQ = this.getPrevQuestion();
     if (prevQ) {
       this.renderQuestion(prevQ);
+      //if previous stage not their and question is first 
+       if(this.getRenderedIndex()==0 && typeof this._stage.params.previous === "undefined"){
+      this.showDefaultPrevNav();
+       }
     } else {
       this.saveQuestionSetState();
       EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
@@ -242,7 +248,6 @@ Plugin.extend({
       });
       customPrevButton.appendTo('#gameArea');
     }
-
     // Show Custom Navigation
     this.showCustomNextNav();
     this.showCustomPrevNav();
@@ -271,12 +276,16 @@ Plugin.extend({
     };
     Renderer.theme.setParam(this._data.id, qsState);
   },
-  resetQS: function () {
+  resetQS: function() {
     this.resetNavigation();
     Renderer.theme.setParam(this._data.id, undefined);
     if (this._currentQuestion) {
-      EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
+        EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
     }
-  }
+    //if first stage is question set show custom next navigation
+    if (this._renderedQuestions.length != this._masterQuestionSet.length) {
+      this.showCustomNextNav();
+    }
+}
 });
 //# sourceURL=questionSetRenderer.js
