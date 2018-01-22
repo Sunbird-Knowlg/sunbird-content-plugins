@@ -84,7 +84,6 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
             if (!_.isEmpty($scope.textbook.audience) && _.isString($scope.textbook.audience)) {
                 $scope.textbook.audience = [$scope.textbook.audience];
             }
-            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
             $scope.textbook.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
             var keywords = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords
@@ -333,6 +332,11 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
             }
         }, true);
     }
+
+    $scope.changeTitle = function(){
+        org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
+    }
+
     $scope.init();
 }]);
 //# sourceURL=textbookmetaApp.js
