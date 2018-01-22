@@ -19,7 +19,7 @@
         },
         {
             "type": "css",
-            "src": "editor/styles/horizontalTemplate.css"
+            "src": "editor/styles/style.css"
         }],
         "menu": [],
         "init-data":
@@ -63,15 +63,15 @@
         "category": "ftb",
         "editor":
         {
-            "templateURL": "editor/templates/horizontalTemplate.html",
-            "controllerURL": "editor/controllers/horizontalTemplate.js",
+            "templateURL": "editor/templates/horizontal_template.html",
+            "controllerURL": "editor/controllers/horizontal_controller.js",
             "template": "ftbtemplate",
             "controller": "QuestionFormController"
         },
         "renderer":
         {
-            "template": "renderer/templates/horizontalTemplate.html",
-            "controller": "renderer/controllers/horizontalTemplate.js"
+            "template": "renderer/templates/horizontal_template.html",
+            "controller": "renderer/controllers/horizontal_controller.js"
         }
 
     }],
@@ -81,7 +81,7 @@
          "dependencies": [
             {
                 "type": "css",
-                "src": "renderer/styles/horizontalTemplate.css"
+                "src": "renderer/styles/style.css"
             },
              {
                 "type": "js",

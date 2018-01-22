@@ -5,7 +5,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
   $scope.showTemplate = true;
   $scope.question;
   $scope.selectedAns;
-  $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/styles/horizontalTemplate.css");
+  $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/styles/style.css");
   $scope.init = function() {
     $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.mcq");
     $scope.pluginInstance.initPlugin($scope.pluginInstance);

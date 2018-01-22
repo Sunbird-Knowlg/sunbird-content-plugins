@@ -5,7 +5,7 @@ angular.module('FTBRendererApp', []).controller("FTBRendererController", functio
   $scope.ftbAnswer;
   $scope.qcquestion = true;
   $scope.qcblank = true;
-  $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.ftb", "1.0", "renderer/styles/horizontalTemplate.css");
+  $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.ftb", "1.0", "renderer/styles/style.css");
   $scope.init = function() {
     $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.ftb");
     // To show template/plugin  
