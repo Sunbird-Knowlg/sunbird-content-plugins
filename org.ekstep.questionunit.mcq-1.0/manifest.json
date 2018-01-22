@@ -80,7 +80,7 @@
                 "src": "renderer/controllers/horizontalTemplate.js"
             },
             {
-                "type": "html",
+                "type": "js",
                 "src": "renderer/templates/horizontalTemplate.html"
             }
 
