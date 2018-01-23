@@ -46,14 +46,15 @@
                         <div class="ui label tree-leftHeader">ADD CONTENT</div>
                         <div class="ui label tree-rightHeader blue-color">View Library</div>
                     </div>
-                    <div class="contentWidth padding-top-10" ng-if="isContent">
+                    <div class="contentWidth padding-top-10 centerAligned" ng-if="isContent">
                         <div class="ui label tree-leftHeader">CONTENT PREVIEW</div>
                         <div class="ui label tree-rightHeader"><i class="fa fa-trash right floated delete-node" aria-hidden="true" ng-click="deleteNode(selectedContent, $event);"> REMOVE</i></div>
                     </div>
                     <div class="ui" id="tree-table">
-                        <div ng-if="!isContent">
+                        <div ng-if="!isContent && collectionData.length<1">
                             <div class="tree-table-drag">
-                                Drag and Drop Suggested Content here or <span class="blue-color">View Library</span>
+                                <!-- Drag and Drop Suggested Content here or <span class="blue-color">View Library</span> -->
+                                No Content's are available
                             </div>
                         </div>
                         <div class="ui raised segment padding-none" ng-repeat="child in collectionData" ng-if="!isContent">
@@ -85,7 +86,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div ng-if="isContent" class="contentWidth">
+                        <div ng-if="isContent" class="contentWidth centerAligned">
                             <div class="content-details">
                                 <div id="contentPreview">
                                     <div class="preview-image">
@@ -104,7 +105,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="tree-footer" ng-class="{'contentWidth':isContent}">
+                    <div class="tree-footer" ng-class="{'contentWidth centerAligned':isContent}">
                         <span class="blue-color" ng-if="prevTextBook.data.metadata.name" ng-click="setActiveNode(prevTextBook.key)">Go to {{prevTextBook.data.metadata.name}}</span>
                         <span class="blue-color floatContentRight" ng-if="nextTextBook.data.metadata.name" ng-click="setActiveNode(nextTextBook.key)">Go to {{nextTextBook.data.metadata.name}}</span>
                     </div>

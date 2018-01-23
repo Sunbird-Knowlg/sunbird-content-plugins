@@ -563,12 +563,14 @@ switched to Github for the search after API changes
     background-color: gainsboro;
     height: 405px;
     width: 720px;
+    position: relative;
 }
 
 .preview-image {
     position: absolute;
-    top: 220px;
-    left: 330px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 #previewContentIframe {
@@ -610,6 +612,10 @@ switched to Github for the search after API changes
 
 #deletePopup {
     top: auto;    
+}
+
+.centerAligned {
+    margin: 0 auto;
 }
 
 /* for not able to fetch content */
