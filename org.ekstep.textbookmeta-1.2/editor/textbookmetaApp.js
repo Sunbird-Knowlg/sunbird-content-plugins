@@ -3,13 +3,8 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
     $scope.showImageIcon = true;
-    // $scope.boardList = {};
-    // $scope.gradeList = [];
-    // $scope.languageList = [];
-    // $scope.subjectList = [];
     $scope.categoryModelList = {};
     $scope.categoryListofFramework = {};
-    $scope.defaultSubjectList = ["Biology", "Chemistry", "Physics", "Mathematics", "Environmental", "Geography", "History", "Political Science", "Economics", "Sanskrit"];
     const DEFAULT_NODETYPE = 'TextBook';
     $scope.updateTitle = function(event, title) {
         $scope.textbook.name = title;
@@ -17,8 +12,9 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
         $scope.$safeApply();
     }
     ecEditor.addEventListener("title:update:textbook", $scope.updateTitle, $scope);
-    _.forEach(org.ekstep.services.collectionService.categoryList, function(category){
-        $scope.categoryListofFramework[category.code] = category.terms;
+    var categoryMasterList = _.cloneDeep(org.ekstep.services.collectionService.categoryList);
+    _.forEach(categoryMasterList, function(category){
+        $scope.categoryListofFramework[category.index] = category.terms || [];
         var categoryName = 'category_'+category.index;
         $scope[categoryName] = category;
         $scope.categoryModelList[category.index] = category.code;
@@ -34,84 +30,86 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
                 });
                 associations = _.concat(categoryObj.associations, associations);
             });
-        }else{
+        }else if(selectedCategory){
             var categoryObj= _.find(categoryList, function(o) { 
                return o.name === selectedCategory;
             });
-            associations = _.concat(categoryObj.associations, associations);
+            associations = categoryObj.associations || [];
         }
         return associations;
     }
-
-    $scope.updatedDependentCategory = function(category, categoryVal){
+    $scope.updatedDependentCategory = function(categoryIndex, categoryVal){
         var category_1 = [],
             category_2 = [],
             category_3 = [],
             category_4 = [],
-            categoryList = $scope.categoryListofFramework[category], 
+            categoryList = $scope.categoryListofFramework[categoryIndex], 
             associations = $scope.getAssociations(categoryVal, categoryList);
         if(associations.length > 0){
             _.forEach(associations, function(data){
-                var categoryIndex = _.findKey($scope.categoryModelList, function(val, key){ 
+                var catendex = _.findKey($scope.categoryModelList, function(val, key){ 
                     return val === data.category; 
                 });
-                var categoryName = 'category_'+categoryIndex;
-                switch(categoryIndex){
+                var categoryName = 'category_'+catendex;
+                switch(catendex){
                     case "1":
-                        $('#textbookmeta-category-1').dropdown('restore defaults');
+                        $('.textbookmeta-category-1').dropdown('restore defaults');
                         category_1 = _.concat(data, category_1);
                         $scope[categoryName].terms = _.uniqWith(category_1, _.isEqual);
                         break;
                     case "2":
-                        $('#textbookmeta-category-2').dropdown('restore defaults');
+                        $('.textbookmeta-category-2').dropdown('restore defaults');
                         category_2 = _.concat(data, category_2);
                         $scope[categoryName].terms = _.uniqWith(category_2, _.isEqual);
                         break;
                     case "3":
-                        $('#textbookmeta-category-3').dropdown('restore defaults');
+                        $('.textbookmeta-category-3').dropdown('restore defaults');
                         category_3 = _.concat(data, category_3);
                         $scope[categoryName].terms = _.uniqWith(category_3, _.isEqual);
                         break;
                     case "4":
-                        $('#textbookmeta-category-4').dropdown('restore defaults');
+                        $('.textbookmeta-category-4').dropdown('restore defaults');
                         category_4 = _.concat(data, category_4);
                         $scope[categoryName].terms = _.uniqWith(category_4, _.isEqual);
                         break;
                 }
             });
         }else{
-            var categoryIndex = _.findKey($scope.categoryModelList, function(val, key){ 
-                return val === category; 
-            });
             switch(categoryIndex){
                 case "1":
-                    $('#textbookmeta-category-2').dropdown('restore defaults');
-                    //$('#textbookmeta-category-3').dropdown('restore defaults');
-                    $('#textbookmeta-category-4').dropdown('restore defaults');
-                    $scope['category_2'].terms = $scope.getTemsByindex(2);
-                    $scope['category_3'].terms = $scope.getTemsByindex(3);
-                    $scope['category_4'].terms = $scope.getTemsByindex(4);
+                    setTimeout(function() {
+                        $('.textbookmeta-category-2').dropdown('restore defaults'); 
+                        $('.textbookmeta-category-3').dropdown('restore defaults');
+                        $('.textbookmeta-category-4').dropdown('restore defaults');
+                    }, 0);
+                    $scope['category_2'] = $scope.getTemsByindex(2);
+                    $scope['category_3'] = $scope.getTemsByindex(3);
+                    $scope['category_4'] = $scope.getTemsByindex(4);
                     break;
                 case '2':
-                    $('#textbookmeta-category-3').dropdown('restore defaults');
-                    $('#textbookmeta-category-4').dropdown('restore defaults');
-                    $scope['category_3'].terms = $scope.getTemsByindex(3);
-                    $scope['category_4'].terms = $scope.getTemsByindex(4);
+                    setTimeout(function() {
+                        $('.textbookmeta-category-3').dropdown('restore defaults');
+                        $('.textbookmeta-category-4').dropdown('restore defaults');
+                    }, 0);
+                    $scope['category_3'] = $scope.getTemsByindex(3);
+                    $scope['category_4'] = $scope.getTemsByindex(4);
                     break;
                 case '3':
-                    $('#textbookmeta-category-4').dropdown('restore defaults');
-                    $scope['category_4'].terms = $scope.getTemsByindex(4);
+                    setTimeout(function() {
+                        $('.textbookmeta-category-4').dropdown('restore defaults');
+                    }, 0);
+                    $scope['category_4'] = $scope.getTemsByindex(4);
                     break;
             }
         }
-        $scope.$safeApply();
     }
 
     $scope.getTemsByindex = function(index){
-        var category = _.find(org.ekstep.services.collectionService.categoryList, function(o){
+        var masterList = _.cloneDeep(org.ekstep.services.collectionService.categoryList);
+        var category = _.find(masterList, function(o){
             return o.index === index;
         });
-        return category.terms;
+        return category;
     }
 
     $scope.showAssestBrowser = function() {
@@ -127,10 +125,10 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
 
     $scope.initDropdown = function() {
         $timeout(function() {
-            $('#textbookmeta-category-1').dropdown('set selected', $scope.textbook[$scope.categoryModelList[1]]);
-            $('#textbookmeta-category-2').dropdown('set selected', $scope.textbook[$scope.categoryModelList[2]]);
-            $('#textbookmeta-category-3').dropdown('set selected', $scope.textbook[$scope.categoryModelList[3]]);
-            $('#textbookmeta-category-4').dropdown('set selected', $scope.textbook[$scope.categoryModelList[4]]);
+            $('.textbookmeta-category-1').dropdown('set selected', $scope.textbook[$scope.categoryModelList[1]]);
+            $('.textbookmeta-category-2').dropdown('set selected', $scope.textbook[$scope.categoryModelList[2]]);
+            $('.textbookmeta-category-3').dropdown('set selected', $scope.textbook[$scope.categoryModelList[3]]);
+            $('.textbookmeta-category-4').dropdown('set selected', $scope.textbook[$scope.categoryModelList[4]]);
             $('#textbookmeta-year').dropdown('set selected', $scope.textbook.year);
             $('#textbookmeta-resource').dropdown('set selected', $scope.textbook.resource);
         });
