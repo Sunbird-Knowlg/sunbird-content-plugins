@@ -4,12 +4,6 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     $scope.nodeId = $scope.nodeType = '';
     $scope.showImageIcon = true;
     const DEFAULT_NODETYPE = 'TextBookUnit';
-    const MEMORY_MAP = 'collection_editor';
-    $scope.suggestVocabularyRequest = {
-        request: {
-            text:""
-        }
-    }
 
     $scope.updateTitle = function(event, title) {
         $scope.unit.name = title;
@@ -188,69 +182,16 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     
     $scope.loadKeywords = function($query) {
         if ($query.length >= 3) {
-            return fetchKeywords($query).then(function(countries) {
-                return countries.filter(function(country) {
-                    return country.lemma.toLowerCase().indexOf($query.toLowerCase()) != -1;
+            return org.ekstep.services.collectionService.fetchKeywords($query).then(function(keywords) {
+                return keywords.filter(function(keyword) {
+                    return keyword.lemma.toLowerCase().indexOf($query.toLowerCase()) != -1;
                 });
             })
         }
     };
 
-    var fetchKeywords = function($query) {
-        return new Promise(function(resolve, reject) {
-            var keyword = $scope.isKeywordPresent($query);
-            if (!keyword.isPresent) {
-                $scope.suggestVocabularyRequest.request.text = $query;
-                org.ekstep.services.metaService.suggestVocabulary($scope.suggestVocabularyRequest, function(err, resp) {
-                    if (resp) {
-                        if (resp.data.result.terms) {
-                            var result = {};
-                            result[$query] = _.uniqBy(resp.data.result.terms,'lemma');
-                            $scope.storeKeywordsInMemory(result);
-                            resolve(result[$query]);
-                        }
-                    } else {
-                        reject(false)
-                    }
-                })
-            } else {
-                resolve(keyword.value);
-            }
-        });
-    }
-
-    $scope.storeKeywordsInMemory = function(data) {
-        var items = JSON.parse(localStorage.getItem(MEMORY_MAP));
-        if (items) {
-            _.forEach(items, function(value, key) {
-                data[key] = value;
-            })
-        }
-        localStorage.setItem(MEMORY_MAP, JSON.stringify(data));
-    }
-
-    $scope.clearInMemory = function(){
-       delete localStorage[MEMORY_MAP];
-    }
-
-    $scope.isKeywordPresent = function($query) {
-        var keywords = {}
-        var fromLocalStorage = localStorage.getItem(MEMORY_MAP);
-        var obj = JSON.parse(fromLocalStorage);
-        if (obj) {
-            _.forEach(obj, function(value, key) {
-                if (_.includes(key, $query)) {
-                    keywords.isPresent = true;
-                    keywords.value = value;
-                }
-            });
-        }
-        return keywords
-    }
-
     $scope.init = function() {
         var activeNode = undefined;
-        $scope.clearInMemory();
         $scope.$watch('unit', function() {
             if ($scope.unit) {
                 if(/^[a-z\d\-_\s]+$/i.test($scope.unit.name) == false) $scope.unit.name = org.ekstep.services.collectionService.removeSpecialChars($scope.unit.name);
