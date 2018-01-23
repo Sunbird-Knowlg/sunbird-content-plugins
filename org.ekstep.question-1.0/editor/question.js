@@ -67,7 +67,6 @@
   }, 300);
 
   ctrl.init = function() {
-
     if (!ecEditor._.isEmpty(questionData)) {
       var questionData1 = typeof questionData.body == "string" ? JSON.parse(questionData.body) : questionData.body;
       ctrl.assessmentId = questionData.identifier;
@@ -266,7 +265,6 @@
     }
 
     ctrl.sendData = function(isValid) {
-      var metadata = {};
       if (isValid && ctrl.Totalconcepts > 0) {
         var questionFormData = {};
 
