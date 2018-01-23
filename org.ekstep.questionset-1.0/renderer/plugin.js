@@ -34,8 +34,14 @@ Plugin.extend({
     },
     qsPrefix: 'qs',
   },
+  initialize: function(){
+    var ctrlPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(this._manifest.id, this._manifest.ver, "renderer/controller/questionset_ctrl.js");
+   var tempPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(this._manifest.id, this._manifest.ver, "renderer/templates/questionset_template.html");
+   org.ekstep.service.controller.loadNgModules(tempPath, ctrlPath);
+  },
   initPlugin: function (data) {
     var instance = this;
+        // this._templatePath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(this._manifest.id, this._manifest.ver, "renderer/templates/overlay.html");
     EkstepRendererAPI.addEventListener('renderer:content:start', this.resetQS, this);
     EkstepRendererAPI.addEventListener(this._manifest.id + ':saveQuestionState', function (event) {
       var state = event.target;
@@ -44,7 +50,8 @@ Plugin.extend({
     this.loadTemplateContainer();
     this._questionSetConfig = this._data.config ? JSON.parse(this._data.config.__cdata) : this._questionSetConfig;
     this.setupNavigation();
-    this._masterQuestionSet = angular.copy(data[this._constants.questionPluginId]);
+    var quesArray = angular.copy(data[this._constants.questionPluginId]);
+    this._masterQuestionSet = _.isArray(quesArray) ? quesArray : _.toArray({quesArray});
 
     var savedQSState = this.getQuestionSetState();
     if (savedQSState) {
@@ -98,12 +105,12 @@ Plugin.extend({
   },
   displayFeedback: function (res) {
     if(res === true) {
-      alert('Correct Answer!');
+      console.log('Correct Answer!');
 
       //TODO: This will move to the feedback pop-up next button
       this.renderNextQuestion();
     } else {
-      alert('Wrong Answer');
+      console.log('Wrong Answer');
     }
   },
   renderNextQuestion: function () {
@@ -283,7 +290,7 @@ Plugin.extend({
         EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
     }
     //if first stage is question set show custom next navigation
-    if (this._renderedQuestions.length != this._masterQuestionSet.length) {
+    if (this._renderedQuestions.length != this._masterQuestionSet.length||this._masterQuestionSet.length==1) {
       this.showCustomNextNav();
     }
 }

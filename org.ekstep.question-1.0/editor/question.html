@@ -4,7 +4,8 @@
         <div class="ui two column grid">
             <div class="row">
                 <div class="two wide column">
-                    <span>Create question</span>
+                    <span ng-if="!$ctrl.backBtn">Create question</span>
+                    <span ng-if="$ctrl.backBtn">Edit question</span>
                 </div>
                 <div class="eight wide column center aligned">
                   <div class="ui huge breadcrumb breadcrumbTitle">

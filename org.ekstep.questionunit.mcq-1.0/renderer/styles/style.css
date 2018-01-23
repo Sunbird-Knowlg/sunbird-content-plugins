@@ -33,12 +33,12 @@ header.qc-long-text-header {
 
 .qc-option-container {
     width: 100%;
-    display: block height: 70%;
+    display: block;
     text-align: center;
     margin-top: 6%;
-    max-height: 63vh;
-    min-height: 34vh;
+    height: 52vh;
     overflow-y: auto;
+
 }
 
 .qc-option-value {
