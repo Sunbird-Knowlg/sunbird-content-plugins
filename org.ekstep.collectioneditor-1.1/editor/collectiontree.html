@@ -85,7 +85,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div ng-if="isContent">
+                        <div ng-if="isContent" class="contentWidth">
                             <div class="content-details">
                                 <div id="contentPreview">
                                     <div class="preview-image">
@@ -93,8 +93,8 @@
                                     </div>
                                     <iframe id="previewContentIframe" width=100% height=100%></iframe>
                                 </div>
-                                <p class="tree-leftHeader content-owner contentWidth">OWNER</p>
-                                <div class="footer contentWidth">
+                                <p class="tree-leftHeader content-owner">OWNER</p>
+                                <div class="footer">
                                     <span>{{selectedContent.data.metadata.owner}}</span>
                                     <span class="content-grade">
                                         <span ng-repeat="grade in selectedContent.data.metadata.gradeLevel | limitTo: 2">{{grade}} &nbsp;</span>

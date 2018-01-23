@@ -608,4 +608,8 @@ switched to Github for the search after API changes
     padding-bottom: 20px;
 }
 
+#deletePopup {
+    top: auto;    
+}
+
 /* for not able to fetch content */

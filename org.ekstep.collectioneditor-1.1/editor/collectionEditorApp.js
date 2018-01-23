@@ -8,8 +8,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     $scope.selectedObjectType = undefined;
     $scope.nodeFilter = "";
     $scope.expandNodeFlag = true;
-    $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.collectioneditor", "1.0", "assets/default.png");
-    $scope.playImage = ecEditor.resolvePluginResource("org.ekstep.collectioneditor", "1.0", "assets/icn_play.png");
+    $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.collectioneditor", "1.1", "assets/default.png");
+    $scope.playImage = ecEditor.resolvePluginResource("org.ekstep.collectioneditor", "1.1", "assets/icn_play.png");
     $scope.collectionData = [];
     $scope.selectedContent;
     $scope.isContent = false;
@@ -51,25 +51,39 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     }
 
     $scope.setFooter = function(data) {
+        var nextSibling = function(node) {
+            var siblingNode
+            if (!node.parent.isTopLevel()){ // Checking if node is not root node
+                if (node.parent.getNextSibling()) return node.parent.getNextSibling();
+                else {
+                    siblingNode = nextSibling(node.parent) // Looping again and again to fetch nextSibling
+                }
+                return siblingNode;
+            }
+        }
+        var prevSibling = function(node) {
+            var siblingNode
+            if (node.hasChildren()) {
+                siblingNode = prevSibling(node.getLastChild()); // looping again and again to fetch first last children of nested sibling
+            } else {
+                return node;
+            }
+            return siblingNode;
+        }
+        // NextSibling
         if (data.children) { // when selected node has children
             $scope.nextTextBook = data.getFirstChild();
         } else 
         if ((data.parent.children.length - 1) == data.getIndex()){ // When selected node is last node of parent
-            if (data.parent.getNextSibling()) {
-                $scope.nextTextBook = data.parent.getNextSibling();
-            } else {
-                data.parent.parent.getNextSibling()
-            }
+                $scope.nextTextBook = nextSibling(data);
         } else {
             $scope.nextTextBook = data.getNextSibling();
             $scope.prevTextBook = data.getPrevSibling();
         }
+
+        // PrevSibling
         if (data.getPrevSibling()) {
-            if (data.getPrevSibling().hasChildren()) {
-                $scope.prevTextBook = data.getPrevSibling().getLastChild();
-            } else {
-                $scope.prevTextBook = data.getPrevSibling();
-            }
+            $scope.prevTextBook = prevSibling(data.getPrevSibling());
         } else
         if(data.parent) {
             $scope.prevTextBook = data.parent;;
