@@ -3,12 +3,8 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
     $scope.showImageIcon = true;
-    $scope.boardList = {};
-    $scope.gradeList = [];
-    $scope.languageList = [];
-    $scope.audienceList = [];
-    $scope.subjectList = [];
-    $scope.defaultSubjectList = ["Biology", "Chemistry", "Physics", "Mathematics", "Environmental", "Geography", "History", "Political Science", "Economics", "Sanskrit"];
+    $scope.categoryModelList = {};
+    $scope.categoryListofFramework = {};
     const DEFAULT_NODETYPE = 'TextBook';
     $scope.updateTitle = function(event, title) {
         $scope.textbook.name = title;
@@ -16,26 +12,105 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
         $scope.$safeApply();
     }
     ecEditor.addEventListener("title:update:textbook", $scope.updateTitle, $scope);
-    ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
-        if (!err) {
-            $scope.gradeList = resp.data.result.ordinals.gradeLevel;
-            $scope.languageList = resp.data.result.ordinals.language;
-            $scope.audienceList = resp.data.result.ordinals.audience;
-            $scope.subjectList = _.uniq(_.union(_.clone(resp.data.result.ordinals.language), $scope.defaultSubjectList));
-            //TODO: Replace below list with API resplonse            
-            $scope.boardList["CBSE"] = "CBSE";
-            $scope.boardList["NCERT"] = "NCERT";
-            $scope.boardList["ICSE"] = "ICSE"
-            $scope.boardList["MSCERT"] = "MSCERT";
-            $scope.boardList["UP Board"] = "UP Board";
-            $scope.boardList["AP Board"] = "AP Board";
-            $scope.boardList["TN Board"] = "TN Board";
-            $scope.boardList["NCTE"] = "NCTE";
-            $scope.boardList["BSER"] = "BSER";
-            $scope.boardList["Other"] = "Others";
-            $scope.$safeApply();
-        }
+    var categoryMasterList = _.cloneDeep(org.ekstep.services.collectionService.categoryList);
+    _.forEach(categoryMasterList, function(category){
+        $scope.categoryListofFramework[category.index] = category.terms || [];
+        var categoryName = 'category_'+category.index;
+        $scope[categoryName] = category;
+        $scope.categoryModelList[category.index] = category.code;
     });
+    $scope.$safeApply();
+
+    $scope.getAssociations = function(selectedCategory, categoryList){
+        var associations = [];
+        if(_.isArray(selectedCategory)){
+            _.forEach(selectedCategory, function(val){
+                var categoryObj= _.find(categoryList, function(o) { 
+                   return o.name === val;
+                });
+                associations = _.concat(categoryObj.associations, associations);
+            });
+        }else if(selectedCategory){
+            var categoryObj= _.find(categoryList, function(o) { 
+               return o.name === selectedCategory;
+            });
+            associations = categoryObj.associations || [];
+        }
+        return associations;
+    }
+    $scope.updatedDependentCategory = function(categoryIndex, categoryVal){
+        var category_1 = [],
+            category_2 = [],
+            category_3 = [],
+            category_4 = [],
+            categoryList = $scope.categoryListofFramework[categoryIndex], 
+            associations = $scope.getAssociations(categoryVal, categoryList);
+        if(associations.length > 0){
+            _.forEach(associations, function(data){
+                var catendex = _.findKey($scope.categoryModelList, function(val, key){ 
+                    return val === data.category; 
+                });
+                var categoryName = 'category_'+catendex;
+                switch(catendex){
+                    case "1":
+                        $('.textbookmeta-category-1').dropdown('restore defaults');
+                        category_1 = _.concat(data, category_1);
+                        $scope[categoryName].terms = _.uniqWith(category_1, _.isEqual);
+                        break;
+                    case "2":
+                        $('.textbookmeta-category-2').dropdown('restore defaults');
+                        category_2 = _.concat(data, category_2);
+                        $scope[categoryName].terms = _.uniqWith(category_2, _.isEqual);
+                        break;
+                    case "3":
+                        $('.textbookmeta-category-3').dropdown('restore defaults');
+                        category_3 = _.concat(data, category_3);
+                        $scope[categoryName].terms = _.uniqWith(category_3, _.isEqual);
+                        break;
+                    case "4":
+                        $('.textbookmeta-category-4').dropdown('restore defaults');
+                        category_4 = _.concat(data, category_4);
+                        $scope[categoryName].terms = _.uniqWith(category_4, _.isEqual);
+                        break;
+                }
+            });
+        }else{
+            switch(categoryIndex){
+                case "1":
+                    setTimeout(function() {
+                        $('.textbookmeta-category-2').dropdown('restore defaults'); 
+                        $('.textbookmeta-category-3').dropdown('restore defaults');
+                        $('.textbookmeta-category-4').dropdown('restore defaults');
+                    }, 0);
+                    $scope['category_2'] = $scope.getTemsByindex(2);
+                    $scope['category_3'] = $scope.getTemsByindex(3);
+                    $scope['category_4'] = $scope.getTemsByindex(4);
+                    break;
+                case '2':
+                    setTimeout(function() {
+                        $('.textbookmeta-category-3').dropdown('restore defaults');
+                        $('.textbookmeta-category-4').dropdown('restore defaults');
+                    }, 0);
+                    $scope['category_3'] = $scope.getTemsByindex(3);
+                    $scope['category_4'] = $scope.getTemsByindex(4);
+                    break;
+                case '3':
+                    setTimeout(function() {
+                        $('.textbookmeta-category-4').dropdown('restore defaults');
+                    }, 0);
+                    $scope['category_4'] = $scope.getTemsByindex(4);
+                    break;
+            }
+        }
+    }
+
+    $scope.getTemsByindex = function(index){
+        var masterList = _.cloneDeep(org.ekstep.services.collectionService.categoryList);
+        var category = _.find(masterList, function(o){
+            return o.index === index;
+        });
+        return category;
+    }
 
     $scope.showAssestBrowser = function() {
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
@@ -50,10 +125,10 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
 
     $scope.initDropdown = function() {
         $timeout(function() {
-            $('#textbookmeta-board').dropdown('set selected', $scope.textbook.board);
-            $('#textbookmeta-medium').dropdown('set selected', $scope.textbook.medium);
-            $('#textbookmeta-subject').dropdown('set selected', $scope.textbook.subject);
-            $('#textbookmeta-gradeLevel').dropdown('set selected', $scope.textbook.gradeLevel);
+            $('.textbookmeta-category-1').dropdown('set selected', $scope.textbook[$scope.categoryModelList[1]]);
+            $('.textbookmeta-category-2').dropdown('set selected', $scope.textbook[$scope.categoryModelList[2]]);
+            $('.textbookmeta-category-3').dropdown('set selected', $scope.textbook[$scope.categoryModelList[3]]);
+            $('.textbookmeta-category-4').dropdown('set selected', $scope.textbook[$scope.categoryModelList[4]]);
             $('#textbookmeta-year').dropdown('set selected', $scope.textbook.year);
             $('#textbookmeta-resource').dropdown('set selected', $scope.textbook.resource);
         });
@@ -69,8 +144,6 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
             if (!_.isEmpty($scope.textbook.gradeLevel) && _.isString($scope.textbook.gradeLevel)) {
                 $scope.textbook.gradeLevel = [$scope.textbook.gradeLevel];
             }
-
-
 
             if (!_.isEmpty($scope.textbook.language) && _.isString($scope.textbook.language)) {
                 $scope.textbook.language = [$scope.textbook.language];
