@@ -53,7 +53,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     $scope.setFooter = function(data) {
         var nextSibling = function(node) {
             var siblingNode
-            if (!node.parent.isTopLevel()){ // Checking if node is not root node
+            if (!node.parent && !node.parent.isTopLevel()){ // Checking if node is not root node
                 if (node.parent.getNextSibling()) return node.parent.getNextSibling();
                 else {
                     siblingNode = nextSibling(node.parent) // Looping again and again to fetch nextSibling
