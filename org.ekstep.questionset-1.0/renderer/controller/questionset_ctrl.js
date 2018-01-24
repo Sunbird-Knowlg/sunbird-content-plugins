@@ -20,7 +20,6 @@ angular.module('genie-canvas')
 	 }
 	})
 .controllerProvider.register("questionsetctrl", function($scope, $ocLazyLoad,$compile) {
-	$scope.showTemplate=false;
 /**
  * Event handler to dynamically load HTML file and add it to DOM.
  * @event "renderer:load:html"
