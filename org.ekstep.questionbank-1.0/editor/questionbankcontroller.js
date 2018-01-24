@@ -15,7 +15,6 @@ angular.module('createquestionapp', [])
     $scope.selQuestionObj = {};
     $scope.filterObj = {};
     $scope.questions = [];
-    $scope.unselectedQuestions = [];
     $scope.itemRange = [];
     $scope.Totalconcepts;
     $scope.selectedConceptsData;
@@ -40,8 +39,9 @@ angular.module('createquestionapp', [])
           ]
         },
         "sortOrder": [
-          { "sortField": "code", "sortOrder": "ASC" }
-        ]
+          { "sortField": "code", "sortOrder": "DESC" }
+        ],
+        "resultSize" : 200
       }
     };
     $scope.csspath = ecEditor.resolvePluginResource(pluginInstance.manifest.id, pluginInstance.manifest.ver, 'editor/style.css');
@@ -113,7 +113,6 @@ angular.module('createquestionapp', [])
       ecEditor.getService('assessment').getQuestionItems($scope.filterData, function(err, resp) {
         if (!err) {
           $scope.questions = resp.data.result.assessment_items;
-          // $scope.getUnselectedQuestionList();
           for (var i = 0; i < $scope.selectedQuestions.length; i++) {
             for (var j = 0; j < $scope.questions.length; j++) {
               if ($scope.selectedQuestions[i].identifier == $scope.questions[j].identifier) {
@@ -131,9 +130,6 @@ angular.module('createquestionapp', [])
       });
     };
 
-    /*  $scope.getUnselectedQuestionList = function() {
-        $scope.unselectedQuestions = _.difference($scope.questions, $scope.selectedQuestions);
-      }*/
 
 
     /**
@@ -191,15 +187,15 @@ angular.module('createquestionapp', [])
           data.isSelected = true;
         }
 
-        /* var selQueIndex = _.findLastIndex($scope.questions, {
+         var selQueIndex = _.findLastIndex($scope.questions, {
            identifier: data.identifier
          });
          if (selQueIndex < 0) {
            $scope.questions.unshift(data);
          } else {
            $scope.questions[selQueIndex] = data;
-         }*/
-        var selQueIndex = _.findLastIndex($scope.selectedQuestions, {
+         }
+        selQueIndex = _.findLastIndex($scope.selectedQuestions, {
           identifier: data.identifier
         });
         if (selQueIndex < 0) {
@@ -207,12 +203,7 @@ angular.module('createquestionapp', [])
         } else {
           $scope.selectedQuestions[selQueIndex] = data;
         }
-        $scope.searchQuestions();
-        //$scope.getUnselectedQuestionList();
-
-        // $scope.selectQuestion(data);
-
-
+         $scope.$safeApply();
       }, false);
 
     }
@@ -240,7 +231,6 @@ angular.module('createquestionapp', [])
       } else {
         $scope.selectedQuestions.unshift(selQuestion);
       }
-      //  $scope.getUnselectedQuestionList();
 
     }
 
@@ -272,8 +262,8 @@ angular.module('createquestionapp', [])
       if (selObjindex > -1) {
         $scope.questions[selObjindex].isSelected = false;
       }
+      $scope.$safeApply();
       $scope.setDisplayandScore();
-      //$scope.getUnselectedQuestionList();
     }
 
 
@@ -282,13 +272,6 @@ angular.module('createquestionapp', [])
      *  @memberof QuestionFormController
      */
     $scope.saveConfig = function() {
-      /* var selectedObjIndex = _.findLastIndex($scope.selectedQuestions, {
-         questionId: $scope.selQuestionObj.questionId
-       });
-       if (selectedObjIndex > -1) {
-         $scope.selectedQuestions[selectedObjIndex] = $scope.selQuestionObj;
-         $scope.showConfigForm = false;
-       }*/
       var selectedObjIndex = _.findLastIndex($scope.questions, {
         identifier: $scope.selQuestionObj.identifier
       });
