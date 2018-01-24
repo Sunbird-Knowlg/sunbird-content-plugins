@@ -96,36 +96,6 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
         return metadata;
     };
 
-    ctrl.validString = function (string) {
-        return (_.isString(string) && string.trim().length > 0);
-    };
-
-    ctrl.validArray = function (array) {
-        array = ctrl.removeEmptyItems(array);
-        return (_.isArray(array) && array.length > 0);
-    };
-
-    ctrl.validateGrade = function () {
-        ctrl.contentMeta.gradeLevel = $('#ecm-gradeLevel').val();
-        $scope.contentMetaForm.gradeLevel.$setValidity("required", ctrl.validArray(ctrl.contentMeta.gradeLevel));
-    };
-
-    ctrl.validateLanguage = function () {
-        $scope.contentMetaForm.language.$setValidity("required", ctrl.validString(ctrl.language));
-    };
-
-    ctrl.validateResource = function () {
-        $scope.contentMetaForm.resource.$setValidity("required", ctrl.validString(ctrl.contentMeta.resourceType));
-    };
-
-    ctrl.validateSubject = function () {
-        $scope.contentMetaForm.subject.$setValidity("required", ctrl.validString(ctrl.contentMeta.subject));
-    };
-
-    ctrl.validateBoard = function () {
-        $scope.contentMetaForm.board.$setValidity("required", ctrl.validString(ctrl.contentMeta.board));
-    };
-
     ctrl.removeEmptyItems = function (array) {
         var newArray = _.filter(array, function (item) {
             return (_.isString(item) && (item.length > 0));

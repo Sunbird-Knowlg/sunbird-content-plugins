@@ -83,7 +83,7 @@
                                         </div>
                                         <div class="field required" ng-class="{error: $ctrl.submitted && contentMetaForm.resource.$error.required}" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('resourcetype') !== -1)">
                                             <label>Resource Type</label>
-                                            <select id="ecm-resource" name="resource" class="ui fluid dropdown short-dropdown" ng-model="$ctrl.contentMeta.resourceType" ng-change="$ctrl.validateResource()" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'resource'})">
+                                            <select id="ecm-resource" name="resource" class="ui fluid dropdown short-dropdown" ng-model="$ctrl.contentMeta.resourceType" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'resource'})" required>
                                                 <option value="" disabled selected>Select</option>
                                                 <option value="{{resource}}" ng-repeat="resource in $ctrl.resourceList">{{resource}}</option>
                                             </select>
