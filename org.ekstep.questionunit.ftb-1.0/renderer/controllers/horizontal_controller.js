@@ -113,8 +113,8 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
         }
         var state = {
          val: $scope.ftbAnswer
-       }
-       EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
+        }
+        EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
     });
 
   $scope.evaluate = function(callback) {
@@ -133,6 +133,12 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
       //$scope.removeEvents();
       callback(result);
     }
+  }
+
+  $scope.telemetry = function(event){
+    TelemetryService.interact("TOUCH", event.target.id, "TOUCH", {
+      stageId: Renderer.theme._currentStage
+    });
   }
 });
 //# sourceURL=questionunitFtbRenderereTmpPlugin.js
