@@ -23,12 +23,6 @@ angular.module('genie-canvas')
 /**
  * Event handler to dynamically load HTML file and add it to DOM.
  * @event "renderer:load:html"
- * @param
- *      {
- *          path: String //Path to html file.
- *          toElement: String //Class of the HTML element to append the html to.
- *          callback: Function //Callback to execute after load.
- *      }
  */
  	EkstepRendererAPI.addEventListener('renderer:load:html', function (event) {
  	var data = event.target;
@@ -49,11 +43,6 @@ angular.module('genie-canvas')
 /**
  * Event handler to dynamically load a JS file.
  * @event "renderer:load:js"
- * @param
- *      {
- *          path: String //Path to js file.
- *          callback: Function //Callback to execute after load.
- *      }
  */
  	EkstepRendererAPI.addEventListener('renderer:load:js', function (event) {
 	 	var data = event.target;
