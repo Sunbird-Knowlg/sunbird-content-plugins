@@ -123,7 +123,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
                 "type": $scope.pluginInstance._manifest.type ? $scope.pluginInstance._manifest.type : "plugin"
             },
             "type": "CHOOSE",
-            "values": [{ index: val.text }] ;
+            "values": [{ index: val.text }]
         }
         TelemetryService.itemResponse(edata);
     }
