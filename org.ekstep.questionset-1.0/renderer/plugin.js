@@ -308,9 +308,11 @@ Plugin.extend({
       EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
     }
     //if first stage is question set show custom next navigation
-    if ((this._renderedQuestions.length != this._masterQuestionSet.length) || (this._masterQuestionSet.length == 1)) {
+    if (((this._renderedQuestions.length==1) || (this._masterQuestionSet.length == 1))&&(this._stage.params.previous==undefined)) {
       this.showCustomNextNav();
-    }
+    }else{
+            this.resetNavigation();
+        }
   }
 });
 //# sourceURL=questionSetRenderer.js

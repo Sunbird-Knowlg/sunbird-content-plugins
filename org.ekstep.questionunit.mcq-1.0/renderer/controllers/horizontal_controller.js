@@ -69,9 +69,13 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
   }
 
   $scope.hideEventListener = function(event){
-    var ctrlScope = angular.element('#preview-mcq-horizontal').scope();
-    ctrlScope.showTemplate = false;
-    ctrlScope.safeApply();
+   // var ctrlScope = angular.element('#preview-mcq-horizontal').scope();
+    // ctrlScope.showTemplate = false;
+    // ctrlScope.safeApply();
+    //code commented beause on click reply scope object not find
+    $scope.showTemplate = false;
+     $scope.safeApply();
+    
   }
 
   $scope.evalListener = function(event){
