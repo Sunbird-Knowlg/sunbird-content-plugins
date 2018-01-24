@@ -114,4 +114,10 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     }
     ctrlScope.selectedIndex = null;
   }
+
+  $scope.telemetry = function(event){
+    TelemetryService.interact("TOUCH", event.target.id, "TOUCH", {
+      stageId: Renderer.theme._currentStage
+    });
+  }
 });
