@@ -109,7 +109,7 @@ Plugin.extend({
         instance.displayFeedback(result.eval);
 
       } else {
-        this.renderNextQuestion();
+        instance.renderNextQuestion();
       }
     });
   },
