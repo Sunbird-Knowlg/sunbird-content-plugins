@@ -46,6 +46,7 @@ Plugin.extend({
   initPlugin: function(data) {
     var instance = this;
     EkstepRendererAPI.addEventListener('renderer:content:start', this.resetQS, this);
+    EkstepRendererAPI.addEventListener('renderer:nextStage', this.moveNext, this);
     EkstepRendererAPI.addEventListener(instance._data.pluginType + ':saveQuestionState', function(event) {
       var state = event.target;
       instance.saveQuestionState(instance._currentQuestion.id, state);
@@ -68,6 +69,10 @@ Plugin.extend({
     }
     this.saveQuestionSetState();
     this.renderQuestion(this._currentQuestion);
+  },
+
+  moveNext: function(){
+    this.renderNextQuestion();
   },
   renderQuestion: function(question) {
     var instance = this;
@@ -110,12 +115,13 @@ Plugin.extend({
   },
   displayFeedback: function(res) {
     if (res === true) {
-      alert('Correct Answer!');
-
+      //alert('Correct Answer!');
+      EkstepRendererAPI.dispatchEvent('renderer:load:popup:goodJob');
       //TODO: This will move to the feedback pop-up next button
-      this.renderNextQuestion();
+      //this.renderNextQuestion();
     } else {
-      alert('Wrong Answer');
+      EkstepRendererAPI.dispatchEvent('renderer:load:popup:tryAgain');
+      //alert('Wrong Answer');
     }
   },
   renderNextQuestion: function() {
