@@ -138,8 +138,6 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
 
         ctrl.contentMeta.keywords = _.isEmpty(ctrl.contentMeta.keywords) ? [] : ctrl.contentMeta.keywords;
         ctrl.contentMeta.attributions = _.isEmpty(jQuery('#ecm-attributions').val()) ? [] : jQuery('#ecm-attributions').val().replace(/\s*,\s*/g, ',').split(',');
-        //ctrl.contentMeta.language = _.isEmpty(ctrl.language) ? [] : [ctrl.language];
-        //ctrl.contentMeta.audience = _.isEmpty(ctrl.audience) ? [] : [ctrl.audience];
 
         if (isValid && ctrl.conceptsSelected && ctrl.contentMeta.appIcon) {
             ecEditor.dispatchEvent('org.ekstep.contenteditor:save:meta', {
