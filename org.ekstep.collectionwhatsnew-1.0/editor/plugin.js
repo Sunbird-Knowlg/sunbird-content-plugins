@@ -20,7 +20,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         /**
          * Update the version number below to intimate the user regarding new changes.
          */
-        store.set('nextversion', '1.2');
+        store.set('nextCollectionversion', '1.2');
     },
     loadHtml: function () {
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({

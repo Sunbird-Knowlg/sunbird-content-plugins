@@ -82,13 +82,13 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
 
     // Show the Whatsnew red dot, if this is a new release
     // and want to show the user to click.
-    $scope.nextversion = store.get('nextversion');
-    $scope.previousversion = store.get('previousversion') || 0;
+    $scope.nextversion = store.get('nextCollectionversion');
+    $scope.previousversion = store.get('previousCollectionversion') || 0;
     $scope.whatsNewBadge = !($scope.nextversion === $scope.previousversion);
 
     $scope.displayWhatsNew = function() {
         $scope.fireEvent({ id: 'org.ekstep.collectionwhatsnew:showpopup' });
-        store.set('previousversion', $scope.nextversion);
+        store.set('previousCollectionversion', $scope.nextversion);
         $scope.whatsNewBadge = false;
     };
 
