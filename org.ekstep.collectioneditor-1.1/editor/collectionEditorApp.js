@@ -43,24 +43,19 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
             if (res && res.data && res.data.responseCode === "OK") {
                 org.ekstep.services.collectionService.fromCollection(res.data.result.content);
-                if(ecEditor.getContext('framework')){
-                    ecEditor.getService('meta').getCategorys(ecEditor.getContext('framework'), function(cateerr, cateresp) {
-                        if (!cateerr) {
-                            _.forEach(cateresp.data.result.framework.categories, function(cat){
-                                org.ekstep.services.collectionService.categoryList[cat.name] = cat;
-                            });
-                            $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
-                            $scope.$safeApply();
-                            callback && callback(err, res);
-                        }else{
-                            callback && callback('unable to fetch categories!', cateresp);
-                        }
-                    });
-                }else{
-                    $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
-                    $scope.$safeApply();
-                    callback && callback(err, res);
-                }
+                var frameworkId = ecEditor.getContext('framework') || org.ekstep.services.collectionService.defaultFramwork;
+                ecEditor.getService('meta').getCategorys(frameworkId, function(cateerr, cateresp) {
+                    if (!cateerr) {
+                        _.forEach(cateresp.data.result.framework.categories, function(category){
+                            org.ekstep.services.collectionService.categoryList[category.name] = category;
+                        });
+                        $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
+                        $scope.$safeApply();
+                        callback && callback(err, res);
+                    }else{
+                        callback && callback('unable to fetch categories!', cateresp);
+                    }
+                });
             } else {
                 callback && callback('unable to fetch the content!', res);
             }
