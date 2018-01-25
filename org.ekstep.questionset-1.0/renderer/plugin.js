@@ -258,6 +258,7 @@ Plugin.extend({
       }).css(this._constants.nextCSS);
       customNextButton.on('click', function () {
         instance.nextQuestion();
+        instance.generateNavigateTelemetry('next');
       });
       customNextButton.appendTo('#gameArea');
     }
@@ -275,6 +276,7 @@ Plugin.extend({
       }).css(this._constants.prevCSS);
       customPrevButton.on('click', function () {
         instance.prevQuestion();
+        instance.generateNavigateTelemetry('previous');
       });
       customPrevButton.appendTo('#gameArea');
     }
@@ -316,6 +318,40 @@ Plugin.extend({
     if (this._renderedQuestions.length != this._masterQuestionSet.length||this._masterQuestionSet.length==1) {
       this.showCustomNextNav();
     }
-}
+},
+generateNavigateTelemetry: function(buttonId) {
+  var instance = this;
+    var stageTo;
+    var stageid = EkstepRendererAPI.getCurrentStageId();
+    if (buttonId == "next") {
+      stageTo = EkstepRendererAPI.getCurrentStage().getParam('next');
+      stageTo = stageTo ? stageTo : EkstepRendererAPI.getCurrentStageId();
+      var data = {
+        "type": "view", // Required. Impression type (list, detail, view, edit, workflow, search)
+        "subtype": "Paginate", // Optional. Additional subtype. "Paginate", "Scroll"
+        "pageid": EkstepRendererAPI.getCurrentStageId(), // Required. Unique page id
+        "uri": "", // Required. Relative URL of the content
+        "visits": {
+          "objid": instance.getNextQuestion(),
+          "objtype": ""
+        }
+      }
+    } else {
+      stageTo = EkstepRendererAPI.getCurrentStage().getParam('previous');
+      stageTo = stageTo ? stageTo : EkstepRendererAPI.getCurrentStageId();
+      var data = {
+        "type": "view", // Required. Impression type (list, detail, view, edit, workflow, search)
+        "subtype": "Paginate", // Optional. Additional subtype. "Paginate", "Scroll"
+        "pageid": EkstepRendererAPI.getCurrentStageId(), // Required. Unique page id
+        "uri": "", // Required. Relative URL of the content
+        "visits": {
+          "objid": instance.getPrevQuestion(),
+          "objtype": ""
+        }
+      }
+    }
+    
+    TelemetryService.navigate(stageid, stageTo, data)
+  }
 });
 //# sourceURL=questionSetRenderer.js
