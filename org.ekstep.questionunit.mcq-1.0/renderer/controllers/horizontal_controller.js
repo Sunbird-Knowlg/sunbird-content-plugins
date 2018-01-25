@@ -92,6 +92,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     var state = {
         val: $scope.selectedIndex
     }
+     $scope.generateItemResponse(val, index);
     EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
   }
   
@@ -113,5 +114,23 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
       callback(result);
     }
     ctrlScope.selectedIndex = null;
+  }
+   $scope.generateItemResponse = function(val, index) {
+        var edata = {
+            "target":{
+                "id": $scope.pluginInstance._manifest.id ? $scope.pluginInstance._manifest.id : "",
+                "ver": $scope.pluginInstance._manifest.ver ? $scope.pluginInstance._manifest.ver : "1.0",
+                "type": $scope.pluginInstance._manifest.type ? $scope.pluginInstance._manifest.type : "plugin"
+            },
+            "type": "CHOOSE",
+            "values": [{ index: val.text }]
+        }
+        TelemetryService.itemResponse(edata);
+    }
+
+  $scope.telemetry = function(event){
+    TelemetryService.interact("TOUCH", event.target.id, "TOUCH", {
+      stageId: Renderer.theme._currentStage
+    });
   }
 });

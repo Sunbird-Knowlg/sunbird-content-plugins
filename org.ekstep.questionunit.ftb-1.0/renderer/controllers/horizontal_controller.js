@@ -113,8 +113,9 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
         }
         var state = {
          val: $scope.ftbAnswer
-       }
-       EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
+        }
+         $scope.generateItemResponse();
+        EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
     });
 
   $scope.evaluate = function(callback) {
@@ -133,6 +134,24 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
       //$scope.removeEvents();
       callback(result);
     }
+  }
+   $scope.generateItemResponse = function() {
+        var edata = {
+            "target":{
+                "id": $scope.pluginInstance._manifest.id ? $scope.pluginInstance._manifest.id : "",
+                "ver": $scope.pluginInstance._manifest.ver ? $scope.pluginInstance._manifest.ver : "1.0",
+                "type": $scope.pluginInstance._manifest.type ? $scope.pluginInstance._manifest.type : "plugin"
+            },
+            "type": "INPUT",
+            "values": [{ "ans": $scope.ftbAnswer }]
+        }
+        TelemetryService.itemResponse(edata);
+    }
+
+  $scope.telemetry = function(event){
+    TelemetryService.interact("TOUCH", event.target.id, "TOUCH", {
+      stageId: Renderer.theme._currentStage
+    });
   }
 });
 //# sourceURL=questionunitFtbRenderereTmpPlugin.js
