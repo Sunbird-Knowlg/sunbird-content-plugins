@@ -292,6 +292,7 @@ Plugin.extend({
   saveQuestionState: function(questionId, state) {
     if (state) {
       var qsState = this.getQuestionSetState();
+      qsState = _.isUndefined(qsState) ? {} : qsState;
       this._questionStates[questionId] = state;
       qsState.questionStates = this._questionStates;
       Renderer.theme.setParam(this._data.id, qsState);
