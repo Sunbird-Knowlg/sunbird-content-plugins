@@ -351,6 +351,12 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
     }
 
+    setTimeout(function() {
+        $(".ui.dropdown").dropdown({
+            useLabels: false
+        });
+    }, 0)
+
     $scope.init();
 }]);
 //# sourceURL=textbookmetaApp.js
