@@ -4,14 +4,14 @@
         <div class="ui two column grid">
             <div class="row">
                 <div class="two wide column">
-                    <span ng-if="!$ctrl.backBtn">Create question</span>
-                    <span ng-if="$ctrl.backBtn">Edit question</span>
+                    <span ng-if="!$ctrl.backBtn">Create Question</span>
+                    <span ng-if="$ctrl.backBtn">Edit Question</span>
                 </div>
                 <div class="eight wide column center aligned">
                   <div class="ui huge breadcrumb breadcrumbTitle">
-                    <div ng-class="{activeBreadcumb: $ctrl.templatesScreen == true}" class="section">Choose template</div>
+                    <div ng-class="{activeBreadcumb: $ctrl.templatesScreen == true}" class="section">Choose Template</div>
                     <i class="right chevron icon divider"></i>
-                    <div class="section" ng-class="{activeBreadcumb: $ctrl.createQuestionScreen == true}">Create question</div>
+                    <div class="section" ng-class="{activeBreadcumb: $ctrl.createQuestionScreen == true}">Create Question</div>
                     <i class="right chevron icon divider"></i>
                     <div class="section" ng-class="{activeBreadcumb: $ctrl.metadaFormScreen == true}">Question Details</div>
                   </div>
@@ -84,7 +84,7 @@
                 <div class="ui grid two column row">
                   <div class="column">
                     <label class="qcMetadateFormLbl" data-original-title="Question title">
-                      Question title <span class="star">&nbsp;*</span>
+                      Question Title <span class="star">&nbsp;*</span>
                     </label>
                     <input type="text" class="form-control" id="questionTitle" placeholder="Question title" name="questionTitle" ng-model="$ctrl.questionData.questionTitle" required/>
                     <small ng-show="questionUnitBrowserForm.questionTitle.$invalid && !questionUnitBrowserForm.questionTitle.$pristine" class="qcError">Enter question title.</small>
@@ -92,10 +92,10 @@
                   <div class="column">
                     <label class="qcMetadateFormLbl">Language <span class="star">&nbsp;*</span></label>
                     <select class="ui dropdown dropdownBox form-control" name="qcLanguage" ng-model="$ctrl.questionData.qcLanguage" id="language-drop-down" ng-click="$ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', 'id': 'dropDown'},$event)" required>
-                      <option value="" selected="selected">Choose language</option>
+                      <option value="" selected="selected">Choose Language</option>
                       <option ng-repeat="lang in $ctrl.languages" value="{{lang}}">{{lang}}</option>
                     </select>
-                    <small ng-show="questionUnitBrowserForm.qcLanguage.$invalid && !questionUnitBrowserForm.qcLanguage.$pristine" class="qcError">Select language.</small>
+                    <small ng-show="questionUnitBrowserForm.qcLanguage.$invalid && !questionUnitBrowserForm.qcLanguage.$pristine" class="qcError">Select Language.</small>
                   </div>
                 </div>
                 <div class="ui grid two column row">
@@ -104,10 +104,10 @@
                       Level <span class="star">&nbsp;*</span>
                     </label>
                     <select class="ui dropdown dropdownBox form-control" name="qcLevel" ng-model="$ctrl.questionData.qcLevel" id="level-drop-down" ng-click="$ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', 'id': 'dropDown'},$event)" required>
-                      <option value="" selected="selected">Choose level</option>
+                      <option value="" selected="selected">Choose Level</option>
                       <option ng-selected="{{$ctrl.qcLevel}}" ng-repeat="lev in $ctrl.level" value="{{lev}}">{{lev}}</option>
                     </select>
-                    <small ng-show="questionUnitBrowserForm.qcLevel.$invalid && !questionUnitBrowserForm.qcLevel.$pristine" class="qcError">Select level.</small>
+                    <small ng-show="questionUnitBrowserForm.qcLevel.$invalid && !questionUnitBrowserForm.qcLevel.$pristine" class="qcError">Select Level.</small>
                   </div>
                   <div class="column">
                     <label class="qcMetadateFormLbl">
@@ -119,13 +119,13 @@
                           <option value="" selected="selected">Choose Grade</option>
                           <option ng-repeat="g in $ctrl.grades" value="{{g}}" ng-selected="{{$ctrl.questionData.qcGrade[$index]}}">{{g}}</option>
                         </select><i class="dropdown icon"></i>
-                        <div class="default text">Select grade</div>
+                        <div class="default text">Select Grade</div>
                         <div class="menu" tabindex="-1">
                           <div class="item" ng-repeat="gr in $ctrl.grades" data-value="{{gr}}">{{gr}}</div>
                         </div>
                       </div>
                     </div>
-                    <small ng-show="questionUnitBrowserForm.qcGrade.$invalid && !questionUnitBrowserForm.qcGrade.$pristine" class="qcError">Select grade.</small>
+                    <small ng-show="questionUnitBrowserForm.qcGrade.$invalid && !questionUnitBrowserForm.qcGrade.$pristine" class="qcError">Select Grade.</small>
                   </div>
                 </div>
                 <div class="ui grid two column row">
@@ -135,11 +135,11 @@
                     </label>
                     <input type="text" id="conceptsTextBoxMeta" value="Choose concepts" readonly="true" id="concepts-drop-down" ng-click="$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'dropDown'},$event)" />
                     <span id="concepts_dummy" class="disabled">{{$ctrl.Totalconcepts}} concept(s) choosen</span>
-                    <small ng-show="$ctrl.qcconcepterr" class="qcError">Select concept</small>
+                    <small ng-show="$ctrl.qcconcepterr" class="qcError">Select Concept</small>
                   </div>
                   <div class="two wide column">
                     <label class="qcMetadateFormLbl" data-original-title="Question max score">
-                      Max score <span class="star">&nbsp;*</span>
+                      Max Score <span class="star">&nbsp;*</span>
                     </label>
                     <input type="number" class="form-control" id="questionTitle" min="1" max="12" name="questionMaxScore" ng-model="$ctrl.questionData.questionMaxScore" required/>
                     <small ng-show="questionUnitBrowserForm.questionMaxScore.$invalid && !questionUnitBrowserForm.questionMaxScore.$pristine" class="qcError">Enter max score.</small>
@@ -148,10 +148,10 @@
                 <div class="ui grid two column row">
                   <div class="twelve wide column">
                     <label class="qcMetadateFormLbl" data-original-title="Question desc">
-                      Question description <span class="star">&nbsp;*</span>
+                      Question Description <span class="star">&nbsp;*</span>
                     </label>
                     <textarea type="text" class="form-control" id="questionTitle" placeholder="Question description" name="questionDesc" ng-model="$ctrl.questionData.questionDesc" required></textarea>
-                    <small ng-show="questionUnitBrowserForm.questionDesc.$invalid && !questionUnitBrowserForm.questionDesc.$pristine" class="qcError">Enter question description.</small>
+                    <small ng-show="questionUnitBrowserForm.questionDesc.$invalid && !questionUnitBrowserForm.questionDesc.$pristine" class="qcError">Enter question Description.</small>
                   </div>
                 </div>
               </form>
