@@ -22,7 +22,7 @@ angular.module('createquestionapp', [])
     $scope.grades;
     $scope.languages;
     $scope.difficultyLevels = ['Easy', 'Medium', 'Difficult'];
-    $scope.questionTypes = ['Multiple Choice Questions', 'Fill in the Blanks', 'Match the Following'];
+    $scope.questionTypes = [{"name": "Multiple Choice Questions", "value": "mcq"}, {"name": "Fill in the Blanks", "value": "ftb"}, {"name": "Match the Following", "value": "mtf"}];
     $scope.filterObj = {};
     $scope.selectedIndex;
     $scope.conceptsText = '(0) Concepts';
@@ -203,6 +203,9 @@ angular.module('createquestionapp', [])
         } else {
           $scope.selectedQuestions[selQueIndex] = data;
         }
+        var qsElement = angular.element("#QuestionFormTemplate");
+        console.log("qsElement" ,qsElement);
+
          $scope.$safeApply();
       }, false);
 
