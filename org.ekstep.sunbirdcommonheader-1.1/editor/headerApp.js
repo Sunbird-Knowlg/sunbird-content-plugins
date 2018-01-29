@@ -32,7 +32,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.editorEnv = "COLLECTION"
                 $scope.publishMode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').publishMode;
                 $scope.isFalgReviewer = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').isFalgReviewer;
-                $scope.headerSettings.showEditMeta = false;
+                $scope.headerSettings.showEditMeta = true;
                 $scope.resolveReviewBtnStatus();
                 break;
             default:

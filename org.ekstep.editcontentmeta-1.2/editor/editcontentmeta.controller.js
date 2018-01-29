@@ -140,10 +140,10 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
     $scope.initDropdown = function() {
         $timeout(function() {
             ecEditor.jQuery('.ui.dropdown').dropdown({
+                useLabels: false,
                 forceSelection: false
             });
             $('#contentmeta-category-1').dropdown('set selected', ctrl.contentMeta[$scope.categoryModelList[1]]);
-            $('#contentmeta-category-2').dropdown('set selected', ctrl.contentMeta[$scope.categoryModelList[2]]);
             $('#contentmeta-category-3').dropdown('set selected', ctrl.contentMeta[$scope.categoryModelList[3]]);
             $('#contentmeta-category-4').dropdown('set selected', ctrl.contentMeta[$scope.categoryModelList[4]]);
         },500);
