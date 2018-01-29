@@ -28,7 +28,6 @@ resourceContentImageAllign resourceContentImageAllign .add-lessons-popup-wrapper
     cursor: pointer;
 }
 #search-button:hover,
-/* #reset-lesson-filter-button:hover, */
 #cancel-lesson-browser-popup:hover {
     color: #fff!important;
     background: #317bca!important;
@@ -127,7 +126,6 @@ resourceContentImageAllign resourceContentImageAllign .add-lessons-popup-wrapper
 
 .lesson-row {
     padding: 6px !important;
-    /*padding: 0px !important;*/
     -webkit-transition: all 0.5s;
     -o-transition: all 0.5s;
     transition: all 0.5s;
@@ -151,16 +149,6 @@ resourceContentImageAllign resourceContentImageAllign .add-lessons-popup-wrapper
 .lesson-name {
     color: #000!important;
 }
-
-
-/*.lesson-row .ui.checkbox .box:before,
-.lesson-row .ui.checkbox label:before,
-.lesson-row .ui.checkbox label:after,
-.lesson-row .ui.checkbox input[type=checkbox],
-.lesson-row .ui.checkbox input[type=radio] {
-    top: 15px!important;
-    
-}*/
 
 .source-filter-container .ui.checkbox .box:before,
 .source-filter-container .ui.checkbox label:before {
@@ -213,9 +201,7 @@ resourceContentImageAllign resourceContentImageAllign .add-lessons-popup-wrapper
 }
 
 .filters-wrapper{
-    /*height: 358px;*/
     overflow-y: scroll;
-    /* border-right: 2px solid #e0e0e0; */
     background-color: ghostwhite;
     margin-left: -14px;
     padding-left: 5%;
@@ -242,13 +228,6 @@ resourceContentImageAllign resourceContentImageAllign .add-lessons-popup-wrapper
 }
 .resourcePanelBodyContent{
     top: 25%;
-    /* border-radius: 5px; */
-    /*  padding: 1% 1% 0% 3%;
-    padding: 1% 1% 0% 3%;*/
-    /* border-bottom: 1px solid #e0e0e0; */
-    /*min-height: 62px;
-    margin-top: 2% !important;
-    vertical-align: middle !important;
     display: inline-table !important;*/
 }
 .resourceContentImage{
@@ -256,17 +235,10 @@ resourceContentImageAllign resourceContentImageAllign .add-lessons-popup-wrapper
    padding: 3px;
 }
 .resourceContentImageAllign{
-    /* padding: 5% 37% 9% 40%; */
-    /* border-bottom: 1px solid #e0e0e0; */
-    /*margin-bottom: 6%;*/
     width: 90px !important;
     height: 100% !important;
-    /*padding-bottom: 2%;*/
     border-radius: 4px;
     height: 100%;
-    /* border-radius: 50%; */
-    /* margin-top: 20%; */
-    /* float: none; */
 }
 #resourceSearch{
     font-size: 75%;
@@ -362,5 +334,10 @@ resourceContentImageAllign resourceContentImageAllign .add-lessons-popup-wrapper
     display: flex;
     align-items: center;
 
+}
+[data-tooltip][data-position="top center"]:hover:after {
+    width: 100%;
+    white-space: pre-wrap;
+    text-align: center;
 }
 /* from lessonBrowser.html */

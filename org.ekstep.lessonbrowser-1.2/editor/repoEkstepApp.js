@@ -18,6 +18,10 @@ angular.module('org.ekstep.contentprovider', [])
     // Regulate Load more button
     $scope.loadmoreEnabledFlag = true;
     var loadedLessonCount = 0;
+    $scope.isCategorySelected=false;
+    $scope.isLanguageSelected=false;
+    $scope.isClassSelected=false;
+    $scope.isSubjectSelected=false;
 
     // Select all - Sidebar filters
     $scope.isAllSelected = {"lang": false, "grade": false, "lessonType": false, "domain": false};
@@ -36,6 +40,7 @@ angular.module('org.ekstep.contentprovider', [])
     setTimeout(function(){
         $('#applyAccordion').accordion();
         $('.ui.multiple.selection.dropdown').dropdown({
+            useLabels: false,
             forceSelection: false,
             onChange: function() {
                 $scope.getFiltersValue();
