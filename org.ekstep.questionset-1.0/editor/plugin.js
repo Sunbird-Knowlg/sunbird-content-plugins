@@ -49,7 +49,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     }
 
     // Add stage object
-    var stageImage = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/assets/QuizImage.png');
+    var stageImage = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/assets/quizimage.png');
     instance.addMedia({
       id: "QuizImage",
       src: stageImage,
