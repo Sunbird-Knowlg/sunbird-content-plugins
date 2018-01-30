@@ -190,6 +190,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
     }
 
     $scope.updatedDependentCategory = function(categoryIndex, categoryVal){
+       // NOTE: Both `clear` and `restore defaults` will support 
         var category_1 = [],
             category_2 = [],
             category_3 = [],
@@ -214,12 +215,12 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
                         $scope[categoryName].terms = _.uniqWith(category_2, _.isEqual);
                         break;
                     case "3":
-                        $('.contentmeta-category-3').dropdown('restore defaults');
+                        $('.contentmeta-category-3').dropdown('clear');
                         category_3 = _.concat(data, category_3);
                         $scope[categoryName].terms = _.uniqWith(category_3, _.isEqual);
                         break;
                     case "4":
-                        $('.contentmeta-category-4').dropdown('restore defaults');
+                        $('.contentmeta-category-4').dropdown('clear');
                         category_4 = _.concat(data, category_4);
                         $scope[categoryName].terms = _.uniqWith(category_4, _.isEqual);
                         break;
@@ -231,7 +232,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
                     setTimeout(function() {
                         $('.contentmeta-category-2').dropdown('restore defaults'); 
                         $('.contentmeta-category-3').dropdown('restore defaults');
-                        $('.contentmeta-category-4').dropdown('restore defaults');
+                        $('.contentmeta-category-4').dropdown('clear');
                     }, 0);
                     $scope['category_2'] = $scope.getTemsByindex(2);
                     $scope['category_3'] = $scope.getTemsByindex(3);
@@ -239,15 +240,15 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
                     break;
                 case '2':
                     setTimeout(function() {
-                        $('.contentmeta-category-3').dropdown('restore defaults');
-                        $('.contentmeta-category-4').dropdown('restore defaults');
+                        $('.contentmeta-category-3').dropdown('clear');
+                        $('.contentmeta-category-4').dropdown('clear');
                     }, 0);
                     $scope['category_3'] = $scope.getTemsByindex(3);
                     $scope['category_4'] = $scope.getTemsByindex(4);
                     break;
                 case '3':
                     setTimeout(function() {
-                        $('.contentmeta-category-4').dropdown('restore defaults');
+                        $('.contentmeta-category-4').dropdown('clear');
                     }, 0);
                     $scope['category_4'] = $scope.getTemsByindex(4);
                     break;
