@@ -321,22 +321,28 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 // break;
             case "application/vnd.ekstep.content-collection":
                 org.ekstep.contenteditor.api.loadPlugin('org.ekstep.collectionwhatsnew', '1.0', function() {
+                    var replaceData = {}
+                    switch(meta.contentType) {
+                        case 'Course':
+                            replaceData = {'replaceValue': '<!-- dynamicWord -->', 'value': 'course'}
+                            $scope.showWhatsNew = true;
+                            break;
+                        case 'TextBook':
+                            replaceData = {'replaceValue': '<!-- dynamicWord -->', 'value': 'book'}
+                            $scope.showWhatsNew = true;
+                            break;
+                        case 'LessonPlan':
+                            replaceData = {'replaceValue': '<!-- dynamicWord -->', 'value': 'lesson plan'}
+                            $scope.showWhatsNew = true;
+                            break;
+                        default:
+                            $scope.showWhatsNew = false;
+                            break;
+                    }
                     $scope.nextversion = store.get('nextCollectionversion');
                     $scope.previousversion = store.get('previousCollectionversion') || 0;
                     $scope.whatsNewBadge = !($scope.nextversion === $scope.previousversion);
                     $scope.displayWhatsNew = function() {
-                        var replaceData = {}
-                        switch(meta.contentType) {
-                            case 'Course':
-                                replaceData = {'replaceValue': '<!-- dynamicWord -->', 'value': 'course'}
-                                break;
-                            case 'LessonPlan':
-                                replaceData = {'replaceValue': '<!-- dynamicWord -->', 'value': 'lesson plan'}
-                                break;
-                            default:
-                                replaceData = {'replaceValue': '<!-- dynamicWord -->', 'value': 'book'}
-                                break;
-                        }
                         $scope.fireEvent({ id: 'org.ekstep.collectionwhatsnew:showpopup', data: replaceData});
                         store.set('previousCollectionversion', $scope.nextversion);
                         $scope.whatsNewBadge = false;
