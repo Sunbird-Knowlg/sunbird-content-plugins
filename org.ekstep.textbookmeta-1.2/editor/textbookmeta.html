@@ -69,7 +69,7 @@
                     <div class="field">
                         <label>Keywords</label>
                         <tags-input ng-model="textbook.keywords" display-property="lemma" placeholder="Enter Keywords" replace-spaces-with-dashes="false">
-                            <auto-complete source="loadKeywords($query)" min-length="0" load-on-focus="true" load-on-empty="true" max-results-to-show="100" template="my-custom-template"></auto-complete>
+                            <auto-complete source="loadKeywords($query)" min-length="0" load-on-focus="true" load-on-empty="true" template="my-custom-template"></auto-complete>
                         </tags-input>
                         <script type="text/ng-template" id="my-custom-template">
                             <div class="right-panel">
