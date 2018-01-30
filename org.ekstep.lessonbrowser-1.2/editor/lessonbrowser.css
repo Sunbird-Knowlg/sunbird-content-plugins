@@ -340,4 +340,7 @@ resourceContentImageAllign resourceContentImageAllign .add-lessons-popup-wrapper
     white-space: pre-wrap;
     text-align: center;
 }
+.deleteIcon{
+    color: red;
+}
 /* from lessonBrowser.html */

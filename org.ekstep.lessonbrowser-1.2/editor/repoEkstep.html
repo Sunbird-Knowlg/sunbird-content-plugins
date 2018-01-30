@@ -26,7 +26,7 @@
                             <i class="dropdown icon"></i>
                             <div class="default text">Choose Lesson Type</div>
                             <div class="menu tooltipElement">
-                                <div class="item" ng-click="isCategorySelected = !isCategorySelected" ng-repeat="lessonType in $ctrl.meta.lessonTypes" data-value="{{lessonType}}">{{lessonType}}<span class="right floated"  ng-if="isCategorySelected"><a>X</a></span></div>
+                                <div class="item" ng-click="isCategorySelected = !isCategorySelected" ng-repeat="lessonType in $ctrl.meta.lessonTypes" data-value="{{lessonType}}">{{lessonType}}<span class="right floated"  ng-if="isCategorySelected"><a class="deleteIcon">X</a></span></div>
                             </div>
                         </div>
                     </div>
@@ -40,7 +40,7 @@
                             <i class="dropdown icon"></i>
                             <div class="default text">Choose Language</div>
                             <div class="menu tooltipElement">
-                                <div class="item" ng-click="isLanguageSelected = !isLanguageSelected" ng-repeat="lang in $ctrl.meta.languages" data-value="{{lang.value}}">{{lang.label}}<span class="right floated"  ng-if="isLanguageSelected"><a>X</a></span></div>
+                                <div class="item" ng-click="isLanguageSelected = !isLanguageSelected" ng-repeat="lang in $ctrl.meta.languages" data-value="{{lang.value}}">{{lang.label}}<span class="right floated"  ng-if="isLanguageSelected"><a class="deleteIcon">X</a></span></div>
                             </div>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                             <i class="dropdown icon"></i>
                             <div class="default text">Choose Class</div>
                             <div class="menu tooltipElement">
-                                <div class="item" ng-click="isClassSelected = !isClassSelected" ng-repeat="grade in $ctrl.meta.grades" data-value="{{grade.label}}">{{grade.label}}<span class="right floated"  ng-if="isClassSelected"><a>X</a></span></div>
+                                <div class="item" ng-click="isClassSelected = !isClassSelected" ng-repeat="grade in $ctrl.meta.grades" data-value="{{grade.label}}">{{grade.label}}<span class="right floated"  ng-if="isClassSelected"><a class="deleteIcon">X</a></span></div>
                             </div>
                         </div>
                     </div>
@@ -67,7 +67,7 @@
                             <i class="dropdown icon"></i>
                             <div class="default text">Choose Subject</div>
                             <div class="menu tooltipElement">
-                                <div class="item" ng-click="isSubjectSelected = !isSubjectSelected" ng-repeat="subject in $ctrl.meta.subjects" data-value="{{subject.label}}">{{subject.label}}<span class="right floated"  ng-if="isSubjectSelected"><a>X</a></span></div>
+                                <div class="item" ng-click="isSubjectSelected = !isSubjectSelected" ng-repeat="subject in $ctrl.meta.subjects" data-value="{{subject.label}}">{{subject.label}}<span class="right floated"  ng-if="isSubjectSelected"><a class="deleteIcon">X</a></span></div>
                             </div>
                         </div>
                     </div>
