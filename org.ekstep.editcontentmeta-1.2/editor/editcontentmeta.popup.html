@@ -60,10 +60,12 @@
                                         </div>
                                         <div class="field required" ng-class="{error: $ctrl.submitted && contentMetaForm.cTwo.$error.required}">
                                             <label for="category_2">{{category_2.name}}</label>
-                                            <select id="contentmeta-category-2" name ="cTwo" class="ui search dropdown contentmeta-category-2" ng-model="$ctrl.contentMeta[category_2.code]" multiple="" ng-change="updatedDependentCategory('2', $ctrl.contentMeta[category_2.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_2.name}) " required>
-                                                <option value="">Select</option>
-                                                <option value="{{category.name}}" ng-repeat="category in category_2.terms">{{category.name}}</option>
-                                            </select>
+                                            <div id="contentmeta-category-2" name ="cTwo" class="ui multiple search selection dropdown contentmeta-category-2" data-tooltip="{{categoryValues || 'select Option'}}" ng-model="$ctrl.contentMeta[category_2.code]" multiple="" ng-click="updatedDependentCategory('2', $ctrl.contentMeta[category_2.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_2.name}) " required>
+                                                <div class="default text" value="">Select</div>
+                                                <div class="menu">
+                                                    <div class="item" value="{{category.name}}" ng-repeat="category in category_2.terms">{{category.name}}</div>
+                                                </div>
+                                            </div>
                                          </div>
                                          <div class="field required" ng-class="{error: $ctrl.submitted && contentMetaForm.cThree.$error.required}">
                                             <label for="category_3">{{category_3.name}}</label>

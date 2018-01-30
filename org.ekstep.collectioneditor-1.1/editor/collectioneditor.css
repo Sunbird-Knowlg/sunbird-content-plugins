@@ -213,7 +213,6 @@ body {
 .ui.dropdown .menu .selected.item,
 .ui.dropdown.selected,
 .ui.dropdown .menu .active.item {
-    font-weight: normal;
     color: rgba(0, 0, 0, .95);
     background: none;
 }

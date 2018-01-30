@@ -20,6 +20,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
     ctrl.metadatafields = ecEditor.getConfig('metaDataFields');
     $scope.categoryModelList = {};
     $scope.categoryListofFramework = {};
+    $scope.categoryValues = '';
 
     var categoryMasterList = _.cloneDeep(org.ekstep.services.collectionService.categoryList);
     _.forEach(categoryMasterList, function(category){
@@ -144,9 +145,11 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
                 forceSelection: false
             });
             $('#contentmeta-category-1').dropdown('set selected', ctrl.contentMeta[$scope.categoryModelList[1]]);
+            $('#contentmeta-category-2').dropdown('set selected', ctrl.contentMeta[$scope.categoryModelList[2]]);
             $('#contentmeta-category-3').dropdown('set selected', ctrl.contentMeta[$scope.categoryModelList[3]]);
             $('#contentmeta-category-4').dropdown('set selected', ctrl.contentMeta[$scope.categoryModelList[4]]);
         },500);
+        if(ctrl.contentMeta[$scope.categoryModelList[2]]) $scope.categoryValues = ctrl.contentMeta[$scope.categoryModelList[2]].join();
     }
 
     ctrl.cancel = function () {
@@ -176,7 +179,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
         if(_.isArray(selectedCategory)){
             _.forEach(selectedCategory, function(val){
                 var categoryObj= _.find(categoryList, function(o) { 
-                   return o.name === val;
+                    return o.name.toUpperCase() === val.toUpperCase();
                 });
                 associations = _.concat(categoryObj.associations, associations);
             });
@@ -190,6 +193,15 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
     }
 
     $scope.updatedDependentCategory = function(categoryIndex, categoryVal){
+        $scope.categoryValues = $('#contentmeta-category-2').dropdown('get value');
+        ctrl.contentMeta[$scope.categoryModelList[2]] = $('#contentmeta-category-2').dropdown('get value').split(",");
+        if(categoryIndex == "2") {
+            categoryVal = $('#contentmeta-category-2').dropdown('get value').split(",");
+            if(categoryVal[0]== "") {
+                categoryVal = [];
+                ctrl.contentMeta[$scope.categoryModelList[2]] = [];
+            }
+        }
         var category_1 = [],
             category_2 = [],
             category_3 = [],
