@@ -4,7 +4,6 @@ angular.module('org.ekstep.collectionwhatsnew', []).controller('whatsnewControll
     var ctrl = this;
     $scope.mdHtml = $sce.trustAsHtml('Loading...');
     $scope.$on('ngDialog.opened', function (e, $dialog) {
-    	console.log(e)
     	var eventData = ecEditor._.cloneDeep(e);
 	    $http.get(ecEditor.resolvePluginResource('org.ekstep.collectionwhatsnew', '1.0', 'editor/whatsnew.md')).then(function (response) {
 	    	var replaceFrom = '<!-- dynamicWord -->';
