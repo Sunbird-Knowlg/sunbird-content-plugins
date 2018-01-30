@@ -20,13 +20,14 @@ org.ekstep.contenteditor.basePlugin.extend({
         /**
          * Update the version number below to intimate the user regarding new changes.
          */
-        store.set('nextCollectionversion', '1.2');
+        store.set('nextCollectionversion', '1.0');
     },
-    loadHtml: function () {
+    loadHtml: function (event, param) {
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
             template: 'partials_org.ekstep.collectionwhatsnew.popup.html',
             controller: 'whatsnewController',
             controllerAs: '$ctrl',
+            data: param,
             width: 900,
             showClose: false
         });
