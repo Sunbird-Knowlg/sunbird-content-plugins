@@ -45,8 +45,14 @@ Plugin.extend({
   },
   initPlugin: function(data) {
     var instance = this;
-    EkstepRendererAPI.addEventListener('renderer:content:start', this.resetQS, this);
-    EkstepRendererAPI.addEventListener('renderer:nextStage', this.moveNext, this);
+    EkstepRendererAPI.addEventListener('renderer:content:start', function(event){
+      instance.resetQS.call(instance);
+    }, instance);
+      //remove the existing listner in the same name
+    EventBus.listeners['renderer:nextStage'] = [];
+    EkstepRendererAPI.addEventListener('renderer:nextStage', function(event){
+      instance.renderNextQuestion.call(instance);
+    }, instance);
     EkstepRendererAPI.addEventListener(instance._data.pluginType + ':saveQuestionState', function(event) {
       var state = event.target;
       instance.saveQuestionState(instance._currentQuestion.id, state);
@@ -59,6 +65,7 @@ Plugin.extend({
       quesArray
     });
     this._questionStates = {};
+    this._renderedQuestions = [];
     var savedQSState = this.getQuestionSetState();
     if (savedQSState) {
       this._renderedQuestions = savedQSState.renderedQuestions;
@@ -70,10 +77,6 @@ Plugin.extend({
     }
     this.saveQuestionSetState();
     this.renderQuestion(this._currentQuestion);
-  },
-
-  moveNext: function(){
-    this.renderNextQuestion();
   },
   renderQuestion: function(question) {
     var instance = this;
@@ -355,6 +358,6 @@ Plugin.extend({
         }
       }
       TelemetryService.navigate(stageid, stageTo, data)
-}
+  }
 });
 //# sourceURL=questionSetRenderer.js
