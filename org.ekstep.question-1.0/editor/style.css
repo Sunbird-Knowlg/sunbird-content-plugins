@@ -1,244 +1,196 @@
-  .activeItem {
-    border-left-style: solid !important;
-    border-left-color: #7777f7 !important;
-    box-shadow: none !important;
-    background: rgba(0, 0, 0, .05) !important;
-    color: rgba(0, 0, 0, .95) !important;
-    /*border: none !important;*/
-    margin: 0 0 .35714286em !important;
-    border-radius: .28571429rem!important;
-  }
+/*.activeItem {
+  border-left-style: solid !important;
+  border-left-color: #7777f7 !important;
+  box-shadow: none !important;
+  background: rgba(0, 0, 0, .05) !important;
+  color: rgba(0, 0, 0, .95) !important;
+  margin: 0 0 .35714286em !important;
+  border-radius: .28571429rem!important;
+}*/
 .md{
   margin-right: 1%
 }
-  /*.templateCard {
-    height: auto;
-    float: left;
-    padding: 0;
-    position: relative;
-    background-color: black;
-  }
-
-  .templateCard:hover img {
-    opacity: 0.3;
-    -moz-box-shadow: 0 0 10px #ccc;
-    -webkit-box-shadow: 0 0 10px #ccc;
-    box-shadow: 0 0 10px #ccc;
-  }
-
-  .templateCard:hover .templateDisc {
-    opacity: 1;
-    background: rgba(16, 1, 1, 0.5);
-  }
-
-  .templateCard img {
-    padding: 0;
-    width: 100%;
-    display: block;
-    opacity: 1;
-  }
-
-  .templateCard img,
-  .templateDisc {
-    -webkit-transition: opacity 0.5s ease-out;
-    -moz-transition: opacity 0.5s ease-out;
-    -o-transition: opacity 0.5s ease-out;
-    transition: opacity 0.5s ease-out;
-  }
-
-  .templateDisc {
-    padding-top: 18%;
-    position: absolute;
-    color: white;
-    left: 0;
-    top: 25%;
-    right: 0;
-    bottom: 0;
-    text-align: center;
-    opacity: 0;
-    background-color: #e6e6e6;
-    margin-top: -15%;
-  }*/
-
-  .item:hover {
-    color: #1e70bf;
-    text-decoration: none;
-    background: #f2f2f2 !important;
-  }
-
-  .dropdownBox {
-    width: 100%;
-  }
-
-  .qcMetadateFormLbl {
-    line-height: 18px;
-    margin-bottom: 0px;
-    margin-top: 14px;
-    color: rgb(148, 148, 148);
-  }
-
-  #questionTitle {
-    width: 100%;
-    padding-left: 0px;
-    height: 33px;
-    min-height: 34px;
-    min-width: inherit;
-    color: inherit;
-    background-color: transparent;
-    border-style: solid;
-    border-color: rgb(230, 231, 232) !important;
-    border-width: 0px 0px 1px !important;
-  }
-
-  #conceptsTextBoxMeta {
-    width: 100%;
-    padding-left: 0px;
-    height: 33px;
-    min-height: 34px;
-    min-width: inherit;
-    color: inherit;
-    background-color: transparent;
-    border-style: solid;
-    border-color: rgb(230, 231, 232) !important;
-    border-width: 0px 0px 1px !important;
-    color: #5f5fd2;
-  }
-
-  #questionTitle:focus {
-    border-color: #2171c2 !important;
-    /*border-style: solid;*/
-    /*border-width: 0px 0px 2px 0px !important;*/
-    outline: none;
-  }
-
-  .activeBreadcumb {
-    color: #32a1da;
-  }
-
-  .wizard .ui.breadcrumb .section {
-    color: rgba(0, 0, 0, .4);
-    margin-left: 1rem;
-    margin-right: 1rem;
-  }
-
- /* .ui.grid >.column.questionHeader {
-    text-align: center;
-    background-color: #fff;
-    padding-top: 1.2rem;
-    padding-bottom: 1.2rem;
-    margin: 0;
-  }*/
 
 
-  .QuestionUnitBrowserFullScreen {
-    display: block !important;
-    position: inherit !important;
-    top: 0 !important;
-    left: 0 !important;
-    height: 100vh;
-    width: 100% !important;
-    margin: 0 auto;
-    border-radius: 0;
-    -webkit-flex-flow: column;
-    -moz-flex-flow: column;
-    -ms-flex-flow: column;
-    -o-flex-flow: column;
-    flex-flow: column;
-  }
+.item:hover {
+  color: #1e70bf;
+  text-decoration: none;
+  background: #f2f2f2 !important;
+}
 
-  .bottomActionButtons {
-    margin-top: 2%;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-  }
+.dropdownBox {
+  width: 100%;
+}
 
-  .quFullScreen {
-    margin-top: 2%;
-    overflow-y: scroll;
-    margin-left: 3%;
-    max-height: 70vh;
-    width: 100%;
-    margin-right: 2%;
-  }
+.qcMetadateFormLbl {
+  line-height: 18px;
+  margin-bottom: 0px;
+  margin-top: 14px;
+  color: rgb(148, 148, 148);
+}
 
-  .QuestionMetaForm {
-    margin-top: 6%;
-    margin-left: 2%;
-    margin-bottom: 7%;
-    margin-right: 2%
-  }
+#questionTitle {
+  width: 100%;
+  padding-left: 0px;
+  height: 33px;
+  min-height: 34px;
+  min-width: inherit;
+  color: inherit;
+  background-color: transparent;
+  border-style: solid;
+  border-color: rgb(230, 231, 232) !important;
+  border-width: 0px 0px 1px !important;
+}
 
-  .qcError {
-    color: red;
-  }
+#conceptsTextBoxMeta {
+  width: 100%;
+  padding-left: 0px;
+  height: 33px;
+  min-height: 34px;
+  min-width: inherit;
+  color: inherit;
+  background-color: transparent;
+  border-style: solid;
+  border-color: rgb(230, 231, 232) !important;
+  border-width: 0px 0px 1px !important;
+  color: #5f5fd2;
+}
 
-  #qcSideMenu {
-    font-size: 16px;
-    margin-top: 5%;
-    margin-left: 4%;
-  }
+#questionTitle:focus {
+  border-color: #2171c2 !important;
+  /*border-style: solid;*/
+  /*border-width: 0px 0px 2px 0px !important;*/
+  outline: none;
+}
 
-  .ui.breadcrumb.breadcrumbTitle {
-    padding-top: 0;
-    font-size:1.2rem;
-    color: #aaaaaa;
-    font-weight: 500;
-  }
+.activeBreadcumb {
+  color: #32a1da;
+}
 
-  /*#templateCardHeader {
-    background-color: #41474f;
-  */}
+.wizard .ui.breadcrumb .section {
+  color: rgba(0, 0, 0, .4);
+  margin-left: 1rem;
+  margin-right: 1rem;
+}
 
-  /*#templateCardHeaderText {
-    color: white;
-  }*/
+/* .ui.grid >.column.questionHeader {
+text-align: center;
+background-color: #fff;
+padding-top: 1.2rem;
+padding-bottom: 1.2rem;
+margin: 0;
+}*/
 
-  .second {
-    margin-top: 1%;
-    margin-right: 2%;
-  }
 
-  .previewArea {
-    background-color: #fff;
-    margin-left: -1%;
-  }
+.QuestionUnitBrowserFullScreen {
+  display: block !important;
+  position: inherit !important;
+  top: 0 !important;
+  left: 0 !important;
+  height: 100vh;
+  width: 100% !important;
+  margin: 0 auto;
+  border-radius: 0;
+  -webkit-flex-flow: column;
+  -moz-flex-flow: column;
+  -ms-flex-flow: column;
+  -o-flex-flow: column;
+  flex-flow: column;
+}
 
-  .previewAreaHead {
-    background-color: #fff;
-    margin: auto;
-    padding: 15px;
-  }
+.bottomActionButtons {
+  margin-top: 2%;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}
 
-  .replyIcon {
-    float: right;
-    display: inline-block;
-  }
+.quFullScreen {
+  margin-top: 2%;
+  overflow-y: scroll;
+  margin-left: 3%;
+  max-height: 70vh;
+  width: 100%;
+  margin-right: 2%;
+}
 
-  .iframe-preview {
-    background-color: white;
-    width: 480px;
-    height: 270px;
-    border-style: initial;
-    box-shadow: 0 0 10px grey;
-  }
+.QuestionMetaForm {
+  margin-top: 6%;
+  margin-left: 2%;
+  margin-bottom: 7%;
+  margin-right: 2%
+}
 
-  .work-text-content {
-    cursor: pointer;
-  }
+.qcError {
+  color: red;
+}
 
-  .work-text-content>p {
-    margin-top: 20%;
-  }
+#qcSideMenu {
+  font-size: 16px;
+  margin-top: 5%;
+  margin-left: 4%;
+}
 
-  #templatsCards{
-    margin-top: 1%
-  }
-  .bar{
-    margin-top: 2%;
-  }
+.ui.breadcrumb.breadcrumbTitle {
+  padding-top: 0;
+  font-size:1.2rem;
+  color: #aaaaaa;
+  font-weight: 500;
+}
 
-  .ui.modal.questioncreation {
+/*#templateCardHeader {
+background-color: #41474f;
+*/}
+
+/*#templateCardHeaderText {
+color: white;
+}*/
+
+.second {
+  margin-top: 1%;
+  margin-right: 2%;
+}
+
+.previewArea {
+  background-color: #fff;
+  margin-left: -1%;
+}
+
+.previewAreaHead {
+  background-color: #fff;
+  margin: auto;
+  padding: 15px;
+}
+
+.replyIcon {
+  float: right;
+  display: inline-block;
+}
+
+.iframe-preview {
+  background-color: white;
+  width: 480px;
+  height: 270px;
+  border-style: initial;
+  box-shadow: 0 0 10px grey;
+}
+
+.work-text-content {
+  cursor: pointer;
+}
+
+.work-text-content>p {
+  margin-top: 20%;
+}
+
+#templatsCards{
+  margin-top: 1%
+}
+.bar{
+  margin-top: 2%;
+}
+
+.ui.modal.questioncreation {
   position: inherit !important;
   top: 0 !important;
   left: 0 !important;
@@ -272,19 +224,6 @@
   text-align: center;
   padding: 2rem;
 }
-/*.ui.card.qcTemplateCard{
-  margin: auto;
-}*/
-/*.ui.grid.qcCustomGrid{
-  padding: 0 20px;  
-}*/
-/*.ui.grid >.column.qcCloseIcon{
-  padding: 1.2rem;
-}
-.ui.grid.qcHeader{
-  margin: 0;
-  border-bottom: 1px solid rgba(34,36,38,.15);
-}*/
 .previewHeading{
   display: inline-block;
   text-align: left;
