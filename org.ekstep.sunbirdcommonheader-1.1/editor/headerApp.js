@@ -327,11 +327,14 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     $scope.displayWhatsNew = function() {
                         var replaceData = {}
                         switch(meta.contentType) {
-                            case 'TextBook':
-                                replaceData = {'replaceValue': 'book', 'value': 'textbook'}
+                            case 'Course':
+                                replaceData = {'replaceValue': '<!-- dynamicWord -->', 'value': 'course'}
                                 break;
                             case 'LessonPlan':
-                                replaceData = {'replaceValue': 'book', 'value': 'lessonplan'}
+                                replaceData = {'replaceValue': '<!-- dynamicWord -->', 'value': 'lesson plan'}
+                                break;
+                            default:
+                                replaceData = {'replaceValue': '<!-- dynamicWord -->', 'value': 'book'}
                                 break;
                         }
                         $scope.fireEvent({ id: 'org.ekstep.collectionwhatsnew:showpopup', data: replaceData});

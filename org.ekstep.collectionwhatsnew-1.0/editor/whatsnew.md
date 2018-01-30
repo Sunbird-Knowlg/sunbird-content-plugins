@@ -17,17 +17,17 @@
 
 ### <b>Right click</b>
 
-<p> ☼ <b>NEW</b> - Right click on any unit in book tree in left pane to view menu
+<p> ☼ <b>NEW</b> - Right click on any unit in <!-- dynamicWord --> tree in left pane to view menu
 
 ---
 
 ### <b>Save easily</b>
 
-<p> ☼ <b>NEW</b> - We have now provided single click Save for any changes in the book
+<p> ☼ <b>NEW</b> - We have now provided single click Save for any changes in the <!-- dynamicWord -->
 ---
 ### <b>Create more..</b>
 
-<p> ☼ <b>NEW</b> - Now you can create more levels of unit in a book to organise resources
+<p> ☼ <b>NEW</b> - Now you can create more levels of unit in a <!-- dynamicWord --> to organise resources
 ---
 ### <b>Do more with new design</b>
 
@@ -35,19 +35,19 @@
 
 - Quickly create New Units at sibling or child level
 
-- Drag to reorder units in a book
+- Drag to reorder units in a <!-- dynamicWord -->
 
 - ```What's New!``` to keep you surprised with new things we are building for you!
 
-- Edit name of a unit in-line in book structure tree located in left pane
+- Edit name of a unit in-line in <!-- dynamicWord --> structure tree located in left pane
 
-- Preview Units and Resources directly inside a book
+- Preview Units and Resources directly inside a <!-- dynamicWord -->
 
 - New look for ```Resource Library```
 ---
 
 ### <b>We love to make things better!</b>
 
-<p> ☂ Add any type of resources to book units now
+<p> ☂ Add any type of resources to <!-- dynamicWord --> units now
 <p> ☂ Type longer names & descriptions now. We have it covered!
 ---
