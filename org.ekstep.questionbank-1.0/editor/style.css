@@ -98,7 +98,7 @@
   height: 4.5vh;
   min-width: 24.5%;
   font-size: 14px !important;
-  padding-top: 2.5% !important;
+  padding-top: 2.3% !important;
 }
 
 .qb-question-bank .content.wizard {
@@ -150,6 +150,8 @@ padding-right: : 1% !important;
 
 .qb-config-form {
   margin-bottom: 3%;
+  width: 45%;
+  margin-left: 8%;
 }
 
 .pull-right {
