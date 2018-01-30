@@ -27,9 +27,9 @@ org.ekstep.contenteditor.basePlugin.extend({
     /*istanbul ignore else*/
     if (!this.attributes.x) {
       this.attributes.x = 10;
-      this.attributes.y = 10;
-      this.attributes.w = 80;
-      this.attributes.h = 80;
+      this.attributes.y = 3;
+      this.attributes.w = 78;
+      this.attributes.h = 94;
       this.percentToPixel(this.attributes);
     }
     var props = this.convertToFabric(this.attributes);
