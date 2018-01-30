@@ -67,7 +67,7 @@
                                          </div>
                                          <div class="field required" ng-class="{error: $ctrl.submitted && contentMetaForm.cThree.$error.required}">
                                             <label for="category_3">{{category_3.name}}</label>
-                                            <select id="contentmeta-category-3" name ="cThree" class="ui search dropdown placeholder-padding contentmeta-category-3" ng-model="contentMeta[category_3.code]" ng-change="updatedDependentCategory('3', $ctrl.contentMeta[category_3.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_3.name})" required>
+                                            <select id="contentmeta-category-3" name ="cThree" class="ui search dropdown placeholder-padding contentmeta-category-3" ng-model="$ctrl.contentMeta[category_3.code]" ng-change="updatedDependentCategory('3', $ctrl.contentMeta[category_3.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_3.name})" required>
                                                 <option value="">Select</option>
                                                 <option value="{{category.name}}" ng-repeat="category in category_3.terms">{{category.name}}</option>
                                             </select>
