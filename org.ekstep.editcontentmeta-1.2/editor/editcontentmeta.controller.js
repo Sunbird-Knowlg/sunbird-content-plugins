@@ -149,7 +149,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
             $('#contentmeta-category-3').dropdown('set selected', ctrl.contentMeta[$scope.categoryModelList[3]]);
             $('#contentmeta-category-4').dropdown('set selected', ctrl.contentMeta[$scope.categoryModelList[4]]);
         },500);
-        if(ctrl.contentMeta[$scope.categoryModelList[2]]) $scope.categoryValues = ctrl.contentMeta[$scope.categoryModelList[2]].join();
+        if(ctrl.contentMeta[$scope.categoryModelList[2]]) $scope.categoryValues = ctrl.contentMeta[$scope.categoryModelList[2]].join().replace(/\b\w/g, l => l.toUpperCase());
     }
 
     ctrl.cancel = function () {
@@ -193,7 +193,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
     }
 
     $scope.updatedDependentCategory = function(categoryIndex, categoryVal){
-        $scope.categoryValues = $('#contentmeta-category-2').dropdown('get value');
+        $scope.categoryValues = $('#contentmeta-category-2').dropdown('get value').replace(/\b\w/g, l => l.toUpperCase());
         ctrl.contentMeta[$scope.categoryModelList[2]] = $('#contentmeta-category-2').dropdown('get value').split(",");
         if(categoryIndex == "2") {
             categoryVal = $('#contentmeta-category-2').dropdown('get value').split(",");

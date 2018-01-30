@@ -40,7 +40,7 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
         return associations;
     }
     $scope.updatedDependentCategory = function(categoryIndex, categoryVal) {
-        $scope.categoryValues = $('#textbookmeta-category-2').dropdown('get value');
+        $scope.categoryValues = $('#textbookmeta-category-2').dropdown('get value').replace(/\b\w/g, l => l.toUpperCase());;
         $scope.textbook[$scope.categoryModelList[2]] = $('#textbookmeta-category-2').dropdown('get value').split(",");
         if(categoryIndex == "2") {
             categoryVal = $('#textbookmeta-category-2').dropdown('get value').split(",");
@@ -141,7 +141,7 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
             $('.textbookmeta-category-4').dropdown('set selected', $scope.textbook[$scope.categoryModelList[4]]);
             $('#textbookmeta-year').dropdown('set selected', $scope.textbook.year);
             $('#textbookmeta-resource').dropdown('set selected', $scope.textbook.resource);
-            if($scope.textbook[$scope.categoryModelList[2]]) $scope.categoryValues = $scope.textbook[$scope.categoryModelList[2]].join();
+            if($scope.textbook[$scope.categoryModelList[2]]) $scope.categoryValues = $scope.textbook[$scope.categoryModelList[2]].join().replace(/\b\w/g, l => l.toUpperCase());;
         });
     }
 
