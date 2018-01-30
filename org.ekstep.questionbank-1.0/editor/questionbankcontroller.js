@@ -21,7 +21,7 @@ angular.module('createquestionapp', [])
         $scope.selectedQueIndex;
         $scope.grades;
         $scope.languages;
-        $scope.difficultyLevels = ['Easy', 'Medium', 'Difficult'];
+        $scope.difficultyLevels = ['All', 'Easy', 'Medium', 'Difficult'];
         $scope.questionTypes = [{ "name": "Multiple Choice Questions", "value": "mcq" }, { "name": "Fill in the Blanks", "value": "ftb" }, { "name": "Match the Following", "value": "mtf" }];
         $scope.filterObj = {};
         $scope.selectedIndex;
@@ -96,10 +96,14 @@ angular.module('createquestionapp', [])
                         case "language":
                             var lan = [];
                             lan.push(value);
-                            $scope.filterData.request.metadata.filters.push({ "property": "language", "operator": "=", "value": lan });
+                            if (value != "All") {
+                                $scope.filterData.request.metadata.filters.push({ "property": "language", "operator": "=", "value": lan });
+                            }
                             break;
                         case "qlevel":
-                            $scope.filterData.request.metadata.filters.push({ "property": "qlevel", "operator": "=", "value": value });
+                            if (value != "All") {
+                                $scope.filterData.request.metadata.filters.push({ "property": "qlevel", "operator": "=", "value": value });
+                            }
                             break;
                         case "type":
                             if (value.length) {
@@ -179,6 +183,7 @@ angular.module('createquestionapp', [])
                 if (!err) {
                     $scope.grades = res.data.result.ordinals.gradeLevel;
                     $scope.languages = res.data.result.ordinals.language;
+                    $scope.languages.unshift("All");
                     ecEditor.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false });
                     $scope.$safeApply();
 
