@@ -26,7 +26,7 @@
                             <i class="dropdown icon"></i>
                             <div class="default text">Choose Lesson Type</div>
                             <div class="menu tooltipElement">
-                                <div class="item" id='cat_{{$index}}' ng-click="toggleDeleteIcon('category',$index)" ng-repeat="lessonType in $ctrl.meta.lessonTypes" data-value="{{lessonType}}">{{lessonType}}
+                                <div class="item" ng-repeat="lessonType in $ctrl.meta.lessonTypes" data-value="{{lessonType}}">{{lessonType}}
                                 </div>
                             </div>
                         </div>
@@ -41,7 +41,7 @@
                             <i class="dropdown icon"></i>
                             <div class="default text">Choose Language</div>
                             <div class="menu tooltipElement">
-                                <div class="item" id='lang_{{$index}}' ng-click="toggleDeleteIcon('language',$index)" ng-repeat="lang in $ctrl.meta.languages" data-value="{{lang.value}}">{{lang.label}}
+                                <div class="item" ng-repeat="lang in $ctrl.meta.languages" data-value="{{lang.value}}">{{lang.label}}
                                 </div>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                             <i class="dropdown icon"></i>
                             <div class="default text">Choose Class</div>
                             <div class="menu tooltipElement">
-                                <div class="item" id='cls_{{$index}}' ng-click="toggleDeleteIcon('class',$index)" ng-repeat="grade in $ctrl.meta.grades" data-value="{{grade.label}}">{{grade.label}}
+                                <div class="item" ng-repeat="grade in $ctrl.meta.grades" data-value="{{grade.label}}">{{grade.label}}
                                 </div>
                             </div>
                         </div>
@@ -70,7 +70,7 @@
                             <i class="dropdown icon"></i>
                             <div class="default text">Choose Subject</div>
                             <div class="menu tooltipElement">
-                                <div class="item" id='sub_{{$index}}' ng-click="toggleDeleteIcon('subject',$index)" ng-repeat="subject in $ctrl.meta.subjects" data-value="{{subject.label}}">{{subject.label}}
+                                <div class="item" ng-repeat="subject in $ctrl.meta.subjects" data-value="{{subject.label}}">{{subject.label}}
                                 </div>
                             </div>
                         </div>
