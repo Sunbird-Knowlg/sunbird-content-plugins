@@ -19,8 +19,8 @@
                 <div class="two wide column right aligned">
                     <i class="cursor-pointer close link icon" ng-click="closeThisDialog();$ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeButton'}, $event)"></i>
                 </div>
-            </div>
         </div>
+      </div>
     </div>
     <div class="ui grid custom-grid">
       <div class="two column row" ng-show="$ctrl.templatesScreen">
@@ -55,7 +55,7 @@
           <div class="ui five stackable cards">
             <div class="card card-hover-effect" ng-repeat="(key, value) in $ctrl.allMenuItems">
               <div class="image">
-                <img src="{{value.thumbnail1}}"/>
+                <img src="{{value.thumbnail1}}" />
               </div>
               <div class="content">
                 <a class="header card-header">{{value.title}}</a>

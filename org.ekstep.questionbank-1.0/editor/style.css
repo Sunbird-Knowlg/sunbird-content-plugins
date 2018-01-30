@@ -98,11 +98,11 @@
   height: 4.5vh;
   min-width: 24.5%;
   font-size: 14px !important;
-  padding-top: 2.5% !important;
+  padding-top: 2.3% !important;
 }
 
 .qb-question-bank .content.wizard {
-  height: 83%;
+  height: 99vh;
   padding: 0;
 }
 
@@ -120,6 +120,12 @@
   border-top: none;
     margin-top: 0!important;
     padding-top: 2% !important;
+}
+
+.qb-question-list-container >.ui.divided.items>.item:last-child{
+  border-top: none;
+    margin-bottom: 0!important;
+    padding-bottom: 2% !important;
 }
 
 
@@ -150,6 +156,8 @@ padding-right: : 1% !important;
 
 .qb-config-form {
   margin-bottom: 3%;
+  width: 45%;
+  margin-left: 8%;
 }
 
 .pull-right {

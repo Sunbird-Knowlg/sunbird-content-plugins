@@ -151,15 +151,16 @@ color: white;
   margin-right: 2%;
 }
 
-.previewArea {
-  background-color: #fff;
-  margin-left: -1%;
+.ui.grid .column.previewArea {
+  margin-top: -14px;
+  background-color: #F0F0F0;
 }
 
 .previewAreaHead {
-  background-color: #fff;
+  background-color: #F0F0F0;
   margin: auto;
   padding: 15px;
+  text-align: center;
 }
 
 .replyIcon {
@@ -210,26 +211,27 @@ color: white;
   height: 83%;
   padding: 0;
 }
-.templateHead{
+/*.templateHead{
   font-size: 1.5em;
   color: #9f9f9f;
   text-align: center;
   padding-bottom: 2%;
-}
-.qc-show-preview{
+}*/
+/*.qc-show-preview{
   display: inline-block;
   border: 1px solid #E6E7E8;
   width: 100%;
   margin: auto;
   text-align: center;
   padding: 2rem;
-}
+}*/
 .previewHeading{
   display: inline-block;
   text-align: left;
 }
 .ui.grid.custom-grid{
   margin: 0;
+  height: 90%;
 }
 .card-hover-effect:hover{
   z-index: 5;
@@ -243,4 +245,10 @@ color: white;
 .ui.cards>.card>.content>a.header.card-header:hover{
   cursor: default;
   color: rgba(0,0,0,.85);
+}
+.preview-heading{
+  padding: 15px 0;
+  width: 480px;
+  margin: auto;
+  text-align: left;
 }

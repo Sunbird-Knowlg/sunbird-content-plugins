@@ -58,6 +58,7 @@ Plugin.extend({
     this._masterQuestionSet = _.isArray(quesArray) ? quesArray : _.toArray({
       quesArray
     });
+    this._questionStates = {};
     var savedQSState = this.getQuestionSetState();
     if (savedQSState) {
       this._renderedQuestions = savedQSState.renderedQuestions;
@@ -109,7 +110,7 @@ Plugin.extend({
         instance.displayFeedback(result.eval);
 
       } else {
-        this.renderNextQuestion();
+        instance.renderNextQuestion();
       }
     });
   },
@@ -200,17 +201,21 @@ Plugin.extend({
     // }
   },
   loadController: function(path, callback) {
+    setTimeout(function() {
       EkstepRendererAPI.dispatchEvent('renderer:load:js', {
         path: path,
         callback: callback
       });
+    },400);
   },
   loadTemplate: function(path, toElement, callback) {
+    setTimeout(function() {
       EkstepRendererAPI.dispatchEvent('renderer:load:html', {
         path: path,
         toElement: toElement,
         callback: callback
       });
+      },400);
   },
   loadTemplateContainer: function() {
     var qsElement = angular.element(this._constants.qsElement);
