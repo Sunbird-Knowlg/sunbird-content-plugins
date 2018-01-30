@@ -59,16 +59,6 @@ angular.module('createquestionapp', [])
         $scope.searchQuestions = function() {
             $scope.filterData.request.metadata = {};
             $scope.filterData.request.metadata.filters = [{ "property": "version", "operator": "=", "value": 2 }];
-            /* for (var key in $scope.filterObj) {
-               if ($scope.filterObj.hasOwnProperty(key)) {
-                 delete $scope.filterData.request.metadata.filters;
-                 $scope.filterData.request.metadata = {};
-                 $scope.filterData.request.metadata.filters = [{ "property": "version", "operator": "=", "value": 2 }];
-               } else {
-                 delete $scope.filterData.request.metadata;
-                 delete $scope.filterData.request.metadata.filters;
-               }
-             }*/
 
             // For my Questions option
             if ($scope.isMyQuestions) {
@@ -82,15 +72,21 @@ angular.module('createquestionapp', [])
                 if (value) {
                     switch (key) {
                         case "question_title":
-                            $scope.filterData.request.metadata.filters.push({ "property": "title", "operator": "like", "value": value });
-                            $scope.filterData.request.metadata.op = "OR";
+                            //$scope.filterData.request.metadata.filters.push({ "property": "title", "operator": "like", "value": value });
+                            $scope.filterData.request.metadata.op = "AND";
                             $scope.filterData.request.metadata.metadata = [];
-                            var decMetadata =  [{
+                            var descMetadata = [{
                                 "filters": [
-                                    { "property": "description", "operator": "like", "value": value }
-                                ]
+                                    { "property": "title", "operator": "like", "value": value }
+                                ],
+                                "op": "OR",
+                                "metadata": [{
+                                    "filters": [
+                                        { "property": "description", "operator": "like", "value": value }
+                                    ]
+                                }]
                             }];
-                            $scope.filterData.request.metadata.metadata = decMetadata;
+                            $scope.filterData.request.metadata.metadata = descMetadata;
                             break;
                         case "gradeLevel":
                             if (value.length) {
