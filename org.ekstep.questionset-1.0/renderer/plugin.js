@@ -58,6 +58,7 @@ Plugin.extend({
     this._masterQuestionSet = _.isArray(quesArray) ? quesArray : _.toArray({
       quesArray
     });
+    this._questionStates = {};
     var savedQSState = this.getQuestionSetState();
     if (savedQSState) {
       this._renderedQuestions = savedQSState.renderedQuestions;
