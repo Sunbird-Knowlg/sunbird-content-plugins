@@ -121,7 +121,7 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
   $scope.evaluate = function(callback) {
     var ansValue = angular.element('#preview-ftb-horizontal').scope().ftbAnswer;
     var correctAnswer = false;
-    if ($scope.questionObj.answer[0].text.toLowerCase().replace(/ /g, '') === ansValue.toLowerCase().replace(/ /g, '')) {
+    if ($scope.questionObj.answer.text.toLowerCase().replace(/ /g, '') === ansValue.toLowerCase().replace(/ /g, '')) {
       correctAnswer = true;
     }
     var result = {
