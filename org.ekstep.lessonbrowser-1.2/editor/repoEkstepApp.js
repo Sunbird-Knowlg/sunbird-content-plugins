@@ -17,7 +17,6 @@ angular.module('org.ekstep.contentprovider', [])
 
     // Regulate Load more button
     $scope.loadmoreEnabledFlag = true;
-    $scope.loadmoreVisibleFlag = true;
     var loadedLessonCount = 0;
 
     // Select all - Sidebar filters
@@ -37,6 +36,7 @@ angular.module('org.ekstep.contentprovider', [])
     setTimeout(function(){
         $('#applyAccordion').accordion();
         $('.ui.multiple.selection.dropdown').dropdown({
+            useLabels: false,
             forceSelection: false,
             onChange: function() {
                 $scope.getFiltersValue();
@@ -93,7 +93,6 @@ angular.module('org.ekstep.contentprovider', [])
                     });
 
                 }
-                $scope.loadmoreVisibleFlag = true;
                 $scope.loadmoreEnabledFlag = true;
 
                 if (loadedLessonCount >= ctrl.res.count) {
@@ -104,9 +103,7 @@ angular.module('org.ekstep.contentprovider', [])
                     $scope.loadmoreEnabledFlag = false;
                 }
 
-                if (!ctrl.res.count) {
-                    $scope.loadmoreVisibleFlag = false;
-                }
+
             }
             $scope.$safeApply();
         });
@@ -129,6 +126,7 @@ angular.module('org.ekstep.contentprovider', [])
             $scope.$safeApply();
         });
     };
+
 
     $scope.getFiltersValue = function(){
         /** Get value from dropdown**/
@@ -348,7 +346,7 @@ angular.module('org.ekstep.contentprovider', [])
             }
         }
 
-        return value + (tail || ' …');
+            return value + (tail);
     };
 });
 //# sourceURL=resourceBrowser.js
