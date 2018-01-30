@@ -4,7 +4,7 @@
     <div class="header" style="padding-right:1em;">
         <div class="ui three column grid">
             <div class="column">
-                <span>Question bank</span>
+                <span>Question Set</span>
             </div>
             <div class="column center aligned">
                 <div class="ui huge breadcrumb breadcrumbTitle qb-breadcrumb">
@@ -145,7 +145,7 @@
                             <div class="item select list-items" ng-repeat="question in questions" ng-class="{quesSelector: $index === selectedQueIndex}">
                                 <div class="middle aligned content" ng-click="previewItem(question, true); showSelectedQue($index);">
                                     <div class="header">{{ question.title }}</div>
-                                    <div class="meta">{{question.language[0]}} | {{ question.type}} | {{ question.qlevel }}</div>
+                                    <div class="meta">{{question.body.data.config.metadata.language}} | {{ question.type}} | {{ question.qlevel }}</div>
                                     <div class="description">{{ question.description }}</div>
                                 </div>
                                 <div class="qb-question-action">
@@ -169,7 +169,7 @@
                             <div class="item select list-items" ng-repeat="selQuestion in selectedQuestions" ng-class="{quesSelector: $index === selectedIndex}">
                                 <div class="middle aligned content" ng-click="previewItem(selQuestion, true);editConfig(selQuestion, $index);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">
                                     <div class="header">{{selQuestion.title }}</div>
-                                    <div class="meta">{{selQuestion.language[0]}} | {{ selQuestion.type}} | {{ selQuestion.qlevel }}</div>
+                                    <div class="meta">{{selQuestion.body.data.config.metadata.language}} | {{ selQuestion.type}} | {{ selQuestion.qlevel }}</div>
                                     <div class="description">{{ selQuestion.description }}</div>
                                 </div>
                                 <div class="qb-question-action">

@@ -122,6 +122,12 @@
     padding-top: 2% !important;
 }
 
+.qb-question-list-container >.ui.divided.items>.item:last-child{
+  border-top: none;
+    margin-bottom: 0!important;
+    padding-bottom: 2% !important;
+}
+
 
 .qb-list-container {
   max-height: 70vh;
