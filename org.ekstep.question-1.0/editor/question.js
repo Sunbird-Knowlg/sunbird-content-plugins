@@ -55,18 +55,14 @@
     'templatesData': []
   };
 
-  $('.ui.dropdown')
-  .dropdown({
-    useLabels: false
-  });
-  setTimeout(function() {
-    $('.ui.dropdown')
-    .dropdown({
-      useLabels: false
-    });
-  }, 300);
 
   ctrl.init = function() {
+    setTimeout(function() {
+       $('.QuestionMetaForm .ui.dropdown')
+       .dropdown({
+        useLabels: false
+      });
+     }, 1000);
     if (!ecEditor._.isEmpty(questionData)) {
       var questionData1 = typeof questionData.body == "string" ? JSON.parse(questionData.body) : questionData.body;
       ctrl.assessmentId = questionData.identifier;
@@ -106,8 +102,8 @@
         "templateId": pluginTemplateId // Template Id of the question unit
       };
     }
-      ecEditor.dispatchEvent(ctrl.plugins.concepts, {
-        element: 'conceptsTextBoxMeta',
+    ecEditor.dispatchEvent(ctrl.plugins.concepts, {
+      element: 'conceptsTextBoxMeta',
         selectedConcepts: ctrl.TotalconceptsData, // All composite keys except mediaType
         callback: function(data) {
           ctrl.Totalconcepts = data.length;
@@ -119,23 +115,23 @@
           $scope.$safeApply();
         }
       });
-      ecEditor.getService('meta').getConfigOrdinals(function(err, res) {
-        if (!err) {
-          ctrl.grades = res.data.result.ordinals.gradeLevel;
-          ctrl.languages = res.data.result.ordinals.language;
-        }
-      });
+    ecEditor.getService('meta').getConfigOrdinals(function(err, res) {
+      if (!err) {
+        ctrl.grades = res.data.result.ordinals.gradeLevel;
+        ctrl.languages = res.data.result.ordinals.language;
+      }
+    });
 
-      var questionplugininstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(instance.manifest.id);
-      _.each(questionplugininstance.editor.dependencies, function(val, key) {
-        if (val.type == 'plugin') {
-          var instance = org.ekstep.pluginframework.pluginManager.getPluginManifest(val.plugin);
-          var pluginID = val.plugin;
-          var ver = val.ver;
-          if (!_.isUndefined(instance.templates))
-            _.each(instance.templates, function(v, k) {
-              v.pluginID = pluginID;
-              v.ver = ver;
+    var questionplugininstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(instance.manifest.id);
+    _.each(questionplugininstance.editor.dependencies, function(val, key) {
+      if (val.type == 'plugin') {
+        var instance = org.ekstep.pluginframework.pluginManager.getPluginManifest(val.plugin);
+        var pluginID = val.plugin;
+        var ver = val.ver;
+        if (!_.isUndefined(instance.templates))
+          _.each(instance.templates, function(v, k) {
+            v.pluginID = pluginID;
+            v.ver = ver;
               var thumbnail = ecEditor.resolvePluginResource(pluginID, ver, v.thumbnail); //Get image source and update in template object
               v.thumbnail1 = thumbnail;
               var allMenus = v;
@@ -147,69 +143,69 @@
                 ctrl.menuItems['other'].templatesData = v;
               }
             });
-        }
-      });
-      ctrl.select = function(parentIndex, index) {
-        ctrl.selected = parentIndex + '.' + index;
-      };
-
-      ctrl.selectedMenuItemData = ctrl.menuItems[ctrl.defaultActiveMenu].templatesData;
-
-      $scope.$on('question:form:valid', ctrl.formValid);
-      $scope.$on('question:form:inValid', ctrl.formInValid);
-    }
-
-    ctrl.setPreviewData = function() {
-      var confData = {};
-      var qObj = {
-        "config": "{'metadata':{'title':'question title','description':'question description','language':'English'},'max_time':0,'max_score':1,'partial_scoring':false}",
-        "data": JSON.stringify(ctrl.questionCreationFormData),
-        "id": "c943d0a907274471a0572e593eab49c2",
-        "pluginId": ctrl.selectedTemplatePluginData.plugin.id,
-        "pluginVer": ctrl.selectedTemplatePluginData.plugin.version,
-        "templateId": ctrl.selectedTemplatePluginData.plugin.templateId,
-        "type": "unit"
       }
-      var questions = [];
-      var data = {
-        "org.ekstep.questionset": {}
-      }
+    });
+    ctrl.select = function(parentIndex, index) {
+      ctrl.selected = parentIndex + '.' + index;
+    };
 
-      questions.push(qObj);
-      data["org.ekstep.questionset"]['org.ekstep.question'] = questions;
-      confData = { "contentBody": {}, "parentElement": true, "element": "#iframeArea" };
-      document.getElementById("iframeArea").contentDocument.location.reload(true);
-      var questionSetInstance = ecEditor.instantiatePlugin('org.ekstep.questionset.preview');
-      confData.contentBody = questionSetInstance.getQuestionPreviwContent(data['org.ekstep.questionset']);
-      ecEditor.dispatchEvent("atpreview:show", confData);
+    ctrl.selectedMenuItemData = ctrl.menuItems[ctrl.defaultActiveMenu].templatesData;
+
+    $scope.$on('question:form:valid', ctrl.formValid);
+    $scope.$on('question:form:inValid', ctrl.formInValid);
+  }
+
+  ctrl.setPreviewData = function() {
+    var confData = {};
+    var qObj = {
+      "config": "{'metadata':{'title':'question title','description':'question description','language':'English'},'max_time':0,'max_score':1,'partial_scoring':false}",
+      "data": JSON.stringify(ctrl.questionCreationFormData),
+      "id": "c943d0a907274471a0572e593eab49c2",
+      "pluginId": ctrl.selectedTemplatePluginData.plugin.id,
+      "pluginVer": ctrl.selectedTemplatePluginData.plugin.version,
+      "templateId": ctrl.selectedTemplatePluginData.plugin.templateId,
+      "type": "unit"
+    }
+    var questions = [];
+    var data = {
+      "org.ekstep.questionset": {}
     }
 
-    ctrl.cancel = function() {
-      $scope.closeThisDialog();
-    }
+    questions.push(qObj);
+    data["org.ekstep.questionset"]['org.ekstep.question'] = questions;
+    confData = { "contentBody": {}, "parentElement": true, "element": "#iframeArea" };
+    document.getElementById("iframeArea").contentDocument.location.reload(true);
+    var questionSetInstance = ecEditor.instantiatePlugin('org.ekstep.questionset.preview');
+    confData.contentBody = questionSetInstance.getQuestionPreviwContent(data['org.ekstep.questionset']);
+    ecEditor.dispatchEvent("atpreview:show", confData);
+  }
 
-    ctrl.back = function() {
-      if (ctrl.createQuestionScreen) {
-        ctrl.templatesScreen = true;
-        ctrl.createQuestionScreen = false;
-        ctrl.metadaFormScreen = false;
-      } else if (ctrl.metadaFormScreen) {
-        ctrl.templatesScreen = false;
-        ctrl.createQuestionScreen = true;
-        ctrl.metadaFormScreen = false;
-      }
-    }
+  ctrl.cancel = function() {
+    $scope.closeThisDialog();
+  }
 
-    ctrl.switchTab = function(id, res) {
-      ctrl.selectedMenuItemData = ctrl.menuItems[res.category].templatesData;
-    }
-
-    ctrl.addCreateQuestionForm = function(obj) {
-      ctrl.category = obj.category;
+  ctrl.back = function() {
+    if (ctrl.createQuestionScreen) {
+      ctrl.templatesScreen = true;
+      ctrl.createQuestionScreen = false;
+      ctrl.metadaFormScreen = false;
+    } else if (ctrl.metadaFormScreen) {
       ctrl.templatesScreen = false;
       ctrl.createQuestionScreen = true;
       ctrl.metadaFormScreen = false;
-      ctrl.templateName = obj.title;
+    }
+  }
+
+  ctrl.switchTab = function(id, res) {
+    ctrl.selectedMenuItemData = ctrl.menuItems[res.category].templatesData;
+  }
+
+  ctrl.addCreateQuestionForm = function(obj) {
+    ctrl.category = obj.category;
+    ctrl.templatesScreen = false;
+    ctrl.createQuestionScreen = true;
+    ctrl.metadaFormScreen = false;
+    ctrl.templateName = obj.title;
       ctrl.selectedTemplatePluginData.plugin = { // Question Unit Plugin Information  
         "id": obj.pluginID, // Id of plugin
         "version": obj.ver, // Version of plugin
@@ -248,6 +244,7 @@
       ctrl.templatesScreen = false;
       ctrl.createQuestionScreen = false;
       ctrl.metadaFormScreen = true;
+      ctrl.questionData.questionTitle = ctrl.questionCreationFormData.question.text;
     }
     ctrl.saveQuestion = function(assessmentId, data) {
       //If identifier present update the question data
