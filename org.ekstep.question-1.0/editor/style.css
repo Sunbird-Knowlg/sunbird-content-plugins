@@ -1,13 +1,12 @@
-.activeItem {
+/*.activeItem {
   border-left-style: solid !important;
   border-left-color: #7777f7 !important;
   box-shadow: none !important;
   background: rgba(0, 0, 0, .05) !important;
   color: rgba(0, 0, 0, .95) !important;
-  /*border: none !important;*/
   margin: 0 0 .35714286em !important;
   border-radius: .28571429rem!important;
-}
+}*/
 .md{
   margin-right: 1%
 }
@@ -225,19 +224,6 @@ color: white;
   text-align: center;
   padding: 2rem;
 }
-/*.ui.card.qcTemplateCard{
-margin: auto;
-}*/
-/*.ui.grid.qcCustomGrid{
-padding: 0 20px;  
-}*/
-/*.ui.grid >.column.qcCloseIcon{
-padding: 1.2rem;
-}
-.ui.grid.qcHeader{
-margin: 0;
-border-bottom: 1px solid rgba(34,36,38,.15);
-}*/
 .previewHeading{
   display: inline-block;
   text-align: left;
