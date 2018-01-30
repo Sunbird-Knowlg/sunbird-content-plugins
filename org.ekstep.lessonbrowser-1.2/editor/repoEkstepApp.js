@@ -195,7 +195,6 @@ angular.module('org.ekstep.contentprovider', [])
         $('#lessonBrowser_grade').dropdown('restore defaults');
         $('#lessonBrowser_lessonType').dropdown('restore defaults');
         $('#lessonBrowser_subject').dropdown('restore defaults');
-        $('.deleteIcon').hide();
         $scope.filterSelection.domain.splice(0, $scope.filterSelection.domain.length);
         $scope.filterSelection.concept.splice(0, $scope.filterSelection.concept.length);
         $scope.applyFilters();
