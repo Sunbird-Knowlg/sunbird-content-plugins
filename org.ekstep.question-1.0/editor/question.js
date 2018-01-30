@@ -248,6 +248,7 @@
       ctrl.templatesScreen = false;
       ctrl.createQuestionScreen = false;
       ctrl.metadaFormScreen = true;
+      ctrl.questionData.questionTitle = ctrl.questionCreationFormData.question.text;
     }
     ctrl.saveQuestion = function(assessmentId, data) {
       //If identifier present update the question data
