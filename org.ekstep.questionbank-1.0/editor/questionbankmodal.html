@@ -33,7 +33,7 @@
                             <div class="field">
                                 <div class="ui fluid labeled input">
                                     <div class="ui label">Language</div>
-                                    <select class="ui fluid dropdown search lableCls" ng-model="filterObj.language" ng-options="lang for lang in languages" id="language-drop-down" ng-change="searchQuestions();generateTelemetry({type: 'select', subtype: 'dropDown', 'id': 'dropDown'},'language-drop-down')">
+                                    <select class="ui fluid dropdown search lableCls" id="search-select" ng-model="filterObj.language" ng-options="lang for lang in languages" ng-change="searchQuestions();generateTelemetry({type: 'select', subtype: 'dropDown', 'id': 'dropDown'},'language-drop-down')">
                                         <option value="">
                                             All
                                         </option>
@@ -212,7 +212,7 @@
     <div class="actions button-actions">
         <button class="ui blue left floated button" ng-show="!isQuestionSetConfig" id="create-question-button" ng-click="createQuestion();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Create question</button>
         <div class="ui buttons">
-            <button class="ui orange button" id="add-more-ques-button" ng-click="searchQuestions();isQuestionSetConfig = false;generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event);closeConfigForm()" ng-show="isQuestionSetConfig" type="button">Add More Questions</button>
+            <button class="ui orange button" id="add-more-ques-button" ng-click="showSelectedQue(0);searchQuestions();isQuestionSetConfig = false;generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event);closeConfigForm();previewItem(questions[0], true);" ng-show="isQuestionSetConfig" type="button">Add More Questions</button>
             <div class="or" ng-show="isQuestionSetConfig"></div>
             <button class="ui blue button next-button" ng-show="!isQuestionSetConfig" ng-disabled="selectedQuestions.length==0" ng-click="createQuestionSet();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" type="button">Next</button>
             <button class="ui blue button" ng-disabled="(questionSetConfigObj.title == '')" ng-show="isQuestionSetConfig" id="add-to-stage" ng-click="addQuestionSet();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" type="button">Add</button>
