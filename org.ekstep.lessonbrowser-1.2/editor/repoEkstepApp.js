@@ -18,10 +18,6 @@ angular.module('org.ekstep.contentprovider', [])
     // Regulate Load more button
     $scope.loadmoreEnabledFlag = true;
     var loadedLessonCount = 0;
-    $scope.isCategorySelected=false;
-    $scope.isLanguageSelected=false;
-    $scope.isClassSelected=false;
-    $scope.isSubjectSelected=false;
 
     // Select all - Sidebar filters
     $scope.isAllSelected = {"lang": false, "grade": false, "lessonType": false, "domain": false};
@@ -131,6 +127,37 @@ angular.module('org.ekstep.contentprovider', [])
         });
     };
 
+    $scope.toggleDeleteIcon = function(value,index){
+         switch (value) {
+            case 'language':
+                if( $scope.filterSelection.lang.indexOf(ctrl.meta.languages[index].value) !== -1){
+                       $('#lang_'+index+' >.deleteIcon').hide();
+                } else {
+                     $( "#lang_"+index ).append("<span class='right floated deleteIcon'>X</span>" );
+                }
+                break;
+            case 'category':
+                if( $scope.filterSelection.lessonType.indexOf(ctrl.meta.lessonTypes[index]) !== -1){
+                    $('#cat_'+index+' >.deleteIcon').hide();
+                } else {
+                    $( "#cat_"+index ).append("<span class='right floated deleteIcon'>X</span>" );
+                }
+                break;
+            case 'class':
+               if($scope.filterSelection.grade.indexOf(ctrl.meta.grades[index].label) !== -1){
+                    $('#cls_'+index+' >.deleteIcon').hide();
+                } else {
+                   $( "#cls_"+index ).append("<span class='right floated deleteIcon'>X</span>" );   
+                }
+                break;
+            default:
+                 if($scope.filterSelection.subject.indexOf(ctrl.meta.subjects[index].value) !== -1){
+                    $('#sub_'+index+' >.deleteIcon').hide();
+                } else {
+                     $( "#sub_"+index ).append("<span class='right floated deleteIcon'>X</span>" );
+                }
+        }
+    }
     $scope.getFiltersValue = function(){
         /** Get value from dropdown**/
         $scope.filterSelection.lang = $('#lessonBrowser_language').dropdown('get value');
