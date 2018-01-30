@@ -309,7 +309,45 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         })
     };
 
+    $scope.fireEvent = function(event) {
+        if (event) org.ekstep.contenteditor.api.dispatchEvent(event.id, event.data);
+    };
+
+    $scope.whatsNew = function() {
+        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        switch (meta.mimeType) {
+            // case "application/vnd.ekstep.ecml-archive":
+                
+                // break;
+            case "application/vnd.ekstep.content-collection":
+                org.ekstep.contenteditor.api.loadPlugin('org.ekstep.collectionwhatsnew', '1.0', function() {
+                    $scope.nextversion = store.get('nextCollectionversion');
+                    $scope.previousversion = store.get('previousCollectionversion') || 0;
+                    $scope.whatsNewBadge = !($scope.nextversion === $scope.previousversion);
+                    $scope.displayWhatsNew = function() {
+                        var replaceData = {}
+                        switch(meta.contentType) {
+                            case 'TextBook':
+                                replaceData = {'replaceValue': 'book', 'value': 'textbook'}
+                                break;
+                            case 'LessonPlan':
+                                replaceData = {'replaceValue': 'book', 'value': 'lessonplan'}
+                                break;
+                        }
+                        $scope.fireEvent({ id: 'org.ekstep.collectionwhatsnew:showpopup', data: replaceData});
+                        store.set('previousCollectionversion', $scope.nextversion);
+                        $scope.whatsNewBadge = false;
+                    };
+                })
+                break;
+            // default:
+                
+                // break;
+        };
+    };
+
     (function() {
+        $scope.whatsNew();
         $scope.setEditorDetails();
         if ($scope.editorEnv == "NON-ECML" && !ecEditor.getContext('contentId')) {
             $scope.disableSaveBtn = false;
