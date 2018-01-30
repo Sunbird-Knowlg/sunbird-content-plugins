@@ -17,8 +17,6 @@ angular.module('createquestionapp', [])
 
   $scope.init = function() {
     $('.menu .item').tab();
-    $('.ui.dropdown').dropdown({ useLabels: false });
-
     if (!ecEditor._.isUndefined($scope.questionEditData)) {
       var data = $scope.questionEditData.data;
       $scope.mcqFormData.question = data.question;

@@ -4,7 +4,7 @@
  * Jagadish Pujari<jagadish.pujari@tarento.com>
  */
  angular.module('org.ekstep.question', [])
- .controller('QuestionCreationFormController', ['$scope', 'instance', 'questionData', function($scope, instance, questionData) {
+ .controller('QuestionCreationFormController', ['$scope', 'instance', 'questionData', '$timeout', function($scope, instance, questionData, $timeout) {
   var ctrl = this;
   ctrl.screens = {
     'template': "S1",
@@ -13,13 +13,12 @@
   };
   ctrl.screenName = ctrl.screens.template;
   ctrl.templatesScreen = true;
-  ctrl.createQuestionScreen = false;
-  ctrl.metadaFormScreen = false;
+  ctrl.questionMetadataScreen = false;
   ctrl.Totalconcepts = 0;
   ctrl.category = '';
+  ctrl.editState = false;
   ctrl.questionUnitTemplateURL = '';
   ctrl.menuItems = {};
-  ctrl.showPreview = true;
   ctrl.defaultActiveMenu = 'mcq';
   ctrl.selectedTemplatePluginData = {};
   ctrl.questionCreationFormData = {};
@@ -30,9 +29,9 @@
   ctrl.selected = 0;
   ctrl.conceptsCheck = false;
   ctrl.questionData = { 'questionMaxScore' : 1};
-  ctrl.backBtn = false;
   ctrl.plugins = { 'concepts': 'org.ekstep.conceptselector:init' };
-  ctrl.previewCheck = false;
+  ctrl.refreshPreview = false;
+  ctrl.noTemplatesFound = "";
   ctrl.allMenuItems = [];
   ctrl.menuItems['mcq'] = {
     'category': 'mcq',
@@ -55,53 +54,24 @@
     'templatesData': []
   };
 
-
   ctrl.init = function() {
-    setTimeout(function() {
-       $('.QuestionMetaForm .ui.dropdown')
-       .dropdown({
-        useLabels: false
-      });
-     }, 1000);
-    if (!ecEditor._.isEmpty(questionData)) {
-      var questionData1 = typeof questionData.body == "string" ? JSON.parse(questionData.body) : questionData.body;
-      ctrl.assessmentId = questionData.identifier;
-      ctrl.questionData = questionData1;
-      ctrl.questionData.qcLanguage = questionData1.data.config.metadata.language;
-      ctrl.questionData.questionTitle = questionData1.data.config.metadata.title;
-      ctrl.questionData.qcLevel = questionData1.data.config.metadata.qlevel;
-      ctrl.questionData.qcGrade = questionData1.data.config.metadata.gradeLevel;
-      ctrl.category = questionData.category;
-      ctrl.Totalconcepts = questionData1.data.config.metadata.concepts.length; //_.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
-      ctrl.TotalconceptsData = questionData1.data.config.metadata.concepts;
-      ctrl.questionData.questionDesc = questionData1.data.config.metadata.description;
-      ctrl.questionData.questionMaxScore = questionData1.data.config.metadata.max_score;
-      ctrl.conceptsCheck = true;
-      ctrl.backBtn = true;
-      $scope.$safeApply();
-      $scope.questionEditData = questionData1.data; //Using this variable in question unit plugin for editing question
-      ctrl.templatesScreen = false;
-      ctrl.createQuestionScreen = true;
-      ctrl.metadaFormScreen = false;
-      var pluginID = questionData1.data.plugin.id;
-      var pluginVer = questionData1.data.plugin.version;
-      var pluginTemplateId = questionData1.data.plugin.templateId;
-      var editCreateQuestionFormInstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(questionData1.data.plugin.id);
-      _.each(editCreateQuestionFormInstance.templates, function(value, key) {
-        if (value.editor.template == questionData1.data.plugin.templateId) {
-          var controllerPathEdit = ecEditor.resolvePluginResource(pluginID, pluginVer, value.editor.controllerURL);
-          var templatePathEdit = ecEditor.resolvePluginResource(pluginID, pluginVer, value.editor.templateURL);
-          ctrl.questionUnitTemplateURL = templatePathEdit;
-          $scope.$safeApply();
-        }
-      });
+    console.log("Init calling--");
 
-      ctrl.selectedTemplatePluginData.plugin = { // Question Unit Plugin Information  
-        "id": pluginID, // Id of plugin
-        "version": pluginVer, // Version of plugin
-        "templateId": pluginTemplateId // Template Id of the question unit
-      };
+    ecEditor.getService('meta').getConfigOrdinals(function(err, res) {
+      if (!err) {
+        ctrl.grades = res.data.result.ordinals.gradeLevel;
+        ctrl.languages = res.data.result.ordinals.language;
+        $scope.$safeApply();
+      }
+    });
+
+    if (!ecEditor._.isEmpty(questionData)) {
+      ctrl.editState = true;
+      ctrl.showQuestionForm();
+    } else {
+      ctrl.showTemplates();
     }
+
     ecEditor.dispatchEvent(ctrl.plugins.concepts, {
       element: 'conceptsTextBoxMeta',
         selectedConcepts: ctrl.TotalconceptsData, // All composite keys except mediaType
@@ -115,20 +85,29 @@
           $scope.$safeApply();
         }
       });
-    ecEditor.getService('meta').getConfigOrdinals(function(err, res) {
-      if (!err) {
-        ctrl.grades = res.data.result.ordinals.gradeLevel;
-        ctrl.languages = res.data.result.ordinals.language;
-      }
-    });
 
-    var questionplugininstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(instance.manifest.id);
-    _.each(questionplugininstance.editor.dependencies, function(val, key) {
-      if (val.type == 'plugin') {
-        var instance = org.ekstep.pluginframework.pluginManager.getPluginManifest(val.plugin);
-        var pluginID = val.plugin;
-        var ver = val.ver;
-        if (!_.isUndefined(instance.templates))
+     
+    ctrl.select = function(parentIndex, index) {
+      ctrl.selected = parentIndex + '.' + index;
+    };
+
+    ctrl.selectedMenuItemData = ctrl.menuItems[ctrl.defaultActiveMenu].templatesData;
+
+    $scope.$on('question:form:valid', ctrl.formValid);
+    $scope.$on('question:form:inValid', ctrl.formInValid);
+  }
+
+  ctrl.showTemplates = function(){
+    ctrl.templatesScreen = true;
+    ctrl.questionMetadataScreen = false;
+    if(ctrl.allMenuItems.length == 0){
+      var questionplugininstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(instance.manifest.id);
+        _.each(questionplugininstance.editor.dependencies, function(val, key) {
+        if (val.type == 'plugin') {
+          var instance = org.ekstep.pluginframework.pluginManager.getPluginManifest(val.plugin);
+          var pluginID = val.plugin;
+          var ver = val.ver;
+          if (!_.isUndefined(instance.templates)){
           _.each(instance.templates, function(v, k) {
             v.pluginID = pluginID;
             v.ver = ver;
@@ -143,17 +122,51 @@
                 ctrl.menuItems['other'].templatesData = v;
               }
             });
-      }
-    });
-    ctrl.select = function(parentIndex, index) {
-      ctrl.selected = parentIndex + '.' + index;
-    };
-
-    ctrl.selectedMenuItemData = ctrl.menuItems[ctrl.defaultActiveMenu].templatesData;
-
-    $scope.$on('question:form:valid', ctrl.formValid);
-    $scope.$on('question:form:inValid', ctrl.formInValid);
+          } else {
+            ctrl.noTemplatesFound = "There are not templates available";
+          }
+        }
+      });
+    }
   }
+
+    ctrl.showQuestionForm = function(){
+
+      ctrl.templatesScreen = false;
+      ctrl.questionMetadataScreen = false;
+
+      var questionData1 = typeof questionData.body == "string" ? JSON.parse(questionData.body) : questionData.body;
+      ctrl.assessmentId = questionData.identifier;
+      ctrl.questionData = questionData1;
+      ctrl.questionData.qcLanguage = questionData1.data.config.metadata.language;
+      ctrl.questionData.questionTitle = questionData1.data.config.metadata.title;
+      ctrl.questionData.qcLevel = questionData1.data.config.metadata.qlevel;
+      ctrl.questionData.qcGrade = questionData1.data.config.metadata.gradeLevel;
+      ctrl.category = questionData.category;
+      ctrl.Totalconcepts = questionData1.data.config.metadata.concepts.length; //_.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
+      ctrl.selectedConceptsData = questionData1.data.config.metadata.concepts;
+      ctrl.questionData.questionDesc = questionData1.data.config.metadata.description;
+      ctrl.questionData.questionMaxScore = questionData1.data.config.metadata.max_score;
+      ctrl.conceptsCheck = true;
+      $scope.questionEditData = questionData1.data; //Using this variable in question unit plugin for editing question
+      var pluginID = questionData1.data.plugin.id;
+      var pluginVer = questionData1.data.plugin.version;
+      var pluginTemplateId = questionData1.data.plugin.templateId;
+      var editCreateQuestionFormInstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(questionData1.data.plugin.id);
+      _.each(editCreateQuestionFormInstance.templates, function(value, key) {
+        if (value.editor.template == questionData1.data.plugin.templateId) {
+          var controllerPathEdit = ecEditor.resolvePluginResource(pluginID, pluginVer, value.editor.controllerURL);
+          var templatePathEdit = ecEditor.resolvePluginResource(pluginID, pluginVer, value.editor.templateURL);
+          ctrl.questionUnitTemplateURL = templatePathEdit;
+        }
+      });
+
+      ctrl.selectedTemplatePluginData.plugin = { // Question Unit Plugin Information  
+        "id": pluginID, // Id of plugin
+        "version": pluginVer, // Version of plugin
+        "templateId": pluginTemplateId // Template Id of the question unit
+      };
+    }
 
   ctrl.setPreviewData = function() {
     var confData = {};
@@ -180,19 +193,43 @@
     ecEditor.dispatchEvent("atpreview:show", confData);
   }
 
+  ctrl.showMetaform = function(){
+    ctrl.refreshPreview = false;
+    ctrl.validateQuestionCreationForm();
+  }
+
+  ctrl.showPreview = function(){
+    ctrl.refreshPreview = true;
+    if(!ctrl.questionMetadataScreen){
+      ctrl.validateQuestionCreationForm();
+    } else {
+      ctrl.setPreviewData();
+    }
+  }
+
   ctrl.cancel = function() {
     $scope.closeThisDialog();
   }
 
+  ctrl.setBackButtonState = function() {
+    if (ctrl.editState){
+      if(ctrl.questionMetadataScreen){
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
+
   ctrl.back = function() {
-    if (ctrl.createQuestionScreen) {
+    if (!ctrl.questionMetadataScreen) {
+      ctrl.questionMetadataScreen = true;
       ctrl.templatesScreen = true;
-      ctrl.createQuestionScreen = false;
-      ctrl.metadaFormScreen = false;
-    } else if (ctrl.metadaFormScreen) {
-      ctrl.templatesScreen = false;
-      ctrl.createQuestionScreen = true;
-      ctrl.metadaFormScreen = false;
+      ctrl.showTemplates();
+    } else {
+      ctrl.questionMetadataScreen = false;
     }
   }
 
@@ -203,8 +240,7 @@
   ctrl.addCreateQuestionForm = function(obj) {
     ctrl.category = obj.category;
     ctrl.templatesScreen = false;
-    ctrl.createQuestionScreen = true;
-    ctrl.metadaFormScreen = false;
+    ctrl.questionMetadataScreen = false;
     ctrl.templateName = obj.title;
       ctrl.selectedTemplatePluginData.plugin = { // Question Unit Plugin Information  
         "id": obj.pluginID, // Id of plugin
@@ -220,19 +256,15 @@
     }
 
     ctrl.validateQuestionCreationForm = function(event) {
-      // ecEditor.dispatchEvent(ctrl.selectedTemplatePluginData.plugin.id + ':val', ctrl.validateQuestionForm, ctrl);
-      if (event.target.id == "preview-icon") ctrl.previewCheck = true;
-      else ctrl.previewCheck = false;
+      // ctrl.refreshPreview = false;
       $scope.$broadcast('question:form:val');
     }
 
     ctrl.formValid = function(event, data) {
       ctrl.questionCreationFormData = data;
-      if (!ctrl.previewCheck) {
+      ctrl.setPreviewData();
+      if (!ctrl.refreshPreview) {
         ctrl.formIsValid();
-      } else {
-        ctrl.setPreviewData();
-        ctrl.previewCheck = false;
       }
     }
 
@@ -241,11 +273,11 @@
     }
 
     ctrl.formIsValid = function() {
-      ctrl.templatesScreen = false;
-      ctrl.createQuestionScreen = false;
-      ctrl.metadaFormScreen = true;
+      ctrl.questionMetadataScreen = true;
       ctrl.questionData.questionTitle = ctrl.questionCreationFormData.question.text;
+       $('.QuestionMetaForm .ui.dropdown').dropdown({});
     }
+
     ctrl.saveQuestion = function(assessmentId, data) {
       //If identifier present update the question data
       ecEditor.getService('assessment').saveQuestionV3(assessmentId, data, function(err, resp) {
@@ -314,6 +346,7 @@
         };
 
         /*Save data and get response and dispatch event with response to questionbank plugin*/
+        console.log("Check question data", ctrl.qFormData);
         ctrl.saveQuestion(ctrl.assessmentId, ctrl.qFormData);
       } else {
         ctrl.qcconcepterr = true;
@@ -338,7 +371,17 @@
         }
       })
     }
-    ctrl.init();
-  }]);
+    $timeout(ctrl.init(), 0);
+    
+  }])
+.directive('siDropdown', function() {
+  return {
+    restrict: 'AE',
+    link: function(scope, element, attrs) {
+      console.log("siDropdown", element);
+      element.dropdown({});
+     }
+  }
+})
 
 //# sourceURL=question.js
