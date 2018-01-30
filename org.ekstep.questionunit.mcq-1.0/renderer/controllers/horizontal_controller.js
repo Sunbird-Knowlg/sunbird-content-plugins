@@ -113,7 +113,8 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     if(_.isFunction(callback)) {
       callback(result);
     }
-    ctrlScope.selectedIndex = null;
+    //commented because when feedback popup shown its becaome null
+    //ctrlScope.selectedIndex = null;
   }
    $scope.generateItemResponse = function(val, index) {
         var edata = {
@@ -134,3 +135,4 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     });
   }
 });
+//# sourceURL=questionunitmcqcontroller.js

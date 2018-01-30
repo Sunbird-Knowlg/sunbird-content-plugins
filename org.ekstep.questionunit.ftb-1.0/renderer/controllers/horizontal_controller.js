@@ -9,7 +9,7 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
   var ctrl = this;
 
   $scope.init = function() {
-    $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.ftb", "1.0", "renderer/styles/horizontalTemplate.css");
+    $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.ftb", "1.0", "renderer/styles/style.css");
     $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.ftb");
 
     $scope.events.eval = $scope.pluginInstance._manifest.id + ":evaluate";
