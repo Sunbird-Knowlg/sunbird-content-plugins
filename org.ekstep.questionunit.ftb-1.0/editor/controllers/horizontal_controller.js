@@ -38,5 +38,23 @@ angular.module('createquestionapp', [])
     return (formValid) ? true : false;
   }
 
+  $scope.generateTelemetry = function(data, event) {
+      if (data) ecEditor.getService('telemetry').interact({
+        "type": data.type,
+        "subtype": data.subtype,
+        "id": data.id,
+        "pageId": ecEditor.getCurrentStage().id,
+        "target": {
+          "id": event.target.id,
+          "ver": "1.0",
+          "type": data.type
+        },
+        "plugin": {
+          "id": "org.ekstep.questionunit.ftb",
+          "ver": "1.0"
+        }
+      })
+    }
+
 }]);
-//# sourceURL=horizontalMCQ.js
+//# sourceURL=horizontalFTB.js
