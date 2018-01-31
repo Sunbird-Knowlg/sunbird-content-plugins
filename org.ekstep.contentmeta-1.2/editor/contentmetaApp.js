@@ -122,7 +122,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.onNodeSelect = function(evant, data) {
         $scope.showImageIcon = false;
         var contentArr = ["Story", "Collection", "Game", "Worksheet", "Resource"];
-        $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
+        $scope.editable = (!data.data.root && data.data.metadata.visibility === 'Default') ? false : true;
         if (_.indexOf(contentArr, data.data.objectType) != -1) {
             $scope.nodeId = data.data.id;
             var cache = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId];            
@@ -131,7 +131,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.editMode = true;
             $scope.newNode = false;
             $scope.tokenMode = 'edit';
-            $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
+            //$scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
             $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.contentmeta", "1.2", "assets/default.png");
             var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
             $scope.content = (_.isUndefined(cache)) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, cache.metadata);
@@ -284,7 +284,8 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         $scope.$watch('content', function() {
             if($scope.content) {
                 if(/^[a-z\d\-_\s]+$/i.test($scope.content.name) == false && $scope.editMode) $scope.content.name = org.ekstep.services.collectionService.removeSpecialChars($scope.content.name);
-                if ($scope.nodeType === DEFAULT_NODETYPE) {
+                var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
+                if ($scope.nodeType === DEFAULT_NODETYPE && (activeNode.data.root || $scope.content.visibility != 'Default')) {
                     $scope.updateNode();
                 }
             }
