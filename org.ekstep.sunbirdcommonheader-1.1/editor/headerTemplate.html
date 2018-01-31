@@ -4,13 +4,12 @@
             <img class="ui tiny centered image" ng-show="contentDetails.contentImage != ''" ng-src="{{contentDetails.contentImage}}" />
         </div>
         <div class="four wide column custom-6-wide">
-            <div class="row custom-row-1">
-                <label class="content-title" ng-bind="contentDetails.contentTitle | limitTo:30">
-                    <span ng-if="contentDetails.contentTitle.length > 30">...</span>
-                </label>
+            <div class="content-title-container" ng-class="(headerSettings.showEditMeta) ? 'row custom-row-1' : 'content-title-align'">
+                <label ng-if="contentDetails.contentTitle.length < 52" class="content-title popup-item">{{contentDetails.contentTitle}}</label>
+                <label ng-if="contentDetails.contentTitle.length >= 52" class="content-title popup-item" data-content="{{contentDetails.contentTitle}}" data-variation="wide" data-position="bottom left">{{contentDetails.contentTitle}}</label>
             </div>
-            <div class="row custom-row-2">
-                <a class="btn at-btn at-btn-ok" ng-click="editContentMeta();generateTelemetry({subtype:'',target:'editmeta'})" ng-show="headerSettings.showEditMeta">
+            <div class="row custom-row-2" ng-show="headerSettings.showEditMeta">
+                <a class="btn at-btn at-btn-ok" ng-click="editContentMeta();generateTelemetry({subtype:'',target:'editmeta'})">
                     <i class="edit icon link"></i>&nbsp;Edit Details
                 </a>
             </div>
@@ -24,6 +23,9 @@
             <div class="row header-icon-container">
                 <div class="custom-row-2">
                     <div class="icon-group-2">
+                        <div ng-if="showWhatsNew" class="icon-box popup-item" data-content="Whats's New" data-variation="tiny inverted" data-position="bottom center" ng-click="displayWhatsNew()">
+                            <i class="gift icon custom-icon" ng-class="{red: whatsNewBadge}"></i>
+                        </div>
                         <div ng-show="editorEnv == 'NON-ECML'" class="icon-box popup-item" data-content="Upload Content" data-variation="tiny inverted" data-position="bottom center" ng-click="upload(); generateTelemetry({subtype:'upload',target:'uploadButton'})">
                             <i class="upload icon custom-icon"></i>
                         </div>
@@ -39,7 +41,7 @@
                             <i class="icon-save"></i>
                             <span class="label-icon-box-text save-button-text">Save</span>
                         </div>
-                        <div ng-show="!publishMode && !isFalgReviewer && !hideReviewBtn" id="reviewButton" class="ui buttons preview-dropdown " ng-class="{ 'preview-dropdown-nonecml': editorEnv == 'NON-ECML', 'popup-item disabled': disableReviewBtn }">
+                        <div ng-show="!publishMode && !isFalgReviewer && !hideReviewBtn" id="reviewButton" class="ui buttons preview-dropdown preview-dropdown-nonecml" ng-class="{ 'popup-item disabled': disableReviewBtn }">
                             <div class="ui button text-part popup-item" data-content="Send for review" data-variation="tiny inverted" data-position="bottom center" ng-click="sendForReview(); generateTelemetry({ subtype: 'review', target: 'reviewbutton'});">
                                 <i class="send icon"></i>
                             </div>

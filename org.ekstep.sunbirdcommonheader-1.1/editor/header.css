@@ -301,3 +301,13 @@ body {
     color: #9b9b9b;
 }
 
+.content-title-container {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.content-title-align {
+    vertical-align: middle;
+    line-height: 50px;
+}
