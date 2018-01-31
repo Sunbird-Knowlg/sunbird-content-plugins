@@ -215,8 +215,12 @@ angular.module('createquestionapp', [])
                 } else {
                     $scope.selectedQuestions[selQueIndex] = data;
                 }
+                
                 $scope.setDisplayandScore();
+                $scope.editConfig($scope.selectedQuestions[0], 0);
+                $scope.previewItem($scope.selectedQuestions[0], true);
                 $scope.$safeApply();
+                
             });
 
         }
@@ -230,6 +234,7 @@ angular.module('createquestionapp', [])
             for (var i = 1; i <= $scope.selectedQuestions.length; i++) {
                 $scope.itemRange.push(i);
             }
+            $scope.$safeApply();
         }
 
         /**
@@ -237,6 +242,30 @@ angular.module('createquestionapp', [])
          *  @memberof QuestionFormController
          */
         $scope.selectQuestion = function(selQuestion) {
+            if (ecEditor._.isUndefined(selQuestion.body)) {
+                $scope.getItem(selQuestion, function(selQuestion) {
+                    var selObjindex = _.findLastIndex($scope.questions, {
+                        identifier: selQuestion.identifier
+                    });
+                    // var selObjindex = $scope.selectedQuestions.indexOf(selQuestion);
+                    if (selObjindex > -1) {
+                        $scope.questions[selObjindex] = selQuestion;
+                        $scope.questions[selObjindex].isSelected = true;
+                    }
+                    $scope.$safeApply();
+                    $scope.selectQuestionData(selQuestion);
+                });
+            } else {
+                $scope.selectQuestionData(selQuestion);
+            }
+        }
+
+
+        /**
+         *  Creating list of selected questions for creating question set
+         *  @memberof QuestionFormController
+         */
+        $scope.selectQuestionData = function(selQuestion) {
             //selQuestion.isSelected = !selQuestion.isSelected;
             var selObjindex = _.findLastIndex($scope.selectedQuestions, {
                 identifier: selQuestion.identifier
@@ -247,9 +276,8 @@ angular.module('createquestionapp', [])
             } else {
                 $scope.selectedQuestions.unshift(selQuestion);
             }
-
+            $scope.$safeApply();
         }
-
         /**
          *  Funtion to edit the config data of question
          *  @memberof QuestionFormController
@@ -319,6 +347,7 @@ angular.module('createquestionapp', [])
                 score = score + $scope.selectedQuestions[i].max_score;
             }
             $scope.questionSetConfigObj.max_score = score;
+            $scope.$safeApply();
             $scope.createTotalItemRange();
         }
 
@@ -366,11 +395,35 @@ angular.module('createquestionapp', [])
         }
 
         $scope.editQuestion = function(questionObj) {
-            ecEditor.dispatchEvent($scope.pluginIdObj.question_create_id + ":showpopup", questionObj);
+            if (ecEditor._.isUndefined(questionObj.body)) {
+                $scope.getItem(questionObj, function(questionObj) {
+                    ecEditor.dispatchEvent($scope.pluginIdObj.question_create_id + ":showpopup", questionObj);
+                });
+            }else{
+              ecEditor.dispatchEvent($scope.pluginIdObj.question_create_id + ":showpopup", questionObj);
+            }
         }
 
         $scope.previewItem = function(question, bool) {
-            var questionBody;
+           if (ecEditor._.isUndefined(question.body)) {
+                $scope.getItem(question, function(questionData) {
+                    var selObjindex = _.findLastIndex($scope.questions, {
+                        identifier: questionData.identifier
+                    });
+                    // var selObjindex = $scope.selectedQuestions.indexOf(selQuestion);
+                    if (selObjindex > -1) {
+                        $scope.questions[selObjindex] = questionData;
+                    }
+                    $scope.$safeApply();
+                    $scope.showPreview(questionData);
+                });
+            } else {
+                $scope.showPreview(question);
+            }
+        }
+
+        $scope.showPreview = function(question, bool){
+          var questionBody;
             if (_.isString(question.body))
                 questionBody = JSON.parse(question.body);
             else
@@ -399,6 +452,15 @@ angular.module('createquestionapp', [])
 
         $scope.cancel = function() {
             $scope.closeThisDialog();
+        }
+
+        $scope.getItem = function(item, callback) {
+            ecEditor.getService('assessment').getItem(item.identifier, function(err, resp) {
+                if (!err) {
+                    item = resp.data.result.assessment_item ? resp.data.result.assessment_item : item;
+                }
+                callback(item);
+            });
         }
 
         $scope.generateTelemetry = function(data, event) {

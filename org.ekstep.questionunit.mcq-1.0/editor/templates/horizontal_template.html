@@ -61,15 +61,15 @@
                 </div> -->
                     </div>
                     <div class="one wide column text-len">
-                      <span class="maxLengthText">{{mcqFormData.question.text.length}}/220</span>
+                      <span class="maxLengthText">{{mcqFormData.question.text.length}}<span class="length-divider">/</span>220</span>
                     </div>
                   </div>
                 </div>
-                <div class="ui secondary right aligned segment">
+                <div class="ui secondary right aligned segment custom-sec-segment">
                   <div class="ui grid">
-                    <div class="one column row">
+                    <div class="one column row segment-column">
                       <div class="column right floated">
-                        <span class="custom-bottom-segment">Add: </span>
+                        <span class="custom-bottom-label">Add: </span>
                         <span class="custom-bottom-segment"><i class="image large icon"></i></span>
                         <span class="custom-bottom-segment"><i class="music large icon"></i></span>
                       </div>
@@ -135,22 +135,22 @@
                   </div> -->
                     </div>
                     <div class="one wide column text-len">
-                      <span class="maxLengthText">{{value.text.length}}/25</span>
+                      <span class="maxLengthText">{{value.text.length}}<span class="length-divider">/</span>25</span>
                     </div>
                   </div>
                 </div>
-                <div class="ui secondary segment">
+                <div class="ui secondary segment custom-sec-segment">
                   <div class="ui grid">
-                    <div class="two column row">
+                    <div class="two column row segment-column">
                       <div class="column left-segment">
                         <a href="" ng-click="deleteAnswer(key);generateTelemetry({type: 'click', subtype: 'select', target: 'deleteAnswer'}, $event);" class="deleteText"><i class="trash large icon delete-icon"></i></a>
                         <div class="ui radio correct-answer">
-                          <input type="radio" id="{{$index}}" name="correctans_{{$index}}" ng-checked="value.isCorrect" ng-model="$parent.selectedOption" value="{{$index}}" ng-click="generateTelemetry({type: 'click', subtype: 'toggle', target: 'rightAnsCheckbox'}, $event);"/>
+                          <input type="radio" id="{{$index}}" class="right-ans-radio" name="correctans_{{$index}}" ng-checked="value.isCorrect" ng-model="$parent.selectedOption" value="{{$index}}" ng-click="generateTelemetry({type: 'click', subtype: 'toggle', target: 'rightAnsCheckbox'}, $event);"/>
                           <label for="{{$index}}" ng-class="{'has-success-text':selLbl == 'error' , 'has-error-text':selLbl == 'success' }">Mark as right answer</label>
                         </div>
                       </div>
                       <div class="column right aligned">
-                        <span class="custom-bottom-segment">Add: </span>
+                        <span class="custom-bottom-label">Add: </span>
                         <span class="custom-bottom-segment"><i class="image large icon"></i></span>
                         <span class="custom-bottom-segment"><i class="music large icon"></i></span>
                       </div>

@@ -19,7 +19,7 @@
   text-align: center;
 }
 .textboxQ {
-  width: 92%;
+  width: 99%;
   border-width: 0px 0px 1px 0px;
   height: 33px;
   color: inherit;
@@ -92,7 +92,7 @@
 }
 
 .deleteText {
-  padding-right: 10px;
+  padding-right: 20px;
   color: #9E9E9E;
 }
 
@@ -115,17 +115,19 @@
 }
 .ui.grid .column.text-len{
   padding-top: 2rem;
-  font-size: 1rem;
+  font-size: 1.3rem;
   color: #9E9E9E;
 }
 .ui.segments .segment.custom-sec-segment{
   border-top: none;
   color: #9E9E9E;
+  font-size: 1.3rem;
 }
 .custom-bottom-segment{
-  padding-left: 20px;
+  padding-left: 10px;
   opacity: 0.5;
   color: #9E9E9E; 
+  vertical-align: bottom;
 }
 .ui.segments.inner-segment{
   margin: 0;
@@ -142,4 +144,20 @@
 }
 i.large.icon.delete-icon{
   vertical-align: baseline;
+}
+.length-divider{
+  padding: 0 4px;
+}
+.ui.grid .column.segment-column{
+  padding: 0.7rem;
+}
+.custom-bottom-label{
+  color: #9E9E9E;
+  vertical-align: bottom;
+  padding-right: 10px; 
+}
+.right-ans-radio{
+  width: 15px;
+  height: 15px;
+  padding-right: 10px;
 }
