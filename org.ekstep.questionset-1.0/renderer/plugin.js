@@ -92,7 +92,7 @@ Plugin.extend({
     this.loadModules(question, function() {
       setTimeout(function() {
         EkstepRendererAPI.dispatchEvent(question.pluginId + ':show', instance);
-      }, 500);
+      }, 100);
     });
   },
   setRendered: function(question) {
