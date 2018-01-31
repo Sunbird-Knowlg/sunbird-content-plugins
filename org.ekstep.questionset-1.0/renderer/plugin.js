@@ -45,7 +45,7 @@ Plugin.extend({
   },
   initPlugin: function(data) {
     var instance = this;
-    EkstepRendererAPI.addEventListener('renderer:content:start', function(event){
+    EkstepRendererAPI.addEventListener('renderer:content:replay', function(event){
       instance.resetQS.call(instance);
     }, instance);
       //remove the existing listner in the same name
@@ -92,7 +92,8 @@ Plugin.extend({
     this.loadModules(question, function() {
       setTimeout(function() {
         EkstepRendererAPI.dispatchEvent(question.pluginId + ':show', instance);
-      }, 500);
+        instance.setupNavigation();
+      }, 100);
     });
   },
   setRendered: function(question) {
@@ -147,10 +148,6 @@ Plugin.extend({
     var prevQ = this.getPrevQuestion();
     if (prevQ) {
       this.renderQuestion(prevQ);
-      //if previous stage not their and question is first 
-      if (this.getRenderedIndex() == 0 && typeof this._stage.params.previous === "undefined") {
-        this.showDefaultPrevNav();
-      }
     } else {
       this.saveQuestionSetState();
       EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
@@ -319,12 +316,6 @@ Plugin.extend({
     if (this._currentQuestion) {
       EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
     }
-    //if first stage is question set show custom next navigation
-    if (((this._renderedQuestions.length==1) || (this._masterQuestionSet.length == 1))&&(this._stage.params.previous==undefined)) {
-      this.showCustomNextNav();
-    }else{
-            this.resetNavigation();
-        }
   },
   generateNavigateTelemetry: function(buttonId) {
     var instance = this;
