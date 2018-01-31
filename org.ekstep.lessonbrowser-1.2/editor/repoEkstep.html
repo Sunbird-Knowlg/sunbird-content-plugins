@@ -85,6 +85,7 @@
                 </div>
 
             </div>
+
             <div class="eight wide column" style="padding-left:0; padding-right:0;">
                 <div class="row ui" id="resourceHeading">
                     <p class="padding-top-3px" style="display:inline;font-weight: bold;">
@@ -103,9 +104,9 @@
                             <img class="ui middle aligned tiny image resourceContentImageAllign" src="{{lesson.appIcon}}" ng-if="lesson.appIcon">
                             <img class="ui middle aligned tiny image resourceContentImageAllign" src="http://via.placeholder.com/80x80" ng-if="!lesson.appIcon">
                         </div>
-                        <div class="eight wide column middle aligned resourceContent">
+                        <div class="nine wide column middle aligned resourceContent">
                             <div class="lesson_name">
-                                <strong class="lesson-name">{{ lesson.name | cut:true:45:''}}
+                                <strong class="lesson-name">{{ lesson.name | cut:true:45}}
                                     <span ng-if="lesson.name.length > 45">
                                         <div class="ui compact icon button desc_ellipsis" data-tooltip="{{lesson.name}}" data-position="bottom right">
                                             ...
@@ -118,12 +119,12 @@
                                     <span ng-repeat="lang in lesson.language"><span ng-if="!$first" class="lesson-lang-separator">|</span>{{lang}}</span>
                                 </div>
                                 <div class="allignCenter">
-                                    <div>{{lesson.description | removeHTMLTags | cut:true:60:''}}
-                                        <span ng-if="lesson.description.length > 60">
+                                    <div>{{lesson.description | removeHTMLTags | cut:true:55}}
+                                        <div ng-if="lesson.description.length > 55">
                                         <div class="ui compact icon button desc_ellipsis" data-tooltip="{{lesson.description}}" data-position="bottom center">
-                                            more...
+                                            <p class="moreLink">more...</p>
                                             </div>
-                                       </span>
+                                       </div>
                                     </div>
                                 </div>
                             </div>
