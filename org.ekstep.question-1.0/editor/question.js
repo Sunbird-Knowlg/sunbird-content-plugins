@@ -314,6 +314,7 @@
           "question": ctrl.questionCreationFormData.question.text,
           "max_score": ctrl.questionData.questionMaxScore,
           "body": JSON.stringify(questionFormData),
+          "language": [ctrl.questionData.qcLanguage],
           "itemType": "unit",
           "version": 2,
           "category": ctrl.category,
