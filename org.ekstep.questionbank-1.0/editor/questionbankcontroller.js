@@ -90,7 +90,7 @@ angular.module('createquestionapp', [])
                             break;
                         case "gradeLevel":
                             if (value.length) {
-                                $scope.filterData.request.metadata.filters.push({ "property": "gradeLevel", "operator": "=", "value": value });
+                                $scope.filterData.request.metadata.filters.push({ "property": "gradeLevel", "operator": "in", "value": value });
                             }
                             break;
                         case "language":
@@ -107,12 +107,12 @@ angular.module('createquestionapp', [])
                             break;
                         case "type":
                             if (value.length) {
-                                $scope.filterData.request.metadata.filters.push({ "property": "type", "operator": "=", "value": value });
+                                $scope.filterData.request.metadata.filters.push({ "property": "type", "operator": "in", "value": value });
                             }
                             break;
                         case "concepts":
                             if (value.length > 0) {
-                                $scope.filterData.request.metadata.filters.push({ "property": "concepts", "operator": "=", "value": value });
+                                $scope.filterData.request.metadata.filters.push({ "property": "concepts", "operator": "in", "value": value });
                             }
                             break;
                     }
