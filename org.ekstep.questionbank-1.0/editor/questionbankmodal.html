@@ -145,7 +145,7 @@
                             <div class="item select list-items" ng-repeat="question in questions" ng-class="{quesSelector: $index === selectedQueIndex}">
                                 <div class="middle aligned content" ng-click="previewItem(question, true); showSelectedQue($index);">
                                     <div class="header">{{ question.title }}</div>
-                                    <div class="meta">{{question.body.data.config.metadata.language}} | {{ question.type}} | {{ question.qlevel }}</div>
+                                    <div class="meta">{{question.language[0]}} | {{ question.type}} | {{ question.qlevel }}</div>
                                     <div class="description">{{ question.description }}</div>
                                 </div>
                                 <div class="qb-question-action">
@@ -169,7 +169,7 @@
                             <div class="item select list-items" ng-repeat="selQuestion in selectedQuestions" ng-class="{quesSelector: $index === selectedIndex}">
                                 <div class="middle aligned content" ng-click="previewItem(selQuestion, true);editConfig(selQuestion, $index);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">
                                     <div class="header">{{selQuestion.title }}</div>
-                                    <div class="meta">{{selQuestion.body.data.config.metadata.language}} | {{ selQuestion.type}} | {{ selQuestion.qlevel }}</div>
+                                    <div class="meta">{{selQuestion.language[0]}} | {{ selQuestion.type}} | {{ selQuestion.qlevel }}</div>
                                     <div class="description">{{ selQuestion.description }}</div>
                                 </div>
                                 <div class="qb-question-action">
@@ -190,7 +190,7 @@
                                 <div class="field">
                                     <div class="ui fluid labeled input">
                                         <div class="ui label">Configure Score</div>
-                                        <input id="max_score" name="max_score" ng-model="selQuestionObj.max_score" type="number" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" ng-change="saveConfig();setDisplayandScore();" />
+                                        <input id="max_score" name="max_score" ng-model="selQuestionObj.max_score" type="number" min="1" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" ng-change="saveConfig();setDisplayandScore();" />
                                     </div>
                                 </div>
                             </div>
@@ -215,7 +215,7 @@
             <button class="ui orange button" id="add-more-ques-button" ng-click="showSelectedQue(0);searchQuestions();isQuestionSetConfig = false;generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event);closeConfigForm();previewItem(questions[0], true);" ng-show="isQuestionSetConfig" type="button">Add More Questions</button>
             <div class="or" ng-show="isQuestionSetConfig"></div>
             <button class="ui blue button next-button" ng-show="!isQuestionSetConfig" ng-disabled="selectedQuestions.length==0" ng-click="createQuestionSet();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" type="button">Next</button>
-            <button class="ui blue button" ng-disabled="(questionSetConfigObj.title == '')" ng-show="isQuestionSetConfig" id="add-to-stage" ng-click="addQuestionSet();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" type="button">Add</button>
+            <button class="ui blue button" ng-disabled="(questionSetConfigObj.title == '') || (selectedQuestions.length==0)" ng-show="isQuestionSetConfig" id="add-to-stage" ng-click="addQuestionSet();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" type="button">Add</button>
         </div>
     </div>
 </div>

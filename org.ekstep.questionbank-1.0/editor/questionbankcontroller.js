@@ -161,6 +161,9 @@ angular.module('createquestionapp', [])
                         }
                     }
                 }
+                $scope.editConfig($scope.selectedQuestions[0], 0);
+                $scope.previewItem($scope.selectedQuestions[0], true);
+            
 
             }
 
