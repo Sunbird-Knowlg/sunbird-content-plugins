@@ -4,14 +4,8 @@
  * Jagadish Pujari<jagadish.pujari@tarento.com>
  */
  angular.module('org.ekstep.question', [])
- .controller('QuestionCreationFormController', ['$scope', 'instance', 'questionData', '$timeout', function($scope, instance, questionData, $timeout) {
+ .controller('QuestionCreationFormController', ['$scope', 'instance', 'questionData', function($scope, instance, questionData) {
   var ctrl = this;
-  ctrl.screens = {
-    'template': "S1",
-    'form': "S2",
-    'metadata': "S3"
-  };
-  ctrl.screenName = ctrl.screens.template;
   ctrl.templatesScreen = true;
   ctrl.questionMetadataScreen = false;
   ctrl.Totalconcepts = 0;
@@ -27,7 +21,6 @@
   ctrl.selectedConceptsData = [];
   ctrl.questionUnitValidated = false
   ctrl.level = ['Easy', 'Medium', 'Difficult'];
-  ctrl.selected = 0;
   ctrl.conceptsCheck = false;
   ctrl.questionData = { 'questionMaxScore' : 1};
   ctrl.plugins = { 'concepts': 'org.ekstep.conceptselector:init' };
@@ -56,8 +49,6 @@
   };
 
   ctrl.init = function() {
-    console.log("Init calling--");
-
     ecEditor.getService('meta').getConfigOrdinals(function(err, res) {
       if (!err) {
         ctrl.grades = res.data.result.ordinals.gradeLevel;
@@ -86,11 +77,6 @@
           $scope.$safeApply();
         }
       });
-
-     
-    ctrl.select = function(parentIndex, index) {
-      ctrl.selected = parentIndex + '.' + index;
-    };
 
     ctrl.selectedMenuItemData = ctrl.menuItems[ctrl.defaultActiveMenu].templatesData;
 
@@ -375,17 +361,8 @@
         }
       })
     }
-    $timeout(ctrl.init(), 0);
+    ctrl.init();
     
-  }])
-.directive('siDropdown', function() {
-  return {
-    restrict: 'AE',
-    link: function(scope, element, attrs) {
-      console.log("siDropdown", element);
-      element.dropdown({});
-     }
-  }
-})
+  }]);
 
 //# sourceURL=question.js
