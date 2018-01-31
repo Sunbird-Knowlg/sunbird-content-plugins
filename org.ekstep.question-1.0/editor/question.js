@@ -300,7 +300,7 @@
         var data = {}; // TODO: You have to get this from Q.Unit plugin(getData())
         data.plugin = ctrl.selectedTemplatePluginData.plugin;
         data.data = ctrl.questionCreationFormData; //{"question":ctrl.questionCreationFormData.question.text,"options":ctrl.questionCreationFormData.options};   
-        var metadataObj = { category: ctrl.category, title: ctrl.questionData.questionTitle, language: ctrl.questionData.qcLanguage, qlevel: ctrl.questionData.qcLevel, gradeLevel: ctrl.questionData.qcGrade, concepts: ctrl.selectedConceptsData, description: ctrl.questionData.questionDesc, max_score: ctrl.questionData.questionMaxScore };
+        var metadataObj = { category: ctrl.category, title: ctrl.questionData.questionTitle, language: [ctrl.questionData.qcLanguage], qlevel: ctrl.questionData.qcLevel, gradeLevel: ctrl.questionData.qcGrade, concepts: ctrl.selectedConceptsData, description: ctrl.questionData.questionDesc, max_score: ctrl.questionData.questionMaxScore };
         data.config = { "metadata": metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": false };
         data.media = ctrl.questionCreationFormData.media;
         questionFormData.data = data;
@@ -314,6 +314,7 @@
           "question": ctrl.questionCreationFormData.question.text,
           "max_score": ctrl.questionData.questionMaxScore,
           "body": JSON.stringify(questionFormData),
+          "language": [ctrl.questionData.qcLanguage],
           "itemType": "unit",
           "version": 2,
           "category": ctrl.category,
