@@ -161,7 +161,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         case 'optionShuffle':
           this.config.optionShuffle = value;
           break;
-        case 'questionbankbrowser':
+        case 'btn_edit':
           ecEditor.dispatchEvent('delete:invoke');
           break;
       }
