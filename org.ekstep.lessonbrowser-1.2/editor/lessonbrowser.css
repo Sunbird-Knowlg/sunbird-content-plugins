@@ -1,4 +1,4 @@
-resourceContentImageAllign resourceContentImageAllign .add-lessons-popup-wrapper {
+.resourceContentImageAllign .add-lessons-popup-wrapper {
     position: relative;
     height: 590px;
     width: 851px;
@@ -301,11 +301,12 @@ resourceContentImageAllign resourceContentImageAllign .add-lessons-popup-wrapper
 
 .desc_ellipsis:hover>[data-tooltip]:hover:after,
 [data-tooltip][data-position="bottom center"]:hover:after {
+    top: 135%;
     width: 550px;
     max-height: 100px;
     overflow-y: auto;
     white-space: pre-wrap;
-    margin-left: 82%;
+    margin-left: 102px;
 }
 
 [data-tooltip][data-position="bottom right"]:hover:after {
@@ -316,7 +317,8 @@ resourceContentImageAllign resourceContentImageAllign .add-lessons-popup-wrapper
 
 .desc_ellipsis:hover>[data-tooltip]:hover:before,
 [data-tooltip][data-position="bottom center"]:hover:before {
-    left: 30% !important;
+    top: 18px;
+    left: 17% !important;
 }
 
 .filterApplyBtn {
@@ -342,5 +344,8 @@ resourceContentImageAllign resourceContentImageAllign .add-lessons-popup-wrapper
 }
 .deleteIcon{
     color: red;
+}
+.moreLink{
+margin-left: -50%;
 }
 /* from lessonBrowser.html */

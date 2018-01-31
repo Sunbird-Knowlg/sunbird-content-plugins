@@ -327,7 +327,7 @@ angular.module('org.ekstep.contentprovider', [])
         return  text ? String(text).replace(/<[^>]+>/gm, '') : '';
     };
 }).filter('cut', function () {
-    return function (value, wordwise, max, tail) {
+    return function (value, wordwise, max) {
         if (!value) return '';
 
         max = parseInt(max, 10);
@@ -345,8 +345,7 @@ angular.module('org.ekstep.contentprovider', [])
               value = value.substr(0, lastspace);
             }
         }
-
-            return value + (tail);
+            return value ;
     };
 });
 //# sourceURL=resourceBrowser.js
