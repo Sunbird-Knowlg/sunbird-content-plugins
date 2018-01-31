@@ -227,6 +227,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.contentDetails.contentTitle = data;
         document.title = data;
         $scope.$safeApply();
+        $('.popup-item').popup();
     };
 
     $scope.updateIcon = function(event, data) {
@@ -308,7 +309,54 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         })
     };
 
+    $scope.fireEvent = function(event) {
+        if (event) org.ekstep.contenteditor.api.dispatchEvent(event.id, event.data);
+    };
+
+    $scope.whatsNew = function() {
+        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        switch (meta.mimeType) {
+            // case "application/vnd.ekstep.ecml-archive":
+                
+                // break;
+            case "application/vnd.ekstep.content-collection":
+                org.ekstep.contenteditor.api.loadPlugin('org.ekstep.collectionwhatsnew', '1.0', function() {
+                    var replaceData = {}
+                    switch(meta.contentType) {
+                        case 'Course':
+                            replaceData = {'replaceValue': '<!-- dynamicWord -->', 'value': 'course'}
+                            $scope.showWhatsNew = true;
+                            break;
+                        case 'TextBook':
+                            replaceData = {'replaceValue': '<!-- dynamicWord -->', 'value': 'book'}
+                            $scope.showWhatsNew = true;
+                            break;
+                        case 'LessonPlan':
+                            replaceData = {'replaceValue': '<!-- dynamicWord -->', 'value': 'lesson plan'}
+                            $scope.showWhatsNew = true;
+                            break;
+                        default:
+                            $scope.showWhatsNew = false;
+                            break;
+                    }
+                    $scope.nextversion = store.get('nextCollectionversion');
+                    $scope.previousversion = store.get('previousCollectionversion') || 0;
+                    $scope.whatsNewBadge = !($scope.nextversion === $scope.previousversion);
+                    $scope.displayWhatsNew = function() {
+                        $scope.fireEvent({ id: 'org.ekstep.collectionwhatsnew:showpopup', data: replaceData});
+                        store.set('previousCollectionversion', $scope.nextversion);
+                        $scope.whatsNewBadge = false;
+                    };
+                })
+                break;
+            // default:
+                
+                // break;
+        };
+    };
+
     (function() {
+        $scope.whatsNew();
         $scope.setEditorDetails();
         if ($scope.editorEnv == "NON-ECML" && !ecEditor.getContext('contentId')) {
             $scope.disableSaveBtn = false;

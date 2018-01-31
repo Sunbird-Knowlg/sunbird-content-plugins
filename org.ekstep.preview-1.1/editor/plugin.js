@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * plugin for preview stage contents
  * @class Preview
  * @extends org.ekstep.contenteditor.basePlugin
@@ -30,7 +30,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      *   @memberof preview
      *
      */
-    initialize: function() {
+    initialize: function () {
         ecEditor.addEventListener("atpreview:show", this.initPreview, this);
         var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/popup.html");
         ecEditor.getService('popup').loadNgModules(templatePath);
@@ -41,16 +41,14 @@ org.ekstep.contenteditor.basePlugin.extend({
      *   @param data {Object} ecml
      *   @memberof preview
      */
-    initPreview: function(event, data) {
+    initPreview: function (event, data) {
         this.contentBody = data.contentBody;
         if (data.currentStage) {
             this.contentBody.theme.startStage = ecEditor.getCurrentStage().id;
         }
         var scope = ecEditor.getAngularScope();
         if (scope.developerMode) {
-            if (!this.contentBody.theme['plugin-manifest']) this.contentBody.theme['plugin-manifest'] = {
-                "plugin": []
-            };
+            if (!this.contentBody.theme['plugin-manifest']) this.contentBody.theme['plugin-manifest'] = {"plugin": []};
             if (!_.isArray(this.contentBody.theme['plugin-manifest'].plugin)) this.contentBody.theme['plugin-manifest'].plugin = [this.contentBody.theme['plugin-manifest'].plugin];
             this.contentBody.theme['plugin-manifest'].plugin.splice(0, 0, {
                 "id": "org.ekstep.developer",
@@ -62,25 +60,25 @@ org.ekstep.contenteditor.basePlugin.extend({
         }
         this.showPreview(data);
     },
-    /**     
+    /**
      *   @memberof preview
      */
-    showPreview: function(data) {
-        var instance = this,itemIframe=null;
+    showPreview: function (data) {
+        var instance = this, itemIframe = null;
         var contentService = ecEditor.getService('content');
         var defaultPreviewConfig = {
-          "repos": ecEditor.getConfig('pluginRepo'),   // plugins repo path where all the plugins are pushed s3 or absolute folder path
-          showEndpage: true
+            "repos": ecEditor.getConfig('pluginRepo'),   // plugins repo path where all the plugins are pushed s3 or absolute folder path
+            showEndpage: true
         };
         var meta = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId'));
-        var modalController = function($scope) {
-            $scope.$on('ngDialog.opened', function() {
+        var modalController = function ($scope) {
+            $scope.$on('ngDialog.opened', function () {
                 var imageUrl = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/images/editor-frame.png');
                 ecEditor.jQuery('.preview-bgimage').css('background', 'url(' + imageUrl + ')');
                 var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
                 previewContentIframe.src = instance.previewURL;
                 var userData = {};
-                previewContentIframe.onload = function() {
+                previewContentIframe.onload = function () {
                     var configuration = {};
                     userData.etags = ecEditor.getContext('etags') || [];
                     configuration.context = {
@@ -115,10 +113,10 @@ org.ekstep.contenteditor.basePlugin.extend({
                 "showEndPage": false
             });
             itemIframe = ecEditor.jQuery(data.element)[0];
-            if (itemIframe.src == ""){
-                itemIframe.src = instance.previewURL;              
+            if (itemIframe.src == "") {
+                itemIframe.src = instance.previewURL;
             }
-            itemIframe.onload = function() {
+            itemIframe.onload = function () {
                 var userData = {};
                 var configuration = {};
                 userData.etags = ecEditor.getContext('etags') || [];
