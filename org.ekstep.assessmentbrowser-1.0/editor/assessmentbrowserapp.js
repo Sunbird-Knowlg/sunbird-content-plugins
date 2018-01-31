@@ -116,6 +116,7 @@ angular.module('assessmentbrowserapp', [])
                     filters: {
                         objectType: ["AssessmentItem"],
                         status: [],
+                        version: 1
                     },
 
                     sort_by: { "name": "desc" },
