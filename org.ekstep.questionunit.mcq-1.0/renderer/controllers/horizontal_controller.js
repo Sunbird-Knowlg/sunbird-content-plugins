@@ -99,8 +99,9 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
   $scope.evaluate = function(callback) {
     var correctAnswer;
     var ctrlScope = angular.element('#preview-mcq-horizontal').scope();
+    var selectedAns = ctrlScope.questionObj.options[ctrlScope.selectedIndex-1].isCorrect;
     ctrlScope.questionObj.options.forEach(function(option) {
-      if (option.isCorrect === ctrlScope.selectedAns) {
+      if (option.isCorrect === selectedAns) {
         correctAnswer = option.isCorrect;
       }
     });
