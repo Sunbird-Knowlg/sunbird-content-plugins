@@ -18,6 +18,7 @@
   ctrl.category = '';
   ctrl.editState = false;
   ctrl.questionUnitTemplateURL = '';
+  ctrl.editMode = false;
   ctrl.menuItems = {};
   ctrl.defaultActiveMenu = 'mcq';
   ctrl.selectedTemplatePluginData = {};
@@ -134,11 +135,11 @@
 
       ctrl.templatesScreen = false;
       ctrl.questionMetadataScreen = false;
-
+      ctrl.editMode = true;
       var questionData1 = typeof questionData.body == "string" ? JSON.parse(questionData.body) : questionData.body;
       ctrl.assessmentId = questionData.identifier;
       ctrl.questionData = questionData1;
-      ctrl.questionData.qcLanguage = questionData1.data.config.metadata.language;
+      ctrl.questionData.qcLanguage = questionData1.data.config.metadata.language[0];
       ctrl.questionData.questionTitle = questionData1.data.config.metadata.title;
       ctrl.questionData.qcLevel = questionData1.data.config.metadata.qlevel;
       ctrl.questionData.qcGrade = questionData1.data.config.metadata.gradeLevel;
@@ -274,7 +275,7 @@
 
     ctrl.formIsValid = function() {
       ctrl.questionMetadataScreen = true;
-      ctrl.questionData.questionTitle = ctrl.questionCreationFormData.question.text;
+      ctrl.questionData.questionTitle = _.isUndefined(ctrl.questionData.questionTitle) ? ctrl.questionCreationFormData.question.text : ctrl.questionData.questionTitle;
        $('.QuestionMetaForm .ui.dropdown').dropdown({});
     }
 
@@ -287,8 +288,11 @@
           ecEditor.dispatchEvent('org.ekstep.questionbank:saveQuestion', qMetadata);
           $scope.closeThisDialog();
         } else {
-          //Alert with message
-          return;
+          //toast with error message
+          ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                         title: 'Failed to save question...',
+                         position: 'topCenter',
+                     });
         }
       });
     }
@@ -347,7 +351,6 @@
         };
 
         /*Save data and get response and dispatch event with response to questionbank plugin*/
-        console.log("Check question data", ctrl.qFormData);
         ctrl.saveQuestion(ctrl.assessmentId, ctrl.qFormData);
       } else {
         ctrl.qcconcepterr = true;
