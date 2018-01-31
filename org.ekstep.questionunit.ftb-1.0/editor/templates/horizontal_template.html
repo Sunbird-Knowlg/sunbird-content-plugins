@@ -25,7 +25,7 @@
               </div> -->
                     <!-- <div class="ui tab active optionTab" data-tab="questionTextTab"> -->
                     <div class="form-group segment textBoxDiv">
-                      <textarea class="form-control textboxQ" ng-class="{'has-success':ftbForm.ftbQuestion.$valid, 'has-error': submitted && ftbForm.ftbQuestion.$error.required}" placeholder="Enter the question" name="ftbQuestion" id="ftbQuestion" ng-model="ftbFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true" ng-blur="$ctrl.focused = false" required></textarea>
+                      <textarea class="form-control textboxQ" ng-class="{'has-success':ftbForm.ftbQuestion.$valid, 'has-error': submitted && ftbForm.ftbQuestion.$error.required}" placeholder="Enter the question" name="ftbQuestion" id="ftbQuestion" ng-model="ftbFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'ftbTextarea'}, $event)" ng-blur="$ctrl.focused = false" ng-click="" required></textarea>
                     </div>
                   </div>
                   <div class="one wide column text-len">
@@ -90,7 +90,7 @@
                 <div class="ui grid">
                   <div class="eleven wide column">
                     <div class="form-group segment textBoxDiv">
-                      <input type="text" class="form-control textbox" ng-class="{'has-success':ftbForm.ftb_answer.$valid, 'has-error': submitted && ftbForm.ftb_answer.$error.required}" placeholder="Enter answer" name="ftb_answer" id="ftb_answer" ng-model="ftbFormData.answer.text" maxlength="25" ng-init="focused = false" ng-focus="focused = true" ng-blur="focused = false" required/>
+                      <input type="text" class="form-control textbox" ng-class="{'has-success':ftbForm.ftb_answer.$valid, 'has-error': submitted && ftbForm.ftb_answer.$error.required}" placeholder="Enter answer" name="ftb_answer" id="ftb_answer" ng-model="ftbFormData.answer.text" maxlength="25" ng-init="focused = false" ng-focus="focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'ftbAnswer'}, $event)" ng-blur="focused = false" ng-click="" required/>
                     </div>
                   </div>
                   <div class="one wide column text-len">
