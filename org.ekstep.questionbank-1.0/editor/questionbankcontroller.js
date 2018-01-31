@@ -215,8 +215,12 @@ angular.module('createquestionapp', [])
                 } else {
                     $scope.selectedQuestions[selQueIndex] = data;
                 }
+                
                 $scope.setDisplayandScore();
+                $scope.editConfig($scope.selectedQuestions[0], 0);
+                $scope.previewItem($scope.selectedQuestions[0], true);
                 $scope.$safeApply();
+                
             });
 
         }
@@ -230,6 +234,7 @@ angular.module('createquestionapp', [])
             for (var i = 1; i <= $scope.selectedQuestions.length; i++) {
                 $scope.itemRange.push(i);
             }
+            $scope.$safeApply();
         }
 
         /**
@@ -342,6 +347,7 @@ angular.module('createquestionapp', [])
                 score = score + $scope.selectedQuestions[i].max_score;
             }
             $scope.questionSetConfigObj.max_score = score;
+            $scope.$safeApply();
             $scope.createTotalItemRange();
         }
 
