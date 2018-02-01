@@ -134,8 +134,10 @@ Plugin.extend({
     var nextQ = this.getNextQuestion();
     if (nextQ) {
       this.renderQuestion(nextQ);
+      this.generateNavigateTelemetry(null, this._currentQuestion.id);
     } else {
       this.saveQuestionSetState();
+      this.generateNavigateTelemetry('next', 'ContentApp-EndScreen');
       EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
       this.resetNavigation();
       OverlayManager.skipAndNavigateNext();
@@ -148,8 +150,10 @@ Plugin.extend({
     var prevQ = this.getPrevQuestion();
     if (prevQ) {
       this.renderQuestion(prevQ);
+      this.generateNavigateTelemetry(null, this._currentQuestion);
     } else {
       this.saveQuestionSetState();
+      this.generateNavigateTelemetry('previous', 'ContentApp-StartScreen');
       EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
       this.resetNavigation();
       OverlayManager.navigatePrevious();
@@ -259,7 +263,6 @@ Plugin.extend({
       }).css(this._constants.nextCSS);
       customNextButton.on('click', function() {
         instance.nextQuestion();
-        instance.generateNavigateTelemetry('next');
       });
       customNextButton.appendTo('#gameArea');
     }
@@ -277,7 +280,6 @@ Plugin.extend({
       }).css(this._constants.prevCSS);
       customPrevButton.on('click', function() {
         instance.prevQuestion();
-        instance.generateNavigateTelemetry('previous');
       });
       customPrevButton.appendTo('#gameArea');
     }
@@ -317,37 +319,30 @@ Plugin.extend({
       EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
     }
   },
-  generateNavigateTelemetry: function(buttonId) {
+  generateNavigateTelemetry: function(buttonId,currentQuestion) {
     var instance = this;
-      var stageTo;
+      var stageTo,objid;
       var stageid = EkstepRendererAPI.getCurrentStageId();
-      if (buttonId == "next") {
-        stageTo = EkstepRendererAPI.getCurrentStage().getParam('next');
-        stageTo = stageTo ? stageTo : EkstepRendererAPI.getCurrentStageId();
-        var data = {
-          "type": "view", // Required. Impression type (list, detail, view, edit, workflow, search)
-          "subtype": "Paginate", // Optional. Additional subtype. "Paginate", "Scroll"
-          "pageid": EkstepRendererAPI.getCurrentStageId(), // Required. Unique page id
-          "uri": "", // Required. Relative URL of the content
-          "visits": {
-            "objid": instance.getNextQuestion(),
-            "objtype": ""
-        }
-      } 
-    }else {
-        stageTo = EkstepRendererAPI.getCurrentStage().getParam('previous');
-        stageTo = stageTo ? stageTo : EkstepRendererAPI.getCurrentStageId();
-        var data = {
-          "type": "view", // Required. Impression type (list, detail, view, edit, workflow, search)
-          "subtype": "Paginate", // Optional. Additional subtype. "Paginate", "Scroll"
-          "pageid": EkstepRendererAPI.getCurrentStageId(), // Required. Unique page id
-          "uri": "", // Required. Relative URL of the content
-          "visits": {
-            "objid": instance.getPrevQuestion(),
-            "objtype": ""
-          }
-        }
+      if (buttonId) {
+        stageTo = EkstepRendererAPI.getCurrentStage().getParam(buttonId);
+        objid = stageTo;
+        objid = objid ? objid : currentQuestion;
+        stageTo = stageTo ? stageTo : currentQuestion;
       }
+      else{
+        stageTo = stageid;
+        objid = currentQuestion;
+      }
+        var data = {
+          "type": "view", // Required. Impression type (list, detail, view, edit, workflow, search)
+          "subtype": "Paginate", // Optional. Additional subtype. "Paginate", "Scroll"
+          "pageid": stageid, // Required. Unique page id
+          "uri": "", // Required. Relative URL of the content
+          "visits": {
+            "objid": objid,
+            "objtype": ""
+        }
+      }  
       TelemetryService.navigate(stageid, stageTo, data)
   }
 });
