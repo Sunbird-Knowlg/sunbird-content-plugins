@@ -125,6 +125,7 @@
       var questionData1 = typeof questionData.body == "string" ? JSON.parse(questionData.body) : questionData.body;
       ctrl.assessmentId = questionData.identifier;
       ctrl.questionData = questionData1;
+      ctrl.questionCreationFormData = questionData1.data.data;
       ctrl.questionData.qcLanguage = questionData1.data.config.metadata.language[0];
       ctrl.questionData.questionTitle = questionData1.data.config.metadata.title;
       ctrl.questionData.qcLevel = questionData1.data.config.metadata.qlevel;
@@ -153,6 +154,9 @@
         "version": pluginVer, // Version of plugin
         "templateId": pluginTemplateId // Template Id of the question unit
       };
+
+      //Call preview
+      //ctrl.setPreviewData();
     }
 
   ctrl.setPreviewData = function() {
@@ -178,6 +182,12 @@
     var questionSetInstance = ecEditor.instantiatePlugin('org.ekstep.questionset.preview');
     confData.contentBody = questionSetInstance.getQuestionPreviwContent(data['org.ekstep.questionset']);
     ecEditor.dispatchEvent("atpreview:show", confData);
+  }
+
+  ctrl.loadPreview = function(){
+    if (ctrl.editMode === true) {
+      setTimeout(function(){ ctrl.setPreviewData(); }, 100);
+    }
   }
 
   ctrl.showMetaform = function(){
