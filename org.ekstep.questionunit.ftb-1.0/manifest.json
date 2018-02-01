@@ -88,7 +88,7 @@
                 "src": "renderer/controllers/horizontal_controller.js"
             },
             {
-                "type": "html",
+                "type": "js",
                 "src": "renderer/templates/horizontal_template.html"
             }
 

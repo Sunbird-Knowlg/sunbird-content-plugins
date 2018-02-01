@@ -72,7 +72,24 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
     $scope.updateTitle = function(event,data){
         $scope.contentDetails.contentTitle = data;
         document.title = data;
-        $scope.$safeApply(); 
+        $scope.$safeApply();
+        $('.popup-item').popup();
+    };
+
+    $scope.fireEvent = function(event) {
+        if (event) org.ekstep.contenteditor.api.dispatchEvent(event.id, event.data);
+    };
+
+    // Show the Whatsnew red dot, if this is a new release
+    // and want to show the user to click.
+    $scope.nextversion = store.get('nextCollectionversion');
+    $scope.previousversion = store.get('previousCollectionversion') || 0;
+    $scope.whatsNewBadge = !($scope.nextversion === $scope.previousversion);
+
+    $scope.displayWhatsNew = function() {
+        $scope.fireEvent({ id: 'org.ekstep.collectionwhatsnew:showpopup' });
+        store.set('previousCollectionversion', $scope.nextversion);
+        $scope.whatsNewBadge = false;
     };
 
     window.addEventListener('online', $scope.internetStatusFn, false);
