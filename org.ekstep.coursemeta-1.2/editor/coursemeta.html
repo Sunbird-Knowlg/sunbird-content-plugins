@@ -63,7 +63,6 @@
                 <div class="one fields">
                     <div class="twelve wide field">
                         <label>Keywords</label>
-                        <!-- <ng-token-field ng-model="course.keywords" id="coursemeta-keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field> -->
                         <tags-input ng-model="course.keywords" id="coursemeta-keywords" display-property="lemma" placeholder="Enter Keywords" replace-spaces-with-dashes="false">
                             <auto-complete source="loadKeywords($query)" min-length="0" load-on-focus="true" load-on-empty="true" template="my-course-custom-template"></auto-complete>
                         </tags-input>
