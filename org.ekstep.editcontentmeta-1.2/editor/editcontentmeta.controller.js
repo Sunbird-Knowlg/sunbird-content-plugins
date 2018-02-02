@@ -14,7 +14,6 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
     ctrl.contentId = org.ekstep.contenteditor.api.getContext('contentId');
     ctrl.contentMeta = data.contentMeta || ecEditor.getService('content').getContentMeta(ctrl.contentId);
     ctrl.originalContentMeta = _.clone(ctrl.contentMeta);
-    ctrl.conceptsSelected = (ctrl.contentMeta.concepts && ctrl.contentMeta.concepts.length > 0);
     ctrl.contentService = org.ekstep.contenteditor.api.getService(ServiceConstants.CONTENT_SERVICE);
     ctrl.popupService = org.ekstep.contenteditor.api.getService(ServiceConstants.POPUP_SERVICE);
     ctrl.metadatafields = ecEditor.getConfig('metaDataFields');
@@ -49,22 +48,6 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
         ctrl.contentMeta.concepts = [];
     }
 
-    // Init concept selector
-    ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
-        element: 'metaConceptSelector',
-        selectedConcepts: ctrl.conceptIds,
-        callback: function (data) {
-            ctrl.contentMeta.concepts = _.map(data, function (concept) {
-                return {"identifier": concept.id, "name": concept.name};
-            });
-            ctrl.conceptIds = [];
-            _.forEach(ctrl.contentMeta.concepts, function (concept) {
-                ctrl.conceptIds.push(concept.identifier);
-            });
-            ctrl.conceptsSelected = (ctrl.contentMeta.concepts.length > 0);
-            $scope.$safeApply();
-        }
-    });
 
     ctrl.launchImageBrowser = function () {
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
@@ -110,7 +93,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
         ctrl.contentMeta.keywords = _.isEmpty(ctrl.contentMeta.keywords) ? [] : ctrl.contentMeta.keywords;
         ctrl.contentMeta.attributions = _.isEmpty(jQuery('#ecm-attributions').val()) ? [] : jQuery('#ecm-attributions').val().replace(/\s*,\s*/g, ',').split(',');
 
-        if (isValid && ctrl.conceptsSelected && ctrl.contentMeta.appIcon) {
+        if (isValid && ctrl.contentMeta.appIcon) {
             ecEditor.dispatchEvent('org.ekstep.contenteditor:save:meta', {
                 savingPopup: false,
                 successPopup: false,
