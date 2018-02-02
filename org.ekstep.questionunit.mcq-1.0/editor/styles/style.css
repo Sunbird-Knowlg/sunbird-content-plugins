@@ -125,7 +125,7 @@
 }
 .custom-bottom-segment{
   padding-left: 10px;
-  opacity: 0.5;
+  /*opacity: 0.5;*/
   color: #9E9E9E; 
   vertical-align: bottom;
 }
