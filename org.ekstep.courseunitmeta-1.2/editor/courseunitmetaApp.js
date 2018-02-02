@@ -41,6 +41,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
             $scope.courseunit.contentType = $scope.nodeType;
             console.log("Name:",$scope.courseunit.name)
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.courseunit));;
+            var keywords = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords
             if (keywords) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords = keywords.map(function(a) {
                     return a.lemma ? a.lemma : a
