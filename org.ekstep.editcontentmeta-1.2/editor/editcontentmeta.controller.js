@@ -108,6 +108,12 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
         ctrl.contentMeta.attributions = _.isEmpty(jQuery('#ecm-attributions').val()) ? [] : jQuery('#ecm-attributions').val().replace(/\s*,\s*/g, ',').split(',');
 
         if (isValid && ctrl.contentMeta.appIcon) {
+            var keywords = ctrl.contentMeta.keywords;
+            if (keywords) {
+                ctrl.contentMeta.keywords = keywords.map(function(a) {
+                    return a.lemma ? a.lemma : a
+                })
+            }
             ecEditor.dispatchEvent('org.ekstep.contenteditor:save:meta', {
                 savingPopup: false,
                 successPopup: false,
