@@ -53,6 +53,12 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
             $scope.content.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.content));;
+            var keywords = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords
+            if (keywords) {
+                org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords = keywords.map(function(a) {
+                    return a.lemma ? a.lemma : a
+                })
+            }
             $scope.metadataCloneObj = _.clone($scope.content);
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             $scope.editMode = $scope.editable;
@@ -98,6 +104,9 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         }
         if(_.isUndefined(metadata['contentType'])){
             metadata['contentType'] = currentMetadata['contentType'];
+        }
+        if (_.isUndefined(metadata['keywords'])) {
+            metadata['keywords'] = currentMetadata['keywords'];
         }
         return metadata;
     }
@@ -294,6 +303,16 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.changeTitle = function(){
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
     }
+
+    $scope.loadKeywords = function($query) {
+        if ($query.length >= 3) {
+            return org.ekstep.services.collectionService.fetchKeywords($query).then(function(keywords) {
+                return keywords.filter(function(keyword) {
+                    return keyword.lemma.toLowerCase().indexOf($query.toLowerCase()) != -1;
+                });
+            })
+        }
+    };
     $scope.init();
 }]);
 //# sourceURL=contentmetaApp.js
