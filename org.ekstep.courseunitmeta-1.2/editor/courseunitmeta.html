@@ -36,7 +36,15 @@
                 </div>
                 <div class="field">
                     <label>Keywords</label>
-                    <ng-token-field ng-model="courseunit.keywords" id="courseunitmeta-keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
+                    <!-- <ng-token-field ng-model="courseunit.keywords" id="courseunitmeta-keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field> -->
+                    <tags-input ng-model="courseunit.keywords" id="courseunitmeta-keywords" display-property="lemma" placeholder="Enter Keywords" replace-spaces-with-dashes="false">
+                        <auto-complete source="loadKeywords($query)" min-length="0" load-on-focus="true" load-on-empty="true" template="my-courseunit-custom-template"></auto-complete>
+                    </tags-input>
+                    <script type="text/ng-template" id="my-course-courseunit-template">
+                        <div class="right-panel">
+                            <span ng-bind-html="$highlight($getDisplayText())"></span>
+                        </div>
+                    </script>
                 </div>
             </div>
         </div>
