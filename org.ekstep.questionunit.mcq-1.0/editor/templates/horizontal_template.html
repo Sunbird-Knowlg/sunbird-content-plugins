@@ -143,7 +143,7 @@
               <div class="ui grid">
                 <div class="two column row segment-column">
                   <div class="column left-segment">
-                    <a href="" ng-click="deleteAnswer(key);generateTelemetry({type: 'click', subtype: 'select', target: 'deleteAnswer'}, $event);" class="deleteText"><i class="trash large icon delete-icon"></i></a>
+                    <a href="" ng-click="deleteAnswer(key);generateTelemetry({type: 'click', subtype: 'select', target: 'deleteAnswer'}, $event);" class="deleteText" data-tooltip="Delete answer" data-inverted=""><i class="trash large icon delete-icon"></i></a>
                     <div class="ui radio correct-answer">
                       <input type="radio" id="{{$index}}" class="right-ans-radio" name="correctans_{{$index}}" ng-checked="value.isCorrect" ng-model="$parent.selectedOption" value="{{$index}}" ng-click="generateTelemetry({type: 'click', subtype: 'toggle', target: 'rightAnsCheckbox'}, $event);"/>
                       <label for="{{$index}}" ng-class="{'has-success-text':selLbl == 'error' , 'has-error-text':selLbl == 'success' }">Mark as right answer</label>
