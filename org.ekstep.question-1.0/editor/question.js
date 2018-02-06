@@ -24,7 +24,7 @@
   ctrl.conceptsCheck = false;
   ctrl.questionData = { 'questionMaxScore' : 1};
   ctrl.plugins = { 'concepts': 'org.ekstep.conceptselector:init' };
-  ctrl.templatesType = ['Horizontal','Vertical'];
+  ctrl.templatesType = ['Horizontal','Vertical','Grid'];
   ctrl.questionData.templateType = ctrl.templatesType[0];
   ctrl.refreshPreview = false;
   ctrl.noTemplatesFound = "";
@@ -162,7 +162,7 @@
   ctrl.setPreviewData = function() {
     var confData = {};
     var qObj = {
-      "config": "{'metadata':{'title':'question title','description':'question description','language':'English'},'max_time':0,'max_score':1,'partial_scoring':false,'layout:'"+ctrl.questionData.templateType+"}",
+      "config": '{"metadata":{"title":"question title","description":"question description","language":"English"},"max_time":0,"max_score":1,"partial_scoring":false,"layout":'+JSON.stringify(ctrl.questionData.templateType)+'}',
       "data": JSON.stringify(ctrl.questionCreationFormData),
       "id": "c943d0a907274471a0572e593eab49c2",
       "pluginId": ctrl.selectedTemplatePluginData.plugin.id,

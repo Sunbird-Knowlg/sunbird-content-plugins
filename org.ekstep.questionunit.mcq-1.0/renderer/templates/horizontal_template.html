@@ -1,6 +1,7 @@
-<div id="preview-mcq-horizontal" ng-controller="MCQRendererController" ng-init="init()" ng-show="showTemplate">
+
+<div id="preview-mcq-horizontal" ng-controller="MCQRendererController" ng-init="init()" ng-show="showTemplate" >
     <link rel="stylesheet" type="text/css" href="{{cssPath}}">
-    <div class="qc-mcqlayout">
+    <div class="qc-mcqlayout" ng-if="questionObj.questionConfig.layout == 'Horizontal' || ''">
         <header class="qc-long-text-header">
             <div class="qc-question-text">{{questionObj.question.text}}</div>
         </header>
@@ -15,4 +16,29 @@
             </div>
         </div>
     </div>
+
+    <div class="qc-mcqlayout" ng-if="questionObj.questionConfig.layout == 'Grid'">
+        <header class="qc-long-text-header">
+            <div class="qc-question-text">{{questionObj.question.text}}</div>
+        </header>
+        <div class="qc-grid-option-container">
+            <div class="qc-grid-option-outer-value" ng-repeat="val in questionObj.topOptions"  ng-click="selectedvalue(val.option, val.key+1);">
+                <div class="qc-grid-option-value" ng-class="{'grid-selected-option': val.key+1 == selectedIndex}">
+                    <div class="qc-grid-option-text-outer" id="{{val.key+1}}">
+                        <div class="qc-grid-option-text">{{val.option.text}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="qc-grid-option-container" ng-if="questionObj.bottomOptions.length != 0">
+          <div class="qc-grid-option-outer-value" ng-repeat="val in questionObj.bottomOptions"  ng-click="selectedvalue(val.option, val.key+1);">
+              <div class="qc-grid-option-value" ng-class="{'grid-selected-option': val.key+1 == selectedIndex}">
+                  <div class="qc-grid-option-text-outer" id="{{val.key+1}}">
+                      <div class="qc-grid-option-text">{{val.option.text}}</div>
+                  </div>
+              </div>
+          </div>
+        </div>
+    </div>
 </div>
+

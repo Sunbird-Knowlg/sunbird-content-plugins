@@ -63,8 +63,22 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     if(qState && qState.val) {
       ctrlScope.selectedIndex = qState.val;
     }
+    var qConfig = ctrlScope.question._currentQuestion.config;
     ctrlScope.questionObj = questionData;
-    ctrlScope.showTemplate = true;
+    ctrlScope.questionObj.topOptions = [];
+    ctrlScope.questionObj.bottomOptions = [];
+    ctrlScope.questionObj.options.forEach(function(option, key) {
+      if (ctrlScope.questionObj.options.length <= 4 || ctrlScope.questionObj.options.length > 6) {
+        if (key < 4) ctrlScope.questionObj.topOptions.push({'option':option,'key':key});
+        else ctrlScope.questionObj.bottomOptions.push({'option':option,'key':key});
+      } 
+      else if(ctrlScope.questionObj.options.length == 5 || ctrlScope.questionObj.options.length == 6) {
+        if (key < 3) ctrlScope.questionObj.topOptions.push({'option':option,'key':key});
+        else ctrlScope.questionObj.bottomOptions.push({'option':option,'key':key});
+      }
+    })
+    ctrlScope.showTemplate = true;   
+    ctrlScope.questionObj.questionConfig = JSON.parse(qConfig);
     ctrlScope.safeApply();
   }
 
