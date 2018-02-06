@@ -163,3 +163,60 @@ input.qc-option-input-checkbox:checked::after {
 .qc-grid-option-value.grid-selected-option{
     border: 1px solid #4a90e2;
 }
+
+        
+#qc-vertical-option-containar {
+    width: 80vw;
+    overflow-x:  auto;
+    /*white-space: nowrap;*/
+    margin-top: 5%;
+    height: 40vh;
+    overflow-y:  hidden;
+}
+
+#qc-vertical-option-table{
+     height: 100%;
+     width: 100%;
+}
+
+.qc-vertical-option-outer{
+    height: 100%;
+
+}
+
+.qc-vertical-option-value{
+     border: 1px solid #c8ccd0;
+    height: 100%;
+    display: table;
+    width: 100%;
+}
+
+
+.qc-vertical-option-td{
+       padding: 0% 0.5%;
+       min-width: 20vw;
+
+}
+
+
+
+
+.qc-option-vertical-text{
+    display: table-cell;
+    vertical-align: middle;
+    height: 22vh;
+   word-break: break-all;
+    line-height: 1.2;
+    width: 65%;
+}
+
+.qc-option-vertical-checkbox{
+     display: table-cell;
+    position: relative;
+    top: 50%;
+    right: 3%;
+}
+
+.qsverticalselectedopt{
+    border: 1px solid blue;
+}
