@@ -162,7 +162,7 @@
   ctrl.setPreviewData = function() {
     var confData = {};
     var qObj = {
-      "config": "{'metadata':{'title':'question title','description':'question description','language':'English'},'max_time':0,'max_score':1,'partial_scoring':false}",
+      "config": "{'metadata':{'title':'question title','description':'question description','language':'English'},'max_time':0,'max_score':1,'partial_scoring':false,'layout:'"+ctrl.questionData.templateType+"}",
       "data": JSON.stringify(ctrl.questionCreationFormData),
       "id": "c943d0a907274471a0572e593eab49c2",
       "pluginId": ctrl.selectedTemplatePluginData.plugin.id,
