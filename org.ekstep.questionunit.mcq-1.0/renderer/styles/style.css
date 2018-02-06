@@ -123,3 +123,43 @@ input.qc-option-input-checkbox:checked::after {
 .qsselectedopt {
     border-left-color: #4a90e2;
 }
+
+/*Grid CSS*/
+.qc-grid-option-container{
+    margin: 0;
+    text-align: left;
+    overflow: hidden;
+    width: 100%;
+    display: table;
+    margin-top: 2%;
+    height: 26vh;
+}
+.qc-grid-option-outer-value{
+    cursor: pointer;
+    display: table-cell;
+    text-align: center;
+    vertical-align:middle;
+    margin: 0;
+    width: 25%;
+}
+.qc-grid-option-value{
+    margin: 0 5px;   
+    border: 1px solid #c8ccd0; 
+    height: 100%;
+}
+.qc-grid-option-text-outer{
+    line-height: 1.5;
+    padding: 5px;
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+.qc-grid-option-text{
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    word-break: break-all;
+}
+.qc-grid-option-value.grid-selected-option{
+    border: 1px solid #4a90e2;
+}
