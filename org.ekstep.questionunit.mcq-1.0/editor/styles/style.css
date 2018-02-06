@@ -91,6 +91,11 @@
   font-size: 1.42rem;
 }
 
+.deleteMedia {
+  padding-right: 20px;
+  color: #9E9E9E;
+}
+
 .deleteText {
   padding-right: 20px;
   color: #9E9E9E;
@@ -160,4 +165,16 @@ i.large.icon.delete-icon{
   width: 15px;
   height: 15px;
   padding-right: 10px;
+}
+
+.myAudio::-webkit-media-controls-panel {
+  display: block;
+}
+.myAudio::-webkit-media-controls-panel{
+  background-color: transparent;
+}
+
+.imgWidth{
+  display: block;
+  width: 70%;
 }

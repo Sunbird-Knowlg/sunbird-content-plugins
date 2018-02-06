@@ -38,6 +38,7 @@
         },
         width: 900,
         showClose: false,
+        className: 'qc-ngdialog-custome'
       });
     }
   });

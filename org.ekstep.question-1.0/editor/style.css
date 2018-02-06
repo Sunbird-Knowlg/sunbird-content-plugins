@@ -11,6 +11,9 @@
   margin-right: 1%
 }
 
+.qc-ngdialog-custome > .ngdialog-content {
+  top: 0% !important;
+}
 
 .item:hover {
   color: #1e70bf;
