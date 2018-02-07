@@ -7,7 +7,7 @@
 angular.module('createquestionapp', [])
     .controller('QuestionFormController', ['$scope', 'pluginInstance', function($scope, pluginInstance) {
 
-        $scope.currentUserId = ecEditor._.isUndefined(ctrl.context) ? '' : (ctrl.context.uid || ctrl.context.user.id);
+        $scope.currentUserId = ecEditor.getContext('user').id;
         $scope.isQuestionTab = true;
         $scope.selectedQuestions = [];
         $scope.showConfigForm = false;
@@ -63,7 +63,7 @@ angular.module('createquestionapp', [])
             // For my Questions option
             if ($scope.isMyQuestions) {
 
-                var userId = ecEditor._.isUndefined(ctrl.context) ? '' : (ctrl.context.uid || ctrl.context.user.id);
+                var userId = $scope.currentUserId;
                 $scope.filterData.request.metadata.filters.push({ "property": "createdBy", "operator": "=", "value": userId });
             }
 
@@ -163,7 +163,7 @@ angular.module('createquestionapp', [])
                 }
                 $scope.editConfig($scope.selectedQuestions[0], 0);
                 $scope.previewItem($scope.selectedQuestions[0], true);
-            
+
 
             }
 
@@ -215,12 +215,12 @@ angular.module('createquestionapp', [])
                 } else {
                     $scope.selectedQuestions[selQueIndex] = data;
                 }
-                
+
                 $scope.setDisplayandScore();
                 $scope.editConfig($scope.selectedQuestions[0], 0);
                 $scope.previewItem($scope.selectedQuestions[0], true);
                 $scope.$safeApply();
-                
+
             });
 
         }
@@ -399,13 +399,13 @@ angular.module('createquestionapp', [])
                 $scope.getItem(questionObj, function(questionObj) {
                     ecEditor.dispatchEvent($scope.pluginIdObj.question_create_id + ":showpopup", questionObj);
                 });
-            }else{
-              ecEditor.dispatchEvent($scope.pluginIdObj.question_create_id + ":showpopup", questionObj);
+            } else {
+                ecEditor.dispatchEvent($scope.pluginIdObj.question_create_id + ":showpopup", questionObj);
             }
         }
 
         $scope.previewItem = function(question, bool) {
-           if (ecEditor._.isUndefined(question.body)) {
+            if (ecEditor._.isUndefined(question.body)) {
                 $scope.getItem(question, function(questionData) {
                     var selObjindex = _.findLastIndex($scope.questions, {
                         identifier: questionData.identifier
@@ -422,8 +422,8 @@ angular.module('createquestionapp', [])
             }
         }
 
-        $scope.showPreview = function(question, bool){
-          var questionBody;
+        $scope.showPreview = function(question, bool) {
+            var questionBody;
             if (_.isString(question.body))
                 questionBody = JSON.parse(question.body);
             else
