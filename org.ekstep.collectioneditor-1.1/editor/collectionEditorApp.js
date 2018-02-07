@@ -42,6 +42,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
             if (res && res.data && res.data.responseCode === "OK") {
+                res.data.result.content.keywords = $scope.parseKeywords(res.data.result.content.keywords);
                 org.ekstep.services.collectionService.fromCollection(res.data.result.content);
                 var frameworkId = ecEditor.getContext('framework') || org.ekstep.services.collectionService.defaultFramwork;
                 ecEditor.getService('meta').getCategorys(frameworkId, function(cateerr, cateresp) {
@@ -108,5 +109,20 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
 
 
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
+
+
+    $scope.init = function(){
+        org.ekstep.services.collectionService.suggestVocabularyRequest.request.limit = ecEditor.getConfig('keywordsLimit')
+    }
+
+    $scope.parseKeywords = function(keywords){
+        if(_.isString(keywords)){
+            return JSON.parse(keywords);
+        }else{
+            return keywords;
+        }
+    }
+
+    $scope.init();
 }]);
 //# sourceURL=collectiontreeApp.js

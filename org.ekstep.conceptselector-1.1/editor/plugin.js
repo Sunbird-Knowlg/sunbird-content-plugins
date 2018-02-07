@@ -36,7 +36,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
 
         /**Get concept data**/
-        instance.getConcept(0, instance.limit, instance, function() { instance.initData(instance); });
         ecEditor.addEventListener(instance.manifest.id + ":init", this.initConceptBrowser, this);
     },
     /**
@@ -44,7 +43,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      * Registers events.
      * @memberof conceptselector
      */
-    initData: function(instance) {
+    initData: function(instance, cb) {
         var instance = instance || this;
         var domains = [];
 
@@ -72,7 +71,11 @@ org.ekstep.contenteditor.basePlugin.extend({
                     domain.nodes = domainChild;
                     domains.push(domain);
                 });
+                cb && cb()
+            }else{
+                cb && cb()
             }
+
         });
 
         /**Get child recursively**/
@@ -133,9 +136,28 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     initConceptBrowser: function(event, data) {
         var instance = this;
-        if (instance.selectors.indexOf(data.element) == -1) {
-            /**This is needed to get updated conceptData**/
-            setTimeout(function() {
+        if(!instance.concepts.length){
+            instance.getConcept(0, instance.limit, instance, function() {
+                instance.initData(instance, function(){
+                    if (instance.selectors.indexOf(data.element) == -1) {
+                        /**This is needed to get updated conceptData**/
+                        ecEditor.jQuery('#' + data.element).treePicker({
+                            data: instance.conceptData,
+                            name: 'Concepts',
+                            picked: data.selectedConcepts,
+                            onSubmit: function(nodes) {
+                                data.callback(nodes);
+                            },
+                            nodeName:"conceptSelector_" + data.element,
+                            /**displayFormat: function(picked) { return "Concepts ("+picked.length+" selected)"; },**/
+                            minSearchQueryLength: 1
+                        });
+                    }
+                });
+            });
+        }else{
+            if (instance.selectors.indexOf(data.element) == -1) {
+                /**This is needed to get updated conceptData**/
                 ecEditor.jQuery('#' + data.element).treePicker({
                     data: instance.conceptData,
                     name: 'Concepts',
@@ -148,7 +170,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     /**displayFormat: function(picked) { return "Concepts ("+picked.length+" selected)"; },**/
                     minSearchQueryLength: 1
                 });
-            }, 1000);
+            }
         }
     },
     /**

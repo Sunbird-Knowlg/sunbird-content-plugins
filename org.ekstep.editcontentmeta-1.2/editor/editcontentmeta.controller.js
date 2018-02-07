@@ -12,14 +12,28 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
     ctrl.defaultImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAV4AAAFeBAMAAAA/BWopAAAAG1BMVEXMzMwAAABmZmZMTEx/f3+ZmZmysrIZGRkzMzNdPZZ6AAAACXBIWXMAAA7EAAAOxAGVKw4bAAAD00lEQVR4nO3cS1LbQBSFYQoMYdp5D8UOoh2YHUQ7gBHjTDJWdh4Cbl/ZrUd3u0rnKvV/KzhFUf65soqrKwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA40agHlLn5pF5Qpg0/1BNKXIfwUb2hxGMIYa8ekW/3Ojd8Ua/I1/3bG36qZ+S6e5sbfqt35Hp53/vtST0kz92vsKkf8P1hbviuXpLnT9wbevWUHDfHuWETUX6wvaFRj1m2G8wNn9Vrlj0O9/qP8u3JXP9Rfj7dG57Ug+YdWxE5b8bL2VzvUf5zvtd3M+6Tub6j3KZ7PR9y1yNzPR9yj2N7/TZjNzrXb5S78b1eD7m7ibnhq3rZuKQVkc9mJCk2LqM80orIZTPSFJtePS51MzPX4yH3MLfX3yE30YrIXTPGU2z26oGnbhfmejvkuqW9vqI804rIVTMmU2xcRXmuFVGvHmlmUmwcRbnN2evnkBs921JuDrn5FJtGPfTdQoqNkyh3uXt9NGMxxcZFlDNaEXloRkaKjYMoZ7UictCMnBSbXj139mxLyQ+53FZEjXZuZoqNOMpLZ1tqr5xb0IpI2oyufK8yykWtiITNKEixEUa5rBVRr5pblGIji3Jbt1d1yBWm2IiaUZpi0yjmZp9tKckh19XvVTSjIsVGEOWqVkTrN6MqxWb1KH+4aO76zahLsenXnVvdimjlQ+7CX9/1f4G7C/eu/Ql80cev4gO4/NIc2q++t/iSH1L8hdZesFfxF/AFH2map1L1yegle6uTLDrgqpuhegJR+Sel7AFEZTN0T9C6qr26B2hVJ6fyW8Oak74R7q1ohvYBe1u8V/tWQfEjP/U3cKVR7sV7C5sh/wa5MMr6L5C7or36NyCKouzhBYiSQ26vHntVdMj5eEMqP8qNeuqb7CjLXyY4yG1Grx56kBlldYqPMpuhb0WUFWV5ik1WMzy0Iuoy9upTbDIOOScvex4sN2OvnnhiMco+Umzahb1uXgY/WGiGm1YczUe5V89LzDbDUSui2Sj7SbHpZvY+qceNmImypxSb6UNur542ajLKvlJspqLcqIdNmDjkvJxtqfFm9OpZk0aj7C/FR6PN8NiKaCTKDlNsRv5lhdN/VnHQJXs9nW2ppBleWxGdR3mvHrTg7JDzdral2pO93s621EkzHLfiaBjlXj0mw6AZrlsRDaLsOcXmeVM/3sEh5/NsS8Vm+E6x2W0jxeb9kGvUM7K9HXJ+z7ZUu4kUm/ttpPjotRnbaEX0spFWRHfb+vECAAAAAAAAAAAAAAAAAAAAAAAAAAAAAID/yl+hBHJNz9INiwAAAABJRU5ErkJggg==';
     ctrl.resourceList= [];
     ctrl.contentId = org.ekstep.contenteditor.api.getContext('contentId');
-    ctrl.contentMeta = data.contentMeta || ecEditor.getService('content').getContentMeta(ctrl.contentId);
+    // Todo: From api keywords are coming in JSON format hence we are parsing this keywords
+    // Need to clean up this below logic
+    $scope.parseKeywords = function(keywords){
+        if(_.isString(keywords)){
+            return JSON.parse(keywords);
+        }else{
+            return keywords;
+        }
+    }
+    var metaInfo = ecEditor.getService('content').getContentMeta(ctrl.contentId);
+    metaInfo.keywords = $scope.parseKeywords(metaInfo.keywords)
+    if(data.contentMeta){
+        data.contentMeta.keywords = $scope.parseKeywords(data.contentMeta.keywords);
+    }
+    ctrl.contentMeta = data.contentMeta || metaInfo
     ctrl.originalContentMeta = _.clone(ctrl.contentMeta);
-    ctrl.conceptsSelected = (ctrl.contentMeta.concepts && ctrl.contentMeta.concepts.length > 0);
     ctrl.contentService = org.ekstep.contenteditor.api.getService(ServiceConstants.CONTENT_SERVICE);
     ctrl.popupService = org.ekstep.contenteditor.api.getService(ServiceConstants.POPUP_SERVICE);
     ctrl.metadatafields = ecEditor.getConfig('metaDataFields');
     $scope.categoryModelList = {};
     $scope.categoryListofFramework = {};
+    $scope.categoryValues = '';
 
     var categoryMasterList = _.cloneDeep(org.ekstep.services.collectionService.categoryList);
     _.forEach(categoryMasterList, function(category){
@@ -48,22 +62,6 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
         ctrl.contentMeta.concepts = [];
     }
 
-    // Init concept selector
-    ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
-        element: 'metaConceptSelector',
-        selectedConcepts: ctrl.conceptIds,
-        callback: function (data) {
-            ctrl.contentMeta.concepts = _.map(data, function (concept) {
-                return {"identifier": concept.id, "name": concept.name};
-            });
-            ctrl.conceptIds = [];
-            _.forEach(ctrl.contentMeta.concepts, function (concept) {
-                ctrl.conceptIds.push(concept.identifier);
-            });
-            ctrl.conceptsSelected = (ctrl.contentMeta.concepts.length > 0);
-            $scope.$safeApply();
-        }
-    });
 
     ctrl.launchImageBrowser = function () {
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
@@ -109,7 +107,13 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
         ctrl.contentMeta.keywords = _.isEmpty(ctrl.contentMeta.keywords) ? [] : ctrl.contentMeta.keywords;
         ctrl.contentMeta.attributions = _.isEmpty(jQuery('#ecm-attributions').val()) ? [] : jQuery('#ecm-attributions').val().replace(/\s*,\s*/g, ',').split(',');
 
-        if (isValid && ctrl.conceptsSelected && ctrl.contentMeta.appIcon) {
+        if (isValid && ctrl.contentMeta.appIcon) {
+            var keywords = ctrl.contentMeta.keywords;
+            if (keywords) {
+                ctrl.contentMeta.keywords = keywords.map(function(a) {
+                    return a.lemma ? a.lemma : a
+                })
+            }
             ecEditor.dispatchEvent('org.ekstep.contenteditor:save:meta', {
                 savingPopup: false,
                 successPopup: false,
@@ -140,6 +144,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
     $scope.initDropdown = function() {
         $timeout(function() {
             ecEditor.jQuery('.ui.dropdown').dropdown({
+                useLabels: false,
                 forceSelection: false
             });
             $('#contentmeta-category-1').dropdown('set selected', ctrl.contentMeta[$scope.categoryModelList[1]]);
@@ -147,6 +152,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
             $('#contentmeta-category-3').dropdown('set selected', ctrl.contentMeta[$scope.categoryModelList[3]]);
             $('#contentmeta-category-4').dropdown('set selected', ctrl.contentMeta[$scope.categoryModelList[4]]);
         },500);
+        if(ctrl.contentMeta[$scope.categoryModelList[2]]) $scope.categoryValues = ctrl.contentMeta[$scope.categoryModelList[2]].join().replace(/\b\w/g, l => l.toUpperCase());
     }
 
     ctrl.cancel = function () {
@@ -176,7 +182,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
         if(_.isArray(selectedCategory)){
             _.forEach(selectedCategory, function(val){
                 var categoryObj= _.find(categoryList, function(o) { 
-                   return o.name === val;
+                    return o.name.toUpperCase() === val.toUpperCase();
                 });
                 associations = _.concat(categoryObj.associations, associations);
             });
@@ -190,6 +196,16 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
     }
 
     $scope.updatedDependentCategory = function(categoryIndex, categoryVal){
+        $scope.categoryValues = $('#contentmeta-category-2').dropdown('get value').replace(/\b\w/g, l => l.toUpperCase());
+        ctrl.contentMeta[$scope.categoryModelList[2]] = $('#contentmeta-category-2').dropdown('get value').split(",");
+        if(categoryIndex == "2") {
+            categoryVal = $('#contentmeta-category-2').dropdown('get value').split(",");
+            if(categoryVal[0]== "") {
+                categoryVal = [];
+                ctrl.contentMeta[$scope.categoryModelList[2]] = [];
+            }
+        }
+       // NOTE: Both `clear` and `restore defaults` will support 
         var category_1 = [],
             category_2 = [],
             category_3 = [],
@@ -214,12 +230,12 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
                         $scope[categoryName].terms = _.uniqWith(category_2, _.isEqual);
                         break;
                     case "3":
-                        $('.contentmeta-category-3').dropdown('restore defaults');
+                        $('.contentmeta-category-3').dropdown('clear');
                         category_3 = _.concat(data, category_3);
                         $scope[categoryName].terms = _.uniqWith(category_3, _.isEqual);
                         break;
                     case "4":
-                        $('.contentmeta-category-4').dropdown('restore defaults');
+                        $('.contentmeta-category-4').dropdown('clear');
                         category_4 = _.concat(data, category_4);
                         $scope[categoryName].terms = _.uniqWith(category_4, _.isEqual);
                         break;
@@ -231,7 +247,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
                     setTimeout(function() {
                         $('.contentmeta-category-2').dropdown('restore defaults'); 
                         $('.contentmeta-category-3').dropdown('restore defaults');
-                        $('.contentmeta-category-4').dropdown('restore defaults');
+                        $('.contentmeta-category-4').dropdown('clear');
                     }, 0);
                     $scope['category_2'] = $scope.getTemsByindex(2);
                     $scope['category_3'] = $scope.getTemsByindex(3);
@@ -239,15 +255,15 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
                     break;
                 case '2':
                     setTimeout(function() {
-                        $('.contentmeta-category-3').dropdown('restore defaults');
-                        $('.contentmeta-category-4').dropdown('restore defaults');
+                        $('.contentmeta-category-3').dropdown('clear');
+                        $('.contentmeta-category-4').dropdown('clear');
                     }, 0);
                     $scope['category_3'] = $scope.getTemsByindex(3);
                     $scope['category_4'] = $scope.getTemsByindex(4);
                     break;
                 case '3':
                     setTimeout(function() {
-                        $('.contentmeta-category-4').dropdown('restore defaults');
+                        $('.contentmeta-category-4').dropdown('clear');
                     }, 0);
                     $scope['category_4'] = $scope.getTemsByindex(4);
                     break;
@@ -271,7 +287,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
                 });
             })
         }
-    };
+    };   
 
 }]);
 
