@@ -12,6 +12,7 @@ angular.module('org.ekstep.contentprovider', [])
 
     // Selected lessons
     $scope.lessonSelection = [];
+    $scope.selectedResources = [];
     // QUICK FIX - Return selected lesson from repo. Service should be implemented
     $scope.selectedLessons.list = $scope.lessonSelection;
 
@@ -90,6 +91,7 @@ angular.module('org.ekstep.contentprovider', [])
 
                     ctrl.res.content = [];
                     angular.forEach(res.data.result.content, function(lessonContent){
+                        console.log('resource content...',lessonContent);
                         ctrl.res.content.push(lessonContent);
                     });
 
@@ -110,6 +112,28 @@ angular.module('org.ekstep.contentprovider', [])
                 }
             }
             $scope.$safeApply();
+            console.log('$scope.lessonSelection',$scope.lessonSelection.length);
+            
+            // if($scope.lessonSelection.length){
+                angular.forEach(ctrl.res.content, function(resource){
+                    console.log('resource.identifier',resource.identifier);
+                    console.log('$scope.selectedResources',$scope.selectedResources);
+                    if($scope.selectedResources.indexOf(resource.identifier) !== -1){
+                        $('#checkBox_'+resource.identifier+' ~ .checkboxStatus').hide();
+                        $( '#checkBox_'+resource.identifier ).after("<a class='checkboxStatus'>REMOVE</a>" );
+                        $('#checkBox_'+resource.identifier+' >.checkBox').attr('checked', true);
+                    }
+                    else{
+                        console.log('else part...');
+                        $('.checkBoxLink ~ .checkboxStatus').hide();
+                        $('.checkBoxLink >.checkBox').attr('checked', false);
+                        $('.checkBoxLink').after("<a class='checkboxStatus'>ADD</a>" );
+                    }
+                });
+            // }
+            // else{    
+               
+            // }
         });
         
     };
@@ -265,16 +289,23 @@ angular.module('org.ekstep.contentprovider', [])
     // Toggle selection for lessons
     $scope.toggleSelectionLesson = function(lesson) {
         var idx = $scope.lessonSelection.indexOf(lesson);
+        $('#checkBox_'+lesson.identifier+' ~ .checkboxStatus').hide();
 
         if (idx > -1) {
             ctrl.generateTelemetry({type: 'click', subtype: 'uncheck', target: 'lesson',targetid: lesson.identifier});
             // is currently selected, remove from selection list
+            $( '#checkBox_'+lesson.identifier ).after("<a class='checkboxStatus'>ADD</a>" );            
             $scope.lessonSelection.splice(idx, 1);
+            $scope.selectedResources.splice(idx, 1);
+            
         } else {
             ctrl.generateTelemetry({type: 'click', subtype: 'check', target: 'lesson',targetid: lesson.identifier});
             // is newly selected, add to the selection list
+            $('#checkBox_'+lesson.identifier ).after("<a class='checkboxStatus'>REMOVE</a>" );
             $scope.lessonSelection.push(lesson);
+            $scope.selectedResources.push(lesson.identifier);
         }
+        console.log('lessonSelection', $scope.lessonSelection);
     };
 
     $scope.telemetryConceptSelector = function() {
@@ -330,7 +361,7 @@ angular.module('org.ekstep.contentprovider', [])
         return  text ? String(text).replace(/<[^>]+>/gm, '') : '';
     };
 }).filter('cut', function () {
-    return function (value, wordwise, max, tail) {
+    return function (value, wordwise, max) {
         if (!value) return '';
 
         max = parseInt(max, 10);
@@ -349,7 +380,7 @@ angular.module('org.ekstep.contentprovider', [])
             }
         }
 
-        return value + (tail || ' …');
+        return value;
     };
 });
 //# sourceURL=resourceBrowser.js
