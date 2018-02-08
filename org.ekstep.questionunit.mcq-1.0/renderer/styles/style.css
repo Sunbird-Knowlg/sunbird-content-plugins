@@ -218,8 +218,111 @@ audio.qc-option-audio-with-image {
     margin-left: 4%;
     width: 100%;
 }
-.qc-long-text-header-image{
-    height: 56px;
+
+.qc-long-text-header-image {
     width: 100%;
     background-color: #404041;
+    height: 56px;
+}
+
+
+/*Grid CSS*/
+
+.qc-grid-option-container {
+    margin: 0;
+    text-align: left;
+    overflow: hidden;
+    width: 100%;
+    display: table;
+    margin-top: 2%;
+    height: 26vh;
+}
+
+.qc-grid-option-outer-value {
+    cursor: pointer;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    margin: 0;
+    width: 25%;
+}
+
+.qc-grid-option-value {
+    margin: 0 5px;
+    border: 1px solid #c8ccd0;
+    height: 100%;
+}
+
+.qc-grid-option-text-outer {
+    line-height: 1.5;
+    padding: 5px;
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+
+.qc-grid-option-text {
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    word-break: break-all;
+}
+
+.qc-grid-option-value.grid-selected-option {
+    border: 1px solid #4a90e2;
+}
+
+
+#qc-vertical-option-containar {
+    width: 80vw;
+    overflow-x: auto;
+
+    margin-top: 5%;
+    height: 40vh;
+    overflow-y: hidden;
+}
+
+#qc-vertical-option-table {
+    height: 100%;
+    width: 100%;
+}
+
+.qc-vertical-option-outer {
+    height: 100%;
+}
+
+.qc-vertical-option-value {
+    border: 1px solid #c8ccd0;
+    height: 100%;
+    display: table;
+    width: 100%;
+}
+
+
+.qc-vertical-option-td {
+    padding: 0% 0.5%;
+    min-width: 20vw;
+}
+
+
+
+
+.qc-option-vertical-text {
+    display: table-cell;
+    vertical-align: middle;
+    height: 22vh;
+    word-break: break-all;
+    line-height: 1.2;
+    width: 65%;
+}
+
+.qc-option-vertical-checkbox {
+    display: table-cell;
+    position: relative;
+    top: 50%;
+    right: 3%;
+}
+
+.qsverticalselectedopt {
+    border: 1px solid blue;
 }
