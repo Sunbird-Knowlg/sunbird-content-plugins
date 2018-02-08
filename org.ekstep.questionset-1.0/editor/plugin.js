@@ -118,6 +118,9 @@ org.ekstep.contenteditor.basePlugin.extend({
         // Instantiate the question unit plugin to add it to <plugin-manifest>
         ecEditor.instantiatePlugin(questionBody.data.plugin.id, {});
         // delete questionSetECML.data;
+        ecEditor._.forEach(questionBody.data.media, function(asset) {
+          instance.addMedia(asset);
+        });
         questionSetECML[instance._questionPlugin].push(questionECML);
       });
     }

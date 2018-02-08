@@ -306,7 +306,6 @@
   ctrl.sendData = function(isValid) {
     if (isValid && ctrl.Totalconcepts > 0) {
       var questionFormData = {};
-
       var data = {}; // TODO: You have to get this from Q.Unit plugin(getData())
       data.plugin = ctrl.selectedTemplatePluginData.plugin;
       data.data = ctrl.questionCreationFormData; //{"question":ctrl.questionCreationFormData.question.text,"options":ctrl.questionCreationFormData.options};   
