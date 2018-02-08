@@ -119,7 +119,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.instantiatePlugin(questionBody.data.plugin.id, {});
         // delete questionSetECML.data;
         ecEditor._.forEach(questionBody.data.media, function(asset) {
-          console.log(asset);
           if(!ecEditor._.isEmpty(asset))
           instance.addMedia(asset);
         });

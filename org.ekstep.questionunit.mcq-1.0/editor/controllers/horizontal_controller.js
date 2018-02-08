@@ -96,7 +96,8 @@ $scope.formValidation = function() {
   var temp = tempArray.filter(function( element ) {
    return element !== undefined;
  });
-  $scope.mcqFormData.media = _.isEmpty($scope.editMedia) ? temp : $scope.editMedia;
+  $scope.editMedia = _.isEmpty(temp) ? 0 : _.union($scope.editMedia,temp);
+  $scope.mcqFormData.media = _.isEmpty($scope.editMedia[0]) ? temp : $scope.editMedia;
   console.log("Form data",$scope.mcqFormData);
   return (formValid && opSel) ? true : false;
 }
