@@ -33,10 +33,10 @@
                       <div class="one wide column" ng-if="mcqFormData.question.audio.length > 0">
                         <a href="" ng-click="deleteAudio('q');generateTelemetry({type: 'click', subtype: 'select', target: 'deleteAudio'}, $event);" class="deleteMedia" data-tooltip="Delete audio" data-inverted=""><i class="trash large icon delete-icon"></i></a>
                       </div>
-                      <div class="three wide column" ng-if="mcqFormData.question.hint.length > 0">
+                      <div class="three wide column" ng-if="mcqFormData.question.hint.length > 0 || qHint">
                         <input type="text" class="form-control textbox" placeholder="Enter hint" name="qHint" ng-model="mcqFormData.question.hint" maxlength="50" ng-focus="qHint" />
                       </div>
-                      <div class="one wide column" ng-if="mcqFormData.question.hint.length > 0">
+                      <div class="one wide column" ng-if="mcqFormData.question.hint.length > 0 || qHint">
                         <a href="" ng-click="deleteHint('q');generateTelemetry({type: 'click', subtype: 'select', target: 'deleteHint'}, $event);" class="deleteMedia" data-tooltip="Delete hint" data-inverted=""><i class="trash large icon delete-icon"></i></a>
                       </div>
                     </div>
@@ -88,10 +88,10 @@
                       <div class="one wide column" ng-if="mcqFormData.options[key].audio.length > 0">
                         <a href="" ng-click="deleteAudio(key);generateTelemetry({type: 'click', subtype: 'select', target: 'deleteAudio'}, $event);" class="deleteMedia" data-tooltip="Delete audio" data-inverted=""><i class="trash large icon delete-icon"></i></a>
                       </div>
-                      <div class="three wide column" ng-if="mcqFormData.options[key].hint.length > 0">
+                      <div class="three wide column" ng-if="mcqFormData.options[key].hint.length > 0 || oHint[key]">
                         <input type="text" class="form-control textbox" placeholder="Enter hint" name="opHint_{{$index}}" ng-model="mcqFormData.options[key].hint" maxlength="50" />
                       </div>
-                      <div class="one wide column" ng-if="mcqFormData.options[key].hint.length > 0">
+                      <div class="one wide column" ng-if="mcqFormData.options[key].hint.length > 0 || oHint[key]">
                         <a href="" ng-click="deleteHint(key);generateTelemetry({type: 'click', subtype: 'select', target: 'deleteHint'}, $event);" class="deleteMedia" data-tooltip="Delete hint" data-inverted=""><i class="trash large icon delete-icon"></i></a>
                       </div>
                     </div>

@@ -13,9 +13,9 @@
   {'isText':true,'isImage':true,'isAudio':true,'isHint':true}]
 };
 $scope.mcqFormData = {
-  'question': { 'text': '', 'image': '', 'audio': '' },
-  'options': [{ 'text': '', 'image': '', 'audio': '', 'isCorrect': false },
-  { 'text': '', 'image': '', 'audio': '', 'isCorrect': false }
+  'question': { 'text': '', 'image': '', 'audio': '','hint':''},
+  'options': [{ 'text': '', 'image': '', 'audio': '', 'hint':'',  'isCorrect': false },
+  { 'text': '', 'image': '', 'audio': '','hint':'' , 'isCorrect': false }
   ]
 };
 $scope.oHint = [];
