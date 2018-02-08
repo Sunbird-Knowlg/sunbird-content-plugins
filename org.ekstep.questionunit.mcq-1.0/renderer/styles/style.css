@@ -20,15 +20,14 @@
 header.qc-long-text-header {
     width: 100%;
     background-color: #404041;
-    height: auto;
 }
 
 .qc-question-text {
     padding: 17px 10px 16px 10px;
     color: white;
-    font-size: 100%;
+    font-size: initial;
     line-height: normal;
-    text-align: center;
+    text-align: initial;
 }
 
 .qc-option-container {
@@ -38,7 +37,6 @@ header.qc-long-text-header {
     margin-top: 6%;
     height: 52vh;
     overflow-y: auto;
-
 }
 
 .qc-option-value {
@@ -46,6 +44,8 @@ header.qc-long-text-header {
     border-bottom: 1px solid #c8ccd0;
     cursor: pointer;
     padding: 5%;
+    display: list-item;
+    max-height: 70px;
     border-left: 7px solid transparent;
 }
 
@@ -58,8 +58,8 @@ header.qc-long-text-header {
     padding: -3%;
     top: -14.66667px;
     text-align: initial;
-    line-height: 1.5;
     width: 77%;
+    font-size: initial;
     position: relative;
     padding: -2% 1% 2% 9%;
 }
@@ -124,99 +124,102 @@ input.qc-option-input-checkbox:checked::after {
     border-left-color: #4a90e2;
 }
 
-/*Grid CSS*/
-.qc-grid-option-container{
-    margin: 0;
-    text-align: left;
-    overflow: hidden;
-    width: 100%;
-    display: table;
-    margin-top: 2%;
-    height: 26vh;
+.qclongtextheaderimage {
+    min-height: 52px;
 }
-.qc-grid-option-outer-value{
+
+img.qc-question-image {
+    width: 10%;
+    width: 10.2%;
+    height: 56px;
+    float: left;
+}
+
+img.qc-option-image {
+    width: 15%;
+    margin-top: -2%;
+    height: 56px;
+}
+
+.qc-question-zoomin {
+    width: 4%;
+    left: -0.5%;
+    top: 0%;
+    position: absolute;
+}
+
+img.qc-question-fullimage {
+    width: 83%;
+    height: 100%;
+}
+
+.qc-question-audio {
+    float: left;
+}
+
+audio.qc-question-audio::-webkit-media-controls-panel {
+    display: block;
+}
+
+audio#qc-option-audio::-webkit-media-controls-panel {
+    background-color: transparent;
+}
+
+audio#qc-option-audio::-webkit-media-controls-panel {
+    display: block;
+}
+
+audio.qc-question-audio::-webkit-media-controls-panel {
+    background-color: transparent;
+}
+
+audio.qc-question-audio {
+    margin-top: -2%;
+    position: initial;
+}
+
+audio.qc-option-audio-with-image {
+    margin-top: -4%;
+    margin-left: 14%;
+    position: absolute;
+    width: 26%;
+}
+
+.qc-option-txt {
+    position: absolute;
+    left: 17%;
+    top: 33%;
+    width: 100%;
+}
+
+.qc-option-zoomin {
+    width: 5%;
+    left: -0.5%;
+    top: -16%;
+    position: absolute;
     cursor: pointer;
-    display: table-cell;
-    text-align: center;
-    vertical-align:middle;
-    margin: 0;
-    width: 25%;
 }
-.qc-grid-option-value{
-    margin: 0 5px;   
-    border: 1px solid #c8ccd0; 
-    height: 100%;
+
+.qc-text-with-audio {
+    width: 26%;
+    top: 2%;
+    position: absolute;
 }
-.qc-grid-option-text-outer{
-    line-height: 1.5;
-    padding: 5px;
-    display: table;
-    height: 100%;
+
+.qc-question-audio {
+    float: initial;
+    position: absolute;
+    left: 9%;
+    top: 9%;
+}
+
+.qc-option-txt-with-image {
+    position: absolute;
+    margin-left: 4%;
     width: 100%;
 }
-.qc-grid-option-text{
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-    word-break: break-all;
-}
-.qc-grid-option-value.grid-selected-option{
-    border: 1px solid #4a90e2;
-}
-
-        
-#qc-vertical-option-containar {
-    width: 80vw;
-    overflow-x:  auto;
-    /*white-space: nowrap;*/
-    margin-top: 5%;
-    height: 40vh;
-    overflow-y:  hidden;
-}
-
-#qc-vertical-option-table{
-     height: 100%;
-     width: 100%;
-}
-
-.qc-vertical-option-outer{
-    height: 100%;
-
-}
-
-.qc-vertical-option-value{
-     border: 1px solid #c8ccd0;
-    height: 100%;
-    display: table;
+.qc-long-text-header-image{
+    height: 56px;
     width: 100%;
-}
-
-
-.qc-vertical-option-td{
-       padding: 0% 0.5%;
-       min-width: 20vw;
-
-}
-
-
-
-
-.qc-option-vertical-text{
-    display: table-cell;
-    vertical-align: middle;
-    height: 22vh;
-   word-break: break-all;
-    line-height: 1.2;
-    width: 65%;
-}
-
-.qc-option-vertical-checkbox{
-     display: table-cell;
-    position: relative;
-    top: 50%;
-    right: 3%;
-}
-
-.qsverticalselectedopt{
-    border: 1px solid blue;
+    background-color: #404041;
 }
