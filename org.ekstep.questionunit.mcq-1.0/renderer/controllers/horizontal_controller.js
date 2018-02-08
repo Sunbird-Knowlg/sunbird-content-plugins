@@ -63,7 +63,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     if(qState && qState.val) {
       ctrlScope.selectedIndex = qState.val;
     }
-    var qConfig = ctrlScope.question._currentQuestion.config;
+    var qConfig =ctrlScope.question._currentQuestion.config.__cdata || ctrlScope.question._currentQuestion.config;
     ctrlScope.questionObj = questionData;
     ctrlScope.questionObj.topOptions = [];
     ctrlScope.questionObj.bottomOptions = [];
@@ -77,7 +77,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
         else ctrlScope.questionObj.bottomOptions.push({'option':option,'key':key});
       }
     })
-    ctrlScope.showTemplate = true;   
+    ctrlScope.showTemplate = true; 
     ctrlScope.questionObj.questionConfig = JSON.parse(qConfig);
     ctrlScope.safeApply();
   }
