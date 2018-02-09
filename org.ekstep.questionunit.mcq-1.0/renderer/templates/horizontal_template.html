@@ -74,7 +74,7 @@
                 <tr class="qc-vertical-option-outer">
                     <td ng-repeat="val in questionObj.options" class="qc-vertical-option-td" ng-click="selectedvalue(val, $index+1);">
                         <div class="qc-vertical-option-value" ng-class="{qsverticalselectedopt : $index+1 == selectedIndex}">
-                            <div id="{{val.id}}" class="qc-option-vertical-text">{{val.text}} {{$index}} {{selectedIndex}}</div>
+                            <div id="{{val.id}}" class="qc-option-vertical-text">{{val.text}}</div>
                             <div class="qc-option-vertical-checkbox">
                                  <input type="radio" name="radio" value="pass" class="qc-option-input-checkbox" ng-checked="$index+1 == selectedIndex" ng-click="telemetry($event);" id="option">
                             </div>
