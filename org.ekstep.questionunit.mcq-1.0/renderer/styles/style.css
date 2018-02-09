@@ -20,6 +20,7 @@
 header.qc-long-text-header {
     width: 100%;
     background-color: #404041;
+    height: 56px;
 }
 
 .qc-question-text {
@@ -27,12 +28,9 @@ header.qc-long-text-header {
     color: white;
     font-size: initial;
     line-height: normal;
-    display: -webkit-box;
     text-align: initial;
 }
-.qc-popup-close-button{
-        bottom: 90%;
-}
+
 
 .qc-option-container {
     width: 100%;
@@ -140,8 +138,9 @@ img.qc-question-image {
 }
 
 img.qc-option-image {
-    width: 15%;
-    margin-top: -2%;
+    width: 21%;
+    margin-top: 0%;
+    margin-left: -5%;
     height: 56px;
 }
 
@@ -157,11 +156,18 @@ img.qc-question-fullimage {
     height: 100%;
 }
 
-.qc-question-audio {
+audio.qc-question-audio {
     float: left;
 }
 
-audio.qc-question-audio::-webkit-media-controls-panel {
+audio.qc-question-audio-with-text {
+    left: 0%;
+    top: 11%;
+    float: initial;
+    position: absolute;
+}
+
+audio#qc-question-audio::-webkit-media-controls-panel {
     display: block;
 }
 
@@ -173,13 +179,13 @@ audio#qc-option-audio::-webkit-media-controls-panel {
     display: block;
 }
 
-audio.qc-question-audio::-webkit-media-controls-panel {
+audio#qc-question-audio::-webkit-media-controls-panel {
     background-color: transparent;
 }
 
 audio.qc-question-audio {
     margin-top: 3%;
-    margin-left: 6%;
+    margin-left: 8%;
     position: initial;
 }
 
@@ -187,35 +193,42 @@ audio.qc-option-audio-with-image {
     margin-top: -4%;
     margin-left: 14%;
     position: absolute;
-    width: 26%;
+    width: 30%;
 }
 
 .qc-option-txt {
     position: absolute;
-    left: 17%;
+    left: 20%;
     top: 33%;
     width: 100%;
 }
 
 .qc-option-zoomin {
     width: 5%;
-    left: -0.5%;
-    top: -16%;
+    left: -5.5%;
+    top: 0%;
     position: absolute;
     cursor: pointer;
 }
 
+.qc-popup-close-button {
+    position: absolute;
+    right: -35px;
+    color: white;
+    bottom: 90%;
+}
+
 .qc-text-with-audio {
-    width: 26%;
+    width: 28%;
     top: 2%;
     position: absolute;
 }
 
-.qc-question-audio {
+audio.qc-question-audio {
     float: initial;
     position: absolute;
-    left: 9%;
-    top: 9%;
+    left: 7%;
+    top: 8%;
 }
 
 .qc-option-txt-with-image {
@@ -229,6 +242,7 @@ audio.qc-option-audio-with-image {
     background-color: #404041;
     height: 56px;
 }
+
 
 
 /*Grid CSS*/

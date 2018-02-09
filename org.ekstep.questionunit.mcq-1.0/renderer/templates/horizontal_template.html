@@ -6,16 +6,16 @@
             <div class="popup-full-body">
                 <div class="font-lato assess-popup assess-goodjob-popup">
                     <img class="qc-question-fullimage" src="{{imageUrl}}" />
-                    <div ng-click="hideImagePopup();" class="primary center button qc-popup-close-button">Close</div>
+                    <div ng-click="hideImagePopup();" class="qc-popup-close-button">X</div>
                 </div>
             </div>
         </div>
-        <header ng-class="{'qc-long-text-header-image': questionObj.question.image.length > 0,'qc-long-text-header':questionObj.question.image}">
+        <header ng-class="{'qc-long-text-header-image': questionObj.question.image.length > 0,'qc-long-text-header':questionObj.question.image.length==0}">
             <span ng-if="questionObj.question.image.length > 0"><img class="qc-question-zoomin" ng-click="showImageModel(questionObj.question.image)" ng-src={{imageZoomPath}}></span>
             <span ng-if="questionObj.question.image.length>0"><img class="qc-question-image" ng-click="showImageModel()" ng src={{questionObj.question.image}}></span>
             <span class="qc-question-text">{{questionObj.question.text}}</span>
-            <span ng-if="questionObj.question.audio.length > 0" class="qc-question-audio">
-            <audio class="qc-question-audio" controls controlsList="nodownload">
+            <span ng-if="questionObj.question.audio.length > 0">
+            <audio id="qc-question-audio" ng-class="{'qc-question-audio':questionObj.question.image,'qc-question-audio-with-text':questionObj.question.audio && questionObj.question.image.length==0}" controls controlsList="nodownload">
 
                <source src={{trustSrcurl(questionObj.question.audio)}} type="audio/mpeg" ng-init="loadAudio();">
             </audio>
@@ -30,7 +30,7 @@
                   </audio>
                </span>
                     <span ng-if="val.image.length>0"><img class="qc-option-image" ng src={{val.image}}></span>
-                    <span ng-class="{'qc-option-txt': val.audio.length > 0,'qc-option-txt-with-image':val.audio.length==0}">
+                    <span ng-class="{'qc-option-txt': val.audio.length > 0 ,'qc-option-txt-with-image':val.audio.length==0}">
                {{val.text}}<span>
                
             </div>
