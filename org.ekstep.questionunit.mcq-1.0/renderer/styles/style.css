@@ -27,7 +27,11 @@ header.qc-long-text-header {
     color: white;
     font-size: initial;
     line-height: normal;
+    display: -webkit-box;
     text-align: initial;
+}
+.qc-popup-close-button{
+        bottom: 90%;
 }
 
 .qc-option-container {
@@ -130,7 +134,7 @@ input.qc-option-input-checkbox:checked::after {
 
 img.qc-question-image {
     width: 10%;
-    width: 10.2%;
+    width: 15%;
     height: 56px;
     float: left;
 }
@@ -174,7 +178,8 @@ audio.qc-question-audio::-webkit-media-controls-panel {
 }
 
 audio.qc-question-audio {
-    margin-top: -2%;
+    margin-top: 3%;
+    margin-left: 6%;
     position: initial;
 }
 

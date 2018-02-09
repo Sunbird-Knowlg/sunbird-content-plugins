@@ -1,6 +1,6 @@
 // TODO: Controller for horizontalTemplate.html
 'use strict';
-angular.module('genie-canvas').controllerProvider.register("MCQRendererController", function($scope, $rootScope) {
+angular.module('genie-canvas').controllerProvider.register("MCQRendererController", function($scope, $rootScope, $sce) {
     //var ctrl = this;
     $scope.showTemplate = true;
     $scope.question;
@@ -26,6 +26,9 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
             if (EventBus.listeners[$scope.events.eval].length > 1)
                 EventBus.removeEventListener($scope.events.eval, $scope.evalListener)
         }
+    }
+    $scope.trustSrcurl = function(data) {
+        return $sce.trustAsResourceUrl(data);
     }
 
     $scope.registerEvents = function() {
