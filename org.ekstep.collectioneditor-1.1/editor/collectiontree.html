@@ -55,8 +55,8 @@
                 <div class="padding-bottom-16" ng-if="suggestedContentList.count" ng-repeat="lesson in suggestedContentList.content | limitTo:20">
                     <div class="ui card">
                         <div class="image">
-                                <img class="ui middle aligned tiny image resourceContentImageAllign" src="{{lesson.appIcon}}" ng-if="lesson.appIcon">
-                                <img class="ui middle aligned tiny image resourceContentImageAllign" src="http://via.placeholder.com/80x80" ng-if="!lesson.appIcon">
+                                <img src="{{lesson.appIcon}}" ng-if="lesson.appIcon">
+                                <img src="http://via.placeholder.com/80x80" ng-if="!lesson.appIcon">
                         </div>
                         <div class="content">
                             <a class="header">{{ lesson.name }}</a>

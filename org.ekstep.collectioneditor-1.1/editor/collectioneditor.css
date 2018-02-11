@@ -416,6 +416,11 @@ span.fancytree-expander {
     border: solid 1px #dedede;
 }
 
+.card-list .ui.card>.image>img {
+    width: 140px;
+    max-width: 140px;
+}
+
 /* mixin for multiline */
 .block-with-text {
     overflow: hidden;
