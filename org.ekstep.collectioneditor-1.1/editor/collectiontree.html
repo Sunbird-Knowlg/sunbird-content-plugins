@@ -39,5 +39,34 @@
         <div class="ui column" id="contents-pane">
             <div class="metacontent-holder metadata-form-container" ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" ng-include="page.templateURL"></div>
         </div>
+        <div class="ui column suggest-content-pane">
+            <div class="suggest-content-header">
+                <div class="suggest-content-header-content suggest-content-header-text">
+                        <i class="angle right icon"></i>
+                        <span class="suggest-content-header-title">Suggested Content</span>
+                        <span ng-click="openResourceBrowser()" class="text-right color-blue">View All</span>
+                </div>
+            </div>
+            <div ng-class="(suggestedContentList.count) ? 'color-blue' : 'disabled'" class="color-blue suggest-content-header-text suggest-row-2">
+                <span ng-click="searchLessons()"><i class="undo icon"></i>Refresh Content</span>
+            </div>
+            <div class="card-list">
+                <span ng-show="!suggestedContentList.count">No content Available</span>
+                <div class="padding-bottom-16" ng-if="suggestedContentList.count" ng-repeat="lesson in suggestedContentList.content | limitTo:20">
+                    <div class="ui card">
+                        <div class="image">
+                                <img class="ui middle aligned tiny image resourceContentImageAllign" src="{{lesson.appIcon}}" ng-if="lesson.appIcon">
+                                <img class="ui middle aligned tiny image resourceContentImageAllign" src="http://via.placeholder.com/80x80" ng-if="!lesson.appIcon">
+                        </div>
+                        <div class="content">
+                            <a class="header">{{ lesson.name }}</a>
+                            <div class="block-with-text description">{{lesson.description}}</div>
+                            <p class="font-size-11">Created by {{ lesson.creator }}</p>
+                        </div>
+                        <div class="color-blue content" ng-click="addContent(lesson, $index)">Add</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
