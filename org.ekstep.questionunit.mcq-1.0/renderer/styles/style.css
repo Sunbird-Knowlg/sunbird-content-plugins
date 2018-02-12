@@ -104,7 +104,7 @@ input.qc-option-input-checkbox:checked::before {
     height: 40px;
     width: 20px;
     position: absolute;
-    content: '✔';
+    content: "\2713";
     display: inline-block;
     font-size: 21.66667px;
     text-align: center;
