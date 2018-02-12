@@ -27,8 +27,7 @@
 #reset-lesson-filter-button:hover{
     cursor: pointer;
 }
-#search-button:hover,
-/* #reset-lesson-filter-button:hover, */
+
 #cancel-lesson-browser-popup:hover {
     color: #fff!important;
     background: #317bca!important;
@@ -268,7 +267,8 @@
     font-size: 75%;
     padding-top: 2%;
     padding-bottom: 2%;
-    border-bottom: none !important;
+    border: none;
+    border-radius: 30px;
 }
 .filterSidebar{
     margin-top: 8%;
@@ -294,9 +294,11 @@
     word-break: break-word;
 }
 .search-reset-keyword-field{
-    /* margin-left: -50%; */
+    margin-left: -7%;
+    margin-right: 7%;
     border: 1px solid #e0e0e0;
-    border-radius: 50px;
+    border-radius: 30px;
+    width: 320px;
 }
 .filterBckgClr{
     background-color: ghostwhite;
@@ -389,8 +391,22 @@
   }
  
 /* from lessonBrowser.html */
-
 /*new styles*/
+#search-button:hover{
+    color: #fff!important;
+    background: #317bca!important;
+    border-top-right-radius: 15%;
+    border-bottom-right-radius: 15%;
+}
+
 #search-button{
     padding-right: 5%;
 }
+.selectedItems{
+    text-align: center;
+}
+#cancelBtn{
+    color: #317bca !important;
+    border: 1px solid #317bca;
+}
+

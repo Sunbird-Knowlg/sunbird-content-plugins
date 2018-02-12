@@ -1,8 +1,15 @@
 angular.module('org.ekstep.lessonbrowserapp', [])
 .controller('lessonController', ['$scope', 'instance', 'callback', 'callerFilters', function($scope, instance, callback, callerFilters) {
     var ctrl = this;
+    $scope.headerTemplate = ecEditor.resolvePluginResource("org.ekstep.lessonbrowser", "1.4", "editor/header.html");
+    $scope.footerTemplate = ecEditor.resolvePluginResource("org.ekstep.lessonbrowser", "1.4", "editor/footer.html");
+    // console.log(' $scope.headerTemplate', $scope.headerTemplate);
     //Response variable
     ctrl.res = {count:0, content:[]};
+
+    // header container load condition
+    $scope.headerContainer = true;
+    $scope.footerContainer = true;
 
     // telemetry pluginId and plugin version
     ctrl.lessonbrowser=instance;

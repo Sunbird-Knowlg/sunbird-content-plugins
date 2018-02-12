@@ -48,7 +48,7 @@ angular.module('org.ekstep.contentprovider', [])
 
     //Telemetry
     var collectionService = org.ekstep.collectioneditor.api.getService('collection');
-    ctrl.generateTeleemetry = function(data) {
+    ctrl.generateTelemetry = function(data) {
         if (data) ecEditor.getService('telemetry').interact({
             "type": data.type,
             "subtype": data.subtype,
