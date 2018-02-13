@@ -1,0 +1,95 @@
+<div class="row ui" id="resourceHeading">
+    <p ng-if="renderTemplate == 'selectedResult'">
+        RESOURCES
+        <span>({{ $ctrl.res.count }})</span></p>
+</div>
+<div class="source-result-container">
+    <div class="ui link cards resourceContent" ng-repeat="lesson in $ctrl.res.content">
+        <div class="card lessonBrowserContentCard">
+            <div class="image resourceImage">
+                <img class="resourceContentImageAllign" src="{{lesson.appIcon}}" ng-if="lesson.appIcon">
+                <img class="resourceContentImageAllign" src="http://via.placeholder.com/80x80" ng-if="!lesson.appIcon">
+                <div class="imgContent">
+                    <div class="ui container contentAllign">
+                        <table>
+                            <tr>
+                                <td>Board</td>
+                                <td> &nbsp;&nbsp; </td>
+                                <td>{{lesson.board || 'NA'}}</td>
+                                <tr>
+                                    <tr>
+                                        <td>Class</td>
+                                        <td> &nbsp;&nbsp; </td>
+                                        <td>{{(lesson.class.toString() | cut:true:15) || 'NA'}}
+                                            <span ng-if="lesson.class.toString().length > 20">
+                                                                   ...
+                                                               </span>
+                                        </td>
+                                        <tr>
+                                            <tr>
+                                                <td>Subject</td>
+                                                <td> &nbsp;&nbsp; </td>
+                                                <td>{{(lesson.subject | cut:true:15) || 'NA'}}
+                                                    <span ng-if="lesson.subject.length > 20">
+                                                                    ...
+                                                                </span>
+                                                </td>
+                                                <tr>
+                                                    <tr>
+                                                        <td>Concept</td>
+                                                        <td> &nbsp;&nbsp; </td>
+                                                        <td>{{(lesson.concepts.toString() | cut:true:15) || 'NA'}}
+                                                            <span ng-if="lesson.concepts.toString().length > 20">
+                                                                    ...
+                                                            </span>
+                                                        </td>
+                                                        <tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="content">
+                <div class="header">{{lesson.name | cut:true:20}}
+                    <span ng-if="lesson.name.length > 25">
+                                                        <span class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.name}}" data-position="bottom right">
+                                                            <a class="desc_ellipsisLink">...</a>
+                                                        </span>
+                    </span>
+                </div>
+                <div class="description descriptionAllign">
+                    {{lesson.description | removeHTMLTags | cut:true:80}}
+                    <span ng-if="lesson.description.length > 80">
+                                                    <span class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.description}}" data-position="bottom center">
+                                                        <a class="moreLink">&nbsp;&nbsp;more...</a>
+                                                    </span>
+                    </span>
+                </div>
+                <div class="meta">
+                    <a>Created by {{lesson.creator || 'Unknown'}}</a>
+                </div>
+            </div>
+            <div class="extra content resourceFooter">
+                <div class="ui checkbox checkBoxLink" id='checkBox_{{lesson.identifier}}'>
+                    <input class="checkBox" type="checkbox" name="lessons[]" ng-click="toggleSelectionLesson(lesson)">
+                    <label></label>
+                </div>
+                <span class="resourceLink" id='add_{{lesson.identifier}}'>ADD</span>
+                <span class="resourceLink" id='remove_{{lesson.identifier}}'>REMOVE</span>
+            </div>
+        </div>
+    </div>
+    <div class="row lesson-row" ng-if="$ctrl.err" style="border:none">
+        <div class="ui negative message" style="width:100%">
+            <div class="header">{{$ctrl.err}}</div>
+        </div>
+    </div>
+    <div class="row lesson-row" ng-if="!$ctrl.res.content.length" style="border:none">
+        <div class="ui negative message" style="width:100%">
+            <div class="header">No lessons found</div>
+            <p>Please try changing the filters</p>
+        </div>
+    </div>
+    <div class="row" style="margin: 1.2%">
+        <button class="ui button primary button-overrides" ng-click="loadmore()" ng-show="loadmoreEnabledFlag">Load more</button>
+    </div>
+</div>

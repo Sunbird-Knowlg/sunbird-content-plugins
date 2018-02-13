@@ -1,288 +1,32 @@
 <script type="text/ng-template" ng-app="org.ekstep.lessonbrowserapp" ng-controller="lessonController as $ctrl" id="partials/lessonbrowser.html">
     <div class="ui active fullscreen modal lessonbrowser">
-      <div ng-if="headerContainer" ng-include="headerTemplate"></div>
-        <!-- <div class="ui padded grid content">
-            <div class="ui tab no-padding" ng-class='{active:$first}' ng-repeat="(rid, repo) in $ctrl.lessonbrowser.repos" ng-include="repo.templateUrl" data-tab="{{repo.id}}{{rid}}"></div>
-        </div> -->
+        <!-- lessonbrowser header -->
+        <div ng-if="headerContainer" ng-include="headerTemplate"></div>
         <!-- repoEkstep html-->
-        <div class="mainTemplate" style="height:530px">
-            <div class="ui grid">
-                <div class="row" ng-if="$ctrl.err">
-                    <div class="column">
-                        {{ $ctrl.err }}
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="three wide column filters-wrapper">
-                        <div class="sortResource ui vertical segment rightBorder">
-                            <p class="padding-top-3px" style="display:inline;font-weight: bold;">
-                                SORT BY</p>
-                            <div style="text-align:center">
-                                <button class="ui button sortBtn">
-                                        A - Z
-                                 </button>
-                                <div class="ui button sortBtn" tabindex="0">
-                                    Sort Value Bubble
-                                </div>
-                            </div>
-                        </div>
-                        <div class="ui vertical segment rightBorder filterAllign">
-                            <div style="margin-bottom: 4%;">
-                                <div class="row">
-                                    <div class="ui">
-                                        <p class="padding-top-3px" style="display:inline;font-weight: bold;">
-                                            FILTERS</p>
-                                        <span><a id="reset-lesson-filter-button" class="ui right floated basic" ng-click="resetFilters()">Reset</a></span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="ui sub header paraHeading">
-                                        <p class="padding-top-3px">CATEGORY ({{filterSelection.lessonType.length}})</p>
-                                    </div>
-                                    <div id="lessonBrowser_lessonType" class="ui multiple search selection dropdown width-95 padding-top-3px textbox" data-tooltip="{{filterSelection.lessonType.toString() || 
-                                            'Choose Lesson Type'}}" data-position="top center">
-                                        <input name="lessonType" type="hidden">
-                                        <i class="dropdown icon"></i>
-                                        <div class="default text">Choose Lesson Type</div>
-                                        <div class="menu tooltipElement">
-                                            <div class="item" ng-repeat="lessonType in $ctrl.meta.lessonTypes" data-value="{{lessonType}}">{{lessonType}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="ui sub header paraHeading">
-                                        <p class="padding-top-3px">LANGUAGE ({{filterSelection.lang.length}})</p>
-                                    </div>
-                                    <div id="lessonBrowser_language" class="ui multiple search selection dropdown width-95 padding-top-3px textbox" data-tooltip="{{filterSelection.lang.toString() || 
-                                            'Choose Language' }}" data-position="top center">
-                                        <input name="Language" type="hidden">
-                                        <i class="dropdown icon"></i>
-                                        <div class="default text">Choose Language</div>
-                                        <div class="menu tooltipElement">
-                                            <div class="item" ng-repeat="lang in $ctrl.meta.languages" data-value="{{lang.value}}">{{lang.label}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="ui sub header paraHeading">
-                                        <p class="padding-top-3px">CLASS ({{filterSelection.grade.length}})</p>
-                                    </div>
-                                    <div id="lessonBrowser_grade" class="ui multiple search selection dropdown width-95 padding-top-3px textbox" data-tooltip="{{filterSelection.grade.toString() || 'Choose Class'}}"
-                                        data-position="top center">
-                                        <input name="Grade" type="hidden">
-                                        <i class="dropdown icon"></i>
-                                        <div class="default text">Choose Class</div>
-                                        <div class="menu tooltipElement">
-                                            <div class="item" ng-repeat="grade in $ctrl.meta.grades" data-value="{{grade.label}}">{{grade.label}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                    <div class="ui sub header paraHeading">
-                                        <p class="padding-top-3px">SUBJECT ({{filterSelection.subject.length}})</p>
-                                    </div>
-                                    <div id="lessonBrowser_subject" class="ui multiple search selection dropdown width-95 padding-top-3px textbox" data-tooltip="{{filterSelection.subject.toString()|| 
-                                            'Choose Subject'}}" data-position="top center">
-                                        <input name="Subject" type="hidden">
-                                        <i class="dropdown icon"></i>
-                                        <div class="default text">Choose Subject</div>
-                                        <div class="menu tooltipElement">
-                                            <div class="item" ng-repeat="subject in $ctrl.meta.subjects" data-value="{{subject.label}}">{{subject.label}}
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div>
-                                        <div class="ui sub header paraHeading">
-                                            <p class="padding-top-3px">Concepts ({{filterSelection.concepts.length}})</p>
-                                        </div>
-                                        <div id="lessonBrowser_subject" class="ui multiple search selection dropdown width-95 padding-top-3px textbox" data-tooltip="{{filterSelection.concepts.toString()|| 
-                                                'Choose Concepts'}}" data-position="top center">
-                                            <input name="Subject" type="hidden">
-                                            <i class="dropdown icon"></i>
-                                            <div class="default text">Choose concepts</div>
-                                            <div class="menu tooltipElement">
-                                                <div class="item" ng-repeat="subject in $ctrl.meta.subjects" data-value="{{subject.label}}">{{subject.label}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                            </div>
-                            <div class="filterApplyBtn rightBorder">
-                                <button id="apply-lesson-filter-button" class="ui right floated button primary" ng-disabled="!filterSelection.lessonType.length && !filterSelection.lang.length && !filterSelection.grade.length && !filterSelection.subject.length"
-                                    ng-click="applyFilters()">Apply</button>
-        
-                            </div>
-                            <!-- </div> -->
-                        </div>
-        
-        
+        <div class="mainTemplate" style="height:535px">
+            <div ng-if="renderTemplate == 'selectedResult'">
+                <div class="ui grid">
+                    <div class="three wide column">
+                        <div class="filterContent" ng-include="filterTemplate"></div>
                     </div>
                     <div class="nine wide column">
-                        <div class="row ui" id="resourceHeading">
-                            <p class="padding-top-3px" style="display:inline;font-weight: bold;">
-                                RESOURCES
-                                <span>({{ $ctrl.res.count }})</span></p>
-                        </div>
-                        <div class="source-result-container">
-                            <div class="ui link cards resouceContent" ng-repeat="lesson in $ctrl.res.content">
-                                <div class="card">
-                                    <div class="image resourceImage">
-                                        <img class="resourceContentImageAllign" src="{{lesson.appIcon}}" ng-if="lesson.appIcon">
-                                        <img class="resourceContentImageAllign" src="http://via.placeholder.com/80x80" ng-if="!lesson.appIcon">
-                                        <div class="imgContent">
-                                            <div class="ui container contentAllign">
-                                                <table>
-                                                    <tr>
-                                                        <td>Board</td>
-                                                        <td> &nbsp;&nbsp; </td>
-                                                        <td>{{lesson.board || 'NA'}}</td>
-                                                        <tr>
-                                                        <tr>
-                                                           <td>Class</td>
-                                                           <td> &nbsp;&nbsp; </td>
-                                                           <td>{{lesson.class.toString() || 'NA'}}
-                                                               <span ng-if="lesson.class.toString().length > 20">
-                                                                   ...
-                                                               </span>   
-                                                           </td>
-                                                        <tr>
-                                                        <tr>
-                                                            <td>Subject</td>
-                                                            <td> &nbsp;&nbsp; </td>
-                                                            <td>{{lesson.subject || 'NA'}}
-                                                            <span ng-if="lesson.subject.length > 20">
-                                                                    ...
-                                                                </span> 
-                                                            </td>    
-                                                        <tr>
-                                                        <tr>
-                                                            <td>Concept</td>
-                                                            <td> &nbsp;&nbsp; </td>
-                                                            <td>{{lesson.concepts.toString() || 'NA'}}
-                                                            <span ng-if="lesson.concepts.toString().length > 20">
-                                                                    ...
-                                                            </span> 
-                                                            </td>   
-                                                        <tr>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="content">
-                                        <div class="header">{{lesson.name | cut:true:25}}
-                                                <span ng-if="lesson.name.length > 25">
-                                                        <span class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.name}}" data-position="bottom right">
-                                                            <a class="desc_ellipsisLink">...</a>
-                                                        </span>
-                                                </span>            
-                                        </div>
-                                        <div class="description descriptionAllign">
-                                            {{lesson.description | removeHTMLTags | cut:true:80}}
-                                            <span ng-if="lesson.description.length > 80">
-                                                    <span class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.description}}" data-position="bottom center">
-                                                        <a class="moreLink">&nbsp;&nbsp;more...</a>
-                                                    </span>
-                                                </span>
-                                        </div>
-                                        <div class="meta">
-                                            <a>Created by {{lesson.creator}}</a>
-                                        </div>
-                                    </div>
-                                    <div class="extra content resourceFooter">
-                                        <div class="ui checkbox checkBoxLink" id='checkBox_{{lesson.identifier}}'>
-                                            <input class="checkBox" type="checkbox" name="lessons[]" ng-click="toggleSelectionLesson(lesson)">
-                                            <label></label>
-                                        </div>
-                                        <span class="resourceLink" id='add_{{lesson.identifier}}'>ADD</span>
-                                        <span class="resourceLink" id='remove_{{lesson.identifier}}'>REMOVE</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row lesson-row" ng-if="!$ctrl.res.content.length" style="border:none">
-                                <div class="ui negative message" style="width:100%">
-                                    <div class="header">No lessons found</div>
-                                    <p>Please try changing the filters</p>
-                                </div>
-                            </div>
-                            <div class="row" style="margin: 1.2%">
-                                <button class="ui button primary button-overrides" ng-click="loadmore()" ng-hide="!loadmoreEnabledFlag" ng-show="loadmoreEnabledFlag">Load more</button>
-                            </div>
-                        </div>
-        
-        
+                        <div ng-include="cardTemplate"></div>
                     </div>
-        
-        
-                    <!-- <div class="eight wide column" style="padding-left:0; padding-right:0;">
-                        <div class="row ui" id="resourceHeading">
-                            <p class="padding-top-3px" style="display:inline;font-weight: bold;">
-                                RESOURCES
-                                <span>({{ $ctrl.res.count }})</span></p>
-                        </div>
-                        <div class="ui bottom attached grid source-result-container">
-                            <div class="row three column lesson-row" ng-repeat="lesson in $ctrl.res.content">
-                                <div class="one wide column lesson-image-box" style="margin-top: 4%;">
-                                    <div class="ui checkbox">
-                                            <input type="checkbox" name="lessons[]" ng-click="toggleSelectionLesson(lesson)">
-                                            <label></label>
-                                    </div>
-                                </div>
-                                <div class="two wide column lesson-image-box" style="padding-top: 3px;">
-                                    <div class="ui checkbox  resourceContentImage">
-                                        <img class="ui middle aligned tiny right floated image resourceContentImageAllign" src="{{lesson.appIcon}}" ng-if="lesson.appIcon">
-                                        <img class="ui middle aligned tiny right floated image resourceContentImageAllign" src="http://via.placeholder.com/80x80"
-                                            ng-if="!lesson.appIcon">
-                                    </div>
-                                </div>
-                                <div class="eight wide column resourcePanelBodyContent">
-                                    <div>
-                                        <strong class="lesson-name">{{lesson.name}}</strong></div>
-                                    <div>
-                                        <div class="lesson-type inline-block">{{ lesson.contentType }}</div>
-                                        &nbsp;&verbar;&nbsp;
-                                        <div class="lesson-languages inline-block">
-                                            <span ng-repeat="lang in lesson.language"><span ng-if="!$first" class="lesson-lang-separator">|</span>{{lang}}</span>
-                                        </div>
-                                        <div class="allignCenter">
-                                            <div>{{lesson.description | removeHTMLTags | cut:true:120:' ...'}}</div>
-                                        </div>
-                                    </div>
-        
-                                </div>
-                            </div>
-                            <div class="row lesson-row" ng-if="!$ctrl.res.content.length" style="border:none">
-                                <div class="ui negative message" style="width:100%">
-                                    <div class="header">No lessons found</div>
-                                    <p>Please try changing the filters</p>
-                                </div>
-                            </div>
-                            <div class="row" style="margin: 1.2%">
-                                <button class="ui button primary button-overrides" ng-click="loadmore()" ng-hide="!loadmoreEnabledFlag" ng-show="loadmoreEnabledFlag">Load more</button>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
-            </div>     
+
+            </div>
+            <div ng-if="renderTemplate == 'selectedItemsView'">
+                <div class="ui grid">
+                    <div class="twelve wide column">
+                        <div style="margin-left: 1%" ng-include="cardTemplate"></div>
+                    </div>
+                </div>
+            </div>
+
         </div>
         <!-- repoEkstep html -->
 
         <!-- lessonbrowser footer -->
-         <div ng-if="footerContainer" ng-include="footerTemplate"></div>
-
-   <!--      <div class="actions">
-            <div class="ui grid">
-                <div class="twelve wide column right aligned">
-                    <div class="ui buttons">
-                        <button id="closePopUp" class="ui orange tiny button" ng-click="closePopup()" type="button">Cancel</button>
-                        <div class="or"></div>
-                        <button class="ui blue button submit tiny button" ng-click="returnSelectedLessons(selectedLessons.list)" ng-disabled="!lessonSelection.length" type="button">Add</button>
-                    </div>
-                </div>
-            </div>
-        </div> -->
+        <div ng-if="footerContainer" ng-include="footerTemplate"></div>
     </div>
 </script>

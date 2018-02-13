@@ -42,11 +42,6 @@
     background: none !important;
 }
 
-.source-result-container {
-    max-height: 486px;
-    overflow-y: scroll;
-    margin-right: 6%;
-}
 
 .source-filter-container {
     height: 304px!important;
@@ -220,9 +215,7 @@
 .width-100{
     width: 100%;
 }
-#apply-lesson-filter-button{
-    margin-right: 5%;
-}
+
 .textbox{
     width: 95%;
     min-width: 98% !important;
@@ -230,13 +223,7 @@
 .btnColor{
     width: 95%;
 }
-#resourceHeading{
-    border: none;
-    margin-top: 3%;
-    /* margin-bottom: 2%; */
-    margin-left: 20px;
-    font-weight: bold;
-}
+
 .resourcePanelBodyContent{
     /* border-radius: 5px; */
     padding: 1% 1% 0% 3%;
@@ -253,7 +240,7 @@
 .resourceContentImageAllign{
     /* padding: 5% 37% 9% 40%; */
     /* border-bottom: 1px solid #e0e0e0; */
-    height: 135px !important;
+    height: 110px !important;
     /* border-radius: 50%; */
     /* margin-top: 20%; */
     /* float: none; */
@@ -316,8 +303,10 @@
 .add-resource{
     font-size: 85%;
 }
-.resouceContent{
-    padding: 1%;
+.resourceContent{
+    margin-top: 0% !important;
+    padding-right: 1%;
+    padding-left: 1%;
     display: inline-block !important;
 }
 .searcher{
@@ -385,10 +374,7 @@
       padding-top: 2% !important;
       padding-bottom: 2% !important;
   }
-  .filterAllign{
-    height: 86%;
-    margin-bottom: 10%;
-  }
+  
  
 /* from lessonBrowser.html */
 /*new styles*/
@@ -403,10 +389,53 @@
     padding-right: 5%;
 }
 .selectedItems{
-    text-align: center;
+    display: flex !important;
+    align-items: center;
+    padding-left: 12% !important;
+}
+.btnAttribute{
+    width: 96px;
+    height: 31px;
+    border-radius: 5px !important;
+    border: solid 1px #007aff !important;
 }
 #cancelBtn{
-    color: #317bca !important;
-    border: 1px solid #317bca;
+    color: #007aff !important;
 }
-
+.filterAllign{
+    height: 458px;
+    padding-top: 2% !important;
+  }
+#apply-lesson-filter-button{
+    margin-right: 2%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+}
+.filterContent{
+    margin-left: 2%;
+}
+.source-result-container {
+    height: 477px;
+    overflow-y: scroll;
+    margin-right: 3%;
+    margin-top: 2%;
+}
+#resourceHeading{
+    border: none;
+   margin-top: 1%;
+    margin-bottom: -1%;
+    margin-left: 1%;
+    font-weight: bold;
+}
+.lessonBrowserContentCard{
+    width: 221px !important;
+}
+.disabledLink{
+    cursor: default;
+    opacity: 0.5;
+}
+.filterOverflow{
+    height: 89%;
+    overflow-y: auto;
+    border-bottom: 1px solid #D8DEE2;
+}
