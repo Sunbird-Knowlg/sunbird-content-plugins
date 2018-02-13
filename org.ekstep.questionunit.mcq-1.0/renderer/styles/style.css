@@ -284,7 +284,7 @@ audio.qc-question-audio {
     display: table-cell;
     vertical-align: middle;
     text-align: center;
-    word-break: break-all;
+    word-break: break-word;
 }
 
 .qc-grid-option-value.grid-selected-option {
@@ -330,7 +330,7 @@ audio.qc-question-audio {
     display: table-cell;
     vertical-align: middle;
     height: 22vh;
-    word-break: break-all;
+    word-break: break-word;
     line-height: 1.2;
     width: 65%;
 }
