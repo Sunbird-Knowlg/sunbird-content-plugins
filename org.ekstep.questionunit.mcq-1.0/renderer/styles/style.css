@@ -20,7 +20,9 @@
 header.qc-long-text-header {
     width: 100%;
     background-color: #404041;
-    height: 56px;
+    min-height: 56px;
+    text-align: center;
+
 }
 
 .qc-question-text {
@@ -240,7 +242,8 @@ audio.qc-question-audio {
 .qc-long-text-header-image {
     width: 100%;
     background-color: #404041;
-    height: 56px;
+    min-height: 56px;
+    padding: 0% 1% 1% 1%;
 }
 
 
