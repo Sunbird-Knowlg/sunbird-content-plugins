@@ -27,7 +27,7 @@
                 <div class="field">
                     <label>Description</label>
                     <div class="ui input">
-                        <textarea placeholder="brief description about the courseunit" ng-model="courseunit.description" ng-class=" {error: submitted && courseunitMetaForm.description.$error.required}" name="description" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})"></textarea>
+                        <textarea placeholder="Brief description about the courseunit" ng-model="courseunit.description" ng-class=" {error: submitted && courseunitMetaForm.description.$error.required}" name="description" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})"></textarea>
                     </div>
                 </div>
                 <div class="field">
@@ -36,7 +36,14 @@
                 </div>
                 <div class="field">
                     <label>Keywords</label>
-                    <ng-token-field ng-model="courseunit.keywords" id="courseunitmeta-keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
+                    <tags-input ng-model="courseunit.keywords" id="courseunitmeta-keywords" display-property="lemma" placeholder="Enter Keywords" replace-spaces-with-dashes="false">
+                        <auto-complete source="loadKeywords($query)" min-length="0" load-on-focus="true" load-on-empty="true" template="my-courseunit-custom-template"></auto-complete>
+                    </tags-input>
+                    <script type="text/ng-template" id="my-courseunit-custom-template">
+                        <div class="right-panel">
+                            <span ng-bind-html="$highlight($getDisplayText())"></span>
+                        </div>
+                    </script>
                 </div>
             </div>
         </div>

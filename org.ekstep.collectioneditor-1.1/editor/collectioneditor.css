@@ -211,10 +211,9 @@ body {
     cursor: pointer;
 }
 
-.ui.dropdown .menu .selected.item,
 .ui.dropdown.selected,
 .ui.dropdown .menu .active.item {
-    font-weight: normal;
+    font-weight: bold;
     color: rgba(0, 0, 0, .95);
     background: none;
 }
@@ -452,8 +451,8 @@ switched to Github for the search after API changes
 
 /* Content tree css */
 
-.tree-container, .tree-container .ui.label {
-    background-color: #f5f5f5!important;
+.tree-container, .tree-container {
+    background-color: #f8f8f8 !important;
 }
 
 #tree-table {
@@ -465,21 +464,39 @@ switched to Github for the search after API changes
 }
 
 .tree-leftHeader {
-    color: #8e8e8e!important;
+    font-style: normal;
+    font-stretch: normal;
+    letter-spacing: normal;
+    text-align: left;
+    color: #979797 !important;
     padding-left: 1px!important;
     font-size: 0.9em!important;
+    background-color: #f8f8f8 !important;
+}
+
+.content-image {
+    border-right: solid 2px #dedede;
+}
+
+.child-list{
+    box-shadow: 0 2px 4px 0 rgba(164, 164, 164, 0.5) !important;
+    border: solid 1px #dedede !important;
+}
+
+.tree-header {
+    padding: 15px 0 !important;
 }
 
 .tree-rightHeader {
     float: right;
-    padding-right: 0px!important;
-    font-size: 0.9em!important;
-    cursor: pointer;
+    /* padding: 10px !important; */
+    /* background-color: #0071ff !important; */
+    border-radius: 5px !important;
 }
 
 .delete-node {
-    color: #da0808;
     cursor: pointer;
+    color: #e66f7e;
 }
 
 .tree-table-drag {
@@ -490,15 +507,10 @@ switched to Github for the search after API changes
     color: black;
 }
 
-.floatContentRight {
-    float:right;
-    cursor: pointer;
-}
-
 .custom-modal-heading {
   height: 34px;
   font-size: 17px;
-  font-weight: 800;
+  font-weight: 600;
   color: #4a4a4a;
 }
 
@@ -553,10 +565,12 @@ switched to Github for the search after API changes
 }
 
 .contentType {
+    background-color: #747474 !important;
+    text-align: left;
+    color: #ffffff !important;
     position: absolute;
-    top: 5px;
-    left: 10px;
-    color: gray;
+    top: 8px;
+    border-radius: 0 !important;
 }
 
 #contentPreview {
@@ -599,15 +613,9 @@ switched to Github for the search after API changes
 }
 
 .content-name {
-    width: 30em;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
-}
-
-.tree-footer {
-    padding-top: 10px;
-    padding-bottom: 20px;
 }
 
 #deletePopup {

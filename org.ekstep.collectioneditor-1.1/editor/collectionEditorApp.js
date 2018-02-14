@@ -1,4 +1,4 @@
-angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('mainController', ['$rootScope', '$scope', '$location', function($rootScope, $scope, $location) {
+angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]).controller('mainController', ['$rootScope', '$scope', '$location', function($rootScope, $scope, $location) {
     //do_112272630392659968130
     $scope.contentDetails = {
         contentTitle: ""
@@ -19,6 +19,17 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         });
     }
 
+    $scope.sortableOptions = {
+        stop: function() {
+            var collectionData = org.ekstep.collectioneditor._.cloneDeep($scope.collectionData);
+            var activeNode = org.ekstep.services.collectionService.getActiveNode();
+            activeNode.removeChildren();
+            activeNode.setActive();
+            $scope.collectionData = collectionData;
+            activeNode.addChildren(collectionData);
+        }
+      };
+
     $scope.searchNode = function(event) {
         if (event.target.value == "") org.ekstep.services.collectionService.clearFilter();
         org.ekstep.services.collectionService.filterNode(event.target.value);
@@ -35,7 +46,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         }
     }
 
-    $scope.generateLevel1Content = function(data, child) {
+    $scope.generateContentList = function(data, child) {
         if (data.children) {
             org.ekstep.collectioneditor._.each(data.children, function(content) {
                 if (!content.isFolder())
@@ -47,46 +58,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         else if (!data.type && !data.isFolder()) {
             $scope.selectedContent = data;
             $scope.isContent = true;
-        }
-    }
-
-    $scope.setFooter = function(data) {
-        var nextSibling = function(node) {
-            var siblingNode
-            if (!node.parent && !node.parent.isTopLevel()){ // Checking if node is not root node
-                if (node.parent.getNextSibling()) return node.parent.getNextSibling();
-                else {
-                    siblingNode = nextSibling(node.parent) // Looping again and again to fetch nextSibling
-                }
-                return siblingNode;
-            }
-        }
-        var prevSibling = function(node) {
-            var siblingNode
-            if (node.hasChildren()) {
-                siblingNode = prevSibling(node.getLastChild()); // looping again and again to fetch first last children of nested sibling
-            } else {
-                return node;
-            }
-            return siblingNode;
-        }
-        // NextSibling
-        if (data.children) { // when selected node has children
-            $scope.nextTextBook = data.getFirstChild();
-        } else 
-        if ((data.parent.children.length - 1) == data.getIndex()){ // When selected node is last node of parent
-                $scope.nextTextBook = nextSibling(data);
-        } else {
-            $scope.nextTextBook = data.getNextSibling();
-            $scope.prevTextBook = data.getPrevSibling();
-        }
-
-        // PrevSibling
-        if (data.getPrevSibling()) {
-            $scope.prevTextBook = prevSibling(data.getPrevSibling());
-        } else
-        if(data.parent) {
-            $scope.prevTextBook = data.parent;;
         }
     }
 
@@ -125,12 +96,18 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
 
     $scope.setSelectedNode = function(event, data) {
         $scope.resetContentData();
-        $scope.generateLevel1Content(data);
-        $scope.setFooter(data);
+        $scope.generateContentList(data);
         if (data.data.objectType) {
             $scope.selectedObjectType = data.data.objectType
             $scope.$safeApply();
         }
+        $( "#tree-table" ).sortable({
+            update: function( event, ui ) {
+                console.log(event)
+                console.log(ui)
+            }
+        });
+        $( "#tree-table" ).disableSelection();
     };
 
     $scope.deleteNode = function(node, event) {
@@ -178,10 +155,21 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
             if (res && res.data && res.data.responseCode === "OK") {
+                res.data.result.content.keywords = $scope.parseKeywords(res.data.result.content.keywords);
                 org.ekstep.services.collectionService.fromCollection(res.data.result.content);
-                $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
-                $scope.$safeApply();
-                callback && callback(err, res);
+                var frameworkId = ecEditor.getContext('framework') || org.ekstep.services.collectionService.defaultFramwork;
+                ecEditor.getService('meta').getCategorys(frameworkId, function(cateerr, cateresp) {
+                    if (!cateerr) {
+                        _.forEach(cateresp.data.result.framework.categories, function(category){
+                            org.ekstep.services.collectionService.categoryList[category.name] = category;
+                        });
+                        $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
+                        $scope.$safeApply();
+                        callback && callback(err, res);
+                    }else{
+                        callback && callback('unable to fetch categories!', cateresp);
+                    }
+                });
             } else {
                 callback && callback('unable to fetch the content!', res);
             }
@@ -236,8 +224,21 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         org.ekstep.collectioneditor.api.getService('collection').setActiveNode(nodeId);
     }
 
-
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
-    ecEditor.addEventListener('org.ekstep.collectioneditor:node:added', $scope.generateLevel1Content, $scope);
+    ecEditor.addEventListener('org.ekstep.collectioneditor:node:added', $scope.generateContentList, $scope);
+    $scope.init = function(){
+        org.ekstep.services.collectionService.suggestVocabularyRequest.request.limit = ecEditor.getConfig('keywordsLimit')
+    }
+
+    $scope.parseKeywords = function(keywords){
+        if(_.isString(keywords)){
+            return JSON.parse(keywords);
+        }else{
+            return keywords;
+        }
+    }
+
+    $scope.init();
+
 }]);
 //# sourceURL=collectiontreeApp.js

@@ -115,7 +115,8 @@ body {
 
 
 #saveButton:hover,
-#downloadButton:hover {
+#downloadButton:hover,
+.icon-box:hover {
     background: #2E9FD9;
     color: #fff;
 }
@@ -210,4 +211,15 @@ body {
     overflow: hidden;
     white-space: nowrap;
     padding-top: 10px;
+}
+
+.icon-box {
+    height: 30px;
+    width: 31.67px;
+    border-radius: 4px;
+    background-color: transparent;
+    padding: 0;
+    display: inline-block;
+    position: relative;
+    top: 10px;
 }

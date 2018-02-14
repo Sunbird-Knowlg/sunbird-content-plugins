@@ -41,39 +41,38 @@
                 <div class="sixteen wide column metacontent-holder metadata-form-container" ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" ng-include="page.templateURL"></div>
             </div>
             <div class="row">
-                <div class="twelve wide column tree-container">
-                    <div class="tree-header padding-top-10" ng-if="!isContent">
-                        <div class="ui label tree-leftHeader">ADD CONTENT</div>
-                        <!-- <div class="ui label tree-rightHeader blue-color">View Library</div> -->
-                    </div>
-                    <div class="contentWidth padding-top-10 centerAligned" ng-if="isContent">
-                        <div class="ui label tree-leftHeader">CONTENT PREVIEW</div>
-                        <div class="ui label tree-rightHeader"><i class="fa fa-trash right floated delete-node" aria-hidden="true" ng-click="deleteNode(selectedContent, $event);"> REMOVE</i></div>
+                <div class="twelve wide column tree-container" ng-if="!isContent">
+                    <div class="tree-header">
+                        <div class="ui label tree-leftHeader">RESOURCES</div>
+                        <button class="ui blue button tree-rightHeader">ADD RESOURCE</button>
                     </div>
                     <div class="ui" id="tree-table">
                         <div ng-if="!isContent && collectionData.length<1">
                             <div class="tree-table-drag">
                                 <!-- Drag and Drop Suggested Content here or <span class="blue-color">View Library</span> -->
-                                No Content's are available
+                                <p>No Content's are available</p><p>You can add resource by ctrl + alt + A</p>
                             </div>
                         </div>
-                        <div class="ui raised segment padding-none" ng-repeat="child in collectionData" ng-if="!isContent">
-                            <div class="tree-table-row">
-                                <div class="ui divided items">
+                        <div ui-sortable="sortableOptions" ng-model="collectionData" ng-if="!isContent">
+                            <div class="ui raised segment padding-none child-list content-list" ng-repeat="child in collectionData">
+                                <div class="ui items tree-table-row">
                                     <div class="item custom-segment">
-                                        <div class="image">
+                                        <div class="image content-image">
+                                            <span class="ui left label ng-binding contentType" tabindex="0">{{child.data.metadata.contentType}}</span>
                                             <img ng-src="{{child.data.metadata.posterImage || defaultImage}}">
-                                            <p class="contentType">{{child.data.metadata.contentType}}</p>
                                         </div>
                                         <div class="content padding-15">
-                                            <p class="header content-name">{{child.data.metadata.name}}</p>
+                                            <div class="meta">
+                                                <p class="header content-name">{{child.data.metadata.name}}</p>
+                                            </div>
                                             <div class="meta">
                                                 <p class="content-desc">{{child.data.metadata.description}}</p>
                                             </div>
                                             <div class="extra padding-top-10 ">
                                                 <p>
+                                                    <span ng-show="content.data.metadata.board">{{content.data.metadata.board}} &nbsp;</span>
                                                     <span ng-repeat="grade in child.data.metadata.gradeLevel | limitTo: 2">{{grade}} &nbsp;</span>
-                                                    <span ng-repeat="genre in child.data.metadata.genre | limitTo: 2">{{genre}} &nbsp;</span>
+                                                    <span ng-repeat="domain in child.data.metadata.domain | limitTo: 2">{{domain}} &nbsp;</span>
                                                 </p>
                                             </div>
                                             <div class="extra">
@@ -82,32 +81,35 @@
                                                 <i class="fa fa-trash right floated delete-node" aria-hidden="true" ng-click="deleteNode(child, $event);"></i>
                                             </div>
                                         </div>
+                                        <div hidden class="nodeId">{{child.key}}</div>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div ng-if="isContent" class="contentWidth centerAligned">
-                            <div class="content-details">
-                                <div id="contentPreview">
-                                    <div class="preview-image">
-                                        <img class="preview-play-image" ng-click="playContent(selectedContent);" src="{{playImage}}">
-                                    </div>
-                                    <iframe id="previewContentIframe" width=100% height=100%></iframe>
-                                </div>
-                                <p class="tree-leftHeader content-owner">OWNER</p>
-                                <div class="footer">
-                                    <span>{{selectedContent.data.metadata.owner}}</span>
-                                    <span class="content-grade">
-                                        <span ng-repeat="grade in selectedContent.data.metadata.gradeLevel | limitTo: 2">{{grade}} &nbsp;</span>
-                                        <span ng-repeat="genre in selectedContent.data.metadata.genre | limitTo: 2">{{genre}} &nbsp;</span>
-                                    </span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="tree-footer" ng-class="{'contentWidth centerAligned':isContent}">
-                        <span class="blue-color" ng-if="prevTextBook.data.metadata.name" ng-click="setActiveNode(prevTextBook.key)">Go to {{prevTextBook.data.metadata.name}}</span>
-                        <span class="blue-color floatContentRight" ng-if="nextTextBook.data.metadata.name" ng-click="setActiveNode(nextTextBook.key)">Go to {{nextTextBook.data.metadata.name}}</span>
+                </div>
+                <div class="twelve wide column tree-container"  ng-if="isContent">
+                    <div class="contentWidth padding-top-10 centerAligned">
+                        <div class="ui label tree-leftHeader">CONTENT PREVIEW</div>
+                        <div class="ui label tree-rightHeader"><i class="fa fa-trash right floated delete-node" aria-hidden="true" ng-click="deleteNode(selectedContent, $event);"> REMOVE</i></div>
+                    </div>
+                    <div class="contentWidth centerAligned">
+                        <div class="content-details">
+                            <div id="contentPreview">
+                                <div class="preview-image">
+                                    <img class="preview-play-image" ng-click="playContent(selectedContent);" src="{{playImage}}">
+                                </div>
+                                <iframe id="previewContentIframe" width=100% height=100%></iframe>
+                            </div>
+                            <p class="tree-leftHeader content-owner">OWNER</p>
+                            <div class="footer">
+                                <span>{{selectedContent.data.metadata.owner}}</span>
+                                <span class="content-grade">
+                                    <span ng-repeat="grade in selectedContent.data.metadata.gradeLevel | limitTo: 2">{{grade}} &nbsp;</span>
+                                    <span ng-repeat="genre in selectedContent.data.metadata.genre | limitTo: 2">{{genre}} &nbsp;</span>
+                                </span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
