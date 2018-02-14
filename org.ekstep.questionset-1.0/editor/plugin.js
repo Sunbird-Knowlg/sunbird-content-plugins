@@ -35,8 +35,8 @@ org.ekstep.contenteditor.basePlugin.extend({
     var props = this.convertToFabric(this.attributes);
     delete props.width;
     delete props.height;
-
-    instance._questions = data.data ? data.data : [];
+     //add media to stage
+    instance._questions = instance.data ? instance.data : [];
     // Add all question media to media manifest
     if (_.isArray(this._questions)) {
       this._questions.forEach(function(question) {
