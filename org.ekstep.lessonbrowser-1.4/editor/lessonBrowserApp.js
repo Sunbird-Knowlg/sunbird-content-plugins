@@ -8,7 +8,6 @@ angular.module('org.ekstep.lessonbrowserapp', [])
     // console.log(' $scope.headerTemplate', $scope.headerTemplate);
     //Response variable
     ctrl.res = {count:0, content:[]};
-    ctrl.searchRes = {count:0, content:[]};
     // error response
     ctrl.err = null;
 
@@ -88,6 +87,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
     // Search API Integration
     var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
     ctrl.searchLessons = function(loadmore = false){
+        console.log('searchLesson hits...');
         if (!loadmore) {
             offset = 0;
         }
@@ -131,14 +131,6 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             }
             console.log('ctrl.res.content',ctrl.res.content);
             $scope.$safeApply(); 
-            // disable view link
-            // if($scope.lessonSelection.length){
-            //      $('.viewLink').css('opacity:0;cursor:defaults');
-            // }
-            // else{
-            //      $('.viewLink').css('opacity:0.5;cursor:defaults');
-            // }
-           
                 angular.forEach(ctrl.res.content, function(resource){
                     if($scope.selectedResources.indexOf(resource.identifier) !== -1){
                         $('#checkBox_'+resource.identifier+' >.checkBox').attr('checked', true);
@@ -162,6 +154,12 @@ angular.module('org.ekstep.lessonbrowserapp', [])
         offset = limit + offset;
         ctrl.searchLessons(true);
     };
+
+    $scope.lessonBrowseSearch = function(){
+        searchBody.request.query = this.searchKeyword;
+        ctrl.searchLessons();
+        ctrl.searchRes = {count:0, content:[]};
+    }
 
     // browserApi
     // $scope.browserApi = {
@@ -294,6 +292,9 @@ angular.module('org.ekstep.lessonbrowserapp', [])
     // $scope.selectedItemsView=false;
      setTimeout(function(){
         $('#applyAccordion').accordion();
+        $('.special.cards .image').dimmer({
+            on: 'hover'
+          });
         $('.ui.multiple.selection.dropdown').dropdown({
             useLabels: false,
             forceSelection: false,
@@ -374,12 +375,15 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             if (err) {
                 ctrl.err = "Oops! Something went wrong. Please try again later.";
             } else {
+                console.log('response from the search service..',res);
+                ctrl.searchRes = {count:0, content:[]};
                 ctrl.searchRes.count = res.data.result.count;
                 
                  angular.forEach(res.data.result.content, function(lessonContent){
                         ctrl.searchRes.content.push(lessonContent);
                     });
                  console.log(' ctrl.searchRes.content', ctrl.searchRes.content);
+                 $scope.$safeApply();
             }
         });
 
@@ -403,6 +407,18 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             });
     }, 100);
 
+        }
+
+        // searcher selected lesson
+        $scope.searchSelectedLesson = function(selectedLesson){
+            console.log('searchSelectedLesson hits...');
+            searchBody.request.query = selectedLesson;
+            console.log('search body query..',searchBody.request.query);
+            ctrl.searchLessons();
+            ctrl.searchRes =[];
+            console.log('this.searchKey',this.searchKeyword);
+            this.searchKeyword.length = 0;
+            $scope.$safeApply();
         }
    
    

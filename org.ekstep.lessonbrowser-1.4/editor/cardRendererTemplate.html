@@ -4,9 +4,100 @@
         <span>({{ $ctrl.res.count }})</span></p>
 </div>
 <div class="source-result-container">
-    <div class="ui link cards resourceContent" ng-repeat="lesson in $ctrl.res.content">
-        <div class="card lessonBrowserContentCard">
-            <div class="image resourceImage">
+    <div class="ui link four special cards">
+        <div class="card" ng-repeat="lesson in $ctrl.res.content">
+            <div class="blurring dimmable medium image">
+                <div class="ui dimmer">
+                    <div class="content">
+                        <div class="ui middle aligned list">
+                            <div class="item">
+                                <div class="right floated content contentMetaDetail">{{lesson.board || 'NA'}}</div>
+                                <div class="content contentTitle">Board</div>
+
+                            </div>
+                            <div class="item">
+                                <div class="right floated content contentMetaDetail">{{(lesson.class.toString() | cut:true:15) || 'NA'}}<span ng-if="lesson.class.toString().length > 20">
+                                                ...
+                                            </span></div>
+                                <div class="content contentTitle">Class</div>
+
+                            </div>
+                            <div class="item">
+                                <div class="right floated content contentMetaDetail">{{(lesson.subject | cut:true:15) || 'NA'}}
+                                    <span ng-if="lesson.subject.length > 20">
+                                                                ...
+                                                            </span></div>
+                                <div class="content contentTitle">Subject</div>
+                            </div>
+                            <div class="item">
+                                <div class="right floated content contentMetaDetail">{{(lesson.concepts.toString() | cut:true:15) || 'NA'}}
+                                    <span ng-if="lesson.concepts.toString().length > 20">
+                                                        ...
+                                                </span>
+                                </div>
+                                <div class="content contentTitle">Concept</div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="imageAllignment" style='background-image:url({{lesson.appIcon}});background-size: cover;
+                        background-size: cover;'>
+                        </div> -->
+                <img src="{{lesson.appIcon || 'http://via.placeholder.com/80x80'}}" style="overflow: hidden; height: 150px;">
+            </div>
+            <div class="content">
+                <a class="header">
+                            {{lesson.name | cut:true:25}}
+                            <span ng-if="lesson.name.length > 25">
+                                    <span class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.name}}" data-position="bottom right">
+                                        <a class="desc_ellipsisLink">...</a>
+                </span>
+                </span>
+                </a>
+                <div class="meta">
+                    <span class="date">Created by {{lesson.creator}}</span>
+                </div>
+            </div>
+            <div class="extra content">
+                <div class="ui checkbox checkBoxLink" id='checkBox_{{lesson.identifier}}'>
+                    <input class="checkBox" type="checkbox" name="lessons[]" ng-click="toggleSelectionLesson(lesson)">
+                    <label></label>
+                </div>
+                <span class="resourceLink" id='add_{{lesson.identifier}}'>ADD</span>
+                <span class="resourceLink" id='remove_{{lesson.identifier}}'>REMOVE</span>
+            </div>
+        </div>
+    </div>
+    <!-- <div class="ui four special cards">
+        <div class="card" ng-repeat="lesson in $ctrl.res.content">
+            <div class="blurring dimmable image">
+                <div class="ui dimmer">
+                    <div class="content">
+                        <div class="center">
+                            <div class="ui inverted button">Add Friend</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="imageAllignment" style='background-image:url({{lesson.appIcon}});background-repeat: no-repeat;background-size: cover;
+                background-size: cover;'> -->
+    <!-- <img class="resourceContentImageAllign" src="{{lesson.appIcon}}" ng-if="lesson.appIcon">
+                <img class="resourceContentImageAllign" src="http://via.placeholder.com/80x80" ng-if="!lesson.appIcon"> -->
+    <!-- </div>   
+            </div>
+            <div class="content">
+                <a class="header">Team Fu</a>
+                <div class="meta">
+                    <span class="date">Create in Sep 2014</span>
+                </div>
+            </div>
+            <div class="extra content">
+                <a>
+                          <i class="users icon"></i>
+                          2 Members
+                        </a>
+            </div> -->
+    <!-- <div class="image resourceImage">
                 <img class="resourceContentImageAllign" src="{{lesson.appIcon}}" ng-if="lesson.appIcon">
                 <img class="resourceContentImageAllign" src="http://via.placeholder.com/80x80" ng-if="!lesson.appIcon">
                 <div class="imgContent">
@@ -49,8 +140,8 @@
                 </div>
             </div>
             <div class="content">
-                <div class="header">{{lesson.name | cut:true:20}}
-                    <span ng-if="lesson.name.length > 25">
+                <div class="header">{{lesson.name | cut:true:15}}
+                    <span ng-if="lesson.name.length > 15">
                                                         <span class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.name}}" data-position="bottom right">
                                                             <a class="desc_ellipsisLink">...</a>
                                                         </span>
@@ -65,7 +156,7 @@
                     </span>
                 </div>
                 <div class="meta">
-                    <a>Created by {{lesson.creator || 'Unknown'}}</a>
+                    <a>Created by {{(lesson.creator | cut:true:10) || 'Unknown'}}</a>
                 </div>
             </div>
             <div class="extra content resourceFooter">
@@ -75,9 +166,9 @@
                 </div>
                 <span class="resourceLink" id='add_{{lesson.identifier}}'>ADD</span>
                 <span class="resourceLink" id='remove_{{lesson.identifier}}'>REMOVE</span>
-            </div>
-        </div>
-    </div>
+            </div> -->
+    <!-- </div>
+    </div> -->
     <div class="row lesson-row" ng-if="$ctrl.err" style="border:none">
         <div class="ui negative message" style="width:100%">
             <div class="header">{{$ctrl.err}}</div>
