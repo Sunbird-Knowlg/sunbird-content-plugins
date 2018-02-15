@@ -35,13 +35,16 @@ org.ekstep.contenteditor.basePlugin.extend({
     var props = this.convertToFabric(this.attributes);
     delete props.width;
     delete props.height;
-     //add media to stage
+    //add media to stage
     instance._questions = instance.data ? instance.data : [];
     // Add all question media to media manifest
     if (_.isArray(this._questions)) {
       this._questions.forEach(function(question) {
+        var quesMedia = JSON.parse(question.body);
+        var question = quesMedia.data;
         if (_.isArray(question.media)) {
           question.media.forEach(function(mediaItem) {
+            mediaItem.src = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(mediaItem.src)
             instance.addMedia(mediaItem);
           });
         }
@@ -70,9 +73,25 @@ org.ekstep.contenteditor.basePlugin.extend({
   getPropsForEditor: function(qTittle, qCount, maxscore) {
     /* Display the all properties(title,count and maxscore) on the editor*/
     var instance = this;
-    qTittle = new fabric.Text(qTittle.toUpperCase(), { fontSize: 15, fill: 'black', textAlign: 'center', top: 33, left: 105 });
-    qCount = new fabric.Text(qCount + "  Questions,", { fontSize: 12, fill: 'black', top: 50, left: 105 });
-    maxscore = new fabric.Text(maxscore + " Marks", { fontSize: 12, fill: 'black', top: 50, left: 190, });
+    qTittle = new fabric.Text(qTittle.toUpperCase(), {
+      fontSize: 15,
+      fill: 'black',
+      textAlign: 'center',
+      top: 33,
+      left: 105
+    });
+    qCount = new fabric.Text(qCount + "  Questions,", {
+      fontSize: 12,
+      fill: 'black',
+      top: 50,
+      left: 105
+    });
+    maxscore = new fabric.Text(maxscore + " Marks", {
+      fontSize: 12,
+      fill: 'black',
+      top: 50,
+      left: 190,
+    });
     fabricGroup = new fabric.Group([qTittle, qCount, maxscore]);
     return fabricGroup;
   },
@@ -85,7 +104,9 @@ org.ekstep.contenteditor.basePlugin.extend({
       });
     }
     var qdata = {};
-    qdata.config = { __cdata: JSON.stringify(dataObj.data.config) };
+    qdata.config = {
+      __cdata: JSON.stringify(dataObj.data.config)
+    };
     qdata.data = questions;
 
     if (!ecEditor._.isUndefined(dataObj.callback)) {
@@ -111,16 +132,20 @@ org.ekstep.contenteditor.basePlugin.extend({
           pluginId: questionBody.data.plugin.id,
           pluginVer: questionBody.data.plugin.version,
           templateId: questionBody.data.plugin.templateId,
-          data: { __cdata: JSON.stringify(questionBody.data.data) },
-          config: { __cdata: JSON.stringify(questionBody.data.config) }
+          data: {
+            __cdata: JSON.stringify(questionBody.data.data)
+          },
+          config: {
+            __cdata: JSON.stringify(questionBody.data.config)
+          }
         };
 
         // Instantiate the question unit plugin to add it to <plugin-manifest>
         ecEditor.instantiatePlugin(questionBody.data.plugin.id, {});
         // delete questionSetECML.data;
         ecEditor._.forEach(questionBody.data.media, function(asset) {
-          if(!ecEditor._.isEmpty(asset))
-          instance.addMedia(asset);
+          if (!ecEditor._.isEmpty(asset))
+            instance.addMedia(asset);
         });
         questionSetECML[instance._questionPlugin].push(questionECML);
       });
@@ -187,10 +212,16 @@ org.ekstep.contenteditor.basePlugin.extend({
       data = undefined;
     } else {
       callback = callback.callback;
-      data = { data: ecEditor.getCurrentObject().data, config: ecEditor.getCurrentObject().config };
+      data = {
+        data: ecEditor.getCurrentObject().data,
+        config: ecEditor.getCurrentObject().config
+      };
     }
 
-    ecEditor.dispatchEvent('org.ekstep.questionbank:showpopup', { callback: callback, data: data });
+    ecEditor.dispatchEvent('org.ekstep.questionbank:showpopup', {
+      callback: callback,
+      data: data
+    });
   }
 });
 //# sourceURL=questionsetPlugin.js
