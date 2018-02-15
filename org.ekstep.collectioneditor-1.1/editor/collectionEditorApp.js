@@ -153,7 +153,11 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
             } else {
                 $scope.suggestedContentList = {count:0, content:[]};
                 $scope.suggestedContentList.count = res.data.result.count;
-
+                $('.card-list')
+                        .transition({
+                            animation  : 'pulse',
+                            duration   : '3s',
+                        });
                 angular.forEach(res.data.result.content, function(lessonContent) {
                     if($scope.excludeContents.length) {
                         if(_.indexOf($scope.excludeContents, lessonContent.identifier) == -1) $scope.suggestedContentList.content.push(lessonContent);
@@ -162,20 +166,10 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
                     } else {
                         $scope.suggestedContentList.content.push(lessonContent);
                     }
-                    // $('.ui.card')
-                    //     .transition({
-                    //         animation  : 'scale',
-                    //         duration   : '2s',
-                    //     });
                 });
-                // angular.forEach($scope.suggestedContentList, function(content){
-                //     if($scope.collectionData == content.
-                // });
             }
-            console.log("$scope.suggestedContentList.content", $scope.suggestedContentList.content);
             $scope.$safeApply();
         });
-        
     }
 
     $scope.openResourceBrowser = function() {
