@@ -107,13 +107,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         }
     }
 
-
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
-
-
-    $scope.init = function(){
-        org.ekstep.services.collectionService.suggestVocabularyRequest.request.limit = ecEditor.getConfig('keywordsLimit')
-    }
 
     $scope.parseKeywords = function(keywords){
         if(_.isString(keywords)){
@@ -123,6 +117,5 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         }
     }
 
-    $scope.init();
 }]);
 //# sourceURL=collectiontreeApp.js
