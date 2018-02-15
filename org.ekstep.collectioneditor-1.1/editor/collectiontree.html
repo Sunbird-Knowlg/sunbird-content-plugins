@@ -24,49 +24,36 @@
                     </div>
                 </div>    
             </div>
-            <!-- <div class="ui segments">
-                <div class="ui segment" id="treeAccessToolsSegment">
-                    <div id="treeExpandCollapseButtonsContainer">
-                        <button ng-if="expandNodeFlag==false" ng-click="expandNode(); telemetry({ subtype: 'collapse', target: 'collapseNodeBtn'});" class="ui button popup-item" data-content="Collapse all" data-variation="tiny inverted" data-position="right center"><i class="fa fa-angle-double-up" aria-hidden="true"></i></button>
-                        <button ng-if="expandNodeFlag==true" ng-click="expandNode(); telemetry({ subtype: 'expand', target: 'expandNodeBtn'});" class="ui button popup-item" data-content="Expand all" data-variation="tiny inverted" data-position="right center"><i class="fa fa-angle-double-down" aria-hidden="true"></i></button>
-                    </div>
-                </div>
-                <div class="ui segment" id="treeWrapper">
-                    <div id="collection-tree"></div>
-                </div>
-            </div> -->
         </div>
         <div class="ui padded grid column" id="contents-pane">
             <div class="row content-manifest">
                 <div class="sixteen wide column metacontent-holder metadata-form-container" ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" ng-include="page.templateURL"></div>
             </div>
             <div class="row">
-                <div class="twelve wide column tree-container" ng-if="!isContent">
-                    <div class="tree-header">
-                        <div class="ui label tree-leftHeader">RESOURCES</div>
-                        <button class="ui blue button tree-rightHeader">ADD RESOURCE</button>
+                <div class="twelve wide column list-container" ng-if="!isContent">
+                    <div class="list-header">
+                        <div class="ui label list-leftheader">RESOURCES</div>
+                        <button class="ui blue button list-addResource" ng-click="addResource()">ADD RESOURCE</button>
                     </div>
-                    <div class="ui" id="tree-table">
-                        <div ng-if="!isContent && collectionData.length<1">
-                            <div class="tree-table-drag">
-                                <!-- Drag and Drop Suggested Content here or <span class="blue-color">View Library</span> -->
-                                <p>No Content's are available</p><p>You can add resource by ctrl + alt + A</p>
-                            </div>
+                    <div class="ui" id="content-list">
+                        <div ng-if="!isContent && contentList.length<1" class="list-drag">
+                            <!-- Drag and Drop Suggested Content here or <span class="blue-color">View Library</span> -->
+                            <p>No Content's are available</p><p>You can add resource by ctrl + alt + A</p>
                         </div>
-                        <div ui-sortable="sortableOptions" ng-model="collectionData" ng-if="!isContent">
-                            <div class="ui raised segment padding-none child-list content-list" ng-repeat="child in collectionData">
-                                <div class="ui items tree-table-row">
+                        <div ui-sortable="sortableOptions" ng-model="contentList">
+                            <div class="ui raised segment padding-none" ng-repeat="child in contentList">
+                                <div class="ui items list-row">
                                     <div class="item custom-segment">
-                                        <div class="image content-image">
-                                            <span class="ui left label ng-binding contentType" tabindex="0">{{child.data.metadata.contentType}}</span>
-                                            <img ng-src="{{child.data.metadata.posterImage || defaultImage}}">
+                                        <div class="ui image content-image">
+                                            <span class="ui left label content-type" tabindex="0">{{child.data.metadata.contentType}}</span>
+                                            <img ng-src="{{child.data.metadata.posterImage || defaultImage}}" class="ui fluid centered floated image">
                                         </div>
                                         <div class="content padding-15">
-                                            <div class="meta">
+                                            <div class="meta header">
                                                 <p class="header content-name">{{child.data.metadata.name}}</p>
                                             </div>
                                             <div class="meta">
-                                                <p class="content-desc">{{child.data.metadata.description}}</p>
+                                                <p class="content-desc fancytree-title popup-item" data-content="{{child.data.metadata.description}}" "data-variation": "wide" "data-position": "bottom left">{{child.data.metadata.description}}</p>
                                             </div>
                                             <div class="extra padding-top-10 ">
                                                 <p>
@@ -77,31 +64,30 @@
                                             </div>
                                             <div class="extra">
                                                 <span ng-if="child.data.metadata.owner">Created by {{child.data.metadata.owner}}</span>
-                                                <i class="long arrow right medium icon right floated blue-color" ng-click="setActiveNode(child.key)"></i>
-                                                <i class="fa fa-trash right floated delete-node" aria-hidden="true" ng-click="deleteNode(child, $event);"></i>
+                                                <i class="long arrow right medium icon right floated blue-color" ng-click="setActiveNode(child)"></i>
+                                                <i class="fa fa-trash right floated delete-node padding-right-10" aria-hidden="true" ng-click="deleteNode(child, $event);"></i>
                                             </div>
                                         </div>
-                                        <div hidden class="nodeId">{{child.key}}</div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="twelve wide column tree-container"  ng-if="isContent">
-                    <div class="contentWidth padding-top-10 centerAligned">
-                        <div class="ui label tree-leftHeader">CONTENT PREVIEW</div>
-                        <div class="ui label tree-rightHeader"><i class="fa fa-trash right floated delete-node" aria-hidden="true" ng-click="deleteNode(selectedContent, $event);"> REMOVE</i></div>
+                <div class="twelve wide column list-container"  ng-if="isContent">
+                    <div class="content-width padding-top-10 centerAligned">
+                        <div class="ui label list-leftheader">CONTENT PREVIEW</div>
+                        <div class="ui label content-rightheader"><i class="fa fa-trash right floated delete-node" aria-hidden="true" ng-click="deleteNode(selectedContent, $event);"> REMOVE</i></div>
                     </div>
-                    <div class="contentWidth centerAligned">
+                    <div class="content-width centerAligned">
                         <div class="content-details">
-                            <div id="contentPreview">
+                            <div id="content-preview">
                                 <div class="preview-image">
-                                    <img class="preview-play-image" ng-click="playContent(selectedContent);" src="{{playImage}}">
+                                    <img class="preview-play-image" ng-click="playContent(selectedContent);  telemetry({type: 'click', subtype: 'preview', target: 'preview'})" src="{{playImage}}">
                                 </div>
                                 <iframe id="previewContentIframe" width=100% height=100%></iframe>
                             </div>
-                            <p class="tree-leftHeader content-owner">OWNER</p>
+                            <p class="list-leftheader content-owner">OWNER</p>
                             <div class="footer">
                                 <span>{{selectedContent.data.metadata.owner}}</span>
                                 <span class="content-grade">

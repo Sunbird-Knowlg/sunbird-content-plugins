@@ -430,6 +430,10 @@ switched to Github for the search after API changes
     padding-top: 10px !important;
 }
 
+.padding-right-10 {
+    padding-right: 25px !important;
+}
+
 .ui.items>.item.custom-segment>.image:not(.ui) {
     width: 170px;
 }
@@ -451,19 +455,19 @@ switched to Github for the search after API changes
 
 /* Content tree css */
 
-.tree-container, .tree-container {
+.list-container {
     background-color: #f8f8f8 !important;
 }
 
-#tree-table {
+#content-list {
     font-weight: bold;
 }
 
-.tree-table-row {
-    box-shadow: 0px 1px 5px grey;
+.list-row {
+    box-shadow: 0 2px 4px 0 rgba(164, 164, 164, 0.5);
 }
 
-.tree-leftHeader {
+.list-leftheader {
     font-style: normal;
     font-stretch: normal;
     letter-spacing: normal;
@@ -476,30 +480,30 @@ switched to Github for the search after API changes
 
 .content-image {
     border-right: solid 2px #dedede;
+    margin: 0 !important;
+    padding: 0 !important;
+    max-height: 170px !important;
+    width: 200px !important;
 }
 
-.child-list{
-    box-shadow: 0 2px 4px 0 rgba(164, 164, 164, 0.5) !important;
-    border: solid 1px #dedede !important;
+.list-header {
+    padding: 27px 0 21px 0 !important;
 }
 
-.tree-header {
-    padding: 15px 0 !important;
-}
-
-.tree-rightHeader {
+.list-addResource {
     float: right;
-    /* padding: 10px !important; */
-    /* background-color: #0071ff !important; */
+    padding: 10px !important;
+    background-color: #0071ff !important;
     border-radius: 5px !important;
 }
 
 .delete-node {
     cursor: pointer;
     color: #e66f7e;
+    font-weight: 600;
 }
 
-.tree-table-drag {
+.list-drag {
     border: 1px dashed #c5c3c3 !important;
     height: 90px;
     text-align: center !important;
@@ -559,21 +563,22 @@ switched to Github for the search after API changes
     }
 }
 
-.blue-color{
+.blue-color {
     color: #066fff!important;
     cursor: pointer;
 }
 
-.contentType {
+.content-type {
     background-color: #747474 !important;
     text-align: left;
     color: #ffffff !important;
     position: absolute;
     top: 8px;
     border-radius: 0 !important;
+    z-index: 10;
 }
 
-#contentPreview {
+#content-preview {
     background-color: gainsboro;
     height: 405px;
     width: 720px;
@@ -591,7 +596,7 @@ switched to Github for the search after API changes
     border: none!important;
 }
 
-.contentWidth {
+.content-width {
     max-width: 720px !important;
 }
 
@@ -610,6 +615,7 @@ switched to Github for the search after API changes
     -webkit-box-orient: vertical;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-weight: 500;
 }
 
 .content-name {
@@ -619,11 +625,20 @@ switched to Github for the search after API changes
 }
 
 #deletePopup {
-    top: auto;    
+    top: auto;
 }
 
 .centerAligned {
     margin: 0 auto;
+}
+
+.content-image > img {
+    height: 100% !important;
+}
+
+.content-rightheader {
+    float: right;
+    background-color: transparent !important;
 }
 
 /* for not able to fetch content */

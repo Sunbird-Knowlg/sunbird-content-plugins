@@ -10,7 +10,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     $scope.expandNodeFlag = true;
     $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.collectioneditor", "1.1", "assets/default.png");
     $scope.playImage = ecEditor.resolvePluginResource("org.ekstep.collectioneditor", "1.1", "assets/icn_play.png");
-    $scope.collectionData = [];
+    $scope.contentList = [];
     $scope.selectedContent;
     $scope.isContent = false;
     $scope.getObjectType = function(objectType) {
@@ -21,11 +21,11 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
 
     $scope.sortableOptions = {
         stop: function() {
-            var collectionData = org.ekstep.collectioneditor._.cloneDeep($scope.collectionData);
+            var collectionData = org.ekstep.collectioneditor._.cloneDeep($scope.contentList);
             var activeNode = org.ekstep.services.collectionService.getActiveNode();
             activeNode.removeChildren();
             activeNode.setActive();
-            $scope.collectionData = collectionData;
+            $scope.contentList = collectionData;
             activeNode.addChildren(collectionData);
         }
       };
@@ -35,8 +35,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         org.ekstep.services.collectionService.filterNode(event.target.value);
     };
 
-    $scope.resetContentData = function() {
-        $scope.collectionData = [];
+    $scope.resetContentList = function() {
+        $scope.contentList = [];
         $scope.isContent = false;
         var iframe = document.getElementById('previewContentIframe');
         if (iframe) {
@@ -46,15 +46,15 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         }
     }
 
-    $scope.generateContentList = function(data, child) {
+    $scope.getContentList = function(data, child) {
         if (data.children) {
             org.ekstep.collectioneditor._.each(data.children, function(content) {
                 if (!content.isFolder())
-                    $scope.collectionData.push(content);
+                    $scope.contentList.push(content);
             })
         } else
         if (child && !child.isFolder())
-            $scope.collectionData.push(child)
+            $scope.contentList.push(child)
         else if (!data.type && !data.isFolder()) {
             $scope.selectedContent = data;
             $scope.isContent = true;
@@ -62,6 +62,15 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     }
 
     $scope.playContent = function(data) {
+        if (!data || data.data.metadata.mimeType !== 'application/vnd.ekstep.ecml-archive') {
+            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                message: 'Unable to preview the content, please try again later',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });
+            org.ekstep.services.telemetryService.error({ "env": "content", "stage": "", "action": "show error", "err": "Unable to fetch content from remote", "type": "API", "data": err, "severity": "fatal" });
+            return
+        }
         var previewButton = document.getElementsByClassName('preview-image')[0];
         previewButton.style.display = 'none';
         var previewIframe = document.getElementById('previewContentIframe');
@@ -95,19 +104,14 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     }
 
     $scope.setSelectedNode = function(event, data) {
-        $scope.resetContentData();
-        $scope.generateContentList(data);
+        $scope.resetContentList();
+        $scope.getContentList(data);
         if (data.data.objectType) {
             $scope.selectedObjectType = data.data.objectType
             $scope.$safeApply();
         }
-        $( "#tree-table" ).sortable({
-            update: function( event, ui ) {
-                console.log(event)
-                console.log(ui)
-            }
-        });
-        $( "#tree-table" ).disableSelection();
+        org.ekstep.collectioneditor.jQuery( "#content-list").sortable();
+        org.ekstep.collectioneditor.jQuery( "#content-list").disableSelection();
     };
 
     $scope.deleteNode = function(node, event) {
@@ -137,6 +141,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             });
         }
     }
+    
 
     //Header scope starts
     $scope.headers = [];
@@ -225,7 +230,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     }
 
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
-    ecEditor.addEventListener('org.ekstep.collectioneditor:node:added', $scope.generateContentList, $scope);
+    ecEditor.addEventListener('org.ekstep.collectioneditor:node:added', $scope.getContentList, $scope);
+    // ecEditor.addEventListener("org.ekstep.contentmeta:preview", $scope.playContent, $scope);
     $scope.init = function(){
         org.ekstep.services.collectionService.suggestVocabularyRequest.request.limit = ecEditor.getConfig('keywordsLimit')
     }
@@ -236,6 +242,11 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         }else{
             return keywords;
         }
+    }
+
+    $scope.addResource = function() {
+        var collectionTree = document.getElementById('collection-tree');
+        org.ekstep.collectioneditor.jQuery(collectionTree).trigger("nodeCommand", {cmd: 'addLesson'});
     }
 
     $scope.init();
