@@ -28,7 +28,11 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
         }
     }
     $scope.trustSrcurl = function(data) {
-        return $sce.trustAsResourceUrl(data);
+        if (isbrowserpreview) {
+            return $sce.trustAsResourceUrl(data);
+        } else {
+            return 'file:///' + EkstepRendererAPI.getBaseURL() + data;
+        }
     }
 
     $scope.registerEvents = function() {
@@ -71,12 +75,31 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     $scope.hideImagePopup = function() {
         $scope.bigImage = false;
     }
+    $scope.checkBaseUrl = function(url) {
+        if (isbrowserpreview) {
+            return url;
+        } else {
+            return 'file:///' + EkstepRendererAPI.getBaseURL() + url;
+        }
+
+    }
 
     $scope.showEventListener = function(event) {
         var ctrlScope = angular.element('#preview-mcq-horizontal').scope();
         ctrlScope.question = event.target;
         var qData = ctrlScope.question._currentQuestion.data.__cdata || ctrlScope.question._currentQuestion.data;
-        var questionData = JSON.parse(qData);
+        var questionData
+        qData = JSON.parse(qData);
+        if (isbrowserpreview) {
+            questionData = qData;
+        } else {
+            _.map(qData.media, function(url) {
+                url.src = 'file:///' + EkstepRendererAPI.getBaseURL() + url.src;
+            })
+        }
+        questionData = qData;
+
+
         var qState = ctrlScope.question._currentQuestionState;
         if (qState && qState.val) {
             ctrlScope.selectedIndex = qState.val;

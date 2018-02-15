@@ -12,7 +12,7 @@
         </div>
         <header ng-class="{'qc-long-text-header-image': questionObj.question.image.length > 0,'qc-long-text-header':questionObj.question.image.length==0}">
             <span ng-if="questionObj.question.image.length > 0"><img class="qc-question-zoomin" ng-click="showImageModel(questionObj.question.image)" ng-src={{imageZoomPath}}></span>
-            <span ng-if="questionObj.question.image.length>0"><img class="qc-question-image" ng-click="showImageModel()" ng src={{questionObj.question.image}}></span>
+            <span ng-if="questionObj.question.image.length>0"><img class="qc-question-image" ng-click="showImageModel()" ng src={{checkBaseUrl(questionObj.question.image)}}></span>
             <span class="qc-question-text">{{questionObj.question.text}}</span>
             <span ng-if="questionObj.question.audio.length > 0">
             <audio id="qc-question-audio" ng-class="{'qc-question-audio':questionObj.question.image,'qc-question-audio-with-text':questionObj.question.audio && questionObj.question.image.length==0}" controls controlsList="nodownload">
@@ -29,7 +29,7 @@
                   <audio id="qc-option-audio" src={{trustSrcurl(val.audio)}} ng-class="{'qc-text-with-audio': val.image.length==0,'qc-option-audio-with-image':val.image.length > 0}" controls controlsList="nodownload" ng-init="loadAudio();"> 
                   </audio>
                </span>
-                    <span ng-if="val.image.length>0"><img class="qc-option-image" ng src={{val.image}}></span>
+                    <span ng-if="val.image.length>0"><img class="qc-option-image" ng src={{checkBaseUrl(val.image)}}></span>
                     <span ng-class="{'qc-option-txt': val.audio.length > 0 ,'qc-option-txt-with-image':val.audio.length==0}">
                {{val.text}}<span>
                
