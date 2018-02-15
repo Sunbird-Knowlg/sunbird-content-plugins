@@ -139,17 +139,17 @@ $scope.addAudio = function(id){
     callback: function(data) {
       var tempAudio = {
             "id": Math.floor(Math.random() * 1000000000), // Unique identifier
-            "src": data.assetMedia.src, // Media URL
+            "src": org.ekstep.contenteditor.mediaManager.getMediaOriginURL(data.assetMedia.src), // Media URL
             "assetId": data.assetMedia.id, // Asset identifier
             "type": "audio", // Type of asset (image, audio, etc)
             "preload": false // true or false
           };
           if(id == 'q'){
-            $scope.mcqFormData.question.audio = data.assetMedia.src;
+            $scope.mcqFormData.question.audio = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(data.assetMedia.src);
             $scope.questionMedia.audio = tempAudio;
           }
           else{
-            $scope.mcqFormData.options[id].audio = data.assetMedia.src;
+            $scope.mcqFormData.options[id].audio = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(data.assetMedia.src);
             $scope.optionsMedia.audio[id] = tempAudio;
           }
         }
