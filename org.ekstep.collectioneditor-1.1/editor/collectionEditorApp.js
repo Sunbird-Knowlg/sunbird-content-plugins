@@ -44,8 +44,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
             if (res && res.data && res.data.responseCode === "OK") {
                 res.data.result.content.keywords = $scope.parseKeywords(res.data.result.content.keywords);
                 org.ekstep.services.collectionService.fromCollection(res.data.result.content);
-                var frameworkId = ecEditor.getContext('framework') || org.ekstep.services.collectionService.defaultFramwork;
-                ecEditor.getService('meta').getCategorys(frameworkId, function(cateerr, cateresp) {
+                var framework = ecEditor.getContext('framework') || "NCF";
+                ecEditor.getService('meta').getCategorys(framework, function(cateerr, cateresp) {
                     if (!cateerr) {
                         _.forEach(cateresp.data.result.framework.categories, function(category){
                             org.ekstep.services.collectionService.categoryList[category.name] = category;
