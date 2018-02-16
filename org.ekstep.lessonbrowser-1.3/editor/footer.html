@@ -1,0 +1,17 @@
+<!-- footer template -->
+<div class="actions">
+    <div class=" ui clearing segment">
+        <div class="ui grid">
+            <div class="four wide column">
+                <button ng-show="mainTemplate == 'selectedResult'" class="ui left floated tiny basic button btnAttribute" ng-click="closePopup()" id="cancelBtn"> CANCEL </button>
+                <button ng-show="mainTemplate == 'addedItemsView'" class="ui left floated tiny basic button btnAttribute" ng-click="backToPrevious()" id="cancelBtn"> BACK </button>
+            </div>
+            <div class="four wide column selectedItems">
+                <span ng-show="mainTemplate == 'selectedResult'">{{lessonSelection.length}} Selected <a class="primary viewLink" ng-style="lessonSelection.length && {'cursor':'pointer'}  || !lessonSelection.length && {'cursor':'not-allowed'}" ng-click="SelectedItems()">View</a></span>
+            </div>
+            <div class="four wide column">
+                <button class="ui right floated primary tiny button btnAttribute" ng-click="returnSelectedLessons(selectedLessons.list)" ng-disabled="!lessonSelection.length"> PROCEED </button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,81 @@
+<div class="row ui" id="resourceHeading">
+    <p ng-if="mainTemplate == 'selectedResult'">
+        RESOURCES
+        <span>({{ $ctrl.res.content.length }})</span></p>
+</div>
+<div class="source-result-container">
+    <div class="ui special cards" ng-class="{four: mainTemplate == 'selectedResult',five: mainTemplate == 'addedItemsView'}">
+        <div class="card" ng-repeat="lesson in $ctrl.res.content">
+            <div class="blurring dimmable medium image">
+                <div class="ui dimmer">
+                    <div class="content">
+                        <div class="ui middle aligned list">
+                            <div class="item">
+                                <div class="right floated content contentMetaDetail">{{lesson.board || 'NA'}}</div>
+                                <div class="content contentTitle">Board</div>
+                            </div>
+                            <div class="item">
+                                <div class="right floated content contentMetaDetail">{{(lesson.class.toString() | cut:true:15) || 'NA'}}
+                                    <span ng-if="lesson.class.toString().length > 20">
+                                    ...
+                                    </span>
+                                </div>
+                                <div class="content contentTitle">Class</div>
+                            </div>
+                            <div class="item">
+                                <div class="right floated content contentMetaDetail">{{(lesson.subject | cut:true:15) || 'NA'}}
+                                    <span ng-if="lesson.subject.length > 20">
+                                     ...
+                                    </span>
+                                </div>
+                                <div class="content contentTitle">Subject</div>
+                            </div>
+                            <div class="item">
+                                <div class="right floated content contentMetaDetail">{{(lesson.concepts.toString() | cut:true:15) || 'NA'}}
+                                    <span ng-if="lesson.concepts.toString().length > 20">
+                                    ...
+                                    </span>
+                                </div>
+                                <div class="content contentTitle">Concept</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <img src="{{lesson.appIcon || 'http://via.placeholder.com/80x80'}}" class="resourceMetaImage">
+            </div>
+            <div class="content">
+                <div class="header">
+                            {{lesson.name | cut:true:25}}
+                                    <span ng-if="lesson.name.length > 25" class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.name}}" data-position="bottom right"><a class="desc_ellipsisLink">...</a>
+                </span>
+                </div>
+                <div class="description resourceDescription">
+                    {{lesson.description | removeHTMLTags | cut:true:80}}
+                    <span ng-if="lesson.description.length > 80">
+                                                    <span class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.description}}" data-position="bottom center">
+                                                        <a class="moreLink">&nbsp;&nbsp;more...</a>
+                                                    </span>
+                    </span>
+                </div>
+                <div class="meta">
+                    <span class="date">Created by {{lesson.creator}}</span>
+                </div>
+            </div>
+            <div class="extra content">
+                <div class="ui checkbox checkBoxLink" id='checkBox_{{lesson.identifier}}'>
+                    <input class="checkBox" type="checkbox" name="lessons[]" ng-click="toggleSelectionLesson(lesson)">
+                    <label></label>
+                </div>
+                <span class="resourceLink" id='add_{{lesson.identifier}}'>ADD</span>
+                <span class="resourceLink" id='remove_{{lesson.identifier}}'>REMOVE</span>
+            </div>
+        </div>
+    </div>
+    <div class="ui negative message errorMessage" ng-if="$ctrl.err">
+        <div class="header">{{$ctrl.err}}</div>
+    </div>
+    <div class="ui negative message errorMessage" ng-if="!$ctrl.res.content.length">
+        <div class="header">No lessons found</div>
+        <p>Please try again</p>
+    </div>
+</div>

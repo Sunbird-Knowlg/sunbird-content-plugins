@@ -312,16 +312,16 @@ angular.module('org.ekstep.contentprovider', [])
         }
     });
 
-        $scope.searchKey = function (event, searchKey) {
+    $scope.searchKey = function (event, searchKey) {
             searchBody.request.query = searchKey;
             ctrl.searchLessons();
-        }
+    }
 
-        $scope.init = function () {
-            org.ekstep.contenteditor.api.addEventListener("lessonplan:category:searchkey", this.searchKey, this);
+    $scope.init = function () {
+      org.ekstep.contenteditor.api.addEventListener("lessonplan:category:searchkey", this.searchKey, this);
+    };
+    $scope.init();
 
-        };
-        $scope.init();
     // Fetch sidebar filters through APIs
     ctrl.learningConfig();
     //ctrl.configOrdinals();
