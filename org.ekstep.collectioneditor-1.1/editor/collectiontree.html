@@ -33,12 +33,12 @@
                 <div class="twelve wide column list-container" ng-if="!isContent">
                     <div class="list-header">
                         <div class="ui label list-leftheader">RESOURCES</div>
-                        <button class="ui blue button list-addResource" ng-click="addResource()">ADD RESOURCE</button>
+                        <button class="ui blue button list-addResource" ng-click="addResource()" ng-show="!isCollection">ADD RESOURCE</button>
                     </div>
                     <div class="ui" id="content-list">
                         <div ng-if="!isContent && contentList.length<1" class="list-drag">
                             <!-- Drag and Drop Suggested Content here or <span class="blue-color">View Library</span> -->
-                            <p>No Content's are available</p><p>You can add resource by ctrl + alt + A</p>
+                            <p>No Content's are available</p><p ng-show="!isCollection">You can add resource by ctrl + alt + A</p>
                         </div>
                         <div ui-sortable="sortableOptions" ng-model="contentList">
                             <div class="ui raised segment padding-none" ng-repeat="child in contentList">
@@ -65,7 +65,7 @@
                                             <div class="extra">
                                                 <span ng-if="child.data.metadata.owner">Created by {{child.data.metadata.owner}}</span>
                                                 <i class="long arrow right medium icon right floated blue-color" ng-click="setActiveNode(child)"></i>
-                                                <i class="fa fa-trash right floated delete-node padding-right-10" aria-hidden="true" ng-click="deleteNode(child, $event);"></i>
+                                                <i ng-show="!isCollection" class="fa fa-trash right floated delete-node padding-right-10" aria-hidden="true" ng-click="deleteNode(child, $event);"></i>
                                             </div>
                                         </div>
                                     </div>
@@ -77,7 +77,7 @@
                 <div class="twelve wide column list-container"  ng-if="isContent">
                     <div class="content-width padding-top-10 centerAligned">
                         <div class="ui label list-leftheader">CONTENT PREVIEW</div>
-                        <div class="ui label content-rightheader"><i class="fa fa-trash right floated delete-node" aria-hidden="true" ng-click="deleteNode(selectedContent, $event);"> REMOVE</i></div>
+                        <div class="ui label content-rightheader" ng-show="!isCollection"><i class="fa fa-trash right floated delete-node" aria-hidden="true" ng-click="deleteNode(selectedContent, $event);"> REMOVE</i></div>
                     </div>
                     <div class="content-width centerAligned">
                         <div class="content-details">
