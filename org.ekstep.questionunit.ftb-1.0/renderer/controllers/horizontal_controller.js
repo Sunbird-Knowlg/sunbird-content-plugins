@@ -1,11 +1,15 @@
 'use strict';
-angular.module('genie-canvas').controllerProvider.register("FTBRendererController", function($scope, $rootScope) {
+angular.module('genie-canvas').controllerProvider.register("FTBRendererController", function($scope, $rootScope, $sce) {
   $scope.showTemplate = true;
   $scope.question;
   $scope.ftbAnswer;
   $scope.qcquestion = true;
   $scope.qcblank = true;
-  $scope.events = {"show":"", "hide":"", "eval": ""};
+  $scope.events = {
+    "show": "",
+    "hide": "",
+    "eval": ""
+  };
   var ctrl = this;
 
   $scope.init = function() {
@@ -15,19 +19,19 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     $scope.events.eval = $scope.pluginInstance._manifest.id + ":evaluate";
     $scope.events.show = $scope.pluginInstance._manifest.id + ":show";
     $scope.events.hide = $scope.pluginInstance._manifest.id + ":hide";
-    
-    $scope.removeEvents(); 
-    $scope.registerEvents();  
-    if(!$rootScope.isFTBRendererd){
+
+    $scope.removeEvents();
+    $scope.registerEvents();
+    if (!$rootScope.isFTBRendererd) {
       $rootScope.isFTBRendererd = true;
     }
-    if(EventBus.hasEventListener($scope.events.eval)){
-      if(EventBus.listeners[$scope.events.eval].length > 1)
+    if (EventBus.hasEventListener($scope.events.eval)) {
+      if (EventBus.listeners[$scope.events.eval].length > 1)
         EventBus.removeEventListener($scope.events.eval, $scope.evalListener)
     }
   }
 
-  $scope.registerEvents = function(){
+  $scope.registerEvents = function() {
     /**
      * renderer:questionunit.ftb:dispatch an event in question set with question data.
      * @event renderer:questionunit.ftb:dispatch
@@ -45,78 +49,84 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
      * @event renderer:questionunit.ftb:click
      * @memberof org.ekstep.questionunit.ftb
      */
-    EkstepRendererAPI.addEventListener($scope.events.eval,  $scope.evalListener);
+    EkstepRendererAPI.addEventListener($scope.events.eval, $scope.evalListener);
   }
 
-  $scope.removeEvents = function(){
+  $scope.removeEvents = function() {
     EkstepRendererAPI.removeEventListener($scope.events.hide, $scope.hideEventListener, undefined);
     EkstepRendererAPI.removeEventListener($scope.events.show, $scope.showEventListener, undefined);
     EkstepRendererAPI.removeEventListener($scope.events.eval, $scope.evalListener, undefined);
   }
 
-  $scope.showEventListener = function(event){
+  $scope.showEventListener = function(event) {
     $scope.question = event.target;
-    $scope.ftbAnswer="";
-    var qData=$scope.question._currentQuestion.data.__cdata||$scope.question._currentQuestion.data;
+    $scope.ftbAnswer = "";
+    var qData = $scope.question._currentQuestion.data.__cdata || $scope.question._currentQuestion.data;
     var questionData = JSON.parse(qData);
+    //if string contain #option then show blank
+    if (questionData.question.text.search("#option") != -1) {
+      $scope.qcblank = false;
+      questionData.question.text = $sce.trustAsHtml(questionData.question.text.replace(/#option#/g, "<input type='text' class='question-box'>"));
+    }
     var qState = $scope.question._currentQuestionState;
-    if(qState && qState.val) {
-       $scope.ftbAnswer = qState.val;
+    if (qState && qState.val) {
+      $scope.ftbAnswer = qState.val;
     }
     $scope.questionObj = questionData;
     $scope.showTemplate = true;
     $scope.safeApply();
   }
 
-  $scope.hideEventListener = function(event){
+  $scope.hideEventListener = function(event) {
     $scope.showTemplate = false;
     $scope.safeApply();
   }
 
-  $scope.evalListener = function(event){
+  $scope.evalListener = function(event) {
     var callback = event.target;
     $scope.evaluate(callback);
     $scope.safeApply();
   }
 
+
   /**
-     * renderer:questionunit.ftb:show keyboard in device.
-     * @event renderer:questionunit.ftb:click
-     * @memberof org.ekstep.questionunit.ftb
-     */
+   * renderer:questionunit.ftb:show keyboard in device.
+   * @event renderer:questionunit.ftb:click
+   * @memberof org.ekstep.questionunit.ftb
+   */
   window.addEventListener('native.keyboardshow', function(e) {
     $scope.qcquestion = false;
-    $scope.qcmiddlealign=true;
+    $scope.qcmiddlealign = true;
     $scope.safeApply();
   });
 
   /**
-     * renderer:questionunit.ftb:hide keyboard in device.
-     * @event renderer:questionunit.ftb:click
-     * @memberof org.ekstep.questionunit.ftb
-     */
+   * renderer:questionunit.ftb:hide keyboard in device.
+   * @event renderer:questionunit.ftb:click
+   * @memberof org.ekstep.questionunit.ftb
+   */
   window.addEventListener('native.keyboardhide', function() {
     $scope.qcquestion = true;
     $scope.qcblank = true;
-    $scope.qcmiddlealign=false;
+    $scope.qcmiddlealign = false;
     $scope.safeApply();
   });
 
-   /**
-     * renderer:questionunit.ftb:max length 25 because max length not working in andirod.
-     * @event renderer:questionunit.ftb:watch
-     * @memberof org.ekstep.questionunit.ftb
-     */
-  $scope.$watch("ftbAnswer", function(newValue, oldValue){
-        if (typeof newValue!="undefined" && newValue.length > 25){
-            $scope.ftbAnswer = oldValue;
-        }
-        var state = {
-         val: $scope.ftbAnswer
-        }
-         $scope.generateItemResponse();
-        EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
-    });
+  /**
+   * renderer:questionunit.ftb:max length 25 because max length not working in andirod.
+   * @event renderer:questionunit.ftb:watch
+   * @memberof org.ekstep.questionunit.ftb
+   */
+  $scope.$watch("ftbAnswer", function(newValue, oldValue) {
+    if (typeof newValue != "undefined" && newValue.length > 25) {
+      $scope.ftbAnswer = oldValue;
+    }
+    var state = {
+      val: $scope.ftbAnswer
+    }
+    $scope.generateItemResponse();
+    EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
+  });
 
   $scope.evaluate = function(callback) {
     var ansValue = angular.element('#preview-ftb-horizontal').scope().ftbAnswer;
@@ -125,30 +135,32 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
       correctAnswer = true;
     }
     var result = {
-        eval: correctAnswer,
-        state: {
-            val: ansValue
-        }
+      eval: correctAnswer,
+      state: {
+        val: ansValue
+      }
     }
-    if(_.isFunction(callback)) {
+    if (_.isFunction(callback)) {
       //$scope.removeEvents();
       callback(result);
     }
   }
-   $scope.generateItemResponse = function() {
-        var edata = {
-            "target":{
-                "id": $scope.pluginInstance._manifest.id ? $scope.pluginInstance._manifest.id : "",
-                "ver": $scope.pluginInstance._manifest.ver ? $scope.pluginInstance._manifest.ver : "1.0",
-                "type": $scope.pluginInstance._manifest.type ? $scope.pluginInstance._manifest.type : "plugin"
-            },
-            "type": "INPUT",
-            "values": [{ "ans": $scope.ftbAnswer }]
-        }
-        TelemetryService.itemResponse(edata);
+  $scope.generateItemResponse = function() {
+    var edata = {
+      "target": {
+        "id": $scope.pluginInstance._manifest.id ? $scope.pluginInstance._manifest.id : "",
+        "ver": $scope.pluginInstance._manifest.ver ? $scope.pluginInstance._manifest.ver : "1.0",
+        "type": $scope.pluginInstance._manifest.type ? $scope.pluginInstance._manifest.type : "plugin"
+      },
+      "type": "INPUT",
+      "values": [{
+        "ans": $scope.ftbAnswer
+      }]
     }
+    TelemetryService.itemResponse(edata);
+  }
 
-  $scope.telemetry = function(event){
+  $scope.telemetry = function(event) {
     TelemetryService.interact("TOUCH", event.target.id, "TOUCH", {
       stageId: Renderer.theme._currentStage
     });

@@ -1,11 +1,10 @@
 <div id="preview-ftb-horizontal" ng-app="FTBRendererApp" ng-init="init()" ng-controller="FTBRendererController" ng-show="showTemplate">
     <link rel="stylesheet" type="text/css" href="{{cssPath}}">
     <div class="qc-ftb-layout" ng-class="{qcalgin:qcmiddlealign}">
-        <header>
-            <div class="qc-ftb-question-text" ng-show="qcquestion">
-                <p>{{questionObj.question.text}}</p>
+        <div class="ftb-question-header">
+            <div class="qc-ftb-question-text" ng-show="qcquestion" ng-bind-html="questionObj.question.text">
             </div>
-        </header>
+        </div>
         <div class="ftbanswer-container" ng-show="qcblank">
             <input id="answer" type="text" name="answer" ng-model="ftbAnswer" ng-click="telemetry($event);">
         </div>
