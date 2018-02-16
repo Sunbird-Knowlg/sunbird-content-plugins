@@ -13,6 +13,8 @@ angular.module('org.ekstep.lessonbrowserapp', [])
         $scope.mainTemplate = 'selectedResult';
         $scope.noResultMsg = false;
         $scope.isLoading = true;
+        $scope.sortOption = 'name';
+        $scope.defaultResources = [];
 
         // telemetry pluginId and plugin version
         ctrl.lessonbrowser = instance;
@@ -66,7 +68,6 @@ angular.module('org.ekstep.lessonbrowserapp', [])
                     ctrl.meta.grades = res.data.result.gradeLevel.values;
                     ctrl.meta.subjects = res.data.result.subject.values;
                     $('#lessonBrowser_lessonType').dropdown('set value', ctrl.meta.lessonTypes[0]);
-                    $scope.filterSelection.lessonType.push(ctrl.meta.lessonTypes[0]);
                 }
                 $scope.$safeApply();
             });
@@ -86,24 +87,28 @@ angular.module('org.ekstep.lessonbrowserapp', [])
                 }
                 $scope.isLoading = false;
                 $scope.$safeApply();
-                angular.forEach(ctrl.res.content, function(resource) {
-                    if ($scope.selectedResources.indexOf(resource.identifier) !== -1) {
-                        $('#checkBox_' + resource.identifier + ' >.checkBox').attr('checked', true);
-                        $('#add_' + resource.identifier).hide();
-                        $('#remove_' + resource.identifier).show();
-                    } else {
-                        $('#checkBox_' + resource.identifier + ' >.checkBox').attr('checked', false);
-                        $('#add_' + resource.identifier).show();
-                        $('#remove_' + resource.identifier).hide();
-                    }
-                    $('.special.cards .image').dimmer({
-                        on: 'hover'
-                    });
-                });
+                ctrl.addOrRemoveContent(ctrl.res.content);
             });
 
         };
 
+        // Add or Remove resources
+        ctrl.addOrRemoveContent = function(Contents) {
+            angular.forEach(Contents, function(resource) {
+                if ($scope.selectedResources.indexOf(resource.identifier) !== -1) {
+                    $('#checkBox_' + resource.identifier + ' >.checkBox').attr('checked', true);
+                    $('#add_' + resource.identifier).hide();
+                    $('#remove_' + resource.identifier).show();
+                } else {
+                    $('#checkBox_' + resource.identifier + ' >.checkBox').attr('checked', false);
+                    $('#add_' + resource.identifier).show();
+                    $('#remove_' + resource.identifier).hide();
+                }
+                $('.special.cards .image').dimmer({
+                    on: 'hover'
+                });
+            });
+        }
         // Initiate concept selector
         ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
             element: 'lessonBrowser_concepts',
@@ -120,6 +125,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
         // Search specific lesson
         $scope.lessonBrowseSearch = function() {
             $scope.noResultMsg = false;
+            $scope.isLoading =true;
             searchBody.request.query = this.searchKeyword;
             ctrl.searchLessons();
             ctrl.searchRes = { count: 0, content: [] };
@@ -186,10 +192,10 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             ctrl.generateTelemetry({ type: 'click', subtype: 'reset', target: 'filter', targetid: 'button-filter-reset' });
             $('#lessonBrowser_language').dropdown('restore defaults');
             $('#lessonBrowser_grade').dropdown('restore defaults');
-            $('#lessonBrowser_lessonType').dropdown('restore defaults');
+            $('#lessonBrowser_concepts').dropdown('restore defaults');
             $('#lessonBrowser_subject').dropdown('restore defaults');
+            $('#lessonBrowser_lessonType').dropdown('set value', ctrl.meta.lessonTypes[0]);
             $scope.filterSelection.concept.splice(0, $scope.filterSelection.concept.length);
-            $scope.applyFilters();
         };
 
         // navigate to the previous page
@@ -197,21 +203,25 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             $scope.mainTemplate = 'selectedResult';
             $scope.isLoading = true;
             setTimeout(function() {
-                $('#applyAccordion').accordion();
-                $('.special.cards .image').dimmer({
-                    on: 'hover'
-                });
-                $('.ui.multiple.selection.dropdown').dropdown({
-                    useLabels: false,
-                    forceSelection: false,
-                    onChange: function() {
-                        $scope.getFiltersValue();
-                    }
-                });
-                $('#lessonBrowser_lessonType').dropdown('set selected', ctrl.meta.lessonTypes[0]);
-                $scope.applyFilters();
-            }, 100);
+                ctrl.addOrRemoveContent(ctrl.res.content);
+                ctrl.dropdownConfig();
+            }, 10);
+            ctrl.res.content = $scope.defaultResources;
+            $scope.$safeApply();
+            $scope.isLoading = false;
+        }
 
+        // Get accordions functioning
+        ctrl.dropdownConfig = function() {
+            $('#applyAccordion').accordion();
+            $('.ui.multiple.selection.dropdown').dropdown({
+                useLabels: false,
+                forceSelection: false,
+                onChange: function() {
+                    $scope.getFiltersValue();
+                }
+            });
+            $('#lessonBrowser_lessonType').dropdown('set selected', ctrl.meta.lessonTypes[0]);
         }
 
         // initial configuration
@@ -221,22 +231,15 @@ angular.module('org.ekstep.lessonbrowserapp', [])
                 searchBody.request.filters.contentType = ctrl.meta.lessonTypes[0];
             }
             ctrl.searchLessons();
-            ctrl.learningConfig(); // Fetch sidebar filters through APIs
+            setTimeout(function() {
+                ctrl.learningConfig(); // Fetch sidebar filters through APIs
+                ctrl.dropdownConfig();
+            }, 20);
         };
         $scope.init();
 
 
-        // Get accordions functioning
-        setTimeout(function() {
-            $('#applyAccordion').accordion();
-            $('.ui.multiple.selection.dropdown').dropdown({
-                useLabels: false,
-                forceSelection: false,
-                onChange: function() {
-                    $scope.getFiltersValue();
-                }
-            });
-        }, 300);
+
 
 
         // Add the resource
@@ -281,14 +284,11 @@ angular.module('org.ekstep.lessonbrowserapp', [])
         // show selected items
         $scope.SelectedItems = function() {
             $scope.mainTemplate = 'addedItemsView';
+            $scope.defaultResources = ctrl.res.content;
             ctrl.res.content = $scope.lessonSelection;
             $scope.$safeApply();
             setTimeout(function() {
-                angular.forEach($scope.lessonSelection, function(resource) {
-                    $('#checkBox_' + resource.identifier + ' >.checkBox').attr('checked', true);
-                    $('#add_' + resource.identifier).hide();
-                    $('#remove_' + resource.identifier).show();
-                });
+                ctrl.addOrRemoveContent($scope.lessonSelection);
             }, 100);
         }
 
@@ -297,8 +297,17 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             searchBody.request.query = selectedLesson;
             ctrl.searchLessons();
             ctrl.searchRes = [];
-            this.searchKeyword.length = 0;
+            $scope.noResultMsg = false;
             $scope.$safeApply();
+        }
+
+        // Sort the resources
+        $scope.Sort = function(option) {
+            if (option == 'alphabetical') {
+                $scope.sortOption = 'name';
+            } else {
+                $scope.sortOption = 'createdOn';
+            }
         }
 
     }]).filter('removeHTMLTags', function() {

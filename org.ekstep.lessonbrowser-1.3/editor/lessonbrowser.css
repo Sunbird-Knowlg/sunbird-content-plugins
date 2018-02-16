@@ -24,6 +24,7 @@
 #reset-lesson-filter-button {
     float: right;
     padding-right: 6%;
+    color: #007aff;
 }
 
 #reset-lesson-filter-button:hover {
@@ -359,10 +360,11 @@
 
 .resourceDescription {
     height: 45px;
+    font-size: 14px;
 }
 
 .resourceLink {
-    color: #009FDA;
+    color:  #007aff;
     font-size: 85%;
 }
 
@@ -457,6 +459,8 @@
     background: white;
     z-index: 1;
     cursor: pointer;
+    max-height: 25%;
+    overflow-y: scroll;
 }
 
 .searchResult {
@@ -485,13 +489,7 @@
     width: 30%;
 }
 
-.enableviewLink {
-    cursor: pointer;
-    color: #007aff;
-}
-
-.disableViewLink {
-    cursor: not-allowed;
+.viewLink {
     color: #007aff;
 }
 
@@ -515,7 +513,25 @@
 .sidebarSectionHeader{
     display:inline;
     font-weight: bold;
+    font-size: 12px;
 }
 .sortButtonsWrapper{
     margin: 0% !important;
+}
+.contentMetaTitle{
+    font-size: 16px !important;
+}
+.creator{
+    font-size: 12px;
+}
+.checkBoxLink{
+    min-height: 13px !important;
+}
+.filterMetaDetails{
+    margin-top: 4%;
+    margin-bottom: 4%;
+}
+.contentDetailsTitle{
+    font-size: 18px !important;
+    font-weight: bold !important;
 }
