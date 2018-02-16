@@ -148,7 +148,7 @@ img.qc-option-image {
 
 .qc-question-zoomin {
     width: 4%;
-    left: -0.5%;
+    left: 0%;
     top: 0%;
     position: absolute;
 }
@@ -207,7 +207,7 @@ audio.qc-option-audio-with-image {
 
 .qc-option-zoomin {
     width: 5%;
-    left: -5.5%;
+    left: -4.5%;
     top: 0%;
     position: absolute;
     cursor: pointer;
@@ -230,7 +230,7 @@ audio.qc-question-audio {
     float: initial;
     position: absolute;
     left: 7%;
-    top: 8%;
+    top: 6%;
 }
 
 .qc-option-txt-with-image {

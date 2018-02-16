@@ -7,7 +7,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     $scope.selectedAns;
     $scope.bigImage = false;
     $scope.events = { "show": "", "hide": "", "eval": "" };
-    $scope.imageZoomPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/zoomin.png");
+   // $scope.imageZoomPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/zoomin.png");
     $scope.init = function() {
         $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/styles/style.css");
         $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.mcq");

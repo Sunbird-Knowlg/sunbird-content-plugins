@@ -5,13 +5,13 @@
             <div class="popup-overlay" ng-click="hideImagePopup()"></div>
             <div class="popup-full-body">
                 <div class="font-lato assess-popup assess-goodjob-popup">
-                    <img class="qc-question-fullimage" src="{{imageUrl}}" />
+                    <img class="qc-question-fullimage" src="{{checkBaseUrl(imageUrl)}}" />
                     <div ng-click="hideImagePopup();" class="qc-popup-close-button">X</div>
                 </div>
             </div>
         </div>
         <header ng-class="{'qc-long-text-header-image': questionObj.question.image.length > 0,'qc-long-text-header':questionObj.question.image.length==0}">
-            <span ng-if="questionObj.question.image.length > 0"><img class="qc-question-zoomin" ng-click="showImageModel(questionObj.question.image)" ng-src={{imageZoomPath}}></span>
+            <span ng-if="questionObj.question.image.length" class="qc-question-zoomin" ng-click="showImageModel(questionObj.question.image) > 0">+</span>
             <span ng-if="questionObj.question.image.length>0"><img class="qc-question-image" ng-click="showImageModel()" ng src={{checkBaseUrl(questionObj.question.image)}}></span>
             <span class="qc-question-text">{{questionObj.question.text}}</span>
             <span ng-if="questionObj.question.audio.length > 0">
@@ -24,7 +24,7 @@
         <div class="qc-option-container">
             <div class="qc-option-value" ng-repeat="val in questionObj.options" ng-class="{qsselectedopt: $index+1 == selectedIndex}" ng-click="selectedvalue(val, $index+1);">
                 <div class="qc-option-text" id="{{val.id}}">
-                    <span ng-if="val.image.length > 0"><img class="qc-option-zoomin" ng-click="showImageModel(val.image)" ng-src={{imageZoomPath}}></span>
+                    <span ng-if="val.image.length > 0" class="qc-option-zoomin" ng-click="showImageModel(val.image)">+</span>
                     <span ng-if="val.audio.length > 0">
                   <audio id="qc-option-audio" src={{trustSrcurl(val.audio)}} ng-class="{'qc-text-with-audio': val.image.length==0,'qc-option-audio-with-image':val.image.length > 0}" controls controlsList="nodownload" ng-init="loadAudio();"> 
                   </audio>
