@@ -519,3 +519,16 @@
 .sortButtonsWrapper{
     margin: 0% !important;
 }
+
+.facets-headtext{
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.facets-viewall{
+    color: #0f69e0;
+    position: relative;
+    left: 88%
+}
+.sections{
+    padding-top:2%;
+}

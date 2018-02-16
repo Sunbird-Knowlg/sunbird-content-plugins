@@ -1,10 +1,12 @@
 angular.module('org.ekstep.lessonbrowserapp', [])
     .controller('lessonController', ['$scope', 'instance', 'callback', 'callerFilters', function($scope, instance, callback, callerFilters) {
         var ctrl = this;
+        ctrl.facetsResponse = undefined;
         $scope.headerTemplate = ecEditor.resolvePluginResource("org.ekstep.lessonbrowser", "1.3", "editor/header.html");
         $scope.footerTemplate = ecEditor.resolvePluginResource("org.ekstep.lessonbrowser", "1.3", "editor/footer.html");
         $scope.filterTemplate = ecEditor.resolvePluginResource("org.ekstep.lessonbrowser", "1.3", "editor/filterTemplate.html");
         $scope.cardTemplate = ecEditor.resolvePluginResource("org.ekstep.lessonbrowser", "1.3", "editor/cardRendererTemplate.html");
+        $scope.facetsTemplate = ecEditor.resolvePluginResource("org.ekstep.lessonbrowser", "1.3", "editor/facetsRenderTemplate.html");
         //Response variable
         ctrl.res = { count: 0, content: [] };
         ctrl.err = null;
@@ -300,6 +302,45 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             this.searchKeyword.length = 0;
             $scope.$safeApply();
         }
+
+        $scope.getPageAssemble = function(cb) {
+            let Obj = {
+                request: {
+                    source: "web",
+                    name: 'LessonBrowser',
+                    sort_by: {
+                        "createdOn": "desc"
+                    }
+                }
+            }
+            let service = org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE);
+            service.getPageAssemble(Obj, function(err, res) {
+                // Initialize the model
+                cb(err, response)
+            })
+
+        }
+       
+        $scope.invokeFacetsPage = function() {
+            $scope.mainTemplate = 'facetsItemView';
+            if (!ctrl.facetsResponse) {
+                $scope.getPageAssemble(function(err, response) {
+                    ctrl.facetsResponse = response;
+                    console.log("Facets Response",ctrl.facetsResponse);
+                    console.log("$ctrl.facetsResponse.result.response.section.length",ctrl.facetsResponse.result.response.sections.length)
+                });
+            }
+        }
+
+        $scope.serachContents = function(query){
+            searchService.search(query, function(err, res){
+                if(res){
+                    
+                }
+            });
+        }
+
+        $scope.invokeFacetsPage();
 
     }]).filter('removeHTMLTags', function() {
         return function(text) {

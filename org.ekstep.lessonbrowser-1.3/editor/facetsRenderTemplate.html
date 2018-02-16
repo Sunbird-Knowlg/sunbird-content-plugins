@@ -1,11 +1,10 @@
-<div class="row ui" id="resourceHeading">
-    <p ng-if="mainTemplate == 'selectedResult'">
-        RESOURCES
-        <span>({{ $ctrl.res.content.length }})</span></p>
-</div>
 <div class="source-result-container">
-    <div class="ui special cards" ng-class="{four: mainTemplate == 'selectedResult',five: mainTemplate == 'addedItemsView'}">
-        <div class="card" ng-repeat="lesson in $ctrl.res.content">
+  <div class = "ui container" ng-repeat="section in $ctrl.facetsResponse.result.response.sections" ng-init = "sectionIndex = $index"> 
+   <span class="facets-headtext">{{$ctrl.facetsResponse.result.response.sections[sectionIndex].name }}</span>
+   <span class="facets-viewall">View All</span>
+</br>
+    <div class="ui special five cards sections" >
+        <div class="card" ng-repeat="lesson in $ctrl.facetsResponse.result.response.sections[sectionIndex].contents | limitTo:5">
             <div class="blurring dimmable medium image">
                 <div class="ui dimmer">
                     <div class="content">
@@ -71,10 +70,13 @@
             </div>
         </div>
     </div>
+    <div class="ui divider"></div>
+  </div>  
     <div class="ui negative message errorMessage" ng-if="$ctrl.err">
         <div class="header">{{$ctrl.err}}</div>
     </div>
-    <div class="ui negative message errorMessage" ng-if="!$ctrl.res.content.length">
+    <div class="ui negative message errorMessage" ng-if="!$ctrl.facetsResponse.result.response.sections.length">
+        <p>{{$ctrl.facetsResponse.result.response.section.length}}</p>
         <div class="header">No lessons found</div>
         <p>Please try again</p>
     </div>
