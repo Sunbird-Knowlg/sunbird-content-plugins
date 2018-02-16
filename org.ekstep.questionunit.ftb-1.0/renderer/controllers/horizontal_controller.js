@@ -60,13 +60,16 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
 
   $scope.showEventListener = function(event) {
     $scope.question = event.target;
+    var gererateId=0;
     $scope.ftbAnswer = "";
     var qData = $scope.question._currentQuestion.data.__cdata || $scope.question._currentQuestion.data;
     var questionData = JSON.parse(qData);
     //if string contain #option then show blank
     if (questionData.question.text.search("#option") != -1) {
       $scope.qcblank = false;
-      questionData.question.text = $sce.trustAsHtml(questionData.question.text.replace(/#option#/g, "<input type='text' class='question-box'>"));
+      questionData.question.text = $sce.trustAsHtml(questionData.question.text.replace(/#option#/g,function(){
+        return "<input type='text' id=option"+ ++gererateId +" class='question-box'>";
+      })); 
     }
     var qState = $scope.question._currentQuestionState;
     if (qState && qState.val) {
