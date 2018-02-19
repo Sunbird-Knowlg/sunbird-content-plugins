@@ -10,7 +10,8 @@
         "main": "editor/plugin.js",
         "dependencies": [
             { "type": "js", "src": "editor/content-provider-repo.js" },
-            { "type": "css", "src": "editor/lessonbrowser.css" }
+            { "type": "css", "src": "editor/lessonbrowser.css" },
+            { "type": "js", "src": "editor/response.js" }
         ]
     }
 }
