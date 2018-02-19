@@ -1,7 +1,7 @@
 <div class="source-result-container">
   <div class = "ui container" ng-repeat="section in $ctrl.facetsResponse.result.response.sections" ng-init = "sectionIndex = $index"> 
    <span class="facets-headtext">{{$ctrl.facetsResponse.result.response.sections[sectionIndex].name }}</span>
-   <span class="facets-viewall">View All</span>
+   <span class="facets-viewall" ng-click = "viewAll($ctrl.facetsResponse.result.response.sections[sectionIndex].searchQuery)">View All</span>
 </br>
     <div class="ui special five cards sections" >
         <div class="card" ng-repeat="lesson in $ctrl.facetsResponse.result.response.sections[sectionIndex].contents | limitTo:5">

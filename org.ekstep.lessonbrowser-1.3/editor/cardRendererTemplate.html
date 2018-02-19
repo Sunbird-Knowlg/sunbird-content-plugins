@@ -4,8 +4,8 @@
         <span>({{ $ctrl.res.content.length }})</span></p>
 </div>
 <div class="source-result-container">
-    <div class="ui special cards" ng-class="{four: mainTemplate == 'selectedResult',five: mainTemplate == 'addedItemsView'}">
-        <div class="card" ng-repeat="lesson in $ctrl.res.content">
+    <div class="ui special link cards" ng-class="{four: mainTemplate == 'selectedResult',five: mainTemplate == 'addedItemsView'}">
+        <div class="card" ng-repeat="lesson in $ctrl.res.content | orderBy:sortOption">
             <div class="blurring dimmable medium image">
                 <div class="ui dimmer">
                     <div class="content">
@@ -44,7 +44,7 @@
                 <img src="{{lesson.appIcon || 'http://via.placeholder.com/80x80'}}" class="resourceMetaImage">
             </div>
             <div class="content">
-                <div class="header">
+                <div class="header contentMetaTitle">
                     {{lesson.name | cut:true:25}}
                     <span ng-if="lesson.name.length > 25" class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.name}}" data-position="bottom right"><a class="desc_ellipsisLink">...</a>
                 </span>
@@ -58,7 +58,7 @@
                     </span>
                 </div>
                 <div class="meta">
-                    <span class="date">Created by {{lesson.creator}}</span>
+                    <span class="creator">Created by {{lesson.creator || 'Unknown'}}</span>
                 </div>
             </div>
             <div class="extra content">

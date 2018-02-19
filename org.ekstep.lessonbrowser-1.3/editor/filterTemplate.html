@@ -3,10 +3,10 @@
     <p class="padding-top-3px sidebarSectionHeader">
         SORT BY</p>
     <div class="ui grid sortButtonsWrapper">
-        <button ng-click="Sort()" class="ui tiny basic button">
+        <button ng-click="Sort('alphabetical')" ng-class="{'primary':sortOption == 'name'}" class="ui tiny basic button">
             A - Z
         </button>
-        <button class="ui tiny basic button">
+        <button ng-click="Sort('timestamp')" ng-class="{'primary':sortOption == 'createdOn'}" class="ui tiny basic button">
             Sort Value Bubble
         </button>
     </div>
@@ -20,11 +20,11 @@
                 <span><a id="reset-lesson-filter-button" class="ui right floated basic" ng-click="resetFilters()">Clear All</a></span>
             </div>
         </div>
-        <div>
+        <div class="filterMetaDetails">
             <div class="ui sub header paraHeading">
                 <p class="padding-top-3px">CATEGORY ({{filterSelection.lessonType.length}})</p>
             </div>
-            <div id="lessonBrowser_lessonType" class="ui multiple small search selection dropdown padding-top-3px textbox" data-tooltip="{{filterSelection.lessonType.toString() || 
+            <div id="lessonBrowser_lessonType" class="ui multiple mini search selection dropdown padding-top-3px textbox" data-tooltip="{{filterSelection.lessonType.toString() || 
                                             'Choose Lesson Type'}}" data-position="top center">
                 <input name="lessonType" type="hidden">
                 <i class="dropdown icon"></i>
@@ -35,11 +35,11 @@
                 </div>
             </div>
         </div>
-        <div>
+        <div class="filterMetaDetails">
             <div class="ui sub header paraHeading">
                 <p class="padding-top-3px">LANGUAGE ({{filterSelection.lang.length}})</p>
             </div>
-            <div id="lessonBrowser_language" class="ui multiple small search selection dropdown padding-top-3px textbox" data-tooltip="{{filterSelection.lang.toString() || 
+            <div id="lessonBrowser_language" class="ui multiple mini search selection dropdown padding-top-3px textbox" data-tooltip="{{filterSelection.lang.toString() || 
                                             'Choose Language' }}" data-position="top center">
                 <input name="Language" type="hidden">
                 <i class="dropdown icon"></i>
@@ -50,11 +50,11 @@
                 </div>
             </div>
         </div>
-        <div>
+        <div class="filterMetaDetails">
             <div class="ui sub header paraHeading">
                 <p class="padding-top-3px">CLASS ({{filterSelection.grade.length}})</p>
             </div>
-            <div id="lessonBrowser_grade" class="ui multiple small search selection dropdown padding-top-3px textbox" data-tooltip="{{filterSelection.grade.toString() || 'Choose Class'}}" data-position="top center">
+            <div id="lessonBrowser_grade" class="ui multiple mini search selection dropdown padding-top-3px textbox" data-tooltip="{{filterSelection.grade.toString() || 'Choose Class'}}" data-position="top center">
                 <input name="Grade" type="hidden">
                 <i class="dropdown icon"></i>
                 <div class="default text">Choose Class</div>
@@ -64,11 +64,11 @@
                 </div>
             </div>
         </div>
-        <div>
+        <div class="filterMetaDetails">
             <div class="ui sub header paraHeading">
                 <p class="padding-top-3px">SUBJECT ({{filterSelection.subject.length}})</p>
             </div>
-            <div id="lessonBrowser_subject" class="ui multiple small search selection dropdown padding-top-3px textbox" data-tooltip="{{filterSelection.subject.toString()|| 
+            <div id="lessonBrowser_subject" class="ui multiple mini search selection dropdown padding-top-3px textbox" data-tooltip="{{filterSelection.subject.toString()|| 
                                             'Choose Subject'}}" data-position="top center">
                 <input name="Subject" type="hidden">
                 <i class="dropdown icon"></i>
@@ -79,11 +79,11 @@
                 </div>
             </div>
         </div>
-        <div>
+        <div class="filterMetaDetails">
             <div class="ui sub header paraHeading">
                 <p class="padding-top-3px">Concepts ({{filterSelection.concept.length}})</p>
             </div>
-            <div id="lessonBrowser_concepts" class="ui multiple small search selection dropdown padding-top-3px textbox" data-tooltip="{{filterSelection.concept.toString()||'Choose Concepts'}}" data-position="top center">
+            <div id="lessonBrowser_concepts" class="ui multiple mini search selection dropdown padding-top-3px textbox" data-tooltip="{{filterSelection.concept.toString()||'Choose Concepts'}}" data-position="top center">
                 <input name="Concepts" type="hidden">
                 <i class="dropdown icon"></i>
                 <div class="default text">Choose concepts</div>
@@ -91,6 +91,6 @@
         </div>
     </div>
     <div class="filterApplyBtn">
-        <button id="apply-lesson-filter-button" class="ui right floated button primary" ng-disabled="!filterSelection.lessonType.length && !filterSelection.lang.length && !filterSelection.grade.length && !filterSelection.subject.length" ng-click="applyFilters()">Apply</button>
+        <button id="apply-lesson-filter-button" class="ui small right floated button primary" ng-disabled="!filterSelection.lessonType.length && !filterSelection.lang.length && !filterSelection.grade.length && !filterSelection.subject.length" ng-click="applyFilters()">Apply</button>
     </div>
 </div>

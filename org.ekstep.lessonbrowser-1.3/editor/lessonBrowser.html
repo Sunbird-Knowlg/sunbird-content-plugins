@@ -6,13 +6,13 @@
         <div class="bodyContainer">
             <div ng-if="mainTemplate == 'selectedResult'">
                 <div class="ui grid">
-                        <div class="ui active dimmer" ng-if="isLoading">
-                            <div class="ui large text loader">Loading</div>
-                        </div>
                       <div class="two wide column">
                         <div class="filterContent rightBorder" ng-include="filterTemplate"></div>
                     </div>
                     <div class="ten wide column">
+                        <div class="ui active inverted dimmer" ng-if="isLoading">
+                            <div class="ui large text loader">Loading</div>
+                        </div>
                         <div ng-include="cardTemplate"></div>
                     </div>
                 </div>
