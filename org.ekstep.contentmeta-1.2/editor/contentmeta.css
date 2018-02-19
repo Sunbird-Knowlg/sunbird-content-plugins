@@ -113,3 +113,7 @@
 #contents-data-form .form-fields-except-image .field textarea:read-only {
     opacity: 0.45;
 }
+
+.collection-childs{
+    position: absolute;
+}

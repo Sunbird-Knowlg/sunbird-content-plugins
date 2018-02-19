@@ -159,7 +159,7 @@ a.item.at-menu-item.popup-item.active {
                 <div class="ui form" ng-switch-when="button">
                     <div class="field">
                         <label ng-show="config.title">{{config.title}}</label>
-                        <button class="ui button" ng-click="fireEvent(config.onclick); fireSidebarTelemetry({id: config.propertyName}, config.dataType)">{{configData[config.PropertyName]}}</button>
+                        <button class="ui button" ng-click="fireEvent({'id':'org.ekstep.config:invoke', 'data': {'type': config.dataType, 'event': config.onclick}}); fireSidebarTelemetry({id: config.propertyName}, config.dataType)">{{configData[config.PropertyName]}}</button>
                     </div>
                 </div>
                 <div class="ui form" ng-switch-when="featureButtonToggle">

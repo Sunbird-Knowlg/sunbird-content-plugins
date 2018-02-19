@@ -5,6 +5,7 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
     $scope.showImageIcon = true;
     $scope.categoryModelList = {};
     $scope.categoryListofFramework = {};
+    $scope.categoryValues = '';
     const DEFAULT_NODETYPE = 'TextBook';
     $scope.updateTitle = function(event, title) {
         $scope.textbook.name = title;
@@ -36,7 +37,7 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
         if(_.isArray(selectedCategory)){
             _.forEach(selectedCategory, function(val){
                 var categoryObj= _.find(categoryList, function(o) { 
-                   return o.name === val;
+                   return o.name.toUpperCase() === val.toUpperCase();
                 });
                 associations = _.concat(categoryObj.associations, associations);
             });
@@ -48,7 +49,16 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
         }
         return associations;
     }
-    $scope.updatedDependentCategory = function(categoryIndex, categoryVal){
+    $scope.updatedDependentCategory = function(categoryIndex, categoryVal) {
+        $scope.categoryValues = $('#textbookmeta-category-2').dropdown('get value').replace(/\b\w/g, l => l.toUpperCase());;
+        $scope.textbook[$scope.categoryModelList[2]] = $('#textbookmeta-category-2').dropdown('get value').split(",");
+        if(categoryIndex == "2") {
+            categoryVal = $('#textbookmeta-category-2').dropdown('get value').split(",");
+            if(categoryVal[0]== "") {
+                categoryVal = [];
+                $scope.textbook[$scope.categoryModelList[2]] = [];
+            }
+        }
         var category_1 = [],
             category_2 = [],
             category_3 = [],
@@ -141,6 +151,7 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
             $('.textbookmeta-category-4').dropdown('set selected', $scope.textbook[$scope.categoryModelList[4]]);
             $('#textbookmeta-year').dropdown('set selected', $scope.textbook.year);
             $('#textbookmeta-resource').dropdown('set selected', $scope.textbook.resource);
+            if($scope.textbook[$scope.categoryModelList[2]]) $scope.categoryValues = $scope.textbook[$scope.categoryModelList[2]].join().replace(/\b\w/g, l => l.toUpperCase());;
         });
     }
 
@@ -162,7 +173,16 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
                 $scope.textbook.audience = [$scope.textbook.audience];
             }
             $scope.textbook.contentType = $scope.nodeType;
-            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
+            var mergedData = _.pickBy(_.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook)),_.identity);
+            _.forEach(mergedData, function(value, key) {
+                if(_.isArray(value)){
+                    mergedData[key] = _.compact(value)
+                    if(!mergedData[key].length){
+                        delete mergedData[key];
+                    }
+                }
+            });
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = mergedData;
             var keywords = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords
             if (keywords) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords = keywords.map(function(a) {
@@ -360,6 +380,12 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
     $scope.changeTitle = function(){
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
     }
+
+    setTimeout(function() {
+        $(".ui.dropdown").dropdown({
+            useLabels: false
+        });
+    }, 0)
 
     $scope.init();
 }]);

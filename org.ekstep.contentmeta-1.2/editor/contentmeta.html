@@ -36,8 +36,15 @@
                     </div>
                 </div>
                 <div class="field" ng-class="editMode ? '' : 'disabled'">
-                        <label>Keywords</label>
-                        <ng-token-field ng-model="content.keywords" id="contentmeta-keywords" placeholder="{{editMode ? 'Enter comma separated keywords': ''}}" mode="{{tokenMode}}" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
+                    <label>Keywords</label>
+                    <tags-input ng-model="content.keywords" display-property="lemma" placeholder="Enter Keywords" replace-spaces-with-dashes="false">
+                        <auto-complete source="loadKeywords($query)" min-length="0" load-on-focus="true" load-on-empty="true" template="my-content-custom-template"></auto-complete>
+                    </tags-input>
+                    <script type="text/ng-template" id="my-content-custom-template">
+                        <div class="right-panel">
+                            <span ng-bind-html="$highlight($getDisplayText())"></span>
+                        </div>
+                    </script>
                 </div>
                 <div class="field" ng-show="!editMode">
                     <div class="metacontent-fields-container">
@@ -52,7 +59,7 @@
                                         <span class="collapse-collection" ng-show="toggleCollectionAccodrionState"><i class="fa fa-minus" aria-hidden="true"></i></span>
                                     </div>
                                     <div class="active content">
-                                        <div id="collection-meta-tree"></div>
+                                        <div id="collection-meta-tree" class="collection-childs"></div>
                                     </div>
                                 </div>
                             </div>
