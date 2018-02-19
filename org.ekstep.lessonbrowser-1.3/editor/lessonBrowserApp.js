@@ -339,10 +339,12 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             if(!$scope.items){
                 searchService.search(query, function(err, res){
                     if(res){
-                        console.log("Response",response)
                         $scope.items = res;
+                        ctrl.res.content = $scope.items.data.result.content
+                        $scope.mainTemplate = 'selectedResult';
+                        $scope.$safeApply();
                     }else{
-                        console.error("Unable to fetch",err)
+                        console.error("Unable to fetch",err);
                     }
                 });
             }   

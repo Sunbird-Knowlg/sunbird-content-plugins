@@ -526,6 +526,7 @@
 .facets-viewall{
     color: #0f69e0;
     position: relative;
+    cursor: pointer;
     left: 88%
 }
 .sections{
@@ -547,4 +548,7 @@
 .contentDetailsTitle{
     font-size: 18px !important;
     font-weight: bold !important;
+}
+.section_divider{
+    border-style: dashed !important;
 }
