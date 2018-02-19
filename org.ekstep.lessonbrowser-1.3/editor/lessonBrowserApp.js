@@ -324,15 +324,18 @@ angular.module('org.ekstep.lessonbrowserapp', [])
         $scope.invokeFacetsPage = function() {
             $scope.mainTemplate = 'facetsItemView';
             if (!ctrl.facetsResponse) {
-                $scope.getPageAssemble(function(err, response) {
-                    ctrl.facetsResponse = response;
-                    console.log("Facets Response",ctrl.facetsResponse);
-                    console.log("$ctrl.facetsResponse.result.response.section.length",ctrl.facetsResponse.result.response.sections.length)
+                $scope.getPageAssemble(function(err, res) {
+                    if(res){
+                        ctrl.facetsResponse = response;
+                    }else{
+                        console.error("Unable to fetch response",err);
+                    }
                 });
             }
         }
 
         $scope.viewAll = function(query){
+            ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'viewAll', targetid: "" });
             if(_.isString(query)){
                 query = JSON.parse(query);
             }
