@@ -319,8 +319,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             }
             let service = org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE);
             service.getPageAssemble(Obj, function(err, res) {
-                // Initialize the model
-                cb(err, response)
+                cb(err, res)
             })
 
         }
@@ -330,7 +329,8 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             if (!ctrl.facetsResponse) {
                 $scope.getPageAssemble(function(err, res) {
                     if(res){
-                        ctrl.facetsResponse = response;
+                        ctrl.facetsResponse = res.data;
+                        $scope.$safeApply();
                     }else{
                         console.error("Unable to fetch response",err);
                     }
