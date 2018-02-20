@@ -1,10 +1,12 @@
 angular.module('org.ekstep.lessonbrowserapp', [])
     .controller('lessonController', ['$scope', 'instance', 'callback', 'callerFilters', function($scope, instance, callback, callerFilters) {
         var ctrl = this;
+        ctrl.facetsResponse = undefined;
         $scope.headerTemplate = ecEditor.resolvePluginResource("org.ekstep.lessonbrowser", "1.3", "editor/header.html");
         $scope.footerTemplate = ecEditor.resolvePluginResource("org.ekstep.lessonbrowser", "1.3", "editor/footer.html");
         $scope.filterTemplate = ecEditor.resolvePluginResource("org.ekstep.lessonbrowser", "1.3", "editor/filterTemplate.html");
         $scope.cardTemplate = ecEditor.resolvePluginResource("org.ekstep.lessonbrowser", "1.3", "editor/cardRendererTemplate.html");
+        $scope.facetsTemplate = ecEditor.resolvePluginResource("org.ekstep.lessonbrowser", "1.3", "editor/facetsRenderTemplate.html");
         //Response variable
         ctrl.res = { count: 0, content: [] };
         ctrl.err = null;
@@ -27,6 +29,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
         // Selected lessons
         $scope.lessonSelection = [];
         $scope.selectedResources = [];
+        var limit = 100;
 
         // Fetch lessons related params
         var searchBody = {
@@ -110,17 +113,19 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             });
         }
         // Initiate concept selector
-        ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
-            element: 'lessonBrowser_concepts',
-            selectedConcepts: [], // All composite keys except mediaType
-            callback: function(concepts) {
-                $scope.filterSelection.concept = [];
-                angular.forEach(concepts, function(concept) {
-                    $scope.filterSelection.concept.push(concept.name);
-                });
-                $scope.$safeApply();
-            }
-        });
+        ctrl.conceptSelector = function (){
+            ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
+                element: 'lessonBrowser_concepts',
+                selectedConcepts: [], // All composite keys except mediaType
+                callback: function(concepts) {
+                    $scope.filterSelection.concept = [];
+                    angular.forEach(concepts, function(concept) {
+                        $scope.filterSelection.concept.push(concept.name);
+                    });
+                    $scope.$safeApply();
+                }
+            });
+        }
 
         // Search specific lesson
         $scope.lessonBrowseSearch = function() {
@@ -205,7 +210,8 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             setTimeout(function() {
                 ctrl.addOrRemoveContent(ctrl.res.content);
                 ctrl.dropdownConfig();
-            }, 10);
+                ctrl.conceptSelector();
+            }, 0);
             ctrl.res.content = $scope.defaultResources;
             $scope.$safeApply();
             $scope.isLoading = false;
@@ -234,7 +240,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             setTimeout(function() {
                 ctrl.learningConfig(); // Fetch sidebar filters through APIs
                 ctrl.dropdownConfig();
-            }, 20);
+            }, 0);
         };
         $scope.init();
 
@@ -289,7 +295,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             $scope.$safeApply();
             setTimeout(function() {
                 ctrl.addOrRemoveContent($scope.lessonSelection);
-            }, 100);
+            }, 0);
         }
 
         // searcher selected lesson
@@ -300,6 +306,64 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             $scope.noResultMsg = false;
             $scope.$safeApply();
         }
+
+        $scope.getPageAssemble = function(cb) {
+            let Obj = {
+                request: {
+                    source: "web",
+                    name: 'LessonBrowser',
+                    sort_by: {
+                        "createdOn": "desc"
+                    }
+                }
+            }
+            let service = org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE);
+            service.getPageAssemble(Obj, function(err, res) {
+                // Initialize the model
+                cb(err, response)
+            })
+
+        }
+       
+        $scope.invokeFacetsPage = function() {
+            $scope.mainTemplate = 'facetsItemView';
+            if (!ctrl.facetsResponse) {
+                $scope.getPageAssemble(function(err, res) {
+                    if(res){
+                        ctrl.facetsResponse = response;
+                    }else{
+                        console.error("Unable to fetch response",err);
+                    }
+                });
+            }
+        }
+
+        $scope.viewAll = function(query){
+            ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'viewAll', targetid: "" });
+            if(_.isString(query)){
+                query = JSON.parse(query);
+            }
+            if(!$scope.items){
+                query.request.limit = limit;
+                searchService.search(query, function(err, res){
+                    if(res){
+                        $scope.items = res;
+                        ctrl.res.content = $scope.items.data.result.content;
+                        $scope.mainTemplate = 'selectedResult';
+                        $scope.$safeApply();
+                        setTimeout(function() {
+                            ctrl.addOrRemoveContent(ctrl.res.content);
+                            ctrl.dropdownConfig();
+                            ctrl.conceptSelector();
+                        }, 0);
+                    }else{
+                        console.error("Unable to fetch",err);
+                    }
+                });
+            }   
+        }
+
+        $scope.invokeFacetsPage();
 
         // Sort the resources
         $scope.Sort = function(option) {

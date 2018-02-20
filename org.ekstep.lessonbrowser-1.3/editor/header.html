@@ -2,7 +2,7 @@
 <div ng-app="org.ekstep.lessonbrowser" class="header">
     <div class="ui clearing segment">
         <h5 class="ui right floated header searcher">
-            <div class="ui action input search-reset-keyword-field" ng-show="mainTemplate == 'selectedResult'">
+            <div class="ui action input search-reset-keyword-field" ng-show="mainTemplate == 'selectedResult' || 'facetsItemView'">
                 <input type="text" id="resourceSearch" placeholder="Search..." autocomplete="off" spellcheck="false" ng-model="searchKeyword"
                     ng-keyup="$event.keyCode == 13 ? lessonBrowseSearch() : ( searchKeyword.length >= 3 ? searchByKeyword() : null)">
                 <button id="search-button" class="ui basic button" ng-click="lessonBrowseSearch() " title="Start search"><i class="search icon"></i></button>
@@ -10,12 +10,12 @@
             <span>
                     <i class="close link icon" id="resourceCloseBtn" ng-click="closeThisDialog(); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeLessonBrowser'})"></i>
                 </span>
-            <ul class="searchList" ng-show="$ctrl.searchRes.content.length && (searchKeyword.length >= 3)">
+            <ul class="searchList" ng-show="mainTemplate == 'selectedResult' && $ctrl.searchRes.content.length && (searchKeyword.length >= 3)">
                 <li ng-click="searchSelectedLesson(lesson.name)" class="searchResult" ng-repeat="lesson in $ctrl.searchRes.content">
                     <p>{{lesson.name}}</p>
                 </li>
             </ul>
-            <ul class="searchList" ng-show="!$ctrl.searchRes.content.length && (searchKeyword.length >= 3) && noResultMsg">
+            <ul class="searchList" ng-show="mainTemplate == 'selectedResult' && !$ctrl.searchRes.content.length && (searchKeyword.length >= 3) && noResultMsg">
                     <strong class="searchResultMsg">No Results</strong>
                     <p class="searchResultMsg">Your search returned no results</p>
             </ul>

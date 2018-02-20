@@ -24,6 +24,13 @@
                     </div>
                 </div>
             </div>
+            <div ng-if="mainTemplate == 'facetsItemView'">
+                <div class="ui grid">
+                    <div class="twelve wide column">
+                        <div class="addedItems" ng-include="facetsTemplate"></div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- lessonbrowser footer -->
         <div ng-include="footerTemplate"></div>

@@ -1,11 +1,10 @@
-<div class="row ui" id="resourceHeading">
-    <p ng-if="mainTemplate == 'selectedResult'">
-        RESOURCES
-        <span>({{ $ctrl.res.content.length }})</span></p>
-</div>
 <div class="source-result-container">
-    <div class="ui special link cards cardsWrapper" ng-class="{four: mainTemplate == 'selectedResult',five: mainTemplate == 'addedItemsView'}">
-        <div class="card" ng-repeat="lesson in $ctrl.res.content | orderBy:sortOption">
+  <div class = "ui container" ng-repeat="section in $ctrl.facetsResponse.result.response.sections" ng-init = "sectionIndex = $index"> 
+   <span class="facets-headtext">{{$ctrl.facetsResponse.result.response.sections[sectionIndex].name }}</span>
+   <span class="facets-viewall" ng-click ="viewAll($ctrl.facetsResponse.result.response.sections[sectionIndex].searchQuery)">View All</span>
+</br>
+    <div class="ui special five cards sections" >
+        <div class="card" ng-repeat="lesson in $ctrl.facetsResponse.result.response.sections[sectionIndex].contents | limitTo:5">
             <div class="blurring dimmable medium image">
                 <div class="ui dimmer">
                     <div class="content">
@@ -44,7 +43,7 @@
                 <img src="{{lesson.appIcon || 'http://via.placeholder.com/80x80'}}" class="resourceMetaImage">
             </div>
             <div class="content">
-                <div class="header contentMetaTitle">
+                <div class="header">
                     {{lesson.name | cut:true:25}}
                     <span ng-if="lesson.name.length > 25" class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.name}}" data-position="bottom right"><a class="desc_ellipsisLink">...</a>
                 </span>
@@ -52,13 +51,13 @@
                 <div class="description resourceDescription">
                     {{lesson.description | removeHTMLTags | cut:true:80}}
                     <span ng-if="lesson.description.length > 80">
-                                                    <span class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.description}}" data-position="bottom center">
-                                                        <a class="moreLink">&nbsp;&nbsp;more...</a>
-                                                    </span>
+                        <span class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.description}}" data-position="bottom center">
+                            <a class="moreLink">&nbsp;&nbsp;more...</a>
+                        </span>
                     </span>
                 </div>
                 <div class="meta">
-                    <span class="creator">Created by {{lesson.creator || 'Unknown'}}</span>
+                    <span class="date">Created by {{lesson.creator}}</span>
                 </div>
             </div>
             <div class="extra content">
@@ -71,10 +70,13 @@
             </div>
         </div>
     </div>
+    <div class="ui divider section_divider"></div>
+  </div>  
     <div class="ui negative message errorMessage" ng-if="$ctrl.err">
         <div class="header">{{$ctrl.err}}</div>
     </div>
-    <div class="ui negative message errorMessage" ng-if="!$ctrl.res.content.length">
+    <div class="ui negative message errorMessage" ng-if="!$ctrl.facetsResponse.result.response.sections.length">
+        <p>{{$ctrl.facetsResponse.result.response.section.length}}</p>
         <div class="header">No lessons found</div>
         <p>Please try again</p>
     </div>
