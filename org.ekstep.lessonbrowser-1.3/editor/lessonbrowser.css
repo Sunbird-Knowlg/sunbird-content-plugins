@@ -520,6 +520,20 @@
 .sortButtonsWrapper{
     margin: 0% !important;
 }
+
+.facets-headtext{
+    font-weight: bold;
+    text-transform: uppercase;
+}
+.facets-viewall{
+    color: #0f69e0;
+    position: relative;
+    cursor: pointer;
+    left: 88%
+}
+.sections{
+    padding-top:2%;
+}   
 .contentMetaTitle{
     font-size: 16px !important;
 }
@@ -537,6 +551,7 @@
     font-size: 18px !important;
     font-weight: bold !important;
 }
+<<<<<<< HEAD
 .cardsWrapper{
     margin: 0px !important;
 }
@@ -560,6 +575,8 @@
 .sections{
     padding-top:2%;
 } 
+=======
+>>>>>>> c0d76a511cbf47ef769dbe8eec6c5ecf2b6fb30c
 .section_divider{
     border-style: dashed !important;
 }
