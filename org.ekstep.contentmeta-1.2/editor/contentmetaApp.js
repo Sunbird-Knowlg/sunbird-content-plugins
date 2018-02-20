@@ -2,7 +2,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
-    // $scope.toggleCollectionAccodrionState = true;
     const DEFAULT_NODETYPE = 'Collection';
 
     $scope.updateTitle = function(event, title) {
@@ -24,19 +23,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.$safeApply();
         }
     });
-    $scope.showImageIcon = true;
     $scope.showSubCollection = true;
-
-    $scope.showAssestBrowser = function() {
-        ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
-            type: 'image',
-            search_filter: {}, // All composite keys except mediaType
-            callback: function(data) {
-                $scope.content.appIcon = data.assetMedia.src;
-                $scope.$safeApply();
-            }
-        });
-    }
 
     $scope.updateNode = function() {
         if (!_.isEmpty($scope.nodeId) && !_.isUndefined($scope.nodeId)) {
@@ -135,7 +122,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
    }
 
     $scope.onNodeSelect = function(evant, data) {
-        $scope.showImageIcon = false;
         var contentArr = ["Story", "Collection", "Game", "Worksheet", "Resource"];
         $scope.editable = (!data.data.root && data.data.metadata.visibility === 'Default') ? false : true;
         if (_.indexOf(contentArr, data.data.objectType) != -1) {
@@ -146,8 +132,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.editMode = true;
             $scope.newNode = false;
             $scope.tokenMode = 'edit';
-            //$scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
-            $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.contentmeta", "1.2", "assets/default.png");
             var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
             $scope.content = (_.isUndefined(cache)) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, cache.metadata);
             $scope.showSubCollection = !activeNode.folder;
@@ -174,7 +158,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.content.name = $scope.content.name || 'Untitled Collection';
             $scope.getPath();
         }
-        $scope.showImageIcon = true;
         // if (data.data.objectType == "Collection" && $scope.showSubCollection) $scope.getSubCollection(data.data.metadata.identifier, function(err, res) {
         //     if (err) console.log("error when trying to fetch sub collections");
         //     if (res) $scope.initFancyTree(res.data.result.content);
@@ -228,71 +211,10 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.contentmeta", "pluginver": "1.2", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
 
-    // $scope.getSubCollection = function(contentId, callback) {
-    //     var mode = "live";
-    //     ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: contentId, mode: mode }, function(err, res) {
-    //         if (res && res.data && res.data.responseCode === "OK") {
-    //             callback && callback(err, res);
-    //         } else {
-    //             callback && callback('unable to fetch the content!', res);
-    //         }
-    //     });
-    // };
-
-    // $scope.initFancyTree = function(data) {
-    //     if (!data) return;
-    //     data = $scope.buildSubCollectionTree(data);
-    //     ecEditor.jQuery("#collection-meta-tree").fancytree("getTree").reload(data);
-    // }
-
-    // ecEditor.jQuery("#collection-meta-tree").fancytree({
-    //     source: [],
-    //     renderNode: function(event, data) {
-    //         var node = data.node;
-    //         var $nodeSpan = $(node.span);
-    //         if (!$nodeSpan.data('rendered') && !node.folder && !$nodeSpan.find("span.collection-preview-icon.popup-item").length) {
-    //             var contextButton = $('<span class="collection-preview-icon popup-item" data-content="Preview" data-variation="tiny inverted" data-position="top center" onclick="ecEditor.dispatchEvent(\'org.ekstep.contentmeta:preview\', {id: \'' + node.data.id + '\'})"><i class="fa fa-eye"></i></span>');
-    //             $nodeSpan.append(contextButton);
-    //         }
-    //     }
-    // });
-
-    // $scope.buildSubCollectionTree = function(data, tree) {
-    //     var instance = this,
-    //         tree = tree || [];
-    //     if (data.children) data.children = _.sortBy(data.children, ['index']);
-    //     _.forEach(data.children, function(child) {
-    //         var childTree = [];
-    //         tree.push({
-    //             "id": child.identifier || UUID(),
-    //             "title": (child.name.length > 22) ? child.name.substring(0, 22) + '...' : child.name,
-    //             "objectType": child.contentType,
-    //             "metadata": _.omit(child, ["children", "collections"]),
-    //             "folder": !_.isEmpty(child.children),
-    //             "children": childTree,
-    //             "root": false
-    //         });
-    //         if (child.children && child.children.length > 0) {
-    //             instance.buildSubCollectionTree(child, childTree);
-    //         }
-    //     });
-
-    //     return tree;
-    // }
-
-    // $scope.toggleCollectionAccodrion = function() {
-    //     $scope.toggleCollectionAccodrionState = !($scope.toggleCollectionAccodrionState);
-    // }
-
     ecEditor.addEventListener("org.ekstep.contentmeta:preview", $scope.previewContent);
 
     setTimeout(function() {
         ecEditor.jQuery('.popup-item').popup();
-        // ecEditor.jQuery(".collection-metadata-accordion").accordion({
-        //     collapsible: true,
-        //     duration: 500
-        // });
-        // ecEditor.jQuery('.collection-metadata-accordion .title:first-child').click();
     }, 0);
 
     $scope.init = function() {
@@ -319,6 +241,12 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             })
         }
     };
+
+    $scope.addCollectiontoBreadcrum = function(event, data) {
+        $scope.path.push({'title' : data.name})
+        $scope.$safeApply();
+    }
+    ecEditor.addEventListener('org.ekstep.collectioneditor:content:update', $scope.addCollectiontoBreadcrum, $scope);
     $scope.init();
 }]);
 //# sourceURL=contentmetaApp.js

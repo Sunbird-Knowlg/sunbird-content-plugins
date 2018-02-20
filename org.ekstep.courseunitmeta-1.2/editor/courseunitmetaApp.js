@@ -2,7 +2,6 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
-    $scope.showImageIcon = true;
     const DEFAULT_NODETYPE = 'CourseUnit'
 
     $scope.updateTitle = function(event, title) {
@@ -12,17 +11,6 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
     }
     ecEditor.addEventListener("title:update:courseunit", $scope.updateTitle, $scope);
 
-    $scope.showAssestBrowser = function(){
-        ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
-            type: 'image',
-            search_filter: {}, // All composite keys except mediaType
-            callback: function(data) { 
-                $scope.courseunit.appIcon = data.assetMedia.src;
-                $scope.$safeApply();
-            }
-        });
-    }
-    
     $scope.updateNode = function(){
         if(!_.isEmpty($scope.nodeId) && !_.isUndefined($scope.nodeId)){ 
             var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
@@ -111,14 +99,12 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
 
     $scope.onNodeSelect = function(evant, data){
         var selectedConcepts = [];
-        $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.courseunit = {};
         $scope.editMode = true;
         $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
-        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.courseunitmeta", "1.2", "assets/default.png");
 
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
         $scope.courseunit = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
@@ -154,7 +140,6 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
                 $scope.$safeApply();
             }
         });
-        $scope.showImageIcon = true;
         $scope.getPath();
         $scope.$safeApply();
     }

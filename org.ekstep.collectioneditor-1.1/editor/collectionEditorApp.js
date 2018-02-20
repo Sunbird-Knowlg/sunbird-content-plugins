@@ -1,4 +1,4 @@
-angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]).controller('mainController', ['$rootScope', '$scope', '$location', function($rootScope, $scope, $location) {
+angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]).controller('mainController', ['$scope', '$location', function($scope, $location) {
     $scope.contentDetails = {
         contentTitle: ""
     };
@@ -35,10 +35,10 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             })
             activeNode.removeChildren();
             activeNode.addChildren(fancyTreeChild);
-            activeNode.toggleExpanded()
             activeNode.setActive();
             $scope.contentList = collectionData;
-        }
+        },
+        cancel: ".unsortable"
       };
 
     $scope.searchNode = function(event) {
@@ -64,27 +64,28 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
      * Construct the content list & collection list to show
      */
     $scope.getContentList = function(data) {
-        if (data) {
-            if (data.children) {
-                org.ekstep.collectioneditor._.each(data.children, function(content) {
-                    if (!content.isFolder())
-                        $scope.contentList.push(content);
-                        return;
-                })
-            } else if (data.data.metadata && data.data.metadata.mimeType == "application/vnd.ekstep.content-collection") {
-                if (!data.data.metadata.children) {
-                    $scope.getSubCollection(data.data.metadata.identifier)
+        if (data && data.folder) {          // Node folder
+            $scope.isCollection = false;
+            org.ekstep.collectioneditor._.each(data.children, function(content) {
+                if (!content.isFolder()) {
+                    $scope.contentList.push(content);
                     return;
-                } else if (data.data.metadata.children) {
-                    $scope.contentList = $scope.generateCollectionContent(data.data.metadata.children);
-                    return
                 }
+            })
+        } else if (data.data.metadata && data.data.metadata.mimeType == "application/vnd.ekstep.content-collection") {    // Node collection/collection
+            $scope.isCollection = true;
+            if (!data.data.metadata.children) {
+                $scope.getSubCollection(data.data.metadata.identifier)
+            } else if (data.data.metadata.children) {
+                $scope.contentList = $scope.generateCollectionContent(data.data.metadata.children);
             }
-            if (!data.type && !data.folder) {
-                $scope.selectedContent = data;
-                $scope.isContent = true;
-            }
+            return;
         }
+        if (!data.type && !data.folder) {           // Node content
+            $scope.selectedContent = data;
+            $scope.isContent = true;
+        }
+        $scope.$safeApply();
     }
 
     /**
@@ -142,10 +143,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             $scope.selectedObjectType = data.data.objectType
             $scope.$safeApply();
         }
-        if (!$scope.isCollection) {
-            org.ekstep.collectioneditor.jQuery( "#content-list").sortable();
-            org.ekstep.collectioneditor.jQuery( "#content-list").disableSelection();
-        }
     };
 
     /**
@@ -166,7 +163,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 plain: true,
                 showClose: false
             });
-            var ngDialogEventListener = $rootScope.$on('ngDialog.opened', function (e, $dialog) {
+            var ngDialogEventListener = $scope.$on('ngDialog.opened', function (e, $dialog) {
                 var dialogWidth = $('#deletePopup').width();
                 var dialogHeight = $('#deletePopup').height();
                 var height = event.pageY;
@@ -261,9 +258,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             if (res) {
                 var activeNode = org.ekstep.services.collectionService.getActiveNode();
                 $scope.contentDetails.contentTitle = activeNode.title ? activeNode.title : "Untitled Content";
-                // if (!_.isUndefined(activeNode.data.metadata.appIcon)) {
-                //     $scope.contentDetails.contentImage = activeNode.data.metadata.appIcon;
-                // }
                 setTimeout(function() {
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', activeNode);
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode);
@@ -293,18 +287,14 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
      */
     $scope.setActiveNode = function(node) {
         if (node.key) {
-            $scope.isCollection = false;
             org.ekstep.collectioneditor.api.getService('collection').setActiveNode(node.key);
         } else {
-            $scope.isCollection = true;
             $scope.setSelectedNode(undefined, node);
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:content:update', node.data.metadata);
         }
     }
 
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
-    // ecEditor.addEventListener('org.ekstep.collectioneditor:node:added', $scope.getContentList, $scope);
-    // ecEditor.addEventListener("org.ekstep.contentmeta:preview", $scope.playContent, $scope);
     $scope.init = function(){
         org.ekstep.services.collectionService.suggestVocabularyRequest.request.limit = ecEditor.getConfig('keywordsLimit')
     }
@@ -317,6 +307,9 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         }
     }
 
+    /**
+     * Open lesson browser to add in collection tree
+     */
     $scope.addResource = function() {
         var collectionTree = document.getElementById('collection-tree');
         org.ekstep.collectioneditor.jQuery(collectionTree).trigger("nodeCommand", {cmd: 'addLesson'});

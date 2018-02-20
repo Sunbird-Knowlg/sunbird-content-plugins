@@ -10,15 +10,8 @@
     </div>
     <form class="ui form segment" id="contents-data-form" novalidate ng-show="editMode" name="courseMetaForm">
         <div class="fields">
-            <div class="field book-image-field margin-left-20">
-                <label for="bookImage">Add icon</label>
-                <div class="book-image-container popup-item" data-content="Add or change image" data-variation="tiny inverted" data-position="right center" ng-click="showAssestBrowser()">
-                    <i class="camera icon"></i>
-                    <img ng-if="showImageIcon" ng-src="{{course.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
-                </div>
-            </div>
             <div class="field form-fields-except-image">
-                <div class="field required">
+                <div class="field required form-field-name">
                     <label>Title</label>
                     <div class="ui input">
                         <input placeholder="Enter title for Book" ng-model="course.name" ng-class=" {error: submitted && courseMetaForm.name.$error.required}" name="name" ng-change = 'changeTitle()' type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="100">
