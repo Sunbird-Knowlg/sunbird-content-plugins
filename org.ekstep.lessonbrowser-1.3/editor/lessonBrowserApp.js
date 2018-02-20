@@ -2,6 +2,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
     .controller('lessonController', ['$scope', 'instance', 'callback', 'callerFilters', function($scope, instance, callback, callerFilters) {
         var ctrl = this;
         ctrl.facetsResponse = undefined;
+        const DEFAULT_PAGEAPI = 'LessonBrowser';
         $scope.headerTemplate = ecEditor.resolvePluginResource("org.ekstep.lessonbrowser", "1.3", "editor/header.html");
         $scope.footerTemplate = ecEditor.resolvePluginResource("org.ekstep.lessonbrowser", "1.3", "editor/footer.html");
         $scope.filterTemplate = ecEditor.resolvePluginResource("org.ekstep.lessonbrowser", "1.3", "editor/filterTemplate.html");
@@ -311,7 +312,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             let Obj = {
                 request: {
                     source: "web",
-                    name: 'LessonBrowser',
+                    name: ecEditor.getContext('pageAPI') || DEFAULT_PAGEAPI,
                     sort_by: {
                         "createdOn": "desc"
                     }
