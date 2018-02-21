@@ -7,8 +7,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     $scope.selectedObjectType = undefined;
     $scope.nodeFilter = "";
     $scope.expandNodeFlag = true;
-    $scope.defaultImage = ecEditor.resolvePluginResource('org.ekstep.collectioneditor', '1.1', "assets/default.png");
-    $scope.playImage = ecEditor.resolvePluginResource('org.ekstep.collectioneditor', '1.1', "assets/icn_play.png");
+    $scope.defaultImage = ecEditor.resolvePluginResource('org.ekstep.collectioneditor', '1.2', "assets/default.png");
+    $scope.playImage = ecEditor.resolvePluginResource('org.ekstep.collectioneditor', '1.2', "assets/icn_play.png");
     $scope.contentList = [];
     $scope.selectedContent;
     $scope.isContent = false;
@@ -75,11 +75,11 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             })
         } else if (data.data.metadata && data.data.metadata.mimeType == "application/vnd.ekstep.content-collection") {    // Node collection/collection
             $scope.isCollection = true;
-            if (!data.data.metadata.children) {
+            // if (!data.data.metadata.children) {
                 $scope.getSubCollection(data.data.metadata.identifier)
-            } else if (data.data.metadata.children) {
-                $scope.contentList = $scope.generateCollectionContent(data.data.metadata.children);
-            }
+            // } else if (data.data.metadata.children) {
+                // $scope.contentList = $scope.generateCollectionContent(data.data.metadata.children);
+            // }
             return;
         }
         if (!data.type && !data.folder) {           // Node content
@@ -87,6 +87,16 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             $scope.isContent = true;
         }
         $scope.$safeApply();
+    }
+
+    $scope.addContent = function(event, data) {
+        $scope.contentList.push(data);
+    }
+
+    $scope.removeContent = function(event, data) {
+        $scope.contentList = _.remove($scope.contentList, function(content) {
+            return content.data.metadata.identifier != data
+        });
     }
 
     /**
@@ -325,6 +335,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     }
 
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
+    ecEditor.addEventListener('org.ekstep.collectioneditor:node:added', $scope.addContent, $scope);
+    ecEditor.addEventListener('org.ekstep.collectioneditor:node:removed', $scope.removeContent, $scope);
 
     $scope.parseKeywords = function(keywords){
         if(_.isString(keywords)){
