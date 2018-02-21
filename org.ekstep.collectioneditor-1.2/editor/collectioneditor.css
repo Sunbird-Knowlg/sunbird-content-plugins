@@ -90,7 +90,6 @@ body {
 #collection-tree span.fancytree-node {
     min-height: 24px;
     font-size: 1.1em;
-    /*width: 310px*/
 }
 
 .primary.button-overrides {
@@ -199,7 +198,7 @@ body {
 
 #collection-tree span.fancytree-node:hover {
     background: #f5f5f5;
-    width: 35vh;
+    width: 23.5vw;
     font-size: 14px;
     border-radius: 3px;
     color: #434343;
@@ -310,7 +309,7 @@ span.fancytree-expander {
 }
 
 #collection-tree span.fancytree-active {
-    width: 33vh;
+    width: 23.5vw;
     font-weight: bold;
     color: #434343;
     border-radius: 3px;
