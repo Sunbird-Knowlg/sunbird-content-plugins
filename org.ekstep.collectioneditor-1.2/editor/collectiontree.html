@@ -16,17 +16,91 @@
             <div class="ui attached segment" id="treeWrapper">
                 <div id="collection-tree"></div>
             </div>
-        <div class="ui grid table-of-contents-fixed-btns">
-            <div class="twelve wide column padding-top-none"> 
-                <div class="ui two buttons table-of-contents-btn">
-                    <button class="ui basic button text-transform-none" ng-click="addNodeType('sibling')" ><a><i class="plus icon"></i>New Sibling</button>
-                    <button class="ui basic button text-transform-none" ng-click="addNodeType('child')"><a> <i class="reply icon table-of-contents-child-icon "></i>New Child</a></button>  
+            <div class="ui grid table-of-contents-fixed-btns">
+                <div class="twelve wide column padding-top-none"> 
+                    <div class="ui two buttons table-of-contents-btn">
+                        <button class="ui basic button text-transform-none" ng-click="addNodeType('sibling')" ><a><i class="plus icon"></i>New Sibling</button>
+                        <button class="ui basic button text-transform-none" ng-click="addNodeType('child')"><a> <i class="reply icon table-of-contents-child-icon "></i>New Child</a></button>  
+                    </div>
+                </div>    
+            </div>
+        </div>
+        <div class="padded column" id="contents-pane">
+            <div class="content-manifest">
+                <div class="sixteen wide column metacontent-holder metadata-form-container" ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" ng-include="page.templateURL"></div>
+            </div>
+            <div class="ui grid padded">
+                <div class="row">
+                    <div class="twelve wide column list-container" ng-if="!isContent">
+                        <div class="list-header">
+                            <div class="ui label list-leftheader">RESOURCES</div>
+                            <button class="ui blue button list-addResource" ng-click="addResource()" ng-show="!isCollection">ADD RESOURCE</button>
+                        </div>
+                        <div class="ui" id="content-list">
+                            <div ng-if="!isContent && contentList.length<1" class="list-drag">
+                                <!-- Drag and Drop Suggested Content here or <span class="blue-color">View Library</span> -->
+                                <p>No Content's are available</p><p ng-show="!isCollection">You can add resource by ctrl + alt + A</p>
+                            </div>
+                            <div ui-sortable="sortableOptions" ng-model="contentList">
+                                <div class="ui raised segment padding-none" ng-repeat="child in contentList" ng-class="{'unsortable': isCollection}">
+                                    <div class="ui items list-row">
+                                        <div class="item custom-segment">
+                                            <div class="ui image content-image">
+                                                <span class="ui left label content-type" tabindex="0">{{child.data.metadata.contentType}}</span>
+                                                <img ng-src="{{child.data.metadata.posterImage || defaultImage}}" class="ui fluid centered floated image">
+                                            </div>
+                                            <div class="content padding-15">
+                                                <div class="meta header ui">
+                                                    <p class="header elipses">{{child.data.metadata.name}}</p>
+                                                </div>
+                                                <div class="meta">
+                                                    <p class="content-desc fancytree-title popup-item" data-content="{{child.data.metadata.description}}" "data-variation": "wide" "data-position": "bottom left">{{child.data.metadata.description}}</p>
+                                                </div>
+                                                <div class="extra">
+                                                    <p class="elipses">
+                                                        <span ng-show="content.data.metadata.board">{{content.data.metadata.board}} &nbsp;</span>
+                                                        <span ng-repeat="grade in child.data.metadata.gradeLevel | limitTo: 2">{{grade}} &nbsp;</span>
+                                                        <span ng-repeat="domain in child.data.metadata.domain | limitTo: 2">{{domain}} &nbsp;</span>
+                                                    </p>
+                                                </div>
+                                                <div class="extra">
+                                                    <span ng-if="child.data.metadata.owner">Created by {{child.data.metadata.owner}}</span>
+                                                    <i class="long arrow right medium icon right floated blue-color" ng-click="setActiveNode(child)"></i>
+                                                    <i ng-show="!isCollection" class="fa fa-trash right floated delete-node padding-right-20" aria-hidden="true" ng-click="deleteNode(child, $event);"></i>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="twelve wide column list-container"  ng-if="isContent">
+                        <div class="content-width padding-top-10 centerAligned">
+                            <div class="ui label list-leftheader">CONTENT PREVIEW</div>
+                            <div class="ui label content-rightheader" ng-show="!isCollection"><i class="fa fa-trash right floated delete-node" aria-hidden="true" ng-click="deleteNode(selectedContent, $event);"> REMOVE</i></div>
+                        </div>
+                        <div class="content-width centerAligned">
+                            <div class="content-details">
+                                <div id="content-preview">
+                                    <div class="preview-image">
+                                        <img class="preview-play-image" ng-click="playContent(selectedContent);  telemetry({type: 'click', subtype: 'preview', target: 'preview'})" src="{{playImage}}">
+                                    </div>
+                                    <iframe id="previewContentIframe" width=100% height=100%></iframe>
+                                </div>
+                                <p class="list-leftheader content-owner">OWNER</p>
+                                <div class="footer">
+                                    <span>{{selectedContent.data.metadata.owner}}</span>
+                                    <span class="content-grade">
+                                        <span ng-repeat="grade in selectedContent.data.metadata.gradeLevel | limitTo: 2">{{grade}} &nbsp;</span>
+                                        <span ng-repeat="genre in selectedContent.data.metadata.genre | limitTo: 2">{{genre}} &nbsp;</span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>    
-        </div>
-        </div>
-        <div class="ui column" id="contents-pane">
-            <div class="metacontent-holder metadata-form-container" ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" ng-include="page.templateURL"></div>
+            </div>
         </div>
     </div>
 </div>
