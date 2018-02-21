@@ -4,7 +4,8 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
   $scope.question;
   $scope.ftbAnswer;
   $scope.qcquestion = true;
-  $scope.qcblank = true;
+  $scope.textboxtarget = {};
+  $scope.qcblank = false;
   $scope.events = {
     "show": "",
     "hide": "",
@@ -60,16 +61,19 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
 
   $scope.showEventListener = function(event) {
     $scope.question = event.target;
-    var gererateId=0;
+    var gererateId = 0;
     $scope.ftbAnswer = "";
     var qData = $scope.question._currentQuestion.data.__cdata || $scope.question._currentQuestion.data;
     var questionData = JSON.parse(qData);
     //if string contain #option then show blank
     if (questionData.question.text.search("#option") != -1) {
-      $scope.qcblank = false;
-      questionData.question.text = $sce.trustAsHtml(questionData.question.text.replace(/#option#/g,function(){
-        return "<input type='text' id=option"+ ++gererateId +" class='question-box'>";
-      })); 
+      //$scope.qcblank = false;
+      questionData.question.text = questionData.question.text.replace(/#option#/g, function() {
+        return "<input type='text' id=option" + ++gererateId + " class='question-box'/>";
+      });
+      $("#qftbtext").html(questionData.question.text);
+      $('#preview-ftb-horizontal').on('click', '.question-box', $scope.doTextBoxHandle);
+      $(".question-box").click($scope.doTextBoxHandle);
     }
     var qState = $scope.question._currentQuestionState;
     if (qState && qState.val) {
@@ -79,6 +83,7 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     $scope.showTemplate = true;
     $scope.safeApply();
   }
+
 
   $scope.hideEventListener = function(event) {
     $scope.showTemplate = false;
@@ -99,8 +104,12 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
    */
   window.addEventListener('native.keyboardshow', function(e) {
     $scope.qcquestion = false;
+    $scope.qcblank = true;
     $scope.qcmiddlealign = true;
+    document.getElementById('answertxt').focus();
     $scope.safeApply();
+    //for text focus
+    document.getElementById('answertxt').focus();
   });
 
   /**
@@ -110,10 +119,27 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
    */
   window.addEventListener('native.keyboardhide', function() {
     $scope.qcquestion = true;
-    $scope.qcblank = true;
+    $scope.qcblank = false;
+    $scope.qcmiddlealign = false;
+    $("#" + $scope.textboxtarget.id).val($("#answertxt").val());
     $scope.qcmiddlealign = false;
     $scope.safeApply();
   });
+  $scope.doTextBoxHandle = function() {
+    $scope.qcblank = true;
+    $scope.textboxtarget.id = this.id;
+    $scope.textboxtarget.value = this.value;
+    $("#answertxt").val($scope.textboxtarget.value);
+    $scope.safeApply();
+
+  }
+  // $scope.addClickEvent = function() {
+  //     var textBoxCollection = angular.element($("#preview-ftb-horizontal").find("input[type=text]"));
+  //     _.each(textBoxCollection, function(element) {
+  //       debugger;
+  //         console.log("hi",element)
+  //     });
+  // }
 
   /**
    * renderer:questionunit.ftb:max length 25 because max length not working in andirod.
