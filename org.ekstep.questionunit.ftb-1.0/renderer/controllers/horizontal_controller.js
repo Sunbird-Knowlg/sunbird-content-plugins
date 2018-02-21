@@ -121,14 +121,14 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     $scope.qcquestion = true;
     $scope.qcblank = false;
     $scope.qcmiddlealign = false;
-    $("#" + $scope.textboxtarget.id).val($("#answertxt").val());
+    $("#" + $scope.textboxtarget.id).val($("#answertxt").val().trim());
     $scope.qcmiddlealign = false;
     $scope.safeApply();
   });
   $scope.doTextBoxHandle = function() {
     $scope.qcblank = true;
     $scope.textboxtarget.id = this.id;
-    $scope.textboxtarget.value = this.value;
+    $scope.textboxtarget.value = this.value.trim();
     $("#answertxt").val($scope.textboxtarget.value);
     $scope.safeApply();
 
