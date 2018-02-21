@@ -549,10 +549,18 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                 instance.cb(assetdata);
                 ctrl.uploadingAsset = false;
                 ctrl.uploadBtnDisabled = false;
-                alert((instance.mediaType).charAt(0).toUpperCase() + (instance.mediaType).slice(1) + ' successfully uploaded');
+                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                    message: (instance.mediaType).charAt(0).toUpperCase() + (instance.mediaType).slice(1) + ' successfully uploaded',
+                    position: 'topCenter',
+                    icon: 'fa fa-check-circle'
+                });
                 ctrl.cancel();
             } else {
-                alert('Error in Uploading image, please try again!');
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: "Error in Uploading image, please try again!",
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
             }
         });
     }
