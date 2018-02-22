@@ -11,93 +11,15 @@
               <div class="ui segment">
                 <div class="ui grid">
                   <div class="eleven wide column">
-                    <!-- <div class="ui pointing secondary demo menu ">
-                <a class="item active" data-tab="questionTextTab"><i class="checkmark icon" ng-show="ftbFormData.question.text.length > 2"></i> Text</a>
-                <a class="item" data-tab="questionImageTab" ng-show="false"><i class="checkmark icon"></i> Image</a>
-                  <a class="item" data-tab="questionAudioTab" ng-show="false"><i class="checkmark icon"></i> Audio</a>
-                <div class="ui dropdown right floated item" ng-show="false">
-                    Customize
-                    <div class="menu" ng-show="false">
-                      <div class="item"><span ng-click="addTab('image',index)">Insert image</span></div>
-                      <div class="item"><span ng-click="addTab('audio',index)">Insert audio</span></div>
-                    </div>
-                  </div>
-              </div> -->
-                    <!-- <div class="ui tab active optionTab" data-tab="questionTextTab"> -->
                     <div class="form-group segment textBoxDiv">
-                      <textarea class="form-control textboxQ" ng-class="{'has-success':ftbForm.ftbQuestion.$valid, 'has-error': submitted && ftbForm.ftbQuestion.$error.required}" placeholder="Enter the question" name="ftbQuestion" id="ftbQuestion" ng-model="ftbFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'ftbTextarea'}, $event)" ng-blur="$ctrl.focused = false" ng-click="" required></textarea>
+                      <textarea class="form-control textboxQ" ng-class="{'has-success':ftbForm.ftbQuestion.$valid, 'has-error': submitted && ftbForm.ftbQuestion.$error.required}" placeholder="Enter the question" name="ftbQuestion" id="ftbQuestion" ng-model="ftbFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'ftbTextarea'}, $event)" ng-blur="$ctrl.focused = false" ng-pattern="" ng-click="" required>
+                      </textarea>
                     </div>
                   </div>
                   <div class="one wide column text-len">
                     <span class="maxLengthText">{{ftbFormData.question.text.length}}<span class="length-divider">/</span>220</span>
                   </div>
                 </div>
-                <!-- </div> -->
-                <!-- <div class="ui tab" data-tab="questionImageTab" ng-show="false">
-                  <div class="ui three column grid">
-                    <div class="two wide column">
-                      <img src="{{mcqFormData.question.image}}">
-                    </div>
-                    <div class="one column">
-                      <div class="ui grid two column row">
-                        <div class="column">
-                          <a href="" class="" ng-click="deleteImage(index,isQuestion)"><i class="trash icon"></i>Delete</a>
-                        </div>
-                        <div class="column">
-                          <a href="" class=""><i class="repeat icon"></i>Repeat</a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="ui tab" data-tab="questionAudioTab" ng-show="false">
-                  <div class="ui two column grid">
-                    <div class="one wide column">
-                      <audio src="{{ftbFormData.question.audio}}" controls="" class="audio-container">
-                      </audio>
-                      <i class="large icon blue" ng-click="playAudio(play)"></i>
-                    </div>
-                    <div class="column">
-                      <a href="" class="" ng-click="deleteAudio(index)" s><i class="trash icon"></i>Delete</a>&nbsp;&nbsp;
-                      <a href="" class=""><i class="repeat icon"></i>Repeat</a>
-                    </div>
-                  </div>
-                </div> -->
-              </div>
-              <div class="ui secondary right aligned segment custom-sec-segment">
-                <div class="ui grid">
-                  <div class="one column row segment-column">
-                    <div class="column right floated">
-                      <span class="custom-bottom-label">Add: </span>
-                      <span class="custom-bottom-segment"><i class="image large icon"></i></span>
-                      <span class="custom-bottom-segment"><i class="music large icon"></i></span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="one column row qHeader">
-            <span>Set answer</span>
-          </div>
-          <div class="outer-segment">
-            <div class="ui segments inner-segment" ng-class="{cardBorder: focused, 'has-errorCard': submitted && ftbForm.ftb_answer.$error.required}">
-              <div class="ui segment">
-                <!-- <div class="ui pointing secondary demo menu ">
-                <a class="item active" data-tab="optionTextTab"><i class="checkmark icon" ng-show="ftbFormData.answer.text.length > 1"></i> Text</a>
-              </div> -->
-                <!-- <div class="ui tab active optionTab" data-tab="optionTextTab"> -->
-                <div class="ui grid">
-                  <div class="eleven wide column">
-                    <div class="form-group segment textBoxDiv">
-                      <input type="text" class="form-control textbox" ng-class="{'has-success':ftbForm.ftb_answer.$valid, 'has-error': submitted && ftbForm.ftb_answer.$error.required}" placeholder="Enter answer" name="ftb_answer" id="ftb_answer" ng-model="ftbFormData.answer.text" maxlength="25" ng-init="focused = false" ng-focus="focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'ftbAnswer'}, $event)" ng-blur="focused = false" ng-click="" required/>
-                    </div>
-                  </div>
-                  <div class="one wide column text-len">
-                    <span class="maxLengthText">{{ftbFormData.answer.text.length}}<span class="length-divider">/</span>25</span>
-                  </div>
-                </div>
-                <!-- </div> -->
               </div>
               <div class="ui secondary right aligned segment custom-sec-segment">
                 <div class="ui grid">

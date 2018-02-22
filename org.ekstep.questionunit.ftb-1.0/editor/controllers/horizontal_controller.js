@@ -10,7 +10,8 @@ angular.module('createquestionapp', [])
   $scope.formVaild = false;
   $scope.ftbFormData = {
     'question': { 'text': '', 'image': '', 'audio': '' },
-    'answer': { 'text': '' }
+    'answer': [],
+    'parsedQuestion': { 'text': '', 'image': '', 'audio': '' }
   };
 
   $scope.init = function() {
@@ -20,10 +21,16 @@ angular.module('createquestionapp', [])
     if (!ecEditor._.isUndefined($scope.questionEditData)) {
       var data = $scope.questionEditData.data;
       $scope.ftbFormData.question = data.question;
-      $scope.ftbFormData.answer = data.answer;
     }
 
     $scope.$parent.$on('question:form:val', function(event) {
+      var regexForAns = /(?:^|\s)\[\[(.*?)(?:\]\]|$)/g;
+      var index = 0;
+      $scope.ftbFormData.answer = $scope.getMatches($scope.ftbFormData.question.text, regexForAns, 1);
+      $scope.ftbFormData.parsedQuestion.text = $scope.ftbFormData.question.text.replace(/\[\[.*?\]\]/g,function(a, b){
+        index = index +1;
+        return '<input type="text" class="ans-field" id=ans-field"' + index + '">';
+      })
       if ($scope.formValidation()) {
         $scope.$emit('question:form:valid', $scope.ftbFormData);
       } else {
@@ -32,9 +39,21 @@ angular.module('createquestionapp', [])
     })
   }
 
+  
+
+  $scope.getMatches = function(string, regex, index) {
+    index || (index = 1); // default to the first capturing group
+    var matches = [];
+    var match;
+    while (match = regex.exec(string)) {
+      matches.push(match[index]);
+    }
+    return matches;
+  }
+
   $scope.formValidation = function() {
     $scope.submitted=true;
-    var formValid = $scope.ftbForm.$valid;
+    var formValid = $scope.ftbForm.$valid && /\[\[.*?\]\]/g.test($scope.ftbFormData.question.text);
     return (formValid) ? true : false;
   }
 
