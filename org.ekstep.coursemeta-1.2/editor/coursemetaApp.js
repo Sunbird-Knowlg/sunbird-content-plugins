@@ -211,6 +211,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             })
         }
     };
+    
     $scope.init();
 }]);
 //# sourceURL=coursemetaApp.js

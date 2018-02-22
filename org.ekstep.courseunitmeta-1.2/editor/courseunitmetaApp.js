@@ -194,6 +194,14 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
             })
         }
     };
+
+    $scope.goToRootParent = function() {
+        var activeNode = org.ekstep.services.collectionService.getActiveNode();
+        var parentList = activeNode.getParentList()
+        if (parentList.length > 0)
+            org.ekstep.services.collectionService.setActiveNode(parentList[0].key);
+    }
+    
     $scope.init();
 }]);
 //# sourceURL=courseunitmetaApp.js

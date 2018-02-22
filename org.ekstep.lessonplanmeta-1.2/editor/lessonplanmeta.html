@@ -1,6 +1,7 @@
 <div ng-app="lessonplanmetaApp" class="metacontent-wrapper" ng-controller="lessonplanmetaController">
     <div class="ui segment header-segment" id="headerSegment">
         <div class="ui breadcrumb">
+            <i class="folder outline icon"></i>
             <a class="section" ng-repeat="value in path" ng-click="setActiveNode(value.nodeId)">
                 <span data-inverted="" ng-mouseover="showTooltip($event, value.title)">{{value.title | limitTo:25}}</span>
                 <span ng-if="value.title.length > 25">...</span>

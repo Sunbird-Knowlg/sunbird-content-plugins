@@ -217,6 +217,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
     $scope.changeTitle = function(){
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.lesson.name);
     }
+
     $scope.init();
 }]);
 //# sourceURL=lessonplanmetaApp.js

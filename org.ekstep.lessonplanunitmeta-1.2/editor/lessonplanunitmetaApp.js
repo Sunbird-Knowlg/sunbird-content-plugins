@@ -149,6 +149,14 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
     $scope.changeTitle = function(){
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.unit.name);
     }
+
+    $scope.goToRootParent = function() {
+        var activeNode = org.ekstep.services.collectionService.getActiveNode();
+        var parentList = activeNode.getParentList()
+        if (parentList.length > 0)
+            org.ekstep.services.collectionService.setActiveNode(parentList[0].key);
+    }
+    
     $scope.init();
 }]);
 //# sourceURL=lessonplanunitmetaApp.js
