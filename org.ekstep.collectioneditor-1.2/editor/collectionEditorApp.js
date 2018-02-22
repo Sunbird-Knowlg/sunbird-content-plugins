@@ -16,8 +16,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
 
     $scope.excludeContents = [];
     $scope.metaData = {};
+    $scope.responseData = {};
     $scope.suggestedContentList = {count:0, content:[]};
-    var apiCall = 1;
     var searchBody = {"request": {
                         "mode": "soft",
                         "filters":{},
@@ -61,13 +61,13 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
                     _.forEach(ecEditor.jQuery("#collection-tree").fancytree("getRootNode").children[0].children, function(content) {
                         if(!content.folder) $scope.excludeContents.push(content.data.id);
                     });
-                    $scope.metaData.board = res.data.result.content.board;
+                    //$scope.metaData.board = res.data.result.content.board;
                     $scope.metaData.subject = res.data.result.content.subject;
-                    $scope.metaData.gradeLevel = res.data.result.content.gradeLevel;
                     if(res.data.result.content.language) $scope.metaData.language = res.data.result.content.language;
-                    if(res.data.result.content.keywords) $scope.metaData.keywords = res.data.result.content.keywords;
                     if(res.data.result.content.concepts) $scope.metaData.concepts = res.data.result.content.concepts;
-                    $scope.searchLessons();
+                    //$scope.metaData.gradeLevel = res.data.result.content.gradeLevel;
+                    //if(res.data.result.content.keywords) $scope.metaData.keywords = res.data.result.content.keywords;
+                    //$scope.searchLessons();
                 }
 
                 var frameworkId = ecEditor.getContext('framework') || org.ekstep.services.collectionService.defaultFramwork;
@@ -150,11 +150,11 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     }
 
     $scope.searchLessons = function(apiCallLevel) {
-        apiCall = apiCallLevel ? apiCallLevel : apiCall;
+        var apiCall = apiCallLevel ? apiCallLevel : 1;
         var queryData = {};
-        queryData.board = $scope.metaData.board || "";
+        //queryData.board = $scope.metaData.board || "";
         queryData.subject = $scope.metaData.subject;
-        queryData.gradeLevel = $scope.metaData.gradeLevel || "";
+        //queryData.gradeLevel = $scope.metaData.gradeLevel || "";
 
         searchBody.request.filters = queryData;
         searchBody.request.filters.contentType = org.ekstep.collectioneditor.api.getService('collection').getObjectTypeByAddType('Browser');
@@ -171,9 +171,11 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
             if($scope.metaData.concepts) searchBody.request.filters.concepts = $scope.metaData.concepts;
             searchBody.request.softConstraints = { "gradeLevel": 100, "board": 90 };
         } else if(apiCall === 2) {
+            if($scope.metaData.language) searchBody.request.filters.language = { "NE": $scope.metaData.language };
             if($scope.metaData.concepts) searchBody.request.filters.concepts = $scope.metaData.concepts;
-            searchBody.request.softConstraints = { "gradeLevel": 100, "board": 90 };
+            searchBody.request.softConstraints = { "gradeLevel": 100, "board": 90, "concepts": 80 };
         } else {
+            if($scope.metaData.concepts) searchBody.request.filters.concepts = { "NE": $scope.metaData.concepts };
             searchBody.request.filters.language = $scope.metaData.language || "";
             searchBody.request.softConstraints = { "gradeLevel": 100, "language": 90, "board": 80 };
         }
@@ -188,18 +190,20 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
                 //     animation  : 'pulse',
                 //     duration   : '3s',
                 // });
+                if(apiCall === 1) $scope.responseData = res.data.result.content;
                 angular.forEach(res.data.result.content, function(lessonContent) {
                     if($scope.excludeContents.length) {
-                        if(_.indexOf($scope.excludeContents, lessonContent.identifier) == -1) $scope.suggestedContentList.content.push(lessonContent);
+                        if(_.indexOf($scope.excludeContents, lessonContent.identifier) < 0) $scope.suggestedContentList.content.push(lessonContent);
                     } else {
                         $scope.suggestedContentList.content.push(lessonContent);
                     }
                 });
                 $scope.suggestedContentList.content = _.uniqBy($scope.suggestedContentList.content, 'identifier');
+                //$scope.responseData[JSON.stringify(searchBody.request)] = $scope.suggestedContentList.content;
                 searchBody.request.filters = {};
                 if($scope.suggestedContentList.content.length < 20 && apiCall === 1 || apiCall === 2) {
                     apiCall++;
-                    $scope.searchLessons();
+                    $scope.searchLessons(apiCall);
                 } else if(apiCall == 3) {
                     apiCall = 1;
                 }
@@ -237,20 +241,40 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
             _.forEach(org.ekstep.services.collectionService.getActiveNode().children, function(content) {
                 if(!content.folder) $scope.excludeContents.push(content.data.id);
             });
-            $scope.searchLessons(1);
+            if($scope.responseData.length > 20) {
+                $scope.suggestedContentList.content = [];
+                angular.forEach($scope.responseData, function(lessonContent) {
+                    if(_.indexOf($scope.excludeContents, lessonContent.identifier) == -1) $scope.suggestedContentList.content.push(lessonContent);
+                });
+                if($scope.suggestedContentList.content.length < 20) $scope.searchLessons(1);
+            } else {
+                $scope.searchLessons(1);
+            }
         }
     }
 
     $scope.updateMetaData = function() {
         _.forEach(org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy().nodesModified, function(node) {
             if(node.root) {
-                if(node.metadata.subject) $scope.metaData.subject = node.metadata.subject;
-                if(node.metadata.medium) $scope.metaData.language = node.metadata.medium;
-                if(node.metadata.board) $scope.metaData.board = node.metadata.board;
-                if(node.metadata.gradeLevel) $scope.metaData.gradeLevel = node.metadata.gradeLevel;
-                //if(node.metadata.concepts) $scope.metaData.concepts = node.metadata.concepts;
+                var metadataUpdate = false;
+                if(node.metadata.subject && node.metadata.subject != $scope.metaData.subject) {
+                    $scope.metaData.subject = node.metadata.subject;
+                    metadataUpdate = true;
+                }
+                if(node.metadata.concepts && node.metadata.concepts != $scope.metaData.concepts) {
+                    $scope.metaData.concepts = node.metadata.concepts;
+                    metadataUpdate = true;
+                }
+                if(node.metadata.medium && node.metadata.concepts != $scope.metaData.concepts) {
+                    $scope.metaData.language = node.metadata.medium;
+                    metadataUpdate = true;
+                }
+                //if(node.metadata.board) $scope.metaData.board = node.metadata.board;
+                //if(node.metadata.gradeLevel) $scope.metaData.gradeLevel = node.metadata.gradeLevel;
+                if(metadataUpdate) $scope.searchLessons();
+            } else {
+                if(node.metadata.concepts && node.metadata.concepts != $scope.metaData.concepts) $scope.searchLessons();
             }
-            $scope.searchLessons();
         });
     }
 
