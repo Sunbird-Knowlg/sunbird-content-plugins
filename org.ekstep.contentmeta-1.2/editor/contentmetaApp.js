@@ -171,22 +171,32 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.onNodeSelect);
 
     $scope.goToRootParent = function() {
+        var parentNode = $scope.getPartentNode();
+        org.ekstep.services.collectionService.setActiveNode(parentNode.key);
+    }
+
+    $scope.getPartentNode = function() {
         var activeNode = org.ekstep.services.collectionService.getActiveNode();
-        var parentList = activeNode.getParentList()
-        org.ekstep.services.collectionService.setActiveNode(parentList[1].key);
+        var parentList = activeNode.getParentList();
+        var parentNode = {};
+        if (parentList && parentList.length > 0) {
+            parentNode = parentList.length > 1 ? parentList[1] : parentList[0];
+        }
+        return parentNode;
     }
 
     $scope.getPath = function() {
+        $scope.path = [];
         var activeNode = org.ekstep.services.collectionService.getActiveNode();
-        var parentList = activeNode.getParentList()
-        $scope.path = [{'title':'...', 'nodeId':parentList[1].key}];
+        var parentNode = $scope.getPartentNode();
+        if (parentNode && (activeNode.data.objectType !== "Collection") || !activeNode.folder) $scope.path = [{'title':'...', 'nodeId':parentNode.key}];
         var path = ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getKeyPath();
         _.forEach(path.split('/'), function(key) {
             if (key) {
+                var activeNode = org.ekstep.services.collectionService.getActiveNode();
                 var node = ecEditor.jQuery("#collection-tree").fancytree("getTree").getNodeByKey(key);
-                if (!node.folder) {
+                if ((!activeNode.folder && !node.folder) || (activeNode.folder && node.data.objectType == "Collection"))
                     $scope.path.push({ 'title': node.title, 'nodeId': node.key })
-                }
             }
         });
         if (ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getLevel() > 5) {
@@ -197,6 +207,8 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
 
     $scope.setActiveNode = function(data) {
         if (data.nodeId) {
+            var activeNode = org.ekstep.services.collectionService.getActiveNode();
+            activeNode ? org.ekstep.services.collectionService.getActiveNode().setActive(false) : '';
             org.ekstep.collectioneditor.api.getService('collection').setActiveNode(data.nodeId);
         } else {
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', {'data':data})

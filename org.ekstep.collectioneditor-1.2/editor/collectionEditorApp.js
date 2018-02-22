@@ -319,8 +319,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         if (node.key) {
             org.ekstep.collectioneditor.api.getService('collection').setActiveNode(node.key);
         } else {
-            var activeNode = org.ekstep.services.collectionService.getActiveNode();
-            activeNode ? org.ekstep.services.collectionService.getActiveNode().setActive(false) : '';
             $scope.setSelectedNode(undefined, node);
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:content:update', node.data.metadata);
         }
