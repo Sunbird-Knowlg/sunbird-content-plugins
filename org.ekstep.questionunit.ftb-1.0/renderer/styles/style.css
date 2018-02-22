@@ -24,6 +24,7 @@
 
 .qc-ftb-layout {
     margin: auto;
+    text-align: center;
 }
 
 .qc-ftb-question-text {
@@ -45,8 +46,12 @@ input#answer {
 input.ans-field {
     border: 2px solid #ececec;
     display: inline;
+    text-align: center;
 }
 
 .ftb-question-header {
     line-height: 3;
+}
+.qc-answertxt{
+    text-align: center;
 }
