@@ -2,6 +2,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
     .controller('lessonController', ['$scope', 'instance', 'callback', 'callerFilters', function($scope, instance, callback, callerFilters) {
         var ctrl = this;
         ctrl.facetsResponse = undefined;
+        const DEFAULT_PAGEAPI = 'LessonBrowser';
         $scope.headerTemplate = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/header.html");
         $scope.footerTemplate = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/footer.html");
         $scope.filterTemplate = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/filterTemplate.html");
@@ -9,6 +10,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
         $scope.facetsTemplate = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/facetsRenderTemplate.html");
         $scope.cardDetailsTemplate = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/cardDetailsTemplate.html");
         ctrl.contentNotFoundImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/contentNotFound.jpg");
+
         //Response variable
         ctrl.res = { count: 0, content: [] };
         ctrl.err = null;
@@ -316,7 +318,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             let Obj = {
                 request: {
                     source: "web",
-                    name: 'LessonBrowser',
+                    name: ecEditor.getContext('pageAPI') || DEFAULT_PAGEAPI,
                     sort_by: {
                         "createdOn": "desc"
                     }
@@ -324,8 +326,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             }
             let service = org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE);
             service.getPageAssemble(Obj, function(err, res) {
-                // Initialize the model
-                cb(err, response)
+                cb(err, res)
             })
 
         }
@@ -334,10 +335,11 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             $scope.mainTemplate = 'facetsItemView';
             if (!ctrl.facetsResponse) {
                 $scope.getPageAssemble(function(err, res) {
-                    if (res) {
-                        ctrl.facetsResponse =res;
-                    } else {
-                        console.error("Unable to fetch response", err);
+                    if(res){
+                        ctrl.facetsResponse = res.data;
+                        $scope.$safeApply();
+                    }else{
+                        console.error("Unable to fetch response",err);
                     }
                 });
             }
