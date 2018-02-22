@@ -193,6 +193,13 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         }, true);
     }
 
+    $scope.goToRootParent = function() {
+        var activeNode = org.ekstep.services.collectionService.getActiveNode();
+        var parentList = activeNode.getParentList()
+        if (parentList.length > 0)
+            org.ekstep.services.collectionService.setActiveNode(parentList[0].key);
+    }
+    
     $scope.changeTitle = function(){
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.unit.name);
     }
