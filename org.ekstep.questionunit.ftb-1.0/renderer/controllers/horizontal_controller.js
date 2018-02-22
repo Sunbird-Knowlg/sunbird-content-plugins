@@ -65,16 +65,8 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     $scope.ftbAnswer = "";
     var qData = $scope.question._currentQuestion.data.__cdata || $scope.question._currentQuestion.data;
     var questionData = JSON.parse(qData);
-    //if string contain #option then show blank
-    if (questionData.question.text.search("#option") != -1) {
-      //$scope.qcblank = false;
-      questionData.question.text = questionData.question.text.replace(/#option#/g, function() {
-        return "<input type='text' id=option" + ++gererateId + " class='question-box'/>";
-      });
-      $("#qftbtext").html(questionData.question.text);
-      $('#preview-ftb-horizontal').on('click', '.question-box', $scope.doTextBoxHandle);
-      $(".question-box").click($scope.doTextBoxHandle);
-    }
+    $("#qftbtext").html(questionData.parsedQuestion.text);
+    $('#preview-ftb-horizontal').on('click', '.ans-field', $scope.doTextBoxHandle);
     var qState = $scope.question._currentQuestionState;
     if (qState && qState.val) {
       $scope.ftbAnswer = qState.val;
@@ -106,6 +98,7 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     $scope.qcquestion = false;
     $scope.qcblank = true;
     $scope.qcmiddlealign = true;
+    //for text focus
     document.getElementById('answertxt').focus();
     $scope.safeApply();
     //for text focus
@@ -125,22 +118,18 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     $scope.qcmiddlealign = false;
     $scope.safeApply();
   });
+   /**
+   * renderer:questionunit.ftb:set target and value.
+   * @event renderer:questionunit.ftb:click
+   * @memberof org.ekstep.questionunit.ftb
+   */
   $scope.doTextBoxHandle = function() {
     $scope.qcblank = true;
     $scope.textboxtarget.id = this.id;
     $scope.textboxtarget.value = this.value.trim();
     $("#answertxt").val($scope.textboxtarget.value);
     $scope.safeApply();
-
   }
-  // $scope.addClickEvent = function() {
-  //     var textBoxCollection = angular.element($("#preview-ftb-horizontal").find("input[type=text]"));
-  //     _.each(textBoxCollection, function(element) {
-  //       debugger;
-  //         console.log("hi",element)
-  //     });
-  // }
-
   /**
    * renderer:questionunit.ftb:max length 25 because max length not working in andirod.
    * @event renderer:questionunit.ftb:watch
@@ -156,17 +145,22 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     $scope.generateItemResponse();
     EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
   });
-
   $scope.evaluate = function(callback) {
-    var ansValue = angular.element('#preview-ftb-horizontal').scope().ftbAnswer;
-    var correctAnswer = false;
-    if ($scope.questionObj.answer.text.toLowerCase().replace(/ /g, '') === ansValue.toLowerCase().replace(/ /g, '')) {
+    var inputAnsArr = [],//array have all answer
+      correctAnswer = false; //check for evalution
+      //get all text box value inside the class
+    var textBoxCollection = angular.element($(".ftb-question-header").find("input[type=text]"));
+    _.each(textBoxCollection, function(element) {
+      inputAnsArr.push(element.value.toLowerCase());
+    });
+    //compare two array
+    if (_.isEqual(inputAnsArr, $scope.questionObj.answer)) {
       correctAnswer = true;
     }
     var result = {
       eval: correctAnswer,
       state: {
-        val: ansValue
+        val: inputAnsArr
       }
     }
     if (_.isFunction(callback)) {
