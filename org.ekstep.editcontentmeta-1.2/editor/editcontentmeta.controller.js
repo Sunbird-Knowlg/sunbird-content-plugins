@@ -114,6 +114,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
                     return a.lemma ? a.lemma : a
                 })
             }
+            console.log("editcontentmeta");
             ecEditor.dispatchEvent('org.ekstep.contenteditor:save:meta', {
                 savingPopup: false,
                 successPopup: false,

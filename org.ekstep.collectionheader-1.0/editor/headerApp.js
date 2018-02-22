@@ -10,6 +10,7 @@ angular.module('org.ekstep.collectionheader:app', ["Scope.safeApply", "yaru22.an
     $scope.lastSaved;
 
     $scope.saveContent = function() {
+        ecEditor.dispatchEvent("org.ekstep.collectioneditor:save")
         $scope.disableSaveBtn = true;
         ecEditor.dispatchEvent("org.ekstep.contenteditor:save", {
             showNotification: true,

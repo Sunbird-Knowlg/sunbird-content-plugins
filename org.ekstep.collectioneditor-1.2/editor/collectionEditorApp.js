@@ -14,18 +14,17 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         });
     }
 
-    var limit = 100;
-    var offset = 0;
     $scope.excludeContents = [];
-    $scope.collectionData = [];
+    $scope.metaData = {};
     $scope.suggestedContentList = {count:0, content:[]};
+    var apiCall = 1;
     var searchBody = {"request": {
-                        "filters":{
-                           "objectType": ["Content"],
-                           //"contentType": ["Collection", "Content"],
-                           "status": ["Live"]
-                        }
-                    }};
+                        "mode": "soft",
+                        "filters":{},
+                        "offset": 0,
+                        "limit": 100
+                         }
+                    };
     var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
 
     $scope.searchNode = function(event) {
@@ -57,11 +56,20 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
             if (res && res.data && res.data.responseCode === "OK") {
                 org.ekstep.services.collectionService.fromCollection(res.data.result.content);
-                $scope.collectionData = res.data.result.content;
-                $scope.searchLessons();
-                _.forEach(ecEditor.jQuery("#collection-tree").fancytree("getRootNode").children[0].children, function(content) {
-                    $scope.excludeContents.push(content.data.id);
-                });
+                //var collectionData = res.data.result.content;
+                if(res.data.result.content.board && res.data.result.content.subject && res.data.result.content.gradeLevel) {
+                    _.forEach(ecEditor.jQuery("#collection-tree").fancytree("getRootNode").children[0].children, function(content) {
+                        if(!content.folder) $scope.excludeContents.push(content.data.id);
+                    });
+                    $scope.metaData.board = res.data.result.content.board;
+                    $scope.metaData.subject = res.data.result.content.subject;
+                    $scope.metaData.gradeLevel = res.data.result.content.gradeLevel;
+                    if(res.data.result.content.language) $scope.metaData.language = res.data.result.content.language;
+                    if(res.data.result.content.keywords) $scope.metaData.keywords = res.data.result.content.keywords;
+                    if(res.data.result.content.concepts) $scope.metaData.concepts = res.data.result.content.concepts;
+                    $scope.searchLessons();
+                }
+
                 var frameworkId = ecEditor.getContext('framework') || org.ekstep.services.collectionService.defaultFramwork;
                 ecEditor.getService('meta').getCategorys(frameworkId, function(cateerr, cateresp) {
                     if (!cateerr) {
@@ -141,44 +149,45 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         }
     }
 
-    $scope.searchLessons = function(metadata) {
-        searchBody.request.limit = limit;
-        searchBody.request.offset = offset;
+    $scope.searchLessons = function(apiCallLevel) {
+        apiCall = apiCallLevel ? apiCallLevel : apiCall;
+        var queryData = {};
+        queryData.board = $scope.metaData.board || "";
+        queryData.subject = $scope.metaData.subject;
+        queryData.gradeLevel = $scope.metaData.gradeLevel || "";
+
+        searchBody.request.filters = queryData;
         searchBody.request.filters.contentType = org.ekstep.collectioneditor.api.getService('collection').getObjectTypeByAddType('Browser');
-        // if(metadata) {
-        //     if(metadata.board) searchBody.request.filters.board = metadata.board;
-        //     if(metadata.subject) searchBody.request.filters.subject = metadata.subject;
-        //     if(metadata.class) searchBody.request.filters.class = metadata.class;
-        //     if(metadata.language) searchBody.request.filters.language = metadata.language;
-        //     if(metadata.concept) searchBody.request.filters.concept = metadata.concept;
-        //     if(metadata.keywords) searchBody.request.filters.keywords = metadata.keywords;
-        // } else {
-        //     if($scope.board) searchBody.request.filters.board = $scope.board;
-        //     if(metadata.subject) searchBody.request.filters.subject = metadata.subject;
-        //     if(metadata.class) searchBody.request.filters.class = metadata.class;
-        //     if(metadata.language) searchBody.request.filters.language = metadata.language;
-        //     if(metadata.concept) searchBody.request.filters.concept = metadata.concept;
-        //     if(metadata.keywords) searchBody.request.filters.keywords = metadata.keywords;
-        // }
 
-        //var rootNodeType = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild().data.objectType;
-        // ecEditor.dispatchEvent("org.ekstep.collectionEditor:" + rootNodeType, {
-        //     callback: function(err, res) {
-        //         console.log("RES", res);
-        //     }
-        // });
+        //Very First call, reads data from root node and strict checking
+        if(apiCall === 1) {
+            if(!$scope.metaData.language) {
+                apiCall++;
+                $scope.searchLessons();
+            }
 
+            $scope.suggestedContentList = { count:0, content:[] };
+            searchBody.request.filters.language = $scope.metaData.language;
+            if($scope.metaData.concepts) searchBody.request.filters.concepts = $scope.metaData.concepts;
+            searchBody.request.softConstraints = { "gradeLevel": 100, "board": 90 };
+        } else if(apiCall === 2) {
+            if($scope.metaData.concepts) searchBody.request.filters.concepts = $scope.metaData.concepts;
+            searchBody.request.softConstraints = { "gradeLevel": 100, "board": 90 };
+        } else {
+            searchBody.request.filters.language = $scope.metaData.language || "";
+            searchBody.request.softConstraints = { "gradeLevel": 100, "language": 90, "board": 80 };
+        }
+        searchBody.request.filters.objectType = ["Content"];
+        searchBody.request.filters.status = ["Live"];
         searchService.search(searchBody, function(err, res) {
             if (err) {
                 console.err("Oops! Something went wrong. Please try again later.");
             } else {
-                $scope.suggestedContentList = { count:0, content:[] };
                 $scope.suggestedContentList.count = res.data.result.count;
-                $('.card-list')
-                        .transition({
-                            animation  : 'pulse',
-                            duration   : '3s',
-                        });
+                // $('.card-list').transition({
+                //     animation  : 'pulse',
+                //     duration   : '3s',
+                // });
                 angular.forEach(res.data.result.content, function(lessonContent) {
                     if($scope.excludeContents.length) {
                         if(_.indexOf($scope.excludeContents, lessonContent.identifier) == -1) $scope.suggestedContentList.content.push(lessonContent);
@@ -186,18 +195,34 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
                         $scope.suggestedContentList.content.push(lessonContent);
                     }
                 });
+                $scope.suggestedContentList.content = _.uniqBy($scope.suggestedContentList.content, 'identifier');
+                searchBody.request.filters = {};
+                if($scope.suggestedContentList.content.length < 20 && apiCall === 1 || apiCall === 2) {
+                    apiCall++;
+                    $scope.searchLessons();
+                } else if(apiCall == 3) {
+                    apiCall = 1;
+                }
             }
             $scope.$safeApply();
         });
     }
 
     $scope.openResourceBrowser = function() {
-        ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show", {
-            filters: { lessonType: ["Resource"] },
-            callback: function(err, res) {
-                console.log("RESULT", res);
-            }
-        });
+        if($scope.suggestedContentList.count) {
+            ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show", {
+                filters: { 
+                    //contentType: org.ekstep.collectioneditor.api.getService('collection').getObjectTypeByAddType('Browser'),
+                    lessonType: org.ekstep.collectioneditor.api.getService('collection').getObjectTypeByAddType('Browser'),
+                    language: $scope.metaData.language || "",
+                    grade: $scope.metaData.gradeLevel || "",
+                    //subject: $scope.metaData.subject
+                },
+                callback: function(err, res) {
+                    console.log("RESULT", res);
+                }
+            });
+        }
     }
 
     $scope.addContent = function(lesson, index) {
@@ -206,7 +231,31 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
         $scope.excludeContents.push(lesson.identifier);
     }
 
+    $scope.onNodeSelect = function() {
+        if($scope.metaData.subject) {
+            $scope.excludeContents = [];
+            _.forEach(org.ekstep.services.collectionService.getActiveNode().children, function(content) {
+                if(!content.folder) $scope.excludeContents.push(content.data.id);
+            });
+            $scope.searchLessons(1);
+        }
+    }
+
+    $scope.updateMetaData = function() {
+        _.forEach(org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy().nodesModified, function(node) {
+            if(node.root) {
+                if(node.metadata.subject) $scope.metaData.subject = node.metadata.subject;
+                if(node.metadata.medium) $scope.metaData.language = node.metadata.medium;
+                if(node.metadata.board) $scope.metaData.board = node.metadata.board;
+                if(node.metadata.gradeLevel) $scope.metaData.gradeLevel = node.metadata.gradeLevel;
+                //if(node.metadata.concepts) $scope.metaData.concepts = node.metadata.concepts;
+            }
+            $scope.searchLessons();
+        });
+    }
+
+    ecEditor.addEventListener('org.ekstep.collectioneditor:contentchange', $scope.onNodeSelect);
+    ecEditor.addEventListener('org.ekstep.collectioneditor:save', $scope.updateMetaData);
     $scope.init();
-    //$scope.searchLessons();
 }]);
 //# sourceURL=collectiontreeApp.js
