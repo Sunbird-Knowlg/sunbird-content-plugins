@@ -147,3 +147,6 @@
   vertical-align: bottom;
   padding-right: 10px; 
 }
+.has-success-card{
+  border: 1px solid #dfcfcf !important;
+}
