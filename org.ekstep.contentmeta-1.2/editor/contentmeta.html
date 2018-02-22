@@ -1,7 +1,7 @@
 <div ng-app="contentmetaApp" class="metacontent-wrapper" ng-controller="contentmetaController">
     <div class="ui segment header-segment" id="headerSegment">
         <div class="ui breadcrumb">
-            <i class="folder outline icon" ng-click="goToRootParent()"></i>
+            <i class="folder outline icon pointer" ng-click="goToRootParent()"></i>
             <a class="section" ng-repeat="value in path" ng-click="setActiveNode(value)">
                 <span data-inverted="" ng-mouseover="showTooltip($event, value.title)">{{value.title | limitTo:25}} </span>
                 <span ng-if="value.title.length > 25">...</span>

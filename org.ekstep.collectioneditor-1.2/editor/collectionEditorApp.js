@@ -13,7 +13,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     $scope.selectedContent;
     $scope.isContent = false;
     $scope.isCollection = false;
-    $scope.collectionMemory = [];
+    $scope.collectionCache = [];
     $scope.getObjectType = function(objectType) {
         return _.find(objectType, function(type) {
             return type == $scope.selectedObjectType
@@ -163,10 +163,10 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 template: '<div class="ui mini modal active" id="deletePopup"> <div class="content"> <div class="ui grid"> <div class="ten wide column"> <span class="custom-modal-heading">Are you sure you want to delete this content?</span> </div><div class="two wide column"> <i class="close large icon four wide column right-float pointer" ng-click="closeThisDialog()"></i></div></div><p class="custom-modal-content">All content within this folder will also be deleted from this textbook.</p><button class="ui red button" ng-click="confirm()">YES, DELETE</button> </div></div>',
                 controller: ["$scope", function($scope) {
                     $scope.confirm = function() {
-                        var activeNode = org.ekstep.services.collectionService.getActiveNode();
+                        var parentNode = node.getParent();
                         node.remove();
                         delete org.ekstep.collectioneditor.cache.nodesModified[node.data.id];
-                        activeNode.setActive();
+                        parentNode.setActive();
                         $scope.closeThisDialog();
                         ecEditor.dispatchEvent("org.ekstep.collectioneditor:node:removed", node.data.id);
                     };
@@ -191,7 +191,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
      * Calling api to get collection list to show in collection content list
      */
     $scope.getSubCollection = function(contentId) {
-        var collection = $scope.getCollectionFromMemory(contentId);
+        var collection = $scope.getCollectionFromCache(contentId);
         if (collection) {
             $scope.contentList = collection;
             $scope.$safeApply();
@@ -200,7 +200,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: contentId, mode: mode }, function(err, res) {
                 if (res && res.data && res.data.responseCode === "OK") {
                     $scope.contentList = $scope.generateCollectionContent(res.data.result.content.children);
-                    $scope.storeCollectionInMemory(contentId,$scope.contentList);
+                    $scope.storeCollectionInCache(contentId,$scope.contentList);
                     $scope.$safeApply();
                 } else {
                     console.log('unable to fetch the content!', res);
@@ -209,13 +209,13 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         }
     }
 
-    $scope.storeCollectionInMemory = function(contentId, collection) {
-        $scope.collectionMemory[contentId] = collection;
+    $scope.storeCollectionInCache = function(contentId, collection) {
+        $scope.collectionCache[contentId] = collection;
     }
 
-    $scope.getCollectionFromMemory = function(identifier) {
-        if ($scope.collectionMemory[identifier]) {
-            return $scope.collectionMemory[identifier]
+    $scope.getCollectionFromCache = function(identifier) {
+        if ($scope.collectionCache[identifier]) {
+            return $scope.collectionCache[identifier]
         } else {
             return false;
         }
