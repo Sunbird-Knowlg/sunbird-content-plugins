@@ -5,43 +5,50 @@
 </div>
 <div class="source-result-container">
     <div class="ui special link cards cardsWrapper" ng-class="{four: mainTemplate == 'selectedResult',five: mainTemplate == 'addedItemsView'}">
-        <div class="card" ng-repeat="lesson in $ctrl.res.content | orderBy:sortOption">
-            <div class="blurring dimmable medium image">
-                <div class="ui dimmer">
-                    <div class="content">
-                        <div class="ui middle aligned list">
-                            <div class="item">
-                                <div class="right floated content contentMetaDetail">{{lesson.board || 'NA'}}</div>
-                                <div class="content contentTitle">Board</div>
-                            </div>
-                            <div class="item">
-                                <div class="right floated content contentMetaDetail">{{(lesson.class.toString() | cut:true:15) || 'NA'}}
-                                    <span ng-if="lesson.class.toString().length > 20">
+        <div class="card" ng-repeat="lesson in $ctrl.res.content | orderBy:sortOption" ng-click="toggleSelectionLesson(lesson)">
+            <div class="ui inverted dimmer">
+                <div class="content">
+                    <div class="ui list cardDetails-list">
+                        <div class="item">
+                            <div class="right floated content contentMetaDetail">{{lesson.board || 'NA'}}</div>
+                            <div class="content contentTitle">Board</div>
+                        </div>
+                        <div class="item">
+                            <div class="right floated content contentMetaDetail">{{(lesson.class.toString() | cut:true:15) || 'NA'}}
+                                <span ng-if="lesson.class.toString().length > 20">
                                     ...
                                     </span>
-                                </div>
-                                <div class="content contentTitle">Class</div>
                             </div>
-                            <div class="item">
-                                <div class="right floated content contentMetaDetail">{{(lesson.subject | cut:true:15) || 'NA'}}
-                                    <span ng-if="lesson.subject.length > 20">
+                            <div class="content contentTitle">Class</div>
+                        </div>
+                        <div class="item">
+                            <div class="right floated content contentMetaDetail">{{(lesson.subject | cut:true:15) || 'NA'}}
+                                <span ng-if="lesson.subject.length > 20">
                                      ...
                                     </span>
-                                </div>
-                                <div class="content contentTitle">Subject</div>
                             </div>
-                            <div class="item">
-                                <div class="right floated content contentMetaDetail">{{(lesson.concepts.toString() | cut:true:15) || 'NA'}}
-                                    <span ng-if="lesson.concepts.toString().length > 20">
+                            <div class="content contentTitle">Subject</div>
+                        </div>
+                        <div class="item">
+                            <div class="right floated content contentMetaDetail">{{(lesson.concepts.toString() | cut:true:15) || 'NA'}}
+                                <span ng-if="lesson.concepts.toString().length > 20">
                                     ...
                                     </span>
-                                </div>
-                                <div class="content contentTitle">Concept</div>
                             </div>
+                            <div class="content contentTitle">Concept</div>
+                        </div>
+                        <div class="item overlapAll">
+                            <div class="content bottomList" ng-click="showCardDetails(lesson)">VIEW DETAILS</div>
                         </div>
                     </div>
                 </div>
-                <img src="{{lesson.appIcon || 'http://via.placeholder.com/80x80'}}" class="resourceMetaImage">
+            </div>
+            <div class="image">
+                <img src="{{lesson.appIcon || 'http://via.placeholder.com/80x80'}}" class="resourceMetaImage ">
+                <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{lesson.identifier}}' style="z-index:9999">
+                    <input class="checkBox" type="checkbox" name="lessons[]">
+                    <label></label>
+                </div>
             </div>
             <div class="content">
                 <div class="header contentMetaTitle">
@@ -61,15 +68,12 @@
                     <span class="creator">Created by {{lesson.creator || 'Unknown'}}</span>
                 </div>
             </div>
-            <div class="extra content">
-                <div class="ui checkbox checkBoxLink" id='checkBox_{{lesson.identifier}}'>
-                    <input class="checkBox" type="checkbox" name="lessons[]" ng-click="toggleSelectionLesson(lesson)">
-                    <label></label>
-                </div>
-                <span class="resourceLink" id='add_{{lesson.identifier}}'>ADD</span>
-                <span class="resourceLink" id='remove_{{lesson.identifier}}'>REMOVE</span>
-            </div>
         </div>
+    </div>
+    <div class="load-more-lesson-warning-msg" ng-hide="mainTemplate == 'addedItemsView' || $ctrl.err || !$ctrl.res.content.length">
+        <img class="ui centered tiny image" ng-src="{{$ctrl.contentNotFoundImage}}">
+        <p>Didn’t find what you were looking for? Try <a href="#">search</a> for something more specific
+        </p>
     </div>
     <div class="ui negative message errorMessage" ng-if="$ctrl.err">
         <div class="header">{{$ctrl.err}}</div>

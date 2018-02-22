@@ -1,18 +1,18 @@
 <script type="text/ng-template" ng-app="org.ekstep.lessonbrowserapp" ng-controller="lessonController as $ctrl" id="partials/lessonbrowser.html">
-    <div class="ui active fullscreen modal lessonbrowser">
+    <div class="ui active fullscreen modal fullScreeenModal">
         <!-- lessonbrowser header -->
         <div ng-include="headerTemplate"></div>
         <!-- MainTemplate html-->
         <div class="bodyContainer">
+            <div class="ui active inverted dimmer" ng-if="isLoading">
+                <div class="ui large text loader">Loading</div>
+            </div>
             <div ng-if="mainTemplate == 'selectedResult'">
                 <div class="ui grid">
-                      <div class="two wide column">
+                    <div class="two wide column">
                         <div class="filterContent rightBorder" ng-include="filterTemplate"></div>
                     </div>
                     <div class="ten wide column">
-                        <div class="ui active inverted dimmer" ng-if="isLoading">
-                            <div class="ui large text loader">Loading</div>
-                        </div>
                         <div ng-include="cardTemplate"></div>
                     </div>
                 </div>
@@ -27,7 +27,14 @@
             <div ng-if="mainTemplate == 'facetsItemView'">
                 <div class="ui grid">
                     <div class="twelve wide column">
-                        <div class="addedItems" ng-include="facetsTemplate"></div>
+                        <div ng-include="facetsTemplate"></div>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="mainTemplate == 'cardDetailsView'" class="fullHeight">
+                <div class="ui grid fullHeight">
+                    <div class="twelve wide column">
+                        <div class="addedItems fullHeight" ng-include="cardDetailsTemplate"></div>
                     </div>
                 </div>
             </div>

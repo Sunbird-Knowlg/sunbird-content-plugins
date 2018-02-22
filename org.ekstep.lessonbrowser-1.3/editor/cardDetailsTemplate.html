@@ -1,0 +1,49 @@
+<div class="ui grid fullHeight">
+    <div class="ui segment horizontal two wide column">
+        <div class="cardMetaDetails">
+            <p class="cardDetailsSectionTitle">{{lessonView.name}}</p>
+            <div class="image">
+                <img src="{{lessonView.appIcon || 'http://via.placeholder.com/80x80'}}" class="width-100 resourceMetaImage">
+            </div>
+            <div class="meta">
+                <div class="ui list cardDetails-list">
+                    <div class="item">
+                        <div class="right floated content cardSidePanel">{{lessonView.board || 'NA'}}</div>
+                        <div class="content cardSidePanel">Board</div>
+                    </div>
+                    <div class="item">
+                        <div class="right floated content cardSidePanel">{{lessonView.class.toString()|| 'NA'}}
+                        </div>
+                        <div class="content cardSidePanel">Class</div>
+                    </div>
+                    <div class="item">
+                        <div class="right floated content cardSidePanel">{{lessonView.subject|| 'NA'}}
+                        </div>
+                        <div class="content cardSidePanel">Subject</div>
+                    </div>
+                    <div class="item">
+                        <div class="right floated content cardSidePanel">{{lessonView.concepts.toString() || 'NA'}}
+                        </div>
+                        <div class="content cardSidePanel">Concept</div>
+                    </div>
+                </div>
+                <div class="bottomFixed">
+                    <span class="creator">Created by <a>{{lessonView.creator || 'Unknown'}}</a></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="ten wide column">
+        <div class="ui grid fullHeight">
+            <div class="ui segment horizontal six wide column removeBorder">
+                <p class="cardDetailsSectionTitle">Description</p>
+                <div class="content">
+                    {{lessonView.description}}
+                </div>
+            </div>
+            <div class="ui segment horizontal six wide column removeBorder centered">
+                <img src="http://via.placeholder.com/80x80" style="width: 75%;height: 40%;">
+            </div>
+        </div>
+    </div>
+</div>

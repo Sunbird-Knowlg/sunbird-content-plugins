@@ -1,6 +1,6 @@
 <!-- header template -->
 <div ng-app="org.ekstep.lessonbrowser" class="header">
-    <div class="ui clearing segment">
+    <div class="ui clearing segment overLapAll">
         <h5 class="ui right floated header searcher">
             <div class="ui action input search-reset-keyword-field" ng-show="mainTemplate == 'selectedResult' || 'facetsItemView'">
                 <input type="text" id="resourceSearch" placeholder="Search..." autocomplete="off" spellcheck="false" ng-model="searchKeyword"
@@ -10,7 +10,7 @@
             <span>
                     <i class="close link icon" id="resourceCloseBtn" ng-click="closeThisDialog(); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeLessonBrowser'})"></i>
                 </span>
-            <ul class="searchList" ng-show="mainTemplate == 'selectedResult' && $ctrl.searchRes.content.length && (searchKeyword.length >= 3)">
+            <ul class="searchList" ng-show="( mainTemplate == 'selectedResult'|| mainTemplate == 'facetsItemView' )  && $ctrl.searchRes.content.length && (searchKeyword.length >= 3)">
                 <li ng-click="searchSelectedLesson(lesson.name)" class="searchResult" ng-repeat="lesson in $ctrl.searchRes.content">
                     <p>{{lesson.name}}</p>
                 </li>
@@ -23,7 +23,7 @@
                     <strong class="searchResultMsg">{{$ctrl.searchErr}}</strong>
             </ul>
         </h5>
-        <strong ng-show="mainTemplate == 'selectedResult'" class="ui left floated header contentDetailsTitle">
+        <strong ng-show="mainTemplate == 'selectedResult' || mainTemplate == 'cardDetailsView' || mainTemplate == 'facetsItemView'" class="ui left floated header contentDetailsTitle">
             Find & Select Activities
         </strong>
         <strong ng-show="mainTemplate == 'addedItemsView'" class="ui left floated header contentDetailsTitle">

@@ -1,14 +1,14 @@
 <div class="source-result-container">
-  <div class = "ui container" ng-repeat="section in $ctrl.facetsResponse.result.response.sections" ng-init = "sectionIndex = $index"> 
-   <span class="facets-headtext">{{$ctrl.facetsResponse.result.response.sections[sectionIndex].name }}</span>
-   <span class="facets-viewall" ng-click ="viewAll($ctrl.facetsResponse.result.response.sections[sectionIndex].searchQuery)">View All</span>
-</br>
-    <div class="ui special five cards sections" >
-        <div class="card" ng-repeat="lesson in $ctrl.facetsResponse.result.response.sections[sectionIndex].contents | limitTo:5">
-            <div class="blurring dimmable medium image">
-                <div class="ui dimmer">
+    <div class="facetList" ng-repeat="section in $ctrl.facetsResponse.result.response.sections" ng-init="sectionIndex = $index">
+        <div class="facets-headtext">{{$ctrl.facetsResponse.result.response.sections[sectionIndex].name }}
+            <span class="facets-viewall blueColor" ng-click="viewAll($ctrl.facetsResponse.result.response.sections[sectionIndex].searchQuery)">View All</span>
+        </div>
+        </br>
+        <div class="ui special five cards">
+            <div class="card" style="cursor:pointer" ng-repeat="lesson in $ctrl.facetsResponse.result.response.sections[sectionIndex].contents | limitTo:5" ng-click="toggleSelectionLesson(lesson)">
+                <div class="ui inverted dimmer">
                     <div class="content">
-                        <div class="ui middle aligned list">
+                        <div class="ui list cardDetails-list">
                             <div class="item">
                                 <div class="right floated content contentMetaDetail">{{lesson.board || 'NA'}}</div>
                                 <div class="content contentTitle">Board</div>
@@ -16,62 +16,62 @@
                             <div class="item">
                                 <div class="right floated content contentMetaDetail">{{(lesson.class.toString() | cut:true:15) || 'NA'}}
                                     <span ng-if="lesson.class.toString().length > 20">
-                                    ...
-                                    </span>
+                                        ...
+                                        </span>
                                 </div>
                                 <div class="content contentTitle">Class</div>
                             </div>
                             <div class="item">
                                 <div class="right floated content contentMetaDetail">{{(lesson.subject | cut:true:15) || 'NA'}}
                                     <span ng-if="lesson.subject.length > 20">
-                                     ...
-                                    </span>
+                                         ...
+                                        </span>
                                 </div>
                                 <div class="content contentTitle">Subject</div>
                             </div>
                             <div class="item">
                                 <div class="right floated content contentMetaDetail">{{(lesson.concepts.toString() | cut:true:15) || 'NA'}}
                                     <span ng-if="lesson.concepts.toString().length > 20">
-                                    ...
-                                    </span>
+                                        ...
+                                        </span>
                                 </div>
                                 <div class="content contentTitle">Concept</div>
+                            </div>
+                            <div class="item overlapAll">
+                                <div class="content bottomList" ng-click="showCardDetails(lesson)">VIEW DETAILS</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <img src="{{lesson.appIcon || 'http://via.placeholder.com/80x80'}}" class="resourceMetaImage">
-            </div>
-            <div class="content">
-                <div class="header">
-                    {{lesson.name | cut:true:25}}
-                    <span ng-if="lesson.name.length > 25" class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.name}}" data-position="bottom right"><a class="desc_ellipsisLink">...</a>
-                </span>
+                <div class="image">
+                    <img src="{{lesson.appIcon || 'http://via.placeholder.com/80x80'}}" class="resourceMetaImage ">
+                    <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{lesson.identifier}}' style="z-index:9999">
+                        <input class="checkBox" type="checkbox" name="lessons[]">
+                        <label></label>
+                    </div>
                 </div>
-                <div class="description resourceDescription">
-                    {{lesson.description | removeHTMLTags | cut:true:80}}
-                    <span ng-if="lesson.description.length > 80">
+                <div class="content">
+                    <div class="header contentMetaTitle">
+                        {{lesson.name | cut:true:25}}
+                        <span ng-if="lesson.name.length > 25" class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.name}}" data-position="bottom right"><a class="desc_ellipsisLink">...</a>
+                </span>
+                    </div>
+                    <div class="description resourceDescription">
+                        {{lesson.description | removeHTMLTags | cut:true:80}}
+                        <span ng-if="lesson.description.length > 80">
                         <span class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.description}}" data-position="bottom center">
                             <a class="moreLink">&nbsp;&nbsp;more...</a>
                         </span>
-                    </span>
+                        </span>
+                    </div>
+                    <div class="meta">
+                        <span class="date">Created by {{lesson.creator}}</span>
+                    </div>
                 </div>
-                <div class="meta">
-                    <span class="date">Created by {{lesson.creator}}</span>
-                </div>
-            </div>
-            <div class="extra content">
-                <div class="ui checkbox checkBoxLink" id='checkBox_{{lesson.identifier}}'>
-                    <input class="checkBox" type="checkbox" name="lessons[]" ng-click="toggleSelectionLesson(lesson)">
-                    <label></label>
-                </div>
-                <span class="resourceLink" id='add_{{lesson.identifier}}'>ADD</span>
-                <span class="resourceLink" id='remove_{{lesson.identifier}}'>REMOVE</span>
             </div>
         </div>
+        <div class="ui divider section_divider"></div>
     </div>
-    <div class="ui divider section_divider"></div>
-  </div>  
     <div class="ui negative message errorMessage" ng-if="$ctrl.err">
         <div class="header">{{$ctrl.err}}</div>
     </div>
