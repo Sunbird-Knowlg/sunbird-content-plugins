@@ -1,6 +1,7 @@
 <div ng-app="unitmetaApp" class="metacontent-wrapper" ng-controller="unitmetaController">
     <div class="ui segment header-segment" id="headerSegment">
         <div class="ui breadcrumb">
+            <i class="folder outline icon"></i>
             <a class="section" ng-repeat="value in path" ng-click="setActiveNode(value.nodeId)">
                 <span data-inverted="" ng-mouseover="showTooltip($event, value.title)">{{value.title | limitTo:25}}</span>
                 <span ng-if="value.title.length > 25">...</span>
@@ -11,7 +12,7 @@
     <form class="ui form segment" id="contents-data-form" novalidate  ng-show="editMode" name="unitMetaForm">
         <div class="fields">
             <div class="field form-fields-except-image">
-                <div class="field required form-field-name">
+                <div class="field required">
                     <label>Name</label>
                     <div class="ui input">
                         <input placeholder="Enter title for Book" ng-model="unit.name" ng-change = 'changeTitle()' ng-class=" {error: submitted && unitMetaForm.name.$error.required}" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="100">

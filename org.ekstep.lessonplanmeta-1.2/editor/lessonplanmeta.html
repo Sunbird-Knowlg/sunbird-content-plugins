@@ -11,7 +11,7 @@
     <form class="ui form segment" id="contents-data-form" novalidate ng-show="editMode" name="lessonMetaForm">
         <div class="fields">
             <div class="field form-fields-except-image">
-                <div class="field required form-field-name">
+                <div class="field required">
                     <label>Title</label>
                     <div class="ui input">
                         <input placeholder="Enter title for lesson" ng-model="lesson.name" ng-class=" {error: submitted && lessonMetaForm.name.$error.required}" ng-change = 'changeTitle()' name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="100">

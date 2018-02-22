@@ -12,10 +12,18 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
 
     $scope.updateContent = function(event, data) {
         $scope.content = data;
+        $scope.path.push({'title' : data.name, 'metadata' : data})
         $scope.$safeApply();
     }
+
+    $scope.updateCollectionBreadcrumb = function(data) {
+        var index = _.indexOf($scope.path, data);
+        if (index>-1) {
+            $scope.path = _.dropRight($scope.path, $scope.path.length-index - 1);
+        }
+    }
+
     ecEditor.addEventListener("title:update:collection", $scope.updateTitle, $scope);
-    ecEditor.addEventListener("org.ekstep.collectioneditor:content:update", $scope.updateContent, $scope);
 
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
         if (!err) {
@@ -158,21 +166,27 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.content.name = $scope.content.name || 'Untitled Collection';
             $scope.getPath();
         }
-        // if (data.data.objectType == "Collection" && $scope.showSubCollection) $scope.getSubCollection(data.data.metadata.identifier, function(err, res) {
-        //     if (err) console.log("error when trying to fetch sub collections");
-        //     if (res) $scope.initFancyTree(res.data.result.content);
-        // });
         $scope.$safeApply();
     }
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.onNodeSelect);
 
+    $scope.goToRootParent = function() {
+        var activeNode = org.ekstep.services.collectionService.getActiveNode();
+        var parentList = activeNode.getParentList()
+        org.ekstep.services.collectionService.setActiveNode(parentList[1].key);
+    }
+
     $scope.getPath = function() {
-        $scope.path = [];
+        var activeNode = org.ekstep.services.collectionService.getActiveNode();
+        var parentList = activeNode.getParentList()
+        $scope.path = [{'title':'...', 'nodeId':parentList[1].key}];
         var path = ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getKeyPath();
         _.forEach(path.split('/'), function(key) {
             if (key) {
                 var node = ecEditor.jQuery("#collection-tree").fancytree("getTree").getNodeByKey(key);
-                $scope.path.push({ 'title': node.title, 'nodeId': node.key })
+                if (!node.folder) {
+                    $scope.path.push({ 'title': node.title, 'nodeId': node.key })
+                }
             }
         });
         if (ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getLevel() > 5) {
@@ -181,8 +195,13 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         }
     }
 
-    $scope.setActiveNode = function(nodeId) {
-        org.ekstep.collectioneditor.api.getService('collection').setActiveNode(nodeId);
+    $scope.setActiveNode = function(data) {
+        if (data.nodeId) {
+            org.ekstep.collectioneditor.api.getService('collection').setActiveNode(data.nodeId);
+        } else {
+            ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', {'data':data})
+            $scope.updateCollectionBreadcrumb(data);
+        }
     }
 
     $scope.previewContent = function(event, data) {
@@ -222,7 +241,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             if($scope.content) {
                 if(/^[a-z\d\-_\s]+$/i.test($scope.content.name) == false && $scope.editMode) $scope.content.name = org.ekstep.services.collectionService.removeSpecialChars($scope.content.name);
                 var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
-                if ($scope.nodeType === DEFAULT_NODETYPE && (activeNode.data.root || $scope.content.visibility != 'Default')) {
+                if ($scope.nodeType === DEFAULT_NODETYPE && ((activeNode && activeNode.data.root) || $scope.content.visibility != 'Default')) {
                     $scope.updateNode();
                 }
             }
@@ -242,11 +261,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         }
     };
 
-    $scope.addCollectiontoBreadcrum = function(event, data) {
-        $scope.path.push({'title' : data.name})
-        $scope.$safeApply();
-    }
-    ecEditor.addEventListener('org.ekstep.collectioneditor:content:update', $scope.addCollectiontoBreadcrum, $scope);
+    ecEditor.addEventListener("org.ekstep.collectioneditor:content:update", $scope.updateContent, $scope);
     $scope.init();
 }]);
 //# sourceURL=contentmetaApp.js

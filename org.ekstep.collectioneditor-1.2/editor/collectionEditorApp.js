@@ -75,11 +75,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             })
         } else if (data.data.metadata && data.data.metadata.mimeType == "application/vnd.ekstep.content-collection") {    // Node collection/collection
             $scope.isCollection = true;
-            // if (!data.data.metadata.children) {
-                $scope.getSubCollection(data.data.metadata.identifier)
-            // } else if (data.data.metadata.children) {
-                // $scope.contentList = $scope.generateCollectionContent(data.data.metadata.children);
-            // }
+            $scope.getSubCollection(data.data.metadata.identifier)
             return;
         }
         if (!data.type && !data.folder) {           // Node content
@@ -90,7 +86,9 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     }
 
     $scope.addContent = function(event, data) {
-        $scope.contentList.push(data);
+        if (!data.folder) {
+            $scope.contentList.push(data);
+        }
     }
 
     $scope.removeContent = function(event, data) {
@@ -165,9 +163,11 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 template: '<div class="ui mini modal active" id="deletePopup"> <div class="content"> <div class="ui grid"> <div class="ten wide column"> <span class="custom-modal-heading">Are you sure you want to delete this content?</span> </div><div class="two wide column"> <i class="close large icon four wide column floatContentRight" ng-click="closeThisDialog()"></i></div></div><p class="custom-modal-content">All content within this folder will also be deleted from this textbook.</p><button class="ui red button" ng-click="confirm()">YES, DELETE</button> </div></div>',
                 controller: ["$scope", function($scope) {
                     $scope.confirm = function() {
+                        var activeNode = org.ekstep.services.collectionService.getActiveNode();
                         node.remove();
-                        $scope.closeThisDialog();
                         delete org.ekstep.collectioneditor.cache.nodesModified[node.data.id];
+                        activeNode.setActive();
+                        $scope.closeThisDialog();
                         ecEditor.dispatchEvent("org.ekstep.collectioneditor:node:removed", node.data.id);
                     };
                }],

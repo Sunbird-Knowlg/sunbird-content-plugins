@@ -78,7 +78,7 @@
                     <div class="twelve wide column list-container"  ng-if="isContent">
                         <div class="content-width padding-top-10 centerAligned">
                             <div class="ui label list-leftheader">CONTENT PREVIEW</div>
-                            <div class="ui label content-rightheader" ng-show="!isCollection"><i class="fa fa-trash right floated delete-node" aria-hidden="true" ng-click="deleteNode(selectedContent, $event);"> REMOVE</i></div>
+                            <div class="ui label content-rightheader delete-node" ng-show="!isCollection"><i class="fa fa-trash right floated" aria-hidden="true" ng-click="deleteNode(selectedContent, $event);"> </i><span>&nbsp;&nbsp;REMOVE</span></div>
                         </div>
                         <div class="content-width centerAligned">
                             <div class="content-details">
@@ -88,9 +88,9 @@
                                     </div>
                                     <iframe id="previewContentIframe" width=100% height=100%></iframe>
                                 </div>
-                                <p class="list-leftheader content-owner">OWNER</p>
+                                <p ng-show="selectedContent.data.metadata.owner" class="list-leftheader content-owner">OWNER</p>
                                 <div class="footer">
-                                    <span>{{selectedContent.data.metadata.owner}}</span>
+                                    <span ng-show="selectedContent.data.metadata.owner">{{selectedContent.data.metadata.owner}}</span>
                                     <span class="content-grade">
                                         <span ng-repeat="grade in selectedContent.data.metadata.gradeLevel | limitTo: 2">{{grade}} &nbsp;</span>
                                         <span ng-repeat="genre in selectedContent.data.metadata.genre | limitTo: 2">{{genre}} &nbsp;</span>

@@ -196,12 +196,6 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     $scope.changeTitle = function(){
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.unit.name);
     }
-
-    $scope.addCollectiontoBreadcrum = function(event, data) {
-        $scope.path.push({'title' : data.name})
-        $scope.$safeApply();
-    }
-    ecEditor.addEventListener('org.ekstep.collectioneditor:content:update', $scope.addCollectiontoBreadcrum, $scope);
     $scope.init();
 }]);
 //# sourceURL=unitmetaApp.js

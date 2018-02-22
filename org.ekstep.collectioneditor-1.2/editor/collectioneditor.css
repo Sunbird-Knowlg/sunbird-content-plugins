@@ -462,6 +462,7 @@ switched to Github for the search after API changes
 
 .list-container {
     background-color: #f8f8f8 !important;
+    padding-bottom: 20px;
 }
 
 #content-list {
@@ -504,8 +505,8 @@ switched to Github for the search after API changes
 
 .delete-node {
     cursor: pointer;
-    color: #e66f7e;
-    font-weight: 600;
+    color: #e66f7e !important;
+    font-weight: 600 !important;
 }
 
 .list-drag {
