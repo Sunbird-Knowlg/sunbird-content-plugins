@@ -42,7 +42,7 @@ input#answer {
     margin: 33px 0px 0px 2px;
 }
 
-input.question-box {
+input.ans-field {
     border: 2px solid #ececec;
     display: inline;
 }
