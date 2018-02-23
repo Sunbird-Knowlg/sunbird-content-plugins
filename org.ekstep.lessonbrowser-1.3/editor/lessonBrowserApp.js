@@ -367,7 +367,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             }
         }
 
-        $scope.viewAll = function(query) {
+        $scope.viewAll = function(event, query) {
             ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'viewAll', targetid: "" });
             if (_.isString(query)) {
                 query = JSON.parse(query);
@@ -444,6 +444,10 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             // close the popup
             $scope.closeThisDialog();
         };
+        $scope.init = function() {
+            ecEditor.addEventListener('editor:initialize:viewall', $scope.viewAll, $scope)
+        }
+        $scope.init()
 
     }]).filter('removeHTMLTags', function() {
         return function(text) {

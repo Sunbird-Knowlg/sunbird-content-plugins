@@ -11,10 +11,10 @@ org.ekstep.collectioneditor.basePlugin.extend({
     repos: [],
 
     /**
-    *   registers events
-    *   @memberof lessonBrowser
-    *
-    */
+     *   registers events
+     *   @memberof lessonBrowser
+     *
+     */
     initialize: function() {
         // Listen if someone calls for lesson browser
         org.ekstep.contenteditor.api.addEventListener(this.manifest.id + ":show", this.initPreview, this);
@@ -22,7 +22,7 @@ org.ekstep.collectioneditor.basePlugin.extend({
         var templatePath = org.ekstep.contenteditor.api.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/lessonBrowser.html");
         var controllerPath = org.ekstep.contenteditor.api.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/lessonBrowserApp.js");
         org.ekstep.contenteditor.api.getService('popup').loadNgModules(templatePath, controllerPath);
-
+        ecEditor.addEventListener('editor:invoke:viewall', this.invokeViewAll, this)
         this.registerRepo(this.getEkstepRepo());
     },
 
@@ -33,10 +33,10 @@ org.ekstep.collectioneditor.basePlugin.extend({
     },
 
     /**
-    *   load html template to show the popup
-    *   @param event {Object} event
-    *   @param cb {Function} callback to be fired when asset is available.
-    */
+     *   load html template to show the popup
+     *   @param event {Object} event
+     *   @param cb {Function} callback to be fired when asset is available.
+     */
     initPreview: function(event, params) {
         var instance = this;
 
@@ -69,21 +69,31 @@ org.ekstep.collectioneditor.basePlugin.extend({
     getEkstepRepo: function() {
         var instance = this;
         var repo = new(org.ekstep.collectioneditor.contentProviderRepo.extend({
-                id: 'ekstep',
-                label: 'EkStep',
-                templateUrl: undefined,
-                controllerUrl: undefined,
+            id: 'ekstep',
+            label: 'EkStep',
+            templateUrl: undefined,
+            controllerUrl: undefined,
 
-                init: function() {
-                    this.templateUrl = org.ekstep.contenteditor.api.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/repoEkstep.html");
-                    this.controllerUrl = org.ekstep.contenteditor.api.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/repoEkstepApp.js");
-                },
-                getFilters: function(){
-                    return {"language":[], "grade": [], "lessonType": [], "domain": []};
-                }
-            }));
+            init: function() {
+                this.templateUrl = org.ekstep.contenteditor.api.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/repoEkstep.html");
+                this.controllerUrl = org.ekstep.contenteditor.api.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/repoEkstepApp.js");
+            },
+            getFilters: function() {
+                return { "language": [], "grade": [], "lessonType": [], "domain": [] };
+            }
+        }));
 
         return repo;
+    },
+
+    invokeViewAll: function(event, data) {
+        var instance = this;
+        instance.query = data
+        this.initPreview("", {});
+        setTimeout(function() {
+            ecEditor.dispatchEvent('editor:initialize:viewall', instance.query)
+        }, 0)
+
     }
 });
 //# sourceURL=lessonbrowserplugin.js
