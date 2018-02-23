@@ -339,7 +339,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             if (!ctrl.facetsResponse) {
                 $scope.getPageAssemble(function(err, res) {
                     if (!res) {
-                        ctrl.facetsResponse = window.response;
+                        ctrl.facetsResponse = res.data;
                         $scope.$safeApply();
                         setTimeout(function() {
                             ctrl.addOrRemoveContent(ctrl.res.content);
@@ -442,8 +442,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                 ctrl.dropdownAndCardsConfig();
                 if (instance.client) {
                     $scope.viewAll(instance.query);
-                    $scope.mainTemplate = 'selectedResult';
-                    $scope.$safeApply();
                 }
             }, 100);
         };
