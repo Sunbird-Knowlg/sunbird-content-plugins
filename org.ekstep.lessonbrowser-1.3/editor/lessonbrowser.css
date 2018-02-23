@@ -50,7 +50,7 @@
     border-radius: 30px;
 }
 
-.resourceDesc {
+.breakWord {
     word-break: break-word;
 }
 
@@ -119,7 +119,7 @@
 }
 
 .source-result-container {
-    height: calc(100vh - 200px)!important;
+    height: calc(100vh - 185px)!important;
     overflow-y: scroll;
     overflow-x: hidden;
     padding: 1%;
@@ -136,7 +136,7 @@
 }
 
 .filterOverflow {
-    height: 100%;
+    height: 95%;
     overflow-y: auto;
     border-bottom: 1px solid #D8DEE2;
 }
@@ -350,4 +350,10 @@
 
 .load-more-lesson-warning-msg {
     text-align: center;
+}
+
+.sortButtonsWrapper .column .SortBtns {
+    width: 90%;
+    height: 40px;
+    padding: 0%;
 }

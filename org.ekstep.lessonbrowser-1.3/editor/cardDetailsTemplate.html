@@ -8,27 +8,27 @@
             <div class="meta">
                 <div class="ui list cardDetails-list">
                     <div class="item">
-                        <div class="right floated content cardSidePanel">{{lessonView.board || 'NA'}}</div>
+                        <div class="right floated content breakWord cardSidePanel">{{lessonView.board || 'NA'}}</div>
                         <div class="content cardSidePanel">Board</div>
                     </div>
                     <div class="item">
-                        <div class="right floated content cardSidePanel">{{lessonView.class.toString()|| 'NA'}}
+                        <div class="right floated content breakWord cardSidePanel">{{lessonView.class.toString()|| 'NA'}}
                         </div>
                         <div class="content cardSidePanel">Class</div>
                     </div>
                     <div class="item">
-                        <div class="right floated content cardSidePanel">{{lessonView.subject|| 'NA'}}
+                        <div class="right floated content breakWord cardSidePanel">{{lessonView.subject|| 'NA'}}
                         </div>
                         <div class="content cardSidePanel">Subject</div>
                     </div>
                     <div class="item">
-                        <div class="right floated content cardSidePanel">{{lessonView.concepts.toString() || 'NA'}}
+                        <div class="right floated content breakWord cardSidePanel">{{lessonView.concepts.toString() || 'NA'}}
                         </div>
                         <div class="content cardSidePanel">Concept</div>
                     </div>
                 </div>
                 <div class="bottomFixed">
-                    <span class="creator">Created by <a>{{lessonView.creator || 'Unknown'}}</a></span>
+                    <span class="creator breakWord">Created by <a>{{lessonView.creator || 'Unknown'}}</a></span>
                 </div>
             </div>
         </div>
@@ -37,7 +37,7 @@
         <div class="ui grid fullHeight">
             <div class="ui segment horizontal six wide column removeBorder">
                 <p class="cardDetailsSectionTitle">Description</p>
-                <div class="content">
+                <div class="content breakWord">
                     {{lessonView.description}}
                 </div>
             </div>

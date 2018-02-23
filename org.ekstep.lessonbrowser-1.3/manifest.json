@@ -10,7 +10,9 @@
         "main": "editor/plugin.js",
         "dependencies": [
             { "type": "js", "src": "editor/content-provider-repo.js" },
+            { "type": "js", "src": "editor/libs/angular-inview.js"},          
             { "type": "css", "src": "editor/lessonbrowser.css" }
+
         ]
     }
 }

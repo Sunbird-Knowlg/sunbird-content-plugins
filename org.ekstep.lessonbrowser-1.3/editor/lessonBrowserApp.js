@@ -1,8 +1,9 @@
-angular.module('org.ekstep.lessonbrowserapp', [])
+angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
     .controller('lessonController', ['$scope', 'instance', 'callback', 'callerFilters', function($scope, instance, callback, callerFilters) {
         var ctrl = this;
         ctrl.facetsResponse = undefined;
         const DEFAULT_PAGEAPI = 'LessonBrowser';
+        // different html configuration to render dynamically
         $scope.headerTemplate = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/header.html");
         $scope.footerTemplate = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/footer.html");
         $scope.filterTemplate = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/filterTemplate.html");
@@ -51,6 +52,8 @@ angular.module('org.ekstep.lessonbrowserapp', [])
 
         //Telemetry
         var collectionService = org.ekstep.collectioneditor.api.getService('collection');
+
+        // Generate interact telemetry
         ctrl.generateTelemetry = function(data) {
             if (data) ecEditor.getService('telemetry').interact({
                 "type": data.type,
@@ -63,6 +66,17 @@ angular.module('org.ekstep.lessonbrowserapp', [])
                 "stage": collectionService.getActiveNode().id
             })
         };
+
+        // Generate Impression telemetry
+        ctrl.generateImpression = function(data) {
+            if (data) ecEditor.getService('telemetry').impression({
+                "type": data.type,
+                "subtype": data.subtype || "",
+                "pageid": data.pageid || "",
+                "uri": window.location.href,
+                "visits": inViewLogs
+            });
+        }
 
 
         // Meta APIs integration
@@ -108,16 +122,11 @@ angular.module('org.ekstep.lessonbrowserapp', [])
                 } else {
                     ecEditor.jQuery('#checkBox_' + resource.identifier + ' >.checkBox').attr('checked', false);
                 }
-                ecEditor.jQuery('.special.cards .card').dimmer({
-                    on: 'hover'
-                });
             });
-            $scope.isLoading = false;
         }
 
         // show card details
         $scope.showCardDetails = function(lesson) {
-            $scope.defaultResources = ctrl.res.content;
             $scope.mainTemplate = 'cardDetailsView';
             $scope.lessonView = lesson;
         }
@@ -135,7 +144,6 @@ angular.module('org.ekstep.lessonbrowserapp', [])
                     $scope.$safeApply();
                 }
             });
-            // $scope.isLoading=false;
         }
 
         // Search specific lesson
@@ -199,7 +207,13 @@ angular.module('org.ekstep.lessonbrowserapp', [])
         };
 
         // Close the popup
-        $scope.closePopup = function() {
+        $scope.closePopup = function(pageId) {
+            if (pageId == "facetsItemView") {
+                ctrl.generateImpression({ type: 'click', subtype: 'close', pageid: 'FacetList' });
+            } else {
+                ctrl.generateImpression({ type: 'click', subtype: 'close', pageid: 'LessonBrowser' });
+            }
+            inViewLogs = [];
             ctrl.generateTelemetry({ type: 'click', subtype: 'cancel', target: 'addlesson', targetid: 'button-cancel' });
             $scope.closeThisDialog();
         };
@@ -216,21 +230,26 @@ angular.module('org.ekstep.lessonbrowserapp', [])
 
         // navigate to the previous page
         $scope.backToPrevious = function() {
-            $scope.mainTemplate = 'selectedResult';
-            $scope.isLoading = true;
+            if ($scope.mainTemplate == 'selectedResult') {
+                $scope.mainTemplate = 'facetsItemView';
+            } else {
+                ctrl.res.content = $scope.defaultResources;
+                $scope.mainTemplate = 'selectedResult';
+            }
+            $scope.$safeApply();
             setTimeout(function() {
                 ctrl.addOrRemoveContent(ctrl.res.content);
-                ctrl.dropdownConfig();
                 ctrl.conceptSelector();
+                ctrl.dropdownAndCardsConfig();
             }, 0);
-            ctrl.res.content = $scope.defaultResources;
-            $scope.$safeApply();
-            $scope.isLoading = false;
         }
 
         // Get accordions functioning
-        ctrl.dropdownConfig = function() {
+        ctrl.dropdownAndCardsConfig = function() {
             ecEditor.jQuery('#applyAccordion').accordion();
+            ecEditor.jQuery('.special.cards .card').dimmer({
+                on: 'hover'
+            });
             ecEditor.jQuery('.ui.multiple.selection.dropdown').dropdown({
                 useLabels: false,
                 forceSelection: false,
@@ -239,7 +258,6 @@ angular.module('org.ekstep.lessonbrowserapp', [])
                 }
             });
             ecEditor.jQuery('#lessonBrowser_lessonType').dropdown('set selected', ctrl.meta.lessonTypes[0]);
-            // $scope.isLoading=false;
         }
 
         // initial configuration
@@ -252,7 +270,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             ctrl.searchLessons();
             setTimeout(function() {
                 ctrl.learningConfig(); // Fetch sidebar filters through APIs
-                ctrl.dropdownConfig();
+                ctrl.dropdownAndCardsConfig();
             }, 0);
         };
         $scope.init();
@@ -297,7 +315,6 @@ angular.module('org.ekstep.lessonbrowserapp', [])
         // show selected items
         $scope.SelectedItems = function() {
             $scope.mainTemplate = 'addedItemsView';
-            $scope.defaultResources = ctrl.res.content;
             ctrl.res.content = $scope.lessonSelection;
             $scope.$safeApply();
             setTimeout(function() {
@@ -326,6 +343,7 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             }
             let service = org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE);
             service.getPageAssemble(Obj, function(err, res) {
+                // Initialize the model
                 cb(err, res)
             })
 
@@ -335,11 +353,15 @@ angular.module('org.ekstep.lessonbrowserapp', [])
             $scope.mainTemplate = 'facetsItemView';
             if (!ctrl.facetsResponse) {
                 $scope.getPageAssemble(function(err, res) {
-                    if(res){
+                    if (!res) {
                         ctrl.facetsResponse = res.data;
                         $scope.$safeApply();
-                    }else{
-                        console.error("Unable to fetch response",err);
+                        setTimeout(function() {
+                            ctrl.addOrRemoveContent(ctrl.res.content);
+                            ctrl.dropdownAndCardsConfig();
+                        }, 0);
+                    } else {
+                        console.error("Unable to fetch response", err);
                     }
                 });
             }
@@ -347,7 +369,6 @@ angular.module('org.ekstep.lessonbrowserapp', [])
 
         $scope.viewAll = function(query) {
             ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'viewAll', targetid: "" });
-            $scope.isLoading = true;
             if (_.isString(query)) {
                 query = JSON.parse(query);
             }
@@ -357,18 +378,22 @@ angular.module('org.ekstep.lessonbrowserapp', [])
                     if (res) {
                         $scope.items = res;
                         ctrl.res.content = $scope.items.data.result.content;
-                        $scope.mainTemplate = 'selectedResult';
-                        $scope.$safeApply();
-                        setTimeout(function() {
-                            ctrl.addOrRemoveContent(ctrl.res.content);
-                            ctrl.dropdownConfig();
-                            ctrl.conceptSelector();
-                        }, 0);
+                        $scope.defaultResources = ctrl.res.content;
                     } else {
                         console.error("Unable to fetch", err);
                     }
                 });
+            } else {
+                ctrl.res.content = $scope.defaultResources;
             }
+            $scope.mainTemplate = 'selectedResult';
+            $scope.$safeApply();
+            setTimeout(function() {
+                ctrl.addOrRemoveContent(ctrl.res.content);
+                ctrl.conceptSelector();
+                ctrl.dropdownAndCardsConfig();
+            }, 0);
+
         }
 
         $scope.invokeFacetsPage();
@@ -381,6 +406,44 @@ angular.module('org.ekstep.lessonbrowserapp', [])
                 $scope.sortOption = 'createdOn';
             }
         }
+
+        var inViewLogs = [];
+        $scope.lineInView = function(index, inview, item, section, pageSectionId) {
+            var obj = _.filter(inViewLogs, function(o) {
+                return o.identifier === item.identifier
+            })
+            if (inview && obj.length === 0) {
+                inViewLogs.push({
+                    objid: item.identifier,
+                    objtype: item.contentType,
+                    section: section,
+                    index: index
+                })
+            }
+        }
+
+        // Get and return the selected lessons
+        $scope.returnSelectedLessons = function(pageId, selectedLessons) {
+            // Geenerate interact telemetry
+            ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'addlesson', targetid: 'button-add' });
+
+            // return selected lessons to the lesson browser caller
+            var err = null;
+            var res = selectedLessons;
+            callback(err, res);
+
+            // generate impression
+            if (pageId == "facetsItemView") {
+                ctrl.generateImpression({ type: 'click', subtype: 'submit', pageid: 'FacetList' });
+            } else {
+                ctrl.generateImpression({ type: 'click', subtype: 'submit', pageid: 'LessonBrowser' });
+
+            }
+            inViewLogs = [];
+
+            // close the popup
+            $scope.closeThisDialog();
+        };
 
     }]).filter('removeHTMLTags', function() {
         return function(text) {

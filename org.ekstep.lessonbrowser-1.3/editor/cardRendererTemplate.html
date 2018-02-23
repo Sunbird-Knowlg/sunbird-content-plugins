@@ -5,7 +5,7 @@
 </div>
 <div class="source-result-container">
     <div class="ui special link cards cardsWrapper" ng-class="{four: mainTemplate == 'selectedResult',five: mainTemplate == 'addedItemsView'}">
-        <div class="card" ng-repeat="lesson in $ctrl.res.content | orderBy:sortOption" ng-click="toggleSelectionLesson(lesson)">
+        <div class="card" ng-repeat="lesson in $ctrl.res.content | orderBy:sortOption track by $index" in-view="lineInView($index, $inview, lesson, 'LessonBrowser', $index)" in-view-options="{ throttle: 1000 }" ng-click="toggleSelectionLesson(lesson)">
             <div class="ui inverted dimmer">
                 <div class="content">
                     <div class="ui list cardDetails-list">
@@ -37,8 +37,8 @@
                             </div>
                             <div class="content contentTitle">Concept</div>
                         </div>
-                        <div class="item overlapAll">
-                            <div class="content bottomList" ng-click="showCardDetails(lesson)">VIEW DETAILS</div>
+                        <div class="item overlapAll" ng-click="showCardDetails(lesson)">
+                            <div class="content bottomList">VIEW DETAILS</div>
                         </div>
                     </div>
                 </div>

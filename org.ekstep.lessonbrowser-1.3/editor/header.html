@@ -8,7 +8,7 @@
                 <button id="search-button" class="ui basic button" ng-click="lessonBrowseSearch() " title="Start search"><i class="search icon"></i></button>
             </div>
             <span>
-                    <i class="close link icon" id="resourceCloseBtn" ng-click="closeThisDialog(); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeLessonBrowser'})"></i>
+                    <i class="close link icon" id="resourceCloseBtn" ng-click="closePopup(mainTemplate)"></i>
                 </span>
             <ul class="searchList" ng-show="( mainTemplate == 'selectedResult'|| mainTemplate == 'facetsItemView' )  && $ctrl.searchRes.content.length && (searchKeyword.length >= 3)">
                 <li ng-click="searchSelectedLesson(lesson.name)" class="searchResult" ng-repeat="lesson in $ctrl.searchRes.content">

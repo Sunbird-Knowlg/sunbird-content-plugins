@@ -3,12 +3,16 @@
     <p class="padding-top-3px sidebarSectionHeader">
         SORT BY</p>
     <div class="ui grid sortButtonsWrapper">
-        <button ng-click="Sort('alphabetical')" ng-class="{'primary':sortOption == 'name'}" class="ui tiny basic button">
-            A - Z
-        </button>
-        <button ng-click="Sort('timestamp')" ng-class="{'primary':sortOption == 'createdOn'}" class="ui tiny basic button">
-            Recently Changed
-        </button>
+        <div class="six wide column" style="padding:0%">
+            <button ng-click="Sort('alphabetical')" ng-class="{'primary':sortOption == 'name'}" class="ui tiny basic left floated button SortBtns">
+                A - Z
+            </button>
+        </div>
+        <div class="six wide column" style="padding:0%">
+            <button ng-click="Sort('timestamp')" ng-class="{'primary':sortOption == 'createdOn'}" class="ui tiny basic right floated button SortBtns">
+                CREATED ON
+            </button>
+        </div>
     </div>
 </div>
 <div class="ui vertical segment filterAllign">
