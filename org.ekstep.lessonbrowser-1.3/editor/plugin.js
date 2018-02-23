@@ -22,7 +22,7 @@ org.ekstep.collectioneditor.basePlugin.extend({
         var templatePath = org.ekstep.contenteditor.api.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/lessonBrowser.html");
         var controllerPath = org.ekstep.contenteditor.api.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/lessonBrowserApp.js");
         org.ekstep.contenteditor.api.getService('popup').loadNgModules(templatePath, controllerPath);
-        ecEditor.addEventListener('editor:invoke:viewall', this.invokeViewAll, this)
+        ecEditor.addEventListener('editor:invoke:viewall', this.initPreview, this)
         this.registerRepo(this.getEkstepRepo());
     },
 
@@ -39,7 +39,8 @@ org.ekstep.collectioneditor.basePlugin.extend({
      */
     initPreview: function(event, params) {
         var instance = this;
-
+        instance.client = params.client;
+        instance.query = params.query;
         cb = params.callback || function() {};
         filters = params.filters || {};
 
@@ -84,16 +85,6 @@ org.ekstep.collectioneditor.basePlugin.extend({
         }));
 
         return repo;
-    },
-
-    invokeViewAll: function(event, data) {
-        var instance = this;
-        instance.query = data
-        this.initPreview("", {});
-        setTimeout(function() {
-            ecEditor.dispatchEvent('editor:initialize:viewall', instance.query)
-        }, 0)
-
     }
 });
 //# sourceURL=lessonbrowserplugin.js

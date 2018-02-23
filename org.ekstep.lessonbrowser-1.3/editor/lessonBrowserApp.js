@@ -260,21 +260,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             ecEditor.jQuery('#lessonBrowser_lessonType').dropdown('set selected', ctrl.meta.lessonTypes[0]);
         }
 
-        // initial configuration
-        $scope.init = function() {
-            if (!$scope.filterSelection.lessonType.length) {
-                ctrl.meta.lessonTypes = collectionService.getObjectTypeByAddType('Browser');
-                searchBody.request.filters.contentType = ctrl.meta.lessonTypes[0];
-            }
-
-            ctrl.searchLessons();
-            setTimeout(function() {
-                ctrl.learningConfig(); // Fetch sidebar filters through APIs
-                ctrl.dropdownAndCardsConfig();
-            }, 0);
-        };
-        $scope.init();
-
         // Add the resource
         $scope.toggleSelectionLesson = function(lesson, event, clickOption) {
             var idx = $scope.selectedResources.indexOf(lesson.identifier);
@@ -354,7 +339,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             if (!ctrl.facetsResponse) {
                 $scope.getPageAssemble(function(err, res) {
                     if (!res) {
-                        ctrl.facetsResponse = res.data;
+                        ctrl.facetsResponse = window.response;
                         $scope.$safeApply();
                         setTimeout(function() {
                             ctrl.addOrRemoveContent(ctrl.res.content);
@@ -367,7 +352,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             }
         }
 
-        $scope.viewAll = function(event, query) {
+        $scope.viewAll = function(query) {
             ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'viewAll', targetid: "" });
             if (_.isString(query)) {
                 query = JSON.parse(query);
@@ -444,10 +429,25 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             // close the popup
             $scope.closeThisDialog();
         };
+        // initial configuration
         $scope.init = function() {
-            ecEditor.addEventListener('editor:initialize:viewall', $scope.viewAll, $scope)
-        }
-        $scope.init()
+            if (!$scope.filterSelection.lessonType.length) {
+                ctrl.meta.lessonTypes = collectionService.getObjectTypeByAddType('Browser');
+                searchBody.request.filters.contentType = ctrl.meta.lessonTypes[0];
+            }
+
+            ctrl.searchLessons();
+            setTimeout(function() {
+                ctrl.learningConfig(); // Fetch sidebar filters through APIs
+                ctrl.dropdownAndCardsConfig();
+                if (instance.client) {
+                    $scope.viewAll(instance.query);
+                    $scope.mainTemplate = 'selectedResult';
+                    $scope.$safeApply();
+                }
+            }, 100);
+        };
+        $scope.init();
 
     }]).filter('removeHTMLTags', function() {
         return function(text) {
