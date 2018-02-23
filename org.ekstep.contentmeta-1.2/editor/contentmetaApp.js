@@ -17,9 +17,9 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     }
 
     $scope.updateCollectionBreadcrumb = function(data) {
-        var index = _.indexOf($scope.path, data);
+        var index = ecEditor._.indexOf($scope.path, data);
         if (index>-1) {
-            $scope.path = _.dropRight($scope.path, $scope.path.length-index - 1);
+            $scope.path = ecEditor. _.dropRight($scope.path, $scope.path.length-index - 1);
         }
     }
 

@@ -85,12 +85,18 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         $scope.$safeApply();
     }
 
+    /**
+     * Add content to collection list
+     */
     $scope.addContent = function(event, data) {
         if (!data.folder) {
             $scope.contentList.push(data);
         }
     }
 
+    /**
+     * Remove content from collection list
+     */
     $scope.removeContent = function(event, data) {
         $scope.contentList = _.remove($scope.contentList, function(content) {
             return content.data.metadata.identifier != data
@@ -209,10 +215,16 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         }
     }
 
+    /**
+     * Store collection data in cache to limit the collection api calls
+     */
     $scope.storeCollectionInCache = function(contentId, collection) {
         $scope.collectionCache[contentId] = collection;
     }
 
+    /**
+     * Get collection data from cache
+     */
     $scope.getCollectionFromCache = function(identifier) {
         if ($scope.collectionCache[identifier]) {
             return $scope.collectionCache[identifier]

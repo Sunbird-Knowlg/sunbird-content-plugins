@@ -24,7 +24,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
             $scope.$safeApply();
         }
     };
-
     //Header scope starts
     $scope.headers = [];
 
@@ -80,9 +79,9 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
             if (res) {
                 var activeNode = org.ekstep.services.collectionService.getActiveNode();
                 $scope.contentDetails.contentTitle = activeNode.title ? activeNode.title : "Untitled Content";
-	            // if (!_.isUndefined(activeNode.data.metadata.appIcon)) {
-    	        //     $scope.contentDetails.contentImage = activeNode.data.metadata.appIcon;
-        	    // }
+                // if (!_.isUndefined(activeNode.data.metadata.appIcon)) {
+                //     $scope.contentDetails.contentImage = activeNode.data.metadata.appIcon;
+                // }
                 setTimeout(function() {
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', activeNode);
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode);
@@ -108,6 +107,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
     }
 
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
+
     $scope.init = function(){
         org.ekstep.services.collectionService.suggestVocabularyRequest.request.limit = ecEditor.getConfig('keywordsLimit')
     }
@@ -119,8 +119,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('m
             return keywords;
         }
     }
-
     $scope.init();
-
 }]);
 //# sourceURL=collectiontreeApp.js
