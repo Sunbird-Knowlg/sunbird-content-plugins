@@ -2,7 +2,6 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
-    $scope.showImageIcon = true;
     $scope.boardList = {};
     $scope.gradeList = [];
     $scope.languageList = [];    
@@ -34,17 +33,6 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
             $scope.$safeApply();                   
         }
     });
-
-    $scope.showAssestBrowser = function(){
-        ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
-            type: 'image',
-            search_filter: {}, // All composite keys except mediaType
-            callback: function(data) { 
-                $scope.lesson.appIcon = data.assetMedia.src;
-                $scope.$safeApply();
-            }
-        });
-    }
 
     $scope.initDropdown = function() {
         setTimeout(function() {
@@ -135,14 +123,12 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
 
     $scope.onNodeSelect = function(evant, data){
         var selectedConcepts = [];
-        $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.lesson = {};
         $scope.editMode = true;
         $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
-        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.lessonplanmeta", "1.2", "assets/default.png");
 
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
         $scope.lesson = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
@@ -189,7 +175,6 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
                 $scope.$safeApply();
             }
         });
-        $scope.showImageIcon = true;
         $scope.getPath();
         $scope.$safeApply();
     }
@@ -232,6 +217,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
     $scope.changeTitle = function(){
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.lesson.name);
     }
+
     $scope.init();
 }]);
 //# sourceURL=lessonplanmetaApp.js

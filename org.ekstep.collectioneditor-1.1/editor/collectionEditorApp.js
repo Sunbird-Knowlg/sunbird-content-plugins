@@ -1,5 +1,4 @@
 angular.module('org.ekstep.collectioneditor', ["Scope.safeApply"]).controller('mainController', ['$scope', '$location', function($scope, $location) {
-    //do_112272630392659968130
     $scope.contentDetails = {
         contentTitle: ""
     };
