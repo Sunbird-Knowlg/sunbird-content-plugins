@@ -338,7 +338,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             $scope.mainTemplate = 'facetsItemView';
             if (!ctrl.facetsResponse) {
                 $scope.getPageAssemble(function(err, res) {
-                    if (!res) {
+                    if (res) {
                         ctrl.facetsResponse = res.data;
                         $scope.$safeApply();
                         setTimeout(function() {
