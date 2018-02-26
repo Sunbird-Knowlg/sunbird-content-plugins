@@ -110,7 +110,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
    }
 
     $scope.onNodeSelect = function(evant, data){
-        ecEditor.dispatchEvent('org.ekstep.collectioneditor:contentchange');
+        //ecEditor.dispatchEvent('org.ekstep.collectioneditor:contentchange');
         var selectedConcepts = [];
         $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;

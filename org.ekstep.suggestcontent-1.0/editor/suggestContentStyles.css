@@ -1,0 +1,111 @@
+.suggest-content-pane {
+    /* background-color: papayawhip; */
+    /* padding: 0;
+    height: 100%;
+    position: relative;
+    margin-top: 39px;
+    border-left: solid 1px #e0e1e2; */
+}
+
+.suggest-content-header {
+    width: 330px;
+    height: 50px;
+    background-color: #eeeeee;
+}
+
+.ui.column.suggest-content-pane{
+    padding: 0 !important;
+}
+
+.suggest-content-header-content {
+    padding-top: 15px;
+    padding-left: 15px;
+}
+
+.suggest-content-header-text {
+    font-family: OpenSans;
+    font-size: 14px;
+    font-weight: 600;
+    font-style: normal;
+    font-stretch: normal;
+    line-height: normal;
+    letter-spacing: normal;
+    text-align: left;
+}
+
+.suggest-content-header-title {
+    color: #333333;
+    text-transform: uppercase;
+}
+
+.suggest-content-header-content i {
+    color: #007aff;
+    padding-right: 8px;
+    font-weight: 600;
+}
+.text-right {
+    float: right;
+    padding-right: 19px;
+}
+.color-blue {
+    color: #0073ff;
+    cursor: pointer;
+}
+.suggest-row-2 {
+    padding: 10px;
+    border-bottom: solid 1px #e0e1e2;
+}
+.suggest-row-2 .ui.checkbox label {
+    color: #0073ff;
+}
+.card-list {
+    padding-left: 20px;
+    padding-top: 20px;
+    padding-right: 20px;
+    overflow-y: auto;
+    position: absolute;
+    height: calc(100% - 130px);
+}
+.padding-bottom-16 {
+    padding-bottom: 16px;
+}
+.font-size-11 {
+    font-size: 11px;
+}
+.ui.card { 
+    box-shadow: 0 2px 4px 0 rgba(164, 164, 164, 0.5);
+    border: solid 1px #dedede;
+}
+
+.card-list .ui.card>.image>img {
+    width: 140px;
+    max-width: 140px;
+}
+
+/* mixin for multiline */
+.block-with-text {
+    overflow: hidden;
+    position: relative;
+    line-height: 1.2em;
+    max-height: 3.6em;
+    text-align: justify;
+    /* margin-right: -1em; */
+    padding-right: 1em;
+  }
+
+  .block-with-text:before {
+    content: '...';
+    position: absolute;
+    right: 0;
+    bottom: 0;
+  }
+
+  .block-with-text:after {
+    content: '';
+    position: absolute;
+    right: 0;
+    width: 1em;
+    height: 1em;
+    margin-top: 0.2em;
+    background: white;
+  }

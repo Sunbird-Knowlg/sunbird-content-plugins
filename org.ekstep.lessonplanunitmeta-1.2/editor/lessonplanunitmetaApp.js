@@ -96,7 +96,8 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
         }
    }
 
-    $scope.onNodeSelect = function(evant, data){        
+    $scope.onNodeSelect = function(evant, data){
+        ecEditor.dispatchEvent('org.ekstep.collectioneditor:contentchange');   
         $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;

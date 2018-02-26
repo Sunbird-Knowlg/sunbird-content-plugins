@@ -131,7 +131,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
    }
 
     $scope.onNodeSelect = function(evant, data){
-        ecEditor.dispatchEvent('org.ekstep.collectioneditor:contentchange');
+        //ecEditor.dispatchEvent('org.ekstep.collectioneditor:contentchange');
         var selectedConcepts = [];
         $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
@@ -180,6 +180,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
         $scope.showImageIcon = true;
         $scope.getPath();
         $scope.$safeApply();
+        ecEditor.dispatchEvent('org.ekstep.collectioneditor:nodeselect', selectedConcepts);
     }
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:Course', $scope.onNodeSelect);
 

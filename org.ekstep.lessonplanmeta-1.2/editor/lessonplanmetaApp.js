@@ -134,6 +134,7 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
    }
 
     $scope.onNodeSelect = function(evant, data){
+        ecEditor.dispatchEvent('org.ekstep.collectioneditor:contentchange');
         var selectedConcepts = [];
         $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
