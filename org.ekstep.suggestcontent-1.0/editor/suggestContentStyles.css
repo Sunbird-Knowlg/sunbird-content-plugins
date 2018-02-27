@@ -1,14 +1,4 @@
-.suggest-content-pane {
-    /* background-color: papayawhip; */
-    /* padding: 0;
-    height: 100%;
-    position: relative;
-    margin-top: 39px;
-    border-left: solid 1px #e0e1e2; */
-}
-
 .suggest-content-header {
-    width: 330px;
     height: 50px;
     background-color: #eeeeee;
 }
@@ -75,11 +65,13 @@
 .ui.card { 
     box-shadow: 0 2px 4px 0 rgba(164, 164, 164, 0.5);
     border: solid 1px #dedede;
+    width: 260px;
 }
 
 .card-list .ui.card>.image>img {
-    width: 140px;
-    max-width: 140px;
+    width: 258px;
+    max-width: 258px;
+    max-height: 140px;
 }
 
 /* mixin for multiline */

@@ -1,22 +1,23 @@
 angular.module('suggestcontentApp', []).controller('suggestcontentController', ['$scope', '$timeout', function($scope, $timeout) {
     $scope.contentId = ecEditor.getContext('contentId');
-
     $scope.excludeContents = [];
     $scope.metaData = {};
     $scope.responseData = [];
     $scope.suggestedContentList = {count:0, content:[]};
-    var searchBody = {"request": {
-                        "mode": "soft",
-                        "filters":{},
-                        "offset": 0,
-                        "limit": 100
-                         }
+    var searchBody = {
+                        "request": {
+                            "mode": "soft",
+                            "filters": {},
+                            "offset": 0,
+                            "limit": 100
+                        }
                     };
     var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
     
+    /* Initialisation */
     $scope.init = function() {
         var mode;
-        if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
+        if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit"; //What if the contentStatus is other than edit
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
             if (res && res.data && res.data.responseCode === "OK") {
                 if(res.data.result.content.subject) {
@@ -32,18 +33,21 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                             $scope.metaData.concepts.push(concept.identifier)
                         });
                     }
+                    $scope.searchLessons();
                 }
             }
         });
     }
+
+    $scope.generateTelemetry = function(data) {
+        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.suggestcontent", "pluginver": "1.0", "objectid": ecEditor.getCurrentStage().id, "stage": ecEditor.getCurrentStage().id })
+    }
+
+    /* Search Lesson, takes parameters from the root node and currently selected node */
     $scope.searchLessons = function(apiCallLevel) {
         var apiCall = apiCallLevel ? apiCallLevel : 1;
-        var queryData = {};
-        //queryData.board = $scope.metaData.board || "";
-        queryData.subject = $scope.metaData.subject;
-        //queryData.gradeLevel = $scope.metaData.gradeLevel || "";
 
-        searchBody.request.filters = queryData;
+        searchBody.request.filters = { "subject": $scope.metaData.subject };
         searchBody.request.filters.contentType = org.ekstep.collectioneditor.api.getService('collection').getObjectTypeByAddType('Browser');
 
         //Very First call, reads data from root node and strict checking
@@ -54,16 +58,17 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             }
 
             $scope.suggestedContentList = { count:0, content:[] };
+            $scope.responseData = [];
             searchBody.request.filters.language = $scope.metaData.language;
             if($scope.metaData.concepts) searchBody.request.filters.concepts = $scope.metaData.concepts;
-            searchBody.request.softConstraints = { "gradeLevel": 100, "board": 90 };
+            searchBody.request.softConstraints = { "gradeLevel": 100, "board": 90, "concepts": 80, "keywords": 70 };
         } else if(apiCall === 2) {
             if($scope.metaData.language) searchBody.request.filters.language = { "NE": $scope.metaData.language };
             if($scope.metaData.concepts) searchBody.request.filters.concepts = $scope.metaData.concepts;
-            searchBody.request.softConstraints = { "gradeLevel": 100, "board": 90, "concepts": 80 };
+            searchBody.request.softConstraints = { "gradeLevel": 100, "board": 90, "concepts": 80, "keywords": 70 };
         } else {
             if($scope.metaData.concepts) searchBody.request.filters.concepts = { "NE": $scope.metaData.concepts };
-            searchBody.request.softConstraints = { "gradeLevel": 100, "language": 90, "board": 80 };
+            searchBody.request.softConstraints = { "gradeLevel": 100, "language": 90, "board": 80, "concepts": 70, "keywords": 60 };
         }
         searchBody.request.filters.objectType = ["Content"];
         searchBody.request.filters.status = ["Live"];
@@ -73,22 +78,27 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             } else {
                 $scope.suggestedContentList.count = res.data.result.count;
                 // $('.card-list').transition({
-                //     animation  : 'pulse',
+                //     animation  : 'fade',
                 //     duration   : '3s',
                 // });
                 if(res.data.result.content != undefined) {
-                    $scope.responseData = _.concat($scope.responseData, res.data.result.content);
+                    $scope.responseData = _.concat(_.uniqBy($scope.responseData, 'identifier'), res.data.result.content);
                     angular.forEach(res.data.result.content, function(lessonContent) {
+
+                        /* Exclude Already Added content in the currently selected node */
                         if($scope.excludeContents.length) {
                             if(_.indexOf($scope.excludeContents, lessonContent.identifier) < 0) $scope.suggestedContentList.content.push(lessonContent);
                         } else {
                             $scope.suggestedContentList.content.push(lessonContent);
                         }
                     });
+
+                    /*  Remove Duplicate contents from the list */
                     $scope.suggestedContentList.content = _.uniqBy($scope.suggestedContentList.content, 'identifier');
                 }
-                //$scope.responseData[JSON.stringify(searchBody.request)] = $scope.suggestedContentList.content;
+
                 searchBody.request.filters = {};
+                /* Increase the API call level */
                 if($scope.suggestedContentList.content.length < 20 && apiCall === 1 || apiCall === 2) {
                     apiCall++;
                     $scope.searchLessons(apiCall);
@@ -100,6 +110,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
         });
     }
 
+    /* Open Resourse Browser with the Given query */
     $scope.openResourceBrowser = function() {
         if($scope.suggestedContentList.count) {
             /*ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show", {
@@ -124,23 +135,39 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                     }
                 }
 
-            ecEditor.dispatchEvent('editor:invoke:viewall', {from:true, query})
-            ecEditor.dispatchEvent('editor:invoke:viewall', { client: "org", que}) 
+            ecEditor.dispatchEvent('editor:invoke:viewall', { from:true, query })
+            ecEditor.dispatchEvent('editor:invoke:viewall', { client: "org", query}) 
         }
     }
 
+    /* Adds content/collection to the currently selected node */
     $scope.addContent = function(lesson, index) {
-        org.ekstep.contenteditor.api.dispatchEvent("org.ekstep.collectioneditor:addContent", [lesson]);
-        if (index > -1) $scope.suggestedContentList.content.splice(index, 1);
-        $scope.excludeContents.push(lesson.identifier);
+
+        /* Add content in root node and unit node only, content inside content is not allowed */
+        if(org.ekstep.services.collectionService.getActiveNode().folder) {
+            org.ekstep.contenteditor.api.dispatchEvent("org.ekstep.collectioneditor:addContent", [lesson]);
+            // org.ekstep.contenteditor.api.dispatchEvent("org.ekstep.collectioneditor:node:added", lesson);
+            if (index > -1) $scope.suggestedContentList.content.splice(index, 1);
+            $scope.excludeContents.push(lesson.identifier);
+        } else {
+            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                message: "Sorry, this operation is not allowed.",
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });
+        }
     }
 
+    /* Returns list of content or makes new API if contents are not available */
     $scope.onNodeSelect = function() {
         if($scope.metaData.subject) {
             $scope.excludeContents = [];
+
+            /* Fetch the added node for the currently selected node */
             _.forEach(org.ekstep.services.collectionService.getActiveNode().children, function(content) {
                 if(!content.folder) $scope.excludeContents.push(content.data.id);
             });
+
             if($scope.responseData && $scope.responseData.length > 20) {
                 $scope.suggestedContentList.content = [];
                 angular.forEach($scope.responseData, function(lessonContent) {
@@ -153,14 +180,17 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
         }
     }
 
+    /* Call when user changes metadata */
     $scope.updateMetaData = function() {
         _.forEach(org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy().nodesModified, function(node) {
             if(node.root) {
                 var metadataUpdate = false;
+
                 if(node.metadata.subject && node.metadata.subject != $scope.metaData.subject) {
                     $scope.metaData.subject = node.metadata.subject;
                     metadataUpdate = true;
                 }
+
                 if(node.metadata.concepts && node.metadata.concepts != $scope.metaData.concepts) {
                     $scope.metaData.concepts = [];
                     _.forEach(node.metadata.concepts, function(concept) {
@@ -168,12 +198,12 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                     });
                     metadataUpdate = true;
                 }
-                if(node.metadata.medium && node.metadata.concepts != $scope.metaData.concepts) {
+
+                if(node.metadata.medium && node.metadata.medium != $scope.metaData.language) {
                     $scope.metaData.language = node.metadata.medium;
                     metadataUpdate = true;
                 }
-                //if(node.metadata.board) $scope.metaData.board = node.metadata.board;
-                //if(node.metadata.gradeLevel) $scope.metaData.gradeLevel = node.metadata.gradeLevel;
+
                 if(metadataUpdate) $scope.searchLessons();
             } else {
                 if(node.metadata.concepts && node.metadata.concepts != $scope.metaData.concepts) {
@@ -187,7 +217,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
         });
     }
 
-    $scope.getCourseData = function(event, data) {
+/*     $scope.getCourseData = function(event, data) {
         if(data.length > 0 && $scope.metaData.concepts && !_.isEqual(data.sort(), $scope.metaData.concepts.sort())) {
             var temp = $scope.metaData.concepts;
             $scope.metaData.concepts = data;
@@ -196,11 +226,10 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
         } else {
             $scope.onNodeSelect();
         }
-    }
+    } */
 
-    ecEditor.addEventListener('org.ekstep.collectioneditor:contentchange', $scope.onNodeSelect);
+    ecEditor.addEventListener('org.ekstep.collectioneditor:nodechange', $scope.onNodeSelect);
     ecEditor.addEventListener('org.ekstep.collectioneditor:save', $scope.updateMetaData);
-    ecEditor.addEventListener('org.ekstep.collectioneditor:nodeselect', $scope.getCourseData, $scope);
     $scope.init();
 }]);
 //# sourceURL=suggestcontentApp.js

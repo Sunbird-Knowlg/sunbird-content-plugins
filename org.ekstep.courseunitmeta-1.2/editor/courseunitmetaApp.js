@@ -2,7 +2,6 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
-    $scope.showImageIcon = true;
     const DEFAULT_NODETYPE = 'CourseUnit'
 
     $scope.updateTitle = function(event, title) {
@@ -12,17 +11,6 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
     }
     ecEditor.addEventListener("title:update:courseunit", $scope.updateTitle, $scope);
 
-    $scope.showAssestBrowser = function(){
-        ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
-            type: 'image',
-            search_filter: {}, // All composite keys except mediaType
-            callback: function(data) { 
-                $scope.courseunit.appIcon = data.assetMedia.src;
-                $scope.$safeApply();
-            }
-        });
-    }
-    
     $scope.updateNode = function(){
         if(!_.isEmpty($scope.nodeId) && !_.isUndefined($scope.nodeId)){ 
             var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
@@ -110,16 +98,13 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
    }
 
     $scope.onNodeSelect = function(evant, data){
-        //ecEditor.dispatchEvent('org.ekstep.collectioneditor:contentchange');
         var selectedConcepts = [];
-        $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.courseunit = {};
         $scope.editMode = true;
         $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
-        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.courseunitmeta", "1.2", "assets/default.png");
 
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
         $scope.courseunit = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
@@ -155,10 +140,8 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
                 $scope.$safeApply();
             }
         });
-        $scope.showImageIcon = true;
         $scope.getPath();
         $scope.$safeApply();
-        ecEditor.dispatchEvent('org.ekstep.collectioneditor:nodeselect', selectedConcepts);
     }
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:CourseUnit', $scope.onNodeSelect);
 
@@ -211,6 +194,14 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
             })
         }
     };
+
+    $scope.goToRootParent = function() {
+        var activeNode = org.ekstep.services.collectionService.getActiveNode();
+        var parentList = activeNode.getParentList()
+        if (parentList.length > 0)
+            org.ekstep.services.collectionService.setActiveNode(parentList[0].key);
+    }
+    
     $scope.init();
 }]);
 //# sourceURL=courseunitmetaApp.js

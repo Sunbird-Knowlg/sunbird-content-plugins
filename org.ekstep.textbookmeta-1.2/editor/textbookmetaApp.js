@@ -253,7 +253,7 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
     }
 
     $scope.onNodeSelect = function(evant, data) {
-        ecEditor.dispatchEvent('org.ekstep.collectioneditor:contentchange');
+        ecEditor.dispatchEvent('org.ekstep.collectioneditor:nodechange');
         var selectedConcepts = [];
         $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
