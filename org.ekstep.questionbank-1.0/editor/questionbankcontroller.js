@@ -426,7 +426,9 @@ angular.module('createquestionapp', [])
             if(question.version == 1){
                 var templateRef = question.template_id;
                 if (templateRef) 
-                    $scope.getv1Template(templateRef, question);          
+                    $scope.getv1Template(templateRef, question,function(controller){
+                        $scope.sendForPreview(controller, question.version);
+                    });          
             }
             else{  
                 var questionBody;
@@ -439,7 +441,7 @@ angular.module('createquestionapp', [])
             
         }
 
-        $scope.getv1Template = function(templateRef, question){
+        $scope.getv1Template = function(templateRef, question,callback){
             ecEditor.getService('assessment').getTemplate(templateRef, function(err, response) {
                 if (!err) {
                     var x2js = new X2JS({ attributePrefix: 'none', enableToStringFunc: false });
@@ -454,7 +456,7 @@ angular.module('createquestionapp', [])
                     controller.questionnaire["item_sets"] = [{ "count": "1", "id": question.identifier }]
                     controller["questionnaire"] = ecEditor._.assign(controller.questionnaire, config);
                     controller["template"].push(templateJson.theme.template);
-                    $scope.sendForPreview(controller, question.version);
+                    callback(controller);
                 }
             });                       
         }
