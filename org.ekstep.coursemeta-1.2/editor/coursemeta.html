@@ -29,14 +29,14 @@
                         <label for="course-audience">Audience</label>
                         <select id="course-audience" class="ui selection dropdown placeholder-padding" ng-model="course.audience" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'audience'})">
                             <option value="">Audience</option>
-                            <option value="{{audience}}" ng-repeat="audience in audienceList">{{audience}}</option>
+                            <option data-value="{{audience}}" ng-repeat="audience in audienceList">{{audience}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="course-language">Language</label>
                         <select id="course-language" class="ui selection dropdown placeholder-padding" ng-model="course.language" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'language'})">
                             <option value="">Language</option>
-                            <option value="{{language}}" ng-repeat="language in languageList">{{language}}</option>
+                            <option data-value="{{language}}" ng-repeat="language in languageList">{{language}}</option>
                         </select>
                     </div>
                     <div class="field">

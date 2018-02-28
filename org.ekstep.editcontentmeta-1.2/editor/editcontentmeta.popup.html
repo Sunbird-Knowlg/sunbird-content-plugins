@@ -55,7 +55,7 @@
                                             <label for="category_1">{{category_1.name}}</label>
                                             <select id="contentmeta-category-1" name ="cOne" class="ui search dropdown placeholder-padding contentmeta-category-1" ng-model="$ctrl.contentMeta[category_1.code]" ng-change="updatedDependentCategory('1', $ctrl.contentMeta[category_1.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_1.name})" required>
                                                 <option value="">Select</option>
-                                                <option value="{{category.name}}" ng-repeat="category in category_1.terms">{{category.name}}</option>
+                                                <option data-value="{{category.name}}" ng-repeat="category in category_1.terms">{{category.name}}</option>
                                             </select>
                                         </div>
                                         <div class="field required" ng-class="{error: $ctrl.submitted && contentMetaForm.cTwo.$error.required}">
@@ -63,7 +63,7 @@
                                             <div id="contentmeta-category-2" name ="cTwo" class="ui multiple search selection dropdown contentmeta-category-2" data-tooltip="{{categoryValues || 'select Option'}}" ng-model="$ctrl.contentMeta[category_2.code]" multiple="" ng-click="updatedDependentCategory('2', $ctrl.contentMeta[category_2.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_2.name}) " required>
                                                 <div class="default text" value="">Select</div>
                                                 <div class="menu">
-                                                    <div class="item" value="{{category.name}}" ng-repeat="category in category_2.terms">{{category.name}}</div>
+                                                    <div class="item" data-value="{{category.name}}" ng-repeat="category in category_2.terms">{{category.name}}</div>
                                                 </div>
                                             </div>
                                          </div>
@@ -71,7 +71,7 @@
                                             <label for="category_3">{{category_3.name}}</label>
                                             <select id="contentmeta-category-3" name ="cThree" class="ui search dropdown placeholder-padding contentmeta-category-3" ng-model="$ctrl.contentMeta[category_3.code]" ng-change="updatedDependentCategory('3', $ctrl.contentMeta[category_3.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_3.name})" required>
                                                 <option value="">Select</option>
-                                                <option value="{{category.name}}" ng-repeat="category in category_3.terms">{{category.name}}</option>
+                                                <option data-value="{{category.name}}" ng-repeat="category in category_3.terms">{{category.name}}</option>
                                             </select>
                                         </div>
                                     </div>
@@ -80,14 +80,14 @@
                                             <label for="category_4">{{category_4.name}}</label>
                                             <select id="contentmeta-category-4" name ="cFour" class="ui search dropdown placeholder-padding contentmeta-category-4" ng-model="$ctrl.contentMeta[category_4.code]" ng-change="updatedDependentCategory('4', $ctrl.contentMeta[category_4.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_4.name})" required>
                                                 <option value="">Select</option>
-                                                <option value="{{category.name}}" ng-repeat="category in category_4.terms">{{category.name}}</option>
+                                                <option data-value="{{category.name}}" ng-repeat="category in category_4.terms">{{category.name}}</option>
                                             </select>
                                         </div>
                                         <div class="field required" ng-class="{error: $ctrl.submitted && contentMetaForm.resource.$error.required}" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('resourcetype') !== -1)">
                                             <label>Resource Type</label>
                                             <select id="ecm-resource" name="resource" class="ui fluid dropdown short-dropdown" ng-model="$ctrl.contentMeta.resourceType" ng-click="generateTelemetry({type: 'click', subtype: 'select', target: 'resource'})" required>
                                                 <option value="" disabled selected>Select</option>
-                                                <option value="{{resource}}" ng-repeat="resource in $ctrl.resourceList">{{resource}}</option>
+                                                <option data-value="{{resource}}" ng-repeat="resource in $ctrl.resourceList">{{resource}}</option>
                                             </select>
                                         </div>
                                     </div>

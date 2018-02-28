@@ -30,7 +30,7 @@
                         <label for="category_1">{{category_1.name}}</label>
                         <select id="textbookmeta-category-1" class="ui search dropdown placeholder-padding textbookmeta-category-1" ng-model="textbook[category_1.code]" ng-change="updatedDependentCategory('1', textbook[category_1.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_1.name})">
                             <option value="">Select</option>
-                            <option value="{{category.name}}" ng-repeat="category in category_1.terms">{{category.name}}</option>
+                            <option data-value="{{category.name}}" ng-repeat="category in category_1.terms">{{category.name}}</option>
                         </select>
                     </div>
                     <div class="field">
@@ -38,7 +38,7 @@
                         <div id="textbookmeta-category-2" class="ui multiple search selection dropdown textbox textbookmeta-category-2" data-tooltip="{{categoryValues || 'select Option'}}" data-position="top center" ng-model="textbook[category_2.code]" multiple="" ng-click="updatedDependentCategory('2', textbook[category_2.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_2.name})">
                             <div class="default text" value="">Select</div>
                             <div class="menu">
-                                <div class="item" value="{{category.name}}" ng-repeat="category in category_2.terms">{{category.name}}
+                                <div class="item" data-value="{{category.name}}" ng-repeat="category in category_2.terms">{{category.name}}
                                 </div>
                             </div>
                         </div>
@@ -49,14 +49,14 @@
                         <label for="category_3">{{category_3.name}}</label>
                         <select id="textbookmeta-category-3" class="ui search dropdown placeholder-padding textbookmeta-category-3" ng-model="textbook[category_3.code]" ng-change="updatedDependentCategory('3', textbook[category_3.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_3.name})">
                             <option value="">Select</option>
-                            <option value="{{category.name}}" ng-repeat="category in category_3.terms">{{category.name}}</option>
+                            <option data-value="{{category.name}}" ng-repeat="category in category_3.terms">{{category.name}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="category_4">{{category_4.name}}</label>
                         <select id="textbookmeta-category-4" class="ui search dropdown placeholder-padding textbookmeta-category-4" ng-model="textbook[category_4.code]" ng-change="updatedDependentCategory('4', textbook[category_4.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_4.name})">
                             <option value="">Select</option>
-                            <option value="{{category.name}}" ng-repeat="category in category_4.terms">{{category.name}}</option>
+                            <option data-value="{{category.name}}" ng-repeat="category in category_4.terms">{{category.name}}</option>
                         </select>
                     </div>
                 </div>
@@ -90,7 +90,7 @@
                         <label for="audience">Year</label>
                         <select id="textbookmeta-year" class="ui search dropdown placeholder-padding" ng-model="textbook.year" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'year'})">
                             <option value="">Year</option>
-                            <option value="{{year}}" ng-repeat="year in years">{{year}}</option>
+                            <option data-value="{{year}}" ng-repeat="year in years">{{year}}</option>
                         </select>
                     </div>
                 </div>
