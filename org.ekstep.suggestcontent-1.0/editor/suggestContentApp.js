@@ -77,14 +77,15 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                 console.err("Oops! Something went wrong. Please try again later.");
             } else {
                 $scope.suggestedContentList.count = res.data.result.count;
-                // $('.card-list').transition({
-                //     animation  : 'fade',
-                //     duration   : '3s',
-                // });
                 if(res.data.result.content != undefined) {
                     $scope.responseData = _.concat(_.uniqBy($scope.responseData, 'identifier'), res.data.result.content);
+                    if(!$scope.suggestedContentList.content.length) {
+                        $('.card-list').transition({
+                        animation  : 'fade in',
+                        duration   : '3s',
+                        });
+                    }
                     angular.forEach(res.data.result.content, function(lessonContent) {
-
                         /* Exclude Already Added content in the currently selected node */
                         if($scope.excludeContents.length) {
                             if(_.indexOf($scope.excludeContents, lessonContent.identifier) < 0) $scope.suggestedContentList.content.push(lessonContent);
