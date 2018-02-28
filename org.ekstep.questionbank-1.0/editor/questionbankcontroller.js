@@ -6,7 +6,6 @@
 'use strict';
 angular.module('createquestionapp', [])
     .controller('QuestionFormController', ['$scope', 'pluginInstance', function($scope, pluginInstance) {
-
         $scope.currentUserId = ecEditor.getContext('user').id;
         $scope.isQuestionTab = true;
         $scope.selectedQuestions = [];
@@ -21,6 +20,7 @@ angular.module('createquestionapp', [])
         $scope.selectedQueIndex;
         $scope.grades;
         $scope.languages;
+        $scope.versions = [1,2];
         $scope.difficultyLevels = ['All', 'Easy', 'Medium', 'Difficult'];
         $scope.questionTypes = [{ "name": "Multiple Choice Questions", "value": "mcq" }, { "name": "Fill in the Blanks", "value": "ftb" }, { "name": "Match the Following", "value": "mtf" }];
         $scope.filterObj = {};
@@ -35,7 +35,7 @@ angular.module('createquestionapp', [])
             request: {
                 "metadata": {
                     "filters": [
-                        { "property": "version", "operator": "=", "value": 2 }
+                        { "property": "version", "operator": "in", "value": $scope.versions }
                     ]
                 },
                 "sortOrder": [
@@ -58,7 +58,7 @@ angular.module('createquestionapp', [])
 
         $scope.searchQuestions = function() {
             $scope.filterData.request.metadata = {};
-            $scope.filterData.request.metadata.filters = [{ "property": "version", "operator": "=", "value": 2 }];
+            $scope.filterData.request.metadata.filters = [{ "property": "version", "operator": "in", "value": $scope.versions }];
 
             // For my Questions option
             if ($scope.isMyQuestions) {
@@ -423,19 +423,70 @@ angular.module('createquestionapp', [])
         }
 
         $scope.showPreview = function(question, bool) {
-            var questionBody;
-            if (_.isString(question.body))
-                questionBody = JSON.parse(question.body);
-            else
-                questionBody = question.body;
-            var qObj = {
-                "config": JSON.stringify(questionBody.data.config),
-                "data": JSON.stringify(questionBody.data.data),
-                "id": "c943d0a907274471a0572e593eab49c2",
-                "pluginId": questionBody.data.plugin.id,
-                "pluginVer": questionBody.data.plugin.version,
-                "templateId": questionBody.data.plugin.templateId,
-                "type": "unit"
+            if(question.version == 1){
+                var templateRef = question.template_id;
+                if (templateRef) 
+                    $scope.getv1Template(templateRef, question);          
+            }
+            else{  
+                var questionBody;
+                if (_.isString(question.body))
+                    questionBody = JSON.parse(question.body);
+                else
+                    questionBody = question.body;
+                $scope.sendForPreview(questionBody, question.version);
+            }
+            
+        }
+
+        $scope.getv1Template = function(templateRef, question){
+            ecEditor.getService('assessment').getTemplate(templateRef, function(err, response) {
+                if (!err) {
+                    var x2js = new X2JS({ attributePrefix: 'none', enableToStringFunc: false });
+                    var templateJson = x2js.xml_str2json(response.data.result.content.body);
+                    var questionSets = {},
+                    _assessmentData = {},
+                    config = {},
+                    controller = { "questionnaire": {}, "template":[] };
+                    questionSets[question.identifier] = [];
+                    questionSets[question.identifier].push(question);
+                    controller.questionnaire["items"] = questionSets;
+                    controller.questionnaire["item_sets"] = [{ "count": "1", "id": question.identifier }]
+                    controller["questionnaire"] = ecEditor._.assign(controller.questionnaire, config);
+                    controller["template"].push(templateJson.theme.template);
+                    $scope.sendForPreview(controller, question.version);
+                }
+            });                       
+        }
+
+        $scope.sendForPreview = function(controller,version){
+            if(version == 1){
+                var qObj = {
+                    "data": { __cdata: JSON.stringify(controller) },
+                    "config": { __cdata: JSON.stringify({ "type": "items", "var": "item" }) },
+                    "pluginId":"org.ekstep.qsquiz",
+                    "pluginVer":"1.0",
+                    "id":"80532057-749a-4534-812b-ec702c99b4b8",
+                    "type":"mcq",
+                    "templateId":"horizontalMCQ",
+                    "rotate":"0",
+                    "z-index":"0",
+                    "w":"80",
+                    "x":"9",
+                    "h":"85",
+                    "y":"6"
+                };  
+            }
+            else{
+                var qObj = {
+                    "config": JSON.stringify(controller.data.config),
+                    "data": JSON.stringify(controller.data.data),
+                    "id": "c943d0a907274471a0572e593eab49c2",
+                    "pluginId": controller.data.plugin.id,
+                    "pluginVer": controller.data.plugin.version,
+                    "templateId": controller.data.plugin.templateId,
+                    "type": "unit"
+                };
             }
             var questions = [];
             var data = {
