@@ -2,16 +2,13 @@
     height: 50px;
     background-color: #eeeeee;
 }
-
 .ui.column.suggest-content-pane{
     padding: 0 !important;
 }
-
 .suggest-content-header-content {
     padding-top: 15px;
     padding-left: 15px;
 }
-
 .suggest-content-header-text {
     font-family: OpenSans;
     font-size: 14px;
@@ -22,12 +19,10 @@
     letter-spacing: normal;
     text-align: left;
 }
-
 .suggest-content-header-title {
     color: #333333;
     text-transform: uppercase;
 }
-
 .suggest-content-header-content i {
     color: #007aff;
     padding-right: 8px;
@@ -49,9 +44,9 @@
     color: #0073ff;
 }
 .card-list {
-    padding-left: 20px;
+    padding-left: 8px;
     padding-top: 20px;
-    padding-right: 20px;
+    padding-right: 5px;
     overflow-y: auto;
     position: absolute;
     height: calc(100% - 130px);
@@ -62,42 +57,51 @@
 .font-size-11 {
     font-size: 11px;
 }
-.ui.card { 
+.ui.cards>.card { 
     box-shadow: 0 2px 4px 0 rgba(164, 164, 164, 0.5);
     border: solid 1px #dedede;
-    width: 260px;
+    width: 305px;
 }
-
-.card-list .ui.card>.image>img {
-    width: 258px;
-    max-width: 258px;
-    max-height: 140px;
+.ui.cards>.card>.content {
+    padding: 0.5em;
 }
-
-/* mixin for multiline */
-.block-with-text {
+.ui.cards>.card .content img {
+    width: 50px;
+    height: 50px;
+}
+.ui.cards>.card>.content>.header:not(.ui) {
+    margin-top: 0;
+    font-size: 1.8;
+    font-weight: bolder;
+}
+.ui.cards>.card>.content>.header {
+    font-family: inherit;
+    color: #000000;
+}
+.header.block-with-text {
+    max-height: 2.4em;
+    text-align: initial;
+    word-break: break-all;
+}
+.content .text-block-ellipsis {
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
     overflow: hidden;
-    position: relative;
-    line-height: 1.2em;
-    max-height: 3.6em;
-    text-align: justify;
-    /* margin-right: -1em; */
-    padding-right: 1em;
-  }
-
-  .block-with-text:before {
-    content: '...';
-    position: absolute;
-    right: 0;
-    bottom: 0;
-  }
-
-  .block-with-text:after {
-    content: '';
-    position: absolute;
-    right: 0;
-    width: 1em;
-    height: 1em;
-    margin-top: 0.2em;
-    background: white;
-  }
+    text-overflow: ellipsis;
+}
+.extra-content {
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-bottom: 4px;
+}
+.extra-content p {
+    margin-bottom: 0;
+    width: 80%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.ui.cards>.card .content img {
+    border-radius: 2px;
+}

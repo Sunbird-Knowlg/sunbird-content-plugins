@@ -60,7 +60,6 @@ body {
 }
 
 #contents-pane {
-    /* width: calc(100% - 650px); */
     height: 100%;
     padding: 0;
     overflow-y: auto;
