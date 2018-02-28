@@ -213,7 +213,7 @@ body {
 .ui.dropdown .menu .selected.item,
 .ui.dropdown.selected,
 .ui.dropdown .menu .active.item {
-    font-weight: normal;
+    font-weight: bold;
     color: rgba(0, 0, 0, .95);
     background: none;
 }
@@ -652,3 +652,5 @@ switched to Github for the search after API changes
     float: right;
     background-color: transparent !important;
 }
+
+

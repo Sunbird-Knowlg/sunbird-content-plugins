@@ -217,17 +217,6 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
         });
     }
 
-/*     $scope.getCourseData = function(event, data) {
-        if(data.length > 0 && $scope.metaData.concepts && !_.isEqual(data.sort(), $scope.metaData.concepts.sort())) {
-            var temp = $scope.metaData.concepts;
-            $scope.metaData.concepts = data;
-            $scope.searchLessons();
-            $scope.metaData.concepts = temp;
-        } else {
-            $scope.onNodeSelect();
-        }
-    } */
-
     ecEditor.addEventListener('org.ekstep.collectioneditor:nodechange', $scope.onNodeSelect);
     ecEditor.addEventListener('org.ekstep.collectioneditor:save', $scope.updateMetaData);
     $scope.init();

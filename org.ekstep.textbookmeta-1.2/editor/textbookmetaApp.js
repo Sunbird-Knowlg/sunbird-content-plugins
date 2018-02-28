@@ -12,17 +12,7 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
         $scope.getPath();
         $scope.$safeApply();
     }
-    $scope.updateSuggestContent = function() {
-        return obj = {
-            board: $scope.categoryModelList[1],
-            class: $scope.categoryModelList[2],
-            subject: $scope.categoryModelList[3],
-            keywords: org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords
-        }
-    }
     ecEditor.addEventListener("title:update:textbook", $scope.updateTitle, $scope);
-    ecEditor.addEventListener("org.ekstep.collectionEditor:Textbook", $scope.updateSuggestContent, $scope);
-    
     var categoryMasterList = _.cloneDeep(org.ekstep.services.collectionService.categoryList);
     _.forEach(categoryMasterList, function(category){
         $scope.categoryListofFramework[category.index] = category.terms || [];
