@@ -5,7 +5,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     $scope.contentId = ecEditor.getContext('contentId');
     $scope.showsuggestedContent = ecEditor.getConfig('suggestedContent');
     $scope.metaPages = [];
-
     $scope.sidebarPages = [];
     $scope.selectedObjectType = undefined;
     $scope.nodeFilter = "";
@@ -268,8 +267,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 org.ekstep.services.collectionService.fromCollection(res.data.result.content);
                 $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
 
-                var frameworkId = ecEditor.getContext('framework') || org.ekstep.services.collectionService.defaultFramwork;
-                ecEditor.getService('meta').getCategorys(frameworkId, function(cateerr, cateresp) {
+                var framework = ecEditor.getContext('framework') || org.ekstep.services.collectionService.framework;
+                ecEditor.getService('meta').getCategorys(framework, function(cateerr, cateresp) {
                     if (!cateerr) {
                         _.forEach(cateresp.data.result.framework.categories, function(category){
                             org.ekstep.services.collectionService.categoryList[category.name] = category;
@@ -304,9 +303,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             if (res) {
                 var activeNode = org.ekstep.services.collectionService.getActiveNode();
                 $scope.contentDetails.contentTitle = activeNode.title ? activeNode.title : "Untitled Content";
-                // if (!_.isUndefined(activeNode.data.metadata.appIcon)) {
-                //     $scope.contentDetails.contentImage = activeNode.data.metadata.appIcon;
-                // }
                 setTimeout(function() {
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', activeNode);
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode);
@@ -355,11 +351,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:added', $scope.addContent, $scope);
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:removed', $scope.removeContent, $scope);
 
-
-    $scope.init = function(){
-        //org.ekstep.services.collectionService.suggestVocabularyRequest.request.limit = ecEditor.getConfig('keywordsLimit')
-    }
-
     $scope.parseKeywords = function(keywords){
         if(_.isString(keywords)){
             return JSON.parse(keywords);
@@ -368,6 +359,5 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         }
     }
 
-    $scope.init();
 }]);
 //# sourceURL=collectiontreeApp.js
