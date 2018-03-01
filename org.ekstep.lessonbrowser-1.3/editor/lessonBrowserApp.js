@@ -389,7 +389,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             $scope.mainTemplate = 'facetsItemView';
             if (!ctrl.facetsResponse) {
                 $scope.getPageAssemble(function(err, res) {
-                    if (!res) {
+                    if (res) {
                         ctrl.facetsResponse = res.data;
                         angular.forEach(ctrl.facetsResponse.result.response.sections, function(section, sectionIndex) {
                             angular.forEach(section.contents, function(content, contentIndex) {
