@@ -9,6 +9,10 @@ org.ekstep.contenteditor.basePlugin.extend({
   type: "org.ekstep.questionset",
   _questions: [],
   _questionPlugin: 'org.ekstep.question',
+  _constants: {
+    v1PluginId: "org.ekstep.qsquiz",
+    templateId: "horizontalMCQ"
+  },
   /**
    * Register events.
    * @memberof questionset
@@ -40,15 +44,18 @@ org.ekstep.contenteditor.basePlugin.extend({
     // Add all question media to media manifest
     if (_.isArray(this._questions)) {
       this._questions.forEach(function(question) {
-        var quesMedia = JSON.parse(question.body);
-        var question = quesMedia.data;
-        if (_.isArray(question.media)) {
-          question.media.forEach(function(mediaItem) {
-            mediaItem.src = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(mediaItem.src)
-            instance.addMedia(mediaItem);
-          });
+        if (!_.isUndefined(question.body)) {
+          var quesMedia = JSON.parse(question.body);
+          var question = quesMedia.data;
+          if (_.isEmpty(!_.isUndefined(question.media))) {
+            question.media.forEach(function(mediaItem) {
+              mediaItem.src = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(mediaItem.src)
+              instance.addMedia(mediaItem);
+            });
+          }
         }
       });
+
     }
 
     // Add stage object
@@ -96,6 +103,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     return fabricGroup;
   },
   addQS: function(event, dataObj) {
+
     var instance = this;
     var questions = [];
     if (_.isArray(dataObj.data.data)) {
@@ -114,6 +122,30 @@ org.ekstep.contenteditor.basePlugin.extend({
     }
     ecEditor.dispatchEvent(this.manifest.id + ':create', qdata);
   },
+  isQuestionV1: function(question) {
+    return _.isUndefined(question.body);
+  },
+  createEcmlStructureV1: function(question) {
+    var instance = this;
+    var questionTemplate = question.template;
+    questionSets = {},
+      questionData = {},
+      controller = {
+        "questionnaire": {},
+        "template": {}
+      };
+    questionSets[question.identifier] = question;
+    delete questionSets[question.identifier].template
+    controller.questionnaire["items"] = questionSets;
+    controller.questionnaire["item_sets"] = [{
+      "count": instance.config.total_items,
+      "id": question.identifier
+    }]
+    controller["questionnaire"] = ecEditor._.assign(controller.questionnaire, instance.config);
+    controller["template"] = ecEditor._.assign(questionTemplate);
+    // instance.setData(controller);
+    return JSON.stringify(controller);
+  },
   toECML: function() {
     var instance = this;
 
@@ -122,34 +154,53 @@ org.ekstep.contenteditor.basePlugin.extend({
 
     if (_.isArray(instance.data)) {
       instance.data.forEach(function(question) {
+        var questionECML = {};
         if (_.isUndefined(questionSetECML[instance._questionPlugin])) questionSetECML[instance._questionPlugin] = [];
-
-        var questionBody = JSON.parse(question.body);
-        // Build Question ECML for each question that is added.
-        var questionECML = {
-          id: UUID(),
-          type: question.type,
-          pluginId: questionBody.data.plugin.id,
-          pluginVer: questionBody.data.plugin.version,
-          templateId: questionBody.data.plugin.templateId,
-          data: {
-            __cdata: JSON.stringify(questionBody.data.data)
-          },
-          config: {
-            __cdata: JSON.stringify(questionBody.data.config)
+        if (instance.isQuestionV1(question)) {
+          questionECML = {
+            id: UUID(),
+            type: question.type,
+            pluginId: instance._constants.v1PluginId,
+            pluginVer: (question.version === 1) ? '1.0' : question.version.toString(),
+            templateId: instance._constants.templateId,
+            data: {
+              __cdata: instance.createEcmlStructureV1(question)
+              //__cdata:"{}"
+            },
+            config: {
+              __cdata: "{}"
+            }
           }
-        };
+          ecEditor.instantiatePlugin(instance._constants.v1PluginId, {});
+        } else {
+          var questionBody = JSON.parse(question.body);
+          // Build Question ECML for each question that is added.
+          var questionECML = {
+            id: UUID(),
+            type: question.type,
+            pluginId: questionBody.data.plugin.id,
+            pluginVer: questionBody.data.plugin.version,
+            templateId: questionBody.data.plugin.templateId,
+            data: {
+              __cdata: JSON.stringify(questionBody.data.data)
+            },
+            config: {
+              __cdata: JSON.stringify(questionBody.data.config)
+            }
+          };
 
-        // Instantiate the question unit plugin to add it to <plugin-manifest>
-        ecEditor.instantiatePlugin(questionBody.data.plugin.id, {});
-        // delete questionSetECML.data;
-        ecEditor._.forEach(questionBody.data.media, function(asset) {
-          if (!ecEditor._.isEmpty(asset))
-            instance.addMedia(asset);
-        });
+          // Instantiate the question unit plugin to add it to <plugin-manifest>
+          ecEditor.instantiatePlugin(questionBody.data.plugin.id, {});
+          // delete questionSetECML.data;
+          ecEditor._.forEach(questionBody.data.media, function(asset) {
+            if (!ecEditor._.isEmpty(asset))
+              instance.addMedia(asset);
+          });
+        }
         questionSetECML[instance._questionPlugin].push(questionECML);
       });
     }
+    console.log(questionSetECML)
     return questionSetECML;
   },
   getConfig: function() {
