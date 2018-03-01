@@ -1,11 +1,13 @@
 <div class="row ui" id="resourceHeading">
     <p ng-if="mainTemplate == 'selectedResult'">
         RESOURCES
-        <span>({{ $ctrl.res.content.length }})</span></p>
+        <span>({{ $ctrl.res.content.length }})</span>
+    </p>
 </div>
 <div class="source-result-container">
     <div class="ui special link cards cardsWrapper" ng-class="{four: mainTemplate == 'selectedResult',five: mainTemplate == 'addedItemsView'}">
-        <div class="card" ng-repeat="lesson in $ctrl.res.content | orderBy:sortOption track by $index" in-view="lineInView($index, $inview, lesson, 'LessonBrowser', $index)" in-view-options="{ throttle: 1000 }" ng-click="toggleSelectionLesson(lesson)">
+        <div class="card" ng-repeat="lesson in $ctrl.res.content | orderBy:sortOption track by $index" in-view="lineInView($index, $inview, lesson, 'LessonBrowser', $index)"
+            in-view-options="{ throttle: 1000 }" ng-click="toggleSelectionLesson(lesson)">
             <div class="ui inverted dimmer">
                 <div class="content">
                     <div class="ui list cardDetails-list">
@@ -35,7 +37,7 @@
                 </div>
             </div>
             <div class="image">
-                <img src="{{lesson.appIcon || 'http://via.placeholder.com/80x80'}}" class="resourceMetaImage ">
+                <img src="{{lesson.appIcon || $ctrl.defaultImage}}" class="resourceMetaImage ">
                 <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{lesson.identifier}}' style="z-index:10">
                     <input class="checkBox" type="checkbox" name="lessons[]">
                     <label></label>
@@ -57,14 +59,14 @@
     </div>
     <div class="load-more-lesson-warning-msg" ng-hide="mainTemplate == 'addedItemsView' || $ctrl.err || !$ctrl.res.content.length">
         <img class="ui centered tiny image" ng-src="{{$ctrl.contentNotFoundImage}}">
-        <p>Didn’t find what you were looking for? Try search for something more specific
+        <p>{{messages.content_not_found_message}}
         </p>
     </div>
     <div class="ui negative message errorMessage" ng-if="$ctrl.err">
         <div class="header">{{$ctrl.err}}</div>
     </div>
-    <div class="ui negative message errorMessage" ng-if="!$ctrl.res.content.length">
-        <div class="header">No lessons found</div>
-        <p>Please try again</p>
+    <div class="ui negative message errorMessage" ng-if="!$ctrl.res.content.length && !$ctrl.err">
+        <div class="header">{{messages.no_lesson_found_msg}}</div>
+        <p>{{messages.try_again_msg}}</p>
     </div>
 </div>

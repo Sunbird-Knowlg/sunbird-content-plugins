@@ -5,7 +5,8 @@
         </div>
         </br>
         <div class="ui special five cards">
-            <div class="card" style="cursor:pointer" ng-repeat="lesson in $ctrl.facetsResponse.result.response.sections[sectionIndex].contents | limitTo:5  track by $index" in-view="lineInView($index, $inview, lesson, 'FacetList', $index)" in-view-options="{ throttle: 1000 }" ng-click="toggleSelectionLesson(lesson)">
+            <div class="card" style="cursor:pointer" ng-repeat="lesson in $ctrl.facetsResponse.result.response.sections[sectionIndex].contents | limitTo:5  track by $index"
+                in-view="lineInView($index, $inview, lesson, 'FacetList', $index)" in-view-options="{ throttle: 1000 }" ng-click="toggleSelectionLesson(lesson)">
                 <div class="ui inverted dimmer">
                     <div class="content">
                         <div class="ui list cardDetails-list">
@@ -35,7 +36,7 @@
                     </div>
                 </div>
                 <div class="image">
-                    <img src="{{lesson.appIcon || 'http://via.placeholder.com/80x80'}}" class="resourceMetaImage ">
+                    <img src="{{lesson.appIcon || $ctrl.defaultImage}}" class="resourceMetaImage ">
                     <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{lesson.identifier}}' style="z-index:10">
                         <input class="checkBox" type="checkbox" name="lessons[]">
                         <label></label>
@@ -49,9 +50,9 @@
                     <div class="description resourceDescription">
                         {{lesson.description}}
                         <span ng-if="lesson.description.length > 80">
-                        <span class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.description}}" data-position="bottom center">
-                            <a class="moreLink">&nbsp;&nbsp;more...</a>
-                        </span>
+                            <span class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.description}}" data-position="bottom center">
+                                <a class="moreLink">&nbsp;&nbsp;more...</a>
+                            </span>
                         </span>
                     </div>
                     <div class="meta">
@@ -67,7 +68,7 @@
     </div>
     <div class="ui negative message errorMessage" ng-if="!$ctrl.facetsResponse.result.response.sections.length">
         <p>{{$ctrl.facetsResponse.result.response.section.length}}</p>
-        <div class="header">No lessons found</div>
-        <p>Please try again</p>
+        <div class="header">{{messages.no_lesson_found_msg}}</div>
+        <p>{{messages.try_again_msg}}</p>
     </div>
 </div>
