@@ -74,6 +74,8 @@ app.controllerProvider.register("CustomNavigationCtrl", function($scope, $rootSc
          * @fires actionNavigateNext
          * @memberof EkstepRendererEvents
          */
+        //Next stageID
+        //var nextStageId = EkstepRendererAPI.getStageParam(); //Get next value
         EventBus.dispatch("renderer:navigator:next",currentStageId);
 
        } else if (navType === "previous") {
@@ -83,6 +85,8 @@ app.controllerProvider.register("CustomNavigationCtrl", function($scope, $rootSc
          * @fires actionNavigatePrevious
          * @memberof EkstepRendererEvents
          */
+        //Previous stageID
+        //var previousStageId = EkstepRendererAPI.getStageParam(); //Get previous value
         EventBus.dispatch("renderer:navigator:prev");
       }
   }
