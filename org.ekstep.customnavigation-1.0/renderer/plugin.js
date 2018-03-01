@@ -5,7 +5,7 @@
  */
 
  /* istanbul ignore next */
-Plugin.extend({
+ Plugin.extend({
   _type: 'org.ekstep.customnavigation',
   _isContainer: false,
   _render: true, 
@@ -40,7 +40,7 @@ Plugin.extend({
 
     //Register plugin for custom navigation
     EkstepRendererAPI.addEventListener("renderer:navigator:deregister",function(event){
-      var index = _.findIndex(instance._customNavigationPlugins, function(pluginInstance){ return pluginInstance.id == event.target});
+      var index = _.findIndex(instance._customNavigationPlugins, function(pluginInstance){ return pluginInstance.id == event.target.id});
       if (index > -1) {
         instance._customNavigationPlugins.splice(index, 1);
       }

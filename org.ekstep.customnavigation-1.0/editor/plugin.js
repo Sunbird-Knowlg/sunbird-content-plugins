@@ -7,8 +7,8 @@ org.ekstep.customnavigation.EditorPlugin = org.ekstep.contenteditor.basePlugin.e
      * @memberOf org.ekstep.customnavigation.EditorPlugin#
      */
     initialize:function(){
-        ecEditor.instantiatePlugin('org.ekstep.customnavigation',{});
-        //ecEditor.instantiatePlugin('org.ekstep.previouscustomnavigation',{});
+        ecEditor.instantiatePlugin('org.ekstep.nextcustomnavigation',{});
+        ecEditor.instantiatePlugin('org.ekstep.previouscustomnavigation',{});
     },
     newInstance: function() {}
 });
