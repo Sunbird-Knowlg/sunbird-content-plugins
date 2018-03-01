@@ -10,7 +10,7 @@
         </div>
         <div class="six wide column" style="padding:0%">
             <button ng-click="Sort('timestamp')" ng-class="{'primary':sortOption == 'createdOn'}" class="ui tiny basic right floated button SortBtns">
-                CREATED ON
+                PUBLISHED ON
             </button>
         </div>
     </div>
@@ -21,7 +21,7 @@
             <div class="ui">
                 <p class="padding-top-3px sidebarSectionHeader">
                     FILTERS</p>
-                <span><a id="reset-lesson-filter-button" class="ui right floated basic" ng-click="resetFilters()">Clear All</a></span>
+                <span><a id="reset-lesson-filter-button" class="ui right floated basic" ng-style="((filterSelection.lang.length || filterSelection.grade.length || filterSelection.subject.length) && {'cursor':'pointer'})  || ((!filterSelection.lang.length && !filterSelection.grade.length && !filterSelection.subject.length) && {'cursor':'not-allowed'})" ng-click="(filterSelection.lang.length || filterSelection.grade.length || filterSelection.subject.length) ? resetFilters() : 'null'">Clear All</a></span>
             </div>
         </div>
         <div class="filterMetaDetails">

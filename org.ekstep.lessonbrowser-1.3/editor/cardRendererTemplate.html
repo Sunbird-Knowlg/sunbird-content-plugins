@@ -14,26 +14,17 @@
                             <div class="content contentTitle">Board</div>
                         </div>
                         <div class="item">
-                            <div class="right floated content contentMetaDetail">{{(lesson.class.toString() | cut:true:15) || 'NA'}}
-                                <span ng-if="lesson.class.toString().length > 20">
-                                    ...
-                                    </span>
+                            <div class="right floated content contentMetaDetail">{{(lesson.class.toString()) || 'NA'}}
                             </div>
                             <div class="content contentTitle">Class</div>
                         </div>
                         <div class="item">
-                            <div class="right floated content contentMetaDetail">{{(lesson.subject | cut:true:15) || 'NA'}}
-                                <span ng-if="lesson.subject.length > 20">
-                                     ...
-                                    </span>
+                            <div class="right floated content contentMetaDetail">{{(lesson.subject) || 'NA'}}
                             </div>
                             <div class="content contentTitle">Subject</div>
                         </div>
                         <div class="item">
-                            <div class="right floated content contentMetaDetail">{{(lesson.concepts.toString() | cut:true:15) || 'NA'}}
-                                <span ng-if="lesson.concepts.toString().length > 20">
-                                    ...
-                                    </span>
+                            <div class="right floated content contentMetaDetail">{{(lesson.concepts.toString()) || 'NA'}}
                             </div>
                             <div class="content contentTitle">Concept</div>
                         </div>
@@ -45,34 +36,28 @@
             </div>
             <div class="image">
                 <img src="{{lesson.appIcon || 'http://via.placeholder.com/80x80'}}" class="resourceMetaImage ">
-                <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{lesson.identifier}}' style="z-index:9999">
+                <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{lesson.identifier}}' style="z-index:10">
                     <input class="checkBox" type="checkbox" name="lessons[]">
                     <label></label>
                 </div>
             </div>
             <div class="content">
                 <div class="header contentMetaTitle">
-                    {{lesson.name | cut:true:25}}
-                    <span ng-if="lesson.name.length > 25" class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.name}}" data-position="bottom right"><a class="desc_ellipsisLink">...</a>
-                </span>
-                </div>
-                <div class="description resourceDescription">
-                    {{lesson.description | removeHTMLTags | cut:true:80}}
-                    <span ng-if="lesson.description.length > 80">
-                        <span class="ui compact icon desc_ellipsis" data-tooltip="{{lesson.description}}" data-position="bottom center">
-                            <a class="moreLink">&nbsp;&nbsp;more...</a>
-                        </span>
+                    {{lesson.name}}
                     </span>
                 </div>
+                <div class="description resourceDescription">
+                    {{lesson.description}}
+                </div>
                 <div class="meta">
-                    <span class="creator">Created by {{lesson.creator || 'Unknown'}}</span>
+                    <span class="creator">Created by {{lesson.creator || '--'}}</span>
                 </div>
             </div>
         </div>
     </div>
     <div class="load-more-lesson-warning-msg" ng-hide="mainTemplate == 'addedItemsView' || $ctrl.err || !$ctrl.res.content.length">
         <img class="ui centered tiny image" ng-src="{{$ctrl.contentNotFoundImage}}">
-        <p>Didn’t find what you were looking for? Try <a href="#">search</a> for something more specific
+        <p>Didn’t find what you were looking for? Try search for something more specific
         </p>
     </div>
     <div class="ui negative message errorMessage" ng-if="$ctrl.err">

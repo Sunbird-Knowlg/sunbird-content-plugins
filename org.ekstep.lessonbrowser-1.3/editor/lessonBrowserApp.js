@@ -1,8 +1,8 @@
 angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
-    .controller('lessonController', ['$scope', 'instance', 'callback', 'callerFilters', function($scope, instance, callback, callerFilters) {
+    .controller('lessonController', ['$scope', '$timeout', 'instance', 'callback', 'callerFilters', function($scope, $timeout, instance, callback, callerFilters) {
         var ctrl = this;
         ctrl.facetsResponse = undefined;
-        const DEFAULT_PAGEAPI = 'LessonBrowser';
+        const DEFAULT_PAGEAPI = 'ContentBrowser';
         // different html configuration to render dynamically
         $scope.headerTemplate = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/header.html");
         $scope.footerTemplate = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/footer.html");
@@ -46,6 +46,16 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                 }
             }
         };
+
+        // concept request body
+        var conceptRequestBody = {
+            "request": {
+                "filters": {
+                    "objectType": ["Concept"],
+                    "identifier": []
+                }
+            }
+        }
 
         // Selected filters
         $scope.filterSelection = { "lang": [], "grade": [], "lessonType": [], "concept": [], "subject": [] };
@@ -95,23 +105,54 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             });
         };
 
+
+        ctrl.searchConcepts = function(content) {
+            angular.forEach(content, function(content, contentIndex) {
+                conceptRequestBody.request.filters.identifier = content.concepts;
+                searchService.search(conceptRequestBody, function(err, res) {
+                    if (err) {
+                        ctrl.err = "Oops! Something went wrong. Please try again later.";
+                    } else {
+                        if (res.data.result.concepts !== (undefined || null)) {
+                            if (res.data.result.concepts.length === 1) {
+                                var conceptNames = [];
+                                conceptNames.push(res.data.result.concepts[0].name);
+                            } else {
+                                angular.forEach(res.data.result.concepts, function(concept) {
+                                    var conceptNames = [];
+                                    conceptNames.push(concept.name);
+                                });
+                            }
+                            ctrl.res.content[contentIndex].concepts = conceptNames;
+                        } else {
+                            ctrl.res.content[contentIndex].concepts = [];
+                        }
+                    }
+                });
+            });
+
+        }
+
         // Search API Integration
         var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
-        ctrl.searchLessons = function() {
+        ctrl.searchLessons = function(callback) {
             searchService.search(searchBody, function(err, res) {
                 if (err) {
                     ctrl.err = "Oops! Something went wrong. Please try again later.";
                 } else {
                     ctrl.res = { count: 0, content: [] };
-                    angular.forEach(res.data.result.content, function(lessonContent) {
-                        ctrl.res.content.push(lessonContent);
-                    });
+                    ctrl.res.content = res.data.result.content;
+                    ctrl.searchConcepts(ctrl.res.content);
                 }
-                $scope.isLoading = false;
                 $scope.$safeApply();
                 ctrl.addOrRemoveContent(ctrl.res.content);
+                ctrl.conceptSelector();
+                ctrl.dropdownAndCardsConfig();
+                $timeout(function() {
+                    $scope.isLoading = false;
+                }, 200);
             });
-
+            return callback(true);
         };
 
         // Add or Remove resources
@@ -127,6 +168,10 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
 
         // show card details
         $scope.showCardDetails = function(lesson) {
+            $scope.previousPage = $scope.mainTemplate;
+            if ($scope.mainTemplate == 'selectedResult') {
+                $scope.defaultResources = ctrl.res.content;
+            }
             $scope.mainTemplate = 'cardDetailsView';
             $scope.lessonView = lesson;
         }
@@ -151,8 +196,10 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             $scope.noResultMsg = false;
             $scope.isLoading = true;
             searchBody.request.query = this.searchKeyword;
-            ctrl.searchLessons();
-            ctrl.searchRes = { count: 0, content: [] };
+            ctrl.searchLessons(function(res) {
+                ctrl.searchRes = { count: 0, content: [] };
+            });
+
         }
 
         // get filters value
@@ -203,7 +250,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             $scope.isLoading = true;
             ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'filter', targetid: 'button-filter-apply' });
             $scope.getFiltersValue(); /**Get filters values**/
-            ctrl.searchLessons();
+            ctrl.searchLessons(function(res) {});
         };
 
         // Close the popup
@@ -232,12 +279,17 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         $scope.backToPrevious = function() {
             if ($scope.mainTemplate == 'selectedResult') {
                 $scope.mainTemplate = 'facetsItemView';
-            } else {
-                ctrl.res.content = $scope.defaultResources;
+            } else if ($scope.mainTemplate == 'addedItemsView') {
                 $scope.mainTemplate = 'selectedResult';
+                ctrl.res.content = $scope.defaultResources;
+            } else {
+                $scope.mainTemplate = $scope.previousPage;
+                if ($scope.mainTemplate == 'selectedResult') {
+                    ctrl.res.content = $scope.defaultResources;
+                }
             }
             $scope.$safeApply();
-            setTimeout(function() {
+            $timeout(function() {
                 ctrl.addOrRemoveContent(ctrl.res.content);
                 ctrl.conceptSelector();
                 ctrl.dropdownAndCardsConfig();
@@ -267,17 +319,19 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                 ctrl.generateTelemetry({ type: 'click', subtype: 'uncheck', target: 'lesson', targetid: lesson.identifier });
                 $scope.lessonSelection.splice(idx, 1); // is currently selected, remove from selection list
                 $scope.selectedResources.splice(idx, 1);
-                $('#checkBox_' + lesson.identifier + ' >.checkBox').prop('checked', false);
+                ecEditor.jQuery('#checkBox_' + lesson.identifier + ' >.checkBox').prop('checked', false);
             } else {
                 ctrl.generateTelemetry({ type: 'click', subtype: 'check', target: 'lesson', targetid: lesson.identifier });
                 $scope.lessonSelection.push(lesson); // is newly selected, add to the selection list
                 $scope.selectedResources.push(lesson.identifier);
-                $('#checkBox_' + lesson.identifier + ' >.checkBox').prop('checked', true);
+                ecEditor.jQuery('#checkBox_' + lesson.identifier + ' >.checkBox').prop('checked', true);
             }
         };
 
         // search
         $scope.searchByKeyword = function() {
+            ecEditor.jQuery('.searchLoader').addClass('active');
+            $scope.searchStatus = "start";
             ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'button-search' });
             searchBody.request.query = this.searchKeyword;
             searchService.search(searchBody, function(err, res) {
@@ -285,11 +339,14 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                     ctrl.searchErr = "Oops! Something went wrong. Please try again later.";
                 } else {
                     ctrl.searchRes = { count: 0, content: [] };
+                    $scope.searchStatus = "end";
+                    ecEditor.jQuery('.searchLoader').removeClass('active');
                     ctrl.searchRes.count = res.data.result.count;
-                    angular.forEach(res.data.result.content, function(lessonContent) {
-                        ctrl.searchRes.content.push(lessonContent);
-                    });
-                    if (!ctrl.searchRes.content.length) {
+                    if (res.data.result.content) {
+                        ctrl.searchRes.content = res.data.result.content;
+                        ctrl.searchConcepts(ctrl.searchRes.content);
+                    }
+                    if (!res.data.result.content) {
                         $scope.noResultMsg = true;
                     }
                     $scope.$safeApply();
@@ -299,21 +356,15 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
 
         // show selected items
         $scope.SelectedItems = function() {
+            $scope.previousPage = $scope.mainTemplate;
+            $scope.defaultResources = ctrl.res.content;
             $scope.mainTemplate = 'addedItemsView';
             ctrl.res.content = $scope.lessonSelection;
             $scope.$safeApply();
-            setTimeout(function() {
+            $timeout(function() {
                 ctrl.addOrRemoveContent($scope.lessonSelection);
+                ctrl.dropdownAndCardsConfig();
             }, 0);
-        }
-
-        // searcher selected lesson
-        $scope.searchSelectedLesson = function(selectedLesson) {
-            searchBody.request.query = selectedLesson;
-            ctrl.searchLessons();
-            ctrl.searchRes = [];
-            $scope.noResultMsg = false;
-            $scope.$safeApply();
         }
 
         $scope.getPageAssemble = function(cb) {
@@ -340,11 +391,38 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                 $scope.getPageAssemble(function(err, res) {
                     if (!res) {
                         ctrl.facetsResponse = res.data;
+                        angular.forEach(ctrl.facetsResponse.result.response.sections, function(section, sectionIndex) {
+                            angular.forEach(section.contents, function(content, contentIndex) {
+                                if (content.concepts !== undefined) {
+                                    conceptRequestBody.request.filters.identifier = content.concepts;
+                                    searchService.search(conceptRequestBody, function(err, res) {
+                                        if (err) {
+                                            ctrl.err = "Oops! Something went wrong. Please try again later.";
+                                        } else {
+                                            var conceptNames = [];
+                                            if (res.data.result.concepts.length === 1) {
+                                                conceptNames.push(res.data.result.concepts[0].name);
+                                            } else {
+                                                angular.forEach(res.data.result.concepts, function(concept) {
+                                                    conceptNames.push(concept.name);
+                                                });
+                                            }
+                                            ctrl.facetsResponse.result.response.sections[sectionIndex].contents[contentIndex].concepts = conceptNames;
+                                        }
+
+                                    });
+                                } else {
+                                    ctrl.facetsResponse.result.response.sections[sectionIndex].contents[contentIndex].concepts = [];
+                                }
+
+                            });
+                        });
                         $scope.$safeApply();
-                        setTimeout(function() {
+                        $timeout(function() {
                             ctrl.addOrRemoveContent(ctrl.res.content);
                             ctrl.dropdownAndCardsConfig();
                         }, 0);
+                        $scope.isLoading = false;
                     } else {
                         console.error("Unable to fetch response", err);
                     }
@@ -352,36 +430,33 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             }
         }
 
+        // show all the contents of particular resource
         $scope.viewAll = function(query) {
             ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'viewAll', targetid: "" });
             if (_.isString(query)) {
                 query = JSON.parse(query);
             }
             if (!$scope.items) {
+                $scope.isLoading = true;
                 query.request.limit = limit;
-                searchService.search(query, function(err, res) {
-                    if (res) {
-                        $scope.items = res;
-                        ctrl.res.content = $scope.items.data.result.content;
-                        $scope.defaultResources = ctrl.res.content;
-                    } else {
-                        console.error("Unable to fetch", err);
-                    }
+                searchBody = query;
+                ctrl.searchLessons(function(res) {
+                    $scope.mainTemplate = 'selectedResult';
+                    $scope.defaultResources = ctrl.res.content;
+
                 });
             } else {
+                $scope.mainTemplate = 'selectedResult';
                 ctrl.res.content = $scope.defaultResources;
+                $scope.$safeApply();
+                $timeout(function() {
+                    ctrl.addOrRemoveContent(ctrl.res.content);
+                    ctrl.conceptSelector();
+                    ctrl.dropdownAndCardsConfig();
+                }, 0);
             }
-            $scope.mainTemplate = 'selectedResult';
-            $scope.$safeApply();
-            setTimeout(function() {
-                ctrl.addOrRemoveContent(ctrl.res.content);
-                ctrl.conceptSelector();
-                ctrl.dropdownAndCardsConfig();
-            }, 0);
 
         }
-
-        $scope.invokeFacetsPage();
 
         // Sort the resources
         $scope.Sort = function(option) {
@@ -429,15 +504,19 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             // close the popup
             $scope.closeThisDialog();
         };
+
+        // refresh searcher
+        $scope.refreshSearch = function() {
+            this.searchKeyword = '';
+        }
         // initial configuration
         $scope.init = function() {
             if (!$scope.filterSelection.lessonType.length) {
                 ctrl.meta.lessonTypes = collectionService.getObjectTypeByAddType('Browser');
                 searchBody.request.filters.contentType = ctrl.meta.lessonTypes[0];
             }
-
-            ctrl.searchLessons();
-            setTimeout(function() {
+            $scope.invokeFacetsPage();
+            $timeout(function() {
                 ctrl.learningConfig(); // Fetch sidebar filters through APIs
                 ctrl.dropdownAndCardsConfig();
                 if (instance.client) {
@@ -447,27 +526,20 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         };
         $scope.init();
 
-    }]).filter('removeHTMLTags', function() {
-        return function(text) {
-            return text ? String(text).replace(/<[^>]+>/gm, '') : '';
-        };
-    }).filter('cut', function() {
-        return function(value, wordwise, max) {
-            if (!value) return '';
-            max = parseInt(max, 10);
-            if (!max) return value;
-            if (value.length <= max) return value;
-            value = value.substr(0, max);
-            if (wordwise) {
-                var lastspace = value.lastIndexOf(' ');
-                if (lastspace !== -1) {
-                    if (value.charAt(lastspace - 1) === '.' || value.charAt(lastspace - 1) === ',') {
-                        lastspace = lastspace - 1;
-                    }
-                    value = value.substr(0, lastspace);
-                }
-            }
-            return value;
-        };
+    }]);
 
-    });
+// slider directive
+angular.module('org.ekstep.lessonbrowserapp').directive('flexslider', function() {
+    return {
+        link: function(scope, element, attrs) {
+            element.flexslider({
+                animation: "slide",
+                slideshow: false,
+                controlNav: true,
+                directionNav: true,
+                prevText: "",
+                nextText: ""
+            });
+        }
+    }
+});

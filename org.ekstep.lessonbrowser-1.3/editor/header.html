@@ -5,21 +5,23 @@
             <div class="ui action input search-reset-keyword-field" ng-show="mainTemplate == 'selectedResult' || 'facetsItemView'">
                 <input type="text" id="resourceSearch" placeholder="Search..." autocomplete="off" spellcheck="false" ng-model="searchKeyword"
                     ng-keyup="$event.keyCode == 13 ? lessonBrowseSearch() : ( searchKeyword.length >= 3 ? searchByKeyword() : null)">
-                <button id="search-button" class="ui basic button" ng-click="lessonBrowseSearch() " title="Start search"><i class="search icon"></i></button>
+                    <div class="ui tiny inline loader searchLoader"></div>
+                    <div class="searchElement" id="refresh-button" ng-show="( searchKeyword.length >= 3 && searchStatus == 'end')" ng-click="refreshSearch() " title="refresh"><i class="close link icon"></i></div>
+                <div class="searchElement" ng-show="( (searchKeyword.length < 3 || searchKeyword == (null || undefined)))" id="search-button" ng-click="lessonBrowseSearch() " title="Start search"><i class="search icon"></i></div>
             </div>
             <span>
                     <i class="close link icon" id="resourceCloseBtn" ng-click="closePopup(mainTemplate)"></i>
                 </span>
             <ul class="searchList" ng-show="( mainTemplate == 'selectedResult'|| mainTemplate == 'facetsItemView' )  && $ctrl.searchRes.content.length && (searchKeyword.length >= 3)">
-                <li ng-click="searchSelectedLesson(lesson.name)" class="searchResult" ng-repeat="lesson in $ctrl.searchRes.content">
+                <li class="searchResult" ng-click="toggleSelectionLesson(lesson)" ng-repeat="lesson in $ctrl.searchRes.content">
                     <p>{{lesson.name}}</p>
                 </li>
             </ul>
-            <ul class="searchList" ng-show="mainTemplate == 'selectedResult' && !$ctrl.searchRes.content.length && (searchKeyword.length >= 3) && noResultMsg">
+            <ul class="searchList" ng-show="( mainTemplate == 'selectedResult'|| mainTemplate == 'facetsItemView' ) && !$ctrl.searchRes.content.length && (searchKeyword.length >= 3) && noResultMsg">
                     <strong class="searchResultMsg">No Results</strong>
                     <p class="searchResultMsg">Your search returned no results</p>
             </ul>
-             <ul class="searchList" ng-show="$ctrl.searchErr">
+             <ul class="searchList" ng-show="$ctrl.searchErr  && (searchKeyword.length >= 3)">
                     <strong class="searchResultMsg">{{$ctrl.searchErr}}</strong>
             </ul>
         </h5>

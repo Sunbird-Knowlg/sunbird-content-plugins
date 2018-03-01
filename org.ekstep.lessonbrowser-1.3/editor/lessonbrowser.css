@@ -59,7 +59,8 @@
     margin-right: 7%;
     border: 1px solid #e0e0e0;
     border-radius: 30px;
-    width: 320px;
+    width: 300px;
+    height: 36px;
 }
 
 .filterMetaDetails .paraHeading {
@@ -76,17 +77,23 @@
 }
 
 .resourceDescription {
-    height: 45px;
-    font-size: 14px;
-    line-height: 15px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-height: 18px;
+    height: 54px;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
 }
 
 .ui.vertical.segment.sortResource {
     padding: 6%;
 }
 
-#search-button {
-    padding-right: 5%;
+.searcher .search-reset-keyword-field .searchElement {
+    padding: 2%;
+    font-size: 78%;
+    cursor: pointer;
 }
 
 .footerElement .segment .grid .selectedItems {
@@ -147,13 +154,13 @@
     padding-left: 1%;
     border-radius: 5px;
     margin-top: 2px;
-    width: 23.5%;
+    width: 300px;
     margin-left: -24px;
     position: fixed;
     background: white;
     z-index: 1;
     cursor: pointer;
-    max-height: 25%;
+    max-height: 62%;
     overflow-y: scroll;
 }
 
@@ -174,6 +181,11 @@
     text-align: left;
     font-size: 13px;
     font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
 }
 
 .contentTitle {
@@ -230,7 +242,8 @@
 .facets-viewall {
     position: relative;
     cursor: pointer;
-    left: 88%;
+    float: right;
+    right: 2px;
     font-weight: normal;
     font-size: 14px;
     text-transform: initial;
@@ -246,6 +259,9 @@
 
 .card .content .header.contentMetaTitle {
     font-size: 16px !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
 }
 
 .creator {
@@ -279,6 +295,8 @@
 
 .ui.segment .cardMetaDetails {
     border-left: none;
+    height: 80%;
+    overflow-y: scroll;
 }
 
 .fullHeight {
@@ -354,6 +372,16 @@
 
 .sortButtonsWrapper .column .SortBtns {
     width: 90%;
-    height: 40px;
+    height: 30px;
     padding: 0%;
+}
+
+.ui.segment.horizontal .cardView-description {
+    height: 80%;
+    overflow-y: scroll;
+}
+
+.searcher .search-reset-keyword-field .searchLoader {
+    height: 100%;
+    margin: 3%;
 }
