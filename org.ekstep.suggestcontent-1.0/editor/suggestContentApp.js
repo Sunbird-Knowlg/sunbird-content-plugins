@@ -16,27 +16,19 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
     
     /* Initialisation */
     $scope.init = function() {
-        var mode;
-        if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit"; //What if the contentStatus is other than edit
-        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
-            if (res && res.data && res.data.responseCode === "OK") {
-                if(res.data.result.content.subject) {
-                    _.forEach(ecEditor.jQuery("#collection-tree").fancytree("getRootNode").children[0].children, function(content) {
-                        if(!content.folder) $scope.excludeContents.push(content.data.id);
-                    });
-
-                    $scope.metaData.subject = res.data.result.content.subject;
-                    if(res.data.result.content.language) $scope.metaData.language = (typeof res.data.result.content.language === 'object') ? res.data.result.content.language[0] : res.data.result.content.language;
-                    if(res.data.result.content.concepts) {
-                        $scope.metaData.concepts = [];
-                        _.forEach(res.data.result.content.concepts, function(concept) {
-                            $scope.metaData.concepts.push(concept.identifier)
-                        });
-                    }
-                    $scope.searchLessons();
-                }
-            }
+        _.forEach(ecEditor.jQuery("#collection-tree").fancytree("getRootNode").children[0].children, function(content) {
+            if(!content.folder) $scope.excludeContents.push(content.data.id);
         });
+        var rootNodeMetadata = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild().data.metadata;
+        $scope.metaData.subject = rootNodeMetadata.subject;
+        if(rootNodeMetadata.language) $scope.metaData.language = (typeof rootNodeMetadata.language === 'object') ? rootNodeMetadata.language[0] : rootNodeMetadata.language;
+        if(rootNodeMetadata.concepts) {
+            $scope.metaData.concepts = [];
+            _.forEach(rootNodeMetadata.concepts, function(concept) {
+                $scope.metaData.concepts.push(concept.identifier)
+            });
+        }
+        $scope.searchLessons();
     }
 
     $scope.generateTelemetry = function(data) {
@@ -113,20 +105,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
 
     /* Open Resourse Browser with the Given query */
     $scope.openResourceBrowser = function() {
-        if($scope.suggestedContentList.count) {
-            /*ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show", {
-                filters: { 
-                    //contentType: org.ekstep.collectioneditor.api.getService('collection').getObjectTypeByAddType('Browser'),
-                    lessonType: org.ekstep.collectioneditor.api.getService('collection').getObjectTypeByAddType('Browser'),
-                    language: $scope.metaData.language || "",
-                    grade: $scope.metaData.gradeLevel || "",
-                    //subject: $scope.metaData.subject
-                },
-                callback: function(err, res) {
-                    console.log("RESULT", res);
-                }
-            }); */
-
+        if($scope.suggestedContentList.content.length) {
             var query = {
                     request: {
                         lessonType: org.ekstep.collectioneditor.api.getService('collection').getObjectTypeByAddType('Browser'),
@@ -136,7 +115,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                     }
                 }
 
-            ecEditor.dispatchEvent('editor:invoke:viewall', { from:true, query })
+            ecEditor.dispatchEvent('editor:invoke:viewall', { from: true, query })
             ecEditor.dispatchEvent('editor:invoke:viewall', { client: "org", query}) 
         }
     }
@@ -146,8 +125,8 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
 
         /* Add content in root node and unit node only, content inside content is not allowed */
         if(org.ekstep.services.collectionService.getActiveNode().folder) {
-            org.ekstep.contenteditor.api.dispatchEvent("org.ekstep.collectioneditor:addContent", [lesson]);
-            // org.ekstep.contenteditor.api.dispatchEvent("org.ekstep.collectioneditor:node:added", lesson);
+            org.ekstep.services.collectionService.addNode(lesson.contentType, lesson);
+
             if (index > -1) $scope.suggestedContentList.content.splice(index, 1);
             $scope.excludeContents.push(lesson.identifier);
         } else {

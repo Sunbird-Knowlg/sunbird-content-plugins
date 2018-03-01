@@ -264,9 +264,9 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
             if (res && res.data && res.data.responseCode === "OK") {
+                res.data.result.content.keywords = $scope.parseKeywords(res.data.result.content.keywords);
                 org.ekstep.services.collectionService.fromCollection(res.data.result.content);
                 $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
-
                 var framework = ecEditor.getContext('framework') || org.ekstep.services.collectionService.framework;
                 ecEditor.getService('meta').getCategorys(framework, function(cateerr, cateresp) {
                     if (!cateerr) {
