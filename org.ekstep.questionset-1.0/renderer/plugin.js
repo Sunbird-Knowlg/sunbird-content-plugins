@@ -150,7 +150,7 @@ Plugin.extend({
     }
   },
   handleNext: function() {
-    this.renderNextQuestion();
+    this.nextQuestion();
   },
   prevQuestion: function() {
     this.renderPrevQuestion();
@@ -171,7 +171,7 @@ Plugin.extend({
     }
   },
   handlePrevious : function() {
-    this.renderPrevQuestion();
+    this.prevQuestion();
   },
   getNextQuestion: function() {
     var renderIndex = this.getRenderedIndex();
