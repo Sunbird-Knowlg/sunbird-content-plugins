@@ -71,6 +71,7 @@
 
 .ui.right.floated.header.searcher {
     margin-bottom: 0%;
+    height: 40px;
 }
 
 .filterContent.rightBorder {
@@ -150,6 +151,7 @@
 }
 
 .searchList {
+    display:none;
     border: 1px solid #D8DEE2;
     list-style: none;
     padding-left: 1%;
@@ -170,6 +172,7 @@
     font-size: 87%;
     margin-left: -4%;
     border-bottom: 1px solid #D8DEE2;
+    word-break: break-word;
 }
 
 .searchResult:hover {
@@ -392,4 +395,12 @@
     width: 99%;
     overflow: hidden;
     position: relative;
+}
+li em {
+    font-weight:bold;
+    font-style:normal;
+  }
+
+.ui.searcher:hover .searchList{
+    display: block;
 }

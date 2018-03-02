@@ -13,11 +13,9 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         ctrl.contentNotFoundImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/content_not_found.jpg");
         ctrl.defaultImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/default_image.png");
 
-
         //Response variable
         ctrl.res = { count: 0, content: [] };
         ctrl.err = null;
-
 
         $scope.mainTemplate = 'selectedResult';
         $scope.isLoading = true;
@@ -25,6 +23,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         $scope.defaultResources = [];
         $scope.lessonView = {};
         $scope.viewAllAvailableResponse = {};
+        $scope.noResultFound = true;
 
         // telemetry pluginId and plugin version
         ctrl.lessonbrowser = instance;
@@ -90,7 +89,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             });
         }
 
-
         // Meta APIs integration
         var metaService = org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE);
         ctrl.learningConfig = function () {
@@ -135,14 +133,12 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                     return cb();
                 });
             });
-
         }
 
         // Search API Integration
         var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
         ctrl.searchLessons = function (callback) {
             searchService.search(searchBody, function (err, res) {
-                $scope.isLoading = true;
                 if (err) {
                     ctrl.err = "Oops! Something went wrong. Please try again later.";
                 } else {
@@ -153,7 +149,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                         ctrl.addOrRemoveContent(ctrl.res.content);
                         ctrl.conceptSelector();
                         ctrl.dropdownAndCardsConfig();
-                        $scope.isLoading = false;
                     });
                 }
                 return callback(true);
@@ -203,13 +198,13 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                 "request": {
                     "filters": {
                         "objectType": ["Content"],
-                        "name": this.searchKeyword
+                        "name": { "value": this.searchKeyword }
                     }
-
                 }
             }
             searchBody = searchRequestBody;
             ctrl.searchLessons(function (res) {
+                $scope.noResultFound = false;
             });
         }
 
@@ -226,14 +221,12 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             } else {
                 delete searchBody.request.filters.language;
             }
-
             if ($scope.filterSelection.grade.length) {
                 $scope.filterSelection.grade = $scope.filterSelection.grade.split(",");
                 searchBody.request.filters.gradeLevel = $scope.filterSelection.grade;
             } else {
                 delete searchBody.request.filters.gradeLevel;
             }
-
             if ($scope.filterSelection.lessonType.length) {
                 $scope.filterSelection.lessonType = $scope.filterSelection.lessonType.split(",");
                 searchBody.request.filters.contentType = $scope.filterSelection.lessonType;
@@ -246,7 +239,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             } else {
                 delete searchBody.request.filters.subject;
             }
-
             if ($scope.filterSelection.concept.length) {
                 searchBody.request.filters.concepts = $scope.filterSelection.concept;
             } else {
@@ -293,6 +285,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             ctrl.generateTelemetry({ type: 'click', subtype: 'cancel', target: 'addlesson', targetid: 'button-cancel' });
             $scope.closeThisDialog();
         };
+
         // Sidebar filters - Reset
         $scope.resetFilters = function () {
             ctrl.generateTelemetry({ type: 'click', subtype: 'reset', target: 'filter', targetid: 'button-filter-reset' });
@@ -306,6 +299,8 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
 
         // navigate to the previous page
         $scope.backToPrevious = function () {
+            ctrl.searchRes = { count: 0, content: [] };
+            $scope.noResultFound = false;
             if ($scope.mainTemplate == 'selectedResult') {
                 $scope.mainTemplate = 'facetsItemView';
             }
@@ -324,6 +319,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                 ctrl.addOrRemoveContent(ctrl.res.content);
                 ctrl.conceptSelector();
                 ctrl.dropdownAndCardsConfig();
+                ecEditor.jQuery('#resourceSearch').val('');
             }, 0);
         }
 
@@ -362,15 +358,16 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         // search
         $scope.searchByKeyword = function () {
             ecEditor.jQuery('.searchLoader').addClass('active');
+            $scope.noResultFound = true;
             $scope.searchStatus = "start";
+            var searchQuery = this.searchKeyword;
             ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'button-search' });
             var searchRequestBody = {
                 "request": {
                     "filters": {
                         "objectType": ["Content"],
-                        "name": this.searchKeyword
+                        "name": { "value": this.searchKeyword }
                     }
-
                 }
             }
             searchService.search(searchRequestBody, function (err, res) {
@@ -385,9 +382,17 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                         ctrl.searchRes.content = res.data.result.content;
                     }
                     $scope.$safeApply();
+                    /* highlight matches text */
+                    ecEditor.jQuery(".searcher ul.searchList li.searchResult").each(function () {
+                        var matchStart =  ecEditor.jQuery(this).text().toLowerCase().indexOf("" + searchQuery.toLowerCase() + "");
+                        var matchEnd = matchStart + searchQuery.length - 1;
+                        var beforeMatch =  ecEditor.jQuery(this).text().slice(0, matchStart);
+                        var matchText =  ecEditor.jQuery(this).text().slice(matchStart, matchEnd + 1);
+                        var afterMatch =  ecEditor.jQuery(this).text().slice(matchEnd + 1);
+                        ecEditor.jQuery(this).html(beforeMatch + "<em>" + matchText + "</em>" + afterMatch);
+                    });
                 }
             });
-
         };
 
         // show selected items
@@ -451,7 +456,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                                 else {
                                     ctrl.facetsResponse.result.response.sections[sectionIndex].contents[contentIndex].concepts = [];
                                 }
-
                             });
                         });
                         $scope.$safeApply();
@@ -472,7 +476,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             if (_.isString(query)) {
                 query = JSON.parse(query);
             }
-
+            ctrl.searchRes = { count: 0, content: [] };
             if (!$scope.viewAllAvailableResponse.hasOwnProperty(sectionIndex)) {
                 $scope.isLoading = true;
                 query.request.limit = limit;
@@ -481,6 +485,11 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                     $scope.mainTemplate = 'selectedResult';
                     $scope.defaultResources = ctrl.res.content;
                     $scope.viewAllAvailableResponse[sectionIndex] = $scope.defaultResources;
+                    $timeout(function () {
+                        $scope.isLoading = false;
+                        $scope.noResultFound = false;
+                        ecEditor.jQuery('#resourceSearch').val('');
+                     }, 6000);
                 });
             } else {
                 $scope.mainTemplate = 'selectedResult';
@@ -492,7 +501,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                     ctrl.dropdownAndCardsConfig();
                 }, 0);
             }
-
         }
 
         // Sort the resources
@@ -523,12 +531,10 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         $scope.returnSelectedLessons = function (pageId, selectedLessons) {
             // Geenerate interact telemetry
             ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'addlesson', targetid: 'button-add' });
-
             // return selected lessons to the lesson browser caller
             var err = null;
             var res = selectedLessons;
             callback(err, res);
-
             // generate impression
             if (pageId == "facetsItemView") {
                 ctrl.generateImpression({ type: 'click', subtype: 'submit', pageid: 'FacetList' });
@@ -537,7 +543,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
 
             }
             inViewLogs = [];
-
             // close the popup
             $scope.closeThisDialog();
         };
@@ -546,6 +551,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         $scope.refreshSearch = function () {
             this.searchKeyword = '';
         }
+
         // initial configuration
         $scope.init = function () {
             $scope.messages = Messages;
@@ -562,6 +568,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                 }
             }, 100);
         };
+
         $scope.init();
 
     }]);

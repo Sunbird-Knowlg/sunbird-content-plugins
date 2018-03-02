@@ -1,7 +1,7 @@
 <div class="row ui" id="resourceHeading">
     <p ng-if="mainTemplate == 'selectedResult'">
         RESOURCES
-        <span>({{ $ctrl.res.content.length }})</span>
+        <span>({{ $ctrl.res.content.length || '0'}})</span>
     </p>
 </div>
 <div class="source-result-container">
