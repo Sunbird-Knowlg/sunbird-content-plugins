@@ -12,8 +12,6 @@
   customNavigationVisible: false, 
   _config:{},
   _templatePath: undefined,
-  _userSwitcherTP: undefined,
-  _ngScopeVar: "overlay",
   _customNavigationPlugins:[],
   initialize: function() {
     var instance = this;
