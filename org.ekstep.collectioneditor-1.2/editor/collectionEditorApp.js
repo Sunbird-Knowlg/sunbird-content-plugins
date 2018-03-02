@@ -4,6 +4,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     };
     $scope.contentId = ecEditor.getContext('contentId');
     $scope.metaPages = [];
+    $scope.sidebarPages = [];
     $scope.selectedObjectType = undefined;
     $scope.nodeFilter = "";
     $scope.expandNodeFlag = true;
@@ -264,6 +265,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             if (res && res.data && res.data.responseCode === "OK") {
                 res.data.result.content.keywords = $scope.parseKeywords(res.data.result.content.keywords);
                 org.ekstep.services.collectionService.fromCollection(res.data.result.content);
+                $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
+                $scope.showsuggestedContent = $scope.sidebarPages.length > 0 ? true : false;
                 var framework = ecEditor.getContext('framework') || org.ekstep.services.collectionService.framework;
                 ecEditor.getService('meta').getCategorys(framework, function(cateerr, cateresp) {
                     if (!cateerr) {

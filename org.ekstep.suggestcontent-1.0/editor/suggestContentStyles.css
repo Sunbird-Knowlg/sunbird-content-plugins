@@ -1,0 +1,120 @@
+.suggest-content-header {
+    height: 50px;
+    background-color: #eeeeee;
+}
+.ui.column.suggest-content-pane{
+    padding: 0 !important;
+}
+.suggest-content-header-content {
+    padding-top: 15px;
+    padding-left: 15px;
+}
+.suggest-content-header-text {
+    font-family: OpenSans;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: left;
+}
+.suggest-content-header-title {
+    color: #333333;
+    text-transform: uppercase;
+}
+.suggest-content-header-content i {
+    padding-right: 8px;
+    font-weight: 400;
+}
+.float-right {
+    float: right;
+}
+.padding-right-20 {
+    padding-right: 20px;
+}
+.padding-left-8 {
+    padding-left: 8px;
+}
+.color-blue {
+    color: #0073ff;
+    cursor: pointer;
+}
+.suggest-row-2 {
+    padding: 10px;
+    border-bottom: solid 1px #e0e1e2;
+}
+.suggest-row-2 .ui.checkbox label {
+    color: #0073ff;
+}
+.refresh-btn {
+    padding-left: 8%;
+}
+.card-list {
+    padding-left: 10px;
+    padding-top: 10px;
+    overflow-y: auto;
+    position: absolute;
+    height: calc(100% - 130px);
+    overflow-x: hidden;
+}
+.padding-left-15 {
+    padding-left: 15px;
+}
+.padding-top-15 {
+    padding-top: 15px;
+}
+.font-size-11 {
+    font-size: 11px;
+}
+.ui.cards>.card { 
+    box-shadow: 0 2px 4px 0 rgba(164, 164, 164, 0.5);
+    border: solid 1px #dedede;
+    width: 100%;
+    margin-left: 5px;
+    margin-right: 15px;
+    margin-bottom: 6px;
+    margin-top: 0;
+}
+.ui.cards>.card:first-child {
+    margin-top: 10px;
+}
+.ui.cards>.card:last-child {
+    padding-bottom: 20px;
+}
+.ui.cards>.card .content img {
+    width: 50px;
+    height: 50px;
+}
+.ui.cards>.card>.content>.header:not(.ui) {
+    margin-top: 0;
+    font-size: 16px;
+    font-weight: bolder;
+}
+.ui.cards>.card>.content>.header {
+    font-family: inherit;
+    color: #000000;
+}
+.header.block-with-text {
+    max-height: 2.4em;
+    text-align: initial;
+    word-break: break-all;
+}
+.content .text-block-ellipsis {
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.extra-content {
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-bottom: 4px;
+}
+.extra-content p {
+    margin-bottom: 0;
+    width: 80%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+.ui.cards>.card .content img {
+    border-radius: 2px;
+}
