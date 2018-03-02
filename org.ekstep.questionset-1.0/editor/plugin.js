@@ -44,10 +44,18 @@ org.ekstep.contenteditor.basePlugin.extend({
     // Add all question media to media manifest
     if (_.isArray(this._questions)) {
       this._questions.forEach(function(question) {
-        if (!_.isUndefined(question.body)) {
+        if (instance.isQuestionV1(question)) {
+          if (_.has(quesMedia, "media")) {
+            var questionMediaArr = question.media;
+            questionMediaArr.forEach(function(mediaItem) {
+              mediaItem.src = mediaItem.src;
+              instance.addMedia(mediaItem);
+            })
+          }
+        } else {
           var quesMedia = JSON.parse(question.body);
           var question = quesMedia.data;
-          if (_.isEmpty(!_.isUndefined(question.media))) {
+          if (_.isEmpty(question.media) && _.has(quesMedia, "media")) {
             question.media.forEach(function(mediaItem) {
               mediaItem.src = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(mediaItem.src)
               instance.addMedia(mediaItem);
@@ -55,9 +63,7 @@ org.ekstep.contenteditor.basePlugin.extend({
           }
         }
       });
-
     }
-
     // Add stage object
     var stageImage = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/assets/quizimage.png');
     instance.addMedia({
@@ -123,27 +129,26 @@ org.ekstep.contenteditor.basePlugin.extend({
     ecEditor.dispatchEvent(this.manifest.id + ':create', qdata);
   },
   isQuestionV1: function(question) {
-    return _.isUndefined(question.body);
+    return _.isUndefined(question.body) && question.version == 1;
   },
   createEcmlStructureV1: function(question) {
     var instance = this;
-    var questionTemplate = question.template;
     questionSets = {},
       questionData = {},
       controller = {
         "questionnaire": {},
         "template": {}
       };
-    questionSets[question.identifier] = question;
-    delete questionSets[question.identifier].template
+    var questionTemplate = Object.assign({}, question);
+    delete questionTemplate.template;
+    questionSets[question.identifier] = questionTemplate;
     controller.questionnaire["items"] = questionSets;
     controller.questionnaire["item_sets"] = [{
       "count": instance.config.total_items,
       "id": question.identifier
     }]
     controller["questionnaire"] = ecEditor._.assign(controller.questionnaire, instance.config);
-    controller["template"] = ecEditor._.assign(questionTemplate);
-    // instance.setData(controller);
+    controller["template"] = ecEditor._.assign(question.template);
     return JSON.stringify(controller);
   },
   toECML: function() {
@@ -171,6 +176,10 @@ org.ekstep.contenteditor.basePlugin.extend({
               __cdata: "{}"
             }
           }
+          ecEditor._.forEach(question.media, function(asset) {
+            if (!ecEditor._.isEmpty(asset))
+              instance.addMedia(asset);
+          });
           ecEditor.instantiatePlugin(instance._constants.v1PluginId, {});
         } else {
           var questionBody = JSON.parse(question.body);
