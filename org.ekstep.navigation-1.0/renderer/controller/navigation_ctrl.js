@@ -90,7 +90,7 @@ app.compileProvider.directive('customNextNavigation', function($rootScope) {
     template: '<div><a class="nav-icon nav-next" ng-show="showCustomNext" href="javascript:void(0);"><img ng-src="{{customNextIcon}}" ng-click="navigate(\'next\')"></a></div>',
     link: function(scope) {
       scope.customNextIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.navigation", "1.0", "renderer/assets/next.png");
-      var events = ["overlayNext", "renderer:customnext:show", "renderer:customnext:hide"];
+      var events = ["overlayNext", "renderer:next:show", "renderer:next:hide"];
       scope.toggleNav = function(event) {
         var val;
         var globalConfig = EkstepRendererAPI.getGlobalConfig();
@@ -102,7 +102,7 @@ app.compileProvider.directive('customNextNavigation', function($rootScope) {
           * @listen renderer:next:show
           * @memberOf EkstepRendererEvents
           */
-          case "renderer:customnext:show":
+          case "renderer:next:show":
           val = "on";
           break;
           /**
@@ -111,7 +111,7 @@ app.compileProvider.directive('customNextNavigation', function($rootScope) {
           * @listen renderer:next:hide
           * @memberOf EkstepRendererEvents
           */    
-          case "renderer:customnext:hide":
+          case "renderer:next:hide":
           val = "off";
           break;
           case "overlayNext":
