@@ -4,15 +4,11 @@
   "author": "Jagadish",
   "type": "plugin",
   "title": "Iterator",
-  "description": "",
+  "description": "It is a base plugin for all collection plugins which needs navigation control",
   "editor": {
     "main": "editor/plugin.js",
     "dependencies": [],
-    "menu": [],
-    "help": {
-      "src": "editor/help.md",
-      "dataType": "text"
-    }
+    "menu": []
   },
   "renderer": {
     "main": "renderer/plugin.js"
