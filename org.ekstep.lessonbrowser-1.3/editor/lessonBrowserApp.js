@@ -13,6 +13,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         ctrl.contentNotFoundImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/content_not_found.jpg");
         ctrl.defaultImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/default_image.png");
 
+
         //Response variable
         ctrl.res = { count: 0, content: [] };
         ctrl.err = null;
@@ -23,6 +24,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         $scope.sortOption = 'name';
         $scope.defaultResources = [];
         $scope.lessonView = {};
+        $scope.viewAllAvailableResponse = {};
 
         // telemetry pluginId and plugin version
         ctrl.lessonbrowser = instance;
@@ -154,9 +156,8 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                         $scope.isLoading = false;
                     });
                 }
-
+                return callback(true);
             });
-            return callback(true);
         };
 
         // Add or Remove resources
@@ -417,7 +418,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                 // Initialize the model
                 cb(err, res)
             })
-
         }
 
         $scope.invokeFacetsPage = function () {
@@ -467,22 +467,24 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             }
         }
 
-        $scope.viewAll = function (query) {
+        $scope.viewAll = function (query, sectionIndex) {
             ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'viewAll', targetid: "" });
             if (_.isString(query)) {
                 query = JSON.parse(query);
             }
-            if (!$scope.items) {
+
+            if (!$scope.viewAllAvailableResponse.hasOwnProperty(sectionIndex)) {
                 $scope.isLoading = true;
                 query.request.limit = limit;
                 searchBody = query;
                 ctrl.searchLessons(function (res) {
                     $scope.mainTemplate = 'selectedResult';
                     $scope.defaultResources = ctrl.res.content;
+                    $scope.viewAllAvailableResponse[sectionIndex] = $scope.defaultResources;
                 });
             } else {
                 $scope.mainTemplate = 'selectedResult';
-                ctrl.res.content = $scope.defaultResources;
+                ctrl.res.content = $scope.viewAllAvailableResponse[sectionIndex];
                 $scope.$safeApply();
                 $timeout(function () {
                     ctrl.addOrRemoveContent(ctrl.res.content);
