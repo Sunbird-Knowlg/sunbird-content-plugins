@@ -10,7 +10,7 @@ org.ekstep.contenteditor.basePlugin.extend({
   _questions: [],
   _questionPlugin: 'org.ekstep.question',
   _constants: {
-    v1PluginId: "org.ekstep.qsquiz",
+    v1PluginId: "org.ekstep.questionset.quiz",
     templateId: "horizontalMCQ"
   },
   /**
