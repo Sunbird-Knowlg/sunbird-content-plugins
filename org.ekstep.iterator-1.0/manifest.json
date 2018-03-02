@@ -7,9 +7,7 @@
   "description": "",
   "editor": {
     "main": "editor/plugin.js",
-    "dependencies": [
-      { "type": "js", "src": "editor/init.js" }
-    ],
+    "dependencies": [],
     "menu": [],
     "help": {
       "src": "editor/help.md",

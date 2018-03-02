@@ -1,14 +1,14 @@
 /**
- * @class  org.ekstep.customnavigation.EditorPlugin
+ * @class  org.ekstep.navigation.EditorPlugin
  */
-org.ekstep.navigation.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
 
     /**
-     * @memberOf org.ekstep.customnavigation.EditorPlugin#
+     * @memberOf org.ekstep.navigation.EditorPlugin#
      */
     initialize:function(){
         ecEditor.instantiatePlugin('org.ekstep.navigation',{});
     },
     newInstance: function() {}
 });
-//# sourceURL=customnavigationEditorPlugin.js
+//# sourceURL=navigationEditorPlugin.js
