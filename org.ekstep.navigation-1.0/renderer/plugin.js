@@ -7,7 +7,6 @@
  /* istanbul ignore next */
  Plugin.extend({
   _type: 'org.ekstep.navigation',
-  _isContainer: false,
   _render: true, 
   customNavigationVisible: false, 
   _config:{},
