@@ -33,8 +33,6 @@ body {
     padding: 0;
     height: 100%;
     position: relative;
-    width: 320px;
-    min-width: 320px;
     box-shadow: none;
     border: none;
 }
@@ -279,6 +277,7 @@ ul.fancytree-container{
 .table-of-contents-fixed-btns {
     bottom: 0;
     position: fixed;
+    width: 22.5%;
 }
 
 .ui.two.buttons.table-of-contents-btn {

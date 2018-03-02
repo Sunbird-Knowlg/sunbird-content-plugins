@@ -16,8 +16,8 @@
             <div class="ui attached segment" id="treeWrapper">
                 <div id="collection-tree"></div>
             </div>
-            <div class="ui grid table-of-contents-fixed-btns">
-                <div class="twelve wide column padding-top-none"> 
+            <div class="table-of-contents-fixed-btns">
+                <div class="padding-top-none"> 
                     <div class="ui two buttons table-of-contents-btn">
                         <button class="ui basic button text-transform-none" ng-click="addNodeType('sibling')" ><a><i class="plus icon"></i>New Sibling</button>
                         <button class="ui basic button text-transform-none" ng-click="addNodeType('child')"><a> <i class="reply icon table-of-contents-child-icon "></i>New Child</a></button>  
@@ -25,7 +25,7 @@
                 </div>    
             </div>
         </div>
-        <div class="padded ui" ng-class="showsuggestedContent ? 'six wide column' : 'nine wide column'" id="contents-pane">
+        <div class="padded ui six" ng-class="showsuggestedContent ? 'wide column' : 'padded ui nine wide column'" id="contents-pane">
             <div class="content-manifest">
                 <div class="sixteen wide column metacontent-holder metadata-form-container" ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" ng-include="page.templateURL"></div>
             </div>

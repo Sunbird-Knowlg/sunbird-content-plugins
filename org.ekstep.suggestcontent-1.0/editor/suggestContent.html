@@ -3,32 +3,27 @@
         <div class="suggest-content-header-content suggest-content-header-text">
             <i class="angle right icon color-blue"></i>
             <span class="suggest-content-header-title">Suggested Content</span>
-            <span ng-class="suggestedContentList.content.length ? 'color-blue' : 'disabled'">
+            <span ng-class="suggestedContentList.content.length ? 'color-blue' : 'disabled'" class="float-right">
                 <i ng-click="searchLessons(); generateTelemetry({type: 'click', subtype: 'RefreshContentButton', target: 'Refresh Content'})" ng-class="suggestedContentList.content.length ? 'color-blue' : 'disabled'" class="undo icon refresh-btn"></i>
-                <span ng-click="openResourceBrowser();generateTelemetry({type: 'click', subtype: 'ViewAllButton', target: 'View All'})" class="text-right">View All</span>
+                <span ng-click="openResourceBrowser();generateTelemetry({type: 'click', subtype: 'ViewAllButton', target: 'View All'})" class="padding-right-20 padding-left-8">View All</span>
             </span>
         </div>
     </div>
-    <!-- <div ng-class="suggestedContentList.content.length ? 'color-blue' : 'disabled'" class="suggest-content-header-text suggest-row-2">
-        <span ng-click="searchLessons(); generateTelemetry({type: 'click', subtype: 'RefreshContentButton', target: 'Refresh Content'})"><i class="undo icon"></i>Refresh Content</span>
-    </div> -->
     <div class="padding-top-15 padding-left-15" ng-show="!suggestedContentList.content.length">No content Available</div>
     <div class="card-list">
-        <!-- <div class="padding-bottom-5" ng-if="suggestedContentList.content.length" ng-repeat="lesson in suggestedContentList.content | limitTo:20"> -->
-            <div class="ui cards">
-                <div class="card" ng-if="suggestedContentList.content.length" ng-repeat="lesson in suggestedContentList.content | limitTo:20">
-                    <div class="content">
-                        <img class="left floated mini ui image" src="{{lesson.appIcon}}" ng-if="lesson.appIcon">
-                        <img class="left floated mini ui image" src="http://via.placeholder.com/40x40" ng-if="!lesson.appIcon">
-                        <div class="header text-block-ellipsis">{{ lesson.name }}</div>
-                        <div ng-if="lesson.description" class="text-block-ellipsis description">{{ lesson.description }}</div>
-                    </div>
-                    <div class="extra-content">
-                        <p ng-if="lesson.creator" class="left floated font-size-11">Created by {{ lesson.creator }}</p>
-                        <div class="right floated color-blue content" ng-click="addContent(lesson, $index);generateTelemetry({type: 'click', subtype: 'AddButton', target: 'Add'})">Add</div>
-                    </div>
+        <div class="ui cards">
+            <div class="card" ng-if="suggestedContentList.content.length" ng-repeat="lesson in suggestedContentList.content | limitTo:20">
+                <div class="content">
+                    <img class="left floated mini ui image" src="{{lesson.appIcon}}" ng-if="lesson.appIcon">
+                    <img class="left floated mini ui image" src="http://via.placeholder.com/40x40" ng-if="!lesson.appIcon">
+                    <div class="header text-block-ellipsis">{{ lesson.name }}</div>
+                    <div ng-if="lesson.description" class="text-block-ellipsis description">{{ lesson.description }}</div>
+                </div>
+                <div class="extra-content">
+                    <p ng-if="lesson.creator" class="left floated font-size-11">Created by {{ lesson.creator }}</p>
+                    <div class="right floated color-blue content" ng-click="addContent(lesson, $index);generateTelemetry({type: 'click', subtype: 'AddButton', target: 'Add'})">Add</div>
                 </div>
             </div>
-        <!-- </div> -->
+        </div>
     </div>
 </div>

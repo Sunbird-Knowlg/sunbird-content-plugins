@@ -7,7 +7,10 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
     var searchBody = {
                         "request": {
                             "mode": "soft",
-                            "filters": {},
+                            "filters": {
+                                objectType: ["Content"],
+                                status: ["Live"]
+                            },
                             "offset": 0,
                             "limit": 100
                         }
@@ -20,7 +23,8 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             if(!content.folder) $scope.excludeContents.push(content.data.id);
         });
         var rootNodeMetadata = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild().data.metadata;
-        $scope.metaData.subject = rootNodeMetadata.subject;
+        if(rootNodeMetadata.subject) $scope.metaData.subject = rootNodeMetadata.subject;
+        if(rootNodeMetadata.gradeLevel) $scope.metaData.gradeLevel = rootNodeMetadata.gradeLevel;
         if(rootNodeMetadata.language) $scope.metaData.language = (typeof rootNodeMetadata.language === 'object') ? rootNodeMetadata.language[0] : rootNodeMetadata.language;
         if(rootNodeMetadata.concepts) {
             $scope.metaData.concepts = [];
@@ -35,40 +39,25 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
         if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.suggestcontent", "pluginver": "1.0", "objectid": ecEditor.getCurrentStage().id, "stage": ecEditor.getCurrentStage().id })
     }
 
-    /* Search Lesson, takes parameters from the root node and currently selected node */
-    $scope.searchLessons = function(apiCallLevel) {
-        var apiCall = apiCallLevel ? apiCallLevel : 1;
-
-        searchBody.request.filters = { "subject": $scope.metaData.subject };
+    $scope.searchLessons = function() {
+        searchBody.request.filters.subject = $scope.metaData.subject;
         searchBody.request.filters.contentType = org.ekstep.collectioneditor.api.getService('collection').getObjectTypeByAddType('Browser');
+        $scope.suggestedContentList = { count:0, content:[] };
+        $scope.responseData = [];
 
-        //Very First call, reads data from root node and strict checking
-        if(apiCall === 1) {
-            if(!$scope.metaData.language) {
-                apiCall++;
-                $scope.searchLessons();
-            }
-
-            $scope.suggestedContentList = { count:0, content:[] };
-            $scope.responseData = [];
-            searchBody.request.filters.language = $scope.metaData.language;
-            if($scope.metaData.concepts) searchBody.request.filters.concepts = $scope.metaData.concepts;
-            searchBody.request.softConstraints = { "gradeLevel": 100, "board": 90, "concepts": 80, "keywords": 70 };
-        } else if(apiCall === 2) {
-            if($scope.metaData.language) searchBody.request.filters.language = { "NE": $scope.metaData.language };
-            if($scope.metaData.concepts) searchBody.request.filters.concepts = $scope.metaData.concepts;
-            searchBody.request.softConstraints = { "gradeLevel": 100, "board": 90, "concepts": 80, "keywords": 70 };
+        if($scope.metaData.concepts) searchBody.request.filters.concepts = $scope.metaData.concepts;
+        if($scope.metaData.language)  searchBody.request.filters.language = $scope.metaData.language;
+        if($scope.metaData.gradeLevel)  searchBody.request.filters.gradeLevel = $scope.metaData.gradeLevel;
+        if($scope.metaData.board)  searchBody.request.filters.board = $scope.metaData.board;
+        if($scope.metaData.concepts){
+            searchBody.request.softConstraints = { "concepts": 100, "language": 50, "gradeLevel": 25, "board": 12};
         } else {
-            if($scope.metaData.concepts) searchBody.request.filters.concepts = { "NE": $scope.metaData.concepts };
-            searchBody.request.softConstraints = { "gradeLevel": 100, "language": 90, "board": 80, "concepts": 70, "keywords": 60 };
+            searchBody.request.softConstraints = { "gradeLevel": 100, "language": 50, "board": 25 };
         }
-        searchBody.request.filters.objectType = ["Content"];
-        searchBody.request.filters.status = ["Live"];
         searchService.search(searchBody, function(err, res) {
             if (err) {
                 console.err("Oops! Something went wrong. Please try again later.");
             } else {
-                $scope.suggestedContentList.count = res.data.result.count;
                 if(res.data.result.content != undefined) {
                     $scope.responseData = _.concat(_.uniqBy($scope.responseData, 'identifier'), res.data.result.content);
                     if(!$scope.suggestedContentList.content.length) {
@@ -85,21 +74,11 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                             $scope.suggestedContentList.content.push(lessonContent);
                         }
                     });
-
+                    $scope.$safeApply();
                     /*  Remove Duplicate contents from the list */
                     $scope.suggestedContentList.content = _.uniqBy($scope.suggestedContentList.content, 'identifier');
                 }
-
-                searchBody.request.filters = {};
-                /* Increase the API call level */
-                if($scope.suggestedContentList.content.length < 20 && apiCall === 1 || apiCall === 2) {
-                    apiCall++;
-                    $scope.searchLessons(apiCall);
-                } else if(apiCall == 3) {
-                    apiCall = 1;
-                }
             }
-            $scope.$safeApply();
         });
     }
 
@@ -143,7 +122,8 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
         if($scope.metaData.subject) {
             $scope.excludeContents = [];
 
-            /* Fetch the added node for the currently selected node */
+
+            /* Fetch the added contents for the currently selected node */
             _.forEach(org.ekstep.services.collectionService.getActiveNode().children, function(content) {
                 if(!content.folder) $scope.excludeContents.push(content.data.id);
             });
@@ -179,8 +159,8 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                     metadataUpdate = true;
                 }
 
-                if(node.metadata.medium && node.metadata.medium != $scope.metaData.language) {
-                    $scope.metaData.language = node.metadata.medium;
+                if(node.metadata.gradeLevel && node.metadata.gradeLevel != $scope.metaData.gradeLevel) {
+                    $scope.metaData.gradeLevel = node.metadata.gradeLevel;
                     metadataUpdate = true;
                 }
 
