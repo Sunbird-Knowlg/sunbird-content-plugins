@@ -1,0 +1,26 @@
+{
+  "id": "org.ekstep.iterator",
+  "ver": "1.0",
+  "author": "Jagadish",
+  "type": "plugin",
+  "title": "Iterator",
+  "description": "",
+  "editor": {
+    "main": "editor/plugin.js",
+    "dependencies": [
+      { "type": "js", "src": "editor/init.js" }
+    ],
+    "menu": [],
+    "help": {
+      "src": "editor/help.md",
+      "dataType": "text"
+    }
+  },
+  "renderer": {
+    "main": "renderer/plugin.js"
+  },
+  "icon": "assets/icon.png",
+  "languages": ["English"],
+  "categories": [""],
+  "keywords": [""]
+}

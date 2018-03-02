@@ -21,11 +21,6 @@
     this.controllerPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(this._manifest.id, this._manifest.ver, "renderer/controller/navigation_ctrl.js");
     org.ekstep.service.controller.loadNgModules(this._templatePath, this.controllerPath);
 
-    //Prototype for adding handleNext method 
-    Plugin.prototype.handleNext = function(){}
-    //Prototype for adding handlePrevious method 
-    Plugin.prototype.handlePrevious = function(){}
-
     EkstepRendererAPI.addEventListener("renderer:overlay:show", instance.showOrHideOverlay, instance);        
     EkstepRendererAPI.addEventListener("renderer:content:start", instance.showOrHideOverlay, instance);
 
