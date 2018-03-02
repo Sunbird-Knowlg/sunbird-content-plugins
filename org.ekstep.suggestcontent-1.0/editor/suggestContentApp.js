@@ -122,7 +122,6 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
         if($scope.metaData.subject) {
             $scope.excludeContents = [];
 
-
             /* Fetch the added contents for the currently selected node */
             _.forEach(org.ekstep.services.collectionService.getActiveNode().children, function(content) {
                 if(!content.folder) $scope.excludeContents.push(content.data.id);
@@ -177,8 +176,8 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
         });
     }
 
-    ecEditor.addEventListener('org.ekstep.collectioneditor:nodechange', $scope.onNodeSelect);
-    ecEditor.addEventListener('org.ekstep.collectioneditor:save', $scope.updateMetaData);
+    ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.onNodeSelect);
+    ecEditor.addEventListener('org.ekstep.contenteditor:save', $scope.updateMetaData);
     $scope.init();
 }]);
 //# sourceURL=suggestcontentApp.js

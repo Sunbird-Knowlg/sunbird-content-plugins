@@ -92,7 +92,6 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
    }
 
     $scope.onNodeSelect = function(evant, data){
-        ecEditor.dispatchEvent('org.ekstep.collectioneditor:nodechange');
         var selectedConcepts = [];
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
