@@ -1,7 +1,6 @@
 <div ng-app="suggestcontentApp" ng-controller="suggestcontentController">
     <div class="suggest-content-header">
         <div class="suggest-content-header-content suggest-content-header-text">
-            <i class="angle right icon color-blue"></i>
             <span class="suggest-content-header-title">Suggested Content</span>
             <span ng-class="suggestedContentList.content.length ? 'color-blue' : 'disabled'" class="float-right">
                 <i ng-click="searchLessons(); generateTelemetry({type: 'click', subtype: 'RefreshContentButton', target: 'Refresh Content'})"
