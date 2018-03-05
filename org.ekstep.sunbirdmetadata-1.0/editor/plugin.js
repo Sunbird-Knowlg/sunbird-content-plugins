@@ -6,6 +6,11 @@
  */
 
 org.ekstep.collectioneditor.metadataPlugin.extend({
+    /**
+     * @description -
+     */
+    form: {},
+
     /**  
      * @description - Resource Bundle object.
      */
@@ -25,17 +30,22 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
      * @description - Initialization of the plugin.
      */
     initialize: function() {
-        ecEditor.addEventListener('editor:form:cancel', this.cancelAction, this);
+        var instance = this;
+        ecEditor.addEventListener('editor:form:cancel', this.cancelsAction, this);
         ecEditor.addEventListener('editor:form:success', this.successAction, this);
-        this.getConfigurations();
+        this.getConfigurations(function(error, result) {
+            instance.resourceBundle = result.resourceBundle;
+            instance.framework = result.framework;
+            instance.config = result.config;
+        });
     },
 
     /**
      * @description
      */
-    onConfigChange: function(key, value) {
-        this.newForm = this.applyDependencyRules(key, value);
-        this.updateForm(newForm, this.resourceBundle);
+    onConfigChange: function(event, key, value) {
+        var form = this.applyDependencyRules(key, value);
+        this.updateForm(form, this.resourceBundle);
     },
 
     /**
@@ -62,7 +72,7 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
      * @description - Which get the form configurations, framework and resource bundle data
      *                Which makes async parallel call.
      */
-    getConfigurations: function() {
+    getConfigurations: function(callback) {
         var instance = this;
         async.parallel({
             config: function(callback) {
@@ -71,27 +81,28 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
             },
             framework: function(callback) {
                 // get the framworkData
-                callback(undefined, {})
+                var frameworkId = ecEditor.getContext('framework') || org.ekstep.services.collectionService.defaultFramwork;
+                ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(frameworkId, function(error, response) {
+                    if (!error) callback(undefined, response)
+                    else throw 'Unable to fetch the framework data.'
+                })
             },
             resourceBundle: function(callback) {
                 // get the resource bundle data
                 callback(undefined, {})
             }
-        }, function(err, results) {
+        }, function(error, results) {
             // results is now equals to: {config: {}, framework: {}, resourceBundle:{}}
             instance.loadTemplate("template");
-            instance.resourceBundle = results.resourceBundle;
-            instance.framework = results.framework;
-            instance.config = results.config;
-            instance.renderForm(results.config, instance.resourceBundle);
+            callback(err, results);
         });
     },
 
     /**
      * @description - Which is used to merge the configurations.
      */
-    mergeConfigurations: function() {
-
+    mergeConfigurations: function(object, source) {
+        var form = {}
     },
 });
 //# sourceURL=sunbirdmetadataplugin.js;

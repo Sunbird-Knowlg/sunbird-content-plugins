@@ -1,9 +1,9 @@
 'use strict';
 
-angular.module('org.ekstep.metadata', ['ngTokenField']).controller('metadata', ['$scope', '$q', '$rootScope', '$http', '$timeout', 'data', function($scope, $q, $rootScope, $http, $timeout, data) {
+angular.module('org.ekstep.metadataform', ['ngTokenField']).controller('metadataform', ['$scope', '$q', '$rootScope', '$http', '$timeout', 'configurations', function($scope, $q, $rootScope, $http, $timeout, configurations) {
     var ctrl = this;
 
-    data = data || {};
+    var data = configurations || {};
 
     // Init controller data
     ctrl.plugin = { id: "org.ekstep.metadata", ver: "1.2" };
@@ -289,6 +289,10 @@ angular.module('org.ekstep.metadata', ['ngTokenField']).controller('metadata', [
         }
     };
 
+    (function() {
+        console.log("Metadata contorller is initialized");
+
+    }());
 }]);
 
-//# sourceURL=editcontentmeta.controller.js
+//# sourceURL=metadataController.js

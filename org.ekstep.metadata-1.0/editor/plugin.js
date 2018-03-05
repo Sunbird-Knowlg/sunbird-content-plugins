@@ -5,29 +5,27 @@
  * @author Kartheek Palla And Manjunath Davanam
  */
 org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlugin.extend({
-    /**
-     *@description
-     */
-    initialize: function() {
-        ecEditor.addEventListener('org.ekstep.editcontentmeta:showpopup', this.invokeTemplate, this);
-    },
 
     /**
-     * @param  {Object} fields
-     * @param  {Object} resourceBundle
-     * @description 
+     *@description - Initialization of the metdata form plugin.
+     *@event 'org.ekstep.editcontentmeta:showpopup'
      */
-    renderForm: function(fields, resourceBundle) {},
+    initialize: function() {
+        ecEditor.addEventListener('org.ekstep.editcontentmeta:showpopup', this.showForm, this);
+    },
 
     /**
      * @param  {Object} fields
      * @param  {Object} resourceBundle
      * @description
      */
-    updateForm: function(fields, resourceBundle) {},
+    updateForm: function(fields, resourceBundle) {
+
+    },
 
 
     /**
+     * @description
      */
     applyDependencyRules: function(key, value) {
         var newForm = {};
@@ -35,13 +33,16 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
     },
 
     /**
+     * TODO:
      * @param {Object} fields
+     * @description - Which is used to validate the fields.
      */
     validate: function(fields) {},
 
 
     /**
-     * @description
+     * TODO:
+     * @description - Which is used to reset the form.
      */
     reset: function() {},
 
@@ -50,15 +51,15 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
      * @param  {String} templateId
      * @description
      */
-    invokeTemplate: function() {
+    showForm: function() {
         var instance = this;
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
             template: 'metadataTemplate',
-            controller: 'metadata',
+            controller: 'metadataform',
             controllerAs: '$ctrl',
             resolve: {
-                'data': function() {
-                    return data;
+                'configurations': function() {
+                    return instance.form;
                 }
             },
             width: 900,
