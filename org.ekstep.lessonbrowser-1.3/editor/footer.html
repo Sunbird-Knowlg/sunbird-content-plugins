@@ -1,0 +1,21 @@
+<!-- footer template -->
+<div class="footerElement">
+    <div class=" ui clearing segment">
+        <div class="ui grid">
+            <div class="four wide column">
+                <button ng-disabled="mainTemplate == 'facetsItemView'" class="ui left floated tiny button btnAttribute blueColor" ng-click="backToPrevious()">
+                BACK </button>
+            </div>
+            <div class="four wide column selectedItems">
+                <span ng-show="(mainTemplate == 'selectedResult'|| mainTemplate == 'cardDetailsView')">{{lessonSelection.length}} Selected
+                    <a class="blueColor" ng-style="lessonSelection.length && {'cursor':'pointer'}  || !lessonSelection.length && {'cursor':'not-allowed'}"
+                        ng-click="lessonSelection.length ? SelectedItems() : 'null'">View</a>
+                </span>
+            </div>
+            <div class="four wide column">
+                <button class="ui right floated primary tiny button btnAttribute" ng-click="returnSelectedLessons(mainTemplate, selectedLessons.list)"
+                    ng-disabled="!lessonSelection.length"> PROCEED </button>
+            </div>
+        </div>
+    </div>
+</div>
