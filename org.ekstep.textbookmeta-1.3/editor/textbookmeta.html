@@ -1,6 +1,7 @@
 <div ng-app="textbookmetaApp" class="metacontent-wrapper" ng-controller="textbookmetaController">
     <div class="ui segment header-segment" id="headerSegment">
         <div class="ui breadcrumb">
+            <i class="folder outline icon pointer"></i>
             <a class="section" ng-repeat="value in path" ng-click="setActiveNode(value.nodeId)">
                 <span data-inverted="" ng-mouseover="showTooltip($event, value.title)">{{value.title | limitTo:25}}</span>
                 <span ng-if="value.title.length > 25">...</span>
@@ -10,7 +11,7 @@
     </div>
     <form class="ui form segment" id="contents-data-form" novalidate ng-show="editMode" name="textbookMetaForm">
         <div class="fields form-fields-overflow">
-            <div class="field book-image-field margin-left-20">
+            <div class="field book-image-field">
                 <label for="bookImage">Add icon</label>
                 <div class="book-image-container popup-item" data-content="Add or change image" data-variation="tiny inverted" data-position="right center" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
@@ -64,6 +65,10 @@
                     <div class="ui input">
                         <textarea placeholder="Brief description about the unit" ng-model="textbook.description" name="description" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})"></textarea>
                     </div>
+                </div>
+                <div class="field">
+                    <label>Concepts</label>
+                    <input name="concepts" id="textbookConceptSelector" ng-model="textbook.conceptData" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
                 </div>
                 <div class="one field">
                     <div class="field">

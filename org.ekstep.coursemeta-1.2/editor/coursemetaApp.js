@@ -2,6 +2,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
+    $scope.showImageIcon = true;
     const DEFAULT_NODETYPE = 'Course'
 
     $scope.updateTitle = function(event, title) {
@@ -18,6 +19,17 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             $scope.$safeApply();
         }
     });
+
+    $scope.showAssestBrowser = function () {
+        ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
+            type: 'image',
+            search_filter: {}, // All composite keys except mediaType
+            callback: function (data) {
+                $scope.course.appIcon = data.assetMedia.src;
+                $scope.$safeApply();
+            }
+        });
+    }
 
     $scope.updateNode = function(){
         if(!_.isEmpty($scope.nodeId) && !_.isUndefined($scope.nodeId)){ 
@@ -120,12 +132,14 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
 
     $scope.onNodeSelect = function(evant, data){
         var selectedConcepts = [];
+        $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.course = {};
         $scope.editMode = true;
         $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
+        $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.coursemeta", "1.2", "assets/default.png");
 
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
         $scope.course = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
@@ -162,6 +176,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
                 $scope.$safeApply();
             }
         });
+        $scope.showImageIcon = true;
         $scope.getPath();
         $scope.$safeApply();
     }
