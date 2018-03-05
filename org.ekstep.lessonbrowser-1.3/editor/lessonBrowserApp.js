@@ -122,7 +122,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                         $scope.conceptsNames[concept.identifier] = concept.name;
                     });
                 }
-                console.log('$scope.conceptsNames....', $scope.conceptsNames);
                 return cb();
             });
         }
@@ -418,19 +417,18 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         }
 
         $scope.invokeFacetsPage = function () {
-            $scope.mainTemplate = 'facetsItemView';
             if (!ctrl.facetsResponse) {
                 $scope.getPageAssemble(function (err, res) {
                     if (!res) {
                         ctrl.facetsResponse = res.data;
                         var contents = [];
+                        $scope.mainTemplate = 'facetsItemView';
                         angular.forEach(ctrl.facetsResponse.result.response.sections, function (section, sectionIndex) {
                             angular.forEach(section.contents, function (content) {
                                 contents.push(content);
                             });
                         });
                         $scope.isLoading = false;
-                        console.log('searchConcepts contents...', contents);
                         ctrl.searchConcepts(contents, function () {
                             $scope.$safeApply();
                             $scope.isLoading = false;
