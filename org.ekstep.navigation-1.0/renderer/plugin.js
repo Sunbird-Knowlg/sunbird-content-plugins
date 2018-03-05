@@ -67,4 +67,4 @@
     this.customNavigationVisible = true;
   }
 });
-//#sourceURL=customnavigation.js
+//# sourceURL=navigation.js
