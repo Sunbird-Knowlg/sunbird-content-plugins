@@ -60,6 +60,9 @@
     });
 
   },
+  initPlugin: function (data) {
+      // Plugin actions are handled in the angularJS controller.
+  },
   showOrHideOverlay: function(){
     this.customNavigationVisible = true;
   }
