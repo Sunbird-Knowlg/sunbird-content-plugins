@@ -56,7 +56,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
         }
         searchService.search(searchBody, function(err, res) {
             if (err) {
-                console.err("Oops! Something went wrong. Please try again later.");
+                console.error("Oops! Something went wrong. Please try again later.", err);
             } else {
                 if(res.data.result.content != undefined) {
                     $scope.responseData = _.concat(_.uniqBy($scope.responseData, 'identifier'), res.data.result.content);
@@ -128,11 +128,15 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                 if(!content.folder) $scope.excludeContents.push(content.data.id);
             });
 
-            if(activeNode.data.metadata.concepts) {
-                _.forEach(activeNode.data.metadata.concepts, function(concept) {
-                    activeNodeConcepts.push(concept.identifier);
-                });
-            }
+            _.forEach(ecEditor.getConfig('editorConfig').rules.objectTypes, function(obj) {
+                if((obj.type == activeNode.data.objectType) && obj.editable && activeNode.data.metadata.concepts) {
+                    _.forEach(activeNode.data.metadata.concepts, function(concept) {
+                        activeNodeConcepts.push(concept.identifier);
+                    });
+                    return; // No need of loop after match found
+                }
+            });
+
             if(activeNodeConcepts.length && !_.isEqual(activeNodeConcepts.sort(), $scope.metaData.concepts.sort())) {
                 $scope.metaData.concepts = activeNodeConcepts;
                 $scope.searchLessons();

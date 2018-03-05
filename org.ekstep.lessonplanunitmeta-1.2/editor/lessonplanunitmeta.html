@@ -1,7 +1,6 @@
 <div ng-app="lessonplanunitmetaApp" class="metacontent-wrapper" ng-controller="lessonplanunitmetaController">
     <div class="ui segment header-segment" id="headerSegment">
         <div class="ui breadcrumb">
-            <i class="folder outline icon pointer" ng-click="goToRootParent()"></i>
             <a class="section" ng-repeat="value in path" ng-click="setActiveNode(value.nodeId)">
                 <span data-inverted="" ng-mouseover="showTooltip($event, value.title)">{{value.title | limitTo:25}}</span>
                 <span ng-if="value.title.length > 25">...</span>
@@ -11,6 +10,13 @@
     </div>
     <form class="ui form segment" id="contents-data-form" novalidate  ng-show="editMode" name="unitMetaForm">
         <div class="fields">
+            <div class="field book-image-field">
+                <label for="bookImage">Add icon</label>
+                <div class="book-image-container popup-item" data-content="Add or change image" data-variation="tiny inverted" data-position="right center" ng-click="showAssestBrowser()">
+                    <i class="camera icon"></i>
+                    <img ng-if="showImageIcon" ng-src="{{unit.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})"/>
+                </div>
+            </div>
             <div class="field form-fields-except-image">
                 <div class="field required">
                     <label>Unit Title</label>
