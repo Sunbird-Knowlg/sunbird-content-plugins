@@ -24,6 +24,10 @@ Plugin.extend({
         this._pluginConfig = JSON.parse(data.config.__cdata);
         this._pluginData = JSON.parse(data.data.__cdata);
         this.qid = data.id;
+
+
+
+
         // Init the item controller
         this.initquestionnaire();
 
@@ -33,6 +37,7 @@ Plugin.extend({
         // Invoke the embed plugin to start rendering the templates
         this.invokeEmbed();
         this.registerEvents();
+
     },
 
 
@@ -91,6 +96,8 @@ Plugin.extend({
             stageController = this._theme._controllerMap[assessmentid];
         }
 
+
+
         if (stageController) {
             this._stage._stageController = stageController;
             this._stage._stageControllerName = controllerName; //+ Math.random();
@@ -100,12 +107,43 @@ Plugin.extend({
 
             if (typeof this._theme.getParam === "function") {
                 this._stage._currentState = this._theme.getParam(stageKey);
+
+
+                var questionState = this.getStates(this.qid);
+                if (questionState) {
+                    var item = this._stage._stageController._model[0];
+                    if (item.type.toLowerCase() == 'mcq' || item.type.toLowerCase() == 'mmcq') {
+                        questionState.model[0].options.forEach(function(i) {
+                        if (i.oSelected) {
+                            i.selected = true;
+                        }
+                    });
+                    }
+                    
+                    this._stage._stageController._model = _.clone(questionState.model);
+                }
             }
         }
     },
     evaluate: function(callback, instance) {
-        var result = {},res = {};
+        var result = {},
+            res = {};
         var item = this._stage._stageController._model[0];
+        /*item.options.forEach(function(i) {
+            
+            if (i.selected) {
+                i.oSelected = true;
+            }else{
+                i.oSelected = false;
+            }
+        });*/
+
+        var state = {
+            model: _.clone(this._stage._stageController._model)
+        }
+
+        EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:savev1QuestionState', function(data) {}, state)
+
 
         if (item.type.toLowerCase() == 'ftb') {
             res = FTBEvaluator.evaluate(item);
@@ -118,9 +156,21 @@ Plugin.extend({
         result.score = res.score;
         result.res = res.res;
 
+
+
         if (_.isFunction(callback)) {
             callback(result);
         }
+    },
+    getStates: function(questionId) {
+        var qState;
+        EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:getQuestionState', {
+            qid: questionId,
+            callback: function(data) {
+                qState = data;
+            }
+        });
+        return qState;
     }
 });
 //# sourceURL=qsquizRenderer.js
