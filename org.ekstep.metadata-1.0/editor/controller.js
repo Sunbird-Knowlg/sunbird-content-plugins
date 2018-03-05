@@ -279,20 +279,156 @@ angular.module('org.ekstep.metadataform', ['ngTokenField']).controller('metadata
         return category;
     }
 
-    $scope.loadKeywords = function($query) {
-        if ($query.length >= 3) {
-            return org.ekstep.services.collectionService.fetchKeywords($query).then(function(keywords) {
-                return keywords.filter(function(keyword) {
-                    return keyword.lemma.toLowerCase().indexOf($query.toLowerCase()) != -1;
-                });
-            })
-        }
-    };
+    // $scope.loadKeywords = function($query) {
+    //     if ($query.length >= 3) {
+    //         return org.ekstep.services.collectionService.fetchKeywords($query).then(function(keywords) {
+    //             return keywords.filter(function(keyword) {
+    //                 return keyword.lemma.toLowerCase().indexOf($query.toLowerCase()) != -1;
+    //             });
+    //         })
+    //     }
+    // };
 
     (function() {
         console.log("Metadata contorller is initialized");
 
     }());
+    $scope.configurations = [{
+            "code": "name",
+            "name": "Name",
+            "description": "Title of the content",
+            "inputType": "text",
+            "editable": true,
+            "required": true,
+            "placeholder": "fieldName",
+            "renderingHints": {
+                "maxLength": 50,
+                "visible": true
+            },
+            "index": 1
+        },
+        {
+            "code": "description",
+            "name": "Description",
+            "description": "Description of the content",
+            "inputType": "text",
+            "editable": true,
+            "required": true,
+            "placeholder": "Description",
+            "renderingHints": {
+                "visible": true
+            }
+        },
+        {
+            "code": "keyword",
+            "name": "Keywords",
+            "description": "Keywords for the content",
+            "inputType": "autoComplete",
+            "editable": true,
+            "required": false,
+            "placeholder": "Keywords",
+            "renderingHints": {
+                "visible": true
+            }
+        },
+        {
+            "code": "subject",
+            "name": "Subject",
+            "description": "",
+            "inputType": "select",
+            "editable": true,
+            "required": false,
+            "dependsOn": [
+                "field1"
+            ],
+            "placeholder": "Subject",
+            "terms": [{
+                    "code": "field2value1",
+                    "name": "field2value1",
+                    "association": [{
+                            "code": "field3value1",
+                            "name": "field3value1"
+                        },
+                        {
+                            "code": "field3value2",
+                            "name": "field3value2"
+                        }
+                    ]
+                },
+                {
+                    "code": "field2value2",
+                    "name": "field2value2",
+                    "association": [{
+                            "code": "field3value1",
+                            "name": "field3value1"
+                        },
+                        {
+                            "code": "field3value2",
+                            "name": "field3value2"
+                        }
+                    ]
+                }
+            ],
+            "renderingHints": {
+                "maxLength": 50
+            },
+            "index": 2
+        },
+        {
+            "code": "field3",
+            "name": "fieldName",
+            "description": "description",
+            "inputType": "select/multiselect",
+            "editable/readOnly": false,
+            "required": false,
+            "dependsOn": [
+                "field1"
+            ],
+            "placeholder": "fieldName",
+            "terms": [{
+                    "code": "field3value1",
+                    "name": "field3value1"
+                },
+                {
+                    "code": "field3value2",
+                    "name": "field3value2"
+                }
+            ],
+            "renderingHints": {
+                "maxLength": 50
+            },
+            "index": 2
+        },
+        {
+            "code": "field4",
+            "name": "fieldName",
+            "description": "description",
+            "inputType": "select/multiselect",
+            "editable/readOnly": false,
+            "required": false,
+            "placeholder": "fieldName",
+            "terms": "framework.categories.terms",
+            "renderingHints": {
+                "maxLength": 50
+            },
+            "index": 2
+        },
+        {
+            "code": "field5",
+            "name": "fieldName",
+            "description": "description",
+            "inputType": "imageBrowser/autoComplete/conceptSelector",
+            "editable/readOnly": false,
+            "required": false,
+            "placeholder": "fieldName",
+            "renderingHints": {
+                "maxLength": 50
+            },
+            "index": 3,
+            "apiUrl": "/keywors"
+        }
+    ]
+
 }]);
 
 //# sourceURL=metadataController.js

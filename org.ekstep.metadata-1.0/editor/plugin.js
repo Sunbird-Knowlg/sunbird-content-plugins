@@ -48,7 +48,6 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
 
 
     /**
-     * @param  {String} templateId
      * @description
      */
     showForm: function() {
@@ -66,12 +65,18 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
             showClose: false
         });
     },
+
+    /**
+     * @param {String} templateName  - Name of the template
+     * @description - Which loads the template 
+     */
     loadTemplate: function(templateName) {
+
         var templatePath = ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", `editor/templates/${templateName}.html`);
         var controllerPath = ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", "editor/controller.js");
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath);
-    }
 
+    }
 
 });
 //# sourceURL=metadataPlugin.js

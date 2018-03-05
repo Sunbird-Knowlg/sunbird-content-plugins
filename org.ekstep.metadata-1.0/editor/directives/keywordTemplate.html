@@ -1,0 +1,7 @@
+<label>Keywords</label>
+<tags-input ng-model="$ctrl.contentMeta.keywords" display-property="lemma " replace-spaces-with-dashes="false ">
+    <auto-complete source="loadKeywords($query) " min-length="0 " load-on-focus="true " load-on-empty="true " template="my-custom-template "></auto-complete>
+</tags-input>
+<div class="right-panel ">
+    <span ng-bind-html="$highlight($getDisplayText()) "></span>
+</div>

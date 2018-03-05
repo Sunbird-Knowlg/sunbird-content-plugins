@@ -1,3 +1,14 @@
+<!--
+     It's default Template to render the metaforms.
+     It as a `Fixed layout` and `Dynamic layout` sections.
+     FixedLayouts are
+        1. App Icon
+        2. Name
+        3. Description
+        4. Keywords
+    These fixed layout fields are configurable
+-->
+
 <script type="text/ng-template" ng-app="org.ekstep.metadataform" ng-controller="metadataform as $ctrl" id="metadataTemplate">
     <div class="ui modal active" id="meta-modal">
         <div class="header">
@@ -16,58 +27,63 @@
             <div class="ui fluid grid container">
                 <div class="row">
                     <div class="column content-meta" id="content-meta">
-                        <form class="ui form" id="content-meta-form" novalidate name="contentMetaForm" ng-init="initDropdown()">
-                            <div class="fields">
-                                <div class="field required" ng-class="{'error': $ctrl.submitted && !($ctrl.contentMeta.appIcon)}" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('appicon') !== -1)">
-                                    <label><i class="camera icon"></i> ffdsf</label>
+                        <form class="ui form" id="content-meta-form" novalidate name="metaForm" ng-init="initDropdown()">
+                            <div class="fields" ng-repeat='field in configurations'>
+                                <!-- APP ICON-->
+                                <div class="field" ng-if="field.inputType = 'imageBrowser'" ng-class="{'error': $ctrl.submitted && !($ctrl.contentMeta.appIcon)}">
+                                    <!-- FIXED LAYOUT -->
+                                    <label><i class="camera icon"></i>{{field.label}}</label>
                                     <div id="ecm-appIcon" class="app-icon content-icon" ng-class="{'required-error': $ctrl.submitted && !($ctrl.contentMeta.appIcon)}" ng-mouseenter="$ctrl.appIconHover = true" ng-mouseleave="$ctrl.appIconHover = false" ng-click="$ctrl.launchImageBrowser(); generateTelemetry({type: 'click', subtype: 'div', target: 'appIcon'})">
                                         <div class="app-icon-overlay" ng-show="$ctrl.appIconHover">
-                                            <p class="app-icon-overlay-message">Edit App Icon</p>
+                                            <p class="app-icon-overlay-message">{{field.placeholder}}</p>
                                         </div>
                                         <img ng-src="{{$ctrl.contentMeta.appIcon || $ctrl.defaultImage }}" />
                                     </div>
                                 </div>
                                 <div class="sixteen wide field">
-                                    <div class="field required" ng-class="{'error': ($ctrl.submitted && contentMetaForm.name.$error.required)}" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('name') !== -1)">
-                                        <label>Name</label>
+                                    <!-- FIXED LAYOUT -->
+                                    <div class="field" ng-if="field.inputType == 'imageBrowser'" ng-class="{'error': ($ctrl.submitted && metaForm.name.$error.required)}">
+                                        <label>{{field.label}}</label>
                                         <div class="ui input">
-                                            <input id="ecm-name" placeholder="Name" ng-model="$ctrl.contentMeta.name" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="100">
+                                            <input id="ecm-name" placeholder="field.placeholder" ng-model="$ctrl.contentMeta.name" name="name" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="100">
                                         </div>
                                     </div>
-                                    <div class="field required" ng-class="{'error': ($ctrl.submitted && contentMetaForm.description.$error.required)}" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('description') !== -1)">
-                                        <label>Description</label>
-                                        <div class="ui input">
-                                            <textarea id="ecm-description" placeholder="Description" ng-model="$ctrl.contentMeta.description" ng-class="{error: submitted && contentMetaForm.description.$error.required}" name="description" rows="2" required ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'description'})"></textarea>
+                                    <div class="field" ng-if="field.inputType='textarea'" ng-class="">
+                                        <label>{{field.label}}</label>
+                                        <div class=" ui input ">
+                                            <textarea id="ecm-description" placeholder=field.placeholde ng-model="$ctrl.contentMeta.description " name="description " rows="2
+                                        " required ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'description'}) "></textarea>
                                         </div>
                                     </div>
-
-                                    <div class="field" ng-if="_.isUndefined($ctrl.metadatafields) || ($ctrl.metadatafields.indexOf('keywords') !== -1)">
-                                        <label>Keywords</label>
-                                        <tags-input ng-model="$ctrl.contentMeta.keywords" display-property="lemma" placeholder="Enter Keywords" replace-spaces-with-dashes="false">
-                                            <auto-complete source="loadKeywords($query)" min-length="0" load-on-focus="true" load-on-empty="true" template="my-custom-template"></auto-complete>
+                                    <div class="field " ng-if="field.inputType=='autoComplete' " ng-class=''>
+                                        <label>{{field.label}}</label>
+                                        <tags-input ng-model="$ctrl.contentMeta.keywords " display-property="lemma " placeholder="{{field.placeholder}}" replace-spaces-with-dashes="false ">
+                                            <auto-complete source="loadKeywords($query) " min-length="0 " load-on-focus="true " load-on-empty="true " template="my-custom-template "></auto-complete>
                                         </tags-input>
-                                        <div class="right-panel">
-                                            <span ng-bind-html="$highlight($getDisplayText())"></span>
+                                        <div class="right-panel ">
+                                            <span ng-bind-html="$highlight($getDisplayText()) "></span>
                                         </div>
                                     </div>
-                                    <div class="equal width fields">
-                                        <div class="field required" ng-class="{error: $ctrl.submitted && contentMetaForm.cOne.$error.required}">
-                                            <label for="category_1">{{category_1.name}}</label>
-                                            <select id="contentmeta-category-1" name="cOne" class="ui search dropdown placeholder-padding contentmeta-category-1" ng-model="$ctrl.contentMeta[category_1.code]" ng-change="updatedDependentCategory('1', $ctrl.contentMeta[category_1.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_1.name})"
-                                                required>
-                                                <option value="">Select</option>
-                                                <option data-value="{{category.name}}" ng-repeat="category in category_1.terms">{{category.name}}</option>
+                                    <div class="equal width fields ">
+                                        <!-- DYNAMIC LAYOUT -->
+                                        <div class="field required " ng-class="{error: $ctrl.submitted && metaForm.cOne.$error.required} ">
+                                            <label for="category_1 ">{{category_1.name}}</label>
+                                            <select id="contentmeta-category-1 " name="cOne " class="ui search dropdown placeholder-padding contentmeta-category-1 " ng-model="$ctrl.contentMeta[category_1.code] " ng-change="updatedDependentCategory(
+                                        '1', $ctrl.contentMeta[category_1.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_1.name}) " required>
+                                                <option value=" ">Select</option>
+                                                <option data-value="{{category.name}} " ng-repeat="category in category_1.terms ">{{category.name}}</option>
                                             </select>
                                         </div>
-                                        <div class="field required" ng-class="{error: $ctrl.submitted && contentMetaForm.cTwo.$error.required}">
-                                            <label for="category_2">{{category_2.name}}</label>
-                                            <div id="contentmeta-category-2" name="cTwo" class="ui multiple search selection dropdown contentmeta-category-2" data-tooltip="{{categoryValues || 'select Option'}}" ng-model="$ctrl.contentMeta[category_2.code]" multiple="" ng-click="updatedDependentCategory('2', $ctrl.contentMeta[category_2.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_2.name}) "
-                                                required>
-                                                <div class="default text" value="">Select</div>
-                                                <div class="menu">
-                                                    <div class="item" data-value="{{category.name}}" ng-repeat="category in category_2.terms">{{category.name}}</div>
+                                        <div class="field required " ng-class="{error: $ctrl.submitted && metaForm.cTwo.$error.required} ">
+                                            <!-- <label for="category_2 ">{{category_2.name}}</label>
+                                            <div id="contentmeta-category-2 " name="cTwo " class="ui multiple search selection dropdown contentmeta-category-2 " data-tooltip="{{categoryValues || 'select Option'}} " ng-model="$ctrl.contentMeta[category_2.code]
+                                        " multiple=" " ng-click="updatedDependentCategory( '2', $ctrl.contentMeta[category_2.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_2.name}) " required>
+                                                <div class="default text " value=" ">Select</div>
+                                                <div class="menu ">
+                                                    <div class="item " data-value="{{category.name}} " ng-repeat="category in category_2.terms ">{{category.name}}</div>
                                                 </div>
-                                            </div>
+                                            </div> -->
+                                            <keywords></keywords>
                                         </div>
                                     </div>
                                 </div>
@@ -77,12 +93,12 @@
                 </div>
             </div>
         </div>
-        <div class="actions">
-            <div class="twelve wide column right aligned">
-                <div class="ui buttons">
-                    <button id="closePopUp" class="ui orange button" type="button" ng-click="ecEditor.dispatchEvent('editor:form:cancel')">Cancel</button>
+        <div class="actions ">
+            <div class="twelve wide column right aligned ">
+                <div class="ui buttons ">
+                    <button id="closePopUp " class="ui orange button " type="button " ng-click="ecEditor.dispatchEvent( 'editor:form:cancel') ">Cancel</button>
                     <div class="or "></div>
-                    <button class="ui blue button " type="button " ng-click="ecEditor.dispatchEvent( 'editor:form:success', contentMetaForm.$valid)">Save</button>
+                    <button class="ui blue button " type="button " ng-click="ecEditor.dispatchEvent( 'editor:form:success', metaForm.$valid) ">Save</button>
                 </div>
             </div>
         </div>
