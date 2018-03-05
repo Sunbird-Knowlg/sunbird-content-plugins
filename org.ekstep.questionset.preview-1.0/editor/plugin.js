@@ -17,7 +17,16 @@ org.ekstep.contenteditor.basePlugin.extend({
                 "ver": 0.3,
                 "stage": [{
                     "id": "splash",
-                    "org.ekstep.questionset": {}
+                    "org.ekstep.questionset": {
+                        "x": 9,
+                        "y": 6,
+                        "w": 80,
+                        "h": 85
+                    },
+                    "x": 0,
+                    "y": 0,
+                    "w": 100,
+                    "h": 100
                 }],
                 "manifest": {
                     "media": []
@@ -62,7 +71,11 @@ org.ekstep.contenteditor.basePlugin.extend({
                 "pluginVer": question.pluginVer,
                 "templateId": question.templateId,
                 "data": question.data,
-                "config": question.config
+                "config": question.config,
+                "w": "80",
+                "x": "9",
+                "h": "85",
+                "y": "6"
             }
             object.pluginIds.push(question.pluginId);
             if (question.media) {
