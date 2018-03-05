@@ -109,7 +109,7 @@ Plugin.extend({
                 this._stage._currentState = this._theme.getParam(stageKey);
 
 
-                var questionState = this.getStates(this.qid);
+               /* var questionState = this.getStates(this.qid);
                 if (questionState) {
                     var item = this._stage._stageController._model[0];
                     if (item.type.toLowerCase() == 'mcq' || item.type.toLowerCase() == 'mmcq') {
@@ -121,7 +121,7 @@ Plugin.extend({
                     }
                     
                     this._stage._stageController._model = _.clone(questionState.model);
-                }
+                }*/
             }
         }
     },
@@ -142,7 +142,7 @@ Plugin.extend({
             model: _.clone(this._stage._stageController._model)
         }
 
-        EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:savev1QuestionState', function(data) {}, state)
+      //  EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:savev1QuestionState', function(data) {}, state)
 
 
         if (item.type.toLowerCase() == 'ftb') {
@@ -162,7 +162,7 @@ Plugin.extend({
             callback(result);
         }
     },
-    getStates: function(questionId) {
+    /*getStates: function(questionId) {
         var qState;
         EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:getQuestionState', {
             qid: questionId,
@@ -171,6 +171,6 @@ Plugin.extend({
             }
         });
         return qState;
-    }
+    }*/
 });
 //# sourceURL=qsquizRenderer.js
