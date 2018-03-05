@@ -1,0 +1,20 @@
+{
+  "id": "org.ekstep.navigation",
+  "ver": "1.0",
+  "author": "Jagadish",
+  "type": "plugin",
+  "title": "Navigation",
+  "description": "",
+  "editor": {
+    "main": "editor/plugin.js",
+    "dependencies": [],
+    "menu": []
+  },
+  "renderer": {
+    "main": "renderer/plugin.js"
+  },
+  "icon": "assets/icon.png",
+  "languages": ["English"],
+  "categories": [""],
+  "keywords": [""]
+}
