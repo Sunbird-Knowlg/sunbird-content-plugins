@@ -31,10 +31,6 @@
                     </div>
                 </div>
                 <div class="field">
-                    <label>Concepts</label>
-                    <input name="concepts" id="unitConceptSelector" ng-model="unit.conceptData" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
-                </div>
-                <div class="field">
                    <label>Keywords</label>
                         <tags-input ng-model="unit.keywords" display-property="lemma" placeholder="Enter Keywords" replace-spaces-with-dashes="false">
                             <auto-complete source="loadKeywords($query)" min-length="0" load-on-focus="true" load-on-empty="true" max-results-to-show="100" template="my-custom-template"></auto-complete>
