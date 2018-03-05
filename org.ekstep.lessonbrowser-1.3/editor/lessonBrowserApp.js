@@ -2,7 +2,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
     .controller('lessonController', ['$scope', '$timeout', 'instance', 'callback', 'callerFilters', function ($scope, $timeout, instance, callback, callerFilters) {
         var ctrl = this;
         ctrl.facetsResponse = undefined;
-        const DEFAULT_PAGEAPI = 'LessonBrowser';
+        const DEFAULT_PAGEAPI = 'ContentBrowser';
         // different html configuration to render dynamically
         $scope.headerTemplate = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/header.html");
         $scope.footerTemplate = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/footer.html");
@@ -23,6 +23,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         $scope.defaultResources = [];
         $scope.lessonView = {};
         $scope.viewAllAvailableResponse = {};
+        $scope.conceptsNames = {};
         $scope.noResultFound = true;
 
         // telemetry pluginId and plugin version
@@ -105,33 +106,24 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             });
         };
 
-
+        // get the concepts name based on concept ids
         ctrl.searchConcepts = function (content, cb) {
-            angular.forEach(content, function (content, contentIndex) {
-                conceptRequestBody.request.filters.identifier = content.concepts;
-                searchService.search(conceptRequestBody, function (err, res) {
-                    if (err) {
-                        ctrl.err = "Oops! Something went wrong. Please try again later.";
-                    } else {
-                        if (res.data.result.concepts !== (undefined || null)) {
-                            if (res.data.result.concepts.length === 1) {
-                                var conceptNames = [];
-                                conceptNames.push(res.data.result.concepts[0].name);
-                            }
-                            else {
-                                angular.forEach(res.data.result.concepts, function (concept) {
-                                    var conceptNames = [];
-                                    conceptNames.push(concept.name);
-                                });
-                            }
-                            ctrl.res.content[contentIndex].concepts = conceptNames;
-                        }
-                        else {
-                            ctrl.res.content[contentIndex].concepts = [];
-                        }
-                    }
-                    return cb();
-                });
+            angular.forEach(content, function (content) {
+                conceptRequestBody.request.filters.identifier = (content.concepts) ? conceptRequestBody.request.filters.identifier.concat(content.concepts) : conceptRequestBody.request.filters.identifier;
+            });
+            conceptRequestBody.request.filters.identifier = conceptRequestBody.request.filters.identifier.filter(function (currentValue, index, array) {
+                return index === array.indexOf(currentValue);
+            });
+            searchService.search(conceptRequestBody, function (err, res) {
+                if (err) {
+                    ctrl.err = "Oops! Something went wrong. Please try again later.";
+                } else {
+                    angular.forEach(res.data.result.concepts, function (concept) {
+                        $scope.conceptsNames[concept.identifier] = concept.name;
+                    });
+                }
+                console.log('$scope.conceptsNames....', $scope.conceptsNames);
+                return cb();
             });
         }
 
@@ -384,11 +376,11 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                     $scope.$safeApply();
                     /* highlight matches text */
                     ecEditor.jQuery(".searcher ul.searchList li.searchResult").each(function () {
-                        var matchStart =  ecEditor.jQuery(this).text().toLowerCase().indexOf("" + searchQuery.toLowerCase() + "");
+                        var matchStart = ecEditor.jQuery(this).text().toLowerCase().indexOf("" + searchQuery.toLowerCase() + "");
                         var matchEnd = matchStart + searchQuery.length - 1;
-                        var beforeMatch =  ecEditor.jQuery(this).text().slice(0, matchStart);
-                        var matchText =  ecEditor.jQuery(this).text().slice(matchStart, matchEnd + 1);
-                        var afterMatch =  ecEditor.jQuery(this).text().slice(matchEnd + 1);
+                        var beforeMatch = ecEditor.jQuery(this).text().slice(0, matchStart);
+                        var matchText = ecEditor.jQuery(this).text().slice(matchStart, matchEnd + 1);
+                        var afterMatch = ecEditor.jQuery(this).text().slice(matchEnd + 1);
                         ecEditor.jQuery(this).html(beforeMatch + "<em>" + matchText + "</em>" + afterMatch);
                     });
                 }
@@ -431,39 +423,21 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                 $scope.getPageAssemble(function (err, res) {
                     if (!res) {
                         ctrl.facetsResponse = res.data;
+                        var contents = [];
                         angular.forEach(ctrl.facetsResponse.result.response.sections, function (section, sectionIndex) {
-                            angular.forEach(section.contents, function (content, contentIndex) {
-                                if (content.concepts !== undefined) {
-                                    conceptRequestBody.request.filters.identifier = content.concepts;
-                                    searchService.search(conceptRequestBody, function (err, res) {
-                                        if (err) {
-                                            ctrl.err = "Oops! Something went wrong. Please try again later.";
-                                        } else {
-                                            var conceptNames = [];
-                                            if (res.data.result.concepts.length === 1) {
-                                                conceptNames.push(res.data.result.concepts[0].name);
-                                            }
-                                            else {
-                                                angular.forEach(res.data.result.concepts, function (concept) {
-                                                    conceptNames.push(concept.name);
-                                                });
-                                            }
-                                            ctrl.facetsResponse.result.response.sections[sectionIndex].contents[contentIndex].concepts = conceptNames;
-                                        }
-
-                                    });
-                                }
-                                else {
-                                    ctrl.facetsResponse.result.response.sections[sectionIndex].contents[contentIndex].concepts = [];
-                                }
+                            angular.forEach(section.contents, function (content) {
+                                contents.push(content);
                             });
                         });
-                        $scope.$safeApply();
-                        $timeout(function () {
-                            ctrl.addOrRemoveContent(ctrl.res.content);
-                            ctrl.dropdownAndCardsConfig();
-                        }, 0);
                         $scope.isLoading = false;
+                        console.log('searchConcepts contents...', contents);
+                        ctrl.searchConcepts(contents, function () {
+                            $scope.$safeApply();
+                            $scope.isLoading = false;
+                            ctrl.addOrRemoveContent(ctrl.res.content);
+                            ctrl.conceptSelector();
+                            ctrl.dropdownAndCardsConfig();
+                        });
                     } else {
                         console.error("Unable to fetch response", err);
                     }
@@ -471,6 +445,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             }
         }
 
+        // view all the items for a specific resource
         $scope.viewAll = function (query, sectionIndex) {
             ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'viewAll', targetid: "" });
             if (_.isString(query)) {
@@ -488,8 +463,11 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                     $timeout(function () {
                         $scope.isLoading = false;
                         $scope.noResultFound = false;
+                        ctrl.addOrRemoveContent(ctrl.res.content);
+                        ctrl.conceptSelector();
+                        ctrl.dropdownAndCardsConfig();
                         ecEditor.jQuery('#resourceSearch').val('');
-                     }, 6000);
+                    }, 6000);
                 });
             } else {
                 $scope.mainTemplate = 'selectedResult';
@@ -568,9 +546,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                 }
             }, 100);
         };
-
         $scope.init();
-
     }]);
 
 // slider directive
