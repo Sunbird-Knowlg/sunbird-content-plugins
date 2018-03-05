@@ -408,7 +408,7 @@ angular.module('createquestionapp', [])
         if (question.version == 1 && question.template_id) {
           $scope.getv1Template(question.template_id, question, function(controller) {
             question.template = controller.template;
-            question.mediamanifest=controller.mediamanifest;
+            if(controller.mediamanifest)question.mediamanifest=controller.mediamanifest;
           });
         }
       });

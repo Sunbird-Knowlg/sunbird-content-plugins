@@ -147,6 +147,7 @@ org.ekstep.contenteditor.basePlugin.extend({
       };
     var questionTemplate = Object.assign({}, question);
     delete questionTemplate.template;
+    delete questionTemplate.mediamanifest;
     questionTemplate["template"] = question.template[0].id;
     questionSets[question.identifier] = [questionTemplate];
     controller.questionnaire["items"] = questionSets;
