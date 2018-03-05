@@ -44,7 +44,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     // Add all question media to media manifest
     if (_.isArray(this._questions)) {
       this._questions.forEach(function(question) {
-        if (instance.isQuestionV1(question)) {
+        if (question.version == 1) {
           if (_.has(quesMedia, "media")) {
             var questionMediaArr = question.media;
             questionMediaArr.forEach(function(mediaItem) {
@@ -128,9 +128,6 @@ org.ekstep.contenteditor.basePlugin.extend({
     }
     ecEditor.dispatchEvent(this.manifest.id + ':create', qdata);
   },
-  isQuestionV1: function(question) {
-    return _.isUndefined(question.body) && question.version == 1;
-  },
   createEcmlStructureV1: function(question) {
     var instance = this;
     questionSets = {},
@@ -141,12 +138,13 @@ org.ekstep.contenteditor.basePlugin.extend({
       };
     var questionTemplate = Object.assign({}, question);
     delete questionTemplate.template;
-    questionSets[question.identifier] = questionTemplate;
+    questionTemplate["template"] = question.template[0].id;
+    questionSets[question.identifier] = [questionTemplate];
     controller.questionnaire["items"] = questionSets;
     controller.questionnaire["item_sets"] = [{
       "count": instance.config.total_items,
       "id": question.identifier
-    }]
+    }];
     controller["questionnaire"] = ecEditor._.assign(controller.questionnaire, instance.config);
     controller["template"] = ecEditor._.assign(question.template);
     return JSON.stringify(controller);
@@ -161,7 +159,7 @@ org.ekstep.contenteditor.basePlugin.extend({
       instance.data.forEach(function(question) {
         var questionECML = {};
         if (_.isUndefined(questionSetECML[instance._questionPlugin])) questionSetECML[instance._questionPlugin] = [];
-        if (instance.isQuestionV1(question)) {
+        if (question.version == 1) {
           questionECML = {
             id: UUID(),
             type: question.type,
@@ -170,10 +168,12 @@ org.ekstep.contenteditor.basePlugin.extend({
             templateId: instance._constants.templateId,
             data: {
               __cdata: instance.createEcmlStructureV1(question)
-              //__cdata:"{}"
             },
             config: {
-              __cdata: "{}"
+              __cdata: JSON.stringify({
+                "type": "items",
+                "var": "item"
+              })
             }
           }
           ecEditor._.forEach(question.media, function(asset) {
@@ -181,6 +181,7 @@ org.ekstep.contenteditor.basePlugin.extend({
               instance.addMedia(asset);
           });
           ecEditor.instantiatePlugin(instance._constants.v1PluginId, {});
+
         } else {
           var questionBody = JSON.parse(question.body);
           // Build Question ECML for each question that is added.
@@ -206,10 +207,17 @@ org.ekstep.contenteditor.basePlugin.extend({
               instance.addMedia(asset);
           });
         }
+        questionECML.w = 80;
+        questionECML.h = 85;
+        questionECML.x = 9;
+        questionECML.y = 6;
+        questionSetECML.w = 80;
+        questionSetECML.h = 85;
+        questionSetECML.x = 9;
+        questionSetECML.y = 6;
         questionSetECML[instance._questionPlugin].push(questionECML);
       });
     }
-    console.log(questionSetECML)
     return questionSetECML;
   },
   getConfig: function() {
