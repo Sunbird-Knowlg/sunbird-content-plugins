@@ -34,7 +34,7 @@
                     </div>
                     <div class="field">
                         <label for="category_2">{{category_2.name}}</label>
-                        <div id="textbookmeta-category-2" class="ui multiple search selection dropdown textbox textbookmeta-category-2" data-tooltip="{{categoryValues || 'select Option'}}" data-position="top center" ng-model="textbook[category_2.code]" multiple="" ng-click="updatedDependentCategory('2', textbook[category_2.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_2.name})">
+                        <div id="textbookmeta-category-2" class="ui multiple search selection dropdown textbox textbookmeta-category-2" data-tooltip="{{categoryValues || 'Select Option'}}" data-position="top center" ng-model="textbook[category_2.code]" multiple="" ng-click="updatedDependentCategory('2', textbook[category_2.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_2.name})">
                             <div class="default text" value="">Select</div>
                             <div class="menu">
                                 <div class="item" data-value="{{category.name}}" ng-repeat="category in category_2.terms">{{category.name}}
