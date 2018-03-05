@@ -51,6 +51,7 @@
     overflow-y: auto;
     position: absolute;
     height: calc(100% - 130px);
+    width: 100%;
     overflow-x: hidden;
 }
 .padding-left-15 {
