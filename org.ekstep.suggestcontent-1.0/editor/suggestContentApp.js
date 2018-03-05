@@ -121,7 +121,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
     $scope.onNodeSelect = function() {
         if($scope.metaData.subject) {
             $scope.excludeContents = [];
-            activeNodeConcepts = [];
+            var activeNodeConcepts = [];
             var activeNode = org.ekstep.services.collectionService.getActiveNode();
             /* Fetch the added contents for the currently selected node */
             _.forEach(activeNode.children, function(content) {
@@ -136,14 +136,11 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             if(activeNodeConcepts.length && !_.isEqual(activeNodeConcepts.sort(), $scope.metaData.concepts.sort())) {
                 $scope.metaData.concepts = activeNodeConcepts;
                 $scope.searchLessons();
-            } else if($scope.responseData && $scope.responseData.length > 20) {
+            } else if($scope.responseData) {
                 $scope.suggestedContentList.content = [];
-                angular.forEach($scope.responseData, function(lessonContent) {
+                _.forEach($scope.responseData, function(lessonContent) {
                     if(_.indexOf($scope.excludeContents, lessonContent.identifier) == -1) $scope.suggestedContentList.content.push(lessonContent);
                 });
-                if($scope.suggestedContentList.content.length < 20) $scope.searchLessons();
-            } else {
-                $scope.searchLessons();
             }
         }
     }
@@ -151,6 +148,12 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
     /* Call when user changes metadata */
     $scope.updateMetaData = function() {
         _.forEach(org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy().nodesModified, function(node) {
+            var updatedConcepts = [];
+            if(node.metadata.concepts) {
+                _.forEach(node.metadata.concepts, function(concept) {
+                    updatedConcepts.push(concept.identifier);
+                });
+            }
             if(node.root) {
                 var metadataUpdate = false;
 
@@ -159,11 +162,8 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                     metadataUpdate = true;
                 }
 
-                if(node.metadata.concepts && node.metadata.concepts != $scope.metaData.concepts) {
-                    $scope.metaData.concepts = [];
-                    _.forEach(node.metadata.concepts, function(concept) {
-                        $scope.metaData.concepts.push(concept.identifier);
-                    });
+                if(updatedConcepts.length && !_.isEqual(updatedConcepts.sort(), $scope.metaData.concepts.sort())) {
+                    $scope.metaData.concepts = updatedConcepts;
                     metadataUpdate = true;
                 }
 
@@ -174,11 +174,8 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
 
                 if(metadataUpdate) $scope.searchLessons();
             } else {
-                if(node.metadata.concepts && node.metadata.concepts != $scope.metaData.concepts) {
-                    $scope.metaData.concepts = [];
-                    _.forEach(node.metadata.concepts, function(concept) {
-                        $scope.metaData.concepts.push(concept.identifier);
-                    });
+                if(updatedConcepts.length && !_.isEqual(updatedConcepts.sort(), $scope.metaData.concepts.sort())) {
+                    $scope.metaData.concepts = updatedConcepts;
                     $scope.searchLessons();
                 }
             }
