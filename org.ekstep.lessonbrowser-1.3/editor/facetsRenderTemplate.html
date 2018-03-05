@@ -25,7 +25,8 @@
                                 <div class="content contentTitle">Subject</div>
                             </div>
                             <div class="item">
-                                <div class="right floated content contentMetaDetail" ng-repeat="concept in lesson.concepts">{{ conceptsNames[concept]}}{{$last ? '' : ', '}}
+                                <div class="right floated content contentMetaDetail">
+                                    <span  ng-repeat="concept in lesson.concepts">{{ conceptsNames[concept]}}{{$last ? '' : ', '}}</span>
                                 </div>
                                 <div class="right floated content contentMetaDetail" ng-show="!lesson.concepts.length">NA
                                 </div>

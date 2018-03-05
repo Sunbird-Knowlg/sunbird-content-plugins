@@ -17,7 +17,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         ctrl.res = { count: 0, content: [] };
         ctrl.err = null;
 
-        $scope.mainTemplate = 'selectedResult';
+        $scope.mainTemplate = '';
         $scope.isLoading = true;
         $scope.sortOption = 'name';
         $scope.defaultResources = [];
