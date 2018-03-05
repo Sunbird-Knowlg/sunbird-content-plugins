@@ -7,7 +7,6 @@ org.ekstep.contenteditor.basePlugin.extend({
     onclick: undefined,
     currentObject: undefined,
     canvas: undefined,
-    _navigationPlugin: 'org.ekstep.navigation',
     initialize: function() {
         ecEditor.addEventListener("stage:create", this.createStage, this);
         ecEditor.addEventListener("object:modified", this.modified, this);
@@ -181,10 +180,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         canvas = new fabric.Canvas(this.id, { backgroundColor: "#FFFFFF", preserveObjectStacking: true, width: 720, height: 405 });
         this.render(canvas);
         ecEditor.jQuery('#' + this.id).remove();
-    },
-    toECML: function() {
-        ecEditor.instantiatePlugin(this._navigationPlugin, {});
-        return this._super();
     }
 });
 //# sourceURL=stageplugin.js
