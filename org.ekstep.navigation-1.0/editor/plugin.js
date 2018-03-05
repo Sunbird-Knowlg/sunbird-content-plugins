@@ -9,10 +9,26 @@ org.ekstep.contenteditor.basePlugin.extend({
     initialize:function() {
         var instance = this;
         // For every new stage create navigation plugin instance.
-        ecEditor.addEventListener('stage:add', this.createInstance);
+        ecEditor.addEventListener('stage:add', function(event) {
+            ecEditor.instantiatePlugin(instance.manifest.id, {}, ecEditor.getCurrentStage());
+        });
         // While content load, event bus is disabled so, unable to catch `stage:add` event (for empty content by default new stage is created).
         // Creating the new instance on content loaded.
-        ecEditor.addEventListener('content:load:complete', this.createInstance);
+        ecEditor.addEventListener('content:load:complete', function(event) {
+            var allStages = ecEditor.getAllStages();
+            allStages.forEach(function (stage) {
+                var addedNavigation = false;
+                var stageChildren = stage.children;
+                stageChildren.forEach(function (child) {
+                    if(child.manifest.id == instance.manifest.id) {
+                        addedNavigation = true;
+                    }
+                });
+                if(!addedNavigation) {
+                    ecEditor.instantiatePlugin(instance.manifest.id, {}, stage);
+                }
+            });
+        });
     },
 
     newInstance: function() {
@@ -32,10 +48,6 @@ org.ekstep.contenteditor.basePlugin.extend({
             type: "image",
             preload: true
         });
-    },
-
-    createInstance: function() {
-        ecEditor.instantiatePlugin(instance.manifest.id, {}, ecEditor.getCurrentStage());
     }
 });
 //# sourceURL=navigationEditorPlugin.js
