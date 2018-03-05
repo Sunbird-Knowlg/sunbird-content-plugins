@@ -8,12 +8,7 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-            { "type": "js", "src": "editor/libs/html2canvas.js" },
-            {
-                "type": "plugin",
-                "plugin": "org.ekstep.navigation",
-                "ver": "1.0"
-            }
+            { "type": "js", "src": "editor/libs/html2canvas.js" }
         ],
         "help": {
             "src": "editor/help.md",
