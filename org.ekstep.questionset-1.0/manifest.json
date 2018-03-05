@@ -26,6 +26,11 @@
       },
       {
           "type": "plugin",
+          "plugin": "org.ekstep.questionset.quiz",
+          "ver": "1.0"
+      },
+      {
+          "type": "plugin",
           "plugin": "org.ekstep.questionset.preview",
           "ver": "1.0"
       }],
@@ -112,5 +117,13 @@
           "src": "renderer/templates/questionset_template.html"
       }
     ]
-  }
+  },
+    "dependencies": [
+        {
+            "plugin": "org.ekstep.questionset.quiz",
+            "ver": "1.0",
+            "type": "plugin",
+            "scope": "renderer"
+        }
+    ]
 }
