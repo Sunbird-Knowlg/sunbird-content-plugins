@@ -45,12 +45,21 @@ org.ekstep.contenteditor.basePlugin.extend({
     if (_.isArray(this._questions)) {
       this._questions.forEach(function(question) {
         if (question.version == 1) {
-          if (_.has(quesMedia, "media")) {
+          if (_.has(question, "media")) {
             var questionMediaArr = question.media;
             questionMediaArr.forEach(function(mediaItem) {
               mediaItem.src = mediaItem.src;
               instance.addMedia(mediaItem);
             })
+          }
+          if (_.has(question, "mediamanifest")) {
+            var questionMediaArr = question.mediamanifest.media;
+            if (_.isArray(questionMediaArr)) {
+              questionMediaArr.forEach(function(mediaItem) {
+                mediaItem.src = mediaItem.src;
+                instance.addMedia(mediaItem);
+              })
+            }
           }
         } else {
           var quesMedia = JSON.parse(question.body);

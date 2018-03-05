@@ -408,6 +408,7 @@ angular.module('createquestionapp', [])
         if (question.version == 1 && question.template_id) {
           $scope.getv1Template(question.template_id, question, function(controller) {
             question.template = controller.template;
+            question.mediamanifest=controller.mediamanifest;
           });
         }
       });
@@ -510,7 +511,8 @@ angular.module('createquestionapp', [])
             config = {},
             controller = {
               "questionnaire": {},
-              "template": []
+              "template": [],
+              "mediamanifest":[]
             };
           questionSets[question.identifier] = [];
           questionSets[question.identifier].push(question);
@@ -521,6 +523,7 @@ angular.module('createquestionapp', [])
           }]
           controller["questionnaire"] = ecEditor._.assign(controller.questionnaire, config);
           controller["template"].push(templateJson.theme.template);
+          controller["mediamanifest"]=templateJson.theme.manifest;
           callback(controller);
         }
       });
@@ -565,6 +568,7 @@ angular.module('createquestionapp', [])
       var data = {
         "org.ekstep.questionset": {}
       }
+       
       questions.push(qObj);
       data["org.ekstep.questionset"]['org.ekstep.question'] = questions;
       var confData = {
@@ -572,6 +576,7 @@ angular.module('createquestionapp', [])
         "parentElement": true,
         "element": "#itemIframe"
       };
+
       document.getElementById("itemIframe").contentDocument.location.reload(true);
       var questionSetInstance = ecEditor.instantiatePlugin('org.ekstep.questionset.preview');
       confData.contentBody = questionSetInstance.getQuestionPreviwContent(data['org.ekstep.questionset']);
