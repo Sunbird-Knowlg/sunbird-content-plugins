@@ -87,6 +87,10 @@
             </div>
 
             <div class="eight wide column" style="padding-left:0; padding-right:0;">
+                    <div class="ui active inverted dimmer" ng-if="isLoading">
+                            <div class="ui large text loader">Loading</div>
+                    </div>
+                    <div ng-hide="isLoading">
                 <div class="row ui" id="resourceHeading">
                     <p class="padding-top-3px" style="display:inline;font-weight: bold;">
                         RESOURCES
@@ -139,6 +143,7 @@
                     <div class="row" style="margin: 1.2%">
                         <button class="ui button primary button-overrides" ng-click="loadmore()" ng-hide="!loadmoreEnabledFlag" ng-show="loadmoreEnabledFlag">Load more</button>
                     </div>
+                </div>
                 </div>
             </div>
         </div>

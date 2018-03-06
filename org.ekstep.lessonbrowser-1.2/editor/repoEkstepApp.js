@@ -18,6 +18,7 @@ angular.module('org.ekstep.contentprovider', [])
     // Regulate Load more button
     $scope.loadmoreEnabledFlag = true;
     var loadedLessonCount = 0;
+    $scope.isLoading = true;
 
     // Select all - Sidebar filters
     $scope.isAllSelected = {"lang": false, "grade": false, "lessonType": false, "domain": false};
@@ -102,8 +103,7 @@ angular.module('org.ekstep.contentprovider', [])
                 if (!res.data.result.content) {
                     $scope.loadmoreEnabledFlag = false;
                 }
-
-
+                $scope.isLoading = false;
             }
             $scope.$safeApply();
         });
