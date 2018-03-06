@@ -87,6 +87,10 @@
             </div>
 
             <div class="eight wide column" style="padding-left:0; padding-right:0;">
+                    <div class="ui active inverted dimmer" ng-if="isLoading">
+                            <div class="ui large text loader">Loading</div>
+                    </div>
+                    <div ng-hide="isLoading">
                 <div class="row ui" id="resourceHeading">
                     <p class="padding-top-3px" style="display:inline;font-weight: bold;">
                         RESOURCES
@@ -95,8 +99,8 @@
                 <div class="ui bottom attached grid source-result-container">
                     <div class="row three column lesson-row" ng-repeat="lesson in $ctrl.res.content">
                         <div class="lesson-image-box middle aligned">
-                            <div class="ui checkbox">
-                                    <input type="checkbox" name="lessons[]" ng-click="toggleSelectionLesson(lesson)">
+                            <div class="ui checkbox" id='checkBox_{{lesson.identifier}}'>
+                                    <input type="checkbox" name="lessons[]" class="checkBox" ng-click="toggleSelectionLesson(lesson)">
                                     <label></label>
                             </div>
                         </div>
@@ -139,6 +143,7 @@
                     <div class="row" style="margin: 1.2%">
                         <button class="ui button primary button-overrides" ng-click="loadmore()" ng-hide="!loadmoreEnabledFlag" ng-show="loadmoreEnabledFlag">Load more</button>
                     </div>
+                </div>
                 </div>
             </div>
         </div>
