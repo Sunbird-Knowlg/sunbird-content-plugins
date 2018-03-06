@@ -99,8 +99,8 @@
                 <div class="ui bottom attached grid source-result-container">
                     <div class="row three column lesson-row" ng-repeat="lesson in $ctrl.res.content">
                         <div class="lesson-image-box middle aligned">
-                            <div class="ui checkbox">
-                                    <input type="checkbox" name="lessons[]" ng-click="toggleSelectionLesson(lesson)">
+                            <div class="ui checkbox" id='checkBox_{{lesson.identifier}}'>
+                                    <input type="checkbox" name="lessons[]" class="checkBox" ng-click="toggleSelectionLesson(lesson)">
                                     <label></label>
                             </div>
                         </div>

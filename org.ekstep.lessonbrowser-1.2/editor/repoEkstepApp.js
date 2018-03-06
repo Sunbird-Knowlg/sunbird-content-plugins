@@ -12,6 +12,8 @@ angular.module('org.ekstep.contentprovider', [])
 
     // Selected lessons
     $scope.lessonSelection = [];
+    $scope.selectedResources = [];
+
     // QUICK FIX - Return selected lesson from repo. Service should be implemented
     $scope.selectedLessons.list = $scope.lessonSelection;
 
@@ -106,6 +108,9 @@ angular.module('org.ekstep.contentprovider', [])
                 $scope.isLoading = false;
             }
             $scope.$safeApply();
+            setTimeout(function(){
+                ctrl.addOrRemoveContent(ctrl.res.content);
+            }, 0);
         });
         
     };
@@ -214,23 +219,31 @@ angular.module('org.ekstep.contentprovider', [])
         ctrl.searchLessons(true);
     }
 
+    // Add or Remove resources
+    ctrl.addOrRemoveContent = function (Contents) {
+       angular.forEach(Contents, function (resource) {
+            if ($scope.selectedResources.indexOf(resource.identifier) !== -1) {
+                ecEditor.jQuery('#checkBox_' + resource.identifier + ' >.checkBox').attr('checked', true);
+            } else {
+                ecEditor.jQuery('#checkBox_' + resource.identifier + ' >.checkBox').attr('checked', false);
+            }
+        });
+    }
     // Toggle selection for filters - called on click of individual checkbox items
     $scope.toggleSelectionFilter = function(selectionKey, val, metaKey, valueKey) {
 
         var idx = $scope.filterSelection[selectionKey].indexOf(val);
-
         if (idx > -1) {
             ctrl.generateTelemetry({type: 'click', subtype: 'uncheck', target: 'filter', targetid: 'checkbox-filter'});
             // is currently selected, remove from selection list
             $scope.filterSelection[selectionKey].splice(idx, 1);
-
             // Un-check select all box
             $scope.isAllSelected[selectionKey] = false;
         } else {
             ctrl.generateTelemetry({type: 'click', subtype: 'check', target: 'filter',targetid: 'checkbox-filter'});
             // is newly selected, add to the selection list
             $scope.filterSelection[selectionKey].push(val);
-
+            $scope.selectedResources.push(lesson.identifier);
             // Check select all box, if all options selected
             var optionsStatus = true;
             angular.forEach(ctrl.meta[metaKey], function(itm){
@@ -267,16 +280,17 @@ angular.module('org.ekstep.contentprovider', [])
 
     // Toggle selection for lessons
     $scope.toggleSelectionLesson = function(lesson) {
-        var idx = $scope.lessonSelection.indexOf(lesson);
-
+        var idx = $scope.selectedResources.indexOf(lesson.identifier);
         if (idx > -1) {
             ctrl.generateTelemetry({type: 'click', subtype: 'uncheck', target: 'lesson',targetid: lesson.identifier});
             // is currently selected, remove from selection list
             $scope.lessonSelection.splice(idx, 1);
+            $scope.selectedResources.splice(idx, 1);
         } else {
             ctrl.generateTelemetry({type: 'click', subtype: 'check', target: 'lesson',targetid: lesson.identifier});
             // is newly selected, add to the selection list
             $scope.lessonSelection.push(lesson);
+            $scope.selectedResources.push(lesson.identifier);
         }
     };
 
