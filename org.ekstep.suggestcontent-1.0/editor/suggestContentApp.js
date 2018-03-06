@@ -93,8 +93,6 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                         subject: $scope.metaData.subject
                     }
                 }
-
-            ecEditor.dispatchEvent('editor:invoke:viewall', { from: true, query })
             ecEditor.dispatchEvent('editor:invoke:viewall', { client: "org", query}) 
         }
     }
