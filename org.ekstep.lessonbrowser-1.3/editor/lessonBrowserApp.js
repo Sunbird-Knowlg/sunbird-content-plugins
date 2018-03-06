@@ -436,6 +436,14 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                         });
                     } else {
                         console.error("Unable to fetch response", err);
+                        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                            message: "Oops, Unable to fetch contents",
+                            position: 'topCenter',
+                            icon: 'fa fa-warning'
+                        });
+                        $scope.isLoading = false;
+                        $scope.mainTemplate = 'selectedResult';
+                        $scope.$safeApply();
                     }
                 });
             }
