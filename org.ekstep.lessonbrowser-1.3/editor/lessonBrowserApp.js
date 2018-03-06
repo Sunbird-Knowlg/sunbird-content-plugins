@@ -444,6 +444,12 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                         $scope.isLoading = false;
                         $scope.mainTemplate = 'selectedResult';
                         $scope.$safeApply();
+                        $timeout(function() {
+                            ctrl.addOrRemoveContent(ctrl.res.content);
+                            ctrl.conceptSelector();
+                            ctrl.dropdownAndCardsConfig();
+                        }, 0);
+                        $scope.applyFilters();
                     }
                 });
             }
