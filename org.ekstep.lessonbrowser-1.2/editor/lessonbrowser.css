@@ -228,7 +228,7 @@
 }
 .resourcePanelBodyContent{
     top: 25%;
-    display: inline-table !important;*/
+    display: inline-table !important;
 }
 .resourceContentImage{
     height: 100%;
@@ -347,5 +347,11 @@
 }
 .moreLink{
 margin-left: -50%;
+}
+.searcherElement{
+    padding: 1%;
+    font-size: 78%;
+    width: 6%;
+    cursor: pointer;
 }
 /* from lessonBrowser.html */
