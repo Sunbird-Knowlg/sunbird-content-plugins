@@ -441,9 +441,31 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                             position: 'topCenter',
                             icon: 'fa fa-warning'
                         });
-                        $scope.isLoading = false;
                         $scope.mainTemplate = 'selectedResult';
                         $scope.$safeApply();
+                        $timeout(function() {
+                            ctrl.conceptSelector();
+                            ctrl.dropdownAndCardsConfig();
+                        }, 0);
+                        searchBody.request.filters.contentType  = ctrl.meta.lessonTypes
+                        searchService.search(searchBody, function(err, res) {
+                         if (err) {
+                                 ctrl.err = "Oops! Something went wrong. Please try again later.";
+                                } else {
+                                ctrl.res = { count: 0, content: [] };
+                                ctrl.res.content = res.data.result.content;
+                                ctrl.searchConcepts(ctrl.res.content, function() {
+                                    $scope.$safeApply();
+                                    ctrl.addOrRemoveContent(ctrl.res.content);
+                                    $timeout(function() {
+                                        ecEditor.jQuery('.special.cards .card').dimmer({
+                                            on: 'hover'
+                                        });
+                                        $scope.isLoading = false;
+                                    }, 200);
+                                });
+                                }
+                            });
                     }
                 });
             }
