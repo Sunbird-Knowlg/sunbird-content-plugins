@@ -181,7 +181,13 @@ angular.module('org.ekstep.contentprovider', [])
     // Sidebar - filters
     $scope.applyFilters = function(){
         ctrl.generateTelemetry({type: 'click', subtype: 'submit', target: 'filter',targetid: 'button-filter-apply'});
-        
+        searchBody = {"request": {
+            "filters":{
+               "objectType": ["Content"],
+               "status": ["Live"],
+            },
+            "query": ""
+        }};
         /**Get filters values**/
         $scope.getFiltersValue();
 
