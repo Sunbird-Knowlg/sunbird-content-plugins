@@ -1,5 +1,6 @@
 angular.module('suggestcontentApp', []).controller('suggestcontentController', ['$scope', '$timeout', function($scope, $timeout) {
     $scope.contentId = ecEditor.getContext('contentId');
+    $scope.defaultImage = ecEditor.resolvePluginResource('org.ekstep.suggestcontent', '1.0', "assets/default.png");
     $scope.excludeContents = [];
     $scope.metaData = {};
     $scope.responseData = [];
