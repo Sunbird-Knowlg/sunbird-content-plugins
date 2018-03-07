@@ -294,6 +294,17 @@ angular.module('org.ekstep.metadataform', ['ngTokenField']).controller('metadata
 
     }());
     $scope.configurations = [{
+            "code": "image",
+            "name": "App Icon",
+            "description": "Edit App Icon",
+            "inputType": "text",
+            "editable": true,
+            "required": true,
+            "placeholder": "Edit App Icon",
+            "renderingHints": {
+                "visible": true
+            },
+        }, {
             "code": "name",
             "name": "Name",
             "description": "Title of the content",
