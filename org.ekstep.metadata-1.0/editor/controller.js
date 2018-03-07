@@ -293,7 +293,7 @@ angular.module('org.ekstep.metadataform', ['ngTokenField']).controller('metadata
         console.log("Metadata contorller is initialized");
 
     }());
-    $scope.configurations = [{
+    $scope.fixedLayoutConfigurations = [{
             "code": "image",
             "name": "App Icon",
             "description": "Edit App Icon",
