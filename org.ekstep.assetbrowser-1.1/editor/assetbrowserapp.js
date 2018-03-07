@@ -557,7 +557,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                 ctrl.cancel();
             } else {
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                    message: "Error in Uploading image, please try again!",
+                    message: "Error in Uploading " + (instance.mediaType).charAt(0).toUpperCase() + (instance.mediaType).slice(1) + ", please try again!",
                     position: 'topCenter',
                     icon: 'fa fa-warning'
                 });
