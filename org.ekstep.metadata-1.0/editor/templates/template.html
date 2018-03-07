@@ -28,36 +28,40 @@
                 <div class="row">
                     <div class="column content-meta" id="content-meta">
                         <form class="ui form" id="content-meta-form" novalidate name="metaForm" ng-init="initDropdown()">
-                            <div class="fields" ng-repeat="field in configurations">
-                                <!-- APP ICON-->
-                                <div class="field" ng-show="field.code =='image'" ng-class=" { 'error': $ctrl.submitted && !($ctrl.contentMeta.appIcon)} ">
-                                    <label><i class="camera icon "></i>{{field.label}}</label>
-                                    <div id="field-app-icon" class="app-icon content-icon " ng-class="{ 'required-error': $ctrl.submitted && !($ctrl.contentMeta.appIcon)} " ng-mouseenter="$ctrl.appIconHover=true" ng-mouseleave="$ctrl.appIconHover=false " ng-click="$ctrl.launchImageBrowser()">
-                                        <div class="app-icon-overlay">
-                                            <p class="app-icon-overlay-message ">{{field.placeholder}}</p>
+                            <div class="fields">
+                                <!-- FIXED LAYOUT -->
+                                <div class="fixed-layout" ng-repeat='field in configurations'>
+                                    <div class="field" ng-show="field.code =='image'" ng-class=" { 'error': $ctrl.submitted && !($ctrl.contentMeta.appIcon)} ">
+                                        <label><i class="camera icon "></i>{{field.label}}</label>
+                                        <div id="field-app-icon" class="app-icon content-icon " ng-class="{ 'required-error': $ctrl.submitted && !($ctrl.contentMeta.appIcon)} " ng-mouseenter="$ctrl.appIconHover=true" ng-mouseleave="$ctrl.appIconHover=false " ng-click="$ctrl.launchImageBrowser()">
+                                            <div class="app-icon-overlay">
+                                                <p class="app-icon-overlay-message ">{{field.placeholder}}</p>
+                                            </div>
+                                            <img ng-src="{{$ctrl.contentMeta.appIcon || $ctrl.defaultImage }}" />
                                         </div>
-                                        <img ng-src="{{$ctrl.contentMeta.appIcon || $ctrl.defaultImage }}" />
+                                    </div>
+
+                                    <div class="sixteen wide field">
+                                        <div class="field" ng-show="field.code =='name'" ng-class="{ 'error': ($ctrl.submitted && metaForm.name.$error.required)} ">
+                                            <label>{{field.label}}</label>
+                                            <div class="ui input ">
+                                                <input id="ecm-name " placeholder={{field.placeholder}} ng-model="$ctrl.contentMeta.name " name="name " type="text" maxlength="100" required>
+                                            </div>
+                                        </div>
+                                        <div class="field " ng-show="field.code=='description' " ng-class=" ">
+                                            <label>{{field.label}}</label>
+                                            <div class=" ui input ">
+                                                <textarea id="ecm-description " placeholder={{field.placeholde}} ng-model="$ctrl.contentMeta.description " name="description " rows="2 " required ng-click="generateTelemetry({type: 'click', subtype:
+                                                'input', target: 'description'}) "></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="field " ng-show="field.code=='keyword' " ng-class=''>
+                                            <keywords></keywords>
+                                        </div>
                                     </div>
                                 </div>
-
-                                <div class="sixteen wide field">
-                                    <!-- FIXED LAYOUT -->
-                                    <div class="two field" ng-show="field.code =='name'" ng-class="{ 'error': ($ctrl.submitted && metaForm.name.$error.required)} ">
-                                        <label>{{field.label}}</label>
-                                        <div class="ui input ">
-                                            <input id="ecm-name " placeholder={{field.placeholder}} ng-model="$ctrl.contentMeta.name " name="name " type="text" maxlength="100" required>
-                                        </div>
-                                    </div>
-                                    <div class="field " ng-show="field.code=='description' " ng-class=" ">
-                                        <label>{{field.label}}</label>
-                                        <div class=" ui input ">
-                                            <textarea id="ecm-description " placeholder={{field.placeholde}} ng-model="$ctrl.contentMeta.description " name="description " rows="2 " required ng-click="generateTelemetry({type: 'click', subtype:
-                                                'input', target: 'description'}) "></textarea>
-                                        </div>
-                                    </div>
-                                    <div class="field " ng-show="field.code=='keyword' " ng-class=''>
-                                        <keywords></keywords>
-                                    </div>
+                                <!-- DYNAMIC LAYOUT -->
+                                <div class="dynamic-layout" ng-repeate="field in dynamicLaoutConfigurations">
                                 </div>
                             </div>
                         </form>
