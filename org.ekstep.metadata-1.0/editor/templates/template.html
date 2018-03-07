@@ -45,17 +45,17 @@
                                 <div class="field" ng-show="(fixedField.code =='name' && fixedField.renderingHints.visible)" ng-class="{ 'error': ($ctrl.submitted && metaForm.name.$error.required)}">
                                     <label>{{fixedField.label}}</label>
                                     <div class="ui input ">
-                                        <input id="ecm-name " placeholder={{field.placeholder}} ng-model="$ctrl.contentMeta.name " name="name " type="text" maxlength="100" required>
+                                        <input id="ecm-name " placeholder={{field.placeholder}} ng-model="$ctrl.contentMeta.name " name="name " type="text" maxlength="100" ng-required="{{fixedField.required}}">
                                     </div>
                                 </div>
-                                <div class="field" ng-show="(fixedField.code =='description' && fixedField.renderingHints.visible)" ng-class=" ">
+                                <div class="field" ng-show="(fixedField.code =='description' && fixedField.renderingHints.visible)" ng-class=" " ng-required="{{fixedField.required}}">
                                     <label>{{fixedField.label}}</label>
                                     <div class=" ui input ">
                                         <textarea id="ecm-description " placeholder={{field.placeholde}} ng-model="$ctrl.contentMeta.description " name="description " rows="2 " required ng-click="generateTelemetry({type: 'click', subtype:
                                                 'input', target: 'description'}) "></textarea>
                                     </div>
                                 </div>
-                                <div class="field" ng-show="(fixedField.code =='keyword' && fixedField.renderingHints.visible)" ng-class=''>
+                                <div class="field" ng-show="(fixedField.code =='keyword' && fixedField.renderingHints.visible)" ng-class='' ng-required="{{fixedField.required}}">
                                     <keywords></keywords>
                                 </div>
                             </div>
@@ -70,23 +70,23 @@
                                     <div class="field" ng-if="dynamicField.inputType=='text' || dynamicField.inputType=='number'" ng-class="{error: $ctrl.submitted && contentMetaForm.cOne.$error.required}">
                                         <label>{{dynamicField.label}}</label>
                                         <div class="ui input">
-                                            <input id="ecm-name " placeholder={{dynamicField.placeholder}} name="name " type="{{dynamicField.inputType}}" maxlength="100 " required>
+                                            <input id="ecm-name " placeholder={{dynamicField.placeholder}} name="name " type="{{dynamicField.inputType}}" maxlength="100 " ng-required="{{dynamicField.required}}">
                                         </div>
                                     </div>
-                                    <div class="field " ng-if="dynamicField.inputType=='select' " ng-class="{error: $ctrl.submitted && contentMetaForm.cOne.$error.required} ">
+                                    <div class="field " ng-if="dynamicField.inputType=='select' " ng-class="{error: $ctrl.submitted && contentMetaForm.cOne.$error.required} " ng-required="{{dynamicField.required}}">
                                         <label>{{dynamicField.label}}</label>
                                         <select id="contentmeta-category-1 " name="cOne " class="ui search dropdown placeholder-padding contentmeta-category-1 " ng-model="$ctrl.contentMeta[category_1.code] " ng-change=" " required>
                                             <option value=" ">Select</option>
                                             <option data-value="{{category.name}} " ng-repeat="category in category_1.terms ">{{category.name}}</option>
                                         </select>
                                     </div>
-                                    <div class="field" ng-if="dynamicField.inputType =='concetpselector' ">
+                                    <div class="field" ng-if="dynamicField.inputType =='concetpselector' " ng-required=" {{dynamicField.required}}">
                                         <label>{{dynamicField.label}}</label>
                                         <concetpselector></concetpselector>
                                     </div>
-                                    <div class="field" ng-if="dynamicField.code =='year' ">
+                                    <div class=" field " ng-if="dynamicField.code=='year' " ng-required=" {{dynamicField.required}} ">
                                         <label>{{dynamicField.label}}</label>
-                                        <year config="dynamicField">
+                                        <year config=" dynamicField ">
                                         </year>
                                     </div>
                                 </div>

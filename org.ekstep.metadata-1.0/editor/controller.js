@@ -500,7 +500,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
             "code": "year",
             "name": "Year",
             "description": "Description of the content",
-            "inputType": "",
+            "inputType": "select",
             "label": "Year",
             "editable": true,
             "required": true,
