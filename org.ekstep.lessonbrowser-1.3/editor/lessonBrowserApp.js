@@ -137,7 +137,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                     ctrl.res.content = res.data.result.content;
                     ctrl.searchConcepts(ctrl.res.content, function() {
                         $scope.$safeApply();
-                        ctrl.addOrRemoveContent(ctrl.res.content);
+                        ctrl.toggleContent(ctrl.res.content);
                         ctrl.conceptSelector();
                         ctrl.dropdownAndCardsConfig();
                     });
@@ -147,7 +147,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         };
 
         // Add or Remove resources
-        ctrl.addOrRemoveContent = function(Contents) {
+        ctrl.toggleContent = function(Contents) {
             angular.forEach(Contents, function(resource) {
                 if ($scope.selectedResources.indexOf(resource.identifier) !== -1) {
                     ecEditor.jQuery('#checkBox_' + resource.identifier + ' >.checkBox').attr('checked', true);
@@ -252,7 +252,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                     ctrl.res.content = res.data.result.content;
                     ctrl.searchConcepts(ctrl.res.content, function() {
                         $scope.$safeApply();
-                        ctrl.addOrRemoveContent(ctrl.res.content);
+                        ctrl.toggleContent(ctrl.res.content);
                         $timeout(function() {
                             ecEditor.jQuery('.special.cards .card').dimmer({
                                 on: 'hover'
@@ -305,7 +305,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             }
             $scope.$safeApply();
             $timeout(function() {
-                ctrl.addOrRemoveContent(ctrl.res.content);
+                ctrl.toggleContent(ctrl.res.content);
                 ctrl.conceptSelector();
                 ctrl.dropdownAndCardsConfig();
                 ecEditor.jQuery('#resourceSearch').val('');
@@ -392,7 +392,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             ctrl.res.content = $scope.lessonSelection;
             $scope.$safeApply();
             $timeout(function() {
-                ctrl.addOrRemoveContent($scope.lessonSelection);
+                ctrl.toggleContent($scope.lessonSelection);
                 ctrl.dropdownAndCardsConfig();
             }, 0);
         }
@@ -432,7 +432,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                                 ecEditor.jQuery('.special.cards .card').dimmer({
                                     on: 'hover'
                                 });
-                                ctrl.addOrRemoveContent(ctrl.res.content);
+                                ctrl.toggleContent(ctrl.res.content);
                                 $scope.isLoading = false;
                             }, 200);
                         });
@@ -449,7 +449,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                             $scope.defaultResources = ctrl.res.content;
                             $scope.isLoading = false;
                             $timeout(function() {
-                                ctrl.addOrRemoveContent(ctrl.res.content);
+                                ctrl.toggleContent(ctrl.res.content);
                                 ctrl.conceptSelector();
                                 ctrl.dropdownAndCardsConfig();
                             }, 0);
@@ -477,7 +477,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                     $timeout(function() {
                         $scope.isLoading = false;
                         $scope.noResultFound = false;
-                        ctrl.addOrRemoveContent(ctrl.res.content);
+                        ctrl.toggleContent(ctrl.res.content);
                         ctrl.conceptSelector();
                         ctrl.dropdownAndCardsConfig();
                         ecEditor.jQuery('#resourceSearch').val('');
@@ -488,7 +488,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                 ctrl.res.content = $scope.viewAllAvailableResponse[sectionIndex];
                 $scope.$safeApply();
                 $timeout(function() {
-                    ctrl.addOrRemoveContent(ctrl.res.content);
+                    ctrl.toggleContent(ctrl.res.content);
                     ctrl.conceptSelector();
                     ctrl.dropdownAndCardsConfig();
                 }, 0);
