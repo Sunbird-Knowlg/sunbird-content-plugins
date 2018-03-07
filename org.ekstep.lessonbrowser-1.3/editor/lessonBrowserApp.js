@@ -426,13 +426,15 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                                 contents.push(content);
                             });
                         });
-                        $scope.isLoading = false;
                         ctrl.searchConcepts(contents, function() {
                             $scope.$safeApply();
-                            $scope.isLoading = false;
-                            ctrl.addOrRemoveContent(ctrl.res.content);
-                            ctrl.conceptSelector();
-                            ctrl.dropdownAndCardsConfig();
+                            $timeout(function() {
+                                ecEditor.jQuery('.special.cards .card').dimmer({
+                                    on: 'hover'
+                                });
+                                ctrl.addOrRemoveContent(ctrl.res.content);
+                                $scope.isLoading = false;
+                            }, 200);
                         });
                     } else {
                         console.error("Unable to fetch response", err);
@@ -441,30 +443,16 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                             position: 'topCenter',
                             icon: 'fa fa-warning'
                         });
-                        $scope.mainTemplate = 'selectedResult';
-                        $scope.$safeApply();
-                        $timeout(function() {
-                            ctrl.conceptSelector();
-                            ctrl.dropdownAndCardsConfig();
-                        }, 0);
                         searchBody.request.filters.contentType = ctrl.meta.lessonTypes
-                        searchService.search(searchBody, function(err, res) {
-                            if (err) {
-                                ctrl.err = "Oops! Something went wrong. Please try again later.";
-                            } else {
-                                ctrl.res = { count: 0, content: [] };
-                                ctrl.res.content = res.data.result.content;
-                                ctrl.searchConcepts(ctrl.res.content, function() {
-                                    $scope.$safeApply();
-                                    ctrl.addOrRemoveContent(ctrl.res.content);
-                                    $timeout(function() {
-                                        ecEditor.jQuery('.special.cards .card').dimmer({
-                                            on: 'hover'
-                                        });
-                                        $scope.isLoading = false;
-                                    }, 200);
-                                });
-                            }
+                        ctrl.searchLessons(function(res) {
+                            $scope.mainTemplate = 'selectedResult';
+                            $scope.defaultResources = ctrl.res.content;
+                            $scope.isLoading = false;
+                            $timeout(function() {
+                                ctrl.addOrRemoveContent(ctrl.res.content);
+                                ctrl.conceptSelector();
+                                ctrl.dropdownAndCardsConfig();
+                            }, 0);
                         });
                     }
                 });
