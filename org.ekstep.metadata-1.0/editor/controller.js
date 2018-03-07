@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('org.ekstep.metadataform', ['ngTokenField']).controller('metadataform', ['$scope', '$q', '$rootScope', '$http', '$timeout', 'configurations', function($scope, $q, $rootScope, $http, $timeout, configurations) {
+angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scope', '$q', '$rootScope', '$http', '$timeout', 'configurations', function($scope, $q, $rootScope, $http, $timeout, configurations) {
     var ctrl = this;
 
     var data = configurations || {};
@@ -21,6 +21,7 @@ angular.module('org.ekstep.metadataform', ['ngTokenField']).controller('metadata
             return keywords;
         }
     }
+    $scope.metaform = {}
     var metaInfo = ecEditor.getService('content').getContentMeta(ctrl.contentId);
     metaInfo.keywords = $scope.parseKeywords(metaInfo.keywords)
     if (data.contentMeta) {
@@ -300,7 +301,7 @@ angular.module('org.ekstep.metadataform', ['ngTokenField']).controller('metadata
             "inputType": "text",
             "editable": true,
             "required": true,
-            "placeholder": "Edit App Icon",
+            "placeholder": "Select concept",
             "renderingHints": {
                 "visible": true
             },
@@ -311,6 +312,7 @@ angular.module('org.ekstep.metadataform', ['ngTokenField']).controller('metadata
             "inputType": "text",
             "editable": true,
             "required": true,
+            "label": "Name",
             "placeholder": "fieldName",
             "renderingHints": {
                 "maxLength": 50,
@@ -321,6 +323,7 @@ angular.module('org.ekstep.metadataform', ['ngTokenField']).controller('metadata
         {
             "code": "description",
             "name": "Description",
+            "label": "Description",
             "description": "Description of the content",
             "inputType": "text",
             "editable": true,
@@ -335,6 +338,7 @@ angular.module('org.ekstep.metadataform', ['ngTokenField']).controller('metadata
             "name": "Keywords",
             "description": "Keywords for the content",
             "inputType": "autoComplete",
+            "label": "keyword",
             "editable": true,
             "required": false,
             "placeholder": "Keywords",
@@ -438,6 +442,74 @@ angular.module('org.ekstep.metadataform', ['ngTokenField']).controller('metadata
             "index": 3,
             "apiUrl": "/keywors"
         }
+    ];
+
+    $scope.dynamicLayoutConfigurations = [{
+            "code": "concetpselector",
+            "name": "conceptselector",
+            "description": "Choose a concept",
+            "inputType": "concetpselector",
+            "label": "Concept",
+            "editable": true,
+            "required": true,
+            "placeholder": "Edit App Icon",
+            "renderingHints": {
+                "visible": true
+            },
+        }, {
+            "code": "number",
+            "name": "Number",
+            "description": "Title of the content",
+            "inputType": "number",
+            "label": "Number",
+            "editable": true,
+            "required": true,
+            "placeholder": "Number",
+            "renderingHints": {
+                "maxLength": 50,
+                "visible": true
+            },
+            "index": 1
+        }, {
+            "code": "description",
+            "name": "Description",
+            "description": "Description of the content",
+            "inputType": "text",
+            "label": "Description",
+            "editable": true,
+            "required": true,
+            "placeholder": "Description",
+            "renderingHints": {
+                "visible": true
+            }
+        },
+        {
+            "code": "Course",
+            "name": "Course",
+            "description": "Description of the content",
+            "inputType": "select",
+            "label": "Course",
+            "editable": true,
+            "required": true,
+            "placeholder": "Description",
+            "renderingHints": {
+                "visible": true
+            }
+        },
+        {
+            "code": "year",
+            "name": "Year",
+            "description": "Description of the content",
+            "inputType": "",
+            "label": "Year",
+            "editable": true,
+            "required": true,
+            "placeholder": "Description",
+            "renderingHints": {
+                "visible": true
+            }
+        }
+
     ]
 
 }]);

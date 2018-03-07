@@ -1,8 +1,9 @@
 /**
  * @description
  */
+var formApp = angular.module('org.ekstep.metadataform', ['ngTokenField']);
 
-angular.module('org.ekstep.metadataform', ['ngTokenField']).directive('keywords', function() {
+formApp.directive('keywords', function() {
     var keywordController = ['$scope', '$controller', function($scope, $controller) {
         $scope.loadKeywords = function($query) {
             if ($query.length >= 3) {
@@ -17,7 +18,7 @@ angular.module('org.ekstep.metadataform', ['ngTokenField']).directive('keywords'
     }]
     return {
         restrict: "EA",
-        templateUrl: ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", "editor/directives/keywordTemplate.html"),
+        templateUrl: ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", "editor/directives/keywords/template.html"),
         controller: keywordController
 
     };

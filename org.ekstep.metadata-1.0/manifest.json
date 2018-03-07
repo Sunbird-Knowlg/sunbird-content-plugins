@@ -10,7 +10,9 @@
         "dependencies": [
             { "plugin": "org.ekstep.assetbrowser", "ver": "1.1", "type": "plugin" },
             { "plugin": "org.ekstep.conceptselector", "ver": "1.0", "type": "plugin" },
-            { "type": "js", "src": "editor/directives/keyword.js" }
+            { "type": "js", "src": "editor/directives/keywords/keyword.js" },
+            { "type": "js", "src": "editor/directives/conceptselector/conceptselector.js" },
+            { "type": "js", "src": "editor/directives/year/yearDirective.js" }
         ]
     }
 }
