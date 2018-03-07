@@ -447,11 +447,11 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                             ctrl.conceptSelector();
                             ctrl.dropdownAndCardsConfig();
                         }, 0);
-                        searchBody.request.filters.contentType  = ctrl.meta.lessonTypes
+                        searchBody.request.filters.contentType = ctrl.meta.lessonTypes
                         searchService.search(searchBody, function(err, res) {
-                         if (err) {
-                                 ctrl.err = "Oops! Something went wrong. Please try again later.";
-                                } else {
+                            if (err) {
+                                ctrl.err = "Oops! Something went wrong. Please try again later.";
+                            } else {
                                 ctrl.res = { count: 0, content: [] };
                                 ctrl.res.content = res.data.result.content;
                                 ctrl.searchConcepts(ctrl.res.content, function() {
@@ -464,8 +464,8 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                                         $scope.isLoading = false;
                                     }, 200);
                                 });
-                                }
-                            });
+                            }
+                        });
                     }
                 });
             }
