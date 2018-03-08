@@ -33,10 +33,13 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
         var instance = this;
         ecEditor.addEventListener('editor:form:cancel', this.cancelsAction, this);
         ecEditor.addEventListener('editor:form:success', this.successAction, this);
-        this.getConfigurations(function(error, result) {
-            instance.resourceBundle = result.resourceBundle;
-            instance.framework = result.framework;
-            instance.config = result.config;
+        this.getConfigurations(function(error, response) {
+            instance.resourceBundle = response.resourceBundle;
+            instance.framework = response.framework.data.result.framework;
+            instance.config = response.config;
+            instance.config = dynamicLayoutConfigurations; // Remove this line
+            instance.form = instance.mapObject(instance.config, instance.framework.categories);
+            instance.renderForm(instance.form, instance.resourceBundle);
         });
     },
 
@@ -91,18 +94,30 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
                 // get the resource bundle data
                 callback(undefined, {})
             }
-        }, function(error, results) {
+        }, function(error, response) {
             // results is now equals to: {config: {}, framework: {}, resourceBundle:{}}
             instance.loadTemplate("template");
-            callback(err, results);
+            console.log("result", response);
+            callback(err, response);
         });
     },
 
     /**
-     * @description - Which is used to merge the configurations.
+     * @param {Object} destination
+     * @param {Object} source
+     * @description - Which is used to merge the framework object into configurations
+     *              - By mapping code attribute
      */
-    mergeConfigurations: function(object, source) {
-        var form = {}
+    mapObject: function(destination, source) {
+        destination.forEach(function(dest) {
+            source.forEach(function(src) {
+                if (dest.code === src.code) {
+                    dest.range = src.terms;
+                }
+            })
+        });
+        return destination;
+
     },
 });
 //# sourceURL=sunbirdmetadataplugin.js;

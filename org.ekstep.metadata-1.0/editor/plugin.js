@@ -46,6 +46,10 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
      */
     reset: function() {},
 
+    renderForm: function(form, resourceBundle) {
+        this.form = form;
+        this.resourceBundle = resourceBundle;
+    },
 
     /**
      * @description
@@ -71,12 +75,13 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
      * @description - Which loads the template 
      */
     loadTemplate: function(templateName) {
-
         var templatePath = ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", `editor/templates/${templateName}.html`);
         var controllerPath = ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", "editor/controller.js");
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath);
 
     }
+
+
 
 });
 //# sourceURL=metadataPlugin.js

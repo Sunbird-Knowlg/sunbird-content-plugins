@@ -73,7 +73,7 @@
                                             <input id="ecm-name " placeholder={{dynamicField.placeholder}} name="name " type="{{dynamicField.inputType}}" maxlength="100 " ng-required="{{dynamicField.required}}">
                                         </div>
                                     </div>
-                                    <div class="field " ng-if="dynamicField.inputType=='select' " ng-class="{error: $ctrl.submitted && contentMetaForm.cOne.$error.required} " ng-required="{{dynamicField.required}}">
+                                    <div class="field " ng-if="dynamicField.inputType=='select' && dynamicField.code!='year' " ng-class="{error: $ctrl.submitted && contentMetaForm.cOne.$error.required} " ng-required="{{dynamicField.required}}">
                                         <label>{{dynamicField.label}}</label>
                                         <select id="contentmeta-category-1 " name="cOne " class="ui search dropdown placeholder-padding contentmeta-category-1 " ng-model="$ctrl.contentMeta[category_1.code] " ng-change=" " required>
                                             <option value=" ">Select</option>
@@ -100,9 +100,9 @@
         <div class=" actions ">
             <div class="twelve wide column right aligned ">
                 <div class="ui buttons ">
-                    <button id="closePopUp " class="ui orange button " type="button " ng-click="ecEditor.dispatchEvent( 'editor:form:cancel') ">Cancel</button>
+                    <button id="closePopUp " class="ui orange button " type="button " ng-click="ecEditor.dispatchEvent('editor:form:cancel') ">Cancel</button>
                     <div class="or "></div>
-                    <button class="ui blue button " type="button " ng-click="ecEditor.dispatchEvent( 'editor:form:success', metaForm.$valid) ">Save</button>
+                    <button class="ui blue button " type="button " ng-click="ecEditor.dispatchEvent('editor:form:success', metaForm.$valid) ">Save</button>
                 </div>
             </div>
         </div>
