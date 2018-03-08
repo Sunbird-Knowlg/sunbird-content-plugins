@@ -284,11 +284,15 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         return category;
     }
 
+
+    /**
+     * @description Which is used to get fixedLayout section and Dynamic section layout fields
+     */
     ctrl.getFieldLayoutConfigurations = function() {
         const FIXED_FIELDS_CODE = ["name", "description", "keyword", "image"];
         var fixedLayout = [];
         var dynamicLayout = [];
-        var johns = _.map(configurations, function(field) {
+        _.map(configurations, function(field) {
             if (_.includes(FIXED_FIELDS_CODE, field.code)) {
                 fixedLayout.push(field)
             } else {
@@ -299,12 +303,41 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         return { fixedLayout: fixedLayout, dynamicLayout: dynamicLayout };
     };
 
-    (function() {
+
+    /** 
+     * @description - Which is used to invoke an action on click of the submit button.
+     * @fires       - 'editor:form:success'
+     */
+    $scope.successFn = function() {
+        var successCB = function(err, res) {
+            console.log("Success yae")
+        }
+        ecEditor.dispatchEvent('editor:form:success', {
+            isValid: $scope.metaForm.$valid,
+            formData: {}
+
+        }, successCB())
+    };
+
+    /** 
+     * @description - Which is used take a action on click of the cancel button.
+     * @fires       - 'editor:form:cancel'
+     */
+    $scope.cancelFn = function() {
+        ecEditor.dispatchEvent('editor:form:cancel', {}, $scope.closeThisDialog())
+    }
+
+    /** 
+     * @description - Initialization of the controller
+     *              - Which partions the fixedLayout and dynamic layout section fields
+     */
+    $scope.init = function() {
         var layoutConfigurations = ctrl.getFieldLayoutConfigurations();
         $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
         $scope.dynamicLayoutConfigurations = _.sortBy(_.uniqBy(layoutConfigurations.dynamicLayout, 'code'), 'index');
 
-    }());
+    };
+    $scope.init()
 }]);
 
 //# sourceURL=metadataController.js

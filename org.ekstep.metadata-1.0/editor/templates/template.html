@@ -96,9 +96,9 @@
                 <div class="actions ">
                     <div class="twelve wide column right aligned ">
                         <div class="ui buttons ">
-                            <button id="closePopUp " class="ui orange button " type="button " ng-click="$ctrl.dispatchEvent( 'editor:form:cancel') ">Cancel</button>
+                            <button id="closePopUp " class="ui orange button " type="button " ng-click="cancelFn()">Cancel</button>
                             <div class="or "></div>
-                            <button class="ui blue button " type="button " ng-click="$ctrl.dispatchEvent( 'editor:form:success', {isValid:metaForm, form:{}}) ">Save</button>
+                            <button class="ui blue button " type="button " ng-click="successFn()">Save</button>
                         </div>
                     </div>
                 </div>

@@ -27,6 +27,11 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
     config: {},
 
     /**
+     * 
+     */
+    actionMap: { 'save': "org.ekstep.contenteditor:save:meta", review: "" },
+
+    /**
      * @description - Initialization of the plugin.
      */
     initialize: function() {
@@ -60,19 +65,29 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
      */
     successAction: function(event, data, successCB) {
         if (data.isValid) {
-
+            let event = this.actionMap[this.config.action];
+            ecEditor.dispatchEvent(event, {
+                savingPopup: false,
+                successPopup: false,
+                failPopup: false,
+                contentMeta: data.formData,
+                callback: function(err, res) {
+                    if (res && res.data && res.data.responseCode == "OK") {
+                        successCB && successCB(undefined, res);
+                    } else {
+                        successCB && successCB(err, undefined);
+                    }
+                }
+            })
+        } else {
+            throw 'Invalid form data'
         }
     },
-
     /**
      * @description
      */
     cancelAction: function(event, data, cancelCB) {
-        console.log("fail")
-            // if (this.validated()) {
-            //     // Invoke related Action
-            //     cancelCB && cancelCB()
-            // }
+        cancelCB && cancelCB()
     },
 
     /**
