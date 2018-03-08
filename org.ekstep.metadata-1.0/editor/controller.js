@@ -74,6 +74,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
             }
         });
     };
+    ctrl.dispatchEvent = function(event, data) {
+        ecEditor.dispatchEvent(event, data)
+    };
 
     ctrl.getUpdatedMetadata = function(originalMetadata, currentMetadata) {
         var metadata = {};
@@ -304,4 +307,4 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     }());
 }]);
 
-//# sourceURL=metadataController.jsss
+//# sourceURL=metadataController.js

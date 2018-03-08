@@ -31,8 +31,9 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
      */
     initialize: function() {
         var instance = this;
-        ecEditor.addEventListener('editor:form:cancel', this.cancelsAction, this);
+        ecEditor.addEventListener('editor:form:cancel', this.cancelAction, this);
         ecEditor.addEventListener('editor:form:success', this.successAction, this);
+        ecEditor.addEventListener('editor:form:change', this.onConfigChange, this);
         ecEditor.addEventListener('org.ekstep.editcontentmeta:showpopup', this.showForm, this);
         this.getConfigurations(function(error, response) {
             instance.resourceBundle = response.resourceBundle;
@@ -48,28 +49,31 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
      * @description
      */
     onConfigChange: function(event, key, value) {
-        var form = this.applyDependencyRules(key, value);
-        this.updateForm(form, this.resourceBundle);
+        console.log("Form change")
+            // var form = this.applyDependencyRules(key, value);
+            // this.updateForm(form, this.resourceBundle);
     },
 
     /**
      * @description
      */
     successAction: function(event, data, successCB) {
-        if (this.validated()) {
-            // invokeRelated Action
-            successCB && successCB();
-        }
+        console.log("suceess")
+            // if (this.validated()) {
+            //     // invokeRelated Action
+            //     successCB && successCB();
+            // }
     },
 
     /**
      * @description
      */
     cancelAction: function(event, data, cancelCB) {
-        if (this.validated()) {
-            // Invoke related Action
-            cancelCB && cancelCB()
-        }
+        console.log("fail")
+            // if (this.validated()) {
+            //     // Invoke related Action
+            //     cancelCB && cancelCB()
+            // }
     },
 
     /**

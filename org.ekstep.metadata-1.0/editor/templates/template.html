@@ -26,13 +26,13 @@
             </div>
         </div>
         <div class="content">
-            <form class="ui form" id="content-meta-form" novalidate name="metaForm" ng-init="initDropdown()">
+            <form class="ui form" id="content-meta-form" name="metaForm" novalidate ng-init="initDropdown()">
                 <div class="ui grid">
                     <div class="row">
                         <div class="two wide field">
                             <div class="field" ng-class=" {'error': $ctrl.submitted && !($ctrl.contentMeta.appIcon)}">
                                 <label><i class="camera icon "></i></label>
-                                <div id="field-app-icon" class="app-icon content-icon " ng-class="{ 'required-error': $ctrl.submitted && !($ctrl.contentMeta.appIcon)} " ng-mouseenter="$ctrl.appIconHover=true" ng-mouseleave="$ctrl.appIconHover=false " ng-click="$ctrl.launchImageBrowser()">
+                                <div id="field-app-icon" class="app-icon content-icon " ng-mouseenter="$ctrl.appIconHover=true" ng-mouseleave="$ctrl.appIconHover=false " ng-click="$ctrl.launchImageBrowser()">
                                     <div class="app-icon-overlay">
                                         <p class="app-icon-overlay-message "></p>
                                     </div>
@@ -42,20 +42,20 @@
                         </div>
                         <div class="ten wide field">
                             <div ng-repeat="fixedField in fixedLayoutConfigurations">
-                                <div class="field" ng-show="(fixedField.code =='name' && fixedField.renderingHints.visible)" ng-class="{ 'error': ($ctrl.submitted && metaForm.name.$error.required)}">
+                                <div id="{{fixedField.code}}" class="field" name="{{fixedField.code}}" ng-show="(fixedField.code =='name' && fixedField.renderingHints.visible)">
                                     <label>{{fixedField.label}}</label>
                                     <div class="ui input ">
-                                        <input id="ecm-name " placeholder={{field.placeholder}} ng-model="$ctrl.contentMeta.name " name="name " type="text" maxlength="100" ng-required="{{fixedField.required}}">
+                                        <input id="{{fixedField.code}}" placeholder={{field.placeholder}} ng-model="$ctrl.contentMeta.name" type="text" maxlength="{{fixedField.renderingHints.maxlength}}" ng-required="{{fixedField.required}}">
                                     </div>
                                 </div>
-                                <div class="field" ng-show="(fixedField.code =='description' && fixedField.renderingHints.visible)" ng-class=" " ng-required="{{fixedField.required}}">
+                                <div id="{{fixedField.code}}" class="field" name="{{fixedField.code}}" ng-show="(fixedField.code =='description' && fixedField.renderingHints.visible)" ng-class=" " ng-required="{{fixedField.required}}">
                                     <label>{{fixedField.label}}</label>
                                     <div class=" ui input ">
-                                        <textarea id="ecm-description " placeholder={{field.placeholde}} ng-model="$ctrl.contentMeta.description " name="description " rows="2 " required ng-click="generateTelemetry({type: 'click', subtype:
-                                                'input', target: 'description'}) "></textarea>
+                                        <textarea id="{{fixedField.code}}" placeholder={{field.placeholde}} ng-model="$ctrl.contentMeta.description " rows="{{fixedField.renderingHints.rows}}"></textarea>
                                     </div>
                                 </div>
-                                <div class="field" ng-show="(fixedField.code =='keyword' && fixedField.renderingHints.visible)" ng-class='' ng-required="{{fixedField.required}}">
+                                <div id="{{fixedField.code}}" class="field" name="{{fixedField.code}}" ng-show="(fixedField.code =='keyword' && fixedField.renderingHints.visible)" ng-required="{{fixedField.required}}">
+                                    <label>{{fixedField.label}}</label>
                                     <keywords></keywords>
                                 </div>
                             </div>
@@ -67,24 +67,24 @@
                         <div class="ten wide field">
                             <div class="ui grid">
                                 <div class="six wide field" ng-repeat="dynamicField in dynamicLayoutConfigurations">
-                                    <div class="field" ng-if="dynamicField.inputType=='text' || dynamicField.inputType=='number'" ng-required=" {{dynamicField.required}} ">
+                                    <div id="{{dynamicField.code}}" class="field" name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='text' || dynamicField.inputType=='number'" ng-required=" {{dynamicField.required}} ">
                                         <label>{{dynamicField.label}}</label>
-                                        <div class=" ui input ">
-                                            <input id="ecm-name " placeholder={{dynamicField.placeholder}} name="name " type="{{dynamicField.inputType}} " maxlength="100 " ng-required="{{dynamicField.required}} ">
+                                        <div class="ui input ">
+                                            <input id="{{dynamicField.code}}" placeholder={{dynamicField.placeholder}} name="name " type="{{dynamicField.inputType}} " maxlength="100 " ng-required="{{dynamicField.required}} ">
                                         </div>
                                     </div>
-                                    <div class="field " ng-if="dynamicField.inputType=='select' && dynamicField.code!='year' " ng-required="{{dynamicField.required}} ">
+                                    <div id="{{dynamicField.code}}" class="field" name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='select' && dynamicField.code!='year' " ng-required="{{dynamicField.required}} ">
                                         <label>{{dynamicField.label}}</label>
-                                        <select id={{dynamicField.code}} name={{dynamicField.code}} class="ui search dropdown placeholder-padding contentmeta-category-1 " ng-model="$ctrl.contentMeta[dynamicField.code]" ng-change="ecEditor.dispatchEvent('editor:form:change', {field:dynamicField,value:$ctrl.contentMeta[dynamicField.code]}) ">
+                                        <select id="{{dynamicField.code}}" name={{dynamicField.code}} class="ui search dropdown placeholder-padding contentmeta-category-1 " ng-model="$ctrl.contentMeta[dynamicField.code] " ng-change="$ctrl.dispatchEvent( 'editor:form:change', {field:dynamicField,value:$ctrl.contentMeta[dynamicField.code]}) ">
                                             <option value=" ">Select</option>
                                             <option data-value="{{category.name}} " ng-repeat="category in dynamicField.range ">{{category.name}}</option>
                                         </select>
                                     </div>
-                                    <div class="field " ng-if="dynamicField.inputType=='concetpselector' " ng-required=" {{dynamicField.required}}">
+                                    <div id="{{dynamicField.code}}" class="field" name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='concetpselector' " ng-required=" {{dynamicField.required}} ">
                                         <label>{{dynamicField.label}}</label>
                                         <concetpselector></concetpselector>
                                     </div>
-                                    <div class=" field " ng-if="dynamicField.code=='year' " ng-required=" {{dynamicField.required}} ">
+                                    <div id="{{dynamicField.code}}" class="field" name="{{dynamicField.code}}" ng-if="dynamicField.code=='year' " ng-required=" {{dynamicField.required}} ">
                                         <label>{{dynamicField.label}}</label>
                                         <year config="dynamicField ">
                                         </year>
@@ -100,9 +100,9 @@
         <div class=" actions ">
             <div class="twelve wide column right aligned ">
                 <div class="ui buttons ">
-                    <button id="closePopUp " class="ui orange button " type="button " ng-click="ecEditor.dispatchEvent( 'editor:form:cancel') ">Cancel</button>
+                    <button id="closePopUp " class="ui orange button " type="button " ng-click="$ctrl.dispatchEvent('editor:form:cancel') ">Cancel</button>
                     <div class="or "></div>
-                    <button class="ui blue button " type="button " ng-click="ecEditor.dispatchEvent( 'editor:form:success', metaForm.$valid) ">Save</button>
+                    <button class="ui blue button " type="button " ng-click="$ctrl.dispatchEvent('editor:form:success', metaform.$valid) ">Save</button>
                 </div>
             </div>
         </div>
