@@ -136,7 +136,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                 }
             });
 
-            if(activeNodeConcepts.length && !_.isEqual(activeNodeConcepts.sort(), $scope.metaData.concepts.sort())) {
+            if((activeNodeConcepts.length && $scope.metaData.concepts) && !_.isEqual(activeNodeConcepts.sort(), $scope.metaData.concepts.sort())) {
                 $scope.metaData.concepts = activeNodeConcepts;
                 $scope.searchLessons();
             } else if($scope.responseData) {
