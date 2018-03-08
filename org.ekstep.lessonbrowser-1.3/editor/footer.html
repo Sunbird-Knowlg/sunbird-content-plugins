@@ -3,8 +3,7 @@
     <div class=" ui clearing segment">
         <div class="ui grid">
             <div class="four wide column">
-                <button ng-disabled="mainTemplate == 'facetsItemView' || !ctrl.facetsResponse" class="ui left floated tiny button btnAttribute blueColor"
-                    ng-click="backToPrevious()">
+                <button ng-disabled="mainTemplate == 'facetsItemView' ? (true) : (mainTemplate == 'cardDetailsView' ? (false) : ((mainTemplate == 'selectedResult' && !$ctrl.facetsResponse.result.response.sections.length) ? (true) : (false))) " class="ui left floated tiny button btnAttribute blueColor" ng-click="backToPrevious()">
                     BACK </button>
             </div>
             <div class="four wide column selectedItems">
@@ -14,8 +13,7 @@
                 </span>
             </div>
             <div class="four wide column">
-                <button class="ui right floated primary tiny button btnAttribute" ng-click="returnSelectedLessons(mainTemplate, selectedLessons.list)"
-                    ng-disabled="!lessonSelection.length"> PROCEED </button>
+                <button class="ui right floated primary tiny button btnAttribute" ng-click="returnSelectedLessons(mainTemplate, selectedLessons.list)" ng-disabled="!lessonSelection.length"> PROCEED </button>
             </div>
         </div>
     </div>

@@ -60,9 +60,6 @@
 .padding-top-15 {
     padding-top: 15px;
 }
-.font-size-11 {
-    font-size: 11px;
-}
 .card-list .ui.cards>.card {
     box-shadow: 0 2px 4px 0 rgba(164, 164, 164, 0.5);
     border: solid 1px #dedede;
@@ -71,6 +68,7 @@
     margin-right: 15px;
     margin-bottom: 6px;
     margin-top: 0;
+    padding: 10px;
 }
 .card-list .ui.cards>.card:first-child {
     margin-top: 10px;
@@ -82,6 +80,9 @@
     width: 50px;
     height: 50px;
 }
+.card-list .ui.cards>.card>.content {
+    padding: 0 0 5px 0;
+}
 .card-list .ui.cards>.card>.content>.header:not(.ui) {
     margin-top: 0;
     font-size: 16px;
@@ -90,13 +91,14 @@
 .card-list .ui.cards>.card>.content>.header {
     font-family: inherit;
     color: #000000;
+    display: table;
 }
 .header.block-with-text {
     max-height: 2.4em;
     text-align: initial;
     word-break: break-all;
 }
-.content .text-block-ellipsis {
+.text-block-ellipsis {
     display: -webkit-box !important;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -104,9 +106,7 @@
     text-overflow: ellipsis;
 }
 .extra-content {
-    padding-left: 8px;
-    padding-right: 8px;
-    padding-bottom: 4px;
+    padding-top: 5px;
 }
 .extra-content p {
     margin-bottom: 0;
@@ -117,4 +117,15 @@
 }
 .card-list .ui.cards>.card .content img {
     border-radius: 2px;
+}
+.ui.floated.image {
+    margin-bottom: 0;
+}
+.title-block {
+    height: 50px;
+    display: table-cell;
+    vertical-align: middle;
+}
+.font-size-12 {
+    font-size: 12px;
 }
