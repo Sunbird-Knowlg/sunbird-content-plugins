@@ -63,7 +63,7 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
     /**
      * @description
      */
-    successAction: function(event, data, successCB) {
+    successAction: function(event, data) {
         if (data.isValid) {
             let event = this.actionMap[this.config.action];
             ecEditor.dispatchEvent(event, {
@@ -73,9 +73,9 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
                 contentMeta: data.formData,
                 callback: function(err, res) {
                     if (res && res.data && res.data.responseCode == "OK") {
-                        successCB && successCB(undefined, res);
+                        data.callback && data.callback(undefined, res);
                     } else {
-                        successCB && successCB(err, undefined);
+                        data.callback && data.callback(err, undefined);
                     }
                 }
             })
@@ -86,8 +86,8 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
     /**
      * @description
      */
-    cancelAction: function(event, data, cancelCB) {
-        cancelCB && cancelCB()
+    cancelAction: function(event, data) {
+        data.callback && data.callback()
     },
 
     /**

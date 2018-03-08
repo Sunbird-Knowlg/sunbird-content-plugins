@@ -310,13 +310,17 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      */
     $scope.successFn = function() {
         var successCB = function(err, res) {
-            console.log("Success yae")
+            if (res) {
+                console.info("Data is saved success fully.", res)
+            } else {
+                console.error("Fails to save the data", err)
+            }
         }
         ecEditor.dispatchEvent('editor:form:success', {
             isValid: $scope.metaForm.$valid,
-            formData: {}
-
-        }, successCB())
+            formData: {},
+            callback: successCB
+        })
     };
 
     /** 
@@ -324,7 +328,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      * @fires       - 'editor:form:cancel'
      */
     $scope.cancelFn = function() {
-        ecEditor.dispatchEvent('editor:form:cancel', {}, $scope.closeThisDialog())
+        ecEditor.dispatchEvent('editor:form:cancel', { callback: $scope.closeThisDialog })
     }
 
     /** 

@@ -35,7 +35,9 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
      * @param {Object} fields
      * @description - Which is used to validate the fields.
      */
-    validate: function(fields) {},
+    validate: function(fields) {
+
+    },
 
 
     /**
@@ -73,7 +75,6 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
         var templatePath = ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", `editor/templates/${templateName}.html`);
         var controllerPath = ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", "editor/controller.js");
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath);
-
     },
 
     /**
