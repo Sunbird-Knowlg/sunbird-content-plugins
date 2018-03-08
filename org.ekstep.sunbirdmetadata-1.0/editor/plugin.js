@@ -33,11 +33,12 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
         var instance = this;
         ecEditor.addEventListener('editor:form:cancel', this.cancelsAction, this);
         ecEditor.addEventListener('editor:form:success', this.successAction, this);
+        ecEditor.addEventListener('org.ekstep.editcontentmeta:showpopup', this.showForm, this);
         this.getConfigurations(function(error, response) {
             instance.resourceBundle = response.resourceBundle;
             instance.framework = response.framework.data.result.framework;
             instance.config = response.config;
-            instance.config = dynamicLayoutConfigurations; // Remove this line
+            instance.config = dyanamic; // Remove this line
             instance.form = instance.mapObject(instance.config, instance.framework.categories);
             instance.renderForm(instance.form, instance.resourceBundle);
         });
@@ -119,5 +120,9 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
         return destination;
 
     },
+
+    getFormFields: function() {
+        return this.form;
+    }
 });
 //# sourceURL=sunbirdmetadataplugin.js;

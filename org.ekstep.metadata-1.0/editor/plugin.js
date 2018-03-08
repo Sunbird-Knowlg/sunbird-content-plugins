@@ -10,9 +10,7 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
      *@description - Initialization of the metdata form plugin.
      *@event 'org.ekstep.editcontentmeta:showpopup'
      */
-    initialize: function() {
-        ecEditor.addEventListener('org.ekstep.editcontentmeta:showpopup', this.showForm, this);
-    },
+    initialize: function() {},
 
     /**
      * @param  {Object} fields
@@ -46,10 +44,7 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
      */
     reset: function() {},
 
-    renderForm: function(form, resourceBundle) {
-        this.form = form;
-        this.resourceBundle = resourceBundle;
-    },
+    renderForm: function(form, resourceBundle) {},
 
     /**
      * @description
@@ -62,7 +57,7 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
             controllerAs: '$ctrl',
             resolve: {
                 'configurations': function() {
-                    return instance.form;
+                    return instance.getFormFields();
                 }
             },
             width: 900,
@@ -79,7 +74,12 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
         var controllerPath = ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", "editor/controller.js");
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath);
 
-    }
+    },
+
+    /**
+     * @description
+     */
+    getFormFields: function( /*Child class should return the form field data*/ ) {}
 
 
 

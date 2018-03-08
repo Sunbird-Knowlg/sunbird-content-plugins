@@ -1,6 +1,7 @@
 'use strict';
 
 angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scope', '$q', '$rootScope', '$http', '$timeout', 'configurations', function($scope, $q, $rootScope, $http, $timeout, configurations) {
+
     var ctrl = this;
 
     var data = configurations || {};
@@ -280,12 +281,27 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         return category;
     }
 
+    ctrl.getFieldLayoutConfigurations = function() {
+        const FIXED_FIELDS_CODE = ["name", "description", "keyword", "image"];
+        var fixedLayout = [];
+        var dynamicLayout = [];
+        var johns = _.map(configurations, function(field) {
+            if (_.includes(FIXED_FIELDS_CODE, field.code)) {
+                fixedLayout.push(field)
+            } else {
+                dynamicLayout.push(field);
+            }
+
+        });
+        return { fixedLayout: fixedLayout, dynamicLayout: dynamicLayout };
+    };
+
     (function() {
-        console.log("Metadata contorller is initialized");
-        $scope.fixedLayoutConfigurations = fixedLayoutConfigurations;
-        $scope.dynamicLayoutConfigurations = dynamicLayoutConfigurations;
+        var layoutConfigurations = ctrl.getFieldLayoutConfigurations();
+        $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
+        $scope.dynamicLayoutConfigurations = _.sortBy(_.uniqBy(layoutConfigurations.dynamicLayout, 'code'), 'index');
 
     }());
 }]);
 
-//# sourceURL=metadataController.js
+//# sourceURL=metadataController.jsss

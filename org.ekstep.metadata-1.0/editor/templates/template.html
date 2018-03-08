@@ -67,26 +67,26 @@
                         <div class="ten wide field">
                             <div class="ui grid">
                                 <div class="six wide field" ng-repeat="dynamicField in dynamicLayoutConfigurations">
-                                    <div class="field" ng-if="dynamicField.inputType=='text' || dynamicField.inputType=='number'" ng-class="{error: $ctrl.submitted && contentMetaForm.cOne.$error.required}">
+                                    <div class="field" ng-if="dynamicField.inputType=='text' || dynamicField.inputType=='number'" ng-required=" {{dynamicField.required}} ">
                                         <label>{{dynamicField.label}}</label>
-                                        <div class="ui input">
-                                            <input id="ecm-name " placeholder={{dynamicField.placeholder}} name="name " type="{{dynamicField.inputType}}" maxlength="100 " ng-required="{{dynamicField.required}}">
+                                        <div class=" ui input ">
+                                            <input id="ecm-name " placeholder={{dynamicField.placeholder}} name="name " type="{{dynamicField.inputType}} " maxlength="100 " ng-required="{{dynamicField.required}} ">
                                         </div>
                                     </div>
-                                    <div class="field " ng-if="dynamicField.inputType=='select' && dynamicField.code!='year' " ng-class="{error: $ctrl.submitted && contentMetaForm.cOne.$error.required} " ng-required="{{dynamicField.required}}">
+                                    <div class="field " ng-if="dynamicField.inputType=='select' && dynamicField.code!='year' " ng-required="{{dynamicField.required}} ">
                                         <label>{{dynamicField.label}}</label>
-                                        <select id="contentmeta-category-1 " name="cOne " class="ui search dropdown placeholder-padding contentmeta-category-1 " ng-model="$ctrl.contentMeta[category_1.code] " ng-change=" " required>
+                                        <select id={{dynamicField.code}} name={{dynamicField.code}} class="ui search dropdown placeholder-padding contentmeta-category-1 " ng-model="$ctrl.contentMeta[dynamicField.code]" ng-change="ecEditor.dispatchEvent('editor:form:change', {field:dynamicField,value:$ctrl.contentMeta[dynamicField.code]}) ">
                                             <option value=" ">Select</option>
-                                            <option data-value="{{category.name}} " ng-repeat="category in category_1.terms ">{{category.name}}</option>
+                                            <option data-value="{{category.name}} " ng-repeat="category in dynamicField.range ">{{category.name}}</option>
                                         </select>
                                     </div>
-                                    <div class="field" ng-if="dynamicField.inputType =='concetpselector' " ng-required=" {{dynamicField.required}}">
+                                    <div class="field " ng-if="dynamicField.inputType=='concetpselector' " ng-required=" {{dynamicField.required}}">
                                         <label>{{dynamicField.label}}</label>
                                         <concetpselector></concetpselector>
                                     </div>
                                     <div class=" field " ng-if="dynamicField.code=='year' " ng-required=" {{dynamicField.required}} ">
                                         <label>{{dynamicField.label}}</label>
-                                        <year config=" dynamicField ">
+                                        <year config="dynamicField ">
                                         </year>
                                     </div>
                                 </div>
@@ -100,9 +100,9 @@
         <div class=" actions ">
             <div class="twelve wide column right aligned ">
                 <div class="ui buttons ">
-                    <button id="closePopUp " class="ui orange button " type="button " ng-click="ecEditor.dispatchEvent('editor:form:cancel') ">Cancel</button>
+                    <button id="closePopUp " class="ui orange button " type="button " ng-click="ecEditor.dispatchEvent( 'editor:form:cancel') ">Cancel</button>
                     <div class="or "></div>
-                    <button class="ui blue button " type="button " ng-click="ecEditor.dispatchEvent('editor:form:success', metaForm.$valid) ">Save</button>
+                    <button class="ui blue button " type="button " ng-click="ecEditor.dispatchEvent( 'editor:form:success', metaForm.$valid) ">Save</button>
                 </div>
             </div>
         </div>
