@@ -157,7 +157,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
             $('#contentmeta-category-3').dropdown('set selected', ctrl.contentMeta[$scope.categoryModelList[3]]);
             $('#contentmeta-category-4').dropdown('set selected', ctrl.contentMeta[$scope.categoryModelList[4]]);
         }, 500);
-        if (ctrl.contentMeta[$scope.categoryModelList[2]]) $scope.categoryValues = ctrl.contentMeta[$scope.categoryModelList[2]].join().replace(/\b\w/g, l => l.toUpperCase());
+        //if (ctrl.contentMeta[$scope.categoryModelList[2]]) $scope.categoryValues = ctrl.contentMeta[$scope.categoryModelList[2]].join().replace(/\b\w/g, l => l.toUpperCase());
     }
 
     ctrl.cancel = function() {

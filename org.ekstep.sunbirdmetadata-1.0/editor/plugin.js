@@ -39,8 +39,9 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
             instance.resourceBundle = response.resourceBundle;
             instance.framework = response.framework.data.result.framework;
             instance.config = response.config;
-            instance.config = dyanamic; // Remove this line
-            instance.form = instance.mapObject(instance.config, instance.framework.categories);
+            instance.config = formConfigurations; // Remove this line
+            instance.form = instance.mapObject(instance.config.fields, instance.framework.categories);
+            instance.loadTemplate(instance.config.templateName);
             instance.renderForm(instance.form, instance.resourceBundle);
         });
     },
@@ -58,11 +59,9 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
      * @description
      */
     successAction: function(event, data, successCB) {
-        console.log("suceess")
-            // if (this.validated()) {
-            //     // invokeRelated Action
-            //     successCB && successCB();
-            // }
+        if (data.isValid) {
+
+        }
     },
 
     /**
@@ -101,7 +100,7 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
             }
         }, function(error, response) {
             // results is now equals to: {config: {}, framework: {}, resourceBundle:{}}
-            instance.loadTemplate("template");
+
             console.log("result", response);
             callback(err, response);
         });
