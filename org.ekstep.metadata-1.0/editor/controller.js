@@ -93,10 +93,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     $scope.initDropdown = function() {
         const DROPDOWN_INPUT_TYPE = 'select';
         $timeout(function() {
-            ecEditor.jQuery('.ui.dropdown').dropdown({
-                useLabels: false,
-                forceSelection: false
-            });
             _.forEach(configurations, function(key, value) {
                 if (key.inputType === DROPDOWN_INPUT_TYPE) {
                     $('#_select' + key.code).dropdown('set selected', ctrl.contentMeta[key.code]);
@@ -119,56 +115,61 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         })
     };
 
-    $scope.selectedTemplate = function(a, b) {
-        console.log("a", a);
-        console.log("b", b);
-    }
-
-    $scope.getAssociations = function(selectedCategory, categoryList) {
-        var associations = [];
-        if (_.isArray(selectedCategory)) {
-            _.forEach(selectedCategory, function(val) {
-                var categoryObj = _.find(categoryList, function(o) {
-                    return o.name.toUpperCase() === val.toUpperCase();
-                });
-                associations = _.concat(categoryObj.associations, associations);
-            });
-        } else if (selectedCategory) {
-            var categoryObj = _.find(categoryList, function(o) {
-                return o.name === selectedCategory;
-            });
-            associations = categoryObj.associations || [];
-        }
-        return associations;
-    }
-
+    /**
+     * 
+     * @param {String} event -
+     * @param {Object} object -
+     * @description
+     */
     $scope.onConfigChange = function(event, object) {
         $scope.updateForm(object);
     }
 
+    /**
+     * @param {Object} object  -
+     * @description - 
+     */
     $scope.updateForm = function(object) {
         if (object.field.range) {
-            var selectedItem = _.filter(object.field.range, { name: object.value });
-            selectedItem.length && selectedItem[0].associations && $scope.updateCategoryFields(selectedItem[0].associations, object.value);
+            $scope.getAssociations(object.value, object.field.range, function(associations) {
+                $scope.applayDependencyRules(object.field, associations);
+            });
         }
     };
 
-    $scope.updateCategoryFields = function(associations) {
-        if (associations.length) {
-            _.forEach(associations, function(key, value) {
-                setTimeout(function() {
-                    var val = getAssociationsByKey(key);
-                    $scope.$safeApply();
-                }, 0)
-            })
-        }
+    /** 
+     * @param {String | Array} keys    -
+     * @description - 
+     */
+    $scope.getAssociations = function(keys, range, callback) {
+        var values = _.filter(range, function(res) { return _.includes(keys, res.name); });
+        var associations = _.filter(values, function(res) {
+            if (res['associations']) return res
+        });
+        callback && callback(associations);
     }
 
+    /**
+     * 
+     * @param {Object} field 
+     * @param {Object} associations 
+     * @description
+     */
+    $scope.applayDependencyRules = function(field, associations) {
+        if (field.depends) {
+            //reset the depended field first
+            // Update the depended field with associated value
+            $('#_select' + field.depends).dropdown('restore default');
+            let code = $scope.getCodeByCategory(field.category);
+            ctrl.contentMeta[code] = _.map(associations, 'name');
+            $scope.$safeApply();
+        }
+    }
 
     /**
      * @description Which is used to get fixedLayout section and Dynamic section layout fields
      */
-    ctrl.getFieldLayoutConfigurations = function() {
+    ctrl.getLayoutConfigurations = function() {
         const FIXED_FIELDS_CODE = ["name", "description", "keyword", "image"];
         var fixedLayout = [];
         var dynamicLayout = [];
@@ -209,6 +210,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      * @fires       - 'editor:form:cancel'
      */
     $scope.cancelFn = function() {
+        // Note: Reset the all selected fields (If required)
         ecEditor.dispatchEvent('editor:form:cancel', { callback: $scope.closeThisDialog })
     }
 
@@ -218,11 +220,16 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      */
     $scope.init = function() {
         ecEditor.addEventListener('editor:form:change', $scope.onConfigChange, $scope);
-        var layoutConfigurations = ctrl.getFieldLayoutConfigurations();
+        var layoutConfigurations = ctrl.getLayoutConfigurations();
         $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
         $scope.dynamicLayoutConfigurations = _.sortBy(_.uniqBy(layoutConfigurations.dynamicLayout, 'code'), 'index');
 
     };
+
+    $scope.resetFields = function() {
+
+    }
+
     setTimeout(function() {
         $(".ui.dropdown").dropdown({
             useLabels: false
