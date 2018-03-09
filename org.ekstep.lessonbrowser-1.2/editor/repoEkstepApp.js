@@ -1,5 +1,5 @@
-angular.module('org.ekstep.contentprovider', [])
-.controller('contentproviderekstepController', ['$scope', function($scope) {
+angular.module('org.ekstep.contentprovider', ['luegg.directives'])
+.controller('contentproviderekstepController', ['$scope', '$timeout', function($scope, $timeout) {
     var ctrl = this;
 
 
@@ -21,6 +21,7 @@ angular.module('org.ekstep.contentprovider', [])
     $scope.loadmoreEnabledFlag = true;
     var loadedLessonCount = 0;
     $scope.isLoading = true;
+    $scope.glued = false;
 
     // Select all - Sidebar filters
     $scope.isAllSelected = {"lang": false, "grade": false, "lessonType": false, "domain": false};
@@ -41,6 +42,7 @@ angular.module('org.ekstep.contentprovider', [])
         $('.ui.multiple.selection.dropdown').dropdown({
             useLabels: false,
             forceSelection: false,
+            direction: 'downward',
             onChange: function() {
                 $scope.getFiltersValue();
             }
@@ -259,6 +261,14 @@ angular.module('org.ekstep.contentprovider', [])
         }
     };
 
+    // scroll down the filter element
+     $scope.moveDown = function(){
+        $timeout(function(){
+            $scope.glued = true;
+            $scope.$safeApply();
+            $scope.glued = false;
+        }, 800);
+    }
     // Toggle select all
     $scope.toggleAllFilter = function(selectionKey, metaKey, valueKey){
         var toggleStatus = !$scope.isAllSelected[selectionKey];

@@ -1,4 +1,4 @@
-angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
+angular.module('org.ekstep.lessonbrowserapp', ['angular-inview','luegg.directives'])
     .controller('lessonController', ['$scope', '$timeout', 'instance', 'callback', 'callerFilters', function($scope, $timeout, instance, callback, callerFilters) {
         var ctrl = this;
         ctrl.facetsResponse = undefined;
@@ -16,6 +16,8 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         //Response variable
         ctrl.res = { count: 0, content: [] };
         ctrl.err = null;
+        ctrl.concepts = '';
+        ctrl.searchRes = { count: 0, content: [] };
 
         $scope.mainTemplate = '';
         $scope.isLoading = true;
@@ -24,7 +26,8 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         $scope.lessonView = {};
         $scope.viewAllAvailableResponse = {};
         $scope.conceptsNames = {};
-        $scope.noResultFound = true;
+        $scope.noResultFound = false;
+        $scope.glued = false;
 
         // telemetry pluginId and plugin version
         ctrl.lessonbrowser = instance;
@@ -173,6 +176,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                 element: 'lessonBrowser_concepts',
                 selectedConcepts: [], // All composite keys except mediaType
                 callback: function(concepts) {
+                    ctrl.concepts = concepts.length + ' selected';
                     $scope.filterSelection.concept = [];
                     angular.forEach(concepts, function(concept) {
                         $scope.filterSelection.concept.push(concept.name);
@@ -280,12 +284,32 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         // Sidebar filters - Reset
         $scope.resetFilters = function() {
             ctrl.generateTelemetry({ type: 'click', subtype: 'reset', target: 'filter', targetid: 'button-filter-reset' });
+            $scope.isLoading = true;
             ecEditor.jQuery('#lessonBrowser_language').dropdown('restore defaults');
             ecEditor.jQuery('#lessonBrowser_grade').dropdown('restore defaults');
-            ecEditor.jQuery('#lessonBrowser_concepts').dropdown('restore defaults');
+            ecEditor.jQuery('#lessonBrowser_concepts').val('');
             ecEditor.jQuery('#lessonBrowser_subject').dropdown('restore defaults');
             ecEditor.jQuery('#lessonBrowser_lessonType').dropdown('set value', ctrl.meta.lessonTypes[0]);
             $scope.filterSelection.concept.splice(0, $scope.filterSelection.concept.length);
+            searchBody = {
+                "request": {
+                    "filters": {
+                        "objectType": ["Content"],
+                        "status": ["Live"]
+                    },
+                    "query":""
+                }
+            };
+            searchBody.request.filters.contentType  = ctrl.meta.lessonTypes
+                        ctrl.searchLessons(function(res) {
+                            $scope.isLoading = false;
+                            $timeout(function() {
+                                ctrl.toggleContent(ctrl.res.content);
+                                ctrl.conceptSelector();
+                                ctrl.dropdownAndCardsConfig();
+                            }, 0);
+                        });
+
         };
 
         // navigate to the previous page
@@ -321,6 +345,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
             ecEditor.jQuery('.ui.multiple.selection.dropdown').dropdown({
                 useLabels: false,
                 forceSelection: false,
+                direction: 'downward',
                 onChange: function() {
                     $scope.getFiltersValue();
                 }
@@ -347,7 +372,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         // search
         $scope.searchByKeyword = function() {
             ecEditor.jQuery('.searchLoader').addClass('active');
-            $scope.noResultFound = true;
             $scope.searchStatus = "start";
             var searchQuery = this.searchKeyword;
             ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'button-search' });
@@ -363,12 +387,16 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                 if (err) {
                     ctrl.searchErr = "Oops! Something went wrong. Please try again later.";
                 } else {
-                    ctrl.searchRes = { count: 0, content: [] };
                     $scope.searchStatus = "end";
                     ecEditor.jQuery('.searchLoader').removeClass('active');
                     ctrl.searchRes.count = res.data.result.count;
                     if (res.data.result.content) {
                         ctrl.searchRes.content = res.data.result.content;
+                        $scope.noResultFound = false;
+                    }
+                    else{
+                        ctrl.searchRes.content = [] ;
+                        $scope.noResultFound = true;
                     }
                     $scope.$safeApply();
                     /* highlight matches text */
@@ -428,22 +456,22 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
                         });
                         ctrl.searchConcepts(contents, function() {
                             $scope.$safeApply();
+                            $scope.isLoading = false;
                             $timeout(function() {
-                                ecEditor.jQuery('.special.cards .card').dimmer({
-                                    on: 'hover'
-                                });
-                                ctrl.toggleContent(ctrl.res.content);
-                                $scope.isLoading = false;
-                            }, 200);
+                                                ecEditor.jQuery('.special.cards .card').dimmer({
+                                                    on: 'hover'
+                                                });
+                                                ctrl.toggleContent(ctrl.res.content);
+                                            }, 200);
                         });
                     } else {
                         console.error("Unable to fetch response", err);
                         ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                            message: "Oops, Unable to fetch contents",
+                            message: "Oops, Content list for resources not available",
                             position: 'topCenter',
                             icon: 'fa fa-warning'
                         });
-                        searchBody.request.filters.contentType = ctrl.meta.lessonTypes
+                        searchBody.request.filters.contentType  = ctrl.meta.lessonTypes
                         ctrl.searchLessons(function(res) {
                             $scope.mainTemplate = 'selectedResult';
                             $scope.defaultResources = ctrl.res.content;
@@ -542,6 +570,21 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview'])
         // refresh searcher
         $scope.refreshSearch = function() {
             this.searchKeyword = '';
+        }
+
+        // scroll down the filter element
+        $scope.moveDown = function(){
+            $timeout(function(){
+                $scope.glued = true;
+                $scope.$safeApply();
+                $scope.glued = false;
+            }, 800);
+        }
+
+        // searcher value reset
+        $scope.resetSearch = function (){
+            ctrl.searchRes.content = [];
+            $scope.noResultFound = false;
         }
 
         // initial configuration
