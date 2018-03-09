@@ -392,3 +392,9 @@ li em {
     white-space: pre-wrap;
     text-align: center;
 }
+
+.conceptSelector {
+background-color: white !important;
+border: 1px solid #979797 !important;
+cursor:pointer;
+}
