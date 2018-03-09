@@ -43,7 +43,7 @@
 }
 
 .source-result-container {
-    max-height: 360px;
+    height: 360px;
     overflow-y: scroll;
     padding: 0 1em!important;
     margin: 0!important;
