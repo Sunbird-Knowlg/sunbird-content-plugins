@@ -118,7 +118,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     instance.concepts.push(value);
                 });
                 if (resp.data.result.count > limit) {
-                    offset = offset + resp.data.result.concepts.length;
+                    offset = resp.data.result.count - limit;
                     limit = limit + limit;
                     instance.getConcept(offset, limit, instance, callback);
                 } else callback(instance);
