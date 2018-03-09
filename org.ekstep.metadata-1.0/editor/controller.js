@@ -154,12 +154,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     };
 
     $scope.updateCategoryFields = function(associations) {
-        //$scope.getValues();
         if (associations.length) {
             _.forEach(associations, function(key, value) {
                 setTimeout(function() {
-                    // $('.dropdown').dropdown('restore defaults');
-                    // $sceop.getAssociations()
+                    var val = getAssociationsByKey(key);
                     $scope.$safeApply();
                 }, 0)
             })
