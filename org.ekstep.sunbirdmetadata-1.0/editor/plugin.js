@@ -54,8 +54,8 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
     /**
      * @description
      */
-    onConfigChange: function(event, key, value) {
-        console.log("Form change")
+    onConfigChange: function(event, object) {
+        var form = this.applyDependencyRules(object.key, object.value)
             // var form = this.applyDependencyRules(key, value);
             // this.updateForm(form, this.resourceBundle);
     },
@@ -124,8 +124,9 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
     /**
      * @param {Object} destination
      * @param {Object} source
-     * @description - Which is used to merge the framework object into configurations
+     * @description - Which is used to merge the "Framework object into Form Configurations"
      *              - By mapping code attribute
+     * @returns {Object}
      */
     mapObject: function(destination, source) {
         destination.forEach(function(dest) {
@@ -139,6 +140,10 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
 
     },
 
+    /**
+     * @description - Which returns the current form object.
+     * @returns {Object}
+     */
     getFormFields: function() {
         return this.form;
     }

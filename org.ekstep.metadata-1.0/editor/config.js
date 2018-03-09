@@ -14,46 +14,6 @@ window.formConfigurations = {
                 "visible": true
             },
             "index": 2
-        }, {
-            "code": "board",
-            "name": "Curriculum",
-            "description": "Board Concept",
-            "inputType": "select",
-            "label": "Curriculum",
-            "editable": true,
-            "required": true,
-            "placeholder": "Curriculum",
-            "renderingHints": {
-                "visible": true
-            },
-            "index": 5
-        }, {
-            "code": "gradeLevel",
-            "name": "Class",
-            "description": "Description of the class",
-            "inputType": "select",
-            "label": "Class",
-            "editable": true,
-            "required": true,
-            "placeholder": "Description",
-            "renderingHints": {
-                "visible": true
-            },
-            "index": 4
-        },
-        {
-            "code": "subject",
-            "name": "Subject",
-            "description": "Description of the Subject",
-            "inputType": "select",
-            "label": "Subject",
-            "editable": true,
-            "required": true,
-            "placeholder": "Description",
-            "renderingHints": {
-                "visible": true
-            },
-            "index": 1
         },
         {
             "code": "year",
@@ -104,6 +64,60 @@ window.formConfigurations = {
             "editable": true,
             "required": false,
             "placeholder": "Keywords",
+            "renderingHints": {
+                "visible": true
+            }
+        },
+        {
+            "code": "sets",
+            "name": "Boards",
+            "description": "Keywords for the content",
+            "inputType": "select",
+            "label": "Boards",
+            "editable": true,
+            "required": false,
+            "placeholder": "Boards",
+            "renderingHints": {
+                "visible": true
+            }
+        },
+        {
+            "code": "class",
+            "name": "Class",
+            "description": "Class for the content",
+            "inputType": "select",
+            "label": "Class",
+            "editable": true,
+            "required": false,
+            "placeholder": "Class",
+            "renderingHints": {
+                "visible": true,
+                "multiSelect": true
+            }
+        },
+        {
+            "code": "subject",
+            "name": "Subject",
+            "description": "Subject for the content",
+            "inputType": "select",
+            "label": "Subject",
+            "editable": true,
+            "required": false,
+            "placeholder": "Subject",
+            "renderingHints": {
+                "visible": true
+            }
+        },
+        {
+            "code": "medium",
+            "name": "Medium",
+            "description": "Medium for the content",
+            "inputType": "select",
+            "label": "Medium",
+            "editable": true,
+            "required": false,
+            "placeholder": "Medium",
+            "index": 0,
             "renderingHints": {
                 "visible": true
             }
