@@ -1,0 +1,9 @@
+<div class="field" ng-show="appIconConfig.renderingHints.visible" ng-class=" {'error': submitted && !(contentMeta.appIcon), 'required': appIconConfig.required}" name="{{appIconConfig.code}}" ng-required="{{appIconConfig.required}}" } ">
+    <label>{{appIconConfig.label}}</label>
+    <div id="field-app-icon " class="app-icon content-icon " ng-click="invokeAssetBrowser() ">
+        <div class="app-icon-overlay ">
+            <p class="app-icon-overlay-message "></p>
+        </div>
+        <img ng-src="{{contentMeta.appIcon}} " />
+    </div>
+</div>

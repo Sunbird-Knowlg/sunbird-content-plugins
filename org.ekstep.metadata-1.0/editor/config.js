@@ -34,7 +34,7 @@ window.formConfigurations = {
             "name": "Name",
             "description": "Title of the content",
             "inputType": "text",
-            "editable": true,
+
             "required": true,
             "label": "Name",
             "placeholder": "fieldName",
@@ -118,10 +118,23 @@ window.formConfigurations = {
             "description": "Medium for the content",
             "inputType": "select",
             "label": "Medium",
-            "editable": true,
+            "editable": false,
             "required": false,
             "placeholder": "Medium",
             "index": 4,
+            "renderingHints": {
+                "visible": true
+            }
+        },
+        {
+            "code": "appIcon",
+            "name": "App Icon",
+            "description": "App Icon",
+            "inputType": "file",
+            "label": "App Icon",
+            "editable": true,
+            "required": true,
+            "placeholder": "App Icon",
             "renderingHints": {
                 "visible": true
             }
