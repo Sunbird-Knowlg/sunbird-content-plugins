@@ -70,13 +70,12 @@
                                     </div>
                                     <div id="{{dynamicField.code}}" class="field" ng-class="{'error': !contentMeta[dynamicField.code] &&  submitted, 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='select' && dynamicField.code!='year' " ng-required="{{dynamicField.required}} ">
                                         <label>{{dynamicField.label}}</label>
-                                        <select id="_select{{dynamicField.code}}" multiple="" name="{{dynamicField.code}}" class="ui search dropdown placeholder-padding" ng-model="contentMeta[dynamicField.code]" ng-change="$ctrl.dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:contentMeta[dynamicField.code]}) ">
+                                        <select id="_select{{dynamicField.code}}" name="{{dynamicField.code}}" class="ui search dropdown placeholder-padding" ng-model="contentMeta[dynamicField.code]" ng-change="$ctrl.dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:contentMeta[dynamicField.code]}) ">
                                                 <option value="">Select</option>
                                                 <option data-value="{{category.name}}"  ng-repeat="category in categoryList[dynamicField.code]">{{category.name}}</option>
                                         </select>
                                     </div>
-                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': !contentMeta[dynamicField.code] && submitted, 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="dynamicField.inputType=='concetpselector'
-                                            " ng-required=" {{dynamicField.required}} ">
+                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': !contentMeta[dynamicField.code] && submitted, 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="dynamicField.inputType=='concetpselector'" ng-required=" {{dynamicField.required}} ">
                                         <label>{{dynamicField.label}}</label>
                                         <concetpselector></concetpselector>
                                     </div>
@@ -91,7 +90,7 @@
                     </div>
                 </div>
                 <div class="actions ">
-                    <div class="twelve wide column right aligned ">
+                    <div class="twelve wide column right aligned">
                         <div class="ui buttons ">
                             <button id="closePopUp " class="ui orange button " type="button " ng-click="cancelFn() ">Cancel</button>
                             <div class="or "></div>

@@ -26,22 +26,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     ctrl.originalContentMeta = _.clone($scope.contentMeta);
     $scope.categoryList = {}
 
-    // Create array of content concept Ids to use with the concept selector
-    ctrl.conceptIds = [];
-    if (!_.isUndefined($scope.contentMeta.concepts)) {
-        if ($scope.contentMeta.concepts.length > 0) {
-            _.forEach($scope.contentMeta.concepts, function(concept) {
-                ctrl.conceptIds.push(concept.identifier);
-            });
-        }
-    } else {
-        $scope.contentMeta.concepts = [];
-    }
-
-
-    ctrl.launchImageBrowser = function() {
-
-    };
 
     /**
      * 
