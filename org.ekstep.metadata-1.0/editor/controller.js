@@ -24,19 +24,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     ctrl.contentMeta = data.contentMeta || metaInfo;
     ctrl.originalContentMeta = _.clone(ctrl.contentMeta);
     $scope.categoryList = {}
-        // $scope.categoryModelList = {};
-        // $scope.categoryListofFramework = {};
-        // $scope.categoryValues = '';
-
-    // var categoryMasterList = _.cloneDeep(org.ekstep.services.collectionService.categoryList);
-
-    // _.forEach(categoryMasterList, function(category) {
-    //     $scope.categoryListofFramework[category.index] = category.terms || [];
-    //     var categoryName = 'category_' + category.index;
-    //     $scope[categoryName] = category;
-    //     $scope.categoryModelList[category.index] = category.code;
-    // });
-    $scope.$safeApply();
 
     // Create array of content concept Ids to use with the concept selector
     ctrl.conceptIds = [];
@@ -91,6 +78,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         return metadata;
     };
 
+
+
+    /**
+     * @description     - Which is used to initialize the dropdown with selected values
+     */
     $scope.initDropdown = function() {
         const DROPDOWN_INPUT_TYPE = 'select';
         $timeout(function() {
@@ -100,7 +92,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
                     $scope.$safeApply();
                 }
             });
-        }, 500);
+        }, 0);
     }
 
     $scope.generateTelemetry = function(data) {
@@ -117,18 +109,17 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     };
 
     /**
-     * 
-     * @param {String} event -
-     * @param {Object} object -
-     * @description
+     *@description            - Which is used to update the form when vlaues is get changes
+     * @param {String} event  - Name of the event.
+     * @param {Object} object - Field information
      */
     $scope.onConfigChange = function(event, object) {
         $scope.updateForm(object);
     }
 
     /**
-     * @param {Object} object  -
-     * @description - 
+     * @description            - Which is used to update the form when vlaues is get changes
+     * @param {Object} object  - Field information
      */
     $scope.updateForm = function(object) {
         if (object.field.range) {
@@ -156,10 +147,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     }
 
     /**
-     * 
-     * @param {Object} field 
-     * @param {Object} associations 
-     * @description
+     * @description                    - Which is used to resolve the dependency. 
+     * @param {Object} field           - Which field need need to get change.
+     * @param {Object} associations    - Association values of the respective field.
      */
     $scope.applayDependencyRules = function(field, associations) {
         if (field.depends) {
@@ -167,10 +157,23 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
             // Update the depended field with associated value
             $scope.resetSelectedField('#_select' + field.depends);
             var dependedValues = _.map(associations, i => _.pick(i, 'name'))
-            setTimeout(function() {
-                $scope.categoryList[field.depends] = dependedValues.length ? dependedValues : $scope.restoreDropDownOptions(field.depends)
-                $scope.$safeApply();
-            }, 100)
+            $scope.updateDropDownList(field, dependedValues);
+            $scope.$safeApply();
+        }
+    }
+
+
+    /**
+     * @description            - Which updates the drop down value list 
+     *                         - If the specified values are empty then drop down will get update with master list
+     * @param {Object} field   - Field which is need to update.
+     * @param {Object} values  - Values for the field
+     */
+    $scope.updateDropDownList = function(field, values) {
+        if (values.length) {
+            $scope.categoryList[field.depends] = values;
+        } else {
+            $scope.mapMasterCategoryList(configurations, field.depends);
         }
     }
 
@@ -223,7 +226,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     }
 
     /** 
-     * 
+     * @description         - Which is used to restore the dropdown slected value.
+     * @param {String} id   - To restore the specific dropdown field value 
      */
     $scope.resetSelectedField = function(id) {
         setTimeout(function() {
@@ -232,17 +236,14 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         }, 0)
     }
 
-    $scope.restoreDropDownOptions = function(code) {
-        setTimeout(function() {
-            $scope.categoryList['subject'] = org.ekstep.services.collectionService.categoryList.Subject.terms;
-            $scope.$safeApply();
-        }, 0)
-    };
-
-    $scope.mapCategoryList = function(configurations, key) {
+    $scope.mapMasterCategoryList = function(configurations, key) {
         _.forEach(configurations, function(field, value) {
-            if (field.range) {
-                $scope.categoryList[field.code] = field.range;
+            if (key) {
+                if (field.code === key) {
+                    $scope.categoryList[field.code] = field.range
+                }
+            } else {
+                field.range && ($scope.categoryList[field.code] = field.range);
             }
         })
     }
@@ -268,7 +269,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
         $scope.dynamicLayoutConfigurations = _.sortBy(_.uniqBy(layoutConfigurations.dynamicLayout, 'code'), 'index');
         $scope.enableMultiSelectDropDown(true);
-        $scope.mapCategoryList(configurations);
+        $scope.mapMasterCategoryList(configurations);
     };
 
     $scope.init()
