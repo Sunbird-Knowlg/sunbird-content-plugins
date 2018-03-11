@@ -2,7 +2,7 @@
 
 angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scope', '$q', '$rootScope', '$http', '$timeout', 'configurations', function($scope, $q, $rootScope, $http, $timeout, configurations) {
     var ctrl = this;
-    var data = configurations || {};
+    var data = {};
     $scope.configurations = configurations;
     $scope.submitted = false;
     ctrl.plugin = { id: "org.ekstep.metadata", ver: "1.2" };
@@ -134,6 +134,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         if (field.depends) {
             //reset the depended field first
             // Update the depended field with associated value
+            // Currently, supported only for the dropdown values
             $scope.resetSelectedField('#_select' + field.depends);
             var dependedValues = _.map(associations, i => _.pick(i, 'name'))
             $scope.updateDropDownList(field, dependedValues);
@@ -189,9 +190,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
                 console.error("Fails to save the data", err)
             }
         }
+        let form = ctrl.getUpdatedMetadata();
         ecEditor.dispatchEvent('editor:form:success', {
             isValid: $scope.metaForm.$valid,
-            formData: ctrl.getUpdatedMetaData(),
+            formData: form,
             callback: successCB
         })
     };

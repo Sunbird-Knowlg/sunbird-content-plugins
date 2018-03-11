@@ -57,8 +57,6 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
      */
     onConfigChange: function(event, object) {
         var form = this.applyDependencyRules(object.key, object.value)
-            // var form = this.applyDependencyRules(key, value);
-            // this.updateForm(form, this.resourceBundle);
     },
 
     /**
