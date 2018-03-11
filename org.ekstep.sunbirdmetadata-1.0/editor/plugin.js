@@ -39,6 +39,7 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
         ecEditor.addEventListener('editor:form:cancel', this.cancelAction, this);
         ecEditor.addEventListener('editor:form:success', this.successAction, this);
         ecEditor.addEventListener('editor:form:change', this.onConfigChange, this);
+        ecEditor.addEventListener('editor:form:reset', this.resetFields, this);
         ecEditor.addEventListener('org.ekstep.editcontentmeta:showpopup', this.showForm, this);
         this.getConfigurations(function(error, response) {
             instance.resourceBundle = response.resourceBundle;

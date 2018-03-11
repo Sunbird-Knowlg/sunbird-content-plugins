@@ -23,18 +23,19 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     }
     ctrl.contentMeta = data.contentMeta || metaInfo;
     ctrl.originalContentMeta = _.clone(ctrl.contentMeta);
-    $scope.categoryModelList = {};
-    $scope.categoryListofFramework = {};
-    $scope.categoryValues = '';
+    $scope.categoryList = {}
+        // $scope.categoryModelList = {};
+        // $scope.categoryListofFramework = {};
+        // $scope.categoryValues = '';
 
-    var categoryMasterList = _.cloneDeep(org.ekstep.services.collectionService.categoryList);
+    // var categoryMasterList = _.cloneDeep(org.ekstep.services.collectionService.categoryList);
 
-    _.forEach(categoryMasterList, function(category) {
-        $scope.categoryListofFramework[category.index] = category.terms || [];
-        var categoryName = 'category_' + category.index;
-        $scope[categoryName] = category;
-        $scope.categoryModelList[category.index] = category.code;
-    });
+    // _.forEach(categoryMasterList, function(category) {
+    //     $scope.categoryListofFramework[category.index] = category.terms || [];
+    //     var categoryName = 'category_' + category.index;
+    //     $scope[categoryName] = category;
+    //     $scope.categoryModelList[category.index] = category.code;
+    // });
     $scope.$safeApply();
 
     // Create array of content concept Ids to use with the concept selector
@@ -142,9 +143,14 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      * @description - 
      */
     $scope.getAssociations = function(keys, range, callback) {
+        let associations = [];
         var values = _.filter(range, function(res) { return _.includes(keys, res.name); });
-        var associations = _.filter(values, function(res) {
-            if (res['associations']) return res
+        _.forEach(values, function(key, value) {
+            if (key.associations) {
+                _.forEach(key.associations, function(key, value) {
+                    associations.push(key);
+                })
+            }
         });
         callback && callback(associations);
     }
@@ -159,10 +165,12 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         if (field.depends) {
             //reset the depended field first
             // Update the depended field with associated value
-            $('#_select' + field.depends).dropdown('restore default');
-            let code = $scope.getCodeByCategory(field.category);
-            ctrl.contentMeta[code] = _.map(associations, 'name');
-            $scope.$safeApply();
+            $scope.resetSelectedField('#_select' + field.depends);
+            var dependedValues = _.map(associations, i => _.pick(i, 'name'))
+            setTimeout(function() {
+                $scope.categoryList[field.depends] = dependedValues.length ? dependedValues : $scope.restoreDropDownOptions(field.depends)
+                $scope.$safeApply();
+            }, 100)
         }
     }
 
@@ -215,6 +223,42 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     }
 
     /** 
+     * 
+     */
+    $scope.resetSelectedField = function(id) {
+        setTimeout(function() {
+            $(id).dropdown('restore defaults');
+            $scope.$safeApply();
+        }, 0)
+    }
+
+    $scope.restoreDropDownOptions = function(code) {
+        setTimeout(function() {
+            $scope.categoryList['subject'] = org.ekstep.services.collectionService.categoryList.Subject.terms;
+            $scope.$safeApply();
+        }, 0)
+    };
+
+    $scope.mapCategoryList = function(configurations, key) {
+        _.forEach(configurations, function(field, value) {
+            if (field.range) {
+                $scope.categoryList[field.code] = field.range;
+            }
+        })
+    }
+
+    /**
+     * 
+     */
+    $scope.enableMultiSelectDropDown = function(flag) {
+        setTimeout(function() {
+            $(".ui.dropdown").dropdown({
+                useLabels: flag
+            });
+        }, 0)
+    }
+
+    /** 
      * @description - Initialization of the controller
      *              - Which partions the fixedLayout and dynamic layout section fields
      */
@@ -223,18 +267,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         var layoutConfigurations = ctrl.getLayoutConfigurations();
         $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
         $scope.dynamicLayoutConfigurations = _.sortBy(_.uniqBy(layoutConfigurations.dynamicLayout, 'code'), 'index');
-
+        $scope.enableMultiSelectDropDown(true);
+        $scope.mapCategoryList(configurations);
     };
 
-    $scope.resetFields = function() {
-
-    }
-
-    setTimeout(function() {
-        $(".ui.dropdown").dropdown({
-            useLabels: false
-        });
-    }, 0)
     $scope.init()
 }]);
 

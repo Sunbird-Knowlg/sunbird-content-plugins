@@ -77,9 +77,9 @@
                                     </div>
                                     <div id="{{dynamicField.code}}" class="field" ng-class="{'error': !$ctrl.contentMeta[dynamicField.code], 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='select' && dynamicField.code!='year' " ng-required="{{dynamicField.required}} ">
                                         <label>{{dynamicField.label}}</label>
-                                        <select id="_select{{dynamicField.code}}" name="{{dynamicField.code}}" class="ui search dropdown placeholder-padding" ng-model="$ctrl.contentMeta[dynamicField.code]" ng-change="$ctrl.dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:$ctrl.contentMeta[dynamicField.code]}) ">
+                                        <select id="_select{{dynamicField.code}}" multiple="" name="{{dynamicField.code}}" class="ui search dropdown placeholder-padding" ng-model="$ctrl.contentMeta[dynamicField.code]" ng-change="$ctrl.dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:$ctrl.contentMeta[dynamicField.code]}) ">
                                                 <option value="">Select</option>
-                                                <option data-value="{{category.name}}"  ng-repeat="category in dynamicField.range">{{category.name}}</option>
+                                                <option data-value="{{category.name}}"  ng-repeat="category in categoryList[dynamicField.code]">{{category.name}}</option>
                                         </select>
                                     </div>
                                     <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': !$ctrl.contentMeta[dynamicField.code], 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="dynamicField.inputType=='concetpselector'

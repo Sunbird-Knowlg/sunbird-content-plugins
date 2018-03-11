@@ -27,7 +27,7 @@ window.formConfigurations = {
             "renderingHints": {
                 "visible": true
             },
-            "index": 0
+            "index": 5
         },
         {
             "code": "name",
@@ -93,7 +93,10 @@ window.formConfigurations = {
             "renderingHints": {
                 "visible": true,
                 "multiSelect": true
-            }
+            },
+            "depends": "subject",
+            "index": 0
+
         },
         {
             "code": "subject",
@@ -106,7 +109,8 @@ window.formConfigurations = {
             "placeholder": "Subject",
             "renderingHints": {
                 "visible": true
-            }
+            },
+            "index": 1
         },
         {
             "code": "medium",
@@ -117,7 +121,7 @@ window.formConfigurations = {
             "editable": true,
             "required": false,
             "placeholder": "Medium",
-            "index": 0,
+            "index": 4,
             "renderingHints": {
                 "visible": true
             }

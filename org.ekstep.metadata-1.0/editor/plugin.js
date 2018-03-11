@@ -44,7 +44,7 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
      * TODO:
      * @description - Which is used to reset the form.
      */
-    reset: function() {},
+    resetFields: function() {},
 
     renderForm: function(form, resourceBundle) {},
 
@@ -81,7 +81,6 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
      * @description
      */
     getFormFields: function( /*Child class should return the form field data*/ ) {}
-
 
 
 });
