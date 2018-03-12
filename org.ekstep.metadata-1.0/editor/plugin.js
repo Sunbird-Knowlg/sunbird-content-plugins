@@ -13,19 +13,6 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
     initialize: function() {},
 
     /**
-     * @param  {Object} fields
-     * @param  {Object} resourceBundle
-     * @description
-     */
-    updateForm: function(fields, resourceBundle) {},
-
-
-    /**
-     * @description
-     */
-    applyDependencyRules: function(key, value) {},
-
-    /**
      * TODO:
      * @param {Object} fields
      * @description - Which is used to validate the fields.
@@ -39,7 +26,7 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
      */
     resetFields: function() {},
 
-    renderForm: function(form, resourceBundle) {},
+    renderForm: function() {},
 
     /**
      * @description

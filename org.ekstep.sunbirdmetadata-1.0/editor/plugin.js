@@ -49,9 +49,7 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
     /**
      * @description
      */
-    onConfigChange: function(event, object) {
-        var form = this.applyDependencyRules(object.key, object.value)
-    },
+    onConfigChange: function(event, object) {},
 
     /**
      * @description
