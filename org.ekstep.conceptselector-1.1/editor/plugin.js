@@ -15,7 +15,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      * set default limit to search API
      * @memberof conceptselector
      */
-    limit: 200,
+    limit: 500,
     /**
      * Selected concept array
      * @memberof conceptselector
@@ -111,19 +111,17 @@ org.ekstep.contenteditor.basePlugin.extend({
     getConcept: function(offset, limit, instance, callback) {
         var instance = instance || this;
         offset = offset || 0;
-        limit = limit || instance.limit;
-
-        var data = { "request": { "filters": { "objectType": ["Concept"] }, "offset": offset, "limit": instance.limit } };
-
+        var data = { "request": { "filters": { "objectType": ["Concept"] }, "offset": offset, "limit": limit } };
         ecEditor.getService('search').search(data, function(err, resp) {
             if (!err && resp.data && resp.data.result && ecEditor._.isArray(resp.data.result.concepts)) {
                 ecEditor._.forEach(resp.data.result.concepts, function(value) {
                     instance.concepts.push(value);
                 });
-                if (resp.data.result.count > limit) {
-                    offset = resp.data.result.count - limit;
-                    limit = limit + limit;
+                if (resp.data.result.count > (resp.data.result.concepts.length + offset)) {
+                    offset = offset + resp.data.result.concepts.length;
+                    if (offset !== resp.data.result.count)
                     instance.getConcept(offset, limit, instance, callback);
+                    else callback(instance);
                 } else callback(instance);
             }
         });
