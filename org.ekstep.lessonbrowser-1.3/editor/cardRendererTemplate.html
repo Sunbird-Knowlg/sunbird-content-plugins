@@ -6,9 +6,7 @@
 </div>
 <div class="source-result-container">
     <div class="ui special link cards cardsWrapper" ng-class="{four: mainTemplate == 'selectedResult',five: mainTemplate == 'addedItemsView'}">
-        <div class="card" ng-repeat="lesson in $ctrl.res.content | orderBy:sortOption track by $index" in-view="lineInView($index, $inview, lesson, 'LessonBrowser', $index)"
-            in-view-options="{ throttle: 1000 }" ng-click="toggleSelectionLesson(lesson)">
-         
+        <div class="card" ng-repeat="lesson in $ctrl.res.content | orderBy:sortOption track by $index" in-view="lineInView($index, $inview, lesson, 'LessonBrowser', $index)" in-view-options="{ throttle: 1000 }" ng-click="toggleSelectionLesson(lesson)">
             <div class="image">
                 <img src="{{lesson.appIcon || $ctrl.defaultImage}}" class="resourceMetaImage ">
                 <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{lesson.identifier}}' style="z-index:9999">
@@ -16,34 +14,34 @@
                     <label></label>
                 </div>
                 <div class="ui inverted dimmer">
-                        <div class="content">
-                            <div class="ui list">
-                                <div class="item">
-                                    <div class="right floated content contentMetaDetail">{{lesson.board}}</div>
-                                    <div class="content contentTitle">Board</div>
+                    <div class="content">
+                        <div class="ui list">
+                            <div class="item">
+                                <div class="right floated content contentMetaDetail">{{lesson.board}}</div>
+                                <div class="content contentTitle">Board</div>
+                            </div>
+                            <div class="item">
+                                <div class="right floated content contentMetaDetail">{{(lesson.class.toString())}}
                                 </div>
-                                <div class="item">
-                                    <div class="right floated content contentMetaDetail">{{(lesson.class.toString())}}
-                                    </div>
-                                    <div class="content contentTitle">Class</div>
+                                <div class="content contentTitle">Class</div>
+                            </div>
+                            <div class="item">
+                                <div class="right floated content contentMetaDetail">{{(lesson.subject)}}
                                 </div>
-                                <div class="item">
-                                    <div class="right floated content contentMetaDetail">{{(lesson.subject)}}
-                                    </div>
-                                    <div class="content contentTitle">Subject</div>
+                                <div class="content contentTitle">Subject</div>
+                            </div>
+                            <div class="item">
+                                <div class="right floated content contentMetaDetail">
+                                    <span ng-repeat="concept in lesson.concepts">{{ conceptsNames[concept]}}{{$last ? '' : ', '}}</span>
                                 </div>
-                                <div class="item">
-                                    <div class="right floated content contentMetaDetail">
-                                        <span  ng-repeat="concept in lesson.concepts">{{ conceptsNames[concept]}}{{$last ? '' : ', '}}</span>
-                                    </div>
-                                    <div class="content contentTitle">Concept</div>
-                                </div>
-                                <div class="item overlapAll" ng-click="showCardDetails(lesson)">
-                                    <div class="content bottomList">VIEW DETAILS</div>
-                                </div>
+                                <div class="content contentTitle">Concept</div>
+                            </div>
+                            <div class="item overlapAll" ng-click="showCardDetails(lesson)">
+                                <div class="content bottomList">VIEW DETAILS</div>
                             </div>
                         </div>
                     </div>
+                </div>
             </div>
             <div class="content">
                 <div class="header contentMetaTitle">
@@ -67,7 +65,7 @@
     <div class="ui negative message errorMessage" ng-if="$ctrl.err">
         <div class="header">{{$ctrl.err}}</div>
     </div>
-    <div class="ui negative message errorMessage" ng-if="!$ctrl.res.content.length && !$ctrl.err">
+    <div id="noLessonMsg" class="ui negative message errorMessage" style="display:none">
         <div class="header">{{messages.no_lesson_found_msg}}</div>
         <p>{{messages.try_again_msg}}</p>
     </div>
