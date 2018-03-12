@@ -140,9 +140,11 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview','luegg.directive
                     ctrl.res.content = res.data.result.content;
                     ctrl.searchConcepts(ctrl.res.content, function() {
                         $scope.$safeApply();
-                        ctrl.toggleContent(ctrl.res.content);
-                        ctrl.conceptSelector();
-                        ctrl.dropdownAndCardsConfig();
+                        $timeout(function() {
+                            ctrl.toggleContent(ctrl.res.content);
+                            ctrl.conceptSelector();
+                            ctrl.dropdownAndCardsConfig();
+                        }, 0);
                     });
                 }
                 return callback(true);
@@ -153,9 +155,9 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview','luegg.directive
         ctrl.toggleContent = function(Contents) {
             angular.forEach(Contents, function(resource) {
                 if ($scope.selectedResources.indexOf(resource.identifier) !== -1) {
-                    ecEditor.jQuery('#checkBox_' + resource.identifier + ' >.checkBox').attr('checked', true);
+                    ecEditor.jQuery('#checkBox_' + resource.identifier + ' >.checkBox').prop('checked', true);
                 } else {
-                    ecEditor.jQuery('#checkBox_' + resource.identifier + ' >.checkBox').attr('checked', false);
+                    ecEditor.jQuery('#checkBox_' + resource.identifier + ' >.checkBox').prop('checked', false);
                 }
             });
         }
@@ -339,7 +341,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview','luegg.directive
         // Get accordions functioning
         ctrl.dropdownAndCardsConfig = function() {
             ecEditor.jQuery('#applyAccordion').accordion();
-            ecEditor.jQuery('.special.cards .card').dimmer({
+            ecEditor.jQuery('.special.cards .image').dimmer({
                 on: 'hover'
             });
             ecEditor.jQuery('.ui.multiple.selection.dropdown').dropdown({
@@ -354,7 +356,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview','luegg.directive
         }
 
         // Add the resource
-        $scope.toggleSelectionLesson = function(lesson, event, clickOption) {
+        $scope.toggleSelectionLesson = function(lesson) {
             var idx = $scope.selectedResources.indexOf(lesson.identifier);
             if (idx > -1) {
                 ctrl.generateTelemetry({ type: 'click', subtype: 'uncheck', target: 'lesson', targetid: lesson.identifier });
@@ -466,8 +468,8 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview','luegg.directive
                         });
                     } else {
                         console.error("Unable to fetch response", err);
-                        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                            message: "Oops, Content list for resources not available",
+                        ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
+                            message: "Content list for resources not available",
                             position: 'topCenter',
                             icon: 'fa fa-warning'
                         });
