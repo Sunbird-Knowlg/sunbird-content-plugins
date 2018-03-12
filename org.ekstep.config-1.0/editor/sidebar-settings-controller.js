@@ -214,6 +214,8 @@ angular.module('editorApp')
                         ecEditor.jQuery("#objectPointer")
                             .show().offset({ 'left': left, 'top': top })
                             .css({ 'height': editorObj.getHeight() + 10, 'width': editorObj.getWidth() + 10 });
+                    }else{
+                        ecEditor.jQuery("#objectPointer").hide();
                     }
                 });
                 ecEditor.jQuery(this).mouseleave(function() {
