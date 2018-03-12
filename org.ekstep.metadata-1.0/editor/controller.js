@@ -8,7 +8,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
     $scope.originalContentMeta = _.clone($scope.contentMeta);
     $scope.categoryList = {}
-
+    const isRoot = true;
+    const isNew = false;
 
     /**
      * 
@@ -173,7 +174,12 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
                 console.error("Fails to save the data", err)
             }
         }
-        let form = ctrl.getUpdatedMetadata($scope.contentMeta);
+
+        let form = {};
+        form.metaData = ctrl.getUpdatedMetadata($scope.contentMeta);
+        form.isRoot = true;
+        form.isNew = false;
+        form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
         ecEditor.dispatchEvent('editor:form:success', {
             isValid: $scope.metaForm.$valid,
             formData: form,

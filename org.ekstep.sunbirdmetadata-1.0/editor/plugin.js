@@ -29,7 +29,7 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
     /**
      * 
      */
-    actionMap: { 'save': "org.ekstep.contenteditor:save:meta", review: "" },
+    actionMap: { save: "org.ekstep.contenteditor:save", review: "org.ekstep.contenteditor:review" },
 
     /**
      * @description - Initialization of the plugin.
@@ -42,13 +42,7 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
         ecEditor.addEventListener('editor:form:reset', this.resetFields, this);
         ecEditor.addEventListener('org.ekstep.editcontentmeta:showpopup', this.showForm, this);
         this.getConfigurations(function(error, response) {
-            instance.resourceBundle = response.resourceBundle;
-            instance.framework = response.framework.data.result.framework;
-            instance.config = response.config;
-            instance.config = formConfigurations; // Remove this line
-            instance.form = instance.mapObject(instance.config.fields, instance.framework.categories);
-            instance.loadTemplate(instance.config.templateName);
-            instance.renderForm(instance.form, instance.resourceBundle);
+            response ? instance.renderForm(response) : console.error("Fails to render")
         });
     },
 
@@ -145,6 +139,20 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
      */
     getFormFields: function() {
         return this.form;
+    },
+
+    /**
+     * @description -
+     * @param {Object} formObj  - Form object it should have configurations, resourceBundle, framework object
+     * @example {resourceBundle:{},framework:{},config:{}}
+     */
+    renderForm: function(formObj) {
+        this.resourceBundle = formObj.resourceBundle;
+        this.framework = formObj.framework.data.result.framework;
+        this.config = formObj.config;
+        this.config = formConfigurations; // Remove this line
+        this.form = this.mapObject(this.config.fields, this.framework.categories);
+        this.loadTemplate(this.config.templateName);
     }
 });
 //# sourceURL=sunbirdmetadataplugin.js;
