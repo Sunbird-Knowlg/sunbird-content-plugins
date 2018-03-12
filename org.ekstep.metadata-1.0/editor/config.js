@@ -27,7 +27,7 @@ window.formConfigurations = {
             "renderingHints": {
                 "visible": true
             },
-            "index": 5
+            "index": 1
         },
         {
             "code": "name",
