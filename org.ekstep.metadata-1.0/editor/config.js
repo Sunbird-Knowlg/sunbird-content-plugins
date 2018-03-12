@@ -85,14 +85,13 @@ window.formConfigurations = {
             "code": "class",
             "name": "Class",
             "description": "Class for the content",
-            "inputType": "select",
+            "inputType": "multiSelect",
             "label": "Class",
             "editable": true,
             "required": false,
             "placeholder": "Class",
             "renderingHints": {
-                "visible": true,
-                "multiSelect": true
+                "visible": true
             },
             "depends": "subject",
             "index": 0

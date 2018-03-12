@@ -47,10 +47,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      * @description     - Which is used to initialize the dropdown with selected values
      */
     $scope.initDropdown = function() {
-        const DROPDOWN_INPUT_TYPE = 'select';
+        const DROPDOWN_INPUT_TYPES = ['select', 'multiSelect'];
         $timeout(function() {
             _.forEach(configurations, function(key, value) {
-                if (key.inputType === DROPDOWN_INPUT_TYPE) {
+                if (_.includes(DROPDOWN_INPUT_TYPES, key.inputType)) {
                     $('#_select' + key.code).dropdown('set selected', $scope.contentMeta[key.code]);
                     $scope.$safeApply();
                 }
@@ -253,6 +253,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     };
 
     $scope.init()
+
 }]);
 
 //# sourceURL=metadataController.js

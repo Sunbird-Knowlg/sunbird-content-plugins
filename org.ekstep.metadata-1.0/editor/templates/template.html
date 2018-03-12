@@ -68,6 +68,14 @@
                                             <input id="{{dynamicField.code}}" placeholder={{dynamicField.placeholder}} name="name " type="{{dynamicField.inputType}} " maxlength="100 " ng-required="{{dynamicField.required}} ">
                                         </div>
                                     </div>
+
+                                    <div id="{{dynamicField.code}}" class="field" ng-class="{'error': !contentMeta[dynamicField.code] &&  submitted && dynamicField.required, 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='multiSelect' " ng-required="{{dynamicField.required}} ">
+                                        <label>{{dynamicField.label}}</label>
+                                        <select id="_select{{dynamicField.code}}" name="{{dynamicField.code}}" class="ui fluid search dropdown" multiple="" ng-class="!dynamicField.editable ? ' disabled ':' ' " ng-model="contentMeta[dynamicField.code]" ng-change="$ctrl.dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:contentMeta[dynamicField.code]}) ">
+                                            <option value="">Select</option>
+                                            <option data-value="{{category.name}}"  ng-repeat="category in categoryList[dynamicField.code]">{{category.name}}</option>
+                                        </select>
+                                    </div>
                                     <div id="{{dynamicField.code}}" class="field" ng-class="{'error': !contentMeta[dynamicField.code] &&  submitted && dynamicField.required, 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='select' && dynamicField.code!='year' "
                                         ng-required="{{dynamicField.required}} ">
                                         <label>{{dynamicField.label}}</label>
@@ -76,6 +84,7 @@
                                                 <option data-value="{{category.name}}"  ng-repeat="category in categoryList[dynamicField.code]">{{category.name}}</option>
                                         </select>
                                     </div>
+
                                     <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': !contentMeta[dynamicField.code] && submitted , 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="dynamicField.inputType=='concetpselector'" ng-required=" {{dynamicField.required}} ">
                                         <label>{{dynamicField.label}}</label>
                                         <concetpselector></concetpselector>
@@ -90,8 +99,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="actions" style="position:relative; left:78%">
-                    <div class="twelve wide column right aligned">
+                <div class="actions " style="position:relative; left:78% ">
+                    <div class="twelve wide column right aligned ">
                         <div class="ui buttons ">
                             <button id="closePopUp " class="ui orange button " type="button " ng-click="cancelFn() ">Cancel</button>
                             <div class="or "></div>
