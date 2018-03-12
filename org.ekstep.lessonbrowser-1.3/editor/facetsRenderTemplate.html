@@ -11,24 +11,22 @@
                     <div class="content">
                         <div class="ui list cardDetails-list">
                             <div class="item">
-                                <div class="right floated content contentMetaDetail">{{lesson.board || 'NA'}}</div>
+                                <div class="right floated content contentMetaDetail">{{lesson.board}}</div>
                                 <div class="content contentTitle">Board</div>
                             </div>
                             <div class="item">
-                                <div class="right floated content contentMetaDetail">{{(lesson.class.toString()) || 'NA'}}
+                                <div class="right floated content contentMetaDetail">{{(lesson.class.toString())}}
                                 </div>
                                 <div class="content contentTitle">Class</div>
                             </div>
                             <div class="item">
-                                <div class="right floated content contentMetaDetail">{{(lesson.subject) || 'NA'}}
+                                <div class="right floated content contentMetaDetail">{{(lesson.subject)}}
                                 </div>
                                 <div class="content contentTitle">Subject</div>
                             </div>
                             <div class="item">
                                 <div class="right floated content contentMetaDetail">
                                     <span ng-repeat="concept in lesson.concepts">{{ conceptsNames[concept]}}{{$last ? '' : ', '}}</span>
-                                </div>
-                                <div class="right floated content contentMetaDetail" ng-show="!lesson.concepts.length">NA
                                 </div>
                                 <div class="content contentTitle">Concept</div>
                             </div>
@@ -59,7 +57,7 @@
                         </span>
                     </div>
                     <div class="meta">
-                        <span class="date">Created by {{lesson.creator || '--'}}</span>
+                        <span class="date">Created by {{lesson.creator}}</span>
                     </div>
                 </div>
             </div>
