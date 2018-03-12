@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <div class="content">
+        <div class="content" style="padding:4%">
             <form class="ui form" id="content-meta-form" ng-init="initDropdown()" name="metaForm" novalidate>
                 <div class="ui grid">
                     <div class="row">
@@ -36,7 +36,7 @@
                             <div ng-repeat="fixedField in fixedLayoutConfigurations">
                                 <div id="{{fixedField.code}}" class="field" ng-class="{'error': !contentMeta[fixedField.code] && submitted, 'required': fixedField.required}" name="{{fixedField.code}}" ng-show="(fixedField.code =='name' && fixedField.renderingHints.visible)">
                                     <label>{{fixedField.label}}</label>
-                                    <div class="ui input" ng-class="{'disabled':!fixedField.editable }">
+                                    <div class="ui input" ng-class="{'disabled':!fixedField.editable}">
                                         <input id="{{fixedField.code}}" placeholder={{field.placeholder}} name="{{fixedField.code}}" ng-model="contentMeta.name" type="text" maxlength="{{fixedField.renderingHints.maxlength}}" ng-required="{{fixedField.required}}">
                                     </div>
                                 </div>
@@ -71,7 +71,7 @@
                                     <div id="{{dynamicField.code}}" class="field" ng-class="{'error': !contentMeta[dynamicField.code] &&  submitted && dynamicField.required, 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='select' && dynamicField.code!='year' "
                                         ng-required="{{dynamicField.required}} ">
                                         <label>{{dynamicField.label}}</label>
-                                        <select id="_select{{dynamicField.code}}" name="{{dynamicField.code}}" class="ui search dropdown placeholder-padding" ng-model="contentMeta[dynamicField.code]" ng-change="$ctrl.dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:contentMeta[dynamicField.code]}) ">
+                                        <select id="_select{{dynamicField.code}}" name="{{dynamicField.code}}" class="ui search  dropdown placeholder-padding" ng-class="!dynamicField.editable ? ' disabled ':' ' " ng-model="contentMeta[dynamicField.code]" ng-change="$ctrl.dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:contentMeta[dynamicField.code]}) ">
                                                 <option value="">Select</option>
                                                 <option data-value="{{category.name}}"  ng-repeat="category in categoryList[dynamicField.code]">{{category.name}}</option>
                                         </select>
@@ -90,7 +90,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="actions ">
+                <div class="actions" style="position:relative; left:78%">
                     <div class="twelve wide column right aligned">
                         <div class="ui buttons ">
                             <button id="closePopUp " class="ui orange button " type="button " ng-click="cancelFn() ">Cancel</button>

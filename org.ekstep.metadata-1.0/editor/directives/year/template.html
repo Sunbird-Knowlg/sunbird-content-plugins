@@ -1,4 +1,4 @@
-<select id="_selectyear" class="ui search dropdown placeholder-padding" ng-model="contentMeta.year">
+<select id="_selectyear" class="ui search dropdown placeholder-padding" ng-class="!dynamicField.editable ? ' disabled ':' ' " ng-model="contentMeta.year">
             <option value="">Year</option>
             <option data-value="{{year}}" ng-repeat="year in years">{{year}}</option>
 </select>

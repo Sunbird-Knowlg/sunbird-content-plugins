@@ -2,28 +2,11 @@
 
 angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scope', '$q', '$rootScope', '$http', '$timeout', 'configurations', function($scope, $q, $rootScope, $http, $timeout, configurations) {
     var ctrl = this;
-    var data = {};
     $scope.configurations = configurations;
     $scope.submitted = false;
-    ctrl.plugin = { id: "org.ekstep.metadata", ver: "1.2" };
-    ctrl.callback = _.isFunction(data.callback) ? data.callback : null;
-    ctrl.contentId = org.ekstep.contenteditor.api.getContext('contentId');
-
-    $scope.parseKeywords = function(keywords) {
-        if (_.isString(keywords)) {
-            return JSON.parse(keywords);
-        } else {
-            return keywords;
-        }
-    }
-    $scope.metaform = {}
-    var metaInfo = ecEditor.getService('content').getContentMeta(ctrl.contentId);
-    metaInfo.keywords = $scope.parseKeywords(metaInfo.keywords)
-    if (data.contentMeta) {
-        data.contentMeta.keywords = $scope.parseKeywords(data.contentMeta.keywords);
-    }
-    $scope.contentMeta = data.contentMeta || metaInfo;
-    ctrl.originalContentMeta = _.clone($scope.contentMeta);
+    $scope.manifest = { id: "org.ekstep.metadata", ver: "1.2" };
+    $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
+    $scope.originalContentMeta = _.clone($scope.contentMeta);
     $scope.categoryList = {}
 
 
@@ -36,23 +19,23 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         ecEditor.dispatchEvent(event, data)
     };
 
-    ctrl.getUpdatedMetadata = function(originalMetadata, currentMetadata) {
-        var metadata = {};
-        if (_.isEmpty(originalMetadata)) {
+    ctrl.getUpdatedMetadata = function(currentMetadata) {
+        let metadata = {};
+        if (_.isEmpty($scope.originalContentMeta)) {
             _.forEach(currentMetadata, function(value, key) {
                 metadata[key] = value;
             });
         } else {
             _.forEach(currentMetadata, function(value, key) {
-                if (_.isUndefined(originalMetadata[key])) {
+                if (_.isUndefined($scope.originalContentMeta[key])) {
                     metadata[key] = value;
-                } else if (value != originalMetadata[key]) {
+                } else if (value != $scope.originalContentMeta[key]) {
                     metadata[key] = value;
                 }
             });
         }
         if (_.isUndefined(metadata['name'])) {
-            metadata['name'] = originalMetadata['name'];
+            metadata['name'] = $scope.originalContentMeta['name'];
         }
         return metadata;
     };
@@ -79,8 +62,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
             "type": data.type || "click",
             "subtype": data.subtype || "",
             "target": data.target || "",
-            "pluginid": ctrl.plugin.id,
-            "pluginver": ctrl.plugin.ver,
+            "pluginid": $scope.manifest.id,
+            "pluginver": $scope.manifest.ver,
             "objectid": "",
             "targetid": "",
             "stage": ""
@@ -158,7 +141,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     }
 
     /**
-     * @description Which is used to get fixedLayout section and Dynamic section layout fields
+     * @description     -Which is used to get fixedLayout section and Dynamic section layout fields
      */
     ctrl.getLayoutConfigurations = function() {
         const FIXED_FIELDS_CODE = ["name", "description", "keyword", "image"];
@@ -190,7 +173,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
                 console.error("Fails to save the data", err)
             }
         }
-        let form = ctrl.getUpdatedMetadata();
+        let form = ctrl.getUpdatedMetadata($scope.contentMeta);
         ecEditor.dispatchEvent('editor:form:success', {
             isValid: $scope.metaForm.$valid,
             formData: form,
@@ -218,6 +201,13 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         }, 0)
     }
 
+
+    /**
+     * 
+     * @description                     -
+     * @param {Object} configurations   - Field configurations
+     * @param {String} key              - Field uniq code
+     */
     $scope.mapMasterCategoryList = function(configurations, key) {
         _.forEach(configurations, function(field, value) {
             if (key) {
@@ -230,8 +220,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         })
     }
 
+
     /**
-     * 
+     * @description             -
+     * @param {Boolean} flag    -
      */
     $scope.enableMultiSelectDropDown = function(flag) {
         setTimeout(function() {
