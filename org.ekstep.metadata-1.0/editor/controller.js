@@ -53,7 +53,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
                 if (_.includes(DROPDOWN_INPUT_TYPES, field.inputType)) {
                     $('#_select' + field.code).dropdown('set selected', $scope.contentMeta[field.code]);
                     $scope.$safeApply();
-                    if (field.depends) {
+                    if (field.depends && field.depends.length) {
                         $scope.getAssociations($scope.contentMeta[field.code], field.range, function(associations) {
                             $scope.applayDependencyRules(field, associations);
                         });
@@ -120,15 +120,20 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      * @param {Object} associations    - Association values of the respective field.
      */
     $scope.applayDependencyRules = function(field, associations) {
-        if (field.depends) {
-            //reset the depended field first
-            // Update the depended field with associated value
-            // Currently, supported only for the dropdown values
-            $scope.resetSelectedField('#_select' + field.depends);
-            var dependedValues = _.map(associations, i => _.pick(i, 'name'))
-            $scope.updateDropDownList(field, dependedValues);
-            $scope.$safeApply();
+        //reset the depended field first
+        // Update the depended field with associated value
+        // Currently, supported only for the dropdown values
+        let dependedValues;
+        if (field.depends && field.depends.length) {
+            _.forEach(field.depends, function(name) {
+                $scope.resetSelectedField('#_select' + name);
+                dependedValues = _.map(associations, i => _.pick(i, 'name'))
+                $scope.updateDropDownList(name, dependedValues);
+                $scope.$safeApply();
+            });
         }
+
+
     }
 
 
@@ -138,11 +143,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      * @param {Object} field   - Field which is need to update.
      * @param {Object} values  - Values for the field
      */
-    $scope.updateDropDownList = function(field, values) {
+    $scope.updateDropDownList = function(fieldCode, values) {
         if (values.length) {
-            $scope.categoryList[field.depends] = values;
+            $scope.categoryList[fieldCode] = values;
         } else {
-            $scope.mapMasterCategoryList(configurations, field.depends);
+            $scope.mapMasterCategoryList(configurations, fieldCode);
         }
     }
 
