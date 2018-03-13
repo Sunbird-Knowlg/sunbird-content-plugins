@@ -71,7 +71,7 @@
 
                                     <div id="{{dynamicField.code}}" class="field" ng-class="{'error': (!contentMeta[dynamicField.code] && dynamicField.required) && isSubmit , 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='multiSelect' ">
                                         <label>{{dynamicField.label}}</label>
-                                        <select id="_select{{dynamicField.code}}" name="{{dynamicField.code}}" class="ui fluid search dropdown" multiple="" ng-class="!dynamicField.editable ? ' disabled ':' ' " ng-model="contentMeta[dynamicField.code]" ng-change="$ctrl.dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:contentMeta[dynamicField.code]}) "
+                                        <select id="_select{{dynamicField.code}}" name="{{dynamicField.code}}" class="ui fluid search dropdown" multiple="" ng-class="!dynamicField.editable ? ' disabled ':' ' " ng-model="contentMeta[dynamicField.code]" ng-change="dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:contentMeta[dynamicField.code]}) "
                                             ng-required="{{dynamicField.required}} ">
                                             <option value="">Select</option>
                                             <option data-value="{{category.name}}"  ng-repeat="category in categoryList[dynamicField.code]">{{category.name}}</option>
@@ -79,7 +79,7 @@
                                     </div>
                                     <div id="{{dynamicField.code}}" class="field" ng-class="{'error': (!contentMeta[dynamicField.code] && dynamicField.required) && isSubmit, 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='select' && dynamicField.code!='year' ">
                                         <label>{{dynamicField.label}}</label>
-                                        <select id="_select{{dynamicField.code}}" name="{{dynamicField.code}}" class="ui search  dropdown placeholder-padding" ng-class="!dynamicField.editable ? ' disabled ':' ' " ng-model="contentMeta[dynamicField.code]" ng-change="$ctrl.dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:contentMeta[dynamicField.code]}) "
+                                        <select id="_select{{dynamicField.code}}" name="{{dynamicField.code}}" class="ui search  dropdown placeholder-padding" ng-class="!dynamicField.editable ? ' disabled ':' ' " ng-model="contentMeta[dynamicField.code]" ng-change="dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:contentMeta[dynamicField.code]}) "
                                             ng-required="{{dynamicField.required}} ">
                                                 <option value="">Select</option>
                                                 <option data-value="{{category.name}}"  ng-repeat="category in categoryList[dynamicField.code]">{{category.name}}</option>

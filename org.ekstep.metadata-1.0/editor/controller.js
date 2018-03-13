@@ -10,16 +10,16 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     let isNewNode = false;
 
     /**
-     * 
-     * @param {String} event - Name of the event
+     * @description          - Which is used to dispatch an event.
+     * @param {String} event - Name of the event.
      * @param {Object} data  - Data which is need to pass.  
      */
-    ctrl.dispatchEvent = function(event, data) {
+    $scope.dispatchEvent = function(event, data) {
         ecEditor.dispatchEvent(event, data)
     };
 
     /**
-     * @description     - Which is used to initialize the dropdown with selected values
+     * @description     - It Initialize the dropdown with selected values
      */
     $scope.initDropdown = function() {
         const DROPDOWN_INPUT_TYPES = ['select', 'multiSelect'];
@@ -35,6 +35,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
                     }
                 }
             });
+            $scope.configureDropdowns();
         }, 0);
     }
 
@@ -73,8 +74,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     };
 
     /** 
-     * @param {String | Array} keys    -
-     * @description - 
+     * @description                    - Which is used to get the association object by mapping key and range object
+     * @param {String | Array} keys    - To the associactio object for particular key's
+     * @param {Object} range           - Which refers to framework terms/range object
      */
     $scope.getAssociations = function(keys, range, callback) {
         let associations = [];
@@ -93,7 +95,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      * @description                    - Which is used to resolve the dependency. 
      * @param {Object} field           - Which field need need to get change.
      * @param {Object} associations    - Association values of the respective field.
-     * @param {Boolean} resetSelected  - Which defines while resolving the dependency dropdown
+     * @param {Boolean} resetSelected  - @default true Which defines while resolving the dependency dropdown
      *                                   Should reset the selected values of the field or not
      */
     $scope.applayDependencyRules = function(field, associations, resetSelected = true) {
@@ -131,7 +133,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     /**
      * @description     -Which is used to get fixedLayout section and Dynamic section layout fields
      */
-    ctrl.getLayoutConfigurations = function() {
+    $scope.getLayoutConfigurations = function() {
         const FIXED_FIELDS_CODE = ["name", "description", "keyword", "appIcon"];
         let fixedLayout = [];
         let dynamicLayout = [];
@@ -189,8 +191,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      */
     $scope.resetSelectedField = function(id) {
         setTimeout(function() {
-            $scope.contentMeta[id] = [];
             $('#_select' + id).dropdown('clear');
+            $scope.contentMeta[id] = undefined;
             $scope.$safeApply();
         }, 0)
     }
@@ -216,7 +218,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
 
     /**
      * @description                     - Which used to get only modied filed values
-     * @param {Object} currentMetadata  -Current field values
+     * @param {Object} currentMetadata  -@default Object Current field values
      */
     $scope.getUpdatedMetadata = function(currentMetadata = {}) {
         let metadata = {};
@@ -251,9 +253,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
 
 
     /**
-     * @description                      -
-     * @param {Boolean} labels           -
-     * @param {Boolean} forceSelection   -
+     * @description                      - Which is used to configure the symantic ui drop down
+     *                                     to enable/disable the force selection field and multiSelect fields with tags format 
+     *
+     * @param {Boolean} labels           - @default false Which defines the MultiSelect should be tag format design or not
+     * @param {Boolean} forceSelection   - @default false Which defines the force selection should enalbe or not
      */
     $scope.configureDropdowns = function(labels = false, forceSelection = false) {
         // TODO: Need to remove the timeout
@@ -273,12 +277,12 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
         $scope.originalContentMeta = _.clone($scope.contentMeta);
         ecEditor.addEventListener('editor:form:change', $scope.onConfigChange, $scope);
-        let layoutConfigurations = ctrl.getLayoutConfigurations();
+        let layoutConfigurations = $scope.getLayoutConfigurations();
         $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
         $scope.dynamicLayoutConfigurations = _.sortBy(_.uniqBy(layoutConfigurations.dynamicLayout, 'code'), 'index');
         $scope.mapMasterCategoryList(configurations);
-        $scope.configureDropdowns();
     };
+
     $scope.init()
 
 }]);
