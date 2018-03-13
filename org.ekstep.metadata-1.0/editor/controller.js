@@ -49,10 +49,15 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     $scope.initDropdown = function() {
         const DROPDOWN_INPUT_TYPES = ['select', 'multiSelect'];
         $timeout(function() {
-            _.forEach(configurations, function(key, value) {
-                if (_.includes(DROPDOWN_INPUT_TYPES, key.inputType)) {
-                    $('#_select' + key.code).dropdown('set selected', $scope.contentMeta[key.code]);
+            _.forEach(configurations, function(field) {
+                if (_.includes(DROPDOWN_INPUT_TYPES, field.inputType)) {
+                    $('#_select' + field.code).dropdown('set selected', $scope.contentMeta[field.code]);
                     $scope.$safeApply();
+                    if (field.depends) {
+                        $scope.getAssociations($scope.contentMeta[field.code], field.range, function(associations) {
+                            $scope.applayDependencyRules(field, associations);
+                        });
+                    }
                 }
             });
         }, 0);
