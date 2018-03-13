@@ -68,8 +68,8 @@
                                                         </div>
                                                         <div class="extra">
                                                             <span ng-if="child.data.metadata.owner">Created by {{child.data.metadata.owner}}</span>
-                                                            <i class="long arrow right medium icon right floated blue-color" ng-click="setActiveNode(child)"></i>
-                                                            <i ng-show="!isCollection" class="fa fa-trash right floated delete-node padding-right-20" aria-hidden="true" ng-click="deleteNode(child, $event);"></i>
+                                                            <i class="long arrow right medium icon right floated blue-color popup-item" data-content="Preview" data-variation: "wide" data-position: "bottom left" ng-click="setActiveNode(child)"></i>
+                                                            <i ng-show="!isCollection" class="fa fa-trash right floated delete-node padding-right-20 popup-item" data-content="Delete" data-variation: "wide" data-position: "bottom left" aria-hidden="true" ng-click="deleteNode(child, $event);"></i>
                                                         </div>
                                                     </div>
                                                 </div>
