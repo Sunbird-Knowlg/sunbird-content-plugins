@@ -42,7 +42,7 @@
                                 <div class="ui" id="content-list">
                                     <div ng-if="!isContent && contentList.length<1" class="list-drag">
                                         <!-- Drag and Drop Suggested Content here or <span class="blue-color">View Library</span> -->
-                                        <p>No Content's are available</p><p ng-show="!isCollection">You can add resource by ctrl + alt + A</p>
+                                        <p>No Content's are available</p><p ng-show="!isCollection">You can add resource by Ctrl + Alt + A</p>
                                     </div>
                                     <div ui-sortable="sortableOptions" ng-model="contentList">
                                         <div class="ui raised segment padding-none" ng-repeat="child in contentList" ng-class="{'unsortable': isCollection}">
