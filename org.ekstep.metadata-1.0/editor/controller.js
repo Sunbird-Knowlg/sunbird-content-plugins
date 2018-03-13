@@ -1,12 +1,10 @@
 'use strict';
 
 angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scope', '$q', '$rootScope', '$http', '$timeout', 'configurations', function($scope, $q, $rootScope, $http, $timeout, configurations) {
-    var ctrl = this;
+    let ctrl = this;
     $scope.configurations = configurations;
     $scope.isSubmit = false;
     $scope.manifest = { id: "org.ekstep.metadata", ver: "1.2" };
-    $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
-    $scope.originalContentMeta = _.clone($scope.contentMeta);
     $scope.categoryList = {}
     let isRootNode = true;
     let isNewNode = false;
@@ -80,7 +78,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      */
     $scope.getAssociations = function(keys, range, callback) {
         let associations = [];
-        var values = _.filter(range, function(res) { return _.includes(keys, res.name); });
+        let values = _.filter(range, function(res) { return _.includes(keys, res.name); });
         _.forEach(values, function(key, value) {
             if (key.associations) {
                 _.forEach(key.associations, function(key, value) {
@@ -135,8 +133,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      */
     ctrl.getLayoutConfigurations = function() {
         const FIXED_FIELDS_CODE = ["name", "description", "keyword", "appIcon"];
-        var fixedLayout = [];
-        var dynamicLayout = [];
+        let fixedLayout = [];
+        let dynamicLayout = [];
         _.map(configurations, function(field) {
             if (_.includes(FIXED_FIELDS_CODE, field.code)) {
                 fixedLayout.push(field)
@@ -216,8 +214,21 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         })
     }
 
+    /**
+     * @description                     - Which used to get only modied filed values
+     * @param {Object} currentMetadata  -Current field values
+     */
     $scope.getUpdatedMetadata = function(currentMetadata = {}) {
         let metadata = {};
+        // TODO:
+        // Which trmis out the lemma keyword 
+        // Example - [{lemma:'key1'},{lemma:'key2'}] => ['key1','key2']
+        if (currentMetadata['keywords']) {
+            let keywords = currentMetadata['keywords'];
+            currentMetadata.keywords = keywords.map(function(a) {
+                return a.lemma ? a.lemma : a
+            })
+        }
         if (_.isEmpty($scope.originalContentMeta)) {
             _.forEach(currentMetadata, function(value, key) {
                 metadata[key] = value;
@@ -251,7 +262,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
                 useLabels: labels,
                 forceSelection: forceSelection
             });
-        }, 100)
+        }, 0)
     }
 
     /** 
@@ -259,12 +270,14 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      *              - Which partions the fixedLayout and dynamic layout section fields
      */
     $scope.init = function() {
+        $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
+        $scope.originalContentMeta = _.clone($scope.contentMeta);
         ecEditor.addEventListener('editor:form:change', $scope.onConfigChange, $scope);
-        var layoutConfigurations = ctrl.getLayoutConfigurations();
+        let layoutConfigurations = ctrl.getLayoutConfigurations();
         $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
         $scope.dynamicLayoutConfigurations = _.sortBy(_.uniqBy(layoutConfigurations.dynamicLayout, 'code'), 'index');
-        $scope.configureDropdowns();
         $scope.mapMasterCategoryList(configurations);
+        $scope.configureDropdowns();
     };
     $scope.init()
 
