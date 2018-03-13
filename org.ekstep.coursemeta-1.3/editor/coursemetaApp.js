@@ -6,7 +6,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
 
     $scope.updateTitle = function(event, title) {
         $scope.course.name = title;
-        $scope.getPath();
+        ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
         $scope.$safeApply();
     }
     ecEditor.addEventListener("title:update:course", $scope.updateTitle, $scope);
@@ -52,7 +52,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             $scope.metadataCloneObj = _.clone($scope.course);
             $scope.editMode = true;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
-            $scope.getPath();
+            ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
             $scope.submitted = true; 
             $scope.$safeApply();
         }
@@ -105,19 +105,6 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
     }
 
-    $scope.showTooltip = function(event, title) {
-        if(title.length > 25 ) {
-            $('.section').popup({
-                content: title,
-                variation: "wide",
-                on: 'hover',
-                position:'bottom left'
-            });
-        } else {
-            $('.section').popup('destroy');
-        }
-   }
-
     $scope.onNodeSelect = function(evant, data){
         var selectedConcepts = [];
         $scope.nodeId = data.data.id;
@@ -162,21 +149,10 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
                 $scope.$safeApply();
             }
         });
-        $scope.getPath();
+        ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
         $scope.$safeApply();
     }
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:Course', $scope.onNodeSelect);
-
-    $scope.getPath = function() {
-        $scope.path = [];
-        var path = ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getKeyPath();
-        _.forEach(path.split('/'), function(key) {
-            if(key){
-                var node = ecEditor.jQuery("#collection-tree").fancytree("getTree").getNodeByKey(key);
-                $scope.path.push({'title' : node.title, 'nodeId'  : node.key });
-            }
-        });
-    }
 
     $scope.setActiveNode = function(nodeId){
         org.ekstep.collectioneditor.api.getService('collection').setActiveNode(nodeId);

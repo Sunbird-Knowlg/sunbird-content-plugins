@@ -108,15 +108,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
      * Play the content in Genie-canvas
      */
     $scope.playContent = function(data) {
-        if (!data || data.data.metadata.mimeType !== 'application/vnd.ekstep.ecml-archive') {
-            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                message: 'Unable to preview the content, please try again later',
-                position: 'topCenter',
-                icon: 'fa fa-warning'
-            });
-            org.ekstep.services.telemetryService.error({ "env": "content", "stage": "", "action": "show error", "err": "Unable to fetch content from remote", "type": "API", "data": err, "severity": "fatal" });
-            return
-        }
         var previewButton = document.getElementsByClassName('preview-image')[0];
         previewButton.style.display = 'none';
         var previewIframe = document.getElementById('previewContentIframe');
@@ -142,7 +133,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 } else {
                     configuration.config = {showEndpage:true};
                 }
-                configuration.metadata = content.metadata; 
+                configuration.metadata = content; 
                 configuration.data = (content.mimeType == 'application/vnd.ekstep.ecml-archive') ?  content.body : {};
                 previewIframe.contentWindow.initializePreview(configuration);
             })
@@ -266,6 +257,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 res.data.result.content.keywords = $scope.parseKeywords(res.data.result.content.keywords);
                 org.ekstep.services.collectionService.fromCollection(res.data.result.content);
                 $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
+                $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
                 $scope.showsuggestedContent = $scope.sidebarPages.length > 0 ? true : false;
                 var framework = ecEditor.getContext('framework') || org.ekstep.services.collectionService.framework;
                 ecEditor.getService('meta').getCategorys(framework, function(cateerr, cateresp) {
@@ -335,7 +327,11 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             org.ekstep.collectioneditor.api.getService('collection').setActiveNode(node.key);
         } else {
             $scope.setSelectedNode(undefined, node);
-            ecEditor.dispatchEvent('org.ekstep.collectioneditor:content:update', node.data.metadata);
+            if (node.data.metadata.mimeType !== "application/vnd.ekstep.content-collection")
+                ecEditor.dispatchEvent('org.ekstep.collectioneditor:content:update', node.data.metadata);
+            ecEditor.dispatchEvent('org.ekstep.collectioneditor:addToBreadcrumb', node.data.metadata);
+
+
         }
     }
 
