@@ -20,29 +20,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         ecEditor.dispatchEvent(event, data)
     };
 
-    ctrl.getUpdatedMetadata = function(currentMetadata) {
-        let metadata = {};
-        if (_.isEmpty($scope.originalContentMeta)) {
-            _.forEach(currentMetadata, function(value, key) {
-                metadata[key] = value;
-            });
-        } else {
-            _.forEach(currentMetadata, function(value, key) {
-                if (_.isUndefined($scope.originalContentMeta[key])) {
-                    metadata[key] = value;
-                } else if (value != $scope.originalContentMeta[key]) {
-                    metadata[key] = value;
-                }
-            });
-        }
-        if (_.isUndefined(metadata['name'])) {
-            metadata['name'] = $scope.originalContentMeta['name'];
-        }
-        return metadata;
-    };
-
-
-
     /**
      * @description     - Which is used to initialize the dropdown with selected values
      */
@@ -55,7 +32,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
                     $scope.$safeApply();
                     if (field.depends && field.depends.length) {
                         $scope.getAssociations($scope.contentMeta[field.code], field.range, function(associations) {
-                            $scope.applayDependencyRules(field, associations);
+                            $scope.applayDependencyRules(field, associations, false);
                         });
                     }
                 }
@@ -118,17 +95,19 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      * @description                    - Which is used to resolve the dependency. 
      * @param {Object} field           - Which field need need to get change.
      * @param {Object} associations    - Association values of the respective field.
+     * @param {Boolean} resetSelected  - Which defines while resolving the dependency dropdown
+     *                                   Should reset the selected values of the field or not
      */
-    $scope.applayDependencyRules = function(field, associations) {
+    $scope.applayDependencyRules = function(field, associations, resetSelected = true) {
         //reset the depended field first
         // Update the depended field with associated value
         // Currently, supported only for the dropdown values
         let dependedValues;
         if (field.depends && field.depends.length) {
-            _.forEach(field.depends, function(name) {
-                $scope.resetSelectedField('#_select' + name);
+            _.forEach(field.depends, function(id) {
+                resetSelected && $scope.resetSelectedField(id);
                 dependedValues = _.map(associations, i => _.pick(i, 'name'))
-                $scope.updateDropDownList(name, dependedValues);
+                $scope.updateDropDownList(id, dependedValues);
                 $scope.$safeApply();
             });
         }
@@ -186,16 +165,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         }
 
         let form = {};
-        form.metaData = ctrl.getUpdatedMetadata($scope.contentMeta);
+        form.metaData = $scope.getUpdatedMetadata($scope.contentMeta);
         form.isRoot = isRootNode;
         form.isNew = isNewNode;
         form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
-        // let keywords = $scope.categoryList[keyword];
-        // if (keywords) {
-        //     $scope.categoryList[keyword] = keywords.map(function(a) {
-        //         return a.lemma ? a.lemma : a
-        //     })
-        // }
         ecEditor.dispatchEvent('editor:form:success', {
             isValid: $scope.metaForm.$valid,
             formData: form,
@@ -218,7 +191,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      */
     $scope.resetSelectedField = function(id) {
         setTimeout(function() {
-            $(id).dropdown('restore defaults');
+            $scope.contentMeta[id] = [];
+            $('#_select' + id).dropdown('clear');
             $scope.$safeApply();
         }, 0)
     }
@@ -242,17 +216,42 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         })
     }
 
+    $scope.getUpdatedMetadata = function(currentMetadata = {}) {
+        let metadata = {};
+        if (_.isEmpty($scope.originalContentMeta)) {
+            _.forEach(currentMetadata, function(value, key) {
+                metadata[key] = value;
+            });
+        } else {
+            _.forEach(currentMetadata, function(value, key) {
+                if (_.isUndefined($scope.originalContentMeta[key])) {
+                    metadata[key] = value;
+                } else if (value != $scope.originalContentMeta[key]) {
+                    metadata[key] = value;
+                }
+            });
+        }
+        if (_.isUndefined(metadata['name'])) {
+            metadata['name'] = $scope.originalContentMeta['name'];
+        }
+        return metadata;
+    };
+
+
 
     /**
-     * @description             -
-     * @param {Boolean} flag    -
+     * @description                      -
+     * @param {Boolean} labels           -
+     * @param {Boolean} forceSelection   -
      */
-    $scope.enableMultiSelectDropDown = function(flag) {
+    $scope.configureDropdowns = function(labels = false, forceSelection = false) {
+        // TODO: Need to remove the timeout
         setTimeout(function() {
             $(".ui.dropdown").dropdown({
-                useLabels: flag
+                useLabels: labels,
+                forceSelection: forceSelection
             });
-        }, 0)
+        }, 100)
     }
 
     /** 
@@ -264,11 +263,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         var layoutConfigurations = ctrl.getLayoutConfigurations();
         $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
         $scope.dynamicLayoutConfigurations = _.sortBy(_.uniqBy(layoutConfigurations.dynamicLayout, 'code'), 'index');
-        console.log("Dynamic layout config", $scope.dynamicLayoutConfigurations)
-        $scope.enableMultiSelectDropDown(false);
+        $scope.configureDropdowns();
         $scope.mapMasterCategoryList(configurations);
     };
-
     $scope.init()
 
 }]);
