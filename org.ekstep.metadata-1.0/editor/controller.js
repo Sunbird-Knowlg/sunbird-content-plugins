@@ -3,13 +3,13 @@
 angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scope', '$q', '$rootScope', '$http', '$timeout', 'configurations', function($scope, $q, $rootScope, $http, $timeout, configurations) {
     var ctrl = this;
     $scope.configurations = configurations;
-    $scope.submitted = false;
+    $scope.isSubmit = false;
     $scope.manifest = { id: "org.ekstep.metadata", ver: "1.2" };
     $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
     $scope.originalContentMeta = _.clone($scope.contentMeta);
     $scope.categoryList = {}
-    const isRoot = true;
-    const isNew = false;
+    let isRootNode = true;
+    let isNewNode = false;
 
     /**
      * 
@@ -155,7 +155,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      * @description     -Which is used to get fixedLayout section and Dynamic section layout fields
      */
     ctrl.getLayoutConfigurations = function() {
-        const FIXED_FIELDS_CODE = ["name", "description", "keyword", "image"];
+        const FIXED_FIELDS_CODE = ["name", "description", "keyword", "appIcon"];
         var fixedLayout = [];
         var dynamicLayout = [];
         _.map(configurations, function(field) {
@@ -175,7 +175,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      * @fires       - 'editor:form:success'
      */
     $scope.successFn = function() {
-        $scope.submitted = true;
+        $scope.isSubmit = true;
         let successCB = function(err, res) {
             if (res) {
                 $scope.closeThisDialog();
@@ -187,9 +187,15 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
 
         let form = {};
         form.metaData = ctrl.getUpdatedMetadata($scope.contentMeta);
-        form.isRoot = true;
-        form.isNew = false;
+        form.isRoot = isRootNode;
+        form.isNew = isNewNode;
         form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
+        // let keywords = $scope.categoryList[keyword];
+        // if (keywords) {
+        //     $scope.categoryList[keyword] = keywords.map(function(a) {
+        //         return a.lemma ? a.lemma : a
+        //     })
+        // }
         ecEditor.dispatchEvent('editor:form:success', {
             isValid: $scope.metaForm.$valid,
             formData: form,
@@ -258,6 +264,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         var layoutConfigurations = ctrl.getLayoutConfigurations();
         $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
         $scope.dynamicLayoutConfigurations = _.sortBy(_.uniqBy(layoutConfigurations.dynamicLayout, 'code'), 'index');
+        console.log("Dynamic layout config", $scope.dynamicLayoutConfigurations)
         $scope.enableMultiSelectDropDown(false);
         $scope.mapMasterCategoryList(configurations);
     };

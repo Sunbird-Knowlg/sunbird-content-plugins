@@ -1,5 +1,6 @@
 /**
  * @description
+ * @author Manjunath Davanam <manjunathd@ilimi.in>
  */
 var formApp = angular.module('org.ekstep.metadataform', ['ngTokenField']);
 

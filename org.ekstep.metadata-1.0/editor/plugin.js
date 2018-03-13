@@ -60,7 +60,26 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
     /**
      * @description
      */
-    getFormFields: function( /*Child class should return the form field data*/ ) {}
+    getFormFields: function( /*Child class should return the form field data*/ ) {},
+
+
+    /**
+     * @param {Object} destination
+     * @param {Object} source
+     * @description - Which is used to merge the "Framework object into Form Configurations"
+     *              - By mapping code attribute
+     * @returns {Object}
+     */
+    mapObject: function(destination, source) {
+        destination.forEach(function(dest) {
+            source.forEach(function(src) {
+                if (dest.code === src.code) {
+                    dest.range = src.terms;
+                }
+            })
+        });
+        return destination;
+    },
 
 
 });

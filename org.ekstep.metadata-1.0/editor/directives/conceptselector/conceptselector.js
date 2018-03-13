@@ -1,5 +1,6 @@
 /**
  * @description
+ * @author Manjunath Davanam <manjunathd@ilimi.in>
  */
 
 formApp.directive('concetpselector', function() {
@@ -29,6 +30,7 @@ formApp.directive('concetpselector', function() {
                 }
             });
         }
+        $scope.invokeConceptSelector()
     }]
     return {
         restrict: "EA",

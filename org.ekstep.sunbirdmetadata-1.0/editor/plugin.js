@@ -57,6 +57,7 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
     successAction: function(event, data) {
         if (data.isValid) {
             let event = this.actionMap[this.config.action];
+            this.updateState(data.formData);
             ecEditor.dispatchEvent(event, {
                 savingPopup: false,
                 successPopup: false,
@@ -113,25 +114,6 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
     },
 
     /**
-     * @param {Object} destination
-     * @param {Object} source
-     * @description - Which is used to merge the "Framework object into Form Configurations"
-     *              - By mapping code attribute
-     * @returns {Object}
-     */
-    mapObject: function(destination, source) {
-        destination.forEach(function(dest) {
-            source.forEach(function(src) {
-                if (dest.code === src.code) {
-                    dest.range = src.terms;
-                }
-            })
-        });
-        return destination;
-
-    },
-
-    /**
      * @description - Which returns the current form object.
      * @returns {Object}
      */
@@ -151,6 +133,16 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
         this.config = formConfigurations; // Remove this line
         this.form = this.mapObject(this.config.fields, this.framework.categories);
         this.loadTemplate(this.config.templateName);
+    },
+
+    updateState: function(stateObj) {
+        let key = stateObj.nodeId;
+        let value = {};
+        value.root = stateObj.isRoot;
+        value.isNew = stateObj.isNew;
+        value.metadata = stateObj.metaData;
+        org.ekstep.services.stateService.setState(key, value);
     }
+
 });
 //# sourceURL=sunbirdmetadataplugin.js;

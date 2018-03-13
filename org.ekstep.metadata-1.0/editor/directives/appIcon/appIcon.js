@@ -1,5 +1,6 @@
 /**
  * @description
+ * @author Manjunath Davanam <manjunathd@ilimi.in>
  */
 
 formApp.directive('appIcon', function() {

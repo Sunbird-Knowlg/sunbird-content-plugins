@@ -34,20 +34,20 @@
                         <!--FIXED SECTION LAYOUT-->
                         <div class="ten wide field" ng-class="!appIconConfig.renderingHints.visible? 'twelve wide field':'ten wide field'">
                             <div ng-repeat="fixedField in fixedLayoutConfigurations">
-                                <div id="{{fixedField.code}}" class="field" ng-class="{'error': !contentMeta[fixedField.code] && submitted, 'required': fixedField.required}" name="{{fixedField.code}}" ng-show="(fixedField.code =='name' && fixedField.renderingHints.visible)">
+                                <div id="{{fixedField.code}}" class="field" ng-class="{'error': !contentMeta[fixedField.code]  && isSubmit && fixedField.required , 'required': fixedField.required}" name="{{fixedField.code}}" ng-show="(fixedField.code =='name' && fixedField.renderingHints.visible)">
                                     <label>{{fixedField.label}}</label>
                                     <div class="ui input" ng-class="{'disabled':!fixedField.editable}">
                                         <input id="{{fixedField.code}}" placeholder={{field.placeholder}} name="{{fixedField.code}}" ng-model="contentMeta.name" type="text" maxlength="{{fixedField.renderingHints.maxlength}}" ng-required="{{fixedField.required}}">
                                     </div>
                                 </div>
-                                <div id="{{fixedField.code}}" class="field" ng-class="{'error': !contentMeta[fixedField.code] && submitted, 'required': fixedField.required}" name="{{fixedField.code}}" ng-show="(fixedField.code =='description' && fixedField.renderingHints.visible)" ng-class=" "
-                                    ng-required="{{fixedField.required}}">
+                                <div id="{{fixedField.code}}" class="field" ng-class="{'error': !contentMeta[fixedField.code]  && isSubmit && fixedField.required , 'required': fixedField.required}" name="{{fixedField.code}}" ng-show="(fixedField.code =='description' && fixedField.renderingHints.visible)">
                                     <label>{{fixedField.label}}</label>
                                     <div class=" ui input " ng-class="{'disabled':!fixedField.editable }">
-                                        <textarea id="{{fixedField.code}}" ng-class="fixedField.required ? 'required':''" placeholder={{field.placeholde}} ng-model="contentMeta.description " rows="{{fixedField.renderingHints.rows}}" name="{{fixedField.code}}"></textarea>
+                                        <textarea id="{{fixedField.code}}" placeholder={{field.placeholde}} ng-model="contentMeta.description" rows="{{fixedField.renderingHints.rows}}" name="{{fixedField.code}}" ng-required="{{fixedField.required}}"></textarea>
                                     </div>
                                 </div>
-                                <div id="{{fixedField.code}}" class="field" ng-class="{'error': !contentMeta[fixedField.code] && submitted, 'required': fixedField.required}" name="{{fixedField.code}}" ng-show="(fixedField.code =='keyword' && fixedField.renderingHints.visible)" ng-required="{{fixedField.required}}">
+                                <div id="{{fixedField.code}}" class="field" ng-class="{'error': !contentMeta[fixedField.code] && isSubmit && fixedField.required , 'required': fixedField.required}" name="{{fixedField.code}}" ng-show="(fixedField.code =='keyword' && fixedField.renderingHints.visible)"
+                                    ng-required="{{fixedField.required}}">
                                     <label>{{fixedField.label}}</label>
                                     <keywords></keywords>
                                 </div>
@@ -61,7 +61,7 @@
                         <div class="ten wide field" ng-class="!appIconConfig.renderingHints.visible? 'twelve wide field':'ten wide field'">
                             <div class="ui grid">
                                 <div class="six wide field" ng-repeat="dynamicField in dynamicLayoutConfigurations">
-                                    <div id="{{dynamicField.code}}" class="field" ng-class="{'error': !contentMeta[dynamicField.code] && submitted, 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='text' || dynamicField.inputType=='number'"
+                                    <div id="{{dynamicField.code}}" class="field" ng-class="{'error': !contentMeta[dynamicField.code] && isSubmit && dynamicField.required , 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='text' || dynamicField.inputType=='number'"
                                         ng-required=" {{dynamicField.required}} ">
                                         <label>{{dynamicField.label}}</label>
                                         <div class="ui input " ng-class="{'disabled':!dynamicField.editable }">
@@ -69,27 +69,27 @@
                                         </div>
                                     </div>
 
-                                    <div id="{{dynamicField.code}}" class="field" ng-class="{'error': !contentMeta[dynamicField.code] &&  submitted && dynamicField.required, 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='multiSelect' " ng-required="{{dynamicField.required}} ">
+                                    <div id="{{dynamicField.code}}" class="field" ng-class="{'error': !contentMeta[dynamicField.code] && isSubmit && dynamicField.required , 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='multiSelect' " ng-required="{{dynamicField.required}} ">
                                         <label>{{dynamicField.label}}</label>
                                         <select id="_select{{dynamicField.code}}" name="{{dynamicField.code}}" class="ui fluid search dropdown" multiple="" ng-class="!dynamicField.editable ? ' disabled ':' ' " ng-model="contentMeta[dynamicField.code]" ng-change="$ctrl.dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:contentMeta[dynamicField.code]}) ">
                                             <option value="">Select</option>
                                             <option data-value="{{category.name}}"  ng-repeat="category in categoryList[dynamicField.code]">{{category.name}}</option>
                                         </select>
                                     </div>
-                                    <div id="{{dynamicField.code}}" class="field" ng-class="{'error': !contentMeta[dynamicField.code] &&  submitted && dynamicField.required, 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='select' && dynamicField.code!='year' "
-                                        ng-required="{{dynamicField.required}} ">
+                                    <div id="{{dynamicField.code}}" class="field" ng-class="{'error': !contentMeta[dynamicField.code] && isSubmit && dynamicField.required, 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='select' && dynamicField.code!='year' ">
                                         <label>{{dynamicField.label}}</label>
-                                        <select id="_select{{dynamicField.code}}" name="{{dynamicField.code}}" class="ui search  dropdown placeholder-padding" ng-class="!dynamicField.editable ? ' disabled ':' ' " ng-model="contentMeta[dynamicField.code]" ng-change="$ctrl.dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:contentMeta[dynamicField.code]}) ">
+                                        <select id="_select{{dynamicField.code}}" name="{{dynamicField.code}}" class="ui search  dropdown placeholder-padding" ng-class="!dynamicField.editable ? ' disabled ':' ' " ng-model="contentMeta[dynamicField.code]" ng-change="$ctrl.dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:contentMeta[dynamicField.code]}) "
+                                            ng-required="{{dynamicField.required}} ">
                                                 <option value="">Select</option>
                                                 <option data-value="{{category.name}}"  ng-repeat="category in categoryList[dynamicField.code]">{{category.name}}</option>
                                         </select>
                                     </div>
 
-                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': !contentMeta[dynamicField.code] && submitted , 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="dynamicField.inputType=='concetpselector'" ng-required=" {{dynamicField.required}} ">
+                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': !contentMeta[dynamicField.code] && isSubmit && dynamicField.required , 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="dynamicField.inputType=='concetpselector'">
                                         <label>{{dynamicField.label}}</label>
                                         <concetpselector></concetpselector>
                                     </div>
-                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': !contentMeta[dynamicField.code] && submitted, 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="dynamicField.code=='year'
+                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': !contentMeta[dynamicField.code] && isSubmit && dynamicField.required, 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="dynamicField.code=='year'
                                             " ng-required=" {{dynamicField.required}} ">
                                         <label>{{dynamicField.label}}</label>
                                         <year></year>
@@ -99,6 +99,7 @@
                         </div>
                     </div>
                 </div>
+                <!-- ACTION SECTION LAYOUT -->
                 <div class="actions " style="position:relative; left:78% ">
                     <div class="twelve wide column right aligned ">
                         <div class="ui buttons ">
