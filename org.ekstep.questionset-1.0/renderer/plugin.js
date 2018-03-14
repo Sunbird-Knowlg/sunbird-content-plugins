@@ -97,13 +97,12 @@ Plugin.extend({
                 Renderer.update = true;
             }, 500);
         } else {
-
-
+            this._currentQuestion = question;
             this._renderedQuestions = _.union(this._renderedQuestions, [question]);
             // if (this._currentQuestion) {
             //   EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
             // }
-            
+
             this._currentQuestionState = this.getQuestionState(this._currentQuestion.id);
             this.loadModules(question, function() {
                 setTimeout(function() {

@@ -48,7 +48,7 @@
       "thumbnail": "editor/assets/mcq-horizontal.png",
       "title": "Horizontal MCQ",
       "disc": "Horizontal MCQ template",
-      "category": "mcq",
+      "category": "MCQ",
       "editor":
       {
         "templateURL": "editor/templates/horizontal_template.html",
