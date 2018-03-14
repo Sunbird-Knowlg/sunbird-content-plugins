@@ -9,12 +9,13 @@
         <div class="card" ng-repeat="lesson in $ctrl.res.content | orderBy:sortOption track by $index" in-view="lineInView($index, $inview, lesson, 'LessonBrowser', $index)" in-view-options="{ throttle: 1000 }" ng-click="toggleSelectionLesson(lesson)">
             <div class="image">
                 <img src="{{lesson.appIcon || $ctrl.defaultImage}}" class="resourceMetaImage ">
-                <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{lesson.identifier}}' style="z-index:9999">
+                <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{lesson.identifier}}' style="z-index:12">
                     <input class="checkBox" type="checkbox" name="lessons[]">
                     <label></label>
                 </div>
                 <div class="ui inverted dimmer">
                     <div class="content">
+
                         <div class="ui list">
                             <div class="item">
                                 <div class="right floated content contentMetaDetail">{{lesson.board}}</div>
@@ -52,7 +53,7 @@
                     {{lesson.description}}
                 </div>
                 <div class="meta">
-                    <span class="creator">Created by {{lesson.creator || '--'}}</span>
+                    <span class="creator">Created by {{lesson.creator}}</span>
                 </div>
             </div>
         </div>

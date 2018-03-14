@@ -125,7 +125,7 @@
 }
 
 .ui.vertical .ui.list.filterOverflow {
-    overflow-y: hidden;
+    overflow-y: scroll;
     height: calc(100vh - 277px);
     padding: 6%;
     margin: 0%;
