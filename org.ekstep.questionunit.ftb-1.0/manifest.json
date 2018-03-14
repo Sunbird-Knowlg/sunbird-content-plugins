@@ -60,7 +60,7 @@
         "thumbnail": "editor/assets/ftb-horizontal.png",
         "title": "Horizantal FTB",
         "disc": "Horizantal FTB template",
-        "category": "ftb",
+        "category": "FTB",
         "editor":
         {
             "templateURL": "editor/templates/horizontal_template.html",

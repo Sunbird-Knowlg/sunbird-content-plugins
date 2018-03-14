@@ -14,13 +14,13 @@
   ctrl.questionUnitTemplateURL = '';
   ctrl.editMode = false;
   ctrl.menuItems = {};
-  ctrl.defaultActiveMenu = 'mcq';
+  ctrl.defaultActiveMenu = 'MCQ';
   ctrl.selectedTemplatePluginData = {};
   ctrl.questionCreationFormData = {};
   ctrl.TotalconceptsData = [];
   ctrl.selectedConceptsData = [];
   ctrl.questionUnitValidated = false
-  ctrl.level = ['Easy', 'Medium', 'Difficult'];
+  ctrl.level = ['EASY', 'MEDIUM', 'DIFFICULT'];
   ctrl.conceptsCheck = false;
   ctrl.questionData = { 'questionMaxScore' : 1};
   ctrl.plugins = { 'concepts': 'org.ekstep.conceptselector:init' };
@@ -29,23 +29,23 @@
   ctrl.refreshPreview = false;
   ctrl.noTemplatesFound = "";
   ctrl.allMenuItems = [];
-  ctrl.menuItems['mcq'] = {
-    'category': 'mcq',
+  ctrl.menuItems['MCQ'] = {
+    'category': 'MCQ',
     'data': { 'name': 'Multiple Choice', 'icon': 'list icon' },
     'templatesData': []
   };
-  ctrl.menuItems['ftb'] = {
-    'category': 'ftb',
+  ctrl.menuItems['FTB'] = {
+    'category': 'FTB',
     'data': { 'name': 'Fill in the Blanks', 'icon': 'minus square outline icon' },
     'templatesData': []
   };
-  ctrl.menuItems['mtf'] = {
-    'category': 'mtf',
+  ctrl.menuItems['MTF'] = {
+    'category': 'MTF',
     'data': { 'name': 'Match the following', 'icon': 'block layout icon' },
     'templatesData': []
   };
-  ctrl.menuItems['other'] = {
-    'category': 'other',
+  ctrl.menuItems['OTHER'] = {
+    'category': 'OTHER',
     'data': { 'name': 'Other', 'icon': 'ellipsis horizontal icon' },
     'templatesData': []
   };
@@ -324,22 +324,22 @@
         "max_score": ctrl.questionData.questionMaxScore,
         "body": JSON.stringify(questionFormData),
         "language": [ctrl.questionData.qcLanguage],
-        "itemType": "unit",
+        "itemType": "UNIT",
         "version": 2,
         "category": ctrl.category,
         "description": ctrl.questionData.questionDesc,
         "createdBy": window.context.user.id,
         "channel": "in.ekstep", //default value
-        "type": ctrl.category, // backward compatibility
+        "type": ctrl.category.toLowerCase(), // backward compatibility
         "template": "NA", // backward compatibility
         "template_id": "NA", // backward compatibility
       }
       var dynamicOptions = [{ "answer": true, "value": { "type": "text", "asset": "1" } }];
       switch (ctrl.category) {
-        case 'mcq':
+        case 'MCQ':
         metadata.options = dynamicOptions;
         break;
-        case 'ftb':
+        case 'FTB':
         metadata.answer = dynamicOptions;
         break;
         default:
