@@ -7,7 +7,7 @@ formApp.directive('concetpselector', function() {
     var conceptController = ['$scope', '$controller', function($scope, $controller) {
         let selectedConcepts = []
         if ($scope.contentMeta.concepts) {
-            if ($scope.conceptData.concepts.length)
+            if ($scope.contentMeta.concepts.length)
                 _.forEach($scope.contentMeta.concepts, function(concept) {
                     selectedConcepts.push(concept.identifier);
                 });

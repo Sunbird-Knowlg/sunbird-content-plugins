@@ -58,6 +58,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      * @param {Object} object - Field information
      */
     $scope.onConfigChange = function(event, object) {
+        $scope.isSubmit = false;
         $scope.updateForm(object);
     }
 
@@ -134,7 +135,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      * @description     -Which is used to get fixedLayout section and Dynamic section layout fields
      */
     $scope.getLayoutConfigurations = function() {
-        const FIXED_FIELDS_CODE = ["name", "description", "keyword", "appIcon"];
+        const FIXED_FIELDS_CODE = ["name", "description", "keywords", "appIcon"];
         let fixedLayout = [];
         let dynamicLayout = [];
         _.map(configurations, function(field) {

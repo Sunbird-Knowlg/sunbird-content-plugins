@@ -15,13 +15,11 @@ formApp.directive('keywords', function() {
                 })
             }
         };
-
     }]
     return {
         restrict: "EA",
         templateUrl: ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", "editor/directives/keywords/template.html"),
-        controller: keywordController
-
+        controller: keywordController,
     };
 });
 

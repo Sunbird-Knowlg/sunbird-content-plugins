@@ -1,4 +1,4 @@
-<tags-input ng-model="contentMeta.keywords" display-property="lemma " replace-spaces-with-dashes="false ">
+<tags-input ng-model="contentMeta.keywords" display-property="lemma " replace-spaces-with-dashes="false " ng-disabled="{{!fixedField.editable}}" ng-class="{'remove-delete':!fixedField.editable}" min-tags="{{fixedField.required ? 1:0}}">
     <auto-complete source="loadKeywords($query) " min-length="0 " load-on-focus="true " load-on-empty="true " template="my-custom-template "></auto-complete>
 </tags-input>
 <div class="right-panel ">

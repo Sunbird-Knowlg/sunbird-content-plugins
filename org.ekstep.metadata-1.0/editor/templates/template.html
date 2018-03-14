@@ -46,7 +46,7 @@
                                         <textarea id="{{fixedField.code}}" placeholder={{field.placeholde}} ng-model="contentMeta.description" rows="{{fixedField.renderingHints.rows}}" name="{{fixedField.code}}" ng-required="{{fixedField.required}}"></textarea>
                                     </div>
                                 </div>
-                                <div id="{{fixedField.code}}" class="field" ng-class="{'error': (!contentMeta[fixedField.code] && fixedField.required) && isSubmit , 'required': fixedField.required}" name="{{fixedField.code}}" ng-show="(fixedField.code =='keyword' && fixedField.renderingHints.visible)"
+                                <div id="{{fixedField.code}}" class="field" ng-class="{'error': (!contentMeta[fixedField.code] && fixedField.required) && isSubmit , 'required': fixedField.required}" name="{{fixedField.code}}" ng-show="(fixedField.code =='keywords' && fixedField.renderingHints.visible)"
                                     ng-required="{{fixedField.required}}">
                                     <label>{{fixedField.label}}</label>
                                     <keywords></keywords>
@@ -106,7 +106,7 @@
                         <div class="ui buttons ">
                             <button id="closePopUp " class="ui orange button " type="button " ng-click="cancelFn() ">Cancel</button>
                             <div class="or "></div>
-                            <button class="ui blue button " ng-disabled="!metaForm.$valid" type="button " ng-click="successFn() ">Save</button>
+                            <button class="ui blue button" type="button " ng-click="successFn() ">Save</button>
                         </div>
                     </div>
                 </div>
