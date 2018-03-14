@@ -14,7 +14,8 @@
             { "type": "js", "src": "editor/directives/conceptselector/conceptselector.js" },
             { "type": "js", "src": "editor/directives/year/yearDirective.js" },
             { "type": "js", "src": "editor/config.js" },
-            { "type": "js", "src": "editor/directives/appIcon/appIcon.js" }
+            { "type": "js", "src": "editor/directives/appIcon/appIcon.js" },
+            { "type": "css", "src": "editor/css/contentmetaform.css" }
         ]
     }
 }

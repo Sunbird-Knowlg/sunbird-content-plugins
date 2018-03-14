@@ -59,10 +59,11 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
             let event = this.actionMap[this.config.action];
             this.updateState(data.formData);
             ecEditor.dispatchEvent(event, {
-                savingPopup: false,
-                successPopup: false,
-                failPopup: false,
+                savingPopup: true,
+                successPopup: true,
+                failPopup: true,
                 contentMeta: data.formData,
+                showNotification: true,
                 callback: function(err, res) {
                     if (res && res.data && res.data.responseCode == "OK") {
                         data.callback && data.callback(undefined, res);
@@ -102,13 +103,11 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
                 })
             },
             resourceBundle: function(callback) {
-                // get the resource bundle data
+                // get the resource bundle data 
                 callback(undefined, {})
             }
         }, function(error, response) {
             // results is now equals to: {config: {}, framework: {}, resourceBundle:{}}
-
-            console.log("result", response);
             callback(err, response);
         });
     },

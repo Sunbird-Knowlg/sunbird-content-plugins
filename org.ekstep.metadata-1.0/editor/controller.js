@@ -26,7 +26,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
         $timeout(function() {
             _.forEach(configurations, function(field) {
                 if (_.includes(DROPDOWN_INPUT_TYPES, field.inputType)) {
-                    $('#_select' + field.code).dropdown('set selected', $scope.contentMeta[field.code]);
+                    // $('#_select' + field.code).dropdown('set selected', $scope.contentMeta[field.code]);
                     $scope.$safeApply();
                     if (field.depends && field.depends.length) {
                         $scope.getAssociations($scope.contentMeta[field.code], field.range, function(associations) {
@@ -164,7 +164,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
                 console.error("Fails to save the data", err)
             }
         }
-
         let form = {};
         form.metaData = $scope.getUpdatedMetadata($scope.contentMeta);
         form.isRoot = isRootNode;
@@ -244,10 +243,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
                     metadata[key] = value;
                 }
             });
-        }
-        if (_.isUndefined(metadata['name'])) {
-            metadata['name'] = $scope.originalContentMeta['name'];
-        }
+        }!metadata['name'] && (metadata['name'] = $scope.originalContentMeta['name']);
+        !metadata['contentType'] && (metadata['contentType'] = $scope.originalContentMeta['contentType']);
+        !metadata['mimeType'] && (metadata['mimeType'] = $scope.originalContentMeta['mimeType']);
         return metadata;
     };
 
@@ -260,7 +258,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      * @param {Boolean} labels           - @default false Which defines the MultiSelect should be tag format design or not
      * @param {Boolean} forceSelection   - @default false Which defines the force selection should enalbe or not
      */
-    $scope.configureDropdowns = function(labels = false, forceSelection = false) {
+    $scope.configureDropdowns = function(labels = true, forceSelection = true) {
         // TODO: Need to remove the timeout
         setTimeout(function() {
             $(".ui.dropdown").dropdown({
