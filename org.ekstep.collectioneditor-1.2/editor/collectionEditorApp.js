@@ -8,8 +8,9 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     $scope.selectedObjectType = undefined;
     $scope.nodeFilter = "";
     $scope.expandNodeFlag = true;
-    $scope.defaultImage = ecEditor.resolvePluginResource('org.ekstep.collectioneditor', '1.2', "assets/default.png");
-    $scope.playImage = ecEditor.resolvePluginResource('org.ekstep.collectioneditor', '1.2', "assets/icn_play.png");
+    var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.collectioneditor");
+    $scope.defaultImage = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "assets/default.png");
+    $scope.playImage = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "assets/icn_play.png");
     $scope.contentList = [];
     $scope.selectedContent;
     $scope.isContent = false;
@@ -287,7 +288,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     };
 
     $scope.telemetry = function(data) {
-        org.ekstep.services.telemetryService.interact({ "type": 'click', "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.collectioneditor", "pluginver": "1.1", "objectid": ecEditor.getCurrentStage().id, "stage": ecEditor.getCurrentStage().id });
+        org.ekstep.services.telemetryService.interact({ "type": 'click', "subtype": data.subtype, "target": data.target, "pluginid": manifest.id, "pluginver": manifest.ver, "objectid": ecEditor.getCurrentStage().id, "stage": ecEditor.getCurrentStage().id });
     };
     
     org.ekstep.collectioneditor.api.initEditor(ecEditor.getConfig('editorConfig'), function() {
