@@ -1,3 +1,9 @@
+<div>
+<div class="ui active inverted dimmer" ng-if="isCardSearching">
+        <div class="ui large text loader">Loading</div>
+</div>
+</div>
+<div ng-if="!isCardSearching">
 <div class="row ui" id="resourceHeading">
     <p ng-if="mainTemplate == 'selectedResult'">
         RESOURCES
@@ -66,8 +72,9 @@
     <div class="ui negative message errorMessage" ng-if="$ctrl.err">
         <div class="header">{{$ctrl.err}}</div>
     </div>
-    <div id="noLessonMsg" class="ui negative message errorMessage" style="display:none">
+    <div id="noLessonMsg" ng-show="!$ctrl.res.content" class="ui negative message errorMessage" style="display:none">
         <div class="header">{{messages.no_lesson_found_msg}}</div>
         <p>{{messages.try_again_msg}}</p>
     </div>
+</div>
 </div>

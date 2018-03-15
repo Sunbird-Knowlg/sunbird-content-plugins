@@ -22,11 +22,11 @@
                 <li class="searchResult" ng-click="showCardDetails(lesson)" ng-repeat="lesson in $ctrl.searchRes.content | limitTo:5">
                     <p>{{lesson.name}}</p>
                 </li>
-                <li ng-if="$ctrl.searchRes.content.length > 5" ng-click="lessonBrowserSearch()" style="text-align:center;font-size: 14px;"><a>View All '{{searchKeyword}}'</a></li>
+                <li ng-if="$ctrl.searchRes.content.length > 5" ng-click="lessonBrowserSearch()" style="padding:2%;color:#007aff;font-size: 14px;cursor:pointer;font-weight:600"><span>View All Results</span></li>
             </ul>
             <ul class="searchList" ng-show="( mainTemplate == 'selectedResult'|| mainTemplate == 'facetsItemView' ) && !$ctrl.searchRes.content.length && (searchKeyword.length >= 3) && noResultFound">
-                <strong class="searchResultMsg">No Results</strong>
-                <p class="searchResultMsg">Your search returned no results</p>
+                <li class="searchResultMsg"><strong>No Results</strong>
+                <p>Your search returned no results</p></li>
             </ul>
             <ul class="searchList" ng-show="$ctrl.searchErr  && (searchKeyword.length >= 3)">
                 <strong class="searchResultMsg">{{$ctrl.searchErr}}</strong>
