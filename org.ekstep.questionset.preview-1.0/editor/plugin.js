@@ -35,6 +35,18 @@ org.ekstep.contenteditor.basePlugin.extend({
             }
         };
         qAndMediaObj = this.getQuestionList(questionSet['org.ekstep.question']);
+        qAndMediaObj['org.ekstep.question'].forEach(function(questionArray) {
+            if (_.has(questionArray.data, "__cdata"))
+                var qdata = JSON.parse(questionArray.data.__cdata);
+            if (_.has(qdata, "mediamanifest")) {
+                var questionMediaArr = qdata.mediamanifest.media;
+                if (_.isArray(questionMediaArr)) {
+                    questionMediaArr.forEach(function(mediaItem) {
+                        story.theme['manifest'].media.push(mediaItem);
+                    })
+                }
+            }
+        });
         story.theme.stage[0]['org.ekstep.questionset']['org.ekstep.question'] = qAndMediaObj["org.ekstep.question"];
         questionMedia = _.uniqBy(qAndMediaObj.media);
         pluginIds = _.uniqBy(qAndMediaObj.pluginIds);
@@ -42,7 +54,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         _.forEach(pluginIds, function(plugin) {
             pluginsUsed[plugin] = plugin;
         });
-        pluginsUsed["org.ekstep.questionset"] = "org.ekstep.questionset";   //Adding Question set plugin into plugin-manifest
+        pluginsUsed["org.ekstep.questionset"] = "org.ekstep.questionset"; //Adding Question set plugin into plugin-manifest
 
         ManifestGenerator.generate(pluginsUsed);
         pluginMedia = _.uniqBy(ManifestGenerator.getMediaManifest());
