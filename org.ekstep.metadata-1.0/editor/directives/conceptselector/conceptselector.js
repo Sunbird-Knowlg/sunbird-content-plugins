@@ -5,7 +5,9 @@
 
 formApp.directive('concetpselector', function() {
     var conceptController = ['$scope', '$controller', function($scope, $controller) {
-        let selectedConcepts = []
+        let selectedConcepts = [];
+        $scope.contentMeta = $scope.$parent.$parent.$parent.contentMeta;
+        $scope.fieldConfig = $scope.config;
         if ($scope.contentMeta.concepts) {
             if ($scope.contentMeta.concepts.length)
                 _.forEach($scope.contentMeta.concepts, function(concept) {
@@ -14,6 +16,7 @@ formApp.directive('concetpselector', function() {
         } else {
             $scope.contentMeta.conceptData = '(0) concepts selected';
         }
+
         $scope.invokeConceptSelector = function() {
             ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
                 element: 'metaform-concept',
@@ -35,7 +38,10 @@ formApp.directive('concetpselector', function() {
     return {
         restrict: "EA",
         templateUrl: ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", "editor/directives/conceptselector/template.html"),
-        controller: conceptController
+        controller: conceptController,
+        scope: {
+            config: '='
+        }
 
     };
 });
