@@ -165,15 +165,18 @@ Plugin.extend({
     } else if (item.type.toLowerCase() == 'mtf') {
       res = MTFEvaluator.evaluate(item);
     }
+    if(_.isUndefined(res)){
+      if (_.isFunction(callback)) {
+      callback(result);
+    }
+    }else{
     result.eval = res.pass;
     result.score = res.score;
     result.res = res.res;
-
-
-
     if (_.isFunction(callback)) {
       callback(result);
     }
+  }
   },
   /*getStates: function(questionId) {
       var qState;
