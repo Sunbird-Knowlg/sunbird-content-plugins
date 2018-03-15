@@ -27,6 +27,10 @@
             "src": "editor/jquery.flexslider-min.js"
         },
         {
+            "type": "js",
+            "src": "editor/scroll-glue.js"
+        },
+        {
             "type": "css",
             "src": "editor/flexslider.min.css"
         },

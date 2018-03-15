@@ -6,7 +6,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
 
     $scope.updateTitle = function(event, title) {
         $scope.unit.name = title;
-        $scope.getPath();
+        ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
         $scope.$safeApply();
     }
     ecEditor.addEventListener("title:update:textbookunit", $scope.updateTitle, $scope);
@@ -32,7 +32,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             $scope.metadataCloneObj = _.clone($scope.unit);
             $scope.editMode = true;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
-            $scope.getPath();
+            ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
             $scope.$safeApply();
             $scope.submitted = true;
         }
@@ -78,19 +78,6 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
     }
 
-    $scope.showTooltip = function(event, title) {
-        if(title.length > 25 ) {
-            $('.section').popup({
-                content: title,
-                variation: "wide",
-                on: 'hover',
-                position:'bottom left'
-            });
-        } else {
-            $('.section').popup('destroy');
-        }
-   }
-
     $scope.onNodeSelect = function(evant, data){
         var selectedConcepts = [];
         $scope.nodeId = data.data.id;
@@ -134,25 +121,10 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                 $scope.$safeApply();
             }
         });
-        $scope.getPath();
+        ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
         $scope.$safeApply();
     }
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:TextBookUnit', $scope.onNodeSelect);
-
-    $scope.getPath = function() {
-        $scope.path = [];
-        var path = ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getKeyPath();
-        _.forEach(path.split('/'), function(key) {
-            if(key){
-                var node = ecEditor.jQuery("#collection-tree").fancytree("getTree").getNodeByKey(key);
-                $scope.path.push({'title' : node.title, 'nodeId'  : node.key })
-            }
-        });
-        if (ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getLevel() > 5) {
-            $scope.path = _.takeRight($scope.path, 6);
-            $scope.path[0].title = "...";
-        }
-    }
 
     $scope.setActiveNode = function(nodeId){
         org.ekstep.collectioneditor.api.getService('collection').setActiveNode(nodeId);
@@ -193,13 +165,6 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         }, true);
     }
 
-    $scope.goToRootParent = function() {
-        var activeNode = org.ekstep.services.collectionService.getActiveNode();
-        var parentList = activeNode.getParentList()
-        if (parentList.length > 0)
-            org.ekstep.services.collectionService.setActiveNode(parentList[0].key);
-    }
-    
     $scope.changeTitle = function(){
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.unit.name);
     }

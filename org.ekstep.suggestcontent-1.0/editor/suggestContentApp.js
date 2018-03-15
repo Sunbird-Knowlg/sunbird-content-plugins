@@ -1,5 +1,7 @@
 angular.module('suggestcontentApp', []).controller('suggestcontentController', ['$scope', '$timeout', function($scope, $timeout) {
     $scope.contentId = ecEditor.getContext('contentId');
+    var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest('org.ekstep.suggestcontent');
+    $scope.defaultImage = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "assets/default.png");
     $scope.excludeContents = [];
     $scope.metaData = {};
     $scope.responseData = [];
@@ -36,7 +38,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
     }
 
     $scope.generateTelemetry = function(data) {
-        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.suggestcontent", "pluginver": "1.0", "objectid": ecEditor.getCurrentStage().id, "stage": ecEditor.getCurrentStage().id })
+        if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": manifest.id, "pluginver": manifest.ver, "objectid": ecEditor.getCurrentStage().id, "stage": ecEditor.getCurrentStage().id })
     }
 
     $scope.searchLessons = function() {
@@ -93,8 +95,6 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                         subject: $scope.metaData.subject
                     }
                 }
-
-            ecEditor.dispatchEvent('editor:invoke:viewall', { from: true, query })
             ecEditor.dispatchEvent('editor:invoke:viewall', { client: "org", query}) 
         }
     }
@@ -137,7 +137,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                 }
             });
 
-            if(activeNodeConcepts.length && !_.isEqual(activeNodeConcepts.sort(), $scope.metaData.concepts.sort())) {
+            if((activeNodeConcepts.length && $scope.metaData.concepts) && !_.isEqual(activeNodeConcepts.sort(), $scope.metaData.concepts.sort())) {
                 $scope.metaData.concepts = activeNodeConcepts;
                 $scope.searchLessons();
             } else if($scope.responseData) {

@@ -61,7 +61,8 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.1"
                 "org.ekstep.collectionwhatsnew-1.0"
                 "org.ekstep.suggestcontent-1.0"
                 "org.ekstep.iterator-1.0"
-                "org.ekstep.navigation-1.0");
+                "org.ekstep.navigation-1.0"
+                "org.ekstep.breadcrumb-1.0");
 
 for i in "${coreplugins[@]}"
 do

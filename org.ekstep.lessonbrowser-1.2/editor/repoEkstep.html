@@ -41,7 +41,7 @@
                             <i class="dropdown icon"></i>
                             <div class="default text">Choose Language</div>
                             <div class="menu tooltipElement">
-                                <div class="item" ng-repeat="lang in $ctrl.meta.languages" data-value="{{lang.value}}">{{lang.label}}
+                                <div class="item" ng-repeat="lang in $ctrl.meta.languages | orderBy:'label'" data-value="{{lang.value}}">{{lang.label}}
                                 </div>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                             <i class="dropdown icon"></i>
                             <div class="default text">Choose Class</div>
                             <div class="menu tooltipElement">
-                                <div class="item" ng-repeat="grade in $ctrl.meta.grades" data-value="{{grade.label}}">{{grade.label}}
+                                <div class="item" ng-repeat="grade in $ctrl.meta.grades | orderBy:'label'" data-value="{{grade.label}}">{{grade.label}}
                                 </div>
                             </div>
                         </div>
@@ -70,7 +70,7 @@
                             <i class="dropdown icon"></i>
                             <div class="default text">Choose Subject</div>
                             <div class="menu tooltipElement">
-                                <div class="item" ng-repeat="subject in $ctrl.meta.subjects" data-value="{{subject.label}}">{{subject.label}}
+                                <div class="item" ng-repeat="subject in $ctrl.meta.subjects | orderBy:'label'" data-value="{{subject.label}}">{{subject.label}}
                                 </div>
                             </div>
                         </div>

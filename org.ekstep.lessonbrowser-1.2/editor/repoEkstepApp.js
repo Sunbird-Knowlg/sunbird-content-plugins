@@ -1,5 +1,5 @@
 angular.module('org.ekstep.contentprovider', [])
-.controller('contentproviderekstepController', ['$scope', function($scope) {
+.controller('contentproviderekstepController', ['$scope', '$timeout', function($scope, $timeout) {
     var ctrl = this;
 
 
@@ -41,6 +41,7 @@ angular.module('org.ekstep.contentprovider', [])
         $('.ui.multiple.selection.dropdown').dropdown({
             useLabels: false,
             forceSelection: false,
+            direction: 'downward',
             onChange: function() {
                 $scope.getFiltersValue();
             }
@@ -258,7 +259,7 @@ angular.module('org.ekstep.contentprovider', [])
             $scope.isAllSelected[selectionKey] = optionsStatus;
         }
     };
-
+    
     // Toggle select all
     $scope.toggleAllFilter = function(selectionKey, metaKey, valueKey){
         var toggleStatus = !$scope.isAllSelected[selectionKey];

@@ -9,7 +9,7 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
     const DEFAULT_NODETYPE = 'TextBook';
     $scope.updateTitle = function(event, title) {
         $scope.textbook.name = title;
-        $scope.getPath();
+        ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
         $scope.$safeApply();
     }
     ecEditor.addEventListener("title:update:textbook", $scope.updateTitle, $scope);
@@ -183,7 +183,7 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
             $scope.editMode = true;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             ecEditor.dispatchEvent("content:title:update", $scope.textbook.name);
-            $scope.getPath();
+            ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
             $scope.submitted = true;
             $scope.$safeApply();
         }
@@ -227,19 +227,6 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
 
     $scope.addlesson = function() {
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
-    }
-
-    $scope.showTooltip = function(event, title) {
-        if (title.length > 25) {
-            $('.section').popup({
-                content: title,
-                inverted: '',
-                on: 'hover',
-                position: 'bottom left'
-            });
-        } else {
-            $('.section').popup('destroy');
-        }
     }
 
     $scope.onNodeSelect = function(evant, data) {
@@ -291,24 +278,10 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
             }
         });
         $scope.showImageIcon = true;
-        $scope.getPath();
+        ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
         $scope.$safeApply();
     }
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:TextBook', $scope.onNodeSelect);
-
-    $scope.getPath = function() {
-        $scope.path = [];
-        var path = ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getKeyPath();
-        _.forEach(path.split('/'), function(key) {
-            if (key) {
-                var node = ecEditor.jQuery("#collection-tree").fancytree("getTree").getNodeByKey(key);
-                $scope.path.push({
-                    'title': node.title,
-                    'nodeId': node.key
-                });
-            }
-        });
-    }
 
     setTimeout(function() {
         ecEditor.jQuery('.popup-item').popup();
