@@ -1,3 +1,9 @@
+<div>
+<div class="ui active inverted dimmer" ng-if="isCardSearching">
+        <div class="ui large text loader">Loading</div>
+</div>
+</div>
+<div ng-if="!isCardSearching">
 <div class="row ui" id="resourceHeading">
     <p ng-if="mainTemplate == 'selectedResult'">
         RESOURCES
@@ -9,12 +15,13 @@
         <div class="card" ng-repeat="lesson in $ctrl.res.content | orderBy:sortOption track by $index" in-view="lineInView($index, $inview, lesson, 'LessonBrowser', $index)" in-view-options="{ throttle: 1000 }" ng-click="toggleSelectionLesson(lesson)">
             <div class="image">
                 <img src="{{lesson.appIcon || $ctrl.defaultImage}}" class="resourceMetaImage ">
-                <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{lesson.identifier}}' style="z-index:9999">
+                <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{lesson.identifier}}' style="z-index:12">
                     <input class="checkBox" type="checkbox" name="lessons[]">
                     <label></label>
                 </div>
                 <div class="ui inverted dimmer">
                     <div class="content">
+
                         <div class="ui list">
                             <div class="item">
                                 <div class="right floated content contentMetaDetail">{{lesson.board}}</div>
@@ -52,7 +59,7 @@
                     {{lesson.description}}
                 </div>
                 <div class="meta">
-                    <span class="creator">Created by {{lesson.creator || '--'}}</span>
+                    <span class="creator">Created by {{lesson.creator}}</span>
                 </div>
             </div>
         </div>
@@ -65,8 +72,9 @@
     <div class="ui negative message errorMessage" ng-if="$ctrl.err">
         <div class="header">{{$ctrl.err}}</div>
     </div>
-    <div id="noLessonMsg" class="ui negative message errorMessage" style="display:none">
+    <div id="noLessonMsg" ng-show="!$ctrl.res.content" class="ui negative message errorMessage" style="display:none">
         <div class="header">{{messages.no_lesson_found_msg}}</div>
         <p>{{messages.try_again_msg}}</p>
     </div>
+</div>
 </div>

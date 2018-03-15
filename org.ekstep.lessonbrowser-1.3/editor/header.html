@@ -11,21 +11,22 @@
                     <i class="close link icon"></i>
                 </div>
                 <div class="searchElement" ng-show="( (searchKeyword.length < 3 || searchKeyword == (null || undefined)))" id="search-button"
-                    ng-click="lessonBrowserSearch() " title="Start search">
+                    ng-click="lessonBrowserSearch()" title="Start search">
                     <i class="search icon"></i>
                 </div>
             </div>
             <span>
                 <i class="close link icon" id="resourceCloseBtn" ng-click="closePopup(mainTemplate)"></i>
             </span>
-            <ul class="searchList" ng-show="searchKeyword.length >= 3 && !noResultFound && $ctrl.searchRes.content.length">
-                <li class="searchResult" ng-click="toggleSelectionLesson(lesson)" ng-repeat="lesson in $ctrl.searchRes.content">
+            <ul class="searchList" ng-show="mainTemplate !== 'cardDetailsView' && searchKeyword.length >= 3 && !noResultFound && $ctrl.searchRes.content.length">
+                <li class="searchResult" ng-click="showCardDetails(lesson)" ng-repeat="lesson in $ctrl.searchRes.content | limitTo:5">
                     <p>{{lesson.name}}</p>
                 </li>
+                <li ng-if="$ctrl.searchRes.content.length > 5" ng-click="lessonBrowserSearch()" style="padding:2%;color:#007aff;font-size: 14px;cursor:pointer;font-weight:600"><span>View All Results</span></li>
             </ul>
             <ul class="searchList" ng-show="( mainTemplate == 'selectedResult'|| mainTemplate == 'facetsItemView' ) && !$ctrl.searchRes.content.length && (searchKeyword.length >= 3) && noResultFound">
-                <strong class="searchResultMsg">No Results</strong>
-                <p class="searchResultMsg">Your search returned no results</p>
+                <li class="searchResultMsg"><strong>No Results</strong>
+                <p>Your search returned no results</p></li>
             </ul>
             <ul class="searchList" ng-show="$ctrl.searchErr  && (searchKeyword.length >= 3)">
                 <strong class="searchResultMsg">{{$ctrl.searchErr}}</strong>
