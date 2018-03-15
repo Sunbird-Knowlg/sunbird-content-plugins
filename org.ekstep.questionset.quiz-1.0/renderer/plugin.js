@@ -8,6 +8,8 @@ Plugin.extend({
   _instance: undefined,
   initPlugin: function(data) {
     // this._stage._currentState = undefined;
+    //Fix some times for v1 question try again and sucess message show in same time
+    EventBus.listeners['org.ekstep.questionset.quiz:evaluate'] = [];
     var instance = this;
     this._instance = this;
     var fontsize = data.fontsize || 20;
@@ -57,6 +59,7 @@ Plugin.extend({
       instance.removeHtmlElements();
       instance.update();
     });
+
     EkstepRendererAPI.addEventListener("org.ekstep.questionset.quiz:evaluate", function(event) {
 
       var callback = event.target;
