@@ -8,7 +8,31 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     initialize:function() {
         var instance = this;
-        // For every new stage create navigation plugin instance.
+        ecEditor.addEventListener('content:load:complete', function(event) {
+            /*console.log('adding nav media');
+            var stage = ecEditor.getCurrentStage();
+            var nextImage = {
+                id: "nextImage",
+                src: org.ekstep.contenteditor.mediaManager.getMediaOriginURL(ecEditor.resolvePluginResource(instance.manifest.id, '1.0', 'renderer/assets/next.png')),
+                assetId: "nextImage",
+                type: "image",
+                preload: true
+            };
+            stage.addMedia(nextImage);
+            console.log(nextImage);
+            var prevImage = {
+                id: "prevImage",
+                src: org.ekstep.contenteditor.mediaManager.getMediaOriginURL(ecEditor.resolvePluginResource(instance.manifest.id, '1.0', 'renderer/assets/previous.png')),
+                assetId: "prevImage",
+                type: "image",
+                preload: true
+            };
+            stage.addMedia(prevImage);
+            console.log(prevImage);*/
+            ecEditor.instantiatePlugin(instance.manifest.id, {}, undefined);
+        });
+
+        /*// For every new stage create navigation plugin instance.
         ecEditor.addEventListener('stage:add', function(event) {
             ecEditor.instantiatePlugin(instance.manifest.id, {}, ecEditor.getCurrentStage());
         });
@@ -28,10 +52,11 @@ org.ekstep.contenteditor.basePlugin.extend({
                     ecEditor.instantiatePlugin(instance.manifest.id, {}, stage);
                 }
             });
-        });
+        });*/
     },
 
     newInstance: function() {
+        /*console.log('this', this);
         var nextImage = ecEditor.resolvePluginResource(this.manifest.id, '1.0', 'renderer/assets/next.png');
         this.addMedia({
             id: "nextImage",
@@ -42,12 +67,12 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
         var preImage = ecEditor.resolvePluginResource(this.manifest.id, '1.0', 'renderer/assets/previous.png');
         this.addMedia({
-            id: "preImage",
+            id: "prevImage",
             src: org.ekstep.contenteditor.mediaManager.getMediaOriginURL(preImage),
             assetId: "preImage",
             type: "image",
             preload: true
-        });
+        });*/
     }
 });
 //# sourceURL=navigationEditorPlugin.js
