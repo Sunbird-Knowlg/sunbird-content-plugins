@@ -201,9 +201,9 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         ctrl.applyAllJquery = function() {
             $timeout(function() {
                 ctrl.toggleContent(ctrl.res.content);
-                ctrl.conceptSelector();
                 ctrl.dropdownAndCardsConfig();
                 ctrl.setFilterValues();
+                ctrl.conceptSelector();
                 ecEditor.jQuery('#resourceSearch').val('');
             }, 0);
         }
@@ -395,6 +395,9 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     $("#lessonBrowser_subject").dropdown('set selected', subject);
                 });
             }
+            if ($scope.filterSelection.concept.length) {
+                $("#lessonBrowser_concepts").val($scope.filterSelection.concept);
+            }
         }
 
         // Add the resource
@@ -402,14 +405,18 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             var idx = $scope.selectedResources.indexOf(lesson.identifier);
             if (idx > -1) {
                 ctrl.generateTelemetry({ type: 'click', subtype: 'uncheck', target: 'lesson', targetid: lesson.identifier });
+                if ($scope.mainTemplate != 'addedItemsView') {
+                    ecEditor.jQuery('#checkBox_' + lesson.identifier + ' >.checkBox').prop('checked', false);
+                }
                 $scope.lessonSelection.splice(idx, 1); // is currently selected, remove from selection list
                 $scope.selectedResources.splice(idx, 1);
-                ecEditor.jQuery('#checkBox_' + lesson.identifier + ' >.checkBox').prop('checked', false);
             } else {
                 ctrl.generateTelemetry({ type: 'click', subtype: 'check', target: 'lesson', targetid: lesson.identifier });
+                if ($scope.mainTemplate != 'addedItemsView') {
+                    ecEditor.jQuery('#checkBox_' + lesson.identifier + ' >.checkBox').prop('checked', true);
+                }
                 $scope.lessonSelection.push(lesson); // is newly selected, add to the selection list
                 $scope.selectedResources.push(lesson.identifier);
-                ecEditor.jQuery('#checkBox_' + lesson.identifier + ' >.checkBox').prop('checked', true);
             }
         };
 
@@ -546,6 +553,9 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             if (query.request.filters.concepts) {
                 $scope.filterSelection.concept = query.request.filters.concepts;
             }
+            if (query.request.sort_by) {
+                $scope.sortOption = query.request.sort_by;
+            }
 
             ctrl.searchRes = { count: 0, content: [] };
             if (_.isUndefined(sectionIndex)) {
@@ -554,6 +564,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     $scope.defaultResources = ctrl.res.content;
                     ctrl.dropdownAndCardsConfig();
                     ctrl.setFilterValues();
+                    ctrl.conceptSelector();
                     $scope.isLoading = false;
                     $scope.noResultFound = false;
                     ecEditor.jQuery('#resourceSearch').val('');
@@ -566,6 +577,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                         $scope.defaultResources = ctrl.res.content;
                         ctrl.dropdownAndCardsConfig();
                         ctrl.setFilterValues();
+                        ctrl.conceptSelector();
                         ecEditor.jQuery('#resourceSearch').val('');
                         $scope.isLoading = false;
                         $scope.noResultFound = false;
