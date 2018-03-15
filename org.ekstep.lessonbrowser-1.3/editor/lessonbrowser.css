@@ -113,7 +113,6 @@
 
 .ui.vertical.segment.filterAllign {
     height: calc(100vh - 260px);
-    padding: 6%;
 }
 
 #apply-lesson-filter-button {
@@ -132,7 +131,7 @@
     overflow-y: scroll;
     overflow-x: hidden;
     padding: 1%;
-    margin-right: 3% !important;
+    margin-right: 0% !important;
     margin-top: 1% !important;
 }
 
@@ -151,7 +150,7 @@
 }
 
 .searchList {
-    display:none;
+    display: none;
     border: 1px solid #D8DEE2;
     list-style: none;
     padding-left: 1%;
@@ -206,7 +205,6 @@
     color: #007aff !important;
     background-color: white !important;
 }
-
 
 .bodyContainer {
     height: 100%;
@@ -390,17 +388,19 @@
     height: 100%;
     margin: 3%;
 }
-.flexslider .screenShotSlider{
+
+.flexslider .screenShotSlider {
     height: 280px;
     width: 99%;
     overflow: hidden;
     position: relative;
 }
-li em {
-    font-weight:bold;
-    font-style:normal;
-  }
 
-.ui.searcher:hover .searchList{
+li em {
+    font-weight: bold;
+    font-style: normal;
+}
+
+.ui.searcher:hover .searchList {
     display: block;
 }

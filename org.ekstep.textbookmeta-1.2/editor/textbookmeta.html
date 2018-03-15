@@ -1,7 +1,6 @@
 <div ng-app="textbookmetaApp" class="metacontent-wrapper" ng-controller="textbookmetaController">
     <div class="ui segment header-segment" id="headerSegment">
         <div class="ui breadcrumb">
-            <i class="folder outline icon pointer"></i>
             <a class="section" ng-repeat="value in path" ng-click="setActiveNode(value.nodeId)">
                 <span data-inverted="" ng-mouseover="showTooltip($event, value.title)">{{value.title | limitTo:25}}</span>
                 <span ng-if="value.title.length > 25">...</span>
@@ -11,7 +10,7 @@
     </div>
     <form class="ui form segment" id="contents-data-form" novalidate ng-show="editMode" name="textbookMetaForm">
         <div class="fields form-fields-overflow">
-            <div class="field book-image-field">
+            <div class="field book-image-field margin-left-20">
                 <label for="bookImage">Add icon</label>
                 <div class="book-image-container popup-item" data-content="Add or change image" data-variation="tiny inverted" data-position="right center" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
@@ -35,7 +34,7 @@
                     </div>
                     <div class="field">
                         <label for="category_2">{{category_2.name}}</label>
-                        <div id="textbookmeta-category-2" class="ui multiple search selection dropdown textbox textbookmeta-category-2" data-tooltip="{{categoryValues || 'select Option'}}" data-position="top center" ng-model="textbook[category_2.code]" multiple="" ng-click="updatedDependentCategory('2', textbook[category_2.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_2.name})">
+                        <div id="textbookmeta-category-2" class="ui multiple search selection dropdown textbox textbookmeta-category-2" data-tooltip="{{categoryValues || 'Select Option'}}" data-position="top center" ng-model="textbook[category_2.code]" multiple="" ng-click="updatedDependentCategory('2', textbook[category_2.code]); generateTelemetry({type: 'change', subtype: 'select', target: category_2.name})">
                             <div class="default text" value="">Select</div>
                             <div class="menu">
                                 <div class="item" data-value="{{category.name}}" ng-repeat="category in category_2.terms">{{category.name}}
@@ -65,10 +64,6 @@
                     <div class="ui input">
                         <textarea placeholder="Brief description about the unit" ng-model="textbook.description" name="description" rows="2" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'description'})"></textarea>
                     </div>
-                </div>
-                <div class="field">
-                    <label>Concepts</label>
-                    <input name="concepts" id="textbookConceptSelector" ng-model="textbook.conceptData" type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'concepts'})">
                 </div>
                 <div class="one field">
                     <div class="field">

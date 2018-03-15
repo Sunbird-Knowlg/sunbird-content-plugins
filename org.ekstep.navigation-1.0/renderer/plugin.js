@@ -60,8 +60,11 @@
     });
 
   },
+  initPlugin: function (data) {
+      // Plugin actions are handled in the angularJS controller.
+  },
   showOrHideOverlay: function(){
     this.customNavigationVisible = true;
   }
 });
-//#sourceURL=customnavigation.js
+//# sourceURL=navigation.js

@@ -619,7 +619,7 @@
    				<div class="ui buttons">
    					<button id="closePopUp" class="ui orange button" ng-click="$ctrl.cancel(); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeAssetBrowser'})" type="button">Cancel</button>
    					<div class="or"></div>
-   					<button class="ui blue button submit button" ng-disabled="$ctrl.uploadBtnDisabled" ng-click="$ctrl.doUpload(); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'uploadAndUseAssetBrowserButton'})" type="button">Upload and Use</button>
+   					<button class="ui blue button submit button" ng-disabled="$ctrl.uploadBtnDisabled" ng-click="$ctrl.doUpload($event); $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'uploadAndUseAssetBrowserButton'})" type="button">Upload and Use</button>
    				</div>
    			</div>
    		</div>

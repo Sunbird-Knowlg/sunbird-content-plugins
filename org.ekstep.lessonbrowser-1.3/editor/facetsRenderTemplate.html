@@ -1,12 +1,12 @@
 <div class="source-result-container">
-    <div class="facetList" ng-repeat="section in $ctrl.facetsResponse.result.response.sections" ng-init="sectionIndex = $index">
+    <div class="facetList" ng-if="section.contents.length" ng-repeat="section in $ctrl.facetsResponse.result.response.sections" ng-init="sectionIndex = $index">
         <div class="facets-headtext">{{$ctrl.facetsResponse.result.response.sections[sectionIndex].name }}
             <span class="facets-viewall blueColor" ng-click="viewAll($ctrl.facetsResponse.result.response.sections[sectionIndex].searchQuery,sectionIndex)">View All</span>
         </div>
         </br>
         <div class="ui special five cards">
-            <div class="card" style="cursor:pointer" ng-repeat="lesson in $ctrl.facetsResponse.result.response.sections[sectionIndex].contents | limitTo:5  track by $index"
-                in-view="lineInView($index, $inview, lesson, 'FacetList', $index)" in-view-options="{ throttle: 1000 }" ng-click="toggleSelectionLesson(lesson)">
+            <div class="card" style="cursor:pointer" ng-repeat="lesson in $ctrl.facetsResponse.result.response.sections[sectionIndex].contents | limitTo:5  track by $index" in-view="lineInView($index, $inview, lesson, 'FacetList', $index)" in-view-options="{ throttle: 1000 }"
+                ng-click="toggleSelectionLesson(lesson)">
                 <div class="ui inverted dimmer">
                     <div class="content">
                         <div class="ui list cardDetails-list">
@@ -26,7 +26,7 @@
                             </div>
                             <div class="item">
                                 <div class="right floated content contentMetaDetail">
-                                    <span  ng-repeat="concept in lesson.concepts">{{ conceptsNames[concept]}}{{$last ? '' : ', '}}</span>
+                                    <span ng-repeat="concept in lesson.concepts">{{ conceptsNames[concept]}}{{$last ? '' : ', '}}</span>
                                 </div>
                                 <div class="right floated content contentMetaDetail" ng-show="!lesson.concepts.length">NA
                                 </div>

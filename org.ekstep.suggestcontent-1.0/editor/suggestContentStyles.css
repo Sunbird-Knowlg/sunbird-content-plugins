@@ -10,7 +10,6 @@
     padding-left: 15px;
 }
 .suggest-content-header-text {
-    font-family: OpenSans;
     font-size: 14px;
     font-weight: 600;
     text-align: left;
@@ -52,6 +51,7 @@
     overflow-y: auto;
     position: absolute;
     height: calc(100% - 130px);
+    width: 100%;
     overflow-x: hidden;
 }
 .padding-left-15 {

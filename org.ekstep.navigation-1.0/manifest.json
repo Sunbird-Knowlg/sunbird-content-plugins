@@ -7,7 +7,6 @@
   "description": "",
   "editor": {
     "main": "editor/plugin.js",
-    "dependencies": [],
     "menu": []
   },
   "renderer": {
@@ -16,5 +15,17 @@
   "icon": "assets/icon.png",
   "languages": ["English"],
   "categories": [""],
-  "keywords": [""]
+  "keywords": [""],
+  "dependencies": [
+    {
+      "type": "js",
+      "src": "renderer/controller/navigation_ctrl.js",
+      "scope": "renderer"
+    },
+    {
+      "type": "js",
+      "src": "renderer/templates/navigation.html",
+      "scope": "renderer"
+    }
+  ]
 }

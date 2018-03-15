@@ -565,7 +565,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         });
     }
 
-    ctrl.doUpload = function(mediaType) {
+    ctrl.doUpload = function(event,mediaType) {
         ctrl.assetMeta.name == "" ? ctrl.assetNameError="error" : true;
         ecEditor.jQuery('#assetfile').val() == "" ? ctrl.assetFileError="error" : true;
         if(ctrl.assetMeta.name != ""  && ecEditor.jQuery('#assetfile').val() != ""){
