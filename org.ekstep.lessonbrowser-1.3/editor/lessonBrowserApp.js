@@ -204,7 +204,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 ctrl.dropdownAndCardsConfig();
                 ctrl.setFilterValues();
                 ctrl.conceptSelector();
-                ecEditor.jQuery('#resourceSearch').val('');
             }, 0);
         }
 
@@ -212,7 +211,8 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         $scope.lessonBrowserSearch = function() {
             $scope.isCardSearching = true;
             ctrl.searchRes = { count: 0, content: [] };
-            searchBody.request.filters.name = { "value": this.searchKeyword };
+            searchBody.request.query = this.searchKeyword;
+            delete searchBody.request.filters.name;
             ctrl.searchLessons(function(res) {
                 $scope.isCardSearching = false;
                 $scope.noResultFound = false;
@@ -356,6 +356,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             }
             $scope.$safeApply();
             ctrl.applyAllJquery();
+            ecEditor.jQuery('#resourceSearch').val(null);
         }
 
         // Get accordions functioning
@@ -427,6 +428,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             var searchQuery = this.searchKeyword;
             ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'button-search' });
             searchBody.request.filters.name = { "value": this.searchKeyword };
+            delete searchBody.request.query;
             searchService.search(searchBody, function(err, res) {
                 if (err) {
                     ctrl.searchErr = "Oops! Something went wrong. Please try again later.";
@@ -531,32 +533,49 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     "query": ""
                 }
             };
-            searchBody = query;
             searchBody.request.filters.objectType = ["Content"];
             searchBody.request.filters.status = ["Live"];
             ctrl.learningConfig();
             ctrl.meta.lessonTypes = collectionService.getObjectTypeByAddType('Browser');
             if (query.request.filters.contentType) {
+                query.request.filters.contentType = _.isString(query.request.filters.contentType) ? (query.request.filters.contentType.split(",") || []) : query.request.filters.contentType;
                 $scope.filterSelection.lessonType = query.request.filters.contentType;
             } else {
-                searchBody.request.filters.contentType = ctrl.meta.lessonTypes;
+                $scope.filterSelection.lessonType = ctrl.meta.lessonTypes;
             }
             if (query.request.filters.gradeLevel) {
+                query.request.filters.gradeLevel = _.isString(query.request.filters.gradeLevel) ? (query.request.filters.gradeLevel.split(",") || []) : query.request.filters.gradeLevel;
                 $scope.filterSelection.grade = query.request.filters.gradeLevel;
+                searchBody.request.filters.gradeLevel = query.request.filters.gradeLevel;
+            } else {
+                delete searchBody.request.filters.gradeLevel;
             }
             if (query.request.filters.language) {
+                query.request.filters.language = _.isString(query.request.filters.language) ? (query.request.filters.language.split(",") || []) : query.request.filters.language;
                 $scope.filterSelection.language = query.request.filters.language;
+                searchBody.request.filters.language = query.request.filters.language;
+            } else {
+                delete searchBody.request.filters.language;
             }
             if (query.request.filters.subject) {
+                query.request.filters.subject = _.isString(query.request.filters.subject) ? (query.request.filters.subject.split(",") || []) : query.request.filters.subject;
                 $scope.filterSelection.subject = query.request.filters.subject;
+                searchBody.request.filters.subject = query.request.filters.subject;;
+            } else {
+                delete searchBody.request.filters.subject;
             }
             if (query.request.filters.concepts) {
                 $scope.filterSelection.concept = query.request.filters.concepts;
+                searchBody.request.filters.concepts = query.request.filters.concepts;
+            } else {
+                delete searchBody.request.filters.concepts;
             }
             if (query.request.sort_by) {
                 $scope.sortOption = query.request.sort_by;
+                searchBody.request.sort_by = query.request.sort_by;
+            } else {
+                delete searchBody.request.sort_by;
             }
-
             ctrl.searchRes = { count: 0, content: [] };
             if (_.isUndefined(sectionIndex)) {
                 $scope.mainTemplate = 'selectedResult';
