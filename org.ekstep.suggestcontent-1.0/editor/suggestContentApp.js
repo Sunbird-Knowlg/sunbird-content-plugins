@@ -88,12 +88,15 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
     $scope.openResourceBrowser = function() {
         if($scope.suggestedContentList.content.length) {
             var query = {
-                    request: {
-                        lessonType: org.ekstep.collectioneditor.api.getService('collection').getObjectTypeByAddType('Browser'),
-                        language: $scope.metaData.language || "",
-                        grade: $scope.metaData.gradeLevel || "",
-                        subject: $scope.metaData.subject
-                    }
+                request:{
+                    filters: {
+                        contentType: org.ekstep.collectioneditor.api.getService('collection').getObjectTypeByAddType('Browser'),
+                        language:_.isString($scope.metaData.language) ? ($scope.metaData.language.split( ) || []) : $scope.metaData.language,
+                        gradeLevel: _.isString($scope.metaData.gradeLevel) ? ($scope.metaData.gradeLevel.split( ) || []) : $scope.metaData.gradeLevel,
+                        subject:_.isString($scope.metaData.subject) ? ($scope.metaData.subject.split( ) || []) : $scope.metaData.subject
+                    },
+                    limit: 100
+                }
                 }
             ecEditor.dispatchEvent('editor:invoke:viewall', { client: "org", query}) 
         }
