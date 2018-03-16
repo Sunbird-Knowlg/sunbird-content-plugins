@@ -89,7 +89,7 @@ app.compileProvider.directive('customNextNavigation', function($rootScope) {
     restrict: 'E',
     template: '<div><a class="nav-icon nav-next" ng-show="showCustomNext" href="javascript:void(0);"><img ng-src="{{customNextIcon}}" ng-click="navigate(\'next\')"></a></div>',
     link: function(scope) {
-      scope.customNextIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.navigation", "1.0", "renderer/assets/next.png");
+      scope.customNextIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.overlay", "1.0", "renderer/assets/icons/next.png");
       var events = ["overlayNext", "renderer:next:show", "renderer:next:hide"];
       scope.toggleNav = function(event) {
         var val;
@@ -133,7 +133,7 @@ app.compileProvider.directive('customPreviousNavigation', function($rootScope) {
     template: '<div><a class="nav-icon nav-previous" ng-show="showCustomPrevious !== state_off" ng-class="{\'nav-disable\': showCustomPrevious == state_disable}" href="javascript:void(0);"><img ng-src="{{customePreviousIcon}}" ng-click="navigate(\'previous\')"></a></div>',
     link: function(scope) {
       var events = ["renderer:customprevious:show", "renderer:customprevious:hide", "overlayPrevious"];
-      scope.customePreviousIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.navigation", "1.0", "renderer/assets/previous.png");
+      scope.customePreviousIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.overlay", "1.0", "renderer/assets/icons/back.png");
       scope.changeValue = function(event) {
         var val;
         var globalConfig = EkstepRendererAPI.getGlobalConfig();
