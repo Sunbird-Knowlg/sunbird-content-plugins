@@ -281,7 +281,9 @@
 
   ctrl.formIsValid = function() {
     ctrl.questionMetadataScreen = true;
-    ctrl.questionData.questionTitle = _.isUndefined(ctrl.questionData.questionTitle) ? ctrl.questionCreationFormData.question.text : ctrl.questionData.questionTitle;
+    //comment because in edit question the question and question title are not same 
+    //ctrl.questionData.questionTitle = _.isUndefined(ctrl.questionData.questionTitle) ? ctrl.questionCreationFormData.question.text : ctrl.questionData.questionTitle;
+    ctrl.questionData.questionTitle = ctrl.questionCreationFormData.question.text
      $('.QuestionMetaForm .ui.dropdown').dropdown({});
   }
 
