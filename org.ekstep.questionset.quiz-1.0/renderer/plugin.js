@@ -13,7 +13,6 @@ Plugin.extend({
     var instance = this;
     this._instance = this;
     var fontsize = data.fontsize || 20;
-
     // Init self container
     var dims = this.relativeDims();
     this._self = new createjs.Container();
@@ -21,25 +20,17 @@ Plugin.extend({
     this._self.y = dims.y;
     this._self.w = dims.w;
     this._self.h = dims.h;
-
     // parse config of the quiz json
     this._pluginConfig = JSON.parse(data.config.__cdata);
     this._pluginData = JSON.parse(data.data.__cdata);
     this.qid = data.id;
-
-
-
-
     // Init the item controller
     this.initquestionnaire();
-
     // Invoke templates to templateMap
     this.invokeTemplate();
-
     // Invoke the embed plugin to start rendering the templates
     this.invokeEmbed();
     this.registerEvents();
-
   },
   removeHtmlElements: function() {
     var gameAreaEle = jQuery('#' + Renderer.divIds.gameArea);
@@ -50,8 +41,6 @@ Plugin.extend({
       }
     });
   },
-
-
   registerEvents: function() {
     var instance = this;
     EkstepRendererAPI.addEventListener("org.ekstep.questionset.quiz:hide", function() {
@@ -59,15 +48,11 @@ Plugin.extend({
       instance.removeHtmlElements();
       instance.update();
     });
-
     EkstepRendererAPI.addEventListener("org.ekstep.questionset.quiz:evaluate", function(event) {
-
       var callback = event.target;
       instance.evaluate(callback, instance);
-
     });
   },
-
   invokeTemplate: function() {
     var instance = this;
     var templateType = this._pluginConfig.var || "item";
@@ -95,7 +80,6 @@ Plugin.extend({
     var assessmentid = (this.qid + "_assessment");
     // var assessmentid = (this._stage._id + "_assessment");
     var stageController = this._theme._controllerMap[assessmentid];
-
     // Check if the controller is already initialized, if yes, skip the init
     var initialized = (stageController != undefined);
     if (!initialized) {
@@ -104,24 +88,17 @@ Plugin.extend({
       controllerData.type = this._pluginConfig.type;
       controllerData.name = assessmentid;
       controllerData.id = assessmentid;
-
       this._theme.addController(controllerData);
       stageController = this._theme._controllerMap[assessmentid];
     }
-
-
-
     if (stageController) {
       this._stage._stageController = stageController;
       this._stage._stageControllerName = controllerName; //+ Math.random();
       this._stage._stageController.reset();
       this._stage._stageController.next();
       var stageKey = this._stage.getStagestateKey();
-
       if (typeof this._theme.getParam === "function") {
         this._stage._currentState = this._theme.getParam(stageKey);
-
-
         /* var questionState = this.getStates(this.qid);
          if (questionState) {
              var item = this._stage._stageController._model[0];
@@ -150,14 +127,10 @@ Plugin.extend({
             i.oSelected = false;
         }
     });*/
-
     var state = {
       model: _.clone(this._stage._stageController._model)
     }
-
     //  EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:savev1QuestionState', function(data) {}, state)
-
-
     if (item.type.toLowerCase() == 'ftb') {
       res = FTBEvaluator.evaluate(item);
     } else if (item.type.toLowerCase() == 'mcq' || item.type.toLowerCase() == 'mmcq') {
@@ -165,18 +138,19 @@ Plugin.extend({
     } else if (item.type.toLowerCase() == 'mtf') {
       res = MTFEvaluator.evaluate(item);
     }
-    if(_.isUndefined(res)){
+       //if res come undefined then show try again popup
+    if (_.isUndefined(res)) {
       if (_.isFunction(callback)) {
-      callback(result);
+        callback(result);
+      }
+    } else {
+      result.eval = res.pass;
+      result.score = res.score;
+      result.res = res.res;
+      if (_.isFunction(callback)) {
+        callback(result);
+      }
     }
-    }else{
-    result.eval = res.pass;
-    result.score = res.score;
-    result.res = res.res;
-    if (_.isFunction(callback)) {
-      callback(result);
-    }
-  }
   },
   /*getStates: function(questionId) {
       var qState;
