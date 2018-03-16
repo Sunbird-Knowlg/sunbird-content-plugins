@@ -1,12 +1,42 @@
 'use strict';
+/**
+ * @description     - Metadata form controller
+ * @module          - 'org.ekstep.metadataform'
+ */
 
-angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scope', '$q', '$rootScope', '$http', '$timeout', 'configurations', function($scope, $q, $rootScope, $http, $timeout, configurations) {
-    let ctrl = this;
+angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scope', 'configurations', function($scope, configurations) {
+
+    /**
+     * @property        - Form configurations which should contains the 'framework, config, resourceBundle' information
+     */
     $scope.configurations = configurations;
+
+    /**
+     * @property        - Which defines is form is submitted or not.
+     */
     $scope.isSubmit = false;
+
+    /**
+     * @property        - Plugin manifest object
+     */
     $scope.manifest = { id: "org.ekstep.metadata", ver: "1.2" };
+
+    /**
+     * @property        - Which holds the category List values 
+     * @example         -{subject:{name:"English"},{name:"Kannada"}}
+     */
     $scope.categoryList = {}
+
+    /** 
+     * 
+     * @property        - Which defines the is form for rootNode or not     
+     * 
+     */
     let isRootNode = true;
+
+    /** 
+     * @property        - Which defines is selected form node is New or already Existing node
+     */
     let isNewNode = false;
 
     /**
@@ -23,32 +53,32 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      */
     $scope.initDropdown = function() {
         const DROPDOWN_INPUT_TYPES = ['select', 'multiSelect'];
-        $timeout(function() {
-            _.forEach(configurations, function(field) {
-                if (_.includes(DROPDOWN_INPUT_TYPES, field.inputType)) {
-                    // $('#_select' + field.code).dropdown('set selected', $scope.contentMeta[field.code]);
-                    $scope.$safeApply();
-                    if (field.depends && field.depends.length) {
-                        $scope.getAssociations($scope.contentMeta[field.code], field.range, function(associations) {
-                            $scope.applayDependencyRules(field, associations, false);
-                        });
-                    }
+        _.forEach(configurations, function(field) {
+            if (_.includes(DROPDOWN_INPUT_TYPES, field.inputType)) {
+                if (field.depends && field.depends.length) {
+                    $scope.getAssociations($scope.contentMeta[field.code], field.range, function(associations) {
+                        $scope.applayDependencyRules(field, associations, false);
+                    });
                 }
-            });
-            $scope.configureDropdowns();
-        }, 0);
+            }
+        });
+        $scope.configureDropdowns();
     }
 
-    $scope.generateTelemetry = function(data) {
-        if (data) ecEditor.getService('telemetry').interact({
-            "type": data.type || "click",
-            "subtype": data.subtype || "",
-            "target": data.target || "",
+    /**
+     * @description             - Which is used to generate the telemetry.
+     * @param {Object} data     - Telemetry interact event data.
+     */
+    $scope.generateTelemetry = function({ type, subtype, target, objectid, targetid, stage } = {}) {
+        ecEditor.getService('telemetry').interact({
+            "type": type || "click",
+            "subtype": subtype,
+            "target": target,
             "pluginid": $scope.manifest.id,
             "pluginver": $scope.manifest.ver,
-            "objectid": "",
-            "targetid": "",
-            "stage": ""
+            "objectid": objectid,
+            "targetid": targetid,
+            "stage": stage
         })
     };
 
@@ -132,7 +162,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     }
 
     /**
-     * @description     -Which is used to get fixedLayout section and Dynamic section layout fields
+     * @description             - Which is used to get fixedLayout section and Dynamic section layout fields
+     * @returns {Object}        - Which returns object which contains both fixedLayout and dynamicLayout configurations
      */
     $scope.getLayoutConfigurations = function() {
         const FIXED_FIELDS_CODE = ["name", "description", "keywords", "appIcon"];
@@ -202,7 +233,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      * 
      * @description                     -
      * @param {Object} configurations   - Field configurations
-     * @param {String} key              - Field uniq code
+     * @param {String} key              - Field uniq code value
      */
     $scope.mapMasterCategoryList = function(configurations, key) {
         _.forEach(configurations, function(field, value) {
@@ -219,6 +250,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
     /**
      * @description                     - Which used to get only modied filed values
      * @param {Object} currentMetadata  -@default Object Current field values
+     * @returns {Object}                - Whihc returns only changed metadata values
      */
     $scope.getUpdatedMetadata = function(currentMetadata = {}) {
         let metadata = {};
@@ -273,9 +305,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataform', ['$scop
      *              - Which partions the fixedLayout and dynamic layout section fields
      */
     $scope.init = function() {
+        ecEditor.addEventListener('editor:form:change', $scope.onConfigChange, $scope);
         $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
         $scope.originalContentMeta = _.clone($scope.contentMeta);
-        ecEditor.addEventListener('editor:form:change', $scope.onConfigChange, $scope);
         let layoutConfigurations = $scope.getLayoutConfigurations();
         $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
         $scope.dynamicLayoutConfigurations = _.sortBy(_.uniqBy(layoutConfigurations.dynamicLayout, 'code'), 'index');

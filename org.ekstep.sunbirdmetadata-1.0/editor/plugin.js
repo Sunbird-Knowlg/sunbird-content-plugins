@@ -7,32 +7,32 @@
 
 org.ekstep.collectioneditor.metadataPlugin.extend({
     /**
-     * @description -
+     * @property    - Form object which contains field details with framework and resource bundle
      */
     form: {},
 
     /**  
-     * @description - Resource Bundle object.
+     * @property    - Resource Bundle object.
      */
     resourceBundle: {},
 
     /**
-     * @description - Framwork association object which is used to map the relationship between fields. eg:(Grade, class)
+     * @property     - Framwork association object which is used to map the relationship between fields. eg:(Grade, class)
      */
     framework: {},
 
     /**
-     * @description - Form configuration object.
+     * @property     - Form configuration object
      */
     config: {},
 
     /**
-     * 
+     * @property      - List of are event are mapped with the action
      */
     actionMap: { save: "org.ekstep.contenteditor:save", review: "org.ekstep.contenteditor:review" },
 
     /**
-     * @description - Initialization of the plugin.
+     * @description    - Initialization of the plugin.
      */
     initialize: function() {
         var instance = this;
@@ -41,24 +41,28 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
         ecEditor.addEventListener('editor:form:change', this.onConfigChange, this);
         ecEditor.addEventListener('editor:form:reset', this.resetFields, this);
         ecEditor.addEventListener('org.ekstep.editcontentmeta:showpopup', this.showForm, this);
-        this.getConfigurations(function(error, response) {
-            response ? instance.renderForm(response) : console.error("Fails to render")
+        this.getConfigurations(function(error, res) {
+            res ? instance.renderForm({ resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config }) : console.error('Fails to render')
         });
     },
 
     /**
-     * @description
+     * @description         - When field value changes. Currenlty, Event is dispatching
+     *                        only when drop down value changes
      */
     onConfigChange: function(event, object) {},
 
     /**
-     * @description
+     * @event           -'editor:form:success'
+     *                  
+     * @description     - Which is used to perform the save/review actions when form is submitted.
+     *                    Which is currently handles 'review` and `save' action
      */
     successAction: function(event, data) {
         if (data.isValid) {
-            let event = this.actionMap[this.config.action];
+            let actionEvent = this.actionMap[this.config.action];
             this.updateState(data.formData);
-            ecEditor.dispatchEvent(event, {
+            ecEditor.dispatchEvent(actionEvent, {
                 savingPopup: true,
                 successPopup: true,
                 failPopup: true,
@@ -76,16 +80,19 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
             throw 'Invalid form data'
         }
     },
+
     /**
-     * @description
+     * @description              - When cancel action is invoked
+     * @event                    - 'editor:form:cancel'
+     * @param {Object} data      - Which contains a callback method and other options 
      */
     cancelAction: function(event, data) {
         data.callback && data.callback()
     },
 
     /**
-     * @description - Which get the form configurations, framework and resource bundle data
-     *                Which makes async parallel call.
+     * @description             - Which get the form configurations, framework and resource bundle data
+     *                            Which makes async parallel call.
      */
     getConfigurations: function(callback) {
         var instance = this;
@@ -113,33 +120,38 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
     },
 
     /**
-     * @description - Which returns the current form object.
-     * @returns {Object}
+     * @description             - Which returns the current form object.
+     * @returns {Object}    
      */
     getFormFields: function() {
         return this.form;
     },
 
     /**
-     * @description -
+     * @description             - Which is used to render the form with the configurations.
      * @param {Object} formObj  - Form object it should have configurations, resourceBundle, framework object
-     * @example {resourceBundle:{},framework:{},config:{}}
+     * @example                 - {resourceBundle:{},framework:{},config:{}}
      */
-    renderForm: function(formObj) {
-        this.resourceBundle = formObj.resourceBundle;
-        this.framework = formObj.framework.data.result.framework;
-        this.config = formObj.config;
-        this.config = formConfigurations; // Remove this line
+    renderForm: function({ resourceBundle, framework, formConfig } = {}) {
+        this.resourceBundle = resourceBundle;
+        this.framework = framework;
+        this.config = formConfig;
+        this.config = window.formConfigurations; // Remove this line
         this.form = this.mapObject(this.config.fields, this.framework.categories);
         this.loadTemplate(this.config.templateName);
     },
 
-    updateState: function(stateObj) {
-        let key = stateObj.nodeId;
+
+    /**
+     * @description             - Which is used to set the state of form object.
+     * @param {Object} stateObj - It should contain the {isRoot, isNew, and form metaData information}
+     */
+    updateState: function({ nodeId, isRoot, isNew, metaData } = {}) {
+        let key = nodeId;
         let value = {};
-        value.root = stateObj.isRoot;
-        value.isNew = stateObj.isNew;
-        value.metadata = stateObj.metaData;
+        value.root = isRoot;
+        value.isNew = isNew;
+        value.metadata = metaData;
         org.ekstep.services.stateService.setState(key, value);
     }
 

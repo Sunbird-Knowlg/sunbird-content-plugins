@@ -29,18 +29,20 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
     renderForm: function() {},
 
     /**
-     * @description
+     * @description    - Which is used to show the popup form
+     * @event          - 'org.ekstep.editcontentmeta:showpopup'          
      */
-    showForm: function() {
+    showForm: function(event, data) {
         var instance = this;
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
             template: 'metadataTemplate',
-            controller: 'metadataform',
+            controller: 'metadataForm',
             controllerAs: '$ctrl',
             resolve: {
                 'configurations': function() {
                     return instance.getFormFields();
-                }
+                },
+
             },
             width: 900,
             showClose: false
