@@ -29,7 +29,6 @@ formApp.directive('concetpselector', function() {
                             "name": concept.name
                         };
                     });
-                    $scope.$safeApply();
                 }
             });
         }

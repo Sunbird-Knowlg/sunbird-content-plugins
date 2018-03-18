@@ -20,7 +20,7 @@ formApp.directive('appIcon', function() {
         }
 
         $scope.configureAppIcon = function() {
-            _.forEach($scope.configurations, function(key, value) {
+            _.forEach($scope.fixedLayoutConfigurations, function(key, value) {
                 if (key.inputType == 'file') {
                     $scope.appIconConfig = key;
                 }

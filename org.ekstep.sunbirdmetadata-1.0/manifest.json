@@ -8,8 +8,6 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-            { "plugin": "org.ekstep.assetbrowser", "ver": "1.1", "type": "plugin" },
-            { "plugin": "org.ekstep.conceptselector", "ver": "1.0", "type": "plugin" },
             { "plugin": "org.ekstep.metadata", "ver": "1.0", "type": "plugin" }
         ]
     }

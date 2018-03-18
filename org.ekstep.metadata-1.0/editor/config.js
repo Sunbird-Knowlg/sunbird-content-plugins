@@ -15,13 +15,13 @@ window.formConfigurations = {
             "visible": true,
             "validation": [{
                     "type": "regex",
-                    "value": "/[a-zA-Z0-9^ ]/",
+                    "value": "[A-Z]",
                     "message": "Invalid Input"
                 },
                 {
                     "type": "max",
-                    "value": "15",
-                    "message": "Input exceded"
+                    "value": "14",
+                    "message": "Input is exceded"
                 }
             ]
         },
@@ -83,23 +83,6 @@ window.formConfigurations = {
             "visible": true
         },
         {
-            "code": "gradeLevel",
-            "dataType": "list",
-            "depends": [
-                "subject"
-            ],
-            "description": "Class",
-            "editable": true,
-            "index": 1,
-            "inputType": "multiselect",
-            "label": "Class",
-            "name": "Class",
-            "placeholder": "Select Class",
-            "renderingHints": {},
-            "required": true,
-            "visible": true
-        },
-        {
             "code": "subject",
             "dataType": "text",
             "description": "",
@@ -128,6 +111,23 @@ window.formConfigurations = {
             "visible": true
         },
         {
+            "code": "gradeLevel",
+            "dataType": "list",
+            "depends": [
+                "subject"
+            ],
+            "description": "Class",
+            "editable": true,
+            "index": 1,
+            "inputType": "multiselect",
+            "label": "Class",
+            "name": "Class",
+            "placeholder": "Select Class",
+            "renderingHints": {},
+            "required": true,
+            "visible": true
+        },
+        {
             "code": "year",
             "dataType": "text",
             "description": "",
@@ -138,7 +138,7 @@ window.formConfigurations = {
             "name": "Year",
             "placeholder": "Select Year",
             "renderingHints": {},
-            "required": true,
+            "required": false,
             "visible": true
         },
         {
@@ -152,21 +152,60 @@ window.formConfigurations = {
             "name": "Publisher",
             "placeholder": "Publication",
             "renderingHints": {},
-            "required": true,
-            "visible": true
+            "required": false,
+            "visible": true,
+            "validation": [{
+                    "type": "regex",
+                    "value": "[A-Z]",
+                    "message": "Invalid Input"
+                },
+                {
+                    "type": "max",
+                    "value": "5",
+                    "message": "Input is exceded"
+                }
+            ]
         },
         {
-            "code": "concepts",
-            "dataType": "list",
-            "description": "Choose a concept",
+            "code": "phone",
+            "dataType": "text",
+            "description": "Publication",
             "editable": true,
-            "inputType": "conceptselector",
-            "label": "Concepts",
-            "name": "Concepts",
-            "placeholder": "Choose Concepts",
+            "index": 5,
+            "inputType": "number",
+            "label": "Phone",
+            "name": "Publisher",
+            "placeholder": "Contact number",
             "renderingHints": {},
-            "required": true,
-            "visible": true
+            "required": false,
+            "visible": true,
+            "validation": [{
+                    "type": "regex",
+                    "value": "[0-1]",
+                    "message": "Invalid Input"
+                },
+                {
+                    "type": "max",
+                    "value": "10",
+                    "message": "Input is exceded"
+                }
+            ]
         },
+        // {
+        //     "code": "concepts",
+        //     "dataType": "list",
+        //     "description": "Choose a concept",
+        //     "editable": true,
+        //     "inputType": "conceptselector",
+        //     "label": "Concepts",
+        //     "name": "Concepts",
+        //     "placeholder": "Choose Concepts",
+        //     "renderingHints": {},
+        //     "required": false,
+        //     "visible": true
+        // },
+
+
+
     ]
 }

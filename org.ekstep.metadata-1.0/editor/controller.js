@@ -19,7 +19,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     /**
      * @property        - Plugin manifest object
      */
-    $scope.manifest = { id: "org.ekstep.metadata", ver: "1.2" };
+    $scope.manifest = { id: "org.ekstep.metadata", ver: "1.0" };
 
     /**
      * @property        - Which holds the category List values 
@@ -47,6 +47,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.dispatchEvent = function(event, data) {
         ecEditor.dispatchEvent(event, data)
     };
+
+    $scope.validation = {};
+
+    $scope.DEFAULT_ERROR_MESSAGE = 'Invalid Input'
 
     /**
      * @description     - It Initialize the dropdown with selected values
@@ -166,10 +170,18 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @returns {Object}        - Which returns object which contains both fixedLayout and dynamicLayout configurations
      */
     $scope.getLayoutConfigurations = function() {
-        const FIXED_FIELDS_CODE = ["name", "description", "keywords", "appIcon"];
+        const FIXED_FIELDS_CODE = ["name", "description", "keywords", "appicon"];
         let fixedLayout = [];
         let dynamicLayout = [];
         _.map(configurations, function(field) {
+            if (field.validation) {
+                _.forEach(field.validation, function(value, key) {
+                    if (value.type === 'regex') {
+                        value.value = new RegExp(value.value);
+                    }
+                    field.validation[value.type] = value;
+                })
+            }
             if (_.includes(FIXED_FIELDS_CODE, field.code)) {
                 fixedLayout.push(field)
             } else {
@@ -187,6 +199,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.successFn = function() {
         $scope.isSubmit = true;
+        !$scope.metaForm.$valid && $scope.updateErrorMessage($scope.metaForm);
         let successCB = function(err, res) {
             if (res) {
                 $scope.closeThisDialog();
@@ -206,6 +219,32 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             callback: successCB
         })
     };
+
+    /**
+     * 
+     * @param {*} errorInfo 
+     */
+    $scope.updateErrorMessage = function() {
+        let errorKeys = undefined;
+        _.forEach(configurations, function(value, key) {
+            if ($scope.metaForm[value.code] && $scope.metaForm[value.code].$invalid) {
+                $scope.validation[value.code] = {}
+                switch (_.keys($scope.metaForm[value.code].$error)[0]) {
+                    case 'pattern':
+                        $scope.validation[value.code]["errorMessage"] = value.validation.regex.message;
+                        break;
+                    case 'required':
+                        $scope.validation[value.code]["errorMessage"] = 'Plese Input a value';
+                        break;
+                    case "maxlength":
+                        $scope.validation[value.code]["errorMessage"] = value.validation.max.message;
+                        break;
+                    default:
+                        $scope.validation[value.code]["errorMessage"] = "Invalid Input";
+                }
+            }
+        });
+    }
 
     /** 
      * @description - Which is used take a action on click of the cancel button.
@@ -290,7 +329,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @param {Boolean} labels           - @default false Which defines the MultiSelect should be tag format design or not
      * @param {Boolean} forceSelection   - @default false Which defines the force selection should enalbe or not
      */
-    $scope.configureDropdowns = function(labels = true, forceSelection = true) {
+    $scope.configureDropdowns = function(labels = false, forceSelection = true) {
         // TODO: Need to remove the timeout
         setTimeout(function() {
             $(".ui.dropdown").dropdown({
@@ -313,7 +352,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         $scope.dynamicLayoutConfigurations = _.sortBy(_.uniqBy(layoutConfigurations.dynamicLayout, 'code'), 'index');
         $scope.mapMasterCategoryList(configurations);
     };
-
     $scope.init()
 
 }]);
