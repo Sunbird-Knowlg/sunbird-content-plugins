@@ -1,139 +1,172 @@
 window.formConfigurations = {
-    templateName: "template",
-    action: "save",
-    fields: [{
-            "code": "conceptselector",
-            "name": "conceptselector",
-            "description": "Choose a concept",
-            "inputType": "concetpselector",
-            "label": "Concept",
-            "editable": true,
-            "required": false,
-            "placeholder": "Edit App Icon",
-            "renderingHints": {
-                "visible": true
-            },
-            "index": 2
-        },
-        {
-            "code": "year",
-            "name": "Year",
-            "description": "Description of the content",
-            "inputType": "select",
-            "label": "Year",
-            "editable": true,
-            "required": true,
-            "placeholder": "Description",
-            "renderingHints": {
-                "visible": true
-            },
-            "index": 1
-        },
-        {
+    "templateName": "defaultTemplate",
+    "action": "save",
+    "fields": [{
             "code": "name",
-            "name": "Name",
+            "dataType": "text",
             "description": "Title of the content",
+            "editable": true,
             "inputType": "text",
+            "label": "Title",
+            "name": "Title",
+            "placeholder": "Enter the Title ",
+            "renderingHints": {},
             "required": true,
-            "editable": true,
-            "label": "Name",
-            "placeholder": "fieldName",
-            "renderingHints": {
-                "maxLength": 50,
-                "visible": true
-            },
-            "index": 1
-        }, {
-            "code": "description",
-            "name": "Description",
-            "label": "Description",
-            "description": "Description of the content",
-            "inputType": "text",
-            "editable": true,
-            "required": true,
-            "placeholder": "Description",
-            "renderingHints": {
-                "visible": true
-            }
-        }, {
-            "code": "keywords",
-            "name": "Keywords",
-            "description": "Keywords for the content",
-            "inputType": "autoComplete",
-            "label": "keyword",
-            "editable": true,
-            "required": true,
-            "placeholder": "Keywords",
-            "renderingHints": {
-                "visible": true
-            }
+            "visible": true,
+            "validation": [{
+                    "type": "regex",
+                    "value": "/[a-zA-Z0-9^ ]/",
+                    "message": "Invalid Input"
+                },
+                {
+                    "type": "max",
+                    "value": "15",
+                    "message": "Input exceded"
+                }
+            ]
         },
         {
-            "code": "appIcon",
-            "name": "App Icon",
+            "code": "description",
+            "dataType": "text",
+            "description": "Brief description",
+            "editable": true,
+            "inputType": "textarea",
+            "label": "Description",
+            "name": "Description",
+            "placeholder": "Description",
+            "renderingHints": {},
+            "required": true,
+            "visible": true
+        },
+        {
+            "code": "keywords",
+            "dataType": "list",
+            "description": "Keywords for the content",
+            "editable": true,
+            "inputType": "keywordsuggestion",
+            "label": "keywords",
+            "name": "Keywords",
+            "placeholder": "Enter Keywords",
+            "required": true,
+            "visible": true
+        },
+        {
+            "code": "appicon",
+            "dataType": "url",
             "description": "App Icon",
+            "editable": true,
+            "index": 6,
             "inputType": "file",
             "label": "App Icon",
-            "editable": true,
-            "required": true,
+            "name": "App Icon",
             "placeholder": "App Icon",
-            "renderingHints": {
-                "visible": true
-            }
+            "renderingHints": {},
+            "required": true,
+            "visible": true
         },
+
         {
             "code": "board",
-            "name": "Curriculum",
+            "dataType": "text",
+            "depends": [
+                "gradeLevel"
+            ],
             "description": "Curriculum",
+            "editable": true,
+            "index": 0,
             "inputType": "select",
             "label": "Curriculum",
-            "editable": true,
+            "name": "Curriculum",
+            "placeholder": "Select Curriculum",
+            "renderingHints": {},
             "required": true,
-            "placeholder": "Curriculum",
-            "renderingHints": {
-                "visible": true
-            },
-            "depends": ['gradeLevel']
-
+            "visible": true
         },
         {
             "code": "gradeLevel",
-            "name": "Class",
+            "dataType": "list",
+            "depends": [
+                "subject"
+            ],
             "description": "Class",
-            "inputType": "multiSelect",
-            "label": "Class",
             "editable": true,
+            "index": 1,
+            "inputType": "multiselect",
+            "label": "Class",
+            "name": "Class",
+            "placeholder": "Select Class",
+            "renderingHints": {},
             "required": true,
-            "placeholder": "Curriculum",
-            "renderingHints": {
-                "visible": true
-            },
-            "depends": ["subject"]
-        }, {
+            "visible": true
+        },
+        {
             "code": "subject",
-            "name": "Subject",
-            "description": "Subject",
+            "dataType": "text",
+            "description": "",
+            "editable": true,
+            "index": 2,
             "inputType": "select",
             "label": "Subject",
-            "editable": true,
+            "name": "Subject",
+            "placeholder": "Select Subject",
+            "renderingHints": {},
             "required": true,
-            "placeholder": "Curriculum",
-            "renderingHints": {
-                "visible": true
-            }
+            "visible": true
         },
         {
             "code": "medium",
-            "name": "medium",
-            "description": "Subject",
+            "dataType": "text",
+            "description": "",
+            "editable": true,
+            "index": 3,
             "inputType": "select",
             "label": "medium",
-            "editable": true,
-            "required": true,
+            "name": "medium",
             "placeholder": "Curriculum",
-            "renderingHints": {
-                "visible": true
-            }
-        }
+            "renderingHints": {},
+            "required": true,
+            "visible": true
+        },
+        {
+            "code": "year",
+            "dataType": "text",
+            "description": "",
+            "editable": true,
+            "index": 4,
+            "inputType": "select",
+            "label": "Year",
+            "name": "Year",
+            "placeholder": "Select Year",
+            "renderingHints": {},
+            "required": true,
+            "visible": true
+        },
+        {
+            "code": "publisher",
+            "dataType": "text",
+            "description": "Publication",
+            "editable": true,
+            "index": 5,
+            "inputType": "text",
+            "label": "Publisher",
+            "name": "Publisher",
+            "placeholder": "Publication",
+            "renderingHints": {},
+            "required": true,
+            "visible": true
+        },
+        {
+            "code": "concepts",
+            "dataType": "list",
+            "description": "Choose a concept",
+            "editable": true,
+            "inputType": "conceptselector",
+            "label": "Concepts",
+            "name": "Concepts",
+            "placeholder": "Choose Concepts",
+            "renderingHints": {},
+            "required": true,
+            "visible": true
+        },
     ]
 }

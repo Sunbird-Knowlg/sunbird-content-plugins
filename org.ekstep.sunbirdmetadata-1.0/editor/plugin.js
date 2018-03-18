@@ -41,7 +41,7 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
         ecEditor.addEventListener('editor:form:change', this.onConfigChange, this);
         ecEditor.addEventListener('editor:form:reset', this.resetFields, this);
         ecEditor.addEventListener('org.ekstep.editcontentmeta:showpopup', this.showForm, this);
-        this.getConfigurations(function(error, res) {
+        this.getConfigurations({ templateId: "", channel: "", contentType: "" }, function(error, res) {
             res ? instance.renderForm({ resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config }) : console.error('Fails to render')
         });
     },
@@ -62,20 +62,22 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
         if (data.isValid) {
             let actionEvent = this.actionMap[this.config.action];
             this.updateState(data.formData);
-            ecEditor.dispatchEvent(actionEvent, {
+            let callbackFn = function(err, res) {
+                if (res && res.data && res.data.responseCode == "OK") {
+                    data.callback && data.callback(undefined, res);
+                } else {
+                    data.callback && data.callback(err, undefined);
+                }
+            }
+            let options = {
                 savingPopup: true,
                 successPopup: true,
                 failPopup: true,
                 contentMeta: data.formData,
                 showNotification: true,
-                callback: function(err, res) {
-                    if (res && res.data && res.data.responseCode == "OK") {
-                        data.callback && data.callback(undefined, res);
-                    } else {
-                        data.callback && data.callback(err, undefined);
-                    }
-                }
-            })
+                callback: callbackFn
+            };
+            (this.config.action === 'save') ? ecEditor.dispatchEvent(actionEvent, options): ecEditor.dispatchEvent(actionEvent, callbackFn)
         } else {
             throw 'Invalid form data'
         }
@@ -94,7 +96,7 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
      * @description             - Which get the form configurations, framework and resource bundle data
      *                            Which makes async parallel call.
      */
-    getConfigurations: function(callback) {
+    getConfigurations: function({ temaplateId, channel } = {}, callback) {
         var instance = this;
         async.parallel({
             config: function(callback) {
