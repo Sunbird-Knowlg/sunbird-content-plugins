@@ -97,6 +97,7 @@ Plugin.extend({
                 Renderer.update = true;
             }, 500);
         } else {
+            this.setRendered(question);
             this._currentQuestion = question;
             this._renderedQuestions = _.union(this._renderedQuestions, [question]);
             // if (this._currentQuestion) {
@@ -111,10 +112,6 @@ Plugin.extend({
                 }, 100);
             });
         }
-        //if render question second then show custom prev navigaion
-        if (this._renderedQuestions.length >= 1) this.showCustomPrevNav();
-        this.setRendered(question);
-        this._currentQuestion = question;
     },
     setRendered: function(question) {
         var instance = this,

@@ -240,34 +240,35 @@ angular.module('createquestionapp', [])
         }
 
       });
-
       ecEditor.addEventListener(pluginInstance.manifest.id + ":saveQuestion", function(event, data) {
         if (!data.isSelected) {
           data.isSelected = true;
         }
-
-        var selQueIndex = _.findLastIndex($scope.questions, {
+        var ctrlScope = angular.element('#qc-question-bank-model').scope();
+        var selQueIndex = _.findLastIndex(ctrlScope.questions, {
           identifier: data.identifier
         });
         if (selQueIndex < 0) {
-          $scope.questions.unshift(data);
+          ctrlScope.questions.unshift(data);
         } else {
-          $scope.questions[selQueIndex] = data;
+          ctrlScope.questions[selQueIndex] = data;
         }
-        selQueIndex = _.findLastIndex($scope.selectedQuestions, {
+        selQueIndex = _.findLastIndex(ctrlScope.selectedQuestions, {
           identifier: data.identifier
         });
         if (selQueIndex < 0) {
-          $scope.selectedQuestions.unshift(data);
+          ctrlScope.selectedQuestions.unshift(data);
         } else {
-          $scope.selectedQuestions[selQueIndex] = data;
+          
+          ctrlScope.selectedQuestions[selQueIndex] = data;
+          console.log("slected questions", ctrlScope.selectedQuestions);
+          ctrlScope.$safeApply();
         }
 
-        $scope.setDisplayandScore();
-        $scope.editConfig($scope.selectedQuestions[0], 0);
-        $scope.previewItem($scope.selectedQuestions[0], true);
-        $scope.$safeApply();
-
+        ctrlScope.setDisplayandScore();
+        ctrlScope.editConfig(ctrlScope.selectedQuestions[0], 0);
+        ctrlScope.previewItem(ctrlScope.selectedQuestions[0], true);
+        ctrlScope.$safeApply();
       });
 
     }
