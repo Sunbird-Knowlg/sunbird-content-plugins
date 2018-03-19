@@ -29,7 +29,7 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
     /**
      * @property      - List of are event are mapped with the action
      */
-    actionMap: { save: "org.ekstep.contenteditor:save", review: "org.ekstep.contenteditor:review" },
+    eventMap: { save: "org.ekstep.contenteditor:save", review: "org.ekstep.contenteditor:review" },
 
     /**
      * @description    - Initialization of the plugin.
@@ -59,9 +59,10 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
      *                    Which is currently handles 'review` and `save' action
      */
     successAction: function(event, data) {
+        let instance = this;
         if (data.isValid) {
-            let actionEvent = this.actionMap[this.config.action];
             this.updateState(data.formData);
+            // Callback function
             let callbackFn = function(err, res) {
                 if (res && res.data && res.data.responseCode == "OK") {
                     data.callback && data.callback(undefined, res);
@@ -77,15 +78,59 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
                 showNotification: true,
                 callback: callbackFn
             };
-            (this.config.action === 'save') ? ecEditor.dispatchEvent(actionEvent, options): ecEditor.dispatchEvent(actionEvent, callbackFn)
+
+            switch (this.config.action) {
+                case 'review':
+                    this.reviewFn(options, callbackFn);
+                    break;
+                case 'save':
+                    this.saveFn(options, callbackFn)
+                    break;
+                default:
+                    console.error(this.config.action + 'Action wont support ')
+            }
         } else {
             throw 'Invalid form data'
         }
     },
 
     /**
+     * @description                 - Which is used send the content to review status 
+     *                                Before sending the content it will update the content
+     * @param {Object} options      - which should have properties related to notification.
+     * 
+     * @param {Fn} callbackFn       - Callback function
+     */
+    reviewFn: function(options, callbackFn) {
+        let instance = this;
+        ecEditor.dispatchEvent(this.eventMap['save'], {
+            callback: function(err, res) {
+                if (!err) {
+                    ecEditor.dispatchEvent(instance.eventMap[instance.config.action], callbackFn)
+                }
+            }
+        })
+
+    },
+
+
+    /**
+     * @description              - Which is used to update the content
+     * 
+     * @param {Object} options      - which should have properties related to notification.
+     * 
+     * @param {Fn} callbackFn       - Callback function
+     */
+    saveFn: function(options, callbackFn) {
+        ecEditor.dispatchEvent(this.eventMap[this.config.action], options)
+    },
+
+
+    /**
      * @description              - When cancel action is invoked
+     * 
      * @event                    - 'editor:form:cancel'
+     * 
      * @param {Object} data      - Which contains a callback method and other options 
      */
     cancelAction: function(event, data) {
@@ -123,6 +168,7 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
 
     /**
      * @description             - Which returns the current form object.
+     * 
      * @returns {Object}    
      */
     getFormFields: function() {
@@ -131,7 +177,9 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
 
     /**
      * @description             - Which is used to render the form with the configurations.
+     * 
      * @param {Object} formObj  - Form object it should have configurations, resourceBundle, framework object
+     * 
      * @example                 - {resourceBundle:{},framework:{},config:{}}
      */
     renderForm: function({ resourceBundle, framework, formConfig } = {}) {
@@ -146,6 +194,7 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
 
     /**
      * @description             - Which is used to set the state of form object.
+     * 
      * @param {Object} stateObj - It should contain the {isRoot, isNew, and form metaData information}
      */
     updateState: function({ nodeId, isRoot, isNew, metaData } = {}) {

@@ -115,3 +115,7 @@
     box-sizing: border-box;
     margin-left: 11% !important;
 }
+
+.marginClass {
+    margin-left: 2%
+}

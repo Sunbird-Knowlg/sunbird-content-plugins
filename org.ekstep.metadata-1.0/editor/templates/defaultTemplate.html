@@ -25,7 +25,7 @@
             </div>
         </div>
         <div class="scrolling content form-popup-modal">
-            <form class="ui form" id="content-meta-form" ng-init="initDropdown()" name="metaForm" novalidate>
+            <form class="ui form" id="content-meta-form" ng-init="initDropdown()" name="metaForm" novalidate ng-class="!appIconConfig.visible ? 'marginClass' : ''">
                 <div class="ui grid">
                     <div class="row">
                         <div class="two wide field" ng-hide="!appIconConfig.visible">
@@ -126,6 +126,11 @@
                                     " ng-if="dynamicField.inputType==='conceptselector'">
                                         <label>{{dynamicField.label}}</label>
                                         <concetpselector config=dynamicField></concetpselector>
+                                    </div>
+                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code].length && fixedField.required) && isSubmit , 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="(dynamicField.inputType=='keywordsuggestion'
+                                    && dynamicField.visible) " ng-required="{{dynamicField.required}} ">
+                                        <label>{{dynamicField.label}}</label>
+                                        <keywords config=dynamicField></keywords>
                                     </div>
                                 </div>
                             </div>

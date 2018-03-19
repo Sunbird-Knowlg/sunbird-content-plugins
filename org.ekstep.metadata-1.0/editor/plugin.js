@@ -7,14 +7,16 @@
 org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlugin.extend({
 
     /**
-     *@description - Initialization of the metdata form plugin.
-     *@event 'org.ekstep.editcontentmeta:showpopup'
+     * @description - Initialization of the metdata form plugin.
+     *
+     * @event 'org.ekstep.editcontentmeta:showpopup'
      */
     initialize: function() {},
 
     /**
      * TODO:
      * @param {Object} fields
+     * 
      * @description - Which is used to validate the fields.
      */
     validate: function(fields) {},
@@ -30,6 +32,7 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
 
     /**
      * @description    - Which is used to show the popup form
+     * 
      * @event          - 'org.ekstep.editcontentmeta:showpopup'          
      */
     showForm: function(event, data) {
@@ -50,7 +53,9 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
     },
 
     /**
+     * 
      * @param {String} templateName  - Name of the template
+     * 
      * @description - Which loads the template 
      */
     loadTemplate: function(templateName) {
@@ -67,9 +72,12 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
 
     /**
      * @param {Object} destination
+     * 
      * @param {Object} source
+     * 
      * @description - Which is used to merge the "Framework object into Form Configurations"
      *              - By mapping code attribute
+     * 
      * @returns {Object}
      */
     mapObject: function(destination, source) {

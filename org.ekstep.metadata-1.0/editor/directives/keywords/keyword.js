@@ -2,7 +2,7 @@
  * @description
  * @author Manjunath Davanam <manjunathd@ilimi.in>
  */
-var formApp = angular.module('org.ekstep.metadataform', ['ngTokenField']);
+var formApp = angular.module('org.ekstep.metadataform', ['ngTagsInput']);
 
 formApp.directive('keywords', function() {
     var keywordController = ['$scope', '$controller', function($scope, $controller) {

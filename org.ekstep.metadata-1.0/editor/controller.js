@@ -40,17 +40,27 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     let isNewNode = false;
 
     /**
+     * @property        -
+     */
+    $scope.validation = {};
+
+    /**
+     * @property       - Default error message for the fields
+     */
+    $scope.DEFAULT_ERROR_MESSAGE = 'Invalid Input'
+
+    /**
      * @description          - Which is used to dispatch an event.
+     * 
      * @param {String} event - Name of the event.
+     * 
      * @param {Object} data  - Data which is need to pass.  
      */
     $scope.dispatchEvent = function(event, data) {
         ecEditor.dispatchEvent(event, data)
     };
 
-    $scope.validation = {};
 
-    $scope.DEFAULT_ERROR_MESSAGE = 'Invalid Input'
 
     /**
      * @description     - It Initialize the dropdown with selected values
@@ -71,6 +81,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
 
     /**
      * @description             - Which is used to generate the telemetry.
+     * 
      * @param {Object} data     - Telemetry interact event data.
      */
     $scope.generateTelemetry = function({ type, subtype, target, objectid, targetid, stage } = {}) {
@@ -87,8 +98,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     };
 
     /**
-     *@description            - Which is used to update the form when vlaues is get changes
+     * @description            - Which is used to update the form when vlaues is get changes
+     * 
      * @param {String} event  - Name of the event.
+     * 
      * @param {Object} object - Field information
      */
     $scope.onConfigChange = function(event, object) {
@@ -98,6 +111,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
 
     /**
      * @description            - Which is used to update the form when vlaues is get changes
+     * 
      * @param {Object} object  - Field information
      */
     $scope.updateForm = function(object) {
@@ -110,7 +124,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
 
     /** 
      * @description                    - Which is used to get the association object by mapping key and range object
+     * 
      * @param {String | Array} keys    - To the associactio object for particular key's
+     * 
      * @param {Object} range           - Which refers to framework terms/range object
      */
     $scope.getAssociations = function(keys, range, callback) {
@@ -128,8 +144,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
 
     /**
      * @description                    - Which is used to resolve the dependency. 
+     * 
      * @param {Object} field           - Which field need need to get change.
+     * 
      * @param {Object} associations    - Association values of the respective field.
+     * 
      * @param {Boolean} resetSelected  - @default true Which defines while resolving the dependency dropdown
      *                                   Should reset the selected values of the field or not
      */
@@ -155,6 +174,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @description            - Which updates the drop down value list 
      *                         - If the specified values are empty then drop down will get update with master list
      * @param {Object} field   - Field which is need to update.
+     * 
      * @param {Object} values  - Values for the field
      */
     $scope.updateDropDownList = function(fieldCode, values) {
@@ -167,6 +187,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
 
     /**
      * @description             - Which is used to get fixedLayout section and Dynamic section layout fields
+     * 
      * @returns {Object}        - Which returns object which contains both fixedLayout and dynamicLayout configurations
      */
     $scope.getLayoutConfigurations = function() {
@@ -195,6 +216,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
 
     /** 
      * @description - Which is used to invoke an action on click of the submit button.
+     * 
      * @fires       - 'editor:form:success'
      */
     $scope.successFn = function() {
@@ -222,7 +244,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
 
     /**
      * 
-     * @param {*} errorInfo 
+     * @description             - Which is used to show an error message to resepective field 
      */
     $scope.updateErrorMessage = function() {
         let errorKeys = undefined;
@@ -230,13 +252,13 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             if ($scope.metaForm[value.code] && $scope.metaForm[value.code].$invalid) {
                 $scope.validation[value.code] = {}
                 switch (_.keys($scope.metaForm[value.code].$error)[0]) {
-                    case 'pattern':
+                    case 'pattern': // When input validation of type is regex
                         $scope.validation[value.code]["errorMessage"] = value.validation.regex.message;
                         break;
-                    case 'required':
+                    case 'required': // When input validation of type is required
                         $scope.validation[value.code]["errorMessage"] = 'Plese Input a value';
                         break;
-                    case "maxlength":
+                    case "maxlength": // When input validation of type is max
                         $scope.validation[value.code]["errorMessage"] = value.validation.max.message;
                         break;
                     default:
@@ -248,6 +270,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
 
     /** 
      * @description - Which is used take a action on click of the cancel button.
+     * 
      * @fires       - 'editor:form:cancel'
      */
     $scope.cancelFn = function() {
@@ -257,6 +280,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
 
     /** 
      * @description         - Which is used to restore the dropdown slected value.
+     * 
      * @param {String} id   - To restore the specific dropdown field value 
      */
     $scope.resetSelectedField = function(id) {
@@ -270,8 +294,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
 
     /**
      * 
-     * @description                     -
+     * @description                     - Which is used to map with the master framework list
+     * 
      * @param {Object} configurations   - Field configurations
+     * 
      * @param {String} key              - Field uniq code value
      */
     $scope.mapMasterCategoryList = function(configurations, key) {
@@ -288,20 +314,13 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
 
     /**
      * @description                     - Which used to get only modied filed values
+     * 
      * @param {Object} currentMetadata  -@default Object Current field values
+     * 
      * @returns {Object}                - Whihc returns only changed metadata values
      */
     $scope.getUpdatedMetadata = function(currentMetadata = {}) {
         let metadata = {};
-        // TODO:
-        // Which trmis out the lemma keyword 
-        // Example - [{lemma:'key1'},{lemma:'key2'}] => ['key1','key2']
-        if (currentMetadata['keywords']) {
-            let keywords = currentMetadata['keywords'];
-            currentMetadata.keywords = keywords.map(function(a) {
-                return a.lemma ? a.lemma : a
-            })
-        }
         if (_.isEmpty($scope.originalContentMeta)) {
             _.forEach(currentMetadata, function(value, key) {
                 metadata[key] = value;
@@ -314,7 +333,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                     metadata[key] = value;
                 }
             });
-        }!metadata['name'] && (metadata['name'] = $scope.originalContentMeta['name']);
+        }
+        // Passing mandatory fields when save is invoked
+        !metadata['name'] && (metadata['name'] = $scope.originalContentMeta['name']);
         !metadata['contentType'] && (metadata['contentType'] = $scope.originalContentMeta['contentType']);
         !metadata['mimeType'] && (metadata['mimeType'] = $scope.originalContentMeta['mimeType']);
         return metadata;
@@ -327,9 +348,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      *                                     to enable/disable the force selection field and multiSelect fields with tags format 
      *
      * @param {Boolean} labels           - @default false Which defines the MultiSelect should be tag format design or not
+     * 
      * @param {Boolean} forceSelection   - @default false Which defines the force selection should enalbe or not
      */
-    $scope.configureDropdowns = function(labels = false, forceSelection = true) {
+    $scope.configureDropdowns = function(labels = false, forceSelection = false) {
         // TODO: Need to remove the timeout
         setTimeout(function() {
             $(".ui.dropdown").dropdown({
