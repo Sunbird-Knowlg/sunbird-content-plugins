@@ -409,7 +409,7 @@ angular.module('createquestionapp', [])
         if (question.version == 1 && question.template_id) {
           $scope.getv1Template(question.template_id, question, function(controller) {
             question.template = controller.template;
-            if(controller.mediamanifest)question.mediamanifest=controller.mediamanifest;
+            if (controller.mediamanifest) question.mediamanifest = controller.mediamanifest;
           });
         }
       });
@@ -510,31 +510,42 @@ angular.module('createquestionapp', [])
           var questionSets = {},
             _assessmentData = {},
             config = {},
-            controller = {
+            quesBody = {
               "questionnaire": {},
               "template": [],
-              "mediamanifest":[]
+              "mediamanifest": {
+                "media": []
+              }
             };
           questionSets[question.identifier] = [];
           questionSets[question.identifier].push(question);
-          controller.questionnaire["items"] = questionSets;
-          controller.questionnaire["item_sets"] = [{
+          if (_.isArray(question.media)) {
+            question.media.forEach(function(mediaItem) {
+              quesBody.mediamanifest.media.push(mediaItem);
+            });
+          }
+          quesBody.questionnaire["items"] = questionSets;
+          quesBody.questionnaire["item_sets"] = [{
             "count": "1",
             "id": question.identifier
           }]
-          controller["questionnaire"] = ecEditor._.assign(controller.questionnaire, config);
-          controller["template"].push(templateJson.theme.template);
-          controller["mediamanifest"]=templateJson.theme.manifest;
-          callback(controller);
+          quesBody["questionnaire"] = ecEditor._.assign(quesBody.questionnaire, config);
+          quesBody["template"].push(templateJson.theme.template);
+          if (!(ecEditor._.isUndefined(templateJson.theme.manifest)) && !(ecEditor._.isUndefined(templateJson.theme.manifest.media)) &&  _.isArray(templateJson.theme.manifest.media)) {
+            templateJson.theme.manifest.media.forEach(function(mediaItem) {
+              quesBody.mediamanifest.media.push(mediaItem);
+            });
+          }
+          callback(quesBody);
         }
       });
     }
 
-    $scope.sendForPreview = function(controller, version) {
+    $scope.sendForPreview = function(quesBody, version) {
       if (version == 1) {
         var qObj = {
           "data": {
-            __cdata: JSON.stringify(controller)
+            __cdata: JSON.stringify(quesBody)
           },
           "config": {
             __cdata: JSON.stringify({
@@ -556,12 +567,12 @@ angular.module('createquestionapp', [])
         };
       } else {
         var qObj = {
-          "config": JSON.stringify(controller.data.config),
-          "data": JSON.stringify(controller.data.data),
+          "config": JSON.stringify(quesBody.data.config),
+          "data": JSON.stringify(quesBody.data.data),
           "id": "c943d0a907274471a0572e593eab49c2",
-          "pluginId": controller.data.plugin.id,
-          "pluginVer": controller.data.plugin.version,
-          "templateId": controller.data.plugin.templateId,
+          "pluginId": quesBody.data.plugin.id,
+          "pluginVer": quesBody.data.plugin.version,
+          "templateId": quesBody.data.plugin.templateId,
           "type": "unit"
         };
       }
@@ -569,7 +580,6 @@ angular.module('createquestionapp', [])
       var data = {
         "org.ekstep.questionset": {}
       }
-       
       questions.push(qObj);
       data["org.ekstep.questionset"]['org.ekstep.question'] = questions;
       var confData = {
