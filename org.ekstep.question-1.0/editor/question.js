@@ -337,12 +337,28 @@
         "template_id": "NA", // backward compatibility
       }
       var dynamicOptions = [{ "answer": true, "value": { "type": "text", "asset": "1" } }];
+       var mtfoptions = [{
+        "value": {
+          "type": "mixed",
+          "text": "इक",
+          "image": "",
+          "count": "",
+          "audio": "",
+          "resvalue": "इक",
+          "resindex": 0
+        },
+        "index": 0
+      }];
       switch (ctrl.category) {
         case 'MCQ':
         metadata.options = dynamicOptions;
         break;
         case 'FTB':
         metadata.answer = dynamicOptions;
+        break;
+        case 'MTF':
+        metadata.lhs_options = mtfoptions;
+        metadata.rhs_options = mtfoptions;
         break;
         default:
         metadata.options = dynamicOptions;
