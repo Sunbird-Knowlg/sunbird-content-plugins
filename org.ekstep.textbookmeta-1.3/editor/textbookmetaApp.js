@@ -1,4 +1,8 @@
-angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller('textbookmetaController', ['$scope', '$timeout', function($scope, $timeout) {
+
+//let myApp = angular.module('org.ekstep.textbookmeta',['ngTagsInput', 'Scope.safeApply']
+var textbookApp = angular.module('textbookmetaApp',['ngTagsInput', 'Scope.safeApply'])
+textbookApp.controller('textbookmetaController', ['$scope', '$timeout', '$filter', function($scope, $timeout , $filter) {
+    var ctrl = this;
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
@@ -7,6 +11,7 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
     $scope.categoryListofFramework = {};
     $scope.categoryValues = '';
     const DEFAULT_NODETYPE = 'TextBook';
+    $scope.dialCodes = [];
     $scope.updateTitle = function(event, title) {
         $scope.textbook.name = title;
         $scope.getPath();
@@ -333,6 +338,15 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
         })
     }
 
+    // clear the dialup code
+    $scope.clearCode = function(){
+        this.testValue = '';
+        ecEditor.jQuery(".ui.icon.input input").css("border-color","");
+        ecEditor.jQuery(".ui.icon.input").removeClass('field error');
+        $scope.proceedFlag= false;
+        $scope.clearFlag = false;
+    }
+
     $scope.initYearDropDown = function() {
         $scope.currentYear = new Date().getFullYear();
         $scope.years = [];
@@ -354,9 +368,19 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
             })
         }
     };
+
+    // get dial codes
+    ctrl.getDialCodes = function(){
+        $scope.dialCodes = window.dialCodes.result.dialcodes;
+        // Search function to fetch all the dialcodes
+
+
+    }
     
+ 
     $scope.init = function() {
         $scope.initYearDropDown();
+        ctrl.getDialCodes();
         $scope.$watch('textbook', function() {
             if($scope.textbook){
                 if(/^[a-z\d\-_\s]+$/i.test($scope.textbook.name) == false) $scope.textbook.name = org.ekstep.services.collectionService.removeSpecialChars($scope.textbook.name);

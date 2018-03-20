@@ -1,0 +1,14 @@
+<div class="field">
+        <label>Dial code</label>
+        <div class="ui icon input" style="align-items: center;">
+        <input ng-show="!editFlag" class="dialCode" type="text"  placeholder="Enter 6 digits dial code eg: XXXXXX" ng-model="dialUpCode" ng-keyup="validateInputValue()" maxlength="6" ng-disabled="false">
+        <div ng-show="editFlag" class="ui action right icon input">
+                <i ng-show="successFlag" style="font-size:17px" class="small green check icon"></i>
+                <i ng-show="failureFlag" style="font-size:17px" class="small red remove icon"></i>
+                <input type="text" ng-model="dialUpCode" style="width:100%;" ng-disabled="true">
+        </div>
+        <span ng-show="editFlag" ng-click="editDialCode()" style="cursor:pointer"><i class="large edit icon"></i></span>
+        <div ng-show="clearFlag" ng-click="clearDialCode()" style="cursor:pointer"><i class="big blue remove circle icon"></i></div>
+        <div ng-show="proceedFlag" ng-click="validateDialCode()" style="cursor:pointer"><i class="big blue check circle icon"></i></div>
+    </div>
+    </div>
