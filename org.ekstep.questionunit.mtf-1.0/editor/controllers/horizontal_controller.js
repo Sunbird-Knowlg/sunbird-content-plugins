@@ -6,25 +6,6 @@
 angular.module('createquestionapp', []).controller('mtfQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope) {
   $scope.formVaild = false;
   $scope.indexCount=4;
-  $scope.mcqConfiguartion = {
-    'questionConfig': {
-      'isText': true,
-      'isImage': true,
-      'isAudio': true,
-      'isHint': false
-    },
-    'optionsConfig': [{
-      'isText': true,
-      'isImage': true,
-      'isAudio': true,
-      'isHint': false
-    }, {
-      'isText': true,
-      'isImage': true,
-      'isAudio': true,
-      'isHint': false
-    }]
-  };
   $scope.mtfFormData = {
     'question': {
       'text': '',
@@ -241,5 +222,22 @@ angular.module('createquestionapp', []).controller('mtfQuestionFormController', 
       delete $scope.optionsMedia.audio[id];
     }
   }
+  $scope.generateTelemetry = function(data, event) {
+  if (data) ecEditor.getService('telemetry').interact({
+    "type": data.type,
+    "subtype": data.subtype,
+    "id": data.id,
+    "pageId": ecEditor.getCurrentStage().id,
+    "target": {
+      "id": event.target.id,
+      "ver": "1.0",
+      "type": data.type
+    },
+    "plugin": {
+      "id": "org.ekstep.questionunit.mtf",
+      "ver": "1.0"
+    }
+  })
+}
 }]);
 //# sourceURL=horizontalMtf.js
