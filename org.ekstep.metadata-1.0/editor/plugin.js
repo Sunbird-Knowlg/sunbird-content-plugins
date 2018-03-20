@@ -4,7 +4,12 @@
  * @since 1.0
  * @author Kartheek Palla And Manjunath Davanam
  */
-org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlugin.extend({
+org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.extend({
+
+    /**
+     * @property            - This plugin which provides a default template
+     */
+    DEFAULT_TEMPLATE_NAME: 'defaultTemplate',
 
     /**
      * @description - Initialization of the metdata form plugin.
@@ -58,7 +63,7 @@ org.ekstep.collectioneditor.metadataPlugin = org.ekstep.collectioneditor.basePlu
      * 
      * @description - Which loads the template 
      */
-    loadTemplate: function(templateName) {
+    loadTemplate: function(templateName = this.DEFAULT_TEMPLATE_NAME) {
         var templatePath = ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", `editor/templates/${templateName}.html`);
         var controllerPath = ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", "editor/controller.js");
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath);

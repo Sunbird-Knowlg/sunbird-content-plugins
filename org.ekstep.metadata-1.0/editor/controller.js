@@ -106,6 +106,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.onConfigChange = function(event, object) {
         $scope.isSubmit = false;
+        !$scope.metaForm.$valid && $scope.updateErrorMessage();
         $scope.updateForm(object);
     }
 
@@ -172,7 +173,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
 
     /**
      * @description            - Which updates the drop down value list 
-     *                         - If the specified values are empty then drop down will get update with master list
+     *                           If the specified values are empty then drop down will get update with master list
      * @param {Object} field   - Field which is need to update.
      * 
      * @param {Object} values  - Values for the field
@@ -221,7 +222,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.successFn = function() {
         $scope.isSubmit = true;
-        !$scope.metaForm.$valid && $scope.updateErrorMessage($scope.metaForm);
+        !$scope.metaForm.$valid && $scope.updateErrorMessage();
         let successCB = function(err, res) {
             if (res) {
                 $scope.closeThisDialog();
@@ -247,6 +248,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @description             - Which is used to show an error message to resepective field 
      */
     $scope.updateErrorMessage = function() {
+        if ($scope.metaForm.$valid) return
         let errorKeys = undefined;
         _.forEach(configurations, function(value, key) {
             if ($scope.metaForm[value.code] && $scope.metaForm[value.code].$invalid) {
@@ -269,9 +271,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     }
 
     /** 
-     * @description - Which is used take a action on click of the cancel button.
+     * @description      -   Which is used take a action on click of the cancel button.
      * 
-     * @fires       - 'editor:form:cancel'
+     * @fires            -   'editor:form:cancel'
      */
     $scope.cancelFn = function() {
         // Note: Reset the all selected fields (If required)

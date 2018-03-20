@@ -5,7 +5,7 @@
  * @author Kartheek Palla And Manjunath Davanam
  */
 
-org.ekstep.collectioneditor.metadataPlugin.extend({
+org.ekstep.contenteditor.metadataPlugin.extend({
     /**
      * @property    - Form object which contains field details with framework and resource bundle
      */
@@ -107,6 +107,9 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
             callback: function(err, res) {
                 if (!err) {
                     ecEditor.dispatchEvent(instance.eventMap[instance.config.action], callbackFn)
+                } else {
+                    throw 'Unable to update the fields value before sending to review status'
+                    callbackFn(err)
                 }
             }
         })
@@ -150,7 +153,7 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
             },
             framework: function(callback) {
                 // get the framworkData
-                var frameworkId = ecEditor.getContext('framework') || org.ekstep.services.collectionService.defaultFramwork;
+                var frameworkId = ecEditor.getContext('framework');
                 ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(frameworkId, function(error, response) {
                     if (!error) callback(undefined, response)
                     else throw 'Unable to fetch the framework data.'
@@ -203,7 +206,8 @@ org.ekstep.collectioneditor.metadataPlugin.extend({
         value.root = isRoot;
         value.isNew = isNew;
         value.metadata = metaData;
-        org.ekstep.services.stateService.setState(key, value);
+        org.ekstep.services.stateService.create("nodesModified");
+        org.ekstep.services.stateService.setState("nodesModified", key, value);
     }
 
 });
