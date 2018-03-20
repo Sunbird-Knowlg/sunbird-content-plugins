@@ -536,6 +536,9 @@ angular.module('createquestionapp', [])
               quesBody.mediamanifest.media.push(mediaItem);
             });
           }
+          else if(!(ecEditor._.isUndefined(templateJson.theme.manifest)) && !(ecEditor._.isUndefined(templateJson.theme.manifest.media))){
+            quesBody.mediamanifest.media.push(templateJson.theme.manifest.media);
+          }
           callback(quesBody);
         }
       });
