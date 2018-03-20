@@ -97,8 +97,7 @@ Plugin.extend({
                 Renderer.update = true;
             }, 500);
         } else {
-            this.setRendered(question);
-            this._currentQuestion = question;
+           
             this._renderedQuestions = _.union(this._renderedQuestions, [question]);
             // if (this._currentQuestion) {
             //   EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
@@ -112,6 +111,8 @@ Plugin.extend({
                 }, 100);
             });
         }
+         this.setRendered(question);
+         this._currentQuestion = question;
     },
     setRendered: function(question) {
         var instance = this,
