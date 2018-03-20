@@ -1,0 +1,135 @@
+#mtf-renderer {
+  height: 90vh;
+  margin: auto;
+  text-align: center;
+  line-height: 2em;
+  width: 80%;
+  margin-top: 2%;
+  position: relative;
+  display: grid;
+}
+
+
+.mtf-layout {
+  width: 100%;
+  top: 10px;
+  position: relative;
+  margin: auto;
+}
+
+header.mtf-header {
+  width: 100%;
+  background-color: #404041;
+  height: auto;
+}
+
+.mtf-question-text {
+  padding: 17px 10px 16px 10px;
+  color: white;
+  font-size: 100%;
+  line-height: normal;
+  text-align: center;
+}
+
+
+/*Horizontal MTF CSS*/
+
+.mtf-hori-container {
+  margin: 0;
+  text-align: left;
+  overflow: hidden;
+  width: 100%;
+  display: table;
+  margin-top: 2%;
+  height: 18vh;
+}
+
+.mtf-hori-option {
+  cursor: pointer;
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+  margin: 0;
+  width: 25%;
+}
+
+.mtf-hori-ques-option {
+  margin: 0 7%;
+  border: 1px solid #c8ccd0;
+  height: 100%;
+}
+
+.mtf-hori-lhs-option {
+  margin: 0 7%;
+  border: 1px inset #c8ccd0;
+  height: 100%;
+}
+
+.mtf-hori-rhs-option {
+  margin: 0 7%;
+  border: 1px solid #c8ccd0;
+  background-color: #ede9e3;
+  height: 100%;
+  z-index: 3;
+  box-shadow: 0 0 10px #c8ccd0;
+}
+
+.mtf-hori-ques-text {
+  line-height: 1.5;
+  padding: 5px;
+  display: table;
+  height: 100%;
+  width: 100%;
+}
+
+.mtf-hori-ques-text-inner {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  word-break: break-all;
+}
+
+
+/*Vertical MTF CSS*/
+
+.mtf-ver-layout {
+  display: table;
+  height: 70vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.mtf-ver-container {
+  display: inline-block;
+  height: 100%;
+  margin: 2% 0 0 0;
+  width: 33.33%;
+  padding: 0 3%;
+}
+
+.mtf-ver-option {
+  margin: 0;
+  width: 100%;
+  height: 18vh;
+  padding: 5% 0;
+}
+
+.mtf-ver-ques-option {
+  border: 1px solid #c8ccd0;
+  height: 100%;
+  cursor: pointer;
+}
+
+.mtf-ver-lhs-option {
+  border: 1px inset #c8ccd0;
+  height: 100%;
+}
+
+.mtf-ver-rhs-option {
+  border: 1px solid #c8ccd0;
+  background-color: #ede9e3;
+  height: 100%;
+  z-index: 3;
+  box-shadow: 0 0 10px #c8ccd0;
+}

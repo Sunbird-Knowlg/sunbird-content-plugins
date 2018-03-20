@@ -7,7 +7,9 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     $scope.selectedAns;
     $scope.bigImage = false;
     $scope.events = { "show": "", "hide": "", "eval": "" };
-   // $scope.imageZoomPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/zoomin.png");
+    $scope.currentAudio;
+    $scope.lastAudio;
+    $scope.audioImage = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png");
     $scope.init = function() {
         $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/styles/style.css");
         $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.mcq");
@@ -189,6 +191,21 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
         TelemetryService.interact("TOUCH", event.target.id, "TOUCH", {
             stageId: Renderer.theme._currentStage
         });
+    }
+
+    $scope.playAudio = function(audio) {
+        if($scope.lastAudio && ($scope.lastAudio != audio)){
+            $scope.currentAudio.pause();
+        }
+
+        if ( !$scope.currentAudio || $scope.currentAudio.paused) {
+            $scope.currentAudio = new Audio(audio);
+            $scope.currentAudio.play();
+            $scope.lastAudio = audio;
+        } else {
+            $scope.currentAudio.pause();
+            $scope.currentAudio.currentTime = 0
+        }
     }
 });
 //# sourceURL=questionunitmcqcontroller.js
