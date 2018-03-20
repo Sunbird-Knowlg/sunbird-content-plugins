@@ -181,6 +181,13 @@
               <!-- <option value="" selected="selected">Choose Layout</option> -->
               <option ng-repeat="tem in $ctrl.templatesType" value="{{tem}}">{{tem}}</option>
             </select>
+            <div>
+                <div class="ui label qb-toggle-label">Shuffle Option</div>
+                <div class="ui fluid toggle checkbox verticalcenter">
+                    <input type="checkbox" ng-model="$ctrl.questionData.isShuffleOption" ng-change="$ctrl.updatePreview();">
+                    <label>&nbsp;</label>
+                </div>
+            </div>
           </div>
       </div>
     </div>

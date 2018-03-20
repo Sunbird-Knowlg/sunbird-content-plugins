@@ -25,6 +25,7 @@
   ctrl.questionData = { 'questionMaxScore' : 1};
   ctrl.plugins = { 'concepts': 'org.ekstep.conceptselector:init' };
   ctrl.templatesType = ['Horizontal','Vertical','Grid'];
+  ctrl.questionData.isShuffleOption = false;
   ctrl.questionData.templateType = ctrl.templatesType[0];
   ctrl.refreshPreview = false;
   ctrl.noTemplatesFound = "";
@@ -162,7 +163,7 @@
   ctrl.setPreviewData = function() {
     var confData = {};
     var qObj = {
-      "config": '{"metadata":{"title":"question title","description":"question description","language":"English"},"max_time":0,"max_score":1,"partial_scoring":false,"layout":'+JSON.stringify(ctrl.questionData.templateType)+'}',
+      "config": '{"metadata":{"title":"question title","description":"question description","language":"English"},"max_time":0,"max_score":1,"partial_scoring":false,"isShuffleOption":'+ctrl.questionData.isShuffleOption +',"layout":'+JSON.stringify(ctrl.questionData.templateType)+'}',
       "data": JSON.stringify(ctrl.questionCreationFormData),
       "id": "c943d0a907274471a0572e593eab49c2",
       "pluginId": ctrl.selectedTemplatePluginData.plugin.id,
@@ -312,7 +313,7 @@
       data.plugin = ctrl.selectedTemplatePluginData.plugin;
       data.data = ctrl.questionCreationFormData; //{"question":ctrl.questionCreationFormData.question.text,"options":ctrl.questionCreationFormData.options};   
       var metadataObj = { category: ctrl.category, title: ctrl.questionData.questionTitle, language: [ctrl.questionData.qcLanguage], qlevel: ctrl.questionData.qcLevel, gradeLevel: ctrl.questionData.qcGrade, concepts: ctrl.selectedConceptsData, description: ctrl.questionData.questionDesc, max_score: ctrl.questionData.questionMaxScore };
-      data.config = { "metadata": metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": false, layout: ctrl.questionData.templateType};
+      data.config = { "metadata": metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": false, "layout": ctrl.questionData.templateType, "isShuffleOption" : ctrl.questionData.isShuffleOption};
       data.media = ctrl.questionCreationFormData.media;
       questionFormData.data = data;
       var bodyData = '';

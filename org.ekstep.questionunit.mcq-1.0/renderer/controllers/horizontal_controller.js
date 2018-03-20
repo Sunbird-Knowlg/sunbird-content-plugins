@@ -9,6 +9,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     $scope.events = { "show": "", "hide": "", "eval": "" };
     $scope.currentAudio;
     $scope.lastAudio;
+    $scope.isShuffleOptions;
     $scope.audioImage = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png");
     $scope.init = function() {
         $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/styles/style.css");
@@ -100,13 +101,23 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
             })
         }
         questionData = qData;
+        var qConfig = ctrlScope.question._currentQuestion.config.__cdata || ctrlScope.question._currentQuestion.config;
+        var queConfig = JSON.parse(qConfig);
+        $scope.isShuffleOptions = queConfig.isShuffleOption;
 
+        if($scope.isShuffleOptions){
+           questionData.options =  _.shuffle(questionData.options);
+        }
 
         var qState = ctrlScope.question._currentQuestionState;
         if (qState && qState.val) {
             ctrlScope.selectedIndex = qState.val;
         }
-        var qConfig = ctrlScope.question._currentQuestion.config.__cdata || ctrlScope.question._currentQuestion.config;
+        if (qState && qState.options) {
+           questionData.options = qState.options;
+        }
+
+        
         ctrlScope.questionObj = questionData;
         ctrlScope.questionObj.topOptions = [];
         ctrlScope.questionObj.bottomOptions = [];
@@ -121,6 +132,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
         })
         ctrlScope.showTemplate = true;
         ctrlScope.questionObj.questionConfig = JSON.parse(qConfig);
+        $scope.isShuffleOptions
         ctrlScope.safeApply();
     }
 
@@ -146,7 +158,8 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
         $scope.selectedIndex = index;
         $scope.selectedAns = val.isCorrect;
         var state = {
-            val: $scope.selectedIndex
+            val: $scope.selectedIndex,
+             options: $scope.questionObj.options
         }
         $scope.generateItemResponse(val, index);
         EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
@@ -165,7 +178,8 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
         var result = {
             eval: correctAnswer,
             state: {
-                val: ctrlScope.selectedIndex
+                val: ctrlScope.selectedIndex,
+                options: ctrlScope.questionObj.options
             }
         }
         if (_.isFunction(callback)) {
@@ -194,11 +208,11 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     }
 
     $scope.playAudio = function(audio) {
-        if($scope.lastAudio && ($scope.lastAudio != audio)){
+        if ($scope.lastAudio && ($scope.lastAudio != audio)) {
             $scope.currentAudio.pause();
         }
 
-        if ( !$scope.currentAudio || $scope.currentAudio.paused) {
+        if (!$scope.currentAudio || $scope.currentAudio.paused) {
             $scope.currentAudio = new Audio(audio);
             $scope.currentAudio.play();
             $scope.lastAudio = audio;
