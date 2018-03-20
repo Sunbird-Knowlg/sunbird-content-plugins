@@ -16,14 +16,17 @@ app.controllerProvider.register("CustomNavigationCtrl", function($scope, $rootSc
 
     EkstepRendererAPI.addEventListener("renderer:content:start", $scope.showCustomNavigation);
 
+
     $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.navigation");
 
     EventBus.addEventListener("sceneEnter", function(data) {
       $timeout( function(){
         $scope.showCustomNavigation();
       }, 0);
+
     });
 
+    $scope.showCustomNavigation();
     if ($scope.pluginInstance) {
       if (globalConfig.overlay.showOverlay) {
         $scope.customNavigationVisible = $scope.pluginInstance.customNavigationVisible;
@@ -40,8 +43,12 @@ app.controllerProvider.register("CustomNavigationCtrl", function($scope, $rootSc
   }
 
   $scope.hideDefaultNavigation = function(){
-    EventBus.dispatch("renderer:next:hide");
-    EventBus.dispatch("renderer:previous:hide");
+    EkstepRendererAPI.dispatchEvent("renderer:next:hide");
+    EkstepRendererAPI.dispatchEvent("renderer:previous:hide");
+    $timeout(function() {
+    EkstepRendererAPI.dispatchEvent('renderer:customprevious:show');
+    EkstepRendererAPI.dispatchEvent('renderer:customNext:show');
+    }, 50);
   }
 
   $scope.hideCustomNavigation = function() {
@@ -84,13 +91,13 @@ app.controllerProvider.register("CustomNavigationCtrl", function($scope, $rootSc
    $scope.init();
  });
 
-app.compileProvider.directive('customNextNavigation', function($rootScope) {
+app.compileProvider.directive('customNextNavigation', function($rootScope, $timeout) {
   return {
     restrict: 'E',
-    template: '<div><a class="nav-icon nav-next" ng-show="showCustomNext" href="javascript:void(0);"><img ng-src="{{customNextIcon}}" ng-click="navigate(\'next\')"></a></div>',
+    template: '<div><a class="nav-icon nav-next" ng-show="showCustomNext !== state_off" href="javascript:void(0);"><img ng-src="{{customNextIcon}}" ng-click="navigate(\'next\')"></a></div>',
     link: function(scope) {
       scope.customNextIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.overlay", "1.0", "renderer/assets/icons/next.png");
-      var events = ["overlayNext", "renderer:next:show", "renderer:next:hide"];
+      var events = ["overlayNext", "renderer:customNext:show", "renderer:customNext:hide", "renderer:next:hide","renderer:next:show"];
       scope.toggleNav = function(event) {
         var val;
         var globalConfig = EkstepRendererAPI.getGlobalConfig();
@@ -102,8 +109,15 @@ app.compileProvider.directive('customNextNavigation', function($rootScope) {
           * @listen renderer:next:show
           * @memberOf EkstepRendererEvents
           */
+          case "renderer:customNext:show":
+          val = 'on';
+          break;
           case "renderer:next:show":
           val = "on";
+          EkstepRendererAPI.dispatchEvent('renderer:next:hide');
+          $timeout(function() {
+          EkstepRendererAPI.dispatchEvent('renderer:customNext:show');
+          }, 50);
           break;
           /**
           * renderer:next:hide Event to hide next navigation icon.
@@ -111,6 +125,7 @@ app.compileProvider.directive('customNextNavigation', function($rootScope) {
           * @listen renderer:next:hide
           * @memberOf EkstepRendererEvents
           */    
+          case "renderer:customNext:hide":
           case "renderer:next:hide":
           val = "off";
           break;
@@ -127,12 +142,12 @@ app.compileProvider.directive('customNextNavigation', function($rootScope) {
   }
 });
 
-app.compileProvider.directive('customPreviousNavigation', function($rootScope) {
+app.compileProvider.directive('customPreviousNavigation', function($rootScope, $timeout) {
   return {
     restrict: 'E',
     template: '<div><a class="nav-icon nav-previous" ng-show="showCustomPrevious !== state_off" ng-class="{\'nav-disable\': showCustomPrevious == state_disable}" href="javascript:void(0);"><img ng-src="{{customePreviousIcon}}" ng-click="navigate(\'previous\')"></a></div>',
     link: function(scope) {
-      var events = ["renderer:customprevious:show", "renderer:customprevious:hide", "overlayPrevious"];
+      var events = ["renderer:customprevious:show", "renderer:customprevious:hide", "overlayPrevious","renderer:previous:hide", "renderer:previous:show"];
       scope.customePreviousIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.overlay", "1.0", "renderer/assets/icons/back.png");
       scope.changeValue = function(event) {
         var val;
@@ -151,6 +166,14 @@ app.compileProvider.directive('customPreviousNavigation', function($rootScope) {
            case "renderer:customprevious:show":
            val = "on";
            break;
+
+           case "renderer:previous:show":
+           EkstepRendererAPI.dispatchEvent('renderer:previous:hide');
+           $timeout(function() {
+           EkstepRendererAPI.dispatchEvent('renderer:customprevious:show');
+           }, 50);
+           val = "on";
+           break;
           /**
            * renderer:previous:hide Event to hide previous navigation icon.
            * @event renderer:previous:hide
@@ -158,6 +181,7 @@ app.compileProvider.directive('customPreviousNavigation', function($rootScope) {
            * @memberOf EkstepRendererEvents
            */
            case "renderer:customprevious:hide":
+           case "renderer:previous:hide":
            val = "off";
            break;
          }
@@ -165,6 +189,7 @@ app.compileProvider.directive('customPreviousNavigation', function($rootScope) {
           var navigateToStage = EkstepRendererAPI.getStageParam('previous');
           if (_.isUndefined(navigateToStage)) {
             val = "disable";
+            $('previous-navigation').hide();
             if (EkstepRendererAPI.isItemScene() && EkstepRendererAPI.getCurrentController().hasPrevious()) {
               val = "enable"
             }
@@ -183,4 +208,4 @@ app.compileProvider.directive('customPreviousNavigation', function($rootScope) {
   }
 });
 
-//#sourceURL=CustomNavigationCtrl.js
+//# sourceURL=CustomNavigationCtrl.js
