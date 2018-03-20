@@ -5,6 +5,7 @@
  */
 angular.module('createquestionapp', []).controller('mtfQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope) {
   $scope.formVaild = false;
+  $scope.indexCount=4;
   $scope.mcqConfiguartion = {
     'questionConfig': {
       'isText': true,
@@ -98,20 +99,20 @@ angular.module('createquestionapp', []).controller('mtfQuestionFormController', 
     })
   }
   $scope.addPair = function() {
+
     var optionLHS = {
       'text': '',
       'image': '',
       'audio': '',
       'hint': '',
-      'index': 1
+      'index': $scope.indexCount
     };
     var optionRHS = {
       'text': '',
       'image': '',
       'audio': '',
       'hint': '',
-      'mapIndex': 2,
-      'multiple': []
+      'mapIndex': $scope.indexCount++
     };
     if ($scope.mtfFormData.option.optionsLHS.length < 5) {
       $scope.mtfFormData.option.optionsLHS.push(optionLHS);
