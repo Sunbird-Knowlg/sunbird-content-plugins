@@ -1,0 +1,64 @@
+<div id="mtf-renderer" ng-controller="MTFRendererController" ng-init="init()" ng-show="showTemplate">
+  <link rel="stylesheet" type="text/css" href="{{cssPath}}">
+  <div class="mtf-layout">
+    <header class="mtf-header">
+      <div class="mtf-question-text">{{questionObj.question.text}}</div>
+    </header>
+    <div class="mtf-ver-layout">
+      <div class="mtf-ver-container">
+        <div class="mtf-ver-option" ng-repeat="val in questionObj.lhs_options">
+          <div class="mtf-ver-ques-option">
+            <div class="mtf-hori-ques-text" id="{{val.key+1}}">
+              <div class="mtf-hori-ques-text-inner">{{val.text}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mtf-ver-container">
+        <div class="mtf-ver-option" ng-repeat="val in droppedObjects1">
+          <div class="mtf-ver-lhs-option" ng-drop="true" ng-drop-success="onDropComplete1($index,$data,$event)" ng-drag="{{val.mapIndex != undefined}}" ng-drag-data="{{val}}">
+            <div class="mtf-hori-ques-text">
+              <div class="mtf-hori-ques-text-inner" id="{{$index}}" ng-model="val">{{val.text}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="mtf-ver-container" ng-drop="true" ng-drop-success="onDropComplete2($data,$event)">
+        <div class="mtf-ver-option" ng-repeat="rval in draggableObjects">
+          <div class="mtfVerRhsOption" ng-drag="true" ng-drag-data="{{rval}}">
+            <div class="mtf-hori-ques-text">
+              <div class="mtf-hori-ques-text-inner" id="{{$index}}">{{rval.text}}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <div class="mtf-hori-container">
+      <div class="mtf-hori-option" ng-repeat="val in questionObj.lhs_options">
+        <div class="mtf-hori-ques-option">
+          <div class="mtf-hori-ques-text" id="{{val.key+1}}">
+            <div class="mtf-hori-ques-text-inner">{{val.text}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mtf-hori-container">
+      <div class="mtf-hori-option" ng-repeat="val in droppedObjects1">
+        <div class="mtf-hori-lhs-option" ng-drop="true" ng-drop-success="onDropComplete1($index,$data,$event)" ng-drag="{{val.mapIndex != undefined}}" ng-drag-data="{{val}}">
+          <div class="mtf-hori-ques-text">
+            <div class="mtf-hori-ques-text-inner" id="{{$index}}" ng-model="val">{{val.text}}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mtf-hori-container vh36" ng-drop="true" ng-drop-success="onDropComplete2($data,$event)">
+      <div class="mtf-hori-option left" ng-repeat="rval in draggableObjects">
+        <div class="mtfHoriRhsOption" ng-drag="true" ng-drag-data="{{rval}}">
+          <div class="mtf-hori-ques-text">
+            <div class="mtf-hori-ques-text-inner" id="{{$index}}">{{rval.text}}</div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+  </div>
+</div>

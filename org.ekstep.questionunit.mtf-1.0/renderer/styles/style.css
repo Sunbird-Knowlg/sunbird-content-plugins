@@ -1,3 +1,4 @@
+/* Put your css in here */
 #mtf-renderer {
   height: 90vh;
   margin: auto;
@@ -65,12 +66,11 @@ header.mtf-header {
   height: 100%;
 }
 
-.mtf-hori-rhs-option {
+.mtfHoriRhsOption {
   margin: 0 7%;
   border: 1px solid #c8ccd0;
   background-color: #ede9e3;
   height: 100%;
-  z-index: 3;
   box-shadow: 0 0 10px #c8ccd0;
 }
 
@@ -87,6 +87,15 @@ header.mtf-header {
   vertical-align: middle;
   text-align: center;
   word-break: break-all;
+}
+
+.left{
+  float : left;
+  height:50%;
+  padding-bottom:3vh;
+}
+.vh36{
+  height: 42vh;
 }
 
 
@@ -106,6 +115,7 @@ header.mtf-header {
   margin: 2% 0 0 0;
   width: 33.33%;
   padding: 0 3%;
+  overflow: hidden;
 }
 
 .mtf-ver-option {
@@ -126,7 +136,7 @@ header.mtf-header {
   height: 100%;
 }
 
-.mtf-ver-rhs-option {
+.mtfVerRhsOption {
   border: 1px solid #c8ccd0;
   background-color: #ede9e3;
   height: 100%;
