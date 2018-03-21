@@ -94,9 +94,6 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     var qData = ctrlScope.question._currentQuestion.data.__cdata || ctrlScope.question._currentQuestion.data;
     var questionData = JSON.parse(qData);
     var qState = ctrlScope.question._currentQuestionState;
-    if (qState && qState.val) {
-      ctrlScope.selectedIndex = qState.val;
-    }
     var qConfig = ctrlScope.question._currentQuestion.config;
     ctrlScope.questionObj = questionData;
     ctrlScope.questionObj.option.emptyBoxs = [];
@@ -108,6 +105,19 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
       };
       ctrlScope.questionObj.option.emptyBoxs.push(emptyBox)
       $scope.droppableObjects.push(emptyBox);
+    }
+    if (qState && qState.val) {
+      for (var i = 0; i < qState.val.length; i++) {
+        if (qState.val[i].mapIndex != undefined) {
+          $scope.droppableObjects.splice(i, 1, qState.val[i]);
+        }
+        for (var l = 0; l < $scope.draggableObjects.length; l++) {
+          if ($scope.draggableObjects[l].mapIndex == qState.val[i].mapIndex) {
+            $scope.draggableObjects.splice(l, 1);
+          }
+        }
+      }
+
     }
     ctrlScope.showTemplate = true;
     var qconfigData = qConfig.__cdata || qConfig;
@@ -130,8 +140,10 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
 
   $scope.evaluate = function(callback) {
     var correctAnswer = true;
+    var stateArray = [];
     var ctrlScope = angular.element('#mtf-renderer').scope();
     for (var i = 0; i < ctrlScope.questionObj.option.optionsLHS.length; i++) {
+      stateArray.push($scope.droppableObjects[i]);
       if ($scope.droppableObjects[i].mapIndex != ctrlScope.questionObj.option.optionsLHS[i].index) {
         correctAnswer = false;
       }
@@ -139,12 +151,13 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     var result = {
       eval: correctAnswer,
       state: {
-        val: 1
+        val: stateArray
       }
     }
     if (_.isFunction(callback)) {
       callback(result);
     }
+    EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
     //commented because when feedback popup shown its becaome null
     //ctrlScope.selectedIndex = null;
   }
