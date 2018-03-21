@@ -1,4 +1,3 @@
-/* Put your css in here */
 #mtf-renderer {
   height: 90vh;
   margin: auto;
@@ -9,7 +8,6 @@
   position: relative;
   display: grid;
 }
-
 
 .mtf-layout {
   width: 100%;
@@ -33,7 +31,6 @@ header.mtf-header {
 }
 
 
-/*Horizontal MTF CSS*/
 
 .mtf-hori-container {
   margin: 0;
@@ -89,17 +86,15 @@ header.mtf-header {
   word-break: break-all;
 }
 
-.left{
-  float : left;
-  height:50%;
-  padding-bottom:3vh;
+.left {
+  float: left;
+  height: 50%;
+  padding-bottom: 3vh;
 }
-.vh36{
+
+.vh36 {
   height: 42vh;
 }
-
-
-/*Vertical MTF CSS*/
 
 .mtf-ver-layout {
   display: table;
