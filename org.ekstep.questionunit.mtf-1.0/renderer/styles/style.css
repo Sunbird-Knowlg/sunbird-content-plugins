@@ -9,6 +9,7 @@
   display: grid;
 }
 
+
 .mtf-layout {
   width: 100%;
   top: 10px;
@@ -30,8 +31,6 @@ header.mtf-header {
   text-align: center;
 }
 
-
-
 .mtf-hori-container {
   margin: 0;
   text-align: left;
@@ -48,7 +47,7 @@ header.mtf-header {
   text-align: center;
   vertical-align: middle;
   margin: 0;
-  width: 25%;
+  width: 20%;
 }
 
 .mtf-hori-ques-option {
@@ -86,16 +85,14 @@ header.mtf-header {
   word-break: break-all;
 }
 
-.left {
-  float: left;
-  height: 50%;
-  padding-bottom: 3vh;
+.left{
+  float : left;
+  height:50%;
+  padding-bottom:3vh;
 }
-
-.vh36 {
+.vh36{
   height: 42vh;
 }
-
 .mtf-ver-layout {
   display: table;
   height: 70vh;
