@@ -196,6 +196,10 @@ textbookApp.controller('textbookmetaController', ['$scope', '$timeout', '$filter
 
     $scope.getUpdatedMetadata = function(originalMetadata, currentMetadata) {
         var metadata = {};
+        ecEditor.dispatchEvent("editor:update:dialcode",{
+            data: org.ekstep.services.collectionService.getActiveNode(),
+            contentId: org.ekstep.contenteditor.api.getContext('contentId')
+         });
         if (_.isEmpty(originalMetadata)) {
             _.forEach(currentMetadata, function(value, key) {
                 metadata[key] = value;
@@ -227,6 +231,7 @@ textbookApp.controller('textbookmetaController', ['$scope', '$timeout', '$filter
         if (_.isUndefined(metadata['keywords'])) {
             metadata['keywords'] = currentMetadata['keywords'];
         }
+        metadata.dialCode = $scope.dialCode;
         return metadata;
     }
 
@@ -368,23 +373,23 @@ textbookApp.controller('textbookmetaController', ['$scope', '$timeout', '$filter
             })
         }
     };
-
-    // get dial codes
-    ctrl.getDialCodes = function(){
-        $scope.dialCodes = window.dialCodes.result.dialcodes;
-        // Search function to fetch all the dialcodes
-
-
-    }
     
- 
+       // get configuration for dial code directives
+       $scope.getConfiguration = function(){
+        $scope.configuration = {
+            data: org.ekstep.services.collectionService.getActiveNode(),
+            contentId: org.ekstep.contenteditor.api.getContext('contentId')
+        }
+        return $scope.configuration;
+    }
+
     $scope.init = function() {
         $scope.initYearDropDown();
-        ctrl.getDialCodes();
         $scope.$watch('textbook', function() {
             if($scope.textbook){
                 if(/^[a-z\d\-_\s]+$/i.test($scope.textbook.name) == false) $scope.textbook.name = org.ekstep.services.collectionService.removeSpecialChars($scope.textbook.name);
                 if($scope.nodeType === DEFAULT_NODETYPE){
+                    $scope.getDialCode();
                     $scope.updateNode();
                 }
             }
@@ -393,6 +398,14 @@ textbookApp.controller('textbookmetaController', ['$scope', '$timeout', '$filter
 
     $scope.changeTitle = function(){
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
+    }
+
+    // get updated current dialcode
+    $scope.getDialCode = function(){
+        var callBackFn = function(dialCode){
+            $scope.dialCode = dialCode 
+        }
+        ecEditor.dispatchEvent("editor:dialcode:get", {callback:callBackFn});
     }
 
     setTimeout(function() {

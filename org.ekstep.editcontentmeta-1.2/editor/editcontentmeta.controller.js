@@ -26,7 +26,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
     if(data.contentMeta){
         data.contentMeta.keywords = $scope.parseKeywords(data.contentMeta.keywords);
     }
-    ctrl.contentMeta = data.contentMeta || metaInfo
+    ctrl.contentMeta = data.contentMeta || metaInfo;
     ctrl.originalContentMeta = _.clone(ctrl.contentMeta);
     ctrl.contentService = org.ekstep.contenteditor.api.getService(ServiceConstants.CONTENT_SERVICE);
     ctrl.popupService = org.ekstep.contenteditor.api.getService(ServiceConstants.POPUP_SERVICE);
@@ -73,7 +73,7 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
         });
     };
 
-    ctrl.getUpdatedMetadata = function (originalMetadata, currentMetadata) {
+    ctrl.getUpdatedMetadata = function (originalMetadata, currentMetadata) {    
         var metadata = {};
         if (_.isEmpty(originalMetadata)) {
             _.forEach(currentMetadata, function (value, key) {
@@ -91,6 +91,8 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
         if (_.isUndefined(metadata['name'])) {
             metadata['name'] = originalMetadata['name'];
         }
+        metadata.dialCode = $scope.dialCode;
+        console.log('metadata value..', metadata);
         return metadata;
     };
 
@@ -289,6 +291,32 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
         }
     };   
 
+      // get configuration for dial code directives
+      $scope.getConfiguration = function(){
+        $scope.configuration = {
+            data: org.ekstep.services.collectionService.getActiveNode(),
+            contentId: org.ekstep.contenteditor.api.getContext('contentId')
+        }
+        return $scope.configuration;
+    }
+
+    // get updated dial code
+    $scope.getDialCode = function(){
+        var callBackFn = function(dialCode){
+            $scope.dialCode = dialCode 
+        }
+        ecEditor.dispatchEvent("editor:dialcode:get", {callback:callBackFn});
+    }
+
+    $scope.init = function(){
+        $scope.getDialCode();
+        ecEditor.dispatchEvent("editor:update:dialcode",{
+            data: org.ekstep.services.collectionService.getActiveNode(),
+            contentId: org.ekstep.contenteditor.api.getContext('contentId')
+         });
+    }
+
+    $scope.init();
 }]);
 
 //# sourceURL=editcontentmeta.controller.js

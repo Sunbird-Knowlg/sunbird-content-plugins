@@ -3,7 +3,9 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
     $scope.showImageIcon = true;
+    $scope.dialCodes = [];
     const DEFAULT_NODETYPE = 'TextBookUnit';
+   
 
     $scope.updateTitle = function(event, title) {
         $scope.unit.name = title;
@@ -83,6 +85,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         if (_.isUndefined(metadata['keywords'])) {
             metadata['keywords'] = currentMetadata['keywords'];
         }
+        metadata.dialCode = $scope.dialCode;
         return metadata;
     }
 
@@ -116,6 +119,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
 
         var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
         $scope.unit = (_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata);
+        
         if($scope.mode === "Edit" && $scope.editable === true){
             $scope.metadataCloneObj = _.clone($scope.unit);
         }
@@ -150,10 +154,14 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         });
         $scope.showImageIcon = true;
         $scope.getPath();
+        ecEditor.dispatchEvent("editor:update:dialcode",{
+            data: org.ekstep.services.collectionService.getActiveNode(),
+            contentId: org.ekstep.contenteditor.api.getContext('contentId')
+         });
         $scope.$safeApply();
     }
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:TextBookUnit', $scope.onNodeSelect);
-
+    
     $scope.getPath = function() {
         $scope.path = [];
         var path = ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getKeyPath();
@@ -173,6 +181,8 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         org.ekstep.collectioneditor.api.getService('collection').setActiveNode(nodeId);
     }
 
+    
+
     setTimeout(function(){
         ecEditor.jQuery('.popup-item').popup();
     },0);
@@ -191,6 +201,15 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         }
     };
 
+    // get configuration for dial code directives
+    $scope.getConfiguration = function(){
+        $scope.configuration = {
+            data: org.ekstep.services.collectionService.getActiveNode(),
+            contentId: org.ekstep.contenteditor.api.getContext('contentId')
+        }
+        return $scope.configuration;
+    }
+
     $scope.init = function() {
         var activeNode = undefined;
         $scope.$watch('unit', function() {
@@ -202,14 +221,23 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                     if (!_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
                         $scope.newNode = false;
                     }
+                    $scope.getDialCode();
                     $scope.updateNode();
                 }   
             }
         }, true);
     }
 
+
     $scope.changeTitle = function(){
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.unit.name);
+    }
+
+    $scope.getDialCode = function(){
+        var callBackFn = function(dialCode){
+            $scope.dialCode = dialCode 
+        }
+        ecEditor.dispatchEvent("editor:dialcode:get", {callback:callBackFn});
     }
     $scope.init();
 }]);
