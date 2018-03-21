@@ -158,18 +158,20 @@ org.ekstep.contenteditor.basePlugin.extend({
         }else{
             if (instance.selectors.indexOf(data.element) == -1) {
                 /**This is needed to get updated conceptData**/
-                ecEditor.jQuery('#' + data.element).treePicker({
-                    data: instance.conceptData,
-                    name: 'Concepts',
-                    picked: data.selectedConcepts,
-                    onSubmit: function(nodes) {
-                        data.callback(nodes);
-                        instance.generateTelemetry({type: 'click', subtype: 'submit', target: 'ConceptSelectorSubmit'});
-                    },
-                    nodeName:"conceptSelector_" + data.element,
-                    /**displayFormat: function(picked) { return "Concepts ("+picked.length+" selected)"; },**/
-                    minSearchQueryLength: 1
-                });
+                setTimeout(function() {
+                    ecEditor.jQuery('#' + data.element).treePicker({
+                        data: instance.conceptData,
+                        name: 'Concepts',
+                        picked: data.selectedConcepts,
+                        onSubmit: function(nodes) {
+                            data.callback(nodes);
+                            instance.generateTelemetry({type: 'click', subtype: 'submit', target: 'ConceptSelectorSubmit'});
+                        },
+                        nodeName:"conceptSelector_" + data.element,
+                        /**displayFormat: function(picked) { return "Concepts ("+picked.length+" selected)"; },**/
+                        minSearchQueryLength: 1
+                    });
+                }, 1000);
             }
         }
     },
