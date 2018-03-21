@@ -70,7 +70,7 @@ Plugin.extend({
         if (savedQSState) {
             this._renderedQuestions = savedQSState.renderedQuestions;
             this._currentQuestion = savedQSState.currentQuestion;
-            this._currentQuestionState = this.getQuestionState();
+            this._currentQuestionState = this.getQuestionState(this._currentQuestion.id);
             this._questionStates = savedQSState.questionStates;
         } else {
             this._currentQuestion = this.getNextQuestion();
@@ -103,7 +103,7 @@ Plugin.extend({
             //   EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
             // }
 
-            this._currentQuestionState = this.getQuestionState(this._currentQuestion.id);
+            this._currentQuestionState = this.getQuestionState(question.id);
             this.loadModules(question, function() {
                 setTimeout(function() {
                     EkstepRendererAPI.dispatchEvent(question.pluginId + ':show', instance);

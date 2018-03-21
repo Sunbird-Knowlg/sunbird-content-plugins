@@ -2,7 +2,13 @@
 angular.module('genie-canvas').controllerProvider.register("FTBRendererController", function($scope, $rootScope, $sce) {
   $scope.showTemplate = true;
   $scope.question;
-  $scope.ftbAnswer;
+  $scope.constant = {
+    ftbContainerId: "#preview-ftb-horizontal",
+    ftbText: "#qs-ftb-text",
+    ftbQuestionClass: ".ftb-question-header",
+    tempanswertext: "#tempanswertext"
+
+  }
   $scope.qcquestion = true;
   $scope.textboxtarget = {};
   $scope.qcblank = false;
@@ -12,7 +18,6 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     "eval": ""
   };
   var ctrl = this;
-
   $scope.init = function() {
     $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.ftb", "1.0", "renderer/styles/style.css");
     $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.ftb");
@@ -62,20 +67,27 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
   $scope.showEventListener = function(event) {
     $scope.question = event.target;
     var gererateId = 0;
-    $scope.ftbAnswer = "";
     var qData = $scope.question._currentQuestion.data.__cdata || $scope.question._currentQuestion.data;
     var questionData = JSON.parse(qData);
-    $("#qftbtext").html(questionData.parsedQuestion.text);
-    $('#preview-ftb-horizontal').on('click', '.ans-field', $scope.doTextBoxHandle);
+    $($scope.constant.ftbText).html(questionData.parsedQuestion.text);
+    $($scope.constant.ftbContainerId).on('click', '.ans-field', $scope.doTextBoxHandle);
     var qState = $scope.question._currentQuestionState;
     if (qState && qState.val) {
-      $scope.ftbAnswer = qState.val;
+      $scope.textboxtarget.state = qState.val;
+      $scope.setStateInput();
     }
     $scope.questionObj = questionData;
     $scope.showTemplate = true;
     $scope.safeApply();
   }
 
+  //if question state their then bind the value in text box
+  $scope.setStateInput = function() {
+    var textBoxCollection = angular.element($($scope.constant.ftbQuestionClass).find("input[type=text]"));
+    _.each(textBoxCollection, function(element, index) {
+      $("#" + element.id).val($scope.textboxtarget.state[index]);
+    });
+  }
 
   $scope.hideEventListener = function(event) {
     $scope.showTemplate = false;
@@ -99,10 +111,10 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     $scope.qcblank = true;
     $scope.qcmiddlealign = true;
     //for text focus
-    document.getElementById('answertxt').focus();
+    $($scope.constant.tempanswertext).focus();
     $scope.safeApply();
     //for text focus
-    document.getElementById('answertxt').focus();
+    $('#tempanswertext').focus();
   });
 
   /**
@@ -114,11 +126,11 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     $scope.qcquestion = true;
     $scope.qcblank = false;
     $scope.qcmiddlealign = false;
-    $("#" + $scope.textboxtarget.id).val($("#answertxt").val().trim());
+    $("#" + $scope.textboxtarget.id).val($($scope.constant.tempanswertext).val().trim());
     $scope.qcmiddlealign = false;
     $scope.safeApply();
   });
-   /**
+  /**
    * renderer:questionunit.ftb:set target and value.
    * @event renderer:questionunit.ftb:click
    * @memberof org.ekstep.questionunit.ftb
@@ -127,48 +139,47 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     $scope.qcblank = true;
     $scope.textboxtarget.id = this.id;
     $scope.textboxtarget.value = this.value.trim();
-    $("#answertxt").val($scope.textboxtarget.value);
+    $($scope.constant.tempanswertext).val($scope.textboxtarget.value);
     $scope.safeApply();
   }
   /**
-   * renderer:questionunit.ftb:max length 25 because max length not working in andirod.
-   * @event renderer:questionunit.ftb:watch
+   * renderer:questionunit.ftb:evalution.
+   * @event renderer:questionunit.ftb:click
    * @memberof org.ekstep.questionunit.ftb
    */
-  $scope.$watch("ftbAnswer", function(newValue, oldValue) {
-    if (typeof newValue != "undefined" && newValue.length > 25) {
-      $scope.ftbAnswer = oldValue;
-    }
-    var state = {
-      val: $scope.ftbAnswer
-    }
-    $scope.generateItemResponse();
-    EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
-  });
   $scope.evaluate = function(callback) {
-    var inputAnsArr = [],//array have all answer
-      correctAnswer = false; //check for evalution
-      //get all text box value inside the class
-    var textBoxCollection = angular.element($(".ftb-question-header").find("input[type=text]"));
-    _.each(textBoxCollection, function(element) {
-      inputAnsArr.push(element.value.toLowerCase());
+    var telemetryAnsArr = [], //array have all answer
+      correctAnswer = false,
+      answerArray = [],
+      ansObj = {};
+    //check for evalution
+    //get all text box value inside the class
+    var textBoxCollection = angular.element($($scope.constant.ftbQuestionClass).find("input[type=text]"));
+    _.each(textBoxCollection, function(element, index) {
+      answerArray.push(element.value.toLowerCase().trim());
+      ansObj = {
+        ["ans" + index]: element.value
+      }
+      telemetryAnsArr.push(ansObj);
     });
     //compare two array
-    if (_.isEqual(inputAnsArr, $scope.questionObj.answer)) {
+    if (_.isEqual(answerArray, $scope.questionObj.answer)) {
       correctAnswer = true;
     }
     var result = {
       eval: correctAnswer,
       state: {
-        val: inputAnsArr
+        val: answerArray
       }
     }
     if (_.isFunction(callback)) {
       //$scope.removeEvents();
       callback(result);
     }
+    EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
+    $scope.generateItemResponse(telemetryAnsArr);
   }
-  $scope.generateItemResponse = function() {
+  $scope.generateItemResponse = function(telemetryAnsArr) {
     var edata = {
       "target": {
         "id": $scope.pluginInstance._manifest.id ? $scope.pluginInstance._manifest.id : "",
@@ -176,9 +187,7 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
         "type": $scope.pluginInstance._manifest.type ? $scope.pluginInstance._manifest.type : "plugin"
       },
       "type": "INPUT",
-      "values": [{
-        "ans": $scope.ftbAnswer
-      }]
+      "values": telemetryAnsArr
     }
     TelemetryService.itemResponse(edata);
   }

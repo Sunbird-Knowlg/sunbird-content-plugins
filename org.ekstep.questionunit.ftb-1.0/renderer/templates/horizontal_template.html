@@ -2,11 +2,11 @@
     <link rel="stylesheet" type="text/css" href="{{cssPath}}">
     <div class="qc-ftb-layout" ng-class="{qcalgin:qcmiddlealign}">
         <div class="ftb-question-header" ng-show="qcquestion">
-            <div class="qc-ftb-question-text" id="qftbtext" class="qc-text-cls">
+            <div class="qc-ftb-question-text" id="qs-ftb-text" class="qc-text-cls">
             </div>
         </div>
         <div class="ftbanswer-container" ng-show="qcblank">
-            <input id="answertxt" class="qc-answertxt" type="text" name="answer" ng-model="ftbAnswer" ng-click="telemetry($event);" autofocus>
+            <input id="tempanswertext" class="qc-answertxt" type="text" name="answer" ng-click="telemetry($event);" autofocus>
         </div>
     </div>
 </div>
