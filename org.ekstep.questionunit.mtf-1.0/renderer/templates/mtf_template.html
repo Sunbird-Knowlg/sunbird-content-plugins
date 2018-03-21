@@ -15,15 +15,15 @@
         </div>
       </div>
       <div class="mtf-ver-container">
-        <div class="mtf-ver-option" ng-repeat="val in droppedObjects1">
-          <div class="mtf-ver-lhs-option" ng-drop="true" ng-drop-success="onDropComplete1($index,$data,$event)" ng-drag="{{val.mapIndex != undefined}}" ng-drag-data="{{val}}">
+        <div class="mtf-ver-option" ng-repeat="val in droppableObjects">
+          <div class="mtf-ver-lhs-option" ng-drop="true" ng-drop-success="onDropToLHS($index,$data,$event)" ng-drag="{{val.mapIndex != undefined}}" ng-drag-data="{{val}}">
             <div class="mtf-hori-ques-text">
               <div class="mtf-hori-ques-text-inner" id="{{$index}}" ng-model="val">{{val.text}}</div>
             </div>
           </div>
         </div>
       </div>
-      <div class="mtf-ver-container" ng-drop="true" ng-drop-success="onDropComplete2($data,$event)">
+      <div class="mtf-ver-container" ng-drop="true" ng-drop-success="onDropToRHS($data,$event)">
         <div class="mtf-ver-option" ng-repeat="rval in draggableObjects">
           <div class="mtfVerRhsOption" ng-drag="true" ng-drag-data="{{rval}}">
             <div class="mtf-hori-ques-text">

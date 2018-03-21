@@ -2,23 +2,22 @@
 'use strict';
 var app = angular.module('genie-canvas');
 app.controllerProvider.register("MTFRendererController", function($scope, $rootScope) {
-  //var ctrl = this;
   $scope.showTemplate = true;
   $scope.question;
   $scope.selectedAns;
   $scope.events = { "show": "", "hide": "", "eval": "" };
-  $scope.droppedObjects1 = [];
+  $scope.droppableObjects = [];
 
-  $scope.onDropComplete1 = function(index, data, evt) {
-    if ($scope.droppedObjects1[evt.event.target.id].mapIndex == data.mapIndex) {
-      var t = $scope.droppedObjects1[index];
-      $scope.droppedObjects1.splice(index, 1, data);
-      $scope.droppedObjects1.splice(evt.event.target.id, 1, t);
+  $scope.onDropToLHS = function(index, data, evt) {
+    if ($scope.droppableObjects[evt.event.target.id].mapIndex == data.mapIndex) {
+      var t = $scope.droppableObjects[index];
+      $scope.droppableObjects.splice(index, 1, data);
+      $scope.droppableObjects.splice(evt.event.target.id, 1, t);
 
-    } else if ($scope.droppedObjects1[evt.event.target.id].mapIndex == data.mapIndex) {
-      var t = $scope.droppedObjects1[index];
-      $scope.droppedObjects1.splice(index, 1, data);
-      $scope.droppedObjects1.splice(evt.event.target.id, 1, $scope.questionObj.lhs_options[evt.event.target.id]);
+    } else if ($scope.droppableObjects[evt.event.target.id].mapIndex == data.mapIndex) {
+      var t = $scope.droppableObjects[index];
+      $scope.droppableObjects.splice(index, 1, data);
+      $scope.droppableObjects.splice(evt.event.target.id, 1, $scope.questionObj.option.emptyBoxs[evt.event.target.id]);
     }
     for (var i = 0; i < $scope.draggableObjects.length; i++) {
       if ($scope.draggableObjects[i].mapIndex == data.mapIndex) {
@@ -26,16 +25,16 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
           var t = angular.element(evt.event.target).data().$ngModelController.$modelValue;
           $scope.draggableObjects.push(t);
         }
-        $scope.droppedObjects1.splice(evt.event.target.id, 1, data);
+        $scope.droppableObjects.splice(evt.event.target.id, 1, data);
         $scope.draggableObjects.splice(i, 1);
       }
     }
   }
-  $scope.onDropComplete2 = function(data, evt) {
+  $scope.onDropToRHS = function(data, evt) {
     var ctrlScope = angular.element('#mtf-renderer').scope();
-    for (var i = 0; i < $scope.droppedObjects1.length; i++) {
-      if ($scope.droppedObjects1[i].mapIndex == data.mapIndex) {
-        $scope.droppedObjects1.splice(i, 1, ctrlScope.questionObj.option.optionsLHS[i]);
+    for (var i = 0; i < $scope.droppableObjects.length; i++) {
+      if ($scope.droppableObjects[i].mapIndex == data.mapIndex) {
+        $scope.droppableObjects.splice(i, 1, ctrlScope.questionObj.option.emptyBoxs[i]);
         $scope.draggableObjects.push(data);
       }
     }
@@ -100,18 +99,23 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     }
     var qConfig = ctrlScope.question._currentQuestion.config;
     ctrlScope.questionObj = questionData;
+    ctrlScope.questionObj.option.emptyBoxs = [];
     $scope.draggableObjects = angular.copy(ctrlScope.questionObj.option.optionsRHS);
-    $scope.droppedObjects1 = angular.copy(ctrlScope.questionObj.option.optionsLHS);
+    for (var l = 0; l < ctrlScope.questionObj.option.optionsLHS.length; l++) {
+      var emptyBox = {
+        "index": ctrlScope.questionObj.option.optionsLHS[l].index,
+        "text": " "
+      };
+      ctrlScope.questionObj.option.emptyBoxs.push(emptyBox)
+      $scope.droppableObjects.push(emptyBox);
+    }
     ctrlScope.showTemplate = true;
-    ctrlScope.questionObj.questionConfig = JSON.parse(qConfig.__cdata);
+    var qconfigData = qConfig.__cdata || qConfig;
+    ctrlScope.questionObj.questionConfig = JSON.parse(qconfigData);
     ctrlScope.safeApply();
   }
 
   $scope.hideEventListener = function(event) {
-    // var ctrlScope = angular.element('#preview-mcq-horizontal').scope();
-    // ctrlScope.showTemplate = false;
-    // ctrlScope.safeApply();
-    //code commented beause on click reply scope object not find
     $scope.showTemplate = false;
     $scope.safeApply();
 
@@ -119,7 +123,6 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
 
   $scope.evalListener = function(event) {
     var ctrlScope = angular.element('#mtf-renderer').scope();
-
     var callback = event.target;
     ctrlScope.evaluate(callback);
     ctrlScope.safeApply();
@@ -129,7 +132,7 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     var correctAnswer = true;
     var ctrlScope = angular.element('#mtf-renderer').scope();
     for (var i = 0; i < ctrlScope.questionObj.option.optionsLHS.length; i++) {
-      if ($scope.droppedObjects1[i].mapIndex != ctrlScope.questionObj.option.optionsLHS[i].index) {
+      if ($scope.droppableObjects[i].mapIndex != ctrlScope.questionObj.option.optionsLHS[i].index) {
         correctAnswer = false;
       }
     }
