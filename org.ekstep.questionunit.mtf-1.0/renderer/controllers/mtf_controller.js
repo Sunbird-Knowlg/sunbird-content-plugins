@@ -10,12 +10,15 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
   $scope.droppedObjects1 = [];
 
   $scope.onDropComplete1 = function(index, data, evt) {
-    console.log(evt.event.target.id);
     if ($scope.droppedObjects1[evt.event.target.id].mapIndex == data.mapIndex) {
       var t = $scope.droppedObjects1[index];
       $scope.droppedObjects1.splice(index, 1, data);
       $scope.droppedObjects1.splice(evt.event.target.id, 1, t);
 
+    } else if ($scope.droppedObjects1[evt.event.target.id].mapIndex == data.mapIndex) {
+      var t = $scope.droppedObjects1[index];
+      $scope.droppedObjects1.splice(index, 1, data);
+      $scope.droppedObjects1.splice(evt.event.target.id, 1, $scope.questionObj.lhs_options[evt.event.target.id]);
     }
     for (var i = 0; i < $scope.draggableObjects.length; i++) {
       if ($scope.draggableObjects[i].mapIndex == data.mapIndex) {
@@ -32,7 +35,7 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     var ctrlScope = angular.element('#mtf-renderer').scope();
     for (var i = 0; i < $scope.droppedObjects1.length; i++) {
       if ($scope.droppedObjects1[i].mapIndex == data.mapIndex) {
-        $scope.droppedObjects1.splice(i, 1, ctrlScope.questionObj.option.optionLHS[i]);
+        $scope.droppedObjects1.splice(i, 1, ctrlScope.questionObj.option.optionsLHS[i]);
         $scope.draggableObjects.push(data);
       }
     }
@@ -97,10 +100,8 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     }
     var qConfig = ctrlScope.question._currentQuestion.config;
     ctrlScope.questionObj = questionData;
-    console.log(ctrlScope.questionObj)
-    debugger;
-    $scope.draggableObjects = angular.copy(ctrlScope.questionObj.option.optionRHS);
-    $scope.droppedObjects1 = angular.copy(ctrlScope.questionObj.option.optionLHS);
+    $scope.draggableObjects = angular.copy(ctrlScope.questionObj.option.optionsRHS);
+    $scope.droppedObjects1 = angular.copy(ctrlScope.questionObj.option.optionsLHS);
     ctrlScope.showTemplate = true;
     ctrlScope.questionObj.questionConfig = JSON.parse(qConfig.__cdata);
     ctrlScope.safeApply();
@@ -127,8 +128,8 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
   $scope.evaluate = function(callback) {
     var correctAnswer = true;
     var ctrlScope = angular.element('#mtf-renderer').scope();
-    for (var i = 0; i < ctrlScope.questionObj.option.optionLHS.length; i++) {
-      if ($scope.droppedObjects1[i].mapIndex != ctrlScope.questionObj.option.optionLHS[i].index) {
+    for (var i = 0; i < ctrlScope.questionObj.option.optionsLHS.length; i++) {
+      if ($scope.droppedObjects1[i].mapIndex != ctrlScope.questionObj.option.optionsLHS[i].index) {
         correctAnswer = false;
       }
     }
