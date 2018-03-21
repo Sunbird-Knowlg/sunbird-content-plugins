@@ -16,7 +16,7 @@
             <div class="ui attached segment" id="treeWrapper">
                 <div id="collection-tree"></div>
             </div>
-            <div class="table-of-contents-fixed-btns">
+            <div class="table-of-contents-fixed-btns" ng-show="{{mode == 'Edit'}}">
                 <div class="padding-top-none"> 
                     <div class="ui two buttons table-of-contents-btn">
                         <button class="ui basic button text-transform-none" ng-click="addNodeType('sibling')" ><a><i class="plus icon"></i>New Sibling</button>
