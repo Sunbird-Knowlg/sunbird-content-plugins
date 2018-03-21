@@ -5,7 +5,7 @@
 
 formApp.directive('concetpselector', function() {
     var conceptController = ['$scope', '$controller', function($scope, $controller) {
-        let selectedConcepts = [];
+        var selectedConcepts = [];
         $scope.contentMeta = $scope.$parent.$parent.$parent.contentMeta;
         $scope.fieldConfig = $scope.config;
         if ($scope.contentMeta.concepts) {

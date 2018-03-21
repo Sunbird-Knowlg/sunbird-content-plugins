@@ -1,4 +1,4 @@
-org.ekstep.contenteditor.basePlugin.extend({    
+org.ekstep.contenteditor.basePlugin.extend({
     editorState: undefined,
     telemetryService: org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE),
     lastSaved: undefined,
@@ -104,7 +104,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     // This could be converted to switch..case to handle different error codes
                     if (res.responseJSON.params.err == "ERR_STALE_VERSION_KEY")
                         instance.showConflictDialog(options);
-                    else{
+                    else {
                         instance.changePopupValues('error');
                     }
                 } else {
@@ -171,7 +171,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     saveNotification: function(message) {
         var template = "editor/partials/saveMessage.html";
-        var instance = this;     
+        var instance = this;
         var config = {
             template: ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, template),
             controller: ['$scope', function($scope) {
@@ -186,8 +186,8 @@ org.ekstep.contenteditor.basePlugin.extend({
         }
         console.log('config', config);
         this.changePopupValues(message);
-        if(!instance.isSaveNotificationPopupOpened){
-            this.popupService.open(config, function(){
+        if (!instance.isSaveNotificationPopupOpened) {
+            this.popupService.open(config, function() {
                 instance.isSaveNotificationPopupOpened = false;
             });
         }
@@ -197,16 +197,16 @@ org.ekstep.contenteditor.basePlugin.extend({
             this.popUpValues.headerMsg = 'Content Saved!';
             this.popUpValues.popUpIcon = 'circle check green';
             this.popUpValues.showCloseButton = true;
-            this.popUpValues.saveNotificationCloseButton = 'saveSuccessNotificationCloseButton';            
+            this.popUpValues.saveNotificationCloseButton = 'saveSuccessNotificationCloseButton';
         } else if (message === 'error') {
             this.popUpValues.headerMsg = 'Failed to save Content';
             this.popUpValues.popUpIcon = 'circle remove red';
             this.popUpValues.showCloseButton = true;
-            this.popUpValues.saveNotificationCloseButton = 'saveFailNotificationCloseButton';            
+            this.popUpValues.saveNotificationCloseButton = 'saveFailNotificationCloseButton';
         }
         if (message === 'saving') {
             this.popUpValues.headerMsg = 'Saving content please wait...';
-            this.popUpValues.showCloseButton = false;            
+            this.popUpValues.showCloseButton = false;
         }
     },
     showConflictDialog: function(options) {
@@ -215,9 +215,9 @@ org.ekstep.contenteditor.basePlugin.extend({
             template: ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/partials/conflictDialog.html"),
             controller: ['$scope', function($scope) {
                 //Platform copy 
-                $scope.showPlatformPreview = false;             
+                $scope.showPlatformPreview = false;
                 if (instance.conflictdialogOptions.showPlatformPreview) $scope.showPlatformPreview = true;
-                
+
                 $scope.previewPlatformContent = function() {
                     instance.previewPlatformContent();
                 };
@@ -379,7 +379,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     saveCollectionContent: function(event, data) {
         data = data || {};
-        var nodes = {validNodes:[],invalidNodes:[]}
+        var nodes = { validNodes: [], invalidNodes: [] }
         var contentBody = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy();
         if (contentBody) {
             //angular.toJson to remove $$hashKey from scope object
@@ -411,7 +411,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 position: 'topCenter',
                 icon: 'fa fa-warning'
             });
-            this.hightlightNode(nodes.invalidNodes);    
+            this.hightlightNode(nodes.invalidNodes);
             data.callback && data.callback("mandatory fields are missing in the data!");
             return false;
         }
@@ -444,7 +444,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
     },
     lowlightNode: function(validNodes) {
-       _.forEach(_.omitBy(_.uniq(validNodes), _.isEmpty), function(key) {
+        _.forEach(_.omitBy(_.uniq(validNodes), _.isEmpty), function(key) {
             org.ekstep.services.collectionService.lowLightNode(key)
         });
     },

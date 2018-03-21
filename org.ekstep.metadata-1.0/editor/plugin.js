@@ -63,8 +63,11 @@ org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.ex
      * 
      * @description - Which loads the template 
      */
-    loadTemplate: function(templateName = this.DEFAULT_TEMPLATE_NAME) {
-        var templatePath = ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", `editor/templates/${templateName}.html`);
+    loadTemplate: function(templateName) {
+        if (!templateName) {
+            templateName = this.DEFAULT_TEMPLATE_NAME
+        }
+        var templatePath = ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", "editor/templates/" + templateName + ".html");
         var controllerPath = ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", "editor/controller.js");
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath);
     },

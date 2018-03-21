@@ -29,7 +29,16 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     /**
      * @property      - List of are event are mapped with the action
      */
-    eventMap: { save: "org.ekstep.contenteditor:save", review: "org.ekstep.contenteditor:review" },
+    eventMap: { savemeta: "org.ekstep.contenteditor:save:meta", review: "org.ekstep.contenteditor:review", save: "org.ekstep.contenteditor:save" },
+
+    options: {
+        savingPopup: false,
+        successPopup: true,
+        failPopup: true,
+        contentMeta: {},
+        showNotification: true,
+        callback: undefined
+    },
 
     /**
      * @description    - Initialization of the plugin.
@@ -59,32 +68,23 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      *                    Which is currently handles 'review` and `save' action
      */
     successAction: function(event, data) {
-        let instance = this;
+        var instance = this;
         if (data.isValid) {
-            this.updateState(data.formData);
+            if (data.formData.metaData.mimeType === "application/vnd.ekstep.content-collection") this.updateState(data.formData);
             // Callback function
-            let callbackFn = function(err, res) {
+            var callbackFn = function(err, res) {
                 if (res && res.data && res.data.responseCode == "OK") {
                     data.callback && data.callback(undefined, res);
                 } else {
                     data.callback && data.callback(err, undefined);
                 }
             }
-            let options = {
-                savingPopup: true,
-                successPopup: true,
-                failPopup: true,
-                contentMeta: data.formData,
-                showNotification: true,
-                callback: callbackFn
-            };
-
             switch (this.config.action) {
                 case 'review':
-                    this.reviewFn(options, callbackFn);
+                    this.reviewFn(data, callbackFn);
                     break;
                 case 'save':
-                    this.saveFn(options, callbackFn)
+                    this.saveMetaFn(data.formData.metaData, callbackFn)
                     break;
                 default:
                     console.error(this.config.action + 'Action wont support ')
@@ -101,19 +101,17 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      * 
      * @param {Fn} callbackFn       - Callback function
      */
-    reviewFn: function(options, callbackFn) {
-        let instance = this;
-        ecEditor.dispatchEvent(this.eventMap['save'], {
-            callback: function(err, res) {
-                if (!err) {
-                    ecEditor.dispatchEvent(instance.eventMap[instance.config.action], callbackFn)
-                } else {
-                    throw 'Unable to update the fields value before sending to review status'
-                    callbackFn(err)
-                }
+    reviewFn: function(data, callbackFn) {
+        var instance = this;
+        var reviewCallBackFn = function(err, res) {
+            if (!err) {
+                ecEditor.dispatchEvent(instance.eventMap[instance.config.action], callbackFn)
+            } else {
+                throw 'Unable to update the fields value before sending to review status'
+                callbackFn(err)
             }
-        })
-
+        }
+        this.saveContentFn(data.formData, reviewCallBackFn)
     },
 
 
@@ -124,8 +122,19 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      * 
      * @param {Fn} callbackFn       - Callback function
      */
-    saveFn: function(options, callbackFn) {
-        ecEditor.dispatchEvent(this.eventMap[this.config.action], options)
+    saveMetaFn: function(contentMeta, callbackFn) {
+        this.options.contentMeta = contentMeta;
+        this.options.callback = callbackFn;
+        ecEditor.dispatchEvent(this.eventMap['savemeta'], this.options);
+    },
+
+    /**
+     * @description     -
+     */
+    saveContentFn: function(contentMeta, callbackFn) {
+        this.options.contentMeta = contentMeta;
+        this.options.callback = callbackFn;
+        ecEditor.dispatchEvent(this.eventMap['save'], this.options)
     },
 
 
@@ -144,7 +153,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      * @description             - Which get the form configurations, framework and resource bundle data
      *                            Which makes async parallel call.
      */
-    getConfigurations: function({ temaplateId, channel } = {}, callback) {
+    getConfigurations: function(request, callback) {
         var instance = this;
         async.parallel({
             config: function(callback) {
@@ -165,7 +174,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
             }
         }, function(error, response) {
             // results is now equals to: {config: {}, framework: {}, resourceBundle:{}}
-            callback(err, response);
+            callback(error, response);
         });
     },
 
@@ -185,10 +194,10 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      * 
      * @example                 - {resourceBundle:{},framework:{},config:{}}
      */
-    renderForm: function({ resourceBundle, framework, formConfig } = {}) {
-        this.resourceBundle = resourceBundle;
-        this.framework = framework;
-        this.config = formConfig;
+    renderForm: function(config) {
+        this.resourceBundle = config.resourceBundle;
+        this.framework = config.framework;
+        this.config = config.formConfig;
         this.config = window.formConfigurations; // Remove this line
         this.form = this.mapObject(this.config.fields, this.framework.categories);
         this.loadTemplate(this.config.templateName);
@@ -200,14 +209,16 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      * 
      * @param {Object} stateObj - It should contain the {isRoot, isNew, and form metaData information}
      */
-    updateState: function({ nodeId, isRoot, isNew, metaData } = {}) {
-        let key = nodeId;
-        let value = {};
-        value.root = isRoot;
-        value.isNew = isNew;
-        value.metadata = metaData;
-        org.ekstep.services.stateService.create("nodesModified");
-        org.ekstep.services.stateService.setState("nodesModified", key, value);
+    updateState: function(object) {
+        if (org.ekstep.services.stateService) {
+            var key = nodeId;
+            var value = {};
+            value.root = object.isRoot;
+            value.isNew = object.isNew;
+            value.metadata = object.metaData;
+            org.ekstep.services.stateService.create("nodesModified");
+            org.ekstep.services.stateService.setState("nodesModified", key, value);
+        }
     }
 
 });

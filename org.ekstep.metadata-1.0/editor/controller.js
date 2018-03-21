@@ -32,12 +32,12 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @property        - Which defines the is form for rootNode or not     
      * 
      */
-    let isRootNode = true;
+    var isRootNode = true;
 
     /** 
      * @property        - Which defines is selected form node is New or already Existing node
      */
-    let isNewNode = false;
+    var isNewNode = false;
 
     /**
      * @property        -
@@ -76,7 +76,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 }
             }
         });
-        $scope.configureDropdowns();
+        $scope.configureDropdowns(false, false);
     }
 
     /**
@@ -84,16 +84,16 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * 
      * @param {Object} data     - Telemetry interact event data.
      */
-    $scope.generateTelemetry = function({ type, subtype, target, objectid, targetid, stage } = {}) {
+    $scope.generateTelemetry = function(data) {
         ecEditor.getService('telemetry').interact({
-            "type": type || "click",
-            "subtype": subtype,
-            "target": target,
+            "type": data.type || "click",
+            "subtype": data.subtype,
+            "target": data.target,
             "pluginid": $scope.manifest.id,
             "pluginver": $scope.manifest.ver,
-            "objectid": objectid,
-            "targetid": targetid,
-            "stage": stage
+            "objectid": data.objectid,
+            "targetid": data.targetid,
+            "stage": data.stage
         })
     };
 
@@ -118,7 +118,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.updateForm = function(object) {
         if (object.field.range) {
             $scope.getAssociations(object.value, object.field.range, function(associations) {
-                $scope.applayDependencyRules(object.field, associations);
+                $scope.applayDependencyRules(object.field, associations, true);
             });
         }
     };
@@ -131,8 +131,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @param {Object} range           - Which refers to framework terms/range object
      */
     $scope.getAssociations = function(keys, range, callback) {
-        let associations = [];
-        let values = _.filter(range, function(res) { return _.includes(keys, res.name); });
+        var associations = [];
+        var values = _.filter(range, function(res) { return _.includes(keys, res.name); });
         _.forEach(values, function(key, value) {
             if (key.associations) {
                 _.forEach(key.associations, function(key, value) {
@@ -153,11 +153,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @param {Boolean} resetSelected  - @default true Which defines while resolving the dependency dropdown
      *                                   Should reset the selected values of the field or not
      */
-    $scope.applayDependencyRules = function(field, associations, resetSelected = true) {
+    $scope.applayDependencyRules = function(field, associations, resetSelected) {
         //reset the depended field first
         // Update the depended field with associated value
         // Currently, supported only for the dropdown values
-        let dependedValues;
+        var dependedValues;
         if (field.depends && field.depends.length) {
             _.forEach(field.depends, function(id) {
                 resetSelected && $scope.resetSelectedField(id);
@@ -193,8 +193,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.getLayoutConfigurations = function() {
         const FIXED_FIELDS_CODE = ["name", "description", "keywords", "appicon"];
-        let fixedLayout = [];
-        let dynamicLayout = [];
+        var fixedLayout = [];
+        var dynamicLayout = [];
         _.map(configurations, function(field) {
             if (field.validation) {
                 _.forEach(field.validation, function(value, key) {
@@ -223,7 +223,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.successFn = function() {
         $scope.isSubmit = true;
         !$scope.metaForm.$valid && $scope.updateErrorMessage();
-        let successCB = function(err, res) {
+        var successCB = function(err, res) {
             if (res) {
                 $scope.closeThisDialog();
                 console.info("Data is saved successfully.", res)
@@ -231,7 +231,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 console.error("Fails to save the data", err)
             }
         }
-        let form = {};
+        var form = {};
         form.metaData = $scope.getUpdatedMetadata($scope.contentMeta);
         form.isRoot = isRootNode;
         form.isNew = isNewNode;
@@ -249,7 +249,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.updateErrorMessage = function() {
         if ($scope.metaForm.$valid) return
-        let errorKeys = undefined;
+        var errorKeys = undefined;
         _.forEach(configurations, function(value, key) {
             if ($scope.metaForm[value.code] && $scope.metaForm[value.code].$invalid) {
                 $scope.validation[value.code] = {}
@@ -321,8 +321,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * 
      * @returns {Object}                - Whihc returns only changed metadata values
      */
-    $scope.getUpdatedMetadata = function(currentMetadata = {}) {
-        let metadata = {};
+    $scope.getUpdatedMetadata = function(currentMetadata) {
+        var metadata = {};
         if (_.isEmpty($scope.originalContentMeta)) {
             _.forEach(currentMetadata, function(value, key) {
                 metadata[key] = value;
@@ -353,7 +353,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * 
      * @param {Boolean} forceSelection   - @default false Which defines the force selection should enalbe or not
      */
-    $scope.configureDropdowns = function(labels = false, forceSelection = false) {
+    $scope.configureDropdowns = function(labels, forceSelection) {
         // TODO: Need to remove the timeout
         setTimeout(function() {
             $(".ui.dropdown").dropdown({
@@ -371,7 +371,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         ecEditor.addEventListener('editor:form:change', $scope.onConfigChange, $scope);
         $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
         $scope.originalContentMeta = _.clone($scope.contentMeta);
-        let layoutConfigurations = $scope.getLayoutConfigurations();
+        var layoutConfigurations = $scope.getLayoutConfigurations();
         $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
         $scope.dynamicLayoutConfigurations = _.sortBy(_.uniqBy(layoutConfigurations.dynamicLayout, 'code'), 'index');
         $scope.mapMasterCategoryList(configurations);

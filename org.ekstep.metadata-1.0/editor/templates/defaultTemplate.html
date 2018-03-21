@@ -52,7 +52,11 @@
                                                 && fixedField.visible) ">
                                     <label>{{fixedField.label}}</label>
                                     <div class=" ui input " ng-class="{ 'disabled':!fixedField.editable } ">
-                                        <textarea id="{{fixedField.code}} " placeholder={{field.placeholde}} ng-model="contentMeta.description " rows="{{fixedField.renderingHints.rows}} " name="{{fixedField.code}} " ng-required="{{fixedField.required}} "></textarea>
+                                        <textarea id="{{fixedField.code}} " placeholder={{field.placeholde}} ng-model="contentMeta.description " rows="{{fixedField.renderingHints.rows}} " name="{{fixedField.code}} " ng-required="{{fixedField.required}}" ng-pattern="fixedField.validation.regex['value']"
+                                            ng-maxlength="{{fixedField.validation.max['value']}}" ng-keyup="updateErrorMessage()"></textarea>
+                                    </div>
+                                    <div ng-show="!metaForm[fixedField.code].$valid" class="ui pointing red basic label ">
+                                        {{validation[fixedField.code].errorMessage || DEFAULT_ERROR_MESSAGE}}
                                     </div>
                                 </div>
                                 <div id="{{fixedField.code}} " class="field " ng-class="{ 'error': (!contentMeta[fixedField.code].length && fixedField.required), 'required': fixedField.required} " name="{{fixedField.code}} " ng-if="(fixedField.inputType=='keywordsuggestion'
