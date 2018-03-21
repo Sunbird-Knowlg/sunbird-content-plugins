@@ -5,25 +5,7 @@
  */
 angular.module('createquestionapp', []).controller('mtfQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope) {
   $scope.formVaild = false;
-  $scope.mcqConfiguartion = {
-    'questionConfig': {
-      'isText': true,
-      'isImage': true,
-      'isAudio': true,
-      'isHint': false
-    },
-    'optionsConfig': [{
-      'isText': true,
-      'isImage': true,
-      'isAudio': true,
-      'isHint': false
-    }, {
-      'isText': true,
-      'isImage': true,
-      'isAudio': true,
-      'isHint': false
-    }]
-  };
+  $scope.indexCount=4;
   $scope.mtfFormData = {
     'question': {
       'text': '',
@@ -72,7 +54,6 @@ angular.module('createquestionapp', []).controller('mtfQuestionFormController', 
       }]
     }
   };
-  $scope.oHint = [];
   $scope.questionMedia = {};
   $scope.optionsMedia = {
     'image': [],
@@ -86,18 +67,6 @@ angular.module('createquestionapp', []).controller('mtfQuestionFormController', 
       $scope.mtfFormData.question = data.question;
       $scope.mtfFormData.option = data.option;
       $scope.editMedia = $scope.questionEditData.media;
-      //$scope.mtfFormData.media = $scope.questionEditData.media;
-      if (data.length > 3) {
-        for (var j = 3; j < data.length; j++) {
-          $scope.mtfFormData.option.push({
-            'text': '',
-            'image': '',
-            'audio': '',
-            'isCorrect': false
-          });
-          $scope.$safeApply();
-        }
-      }
       if ($scope.mtfFormData.option.length < 3) {
         $scope.mtfFormData.option.splice(3, 1);
       }
@@ -110,40 +79,26 @@ angular.module('createquestionapp', []).controller('mtfQuestionFormController', 
       }
     })
   }
-  $scope.addAnswerField = function() {
+  $scope.addPair = function() {
+
     var optionLHS = {
       'text': '',
       'image': '',
       'audio': '',
       'hint': '',
-      'index': 1
+      'index': $scope.indexCount
     };
     var optionRHS = {
       'text': '',
       'image': '',
       'audio': '',
       'hint': '',
-      'mapIndex': 2,
-      'multiple': []
+      'mapIndex': $scope.indexCount++
     };
     if ($scope.mtfFormData.option.optionsLHS.length < 5) {
       $scope.mtfFormData.option.optionsLHS.push(optionLHS);
       $scope.mtfFormData.option.optionsRHS.push(optionRHS);
     }
-  }
-  $scope.addDistractor = function() {
-    if ($scope.mtfFormData.option.distractor.length < 2) {
-      var distract = {
-        'text': '',
-        'image': '',
-        'audio': '',
-        'hint': ''
-      };
-      $scope.mtfFormData.option.distractor.push(distract);
-    }
-  }
-  $scope.removeDistractor = function(id) {
-    $scope.mtfFormData.option.distractor.splice(id, 1);
   }
   $scope.formValidation = function() {
     console.log($scope.mtfFormData);
@@ -158,7 +113,6 @@ angular.module('createquestionapp', []).controller('mtfQuestionFormController', 
       opSel = false;
       $scope.selLbl = 'error';
     }
-    //$scope.mtfFormData.media = [];
     var tempArray = [];
     _.isEmpty($scope.questionMedia.image) ? 0 : tempArray.push($scope.questionMedia.image);
     _.isEmpty($scope.questionMedia.audio) ? 0 : tempArray.push($scope.questionMedia.audio);
@@ -171,13 +125,12 @@ angular.module('createquestionapp', []).controller('mtfQuestionFormController', 
     var temp = tempArray.filter(function(element) {
       return element !== undefined;
     });
-    $scope.editMedia = _.isEmpty(temp) ? 0 : _.union($scope.editMedia, temp);
-    $scope.mtfFormData.media = _.isEmpty($scope.editMedia[0]) ? temp : $scope.editMedia;
+    $scope.editMedia = _.union($scope.editMedia, temp);
+    $scope.mtfFormData.media = $scope.editMedia;
     console.log("Form data", $scope.mtfFormData);
     return (formValid && opSel) ? true : false;
   }
   $scope.deletePair = function(id) {
-    // if ($scope.mtfFormData.option.optionsLHS.length > 3 && $scope.mtfFormData.option.optionsRHS.length > 3) {
     $scope.mtfFormData.option.optionsLHS.splice(id, 1);
     $scope.mtfFormData.option.optionsRHS.splice(id, 1);
     //}
@@ -194,7 +147,6 @@ angular.module('createquestionapp', []).controller('mtfQuestionFormController', 
           "type": "image", // Type of asset (image, audio, etc)
           "preload": false // true or false
         };
-        //$scope.mtfFormData.media.push(tempImage);
         if (id == 'q') {
           $scope.mtfFormData.question.image = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(data.assetMedia.src);
           $scope.questionMedia.image = tempImage;
@@ -245,11 +197,9 @@ angular.module('createquestionapp', []).controller('mtfQuestionFormController', 
       delete $scope.questionMedia.image;
     } else if (type == 'LHS') {
       $scope.mtfFormData.option.optionsLHS[id].image = '';
-      //$scope.optionsMedia.image.splice(id,1);
       delete $scope.optionsMedia.image[id];
     } else if (type == 'RHS') {
       $scope.mtfFormData.option.optionsRHS[id].image = '';
-      //$scope.optionsMedia.image.splice(id,1);
       delete $scope.optionsMedia.image[id];
     } else if (type = 'dist') {
       $scope.mtfFormData.option.distractor[id].image = '';
@@ -272,5 +222,22 @@ angular.module('createquestionapp', []).controller('mtfQuestionFormController', 
       delete $scope.optionsMedia.audio[id];
     }
   }
+  $scope.generateTelemetry = function(data, event) {
+  if (data) ecEditor.getService('telemetry').interact({
+    "type": data.type,
+    "subtype": data.subtype,
+    "id": data.id,
+    "pageId": ecEditor.getCurrentStage().id,
+    "target": {
+      "id": event.target.id,
+      "ver": "1.0",
+      "type": data.type
+    },
+    "plugin": {
+      "id": "org.ekstep.questionunit.mtf",
+      "ver": "1.0"
+    }
+  })
+}
 }]);
 //# sourceURL=horizontalMtf.js
