@@ -651,3 +651,7 @@ switched to Github for the search after API changes
     float: right;
     background-color: transparent !important;
 }
+
+ul.fancytree-container > li > ul{
+    padding-left: 0px !important
+}
