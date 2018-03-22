@@ -17,7 +17,7 @@
       <div class="mtf-hori-option" ng-repeat="val in droppableObjects">
         <div class="mtf-hori-lhs-option" ng-drop="true" ng-drop-success="onDropToLHS($index,$data,$event)" ng-drag="{{val.mapIndex != undefined}}" ng-drag-data="{{val}}">
           <div class="mtf-hori-ques-text">
-            <div class="mtf-hori-ques-text-inner" id="{{$index}}" ng-model="val">{{val.text}}</div>
+            <div class="mtf-hori-ques-text-inner" id="{{$index}}" data-val="{{val}}" ng-model="val">{{val.text}}</div>
           </div>
         </div>
       </div>
