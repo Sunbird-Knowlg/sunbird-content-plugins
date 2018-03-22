@@ -14,7 +14,7 @@
                 <label for="bookImage">Add icon</label>
                 <div class="book-image-container popup-item" data-content="Add or change image" data-variation="tiny inverted" data-position="right center" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
-                    <img ng-if="showImageIcon" ng-src="{{lesson.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
+                    <img ng-if="showImageIcon" ng-src="{{lesson.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})"/>
                 </div>
             </div>
             <div class="field form-fields-except-image">
@@ -35,21 +35,21 @@
                         <label for="board">Curriculum</label>
                         <select id="lessonplan-board" class="ui selection dropdown placeholder-padding" ng-model="lesson.board" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'board'})">
                             <option value="">Select</option>
-                            <option value="{{board}}" ng-repeat="board in boardList track by $index">{{board}}</option>
+                            <option data-value="{{board}}" ng-repeat="board in boardList track by $index">{{board}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="subject">Subject</label>
                         <select id="lessonplan-subject" class="ui selection dropdown placeholder-padding" ng-model="lesson.subject" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'subject'})">
                             <option value="">Select</option>
-                            <option value="{{subject}}" ng-repeat="subject in subjectList track by $index">{{subject}}</option>
+                            <option data-value="{{subject}}" ng-repeat="subject in subjectList track by $index">{{subject}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="grade">Grade</label>
                         <select id="lessonplan-gradeLevel" class="ui fluid dropdown" ng-model="lesson.gradeLevel" multiple="" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'gradeLevel'})">
                             <option value="">Select</option>
-                            <option value="{{gradeLevel}}" ng-repeat="gradeLevel in gradeList track by $index">{{gradeLevel}}</option>
+                            <option data-value="{{gradeLevel}}" ng-repeat="gradeLevel in gradeList track by $index">{{gradeLevel}}</option>
                         </select>
                     </div>
                 </div>
@@ -58,14 +58,14 @@
                         <label for="medium">Medium</label>
                         <select id="lessonplan-medium" class="ui selection dropdown placeholder-padding" ng-model="lesson.medium" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'medium'})">
                             <option value="">Select</option>
-                            <option value="{{medium}}" ng-repeat="medium in languageList track by $index">{{medium}}</option>
+                            <option data-value="{{medium}}" ng-repeat="medium in languageList track by $index">{{medium}}</option>
                         </select>
                     </div>
                     <div class="field">
                         <label for="language">Language</label>
                         <select id="lessonplan-language" class="ui selection dropdown placeholder-padding" ng-model="lesson.language" ng-change="generateTelemetry({type: 'change', subtype: 'select', target: 'language'})">
                             <option value="">Select</option>
-                            <option value="{{language}}" ng-repeat="language in languageList track by $index">{{language}}</option>
+                            <option data-value="{{language}}" ng-repeat="language in languageList track by $index">{{language}}</option>
                         </select>
                     </div>
                     <div class="field">
@@ -86,7 +86,7 @@
                 <div class="field">
                     <label for="learningObjective">Learning Objective</label>
                     <div class="ui input">
-                        <textarea placeholder="brief description about learning objective" rows="2" ng-model="learningObjective" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'learningObjective'})"></textarea>
+                        <textarea placeholder="Brief description about learning objective" rows="2" ng-model="learningObjective" ng-click="generateTelemetry({type: 'click', subtype: 'textarea', target: 'learningObjective'})"></textarea>
                     </div>
                 </div>
             </div>

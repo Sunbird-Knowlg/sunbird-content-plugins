@@ -14,7 +14,7 @@
                 <label for="bookImage">Add icon</label>
                 <div class="book-image-container popup-item" data-content="Add or change image" data-variation="tiny inverted" data-position="right center" ng-click="showAssestBrowser()">
                     <i class="camera icon"></i>
-                    <img ng-if="showImageIcon" ng-src="{{courseunit.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
+                    <img ng-if="showImageIcon" ng-src="{{courseunit.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})"/>
                 </div>
             </div>
             <div class="field form-fields-except-image">
@@ -36,7 +36,14 @@
                 </div>
                 <div class="field">
                     <label>Keywords</label>
-                    <ng-token-field ng-model="courseunit.keywords" id="courseunitmeta-keywords" placeholder="Enter comma separated keywords" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
+                    <tags-input ng-model="courseunit.keywords" id="courseunitmeta-keywords" display-property="lemma" placeholder="Enter Keywords" replace-spaces-with-dashes="false">
+                        <auto-complete source="loadKeywords($query)" min-length="0" load-on-focus="true" load-on-empty="true" template="my-courseunit-custom-template"></auto-complete>
+                    </tags-input>
+                    <script type="text/ng-template" id="my-courseunit-custom-template">
+                        <div class="right-panel">
+                            <span ng-bind-html="$highlight($getDisplayText())"></span>
+                        </div>
+                    </script>
                 </div>
             </div>
         </div>

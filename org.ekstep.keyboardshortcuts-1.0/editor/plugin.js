@@ -9,6 +9,7 @@
 
 org.ekstep.contenteditor.basePlugin.extend({
     type: "shortcuts",
+    isPopupOpen: false,
     events: {
         'copyElem': 'copy:copyItem',
         'pasteElem': 'paste:pasteItem',
@@ -125,14 +126,24 @@ org.ekstep.contenteditor.basePlugin.extend({
          *  @memberof Shortcuts
          */
         ecEditor.registerKeyboardCommand('mod+/', function(event) {
-            event.preventDefault();
-            ecEditor.getService('popup').open({
-                templateUrl: templatePath,
-                width: 900,
-                showClose: true,
-                className: 'ngdialog-theme-default'
+            event.preventDefault(); 
+
+            var modalController = function($scope) {
+            $scope.$on('ngDialog.opened', function(e, $dialog) {
+                instance.isPopupOpen = true;
             });
-            
+        };
+            if(!instance.isPopupOpen){
+                var dialog = ecEditor.getService('popup').open({
+                    templateUrl: templatePath,
+                    controller: ['$scope', modalController],
+                    width: 900,
+                    showClose: true,
+                    className: 'ngdialog-theme-default'
+                },function(){
+                    instance.isPopupOpen = false;
+                });
+            }
         });
 
         /**

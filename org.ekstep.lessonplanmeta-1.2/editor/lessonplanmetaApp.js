@@ -35,11 +35,11 @@ angular.module('lessonplanmetaApp', ['Scope.safeApply']).controller('lessonplanm
         }
     });
 
-    $scope.showAssestBrowser = function(){
+    $scope.showAssestBrowser = function () {
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',
             search_filter: {}, // All composite keys except mediaType
-            callback: function(data) { 
+            callback: function (data) {
                 $scope.lesson.appIcon = data.assetMedia.src;
                 $scope.$safeApply();
             }

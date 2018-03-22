@@ -13,6 +13,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      *
      */
     type: 'collaborator',
+    isCollaboratorPopupOpened: false,
     /**
      *   registers events
      *   @memberof collaborator
@@ -69,6 +70,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             $scope.isError = instance.isError;
 
             $scope.$on('ngDialog.opened', function(e, $dialog) {
+                instance.isCollaboratorPopupOpened = true;
                 callback();
             });
         };
@@ -79,6 +81,8 @@ org.ekstep.contenteditor.basePlugin.extend({
             showClose: false,
             width: 900,
             className: 'ngdialog-theme-default'
+        },function(){
+            isCollaboratorPopupOpened = false;
         });
     },
     /**

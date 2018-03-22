@@ -164,11 +164,11 @@ org.ekstep.contenteditor.basePlugin.extend({
 
     // Generate the questionSet ECML by using the basePlugin `toECML` function.
     var questionSetECML = this._super();
+    questionSetECML[instance._questionPlugin] = [];
 
     if (_.isArray(instance.data)) {
       instance.data.forEach(function(question) {
         var questionECML = {};
-        if (_.isUndefined(questionSetECML[instance._questionPlugin])) questionSetECML[instance._questionPlugin] = [];
         if (question.version == 1) {
           questionECML = {
             id: UUID(),

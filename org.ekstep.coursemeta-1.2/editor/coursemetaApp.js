@@ -20,17 +20,17 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
         }
     });
 
-    $scope.showAssestBrowser = function(){
+    $scope.showAssestBrowser = function () {
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',
             search_filter: {}, // All composite keys except mediaType
-            callback: function(data) { 
+            callback: function (data) {
                 $scope.course.appIcon = data.assetMedia.src;
                 $scope.$safeApply();
             }
         });
     }
-    
+
     $scope.updateNode = function(){
         if(!_.isEmpty($scope.nodeId) && !_.isUndefined($scope.nodeId)){ 
             if(_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
@@ -55,6 +55,12 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
             }
             $scope.course.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.course));
+            var keywords = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords
+            if (keywords) {
+                org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords = keywords.map(function(a) {
+                    return a.lemma ? a.lemma : a
+                })
+            }
             $scope.metadataCloneObj = _.clone($scope.course);
             $scope.editMode = true;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
@@ -100,6 +106,9 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
         }
         if(_.isUndefined(metadata['contentType'])){
             metadata['contentType'] = currentMetadata['contentType'];
+        }
+        if (_.isUndefined(metadata['keywords'])) {
+            metadata['keywords'] = currentMetadata['keywords'];
         }
         return metadata;
     }
@@ -208,6 +217,16 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
     $scope.changeTitle = function(){
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.course.name);
     }
+    $scope.loadKeywords = function($query) {
+        if ($query.length >= 3) {
+            return org.ekstep.services.collectionService.fetchKeywords($query).then(function(keywords) {
+                return keywords.filter(function(keyword) {
+                    return keyword.lemma.toLowerCase().indexOf($query.toLowerCase()) != -1;
+                });
+            })
+        }
+    };
+    
     $scope.init();
 }]);
 //# sourceURL=coursemetaApp.js

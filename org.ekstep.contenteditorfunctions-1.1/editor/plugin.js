@@ -3,6 +3,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     telemetryService: org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE),
     lastSaved: undefined,
     popUpValues: {},
+    isSaveNotificationPopupOpened: false,
     contentService: org.ekstep.contenteditor.api.getService(ServiceConstants.CONTENT_SERVICE),
     popupService: org.ekstep.contenteditor.api.getService(ServiceConstants.POPUP_SERVICE),
     conflictdialogOptions: {
@@ -103,6 +104,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                     // This could be converted to switch..case to handle different error codes
                     if (res.responseJSON.params.err == "ERR_STALE_VERSION_KEY")
                         instance.showConflictDialog(options);
+                    else{
+                        instance.changePopupValues('error');
+                    }
                 } else {
                     if (options && options.failPopup) {
                         if (!options.savingPopup) instance.saveNotification();
@@ -167,11 +171,14 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     saveNotification: function(message) {
         var template = "editor/partials/saveMessage.html";
-        var instance = this;
+        var instance = this;     
         var config = {
             template: ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, template),
             controller: ['$scope', function($scope) {
                 $scope.popUpValues = instance.popUpValues;
+                $scope.$on('ngDialog.opened', function(e, $dialog) {
+                    instance.isSaveNotificationPopupOpened = true;
+                });
             }],
             showClose: false,
             closeByEscape: false,
@@ -179,7 +186,11 @@ org.ekstep.contenteditor.basePlugin.extend({
         }
         console.log('config', config);
         this.changePopupValues(message);
-        this.popupService.open(config);
+        if(!instance.isSaveNotificationPopupOpened){
+            this.popupService.open(config, function(){
+                instance.isSaveNotificationPopupOpened = false;
+            });
+        }
     },
     changePopupValues: function(message) {
         if (message === 'success') {
