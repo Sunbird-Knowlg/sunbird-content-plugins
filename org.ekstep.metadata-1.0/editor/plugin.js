@@ -48,7 +48,12 @@ org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.ex
             controllerAs: '$ctrl',
             resolve: {
                 'configurations': function() {
-                    return instance.getFormFields();
+                    return {
+                        "fields": instance.getFormFields(),
+                        "template": instance.getTemplate() || instance.DEFAULT_TEMPLATE_NAME
+                    };
+
+
                 },
 
             },
@@ -76,6 +81,12 @@ org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.ex
      * @description
      */
     getFormFields: function( /*Child class should return the form field data*/ ) {},
+
+
+    /**
+     * @description
+     */
+    getTemplate: function( /*Child class should return the template*/ ) {},
 
 
     /**

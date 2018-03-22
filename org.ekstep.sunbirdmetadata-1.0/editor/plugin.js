@@ -81,7 +81,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
             }
             switch (this.config.action) {
                 case 'review':
-                    this.reviewFn(data, callbackFn);
+                    this.reviewFn(data.formData.metaData, callbackFn);
                     break;
                 case 'save':
                     this.saveMetaFn(data.formData.metaData, callbackFn)
@@ -111,7 +111,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
                 callbackFn(err)
             }
         }
-        this.saveContentFn(data.formData, reviewCallBackFn)
+        this.saveContentFn(data, reviewCallBackFn)
     },
 
 
@@ -188,6 +188,14 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     },
 
     /**
+     * 
+     * 
+     */
+    getTemplate: function() {
+        return this.config.templateName
+    },
+
+    /**
      * @description             - Which is used to render the form with the configurations.
      * 
      * @param {Object} formObj  - Form object it should have configurations, resourceBundle, framework object
@@ -210,11 +218,16 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      * @param {Object} stateObj - It should contain the {isRoot, isNew, and form metaData information}
      */
     updateState: function(object) {
+        var isNew = true
         if (org.ekstep.services.stateService) {
-            var key = nodeId;
+            var contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
+            if (!_.isEmpty(contentMeta) && _.has(contentMeta, ["name"])) {
+                isNew = false;
+            }
+            var key = object.nodeId;
             var value = {};
-            value.root = object.isRoot;
-            value.isNew = object.isNew;
+            value.root = object.isRoot || true; // Currently, Supporting oly for root node
+            value.isNew = object.isNew || isNew;
             value.metadata = object.metaData;
             org.ekstep.services.stateService.create("nodesModified");
             org.ekstep.services.stateService.setState("nodesModified", key, value);

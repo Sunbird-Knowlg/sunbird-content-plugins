@@ -1,3 +1,15 @@
+.ui.form .ten.wide.field {
+    width: 82.5%!important;
+}
+
+.ui.form .six.wide.field {
+    width: 50%!important;
+}
+
+.lef.ui.form .two.wide.fieldtlayout {
+    width: 16.66666667%!important;
+}
+
 #meta-modal {
     top: 4% !important;
 }

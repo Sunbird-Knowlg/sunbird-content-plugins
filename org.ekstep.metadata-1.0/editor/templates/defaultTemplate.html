@@ -137,6 +137,11 @@
                                         <label>{{dynamicField.label}}</label>
                                         <keywords config=dynamicField></keywords>
                                     </div>
+                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code].length && fixedField.required), 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="(dynamicField.inputType=='dialcode'
+                                    && dynamicField.visible) " ng-required="{{dynamicField.required}} ">
+                                        <label>{{dynamicField.label}}</label>
+                                        <dial-code-units></dial-code-units>
+                                    </div>
                                 </div>
                             </div>
                         </div>

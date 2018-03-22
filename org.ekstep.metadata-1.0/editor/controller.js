@@ -9,7 +9,13 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     /**
      * @property        - Form configurations which should contains the 'framework, config, resourceBundle' information
      */
-    $scope.configurations = configurations;
+    $scope.fields = configurations.fields;
+
+
+    /**
+     * 
+     */
+    $scope.tempalteName = configurations.template;
 
     /**
      * @property        - Which defines is form is submitted or not.
@@ -27,17 +33,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.categoryList = {}
 
-    /** 
-     * 
-     * @property        - Which defines the is form for rootNode or not     
-     * 
-     */
-    var isRootNode = true;
-
-    /** 
-     * @property        - Which defines is selected form node is New or already Existing node
-     */
-    var isNewNode = false;
 
     /**
      * @property        -
@@ -48,6 +43,12 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @property       - Default error message for the fields
      */
     $scope.DEFAULT_ERROR_MESSAGE = 'Invalid Input'
+
+
+    /**
+     * 
+     */
+    $scope.isNew = true;
 
     /**
      * @description          - Which is used to dispatch an event.
@@ -67,7 +68,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.initDropdown = function() {
         const DROPDOWN_INPUT_TYPES = ['select', 'multiSelect'];
-        _.forEach(configurations, function(field) {
+        _.forEach($scope.fields, function(field) {
             if (_.includes(DROPDOWN_INPUT_TYPES, field.inputType)) {
                 if (field.depends && field.depends.length) {
                     $scope.getAssociations($scope.contentMeta[field.code], field.range, function(associations) {
@@ -182,7 +183,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         if (values.length) {
             $scope.categoryList[fieldCode] = values;
         } else {
-            $scope.mapMasterCategoryList(configurations, fieldCode);
+            $scope.mapMasterCategoryList($scope.fields, fieldCode);
         }
     }
 
@@ -192,10 +193,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @returns {Object}        - Which returns object which contains both fixedLayout and dynamicLayout configurations
      */
     $scope.getLayoutConfigurations = function() {
-        const FIXED_FIELDS_CODE = ["name", "description", "keywords", "appicon"];
+        var FIXED_FIELDS_CODE = this.getFixedFieldCode($scope.tempalteName);
         var fixedLayout = [];
         var dynamicLayout = [];
-        _.map(configurations, function(field) {
+        _.map($scope.fields, function(field) {
             if (field.validation) {
                 _.forEach(field.validation, function(value, key) {
                     if (value.type === 'regex') {
@@ -233,8 +234,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         }
         var form = {};
         form.metaData = $scope.getUpdatedMetadata($scope.contentMeta);
-        form.isRoot = isRootNode;
-        form.isNew = isNewNode;
         form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
         ecEditor.dispatchEvent('editor:form:success', {
             isValid: $scope.metaForm.$valid,
@@ -250,7 +249,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.updateErrorMessage = function() {
         if ($scope.metaForm.$valid) return
         var errorKeys = undefined;
-        _.forEach(configurations, function(value, key) {
+        _.forEach($scope.fields, function(value, key) {
             if ($scope.metaForm[value.code] && $scope.metaForm[value.code].$invalid) {
                 $scope.validation[value.code] = {}
                 switch (_.keys($scope.metaForm[value.code].$error)[0]) {
@@ -303,7 +302,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @param {String} key              - Field uniq code value
      */
     $scope.mapMasterCategoryList = function(configurations, key) {
-        _.forEach(configurations, function(field, value) {
+        _.forEach($scope.fields, function(field, value) {
             if (key) {
                 if (field.code === key) {
                     $scope.categoryList[field.code] = field.range
@@ -336,11 +335,18 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 }
             });
         }
+        if (metadata.keywords) {
+            var keys = metadata.keywords
+            metadata.keywords = keys.map(function(a) {
+                return a.lemma ? a.lemma : a
+            })
+        }
         // Passing mandatory fields when save is invoked
         !metadata['name'] && (metadata['name'] = $scope.originalContentMeta['name']);
         !metadata['contentType'] && (metadata['contentType'] = $scope.originalContentMeta['contentType']);
         !metadata['mimeType'] && (metadata['mimeType'] = $scope.originalContentMeta['mimeType']);
-        return metadata;
+        var result = $scope.validateDataTypes(metadata, $scope.fields)
+        return result;
     };
 
 
@@ -370,12 +376,53 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.init = function() {
         ecEditor.addEventListener('editor:form:change', $scope.onConfigChange, $scope);
         $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
+        var contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'))
+        if (!_.isEmpty(contentMeta) && _.has(contentMeta, ['name'])) {
+            $scope.isNew = false
+        }
         $scope.originalContentMeta = _.clone($scope.contentMeta);
         var layoutConfigurations = $scope.getLayoutConfigurations();
         $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
         $scope.dynamicLayoutConfigurations = _.sortBy(_.uniqBy(layoutConfigurations.dynamicLayout, 'code'), 'index');
-        $scope.mapMasterCategoryList(configurations);
+        $scope.mapMasterCategoryList($scope.fields);
     };
+
+    $scope.getFixedFieldCode = function(tempalteName) {
+        var map = {
+            'defaultTemplate': ["name", "description", "keywords", "appicon"]
+        }
+        if (tempalteName === 'defaultTemplate') {
+            return map.defaultTemplate;
+        } else {
+            return {}
+        }
+
+    }
+
+    $scope.validateDataTypes = function(selectedFields, configurations) {
+        _.forEach(configurations, function(configureValue, configureKey) {
+            _.forEach(selectedFields, function(selectedValue, selectedKey) {
+                if (configureValue.code === selectedKey) {
+                    var result = $scope.updateFieldDataType(configureValue.dataType, selectedValue);
+                    selectedFields[selectedKey] = result;
+                }
+            })
+        })
+        return selectedFields
+    };
+
+    $scope.updateFieldDataType = function(dataType, value) {
+        var result = undefined;
+        // currently, supporting for list
+        // Need to update for other data types
+        if (dataType == 'list') {
+            if (_.isString(value)) {
+                result = value.split(',')
+            }
+        }
+        return result || value
+
+    }
     $scope.init()
 
 }]);

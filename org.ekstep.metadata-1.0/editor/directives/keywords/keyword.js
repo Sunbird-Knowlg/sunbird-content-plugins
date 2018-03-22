@@ -25,7 +25,8 @@ formApp.directive('keywords', function() {
                 if (!keyword.isPresent) {
                     var requestData = {
                         "request": {
-                            "text": $query
+                            "text": $query,
+                            "limit": 100,
                         }
                     }
                     if (ecEditor.getConfig('keywordsLimit')) {
