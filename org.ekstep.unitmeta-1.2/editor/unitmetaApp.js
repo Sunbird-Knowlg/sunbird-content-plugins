@@ -11,11 +11,12 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         $scope.$safeApply();
     }
     ecEditor.addEventListener("title:update:textbookunit", $scope.updateTitle, $scope);
-    $scope.showAssestBrowser = function(){
+
+    $scope.showAssestBrowser = function () {
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',
             search_filter: {}, // All composite keys except mediaType
-            callback: function(data) { 
+            callback: function (data) {
                 $scope.unit.appIcon = data.assetMedia.src;
                 $scope.$safeApply();
             }

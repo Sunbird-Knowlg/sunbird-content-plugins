@@ -85,5 +85,13 @@
             "required":true,
             "defaultValue":"#FFFFFF"
         }]
-    }
+    },
+    "dependencies": [
+      {
+        "type": "plugin",
+        "plugin": "org.ekstep.navigation",
+        "ver": "1.0",
+        "scope": "renderer"
+      }
+    ]
 }

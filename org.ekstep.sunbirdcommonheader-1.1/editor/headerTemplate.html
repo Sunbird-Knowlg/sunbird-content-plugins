@@ -23,7 +23,7 @@
             <div class="row header-icon-container">
                 <div class="custom-row-2">
                     <div class="icon-group-2">
-                        <div ng-if="showWhatsNew" class="icon-box popup-item" data-content="Whats's New" data-variation="tiny inverted" data-position="bottom center" ng-click="displayWhatsNew()">
+                        <div ng-if="showWhatsNew" class="icon-box popup-item" data-content="What's New" data-variation="tiny inverted" data-position="bottom center" ng-click="displayWhatsNew()">
                             <i class="gift icon custom-icon" ng-class="{red: whatsNewBadge}"></i>
                         </div>
                         <div ng-show="editorEnv == 'NON-ECML'" class="icon-box popup-item" data-content="Upload Content" data-variation="tiny inverted" data-position="bottom center" ng-click="upload(); generateTelemetry({subtype:'upload',target:'uploadButton'})">
@@ -41,7 +41,7 @@
                             <i class="icon-save"></i>
                             <span class="label-icon-box-text save-button-text">Save</span>
                         </div>
-                        <div ng-show="!publishMode && !isFalgReviewer && !hideReviewBtn" id="reviewButton" class="ui buttons preview-dropdown preview-dropdown-nonecml" ng-class="{ 'popup-item disabled': disableReviewBtn }">
+                        <div ng-show="!publishMode && !isFalgReviewer && !hideReviewBtn" id="reviewButton" class="ui buttons preview-dropdown" ng-class="{ 'preview-dropdown-nonecml': editorEnv != 'ECML','popup-item disabled': disableReviewBtn }">
                             <div class="ui button text-part popup-item" data-content="Send for review" data-variation="tiny inverted" data-position="bottom center" ng-click="sendForReview(); generateTelemetry({ subtype: 'review', target: 'reviewbutton'});">
                                 <i class="send icon"></i>
                             </div>
@@ -58,10 +58,6 @@
                         </div>
                         <div ng-show="publishMode && !isFalgReviewer" class="icon-box popup-item label-icon-box" data-content="Publish content" data-variation="tiny inverted" data-position="bottom center" ng-click="publishContent()">
                             <i class="fa fa-cloud-upload"></i>
-                            <span class="label-icon-box-text">Publish</span>
-                        </div>
-                        <div ng-show="isFalgReviewer" id="retireButton" class="icon-box popup-item label-icon-box" data-content="Retire content" data-variation="tiny inverted" data-position="bottom center" ng-click="retireContent(); generateTelemetry({ subtype: 'retire', target: 'retireButton'});">
-                            <i class="fa fa-trash"></i>  
                             <span class="label-icon-box-text">Publish</span>
                         </div>
                         <div ng-show="isFalgReviewer" id="discardButton" class="icon-box popup-item label-icon-box" data-content="Discard content" data-variation="tiny inverted" data-position="bottom center" ng-click="discardContentFlag(); generateTelemetry({ subtype: 'retire', target: 'discardButton'});">

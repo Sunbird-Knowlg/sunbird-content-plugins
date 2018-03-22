@@ -1,13 +1,7 @@
 // TODO: Controller for horizontalTemplate.html
 'use strict';
 var app = angular.module('genie-canvas');
-/*
- *
- * https://github.com/fatlinesofcode/ngDraggable
- */
 app.service('ngDraggable', [function() {
-
-
     var scope = this;
     scope.inputEvent = function(event) {
       if (angular.isDefined(event.touches)) {

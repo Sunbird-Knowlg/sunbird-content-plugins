@@ -11,11 +11,12 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
         $scope.$safeApply();
     }
     ecEditor.addEventListener("title:update:lessonplanunit", $scope.updateTitle, $scope);
-    $scope.showAssestBrowser = function(){
+
+    $scope.showAssestBrowser = function () {
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',
             search_filter: {}, // All composite keys except mediaType
-            callback: function(data) { 
+            callback: function (data) {
                 $scope.unit.appIcon = data.assetMedia.src;
                 $scope.$safeApply();
             }
@@ -35,7 +36,6 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId]["root"] = false;
             }            
             $scope.unit.contentType = $scope.nodeType;
-            console.log("node title:",$scope.unit.name)
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.unit));;
             $scope.metadataCloneObj = _.clone($scope.unit);
             $scope.editMode = true;
@@ -96,7 +96,7 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
         }
    }
 
-    $scope.onNodeSelect = function(evant, data){        
+    $scope.onNodeSelect = function(event, data){
         $scope.showImageIcon = false;
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
@@ -115,7 +115,7 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
         }else{
             $scope.newNode = true;
-        }        
+        }
         $scope.showImageIcon = true;
         $scope.getPath();
         $scope.unit.name = $scope.unit.name || 'Untitled Lesson';

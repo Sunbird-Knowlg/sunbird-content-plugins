@@ -37,183 +37,232 @@ Plugin.extend({
             right: '1%'
         },
         qsPrefix: 'qs',
+        qsQuizPlugin: 'org.ekstep.questionset.quiz'
     },
-    initialize: function() {
+    _questionUnitPlugins: [],
+    initialize: function () {
         var ctrlPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(this._manifest.id, this._manifest.ver, "renderer/controller/questionset_ctrl.js");
         var tempPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(this._manifest.id, this._manifest.ver, "renderer/templates/questionset_template.html");
         org.ekstep.service.controller.loadNgModules(tempPath, ctrlPath);
     },
-    initPlugin: function(data) {
+    initPlugin: function (data) {
         var instance = this;
-        EkstepRendererAPI.addEventListener('renderer:content:replay', function(event) {
+
+        // On content replay, reset all question set information.
+        EkstepRendererAPI.addEventListener('renderer:content:replay', function (event) {
             instance.resetQS.call(instance);
         }, instance);
-        //remove the existing listner in the same name
+
+        // Remove duplicate event listener for 'renderer:nextStage'
         EventBus.listeners['renderer:nextStage'] = [];
-        EkstepRendererAPI.addEventListener('renderer:nextStage', function(event) {
+        EkstepRendererAPI.addEventListener('renderer:nextStage', function (event) {
             instance.renderNextQuestion.call(instance);
         }, instance);
-        EkstepRendererAPI.addEventListener(instance._data.pluginType + ':saveQuestionState', function(event) {
+
+        // Event handler to save question state
+        EkstepRendererAPI.addEventListener(instance._data.pluginType + ':saveQuestionState', function (event) {
             var state = event.target;
             instance.saveQuestionState(instance._currentQuestion.id, state);
         }, this);
+
+        // Load the DOM container that houses the unit templates
         this.loadTemplateContainer();
         this._questionSetConfig = this._data.config ? JSON.parse(this._data.config.__cdata) : this._questionSetConfig;
         this.setupNavigation();
+
+        // Get all questions in the question set
         var quesArray = angular.copy(data[this._constants.questionPluginId]);
         this._masterQuestionSet = _.isArray(quesArray) ? quesArray : _.toArray({
             quesArray
         });
+
+        // If this isn't the first time the question set is being rendered, restore its earlier state
         this._questionStates = {};
         this._renderedQuestions = [];
         var savedQSState = this.getQuestionSetState();
         if (savedQSState) {
             this._renderedQuestions = savedQSState.renderedQuestions;
             this._currentQuestion = savedQSState.currentQuestion;
-            this._currentQuestionState = this.getQuestionState(this._currentQuestion.id);
             this._questionStates = savedQSState.questionStates;
+            this._currentQuestionState = this.getQuestionState(this._currentQuestion.id);
         } else {
             this._currentQuestion = this.getNextQuestion();
         }
         this.saveQuestionSetState();
+
+        // Render the question
         this.renderQuestion(this._currentQuestion);
     },
-    renderQuestion: function(question) {
+    renderQuestion: function (question) {
         var instance = this;
 
+        // If this is not the first question, hide the current question
         if (this._currentQuestion) {
             EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
-            // EkstepRendererAPI.dispatchEvent('org.ekstep.questionset.quiz:hide');
         }
 
-        if (question.pluginId === 'org.ekstep.questionset.quiz') {
-            // instance._stage._currentState['mcq'] = undefined;
-            // EkstepRendererAPI.instantiatePlugin(question.pluginId);
+        if (question.pluginId === this._constants.qsQuizPlugin) {
+            // For V1 questions, invoke the 'questionset.quiz' plugin.
+            // TODO: Move state saving of V1 questions from questionset.quiz to here, like V2 questions
             var ins = PluginManager.invoke(question.pluginId, question, this._stage, this._stage, this._theme);
-            // console.log('ins', ins);
-            // question.objid = "ins.id";
-            this._renderedQuestions = _.union(this._renderedQuestions, [question]);
-            setTimeout(function() {
+
+            // Mark the question as rendered
+            this.setRendered(question);
+            setTimeout(function () {
                 Renderer.update = true;
             }, 500);
         } else {
-           
-            this._renderedQuestions = _.union(this._renderedQuestions, [question]);
-            // if (this._currentQuestion) {
-            //   EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
-            // }
+            // For V2 questions, load the AngularJS template and controller and invoke the event to render the question
 
+            // Mark the question as rendered
+            this._currentQuestion = question;
+            this.setRendered(question);
+
+            // Fetch the question state if it was already rendered before
             this._currentQuestionState = this.getQuestionState(question.id);
-            this.loadModules(question, function() {
-                setTimeout(function() {
+            this.loadModules(question, function () {
+                setTimeout(function () {
                     EkstepRendererAPI.dispatchEvent(question.pluginId + ':show', instance);
-                    instance.setupNavigation();
+                    // instance.setupNavigation();
                 }, 100);
             });
         }
-         this.setRendered(question);
-         this._currentQuestion = question;
     },
-    setRendered: function(question) {
+    setRendered: function (question) {
         var instance = this,
             element;
-        element = _.find(instance._masterQuestionSet, function(item) {
+
+        // Mark the question as rendered in the _masterQuestionSet
+        // This is to ensure that we do not re-render the same question twice (in case of shuffle)
+        element = _.find(instance._masterQuestionSet, function (item) {
             return item.id === question.id;
         });
         element.rendered = true;
+
+        // Add the rendered question to the _renderedQuestions array - this will be saved for future
+        // when the question set may be re-rendered when revisiting the stage
+        // This array also helps in navigation between already rendered questions.
+        var renderedQuestion = _.find(instance._renderedQuestions, function (q) {
+            return q.id === question.id
+        });
+        if (_.isUndefined(renderedQuestion)) {
+            instance._renderedQuestions.push(question);
+        }
     },
-    endOfQuestionSet: function() {
+    endOfQuestionSet: function () {
         return (this._renderedQuestions.length >= this._questionSetConfig.total_items);
     },
-    nextQuestion: function() {
+    nextQuestion: function () {
+        // Trigger the evaluation for the question
         var instance = this;
-        EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ":evaluate", function(result) {
+        EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ":evaluate", function (result) {
             if (instance._questionSetConfig.show_feedback == true) {
+                // Display feedback popup (tryagain or goodjob)
                 instance.displayFeedback(result.eval);
 
             } else {
+                // If show_feedback is set to false, move to next question without displaying feedback popup
                 instance.renderNextQuestion();
             }
         });
     },
-    displayFeedback: function(res) {
+    displayFeedback: function (res) {
         if (res === true) {
-            //alert('Correct Answer!');
             EkstepRendererAPI.dispatchEvent('renderer:load:popup:goodJob');
-            //TODO: This will move to the feedback pop-up next button
-            //this.renderNextQuestion();
         } else {
             EkstepRendererAPI.dispatchEvent('renderer:load:popup:tryAgain');
-            //alert('Wrong Answer');
         }
     },
-    renderNextQuestion: function() {
-        // EkstepRendererAPI.removeEventListener($scope.pluginInstance._manifest.id + ":evaluate");
+    renderNextQuestion: function () {
+        // Get the next question to be rendered
         var nextQ = this.getNextQuestion();
         if (nextQ) {
             this.renderQuestion(nextQ);
             this.generateNavigateTelemetry(null, this._currentQuestion.id);
         } else {
+            // If no question is remaining, it is the end of the question set, move to next stage after
+            // hiding the last question and some housekeeping
             this.saveQuestionSetState();
             this.generateNavigateTelemetry('next', 'ContentApp-EndScreen');
             EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
             this.resetNavigation();
+            this.resetListeners();
             OverlayManager.skipAndNavigateNext();
         }
     },
-    prevQuestion: function() {
+    prevQuestion: function () {
         this.renderPrevQuestion();
     },
-    renderPrevQuestion: function() {
+    renderPrevQuestion: function () {
+        // Get the previous question to be rendered
         var prevQ = this.getPrevQuestion();
         if (prevQ) {
             this.renderQuestion(prevQ);
             this.generateNavigateTelemetry(null, this._currentQuestion);
         } else {
+            // If no question is remaining, it is the beginning of the question set, move to previous stage after
+            // hiding the first question and some housekeeping
             this.saveQuestionSetState();
             this.generateNavigateTelemetry('previous', 'ContentApp-StartScreen');
             EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
             this.resetNavigation();
+            this.resetListeners();
             OverlayManager.navigatePrevious();
         }
     },
-    getNextQuestion: function() {
+    getNextQuestion: function () {
+        // Check if the next question has already been rendered (are we moving back and forth within the question set?)
         var renderIndex = this.getRenderedIndex();
         if ((renderIndex + 1 >= this._renderedQuestions.length) && !this.endOfQuestionSet()) {
-            var unRenderedQuestions = this._masterQuestionSet.filter(function(q) {
+            // The next question should be picked from the master question array, so fetch the list of all questions
+            // that are NOT marked as 'rendered'
+            var unRenderedQuestions = this._masterQuestionSet.filter(function (q) {
                 return (_.isUndefined(q.rendered)) ? true : !q.rendered;
             });
+            // If shuffle is on, return a random question from the list of NOT rendered questions
             if (this._questionSetConfig.shuffle_questions) {
                 return _.sample(unRenderedQuestions);
             }
+            // If shuffle is off, return the next question in the list
             return unRenderedQuestions.shift();
         } else {
+            // If the next question has already been rendered, fetch it from the _renderedQuestions array
             return this._renderedQuestions[renderIndex + 1];
         }
     },
-    getPrevQuestion: function() {
+    getPrevQuestion: function () {
+        // The previous question is always obtained from the _renderedQuestions array.
+        // If the index becomes < 0, it means that we have already returned the first question
+        // and can go back any further
         var renderIndex = this.getRenderedIndex();
         if (renderIndex - 1 < 0) {
             return undefined;
         }
         return this._renderedQuestions[renderIndex - 1];
     },
-    getRenderedIndex: function() {
-        return this._renderedQuestions.indexOf(this._currentQuestion);
+    getRenderedIndex: function () {
+        var instance = this;
+        var index = _.findIndex(this._renderedQuestions, function (q) {
+            return q.id === instance._currentQuestion.id;
+        });
+        return index;
     },
-    loadModules: function(question, callback) {
+    loadModules: function (question, callback) {
+        this._questionUnitPlugins = _.union(this._questionUnitPlugins, [question.pluginId]);
         var instance = this;
         var getPluginManifest = org.ekstep.pluginframework.pluginManager.pluginObjs[question.pluginId];
         var unitTemplates = getPluginManifest._manifest.templates;
-        var templateData = _.find(unitTemplates, function(template) {
+        var templateData = _.find(unitTemplates, function (template) {
             return template.id === question.templateId;
         });
+        // TODO: | Figure out a way to load the templates only once - may require changes to all event contracts between
+        // TODO: | question set and question unit plugins.
         // if (this._loadedTemplates.indexOf(templateData.id) === -1) {
         var pluginVer = (question.pluginVer === 1) ? '1.0' : question.pluginVer.toString();
         var templatePath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(question.pluginId, pluginVer, templateData.renderer.template);
         var controllerPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(question.pluginId, pluginVer, templateData.renderer.controller);
-        this.loadController(controllerPath, function(data) {
-            instance.loadTemplate(templatePath, instance._constants.qsElement, function(data) {
+        this.loadController(controllerPath, function (data) {
+            instance.loadTemplate(templatePath, instance._constants.qsElement, function (data) {
                 instance._loadedTemplates.push(templateData.id);
                 callback();
             });
@@ -222,16 +271,16 @@ Plugin.extend({
         //   callback();
         // }
     },
-    loadController: function(path, callback) {
-        setTimeout(function() {
+    loadController: function (path, callback) {
+        setTimeout(function () {
             EkstepRendererAPI.dispatchEvent('renderer:load:js', {
                 path: path,
                 callback: callback
             });
         }, 400);
     },
-    loadTemplate: function(path, toElement, callback) {
-        setTimeout(function() {
+    loadTemplate: function (path, toElement, callback) {
+        setTimeout(function () {
             EkstepRendererAPI.dispatchEvent('renderer:load:html', {
                 path: path,
                 toElement: toElement,
@@ -239,33 +288,33 @@ Plugin.extend({
             });
         }, 400);
     },
-    loadTemplateContainer: function() {
+    loadTemplateContainer: function () {
         var qsElement = angular.element(this._constants.qsElement);
         if (qsElement.length === 0) {
             angular.element('body').append(angular.element('<div id="' + this._constants.qsElement.replace('#', '') + '"></div>'));
         }
     },
-    resetNavigation: function() {
+    resetNavigation: function () {
         this.showDefaultNextNav();
         this.showDefaultPrevNav();
     },
-    showDefaultPrevNav: function() {
+    showDefaultPrevNav: function () {
         $('#qs-custom-prev').hide();
         $('.nav-previous').show();
     },
-    showDefaultNextNav: function() {
+    showDefaultNextNav: function () {
         $('#qs-custom-next').hide();
         $('.nav-next').show();
     },
-    showCustomPrevNav: function() {
+    showCustomPrevNav: function () {
         $('#qs-custom-prev').show();
         $('.nav-previous').hide();
     },
-    showCustomNextNav: function() {
+    showCustomNextNav: function () {
         $('#qs-custom-next').show();
         $('.nav-next').hide();
     },
-    setupNavigation: function() {
+    setupNavigation: function () {
         instance = this;
 
         // Next
@@ -279,7 +328,7 @@ Plugin.extend({
                 id: 'qs-custom-next',
                 class: ''
             }).css(this._constants.nextCSS);
-            customNextButton.on('click', function() {
+            customNextButton.on('click', function () {
                 instance.nextQuestion();
             });
             customNextButton.appendTo('#gameArea');
@@ -296,7 +345,7 @@ Plugin.extend({
                 id: 'qs-custom-prev',
                 class: ''
             }).css(this._constants.prevCSS);
-            customPrevButton.on('click', function() {
+            customPrevButton.on('click', function () {
                 instance.prevQuestion();
             });
             customPrevButton.appendTo('#gameArea');
@@ -305,39 +354,57 @@ Plugin.extend({
         this.showCustomNextNav();
         this.showCustomPrevNav();
     },
-    getQuestionState: function(questionId) {
+    getQuestionState: function (questionId) {
         return this._questionStates[questionId];
     },
-    getQuestionSetState: function() {
+    getQuestionSetState: function () {
         return Renderer.theme.getParam(this._data.id);
     },
-    saveQuestionState: function(questionId, state) {
+    saveQuestionState: function (questionId, state) {
         if (state) {
             var qsState = this.getQuestionSetState();
             qsState = _.isUndefined(qsState) ? {} : qsState;
             this._questionStates[questionId] = state;
             qsState.questionStates = this._questionStates;
-            Renderer.theme.setParam(this._data.id, qsState);
+            Renderer.theme.setParam(this._data.id, JSON.parse(JSON.stringify(qsState)));
         }
-        //TODO: Generate itemresponse telemetry here?
     },
-    saveQuestionSetState: function() {
+    saveQuestionSetState: function () {
         var qsState = {
             masterQuestionSet: this._masterQuestionSet,
             renderedQuestions: this._renderedQuestions,
             currentQuestion: this._currentQuestion,
             questionStates: this._questionStates
         };
-        Renderer.theme.setParam(this._data.id, qsState);
+        Renderer.theme.setParam(this._data.id, JSON.parse(JSON.stringify(qsState)));
     },
-    resetQS: function() {
+    resetQS: function () {
         this.resetNavigation();
         Renderer.theme.setParam(this._data.id, undefined);
         if (this._currentQuestion) {
             EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
         }
+        setTimeout(function () {
+            this.resetListeners();
+        }, 100);
     },
-    generateNavigateTelemetry: function(buttonId, currentQuestion) {
+    resetListeners: function () {
+        EventBus.listeners['org.ekstep.questionset:saveQuestionState'] = undefined;
+
+        // The following code will unregister all event listeners added by the question unit plugins
+        // This is to ensure that the event listeners do not overlap when there are two or more question sets
+        // in the same content.
+        this._questionUnitPlugins.forEach(function (qu) {
+            for (key in EventBus.listeners) {
+                if (key.indexOf(qu) !== -1) {
+                    if (EventBus.listeners.hasOwnProperty(key)) {
+                        EventBus.listeners[key] = undefined;
+                    }
+                }
+            }
+        });
+    },
+    generateNavigateTelemetry: function (buttonId, currentQuestion) {
         var instance = this;
         var stageTo, objid;
         var stageid = EkstepRendererAPI.getCurrentStageId();
@@ -351,10 +418,10 @@ Plugin.extend({
             objid = currentQuestion;
         }
         var data = {
-            "type": "view", // Required. Impression type (list, detail, view, edit, workflow, search)
-            "subtype": "Paginate", // Optional. Additional subtype. "Paginate", "Scroll"
-            "pageid": stageid, // Required. Unique page id
-            "uri": "", // Required. Relative URL of the content
+            "type": "view",
+            "subtype": "Paginate",
+            "pageid": stageid,
+            "uri": "",
             "visits": {
                 "objid": objid,
                 "objtype": ""

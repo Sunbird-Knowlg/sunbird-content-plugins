@@ -27,7 +27,7 @@
     box-sizing: border-box;
     padding: 1em!important;
     position: relative;
-    padding-left: 0!important;
+   padding-left: 0!important;
     position: relative;
     left: -27px;
 }
@@ -35,7 +35,7 @@
 #collectionMetadataAccordion {
     border: none;
     box-shadow: none;
-    font-family: inherit;
+   font-family: inherit;
 }
 
 #collectionMetadataAccordion .content {
@@ -46,7 +46,6 @@
 #collectionMetadataAccordion .title {
     outline: none;
     font-family: Lato, 'Helvetica Neue', Arial, Helvetica, sans-serif!important;
-}
 }
 
 #collectionMetadataAccordion .title.ui-state-active {
@@ -116,4 +115,4 @@
 
 .collection-childs{
     position: absolute;
-}
+} 

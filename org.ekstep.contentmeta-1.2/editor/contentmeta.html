@@ -17,9 +17,10 @@
         <div class="fields">
             <div class="field book-image-field" ng-class="editMode ? '' : 'disabled'">
                 <label ng-show="editMode" for="bookImage">Add Icon</label>
-                <div class="book-image-container popup-item" data-content="{{editMode ? 'Add or change image': ''}}" data-variation="tiny inverted" data-position="right center" ng-click="!editMode || showAssestBrowser()">
+                <div class="book-image-container popup-item" data-content="{{editMode ? 'Add or change image': ''}}" data-variation="tiny inverted"
+                    data-position="right center" ng-click="!editMode || showAssestBrowser()">
                     <i class="camera icon"></i>
-                    <img ng-if="showImageIcon" ng-src="{{content.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})" />
+                    <img ng-if="showImageIcon" ng-src="{{content.appIcon || defaultImage }}" ng-click="generateTelemetry({type: 'click', subtype: 'addicon', target: 'appIcon'})"/>
                 </div>
             </div>
             <div class="field form-fields-except-image">
@@ -36,8 +37,15 @@
                     </div>
                 </div>
                 <div class="field" ng-class="editMode ? '' : 'disabled'">
-                        <label>Keywords</label>
-                        <ng-token-field ng-model="content.keywords" id="contentmeta-keywords" placeholder="{{editMode ? 'Enter comma separated keywords': ''}}" mode="{{tokenMode}}" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'keywords'})"></ng-token-field>
+                    <label>Keywords</label>
+                    <tags-input ng-model="content.keywords" display-property="lemma" placeholder="Enter Keywords" replace-spaces-with-dashes="false">
+                        <auto-complete source="loadKeywords($query)" min-length="0" load-on-focus="true" load-on-empty="true" template="my-content-custom-template"></auto-complete>
+                    </tags-input>
+                    <script type="text/ng-template" id="my-content-custom-template">
+                        <div class="right-panel">
+                            <span ng-bind-html="$highlight($getDisplayText())"></span>
+                        </div>
+                    </script>
                 </div>
                 <div class="field" ng-show="!editMode">
                     <div class="metacontent-fields-container">
@@ -47,7 +55,7 @@
                                 <div class="ui styled accordion collection-metadata-accordion" id="collectionMetadataAccordion">
                                     <div class="active title" ng-click="toggleCollectionAccodrion()">
                                         <i ng-show="!(toggleCollectionAccodrionState)" class="fa fa-folder-o" aria-hidden="true"></i>
-                                        <i ng-show="toggleCollectionAccodrionState" aria-hidden="true" class="fa fa-folder-open-o"></i> &nbsp; Contents
+                                        <i ng-show="toggleCollectionAccodrionState" aria-hidden="true" class="fa fa-folder-open-o"></i> &nbsp; Contents -
                                         <span class="expand-collection" ng-show="!(toggleCollectionAccodrionState)"><i class="fa fa-plus" aria-hidden="true"></i></span>
                                         <span class="collapse-collection" ng-show="toggleCollectionAccodrionState"><i class="fa fa-minus" aria-hidden="true"></i></span>
                                     </div>

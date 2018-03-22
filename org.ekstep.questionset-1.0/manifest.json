@@ -8,11 +8,6 @@
   "editor":
   {
       "main": "editor/plugin.js",
-      "help":
-      {
-          "src": "editor/help.md",
-          "dataType": "text"
-      },
       "dependencies": [
       {
           "type": "plugin",

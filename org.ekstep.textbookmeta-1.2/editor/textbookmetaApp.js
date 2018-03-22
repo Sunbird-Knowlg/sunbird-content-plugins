@@ -163,7 +163,16 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
                 $scope.textbook.audience = [$scope.textbook.audience];
             }
             $scope.textbook.contentType = $scope.nodeType;
-            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook));
+            var mergedData = _.pickBy(_.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook)),_.identity);
+            _.forEach(mergedData, function(value, key) {
+                if(_.isArray(value)){
+                    mergedData[key] = _.compact(value)
+                    if(!mergedData[key].length){
+                        delete mergedData[key];
+                    }
+                }
+            });
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = mergedData;
             var keywords = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords
             if (keywords) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords = keywords.map(function(a) {

@@ -136,7 +136,11 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
    * @memberof org.ekstep.questionunit.ftb
    */
   $scope.doTextBoxHandle = function() {
-    $scope.qcblank = true;
+    if(isbrowserpreview){
+       $scope.qcblank = false;
+    }else{
+        $scope.qcblank = true;
+    }
     $scope.textboxtarget.id = this.id;
     $scope.textboxtarget.value = this.value.trim();
     $($scope.constant.tempanswertext).val($scope.textboxtarget.value);

@@ -10,6 +10,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         $scope.getPath();
         $scope.$safeApply();
     }
+
     ecEditor.addEventListener("title:update:collection", $scope.updateTitle, $scope);
 
     ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
@@ -21,11 +22,11 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.showImageIcon = true;
     $scope.showSubCollection = true;
 
-    $scope.showAssestBrowser = function() {
+    $scope.showAssestBrowser = function () {
         ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
             type: 'image',
             search_filter: {}, // All composite keys except mediaType
-            callback: function(data) {
+            callback: function (data) {
                 $scope.content.appIcon = data.assetMedia.src;
                 $scope.$safeApply();
             }
@@ -53,6 +54,12 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
             $scope.content.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.content));;
+            var keywords = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords
+            if (keywords) {
+                org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords = keywords.map(function(a) {
+                    return a.lemma ? a.lemma : a
+                })
+            }
             $scope.metadataCloneObj = _.clone($scope.content);
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             $scope.editMode = $scope.editable;
@@ -99,6 +106,9 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         if(_.isUndefined(metadata['contentType'])){
             metadata['contentType'] = currentMetadata['contentType'];
         }
+        if (_.isUndefined(metadata['keywords'])) {
+            metadata['keywords'] = currentMetadata['keywords'];
+        }
         return metadata;
     }
 
@@ -131,7 +141,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.editMode = true;
             $scope.newNode = false;
             $scope.tokenMode = 'edit';
-            //$scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
             $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.contentmeta", "1.2", "assets/default.png");
             var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
             $scope.content = (_.isUndefined(cache)) ? activeNode.data.metadata : _.assign(activeNode.data.metadata, cache.metadata);
@@ -160,7 +169,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             $scope.getPath();
         }
         $scope.showImageIcon = true;
-        if (data.data.objectType == "Collection" && $scope.showSubCollection) $scope.getSubCollection(data.data.metadata.identifier, function(err, res) {
+        if (data.data.objectType == "Collection" && $scope.showSubCollection) $scope.getSubCollection(data.data.metadata.identifier, function (err, res) {
             if (err) console.log("error when trying to fetch sub collections");
             if (res) $scope.initFancyTree(res.data.result.content);
         });
@@ -183,7 +192,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         }
     }
 
-    $scope.setActiveNode = function(nodeId) {
+    $scope.setActiveNode = function (nodeId) {
         org.ekstep.collectioneditor.api.getService('collection').setActiveNode(nodeId);
     }
 
@@ -213,9 +222,9 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.contentmeta", "pluginver": "1.2", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
 
-    $scope.getSubCollection = function(contentId, callback) {
+    $scope.getSubCollection = function (contentId, callback) {
         var mode = "live";
-        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: contentId, mode: mode }, function(err, res) {
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: contentId, mode: mode }, function (err, res) {
             if (res && res.data && res.data.responseCode === "OK") {
                 callback && callback(err, res);
             } else {
@@ -232,7 +241,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
 
     ecEditor.jQuery("#collection-meta-tree").fancytree({
         source: [],
-        renderNode: function(event, data) {
+        renderNode: function (event, data) {
             var node = data.node;
             var $nodeSpan = $(node.span);
             if (!$nodeSpan.data('rendered') && !node.folder && !$nodeSpan.find("span.collection-preview-icon.popup-item").length) {
@@ -244,9 +253,9 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
 
     $scope.buildSubCollectionTree = function(data, tree) {
         var instance = this,
-            tree = tree || [];
+        tree = tree || [];
         if (data.children) data.children = _.sortBy(data.children, ['index']);
-        _.forEach(data.children, function(child) {
+        _.forEach(data.children, function (child) {
             var childTree = [];
             tree.push({
                 "id": child.identifier || UUID(),
@@ -261,7 +270,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 instance.buildSubCollectionTree(child, childTree);
             }
         });
-
         return tree;
     }
 
@@ -294,6 +302,16 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.changeTitle = function(){
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
     }
+
+    $scope.loadKeywords = function($query) {
+        if ($query.length >= 3) {
+            return org.ekstep.services.collectionService.fetchKeywords($query).then(function(keywords) {
+                return keywords.filter(function(keyword) {
+                    return keyword.lemma.toLowerCase().indexOf($query.toLowerCase()) != -1;
+                });
+            })
+        }
+    };
     $scope.init();
 }]);
 //# sourceURL=contentmetaApp.js
