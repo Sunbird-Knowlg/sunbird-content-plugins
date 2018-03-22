@@ -30,7 +30,7 @@ angular.module('createquestionapp', [])
       if ($scope.formValidation()) {
         $scope.ftbFormData.parsedQuestion.text = $scope.ftbFormData.question.text.replace(/\[\[.*?\]\]/g,function(a, b){
           index = index +1;
-          return '<input type="text" class="ans-field" id=ans-field"' + index + '">';
+          return '<input type="text" class="ans-field" id=ans-field' + index + '>';
         })
         $scope.$emit('question:form:valid', $scope.ftbFormData);
       } else {
