@@ -666,7 +666,18 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
   $scope.droppableObjects = [];
 
   $scope.onDropToLHS = function(index, data, evt) {
-    if ($scope.droppableObjects[evt.event.target.id].mapIndex == data.mapIndex) {
+    var ctrlScope = angular.element('#mtf-renderer').scope();
+    for (var i = 0; i < $scope.draggableObjects.length; i++) {
+      if ($scope.draggableObjects[i].mapIndex == data.mapIndex) {
+        var temp = document.getElementById(index).getAttribute("dataVal");
+        if (temp.mapIndex != undefined) {
+          $scope.draggableObjects.push(temp);
+        }
+        $scope.droppableObjects.splice(index, 1, data);
+        $scope.draggableObjects.splice(i, 1);
+      }
+    }
+    if ($scope.droppableObjects[evt.event.target.id].mapIndex == data.mapIndex && $scope.droppableObjects[index].mapIndex != undefined) {
       var t = $scope.droppableObjects[index];
       $scope.droppableObjects.splice(index, 1, data);
       $scope.droppableObjects.splice(evt.event.target.id, 1, t);
@@ -674,17 +685,7 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     } else if ($scope.droppableObjects[evt.event.target.id].mapIndex == data.mapIndex) {
       var t = $scope.droppableObjects[index];
       $scope.droppableObjects.splice(index, 1, data);
-      $scope.droppableObjects.splice(evt.event.target.id, 1, $scope.questionObj.option.emptyBoxs[evt.event.target.id]);
-    }
-    for (var i = 0; i < $scope.draggableObjects.length; i++) {
-      if ($scope.draggableObjects[i].mapIndex == data.mapIndex) {
-        if (evt.event.target.id && angular.element(evt.event.target).data().$ngModelController.$modelValue.mapIndex != undefined) {
-          var t = angular.element(evt.event.target).data().$ngModelController.$modelValue;
-          $scope.draggableObjects.push(t);
-        }
-        $scope.droppableObjects.splice(evt.event.target.id, 1, data);
-        $scope.draggableObjects.splice(i, 1);
-      }
+      $scope.droppableObjects.splice(evt.event.target.id, 1, ctrlScope.questionObj.option.emptyBoxs[evt.event.target.id]);
     }
   }
   $scope.onDropToRHS = function(data, evt) {
@@ -755,6 +756,7 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     ctrlScope.questionObj = questionData;
     ctrlScope.questionObj.option.emptyBoxs = [];
     $scope.draggableObjects = angular.copy(ctrlScope.questionObj.option.optionsRHS);
+    $scope.draggableObjects.sort(() => Math.random() - 0.5);
     for (var l = 0; l < ctrlScope.questionObj.option.optionsLHS.length; l++) {
       var emptyBox = {
         "index": ctrlScope.questionObj.option.optionsLHS[l].index,
