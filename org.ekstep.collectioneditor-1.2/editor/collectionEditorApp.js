@@ -16,7 +16,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     $scope.isContent = false;
     $scope.isCollection = false;
     $scope.collectionCache = [];
-    $scope.mode = ecEditor.getConfig('editorConfig').mode;
+    $scope.mode = ecEditor.getConfig('editorConfig').mode; 
+    $scope.collectionTreeHeight = ($scope.mode == "Edit") ? "collection-tree-height-with-footer" : "collection-tree-height-without-footer"; 
     $scope.getObjectType = function(objectType) {
         return _.find(objectType, function(type) {
             return type == $scope.selectedObjectType
