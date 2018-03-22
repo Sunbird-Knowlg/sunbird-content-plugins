@@ -27,6 +27,12 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     config: {},
 
     /**
+     * 
+     */
+
+    mappedResponse: {},
+
+    /**
      * @property      - List of are event are mapped with the action
      */
     eventMap: { savemeta: 'org.ekstep.contenteditor:save:meta', review: 'org.ekstep.contenteditor:review', save: 'org.ekstep.contenteditor:save' },
@@ -49,11 +55,28 @@ org.ekstep.contenteditor.metadataPlugin.extend({
         ecEditor.addEventListener('editor:form:success', this.successAction, this)
         ecEditor.addEventListener('editor:form:change', this.onConfigChange, this)
         ecEditor.addEventListener('editor:form:reset', this.resetFields, this)
-        ecEditor.addEventListener('org.ekstep.editcontentmeta:showpopup', this.showForm, this)
-        this.getConfigurations({ formConfig: ecEditor.getConfig('formConfig'), frameworkId: ecEditor.getContext('framework') }, function(error, res) {
-            res ? instance.renderForm({ resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config.data.result.form.data }) : console.error('Fails to render')
-        })
+        ecEditor.addEventListener('org.ekstep.editcontentmeta:showpopup', this.invoke, this)
+
     },
+
+    invoke: function(event, config) {
+        console.log("fds")
+        var instance = this;
+        if (!this.isConfigurationsExists(config.subType, config.action)) {
+            this.getConfigurations(config, function(error, res) {
+                if (res) {
+                    instance.mapResponse(config.subType, config.action, { resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config })
+                    instance.renderForm({ resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config })
+                } else {
+                    console.error('Fails to render', error)
+                }   
+
+            })
+        } else {
+            instance.renderForm(instance.getMappedResponse(config.subType, config.action))
+        }
+    },
+
 
     /**
      * @description         - When field value changes. Currenlty, Event is dispatching
@@ -157,14 +180,14 @@ org.ekstep.contenteditor.metadataPlugin.extend({
             config: function(callback) {
                 // get the formConfigurations data
                 org.ekstep.services.configuration.getFormConfigurations({ request: request.formConfig }, function(error, response) {
-                    if (!error) callback(undefined, response)
-                    else throw 'Unable to fetch the form configurations.'
-                        //callback(undefined, window.formConfigurations)
+                    //if (!error) callback(undefined, response)
+                    //else throw 'Unable to fetch the form configurations.'
+                    callback(undefined, window.formConfigurations)
                 })
             },
             framework: function(callback) {
                 // get the framworkData
-                ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(request.frameworkId, function(error, response) {
+                ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(request.framework, function(error, response) {
                     if (!error) callback(undefined, response)
                     else throw 'Unable to fetch the framework data.'
                 })
@@ -208,7 +231,8 @@ org.ekstep.contenteditor.metadataPlugin.extend({
         this.framework = config.framework
         this.config = config.formConfig
         this.form = this.mapObject(this.config.fields, this.framework.categories)
-        this.loadTemplate(this.config.templateName)
+        this.loadTemplate(this.config.templateName);
+        this.showForm()
     },
 
     /**
@@ -229,9 +253,31 @@ org.ekstep.contenteditor.metadataPlugin.extend({
         value.metadata = object.metaData
         org.ekstep.services.stateService.create('nodesModified')
         org.ekstep.services.stateService.setState('nodesModified', key, value)
+    },
+
+    /**
+     * @description
+     */
+    mapResponse: function(type, action, value) {
+        this.mappedResponse[type + '_' + action] = value;
+    },
+
+    /**
+     * @description
+     */
+    isConfigurationsExists: function(type, action) {
+        return this.mappedResponse[type + '_' + action] ? true : false
+    },
+
+    /**
+     * @description
+     */
+    getMappedResponse: function(type, action) {
+        return this.mappedResponse[type + '_' + action]
     }
+
+
 
 })
 
-// # sourceURL=sunbirdmetadataplugin.js;
-// # sourceURL=sunbirdmetadataplugin.js;
+// # sourceURL=sunbirdmetadataplugin.js
