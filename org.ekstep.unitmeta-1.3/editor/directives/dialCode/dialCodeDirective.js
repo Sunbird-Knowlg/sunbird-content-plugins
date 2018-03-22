@@ -1,11 +1,10 @@
 /**
- * @description
+ * @description DIAL code directive
  * @author Archana Baskaran<archana.b@latitudefintech.com>
  */
-
-
 angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).directive('dialCode', function () {
-    template = ecEditor.resolvePluginResource("org.ekstep.unitmeta", "1.2", "editor/directives/dialCode/template.html")
+    var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.unitmeta");
+    template = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/directives/dialCode/template.html")
     var dialCodeController = ['$scope', '$controller', '$filter', function ($scope, $controller, $filter) {
         $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
         $scope.maxLength = 6;
@@ -21,7 +20,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                 $scope.errorMessage = "";
                 let nodeId = org.ekstep.services.collectionService.getActiveNode().data.id;
                 if (org.ekstep.collectioneditor.cache.nodesModified && org.ekstep.collectioneditor.cache.nodesModified[nodeId]) {
-                        org.ekstep.collectioneditor.cache.nodesModified[nodeId].metadata["dialCode"] = this.dialCode;
+                    org.ekstep.collectioneditor.cache.nodesModified[nodeId].metadata["dialCode"] = this.dialCode;
                 }
                 if (ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, this.dialCode) != -1) {
                     $scope.status = "success";
