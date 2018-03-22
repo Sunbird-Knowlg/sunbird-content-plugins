@@ -73,10 +73,6 @@
             },
             {
                 "type": "js",
-                "src": "renderer/controllers/ngDraggable.js"
-            },
-            {
-                "type": "js",
                 "src": "renderer/util/evaluator.js"
             },
             {
