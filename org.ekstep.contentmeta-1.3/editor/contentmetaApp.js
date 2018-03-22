@@ -6,21 +6,13 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
 
     $scope.updateTitle = function(event, title) {
         $scope.content.name = title;
-        $scope.getPath();
+        ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
         $scope.$safeApply();
     }
 
     $scope.updateContent = function(event, data) {
         $scope.content = data;
-        $scope.path.push({'title' : data.name, 'metadata' : data})
         $scope.$safeApply();
-    }
-
-    $scope.updateCollectionBreadcrumb = function(data) {
-        var index = ecEditor._.indexOf($scope.path, data);
-        if (index>-1) {
-            $scope.path = ecEditor. _.dropRight($scope.path, $scope.path.length-index - 1);
-        }
     }
 
     ecEditor.addEventListener("title:update:collection", $scope.updateTitle, $scope);
@@ -64,7 +56,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             $scope.editMode = $scope.editable;
             if (activeNode.data && activeNode.data.root) ecEditor.dispatchEvent("content:title:update", $scope.content.name);
-            $scope.getPath();
+            ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
             $scope.submitted = true;
             $scope.$safeApply();
         } 
@@ -116,19 +108,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
     }
 
-    $scope.showTooltip = function(event, title) {
-        if(title.length > 25 ) {
-            $('.section').popup({
-                content: title,
-                variation: "wide",
-                on: 'hover',
-                position:'bottom left'
-            });
-        } else {
-            $('.section').popup('destroy');
-        }
-   }
-
     $scope.onNodeSelect = function(evant, data) {
         var contentArr = ["Story", "Collection", "Game", "Worksheet", "Resource"];
         $scope.editable = (!data.data.root && data.data.metadata.visibility === 'Default') ? false : true;
@@ -164,16 +143,11 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 $scope.newNode = true;
             }
             $scope.content.name = $scope.content.name || 'Untitled Collection';
-            $scope.getPath();
+            ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
         }
         $scope.$safeApply();
     }
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.onNodeSelect);
-
-    $scope.goToRootParent = function() {
-        var parentNode = $scope.getPartentNode();
-        org.ekstep.services.collectionService.setActiveNode(parentNode.key);
-    }
 
     $scope.getPartentNode = function() {
         var activeNode = org.ekstep.services.collectionService.getActiveNode();
@@ -183,26 +157,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             parentNode = parentList.length > 1 ? parentList[1] : parentList[0];
         }
         return parentNode;
-    }
-
-    $scope.getPath = function() {
-        $scope.path = [];
-        var activeNode = org.ekstep.services.collectionService.getActiveNode();
-        var parentNode = $scope.getPartentNode();
-        if (parentNode && (activeNode.data.objectType !== "Collection") || !activeNode.folder) $scope.path = [{'title':'...', 'nodeId':parentNode.key}];
-        var path = ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getKeyPath();
-        _.forEach(path.split('/'), function(key) {
-            if (key) {
-                var activeNode = org.ekstep.services.collectionService.getActiveNode();
-                var node = ecEditor.jQuery("#collection-tree").fancytree("getTree").getNodeByKey(key);
-                if ((!activeNode.folder && !node.folder) || (activeNode.folder && node.data.objectType == "Collection"))
-                    $scope.path.push({ 'title': node.title, 'nodeId': node.key })
-            }
-        });
-        if (ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getLevel() > 5) {
-            $scope.path = _.takeRight($scope.path, 6);
-            $scope.path[0].title = "...";
-        }
     }
 
     $scope.setActiveNode = function(data) {

@@ -10,6 +10,7 @@
         "dependencies": [
         	{ "plugin": "org.ekstep.assetbrowser", "ver": "1.1", "type": "plugin" },
         	{ "plugin": "org.ekstep.conceptselector", "ver": "1.0", "type": "plugin" },
+            { "plugin": "org.ekstep.conceptselector", "ver": "1.1", "type": "plugin" },
             { "type": "js", "src": "editor/directives/dialCode/dialCodeDirective.js" }
         ]
     }

@@ -1,14 +1,4 @@
 <div ng-app="unitmetaApp" class="metacontent-wrapper" ng-controller="unitmetaController">
-    <div class="ui segment header-segment" id="headerSegment">
-        <div class="ui breadcrumb">
-            <i class="folder outline icon pointer" ng-click="goToRootParent()"></i>
-            <a class="section" ng-repeat="value in path" ng-click="setActiveNode(value.nodeId)">
-                <span data-inverted="" ng-mouseover="showTooltip($event, value.title)">{{value.title | limitTo:25}}</span>
-                <span ng-if="value.title.length > 25">...</span>
-                <div ng-if="!$last" class="divider"> > </div>
-            </a>
-        </div>
-    </div>
     <form class="ui form segment" id="contents-data-form" novalidate  ng-show="editMode" name="unitMetaForm">
         <div class="fields">
             <div class="field form-fields-except-image">

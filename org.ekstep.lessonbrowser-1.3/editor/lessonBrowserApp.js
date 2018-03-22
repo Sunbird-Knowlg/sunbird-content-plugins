@@ -332,7 +332,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     "query": ""
                 }
             };
-            searchBody.request.filters.contentType = ctrl.meta.lessonTypes
+            searchBody.request.filters.contentType = ctrl.meta.lessonTypes;
             ctrl.searchLessons(function(res) {
                 $scope.isCardSearching = false;
             });
@@ -540,8 +540,10 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             if (query.request.filters.contentType) {
                 query.request.filters.contentType = _.isString(query.request.filters.contentType) ? (query.request.filters.contentType.split(",") || []) : query.request.filters.contentType;
                 $scope.filterSelection.lessonType = query.request.filters.contentType;
+                searchBody.request.filters.contentType = query.request.filters.contentType;
             } else {
                 $scope.filterSelection.lessonType = ctrl.meta.lessonTypes;
+                searchBody.request.filters.contentType = ctrl.meta.lessonTypes;
             }
             if (query.request.filters.gradeLevel) {
                 query.request.filters.gradeLevel = _.isString(query.request.filters.gradeLevel) ? (query.request.filters.gradeLevel.split(",") || []) : query.request.filters.gradeLevel;

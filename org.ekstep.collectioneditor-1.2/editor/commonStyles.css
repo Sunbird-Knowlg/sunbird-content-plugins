@@ -40,4 +40,6 @@ body {
     margin-left: 20px !important;
 }
 
-
+.ngdialog.ngdialog-theme-default .ngdialog-content {
+    padding: 0!important;
+}
