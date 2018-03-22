@@ -267,24 +267,28 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 org.ekstep.services.collectionService.fromCollection(res.data.result.content);
                 $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
                 $scope.showsuggestedContent = $scope.sidebarPages.length > 0 ? true : false;
-                var channel = ecEditor.getContext('channel');
-                var reqObj = {
-                    "request": {
-                        "search": {}
-                    }
-                };
-                ecEditor.getService('dialcode').getAllDialCodes(channel, reqObj, function(dialerr, dialrep) {
-                    if (!dialerr) {
-                        _.forEach(dialrep.data.result.dialcodes, function(dialcodeData){
-                            org.ekstep.services.collectionService.dialcodeList.push(dialcodeData.identifier);
-                        });
-                        $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
-                        $scope.$safeApply();
-                        callback && callback(err, res);
-                    }else{
-                        callback && callback('unable to fetch categories!', cateresp);
-                    }
-                });
+                if(res.data.result.content.contentType === "TextBook"){
+                    var channel = ecEditor.getContext('channel');
+                    var reqObj = {
+                        "request": {
+                            "search": {}
+                        }
+                    };
+                    ecEditor.getService('dialcode').getAllDialCodes(channel, reqObj, function(dialerr, dialrep) {
+                        if (!dialerr) {
+                            _.forEach(dialrep.data.result.dialcodes, function(dialcodeData){
+                                org.ekstep.services.collectionService.dialcodeList.push(dialcodeData.identifier);
+                            });
+                            $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
+                            $scope.$safeApply();
+                            callback && callback(err, res);
+                        }else{
+                            callback && callback('unable to fetch dialcodes!', cateresp);
+                        }
+                    });
+                }else{
+                    callback && callback('unable to fetch the content!', res);
+                }
             } else {
                 callback && callback('unable to fetch the content!', res);
             }
