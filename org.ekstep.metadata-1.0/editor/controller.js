@@ -72,31 +72,13 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             if (_.includes(DROPDOWN_INPUT_TYPES, field.inputType)) {
                 if (field.depends && field.depends.length) {
                     $scope.getAssociations($scope.contentMeta[field.code], field.range, function(associations) {
-                        $scope.applayDependencyRules(field, associations, false);
+                        $scope.applyDependencyRules(field, associations, false);
                     });
                 }
             }
         });
         $scope.configureDropdowns(false, false);
     }
-
-    /**
-     * @description             - Which is used to generate the telemetry.
-     * 
-     * @param {Object} data     - Telemetry interact event data.
-     */
-    $scope.generateTelemetry = function(data) {
-        ecEditor.getService('telemetry').interact({
-            "type": data.type || "click",
-            "subtype": data.subtype,
-            "target": data.target,
-            "pluginid": $scope.manifest.id,
-            "pluginver": $scope.manifest.ver,
-            "objectid": data.objectid,
-            "targetid": data.targetid,
-            "stage": data.stage
-        })
-    };
 
     /**
      * @description            - Which is used to update the form when vlaues is get changes
@@ -119,7 +101,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.updateForm = function(object) {
         if (object.field.range) {
             $scope.getAssociations(object.value, object.field.range, function(associations) {
-                $scope.applayDependencyRules(object.field, associations, true);
+                $scope.applyDependencyRules(object.field, associations, true);
             });
         }
     };
@@ -154,7 +136,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @param {Boolean} resetSelected  - @default true Which defines while resolving the dependency dropdown
      *                                   Should reset the selected values of the field or not
      */
-    $scope.applayDependencyRules = function(field, associations, resetSelected) {
+    $scope.applyDependencyRules = function(field, associations, resetSelected) {
         //reset the depended field first
         // Update the depended field with associated value
         // Currently, supported only for the dropdown values
@@ -221,19 +203,19 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * 
      * @fires       - 'editor:form:success'
      */
-    $scope.successFn = function() {
+    $scope.success = function() {
         $scope.isSubmit = true;
         !$scope.metaForm.$valid && $scope.updateErrorMessage();
         var successCB = function(err, res) {
             if (res) {
-                $scope.closeThisDialog();
                 console.info("Data is saved successfully.", res)
             } else {
-                console.error("Fails to save the data", err)
+                console.error("Fails to save the data", err);
             }
+            $scope.closeThisDialog();
         }
         var form = {};
-        form.metaData = $scope.getUpdatedMetadata($scope.contentMeta);
+        form.metaData = getUpdatedMetadata($scope.contentMeta, $scope.originalContentMeta, $scope.fields);
         form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
         ecEditor.dispatchEvent('editor:form:success', {
             isValid: $scope.metaForm.$valid,
@@ -274,7 +256,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * 
      * @fires            -   'editor:form:cancel'
      */
-    $scope.cancelFn = function() {
+    $scope.cancel = function() {
         // Note: Reset the all selected fields (If required)
         ecEditor.dispatchEvent('editor:form:cancel', { callback: $scope.closeThisDialog })
     }
@@ -314,44 +296,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     }
 
     /**
-     * @description                     - Which used to get only modied filed values
-     * 
-     * @param {Object} currentMetadata  -@default Object Current field values
-     * 
-     * @returns {Object}                - Whihc returns only changed metadata values
-     */
-    $scope.getUpdatedMetadata = function(currentMetadata) {
-        var metadata = {};
-        if (_.isEmpty($scope.originalContentMeta)) {
-            _.forEach(currentMetadata, function(value, key) {
-                metadata[key] = value;
-            });
-        } else {
-            _.forEach(currentMetadata, function(value, key) {
-                if (_.isUndefined($scope.originalContentMeta[key])) {
-                    metadata[key] = value;
-                } else if (value != $scope.originalContentMeta[key]) {
-                    metadata[key] = value;
-                }
-            });
-        }
-        if (metadata.keywords) {
-            var keys = metadata.keywords
-            metadata.keywords = keys.map(function(a) {
-                return a.lemma ? a.lemma : a
-            })
-        }
-        // Passing mandatory fields when save is invoked
-        !metadata['name'] && (metadata['name'] = $scope.originalContentMeta['name']);
-        !metadata['contentType'] && (metadata['contentType'] = $scope.originalContentMeta['contentType']);
-        !metadata['mimeType'] && (metadata['mimeType'] = $scope.originalContentMeta['mimeType']);
-        var result = $scope.validateDataTypes(metadata, $scope.fields)
-        return result;
-    };
-
-
-
-    /**
      * @description                      - Which is used to configure the symantic ui drop down
      *                                     to enable/disable the force selection field and multiSelect fields with tags format 
      *
@@ -376,10 +320,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.init = function() {
         ecEditor.addEventListener('editor:form:change', $scope.onConfigChange, $scope);
         $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
-        var contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'))
-        if (!_.isEmpty(contentMeta) && _.has(contentMeta, ['name'])) {
-            $scope.isNew = false
-        }
         $scope.originalContentMeta = _.clone($scope.contentMeta);
         var layoutConfigurations = $scope.getLayoutConfigurations();
         $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
@@ -398,33 +338,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         }
 
     }
-
-    $scope.validateDataTypes = function(selectedFields, configurations) {
-        _.forEach(configurations, function(configureValue, configureKey) {
-            _.forEach(selectedFields, function(selectedValue, selectedKey) {
-                if (configureValue.code === selectedKey) {
-                    var result = $scope.updateFieldDataType(configureValue.dataType, selectedValue);
-                    selectedFields[selectedKey] = result;
-                }
-            })
-        })
-        return selectedFields
-    };
-
-    $scope.updateFieldDataType = function(dataType, value) {
-        var result = undefined;
-        // currently, supporting for list
-        // Need to update for other data types
-        if (dataType == 'list') {
-            if (_.isString(value)) {
-                result = value.split(',')
-            }
-        }
-        return result || value
-
-    }
     $scope.init()
 
 }]);
 
+//# sourceURL=metadataController.js
 //# sourceURL=metadataController.js
