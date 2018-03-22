@@ -669,7 +669,7 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     var ctrlScope = angular.element('#mtf-renderer').scope();
     for (var i = 0; i < $scope.draggableObjects.length; i++) {
       if ($scope.draggableObjects[i].mapIndex == data.mapIndex) {
-        var temp = document.getElementById(index).getAttribute("dataVal");
+        var temp = document.getElementById(index).getAttribute("data-val");
         if (temp.mapIndex != undefined) {
           $scope.draggableObjects.push(temp);
         }
