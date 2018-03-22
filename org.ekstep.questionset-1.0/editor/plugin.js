@@ -13,12 +13,18 @@ org.ekstep.contenteditor.basePlugin.extend({
     v1PluginId: "org.ekstep.questionset.quiz",
     templateId: "horizontalMCQ"
   },
+  _dependencyPlugin: "org.ekstep.questionbank",
   /**
    * Register events.
    * @memberof questionset
    */
   initialize: function() {
     var instance = this;
+
+    //Load dependecny plugin
+    var publishedDate = new Date().getTime();
+    ecEditor.loadAndInitPlugin(instance._dependencyPlugin, "1.0", publishedDate);
+    
     ecEditor.addEventListener(instance.manifest.id + ":showPopup", instance.openQuestionBank, instance);
     ecEditor.addEventListener(instance.manifest.id + ":addQS", instance.addQS, instance);
   },
