@@ -13,7 +13,6 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
         $scope.failureFlag = false;
         $scope.successFlag = false;
         $scope.editFlag = false;
-        $scope.dialCodes = window.dialCodes;
         
         // validate dial code input
         $scope.validateInputValue = function () {
@@ -34,22 +33,20 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
         }
         // validate the dialCode
         $scope.validateDialCode = function () {
-          let nodeId =  org.ekstep.services.collectionService.getActiveNode().data.id;
-          if(org.ekstep.collectioneditor.cache.nodesModified){
-            if(org.ekstep.collectioneditor.cache.nodesModified[nodeId]){
-                org.ekstep.collectioneditor.cache.nodesModified[nodeId].metadata["dialCode"] = this.dialCode;
+            let nodeId =  org.ekstep.services.collectionService.getActiveNode().data.id;
+            if(org.ekstep.collectioneditor.cache.nodesModified){
+                if(org.ekstep.collectioneditor.cache.nodesModified[nodeId]){
+                    org.ekstep.collectioneditor.cache.nodesModified[nodeId].metadata["dialCode"] = this.dialCode;
+                }
             }
-          }
-            var validCode = $filter('filter')($scope.dialCodes, { identifier: this.dialCode });
-            if (validCode.length) {
+            if (ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, this.dialCode) != -1) {
                 $scope.successFlag = true;
                 $scope.failureFlag = false;
                 if($scope.contentMeta.mimeType == 'application/vnd.ekstep.content-collection'){
                     if(!org.ekstep.services.stateService.state.dialCodes){
-                        org.ekstep.services.stateService.create('dialCodes');
+                        org.ekstep.services.stateService.create('dialCodeMap');
                     }
-                    org.ekstep.services.stateService.setState('dialCodes',$scope.config.data.data.id || $scope.config.contentId,this.dialCode);
-                console.log('getState..', org.ekstep.services.stateService.getState('dialCodes'));
+                    org.ekstep.services.stateService.setState('dialCodeMap',$scope.config.data.data.id || $scope.config.contentId,this.dialCode);
                 }
             } else {
                 $scope.failureFlag = true;

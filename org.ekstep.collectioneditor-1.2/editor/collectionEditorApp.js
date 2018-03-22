@@ -267,11 +267,16 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 org.ekstep.services.collectionService.fromCollection(res.data.result.content);
                 $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
                 $scope.showsuggestedContent = $scope.sidebarPages.length > 0 ? true : false;
-                var framework = ecEditor.getContext('framework') || org.ekstep.services.collectionService.framework;
-                ecEditor.getService('meta').getCategorys(framework, function(cateerr, cateresp) {
-                    if (!cateerr) {
-                        _.forEach(cateresp.data.result.framework.categories, function(category){
-                            org.ekstep.services.collectionService.categoryList[category.name] = category;
+                var channel = ecEditor.getContext('channel');
+                var reqObj = {
+                    "request": {
+                        "search": {}
+                    }
+                };
+                ecEditor.getService('dialcode').getAllDialCodes(channel, reqObj, function(dialerr, dialrep) {
+                    if (!dialerr) {
+                        _.forEach(dialrep.data.result.dialcodes, function(dialcodeData){
+                            org.ekstep.services.collectionService.dialcodeList.push(dialcodeData.identifier);
                         });
                         $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
                         $scope.$safeApply();
