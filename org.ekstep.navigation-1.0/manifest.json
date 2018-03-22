@@ -27,17 +27,5 @@
   "icon": "assets/icon.png",
   "languages": ["English"],
   "categories": [""],
-  "keywords": [""],
-  "dependencies": [
-    {
-      "type": "js",
-      "src": "renderer/controller/navigation_ctrl.js",
-      "scope": "all"
-    },
-    {
-      "type": "js",
-      "src": "renderer/templates/navigation.html",
-      "scope": "all"
-    }
-  ]
+  "keywords": [""]
 }
