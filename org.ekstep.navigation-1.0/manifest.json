@@ -20,12 +20,12 @@
     {
       "type": "js",
       "src": "renderer/controller/navigation_ctrl.js",
-      "scope": "renderer"
+      "scope": "all"
     },
     {
       "type": "js",
       "src": "renderer/templates/navigation.html",
-      "scope": "renderer"
+      "scope": "all"
     }
   ]
 }
