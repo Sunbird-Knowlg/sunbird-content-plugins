@@ -69,7 +69,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
                     instance.renderForm({ resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config })
                 } else {
                     console.error('Fails to render', error)
-                }   
+                }
 
             })
         } else {
@@ -227,12 +227,16 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      * @example                 - {resourceBundle:{},framework:{},config:{}}
      */
     renderForm: function(config) {
+        var instance = this;
         this.resourceBundle = config.resourceBundle
         this.framework = config.framework
         this.config = config.formConfig
         this.form = this.mapObject(this.config.fields, this.framework.categories)
         this.loadTemplate(this.config.templateName);
-        this.showForm()
+        setTimeout(function() {
+            instance.showForm()
+        }, 100)
+
     },
 
     /**
@@ -256,21 +260,26 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     },
 
     /**
-     * @description
+     * @description             - which is used to map the response
+     * @param {String} type     - Should be subType @example(Textbook,course, assesment)
+     * @param {String} action   - Defines the name of the action @example(review, save)
      */
     mapResponse: function(type, action, value) {
         this.mappedResponse[type + '_' + action] = value;
     },
 
     /**
-     * @description
+     * @description            - Which defines is configuration is already mapped in the local object or not    
+     * @return     {Boolean}
      */
     isConfigurationsExists: function(type, action) {
         return this.mappedResponse[type + '_' + action] ? true : false
     },
 
     /**
-     * @description
+     * @description            - Which returns the mapped response object
+     * @param {String} type     - Should be subType @example(Textbook,course, assesment)
+     * @param {String} action   - Defines the name of the action @example(review, save)       -
      */
     getMappedResponse: function(type, action) {
         return this.mappedResponse[type + '_' + action]
@@ -280,4 +289,4 @@ org.ekstep.contenteditor.metadataPlugin.extend({
 
 })
 
-// # sourceURL=sunbirdmetadataplugin.js
+//# sourceURL=sunbirdMetadata.js
