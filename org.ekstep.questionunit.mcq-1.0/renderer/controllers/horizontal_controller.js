@@ -105,8 +105,8 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
         var queConfig = JSON.parse(qConfig);
         $scope.isShuffleOptions = queConfig.isShuffleOption;
 
-        if($scope.isShuffleOptions){
-           questionData.options =  _.shuffle(questionData.options);
+        if ($scope.isShuffleOptions) {
+            questionData.options = _.shuffle(questionData.options);
         }
 
         var qState = ctrlScope.question._currentQuestionState;
@@ -114,10 +114,8 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
             ctrlScope.selectedIndex = qState.val;
         }
         if (qState && qState.options) {
-           questionData.options = qState.options;
+            questionData.options = qState.options;
         }
-
-        
         ctrlScope.questionObj = questionData;
         ctrlScope.questionObj.topOptions = [];
         ctrlScope.questionObj.bottomOptions = [];
@@ -132,7 +130,12 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
         })
         ctrlScope.showTemplate = true;
         ctrlScope.questionObj.questionConfig = JSON.parse(qConfig);
-        $scope.isShuffleOptions
+        var state = {
+            val: ctrlScope.selectedIndex,
+            options: questionData.options
+        }
+        EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
+
         ctrlScope.safeApply();
     }
 
@@ -159,7 +162,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
         $scope.selectedAns = val.isCorrect;
         var state = {
             val: $scope.selectedIndex,
-             options: $scope.questionObj.options
+            options: $scope.questionObj.options
         }
         $scope.generateItemResponse(val, index);
         EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
