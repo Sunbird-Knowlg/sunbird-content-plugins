@@ -5,7 +5,6 @@
   line-height: 2em;
   width: 80%;
   margin-top: 2%;
-  position: relative;
   display: grid;
 }
 
@@ -36,18 +35,18 @@ header.mtf-header {
   text-align: left;
   overflow: hidden;
   width: 100%;
-  display: table;
+  display: block;
   margin-top: 2%;
   height: 18vh;
 }
 
 .mtf-hori-option {
   cursor: pointer;
-  display: table-cell;
+  display: inline-block;
   text-align: center;
   vertical-align: middle;
   margin: 0;
-  width: 20%;
+  height: 100%;
 }
 
 .mtf-hori-ques-option {
@@ -68,6 +67,7 @@ header.mtf-header {
   background-color: #ede9e3;
   height: 100%;
   box-shadow: 0 0 10px #c8ccd0;
+  position: relative;
 }
 
 .mtf-hori-ques-text {
@@ -85,53 +85,31 @@ header.mtf-header {
   word-break: break-all;
 }
 
-.left{
-  float : left;
-  height:50%;
-  padding-bottom:3vh;
-}
-.vh36{
-  height: 42vh;
-}
-.mtf-ver-layout {
-  display: table;
-  height: 70vh;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-.mtf-ver-container {
-  display: inline-block;
-  height: 100%;
-  margin: 2% 0 0 0;
-  width: 33.33%;
-  padding: 0 3%;
-  overflow: hidden;
-}
-
-.mtf-ver-option {
-  margin: 0;
-  width: 100%;
+[ng-drag].dragging {
+  position: absolute;
   height: 18vh;
-  padding: 5% 0;
 }
 
-.mtf-ver-ques-option {
-  border: 1px solid #c8ccd0;
-  height: 100%;
-  cursor: pointer;
+.width20 {
+  width: 20%;
 }
 
-.mtf-ver-lhs-option {
-  border: 1px inset #c8ccd0;
-  height: 100%;
+.width25 {
+  width: 25%;
 }
 
-.mtfVerRhsOption {
-  border: 1px solid #c8ccd0;
-  background-color: #ede9e3;
-  height: 100%;
-  z-index: 3;
-  box-shadow: 0 0 10px #c8ccd0;
+.width33 {
+  width: 33.33%;
+}
+
+.width20 [ng-drag].dragging {
+  width: 18%;
+}
+
+.width25 [ng-drag].dragging {
+  width: 20%;
+}
+
+.width33 [ng-drag].dragging {
+  width: 28.33%;
 }
