@@ -279,7 +279,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                             $scope.$safeApply();
                             callback && callback(err, res);
                         }else{
-                            callback && callback('unable to fetch dialcodes!', cateresp);
+                            callback && callback('unable to fetch dialcodes!', dialrep);
                         }
                     });
                 }else{
