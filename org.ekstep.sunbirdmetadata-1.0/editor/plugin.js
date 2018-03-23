@@ -66,6 +66,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
                 if (res) {
                     instance.mapResponse(config.subType, config.action, { resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config.data.result.form.data })
                     instance.renderForm({ resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config.data.result.form.data })
+
                 } else {
                     console.error('Fails to render', error)
                 }
@@ -193,15 +194,14 @@ org.ekstep.contenteditor.metadataPlugin.extend({
                 // get the formConfigurations data
                 org.ekstep.services.configuration.getFormConfigurations({ request: request }, function(error, response) {
                     if (!error) callback(undefined, response)
-                    else throw 'Unable to fetch the form configurations.'
-                        //callback(undefined, window.formConfigurations)
+                    else callback(error, undefined)
                 })
             },
             framework: function(callback) {
                 // get the framworkData
                 ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(request.framework, function(error, response) {
                     if (!error) callback(undefined, response)
-                    else throw 'Unable to fetch the framework data.'
+                    else callback(error, undefined)
                 })
             },
             resourceBundle: function(callback) {
@@ -210,6 +210,13 @@ org.ekstep.contenteditor.metadataPlugin.extend({
             }
         }, function(error, response) {
             // results is now equals to: {config: {}, framework: {}, resourceBundle:{}}
+            if (error) {
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'Unable to open form!',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
+            }
             callback(error, response)
         })
     },
@@ -301,6 +308,4 @@ org.ekstep.contenteditor.metadataPlugin.extend({
 
 })
 
-//# sourceURL=sunbirdMetadata.js
-//# sourceURL=sunbirdMetadata.js
 //# sourceURL=sunbirdMetadata.js
