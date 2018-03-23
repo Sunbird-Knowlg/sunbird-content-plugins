@@ -5,6 +5,8 @@
 var formApp = angular.module('org.ekstep.metadataform', ['ngTagsInput']);
 
 formApp.directive('keywords', function() {
+    const manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.metadata");
+
     var keywordController = ['$scope', '$controller', function($scope, $controller) {
         $scope.contentMeta = $scope.$parent.$parent.$parent.contentMeta;
         $scope.fieldConfig = $scope.config;
@@ -77,7 +79,7 @@ formApp.directive('keywords', function() {
     }]
     return {
         restrict: "EA",
-        templateUrl: ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", "editor/directives/keywords/template.html"),
+        templateUrl: ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/directives/keywords/template.html"),
         controller: keywordController,
         transclude: true,
         scope: {

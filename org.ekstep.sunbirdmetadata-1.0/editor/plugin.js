@@ -70,14 +70,16 @@ org.ekstep.contenteditor.metadataPlugin.extend({
             this.getConfigurations(config, function(error, res) {
                 if (res) {
                     instance.mapResponse(config.subType, config.action, { resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config.data.result.form.data })
-                    instance.renderForm({ resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config.data.result.form.data })
+                    instance.renderForm(config.popup, { resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config.data.result.form.data })
                 } else {
                     console.error('Fails to render', error)
                 }
 
             })
         } else {
-            instance.showForm(config.popup);
+            config.popup ? instance.showForm() : this.loadTemplate(instance.getTemplate(), function(templatePath, controller) {
+                ecEditor.dispatchEvent("editor:template:loaded", { "templatePath": templatePath })
+            })
         }
     },
 
@@ -246,16 +248,15 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      *
      * @example                 - {resourceBundle:{},framework:{},config:{}}
      */
-    renderForm: function(config) {
+    renderForm: function(isPopup, config) {
         var instance = this;
         this.resourceBundle = config.resourceBundle
         this.framework = config.framework
         this.config = config.formConfig
         this.form = this.mapObject(this.config.fields, this.framework.categories)
-        this.loadTemplate(this.config.templateName);
-        setTimeout(function() {
-            instance.showForm(config.popup);
-        }, 1000)
+        this.loadTemplate(this.config.templateName, function(templatePath) {
+            isPopup ? instance.showForm() : ecEditor.dispatchEvent("editor:template:loaded", { "templatePath": templatePath })
+        })
 
     },
 

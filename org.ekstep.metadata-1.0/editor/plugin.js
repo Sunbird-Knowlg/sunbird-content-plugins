@@ -45,54 +45,31 @@ org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.ex
      * 
      * @event          - 'org.ekstep.editcontentmeta:showpopup'          
      */
-    showForm: function(isPopup) {
+    showForm: function() {
         var instance = this;
-        if (isPopup) {
-            ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
-                template: 'metadataTemplate',
-                controller: 'metadataForm',
-                controllerAs: '$ctrl',
-                resolve: {
-                    'configurations': function() {
-                        return {
-                            "fields": instance.getFormFields(),
-                            "template": instance.getTemplate() || instance.DEFAULT_TEMPLATE_NAME
-                        };
-                    },
-
-                },
-                width: 900,
-                showClose: false
-            });
-        } else {
-            console.log("Embed the form", isPopup);
-            instance.registerMetapage(instance.getTemplate());
-
-            // render the form
-        }
+        ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
+            template: 'metadataTemplate',
+            controller: 'metadataForm',
+            controllerAs: '$ctrl',
+            width: 900,
+            showClose: false
+        });
     },
-
     /**
      * 
      * @param {String} templateName  - Name of the template
      * 
      * @description - Which loads the template 
      */
-    loadTemplate: function(templateName) {
-        if (!templateName) {
-            templateName = this.DEFAULT_TEMPLATE_NAME
-        }
+    loadTemplate: function(templateName, callback) {
+        !templateName && (templateName = this.DEFAULT_TEMPLATE_NAME)
         var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.metadata");
         var templatePath = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/templates/" + templateName + ".html");
         var controllerPath = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/controller.js");
-        ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath);
+        ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath).then(function() {
+            if (callback) callback(templatePath, controllerPath)
+        });
     },
-
-
-    /**
-     * 
-     */
-    registerMetapage: function(template) { /*Metapage register*/ },
 
     /**
      * @description

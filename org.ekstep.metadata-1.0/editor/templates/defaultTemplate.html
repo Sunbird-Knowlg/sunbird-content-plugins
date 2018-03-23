@@ -10,7 +10,7 @@
     DynamicLayout Support any kind of input Types
 
 -->
-<script type="text/ng-template" ng-app="org.ekstep.metadataform" ng-controller="metadataform as $ctrl" id="metadataTemplate">
+<script type="text/ng-template" ng-app="org.ekstep.metadataform" ng-controller="metadataForm as $ctrl" id="metadataTemplate">
     <div class="ui modal active" id="meta-modal">
         <div class="header">
             <div class="ui two column grid">
@@ -139,8 +139,7 @@
                                     </div>
                                     <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code].length && fixedField.required), 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="(dynamicField.inputType=='dialcode'
                                     && dynamicField.visible) " ng-required="{{dynamicField.required}} ">
-                                        <label>{{dynamicField.label}}</label>
-                                        <dial-code-units></dial-code-units>
+                                        <dial-code></dial-code>
                                     </div>
                                 </div>
                             </div>

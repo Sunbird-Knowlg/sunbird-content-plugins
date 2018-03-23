@@ -4,28 +4,13 @@
  * @module          - 'org.ekstep.metadataform'
  */
 
-angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scope', 'configurations', function($scope, configurations) {
+angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scope', function($scope) {
 
-    /**
-     * @property        - Form configurations which should contains the 'framework, config, resourceBundle' information
-     */
-    $scope.fields = configurations.fields;
-
-
-    /**
-     * 
-     */
-    $scope.tempalteName = configurations.template;
 
     /**
      * @property        - Which defines is form is submitted or not.
      */
     $scope.isSubmit = false;
-
-    /**
-     * @property        - Plugin manifest object
-     */
-    $scope.manifest = { id: "org.ekstep.metadata", ver: "1.0" };
 
     /**
      * @property        - Which holds the category List values 
@@ -43,6 +28,21 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @property       - Default error message for the fields
      */
     $scope.DEFAULT_ERROR_MESSAGE = 'Invalid Input'
+
+    /**
+     * @property        - Form configurations which should contains the 'framework, config, resourceBundle' information
+     */
+    $scope.fields = undefined;
+
+    /**
+     * @property
+     */
+    $scope.tempalteName = undefined;
+
+    /**
+     * 
+     */
+    $scope.manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.metadata");
 
 
     /**
@@ -319,6 +319,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.init = function() {
         ecEditor.addEventListener('editor:form:change', $scope.onConfigChange, $scope);
+        $scope.fields = org.ekstep.pluginframework.pluginManager.pluginObjs['org.ekstep.sunbirdmetadata'].getFormFields();
+        $scope.tempalteName = org.ekstep.pluginframework.pluginManager.pluginObjs['org.ekstep.sunbirdmetadata'].getTemplate() || 'defaultTemplate';
+
         $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
         $scope.originalContentMeta = _.clone($scope.contentMeta);
         var layoutConfigurations = $scope.getLayoutConfigurations();
@@ -342,5 +345,4 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
 
 }]);
 
-//# sourceURL=metadataController.js
 //# sourceURL=metadataController.js
