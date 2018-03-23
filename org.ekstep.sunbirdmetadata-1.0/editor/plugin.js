@@ -73,7 +73,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
 
             })
         } else {
-            instance.renderForm(instance.getMappedResponse(config.subType, config.action))
+            instance.showForm();
         }
     },
 
