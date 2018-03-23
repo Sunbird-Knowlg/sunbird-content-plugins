@@ -749,8 +749,11 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
   $scope.showEventListener = function(event) {
     var ctrlScope = angular.element('#mtf-renderer').scope();
     ctrlScope.question = event.target;
+    $scope.questionObj123 = ctrlScope.question;
     var qData = ctrlScope.question._currentQuestion.data.__cdata || ctrlScope.question._currentQuestion.data;
     var questionData = JSON.parse(qData);
+    var ps = $scope.question._currentQuestion.config.__cdata || $scope.question._currentQuestion.config;
+    $scope.maxScore = JSON.parse(ps);
     var qState = ctrlScope.question._currentQuestionState;
     var qConfig = ctrlScope.question._currentQuestion.config;
     ctrlScope.questionObj = questionData;
@@ -798,41 +801,69 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
   }
 
   $scope.evaluate = function(callback) {
+    //console.log($scope.questionObj123);
     var correctAnswer = true;
     var stateArray = [];
     var ctrlScope = angular.element('#mtf-renderer').scope();
+    // Calculate partial score
+    var tempCount = 0;
     for (var i = 0; i < ctrlScope.questionObj.option.optionsLHS.length; i++) {
       stateArray.push($scope.droppableObjects[i]);
       if ($scope.droppableObjects[i].mapIndex != ctrlScope.questionObj.option.optionsLHS[i].index) {
         correctAnswer = false;
+      }else{
+        tempCount++;
       }
     }
+ 
+    var partialScore = (tempCount/ctrlScope.questionObj.option.optionsLHS.length) * $scope.maxScore.max_score;
+
     var result = {
       eval: correctAnswer,
       state: {
         val: stateArray
-      }
+      },
+      partial_score: partialScore
     }
+    $scope.generateItemResponse(stateArray);
     if (_.isFunction(callback)) {
       callback(result);
     }
     EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
     //commented because when feedback popup shown its becaome null
     //ctrlScope.selectedIndex = null;
+    $scope.telemetryAssess(partialScore);
   }
-  $scope.generateItemResponse = function(val, index) {
+  $scope.generateItemResponse = function(answer) {
     var edata = {
       "target": {
         "id": $scope.pluginInstance._manifest.id ? $scope.pluginInstance._manifest.id : "",
         "ver": $scope.pluginInstance._manifest.ver ? $scope.pluginInstance._manifest.ver : "1.0",
         "type": $scope.pluginInstance._manifest.type ? $scope.pluginInstance._manifest.type : "plugin"
       },
-      "type": "CHOOSE",
-      "values": [{ index: val.text }]
+      "type": "MATCH",
+      "values": answer
     }
     TelemetryService.itemResponse(edata);
   }
-
+  $scope.telemetryAssess = function(pScore){
+    var ctrlScope = angular.element('#mtf-renderer').scope();
+    var question = {
+      "id": "", // unique assessment question id. its an required property.
+      "maxscore":"", // user defined score to this assessment/question.
+      "desc": "short description",
+      "title": "title"
+    };
+    var eData = {
+      "item": ctrlScope.questionObj, // Required. Question Data
+      "index": "", // Optional. Index of the question within a content.
+      "pass": pScore == $scope.maxScore.max_score ? "Yes" : "No", // Required. Yes, No. This is case-sensitive. default value: No.
+      "score": pScore, // Required. Evaluated score (Integer or decimal) on answer(between 0 to 1), default is 1 if pass=YES or 0 if pass=NO. 
+      "resvalues": [{"id":"value"}], // Required. Array of key-value pairs that represent child answer (result of this assessment)
+      "duration":  1// Required. time taken (decimal number) for this assessment in seconds
+    };
+    TelemetryService.assess(eData);
+  }
   $scope.telemetry = function(event) {
     TelemetryService.interact("TOUCH", event.target.id, "TOUCH", {
       stageId: Renderer.theme._currentStage

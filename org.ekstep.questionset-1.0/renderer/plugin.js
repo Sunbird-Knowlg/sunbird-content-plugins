@@ -118,7 +118,14 @@ Plugin.extend({
             // Mark the question as rendered
             this._currentQuestion = question;
             this.setRendered(question);
-
+            // // Telemetry Assess start
+            // var qConfig = JSON.parse(instance._currentQuestion.config);
+            // var subject = qConfig.metadata.language;
+            // var qLevel = "";
+            // var data = JSON.parse(instance._currentQuestion.data);
+            // debugger;
+            // this.assessStartEvent = TelemetryService.assess(instance._currentQuestion.id, subject, qLevel, data).start();
+            // debugger;
             // Fetch the question state if it was already rendered before
             this._currentQuestionState = this.getQuestionState(question.id);
             this.loadModules(question, function () {
@@ -159,6 +166,7 @@ Plugin.extend({
         EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ":evaluate", function (result) {
             if (instance._questionSetConfig.show_feedback == true) {
                 // Display feedback popup (tryagain or goodjob)
+                //alert("Question score-->"+result.partial_score);
                 instance.displayFeedback(result.eval);
 
             } else {
