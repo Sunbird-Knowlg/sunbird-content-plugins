@@ -1,0 +1,24 @@
+<div class="field">
+    <label>Dial code &nbsp; &nbsp;<a ng-show="editFlag" ng-click="editDialCode()" style="cursor:pointer">Edit</a>
+        <span ng-show="!editFlag" style="background-color: transparent;float:right">{{dialCode.length || minLength}}/{{maxLength}}</span>
+    </label>
+    <div class="ui action icons input" style="align-items: center;">
+        <input ng-show="!editFlag" class="dialCode" type="text" placeholder="Enter code here" ng-model="dialCode" maxlength="6" ng-disabled="false">
+        <div ng-show="editFlag" class="ui action right icon input">
+            <div class="ui action right icon">
+                {{dialCode}}
+                <i ng-show="status == 'success'" style="font-size:17px" class="small green check icon"></i>
+                <i ng-show="status == 'failure'" style="font-size:17px" class="small red remove icon"></i>
+            </div>
+        </div>
+        <div ng-show="dialCode.length == maxLength && !editFlag" ng-click="clearDialCode()" style="cursor:pointer">
+            <i class="large red remove circle icon"></i>
+        </div>
+        <div ng-show="dialCode.length == maxLength && !editFlag" ng-click="validateDialCode()" style="cursor:pointer">
+            <i class="large blue check circle icon"></i>
+        </div>
+    </div>
+    <div class="ui pointing red basic label" ng-show="errorMessage">
+        {{errorMessage}}
+    </div>
+</div>
