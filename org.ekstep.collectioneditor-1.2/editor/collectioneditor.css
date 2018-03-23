@@ -65,8 +65,15 @@ body {
 }
 
 #collection-tree {
-    height: calc(100% - 30px);
     overflow: auto;
+}
+
+#collection-tree.collection-tree-height-without-footer{
+    height: 100%;
+}
+
+#collection-tree.collection-tree-height-with-footer{
+    height: calc(100% - 30px);
 }
 
 #collection-tree span {
@@ -652,6 +659,10 @@ switched to Github for the search after API changes
 .content-rightheader {
     float: right;
     background-color: transparent !important;
+}
+
+ul.fancytree-container > li > ul{
+    padding-left: 0px !important
 }
 
 #mainBody .editor-body {

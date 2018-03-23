@@ -54,6 +54,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 if (res && res.data && res.data.responseCode == "OK") {
                     $scope.lastSaved = Date.now();
                     if ($scope.editorEnv == "COLLECTION") {
+                        if(org.ekstep.services.stateService.state.dialCodeMap)
+                            $scope.dialcodeLink(res);
                         $scope.hideReviewBtn = false;
                         $scope.resolveReviewBtnStatus();
                     }
@@ -66,6 +68,27 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             }
         });
     };
+
+    $scope.dialcodeLink = function(res, dialcodeMap){
+        var mapArr = [];
+        ecEditor._.forIn(res.data.result.identifiers, function(identifier, uuid) {
+            mapArr.push({ "identifier": identifier, "dialcode":  org.ekstep.services.stateService.state.dialCodeMap[uuid]});
+        });
+        var request = {
+            "request": {
+                "content": mapArr
+            }
+        };
+        ecEditor.getService('dialcode').dialcodeLink(request, function(err, rep) {
+            if(!err){
+                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                    title: 'DIAL code linking successfully!',
+                    position: 'topCenter',
+                    icon: 'fa fa-check-circle'
+                });
+            }
+        });
+    }
 
     $scope.previewContent = function(fromBeginning) {
         ecEditor.dispatchEvent('org.ekstep.contenteditor:preview', { fromBeginning: fromBeginning });
