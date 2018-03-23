@@ -24,7 +24,7 @@ angular.module('createquestionapp', [])
     }
 
     $scope.$parent.$on('question:form:val', function(event) {
-      var regexForAns = /(?:^|\s)\[\[(.*?)(?:\]\]|$)/g;
+      var regexForAns = /(?:^|)\[\[(.*?)(?:\]\]|$)/g;
       var index = 0;
       $scope.ftbFormData.answer = $scope.getMatches($scope.ftbFormData.question.text, regexForAns, 1);
       if ($scope.formValidation()) {
