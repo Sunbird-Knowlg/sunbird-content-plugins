@@ -54,7 +54,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             }
             $scope.metadataCloneObj = _.clone($scope.content);
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
-            $scope.editMode = $scope.editable && (($scope.mode == "Edit") ? true : false);
+            $scope.editMode = $scope.editable;
             if (activeNode.data && activeNode.data.root) ecEditor.dispatchEvent("content:title:update", $scope.content.name);
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
             $scope.submitted = true;
@@ -116,7 +116,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             var cache = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId];            
             $scope.nodeType = data.data.objectType;
             $scope.content = {};
-            $scope.editMode = ($scope.mode == "Edit") ? true : false;
+            $scope.editMode = true;
             $scope.newNode = false;
             $scope.tokenMode = 'edit';
             var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
