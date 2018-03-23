@@ -823,7 +823,7 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
       state: {
         val: stateArray
       },
-      partial_score: partialScore
+      score: partialScore
     }
     $scope.generateItemResponse(stateArray);
     if (_.isFunction(callback)) {

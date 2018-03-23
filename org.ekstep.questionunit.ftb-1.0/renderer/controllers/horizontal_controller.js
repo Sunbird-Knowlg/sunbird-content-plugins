@@ -190,7 +190,7 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
       state: {
         val: answerArray
       },
-      partial_score: partialScore
+      score: partialScore
     }
     if (_.isFunction(callback)) {
       //$scope.removeEvents();
