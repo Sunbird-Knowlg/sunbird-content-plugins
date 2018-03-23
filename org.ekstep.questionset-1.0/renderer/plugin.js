@@ -107,6 +107,7 @@ Plugin.extend({
             var ins = PluginManager.invoke(question.pluginId, question, this._stage, this._stage, this._theme);
 
             // Mark the question as rendered
+            this._currentQuestion = question;
             this.setRendered(question);
             setTimeout(function () {
                 Renderer.update = true;
@@ -123,7 +124,7 @@ Plugin.extend({
             this.loadModules(question, function () {
                 setTimeout(function () {
                     EkstepRendererAPI.dispatchEvent(question.pluginId + ':show', instance);
-                    // instance.setupNavigation();
+                    instance.setupNavigation();
                 }, 100);
             });
         }
