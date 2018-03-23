@@ -70,16 +70,21 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.dialcodeLink = function(res, dialcodeMap){
+        var dialcodeMap = org.ekstep.services.stateService.state.dialCodeMap;
         var mapArr = [];
-        ecEditor._.forIn(res.data.result.identifiers, function(identifier, uuid) {
-            mapArr.push({ "identifier": identifier, "dialcode":  org.ekstep.services.stateService.state.dialCodeMap[uuid]});
+        ecEditor._.forEach(dialcodeMap, function(value, key){
+            if(_.has(res.data.result.identifiers, key)){   
+                mapArr.push({ "identifier": res.data.result.identifiers[key], "dialcode": value});
+            }else{
+                mapArr.push({ "identifier": key, "dialcode": value});
+            }
         });
         var request = {
             "request": {
                 "content": mapArr
             }
         };
-        ecEditor.getService('dialcode').dialcodeLink(request, function(err, rep) {
+        ecEditor.getService('dialcode').dialcodeLink(ecEditor.getContext('channel') ,request, function(err, rep) {
             if(!err){
                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                     title: 'DIAL code linking successfully!',
