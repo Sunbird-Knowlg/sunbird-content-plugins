@@ -1,8 +1,12 @@
 <div class="field">
-    <label>Dial code &nbsp; &nbsp;<a ng-show="editFlag" ng-click="editDialCode()" style="cursor:pointer">Edit</a>
+    <label>Dial code
+        <span class="ui icon" data-tooltip="Digital Infrastructure for Augmented Learning">
+            <i style="cursor: pointer;" class="large blue question circle icon link"></i>
+        </span>
+        <a ng-show="editFlag && mode == 'Edit'" ng-click="editDialCode()" style="cursor:pointer">Edit</a>
         <span ng-show="!editFlag" style="background-color: transparent;float:right">{{dialCode.length || minLength}}/{{maxLength}}</span>
     </label>
-    <div class="ui action icons input" style="align-items: center;">
+    <div class="ui action right icon input" ng-class="mode == 'Edit' ? '' : 'disabled'" style="align-items: center;">
         <input ng-show="!editFlag" class="dialCode" type="text" placeholder="Enter code here" ng-model="dialCode" maxlength="6" ng-disabled="false">
         <div ng-show="editFlag" class="ui action right icon input">
             <div class="ui action right icon">

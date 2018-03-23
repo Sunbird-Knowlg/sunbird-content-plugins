@@ -23,7 +23,7 @@ org.ekstep.collectioneditor.basePlugin.extend({
         var controllerPath = org.ekstep.contenteditor.api.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/lessonBrowserApp.js");
         org.ekstep.contenteditor.api.getService('popup').loadNgModules(templatePath, controllerPath);
         ecEditor.addEventListener('editor:invoke:viewall', this.initPreview, this)
-        this.registerRepo(this.getEkstepRepo());
+       // this.registerRepo(this.getEkstepRepo());
     },
 
     registerRepo: function(repo) {
