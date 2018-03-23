@@ -4,6 +4,8 @@
  */
 
 formApp.directive('concetpselector', function() {
+    const manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.metadata");
+
     var conceptController = ['$scope', '$controller', function($scope, $controller) {
         var selectedConcepts = [];
         $scope.contentMeta = $scope.$parent.$parent.$parent.contentMeta;
@@ -22,6 +24,7 @@ formApp.directive('concetpselector', function() {
                 element: 'metaform-concept',
                 selectedConcepts: selectedConcepts,
                 callback: function(data) {
+                    console.log("Length", data)
                     $scope.contentMeta.conceptData = '(' + data.length + ') concepts selected';
                     $scope.contentMeta.concepts = _.map(data, function(concept) {
                         return {
@@ -36,7 +39,7 @@ formApp.directive('concetpselector', function() {
     }]
     return {
         restrict: "EA",
-        templateUrl: ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", "editor/directives/conceptselector/template.html"),
+        templateUrl: ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/directives/conceptselector/template.html"),
         controller: conceptController,
         scope: {
             config: '='
@@ -45,4 +48,4 @@ formApp.directive('concetpselector', function() {
     };
 });
 
-//# sourceURL=conceptDirective.jssss
+//# sourceURL=conceptDirective.js

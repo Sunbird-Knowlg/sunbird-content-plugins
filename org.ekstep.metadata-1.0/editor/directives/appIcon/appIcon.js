@@ -5,6 +5,8 @@
 
 formApp.directive('appIcon', function() {
     const ASSETBROWSER_SHOW_EVENT = 'org.ekstep.assetbrowser:show';
+    const manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.metadata");
+
     var appIconController = ['$scope', '$controller', function($scope, $controller) {
         const DEFAUTL_APPICON = ecEditor.resolvePluginResource($scope.manifest.id, $scope.manifest.ver, "editor/directives/appIcon/assets/appIcon.png");
         $scope.contentMeta.appIcon = $scope.contentMeta.appIcon || DEFAUTL_APPICON;
@@ -30,7 +32,7 @@ formApp.directive('appIcon', function() {
     }]
     return {
         restrict: "EA",
-        templateUrl: ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", "editor/directives/appIcon/template.html"),
+        templateUrl: ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/directives/appIcon/template.html"),
         controller: appIconController
 
     };

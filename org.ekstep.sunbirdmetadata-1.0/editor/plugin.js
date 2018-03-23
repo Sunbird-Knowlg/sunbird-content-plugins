@@ -27,9 +27,8 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     config: {},
 
     /**
-     * 
+     * @property
      */
-
     mappedResponse: {},
 
     /**
@@ -37,6 +36,9 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      */
     eventMap: { savemeta: 'org.ekstep.contenteditor:save:meta', review: 'org.ekstep.contenteditor:review', save: 'org.ekstep.contenteditor:save' },
 
+    /**
+     * 
+     */
     options: {
         savingPopup: false,
         successPopup: true,
@@ -59,6 +61,9 @@ org.ekstep.contenteditor.metadataPlugin.extend({
 
     },
 
+    /**
+     * @description     
+     */
     invoke: function(event, config) {
         var instance = this;
         if (!this.isConfigurationsExists(config.subType, config.action)) {
@@ -66,14 +71,13 @@ org.ekstep.contenteditor.metadataPlugin.extend({
                 if (res) {
                     instance.mapResponse(config.subType, config.action, { resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config.data.result.form.data })
                     instance.renderForm({ resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config.data.result.form.data })
-
                 } else {
                     console.error('Fails to render', error)
                 }
 
             })
         } else {
-            instance.showForm();
+            instance.showForm(config.popup);
         }
     },
 
@@ -104,10 +108,10 @@ org.ekstep.contenteditor.metadataPlugin.extend({
             }
             switch (this.config.action) {
                 case 'review':
-                    this.reviewFn(data.formData.metaData, callbackFn)
+                    this.reviewContent(data.formData.metaData, callbackFn)
                     break
                 case 'save':
-                    this.saveMetaFn(data.formData.metaData, callbackFn)
+                    this.saveMeta(data.formData.metaData, callbackFn)
                     break
                 default:
                     console.error(this.config.action + 'Action wont support ')
@@ -124,7 +128,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      *
      * @param {Fn} callbackFn       - Callback function
      */
-    reviewFn: function(data, callbackFn) {
+    reviewContent: function(data, callbackFn) {
         var instance = this
         var reviewCallBackFn = function(err, res) {
             if (!err) {
@@ -134,7 +138,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
                 callbackFn(err)
             }
         }
-        this.saveContentFn(data, reviewCallBackFn)
+        this.saveContent(data, reviewCallBackFn)
     },
 
     /**
@@ -144,7 +148,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      *
      * @param {Fn} callbackFn       - Callback function
      */
-    saveMetaFn: function(contentMeta, callbackFn) {
+    saveMeta: function(contentMeta, callbackFn) {
         this.options.contentMeta = contentMeta
         this.options.callback = callbackFn
         ecEditor.dispatchEvent(this.eventMap['savemeta'], this.options)
@@ -153,17 +157,13 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     /**
      * @description     -
      */
-    saveContentFn: function(contentMeta, callbackFn) {
+    saveContent: function(contentMeta, callbackFn) {
         switch (contentMeta.mimeType) {
             case 'application/vnd.ekstep.content-collection':
-                this.options.contentMeta = contentMeta
-                this.options.callback = callbackFn
-                ecEditor.dispatchEvent(this.eventMap['save'], this.options)
-                break
             case 'application/vnd.ekstep.ecml-archive':
                 this.options.contentMeta = contentMeta
                 this.options.callback = callbackFn
-                ecEditor.dispatchEvent(this.eventMap['save'], this.options);
+                ecEditor.dispatchEvent(this.eventMap['save'], this.options)
                 break
             default:
                 this.options = contentMeta
@@ -195,6 +195,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
                 org.ekstep.services.configuration.getFormConfigurations({ request: request }, function(error, response) {
                     if (!error) callback(undefined, response)
                     else callback(error, undefined)
+                        //callback(undefined, window.formConfigurations)
                 })
             },
             framework: function(callback) {
@@ -253,7 +254,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
         this.form = this.mapObject(this.config.fields, this.framework.categories)
         this.loadTemplate(this.config.templateName);
         setTimeout(function() {
-            instance.showForm()
+            instance.showForm(config.popup);
         }, 1000)
 
     },
@@ -303,8 +304,6 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     getMappedResponse: function(type, action) {
         return this.mappedResponse[type + '_' + action]
     }
-
-
 
 })
 

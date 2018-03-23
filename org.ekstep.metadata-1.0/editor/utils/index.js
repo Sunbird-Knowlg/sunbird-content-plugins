@@ -50,13 +50,13 @@ function getUpdateDataType(selectedFields, configurations) {
  * 
  * @param {*} data 
  */
-function logTelemetry(data) {
+function logTelemetry(data, plugin) {
     ecEditor.getService('telemetry').interact({
         "type": data.type || "click",
         "subtype": data.subtype,
         "target": data.target,
-        "pluginid": $scope.manifest.id,
-        "pluginver": $scope.manifest.ver,
+        "pluginid": plugin.id,
+        "pluginver": plugin.ver,
         "objectid": data.objectid,
         "targetid": data.targetid,
         "stage": data.stage

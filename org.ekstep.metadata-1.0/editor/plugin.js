@@ -4,6 +4,7 @@
  * @since 1.0
  * @author Kartheek Palla And Manjunath Davanam
  */
+
 org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.extend({
 
     /**
@@ -11,12 +12,16 @@ org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.ex
      */
     DEFAULT_TEMPLATE_NAME: 'defaultTemplate',
 
+
+
     /**
      * @description - Initialization of the metdata form plugin.
      *
      * @event 'org.ekstep.editcontentmeta:showpopup'
      */
-    initialize: function() {},
+    initialize: function() {
+        this.manifest = manifest;
+    },
 
     /**
      * TODO:
@@ -40,26 +45,31 @@ org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.ex
      * 
      * @event          - 'org.ekstep.editcontentmeta:showpopup'          
      */
-    showForm: function(event, data) {
+    showForm: function(isPopup) {
         var instance = this;
-        ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
-            template: 'metadataTemplate',
-            controller: 'metadataForm',
-            controllerAs: '$ctrl',
-            resolve: {
-                'configurations': function() {
-                    return {
-                        "fields": instance.getFormFields(),
-                        "template": instance.getTemplate() || instance.DEFAULT_TEMPLATE_NAME
-                    };
-
+        if (isPopup) {
+            ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
+                template: 'metadataTemplate',
+                controller: 'metadataForm',
+                controllerAs: '$ctrl',
+                resolve: {
+                    'configurations': function() {
+                        return {
+                            "fields": instance.getFormFields(),
+                            "template": instance.getTemplate() || instance.DEFAULT_TEMPLATE_NAME
+                        };
+                    },
 
                 },
+                width: 900,
+                showClose: false
+            });
+        } else {
+            console.log("Embed the form", isPopup);
+            instance.registerMetapage(instance.getTemplate());
 
-            },
-            width: 900,
-            showClose: false
-        });
+            // render the form
+        }
     },
 
     /**
@@ -72,10 +82,17 @@ org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.ex
         if (!templateName) {
             templateName = this.DEFAULT_TEMPLATE_NAME
         }
-        var templatePath = ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", "editor/templates/" + templateName + ".html");
-        var controllerPath = ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", "editor/controller.js");
+        var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.metadata");
+        var templatePath = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/templates/" + templateName + ".html");
+        var controllerPath = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/controller.js");
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath);
     },
+
+
+    /**
+     * 
+     */
+    registerMetapage: function(template) { /*Metapage register*/ },
 
     /**
      * @description
@@ -108,7 +125,7 @@ org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.ex
             })
         });
         return destination;
-    },
+    }
 
 
 });

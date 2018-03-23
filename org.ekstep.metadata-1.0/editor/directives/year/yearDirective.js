@@ -4,6 +4,8 @@
  */
 
 formApp.directive('year', function() {
+    const manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.metadata");
+
     var yearDropdownController = ['$scope', '$controller', function($scope, $controller) {
         $scope.years = [];
         $scope.contentMeta = $scope.$parent.$parent.$parent.contentMeta;
@@ -22,7 +24,7 @@ formApp.directive('year', function() {
     }]
     return {
         restrict: "EA",
-        templateUrl: ecEditor.resolvePluginResource("org.ekstep.metadata", "1.0", "editor/directives/year/template.html"),
+        templateUrl: ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/directives/year/template.html"),
         transclude: true,
         scope: {
             config: "="
