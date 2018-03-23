@@ -46,8 +46,8 @@
     {
       "id": "horizontalMCQ",
       "thumbnail": "editor/assets/mcq-horizontal.png",
-      "title": "Horizontal MCQ",
-      "disc": "Horizontal MCQ template",
+      "title": "Multiple Choice Question",
+      "disc": "Multiple choice items consist of a stem, the correct answer, keyed alternative, and distractors. The stem is the beginning part of the item that presents the item as a problem to be solved, a question asked of the respondent, or an incomplete statement to be completed, as well as any other relevant information.",
       "category": "MCQ",
       "editor":
       {
