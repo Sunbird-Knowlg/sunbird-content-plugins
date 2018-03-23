@@ -133,6 +133,7 @@
       ctrl.questionData.qcLevel = questionData1.data.config.metadata.qlevel;
       ctrl.questionData.templateType = questionData1.data.config.layout;
       ctrl.questionData.qcGrade = questionData1.data.config.metadata.gradeLevel;
+      ctrl.questionData.isShuffleOption = questionData1.data.config.isShuffleOption;
       ctrl.category = questionData.category;
       ctrl.Totalconcepts = questionData1.data.config.metadata.concepts.length; //_.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
       ctrl.selectedConceptsData = questionData1.data.config.metadata.concepts;
