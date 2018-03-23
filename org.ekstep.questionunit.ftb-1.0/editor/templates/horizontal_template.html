@@ -7,7 +7,7 @@
             <span>Enter the question</span>
           </div>
           <div class="outer-segment">
-            <div class="ui segments inner-segment" ng-class="{'cardBorder': $ctrl.focused, 'has-success-card':ftbForm.ftbQuestion.$valid, 'has-errorCard': submitted && (ftbForm.ftbQuestion.$error.required != true || ftbForm.ftbQuestion.$error.pattern !=true)}">
+            <div class="ui segments inner-segment" ng-class="{'cardBorder': $ctrl.focused, 'has-success-card':ftbForm.ftbQuestion.$valid, 'has-errorCard': submitted && (ftbForm.ftbQuestion.question.text.length == 0 || ftbForm.ftbQuestion.$error.pattern)}">
               <div class="ui segment">
                 <div class="ui grid">
                   <div class="eleven wide column">
