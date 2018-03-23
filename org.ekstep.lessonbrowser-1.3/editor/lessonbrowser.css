@@ -125,7 +125,7 @@
 }
 
 .ui.vertical .ui.list.filterOverflow {
-    overflow-y: hidden;
+    overflow-y: scroll;
     height: calc(100vh - 277px);
     padding: 6%;
     margin: 0%;
@@ -136,7 +136,7 @@
     display: none;
     border: 1px solid #D8DEE2;
     list-style: none;
-    padding-left: 1%;
+    padding-left: 0%;
     border-radius: 5px;
     margin-top: 2px;
     width: 300px;
@@ -145,14 +145,11 @@
     background: white;
     z-index: 1;
     cursor: pointer;
-    max-height: 62%;
-    overflow-y: scroll;
 }
 
 .searchResult {
-    padding: 1%;
-    font-size: 87%;
-    margin-left: -4%;
+    padding: 2%;
+    font-size: 14px;
     border-bottom: 1px solid #D8DEE2;
     word-break: break-word;
 }
@@ -199,6 +196,7 @@
 
 .searchResultMsg {
     font-size: 14px;
+    padding: 2%;
 }
 
 .resourceMetaImage {
@@ -331,7 +329,7 @@
 }
 
 .overLapAll {
-    z-index: 999;
+    z-index: 9999;
 }
 
 .checkBoxOverImage-top-right-corner {

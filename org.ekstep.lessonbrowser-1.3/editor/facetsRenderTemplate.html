@@ -8,7 +8,7 @@
             <div class="card" style="cursor:pointer" ng-repeat="lesson in $ctrl.facetsResponse.result.response.sections[sectionIndex].contents | limitTo:5  track by $index" in-view="lineInView($index, $inview, lesson, 'FacetList', $index)" in-view-options="{ throttle: 1000 }" ng-click="toggleSelectionLesson(lesson)">
                 <div class="image">
                     <img src="{{lesson.appIcon || $ctrl.defaultImage}}" class="resourceMetaImage ">
-                    <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{lesson.identifier}}' style="z-index:10">
+                    <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{lesson.identifier}}' style="z-index:12">
                         <input class="checkBox" type="checkbox" name="lessons[]">
                         <label></label>
                     </div>
