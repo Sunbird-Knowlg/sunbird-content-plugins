@@ -9,7 +9,6 @@
     display: grid;
 }
 
-
 .qc-mcqlayout {
     width: 100%;
     top: 2%;
@@ -232,15 +231,16 @@ audio.qc-option-audio-with-image {
 
 .qc-vertical-option-zoomin {
     width: 5%;
-    position: fixed;
+    position: initial;
     cursor: pointer;
+        float: left;
 }
 
 .qc-popup-close-button {
     position: absolute;
     right: -35px;
     color: white;
-    bottom: 90%;
+    bottom: 87%;
 }
 
 .qc-text-with-audio {
