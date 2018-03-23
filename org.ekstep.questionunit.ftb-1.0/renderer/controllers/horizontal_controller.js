@@ -81,7 +81,9 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
       $scope.setStateInput();
     }
     $scope.questionObj = questionData;
-    $scope.showTemplate = true;
+    $scope.showTemplate = true;    
+    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.ASSESS);
+
     $scope.safeApply();
   }
 
@@ -197,43 +199,13 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
       callback(result);
     }
     EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
-    $scope.generateItemResponse(telemetryAnsArr);
-    $scope.telemetryAssess(partialScore);
-  }
-  $scope.generateItemResponse = function(telemetryAnsArr) {
-    var edata = {
-      "target": {
-        "id": $scope.pluginInstance._manifest.id ? $scope.pluginInstance._manifest.id : "",
-        "ver": $scope.pluginInstance._manifest.ver ? $scope.pluginInstance._manifest.ver : "1.0",
-        "type": $scope.pluginInstance._manifest.type ? $scope.pluginInstance._manifest.type : "plugin"
-      },
-      "type": "INPUT",
-      "values": telemetryAnsArr
-    }
-    TelemetryService.itemResponse(edata);
+
+    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.RESPONSE, {"type": "INPUT", "values": telemetryAnsArr});
+    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.ASSESSEND, result);
   }
 
-  $scope.telemetry = function(event) {
-    TelemetryService.interact("TOUCH", event.target.id, "TOUCH", {
-      stageId: Renderer.theme._currentStage
-    });
-  }
-  $scope.telemetryAssess = function(pScore){
-    var question = {
-      "id": $scope.question._currentQuestion.id, // unique assessment question id. its an required property.
-      "maxscore": $scope.maxScore.max_score, // user defined score to this assessment/question.
-      "desc": $scope.maxScore.metadata.description,
-      "title": $scope.maxScore.metadata.title
-    };
-    var eData = {
-      "item": question, // Required. Question Data
-      "index": "", // Optional. Index of the question within a content.
-      "pass": pScore == $scope.maxScore.max_score ? "Yes" : "No", // Required. Yes, No. This is case-sensitive. default value: No.
-      "score": pScore, // Required. Evaluated score (Integer or decimal) on answer(between 0 to 1), default is 1 if pass=YES or 0 if pass=NO. 
-      "resvalues": [{"id":"value"}], // Required. Array of key-value pairs that represent child answer (result of this assessment)
-      "duration":  1// Required. time taken (decimal number) for this assessment in seconds
-    }
-    TelemetryService.assess(eData);
+  $scope.logTelemetryInteract = function(event) {
+    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.TOUCH, {type: QSTelemetryUtil.EVENT_TYPES.TOUCH, id: event.target.id});
   }
 });
 //# sourceURL=questionunitFtbRenderereTmpPlugin.js

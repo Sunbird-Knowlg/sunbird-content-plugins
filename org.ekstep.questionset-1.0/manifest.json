@@ -110,6 +110,10 @@
       {
           "type": "js",
           "src": "renderer/templates/questionset_template.html"
+      },
+      {
+          "type": "js",
+          "src": "renderer/util/telemetry_logger.js"
       }
     ]
   },

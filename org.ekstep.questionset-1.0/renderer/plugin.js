@@ -129,7 +129,10 @@ Plugin.extend({
             // Fetch the question state if it was already rendered before
             this._currentQuestionState = this.getQuestionState(question.id);
             this.loadModules(question, function () {
-                setTimeout(function () {
+                setTimeout(function () {                    
+                    // Set current question for telmetry to log events from question-unit
+                    QSTelemetryUtil.setQuestion(instance._currentQuestion, instance.getRenderedIndex());
+                    
                     EkstepRendererAPI.dispatchEvent(question.pluginId + ':show', instance);
                     instance.setupNavigation();
                 }, 100);
