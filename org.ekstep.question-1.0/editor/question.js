@@ -26,6 +26,7 @@
   ctrl.plugins = { 'concepts': 'org.ekstep.conceptselector:init' };
   ctrl.templatesType = ['Horizontal','Vertical','Grid'];
   ctrl.questionData.isShuffleOption = false;
+  ctrl.questionData.isPartialScore = true;
   ctrl.questionData.templateType = ctrl.templatesType[0];
   ctrl.refreshPreview = false;
   ctrl.noTemplatesFound = "";
@@ -132,6 +133,7 @@
       ctrl.questionData.questionTitle = questionData1.data.config.metadata.title;
       ctrl.questionData.qcLevel = questionData1.data.config.metadata.qlevel;
       ctrl.questionData.templateType = questionData1.data.config.layout;
+      ctrl.questionData.isPartialScore = questionData1.data.config.partial_scoring;
       ctrl.questionData.qcGrade = questionData1.data.config.metadata.gradeLevel;
       ctrl.questionData.isShuffleOption = questionData1.data.config.isShuffleOption;
       ctrl.category = questionData.category;
@@ -164,7 +166,7 @@
   ctrl.setPreviewData = function() {
     var confData = {};
     var qObj = {
-      "config": '{"metadata":{"title":"question title","description":"question description","language":"English"},"max_time":0,"max_score":1,"partial_scoring":false,"isShuffleOption":'+ctrl.questionData.isShuffleOption +',"layout":'+JSON.stringify(ctrl.questionData.templateType)+'}',
+      "config": '{"metadata":{"title":"question title","description":"question description","language":"English"},"max_time":0,"max_score":1,"partial_scoring":'+ctrl.questionData.isPartialScore +',"isShuffleOption":'+ctrl.questionData.isShuffleOption +',"layout":'+JSON.stringify(ctrl.questionData.templateType)+'}',
       "data": JSON.stringify(ctrl.questionCreationFormData),
       "id": "c943d0a907274471a0572e593eab49c2",
       "pluginId": ctrl.selectedTemplatePluginData.plugin.id,
@@ -314,7 +316,7 @@
       data.plugin = ctrl.selectedTemplatePluginData.plugin;
       data.data = ctrl.questionCreationFormData; //{"question":ctrl.questionCreationFormData.question.text,"options":ctrl.questionCreationFormData.options};   
       var metadataObj = { category: ctrl.category, title: ctrl.questionData.questionTitle, language: [ctrl.questionData.qcLanguage], qlevel: ctrl.questionData.qcLevel, gradeLevel: ctrl.questionData.qcGrade, concepts: ctrl.selectedConceptsData, description: ctrl.questionData.questionDesc, max_score: ctrl.questionData.questionMaxScore };
-      data.config = { "metadata": metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": false, "layout": ctrl.questionData.templateType, "isShuffleOption" : ctrl.questionData.isShuffleOption};
+      data.config = { "metadata": metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": ctrl.questionData.isPartialScore, "layout": ctrl.questionData.templateType, "isShuffleOption" : ctrl.questionData.isShuffleOption};
       data.media = ctrl.questionCreationFormData.media;
       questionFormData.data = data;
       var bodyData = '';

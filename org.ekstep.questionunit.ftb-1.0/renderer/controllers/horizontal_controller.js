@@ -9,6 +9,7 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     tempanswertext: "#tempanswertext"
 
   }
+  $scope.maxScore = 0;
   $scope.qcquestion = true;
   $scope.textboxtarget = {};
   $scope.qcblank = false;
@@ -69,6 +70,9 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     var gererateId = 0;
     var qData = $scope.question._currentQuestion.data.__cdata || $scope.question._currentQuestion.data;
     var questionData = JSON.parse(qData);
+    //$scope.maxScore = JSON.parse($scope.question._currentQuestion.config).max_score;
+    var ps = $scope.question._currentQuestion.config.__cdata || $scope.question._currentQuestion.config;
+    $scope.maxScore = JSON.parse(ps);
     $($scope.constant.ftbText).html(questionData.parsedQuestion.text);
     $($scope.constant.ftbContainerId).on('click', '.ans-field', $scope.doTextBoxHandle);
     var qState = $scope.question._currentQuestionState;
@@ -170,11 +174,23 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     if (_.isEqual(answerArray, $scope.questionObj.answer)) {
       correctAnswer = true;
     }
+
+    // Calculate partial score
+    var tempCount = 0;
+    _.each($scope.questionObj.answer, function(ans, index) {
+      if(ans == answerArray[index]){
+        tempCount++;
+      }
+    });
+
+    var partialScore = (tempCount/$scope.questionObj.answer.length) * $scope.maxScore.max_score;
+
     var result = {
       eval: correctAnswer,
       state: {
         val: answerArray
-      }
+      },
+      partial_score: partialScore
     }
     if (_.isFunction(callback)) {
       //$scope.removeEvents();
@@ -182,6 +198,7 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     }
     EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
     $scope.generateItemResponse(telemetryAnsArr);
+    $scope.telemetryAssess(partialScore);
   }
   $scope.generateItemResponse = function(telemetryAnsArr) {
     var edata = {
@@ -200,6 +217,23 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     TelemetryService.interact("TOUCH", event.target.id, "TOUCH", {
       stageId: Renderer.theme._currentStage
     });
+  }
+  $scope.telemetryAssess = function(pScore){
+    var question = {
+      "id": $scope.question._currentQuestion.id, // unique assessment question id. its an required property.
+      "maxscore": $scope.maxScore.max_score, // user defined score to this assessment/question.
+      "desc": $scope.maxScore.metadata.description,
+      "title": $scope.maxScore.metadata.title
+    };
+    var eData = {
+      "item": question, // Required. Question Data
+      "index": "", // Optional. Index of the question within a content.
+      "pass": pScore == $scope.maxScore.max_score ? "Yes" : "No", // Required. Yes, No. This is case-sensitive. default value: No.
+      "score": pScore, // Required. Evaluated score (Integer or decimal) on answer(between 0 to 1), default is 1 if pass=YES or 0 if pass=NO. 
+      "resvalues": [{"id":"value"}], // Required. Array of key-value pairs that represent child answer (result of this assessment)
+      "duration":  1// Required. time taken (decimal number) for this assessment in seconds
+    }
+    TelemetryService.assess(eData);
   }
 });
 //# sourceURL=questionunitFtbRenderereTmpPlugin.js

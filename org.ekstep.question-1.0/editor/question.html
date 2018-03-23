@@ -189,6 +189,16 @@
                 </div>
             </div>
           </div>
+          <div class="previewAreaHead" ng-show="$ctrl.selectedTemplatePluginData.plugin.id != 'org.ekstep.questionunit.mcq'">
+             <div class="preview-heading">
+              <h3 class="ui left floated previewHeading">Configuration</h3>
+            </div>
+            <div class="ui label qb-toggle-label">Partial Scoring </div>
+            <div class="ui fluid toggle checkbox verticalcenter">
+              <input type="checkbox" ng-model="$ctrl.questionData.isPartialScore">
+              <label>&nbsp;</label>
+          </div>
+          </div>
       </div>
     </div>
   </div>
