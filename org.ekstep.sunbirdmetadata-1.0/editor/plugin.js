@@ -60,13 +60,12 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     },
 
     invoke: function(event, config) {
-        console.log("fds")
         var instance = this;
         if (!this.isConfigurationsExists(config.subType, config.action)) {
             this.getConfigurations(config, function(error, res) {
                 if (res) {
-                    instance.mapResponse(config.subType, config.action, { resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config })
-                    instance.renderForm({ resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config })
+                    instance.mapResponse(config.subType, config.action, { resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config.data.result.form.data })
+                    instance.renderForm({ resourceBundle: res.resourceBundle, framework: res.framework.data.result.framework, formConfig: res.config.data.result.form.data })
                 } else {
                     console.error('Fails to render', error)
                 }
@@ -154,9 +153,22 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      * @description     -
      */
     saveContentFn: function(contentMeta, callbackFn) {
-        this.options.contentMeta = contentMeta
-        this.options.callback = callbackFn
-        ecEditor.dispatchEvent(this.eventMap['save'], this.options)
+        switch (contentMeta.mimeType) {
+            case 'application/vnd.ekstep.content-collection':
+                this.options.contentMeta = contentMeta
+                this.options.callback = callbackFn
+                ecEditor.dispatchEvent(this.eventMap['save'], this.options)
+                break
+            case 'application/vnd.ekstep.ecml-archive':
+                this.options.contentMeta = contentMeta
+                this.options.callback = callbackFn
+                ecEditor.dispatchEvent(this.eventMap['save'], this.options);
+                break
+            default:
+                this.options = contentMeta
+                this.options.callback = callbackFn
+                ecEditor.dispatchEvent(this.eventMap['save'], this.options);
+        }
     },
 
     /**
@@ -179,10 +191,10 @@ org.ekstep.contenteditor.metadataPlugin.extend({
         async.parallel({
             config: function(callback) {
                 // get the formConfigurations data
-                org.ekstep.services.configuration.getFormConfigurations({ request: request.formConfig }, function(error, response) {
-                    //if (!error) callback(undefined, response)
-                    //else throw 'Unable to fetch the form configurations.'
-                    callback(undefined, window.formConfigurations)
+                org.ekstep.services.configuration.getFormConfigurations({ request: request }, function(error, response) {
+                    if (!error) callback(undefined, response)
+                    else throw 'Unable to fetch the form configurations.'
+                        //callback(undefined, window.formConfigurations)
                 })
             },
             framework: function(callback) {
@@ -235,7 +247,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
         this.loadTemplate(this.config.templateName);
         setTimeout(function() {
             instance.showForm()
-        }, 100)
+        }, 1000)
 
     },
 
@@ -289,4 +301,6 @@ org.ekstep.contenteditor.metadataPlugin.extend({
 
 })
 
+//# sourceURL=sunbirdMetadata.js
+//# sourceURL=sunbirdMetadata.js
 //# sourceURL=sunbirdMetadata.js
