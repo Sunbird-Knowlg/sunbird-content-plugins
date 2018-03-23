@@ -6,6 +6,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
     var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.unitmeta");
     template = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/directives/dialCode/template.html")
     var dialCodeController = ['$scope', '$controller', '$filter', function ($scope, $controller, $filter) {
+        $scope.mode = ecEditor.getConfig('editorConfig').mode;
         $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
         $scope.maxLength = 6;
         $scope.minLength = 0;
