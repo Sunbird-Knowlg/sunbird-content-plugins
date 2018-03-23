@@ -370,6 +370,12 @@ angular.module('createquestionapp', [])
      *  @memberof QuestionFormController
      */
     $scope.saveConfig = function() {
+
+      //Update max_score question->config->metadata
+      var qBody = JSON.parse($scope.selQuestionObj.body);
+      qBody.data.config.max_score = $scope.selQuestionObj.max_score;
+      $scope.selQuestionObj.body = JSON.stringify(qBody);
+      
       var selectedObjIndex = _.findLastIndex($scope.questions, {
         identifier: $scope.selQuestionObj.identifier
       });

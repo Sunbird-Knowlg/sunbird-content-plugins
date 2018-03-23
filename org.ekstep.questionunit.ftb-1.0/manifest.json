@@ -58,8 +58,8 @@
     {
         "id": "ftbtemplate",
         "thumbnail": "editor/assets/ftb-horizontal.png",
-        "title": "Horizantal FTB",
-        "disc": "Horizantal FTB template",
+        "title": "Fill in the Blanks",
+        "disc": "A type of question or phrase with one or more words replaced with a blank line, giving the reader the chance to add the missing word(s).",
         "category": "FTB",
         "editor":
         {
