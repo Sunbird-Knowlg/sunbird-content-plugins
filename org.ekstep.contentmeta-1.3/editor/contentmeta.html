@@ -3,7 +3,7 @@
         <div class="fields">
             <div class="field form-fields-except-image">
                 <div class="field" ng-class="editMode ? 'required' : ''">
-                    <label>Name</label>{{editMode ? '' : 'disabled'}}
+                    <label>Name</label>
                     <div class="ui input" ng-class="editMode ? '' : 'disabled'">
                         <input placeholder="Enter title for Book" ng-model="content.name" ng-class=" {error: submitted && contentMetaForm.name.$error.required}" name="name" ng-change='changeTitle()' type="text" ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'name'})" required maxlength="100">
                     </div>
