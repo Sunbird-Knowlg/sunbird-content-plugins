@@ -290,15 +290,15 @@ angular.module('createquestionapp', [])
      *  @memberof QuestionFormController
      */
     $scope.selectQuestion = function(selQuestion) {
+      var isQuestionSelected = selQuestion.isSelected;
       if (ecEditor._.isUndefined(selQuestion.body)) {
         $scope.getItem(selQuestion, function(selQuestion) {
           var selObjindex = _.findLastIndex($scope.questions, {
             identifier: selQuestion.identifier
           });
-          // var selObjindex = $scope.selectedQuestions.indexOf(selQuestion);
           if (selObjindex > -1) {
             $scope.questions[selObjindex] = selQuestion;
-            $scope.questions[selObjindex].isSelected = true;
+            $scope.questions[selObjindex].isSelected = !isQuestionSelected;
           }
           $scope.$safeApply();
           $scope.selectQuestionData(selQuestion);
@@ -314,7 +314,6 @@ angular.module('createquestionapp', [])
      *  @memberof QuestionFormController
      */
     $scope.selectQuestionData = function(selQuestion) {
-      //selQuestion.isSelected = !selQuestion.isSelected;
       var selObjindex = _.findLastIndex($scope.selectedQuestions, {
         identifier: selQuestion.identifier
       });
