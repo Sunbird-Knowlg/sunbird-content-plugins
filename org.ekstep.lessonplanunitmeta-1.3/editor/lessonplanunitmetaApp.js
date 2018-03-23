@@ -26,7 +26,7 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
             $scope.unit.contentType = $scope.nodeType;
             org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.unit));;
             $scope.metadataCloneObj = _.clone($scope.unit);
-            $scope.editMode = true;
+            $scope.editMode = ($scope.mode == "Edit") ? true : false;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
             $scope.submitted = true; 
@@ -75,7 +75,7 @@ angular.module('lessonplanunitmetaApp', []).controller('lessonplanunitmetaContro
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.unit = {};
-        $scope.editMode = true;
+        $scope.editMode = ($scope.mode == "Edit") ? true : false;
         $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
 

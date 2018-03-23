@@ -180,7 +180,7 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
                 })
             }
             $scope.metadataCloneObj = _.clone($scope.textbook);
-            $scope.editMode = true;
+            $scope.editMode = ($scope.mode == "Edit") ? true : false;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             ecEditor.dispatchEvent("content:title:update", $scope.textbook.name);
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
@@ -235,7 +235,7 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.textbook = {};
-        $scope.editMode = true;
+        $scope.editMode = ($scope.mode == "Edit") ? true : false;
         $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
         $scope.defaultImage = ecEditor.resolvePluginResource("org.ekstep.textbookmeta", "1.2", "assets/default.png");
