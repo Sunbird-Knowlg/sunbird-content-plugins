@@ -50,7 +50,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
                 })
             }
             $scope.metadataCloneObj = _.clone($scope.course);
-            $scope.editMode = ($scope.mode == "Edit") ? true : false;
+            $scope.editMode = true;
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
             $scope.submitted = true; 
@@ -110,7 +110,7 @@ angular.module('coursemetaApp', []).controller('coursemetaController', ['$scope'
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.course = {};
-        $scope.editMode = ($scope.mode == "Edit") ? true : false;
+        $scope.editMode = true;
         $scope.newNode = false;
         $scope.editable = org.ekstep.collectioneditor.api.getService('collection').getObjectType(data.data.objectType).editable;
 
