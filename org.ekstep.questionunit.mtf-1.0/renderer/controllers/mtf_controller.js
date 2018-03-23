@@ -813,6 +813,7 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
         val: stateArray
       }
     }
+    $scope.generateItemResponse(stateArray);
     if (_.isFunction(callback)) {
       callback(result);
     }
@@ -820,15 +821,15 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     //commented because when feedback popup shown its becaome null
     //ctrlScope.selectedIndex = null;
   }
-  $scope.generateItemResponse = function(val, index) {
+  $scope.generateItemResponse = function(answer) {
     var edata = {
       "target": {
         "id": $scope.pluginInstance._manifest.id ? $scope.pluginInstance._manifest.id : "",
         "ver": $scope.pluginInstance._manifest.ver ? $scope.pluginInstance._manifest.ver : "1.0",
         "type": $scope.pluginInstance._manifest.type ? $scope.pluginInstance._manifest.type : "plugin"
       },
-      "type": "CHOOSE",
-      "values": [{ index: val.text }]
+      "type": "MATCH",
+      "values": answer
     }
     TelemetryService.itemResponse(edata);
   }
