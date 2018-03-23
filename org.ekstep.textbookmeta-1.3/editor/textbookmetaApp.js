@@ -1,4 +1,7 @@
-angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller('textbookmetaController', ['$scope', '$timeout', function($scope, $timeout) {
+//let myApp = angular.module('org.ekstep.textbookmeta',['ngTagsInput', 'Scope.safeApply']
+var textbookApp = angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply'])
+textbookApp.controller('textbookmetaController', ['$scope', '$timeout', '$filter', function($scope, $timeout, $filter) {
+    var ctrl = this;
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.metadataCloneObj = {};
     $scope.nodeId = $scope.nodeType = '';
@@ -7,6 +10,7 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
     $scope.categoryListofFramework = {};
     $scope.categoryValues = '';
     const DEFAULT_NODETYPE = 'TextBook';
+    $scope.dialCodes = [];
     $scope.updateTitle = function(event, title) {
         $scope.textbook.name = title;
         ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
@@ -14,26 +18,26 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
     }
     ecEditor.addEventListener("title:update:textbook", $scope.updateTitle, $scope);
     var categoryMasterList = _.cloneDeep(org.ekstep.services.collectionService.categoryList);
-    _.forEach(categoryMasterList, function(category){
+    _.forEach(categoryMasterList, function(category) {
         $scope.categoryListofFramework[category.index] = category.terms || [];
-        var categoryName = 'category_'+category.index;
+        var categoryName = 'category_' + category.index;
         $scope[categoryName] = category;
         $scope.categoryModelList[category.index] = category.code;
     });
     $scope.$safeApply();
 
-    $scope.getAssociations = function(selectedCategory, categoryList){
+    $scope.getAssociations = function(selectedCategory, categoryList) {
         var associations = [];
-        if(_.isArray(selectedCategory)){
-            _.forEach(selectedCategory, function(val){
-                var categoryObj= _.find(categoryList, function(o) { 
-                   return o.name.toUpperCase() === val.toUpperCase();
+        if (_.isArray(selectedCategory)) {
+            _.forEach(selectedCategory, function(val) {
+                var categoryObj = _.find(categoryList, function(o) {
+                    return o.name.toUpperCase() === val.toUpperCase();
                 });
                 associations = _.concat(categoryObj.associations, associations);
             });
-        }else if(selectedCategory){
-            var categoryObj= _.find(categoryList, function(o) { 
-               return o.name === selectedCategory;
+        } else if (selectedCategory) {
+            var categoryObj = _.find(categoryList, function(o) {
+                return o.name === selectedCategory;
             });
             associations = categoryObj.associations || [];
         }
@@ -42,9 +46,9 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
     $scope.updatedDependentCategory = function(categoryIndex, categoryVal) {
         $scope.categoryValues = $('#textbookmeta-category-2').dropdown('get value').replace(/\b\w/g, l => l.toUpperCase());;
         $scope.textbook[$scope.categoryModelList[2]] = $('#textbookmeta-category-2').dropdown('get value').split(",");
-        if(categoryIndex == "2") {
+        if (categoryIndex == "2") {
             categoryVal = $('#textbookmeta-category-2').dropdown('get value').split(",");
-            if(categoryVal[0]== "") {
+            if (categoryVal[0] == "") {
                 categoryVal = [];
                 $scope.textbook[$scope.categoryModelList[2]] = [];
             }
@@ -53,15 +57,15 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
             category_2 = [],
             category_3 = [],
             category_4 = [],
-            categoryList = $scope.categoryListofFramework[categoryIndex], 
+            categoryList = $scope.categoryListofFramework[categoryIndex],
             associations = $scope.getAssociations(categoryVal, categoryList);
-        if(associations.length > 0){
-            _.forEach(associations, function(data){
-                var catendex = _.findKey($scope.categoryModelList, function(val, key){ 
-                    return val === data.category; 
+        if (associations.length > 0) {
+            _.forEach(associations, function(data) {
+                var catendex = _.findKey($scope.categoryModelList, function(val, key) {
+                    return val === data.category;
                 });
-                var categoryName = 'category_'+catendex;
-                switch(catendex){
+                var categoryName = 'category_' + catendex;
+                switch (catendex) {
                     case "1":
                         $('.textbookmeta-category-1').dropdown('restore defaults');
                         category_1 = _.concat(data, category_1);
@@ -84,11 +88,11 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
                         break;
                 }
             });
-        }else{
-            switch(categoryIndex){
+        } else {
+            switch (categoryIndex) {
                 case "1":
                     setTimeout(function() {
-                        $('.textbookmeta-category-2').dropdown('restore defaults'); 
+                        $('.textbookmeta-category-2').dropdown('restore defaults');
                         $('.textbookmeta-category-3').dropdown('restore defaults');
                         $('.textbookmeta-category-4').dropdown('restore defaults');
                     }, 0);
@@ -114,9 +118,9 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
         }
     }
 
-    $scope.getTemsByindex = function(index){
+    $scope.getTemsByindex = function(index) {
         var masterList = _.cloneDeep(org.ekstep.services.collectionService.categoryList);
-        var category = _.find(masterList, function(o){
+        var category = _.find(masterList, function(o) {
             return o.index === index;
         });
         return category;
@@ -141,7 +145,7 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
             $('.textbookmeta-category-4').dropdown('set selected', $scope.textbook[$scope.categoryModelList[4]]);
             $('#textbookmeta-year').dropdown('set selected', $scope.textbook.year);
             $('#textbookmeta-resource').dropdown('set selected', $scope.textbook.resource);
-            if($scope.textbook[$scope.categoryModelList[2]]) $scope.categoryValues = $scope.textbook[$scope.categoryModelList[2]].join().replace(/\b\w/g, l => l.toUpperCase());;
+            if ($scope.textbook[$scope.categoryModelList[2]]) $scope.categoryValues = $scope.textbook[$scope.categoryModelList[2]].join().replace(/\b\w/g, l => l.toUpperCase());;
         });
     }
 
@@ -163,11 +167,11 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
                 $scope.textbook.audience = [$scope.textbook.audience];
             }
             $scope.textbook.contentType = $scope.nodeType;
-            var mergedData = _.pickBy(_.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook)),_.identity);
+            var mergedData = _.pickBy(_.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.textbook)), _.identity);
             _.forEach(mergedData, function(value, key) {
-                if(_.isArray(value)){
+                if (_.isArray(value)) {
                     mergedData[key] = _.compact(value)
-                    if(!mergedData[key].length){
+                    if (!mergedData[key].length) {
                         delete mergedData[key];
                     }
                 }
@@ -191,6 +195,10 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
 
     $scope.getUpdatedMetadata = function(originalMetadata, currentMetadata) {
         var metadata = {};
+        ecEditor.dispatchEvent("editor:update:dialcode", {
+            data: org.ekstep.services.collectionService.getActiveNode(),
+            contentId: org.ekstep.contenteditor.api.getContext('contentId')
+        });
         if (_.isEmpty(originalMetadata)) {
             _.forEach(currentMetadata, function(value, key) {
                 metadata[key] = value;
@@ -222,6 +230,7 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
         if (_.isUndefined(metadata['keywords'])) {
             metadata['keywords'] = currentMetadata['keywords'];
         }
+        metadata.dialCode = $scope.dialCode;
         return metadata;
     }
 
@@ -306,6 +315,15 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
         })
     }
 
+    // clear the dialup code
+    $scope.clearCode = function() {
+        this.testValue = '';
+        ecEditor.jQuery(".ui.icon.input input").css("border-color", "");
+        ecEditor.jQuery(".ui.icon.input").removeClass('field error');
+        $scope.proceedFlag = false;
+        $scope.clearFlag = false;
+    }
+
     $scope.initYearDropDown = function() {
         $scope.currentYear = new Date().getFullYear();
         $scope.years = [];
@@ -327,21 +345,39 @@ angular.module('textbookmetaApp', ['ngTagsInput', 'Scope.safeApply']).controller
             })
         }
     };
-    
+
+    // get configuration for dial code directives
+    $scope.getConfiguration = function() {
+        $scope.configuration = {
+            data: org.ekstep.services.collectionService.getActiveNode(),
+            contentId: org.ekstep.contenteditor.api.getContext('contentId')
+        }
+        return $scope.configuration;
+    }
+
     $scope.init = function() {
         $scope.initYearDropDown();
         $scope.$watch('textbook', function() {
-            if($scope.textbook){
-                if(/^[a-z\d\-_\s]+$/i.test($scope.textbook.name) == false) $scope.textbook.name = org.ekstep.services.collectionService.removeSpecialChars($scope.textbook.name);
-                if($scope.nodeType === DEFAULT_NODETYPE){
+            if ($scope.textbook) {
+                if (/^[a-z\d\-_\s]+$/i.test($scope.textbook.name) == false) $scope.textbook.name = org.ekstep.services.collectionService.removeSpecialChars($scope.textbook.name);
+                if ($scope.nodeType === DEFAULT_NODETYPE) {
+                    $scope.getDialCode();
                     $scope.updateNode();
                 }
             }
         }, true);
     }
 
-    $scope.changeTitle = function(){
+    $scope.changeTitle = function() {
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.textbook.name);
+    }
+
+    // get updated current dialcode
+    $scope.getDialCode = function() {
+        var callBackFn = function(dialCode) {
+            $scope.dialCode = dialCode
+        }
+        ecEditor.dispatchEvent("editor:dialcode:get", { callback: callBackFn });
     }
 
     setTimeout(function() {
