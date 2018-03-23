@@ -12,6 +12,14 @@ function getArrayOfKeywords(keys) {
     })
 };
 
+function invokeDialCode() {
+    var configurations = {
+        data: ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild(),
+        contentId: org.ekstep.contenteditor.api.getContext('contentId')
+    }
+    ecEditor.dispatchEvent("editor:update:dialcode", configurations)
+}
+
 /**
  * @description         - Which is used to convert to data types
  */
@@ -89,6 +97,8 @@ function getUpdatedMetadata(currentMetadata, originalMetadata, fields) {
     !metadata['mimeType'] && (metadata['mimeType'] = originalMetadata['mimeType']);
     return getUpdateDataType(metadata, fields)
 }
+
+
 
 
 

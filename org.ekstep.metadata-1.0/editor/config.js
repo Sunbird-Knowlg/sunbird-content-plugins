@@ -142,6 +142,20 @@ window.formConfigurations = {
             "visible": true
         },
         {
+            "code": "dialcode",
+            "dataType": "text",
+            "description": "",
+            "editable": true,
+            "index": 4,
+            "inputType": "dialcode",
+            "label": "dialcode",
+            "name": "dialcode",
+            "placeholder": "Select Year",
+            "renderingHints": {},
+            "required": true,
+            "visible": true
+        },
+        {
             "code": "publisher",
             "dataType": "text",
             "description": "Publication",

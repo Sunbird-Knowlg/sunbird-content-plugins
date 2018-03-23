@@ -179,6 +179,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var fixedLayout = [];
         var dynamicLayout = [];
         _.map($scope.fields, function(field) {
+            if (field.code === 'dialcode') { invokeDialCode() }
             if (field.validation) {
                 _.forEach(field.validation, function(value, key) {
                     if (value.type === 'regex') {
@@ -192,7 +193,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             } else {
                 dynamicLayout.push(field);
             }
-
         });
         return { fixedLayout: fixedLayout, dynamicLayout: dynamicLayout };
     };
@@ -321,7 +321,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         ecEditor.addEventListener('editor:form:change', $scope.onConfigChange, $scope);
         $scope.fields = org.ekstep.pluginframework.pluginManager.pluginObjs['org.ekstep.sunbirdmetadata'].getFormFields();
         $scope.tempalteName = org.ekstep.pluginframework.pluginManager.pluginObjs['org.ekstep.sunbirdmetadata'].getTemplate() || 'defaultTemplate';
-
         $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
         $scope.originalContentMeta = _.clone($scope.contentMeta);
         var layoutConfigurations = $scope.getLayoutConfigurations();
