@@ -15,16 +15,16 @@
     </div>
     <div class="mtf-hori-container">
       <div class="mtf-hori-option" ng-repeat="val in droppableObjects" ng-class="{'width20': questionObj.option.optionsLHS.length == 5, 'width25': questionObj.option.optionsLHS.length == 4,'width33': questionObj.option.optionsLHS.length == 3}">
-        <div class="mtf-hori-lhs-option" ng-drop="true" ng-drop-success="onDropToLHS($index,$data,$event);" ng-drag="{{val.mapIndex != undefined}}" ng-drag-data="{{val}}" id="drag-drop-lhs" on-drag="telemetry($event);" on-drop="telemetry($event);">
+        <div class="mtf-hori-lhs-option" ng-drop="true" ng-drop-success="onDropToLHS($index,$data,$event);logTelemetryItemResponse(val.mapIndex);" ng-drag="{{val.mapIndex != undefined}}" ng-drag-data="{{val}}" id="drag-drop-lhs" ng-drag-start="logTelemetryInteract(val.mapIndex);" on-drop="logTelemetryInteract(val.mapIndex);">
           <div class="mtf-hori-ques-text">
             <div class="mtf-hori-ques-text-inner" id="{{$index}}" data-val="{{val}}" ng-model="val">{{val.text}}</div>
           </div>
         </div>
       </div>
     </div>
-    <div class="mtf-hori-container" id="drop-rhs" ng-drop="true" ng-drop-success="onDropToRHS($data,$event);" on-drop="telemetry($event);">
+    <div class="mtf-hori-container" ng-drop="true" ng-drop-success="onDropToRHS($data,$event);" on-drop="logTelemetryInteract('drop-rhs');">
       <div class="mtf-hori-option" ng-repeat="rval in draggableObjects" ng-class="{'width20': questionObj.option.optionsRHS.length == 5, 'width25': questionObj.option.optionsRHS.length == 4,'width33': questionObj.option.optionsRHS.length == 3}">
-        <div class="mtfHoriRhsOption" ng-drag="true" ng-drag-data="{{rval}}" on-drag="telemetry($event);" id="drag-rhs">
+        <div class="mtfHoriRhsOption" ng-drag="true" ng-drag-data="{{rval}}" ng-drag-start="logTelemetryInteract(rval.mapIndex);" id="drag-rhs">
           <div class="mtf-hori-ques-text">
             <div class="mtf-hori-ques-text-inner" id="{{$index}}">{{rval.text}}</div>
           </div>
