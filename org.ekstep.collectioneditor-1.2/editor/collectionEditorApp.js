@@ -328,15 +328,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
 
     $scope.addNodeType = function(nodeType) {
         if (nodeType == 'sibling') {
-            if (!$scope.isNewCollection) {
-                org.ekstep.services.collectionService.addSibling()
-            } else {
-                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                    message: "Sorry, this operation is not allowed.(Please add a child first)",
-                    position: 'topCenter',
-                    icon: 'fa fa-warning'
-                });
-            }
+            org.ekstep.services.collectionService.addSibling()
         }
         if (nodeType == 'child') {
             org.ekstep.services.collectionService.addChild()
