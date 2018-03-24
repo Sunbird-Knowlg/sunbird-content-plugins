@@ -91,9 +91,8 @@
                 <tr class="qc-vertical-option-outer">
                     <td ng-repeat="val in questionObj.options" class="qc-vertical-option-td">
                         <div class="qc-vertical-option-value">
-                           
                             <div id="{{val.id}}" class="qc-option-vertical-text" ng-class="{qsverticalselectedopt : $index+1 == selectedIndex}" ng-click="selectedvalue(val, $index+1);">
-                                 <span ng-if="questionObj.question.image.length" class="qc-vertical-option-zoomin" ng-click="showImageModel(val.image) > 0">+</span>
+                                 <span ng-if="val.image.length>0" class="qc-vertical-option-zoomin" ng-click="showImageModel(val.image) > 0">+</span>
                                 <div ng-if="val.audio.length > 0 && val.image.length == 0" class="">
                                     <img src="{{audioImage}}" class="qc-vertical-audio-with-image" ng-click="playAudio(val.audio)" />
                                 </div>
