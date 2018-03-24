@@ -659,11 +659,14 @@ app.service('ngDraggable', [function() {
 
 
 app.controllerProvider.register("MTFRendererController", function($scope, $rootScope) {
+  $scope.pluginInstance;
   $scope.showTemplate = true;
   $scope.question;
-  $scope.selectedAns;
+  $scope.qData;
+  $scope.qConfig;
   $scope.events = { "show": "", "hide": "", "eval": "" };
-  $scope.droppableObjects = [];
+  $scope.selectedAns = [];
+  $scope.draggableObjects;
 
   $scope.onDropToLHS = function(index, data, evt) {
     var ctrlScope = angular.element('#mtf-renderer').scope();
@@ -673,26 +676,26 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
         if (temp.mapIndex != undefined) {
           $scope.draggableObjects.push(temp);
         }
-        $scope.droppableObjects.splice(index, 1, data);
+        $scope.selectedAns.splice(index, 1, data);
         $scope.draggableObjects.splice(i, 1);
       }
     }
-    if ($scope.droppableObjects[evt.event.target.id].mapIndex == data.mapIndex && $scope.droppableObjects[index].mapIndex != undefined) {
-      var t = $scope.droppableObjects[index];
-      $scope.droppableObjects.splice(index, 1, data);
-      $scope.droppableObjects.splice(evt.event.target.id, 1, t);
+    if ($scope.selectedAns[evt.event.target.id].mapIndex == data.mapIndex && $scope.selectedAns[index].mapIndex != undefined) {
+      var t = $scope.selectedAns[index];
+      $scope.selectedAns.splice(index, 1, data);
+      $scope.selectedAns.splice(evt.event.target.id, 1, t);
 
-    } else if ($scope.droppableObjects[evt.event.target.id].mapIndex == data.mapIndex) {
-      var t = $scope.droppableObjects[index];
-      $scope.droppableObjects.splice(index, 1, data);
-      $scope.droppableObjects.splice(evt.event.target.id, 1, ctrlScope.questionObj.option.emptyBoxs[evt.event.target.id]);
+    } else if ($scope.selectedAns[evt.event.target.id].mapIndex == data.mapIndex) {
+      var t = $scope.selectedAns[index];
+      $scope.selectedAns.splice(index, 1, data);
+      $scope.selectedAns.splice(evt.event.target.id, 1, ctrlScope.qData.option.emptyBoxs[evt.event.target.id]);
     }
   }
   $scope.onDropToRHS = function(data, evt) {
     var ctrlScope = angular.element('#mtf-renderer').scope();
-    for (var i = 0; i < $scope.droppableObjects.length; i++) {
-      if ($scope.droppableObjects[i].mapIndex == data.mapIndex) {
-        $scope.droppableObjects.splice(i, 1, ctrlScope.questionObj.option.emptyBoxs[i]);
+    for (var i = 0; i < $scope.selectedAns.length; i++) {
+      if ($scope.selectedAns[i].mapIndex == data.mapIndex) {
+        $scope.selectedAns.splice(i, 1, ctrlScope.qData.option.emptyBoxs[i]);
         $scope.draggableObjects.push(data);
       }
     }
@@ -749,29 +752,33 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
   $scope.showEventListener = function(event) {
     var ctrlScope = angular.element('#mtf-renderer').scope();
     ctrlScope.question = event.target;
-    $scope.questionObj123 = ctrlScope.question;
+
     var qData = ctrlScope.question._currentQuestion.data.__cdata || ctrlScope.question._currentQuestion.data;
-    var questionData = JSON.parse(qData);
-    var ps = $scope.question._currentQuestion.config.__cdata || $scope.question._currentQuestion.config;
-    $scope.maxScore = JSON.parse(ps);
+    $scope.qData = JSON.parse(qData);
+
+    var questionConfig = ctrlScope.question._currentQuestion.data.__cdata || ctrlScope.question._currentQuestion.config;
+    $scope.qConfig = JSON.parse(questionConfig);
+
     var qState = ctrlScope.question._currentQuestionState;
-    var qConfig = ctrlScope.question._currentQuestion.config;
-    ctrlScope.questionObj = questionData;
-    ctrlScope.questionObj.option.emptyBoxs = [];
-    $scope.draggableObjects = angular.copy(ctrlScope.questionObj.option.optionsRHS);
+
+    ctrlScope.qData.option.emptyBoxs = [];
+    $scope.draggableObjects = angular.copy(ctrlScope.qData.option.optionsRHS);
     $scope.draggableObjects.sort(() => Math.random() - 0.5);
-    for (var l = 0; l < ctrlScope.questionObj.option.optionsLHS.length; l++) {
+    for (var l = 0; l < ctrlScope.qData.option.optionsLHS.length; l++) {
       var emptyBox = {
-        "index": ctrlScope.questionObj.option.optionsLHS[l].index,
+        "index": ctrlScope.qData.option.optionsLHS[l].index,
         "text": " "
       };
-      ctrlScope.questionObj.option.emptyBoxs.push(emptyBox)
-      $scope.droppableObjects.push(emptyBox);
+      ctrlScope.qData.option.emptyBoxs.push(emptyBox)
+      $scope.selectedAns.push(emptyBox);
     }
+
+    // Save current state of the question
+
     if (qState && qState.val) {
       for (var i = 0; i < qState.val.length; i++) {
         if (qState.val[i].mapIndex != undefined) {
-          $scope.droppableObjects.splice(i, 1, qState.val[i]);
+          $scope.selectedAns.splice(i, 1, qState.val[i]);
         }
         for (var l = 0; l < $scope.draggableObjects.length; l++) {
           if ($scope.draggableObjects[l].mapIndex == qState.val[i].mapIndex) {
@@ -783,8 +790,6 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     }
     ctrlScope.showTemplate = true;
     QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.ASSESS);
-    var qconfigData = qConfig.__cdata || qConfig;
-    ctrlScope.questionObj.questionConfig = JSON.parse(qconfigData);
     ctrlScope.safeApply();
   }
 
@@ -803,29 +808,28 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
 
   $scope.evaluate = function(callback) {
     var correctAnswer = true;
-    var stateArray = [];
+    var answerArray = [];
     var ctrlScope = angular.element('#mtf-renderer').scope();
+
     // Calculate partial score
     var tempCount = 0;
-    for (var i = 0; i < ctrlScope.questionObj.option.optionsLHS.length; i++) {
-      stateArray.push($scope.droppableObjects[i]);
-      if ($scope.droppableObjects[i].mapIndex != ctrlScope.questionObj.option.optionsLHS[i].index) {
+    for (var i = 0; i < ctrlScope.qData.option.optionsLHS.length; i++) {
+      answerArray.push($scope.selectedAns[i]);
+      if ($scope.selectedAns[i].mapIndex != ctrlScope.qData.option.optionsLHS[i].index) {
         correctAnswer = false;
       } else {
         tempCount++;
       }
     }
-
-    var partialScore = (tempCount / ctrlScope.questionObj.option.optionsLHS.length) * $scope.maxScore.max_score;
+    var partialScore = (tempCount / ctrlScope.qData.option.optionsLHS.length) * $scope.qConfig.max_score;
 
     var result = {
       eval: correctAnswer,
       state: {
-        val: stateArray
+        val: answerArray
       },
       score: partialScore
     }
-    // $scope.generateItemResponse(stateArray);
     if (_.isFunction(callback)) {
       callback(result);
     }
