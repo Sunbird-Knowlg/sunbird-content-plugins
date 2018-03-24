@@ -669,6 +669,7 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
   $scope.draggableObjects;
 
   $scope.onDropToLHS = function(index, data, evt) {
+    var responseData = {};
     var ctrlScope = angular.element('#mtf-renderer').scope();
     for (var i = 0; i < $scope.draggableObjects.length; i++) {
       if ($scope.draggableObjects[i].mapIndex == data.mapIndex) {
@@ -690,6 +691,11 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
       $scope.selectedAns.splice(index, 1, data);
       $scope.selectedAns.splice(evt.event.target.id, 1, ctrlScope.qData.option.emptyBoxs[evt.event.target.id]);
     }
+    responseData = [{
+      "lhs" : ctrlScope.qData.option.optionsLHS[index].text,
+      "rhs" : data.text
+    }];
+    ctrlScope.logTelemetryItemResponse(responseData);
   }
   $scope.onDropToRHS = function(data, evt) {
     var ctrlScope = angular.element('#mtf-renderer').scope();
@@ -822,13 +828,13 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
       }
     }
     var partialScore = (tempCount / ctrlScope.qData.option.optionsLHS.length) * $scope.qConfig.max_score;
-
     var result = {
       eval: correctAnswer,
       state: {
         val: answerArray
       },
-      score: partialScore
+      score: partialScore,
+      values: answerArray
     }
     if (_.isFunction(callback)) {
       callback(result);
