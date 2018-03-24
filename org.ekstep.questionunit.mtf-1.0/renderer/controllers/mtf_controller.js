@@ -782,7 +782,7 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
 
     }
     ctrlScope.showTemplate = true;
-    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.ASSESS);
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS);
     var qconfigData = qConfig.__cdata || qConfig;
     ctrlScope.questionObj.questionConfig = JSON.parse(qconfigData);
     ctrlScope.safeApply();
@@ -803,12 +803,12 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
 
   $scope.evaluate = function(callback) {
     var correctAnswer = true;
-    var stateArray = [];
+    var answerArray = [];
     var ctrlScope = angular.element('#mtf-renderer').scope();
     // Calculate partial score
     var tempCount = 0;
     for (var i = 0; i < ctrlScope.questionObj.option.optionsLHS.length; i++) {
-      stateArray.push($scope.droppableObjects[i]);
+      answerArray.push($scope.droppableObjects[i]);
       if ($scope.droppableObjects[i].mapIndex != ctrlScope.questionObj.option.optionsLHS[i].index) {
         correctAnswer = false;
       } else {
@@ -821,7 +821,7 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     var result = {
       eval: correctAnswer,
       state: {
-        val: stateArray
+        val: answerArray
       },
       score: partialScore
     }
@@ -831,15 +831,15 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     }
     EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
 
-    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.ASSESSEND, result);
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);
   }
 
   $scope.logTelemetryItemResponse = function(data) {
-    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.RESPONSE, { "type": "INPUT", "values": data });
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { "type": "INPUT", "values": data });
   }
 
   $scope.logTelemetryInteract = function(event) {
-    if (event != undefined) QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.TOUCH, { type: QSTelemetryUtil.EVENT_TYPES.TOUCH, id: event });
+    if (event != undefined) QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event });
   }
 });
 //# sourceURL=questionunitmtfcontroller.js
