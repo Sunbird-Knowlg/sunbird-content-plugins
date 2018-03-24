@@ -290,15 +290,15 @@ angular.module('createquestionapp', [])
      *  @memberof QuestionFormController
      */
     $scope.selectQuestion = function(selQuestion) {
+      var isQuestionSelected = selQuestion.isSelected;
       if (ecEditor._.isUndefined(selQuestion.body)) {
         $scope.getItem(selQuestion, function(selQuestion) {
           var selObjindex = _.findLastIndex($scope.questions, {
             identifier: selQuestion.identifier
           });
-          // var selObjindex = $scope.selectedQuestions.indexOf(selQuestion);
           if (selObjindex > -1) {
             $scope.questions[selObjindex] = selQuestion;
-            $scope.questions[selObjindex].isSelected = true;
+            $scope.questions[selObjindex].isSelected = !isQuestionSelected;
           }
           $scope.$safeApply();
           $scope.selectQuestionData(selQuestion);
@@ -314,7 +314,6 @@ angular.module('createquestionapp', [])
      *  @memberof QuestionFormController
      */
     $scope.selectQuestionData = function(selQuestion) {
-      //selQuestion.isSelected = !selQuestion.isSelected;
       var selObjindex = _.findLastIndex($scope.selectedQuestions, {
         identifier: selQuestion.identifier
       });
@@ -371,6 +370,12 @@ angular.module('createquestionapp', [])
      *  @memberof QuestionFormController
      */
     $scope.saveConfig = function() {
+
+      //Update max_score question->config->metadata
+      var qBody = JSON.parse($scope.selQuestionObj.body);
+      qBody.data.config.max_score = $scope.selQuestionObj.max_score;
+      $scope.selQuestionObj.body = JSON.stringify(qBody);
+      
       var selectedObjIndex = _.findLastIndex($scope.questions, {
         identifier: $scope.selQuestionObj.identifier
       });

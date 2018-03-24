@@ -286,8 +286,11 @@
   ctrl.formIsValid = function() {
     ctrl.questionMetadataScreen = true;
     //comment because in edit question the question and question title are not
-    //ctrl.questionData.questionTitle = _.isUndefined(ctrl.questionData.questionTitle) ? ctrl.questionCreationFormData.question.text : ctrl.questionData.questionTitle;
-    ctrl.questionData.questionTitle = ctrl.questionCreationFormData.question.text
+    if(ctrl.category == 'FTB'){
+      ctrl.questionData.questionTitle = _.isUndefined(ctrl.questionData.questionTitle) ? ctrl.questionCreationFormData.question.text.replace(/\[\[.*?\]\]/g,'') : ctrl.questionData.questionTitle; 
+    }else{
+      ctrl.questionData.questionTitle = _.isUndefined(ctrl.questionData.questionTitle) ? ctrl.questionCreationFormData.question.text : ctrl.questionData.questionTitle;
+    }
      $('.QuestionMetaForm .ui.dropdown').dropdown({});
   }
 

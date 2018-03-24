@@ -46,8 +46,8 @@
     {
       "id": "horizontalMTF",
       "thumbnail": "editor/assets/mtf-horizontal.png",
-      "title": "Horizontal MTF",
-      "disc": "Horizontal MTF template",
+      "title": "Match The Following",
+      "disc": "",
       "category": "MTF",
       "editor":
       {
