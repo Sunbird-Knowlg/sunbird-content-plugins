@@ -36,13 +36,13 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
                 EventBus.removeEventListener($scope.events.eval, $scope.evalListener)
         }
     }
-    $scope.trustSrcurl = function(data) {
-        if (isbrowserpreview) {
-            return $sce.trustAsResourceUrl(data);
-        } else {
-            return 'file:///' + EkstepRendererAPI.getBaseURL() + data;
-        }
-    }
+    // $scope.trustSrcurl = function(data) {
+    //     if (isbrowserpreview) {
+    //         return $sce.trustAsResourceUrl(data);
+    //     } else {
+    //         return 'file:///' + EkstepRendererAPI.getBaseURL() + data;
+    //     }
+    // }
 
     $scope.registerEvents = function() {
         /**
@@ -217,6 +217,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     }
 
     $scope.playAudio = function(audio) {
+            audio=$scope.checkBaseUrl(audio);
         if ($scope.lastAudio && ($scope.lastAudio != audio)) {
             $scope.currentAudio.pause();
         }
