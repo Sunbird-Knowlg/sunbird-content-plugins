@@ -32,7 +32,7 @@
                             <app-icon></app-icon>
                         </div>
                         <!--FIXED SECTION LAYOUT-->
-                        <div class="ten wide field" ng-class="!appIconConfig.visible? 'twelve wide field':'ten wide field'">
+                        <div class="{{!appIconConfig.visible ? 'twelve wide field' : 'ten wide field'}}">
                             <div ng-repeat="fixedField in fixedLayoutConfigurations">
                                 <div id="{{fixedField.code}}" class="field" ng-class="{'error': (!contentMeta[fixedField.code] && fixedField.required), 'required': fixedField.required}" name="{{fixedField.code}}" ng-if="(fixedField.inputType =='text' && fixedField.visible)">
                                     <label>{{fixedField.label}}</label>
@@ -71,7 +71,7 @@
                         <!--DYNAMIC SECTION LAYOUT-->
                         <div class="two wide field " ng-hide="!appIconConfig.visible ">
                         </div>
-                        <div class="ten wide field " ng-class="!appIconConfig.visible? 'twelve wide field': 'ten wide field' ">
+                        <div class="{{!appIconConfig.visible ? 'twelve wide field' : 'ten wide field'}}">
                             <div class="ui grid ">
                                 <div class="six wide field " ng-repeat="dynamicField in dynamicLayoutConfigurations ">
                                     <div id="{{dynamicField.code}} " class="field " ng-class="{'error': (!metaForm[dynamicField.code].$valid), 'required': dynamicField.required}" name="{{dynamicField.code}}
