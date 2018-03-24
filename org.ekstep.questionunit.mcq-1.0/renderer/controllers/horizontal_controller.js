@@ -13,6 +13,9 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     $scope.lastAudio;
     $scope.isShuffleOptions;
     $scope.bigImage = false;
+    $scope.expandQ = true;
+    $scope.collapseQ = true;
+
     if(isbrowserpreview){
         $scope.audioImage = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png");
     }else{
@@ -21,7 +24,6 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     //$scope.audioImage = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png");
     //$scope.audioImage="/content-plugins/org.ekstep.questionunit.mcq-1.0/renderer/assets/audio.png";
     $scope.init = function() {
-        $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/styles/style.css");
         $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.mcq");
         $scope.pluginInstance.initPlugin($scope.pluginInstance);
 
@@ -84,8 +86,21 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
         $scope.bigImage = true;
         $scope.imageUrl = imgUrl;
     }
+
     $scope.hideImagePopup = function() {
         $scope.bigImage = false;
+    }
+    $scope.expandQuestion = function(event){
+        if($scope.collapseQ){
+            $scope.expandQ = true;
+            $scope.collapseQ = false;
+            $(event.target.parentElement.parentElement).css('height','50vh');
+        }else{
+            $(event.target.parentElement.parentElement).css('height','17vh');
+            $scope.expandQ = false;
+            $scope.collapseQ = true;
+        }
+        console.log(event.target.parentElement.parentElement);
     }
     $scope.checkBaseUrl = function(url) {
         if (isbrowserpreview) {
