@@ -60,7 +60,7 @@ angular.module('org.ekstep.breadcrumb', []).controller('breadcrumbController', [
       _.forEach(path.split('/'), function (key) {
          if (key) {
             var node = ecEditor.jQuery($scope.collectionTreeId).fancytree("getTree").getNodeByKey(key);
-            if (showFolder || (!showFolder && !node.folder)) {
+            if ((showFolder || (!showFolder && !node.folder)) && node.getLevel() !== 1) {
                $scope.path.push({
                   'title': node.title,
                   'nodeId': node.key,
@@ -100,10 +100,9 @@ angular.module('org.ekstep.breadcrumb', []).controller('breadcrumbController', [
     * Go to root node
     */
    $scope.goToRootParent = function () {
-      var activeNode = org.ekstep.services.collectionService.getActiveNode();
-      var parentList = activeNode.getParentList()
-      if (parentList.length > 0)
-         org.ekstep.services.collectionService.setActiveNode(parentList[0].key);
+         var parentNode = $scope.getPartentNode();
+         if (parentNode)
+            org.ekstep.services.collectionService.setActiveNode(parentNode.key);
    }
 
    /**
@@ -130,7 +129,7 @@ angular.module('org.ekstep.breadcrumb', []).controller('breadcrumbController', [
       var parentList = activeNode.getParentList();
       var parentNode = {};
       if (parentList && parentList.length > 0) {
-         parentNode = parentList.length > 1 ? parentList[1] : parentList[0];
+         parentNode = parentList.length > 1 ? parentList[1] : parentNode;
       }
       return parentNode;
    }

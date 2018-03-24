@@ -668,3 +668,9 @@ ul.fancytree-container > li > ul{
 #mainBody .editor-body {
     padding: 0 2px;
 }
+
+.newCollection {
+    top: 40%;
+    position: relative;
+    height: 20%;
+}
