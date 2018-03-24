@@ -790,8 +790,6 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     }
     ctrlScope.showTemplate = true;
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS);
-    var qconfigData = qConfig.__cdata || qConfig;
-    ctrlScope.questionObj.questionConfig = JSON.parse(qconfigData);
     ctrlScope.safeApply();
   }
 

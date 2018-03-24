@@ -113,7 +113,7 @@
       },
       {
           "type": "js",
-          "src": "renderer/util/telemetry_logger.js"
+          "src": "renderer/utils/telemetry_logger.js"
       }
     ]
   },

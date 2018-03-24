@@ -131,7 +131,7 @@ Plugin.extend({
             this.loadModules(question, function () {
                 setTimeout(function () {                    
                     // Set current question for telmetry to log events from question-unit
-                    QSTelemetryUtil.setQuestion(instance._currentQuestion, instance.getRenderedIndex());
+                    QSTelemetryLogger.setQuestion(instance._currentQuestion, instance.getRenderedIndex());
                     
                     EkstepRendererAPI.dispatchEvent(question.pluginId + ':show', instance);
                     instance.setupNavigation();
