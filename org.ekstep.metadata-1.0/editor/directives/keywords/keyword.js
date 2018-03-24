@@ -8,7 +8,7 @@ formApp.directive('keywords', function() {
     const manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.metadata");
 
     var keywordController = ['$scope', '$controller', function($scope, $controller) {
-        $scope.contentMeta = $scope.$parent.$parent.$parent.contentMeta;
+        $scope.contentMeta = $scope.$parent.contentMeta
         $scope.fieldConfig = $scope.config;
         $scope.cacheKeywords = {};
         $scope.loadKeywords = function($query) {
