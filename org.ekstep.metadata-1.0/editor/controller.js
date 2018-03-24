@@ -87,9 +87,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * 
      * @param {Object} object - Field information
      */
-    $scope.onConfigChange = function(event, object) {
+    $scope.onConfigChange = function(object) {
         $scope.isSubmit = false;
-        !$scope.metaForm.$valid && $scope.updateErrorMessage();
+        !object.form.$valid && $scope.updateErrorMessage(object.form);
         $scope.updateForm(object);
     }
 
@@ -203,9 +203,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * 
      * @fires       - 'editor:form:success'
      */
-    $scope.success = function() {
+    $scope.success = function(object) {
         $scope.isSubmit = true;
-        !$scope.metaForm.$valid && $scope.updateErrorMessage();
+        !object.form.$valid && $scope.updateErrorMessage(object.form);
         var successCB = function(err, res) {
             if (res) {
                 console.info("Data is saved successfully.", res)
@@ -218,7 +218,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         form.metaData = getUpdatedMetadata($scope.contentMeta, $scope.originalContentMeta, $scope.fields);
         form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
         ecEditor.dispatchEvent('editor:form:success', {
-            isValid: $scope.metaForm.$valid,
+            isValid: !object.form.$valid,
             formData: form,
             callback: successCB
         })
@@ -228,13 +228,13 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * 
      * @description             - Which is used to show an error message to resepective field 
      */
-    $scope.updateErrorMessage = function() {
+    $scope.updateErrorMessage = function(form) {
         if ($scope.metaForm.$valid) return
         var errorKeys = undefined;
         _.forEach($scope.fields, function(value, key) {
-            if ($scope.metaForm[value.code] && $scope.metaForm[value.code].$invalid) {
+            if (form[value.code] && form[value.code].$invalid) {
                 $scope.validation[value.code] = {}
-                switch (_.keys($scope.metaForm[value.code].$error)[0]) {
+                switch (_.keys(form[value.code].$error)[0]) {
                     case 'pattern': // When input validation of type is regex
                         $scope.validation[value.code]["errorMessage"] = value.validation.regex.message;
                         break;
@@ -318,7 +318,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      *              - Which partions the fixedLayout and dynamic layout section fields
      */
     $scope.init = function() {
-        ecEditor.addEventListener('editor:form:change', $scope.onConfigChange, $scope);
         $scope.fields = org.ekstep.pluginframework.pluginManager.pluginObjs['org.ekstep.sunbirdmetadata'].getFormFields();
         $scope.tempalteName = org.ekstep.pluginframework.pluginManager.pluginObjs['org.ekstep.sunbirdmetadata'].getTemplate() || 'defaultTemplate';
         $scope.contentMeta = org.ekstep.pluginframework.pluginManager.pluginObjs['org.ekstep.sunbirdmetadata'].getMetaData();

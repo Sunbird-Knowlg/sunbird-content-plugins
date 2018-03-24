@@ -39,7 +39,7 @@
                                     <div>
                                         <div class="ui input" ng-class="{'disabled':!fixedField.editable}">
                                             <input id="{{fixedField.code}}" ng-pattern="fixedField.validation.regex['value']" ng-maxlength="{{fixedField.validation.max[ 'value']}}" placeholder={{field.placeholder}} name="{{fixedField.code}} " ng-model="contentMeta.name " type="text " ng-required="{{fixedField.required}} "
-                                                ng-keyup="updateErrorMessage()">
+                                                ng-keyup="updateErrorMessage(metaForm)">
 
                                         </div>
                                         <div ng-show="!metaForm[fixedField.code].$valid" class="ui pointing red basic label ">
@@ -53,7 +53,7 @@
                                     <label>{{fixedField.label}}</label>
                                     <div class=" ui input " ng-class="{ 'disabled':!fixedField.editable } ">
                                         <textarea id="{{fixedField.code}} " placeholder={{field.placeholde}} ng-model="contentMeta.description " rows="{{fixedField.renderingHints.rows}} " name="{{fixedField.code}} " ng-required="{{fixedField.required}}" ng-pattern="fixedField.validation.regex['value']"
-                                            ng-maxlength="{{fixedField.validation.max['value']}}" ng-keyup="updateErrorMessage()"></textarea>
+                                            ng-maxlength="{{fixedField.validation.max['value']}}" ng-keyup="updateErrorMessage(metaForm)"></textarea>
                                     </div>
                                     <div ng-show="!metaForm[fixedField.code].$valid" class="ui pointing red basic label ">
                                         {{validation[fixedField.code].errorMessage || DEFAULT_ERROR_MESSAGE}}
@@ -80,7 +80,7 @@
                                         <div>
                                             <div class="ui input " ng-class="{ 'disabled':!dynamicField.editable} ">
                                                 <input id="{{dynamicField.code}} " placeholder={{dynamicField.placeholder}} name="{{dynamicField.code}} " ng-model="contentMeta[dynamicField.code] " type="text " ng-required="{{dynamicField.required}} " ng-pattern="dynamicField.validation.regex['value']"
-                                                    ng-maxlength="{{dynamicField.validation.max[ 'value']}}" ng-keyup="updateErrorMessage()">
+                                                    ng-maxlength="{{dynamicField.validation.max[ 'value']}}" ng-keyup="updateErrorMessage(metaForm)">
                                             </div>
                                             <div ng-show="!metaForm[dynamicField.code].$valid " class="ui pointing red basic label ">
                                                 {{validation[dynamicField.code].errorMessage || DEFAULT_ERROR_MESSAGE}}
@@ -92,7 +92,7 @@
                                         <div>
                                             <div class="ui input " ng-class="{ 'disabled':!dynamicField.editable} ">
                                                 <input id="{{dynamicField.code}} " placeholder={{dynamicField.placeholder}} name="{{dynamicField.code}} " ng-model="contentMeta[dynamicField.code] " type="number" ng-pattern="dynamicField.validation.regex['value']" ng-maxlength="{{dynamicField.validation.max[ 'value']}}"
-                                                    ng-required="{{dynamicField.required}} " ng-keyup="updateErrorMessage()">
+                                                    ng-required="{{dynamicField.required}} " ng-keyup="updateErrorMessage(metaForm)">
                                             </div>
                                             <div ng-show="!metaForm[dynamicField.code].$valid" class="ui pointing red basic label ">
                                                 {{validation[dynamicField.code].errorMessage || DEFAULT_ERROR_MESSAGE}}
@@ -103,7 +103,7 @@
                                                 " ng-if="dynamicField.inputType=='multiselect' ">
                                         <label>{{dynamicField.label}}</label>
                                         <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown " multiple=" " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]
-                                                " ng-change="dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:contentMeta[dynamicField.code]}) " ng-required="{{dynamicField.required}} ">
+                                                " ng-change="onConfigChange({index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm}) " ng-required="{{dynamicField.required}} ">
                                             <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code] ">{{category.name || category}}</option>
                                         </select>
                                         <div ng-show="!metaForm[dynamicField.code].$valid " class="ui pointing red basic label ">
@@ -114,7 +114,7 @@
                                                 " ng-if="dynamicField.inputType=='select' && dynamicField.code!='year' ">
                                         <label>{{dynamicField.label}}</label>
                                         <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui search dropdown placeholder-padding " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]
-                                                " ng-change="dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:contentMeta[dynamicField.code]}) " ng-required="{{dynamicField.required}} ">
+                                                " ng-change="onConfigChange({index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm}) " ng-required="{{dynamicField.required}} ">
                                                 <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code] ">{{category.name || category}}</option>
                                         </select>
                                         <div ng-show="!metaForm[dynamicField.code].$valid  " class="ui pointing red basic label ">
@@ -155,7 +155,7 @@
                 <div class="ui buttons ">
                     <button id="closePopUp " class="ui orange button " type="button " ng-click="cancel() ">Cancel</button>
                     <div class="or "></div>
-                    <button class="ui blue button " type="button " ng-click="success() ">Save</button>
+                    <button class="ui blue button " type="button " ng-click="success({form:metaForm}) ">Save</button>
                 </div>
             </div>
         </div>
