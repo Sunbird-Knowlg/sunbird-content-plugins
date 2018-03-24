@@ -1,5 +1,4 @@
 /**
- * @description
  * @extends org.ekstep.collectioneditor.metadataPlugin
  * @since 1.0
  * @author Kartheek Palla And Manjunath Davanam
@@ -72,13 +71,13 @@ org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.ex
     },
 
     /**
-     * @description
+     * @description  - to get form filelds
      */
     getFormFields: function( /*Child class should return the form field data*/ ) {},
 
 
     /**
-     * @description
+     * @description - to get template
      */
     getTemplate: function( /*Child class should return the template*/ ) {},
 

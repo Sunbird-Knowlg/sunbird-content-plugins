@@ -1,5 +1,5 @@
 /**
- * @description
+ * @description sunbird metada plugin
  * @extends org.ekstep.collectioneditor.basePlugin
  * @since 1.0
  * @author Kartheek Palla And Manjunath Davanam
@@ -27,7 +27,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     config: {},
 
     /**
-     * @property
+     * @property     - map the response
      */
     mappedResponse: {},
 
@@ -62,7 +62,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     },
 
     /**
-     * @description     
+     * @description   - to render metadata form
      */
     invoke: function(event, config) {
         var instance = this;
@@ -157,7 +157,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     },
 
     /**
-     * @description     -
+     * @description     - save meta data
      */
     saveContent: function(contentMeta, callbackFn) {
         switch (contentMeta.mimeType) {

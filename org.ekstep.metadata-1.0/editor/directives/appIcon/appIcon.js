@@ -1,5 +1,5 @@
 /**
- * @description
+ * @description Appicon directive
  * @author Manjunath Davanam <manjunathd@ilimi.in>
  */
 

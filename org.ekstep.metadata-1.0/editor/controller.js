@@ -20,7 +20,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
 
 
     /**
-     * @property        -
+     * 
      */
     $scope.validation = {};
 
@@ -35,7 +35,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.fields = undefined;
 
     /**
-     * @property
+     * @property  - template name
      */
     $scope.tempalteName = undefined;
 

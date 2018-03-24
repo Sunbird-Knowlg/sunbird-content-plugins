@@ -1,5 +1,5 @@
 /**
- * @description
+ * @description concept selector directive
  * @author Manjunath Davanam <manjunathd@ilimi.in>
  */
 
