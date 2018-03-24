@@ -78,10 +78,8 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     if (qState && qState.val) {
       $scope.textboxtarget.state = qState.val;
       $scope.setStateInput();
-    }
-
-    $scope.showTemplate = true;
-    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.ASSESS);
+    }    
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS);
 
     $scope.safeApply();
   }
@@ -199,12 +197,13 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     }
     EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
 
-    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.RESPONSE, { "type": "INPUT", "values": telemetryAnsArr });
-    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.ASSESSEND, result);
+
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, {"type": "INPUT", "values": telemetryAnsArr});
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);
   }
 
   $scope.logTelemetryInteract = function(event) {
-    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.TOUCH, { type: QSTelemetryUtil.EVENT_TYPES.TOUCH, id: event.target.id });
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, {type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event.target.id});
   }
 });
 //# sourceURL=questionunitFtbRenderereTmpPlugin.js

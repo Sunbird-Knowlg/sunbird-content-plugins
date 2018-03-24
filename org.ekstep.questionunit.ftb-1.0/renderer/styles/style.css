@@ -13,7 +13,6 @@
     border-bottom: 3px dotted;
     width: -webkit-fill-available;
 }
-
 .ftbanswer-container {
     width: 90%;
     left: 5%;
@@ -54,4 +53,9 @@ input.ans-field {
 }
 .qc-answertxt{
     text-align: center;
+}
+@media (min-width:801px){
+    .qc-ftb-layout{
+    margin-top: 20%;
+}
 }

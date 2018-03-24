@@ -789,7 +789,9 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
 
     }
     ctrlScope.showTemplate = true;
-    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.ASSESS);
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS);
+    var qconfigData = qConfig.__cdata || qConfig;
+    ctrlScope.questionObj.questionConfig = JSON.parse(qconfigData);
     ctrlScope.safeApply();
   }
 
@@ -835,15 +837,15 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     }
     EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
 
-    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.ASSESSEND, result);
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);
   }
 
   $scope.logTelemetryItemResponse = function(data) {
-    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.RESPONSE, { "type": "INPUT", "values": data });
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { "type": "INPUT", "values": data });
   }
 
   $scope.logTelemetryInteract = function(event) {
-    if (event != undefined) QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.TOUCH, { type: QSTelemetryUtil.EVENT_TYPES.TOUCH, id: event });
+    if (event != undefined) QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event });
   }
 });
 //# sourceURL=questionunitmtfcontroller.js
