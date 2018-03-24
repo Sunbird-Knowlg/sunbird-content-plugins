@@ -262,6 +262,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
                 $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
                 $scope.showsuggestedContent = $scope.sidebarPages.length > 0 ? true : false;
+                $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
                 if(res.data.result.content.contentType === "TextBook"){
                     var channel = ecEditor.getContext('channel');
                     var reqObj = {
@@ -278,7 +279,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                             $scope.$safeApply();
                             callback && callback(err, res);
                         }else{
-                            callback && callback('unable to fetch dialcodes!', cateresp);
+                            callback && callback('unable to fetch dialcodes!', dialrep);
                         }
                     });
                 }else{

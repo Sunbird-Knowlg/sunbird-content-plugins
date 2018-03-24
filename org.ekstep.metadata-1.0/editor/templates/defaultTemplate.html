@@ -1,0 +1,163 @@
+<!--
+     It's default Template to render the metaforms.
+     It as a `Fixed layout` and `Dynamic layout` sections.
+     FixedLayouts are
+        1. App Icon
+        2. Name
+        3. Description
+        4. Keywords
+    These fixed layout fields are configurable
+    DynamicLayout Support any kind of input Types
+
+-->
+<script type="text/ng-template" ng-app="org.ekstep.metadataform" ng-controller="metadataForm as $ctrl" id="metadataTemplate">
+    <div class="ui modal active" id="meta-modal">
+        <div class="header">
+            <div class="ui two column grid">
+                <div class="row">
+                    <div class="column">
+                        <span><i class="icon edit"></i> Edit Details</span>
+                    </div>
+                    <div class="right aligned column">
+                        <i class="close link icon" ng-click="cancel()"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="scrolling content form-popup-modal">
+            <form class="ui form" id="content-meta-form" ng-init="initDropdown()" name="metaForm" novalidate ng-class="!appIconConfig.visible ? 'marginClass' : ''">
+                <div class="ui grid">
+                    <div class="row">
+                        <div class="two wide field" ng-hide="!appIconConfig.visible">
+                            <app-icon></app-icon>
+                        </div>
+                        <!--FIXED SECTION LAYOUT-->
+                        <div class="{{!appIconConfig.visible ? 'twelve wide field' : 'ten wide field'}}">
+                            <div ng-repeat="fixedField in fixedLayoutConfigurations">
+                                <div id="{{fixedField.code}}" class="field" ng-class="{'error': (!contentMeta[fixedField.code] && fixedField.required), 'required': fixedField.required}" name="{{fixedField.code}}" ng-if="(fixedField.inputType =='text' && fixedField.visible)">
+                                    <label>{{fixedField.label}}</label>
+                                    <div>
+                                        <div class="ui input" ng-class="{'disabled':!fixedField.editable}">
+                                            <input id="{{fixedField.code}}" ng-pattern="fixedField.validation.regex['value']" ng-maxlength="{{fixedField.validation.max[ 'value']}}" placeholder={{field.placeholder}} name="{{fixedField.code}} " ng-model="contentMeta.name " type="text " ng-required="{{fixedField.required}} "
+                                                ng-keyup="updateErrorMessage()">
+
+                                        </div>
+                                        <div ng-show="!metaForm[fixedField.code].$valid" class="ui pointing red basic label ">
+                                            {{validation[fixedField.code].errorMessage || DEFAULT_ERROR_MESSAGE}}
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div id="{{fixedField.code}} " class="field " ng-class="{ 'error':(!contentMeta[fixedField.code] && fixedField.required), 'required': fixedField.required} " name="{{fixedField.code}} " ng-if="(fixedField.inputType=='textarea'
+                                                && fixedField.visible) ">
+                                    <label>{{fixedField.label}}</label>
+                                    <div class=" ui input " ng-class="{ 'disabled':!fixedField.editable } ">
+                                        <textarea id="{{fixedField.code}} " placeholder={{field.placeholde}} ng-model="contentMeta.description " rows="{{fixedField.renderingHints.rows}} " name="{{fixedField.code}} " ng-required="{{fixedField.required}}" ng-pattern="fixedField.validation.regex['value']"
+                                            ng-maxlength="{{fixedField.validation.max['value']}}" ng-keyup="updateErrorMessage()"></textarea>
+                                    </div>
+                                    <div ng-show="!metaForm[fixedField.code].$valid" class="ui pointing red basic label ">
+                                        {{validation[fixedField.code].errorMessage || DEFAULT_ERROR_MESSAGE}}
+                                    </div>
+                                </div>
+                                <div id="{{fixedField.code}} " class="field " ng-class="{ 'error': (!contentMeta[fixedField.code].length && fixedField.required), 'required': fixedField.required} " name="{{fixedField.code}} " ng-if="(fixedField.inputType=='keywordsuggestion'
+                                                && fixedField.visible) " ng-required="{{fixedField.required}} ">
+                                    <label>{{fixedField.label}}</label>
+                                    <keywords config=fixedField></keywords>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row ">
+                        <!--DYNAMIC SECTION LAYOUT-->
+                        <div class="two wide field " ng-hide="!appIconConfig.visible ">
+                        </div>
+                        <div class="{{!appIconConfig.visible ? 'twelve wide field' : 'ten wide field'}}">
+                            <div class="ui grid ">
+                                <div class="six wide field " ng-repeat="dynamicField in dynamicLayoutConfigurations ">
+                                    <div id="{{dynamicField.code}} " class="field " ng-class="{'error': (!metaForm[dynamicField.code].$valid), 'required': dynamicField.required}" name="{{dynamicField.code}}
+                                                " ng-if="(dynamicField.inputType=='text') ">
+                                        <label>{{dynamicField.label}}</label>
+                                        <div>
+                                            <div class="ui input " ng-class="{ 'disabled':!dynamicField.editable} ">
+                                                <input id="{{dynamicField.code}} " placeholder={{dynamicField.placeholder}} name="{{dynamicField.code}} " ng-model="contentMeta[dynamicField.code] " type="text " ng-required="{{dynamicField.required}} " ng-pattern="dynamicField.validation.regex['value']"
+                                                    ng-maxlength="{{dynamicField.validation.max[ 'value']}}" ng-keyup="updateErrorMessage()">
+                                            </div>
+                                            <div ng-show="!metaForm[dynamicField.code].$valid " class="ui pointing red basic label ">
+                                                {{validation[dynamicField.code].errorMessage || DEFAULT_ERROR_MESSAGE}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!metaForm[dynamicField.code].$valid), 'required': dynamicField.required} " name="{{dynamicField.code}}" ng-if="(dynamicField.inputType=='number') ">
+                                        <label>{{dynamicField.label}}</label>
+                                        <div>
+                                            <div class="ui input " ng-class="{ 'disabled':!dynamicField.editable} ">
+                                                <input id="{{dynamicField.code}} " placeholder={{dynamicField.placeholder}} name="{{dynamicField.code}} " ng-model="contentMeta[dynamicField.code] " type="number" ng-pattern="dynamicField.validation.regex['value']" ng-maxlength="{{dynamicField.validation.max[ 'value']}}"
+                                                    ng-required="{{dynamicField.required}} " ng-keyup="updateErrorMessage()">
+                                            </div>
+                                            <div ng-show="!metaForm[dynamicField.code].$valid" class="ui pointing red basic label ">
+                                                {{validation[dynamicField.code].errorMessage || DEFAULT_ERROR_MESSAGE}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required), 'required': dynamicField.required} " name="{{dynamicField.code}}
+                                                " ng-if="dynamicField.inputType=='multiselect' ">
+                                        <label>{{dynamicField.label}}</label>
+                                        <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown " multiple=" " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]
+                                                " ng-change="dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:contentMeta[dynamicField.code]}) " ng-required="{{dynamicField.required}} ">
+                                            <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code] ">{{category.name || category}}</option>
+                                        </select>
+                                        <div ng-show="!metaForm[dynamicField.code].$valid " class="ui pointing red basic label ">
+                                            Please Select
+                                        </div>
+                                    </div>
+                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required), 'required': dynamicField.required} " name="{{dynamicField.code}}
+                                                " ng-if="dynamicField.inputType=='select' && dynamicField.code!='year' ">
+                                        <label>{{dynamicField.label}}</label>
+                                        <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui search dropdown placeholder-padding " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]
+                                                " ng-change="dispatchEvent( 'editor:form:change', {index:$index, field:dynamicField, value:contentMeta[dynamicField.code]}) " ng-required="{{dynamicField.required}} ">
+                                                <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code] ">{{category.name || category}}</option>
+                                        </select>
+                                        <div ng-show="!metaForm[dynamicField.code].$valid  " class="ui pointing red basic label ">
+                                            Please Select
+                                        </div>
+
+                                    </div>
+                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required), 'required': dynamicField.required} " name="{{dynamicField.code}}
+                                                " ng-if="dynamicField.code=='year' " ng-required=" {{dynamicField.required}} ">
+                                        <label>{{dynamicField.label}}</label>
+                                        <year config=dynamicField></year>
+                                    </div>
+                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required) , 'required': dynamicField.required} " name="{{dynamicField.code}}
+                                    " ng-if="dynamicField.inputType==='conceptselector'">
+                                        <label>{{dynamicField.label}}</label>
+                                        <concetpselector config=dynamicField></concetpselector>
+                                    </div>
+                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code].length && fixedField.required), 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="(dynamicField.inputType=='keywordsuggestion'
+                                    && dynamicField.visible) " ng-required="{{dynamicField.required}} ">
+                                        <label>{{dynamicField.label}}</label>
+                                        <keywords config=dynamicField></keywords>
+                                    </div>
+                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code].length && fixedField.required), 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="(dynamicField.inputType=='dialcode'
+                                    && dynamicField.visible) " ng-required="{{dynamicField.required}} ">
+                                        <dialcode></dialcode>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- ACTION SECTION LAYOUT -->
+            </form>
+
+        </div>
+        <div class="actions ">
+            <div class="twelve wide column right aligned ">
+                <div class="ui buttons ">
+                    <button id="closePopUp " class="ui orange button " type="button " ng-click="cancel() ">Cancel</button>
+                    <div class="or "></div>
+                    <button class="ui blue button " type="button " ng-click="success() ">Save</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>

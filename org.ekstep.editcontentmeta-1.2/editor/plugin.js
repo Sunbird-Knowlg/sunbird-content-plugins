@@ -10,14 +10,14 @@ org.ekstep.contenteditor.basePlugin.extend({
     /**
      * @memberOf org.ekstep.editcontentdetails.EditorPlugin#
      */
-    initialize: function () {
+    initialize: function() {
         var instance = this;
         ecEditor.addEventListener('org.ekstep.editcontentmeta:showpopup', this.loadHtml, this);
         var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/editcontentmeta.popup.html');
         var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/editcontentmeta.controller.js');
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath);
     },
-    loadHtml: function (event, data) {
+    loadHtml: function(event, data) {
         var instance = this;
 
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
@@ -25,7 +25,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             controller: 'editcontentmetaController',
             controllerAs: '$ctrl',
             resolve: {
-                'data': function () {
+                'data': function() {
                     return data;
                 }
             },
@@ -33,7 +33,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             showClose: false
         });
     },
-    newInstance: function () {}
+    newInstance: function() {}
 });
 
 //# sourceURL=editcontentmetaPlugin.js
