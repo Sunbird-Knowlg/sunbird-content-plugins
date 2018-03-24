@@ -140,6 +140,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     }
                 }
             };
+            $scope._sendReview();
             if ($scope.editorEnv == "COLLECTION") {
                 var rootNode = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(ecEditor.getContext('contentId'));
                 if (rootNode) editMetaOptions.contentMeta = rootNode.data && rootNode.data.metadata;
