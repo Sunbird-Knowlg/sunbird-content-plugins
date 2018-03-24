@@ -1,4 +1,4 @@
-var QSTelemetryUtil = {
+var QSTelemetryLogger = {
 	EVENT_TYPES: {
 		TOUCH: 'TOUCH',
 		RESPONSE: 'RESPONSE',
