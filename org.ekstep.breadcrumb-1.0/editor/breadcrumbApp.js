@@ -60,7 +60,7 @@ angular.module('org.ekstep.breadcrumb', []).controller('breadcrumbController', [
       _.forEach(path.split('/'), function (key) {
          if (key) {
             var node = ecEditor.jQuery($scope.collectionTreeId).fancytree("getTree").getNodeByKey(key);
-            if ((showFolder || (!showFolder && !node.folder)) && node.getLevel() !== 1) {
+               if ((showFolder || (!showFolder && !node.folder)) && (node.data.objectType == 'Collection' || node.getLevel() !== 1)) {
                $scope.path.push({
                   'title': node.title,
                   'nodeId': node.key,
