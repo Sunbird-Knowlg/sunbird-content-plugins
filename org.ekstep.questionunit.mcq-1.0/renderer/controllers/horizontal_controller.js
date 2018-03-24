@@ -10,7 +10,13 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     $scope.currentAudio;
     $scope.lastAudio;
     $scope.isShuffleOptions;
-    $scope.audioImage = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png");
+    if(isbrowserpreview){
+        $scope.audioImage = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png");
+    }else{
+        $scope.audioImage='file:///' + EkstepRendererAPI.getBaseURL() + "/content-plugins/org.ekstep.questionunit.mcq-1.0/renderer/assets/audio.png";
+    }
+    //$scope.audioImage = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png");
+    //$scope.audioImage="/content-plugins/org.ekstep.questionunit.mcq-1.0/renderer/assets/audio.png";
     $scope.init = function() {
         $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/styles/style.css");
         $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.mcq");
@@ -91,7 +97,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
         var ctrlScope = angular.element('#preview-mcq-horizontal').scope();
         ctrlScope.question = event.target;
         var qData = ctrlScope.question._currentQuestion.data.__cdata || ctrlScope.question._currentQuestion.data;
-        var questionData
+        var questionData;
         qData = JSON.parse(qData);
         if (isbrowserpreview) {
             questionData = qData;
