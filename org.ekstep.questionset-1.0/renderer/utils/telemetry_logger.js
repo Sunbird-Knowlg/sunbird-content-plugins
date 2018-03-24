@@ -42,12 +42,14 @@ var QSTelemetryLogger = {
 	},
 	logAssessEnd: function (result) {  
     var data = {
-      pass: result.pass,
+      pass: result.eval,
       score: result.score,
-      res: result.state.val,
+      res: result.values,
       qindex: this._question.index,
       qtitle: this._qConfig.metadata.title,
-      qdesc: this._qConfig.metadata.description ? this._qConfig.metadata.description : ''
+      qdesc: this._qConfig.metadata.description ? this._qConfig.metadata.description : '',
+      mc: [],
+      mmc: []
     }
 		TelemetryService.assessEnd(this._assessStart, data);
 	},
