@@ -15,14 +15,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     $scope.bigImage = false;
     $scope.expandQ = true;
     $scope.collapseQ = true;
-
-    if(isbrowserpreview){
-        $scope.audioImage = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png");
-    }else{
-        $scope.audioImage='file:///' + EkstepRendererAPI.getBaseURL() + "/content-plugins/org.ekstep.questionunit.mcq-1.0/renderer/assets/audio.png";
-    }
-    //$scope.audioImage = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png");
-    //$scope.audioImage="/content-plugins/org.ekstep.questionunit.mcq-1.0/renderer/assets/audio.png";
+    $scope.audioImage;
     $scope.init = function() {
         $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.mcq");
         $scope.pluginInstance.initPlugin($scope.pluginInstance);
@@ -30,7 +23,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
         $scope.events.eval = $scope.pluginInstance._manifest.id + ":evaluate";
         $scope.events.show = $scope.pluginInstance._manifest.id + ":show";
         $scope.events.hide = $scope.pluginInstance._manifest.id + ":hide";
-
+        $scope.addAudioIcon();
         $scope.removeEvents();
         $scope.registerEvents();
         if (!$rootScope.isMCQRendererd) {
@@ -69,7 +62,13 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
          */
         EkstepRendererAPI.addEventListener($scope.events.eval, $scope.evalListener);
     }
-
+    $scope.addAudioIcon=function(){
+         if(isbrowserpreview){
+         $scope.audioImage = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png");
+         }else{
+         $scope.audioImage='file:///' + EkstepRendererAPI.getBaseURL() + "/content-plugins/org.ekstep.questionunit.mcq-1.0/renderer/assets/audio.png";
+    }
+    }
     $scope.removeEvents = function() {
         EkstepRendererAPI.removeEventListener($scope.events.hide, $scope.hideEventListener, undefined);
         EkstepRendererAPI.removeEventListener($scope.events.show, $scope.showEventListener, undefined);
