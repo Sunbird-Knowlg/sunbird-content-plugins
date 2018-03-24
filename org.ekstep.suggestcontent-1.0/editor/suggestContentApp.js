@@ -5,6 +5,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
     $scope.excludeContents = [];
     $scope.metaData = {};
     $scope.responseData = [];
+    $scope.mode = ecEditor.getConfig('editorConfig').mode;
     $scope.suggestedContentList = {count:0, content:[]};
     var searchBody = {
                         "request": {

@@ -8,7 +8,7 @@ formApp.directive('concetpselector', function() {
 
     var conceptController = ['$scope', '$controller', function($scope, $controller) {
         var selectedConcepts = [];
-        $scope.contentMeta = $scope.$parent.$parent.$parent.contentMeta;
+        $scope.contentMeta = $scope.$parent.contentMeta;
         $scope.fieldConfig = $scope.config;
         if ($scope.contentMeta.concepts) {
             if ($scope.contentMeta.concepts.length)
@@ -43,7 +43,8 @@ formApp.directive('concetpselector', function() {
         controller: conceptController,
         scope: {
             config: '='
-        }
+        },
+        transclude: true
 
     };
 });

@@ -1,9 +1,19 @@
+/**
+Todo: Need to remove the "ui form classes"
+currently editor semantic ui is using 12 gird layout
+and collectio is using 16 grid layout so
+**/
+
 .ui.form .ten.wide.field {
     width: 82.5%!important;
 }
 
 .ui.form .six.wide.field {
     width: 50%!important;
+}
+
+.ui.form .twelve.wide.field {
+    width: 100%!important
 }
 
 .lef.ui.form .two.wide.fieldtlayout {

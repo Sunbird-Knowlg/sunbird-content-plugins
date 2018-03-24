@@ -1,6 +1,6 @@
 angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22.angular-timeago"]).controller('headerController', ['$scope', function($scope) {
 
-    var plugin = { id: "org.ekstep.sunbirdcommonheader", ver: "1.0" };
+    var plugin = { id: "org.ekstep.sunbirdcommonheader", ver: "1.2" };
     $scope.contentDetails = {
         contentTitle: "",
         contentImage: ""
@@ -32,17 +32,18 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.editorEnv = "COLLECTION"
                 $scope.publishMode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').publishMode;
                 $scope.isFalgReviewer = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').isFalgReviewer;
-                $scope.headerSettings.showEditMeta = false;
+                if (ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').mode.toLowerCase() === "read")
+                    $scope.headerSettings.showEditMeta = false;
                 $scope.resolveReviewBtnStatus();
                 break;
             default:
-                $scope.editorEnv = "NON-ECML" 
+                $scope.editorEnv = "NON-ECML"
                 break;
         };
         $scope.contentDetails = {
-            contentImage: ecEditor.getConfig('headerLogo') || meta.appIcon || ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/sunbird_logo.png"),
+            contentImage: meta.appIcon || ecEditor.getConfig('headerLogo') || ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/sunbird_logo.png"),
             contentTitle: meta.name
-        };            
+        };
         $scope.$safeApply();
     };
 
@@ -54,12 +55,14 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 if (res && res.data && res.data.responseCode == "OK") {
                     $scope.lastSaved = Date.now();
                     if ($scope.editorEnv == "COLLECTION") {
+                        if (org.ekstep.services.stateService.state.dialCodeMap || org.ekstep.services.stateService.state.invaliddialCodeMap)
+                            $scope.dialcodeLink(res);
                         $scope.hideReviewBtn = false;
                         $scope.resolveReviewBtnStatus();
                     }
-                    $scope.pendingChanges = false;                                        
+                    $scope.pendingChanges = false;
                 } else {
-                    $scope.disableSaveBtn = false;                    
+                    $scope.disableSaveBtn = false;
                 }
                 cb && cb(err, res);
                 $scope.$safeApply();
@@ -67,22 +70,73 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         });
     };
 
+    $scope.dialcodeLink = function(res, dialcodeMap) {
+        var dialcodeMap = org.ekstep.services.stateService.state.dialCodeMap;
+        var mapArr = [];
+        ecEditor._.forEach(org.ekstep.services.stateService.state.invaliddialCodeMap, function(value, key) {
+            if (_.has(res.data.result.identifiers, key)) {
+                org.ekstep.services.collectionService.highlightNode(res.data.result.identifiers[key]);
+                $scope.storeDialCodes(res.data.result.identifiers[key], value);
+            }else{
+                $scope.storeDialCodes(key, value);
+                org.ekstep.services.collectionService.highlightNode(key); 
+           }
+        });
+        ecEditor._.forEach(dialcodeMap, function(value, key) {
+            if (_.has(res.data.result.identifiers, key)) {
+                mapArr.push({ "identifier": res.data.result.identifiers[key], "dialcode": value });
+                $scope.storeDialCodes(res.data.result.identifiers[key], value);
+            } else {
+                mapArr.push({ "identifier": key, "dialcode": value });
+                $scope.storeDialCodes(key, value);
+            }
+        });
+        var request = {
+            "request": {
+                "content": mapArr
+            }
+        };
+        ecEditor.getService('dialcode').dialcodeLink(ecEditor.getContext('channel'), request, function(err, rep) {
+            if (!err) {
+                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                    title: 'DIAL code linking successfully!',
+                    position: 'topCenter',
+                    icon: 'fa fa-check-circle'
+                });
+            }
+        });
+    }
+
+    $scope.storeDialCodes = function(nodeId, dialCode){
+        var node = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(nodeId);
+        node.data.metadata["dialcodes"] = dialCode;
+    }
+
     $scope.previewContent = function(fromBeginning) {
         ecEditor.dispatchEvent('org.ekstep.contenteditor:preview', { fromBeginning: fromBeginning });
     }
 
     $scope.editContentMeta = function() {
-        ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup");
+        var subType = $scope.getContentType();
+        ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'save', subType: subType.toLowerCase(), framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: true })
     }
 
     $scope._sendReview = function() {
-        ecEditor.dispatchEvent("org.ekstep.contenteditor:review", function(err, res) {
-            if (res) $scope.closeEditor();
-            $scope.$safeApply();
-        });
+        var subType = $scope.getContentType();
+        ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'review', subType: subType.toLowerCase(), framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: true })
     };
 
-    $scope.sendForReview = function() {        
+    $scope.getContentType = function() {
+        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        if (meta.mimeType === 'application/vnd.ekstep.content-collection') {
+            var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
+            return rootNodeConfig.type
+        } else {
+            return 'resource'
+        }
+    }
+
+    $scope.sendForReview = function() {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         if (meta.status === "Draft") {
             var editMetaOptions = {
@@ -101,16 +155,15 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         });
                     }
                 }
-            };            
+            };
+            $scope._sendReview();
             if ($scope.editorEnv == "COLLECTION") {
                 var rootNode = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(ecEditor.getContext('contentId'));
                 if (rootNode) editMetaOptions.contentMeta = rootNode.data && rootNode.data.metadata;
             }
-
-            ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup", editMetaOptions);            
         } else {
             $scope._sendReview();
-        }        
+        }
     };
 
     $scope.limitedSharing = function() {
@@ -119,10 +172,10 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             controller: ['$scope', function($scope) {
                 ecEditor.dispatchEvent("org.ekstep.contenteditor:unlistedPublish", {
                     callback: function(err, res) {
-                        if (!err){
+                        if (!err) {
                             $scope.closeThisDialog();
                             window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
-                        }else{
+                        } else {
                             $scope.closeThisDialog();
                         }
                     }
@@ -181,7 +234,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope.setPendingChangingStatus = function(event, data) {
         $scope.pendingChanges = true;
-        $scope.disableSaveBtn = false;        
+        $scope.disableSaveBtn = false;
         $scope.$safeApply();
     };
 
@@ -317,22 +370,22 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         switch (meta.mimeType) {
             // case "application/vnd.ekstep.ecml-archive":
-                
-                // break;
+
+            // break;
             case "application/vnd.ekstep.content-collection":
                 org.ekstep.contenteditor.api.loadPlugin('org.ekstep.collectionwhatsnew', '1.0', function() {
                     var replaceData = {}
-                    switch(meta.contentType) {
+                    switch (meta.contentType) {
                         case 'Course':
-                            replaceData = {'replaceValue': '<!-- dynamicWord -->', 'value': 'course'}
+                            replaceData = { 'replaceValue': '<!-- dynamicWord -->', 'value': 'course' }
                             $scope.showWhatsNew = true;
                             break;
                         case 'TextBook':
-                            replaceData = {'replaceValue': '<!-- dynamicWord -->', 'value': 'book'}
+                            replaceData = { 'replaceValue': '<!-- dynamicWord -->', 'value': 'book' }
                             $scope.showWhatsNew = true;
                             break;
                         case 'LessonPlan':
-                            replaceData = {'replaceValue': '<!-- dynamicWord -->', 'value': 'lesson plan'}
+                            replaceData = { 'replaceValue': '<!-- dynamicWord -->', 'value': 'lesson plan' }
                             $scope.showWhatsNew = true;
                             break;
                         default:
@@ -343,14 +396,14 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     $scope.previousversion = store.get('previousCollectionversion') || 0;
                     $scope.whatsNewBadge = !($scope.nextversion === $scope.previousversion);
                     $scope.displayWhatsNew = function() {
-                        $scope.fireEvent({ id: 'org.ekstep.collectionwhatsnew:showpopup', data: replaceData});
+                        $scope.fireEvent({ id: 'org.ekstep.collectionwhatsnew:showpopup', data: replaceData });
                         store.set('previousCollectionversion', $scope.nextversion);
                         $scope.whatsNewBadge = false;
                     };
                 })
                 break;
-            // default:
-                
+                // default:
+
                 // break;
         };
     };
