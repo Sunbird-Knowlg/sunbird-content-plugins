@@ -186,8 +186,8 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
         $scope.selectedAns = val.isCorrect;
         var state = {
             val: $scope.selectedIndex,
-            options: $scope.questionObj.options
-            score: 
+            options: $scope.questionObj.options,
+            score: $scope.qConfig.max_score
         }
         QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, {"type": "INPUT", "values": $scope.selectedIndex});
         EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
