@@ -107,6 +107,7 @@ Plugin.extend({
             var ins = PluginManager.invoke(question.pluginId, question, this._stage, this._stage, this._theme);
 
             // Mark the question as rendered
+            this._currentQuestion = question;
             this.setRendered(question);
             setTimeout(function () {
                 Renderer.update = true;
@@ -117,13 +118,23 @@ Plugin.extend({
             // Mark the question as rendered
             this._currentQuestion = question;
             this.setRendered(question);
-
+            // // Telemetry Assess start
+            // var qConfig = JSON.parse(instance._currentQuestion.config);
+            // var subject = qConfig.metadata.language;
+            // var qLevel = "";
+            // var data = JSON.parse(instance._currentQuestion.data);
+            // debugger;
+            // this.assessStartEvent = TelemetryService.assess(instance._currentQuestion.id, subject, qLevel, data).start();
+            // debugger;
             // Fetch the question state if it was already rendered before
             this._currentQuestionState = this.getQuestionState(question.id);
             this.loadModules(question, function () {
-                setTimeout(function () {
+                setTimeout(function () {                    
+                    // Set current question for telmetry to log events from question-unit
+                    QSTelemetryUtil.setQuestion(instance._currentQuestion, instance.getRenderedIndex());
+                    
                     EkstepRendererAPI.dispatchEvent(question.pluginId + ':show', instance);
-                    // instance.setupNavigation();
+                    instance.setupNavigation();
                 }, 100);
             });
         }
@@ -158,6 +169,7 @@ Plugin.extend({
         EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ":evaluate", function (result) {
             if (instance._questionSetConfig.show_feedback == true) {
                 // Display feedback popup (tryagain or goodjob)
+                //alert("Question score-->"+result.partial_score);
                 instance.displayFeedback(result.eval);
 
             } else {

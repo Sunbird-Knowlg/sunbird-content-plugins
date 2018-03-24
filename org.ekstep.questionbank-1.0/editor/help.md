@@ -1,6 +1,6 @@
-**Question Bank**
+**Question Set**
 
-List of all questions in the question bank.
+You can add question sets to your lesson to help a child practice a concept.
 
 ---
 

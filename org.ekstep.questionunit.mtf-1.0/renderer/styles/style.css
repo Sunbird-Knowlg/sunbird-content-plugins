@@ -1,0 +1,115 @@
+#mtf-renderer {
+  height: 90vh;
+  margin: auto;
+  text-align: center;
+  line-height: 2em;
+  width: 80%;
+  margin-top: 2%;
+  display: grid;
+}
+
+
+.mtf-layout {
+  width: 100%;
+  top: 10px;
+  position: relative;
+  margin: auto;
+}
+
+header.mtf-header {
+  width: 100%;
+  background-color: #404041;
+  height: auto;
+}
+
+.mtf-question-text {
+  padding: 17px 10px 16px 10px;
+  color: white;
+  font-size: 100%;
+  line-height: normal;
+  text-align: center;
+}
+
+.mtf-hori-container {
+  margin: 0;
+  text-align: left;
+  overflow: hidden;
+  width: 100%;
+  display: block;
+  margin-top: 2%;
+  height: 18vh;
+}
+
+.mtf-hori-option {
+  cursor: pointer;
+  display: inline-block;
+  text-align: center;
+  vertical-align: middle;
+  margin: 0;
+  height: 100%;
+}
+
+.mtf-hori-ques-option {
+  margin: 0 7%;
+  border: 1px solid #c8ccd0;
+  height: 100%;
+}
+
+.mtf-hori-lhs-option {
+  margin: 0 7%;
+  border: 1px inset #c8ccd0;
+  height: 100%;
+}
+
+.mtfHoriRhsOption {
+  margin: 0 7%;
+  border: 1px solid #c8ccd0;
+  background-color: #ede9e3;
+  height: 100%;
+  box-shadow: 0 0 10px #c8ccd0;
+  position: relative;
+}
+
+.mtf-hori-ques-text {
+  line-height: 1.5;
+  padding: 5px;
+  display: table;
+  height: 100%;
+  width: 100%;
+}
+
+.mtf-hori-ques-text-inner {
+  display: table-cell;
+  vertical-align: middle;
+  text-align: center;
+  word-break: break-all;
+}
+
+[ng-drag].dragging {
+  position: absolute;
+  height: 18vh;
+}
+
+.width20 {
+  width: 20%;
+}
+
+.width25 {
+  width: 25%;
+}
+
+.width33 {
+  width: 33.33%;
+}
+
+.width20 [ng-drag].dragging {
+  width: 18%;
+}
+
+.width25 [ng-drag].dragging {
+  width: 20%;
+}
+
+.width33 [ng-drag].dragging {
+  width: 28.33%;
+}
