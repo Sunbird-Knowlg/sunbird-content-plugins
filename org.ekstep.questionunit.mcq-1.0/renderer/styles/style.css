@@ -161,8 +161,8 @@ input.qc-option-input-checkbox:checked::after {
 }
 
 img.qc-question-image {
-        width: 13vw;
-    height: 20vh;
+        max-width: 21%;
+    max-height: 53px;
     float: left;
 }
 
@@ -288,7 +288,7 @@ audio.qc-question-audio {
 }
 
 .qc-long-text-header-image {
-    height: 20vh;
+    height: 16vh;
     width: 80vw;
     background-color: #404041;
     min-height: 56px;
