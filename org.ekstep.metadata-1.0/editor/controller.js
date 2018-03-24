@@ -218,7 +218,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         form.metaData = getUpdatedMetadata($scope.contentMeta, $scope.originalContentMeta, $scope.fields);
         form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
         ecEditor.dispatchEvent('editor:form:success', {
-            isValid: !object.form.$valid,
+            isValid: object.form.$valid,
             formData: form,
             callback: successCB
         })
