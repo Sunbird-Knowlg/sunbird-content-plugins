@@ -101,14 +101,13 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope.editContentMeta = function() {
         var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
-        ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'review', subType: rootNodeConfig.type.toLowerCase(), framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: true })
+        ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'save', subType: rootNodeConfig.type.toLowerCase(), framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: true })
     }
 
     $scope._sendReview = function() {
-        ecEditor.dispatchEvent("org.ekstep.contenteditor:review", function(err, res) {
-            if (res) $scope.closeEditor();
-            $scope.$safeApply();
-        });
+        var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
+        ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'review', subType: rootNodeConfig.type.toLowerCase(), framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: true })
+
     };
 
     $scope.sendForReview = function() {
@@ -135,9 +134,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 var rootNode = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(ecEditor.getContext('contentId'));
                 if (rootNode) editMetaOptions.contentMeta = rootNode.data && rootNode.data.metadata;
             }
-
-            var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
-            ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'save', subType: rootNodeConfig.type.toLowerCase(), framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: true })
         } else {
             $scope._sendReview();
         }
