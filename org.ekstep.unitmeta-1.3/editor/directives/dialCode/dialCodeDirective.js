@@ -19,10 +19,10 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
             if (String(this.dialcodes).match(/^[A-Z0-9]{6}$/)) {
                 $scope.errorMessage = "";
                 var nodeId = org.ekstep.services.collectionService.getActiveNode().data.id;
+                if (org.ekstep.collectioneditor.cache.nodesModified && org.ekstep.collectioneditor.cache.nodesModified[nodeId]) {
+                    org.ekstep.collectioneditor.cache.nodesModified[nodeId].metadata["dialcodes"] = this.dialcodes;
+                }
                 if (ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, this.dialcodes) != -1) {
-                    if (org.ekstep.collectioneditor.cache.nodesModified && org.ekstep.collectioneditor.cache.nodesModified[nodeId]) {
-                        org.ekstep.collectioneditor.cache.nodesModified[nodeId].metadata["dialcodes"] = this.dialcodes;
-                    }
                     $scope.status = "success";
                     if ($scope.contentMeta.mimeType == 'application/vnd.ekstep.content-collection') {
                         if (!org.ekstep.services.stateService.state.dialCodeMap) {
@@ -31,7 +31,10 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                         org.ekstep.services.stateService.setState('dialCodeMap', nodeId, this.dialcodes);
                     }
                 } else {
-                    org.ekstep.services.collectionService.highlightNode(nodeId);
+                    if (!org.ekstep.services.stateService.state.invaliddialCodeMap) {
+                        org.ekstep.services.stateService.create('invaliddialCodeMap');
+                    }
+                    org.ekstep.services.stateService.setState('invaliddialCodeMap', nodeId, this.dialcodes);
                     $scope.status = "failure";
                 }
                 $scope.editFlag = true;
@@ -56,16 +59,24 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
         }
 
         $scope.updateDialCode = function (event, data) {
+            $scope.dialcodes = "";
             if ($scope.contentMeta.mimeType == 'application/vnd.ekstep.content-collection') {
                 var node = org.ekstep.services.collectionService.getActiveNode();
-                $scope.dialcodes = node.data.metadata.dialcodes;
+                if(node.data.metadata.dialcodes){
+                    $scope.dialcodes = node.data.metadata.dialcodes    
+                }else if(!_.isEmpty(org.ekstep.collectioneditor.cache.nodesModified) && org.ekstep.collectioneditor.cache.nodesModified[node.data.id]){
+                    $scope.dialcodes = org.ekstep.collectioneditor.cache.nodesModified[node.data.id].metadata["dialcodes"]
+                }
             } else {
                 $scope.dialcodes = $scope.contentMeta.dialcodes;
             }
             if($scope.dialcodes){
+                if(_.isArray($scope.dialcodes)){
+                    $scope.dialcodes = $scope.dialcodes[0];
+                }
                 $scope.editFlag = ($scope.dialcodes.length == $scope.maxLength) ? true : false;
                 if($scope.editFlag){
-                    $scope.status = ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, $scope.dialcodes) != -1 ? "failure" : "success";
+                    $scope.status = ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, $scope.dialcodes) == -1 ? "failure" : "success";
                 }
             } else{
                 $scope.editFlag = false;
