@@ -57,18 +57,15 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
 
         $scope.updateDialCode = function(event, data) {
             if ($scope.contentMeta.mimeType == 'application/vnd.ekstep.content-collection') {
-                if (data) {
-                    $scope.config = data;
-                    $scope.dialcodes = $scope.config.data.data.metadata.dialcodes;
-                }
+                var node = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
+                $scope.dialcodes = node.data.metadata.dialcodes;
             } else {
-                /// other content mimeTypes
                 $scope.dialcodes = $scope.contentMeta.dialcodes;
             }
             if ($scope.dialcodes) {
                 $scope.editFlag = ($scope.dialcodes.length == $scope.maxLength) ? true : false;
                 if ($scope.editFlag) {
-                    $scope.status = ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, this.dialCode) != -1 ? "failure" : "success";
+                    $scope.status = ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, $scope.dialcodes) != -1 ? "failure" : "success";
                 }
             } else {
                 $scope.editFlag = false;
