@@ -43,7 +43,7 @@ var QSTelemetryLogger = {
 	logAssessEnd: function (result) {  
     var data = {
       pass: result.eval,
-      score: result.score,
+      score: (result.score).toFixed(2),
       res: result.values,
       qindex: this._question.index,
       qtitle: this._qConfig.metadata.title,

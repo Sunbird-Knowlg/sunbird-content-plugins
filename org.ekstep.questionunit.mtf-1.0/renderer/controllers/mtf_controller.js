@@ -814,13 +814,16 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
 
   $scope.evaluate = function(callback) {
     var correctAnswer = true;
-    var answerArray = [];
     var ctrlScope = angular.element('#mtf-renderer').scope();
-
+    var teleValues = [];
     // Calculate partial score
     var tempCount = 0;
-    for (var i = 0; i < ctrlScope.qData.option.optionsLHS.length; i++) {
-      answerArray.push($scope.selectedAns[i]);
+    var lhsLength = ctrlScope.qData.option.optionsLHS.length;
+    for (var i = 0; i < lhsLength; i++) {
+      var telObj = {};
+      telObj[ctrlScope.qData.option.optionsLHS[i].text] = $scope.selectedAns[i].text;
+      teleValues.push(telObj);
+      
       if ($scope.selectedAns[i].mapIndex != ctrlScope.qData.option.optionsLHS[i].index) {
         correctAnswer = false;
       } else {
@@ -831,10 +834,10 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     var result = {
       eval: correctAnswer,
       state: {
-        val: answerArray
+        val: $scope.selectedAns
       },
       score: partialScore,
-      values: answerArray
+      values: teleValues
     }
     if (_.isFunction(callback)) {
       callback(result);
