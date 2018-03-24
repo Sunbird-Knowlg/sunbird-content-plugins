@@ -19,7 +19,7 @@
             <div class="table-of-contents-fixed-btns" ng-show="{{mode == 'Edit'}}">
                 <div class="padding-top-none"> 
                     <div class="ui two buttons table-of-contents-btn">
-                        <button class="ui basic button text-transform-none" ng-click="addNodeType('sibling')" ><a><i class="plus icon"></i>New Sibling</button>
+                        <button class="ui basic button text-transform-none" ng-click="addNodeType('sibling')" ng-disabled="isNewCollection"><a><i class="plus icon"></i>New Sibling</button>
                         <button class="ui basic button text-transform-none" ng-click="addNodeType('child')"><a> <i class="reply icon table-of-contents-child-icon "></i>New Child</a></button>  
                     </div>
                 </div>    
@@ -27,7 +27,7 @@
         </div>
         <div class="nine wide column editor-body">
             <div class="breadcrumbTemplate" ng-repeat="page in breadcrumb" ng-include="page.templateURL"></div>
-            <div class="ui grid no-margin">
+            <div class="ui grid no-margin" ng-show="!isNewCollection">
                 <div class="padded ui eight" ng-class="showsuggestedContent ? 'wide column' : 'twelve wide column'" id="contents-pane">
                     <div class="content-manifest">
                         <div class="sixteen wide column metacontent-holder metadata-form-container" ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" ng-include="page.templateURL"></div>
@@ -107,6 +107,16 @@
                 </div>
                 <div ng-show="showsuggestedContent" class="ui four wide column padding-none suggest-content-pane">
                     <div ng-repeat="page in sidebarPages" ng-include="page.templateURL"></div>
+                </div>
+            </div>
+            <div class="ui grid no-margin middle aligned list-container newCollection" ng-show="isNewCollection">
+                <div class="twelve wide column">
+                    <div class="ui" id="content-list">
+                        <div class="list-drag">
+                            <p>There is no unit created for this collection.</p>
+                            <p>Please click on new child to add a unit</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
