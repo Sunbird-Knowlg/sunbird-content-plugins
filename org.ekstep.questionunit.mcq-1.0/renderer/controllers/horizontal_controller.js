@@ -216,7 +216,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
                 options: ctrlScope.questionObj.options
             },
             score: correctAnswer ? $scope.qConfig.metadata.max_score : 0,
-            values: telValues
+            values: [telValues]
         }
         if (_.isFunction(callback)) {
             callback(result);
