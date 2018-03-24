@@ -16,7 +16,8 @@
             { "type": "js", "src": "editor/directives/year/yearDirective.js" },
             { "type": "js", "src": "editor/config.js" },
             { "type": "js", "src": "editor/directives/appIcon/appIcon.js" },
-            { "type": "css", "src": "editor/css/contentmetaform.css" }
+            { "type": "css", "src": "editor/css/contentmetaform.css" },
+            { "type": "js", "src": "editor/utils/index.js" }
         ]
     }
 }
