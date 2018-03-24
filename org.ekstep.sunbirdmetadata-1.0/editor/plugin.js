@@ -66,6 +66,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      */
     invoke: function(event, config) {
         var instance = this;
+        instance.metadata = config.metadata;
         if (!this.isConfigurationsExists(config.subType, config.action)) {
             this.getConfigurations(config, function(error, res) {
                 if (res) {
@@ -304,6 +305,10 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      */
     getMappedResponse: function(type, action) {
         return this.mappedResponse[type + '_' + action]
+    },
+
+    getMetaData: function() {
+        return this.metadata || ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
     }
 
 })

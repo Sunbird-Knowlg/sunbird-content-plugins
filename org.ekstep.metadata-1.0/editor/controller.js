@@ -321,7 +321,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         ecEditor.addEventListener('editor:form:change', $scope.onConfigChange, $scope);
         $scope.fields = org.ekstep.pluginframework.pluginManager.pluginObjs['org.ekstep.sunbirdmetadata'].getFormFields();
         $scope.tempalteName = org.ekstep.pluginframework.pluginManager.pluginObjs['org.ekstep.sunbirdmetadata'].getTemplate() || 'defaultTemplate';
-        $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
+        $scope.contentMeta = org.ekstep.pluginframework.pluginManager.pluginObjs['org.ekstep.sunbirdmetadata'].getMetaData();
         $scope.originalContentMeta = _.clone($scope.contentMeta);
         var layoutConfigurations = $scope.getLayoutConfigurations();
         $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
