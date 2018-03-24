@@ -203,7 +203,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * 
      * @fires       - 'editor:form:success'
      */
-    $scope.success = function(object) {
+    $scope.success = function(event, object) {
         $scope.isSubmit = true;
         !object.form.$valid && $scope.updateErrorMessage(object.form);
         var successCB = function(err, res) {
@@ -318,6 +318,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      *              - Which partions the fixedLayout and dynamic layout section fields
      */
     $scope.init = function() {
+        ecEditor.addEventListener('metadata:form:onsuccess', $scope.success, $scope);
+        ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
         $scope.fields = org.ekstep.pluginframework.pluginManager.pluginObjs['org.ekstep.sunbirdmetadata'].getFormFields();
         $scope.tempalteName = org.ekstep.pluginframework.pluginManager.pluginObjs['org.ekstep.sunbirdmetadata'].getTemplate() || 'defaultTemplate';
         $scope.contentMeta = org.ekstep.pluginframework.pluginManager.pluginObjs['org.ekstep.sunbirdmetadata'].getMetaData();
@@ -337,7 +339,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         } else {
             return {}
         }
-
     }
     $scope.init()
 

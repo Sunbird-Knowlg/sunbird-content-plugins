@@ -117,7 +117,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
                     this.saveMeta(data.formData.metaData, callbackFn)
                     break
                 default:
-                    console.error(this.config.action + 'Action wont support ')
+                    ecEditor.dispatchEvent("editor:form:data", data);
             }
         } else {
             throw 'Invalid form data'
