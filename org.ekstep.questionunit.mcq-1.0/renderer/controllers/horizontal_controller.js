@@ -135,6 +135,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
             }
         })
         ctrlScope.showTemplate = true;
+        QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.ASSESS);
         ctrlScope.questionObj.questionConfig = JSON.parse(qConfig);
         var state = {
             val: ctrlScope.selectedIndex,
@@ -170,7 +171,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
             val: $scope.selectedIndex,
             options: $scope.questionObj.options
         }
-        $scope.generateItemResponse(val, index);
+        QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.RESPONSE, {"type": "INPUT", "values": $scope.selectedIndex});
         EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
     }
 
@@ -193,27 +194,12 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
         }
         if (_.isFunction(callback)) {
             callback(result);
-        }
-        //commented because when feedback popup shown its becaome null
-        //ctrlScope.selectedIndex = null;
-    }
-    $scope.generateItemResponse = function(val, index) {
-        var edata = {
-            "target": {
-                "id": $scope.pluginInstance._manifest.id ? $scope.pluginInstance._manifest.id : "",
-                "ver": $scope.pluginInstance._manifest.ver ? $scope.pluginInstance._manifest.ver : "1.0",
-                "type": $scope.pluginInstance._manifest.type ? $scope.pluginInstance._manifest.type : "plugin"
-            },
-            "type": "CHOOSE",
-            "values": [{ index: val.text }]
-        }
-        TelemetryService.itemResponse(edata);
+        }       
+        QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.ASSESSEND, result);
     }
 
-    $scope.telemetry = function(event) {
-        TelemetryService.interact("TOUCH", event.target.id, "TOUCH", {
-            stageId: Renderer.theme._currentStage
-        });
+    $scope.logTelemetryInteract = function(event) {
+        if (event != undefined) QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.TOUCH, { type: QSTelemetryUtil.EVENT_TYPES.TOUCH, id: event.target.id });
     }
 
     $scope.playAudio = function(audio) {

@@ -782,6 +782,7 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
 
     }
     ctrlScope.showTemplate = true;
+    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.ASSESS);
     var qconfigData = qConfig.__cdata || qConfig;
     ctrlScope.questionObj.questionConfig = JSON.parse(qconfigData);
     ctrlScope.safeApply();
@@ -801,7 +802,6 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
   }
 
   $scope.evaluate = function(callback) {
-    //console.log($scope.questionObj123);
     var correctAnswer = true;
     var stateArray = [];
     var ctrlScope = angular.element('#mtf-renderer').scope();
@@ -811,12 +811,12 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
       stateArray.push($scope.droppableObjects[i]);
       if ($scope.droppableObjects[i].mapIndex != ctrlScope.questionObj.option.optionsLHS[i].index) {
         correctAnswer = false;
-      }else{
+      } else {
         tempCount++;
       }
     }
- 
-    var partialScore = (tempCount/ctrlScope.questionObj.option.optionsLHS.length) * $scope.maxScore.max_score;
+
+    var partialScore = (tempCount / ctrlScope.questionObj.option.optionsLHS.length) * $scope.maxScore.max_score;
 
     var result = {
       eval: correctAnswer,
@@ -825,49 +825,21 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
       },
       score: partialScore
     }
-    $scope.generateItemResponse(stateArray);
+    // $scope.generateItemResponse(stateArray);
     if (_.isFunction(callback)) {
       callback(result);
     }
     EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
-    //commented because when feedback popup shown its becaome null
-    //ctrlScope.selectedIndex = null;
-    $scope.telemetryAssess(partialScore);
+
+    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.ASSESSEND, result);
   }
-  $scope.generateItemResponse = function(answer) {
-    var edata = {
-      "target": {
-        "id": $scope.pluginInstance._manifest.id ? $scope.pluginInstance._manifest.id : "",
-        "ver": $scope.pluginInstance._manifest.ver ? $scope.pluginInstance._manifest.ver : "1.0",
-        "type": $scope.pluginInstance._manifest.type ? $scope.pluginInstance._manifest.type : "plugin"
-      },
-      "type": "MATCH",
-      "values": answer
-    }
-    TelemetryService.itemResponse(edata);
+
+  $scope.logTelemetryItemResponse = function(data) {
+    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.RESPONSE, { "type": "INPUT", "values": data });
   }
-  $scope.telemetryAssess = function(pScore){
-    var ctrlScope = angular.element('#mtf-renderer').scope();
-    var question = {
-      "id": "", // unique assessment question id. its an required property.
-      "maxscore":"", // user defined score to this assessment/question.
-      "desc": "short description",
-      "title": "title"
-    };
-    var eData = {
-      "item": ctrlScope.questionObj, // Required. Question Data
-      "index": "", // Optional. Index of the question within a content.
-      "pass": pScore == $scope.maxScore.max_score ? "Yes" : "No", // Required. Yes, No. This is case-sensitive. default value: No.
-      "score": pScore, // Required. Evaluated score (Integer or decimal) on answer(between 0 to 1), default is 1 if pass=YES or 0 if pass=NO. 
-      "resvalues": [{"id":"value"}], // Required. Array of key-value pairs that represent child answer (result of this assessment)
-      "duration":  1// Required. time taken (decimal number) for this assessment in seconds
-    };
-    TelemetryService.assess(eData);
-  }
-  $scope.telemetry = function(event) {
-    TelemetryService.interact("TOUCH", event.target.id, "TOUCH", {
-      stageId: Renderer.theme._currentStage
-    });
+
+  $scope.logTelemetryInteract = function(event) {
+    if (event != undefined) QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.TOUCH, { type: QSTelemetryUtil.EVENT_TYPES.TOUCH, id: event });
   }
 });
 //# sourceURL=questionunitmtfcontroller.js
