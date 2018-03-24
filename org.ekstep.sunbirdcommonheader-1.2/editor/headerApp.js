@@ -55,7 +55,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 if (res && res.data && res.data.responseCode == "OK") {
                     $scope.lastSaved = Date.now();
                     if ($scope.editorEnv == "COLLECTION") {
-                        if (org.ekstep.services.stateService.state.dialCodeMap)
+                        if (org.ekstep.services.stateService.state.dialCodeMap || org.ekstep.services.stateService.state.invaliddialCodeMap)
                             $scope.dialcodeLink(res);
                         $scope.hideReviewBtn = false;
                         $scope.resolveReviewBtnStatus();
@@ -73,11 +73,22 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.dialcodeLink = function(res, dialcodeMap) {
         var dialcodeMap = org.ekstep.services.stateService.state.dialCodeMap;
         var mapArr = [];
+        ecEditor._.forEach(org.ekstep.services.stateService.state.invaliddialCodeMap, function(value, key) {
+            if (_.has(res.data.result.identifiers, key)) {
+                org.ekstep.services.collectionService.highlightNode(res.data.result.identifiers[key]);
+                $scope.storeDialCodes(res.data.result.identifiers[key], value);
+            }else{
+                $scope.storeDialCodes(key, value);
+                org.ekstep.services.collectionService.highlightNode(key); 
+           }
+        });
         ecEditor._.forEach(dialcodeMap, function(value, key) {
             if (_.has(res.data.result.identifiers, key)) {
                 mapArr.push({ "identifier": res.data.result.identifiers[key], "dialcode": value });
+                $scope.storeDialCodes(res.data.result.identifiers[key], value);
             } else {
                 mapArr.push({ "identifier": key, "dialcode": value });
+                $scope.storeDialCodes(key, value);
             }
         });
         var request = {
@@ -94,6 +105,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 });
             }
         });
+    }
+
+    $scope.storeDialCodes = function(nodeId, dialCode){
+        var node = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(nodeId);
+        node.data.metadata["dialcodes"] = dialCode;
     }
 
     $scope.previewContent = function(fromBeginning) {
