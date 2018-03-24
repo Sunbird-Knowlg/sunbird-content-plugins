@@ -32,7 +32,7 @@
                         {{val.text}}</div>
                 </div>
                 <div class="qc-option-checkbox">
-                    <input type="radio" name="radio" value="pass" class="qc-option-input-checkbox" ng-checked="$index+1 == selectedIndex" ng-click="telemetry($event);" id="option">
+                    <input type="radio" name="radio" value="pass" class="qc-option-input-checkbox" ng-checked="$index+1 == selectedIndex" ng-click="logTelemetryInteract($event);" id="option">
                 </div>
             </div>
         </div>
@@ -42,7 +42,7 @@
                     <div class="qc-grid-option-value">
                         <div class="qc-grid-option-text-outer" id="{{val.key+1}}">
                             <div class="qc-grid-option-text" ng-class="{'qsverticalselectedopt': val.key+1 == selectedIndex}"  ng-click="selectedvalue(val.option, val.key+1);">
-                                <div ng-if="val.option.image.length > 0" class="qc-vertical-option-zoomin" ng-click="showImageModel(val.option.image)" class="qc-opt">+</div>
+                                <span ng-if="val.option.image.length > 0" class="qc-vertical-option-zoomin" ng-click="showImageModel(val.option.image)" class="qc-opt">+</span>
                                 <div ng-if="val.option.audio.length > 0 && val.option.image.length == 0" class="qc-opt">
                                     <img src="{{audioImage}}" class="qc-vertical-audio-with-image" ng-click="playAudio(val.option.audio)" />
                                 </div>
@@ -52,7 +52,7 @@
                             </div>
                             <div class="qc-option-grid-checkbox">
                                 <div>
-                                    <input type="radio" name="radio" value="pass" class="qc-option-input-checkbox" ng-checked="val.key+1 == selectedIndex" ng-click="telemetry($event); selectedvalue(val.option, val.key+1);" id="option">
+                                    <input type="radio" name="radio" value="pass" class="qc-option-input-checkbox" ng-checked="val.key+1 == selectedIndex" ng-click="logTelemetryInteract($event); selectedvalue(val.option, val.key+1);" id="option">
                                 </div>
                                 <div ng-if="val.option.audio.length > 0 && val.option.image.length > 0">
                                     <img src="{{audioImage}}" class="qc-grid-audio-with-image" ng-click="playAudio(val.option.audio)" />
@@ -76,7 +76,7 @@
                         </div>
                         <div class="qc-option-grid-checkbox">
                             <div>
-                                <input type="radio" name="radio" value="pass" class="qc-option-input-checkbox" ng-checked="val.key+1 == selectedIndex" ng-click="telemetry($event); selectedvalue(val.option, val.key+1);" id="option">
+                                <input type="radio" name="radio" value="pass" class="qc-option-input-checkbox" ng-checked="val.key+1 == selectedIndex" ng-click="logTelemetryInteract($event); selectedvalue(val.option, val.key+1);" id="option">
                             </div>
                             <div ng-if="val.option.audio.length > 0 && val.option.image.length > 0">
                                 <img src="{{audioImage}}" class="qc-grid-audio-with-image" ng-click="playAudio(val.option.audio)" />
@@ -103,7 +103,7 @@
                             </div>
                             <div class="qc-option-vertical-checkbox">
                                 <div>
-                                    <input type="radio" name="radio" value="pass" class="qc-option-input-checkbox" ng-checked="$index+1 == selectedIndex" ng-click="telemetry($event);selectedvalue(val, $index+1);" id="option">
+                                    <input type="radio" name="radio" value="pass" class="qc-option-input-checkbox" ng-checked="$index+1 == selectedIndex" ng-click="logTelemetryInteract($event);selectedvalue(val, $index+1);" id="option">
                                 </div>
                                 <div ng-if="val.audio.length > 0 && val.image.length > 0">
                                     <img src="{{audioImage}}" class="qc-vertical-audio-with-image" ng-click="playAudio(val.audio)" />

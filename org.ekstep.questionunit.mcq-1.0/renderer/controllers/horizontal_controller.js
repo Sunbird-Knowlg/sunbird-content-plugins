@@ -12,7 +12,13 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     $scope.currentAudio;
     $scope.lastAudio;
     $scope.isShuffleOptions;
-    $scope.audioImage = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png");
+    if(isbrowserpreview){
+        $scope.audioImage = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png");
+    }else{
+        $scope.audioImage='file:///' + EkstepRendererAPI.getBaseURL() + "/content-plugins/org.ekstep.questionunit.mcq-1.0/renderer/assets/audio.png";
+    }
+    //$scope.audioImage = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png");
+    //$scope.audioImage="/content-plugins/org.ekstep.questionunit.mcq-1.0/renderer/assets/audio.png";
     $scope.init = function() {
         // $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/styles/style.css");
         $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.mcq");
@@ -32,13 +38,13 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
                 EventBus.removeEventListener($scope.events.eval, $scope.evalListener)
         }
     }
-    $scope.trustSrcurl = function(data) {
-        if (isbrowserpreview) {
-            return $sce.trustAsResourceUrl(data);
-        } else {
-            return 'file:///' + EkstepRendererAPI.getBaseURL() + data;
-        }
-    }
+    // $scope.trustSrcurl = function(data) {
+    //     if (isbrowserpreview) {
+    //         return $sce.trustAsResourceUrl(data);
+    //     } else {
+    //         return 'file:///' + EkstepRendererAPI.getBaseURL() + data;
+    //     }
+    // }
 
     $scope.registerEvents = function() {
         /**
@@ -106,7 +112,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
         var ctrlScope = angular.element('#preview-mcq-horizontal').scope();
         ctrlScope.question = event.target;
         var qData = ctrlScope.question._currentQuestion.data.__cdata || ctrlScope.question._currentQuestion.data;
-        var questionData
+        var questionData;
         qData = JSON.parse(qData);
         if (isbrowserpreview) {
             questionData = qData;
@@ -144,6 +150,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
             }
         })
         ctrlScope.showTemplate = true;
+        QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.ASSESS);
         ctrlScope.questionObj.questionConfig = JSON.parse(qConfig);
         var state = {
             val: ctrlScope.selectedIndex,
@@ -179,7 +186,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
             val: $scope.selectedIndex,
             options: $scope.questionObj.options
         }
-        $scope.generateItemResponse(val, index);
+        QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.RESPONSE, {"type": "INPUT", "values": $scope.selectedIndex});
         EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
     }
 
@@ -202,30 +209,16 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
         }
         if (_.isFunction(callback)) {
             callback(result);
-        }
-        //commented because when feedback popup shown its becaome null
-        //ctrlScope.selectedIndex = null;
-    }
-    $scope.generateItemResponse = function(val, index) {
-        var edata = {
-            "target": {
-                "id": $scope.pluginInstance._manifest.id ? $scope.pluginInstance._manifest.id : "",
-                "ver": $scope.pluginInstance._manifest.ver ? $scope.pluginInstance._manifest.ver : "1.0",
-                "type": $scope.pluginInstance._manifest.type ? $scope.pluginInstance._manifest.type : "plugin"
-            },
-            "type": "CHOOSE",
-            "values": [{ index: val.text }]
-        }
-        TelemetryService.itemResponse(edata);
+        }       
+        QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.ASSESSEND, result);
     }
 
-    $scope.telemetry = function(event) {
-        TelemetryService.interact("TOUCH", event.target.id, "TOUCH", {
-            stageId: Renderer.theme._currentStage
-        });
+    $scope.logTelemetryInteract = function(event) {
+        if (event != undefined) QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.TOUCH, { type: QSTelemetryUtil.EVENT_TYPES.TOUCH, id: event.target.id });
     }
 
     $scope.playAudio = function(audio) {
+            audio=$scope.checkBaseUrl(audio);
         if ($scope.lastAudio && ($scope.lastAudio != audio)) {
             $scope.currentAudio.pause();
         }
