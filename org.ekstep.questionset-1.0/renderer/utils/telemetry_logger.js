@@ -33,7 +33,7 @@ var QSTelemetryLogger = {
         "type": this._plugin._manifest.type ? this._plugin._manifest.type : "plugin"
       },
       "type": data.type,
-      "values": data.values
+      "res": data.values
     }
     TelemetryService.itemResponse(edata);
 	},

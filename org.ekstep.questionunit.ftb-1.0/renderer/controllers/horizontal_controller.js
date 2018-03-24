@@ -189,7 +189,8 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
       state: {
         val: answerArray
       },
-      score: partialScore
+      score: partialScore,
+      values: telemetryAnsArr
     }
     if (_.isFunction(callback)) {
       //$scope.removeEvents();
@@ -197,7 +198,7 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     }
     EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
 
-
+    console.log("FTB Tel", telemetryAnsArr);
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, {"type": "INPUT", "values": telemetryAnsArr});
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);
   }
