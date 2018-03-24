@@ -65,7 +65,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
             if($scope.dialcodes){
                 $scope.editFlag = ($scope.dialcodes.length == $scope.maxLength) ? true : false;
                 if($scope.editFlag){
-                    $scope.status = ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, this.dialcodes) != -1 ? "failure" : "success";
+                    $scope.status = ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, $scope.dialcodes) != -1 ? "failure" : "success";
                 }
             } else{
                 $scope.editFlag = false;

@@ -55,6 +55,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
      * Resetting the content list/preview page when a new node is selected
      */
     $scope.resetContentList = function() {
+        $scope.isNewCollection = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild().children ? false : true;
         $scope.contentList = [];
         $scope.isContent = false;
         var iframe = document.getElementById('previewContentIframe');
@@ -102,6 +103,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
      * Remove content from collection list
      */
     $scope.removeContent = function(event, data) {
+        $scope.isNewCollection = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild().children ? false : true;
         $scope.contentList = _.remove($scope.contentList, function(content) {
             return content.data.metadata.identifier != data
         });
@@ -330,6 +332,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         }
         if (nodeType == 'child') {
             org.ekstep.services.collectionService.addChild()
+            $scope.isNewCollection = false;
+            $scope.$safeApply();
         }
     }
 

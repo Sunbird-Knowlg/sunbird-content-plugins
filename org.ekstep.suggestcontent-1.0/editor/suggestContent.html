@@ -25,7 +25,7 @@
                 <div class="content">
                     <p class="description text-block-ellipsis" ng-if="lesson.description">{{ lesson.description }}</p>
                     <div class="extra">
-                        <div class="ui right floated content" ng-click="addContent(lesson, $index);generateTelemetry({type: 'click', subtype: 'AddButton', target: 'Add'})">
+                        <div class="ui right floated content" ng-click="addContent(lesson, $index);generateTelemetry({type: 'click', subtype: 'AddButton', target: 'Add'})" ng-if="mode.toLowerCase() === 'edit'">
                             <a><span class="suggestedbottom">ADD</span></a> 
                         </div>
                         <div class="middle aligned content">
