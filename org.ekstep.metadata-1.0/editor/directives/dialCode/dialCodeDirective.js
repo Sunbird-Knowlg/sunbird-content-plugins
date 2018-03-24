@@ -17,19 +17,19 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
 
         // validate the dialCode
         $scope.validateDialCode = function() {
-            if (String(this.dialCode).match(/^[A-Z0-9]{6}$/)) {
+            if (String(this.dialcodes).match(/^[A-Z0-9]{6}$/)) {
                 $scope.errorMessage = "";
-                if (ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, this.dialCode) != -1) {
+                if (ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, this.dialcodes) != -1) {
                     $scope.status = "success";
                     if ($scope.contentMeta.mimeType == 'application/vnd.ekstep.content-collection') {
                         var node = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
                         if (org.ekstep.collectioneditor.cache.nodesModified && org.ekstep.collectioneditor.cache.nodesModified[node.data.id]) {
-                            org.ekstep.collectioneditor.cache.nodesModified[node.data.id].metadata["dialCode"] = this.dialCode;
+                            org.ekstep.collectioneditor.cache.nodesModified[node.data.id].metadata["dialcodes"] = this.dialcodes;
                         }
                         if (!org.ekstep.services.stateService.state.dialCodeMap) {
                             org.ekstep.services.stateService.create('dialCodeMap');
                         }
-                        org.ekstep.services.stateService.setState('dialCodeMap', node.data.id, this.dialCode);
+                        org.ekstep.services.stateService.setState('dialCodeMap', node.data.id, this.dialcodes);
                     }
                 } else {
                     $scope.status = "failure";
@@ -48,7 +48,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
 
         // clear dial code values
         $scope.clearDialCode = function() {
-            $scope.dialCode = "";
+            $scope.dialcodes = "";
         }
         $scope.init = function() {
             ecEditor.addEventListener("editor:dialcode:get", $scope.getCurrentDialCode, $scope);
@@ -59,14 +59,14 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
             if ($scope.contentMeta.mimeType == 'application/vnd.ekstep.content-collection') {
                 if (data) {
                     $scope.config = data;
-                    $scope.dialCode = $scope.config.data.data.metadata.dialCode;
+                    $scope.dialcodes = $scope.config.data.data.metadata.dialcodes;
                 }
             } else {
                 /// other content mimeTypes
-                $scope.dialCode = $scope.contentMeta.dialCode;
+                $scope.dialcodes = $scope.contentMeta.dialcodes;
             }
-            if ($scope.dialCode) {
-                $scope.editFlag = ($scope.dialCode.length == $scope.maxLength) ? true : false;
+            if ($scope.dialcodes) {
+                $scope.editFlag = ($scope.dialcodes.length == $scope.maxLength) ? true : false;
                 if ($scope.editFlag) {
                     $scope.status = ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, this.dialCode) != -1 ? "failure" : "success";
                 }
@@ -76,12 +76,12 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
         }
 
         $scope.retrunDialCode = function() {
-            ecEditor.dispatchEvent("editor:content:dialcode", $scope.dialCode);
+            ecEditor.dispatchEvent("editor:content:dialcode", $scope.dialcodes);
         }
 
         $scope.getCurrentDialCode = function(event, options) {
             if (options && options.callback) {
-                options.callback($scope.dialCode);
+                options.callback($scope.dialcodes);
             }
         }
 

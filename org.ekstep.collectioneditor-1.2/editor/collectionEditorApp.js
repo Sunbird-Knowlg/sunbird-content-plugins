@@ -263,7 +263,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
                 $scope.showsuggestedContent = $scope.sidebarPages.length > 0 ? true : false;
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
-                if(res.data.result.content.contentType === "TextBook"){
+                var rootNodeConfig = ecEditor._.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
+                if(rootNodeConfig.type.toLowerCase() === "textbook"){
                     var channel = ecEditor.getContext('channel');
                     var reqObj = {
                         "request": {
