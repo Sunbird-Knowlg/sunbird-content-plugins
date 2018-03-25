@@ -8,7 +8,7 @@ formApp.directive('year', function() {
 
     var yearDropdownController = ['$scope', '$controller', function($scope, $controller) {
         $scope.years = [];
-        $scope.contentMeta = $scope.$parent.$parent.$parent.contentMeta;
+        $scope.contentMeta = $scope.$parent.contentMeta;
         $scope.fieldConfig = $scope.config;
         $scope.initYearDropDown = function() {
             $scope.currentYear = new Date().getFullYear();

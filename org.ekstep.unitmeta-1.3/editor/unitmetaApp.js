@@ -121,10 +121,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                 $scope.$safeApply();
             }
         });
-        ecEditor.dispatchEvent("editor:update:dialcode", {
-            data: org.ekstep.services.collectionService.getActiveNode(),
-            contentId: org.ekstep.contenteditor.api.getContext('contentId')
-        });
+        ecEditor.dispatchEvent("editor:update:dialcode");
         ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
         $scope.$safeApply();
     }
