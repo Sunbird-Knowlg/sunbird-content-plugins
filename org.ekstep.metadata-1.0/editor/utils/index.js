@@ -32,6 +32,11 @@ function convertToDataType(targetType, data) {
                 return data
             }
             break;
+        case 'STRING':
+            if (_.isNumber(data)) {
+                return data.toString();
+            }
+            break;
     }
 }
 

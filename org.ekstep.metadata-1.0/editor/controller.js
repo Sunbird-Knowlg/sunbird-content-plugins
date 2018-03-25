@@ -208,9 +208,15 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         !object.form.$valid && $scope.updateErrorMessage(object.form);
         var successCB = function(err, res) {
             if (res) {
+                // success toast message which is already handled by content editor function plugin
                 console.info("Data is saved successfully.", res)
             } else {
                 console.error("Fails to save the data", err);
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'Unable to update the content, Please try again!',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
             }
             $scope.closeThisDialog();
         }
