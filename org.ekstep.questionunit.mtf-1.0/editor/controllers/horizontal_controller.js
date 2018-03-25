@@ -3,7 +3,7 @@
  * @class org.ekstep.questionunitmcq:mtfQuestionFormController
  * Sachin<sachin.kumar@goodworklabs.com>
  */
-angular.module('createquestionapp', []).controller('mtfQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope) {
+angular.module('mtfApp', []).controller('mtfQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope) {
   $scope.formVaild = false;
   $scope.indexCount=4;
   $scope.mtfFormData = {
