@@ -43,6 +43,7 @@
 .card-list .ui.card{
     box-shadow: 0 2px 4px 0 rgba(164, 164, 164, 0.5);
     border: solid 1px #dedede;
+    width: 98%;
 }
 .card-list {
     padding-left: 10px;

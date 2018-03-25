@@ -172,6 +172,7 @@ angular.module('createquestionapp', [])
               }
             }
           }
+          $scope.itemsLoading = false;
           $scope.$safeApply();
         } else {
           $scope.itemsLoading = false;
@@ -189,6 +190,7 @@ angular.module('createquestionapp', [])
      *  @memberof QuestionFormController
      */
     $scope.init = function() {
+      $scope.itemsLoading = true;
       $scope.searchQuestions();
       $scope.selectedIndex = undefined;
       if (pluginInstance.editData) {
