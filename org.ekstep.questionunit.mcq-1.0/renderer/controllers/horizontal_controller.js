@@ -188,7 +188,10 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
             options: $scope.questionObj.options,
             score: $scope.qConfig.max_score
         }
-        QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, {"type": "INPUT", "values": $scope.selectedIndex});
+
+        var telValues = {};
+        telValues['option'+index] = val.image.length > 0 ? val.image : val.text;
+        QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, {"type": "MCQ", "values": [telValues]});
         EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
     }
 
@@ -203,13 +206,17 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
             }
         });
 
+        var telValues = {};
+        telValues['option'+ctrlScope.selectedIndex] = selectedAnsData.image.length > 0 ? selectedAnsData.image : selectedAnsData.text;
+        
         var result = {
             eval: correctAnswer,
             state: {
                 val: ctrlScope.selectedIndex,
                 options: ctrlScope.questionObj.options
             },
-            score: $scope.qConfig.metadata.max_score
+            score: correctAnswer ? $scope.qConfig.metadata.max_score : 0,
+            values: [telValues]
         }
         if (_.isFunction(callback)) {
             callback(result);

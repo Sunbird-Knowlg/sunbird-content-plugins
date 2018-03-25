@@ -669,6 +669,7 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
   $scope.draggableObjects;
 
   $scope.onDropToLHS = function(index, data, evt) {
+    var responseData = {};
     var ctrlScope = angular.element('#mtf-renderer').scope();
     for (var i = 0; i < $scope.draggableObjects.length; i++) {
       if ($scope.draggableObjects[i].mapIndex == data.mapIndex) {
@@ -690,6 +691,11 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
       $scope.selectedAns.splice(index, 1, data);
       $scope.selectedAns.splice(evt.event.target.id, 1, ctrlScope.qData.option.emptyBoxs[evt.event.target.id]);
     }
+    responseData = [{
+      "lhs" : ctrlScope.qData.option.optionsLHS[index].text,
+      "rhs" : data.text
+    }];
+    ctrlScope.logTelemetryItemResponse(responseData);
   }
   $scope.onDropToRHS = function(data, evt) {
     var ctrlScope = angular.element('#mtf-renderer').scope();
@@ -808,13 +814,16 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
 
   $scope.evaluate = function(callback) {
     var correctAnswer = true;
-    var answerArray = [];
     var ctrlScope = angular.element('#mtf-renderer').scope();
-
+    var teleValues = [];
     // Calculate partial score
     var tempCount = 0;
-    for (var i = 0; i < ctrlScope.qData.option.optionsLHS.length; i++) {
-      answerArray.push($scope.selectedAns[i]);
+    var lhsLength = ctrlScope.qData.option.optionsLHS.length;
+    for (var i = 0; i < lhsLength; i++) {
+      var telObj = {};
+      telObj[ctrlScope.qData.option.optionsLHS[i].text] = $scope.selectedAns[i].text;
+      teleValues.push(telObj);
+      
       if ($scope.selectedAns[i].mapIndex != ctrlScope.qData.option.optionsLHS[i].index) {
         correctAnswer = false;
       } else {
@@ -822,13 +831,13 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
       }
     }
     var partialScore = (tempCount / ctrlScope.qData.option.optionsLHS.length) * $scope.qConfig.max_score;
-
     var result = {
       eval: correctAnswer,
       state: {
-        val: answerArray
+        val: $scope.selectedAns
       },
-      score: partialScore
+      score: partialScore,
+      values: teleValues
     }
     if (_.isFunction(callback)) {
       callback(result);
