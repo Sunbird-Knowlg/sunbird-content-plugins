@@ -32,7 +32,7 @@ function convertToDataType(targetType, data) {
                 return data
             }
             break;
-        case 'STRING':
+        case 'TEXT':
             if (_.isNumber(data)) {
                 return data.toString();
             }
