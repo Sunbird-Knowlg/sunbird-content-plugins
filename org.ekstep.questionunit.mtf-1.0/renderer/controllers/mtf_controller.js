@@ -689,10 +689,10 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     } else if ($scope.selectedAns[evt.event.target.id].mapIndex == data.mapIndex) {
       var t = $scope.selectedAns[index];
       $scope.selectedAns.splice(index, 1, data);
-      $scope.selectedAns.splice(evt.event.target.id, 1, ctrlScope.qData.option.emptyBoxs[evt.event.target.id]);
+      $scope.selectedAns.splice(evt.event.target.id, 1, $scope.qData.option.emptyBoxs[evt.event.target.id]);
     }
     responseData = [{
-      "lhs" : ctrlScope.qData.option.optionsLHS[index].text,
+      "lhs" : $scope.qData.option.optionsLHS[index].text,
       "rhs" : data.text
     }];
     ctrlScope.logTelemetryItemResponse(responseData);
@@ -701,7 +701,7 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     var ctrlScope = angular.element('#mtf-renderer').scope();
     for (var i = 0; i < $scope.selectedAns.length; i++) {
       if ($scope.selectedAns[i].mapIndex == data.mapIndex) {
-        $scope.selectedAns.splice(i, 1, ctrlScope.qData.option.emptyBoxs[i]);
+        $scope.selectedAns.splice(i, 1, $scope.qData.option.emptyBoxs[i]);
         $scope.draggableObjects.push(data);
       }
     }
@@ -767,15 +767,15 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
 
     var qState = ctrlScope.question._currentQuestionState;
 
-    ctrlScope.qData.option.emptyBoxs = [];
-    $scope.draggableObjects = angular.copy(ctrlScope.qData.option.optionsRHS);
+    $scope.qData.option.emptyBoxs = [];
+    $scope.draggableObjects = angular.copy($scope.qData.option.optionsRHS);
     $scope.draggableObjects.sort(() => Math.random() - 0.5);
-    for (var l = 0; l < ctrlScope.qData.option.optionsLHS.length; l++) {
+    for (var l = 0; l < $scope.qData.option.optionsLHS.length; l++) {
       var emptyBox = {
-        "index": ctrlScope.qData.option.optionsLHS[l].index,
+        "index": $scope.qData.option.optionsLHS[l].index,
         "text": " "
       };
-      ctrlScope.qData.option.emptyBoxs.push(emptyBox)
+      $scope.qData.option.emptyBoxs.push(emptyBox)
       $scope.selectedAns.push(emptyBox);
     }
 
@@ -818,19 +818,19 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     var teleValues = [];
     // Calculate partial score
     var tempCount = 0;
-    var lhsLength = ctrlScope.qData.option.optionsLHS.length;
+    var lhsLength = $scope.qData.option.optionsLHS.length;
     for (var i = 0; i < lhsLength; i++) {
       var telObj = {};
-      telObj[ctrlScope.qData.option.optionsLHS[i].text] = $scope.selectedAns[i].text;
+      telObj[$scope.qData.option.optionsLHS[i].text] = $scope.selectedAns[i].text;
       teleValues.push(telObj);
       
-      if ($scope.selectedAns[i].mapIndex != ctrlScope.qData.option.optionsLHS[i].index) {
+      if ($scope.selectedAns[i].mapIndex != $scope.qData.option.optionsLHS[i].index) {
         correctAnswer = false;
       } else {
         tempCount++;
       }
     }
-    var partialScore = (tempCount / ctrlScope.qData.option.optionsLHS.length) * $scope.qConfig.max_score;
+    var partialScore = (tempCount / $scope.qData.option.optionsLHS.length) * $scope.qConfig.max_score;
     var result = {
       eval: correctAnswer,
       state: {
@@ -852,7 +852,10 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
   }
 
   $scope.logTelemetryInteract = function(event) {
-    if (event != undefined) QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event });
+    if (event != undefined ) {
+      event = _.isString(event) ? event : event.toString();
+      QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event });
+    }
   }
 });
 //# sourceURL=questionunitmtfcontroller.js

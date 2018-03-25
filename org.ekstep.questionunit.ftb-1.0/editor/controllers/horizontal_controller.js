@@ -4,7 +4,7 @@
  * Jagadish P<jagadish.pujari@tarento.com>
  */
 
-angular.module('createquestionapp', [])
+angular.module('ftbApp', [])
  .controller('ftbQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope) {
 
   $scope.formVaild = false;
