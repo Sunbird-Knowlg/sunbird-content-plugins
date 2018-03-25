@@ -1,4 +1,4 @@
-var QSTelemetryUtil = {
+var QSTelemetryLogger = {
 	EVENT_TYPES: {
 		TOUCH: 'TOUCH',
 		RESPONSE: 'RESPONSE',
@@ -33,7 +33,7 @@ var QSTelemetryUtil = {
         "type": this._plugin._manifest.type ? this._plugin._manifest.type : "plugin"
       },
       "type": data.type,
-      "values": data.values
+      "res": data.values
     }
     TelemetryService.itemResponse(edata);
 	},
@@ -42,12 +42,14 @@ var QSTelemetryUtil = {
 	},
 	logAssessEnd: function (result) {  
     var data = {
-      pass: result.pass,
-      score: result.score,
-      res: result.state.val,
+      pass: result.eval,
+      score: parseFloat((result.score).toFixed(2)),
+      res: result.values,
       qindex: this._question.index,
       qtitle: this._qConfig.metadata.title,
-      qdesc: this._qConfig.metadata.description ? this._qConfig.metadata.description : ''
+      qdesc: this._qConfig.metadata.description ? this._qConfig.metadata.description : '',
+      mc: [],
+      mmc: []
     }
 		TelemetryService.assessEnd(this._assessStart, data);
 	},
