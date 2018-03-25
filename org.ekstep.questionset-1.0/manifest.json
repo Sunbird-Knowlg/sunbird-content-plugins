@@ -118,6 +118,10 @@
         "ver": "1.0",
         "type": "plugin",
         "scope": "renderer"
+      },
+      {
+          "type": "js",
+          "src": "renderer/util/telemetry_logger.js"
       }
     ]
   },
