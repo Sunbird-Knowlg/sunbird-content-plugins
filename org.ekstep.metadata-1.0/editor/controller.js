@@ -320,25 +320,22 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.init = function() {
         ecEditor.addEventListener('metadata:form:onsuccess', $scope.success, $scope);
         ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
-        $scope.fields = org.ekstep.pluginframework.pluginManager.pluginObjs['org.ekstep.sunbirdmetadata'].getFormFields();
-        $scope.tempalteName = org.ekstep.pluginframework.pluginManager.pluginObjs['org.ekstep.sunbirdmetadata'].getTemplate() || 'defaultTemplate';
-        $scope.contentMeta = org.ekstep.pluginframework.pluginManager.pluginObjs['org.ekstep.sunbirdmetadata'].getMetaData();
-        $scope.originalContentMeta = _.clone($scope.contentMeta);
-        var layoutConfigurations = $scope.getLayoutConfigurations();
-        $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
-        $scope.dynamicLayoutConfigurations = _.sortBy(_.uniqBy(layoutConfigurations.dynamicLayout, 'code'), 'index');
-        $scope.mapMasterCategoryList($scope.fields);
+        var callbackFn = function(config) {
+            $scope.fields = config.fields;
+            $scope.tempalteName = config.template;
+            $scope.contentMeta = config.model;
+            $scope.originalContentMeta = _.clone($scope.contentMeta);
+            var layoutConfigurations = $scope.getLayoutConfigurations();
+            $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
+            $scope.dynamicLayoutConfigurations = _.sortBy(_.uniqBy(layoutConfigurations.dynamicLayout, 'code'), 'index');
+            $scope.mapMasterCategoryList($scope.fields);
+        }
+        ecEditor.dispatchEvent("editor:form:getconfig", callbackFn);
     };
 
     $scope.getFixedFieldCode = function(tempalteName) {
-        var map = {
-            'defaultTemplate': ["name", "description", "keywords", "appicon"]
-        }
-        if (tempalteName === 'defaultTemplate') {
-            return map.defaultTemplate;
-        } else {
-            return {}
-        }
+        var map = { 'defaultTemplate': ["name", "description", "keywords", "appicon"] }
+        return map[$scope.tempalteName] || {}
     }
     $scope.init()
 
