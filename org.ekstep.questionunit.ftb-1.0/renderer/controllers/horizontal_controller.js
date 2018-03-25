@@ -1,7 +1,11 @@
 'use strict';
 angular.module('genie-canvas').controllerProvider.register("FTBRendererController", function($scope, $rootScope, $sce) {
+  $scope.pluginInstance;
   $scope.showTemplate = true;
   $scope.question;
+  $scope.qData;
+  $scope.qConfig;
+  $scope.events = { "show": "", "hide": "", "eval": "" };
   $scope.constant = {
     ftbContainerId: "#preview-ftb-horizontal",
     ftbText: "#qs-ftb-text",
@@ -9,16 +13,10 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     tempanswertext: "#tempanswertext"
 
   }
-  $scope.maxScore = 0;
   $scope.qcquestion = true;
   $scope.textboxtarget = {};
   $scope.qcblank = false;
-  $scope.events = {
-    "show": "",
-    "hide": "",
-    "eval": ""
-  };
-  var ctrl = this;
+
   $scope.init = function() {
     $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.ftb", "1.0", "renderer/styles/style.css");
     $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.ftb");
@@ -69,20 +67,19 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     $scope.question = event.target;
     var gererateId = 0;
     var qData = $scope.question._currentQuestion.data.__cdata || $scope.question._currentQuestion.data;
-    var questionData = JSON.parse(qData);
-    //$scope.maxScore = JSON.parse($scope.question._currentQuestion.config).max_score;
-    var ps = $scope.question._currentQuestion.config.__cdata || $scope.question._currentQuestion.config;
-    $scope.maxScore = JSON.parse(ps);
-    $($scope.constant.ftbText).html(questionData.parsedQuestion.text);
+    $scope.qData = JSON.parse(qData);
+
+    var questionConfig = $scope.question._currentQuestion.config.__cdata || $scope.question._currentQuestion.config;
+    $scope.qConfig = JSON.parse(questionConfig);
+
+    $($scope.constant.ftbText).html($scope.qData.parsedQuestion.text);
     $($scope.constant.ftbContainerId).on('click', '.ans-field', $scope.doTextBoxHandle);
     var qState = $scope.question._currentQuestionState;
     if (qState && qState.val) {
       $scope.textboxtarget.state = qState.val;
       $scope.setStateInput();
-    }
-    $scope.questionObj = questionData;
-    $scope.showTemplate = true;    
-    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.ASSESS);
+    }    
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS);
 
     $scope.safeApply();
   }
@@ -142,10 +139,10 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
    * @memberof org.ekstep.questionunit.ftb
    */
   $scope.doTextBoxHandle = function() {
-    if(isbrowserpreview){
-       $scope.qcblank = false;
-    }else{
-        $scope.qcblank = true;
+    if (isbrowserpreview) {
+      $scope.qcblank = false;
+    } else {
+      $scope.qcblank = true;
     }
     $scope.textboxtarget.id = this.id;
     $scope.textboxtarget.value = this.value.trim();
@@ -173,26 +170,27 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
       telemetryAnsArr.push(ansObj);
     });
     //compare two array
-    if (_.isEqual(answerArray, $scope.questionObj.answer)) {
+    if (_.isEqual(answerArray, $scope.qData.answer)) {
       correctAnswer = true;
     }
 
     // Calculate partial score
     var tempCount = 0;
-    _.each($scope.questionObj.answer, function(ans, index) {
-      if(ans == answerArray[index]){
+    _.each($scope.qData.answer, function(ans, index) {
+      if (ans == answerArray[index]) {
         tempCount++;
       }
     });
 
-    var partialScore = (tempCount/$scope.questionObj.answer.length) * $scope.maxScore.max_score;
+    var partialScore = (tempCount / $scope.qData.answer.length) * $scope.qConfig.max_score;
 
     var result = {
       eval: correctAnswer,
       state: {
         val: answerArray
       },
-      score: partialScore
+      score: partialScore,
+      values: telemetryAnsArr
     }
     if (_.isFunction(callback)) {
       //$scope.removeEvents();
@@ -200,12 +198,13 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     }
     EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
 
-    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.RESPONSE, {"type": "INPUT", "values": telemetryAnsArr});
-    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.ASSESSEND, result);
+    console.log("FTB Tel", telemetryAnsArr);
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, {"type": "INPUT", "values": telemetryAnsArr});
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);
   }
 
   $scope.logTelemetryInteract = function(event) {
-    QSTelemetryUtil.logEvent(QSTelemetryUtil.EVENT_TYPES.TOUCH, {type: QSTelemetryUtil.EVENT_TYPES.TOUCH, id: event.target.id});
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, {type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event.target.id});
   }
 });
 //# sourceURL=questionunitFtbRenderereTmpPlugin.js

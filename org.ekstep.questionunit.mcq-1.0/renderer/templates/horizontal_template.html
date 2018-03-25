@@ -1,5 +1,5 @@
 <div id="preview-mcq-horizontal" ng-controller="MCQRendererController" ng-init="init()" ng-show="showTemplate">
-    <link rel="stylesheet" type="text/css" href="{{cssPath}}">
+    <!-- <link rel="stylesheet" type="text/css" href="{{cssPath}}"> -->
     <div class="qc-mcqlayout">
         <div class="popup" ng-show="bigImage" ng-if="imageUrl.length>0">
             <div class="popup-overlay" ng-click="hideImagePopup()"></div>
@@ -13,7 +13,9 @@
         <header ng-class="{'qc-long-text-header-image': questionObj.question.image.length > 0,'qc-long-text-header':questionObj.question.image.length==0}">
             <span ng-if="questionObj.question.image.length" class="qc-question-zoomin" ng-click="showImageModel(questionObj.question.image) > 0">+</span>
             <div ng-if="questionObj.question.image.length>0" class="qc-opt"><img class="qc-question-image" ng-click="showImageModel()" ng src={{checkBaseUrl(questionObj.question.image)}}></div>
-            <div class="qc-question-text">{{questionObj.question.text}}</div>
+
+            <div ng-class="{'qclc-question-text': expandQ,'qcl-question-text':collapseQ }" ng-if="questionObj.question.text.length > 100"><span ng-click="expandQuestion($event)">{{questionObj.question.text}}</span></div>
+            <div class="qc-question-text" ng-if="questionObj.question.text.length < 100"><span>{{questionObj.question.text}}</span></div>
             <div ng-if="questionObj.question.audio.length > 0" class="qc-opt">
                 <img src="{{audioImage}}" class="qc-question-audio-image" ng-click="playAudio(questionObj.question.audio)" />
             </div>
@@ -40,12 +42,12 @@
                     <div class="qc-grid-option-value">
                         <div class="qc-grid-option-text-outer" id="{{val.key+1}}">
                             <div class="qc-grid-option-text" ng-class="{'qsverticalselectedopt': val.key+1 == selectedIndex}"  ng-click="selectedvalue(val.option, val.key+1);">
-                                <div ng-if="val.option.image.length > 0" class="qc-vertical-option-zoomin" ng-click="showImageModel(val.option.image)" class="qc-opt">+</div>
+                                <span ng-if="val.option.image.length > 0" class="qc-vertical-option-zoomin" ng-click="showImageModel(val.option.image)" class="qc-opt">+</span>
                                 <div ng-if="val.option.audio.length > 0 && val.option.image.length == 0" class="qc-opt">
                                     <img src="{{audioImage}}" class="qc-vertical-audio-with-image" ng-click="playAudio(val.option.audio)" />
                                 </div>
                                 <div ng-if="val.option.image.length>0 " class="qc-opt"><img class="qc-grid-option-image" ng src={{checkBaseUrl(val.option.image)}}></div>
-                                <div ng-class="{'qc-option-txt': val.option.audio.length > 0}" class="qc-opt" ng-if="val.option.image.length = 0 && val.option.audio.length == 0">
+                                <div ng-class="{'qc-option-txt': val.option.audio.length > 0}" class="qc-opt" ng-if="val.option.image.length == 0 && val.option.audio.length == 0">
                                     {{val.option.text}}</div>
                             </div>
                             <div class="qc-option-grid-checkbox">
@@ -69,7 +71,7 @@
                                 <img src="{{audioImage}}" class="qc-vertical-audio-with-image" ng-click="playAudio(val.option.audio)" />
                             </div>
                             <div ng-if="val.option.image.length>0 " class="qc-opt"><img class="qc-grid-option-image" ng src={{checkBaseUrl(val.option.image)}}></div>
-                            <div ng-class="{'qc-option-txt': val.option.audio.length > 0}" class="qc-opt" ng-if="val.option.image.length = 0 && val.option.audio.length == 0">
+                            <div ng-class="{'qc-option-txt': val.option.audio.length > 0}" class="qc-opt" ng-if="val.option.image.length == 0 && val.option.audio.length == 0">
                                 {{val.option.text}}</div>
                         </div>
                         <div class="qc-option-grid-checkbox">
@@ -89,14 +91,13 @@
                 <tr class="qc-vertical-option-outer">
                     <td ng-repeat="val in questionObj.options" class="qc-vertical-option-td">
                         <div class="qc-vertical-option-value">
-                           
                             <div id="{{val.id}}" class="qc-option-vertical-text" ng-class="{qsverticalselectedopt : $index+1 == selectedIndex}" ng-click="selectedvalue(val, $index+1);">
-                                 <span ng-if="questionObj.question.image.length" class="qc-vertical-option-zoomin" ng-click="showImageModel(val.image) > 0">+</span>
+                                 <span ng-if="val.image.length>0" class="qc-vertical-option-zoomin" ng-click="showImageModel(val.image) > 0">+</span>
                                 <div ng-if="val.audio.length > 0 && val.image.length == 0" class="">
                                     <img src="{{audioImage}}" class="qc-vertical-audio-with-image" ng-click="playAudio(val.audio)" />
                                 </div>
                                 <div ng-if="val.image.length>0" class="qc-opt"><img class="qc-vertical-option-image" ng src={{checkBaseUrl(val.image)}}></div>
-                                <div ng-class="{'qc-option-txt': val.audio.length > 0 }" class="qc-opt" ng-if="val.option.image.length = 0 && val.option.audio.length == 0">
+                                <div ng-class="{'qc-option-txt': val.audio.length > 0 }" class="qc-opt" ng-if="val.option.image.length == 0 && val.option.audio.length == 0">
                                     {{val.text}}</div>
                             </div>
                             <div class="qc-option-vertical-checkbox">
