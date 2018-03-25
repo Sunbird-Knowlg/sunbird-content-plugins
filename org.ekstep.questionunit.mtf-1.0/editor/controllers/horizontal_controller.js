@@ -3,7 +3,7 @@
  * @class org.ekstep.questionunitmcq:mtfQuestionFormController
  * Sachin<sachin.kumar@goodworklabs.com>
  */
-angular.module('createquestionapp', []).controller('mtfQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope) {
+angular.module('mtfApp', []).controller('mtfQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope) {
   $scope.formVaild = false;
   $scope.indexCount=4;
   $scope.mtfFormData = {
@@ -156,10 +156,7 @@ angular.module('createquestionapp', []).controller('mtfQuestionFormController', 
         } else if (type == 'RHS') {
           $scope.mtfFormData.option.optionsRHS[id].image = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(data.assetMedia.src);
           $scope.optionsMedia.image[id] = tempImage;
-        } else if (type == 'dist') {
-          $scope.mtfFormData.option.distractor[id].image = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(data.assetMedia.src);
-          $scope.optionsMedia.image[id] = tempImage;
-        }
+        } 
       }
     });
   }
@@ -184,10 +181,7 @@ angular.module('createquestionapp', []).controller('mtfQuestionFormController', 
         } else if (type == 'RHS') {
           $scope.mtfFormData.option.optionsRHS[id].audio = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(data.assetMedia.src);
           $scope.optionsMedia.audio[id] = tempAudio;
-        } else if (type == 'dist') {
-          $scope.mtfFormData.option.distractor[id].audio = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(data.assetMedia.src);
-          $scope.optionsMedia.audio[id] = tempAudio;
-        }
+        } 
       }
     });
   }
@@ -200,9 +194,6 @@ angular.module('createquestionapp', []).controller('mtfQuestionFormController', 
       delete $scope.optionsMedia.image[id];
     } else if (type == 'RHS') {
       $scope.mtfFormData.option.optionsRHS[id].image = '';
-      delete $scope.optionsMedia.image[id];
-    } else if (type = 'dist') {
-      $scope.mtfFormData.option.distractor[id].image = '';
       delete $scope.optionsMedia.image[id];
     }
   }
@@ -217,10 +208,7 @@ angular.module('createquestionapp', []).controller('mtfQuestionFormController', 
     } else if (type == 'RHS') {
       $scope.mtfFormData.option.optionsRHS[id].audio = '';
       delete $scope.optionsMedia.audio[id];
-    } else if (type = 'dist') {
-      $scope.mtfFormData.option.distractor[id].audio = '';
-      delete $scope.optionsMedia.audio[id];
-    }
+    } 
   }
   $scope.generateTelemetry = function(data, event) {
   if (data) ecEditor.getService('telemetry').interact({
