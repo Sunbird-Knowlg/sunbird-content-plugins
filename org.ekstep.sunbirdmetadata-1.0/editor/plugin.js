@@ -314,7 +314,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     },
 
     returnConfigs: function(event, callbackFn) {
-        callbackFn({ model: this.model, template: this.config.templateName || this.DEFAULT_TEMPLATE_NAME, fields: this.form })
+        callbackFn({ model: this.getModel(), template: this.config.templateName || this.DEFAULT_TEMPLATE_NAME, fields: this.form })
     }
 })
 
