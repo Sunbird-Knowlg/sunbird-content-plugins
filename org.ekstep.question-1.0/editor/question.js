@@ -144,7 +144,9 @@
       ctrl.questionData.qcGrade = questionData1.data.config.metadata.gradeLevel;
       ctrl.questionData.isShuffleOption = questionData1.data.config.isShuffleOption;
       ctrl.category = questionData.category;
-      ctrl.Totalconcepts = questionData1.data.config.metadata.concepts.length; //_.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
+      if(questionData1.data.config.metadata.concepts){
+        ctrl.Totalconcepts = questionData1.data.config.metadata.concepts.length; 
+      }//_.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
       ctrl.questionData.concepts = questionData1.data.config.metadata.concepts;
       ctrl.selectedConceptsData = questionData1.data.config.metadata.concepts;
       ctrl.questionData.questionDesc = questionData1.data.config.metadata.description;
@@ -310,7 +312,9 @@
       if(ctrl.questionMetaData.concepts){
         ctrl.questionMetaData.conceptData = "(" + ctrl.questionData.concepts.length + ") concepts selected";
       }
-      ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup", { action: 'question-meta-save', subType: 'questions', framework: "NCF", rootOrgId: "*", type: "content", popup: false, metadata: ctrl.questionMetaData });
+
+      ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'question-meta-save', subType: 'questions', framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: false, metadata: ctrl.questionMetaData})
+
   }
 
   ctrl.saveQuestion = function(assessmentId, data) {
