@@ -91,9 +91,9 @@ tags-input .tags .input::-ms-clear {
 }
 
 tags-input.ng-invalid .tags {
-    /* -webkit-box-shadow: 0 0 3px 1px rgba(255, 0, 0, 0.6);
-  -moz-box-shadow: 0 0 3px 1px rgba(255, 0, 0, 0.6);
-  box-shadow: 0 0 3px 1px rgba(255, 0, 0, 0.6); */
+    -webkit-box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    box-shadow: none !important
 }
 
 tags-input[disabled] .host:focus {
