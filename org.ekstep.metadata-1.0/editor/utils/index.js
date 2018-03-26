@@ -13,11 +13,13 @@ function getArrayOfKeywords(keys) {
 };
 
 function invokeDialCode() {
-    var configurations = {
-        data: ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild(),
-        contentId: org.ekstep.contenteditor.api.getContext('contentId')
+    if (ecEditor.jQuery("#collection-tree").length) {
+        var configurations = {
+            data: ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild(),
+            contentId: org.ekstep.contenteditor.api.getContext('contentId')
+        }
+        ecEditor.dispatchEvent("editor:update:dialcode", configurations)
     }
-    ecEditor.dispatchEvent("editor:update:dialcode", configurations)
 }
 
 /**
