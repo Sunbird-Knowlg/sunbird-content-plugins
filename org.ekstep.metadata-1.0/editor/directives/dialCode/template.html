@@ -1,10 +1,10 @@
 <div class="field">
-    <label>Dial code
-        <span class="ui icon" data-tooltip="Digital Infrastructure for Augmented Learning" data-position="top left">
+    <label>DIAL CODE</label>
+    <span class="ui icon" data-tooltip="Digital Infrastructure for Augmented Learning" data-position="top left">
             <i style="cursor: pointer;" class="large blue question circle icon link"></i>
         </span>
-        <a ng-show="editFlag && mode == 'Edit'" ng-click="editDialCode()" style="cursor:pointer">Edit</a>
-        <span ng-show="!editFlag" style="background-color: transparent;float:right">{{dialcodes.length || minLength}}/{{maxLength}}</span>
+    <a ng-show="editFlag && mode == 'Edit'" ng-click="editDialCode()" style="cursor:pointer">Edit</a>
+    <span ng-show="!editFlag" style="background-color: transparent;float:right">{{dialcodes.length || minLength}}/{{maxLength}}</span>
     </label>
     <div class="ui action right icon input" ng-class="mode == 'Edit' ? '' : 'disabled'" style="align-items: center;">
         <input ng-show="!editFlag" class="dialCode" type="text" placeholder="Enter code here" ng-model="dialcodes" maxlength="6" ng-disabled="false">
