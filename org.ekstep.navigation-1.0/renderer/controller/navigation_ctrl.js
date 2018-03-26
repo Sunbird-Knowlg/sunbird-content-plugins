@@ -69,7 +69,8 @@ angular.module('genie-canvas').directive('customNextNavigation', function ($root
         var disablePrevious = function () {
           var val = "";
           var navigateToStage = EkstepRendererAPI.getStageParam('previous');
-          if (_.isUndefined(navigateToStage)) {
+          var stage = EkstepRendererAPI.getCurrentStage();
+          if (stage && _.isUndefined(navigateToStage)) {
             val = "disable";
             hideDefaultPrevious();
             if (EkstepRendererAPI.isItemScene() && EkstepRendererAPI.getCurrentController().hasPrevious()) {

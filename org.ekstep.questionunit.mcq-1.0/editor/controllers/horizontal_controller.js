@@ -3,7 +3,7 @@
  * @class org.ekstep.questionunitmcq:mcqQuestionFormController
  * Jagadish P<jagadish.pujari@tarento.com>
  */
-angular.module('createquestionapp', []).controller('mcqQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope) {
+angular.module('mcqApp', []).controller('mcqQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope) {
   $scope.formVaild = false;
   $scope.mcqConfiguartion = {
     'questionConfig': {

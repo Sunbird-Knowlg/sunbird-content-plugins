@@ -197,6 +197,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
 
     $scope.evaluate = function(callback) {
         var correctAnswer;
+        var telValues = {};
         var ctrlScope = angular.element('#preview-mcq-horizontal').scope();
         var selectedAnsData = ctrlScope.questionObj.options[ctrlScope.selectedIndex - 1];
         var selectedAns = _.isUndefined(selectedAnsData) ? false : selectedAnsData.isCorrect;
@@ -206,8 +207,8 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
             }
         });
 
-        var telValues = {};
-        telValues['option'+ctrlScope.selectedIndex] = selectedAnsData.image.length > 0 ? selectedAnsData.image : selectedAnsData.text;
+        if(!_.isUndefined(ctrlScope.selectedIndex))
+            telValues['option'+ctrlScope.selectedIndex] = selectedAnsData.image.length > 0 ? selectedAnsData.image : selectedAnsData.text;
         
         var result = {
             eval: correctAnswer,

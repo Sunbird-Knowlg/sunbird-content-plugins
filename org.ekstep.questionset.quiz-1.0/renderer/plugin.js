@@ -135,23 +135,22 @@ Plugin.extend({
         };
 
         this._theme.setParam(this.qid, state);
-
-
-        //  EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:savev1QuestionState', function(data) {}, state)
-
-
-        if (item.type.toLowerCase() == 'ftb') {
-            res = FTBEvaluator.evaluate(item);
-        } else if (item.type.toLowerCase() == 'mcq' || item.type.toLowerCase() == 'mmcq') {
-            res = MCQEvaluator.evaluate(item);
-        } else if (item.type.toLowerCase() == 'mtf') {
-            res = MTFEvaluator.evaluate(item);
+        if (GlobalContext.registerEval[item.type.toLowerCase()]) {
+            var customEvalInstance = GlobalContext.registerEval[item.type.toLowerCase()];
+            result = customEvalInstance.evaluate(item);
+        } else {
+            if (item.type.toLowerCase() == 'ftb') {
+                result = FTBEvaluator.evaluate(item);
+            } else if (item.type.toLowerCase() == 'mcq' || item.type.toLowerCase() == 'mmcq') {
+                result = MCQEvaluator.evaluate(item);
+            } else if (item.type.toLowerCase() == 'mtf') {
+                result = MTFEvaluator.evaluate(item);
+            }
         }
+
         result.eval = res.pass;
         result.score = res.score;
         result.res = res.res;
-
-
         if (_.isFunction(callback)) {
             callback(result);
         }
