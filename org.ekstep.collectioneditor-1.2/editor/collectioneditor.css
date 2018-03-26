@@ -602,7 +602,7 @@ switched to Github for the search after API changes
 #content-preview {
     background-color: gainsboro;
     height: 405px;
-    width: 720px;
+    width: auto;
     position: relative;
 }
 
