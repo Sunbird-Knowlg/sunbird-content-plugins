@@ -32,6 +32,11 @@ function convertToDataType(targetType, data) {
                 return data
             }
             break;
+        case 'TEXT':
+            if (_.isNumber(data)) {
+                return data.toString();
+            }
+            break;
     }
 }
 
@@ -65,9 +70,9 @@ function logTelemetry(data, plugin) {
         "target": data.target,
         "pluginid": plugin.id,
         "pluginver": plugin.ver,
-        "objectid": data.objectid,
-        "targetid": data.targetid,
-        "stage": data.stage
+        "objectid": data.objectid || "",
+        "targetid": data.targetid || "",
+        "stage": data.stage || ""
     })
 }
 
@@ -88,7 +93,7 @@ function getUpdatedMetadata(currentMetadata, originalMetadata, fields) {
         });
     }
     if (metadata.keywords) {
-        metadata.keywords = getArrayOfKeywords(metadata.keywords)
+        metadata.keywords = getArrayOfKeywords(metadata.keywords);
     }
 
     // Passing mandatory fields when save is invoked

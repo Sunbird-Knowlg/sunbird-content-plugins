@@ -26,7 +26,9 @@ angular.module('ftbApp', [])
     $scope.$parent.$on('question:form:val', function(event) {
       var regexForAns = /(?:^|)\[\[(.*?)(?:\]\]|$)/g;
       var index = 0;
-      $scope.ftbFormData.answer = $scope.getMatches($scope.ftbFormData.question.text, regexForAns, 1);
+      $scope.ftbFormData.answer = $scope.getMatches($scope.ftbFormData.question.text, regexForAns, 1).map(function (a) {
+        return a.toLowerCase().trim();
+      });
       if ($scope.formValidation()) {
         $scope.ftbFormData.parsedQuestion.text = $scope.ftbFormData.question.text.replace(/\[\[.*?\]\]/g,function(a, b){
           index = index +1;
