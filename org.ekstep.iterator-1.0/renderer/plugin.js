@@ -23,6 +23,10 @@
   },
   handlePrevious:function(){
   	
+  },
+  hasPrevious: function (navType) {
+    // navType: String --> "prev" or "next"
+    // Denotes the navigation event that it is triggered for
   }
 });
 //#sourceURL=iterator.js

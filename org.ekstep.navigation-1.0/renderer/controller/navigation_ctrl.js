@@ -55,7 +55,7 @@ angular.module('genie-canvas').directive('customNextNavigation', function ($root
     restrict: 'E',
     template: '<div><a class="nav-icon nav-previous" ng-show="showCustomPrevious !== state_off" ng-class="{\'nav-disable\': showCustomPrevious == state_disable}" href="javascript:void(0);"><img ng-src="{{customePreviousIcon}}" ng-click="navigate(\'previous\')"></a></div>',
     link: function (scope) {
-      var events = ["overlayPrevious", "renderer:previous:hide", "renderer:previous:show", "renderer:previous:disable"];
+      var events = ["overlayPrevious", "renderer:previous:hide", "renderer:previous:show", "renderer:previous:disable", "renderer:previous:enable"];
       scope.customePreviousIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.overlay", "1.0", "renderer/assets/icons/back.png");
       scope.changeValue = function (event) {
         var val;
@@ -109,8 +109,12 @@ angular.module('genie-canvas').directive('customNextNavigation', function ($root
           case "renderer:previous:disable":
             val = disablePrevious();
             break;
+
+          case "renderer:previous:enable":
+            val = "on";
+            break;
         }
-        if (val == "on") {
+        if (val == "on" && event.type !== "renderer:previous:enable") {
           val = disablePrevious();
         }
 
