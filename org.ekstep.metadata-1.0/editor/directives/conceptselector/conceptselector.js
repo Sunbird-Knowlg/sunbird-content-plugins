@@ -9,16 +9,14 @@ formApp.directive('concetpselector', function() {
     var conceptController = ['$scope', '$rootScope', '$controller', function($scope, $rootScope, $controller) {
         var selectedConcepts = [];
         $scope.contentMeta = $scope.$parent.contentMeta;
+        $scope.contentMeta.conceptData = $scope.$parent.contentMeta.conceptData || '(0) concepts selected';
         $scope.fieldConfig = $scope.config;
         if ($scope.contentMeta.concepts) {
             if ($scope.contentMeta.concepts.length)
                 _.forEach($scope.contentMeta.concepts, function(concept) {
                     selectedConcepts.push(concept.identifier);
                 });
-        } else {
-            $scope.contentMeta.conceptData = '(0) concepts selected';
         }
-
         $scope.invokeConceptSelector = function() {
             ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
                 element: 'metaform-concept',
