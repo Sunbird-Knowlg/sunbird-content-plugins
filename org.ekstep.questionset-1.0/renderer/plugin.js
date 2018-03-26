@@ -169,8 +169,8 @@ Plugin.extend({
         EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ":evaluate", function (result) {
             if (instance._questionSetConfig.show_feedback == true) {
                 // Display feedback popup (tryagain or goodjob)
-                //alert("Question score-->"+result.partial_score);
-                instance.displayFeedback(result.eval);
+                // result.pass is added to handle sorting-template(Custom IEvaluator) issue. This can be generic solution for other
+                instance.displayFeedback(result.eval? result.eval : result.pass );   
 
             } else {
                 // If show_feedback is set to false, move to next question without displaying feedback popup

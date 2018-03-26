@@ -134,7 +134,7 @@
         <div class="ui divider"></div>
         <div class="ui segment" ng-show="itemsLoading">
             <div class="ui active inverted dimmer">
-                <div class="ui text loader">Just one second, We re fetching that content for you.</div>
+                <div class="ui text loader">Just one second, We are fetching that content for you.</div>
             </div>
         </div>
         <div class="qb-questions-list">
@@ -159,6 +159,11 @@
                             <div ng-show="questions.length == 0">
                                 <p>No Data Found Redefine your search filters!.</p>
                                 Please click on "Create question" button to create new question
+                            </div>
+                            <div class="load-more-assets-warning-msg endpage" ng-show="questions.length == 200">
+                                <img class="ui centered tiny image" src="/plugins/org.ekstep.questionbank-1.0/assets/contentNotFound.jpg">
+                                <p>Didn’t find what you were looking for? Try <a href="#">search</a> for something more specific
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -185,7 +190,7 @@
                 </div>
                 <div class="five wide column">
                     <div class="preview-and-config">
-                        <div class="qb-config-form" ng-show="showConfigForm">
+                        <div class="qb-config-form" ng-show="showConfigForm && isQuestionSetConfig">
                             <div class="ui form">
                                 <div class="field">
                                     <div class="ui fluid labeled input">
