@@ -6,7 +6,7 @@
 formApp.directive('concetpselector', function() {
     const manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.metadata");
 
-    var conceptController = ['$scope', '$controller', function($scope, $controller) {
+    var conceptController = ['$scope', '$rootScope', '$controller', function($scope, $rootScope, $controller) {
         var selectedConcepts = [];
         $scope.contentMeta = $scope.$parent.contentMeta;
         $scope.fieldConfig = $scope.config;
@@ -32,6 +32,7 @@ formApp.directive('concetpselector', function() {
                             "name": concept.name
                         };
                     });
+                    $rootScope.$safeApply();
                 }
             });
         }
