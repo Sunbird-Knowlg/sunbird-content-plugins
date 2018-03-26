@@ -57,9 +57,6 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.1"
                 "org.ekstep.iterator-1.0"
                 "org.ekstep.navigation-1.0"
                 "org.ekstep.breadcrumb-1.0"
-                "org.ekstep.questionset-1.0"
-                "org.ekstep.questionset.preview-1.0"
-                "org.ekstep.questionset.quiz-1.0"
                 "org.ekstep.sunbirdmetadata-1.0"
                 "org.ekstep.metadata-1.0");
 
