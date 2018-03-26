@@ -39,8 +39,7 @@
                                     <div>
                                         <div class="ui input" ng-class="{'disabled':!fixedField.editable}">
                                             <input id="{{fixedField.code}}" ng-pattern="fixedField.validation.regex['value']" ng-maxlength="{{fixedField.validation.max[ 'value']}}" placeholder={{field.placeholder}} name="{{fixedField.code}} " ng-model="contentMeta.name " type="text " ng-required="{{fixedField.required}} "
-                                                ng-keyup="updateErrorMessage(metaForm)">
-
+                                                ng-keyup="onConfigChange({form:metaForm})" ng-click="onConfigChange({field:fixedField,form:metaForm})">
                                         </div>
                                         <div ng-show="!metaForm[fixedField.code].$valid" class="ui pointing red basic label ">
                                             {{validation[fixedField.code].errorMessage || DEFAULT_ERROR_MESSAGE}}
@@ -53,7 +52,7 @@
                                     <label>{{fixedField.label | uppercase}}</label>
                                     <div class=" ui input " ng-class="{ 'disabled':!fixedField.editable } ">
                                         <textarea id="{{fixedField.code}} " placeholder={{field.placeholde}} ng-model="contentMeta.description " rows="{{fixedField.renderingHints.rows}} " name="{{fixedField.code}} " ng-required="{{fixedField.required}}" ng-pattern="fixedField.validation.regex['value']"
-                                            ng-maxlength="{{fixedField.validation.max['value']}}" ng-keyup="updateErrorMessage(metaForm)"></textarea>
+                                            ng-maxlength="{{fixedField.validation.max['value']}}" ng-keyup="onConfigChange({form:metaForm})" ng-click="onConfigChange({field:fixedField,form:metaForm})"></textarea>
                                     </div>
                                     <div ng-show="!metaForm[fixedField.code].$valid" class="ui pointing red basic label ">
                                         {{validation[fixedField.code].errorMessage || DEFAULT_ERROR_MESSAGE}}
@@ -62,7 +61,7 @@
                                 <div id="{{fixedField.code}} " class="field " ng-class="{ 'error': (!contentMeta[fixedField.code].length && fixedField.required), 'required': fixedField.required} " name="{{fixedField.code}} " ng-if="(fixedField.inputType=='keywordsuggestion'
                                                 && fixedField.visible) " ng-required="{{fixedField.required}} ">
                                     <label>{{fixedField.label | uppercase}}</label>
-                                    <keywords config=fixedField></keywords>
+                                    <keywords config=fixedField ng-click="onConfigChange({field:fixedField,form:metaForm})"></keywords>
                                 </div>
                             </div>
                         </div>
@@ -80,7 +79,7 @@
                                         <div>
                                             <div class="ui input " ng-class="{ 'disabled':!dynamicField.editable} ">
                                                 <input id="{{dynamicField.code}} " placeholder={{dynamicField.placeholder}} name="{{dynamicField.code}} " ng-model="contentMeta[dynamicField.code] " type="text " ng-required="{{dynamicField.required}} " ng-pattern="dynamicField.validation.regex['value']"
-                                                    ng-maxlength="{{dynamicField.validation.max[ 'value']}}" ng-keyup="updateErrorMessage(metaForm)">
+                                                    ng-maxlength="{{dynamicField.validation.max[ 'value']}}" ng-keyup="onConfigChange({form:metaForm})" ng-click="onConfigChange({field:dynamicField, form:metaForm})">
                                             </div>
                                             <div ng-show="!metaForm[dynamicField.code].$valid " class="ui pointing red basic label ">
                                                 {{validation[dynamicField.code].errorMessage || DEFAULT_ERROR_MESSAGE}}
@@ -92,7 +91,7 @@
                                         <div>
                                             <div class="ui input " ng-class="{ 'disabled':!dynamicField.editable} ">
                                                 <input id="{{dynamicField.code}} " placeholder={{dynamicField.placeholder}} name="{{dynamicField.code}} " ng-model="contentMeta[dynamicField.code] " type="number" ng-pattern="dynamicField.validation.regex['value']" ng-maxlength="{{dynamicField.validation.max[ 'value']}}"
-                                                    ng-required="{{dynamicField.required}} " ng-keyup="updateErrorMessage(metaForm)">
+                                                    ng-required="{{dynamicField.required}} " ng-keyup="onConfigChange({form:metaForm})" ng-click="onConfigChange({field:dynamicField, form:metaForm})">
                                             </div>
                                             <div ng-show="!metaForm[dynamicField.code].$valid" class="ui pointing red basic label ">
                                                 {{validation[dynamicField.code].errorMessage || DEFAULT_ERROR_MESSAGE}}
@@ -125,21 +124,21 @@
                                     <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required), 'required': dynamicField.required} " name="{{dynamicField.code}}
                                                 " ng-if="dynamicField.code=='year' " ng-required=" {{dynamicField.required}} ">
                                         <label>{{dynamicField.label | uppercase}}</label>
-                                        <year config=dynamicField></year>
+                                        <year config=dynamicField ng-click="onConfigChange({field:dynamicField, form:{}})"></year>
                                     </div>
                                     <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required) , 'required': dynamicField.required} " name="{{dynamicField.code}}
                                     " ng-if="dynamicField.inputType==='conceptselector'">
                                         <label>{{dynamicField.label}}</label>
-                                        <concetpselector config=dynamicField></concetpselector>
+                                        <concetpselector config=dynamicField ng-click="onConfigChange({field:dynamicField, form:metaForm})"></concetpselector>
                                     </div>
                                     <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code].length && fixedField.required), 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="(dynamicField.inputType=='keywordsuggestion'
                                     && dynamicField.visible) " ng-required="{{dynamicField.required}} ">
                                         <label>{{dynamicField.label | uppercase}}</label>
-                                        <keywords config=dynamicField></keywords>
+                                        <keywords config=dynamicField ng-click="onConfigChange({field:dynamicField, form:metaForm})"></keywords>
                                     </div>
                                     <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code].length && fixedField.required), 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="(dynamicField.inputType=='dialcode'
                                     && dynamicField.visible) " ng-required="{{dynamicField.required}} ">
-                                        <dialcode></dialcode>
+                                        <dialcode ng-click="onConfigChange({field:dynamicField, form:metaForm})"></dialcode>
                                     </div>
                                 </div>
                             </div>

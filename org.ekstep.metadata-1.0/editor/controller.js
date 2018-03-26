@@ -89,7 +89,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.onConfigChange = function(object) {
         $scope.isSubmit = false;
-        !object.form.$valid && $scope.updateErrorMessage(object.form);
+        if (object.field) {
+            var type = (object.field.inputType == 'select' || object.field.inputType == 'multiselect') ? 'change' : 'click'
+            object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: object.field.code }, $scope.manifest);
+        }!object.form.$valid && $scope.updateErrorMessage(object.form);
         $scope.updateForm(object);
     }
 
@@ -99,7 +102,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @param {Object} object  - Field information
      */
     $scope.updateForm = function(object) {
-        if (object.field.range) {
+        if (object.field && object.field.range) {
             $scope.getAssociations(object.value, object.field.range, function(associations) {
                 $scope.applyDependencyRules(object.field, associations, true);
             });
@@ -204,24 +207,33 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @fires       - 'editor:form:success'
      */
     $scope.success = function(event, object) {
+        logTelemetry({
+            id: "save",
+            type: 'click',
+            subtype: 'button',
+            target: 'save'
+        }, $scope.manifest);
         $scope.isSubmit = true;
         !object.form.$valid && $scope.updateErrorMessage(object.form);
         var successCB = function(err, res) {
-            if (res) {
-                // success toast message which is already handled by content editor function plugin
-                console.info("Data is saved successfully.", res)
-            } else {
-                console.error("Fails to save the data", err);
-                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                    message: 'Unable to update the content, Please try again!',
-                    position: 'topCenter',
-                    icon: 'fa fa-warning'
-                });
+                if (res) {
+                    // success toast message which is already handled by content editor function plugin
+                    console.info("Data is saved successfully.", res)
+                } else {
+                    console.error("Fails to save the data", err);
+                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                        message: 'Unable to update the content, Please try again!',
+                        position: 'topCenter',
+                        icon: 'fa fa-warning'
+                    });
+                }
+                $scope.closeThisDialog();
             }
-            $scope.closeThisDialog();
-        }
+            // TODO: Scope of metaform was not lossing  when state was changing
+            // Need to remove the below line of snippet 
+        var template = $('#content-meta-form');
         var form = {};
-        form.metaData = getUpdatedMetadata($scope.contentMeta, $scope.originalContentMeta, $scope.fields);
+        form.metaData = getUpdatedMetadata(template.scope().contentMeta, $scope.originalContentMeta, $scope.fields);
         form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
         ecEditor.dispatchEvent('editor:form:success', {
             isValid: object.form.$valid,
@@ -264,6 +276,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.cancel = function() {
         // Note: Reset the all selected fields (If required)
+        logTelemetry({ id: "cancel", type: 'click', subtype: 'button', target: 'close' }, $scope.manifest);
         ecEditor.dispatchEvent('editor:form:cancel', { callback: $scope.closeThisDialog })
     }
 
