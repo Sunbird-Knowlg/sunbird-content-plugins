@@ -103,7 +103,8 @@
                                         <label>{{dynamicField.label | uppercase}}</label>
                                         <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown " multiple=" " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]
                                                 " ng-change="onConfigChange({index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm}) " ng-required="{{dynamicField.required}} ">
-                                            <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code] ">{{category.name || category}}</option>
+                                                <option value = "">{{dynamicField.placeholder}}</option>                                            
+                                                <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code] ">{{category.name || category}}</option>
                                         </select>
                                         <div ng-show="!metaForm[dynamicField.code].$valid " class="ui pointing red basic label ">
                                             Please Select
@@ -114,6 +115,7 @@
                                         <label>{{dynamicField.label | uppercase}}</label>
                                         <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui search dropdown placeholder-padding " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]
                                                 " ng-change="onConfigChange({index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm}) " ng-required="{{dynamicField.required}} ">
+                                                <option value = "">{{dynamicField.placeholder}}</option> 
                                                 <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code] ">{{category.name || category}}</option>
                                         </select>
                                         <div ng-show="!metaForm[dynamicField.code].$valid  " class="ui pointing red basic label ">
