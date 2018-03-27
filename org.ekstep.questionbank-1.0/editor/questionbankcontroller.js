@@ -69,6 +69,13 @@ angular.module('createquestionapp', [])
       "total_items": 1
     };
 
+    $scope._constants = {
+      previewPlugin: 'org.ekstep.questionset.preview',
+      questionPlugin: 'org.ekstep.question',
+      questionsetPlugin: 'org.ekstep.questionset',
+      questionbankPlugin: 'org.ekstep.questionbank'
+    };
+
     $scope.searchQuestions = function() {
       $scope.filterData.request.metadata = {};
       $scope.filterData.request.metadata.filters = [{
@@ -592,7 +599,7 @@ angular.module('createquestionapp', [])
         "org.ekstep.questionset": {}
       }
       questions.push(qObj);
-      data["org.ekstep.questionset"]['org.ekstep.question'] = questions;
+      data[$scope._constants.questionsetPlugin][$scope._constants.questionPlugin] = questions;
       var confData = {
         "contentBody": {},
         "parentElement": true,
@@ -600,8 +607,14 @@ angular.module('createquestionapp', [])
       };
 
       document.getElementById("itemIframe").contentDocument.location.reload(true);
-      var questionSetInstance = ecEditor.instantiatePlugin('org.ekstep.questionset.preview');
-      confData.contentBody = questionSetInstance.getQuestionPreviwContent(data['org.ekstep.questionset']);
+      var pluginInstances = ecEditor.getPluginInstances();
+      var previewInstance = _.find(pluginInstances, function (pi) {
+        return pi.manifest.id === $scope._constants.previewPlugin
+      });
+      if(_.isUndefined(previewInstance)) {
+        previewInstance = ecEditor.instantiatePlugin($scope._constants.previewPlugin);
+      }
+      confData.contentBody = previewInstance.getQuestionPreviwContent(data[$scope._constants.questionsetPlugin]);
       ecEditor.dispatchEvent("atpreview:show", confData);
     }
 

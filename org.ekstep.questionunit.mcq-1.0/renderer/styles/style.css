@@ -76,7 +76,7 @@ header.qc-long-text-header {
     cursor: pointer;
     padding: 5%;
     display: list-item;
-    min-height: : 15vh;
+    min-height: 15vh;
     border-left: 7px solid transparent;
 }
 
