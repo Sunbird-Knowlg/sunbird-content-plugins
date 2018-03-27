@@ -49,7 +49,7 @@ IteratorPlugin.extend({
         org.ekstep.service.controller.loadNgModules(tempPath, ctrlPath);
     },
     initPlugin: function (data) {
-        var instance = this;
+        var instance = this;  
 
         // Register for navigation hooks
         this.registerNavigation(instance);
@@ -210,7 +210,7 @@ IteratorPlugin.extend({
             // this.resetNavigation();
             this.resetListeners();
             this.resetTemplates();
-            this.deregisterNavigation(instance);
+            this.deregisterNavigation(this);
             OverlayManager.skipAndNavigateNext();
         }
     },
@@ -232,7 +232,7 @@ IteratorPlugin.extend({
             // this.resetNavigation();
             this.resetListeners();
             this.resetTemplates();
-            this.deregisterNavigation(instance);
+            this.deregisterNavigation(this);
             OverlayManager.navigatePrevious();
         }
     },
