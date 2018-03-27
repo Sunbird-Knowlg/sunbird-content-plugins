@@ -31,7 +31,7 @@ angular.module('genie-canvas')
 				element.hide();
 			}
 			scope.moveNextStage = function(){
-				EkstepRendererAPI.dispatchEvent('renderer:nextStage');
+				EkstepRendererAPI.dispatchEvent('renderer:navigation:next');
 				scope.hidePopup();
 				element.hide();
 			}
@@ -50,7 +50,7 @@ angular.module('genie-canvas')
 				element.hide();
 			}
 			scope.moveNextStage = function(){
-				EkstepRendererAPI.dispatchEvent('renderer:nextStage');
+				EkstepRendererAPI.dispatchEvent('renderer:navigation:next');
 				scope.tryAgainHidePopup();
 				element.hide();
 			}
