@@ -216,7 +216,13 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             ctrl.searchLessons(function(res) {
                 $scope.isCardSearching = false;
                 $scope.noResultFound = false;
-                ctrl.applyAllJquery();
+                $scope.$safeApply();
+                if (!res) {
+                    ecEditor.jQuery('#noLessonMsg').show();
+                } else {
+                    ecEditor.jQuery('#noLessonMsg').hide();
+                     ctrl.applyAllJquery();
+                }
             });
         }
 
@@ -500,10 +506,14 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                             });
                             ctrl.searchConcepts(contents, function() {
                                 $scope.isLoading = false;
-                                ecEditor.jQuery('#noLessonMsg').hide();
+                                $timeout(function() {
+                                    ecEditor.jQuery('#noLessonMsg').hide();
+                                },0);
                             });
                         } else {
-                            ecEditor.jQuery('#noLessonMsg').show();
+                            $timeout(function() {
+                                ecEditor.jQuery('#noLessonMsg').show();
+                            },0);
                         }
                     } else {
                         console.error("Unable to fetch response", err);
