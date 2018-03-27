@@ -164,9 +164,9 @@ IteratorPlugin.extend({
         }
 
         // Set first/last question flags
-        this._firstQuestion = (this.getRenderedIndex() === 0);
-        this._lastQuestion = (this._renderedQuestions.length + 1 >= this._questionSetConfig.total_items);
-
+        // this._firstQuestion = (this.getRenderedIndex() === 0);
+        // this._lastQuestion = (this._renderedQuestions.length + 1 >= this._questionSetConfig.total_items);
+        this._itemIndex = this.getRenderedIndex();
     },
     endOfQuestionSet: function () {
         return (this._renderedQuestions.length >= this._questionSetConfig.total_items);
@@ -479,7 +479,7 @@ IteratorPlugin.extend({
     },
     handlePrevious: function () {
       this.prevQuestion();
-    },
+    }/*,
     hasPrevious: function (navType) {
       if(this._currentQuestion) {
           if(navType === "next") {
@@ -493,6 +493,6 @@ IteratorPlugin.extend({
           }
       }
       return false;
-    }
+    }*/
 });
 //# sourceURL=questionSetRenderer.js

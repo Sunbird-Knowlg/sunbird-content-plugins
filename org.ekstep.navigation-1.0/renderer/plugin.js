@@ -41,10 +41,9 @@
         // Get the first plugin instance and pass control to it.
         var pluginInstance = instance._customNavigationPlugins[0];
         pluginInstance.handleNext();
-        if(pluginInstance.hasPrevious("next")) {
-          EventBus.dispatch("renderer:previous:enable");
-        } else {
-          EventBus.dispatch("renderer:previous:disable");
+
+        if(pluginInstance._itemIndex >= 0){
+            EventBus.dispatch("renderer:previous:enable");
         }
       } else {
         EventBus.dispatch("actionNavigateNext", "next");
@@ -58,10 +57,9 @@
       if(!registered){
         var pluginInstance = instance._customNavigationPlugins[0];
         pluginInstance.handlePrevious();
-        if(pluginInstance.hasPrevious("prev")) {
-          EventBus.dispatch("renderer:previous:enable");
-        } else {
-          EventBus.dispatch("renderer:previous:disable");
+        
+        if(pluginInstance._itemIndex == 0){
+            EventBus.dispatch("renderer:previous:disable");
         }
       } else {
         EventBus.dispatch("actionNavigatePrevious", "previous");
