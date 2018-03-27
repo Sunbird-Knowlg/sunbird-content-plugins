@@ -670,19 +670,19 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
 
   $scope.onDropToLHS = function(index, data, evt) {
     var responseData = {};
-    var emptyRHS = {
-      text: '',
-      shadowIndex: parseInt(evt.event.target.id)
-    };
-    data.shadowIndex = parseInt(evt.event.target.id)
     var ctrlScope = angular.element('#mtf-renderer').scope();
     for (var i = 0; i < $scope.draggableObjects.length; i++) {
       if ($scope.draggableObjects[i].mapIndex == data.mapIndex) {
+        var emptyRHS = {
+          text: '',
+          shadowIndex: parseInt(evt.event.target.id)
+        };
+        data.shadowIndex = parseInt(evt.event.target.id)
         $scope.selectedAns.splice(index, 1, data);
         $scope.draggableObjects.splice(i, 1, emptyRHS);
         var temp = JSON.parse(document.getElementById(index).getAttribute("data-val"));
         if (temp.mapIndex) {
-          $scope.draggableObjects.splice(i, 1, temp);
+          $scope.draggableObjects.splice(temp.shadowIndex, 1, temp);
         }
       }
     }
@@ -707,7 +707,8 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     var rhsIndex = _.findIndex($scope.draggableObjects, function(obj) {
       return obj.shadowIndex === data.shadowIndex;
     });
-    $scope.draggableObjects.splice(rhsIndex, 1, data);
+    if ($scope.draggableObjects[rhsIndex].mapIndex == undefined)
+      $scope.draggableObjects.splice(rhsIndex, 1, data);
     for (var i = 0; i < $scope.selectedAns.length; i++) {
       if ($scope.selectedAns[i].mapIndex == data.mapIndex)
         $scope.selectedAns.splice(i, 1, $scope.qData.option.emptyBoxs[i]);
