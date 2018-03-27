@@ -150,11 +150,12 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <span class="has-success-text" ng-show="mtfFormData.option.optionsLHS.length<3">Minimum three pair will be required</span>
                 </div>
                 </form>
                 <div class="one column row">
                     <div class="column addAns">
-                        <button class="ui primary basic button large" id="mtf-add-pair-button" id="mtf-pair-btn" ng-click="addPair();generateTelemetry({type: 'click', subtype: 'select', target: 'addpair'}, $event);">Add Pair</button>
+                        <button ng-hide="mtfFormData.option.optionsLHS.length==5" class="ui primary basic button large" id="mtf-add-pair-button" id="mtf-pair-btn" ng-click="addPair();generateTelemetry({type: 'click', subtype: 'select', target: 'addpair'}, $event);">Add Pair</button>
                     </div>
                 </div>
             </div>
