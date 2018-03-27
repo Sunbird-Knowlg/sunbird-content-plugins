@@ -342,6 +342,16 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var callbackFn = function(config) {
             $scope.fields = config.fields;
             $scope.tempalteName = config.template;
+            var field = undefined;
+            // Currently, Dropdown value is coming as array of string ex: Audience: ["Learner"]
+            // this fails to show the value in the dropdown hence converting value to string format
+            _.forEach(config.model, function(value, key) {
+                field = _.find($scope.fields, ['code', key]);
+                if (field && field.inputType == 'select') {
+                    // converting array of value to string format only for the case of `SELECT` inputType dropdown
+                    config.model[key] = convertToDataType('TEXT', value);
+                }
+            });
             $scope.contentMeta = config.model;
             $scope.originalContentMeta = _.clone($scope.contentMeta);
             var layoutConfigurations = $scope.getLayoutConfigurations();
