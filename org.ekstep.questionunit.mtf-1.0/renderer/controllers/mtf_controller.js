@@ -769,7 +769,7 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     var qData = ctrlScope.question._currentQuestion.data.__cdata || ctrlScope.question._currentQuestion.data;
     $scope.qData = JSON.parse(qData);
 
-    var questionConfig = ctrlScope.question._currentQuestion.data.__cdata || ctrlScope.question._currentQuestion.config;
+    var questionConfig = ctrlScope.question._currentQuestion.config.__cdata || ctrlScope.question._currentQuestion.config;
     $scope.qConfig = JSON.parse(questionConfig);
 
     var qState = ctrlScope.question._currentQuestionState;
