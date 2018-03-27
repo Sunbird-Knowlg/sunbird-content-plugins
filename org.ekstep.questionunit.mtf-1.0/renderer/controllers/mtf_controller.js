@@ -670,15 +670,20 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
 
   $scope.onDropToLHS = function(index, data, evt) {
     var responseData = {};
+    var emptyRHS = {
+      text: '',
+      shadowIndex: parseInt(evt.event.target.id)
+    };
+    data.shadowIndex = parseInt(evt.event.target.id)
     var ctrlScope = angular.element('#mtf-renderer').scope();
     for (var i = 0; i < $scope.draggableObjects.length; i++) {
       if ($scope.draggableObjects[i].mapIndex == data.mapIndex) {
-        var temp = document.getElementById(index).getAttribute("data-val");
-        if (temp.mapIndex != undefined) {
-          $scope.draggableObjects.push(temp);
-        }
         $scope.selectedAns.splice(index, 1, data);
-        $scope.draggableObjects.splice(i, 1);
+        $scope.draggableObjects.splice(i, 1, emptyRHS);
+        var temp = JSON.parse(document.getElementById(index).getAttribute("data-val"));
+        if (temp.mapIndex) {
+          $scope.draggableObjects.splice(i, 1, temp);
+        }
       }
     }
     if ($scope.selectedAns[evt.event.target.id].mapIndex == data.mapIndex && $scope.selectedAns[index].mapIndex != undefined) {
@@ -692,18 +697,20 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
       $scope.selectedAns.splice(evt.event.target.id, 1, $scope.qData.option.emptyBoxs[evt.event.target.id]);
     }
     responseData = [{
-      "lhs" : $scope.qData.option.optionsLHS[index].text,
-      "rhs" : data.text
+      "lhs": $scope.qData.option.optionsLHS[index].text,
+      "rhs": data.text
     }];
     ctrlScope.logTelemetryItemResponse(responseData);
   }
   $scope.onDropToRHS = function(data, evt) {
     var ctrlScope = angular.element('#mtf-renderer').scope();
+    var rhsIndex = _.findIndex($scope.draggableObjects, function(obj) {
+      return obj.shadowIndex === data.shadowIndex;
+    });
+    $scope.draggableObjects.splice(rhsIndex, 1, data);
     for (var i = 0; i < $scope.selectedAns.length; i++) {
-      if ($scope.selectedAns[i].mapIndex == data.mapIndex) {
+      if ($scope.selectedAns[i].mapIndex == data.mapIndex)
         $scope.selectedAns.splice(i, 1, $scope.qData.option.emptyBoxs[i]);
-        $scope.draggableObjects.push(data);
-      }
     }
   }
 
@@ -823,7 +830,7 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
       var telObj = {};
       telObj[$scope.qData.option.optionsLHS[i].text] = $scope.selectedAns[i].text;
       teleValues.push(telObj);
-      
+
       if ($scope.selectedAns[i].mapIndex != $scope.qData.option.optionsLHS[i].index) {
         correctAnswer = false;
       } else {
@@ -852,7 +859,7 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
   }
 
   $scope.logTelemetryInteract = function(event) {
-    if (event != undefined ) {
+    if (event != undefined) {
       event = _.isString(event) ? event : event.toString();
       QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event });
     }

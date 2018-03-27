@@ -324,7 +324,7 @@ angular.module('createquestionapp', [])
       if (selObjindex > -1) {
         $scope.selectedQuestions.splice(selObjindex, 1);
       } else {
-        $scope.selectedQuestions.unshift(selQuestion);
+        $scope.selectedQuestions.push(selQuestion);
       }
       $scope.$safeApply();
     }
