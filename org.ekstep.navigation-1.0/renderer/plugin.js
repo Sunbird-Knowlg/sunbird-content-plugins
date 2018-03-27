@@ -42,7 +42,7 @@
         var pluginInstance = instance._customNavigationPlugins[0];
         pluginInstance.handleNext();
 
-        if(pluginInstance._itemIndex >= 0){
+        if(pluginInstance._itemIndex > 0){
             EventBus.dispatch("renderer:previous:enable");
         }
       } else {
@@ -58,7 +58,7 @@
         var pluginInstance = instance._customNavigationPlugins[0];
         pluginInstance.handlePrevious();
         
-        if(pluginInstance._itemIndex == 0){
+        if(pluginInstance._itemIndex <= 0){
             EventBus.dispatch("renderer:previous:disable");
         }
       } else {

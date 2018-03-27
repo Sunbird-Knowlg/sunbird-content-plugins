@@ -21,7 +21,7 @@ IteratorPlugin.extend({
     _currentQuestionState: undefined,
     _loadedTemplates: [],
     _stageObject: undefined,
-    _displayedTryAgain: false,
+    _displayedPopup: false,
     _constants: {
         questionPluginId: 'org.ekstep.question',
         qsElement: '#questionset',
@@ -132,10 +132,10 @@ IteratorPlugin.extend({
             // Fetch the question state if it was already rendered before
             this._currentQuestionState = this.getQuestionState(question.id);
             this.loadModules(question, function () {
-                setTimeout(function () {                    
+                setTimeout(function () {
                     // Set current question for telmetry to log events from question-unit
                     QSTelemetryLogger.setQuestion(instance._currentQuestion, instance.getRenderedIndex());
-                    
+
                     EkstepRendererAPI.dispatchEvent(question.pluginId + ':show', instance);
                     // instance.setupNavigation();
                 }, 100);
@@ -174,26 +174,30 @@ IteratorPlugin.extend({
     nextQuestion: function () {
         // Trigger the evaluation for the question
         var instance = this;
-        this._displayedTryAgain = false;
-        EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ":evaluate", function (result) {
+        if(!this._displayedPopup) {
+          EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ":evaluate", function (result) {
             if (instance._questionSetConfig.show_feedback == true) {
-                // Display feedback popup (tryagain or goodjob)
-                // result.pass is added to handle sorting-template(Custom IEvaluator) issue. This can be generic solution for other
-                instance.displayFeedback(result.eval? result.eval : result.pass );   
+              // Display feedback popup (tryagain or goodjob)
+              // result.pass is added to handle sorting-template(Custom IEvaluator) issue. This can be generic solution for other
+              instance.displayFeedback(result.eval ? result.eval : result.pass);
 
             } else {
-                // If show_feedback is set to false, move to next question without displaying feedback popup
-                instance.renderNextQuestion();
+              // If show_feedback is set to false, move to next question without displaying feedback popup
+              instance.renderNextQuestion();
             }
-        });
+          });
+        } else {
+            this._displayedPopup = false;
+            instance.renderNextQuestion();
+        }
     },
     displayFeedback: function (res) {
         if (res === true) {
             EkstepRendererAPI.dispatchEvent('renderer:load:popup:goodJob');
         } else {
             EkstepRendererAPI.dispatchEvent('renderer:load:popup:tryAgain');
-            this._displayedTryAgain = true;
         }
+        this._displayedPopup = true;
     },
     renderNextQuestion: function () {
         // Get the next question to be rendered
@@ -210,7 +214,9 @@ IteratorPlugin.extend({
             // this.resetNavigation();
             this.resetListeners();
             this.resetTemplates();
-            this.deregisterNavigation(this);
+            if(!this._displayedPopup) {
+              this.deregisterNavigation(this);
+            }
             OverlayManager.skipAndNavigateNext();
         }
     },
@@ -483,7 +489,7 @@ IteratorPlugin.extend({
     hasPrevious: function (navType) {
       if(this._currentQuestion) {
           if(navType === "next") {
-            if(this._firstQuestion && this._displayedTryAgain) {
+            if(this._firstQuestion && this._displayedPopup) {
               return false;
             } else {
               return (this.getRenderedIndex() + 1) > 0;
