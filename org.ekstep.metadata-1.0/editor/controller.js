@@ -257,7 +257,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                         $scope.validation[value.code]["errorMessage"] = value.validation.regex.message;
                         break;
                     case 'required': // When input validation of type is required
-                        $scope.validation[value.code]["errorMessage"] = 'Plese Input a value';
+                        $scope.validation[value.code]["errorMessage"] = 'Please Input a value';
                         break;
                     case "maxlength": // When input validation of type is max
                         $scope.validation[value.code]["errorMessage"] = value.validation.max.message;
