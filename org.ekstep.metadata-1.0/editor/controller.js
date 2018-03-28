@@ -240,7 +240,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var appIconConfig = _.filter($scope.fields,{'code':'appicon'})[0];
         if(appIconConfig){
             if(appIconConfig.code =='appicon' && appIconConfig.required && !$scope.contentMeta['appIcon']){
-                object.form.$invalid; 
+                object.form.$valid = false; 
              }
         }
         !object.form.$valid && $scope.updateErrorMessage(object.form);
