@@ -391,13 +391,14 @@ Plugin.extend({
         Renderer.theme.setParam(this._data.id, JSON.parse(JSON.stringify(qsState)));
     },
     resetQS: function () {
+        var instance = this;
         this.resetNavigation();
         Renderer.theme.setParam(this._data.id, undefined);
         if (this._currentQuestion) {
             EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
         }
         setTimeout(function () {
-            this.resetListeners();
+            instance.resetListeners();
         }, 100);
     },
     resetListeners: function () {
