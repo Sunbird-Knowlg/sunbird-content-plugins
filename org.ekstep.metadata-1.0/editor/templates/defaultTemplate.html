@@ -131,7 +131,7 @@
                                     <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required) , 'required': dynamicField.required} " name="{{dynamicField.code}}
                                     " ng-if="dynamicField.inputType==='conceptselector'">
                                         <label>{{dynamicField.label}}</label>
-                                        <concetpselector config=dynamicField ng-click="onConfigChange({field:dynamicField, form:metaForm})"></concetpselector>
+                                        <conceptselector config=dynamicField ng-click="onConfigChange({field:dynamicField, form:metaForm})"></conceptselector>
                                     </div>
                                     <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code].length && fixedField.required), 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="(dynamicField.inputType=='keywordsuggestion'
                                     && dynamicField.visible) " ng-required="{{dynamicField.required}} ">
