@@ -9,6 +9,7 @@
   _type: 'org.ekstep.iterator',
   _isContainer: false,
   _render: true,
+  _itemIndex: -1,
   initialize: function() {
   	var instance = this;
   },
@@ -23,6 +24,10 @@
   },
   handlePrevious:function(){
   	
-  }
+  }/*,
+  hasPrevious: function (navType) {
+    // navType: String --> "prev" or "next"
+    // Denotes the navigation event that it is triggered for
+  }*/
 });
 //#sourceURL=iterator.js

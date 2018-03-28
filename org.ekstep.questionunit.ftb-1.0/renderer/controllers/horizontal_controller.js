@@ -80,7 +80,7 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
       $scope.setStateInput();
     }    
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS);
-
+    $scope.showTemplate = true;
     $scope.safeApply();
   }
 
