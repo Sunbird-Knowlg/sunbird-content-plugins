@@ -237,7 +237,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             target: 'save'
         }, $scope.manifest);
         $scope.isSubmit = true;
-        !$scope.isValidInputs(object) && $scope.updateErrorMessage(object.form);
+        var validationStatus = $scope.isValidInputs(object);
+        !validationStatus && $scope.updateErrorMessage(object.form);
         var successCB = function(err, res) {
                 if (res) {
                     // success toast message which is already handled by content editor function plugin
@@ -259,7 +260,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         form.metaData = getUpdatedMetadata(template.scope().contentMeta, $scope.originalContentMeta, $scope.fields);
         form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
         ecEditor.dispatchEvent('editor:form:success', {
-            isValid: object.form.$valid,
+            isValid: validationStatus,
             formData: form,
             callback: successCB
         })
@@ -392,15 +393,16 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     }
 
     $scope.isValidInputs = function(object) {
+        var isValid = true;
         var appIconConfig = _.filter($scope.fields, { 'code': 'appicon' })[0];
         var conceptSelector = _.filter($scope.fields, { 'code': 'concepts' })[0]
         if (appIconConfig && appIconConfig.required && !$scope.contentMeta['appIcon']) {
-            object.form.$valid = false;
+            isValid = false;
         };
         if (conceptSelector && conceptSelector.required && !_.size($scope.contentMeta['concepts'])) {
-            object.form.$valid = false
+            isValid = false
         }
-        return object.form.$valid;
+        return (object.form.$valid && isValid) ? true : false
     };
 
     $scope.init()
