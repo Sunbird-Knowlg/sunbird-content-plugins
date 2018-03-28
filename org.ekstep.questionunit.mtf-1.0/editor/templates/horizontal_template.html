@@ -52,7 +52,7 @@
                             </div>
                         </div>
                         <div class="one column row qHeader">
-                            <span class="instructions">Set Answer for LHS and RHS </span>
+                            <span class="instructions">Set your answers <br>Add question-answer pairs to your question. Answers will be shuffled automatically.</span>
                         </div>
                         <table class="ui celled table">
                             <tbody>
@@ -150,11 +150,12 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <span class="has-success-text" ng-show="mtfFormData.option.optionsLHS.length<3">Minimum three pair will be required</span>
                 </div>
                 </form>
                 <div class="one column row">
                     <div class="column addAns">
-                        <button class="ui primary basic button large" id="mtf-add-pair-button" id="mtf-pair-btn" ng-click="addPair();generateTelemetry({type: 'click', subtype: 'select', target: 'addpair'}, $event);">Add Pair</button>
+                        <button ng-hide="mtfFormData.option.optionsLHS.length==5" class="ui primary basic button large" id="mtf-add-pair-button" id="mtf-pair-btn" ng-click="addPair();generateTelemetry({type: 'click', subtype: 'select', target: 'addpair'}, $event);">Add another question-answer pair</button>
                     </div>
                 </div>
             </div>

@@ -57,6 +57,7 @@ angular.module('createquestionapp', [])
       }
     };
     $scope.csspath = ecEditor.resolvePluginResource(pluginInstance.manifest.id, pluginInstance.manifest.ver, 'editor/style.css');
+    $scope.contentNotFound = ecEditor.resolvePluginResource(pluginInstance.manifest.id, pluginInstance.manifest.ver, 'assets/contentNotFound.jpg');
 
     $scope.questionSetConfigObj = {
       "title": "",
@@ -66,6 +67,13 @@ angular.module('createquestionapp', [])
       "shuffle_questions": false,
       "shuffle_options": false,
       "total_items": 1
+    };
+
+    $scope._constants = {
+      previewPlugin: 'org.ekstep.questionset.preview',
+      questionPlugin: 'org.ekstep.question',
+      questionsetPlugin: 'org.ekstep.questionset',
+      questionbankPlugin: 'org.ekstep.questionbank'
     };
 
     $scope.searchQuestions = function() {
@@ -323,7 +331,7 @@ angular.module('createquestionapp', [])
       if (selObjindex > -1) {
         $scope.selectedQuestions.splice(selObjindex, 1);
       } else {
-        $scope.selectedQuestions.unshift(selQuestion);
+        $scope.selectedQuestions.push(selQuestion);
       }
       $scope.$safeApply();
     }
@@ -591,7 +599,7 @@ angular.module('createquestionapp', [])
         "org.ekstep.questionset": {}
       }
       questions.push(qObj);
-      data["org.ekstep.questionset"]['org.ekstep.question'] = questions;
+      data[$scope._constants.questionsetPlugin][$scope._constants.questionPlugin] = questions;
       var confData = {
         "contentBody": {},
         "parentElement": true,
@@ -599,8 +607,14 @@ angular.module('createquestionapp', [])
       };
 
       document.getElementById("itemIframe").contentDocument.location.reload(true);
-      var questionSetInstance = ecEditor.instantiatePlugin('org.ekstep.questionset.preview');
-      confData.contentBody = questionSetInstance.getQuestionPreviwContent(data['org.ekstep.questionset']);
+      var pluginInstances = ecEditor.getPluginInstances();
+      var previewInstance = _.find(pluginInstances, function (pi) {
+        return pi.manifest.id === $scope._constants.previewPlugin
+      });
+      if(_.isUndefined(previewInstance)) {
+        previewInstance = ecEditor.instantiatePlugin($scope._constants.previewPlugin);
+      }
+      confData.contentBody = previewInstance.getQuestionPreviwContent(data[$scope._constants.questionsetPlugin]);
       ecEditor.dispatchEvent("atpreview:show", confData);
     }
 

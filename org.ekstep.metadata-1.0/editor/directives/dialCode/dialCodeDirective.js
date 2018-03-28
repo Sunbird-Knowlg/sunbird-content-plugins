@@ -35,7 +35,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                     if (!org.ekstep.services.stateService.state.invaliddialCodeMap) {
                         org.ekstep.services.stateService.create('invaliddialCodeMap');
                     }
-                    org.ekstep.services.stateService.setState('invaliddialCodeMap', nodeId, this.dialcodes);
+                    org.ekstep.services.stateService.setState('invaliddialCodeMap', node.data.id, this.dialcodes);
                     $scope.status = "failure";
                 }
                 $scope.editFlag = true;
@@ -59,27 +59,27 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
             ecEditor.addEventListener("editor:update:dialcode", $scope.updateDialCode);
         }
 
-        $scope.updateDialCode = function (event, data) {
+        $scope.updateDialCode = function(event, data) {
             $scope.dialcodes = "";
             if ($scope.contentMeta.mimeType == 'application/vnd.ekstep.content-collection') {
                 var node = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
-                if(node.data.metadata.dialcodes){
-                    $scope.dialcodes = node.data.metadata.dialcodes    
-                }else if(!_.isEmpty(org.ekstep.collectioneditor.cache.nodesModified) && org.ekstep.collectioneditor.cache.nodesModified[node.data.id]){
+                if (node.data.metadata.dialcodes) {
+                    $scope.dialcodes = node.data.metadata.dialcodes
+                } else if (!_.isEmpty(org.ekstep.collectioneditor.cache.nodesModified) && org.ekstep.collectioneditor.cache.nodesModified[node.data.id]) {
                     $scope.dialcodes = org.ekstep.collectioneditor.cache.nodesModified[node.data.id].metadata["dialcodes"]
                 }
             } else {
                 $scope.dialcodes = $scope.contentMeta.dialcodes;
             }
-            if($scope.dialcodes){
-                if(_.isArray($scope.dialcodes)){
+            if ($scope.dialcodes) {
+                if (_.isArray($scope.dialcodes)) {
                     $scope.dialcodes = $scope.dialcodes[0];
                 }
                 $scope.editFlag = ($scope.dialcodes.length == $scope.maxLength) ? true : false;
-                if($scope.editFlag){
+                if ($scope.editFlag) {
                     $scope.status = ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, $scope.dialcodes) == -1 ? "failure" : "success";
                 }
-            } else{
+            } else {
                 $scope.editFlag = false;
             }
         }

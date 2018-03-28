@@ -58,6 +58,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
         ecEditor.addEventListener('editor:form:change', this.onConfigChange, this)
         ecEditor.addEventListener('editor:form:reset', this.resetFields, this)
         ecEditor.addEventListener('org.ekstep.editcontentmeta:showpopup', this.invoke, this)
+        ecEditor.addEventListener('editor:form:getconfig', this.returnConfigs, this)
 
     },
 
@@ -66,7 +67,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      */
     invoke: function(event, config) {
         var instance = this;
-        instance.metadata = config.metadata;
+        instance.model = config.metadata;
         if (!this.isConfigurationsExists(config.subType, config.action)) {
             this.getConfigurations(config, function(error, res) {
                 if (res) {
@@ -230,7 +231,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      *
      * @returns {Object}
      */
-    getFormFields: function() {
+    getFields: function() {
         return this.form
     },
 
@@ -307,10 +308,14 @@ org.ekstep.contenteditor.metadataPlugin.extend({
         return this.mappedResponse[type + '_' + action]
     },
 
-    getMetaData: function() {
-        return this.metadata || ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
-    }
 
+    getModel: function() {
+        return this.model || ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
+    },
+
+    returnConfigs: function(event, callbackFn) {
+        callbackFn({ model: this.getModel(), template: this.config.templateName || this.DEFAULT_TEMPLATE_NAME, fields: this.form })
+    }
 })
 
 //# sourceURL=sunbirdMetadata.js
