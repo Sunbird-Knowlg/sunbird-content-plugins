@@ -79,7 +79,7 @@
           <div ng-if="$ctrl.questionUnitTemplateURL" ng-show="!$ctrl.questionMetadataScreen && !$ctrl.templatesScreen">
             <ng-include src="$ctrl.questionUnitTemplateURL"></ng-include>
           </div>
-          <div class="QuestionMetaForm" ng-show="$ctrl.metadataform">
+          <div class="QuestionMetaForm" ng-show="$ctrl.metadataform && $ctrl.questionMetadataScreen">
               <div ng-include="$ctrl.metadataform"></div>
           </div>
           <!-- <div class="QuestionMetaForm" ng-show="$ctrl.questionMetadataScreen">
