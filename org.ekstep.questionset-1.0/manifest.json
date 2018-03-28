@@ -112,10 +112,6 @@
       {
         "type": "js",
         "src": "renderer/utils/telemetry_logger.js"
-      },
-      {
-          "type": "js",
-          "src": "renderer/util/telemetry_logger.js"
       }
     ]
   },
@@ -125,6 +121,12 @@
       "ver": "1.0",
       "type": "plugin",
       "scope": "renderer"
+    },
+    {
+      "type": "plugin",
+      "plugin": "org.ekstep.iterator",
+      "ver": "1.0",
+      "scope":"renderer"
     }
   ]
 }
