@@ -88,7 +88,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @param {Object} object - Field information
      */
     $scope.onConfigChange = function(object) {
-        $scope.isSubmit = false;
         if (object.field) {
             var type = (object.field.inputType == 'select' || object.field.inputType == 'multiselect') ? 'change' : 'click'
             object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: object.field.code }, $scope.manifest);
