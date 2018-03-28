@@ -21,11 +21,3 @@
 #sideBarTitle .title-item i.icon{
     line-height: normal;
 }
-
-.pdf-warning-message{
-    display: block!important;
-}
-
-.pdf-warning-message.ui.message .header{
-    font-size: 1em!important;
-}
