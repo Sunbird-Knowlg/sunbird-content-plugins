@@ -195,10 +195,6 @@ textbookApp.controller('textbookmetaController', ['$scope', '$timeout', '$filter
 
     $scope.getUpdatedMetadata = function(originalMetadata, currentMetadata) {
         var metadata = {};
-        ecEditor.dispatchEvent("editor:update:dialcode", {
-            data: org.ekstep.services.collectionService.getActiveNode(),
-            contentId: org.ekstep.contenteditor.api.getContext('contentId')
-        });
         if (_.isEmpty(originalMetadata)) {
             _.forEach(currentMetadata, function(value, key) {
                 metadata[key] = value;

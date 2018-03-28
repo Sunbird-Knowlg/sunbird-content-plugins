@@ -216,7 +216,13 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             ctrl.searchLessons(function(res) {
                 $scope.isCardSearching = false;
                 $scope.noResultFound = false;
-                ctrl.applyAllJquery();
+                $scope.$safeApply();
+                if (!res) {
+                    ecEditor.jQuery('#noLessonMsg').show();
+                } else {
+                    ecEditor.jQuery('#noLessonMsg').hide();
+                     ctrl.applyAllJquery();
+                }
             });
         }
 
@@ -303,11 +309,11 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         $scope.resetFilters = function() {
             ctrl.generateTelemetry({ type: 'click', subtype: 'reset', target: 'filter', targetid: 'button-filter-reset' });
             $scope.isCardSearching = true;
-            ecEditor.jQuery('#lessonBrowser_lessonType').dropdown('restore defaults');
-            ecEditor.jQuery('#lessonBrowser_language').dropdown('restore defaults');
-            ecEditor.jQuery('#lessonBrowser_grade').dropdown('restore defaults');
+            ecEditor.jQuery('#lessonBrowser_lessonType').dropdown('clear');
+            ecEditor.jQuery('#lessonBrowser_language').dropdown('clear');
+            ecEditor.jQuery('#lessonBrowser_grade').dropdown('clear');
             ecEditor.jQuery('#lessonBrowser_concepts').val('');
-            ecEditor.jQuery('#lessonBrowser_subject').dropdown('restore defaults');
+            ecEditor.jQuery('#lessonBrowser_subject').dropdown('clear');
             if ($scope.filterSelection.concept.length) {
                 $scope.filterSelection.concept.splice(0, $scope.filterSelection.concept.length);
             }
@@ -332,11 +338,12 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     "query": ""
                 }
             };
+            ctrl.meta.lessonTypes = collectionService.getObjectTypeByAddType('Browser');
             searchBody.request.filters.contentType = ctrl.meta.lessonTypes;
             ctrl.searchLessons(function(res) {
+                ctrl.applyAllJquery();
                 $scope.isCardSearching = false;
             });
-
         };
 
         // navigate to the previous page
@@ -397,7 +404,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 });
             }
             if ($scope.filterSelection.concept.length) {
-                $("#lessonBrowser_concepts").val($scope.filterSelection.concept);
+                $("#lessonBrowser_concepts").val($scope.filterSelection.concept.length + ' selected');
             }
         }
 
@@ -499,10 +506,14 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                             });
                             ctrl.searchConcepts(contents, function() {
                                 $scope.isLoading = false;
-                                ecEditor.jQuery('#noLessonMsg').hide();
+                                $timeout(function() {
+                                    ecEditor.jQuery('#noLessonMsg').hide();
+                                },0);
                             });
                         } else {
-                            ecEditor.jQuery('#noLessonMsg').show();
+                            $timeout(function() {
+                                ecEditor.jQuery('#noLessonMsg').show();
+                            },0);
                         }
                     } else {
                         console.error("Unable to fetch response", err);

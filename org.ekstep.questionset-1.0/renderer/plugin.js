@@ -435,11 +435,14 @@ IteratorPlugin.extend({
     },
     resetQS: function () {
         // this.resetNavigation();
+        var instance = this;
         Renderer.theme.setParam(this._data.id, undefined);
         if (this._currentQuestion) {
             EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
         }
-        this.resetListeners();
+        setTimeout(function () {
+            instance.resetListeners();
+        }, 100);
     },
     resetListeners: function () {
         // The following code will unregister all event listeners added by the question unit plugins

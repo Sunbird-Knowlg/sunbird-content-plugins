@@ -47,6 +47,10 @@ angular.module('createquestionapp', [])
             "property": "version",
             "operator": "in",
             "value": $scope.versions
+          }, {
+            "property": "status",
+            "operator": "=",
+            "value": "Live"
           }]
         },
         "sortOrder": [{
@@ -82,6 +86,10 @@ angular.module('createquestionapp', [])
         "property": "version",
         "operator": "in",
         "value": $scope.versions
+      }, {
+        "property": "status",
+        "operator": "=",
+        "value": "Live"
       }];
 
       // For my Questions option
