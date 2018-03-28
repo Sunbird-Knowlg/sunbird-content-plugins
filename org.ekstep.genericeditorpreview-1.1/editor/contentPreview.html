@@ -1,8 +1,8 @@
 <div class="main" ng-app='org.ekstep.genericeditorpreview' ng-controller='previewController'>
     <div class="ui raised card child preview-iframe-wrapper" id="previewContentIframeWrapper" ng-show='showPreview'>
         <div class="field pdf-warning-message">
-            <div class="ui icon warning message">
-                <i class="close icon"></i>
+            <div class="ui icon warning {{showPdfWarningMsg ? 'visible' : 'transition hidden';}} message">
+                <i class="close icon" ng-click="hidePdfWarningMsg();"></i>
                 <div class="content">
                     <div class="header">
                         Please review all the pages in this PDF. If the PDF isn't displaying correctly, it may be related to one of the following issues:
