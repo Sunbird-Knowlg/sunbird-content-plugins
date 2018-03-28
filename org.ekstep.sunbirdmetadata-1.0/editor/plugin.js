@@ -134,16 +134,21 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      */
     reviewContent: function(data, callbackFn) {
         var instance = this
-        var reviewCallBackFn = function(err, res) {
+        var saveCallBackFn = function(err, res) {
             if (!err) {
-                ecEditor.dispatchEvent(instance.eventMap[instance.config.action], callbackFn)
-                ecEditor.dispatchEvent(instance.eventMap['close']);
+                ecEditor.dispatchEvent(instance.eventMap[instance.config.action], reviewCallBackFn)
             } else {
                 throw 'Unable to update the fields value before sending to review status'
                 callbackFn(err)
             }
         }
-        this.saveContent(data, reviewCallBackFn)
+        var reviewCallBackFn = function(err, res) {
+            if (!err) {
+                ecEditor.dispatchEvent(instance.eventMap['close']);
+            }
+            callbackFn()
+        }
+        this.saveContent(data, saveCallBackFn)
     },
 
     /**
