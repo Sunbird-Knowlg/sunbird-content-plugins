@@ -25,3 +25,13 @@
     width: 100%;
     border: none;
 }
+
+.field.pdf-warning-message{
+    position: absolute;
+    width: 100%;
+    padding: 11px;
+}
+
+.pdf-warning-message .ui.message .header{
+    font-size: 1em!important;
+}
