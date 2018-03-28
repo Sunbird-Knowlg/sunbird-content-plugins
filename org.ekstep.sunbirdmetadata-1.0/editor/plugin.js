@@ -34,7 +34,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     /**
      * @property      - List of are event are mapped with the action
      */
-    eventMap: { savemeta: 'org.ekstep.contenteditor:save:meta', review: 'org.ekstep.contenteditor:review', save: 'org.ekstep.contenteditor:save' },
+    eventMap: { savemeta: 'org.ekstep.contenteditor:save:meta', review: 'org.ekstep.contenteditor:review', save: 'org.ekstep.contenteditor:save', close: 'org.ekstep.collectioneditor:content:notfound' },
 
     /**
      * 
@@ -137,6 +137,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
         var reviewCallBackFn = function(err, res) {
             if (!err) {
                 ecEditor.dispatchEvent(instance.eventMap[instance.config.action], callbackFn)
+                ecEditor.dispatchEvent(instance.eventMap['close']);
             } else {
                 throw 'Unable to update the fields value before sending to review status'
                 callbackFn(err)
