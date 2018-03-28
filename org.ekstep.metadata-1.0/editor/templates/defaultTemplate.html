@@ -39,7 +39,7 @@
                                     <div>
                                         <div class="ui input" ng-class="{'disabled':!fixedField.editable}">
                                             <input id="{{fixedField.code}}" ng-pattern="fixedField.validation.regex['value']" ng-maxlength="{{fixedField.validation.max[ 'value']}}" placeholder={{field.placeholder}} name="{{fixedField.code}} " ng-model="contentMeta.name " type="text " ng-required="{{fixedField.required}} "
-                                                ng-keyup="onConfigChange({form:metaForm})" ng-click="onConfigChange({field:fixedField,form:metaForm})">
+                                                ng-keyup="onConfigChange({form:metaForm})" ng-change="dispatchEvent('content:title:update',contentMeta.name)" ng-click="onConfigChange({field:fixedField,form:metaForm})">
                                         </div>
                                         <div ng-show="!metaForm[fixedField.code].$valid && isSubmit" class="ui pointing red basic label ">
                                             {{validation[fixedField.code].errorMessage || DEFAULT_ERROR_MESSAGE}}
