@@ -141,3 +141,12 @@ and collectio is using 16 grid layout so
 .marginClass {
     margin-left: 2%
 }
+
+.form-icon .appIconSelector{
+    border: 1px solid #E6E7E8;
+    color: #888; 
+    height: 100%; 
+    position: relative; 
+    top: 15%;
+    align-items: center;
+}
