@@ -1,15 +1,17 @@
 <div class="main" ng-app='org.ekstep.genericeditorpreview' ng-controller='previewController'>
     <div class="ui raised card child preview-iframe-wrapper" id="previewContentIframeWrapper" ng-show='showPreview'>
-        <div class="ui pdf-warning-message icon warning message">
-            <i class="close icon"></i>
-            <div class="content">
-                <div class="header">
-                    Please review all the pages in this PDF. If the PDF isn't displaying correctly, it may be related to one of the following issues:
+        <div class="field pdf-warning-message">
+            <div class="ui icon warning message">
+                <i class="close icon"></i>
+                <div class="content">
+                    <div class="header">
+                        Please review all the pages in this PDF. If the PDF isn't displaying correctly, it may be related to one of the following issues:
+                    </div>
+                    <ul class="list">
+                        <li>Using fonts that are not packaged along with the PDF</li>
+                        <li>Corrupted file has been uploaded</li>
+                    </ul>
                 </div>
-                <ul class="list">
-                    <li>Using fonts that are not packaged along with the PDF</li>
-                    <li>Corrupted file has been uploaded</li>
-                </ul>
             </div>
         </div>
         <iframe id="previewContentIframe"></iframe>
