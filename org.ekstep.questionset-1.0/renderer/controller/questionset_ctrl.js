@@ -31,7 +31,7 @@ angular.module('genie-canvas')
 				element.hide();
 			}
 			scope.moveNextStage = function(){
-				EkstepRendererAPI.dispatchEvent('renderer:nextStage');
+				EkstepRendererAPI.dispatchEvent('renderer:navigation:next');
 				scope.hidePopup();
 				element.hide();
 			}
@@ -50,7 +50,7 @@ angular.module('genie-canvas')
 				element.hide();
 			}
 			scope.moveNextStage = function(){
-				EkstepRendererAPI.dispatchEvent('renderer:nextStage');
+				EkstepRendererAPI.dispatchEvent('renderer:navigation:next');
 				scope.tryAgainHidePopup();
 				element.hide();
 			}
@@ -73,7 +73,7 @@ angular.module('genie-canvas')
  		$ocLazyLoad.load([{type: 'html', path: data.path}]).then(function () {
  			if (data.toElement) {
  				var element = angular.element(data.toElement);
- 				var ngElement = angular.element('<template-content path="' + data.path + '"></template-content>');
+ 				var ngElement = angular.element('<template-content id="' + data.questionId + '" path="' + data.path + '"></template-content>');
  				element.append(ngElement);
  				$compile(element.contents())($scope);
  				$scope.safeApply();
