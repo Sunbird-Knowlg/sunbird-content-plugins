@@ -41,7 +41,7 @@
         // Get the first plugin instance and pass control to it.
         var pluginInstance = instance._customNavigationPlugins[0];
         pluginInstance.handleNext();
-
+        
         if(pluginInstance._itemIndex > 0){
             EventBus.dispatch("renderer:previous:enable");
         }
@@ -54,12 +54,14 @@
     //If register call plugin previous method
     EkstepRendererAPI.addEventListener("renderer:navigation:prev",function(event){
       var registered = _.isEmpty(instance._customNavigationPlugins);
+      var pluginInstance = instance._customNavigationPlugins[0];
       if(!registered){
-        var pluginInstance = instance._customNavigationPlugins[0];
         pluginInstance.handlePrevious();
-        
         if(pluginInstance._itemIndex <= 0){
-            EventBus.dispatch("renderer:previous:disable");
+          EventBus.dispatch("renderer:previous:disable");
+        }
+        if(pluginInstance._itemIndex > 0){
+          EventBus.dispatch("renderer:previous:enable");
         }
       } else {
         EventBus.dispatch("actionNavigatePrevious", "previous");
