@@ -237,12 +237,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             target: 'save'
         }, $scope.manifest);
         $scope.isSubmit = true;
-        var appIconConfig = _.filter($scope.fields, { 'code': 'appicon' })[0];
-        if (appIconConfig) {
-            if (appIconConfig.code == 'appicon' && appIconConfig.required && !$scope.contentMeta['appIcon']) {
-                object.form.$valid = false;
-            }
-        };
         !$scope.isValidInputs(object) && $scope.updateErrorMessage(object.form);
         var successCB = function(err, res) {
                 if (res) {
