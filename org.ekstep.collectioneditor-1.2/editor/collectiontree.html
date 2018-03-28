@@ -28,7 +28,7 @@
         <div class="nine wide column editor-body">
             <div class="breadcrumbTemplate" ng-repeat="page in breadcrumb" ng-include="page.templateURL"></div>
             <div class="ui grid no-margin" ng-show="!isNewCollection">
-                <div class="padded ui eight" ng-class="showsuggestedContent ? 'wide column' : 'twelve wide column'" id="contents-pane">
+                <div class="padded ui eight" ng-class="(showsuggestedContent && mode === 'Edit') ? 'wide column' : 'twelve wide column'" id="contents-pane">
                     <div class="content-manifest">
                         <div class="sixteen wide column metacontent-holder metadata-form-container" ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" ng-include="page.templateURL"></div>
                     </div>
@@ -105,7 +105,7 @@
                         </div>
                     </div>
                 </div>
-                <div ng-show="showsuggestedContent" class="ui four wide column padding-none suggest-content-pane">
+                <div ng-show="showsuggestedContent && mode === 'Edit'" class="ui four wide column padding-none suggest-content-pane">
                     <div ng-repeat="page in sidebarPages" ng-include="page.templateURL"></div>
                 </div>
             </div>
