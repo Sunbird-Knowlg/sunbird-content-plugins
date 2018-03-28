@@ -237,13 +237,13 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             target: 'save'
         }, $scope.manifest);
         $scope.isSubmit = true;
-        var appIconConfig = _.filter($scope.fields,{'code':'appicon'})[0];
-        if(appIconConfig){
-            if(appIconConfig.code =='appicon' && appIconConfig.required && !$scope.contentMeta['appIcon']){
-                object.form.$valid = false; 
-             }
-        }
-        !object.form.$valid && $scope.updateErrorMessage(object.form);
+        var appIconConfig = _.filter($scope.fields, { 'code': 'appicon' })[0];
+        if (appIconConfig) {
+            if (appIconConfig.code == 'appicon' && appIconConfig.required && !$scope.contentMeta['appIcon']) {
+                object.form.$valid = false;
+            }
+        };
+        !$scope.isValidInputs(object) && $scope.updateErrorMessage(object.form);
         var successCB = function(err, res) {
                 if (res) {
                     // success toast message which is already handled by content editor function plugin
@@ -396,6 +396,19 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var map = { 'defaultTemplate': ["name", "description", "keywords", "appicon"] }
         return map[$scope.tempalteName] || {}
     }
+
+    $scope.isValidInputs = function(object) {
+        var appIconConfig = _.filter($scope.fields, { 'code': 'appicon' })[0];
+        var conceptSelector = _.filter($scope.fields, { 'code': 'concepts' })[0]
+        if (appIconConfig && appIconConfig.required && !$scope.contentMeta['appIcon']) {
+            object.form.$valid = false;
+        };
+        if (conceptSelector && conceptSelector.required && !_.size($scope.contentMeta['concepts'])) {
+            object.form.$valid = false
+        }
+        return object.form.$valid;
+    };
+
     $scope.init()
 
 }]);

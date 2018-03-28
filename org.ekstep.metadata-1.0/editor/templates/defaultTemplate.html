@@ -128,7 +128,7 @@
                                         <label>{{dynamicField.label | uppercase}}</label>
                                         <year config=dynamicField ng-click="onConfigChange({field:dynamicField, form:{}})"></year>
                                     </div>
-                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required  && isSubmit) , 'required': dynamicField.required} " name="{{dynamicField.code}}
+                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code].length && dynamicField.required  && isSubmit) , 'required': dynamicField.required} " name="{{dynamicField.code}}
                                     " ng-if="dynamicField.inputType==='conceptselector'">
                                         <label>{{dynamicField.label}}</label>
                                         <conceptselector config=dynamicField ng-click="onConfigChange({field:dynamicField, form:metaForm})"></conceptselector>
