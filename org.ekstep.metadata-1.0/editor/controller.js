@@ -88,7 +88,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @param {Object} object - Field information
      */
     $scope.onConfigChange = function(object) {
-        $scope.isSubmit = false;
         if (object.field) {
             var type = (object.field.inputType == 'select' || object.field.inputType == 'multiselect') ? 'change' : 'click'
             object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: object.field.code }, $scope.manifest);
@@ -117,11 +116,24 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @param {Object} range           - Which refers to framework terms/range object
      */
     $scope.getAssociations = function(keys, range, callback) {
+        var names = [];
         var associations = [];
-        var values = _.filter(range, function(res) { return _.includes(keys, res.name); });
-        _.forEach(values, function(key, value) {
-            if (key.associations) {
-                _.forEach(key.associations, function(key, value) {
+        var filteredAssociations = [];
+        if (_.isString(keys)) {
+            names.push(keys);
+        } else {
+            names = keys
+        }
+        _.filter(range, function(res) {
+            _.forEach(names, function(value, key) {
+                if (res.name === value) {
+                    filteredAssociations.push(res)
+                }
+            });
+        });
+        _.forEach(filteredAssociations, function(val, index) {
+            if (val.associations) {
+                _.forEach(val.associations, function(key, value) {
                     associations.push(key);
                 })
             }
@@ -143,13 +155,24 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         //reset the depended field first
         // Update the depended field with associated value
         // Currently, supported only for the dropdown values
-        var dependedValues;
+        var dependedValues, groupdFields;
         if (field.depends && field.depends.length) {
             _.forEach(field.depends, function(id) {
                 resetSelected && $scope.resetSelectedField(id);
-                dependedValues = _.map(associations, i => _.pick(i, 'name'))
-                $scope.updateDropDownList(id, dependedValues);
-                $scope.$safeApply();
+                dependedValues = _.map(associations, i => _.pick(i, ['name', 'category']))
+                groupdFields = _.chain(dependedValues)
+                    .groupBy('category')
+                    .map((name, category) => ({ name, category }))
+                    .value();
+                if (groupdFields.length) {
+                    _.forEach(groupdFields, function(value, key) {
+                        $scope.updateDropDownList(value.category, _.map(value.name, i => _.pick(i, 'name')));
+                        $scope.$safeApply();
+                    })
+                } else {
+                    $scope.updateDropDownList(id, [])
+                    $scope.$safeApply();
+                }
             });
         }
 
@@ -166,7 +189,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.updateDropDownList = function(fieldCode, values) {
         if (values.length) {
-            $scope.categoryList[fieldCode] = values;
+            $scope.categoryList[fieldCode] = _.unionBy(values, 'name');
         } else {
             $scope.mapMasterCategoryList($scope.fields, fieldCode);
         }
@@ -358,6 +381,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                     config.model[key] = convertToDataType('TEXT', value);
                 }
             });
+
             $scope.contentMeta = config.model;
             $scope.originalContentMeta = _.clone($scope.contentMeta);
             var layoutConfigurations = $scope.getLayoutConfigurations();

@@ -3,7 +3,7 @@
  * @author Manjunath Davanam <manjunathd@ilimi.in>
  */
 
-formApp.directive('concetpselector', function() {
+formApp.directive('conceptselector', function() {
     const manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.metadata");
 
     var conceptController = ['$scope', '$rootScope', '$controller', function($scope, $rootScope, $controller) {

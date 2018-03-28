@@ -97,7 +97,7 @@ angular.module('mcqApp', []).controller('mcqQuestionFormController', ['$scope', 
   $scope.formValidation = function() {
     var opSel = false;
     var valid = false;
-    var formValid = $scope.mcqForm.$valid;
+    var formValid = $scope.mcqForm.$valid && $scope.mcqFormData.options.length>1;
     $scope.submitted = true;
     if (!_.isUndefined($scope.selectedOption)) {
       _.each($scope.mcqFormData.options, function(k, v) {

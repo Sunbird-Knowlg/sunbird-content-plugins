@@ -100,11 +100,13 @@ angular.module('mtfApp', []).controller('mtfQuestionFormController', ['$scope', 
       $scope.mtfFormData.option.optionsRHS.push(optionRHS);
     }
   }
+  //on click next the form validation function called
   $scope.formValidation = function() {
     console.log($scope.mtfFormData);
     var opSel = false;
     var valid = false;
-    var formValid = $scope.mtfForm.$valid;
+    //check form valid and lhs should be more than 3
+    var formValid = $scope.mtfForm.$valid && $scope.mtfFormData.option.optionsLHS.length>2;
     $scope.submitted = true;
     if (formValid) {
       opSel = true;
