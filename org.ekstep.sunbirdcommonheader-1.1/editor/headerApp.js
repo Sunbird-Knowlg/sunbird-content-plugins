@@ -40,7 +40,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 break;
         };
         $scope.contentDetails = {
-            contentImage: meta.appIcon || ecEditor.getConfig('headerLogo') || ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/sunbird_logo.png"),
+            contentImage: ecEditor.getConfig('headerLogo') || meta.appIcon || ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/sunbird_logo.png"),
             contentTitle: meta.name
         };            
         $scope.$safeApply();

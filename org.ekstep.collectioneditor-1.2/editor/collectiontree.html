@@ -14,12 +14,12 @@
                 </div>
             </div>
             <div class="ui attached segment" id="treeWrapper">
-                <div id="collection-tree"></div>
+                <div id="collection-tree" ng-class="collectionTreeHeight"></div>
             </div>
-            <div class="table-of-contents-fixed-btns">
+            <div class="table-of-contents-fixed-btns" ng-show="{{mode == 'Edit'}}">
                 <div class="padding-top-none"> 
                     <div class="ui two buttons table-of-contents-btn">
-                        <button class="ui basic button text-transform-none" ng-click="addNodeType('sibling')" ><a><i class="plus icon"></i>New Sibling</button>
+                        <button class="ui basic button text-transform-none" ng-click="addNodeType('sibling')" ng-disabled="isNewCollection"><a><i class="plus icon"></i>New Sibling</button>
                         <button class="ui basic button text-transform-none" ng-click="addNodeType('child')"><a> <i class="reply icon table-of-contents-child-icon "></i>New Child</a></button>  
                     </div>
                 </div>    
@@ -27,7 +27,7 @@
         </div>
         <div class="nine wide column editor-body">
             <div class="breadcrumbTemplate" ng-repeat="page in breadcrumb" ng-include="page.templateURL"></div>
-            <div class="ui grid no-margin">
+            <div class="ui grid no-margin" ng-show="!isNewCollection">
                 <div class="padded ui eight" ng-class="showsuggestedContent ? 'wide column' : 'twelve wide column'" id="contents-pane">
                     <div class="content-manifest">
                         <div class="sixteen wide column metacontent-holder metadata-form-container" ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" ng-include="page.templateURL"></div>
@@ -37,12 +37,12 @@
                             <div class="twelve wide column list-container" ng-if="!isContent">
                                 <div class="list-header">
                                     <div class="ui label list-leftheader">RESOURCES</div>
-                                    <button class="ui blue button list-addResource" ng-click="addResource()" ng-show="!isCollection">ADD RESOURCE</button>
+                                    <button class="ui blue button list-addResource" ng-click="addResource()" ng-show="!isCollection && mode === 'Edit'">ADD RESOURCE</button>
                                 </div>
                                 <div class="ui" id="content-list">
                                     <div ng-if="!isContent && contentList.length<1" class="list-drag">
                                         <!-- Drag and Drop Suggested Content here or <span class="blue-color">View Library</span> -->
-                                        <p>No Contents are available</p><p ng-show="!isCollection">You can add resource by Ctrl + Alt + A</p>
+                                        <p>No Contents are available</p><p ng-show="!isCollection &&  mode === 'Edit'">You can add resource by Ctrl + Alt + A</p>
                                     </div>
                                     <div ui-sortable="sortableOptions" ng-model="contentList">
                                         <div class="ui raised segment padding-none" ng-repeat="child in contentList" ng-class="{'unsortable': isCollection}">
@@ -69,7 +69,7 @@
                                                         <div class="extra">
                                                             <span ng-if="child.data.metadata.owner">Created by {{child.data.metadata.owner}}</span>
                                                             <i class="long arrow right medium icon right floated blue-color popup-item" data-content="Preview" data-variation: "wide" data-position: "bottom left" ng-click="setActiveNode(child)"></i>
-                                                            <i ng-show="!isCollection" class="fa fa-trash right floated delete-node padding-right-20 popup-item" data-content="Delete" data-variation: "wide" data-position: "bottom left" aria-hidden="true" ng-click="deleteNode(child, $event);"></i>
+                                                            <i ng-show="!isCollection && mode === 'Edit'" class="fa fa-trash right floated delete-node padding-right-20 popup-item" data-content="Delete" data-variation: "wide" data-position: "bottom left" aria-hidden="true" ng-click="deleteNode(child, $event);"></i>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -81,7 +81,7 @@
                             <div class="twelve wide column list-container"  ng-if="isContent">
                                 <div class="content-width padding-top-10 centerAligned">
                                     <div class="ui label list-leftheader">CONTENT PREVIEW</div>
-                                    <div class="ui label content-rightheader delete-node" ng-show="!isCollection" ng-click="deleteNode(selectedContent, $event);"><i class="fa fa-trash right floated" aria-hidden="true"> </i><span>&nbsp;&nbsp;REMOVE</span></div>
+                                    <div class="ui label content-rightheader delete-node" ng-show="!isCollection" ng-if="mode === 'Edit'" ng-click="deleteNode(selectedContent, $event);"><i class="fa fa-trash right floated" aria-hidden="true"> </i><span>&nbsp;&nbsp;REMOVE</span></div>
                                 </div>
                                 <div class="content-width centerAligned">
                                     <div class="content-details">
@@ -107,6 +107,16 @@
                 </div>
                 <div ng-show="showsuggestedContent" class="ui four wide column padding-none suggest-content-pane">
                     <div ng-repeat="page in sidebarPages" ng-include="page.templateURL"></div>
+                </div>
+            </div>
+            <div class="ui grid no-margin middle aligned list-container newCollection" ng-show="isNewCollection">
+                <div class="twelve wide column">
+                    <div class="ui" id="content-list">
+                        <div class="list-drag">
+                            <p>There is no unit created for this collection.</p>
+                            <p>Please click on new child to add a unit</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

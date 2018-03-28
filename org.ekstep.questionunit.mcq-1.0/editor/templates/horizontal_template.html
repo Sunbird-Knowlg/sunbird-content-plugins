@@ -1,0 +1,134 @@
+<div ng-controller="mcqQuestionFormController" ng-init="init()">
+  <div class="ui grid mcqFullGrid">
+    <div class="one column row">
+      <div class="column innerScroll">
+        <div>
+          <form name="mcqForm">
+            <div class="one column row qHeader">
+              <span>Enter the question</span>
+            </div>
+            <div class="outer-segment">
+              <div class="ui segments inner-segment" ng-class="{cardBorder: $ctrl.focused, 'has-errorCard': submitted && mcqForm.question.$error.required}">
+                <div class="ui segment">
+                  <div class="ui grid">
+                    <div class="eleven wide column">
+                      <div class="form-group segment textBoxDiv">
+                        <textarea class="form-control textboxQ" ng-class="{'has-success':mcqForm.question.$valid, 'has-error': submitted && mcqForm.question.$error.required}" placeholder="Enter the question" name="question" ng-model="mcqFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'mcqQues'}, $event)" ng-blur="$ctrl.focused = false" ng-required="!(mcqFormData.question.text.length || mcqFormData.question.image.length || mcqFormData.question.audio.length)"></textarea>
+                      </div>
+                    </div>
+                    <div class="one wide column text-len">
+                      <span class="maxLengthText">{{mcqFormData.question.text.length}}<span class="length-divider">/</span>220</span>
+                    </div>
+                    <div class="six column row">
+                      <div class="two wide column" ng-if="mcqFormData.question.image.length > 0">
+                        <img src="{{mcqFormData.question.image}}" class="imgWidth" ng-click="addImage('q')"/>
+                      </div>
+                      <div class="one wide column" ng-if="mcqFormData.question.image.length > 0">
+                         <a href="" ng-click="deleteImage('q');generateTelemetry({type: 'click', subtype: 'select', target: 'deleteImage'}, $event);" class="deleteMedia" data-tooltip="Delete image" data-inverted=""><i class="trash large icon delete-icon"></i></a>
+                      </div>
+                      <div class="one wide column" ng-if="mcqFormData.question.audio.length > 0">
+                        <audio src="{{mcqFormData.question.audio}}" controls  controlsList="nodownload" preload="none" class="audio-container myAudio" ng-click="addAudio('q')" data-tooltip="Play audio" data-inverted="">
+                        </audio>
+                      </div>
+                      <div class="one wide column" ng-if="mcqFormData.question.audio.length > 0">
+                        <a href="" ng-click="deleteAudio('q');generateTelemetry({type: 'click', subtype: 'select', target: 'deleteAudio'}, $event);" class="deleteMedia" data-tooltip="Delete audio" data-inverted=""><i class="trash large icon delete-icon"></i></a>
+                      </div>
+                      <div class="three wide column" ng-if="mcqFormData.question.hint.length > 0 || qHint">
+                        <input type="text" class="form-control textbox" placeholder="Enter hint" name="qHint" ng-model="mcqFormData.question.hint" maxlength="50" ng-focus="qHint" />
+                      </div>
+                      <div class="one wide column" ng-if="mcqFormData.question.hint.length > 0 || qHint">
+                        <a href="" ng-click="deleteHint('q');generateTelemetry({type: 'click', subtype: 'select', target: 'deleteHint'}, $event);" class="deleteMedia" data-tooltip="Delete hint" data-inverted=""><i class="trash large icon delete-icon"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="ui secondary right aligned segment custom-sec-segment">
+                  <div class="ui grid">
+                    <div class="one column row segment-column">
+                      <div class="column right floated">
+                        <span class="custom-bottom-label">Add: </span>
+                        <span class="custom-bottom-segment ui icon" ng-if="mcqFormData.question.image.length <= 0" data-tooltip="Add image" data-inverted="" ng-click="addImage('q')"><i class="image large icon"></i></span>
+                        <span class="custom-bottom-segment ui icon" ng-if="mcqFormData.question.image.length > 0" data-tooltip="Edit image" data-inverted="" ng-click="addImage('q')"><i class="image large icon"></i></span>
+                        <span class="custom-bottom-segment ui icon" ng-if="mcqFormData.question.audio.length <= 0" data-tooltip="Add audio" data-inverted="" ng-click="addAudio('q')"><i class="music large icon"></i></span>
+                        <span class="custom-bottom-segment ui icon" ng-if="mcqFormData.question.audio.length > 0" data-tooltip="Edit audio" data-inverted="" ng-click="addAudio('q')"><i class="music large icon"></i></span>
+                        <span class="custom-bottom-segment ui icon" ng-if="!qHint" data-tooltip="Add hint" data-inverted="" ng-click="addHint('q')"><i class="idea large icon"></i></span>
+                        <span class="custom-bottom-segment ui icon" ng-if="qHint" data-tooltip="Edit hint" data-inverted="" ng-click="addHint('q')"><i class="idea large icon"></i></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="one column row qHeader" ng-if="mcqFormData.options.length > 0">
+              <span>Set answer</span>
+            </div>
+            <div ng-repeat="(key, value) in mcqFormData.options" class="outer-segment">
+              <div class="ui segments inner-segment" ng-class="{cardBorder: focused, 'has-errorCard': submitted && mcqForm['options_' + $index].$error.required}" id="eachCard">
+                <div class="ui segment">
+                  <div class="ui grid">
+                    <div class="eleven wide column">
+                      <div class="form-group segment textBoxDiv">
+                        <input type="text" class="form-control textbox" ng-class="{'has-success':mcqForm['options_' + $index].$valid, 'has-error': submitted && mcqForm['options_' + $index].$error.required}" placeholder="Enter answer" name="options_{{$index}}" ng-model="mcqFormData.options[key].text" maxlength="25" ng-init="focused = false" ng-focus="focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'mcqAnswerField'}, $event)" ng-blur="focused = false" ng-required="!(mcqFormData.options[key].text.length || mcqFormData.options[key].image.length || mcqFormData.options[key].audio.length)"/>
+                      </div>
+                    </div>
+                    <div class="one wide column text-len">
+                      <span class="maxLengthText">{{value.text.length}}<span class="length-divider">/</span>25</span>
+                    </div>
+                    <div class="four column row">
+                      <div class="two wide column" ng-if="mcqFormData.options[key].image.length > 0">
+                        <img src="{{mcqFormData.options[key].image}}" class="imgWidth" ng-click="addImage(key)"/>
+                      </div>
+                      <div class="one wide column" ng-if="mcqFormData.options[key].image.length > 0">
+                        <a href="" ng-click="deleteImage(key);generateTelemetry({type: 'click', subtype: 'select', target: 'deleteImage'}, $event);" class="deleteMedia" data-tooltip="Delete image" data-inverted=""><i class="trash large icon delete-icon"></i></a>
+                      </div>
+                      <div class="one wide column" ng-if="mcqFormData.options[key].audio.length > 0">
+                       <audio src="{{mcqFormData.options[key].audio}}" controls  controlsList="nodownload" preload="none" class="audio-container myAudio" ng-click="addAudio(key)">
+                        </audio>
+                      </div>
+                      <div class="one wide column" ng-if="mcqFormData.options[key].audio.length > 0">
+                        <a href="" ng-click="deleteAudio(key);generateTelemetry({type: 'click', subtype: 'select', target: 'deleteAudio'}, $event);" class="deleteMedia" data-tooltip="Delete audio" data-inverted=""><i class="trash large icon delete-icon"></i></a>
+                      </div>
+                      <div class="three wide column" ng-if="mcqFormData.options[key].hint.length > 0 || oHint[key]">
+                        <input type="text" class="form-control textbox" placeholder="Enter hint" name="opHint_{{$index}}" ng-model="mcqFormData.options[key].hint" maxlength="50" />
+                      </div>
+                      <div class="one wide column" ng-if="mcqFormData.options[key].hint.length > 0 || oHint[key]">
+                        <a href="" ng-click="deleteHint(key);generateTelemetry({type: 'click', subtype: 'select', target: 'deleteHint'}, $event);" class="deleteMedia" data-tooltip="Delete hint" data-inverted=""><i class="trash large icon delete-icon"></i></a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="ui secondary segment custom-sec-segment">
+                  <div class="ui grid">
+                    <div class="two column row segment-column">
+                      <div class="column left-segment">
+                        <a href="" ng-click="deleteAnswer(key);generateTelemetry({type: 'click', subtype: 'select', target: 'deleteAnswer'}, $event);" class="deleteText" data-tooltip="Delete answer" data-inverted=""><i class="trash large icon delete-icon"></i></a>
+                        <div class="ui radio correct-answer">
+                          <input type="radio" id="{{$index}}" class="right-ans-radio" name="correctans_{{$index}}" ng-checked="value.isCorrect" ng-model="$parent.selectedOption" value="{{$index}}" ng-click="generateTelemetry({type: 'click', subtype: 'toggle', target: 'rightAnsCheckbox'}, $event);"/>
+                          <label for="{{$index}}" ng-class="{'has-success-text':selLbl == 'error' , 'has-error-text':selLbl == 'success' }">Mark as right answer</label>
+                        </div>
+                      </div>
+                      <div class="column right aligned">
+                        <span class="custom-bottom-label">Add: </span>
+                        <span class="custom-bottom-segment ui icon" ng-if="mcqFormData.options[key].image.length <= 0" data-tooltip="Add image" data-inverted="" ng-click="addImage(key)"><i class="image large icon"></i></span>
+                        <span class="custom-bottom-segment ui icon" ng-if="mcqFormData.options[key].image.length > 0" data-tooltip="Edit image" data-inverted="" ng-click="addImage(key)"><i class="image large icon"></i></span>
+                        <span class="custom-bottom-segment ui icon" ng-if="mcqFormData.options[key].audio.length <= 0" data-tooltip="Add audio" data-inverted="" ng-click="addAudio(key)"><i class="music large icon"></i></span>
+                        <span class="custom-bottom-segment ui icon" ng-if="mcqFormData.options[key].audio.length > 0" data-tooltip="Edit audio" data-inverted="" ng-click="addAudio(key)"><i class="music large icon"></i></span>
+                        <span class="custom-bottom-segment ui icon" ng-if="!oHint[key]" data-tooltip="Add hint" data-inverted="" ng-click="addHint(key)"><i class="idea large icon"></i></span>
+                        <span class="custom-bottom-segment ui icon" ng-if="oHint[key]" data-tooltip="Edit hint" data-inverted="" ng-click="addHint(key)"><i class="idea large icon"></i></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+          <div class="one column row">
+            <div class="column addAns">
+              <button class="ui primary basic button large" id="mcq-add-ans-button" ng-click="addAnswerField();generateTelemetry({type: 'click', subtype: 'select', target: 'addAnswer'}, $event);">Add answer</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

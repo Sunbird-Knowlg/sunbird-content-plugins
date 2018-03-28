@@ -1,18 +1,50 @@
 {
-    "id": "org.ekstep.questionbank",
-    "ver": "1.0",
-    "author": "Manoj Chandrashekar",
-    "title": "Question Bank Plugin",
-    "description": "Plugin to list questions for users to select from.",
-    "publishedDate": "",
-    "editor": {
-        "main": "editor/plugin.js",
-        "help": {
-            "src": "editor/help.md",
-            "dataType": "text"
-        },
-        "menu": [],
-        "configManifest": [],
-        "dependencies": []
+  "id": "org.ekstep.questionbank",
+  "ver": "1.0",
+  "shortId": "questionbank",
+  "author": "Swati Singh",
+  "type": "plugin",
+  "title": "questionbank",
+  "description": "This plugin is for question bank",
+  "editor": {
+    "main": "editor/plugin.js",
+    "dependencies": [
+      {
+        "type": "plugin",
+        "plugin": "org.ekstep.question",
+        "ver": "1.0"
+      }, {
+        "type": "plugin",
+        "plugin": "org.ekstep.questionset.preview",
+        "ver": "1.0"
+      },
+      {
+        "type": "plugin",
+        "plugin": "org.ekstep.questionunit.mcq",
+        "ver": "1.0"
+      },{
+        "type": "plugin",
+        "plugin": "org.ekstep.questionunit.ftb",
+        "ver": "1.0"
+      }
+    ],
+    "menu": [],
+    "help": {
+      "src": "editor/help.md",
+      "dataType": "text"
     }
+  },
+  "renderer": {
+    "main": "renderer/plugin.js",
+    "dependencies": [{
+      "type": "plugin",
+      "plugin": "org.ekstep.questionset.preview",
+      "ver": "1.0"
+    },{
+        "type": "plugin",
+        "plugin": "org.ekstep.questionunit.mcq",
+        "ver": "1.0"
+      }
+    ]
+  }
 }
