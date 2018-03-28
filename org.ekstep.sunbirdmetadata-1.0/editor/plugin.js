@@ -79,9 +79,8 @@ org.ekstep.contenteditor.metadataPlugin.extend({
 
             })
         } else {
-            config.popup ? instance.showForm() : this.loadTemplate(instance.getTemplate(), function(templatePath, controller) {
-                ecEditor.dispatchEvent("editor:template:loaded", { "templatePath": templatePath })
-            })
+            var mappedRes = instance.getMappedResponse(config.subType, config.action)
+            instance.renderForm(config.popup, { resourceBundle: mappedRes.resourceBundle, framework: mappedRes.framework, formConfig: mappedRes.formConfig })
         }
     },
 
