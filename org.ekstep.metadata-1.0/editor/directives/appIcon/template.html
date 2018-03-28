@@ -2,7 +2,7 @@
     <label>{{appIconConfig.label}}</label>
     <div id="field-app-icon " class="form-icon" ng-click="invokeAssetBrowser() ">
         <img ng-src="{{contentMeta.appIcon}} " />
-        <div ng-show="!contentMeta.appIcon" class="ui grid centered appIconSelector" ng-class=" {'error': isSubmit && !(contentMeta.appIcon)}">
+        <div ng-show="!contentMeta.appIcon" class="ui appIconSelector" ng-class=" {'error': isSubmit && appIconConfig.required && !(contentMeta.appIcon) }">
             <div>
                 <i id="icon_appIcon" name="icon_appIcon" class="fa fa-camera"></i>
                 <div class="addImageText">Add an image</div>

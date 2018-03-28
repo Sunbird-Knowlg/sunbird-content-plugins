@@ -144,9 +144,10 @@ and collectio is using 16 grid layout so
 
 .form-icon .appIconSelector{
     border: 1px solid #E6E7E8;
-    color: #888; 
-    height: 100%; 
-    position: relative; 
-    top: 15%;
+    color: #888;
+    text-align: center;
+    height: 100%;
+    width:100%;
+    padding-top: 25%;
     align-items: center;
 }
