@@ -634,7 +634,6 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         // Show loader
         ctrl.loadMoreAssetSpinner = true;
 
-        ctrl.selectBtnDisable = false;
         var createdBy = ctrl.tabSelected == "all" ? undefined :  ctrl.createdBy;
         imageTabSelected = true;
         audioTabSelected = false;
