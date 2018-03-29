@@ -68,6 +68,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     invoke: function(event, config) {
         var instance = this;
         instance.model = config.metadata;
+        instance.editMode = config.editMode;
         if (!this.isConfigurationsExists(config.subType, config.action)) {
             this.getConfigurations(config, function(error, res) {
                 if (res) {
@@ -319,7 +320,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     },
 
     returnConfigs: function(event, callbackFn) {
-        callbackFn({ model: this.getModel(), template: this.config.templateName || this.DEFAULT_TEMPLATE_NAME, fields: this.form })
+        callbackFn({ model: this.getModel(), template: this.config.templateName || this.DEFAULT_TEMPLATE_NAME, fields: this.form, editMode: this.editMode })
     }
 })
 

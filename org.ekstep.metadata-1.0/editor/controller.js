@@ -50,6 +50,18 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.isNew = true;
 
+
+    /**
+     * 
+     */
+    $scope.editMode = true;
+
+
+    /**
+     * 
+     */
+    $scope.headerMessage = 'Edit Details'
+
     /**
      * @description          - Which is used to dispatch an event.
      * 
@@ -367,7 +379,14 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var callbackFn = function(config) {
             $scope.fields = config.fields;
             $scope.tempalteName = config.template;
+            $scope.editMode = config.editMode;
+            if (!$scope.editMode) {
+                $scope.headerMessage = 'View Details'
+            }
             var field = undefined;
+            _.forEach($scope.fields, function(value, key) {
+                value.editable = $scope.editMode;
+            });
             // Currently, Dropdown value is coming as array of string ex: Audience: ["Learner"]
             // this fails to show the value in the dropdown hence converting value to string format
             _.forEach(config.model, function(value, key) {
@@ -377,7 +396,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                     config.model[key] = convertToDataType('TEXT', value);
                 }
             });
-
             $scope.contentMeta = config.model;
             $scope.originalContentMeta = _.clone($scope.contentMeta);
             var layoutConfigurations = $scope.getLayoutConfigurations();
