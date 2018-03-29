@@ -52,7 +52,7 @@
                                     <label>{{fixedField.label | uppercase}}</label>
                                     <div class=" ui input " ng-class="{ 'disabled':!fixedField.editable } ">
                                         <textarea id="{{fixedField.code}} " placeholder={{field.placeholde}} ng-model="contentMeta.description " rows="{{fixedField.renderingHints.rows}} " name="{{fixedField.code}} " ng-required="{{fixedField.required}}" ng-pattern="fixedField.validation.regex['value']"
-                                            ng-maxlength="{{fixedField.validation.max['value']}}" ng-keyup="onConfigChange({form:metaForm})" ng-click="onConfigChange({field:fixedField,form:metaForm})"></textarea>
+                                            ng-maxlength="{{fixedField.validation.max['value']}}" ng-keyup="onConfigChange({form:metaForm})" ng-click="onConfigChange({field:fixedField,form:metaForm})" ng-disabled="{{!fixedField.editable}}"></textarea>
                                     </div>
                                     <div ng-show="!metaForm[fixedField.code].$valid  && isSubmit" class="ui pointing red basic label ">
                                         {{validation[fixedField.code].errorMessage || DEFAULT_ERROR_MESSAGE}}
