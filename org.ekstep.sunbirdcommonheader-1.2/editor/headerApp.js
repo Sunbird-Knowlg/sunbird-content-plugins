@@ -16,11 +16,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.pendingChanges = false;
     $scope.hideReviewBtn = false;
     $scope.publishMode = false;
-    $scope.isFalgReviewer = false;
+    $scope.isFlagReviewer = false;
     $scope.editorEnv = "";
-    $scope.headerSettings = {
-        showEditMeta: true
-    }
+    $scope.showEditMeta = true;
 
     $scope.setEditorDetails = function() {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
@@ -31,7 +29,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             case "application/vnd.ekstep.content-collection":
                 $scope.editorEnv = "COLLECTION"
                 $scope.publishMode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').publishMode;
-                $scope.isFalgReviewer = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').isFalgReviewer;
+                $scope.isFlagReviewer = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').isFlagReviewer;
+                if(ecEditor.getConfig('editorConfig').mode === 'Read')
+                    $scope.showEditMeta = false;
                 $scope.resolveReviewBtnStatus();
                 break;
             default:
