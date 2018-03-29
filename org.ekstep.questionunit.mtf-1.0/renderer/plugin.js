@@ -6,7 +6,7 @@
  * @author Manoj Chandrashekar <manoj.chandrashekar@tarento.com>
  */
 org.ekstep.contentrenderer.questionUnitPlugin.extend({
-    _type: 'org.ekstep.questionunit.mcq',
+    _type: 'org.ekstep.questionunit.mtf',
     _isContainer: true,
     _render: true,
     _selectedanswere:undefined,
