@@ -91,7 +91,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         if (object.field) {
             var type = (object.field.inputType == 'select' || object.field.inputType == 'multiselect') ? 'change' : 'click'
             object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: object.field.code }, $scope.manifest);
-        }!object.form.$valid && $scope.updateErrorMessage(object.form);
+        };
+        var validationStatus = $scope.isValidInputs(object);
+        !validationStatus && $scope.updateErrorMessage(object.form);
         $scope.updateForm(object);
     }
 
@@ -271,7 +273,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @description             - Which is used to show an error message to resepective field 
      */
     $scope.updateErrorMessage = function(form) {
-        if ($scope.metaForm.$valid) return
         var errorKeys = undefined;
         _.forEach($scope.fields, function(value, key) {
             if (form[value.code] && form[value.code].$invalid) {
@@ -393,17 +394,23 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     }
 
     $scope.isValidInputs = function(object) {
+        var meta = $scope.getScopeMeta();
         var isValid = true;
         var appIconConfig = _.filter($scope.fields, { 'code': 'appicon' })[0];
         var conceptSelector = _.filter($scope.fields, { 'code': 'concepts' })[0]
-        if (appIconConfig && appIconConfig.visible && appIconConfig.required && !$scope.contentMeta['appIcon']) {
+        if (appIconConfig && appIconConfig.visible && appIconConfig.required && !meta['appIcon']) {
             isValid = false;
         };
-        if (conceptSelector && conceptSelector.required && !_.size($scope.contentMeta['concepts'])) {
+        if (conceptSelector && conceptSelector.required && !_.size(meta['concepts'])) {
             isValid = false
         }
         return (object.form.$valid && isValid) ? true : false
     };
+
+    $scope.getScopeMeta = function() {
+        var template = $('#content-meta-form');
+        return template.scope().contentMeta || {};
+    }
 
     $scope.init()
 
