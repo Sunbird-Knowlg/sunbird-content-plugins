@@ -13,7 +13,7 @@
                                     <div class="ui grid">
                                         <div class="eleven wide column">
                                             <div class="form-group segment textBoxDiv">
-                                                <textarea class="form-control textboxQ" ng-class="{'has-success':mtfForm.question.$valid, 'has-error': submitted && mtfForm.question.$error.required}" placeholder="Enter the question" name="question" ng-model="mtfFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'mtfQues'}, $event)" ng-blur="$ctrl.focused = false" ng-required="!(mtfFormData.question.text.length || mtfFormData.question.image.length || mtfFormData.question.audio.length)"></textarea>
+                                                <textarea class="form-control textboxQ" ng-class="{'has-success':mtfForm.question.$valid, 'has-error': submitted && mtfForm.question.$error.required}" placeholder="Enter the question" name="question" ng-model="mtfFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'mtfQues'}, $event)" ng-blur="$ctrl.focused = false" ng-required="!(mtfFormData.question.text.length)"></textarea>
                                             </div>
                                         </div>
                                         <div class="one wide column text-len">
@@ -52,7 +52,7 @@
                             </div>
                         </div>
                         <div class="one column row qHeader">
-                            <span class="instructions">Set Answer for LHS and RHS </span>
+                            <span class="instructions">Set your answers <br>Add question-answer pairs to your question. Answers will be shuffled automatically.</span>
                         </div>
                         <table class="ui celled table">
                             <tbody>
@@ -63,7 +63,7 @@
                                                 <div class="ui grid">
                                                     <div class="eleven wide column">
                                                         <div class="form-group segment textBoxDiv">
-                                                            <input type="text" class="form-control textbox" ng-class="{'has-success':mtfForm['option.optionsLHS_' + $index].$valid, 'has-error': submitted && mtfForm['option.optionsLHS_' + $index].$error.required}" placeholder="Enter answer" name="option.optionsLHS_{{$index}}" id="mtf-optionLHS" ng-model="mtfFormData.option.optionsLHS[$index].text" maxlength="25" ng-init="focused = false" ng-focus="focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'mtfoptionLHS'}, $event)" ng-blur="focused = false" ng-required="!(mtfFormData.option.optionsLHS[$index].text.length || mtfFormData.option.optionsLHS[$index].image.length || mtfFormData.option.optionsLHS[$index].audio.length)" />
+                                                            <input type="text" class="form-control textbox" ng-class="{'has-success':mtfForm['option.optionsLHS_' + $index].$valid, 'has-error': submitted && mtfForm['option.optionsLHS_' + $index].$error.required}" placeholder="Enter answer" name="option.optionsLHS_{{$index}}" id="mtf-optionLHS" ng-model="mtfFormData.option.optionsLHS[$index].text" maxlength="25" ng-init="focused = false" ng-focus="focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'mtfoptionLHS'}, $event)" ng-blur="focused = false" ng-required="!(mtfFormData.option.optionsLHS[$index].text.length)" />
                                                         </div>
                                                     </div>
                                                     <div class="one wide column text-len">
@@ -108,7 +108,7 @@
                                                 <div class="ui grid">
                                                     <div class="eleven wide column">
                                                         <div class="form-group segment textBoxDiv">
-                                                            <input type="text" class="form-control textbox" ng-class="{'has-success':mtfForm['option.optionsRHS_' + $index].$valid, 'has-error': submitted && mtfForm['option.optionsRHS_' + $index].$error.required}" placeholder="Enter answer" name="option.optionsRHS_{{$index}}" ng-model="mtfFormData.option.optionsRHS[$index].text" maxlength="25" ng-init="focused = false" ng-focus="focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'mtfoptionRHS'}, $event)" id="mtf-optionRHS-input" ng-blur="focused = false" ng-required="!(mtfFormData.option.optionsRHS[$index].text.length || mtfFormData.option.optionsRHS[$index].image.length || mtfFormData.option.optionsRHS[$index].audio.length)" />
+                                                            <input type="text" class="form-control textbox" ng-class="{'has-success':mtfForm['option.optionsRHS_' + $index].$valid, 'has-error': submitted && mtfForm['option.optionsRHS_' + $index].$error.required}" placeholder="Enter answer" name="option.optionsRHS_{{$index}}" ng-model="mtfFormData.option.optionsRHS[$index].text" maxlength="25" ng-init="focused = false" ng-focus="focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'mtfoptionRHS'}, $event)" id="mtf-optionRHS-input" ng-blur="focused = false" ng-required="!(mtfFormData.option.optionsRHS[$index].text.length)" />
                                                         </div>
                                                     </div>
                                                     <div class="one wide column text-len">
@@ -150,11 +150,12 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <span class="has-success-text" ng-show="mtfFormData.option.optionsLHS.length<3">Minimum three pair will be required</span>
                 </div>
                 </form>
                 <div class="one column row">
                     <div class="column addAns">
-                        <button class="ui primary basic button large" id="mtf-add-pair-button" id="mtf-pair-btn" ng-click="addPair();generateTelemetry({type: 'click', subtype: 'select', target: 'addpair'}, $event);">Add Pair</button>
+                        <button ng-hide="mtfFormData.option.optionsLHS.length==5" class="ui primary basic button large" id="mtf-add-pair-button" id="mtf-pair-btn" ng-click="addPair();generateTelemetry({type: 'click', subtype: 'select', target: 'addpair'}, $event);">Add another question-answer pair</button>
                     </div>
                 </div>
             </div>

@@ -114,12 +114,6 @@
         "src": "renderer/utils/telemetry_logger.js"
       },
       {
-        "plugin": "org.ekstep.questionset.quiz",
-        "ver": "1.0",
-        "type": "plugin",
-        "scope": "renderer"
-      },
-      {
           "type": "js",
           "src": "renderer/util/telemetry_logger.js"
       }

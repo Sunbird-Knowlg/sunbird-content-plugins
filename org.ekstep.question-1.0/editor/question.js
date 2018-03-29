@@ -52,6 +52,12 @@
     'data': { 'name': 'Other', 'icon': 'ellipsis horizontal icon' },
     'templatesData': []
   };
+  ctrl._constants = {
+    previewPlugin: 'org.ekstep.questionset.preview',
+    questionPlugin: 'org.ekstep.question',
+    questionsetPlugin: 'org.ekstep.questionset',
+    questionbankPlugin: 'org.ekstep.questionbank'
+  };
 
   ctrl.init = function() {
     ecEditor.addEventListener('editor:template:loaded', function(event, object) {
@@ -190,11 +196,17 @@
     }
 
     questions.push(qObj);
-    data["org.ekstep.questionset"]['org.ekstep.question'] = questions;
+    data[ctrl._constants.questionsetPlugin][ctrl._constants.questionPlugin] = questions;
     confData = { "contentBody": {}, "parentElement": true, "element": "#iframeArea" };
     document.getElementById("iframeArea").contentDocument.location.reload(true);
-    var questionSetInstance = ecEditor.instantiatePlugin('org.ekstep.questionset.preview');
-    confData.contentBody = questionSetInstance.getQuestionPreviwContent(data['org.ekstep.questionset']);
+    var pluginInstances = ecEditor.getPluginInstances();
+    var previewInstance = _.find(pluginInstances, function (pi) {
+      return pi.manifest.id === ctrl._constants.previewPlugin
+    });
+    if(_.isUndefined(previewInstance)) {
+      previewInstance = ecEditor.instantiatePlugin(ctrl._constants.previewPlugin);
+    }
+    confData.contentBody = previewInstance.getQuestionPreviwContent(data[ctrl._constants.questionsetPlugin]);
     ecEditor.dispatchEvent("atpreview:show", confData);
   }
 
@@ -297,7 +309,7 @@
     ctrl.questionMetadataScreen = true;
     //comment because in edit question the question and question title are not
     if(ctrl.category == 'FTB'){
-      ctrl.questionData.questionTitle = _.isUndefined(ctrl.questionData.questionTitle) ? ctrl.questionCreationFormData.question.text.replace(/\[\[.*?\]\]/g,'') : ctrl.questionData.questionTitle; 
+      ctrl.questionData.questionTitle = _.isUndefined(ctrl.questionData.questionTitle) ? ctrl.questionCreationFormData.question.text.replace(/\[\[.*?\]\]/g,'____') : ctrl.questionData.questionTitle; 
     }else{
       ctrl.questionData.questionTitle = _.isUndefined(ctrl.questionData.questionTitle) ? ctrl.questionCreationFormData.question.text : ctrl.questionData.questionTitle;
     }
@@ -323,7 +335,7 @@
       if (!err) {
         var qMetadata = ctrl.qFormData.request.assessment_item.metadata;
         qMetadata.identifier = resp.data.result.node_id;
-        ecEditor.dispatchEvent('org.ekstep.questionbank:saveQuestion', qMetadata);
+        ecEditor.dispatchEvent(ctrl._constants.questionbankPlugin + ':saveQuestion', qMetadata);
         $scope.closeThisDialog();
       } else {
         //toast with error message
