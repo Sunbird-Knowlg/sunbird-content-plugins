@@ -75,7 +75,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         var mapArr = [];
         ecEditor._.forEach(org.ekstep.services.stateService.state.invaliddialCodeMap, function(value, key) {
             if (_.has(res.data.result.identifiers, key)) {
-                delete org.ekstep.services.stateService.state.invaliddialCodeMap[key]
+                delete org.ekstep.services.stateService.state.invaliddialCodeMap[key];
                 org.ekstep.services.stateService.setState('invaliddialCodeMap', res.data.result.identifiers[key], value);
                 org.ekstep.services.collectionService.highlightNode(res.data.result.identifiers[key]);
                 $scope.storeDialCodes(res.data.result.identifiers[key], value);
@@ -86,6 +86,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         });
         ecEditor._.forEach(dialcodeMap, function(value, key) {
             if (_.has(res.data.result.identifiers, key)) {
+                delete org.ekstep.services.stateService.state.dialCodeMap[key];
+                org.ekstep.services.stateService.setState('dialCodeMap', res.data.result.identifiers[key], value);
                 mapArr.push({ "identifier": res.data.result.identifiers[key], "dialcode": value });
                 $scope.storeDialCodes(res.data.result.identifiers[key], value);
             } else {
