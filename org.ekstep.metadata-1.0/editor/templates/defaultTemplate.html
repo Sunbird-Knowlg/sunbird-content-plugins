@@ -24,7 +24,7 @@
                 </div>
             </div>
         </div>
-        <div class="scrolling content form-popup-modal">
+        <div class="scrolling content form-popup-modal" id="metadataForm">
             <form class="ui form" id="content-meta-form" ng-init="initDropdown()" name="metaForm" novalidate ng-class="!appIconConfig.visible ? 'marginClass' : ''">
                 <div class="ui grid">
                     <div class="row">
@@ -39,7 +39,7 @@
                                     <div>
                                         <div class="ui input" ng-class="{'disabled':!fixedField.editable}">
                                             <input id="{{fixedField.code}}" ng-pattern="fixedField.validation.regex['value']" ng-maxlength="{{fixedField.validation.max[ 'value']}}" placeholder={{field.placeholder}} name="{{fixedField.code}} " ng-model="contentMeta.name " type="text " ng-required="{{fixedField.required}} "
-                                                ng-keyup="onConfigChange({form:metaForm})" ng-click="onConfigChange({field:fixedField,form:metaForm})">
+                                                ng-keyup="onConfigChange({form:metaForm})" ng-change="dispatchEvent('content:title:update',contentMeta.name || 'Untitled')" ng-click="onConfigChange({field:fixedField,form:metaForm})">
                                         </div>
                                         <div ng-show="!metaForm[fixedField.code].$valid && isSubmit" class="ui pointing red basic label ">
                                             {{validation[fixedField.code].errorMessage || DEFAULT_ERROR_MESSAGE}}
@@ -128,7 +128,7 @@
                                         <label>{{dynamicField.label | uppercase}}</label>
                                         <year config=dynamicField ng-click="onConfigChange({field:dynamicField, form:{}})"></year>
                                     </div>
-                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required  && isSubmit) , 'required': dynamicField.required} " name="{{dynamicField.code}}
+                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code].length && dynamicField.required  && isSubmit) , 'required': dynamicField.required} " name="{{dynamicField.code}}
                                     " ng-if="dynamicField.inputType==='conceptselector'">
                                         <label>{{dynamicField.label}}</label>
                                         <conceptselector config=dynamicField ng-click="onConfigChange({field:dynamicField, form:metaForm})"></conceptselector>

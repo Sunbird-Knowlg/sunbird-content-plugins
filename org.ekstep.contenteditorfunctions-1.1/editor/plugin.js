@@ -38,14 +38,15 @@ org.ekstep.contenteditor.basePlugin.extend({
                     position: 'topCenter',
                     icon: 'fa fa-check-circle'
                 });
+                callback && callback(err, res);
             } else {
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                     message: 'Sending for review failed, please try again later...',
                     position: 'topCenter',
                     icon: 'fa fa-warning'
                 });
+                callback && callback(err, res);
             }
-            callback && callback(err, res);
         });
     },
     resolveSaveFn: function(event, data) {
