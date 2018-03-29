@@ -329,6 +329,7 @@ span.fancytree-expander {
     border: solid 1px #dedede;
     line-height: 1.3;
     color: #434343;
+    z-index: 999;
 }
 
 .ui-menu.ui-widget.ui-widget-content kbd {
