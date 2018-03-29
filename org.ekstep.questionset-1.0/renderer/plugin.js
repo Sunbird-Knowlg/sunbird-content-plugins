@@ -59,10 +59,10 @@ IteratorPlugin.extend({
             instance.resetQS.call(instance);
         }, instance);
 
-        // Remove duplicate event listener for 'renderer:nextStage'
-        EventBus.listeners['renderer:nextStage'] = [];
-        EkstepRendererAPI.addEventListener('renderer:nextStage', function (event) {
-            instance.renderNextQuestion.call(instance);
+        // Remove duplicate event listener 
+        EventBus.listeners['org.ekstep.questionset:feedback:retry'] = [];
+        EkstepRendererAPI.addEventListener('org.ekstep.questionset:feedback:retry', function (event) {
+            this._displayedPopup = false;
         }, instance);
 
         // Event handler to save question state
