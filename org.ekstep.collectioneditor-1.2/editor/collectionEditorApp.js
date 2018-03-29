@@ -313,10 +313,10 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             if (res) {
                 var activeNode = org.ekstep.services.collectionService.getActiveNode();
                 $scope.contentDetails.contentTitle = activeNode.title ? activeNode.title : "Untitled Content";
+                ecEditor.dispatchEvent("org.ekstep.collectioneditor:content:load");
                 setTimeout(function() {
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', activeNode);
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode);
-                    ecEditor.dispatchEvent("org.ekstep.collectioneditor:content:load");
                 }, 200);
                 // close the loading screen
                 window.loading_screen && window.loading_screen.finish();
