@@ -241,8 +241,8 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     }   
 
     ecEditor.addEventListener("org.ekstep.collectioneditor:content:update", $scope.updateContent, $scope);
-   // ecEditor.addEventListener("org.ekstep.contenteditor:after-save", $scope.updateRootNode, $scope);
-    //ecEditor.addEventListener("meta:after:save", $scope.updateRootNode, $scope)
+    ecEditor.addEventListener("org.ekstep.contenteditor:after-save", $scope.updateRootNode, $scope);
+    ecEditor.addEventListener("meta:after:save", $scope.updateRootNode, $scope)
 
     $scope.init();
 }]);
