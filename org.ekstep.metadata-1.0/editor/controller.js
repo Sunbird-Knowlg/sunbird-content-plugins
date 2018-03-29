@@ -379,6 +379,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var callbackFn = function(config) {
             $scope.fields = config.fields;
             $scope.tempalteName = config.template;
+            if (_.isUndefined(config.editMode)) {
+                config.editMode = true
+            }
             $scope.editMode = config.editMode;
             if (!$scope.editMode) {
                 $scope.headerMessage = 'View Details'
