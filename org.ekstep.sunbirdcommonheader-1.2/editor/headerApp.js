@@ -21,7 +21,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.headerSettings = {
         showEditMeta: true
     }
-    $scope.mode = ecEditor.getConfig('editorConfig').mode;
 
     $scope.setEditorDetails = function() {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
@@ -138,13 +137,23 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope.editContentMeta = function() {
         var subType = $scope.getContentType();
-        ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'save', subType: subType.toLowerCase(), framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: true , editMode: ($scope.mode === 'Edit' ? true : false) })
+        var editMode = true;
+        if($scope.editorEnv === "COLLECTION")
+                editMode = ecEditor.getConfig('editorConfig').mode === 'Edit' ? true : false;
+        ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'save', subType: subType.toLowerCase(), framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: true , editMode: $scope.getViewMode() })
     }
 
     $scope._sendReview = function() {
         var subType = $scope.getContentType();
-        ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'review', subType: subType.toLowerCase(), framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: true ,editMode: ($scope.mode === 'Edit' ? true : false)})
+        ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'review', subType: subType.toLowerCase(), framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: true ,editMode: $scope.getViewMode() })
     };
+
+    $scope.getViewMode = function(){
+        var editMode = true;
+        if($scope.editorEnv === "COLLECTION")
+            editMode = ecEditor.getConfig('editorConfig').mode === 'Edit' ? true : false;
+        return editMode;
+    }
 
     $scope.getContentType = function() {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
