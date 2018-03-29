@@ -98,8 +98,8 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                     },
                     limit: 100
                 }
-                }
-            ecEditor.dispatchEvent('editor:invoke:viewall', { client: "org", query}) 
+            }
+            ecEditor.dispatchEvent('editor:invoke:viewall', { client: "org", query, callback: org.ekstep.services.collectionService.filterResource}) 
         }
     }
 
@@ -108,7 +108,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
 
         /* Add content in root node and unit node only, content inside content is not allowed */
         if(org.ekstep.services.collectionService.getActiveNode().folder) {
-            org.ekstep.services.collectionService.addNode(lesson.contentType, lesson);
+            org.ekstep.services.collectionService.filterResource(undefined, [lesson]);
 
             if (index > -1) $scope.suggestedContentList.content.splice(index, 1);
             $scope.excludeContents.push(lesson.identifier);

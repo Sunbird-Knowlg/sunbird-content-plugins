@@ -57,7 +57,7 @@ body {
 }
 
 #contents-pane {
-    height: 90vh;
+    height: calc(100vh - 97px);
     padding: 0;
     overflow-y: auto;
     padding-left: 2px;
@@ -684,4 +684,8 @@ ul.fancytree-container>li>ul {
     top: 40%;
     position: relative;
     height: 20%;
+}
+
+.margin-none {
+    margin: 0!important;
 }
