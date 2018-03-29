@@ -108,7 +108,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
     }
 
-    $scope.onNodeSelect = function(evant, data) {
+    $scope.onNodeSelect = function(event, data) {
         var contentArr = ["Story", "Collection", "Game", "Worksheet", "Resource"];
         $scope.editable = (!data.data.root && data.data.metadata.visibility === 'Default') ? false : true;
         if (_.indexOf(contentArr, data.data.objectType) != -1) {
@@ -214,6 +214,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 }
             }
         }, true);
+        $scope.onNodeSelect(undefined, org.ekstep.services.collectionService.getActiveNode())
     }
     $scope.changeTitle = function() {
         if ($scope.content) {
