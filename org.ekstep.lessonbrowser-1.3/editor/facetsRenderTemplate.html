@@ -5,7 +5,8 @@
         </div>
         </br>
         <div class="ui special five cards">
-            <div class="card" style="cursor:pointer" ng-repeat="lesson in $ctrl.facetsResponse.result.response.sections[sectionIndex].contents | limitTo:5  track by $index" in-view="lineInView($index, $inview, lesson, 'FacetList', $index)" in-view-options="{ throttle: 1000 }" ng-click="toggleSelectionLesson(lesson)">
+            <div class="card" style="cursor:pointer" ng-repeat="lesson in $ctrl.facetsResponse.result.response.sections[sectionIndex].contents | limitTo:5  track by $index" in-view="lineInView($index, $inview, lesson, 'FacetList', $index)" in-view-options="{ throttle: 1000 }"
+                ng-click="toggleSelectionLesson(lesson)">
                 <div class="image">
                     <img src="{{lesson.appIcon || $ctrl.defaultImage}}" class="resourceMetaImage ">
                     <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{lesson.identifier}}' style="z-index:12">
@@ -66,8 +67,7 @@
     <div class="ui negative message errorMessage" ng-if="$ctrl.err">
         <div class="header">{{$ctrl.err}}</div>
     </div>
-    <div id="noLessonMsg" class="ui negative message errorMessage">
-        <p>{{$ctrl.facetsResponse.result.response.section.length}}</p>
+    <div id="noLessonMsg" class="ui negative message errorMessage" ng-if="$ctrl.facetsResponse.result.response.section.length">
         <div class="header">{{messages.no_lesson_found_msg}}</div>
         <p>{{messages.try_again_msg}}</p>
     </div>
