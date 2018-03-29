@@ -668,54 +668,6 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
   $scope.selectedAns = [];
   $scope.draggableObjects;
 
-  $scope.onDropToLHS = function(index, data, evt) {
-    var responseData = {};
-    var ctrlScope = angular.element('#mtf-renderer').scope();
-    for (var i = 0; i < $scope.draggableObjects.length; i++) {
-      if ($scope.draggableObjects[i].mapIndex == data.mapIndex) {
-        var emptyRHS = {
-          text: '',
-          shadowIndex: parseInt(evt.event.target.id)
-        };
-        data.shadowIndex = parseInt(evt.event.target.id)
-        $scope.selectedAns.splice(index, 1, data);
-        $scope.draggableObjects.splice(i, 1, emptyRHS);
-        var temp = JSON.parse(document.getElementById(index).getAttribute("data-val"));
-        if (temp.mapIndex) {
-          $scope.draggableObjects.splice(temp.shadowIndex, 1, temp);
-        }
-      }
-    }
-    if ($scope.selectedAns[evt.event.target.id].mapIndex == data.mapIndex && $scope.selectedAns[index].mapIndex != undefined) {
-      var t = $scope.selectedAns[index];
-      $scope.selectedAns.splice(index, 1, data);
-      $scope.selectedAns.splice(evt.event.target.id, 1, t);
-
-    } else if ($scope.selectedAns[evt.event.target.id].mapIndex == data.mapIndex) {
-      var t = $scope.selectedAns[index];
-      $scope.selectedAns.splice(index, 1, data);
-      $scope.selectedAns.splice(evt.event.target.id, 1, $scope.qData.option.emptyBoxs[evt.event.target.id]);
-    }
-    responseData = [{
-      "lhs": $scope.qData.option.optionsLHS[index].text,
-      "rhs": data.text
-    }];
-    ctrlScope.logTelemetryItemResponse(responseData);
-  }
-  $scope.onDropToRHS = function(data, evt) {
-    var ctrlScope = angular.element('#mtf-renderer').scope();
-    var rhsIndex = _.findIndex($scope.draggableObjects, function(obj) {
-      return obj.shadowIndex === data.shadowIndex;
-    });
-    if ($scope.draggableObjects[rhsIndex].mapIndex == undefined)
-      $scope.draggableObjects.splice(rhsIndex, 1, data);
-    for (var i = 0; i < $scope.selectedAns.length; i++) {
-      if ($scope.selectedAns[i].mapIndex == data.mapIndex)
-        $scope.selectedAns.splice(i, 1, $scope.qData.option.emptyBoxs[i]);
-    }
-  }
-
-
   $scope.init = function() {
     $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mtf", "1.0", "renderer/styles/style.css");
     $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.mtf");
@@ -727,8 +679,8 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
 
     $scope.removeEvents();
     $scope.registerEvents();
-    if (!$rootScope.isMCQRendererd) {
-      $rootScope.isMCQRendererd = true;
+    if (!$rootScope.isMTFRendererd) {
+      $rootScope.isMTFRendererd = true;
     }
     if (EventBus.hasEventListener($scope.events.eval)) {
       if (EventBus.listeners[$scope.events.eval].length > 1)
@@ -758,23 +710,23 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
   }
 
   $scope.removeEvents = function() {
+    EventBus.listeners[$scope.events.show] = undefined;
     EkstepRendererAPI.removeEventListener($scope.events.hide, $scope.hideEventListener, undefined);
-    EkstepRendererAPI.removeEventListener($scope.events.show, $scope.showEventListener, undefined);
+    //EkstepRendererAPI.removeEventListener($scope.events.show, $scope.showEventListener, undefined);
     EkstepRendererAPI.removeEventListener($scope.events.eval, $scope.evalListener, undefined);
   }
 
   $scope.showEventListener = function(event) {
     var ctrlScope = angular.element('#mtf-renderer').scope();
-    ctrlScope.question = event.target;
+    $scope.question = event.target;
 
-    var qData = ctrlScope.question._currentQuestion.data.__cdata || ctrlScope.question._currentQuestion.data;
+    var qData = $scope.question._currentQuestion.data.__cdata || $scope.question._currentQuestion.data;
     $scope.qData = JSON.parse(qData);
 
-    var questionConfig = ctrlScope.question._currentQuestion.config.__cdata || ctrlScope.question._currentQuestion.config;
+    var questionConfig = $scope.question._currentQuestion.config.__cdata || $scope.question._currentQuestion.config;
     $scope.qConfig = JSON.parse(questionConfig);
-
-    var qState = ctrlScope.question._currentQuestionState;
-
+    var qState = $scope.question._currentQuestionState;
+   
     $scope.qData.option.emptyBoxs = [];
     $scope.draggableObjects = angular.copy($scope.qData.option.optionsRHS);
     $scope.draggableObjects.sort(() => Math.random() - 0.5);
@@ -786,20 +738,9 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
       $scope.qData.option.emptyBoxs.push(emptyBox)
       $scope.selectedAns.push(emptyBox);
     }
-
-    // Save current state of the question
-
     if (qState && qState.val) {
-      for (var i = 0; i < qState.val.length; i++) {
-        if (qState.val[i].mapIndex != undefined) {
-          $scope.selectedAns.splice(i, 1, qState.val[i]);
-        }
-        for (var l = 0; l < $scope.draggableObjects.length; l++) {
-          if ($scope.draggableObjects[l].mapIndex == qState.val[i].mapIndex) {
-            $scope.draggableObjects.splice(l, 1);
-          }
-        }
-      }
+      $scope.selectedAns = qState.val.lhs;
+      $scope.draggableObjects = qState.val.rhs;
 
     }
     ctrlScope.showTemplate = true;
@@ -818,6 +759,54 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     var callback = event.target;
     ctrlScope.evaluate(callback);
     ctrlScope.safeApply();
+  }
+
+  $scope.onDropToLHS = function(index, data, evt) {
+    var responseData = {};
+    var ctrlScope = angular.element('#mtf-renderer').scope();
+    for (var i = 0; i < $scope.draggableObjects.length; i++) {
+      if ($scope.draggableObjects[i].mapIndex == data.mapIndex) {
+        var emptyRHS = {
+          text: '',
+          shadowIndex: parseInt(evt.event.target.id)
+        };
+        data.shadowIndex = parseInt(evt.event.target.id)
+        $scope.selectedAns.splice(index, 1, data);
+        $scope.draggableObjects.splice(i, 1, emptyRHS);
+        var temp = JSON.parse(document.getElementById(index).getAttribute("data-val"));
+        if (temp.mapIndex) {
+          $scope.draggableObjects.splice(temp.shadowIndex, 1, temp);
+        }
+      }
+    }
+    if ($scope.selectedAns[index].mapIndex != undefined && $scope.selectedAns[evt.event.target.id].mapIndex == data.mapIndex) {
+      var t = $scope.selectedAns[index];
+      $scope.selectedAns.splice(index, 1, data);
+      $scope.selectedAns.splice(evt.event.target.id, 1, t);
+
+    } else if ($scope.selectedAns[evt.event.target.id].mapIndex == data.mapIndex) {
+      var t = $scope.selectedAns[index];
+      $scope.selectedAns.splice(index, 1, data);
+      $scope.selectedAns.splice(evt.event.target.id, 1, $scope.qData.option.emptyBoxs[evt.event.target.id]);
+    }
+    
+    responseData = [{
+      "lhs": $scope.qData.option.optionsLHS[index].text,
+      "rhs": data.text
+    }];
+    ctrlScope.logTelemetryItemResponse(responseData);
+  }
+  $scope.onDropToRHS = function(data, evt) {
+    var ctrlScope = angular.element('#mtf-renderer').scope();
+    var rhsIndex = _.findIndex($scope.draggableObjects, function(obj) {
+      return obj.shadowIndex === data.shadowIndex;
+    });
+    if ($scope.draggableObjects[rhsIndex].mapIndex == undefined)
+      $scope.draggableObjects.splice(rhsIndex, 1, data);
+    for (var i = 0; i < $scope.selectedAns.length; i++) {
+      if ($scope.selectedAns[i].mapIndex == data.mapIndex)
+        $scope.selectedAns.splice(i, 1, $scope.qData.option.emptyBoxs[i]);
+    }
   }
 
   $scope.evaluate = function(callback) {
@@ -842,7 +831,10 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     var result = {
       eval: correctAnswer,
       state: {
-        val: $scope.selectedAns
+        val: {
+          "lhs": $scope.selectedAns,
+          "rhs": $scope.draggableObjects
+        }
       },
       score: partialScore,
       values: teleValues
@@ -851,7 +843,6 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
       callback(result);
     }
     EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
-
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);
   }
 

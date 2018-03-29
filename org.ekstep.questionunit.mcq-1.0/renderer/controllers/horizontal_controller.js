@@ -69,8 +69,9 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     }
   }
   $scope.removeEvents = function() {
+    EventBus.listeners[$scope.events.show] = undefined;
     EkstepRendererAPI.removeEventListener($scope.events.hide, $scope.hideEventListener, undefined);
-    EkstepRendererAPI.removeEventListener($scope.events.show, $scope.showEventListener, undefined);
+    //EkstepRendererAPI.removeEventListener($scope.events.show, $scope.showEventListener, undefined);
     EkstepRendererAPI.removeEventListener($scope.events.eval, $scope.evalListener, undefined);
   }
   $scope.loadAudio = function() {
