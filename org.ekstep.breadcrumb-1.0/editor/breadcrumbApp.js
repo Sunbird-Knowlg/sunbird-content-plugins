@@ -127,9 +127,9 @@ angular.module('org.ekstep.breadcrumb', []).controller('breadcrumbController', [
    $scope.getPartentNode = function () {
       var activeNode = org.ekstep.services.collectionService.getActiveNode();
       var parentList = activeNode.getParentList();
-      var parentNode = {};
+      var parentNode;
       if (parentList && parentList.length > 0) {
-         parentNode = parentList.length > 1 ? parentList[1] : parentNode;
+            parentNode = parentList.length > 1 ? parentList[1] : parentList[0];
       }
       return parentNode;
    }
