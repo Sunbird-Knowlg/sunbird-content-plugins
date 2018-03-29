@@ -75,6 +75,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         var mapArr = [];
         ecEditor._.forEach(org.ekstep.services.stateService.state.invaliddialCodeMap, function(value, key) {
             if (_.has(res.data.result.identifiers, key)) {
+                delete org.ekstep.services.stateService.state.invaliddialCodeMap[key]
+                org.ekstep.services.stateService.setState('invaliddialCodeMap', res.data.result.identifiers[key], value);
                 org.ekstep.services.collectionService.highlightNode(res.data.result.identifiers[key]);
                 $scope.storeDialCodes(res.data.result.identifiers[key], value);
             }else{
@@ -91,25 +93,42 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.storeDialCodes(key, value);
             }
         });
-        var request = {
-            "request": {
-                "content": mapArr
-            }
-        };
-        ecEditor.getService('dialcode').dialcodeLink(ecEditor.getContext('channel'), request, function(err, rep) {
-            if (!err) {
-                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
-                    title: 'DIAL code linking successfully!',
-                    position: 'topCenter',
-                    icon: 'fa fa-check-circle'
-                });
-            }
-        });
+        if(!_.isEmpty(mapArr)){
+            var request = {
+                "request": {
+                    "content": mapArr
+                }
+            };
+            ecEditor.getService('dialcode').dialcodeLink(ecEditor.getContext('channel'), request, function(err, rep) {
+                if (!err) {
+                    if( org.ekstep.services.stateService.state.dialCodeMap && org.ekstep.services.stateService.state.invaliddialCodeMap){
+                        ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
+                            title: 'Unable to link some of the DIAL codes',
+                            position: 'topCenter',
+                            icon: 'fa fa-warning'
+                        });
+                    }else{
+                        ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                            title: 'DIAL code linking successfully!',
+                            position: 'topCenter',
+                            icon: 'fa fa-check-circle'
+                        });
+                    }
+                }
+            });
+        }else{
+            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                title: 'DIAL code linking failed!',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });   
+        }
     }
 
     $scope.storeDialCodes = function(nodeId, dialCode){
         var node = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(nodeId);
-        node.data.metadata["dialcodes"] = dialCode;
+        if(node && node.data)
+            node.data.metadata["dialcodes"] = dialCode;
     }
 
     $scope.previewContent = function(fromBeginning) {
