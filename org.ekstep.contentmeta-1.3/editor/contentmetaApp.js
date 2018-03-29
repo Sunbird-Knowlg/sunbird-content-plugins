@@ -215,8 +215,10 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             }
         }, true);
     }
-    $scope.changeTitle = function(){
-        org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
+    $scope.changeTitle = function() {
+        if ($scope.content) {
+            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
+        }
     }
 
     $scope.loadKeywords = function($query) {
