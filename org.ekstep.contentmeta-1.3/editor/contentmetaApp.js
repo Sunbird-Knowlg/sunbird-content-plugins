@@ -232,11 +232,13 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     };
 
     $scope.updateRootNode = function(){
-        var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
-        if(activeNode && activeNode.data.root){
-            $scope.content = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
-            ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
-            $scope.changeTitle ()
+        if ($scope.nodeType === DEFAULT_NODETYPE){
+            var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
+            if(activeNode && activeNode.data.root){
+                $scope.content = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
+                ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
+                $scope.changeTitle ()
+            }
         }
     }   
 
