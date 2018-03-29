@@ -138,7 +138,7 @@ IteratorPlugin.extend({
 
                     EkstepRendererAPI.dispatchEvent(question.pluginId + ':show', instance);
                     // instance.setupNavigation();
-                }, 100);
+                }, 1000);
             });
         }
     },

@@ -208,7 +208,7 @@
       <button class="ui basic primary button" id="back-button" ng-show="!$ctrl.templatesScreen" ng-click="$ctrl.back();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" ng-disabled="$ctrl.setBackButtonState()">Back</button>
       <div class="or" ng-show="!$ctrl.templatesScreen"></div>
       <button class="ui large blue button" ng-show="!$ctrl.questionMetadataScreen && !$ctrl.templatesScreen" id="back-button" ng-click="$ctrl.showMetaform();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Next</button>
-      <button class="ui large blue button" ng-if="$ctrl.questionMetadataScreen" id="save-question-button" ng-click="$ctrl.sendData(questionUnitBrowserForm.$valid);$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" ng-disabled="(!questionUnitBrowserForm.$valid) || (!$ctrl.conceptsCheck)">Submit</button>
+      <button class="ui large blue button" ng-if="$ctrl.questionMetadataScreen" id="save-question-button" ng-click="$ctrl.sendData(questionUnitBrowserForm.$valid);$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Submit</button>
     </div>
   </div>
 </div>
