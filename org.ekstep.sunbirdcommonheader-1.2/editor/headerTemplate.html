@@ -4,7 +4,7 @@
             <img class="ui tiny centered image" ng-show="contentDetails.contentImage != ''" ng-src="{{contentDetails.contentImage}}" />
         </div>
         <div class="four wide column custom-6-wide">
-            <div class="content-title-container" ng-class="row custom-row-1">
+            <div class="content-title-container row custom-row-1">
                 <label ng-if="contentDetails.contentTitle.length < 52" class="content-title popup-item">{{contentDetails.contentTitle}}</label>
                 <label ng-if="contentDetails.contentTitle.length >= 52" class="content-title popup-item" data-content="{{contentDetails.contentTitle}}" data-variation="wide" data-position="bottom left">{{contentDetails.contentTitle}}</label>
             </div>
