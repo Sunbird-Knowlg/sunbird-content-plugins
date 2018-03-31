@@ -144,8 +144,8 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             }
             $scope.content.name = $scope.content.name || 'Untitled Collection';
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
+            $scope.changeTitle();
         }
-        $scope.changeTitle()
         $scope.$safeApply();
     }
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.onNodeSelect);
@@ -238,7 +238,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             if(activeNode && activeNode.data.root){
                 $scope.content = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
                 ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
-                $scope.changeTitle ()
+                $scope.changeTitle();
             }
         }
     }   
