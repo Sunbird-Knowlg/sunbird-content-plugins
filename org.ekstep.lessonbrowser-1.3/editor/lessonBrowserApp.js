@@ -190,7 +190,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     ctrl.concepts = concepts.length + ' selected';
                     $scope.filterSelection.concept = [];
                     angular.forEach(concepts, function(concept) {
-                        $scope.filterSelection.concept.push(concept.name);
+                        $scope.filterSelection.concept.push(concept.id);
                     });
                     $scope.$safeApply();
                 }
