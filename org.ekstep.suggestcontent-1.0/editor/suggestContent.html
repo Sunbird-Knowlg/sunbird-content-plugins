@@ -9,8 +9,11 @@
             </span>
         </div>
     </div>
-    <div class="padding-top-15 padding-left-15" ng-show="!suggestedContentList.content.length">No content Available</div>
+    <div class="padding-top-15 padding-left-15" ng-if="suggestedContentList.content.length === 0">No content Available</div>
     <div class="card-list">
+        <div class="ui active inverted dimmer" id="suggestions-loader">
+            <div class="ui large text loader">Loading</div>
+        </div>
         <div class="ui card" ng-if="suggestedContentList.content.length" ng-repeat="lesson in suggestedContentList.content | limitTo:20">
             <div class="ui items card-padding"> 
                 <div class="item margin-bottom-0">

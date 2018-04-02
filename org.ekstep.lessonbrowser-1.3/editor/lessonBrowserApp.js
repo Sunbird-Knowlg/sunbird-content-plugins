@@ -600,7 +600,21 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 delete searchBody.request.sort_by;
             }
             ctrl.searchRes = { count: 0, content: [] };
-            if (_.isUndefined(sectionIndex)) {
+            
+            if(!_.isUndefined(query.request.mode)){
+                $scope.mainTemplate = 'selectedResult';
+                searchBody = query;
+                ctrl.searchLessons(function(res) {
+                    $scope.defaultResources = ctrl.res.content;
+                    ctrl.dropdownAndCardsConfig();
+                    ctrl.setFilterValues();
+                    ctrl.conceptSelector();
+                    $scope.isLoading = false;
+                    $scope.noResultFound = false;
+                    ecEditor.jQuery('#resourceSearch').val('');
+                    $scope.$safeApply();
+                });
+            }else if (_.isUndefined(sectionIndex)) {
                 $scope.mainTemplate = 'selectedResult';
                 ctrl.searchLessons(function(res) {
                     $scope.defaultResources = ctrl.res.content;
@@ -610,6 +624,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     $scope.isLoading = false;
                     $scope.noResultFound = false;
                     ecEditor.jQuery('#resourceSearch').val('');
+                    $scope.$safeApply();
                 });
             } else {
                 if (!$scope.viewAllAvailableResponse.hasOwnProperty(sectionIndex)) {
@@ -625,7 +640,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                         $scope.noResultFound = false;
                         if (!_.isUndefined(sectionIndex))
                             $scope.viewAllAvailableResponse[sectionIndex] = $scope.defaultResources;
-
+                        $scope.$safeApply();
                     });
                 } else {
                     ctrl.res.content = $scope.viewAllAvailableResponse[sectionIndex];
