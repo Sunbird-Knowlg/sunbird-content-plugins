@@ -37,7 +37,7 @@
                 </div>
             </div>
         </div>
-        <div class="filterMetaDetails">
+        <div class="filterMetaDetails" ng-if="$ctrl.meta.languages.length > 0">
             <div class="ui sub header paraHeading">
                 <p class="padding-top-3px">LANGUAGE ({{filterSelection.language.length}})</p>
             </div>
@@ -47,12 +47,12 @@
                 <i class="dropdown icon"></i>
                 <div class="default text">Choose Language</div>
                 <div class="menu tooltipElement">
-                    <div class="item" ng-repeat="language in $ctrl.meta.languages" data-value="{{language.value}}">{{language.label}}
+                    <div class="item" ng-repeat="language in $ctrl.meta.languages" data-value="{{language.code}}">{{language.name}}
                     </div>
                 </div>
             </div>
         </div>
-        <div class="filterMetaDetails">
+        <div class="filterMetaDetails" ng-if="$ctrl.meta.grades.length > 0">
             <div class="ui sub header paraHeading">
                 <p class="padding-top-3px">CLASS ({{filterSelection.grade.length}})</p>
             </div>
@@ -61,12 +61,12 @@
                 <i class="dropdown icon"></i>
                 <div class="default text">Choose Class</div>
                 <div class="menu tooltipElement">
-                    <div class="item" ng-repeat="grade in $ctrl.meta.grades" data-value="{{grade.label}}">{{grade.label}}
+                    <div class="item" ng-repeat="grade in $ctrl.meta.grades" data-value="{{grade.name}}">{{grade.name}}
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="filterMetaDetails">
+        </div> 
+        <div class="filterMetaDetails" ng-if="$ctrl.meta.subjects.length > 0">
             <div class="ui sub header paraHeading">
                 <p class="padding-top-3px">SUBJECT ({{filterSelection.subject.length}})</p>
             </div>
@@ -75,7 +75,7 @@
                 <i class="dropdown icon"></i>
                 <div class="default text">Choose Subject</div>
                 <div class="menu tooltipElement">
-                    <div class="item" ng-repeat="subject in $ctrl.meta.subjects" data-value="{{subject.label}}">{{subject.label}}
+                    <div class="item" ng-repeat="subject in $ctrl.meta.subjects" data-value="{{subject.cde}}">{{subject.name}}
                     </div>
                 </div>
             </div>

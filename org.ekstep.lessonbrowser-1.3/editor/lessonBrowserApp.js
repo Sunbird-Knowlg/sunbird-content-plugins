@@ -97,13 +97,23 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         // Meta APIs integration
         var metaService = org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE);
         ctrl.learningConfig = function() {
-            metaService.getLearningConfig(function(err, res) {
+            var framework = ecEditor.getContext('framework');
+            ecEditor.getService('meta').getCategorys(framework, function(err, res) {
                 if (err) {
                     ctrl.langErr = "Oops! Something went wrong with learning config. Please try again later.";
                 } else {
-                    ctrl.meta.languages = res.data.result.medium.values;
-                    ctrl.meta.grades = res.data.result.gradeLevel.values;
-                    ctrl.meta.subjects = res.data.result.subject.values;
+                    ctrl.meta.languages = [];
+                    ctrl.meta.grades = [];
+                    ctrl.meta.subjects = [];
+                    var medium = _.find(res.data.result.framework.categories, ['code', 'medium']);
+                    if(medium && medium.terms)
+                        ctrl.meta.languages = medium.terms;
+                    var gradeLevel = _.find(res.data.result.framework.categories, ['code', 'gradeLevel']);
+                    if(gradeLevel && gradeLevel.terms)
+                        ctrl.meta.grades = gradeLevel.terms;
+                    var subject = _.find(res.data.result.framework.categories, ['code', 'subject']);
+                    if(subject && subject.terms)
+                        ctrl.meta.subjects = subject.terms;
                 }
                 $scope.$safeApply();
             });
