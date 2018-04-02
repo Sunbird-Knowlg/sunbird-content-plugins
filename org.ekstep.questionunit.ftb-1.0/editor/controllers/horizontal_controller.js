@@ -9,15 +9,14 @@ angular.module('ftbApp', [])
 
   $scope.formVaild = false;
   $scope.ftbFormData = {
-    'question': { 'text': '', 'image': '', 'audio': '' },
-    'answer': [],
-    'parsedQuestion': { 'text': '', 'image': '', 'audio': '' }
+    question: { text: '', image: '', audio: '' },
+    answer: [],
+    parsedQuestion: { text: '', image: '', audio: '' }
   };
 
   $scope.init = function() {
     $('.menu .item').tab();
     $('.ui.dropdown').dropdown({ useLabels: false });
-
     if (!ecEditor._.isUndefined($scope.questionEditData)) {
       var data = $scope.questionEditData.data;
       $scope.ftbFormData.question = data.question;
@@ -56,7 +55,13 @@ angular.module('ftbApp', [])
   $scope.formValidation = function() {
     $scope.submitted=true;
     var formValid = $scope.ftbForm.$valid && /\[\[.*?\]\]/g.test($scope.ftbFormData.question.text);
-    return (formValid) ? true : false;
+    if(formValid){
+      return true;
+    }else{
+      $scope.ftbForm.ftbQuestion.$valid = false;
+       return false;
+    }
+ 
   }
 
   $scope.generateTelemetry = function(data, event) {
