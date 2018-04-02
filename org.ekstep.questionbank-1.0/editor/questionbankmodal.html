@@ -149,7 +149,7 @@
                                     <div class="description">{{ question.description }}</div>
                                 </div>
                                 <div class="qb-question-action">
-                                    <span><i class="edit icon" id="edit-question-config" ng-if="currentUserId == question.createdBy" ng-click="editQuestion(question);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)"></i></span>
+                                    <span><i class="edit icon" id="edit-question-config" ng-if="(currentUserId == question.createdBy) && (question.version != '1')" ng-click="editQuestion(question);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)"></i></span>
                                     <div class="ui checkbox" ng-class="question.isSelected ? 'checked' : '' ">
                                         <input type="checkbox" ng-checked="question.isSelected ? 'checked' : ''" name="check" ng-click="selectQuestion(question);generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)">
                                         <label></label>
@@ -178,7 +178,7 @@
                                     <div class="description">{{ selQuestion.description }}</div>
                                 </div>
                                 <div class="qb-question-action">
-                                    <span ng-show="currentUserId == selQuestion.createdBy"><i class="edit icon" id="edit-question-config" ng-click="editQuestion(selQuestion);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)"></i></span>
+                                    <span ng-show="(currentUserId == selQuestion.createdBy)  && (selQuestion.version != '1')"><i class="edit icon" id="edit-question-config" ng-click="editQuestion(selQuestion);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)"></i></span>
                                     <span><i class="remove icon" id="remove-question-button" ng-click="removeQuestion(selQuestion);generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)"></i></span>
                                 </div>
                             </div>

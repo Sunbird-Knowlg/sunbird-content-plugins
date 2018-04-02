@@ -95,6 +95,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             }
             object["org.ekstep.question"].push(obj);
         });
+        object.pluginIds.push('org.ekstep.navigation');
         return object;
     }
 });

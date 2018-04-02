@@ -171,6 +171,7 @@ img.qc-option-image {
     margin-top: 0%;
     margin-left: -5%;
     height: 56px;
+    object-fit: scale-down;
 }
 
 img.qc-vertical-option-image {
@@ -374,7 +375,7 @@ audio.qc-question-audio {
 
 .qc-vertical-option-value {
     /* border: 1px solid #c8ccd0;*/
-    height: 100%;
+    height: 98%;
     display: table;
     width: 100%;
 }
@@ -392,10 +393,9 @@ audio.qc-question-audio {
     border: 1px solid #c8ccd0;
     display: table-cell;
     vertical-align: middle;
-
     word-break: break-word;
     line-height: 1.2;
-    width: 65%;
+    width: 62%;
 }
 
 .qc-option-vertical-checkbox {
@@ -406,9 +406,12 @@ audio.qc-question-audio {
 }
 
 .qsverticalselectedopt {
-    border-left: 3px solid #4a90e2;
+    background-color: #4a90e2;
 }
-
+.qsverticalselect{
+    display: table-cell;
+    width: 3px;
+}
 .qc-opt {
     display: inline;
 }

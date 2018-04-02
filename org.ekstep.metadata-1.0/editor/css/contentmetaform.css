@@ -4,19 +4,19 @@ currently editor semantic ui is using 12 gird layout
 and collectio is using 16 grid layout so
 **/
 
-.ui.form .ten.wide.field {
+#metadataForm .ui.form .ten.wide.field {
     width: 82.5%!important;
 }
 
-.ui.form .six.wide.field {
+#metadataForm .ui.form .six.wide.field {
     width: 50%!important;
 }
 
-.ui.form .twelve.wide.field {
+#metadataForm .ui.form .twelve.wide.field {
     width: 100%!important
 }
 
-.lef.ui.form .two.wide.fieldtlayout {
+#metadataForm .lef.ui.form .two.wide.field {
     width: 16.66666667%!important;
 }
 
@@ -140,4 +140,14 @@ and collectio is using 16 grid layout so
 
 .marginClass {
     margin-left: 2%
+}
+
+.form-icon .appIconSelector{
+    border: 1px solid #E6E7E8;
+    color: #888;
+    text-align: center;
+    height: 100%;
+    width:100%;
+    padding-top: 25%;
+    align-items: center;
 }

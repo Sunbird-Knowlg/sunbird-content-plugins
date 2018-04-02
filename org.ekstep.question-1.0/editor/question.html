@@ -212,6 +212,7 @@
       <div class="or" ng-show="!$ctrl.templatesScreen"></div>
       <button class="ui large blue button" ng-show="!$ctrl.questionMetadataScreen && !$ctrl.templatesScreen" id="back-button" ng-click="$ctrl.showMetaform();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Next</button>
       <button class="ui large blue button" ng-if="$ctrl.questionMetadataScreen" id="save-question-button" ng-click="$ctrl.sendMetaData();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" >Submit</button>
+
     </div>
   </div>
 </div>
