@@ -77,9 +77,9 @@ angular.module('createquestionapp', [])
             questionbankPlugin: 'org.ekstep.questionbank'
         };
         $scope.searchQuestions = function() {
-            var activity = ctrl.activity;
-            ctrl.isItemAvailable = true;
-            ctrl.itemsLoading = true;
+            // var activity = ctrl.activity;
+            // ctrl.isItemAvailable = true;
+            // ctrl.itemsLoading = true;
             var data = {
                 request: {
                     filters: {
