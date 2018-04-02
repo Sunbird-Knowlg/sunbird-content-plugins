@@ -518,7 +518,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     } else {
                         console.error("Unable to fetch response", err);
                         ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
-                            message: "Content list for resources not available",
+                            message: "Unable to load categories to browse resources. You can use search to find resources.",
                             position: 'topCenter',
                             icon: 'fa fa-warning'
                         });
