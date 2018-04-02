@@ -92,10 +92,9 @@ angular.module('createquestionapp', [])
                 }
             };
             if ($scope.isMyQuestions) {
-              var userId = $scope.currentUserId;
+                var userId = $scope.currentUserId;
                 data.request.filters.createdBy = userId;
-            } else {
-            }
+            } else {}
             // setting filters values and title to request data
             ecEditor._.forEach($scope.filterObj, function(value, key) {
                 if (value) {
@@ -155,6 +154,38 @@ angular.module('createquestionapp', [])
             $scope.itemsLoading = true;
             $scope.searchQuestions();
             $scope.selectedIndex = undefined;
+
+            ecEditor.addEventListener(pluginInstance.manifest.id + ":saveQuestion", function(event, data) {
+                if (!data.isSelected) {
+                    data.isSelected = true;
+                }
+                var ctrlScope = angular.element('#qc-question-bank-model').scope();
+                var selQueIndex = _.findLastIndex(ctrlScope.questions, {
+                    identifier: data.identifier
+                });
+                if (selQueIndex < 0) {
+                    ctrlScope.questions.unshift(data);
+                } else {
+                    ctrlScope.questions[selQueIndex] = data;
+                }
+                selQueIndex = _.findLastIndex(ctrlScope.selectedQuestions, {
+                    identifier: data.identifier
+                });
+                if (selQueIndex < 0) {
+                    ctrlScope.selectedQuestions.unshift(data);
+                } else {
+
+                    ctrlScope.selectedQuestions[selQueIndex] = data;
+                    ctrlScope.$safeApply();
+                }
+
+                ctrlScope.setDisplayandScore();
+                ctrlScope.editConfig(ctrlScope.selectedQuestions[0], 0);
+                ctrlScope.previewItem(ctrlScope.selectedQuestions[0], true);
+                ctrlScope.$safeApply();
+            });
+
+
             if (pluginInstance.editData) {
                 $scope.selectedQuestions = pluginInstance.editData.data;
                 $scope.questionSetConfigObj = pluginInstance.editData.config;
@@ -204,35 +235,7 @@ angular.module('createquestionapp', [])
                 }
 
             });
-            ecEditor.addEventListener(pluginInstance.manifest.id + ":saveQuestion", function(event, data) {
-                if (!data.isSelected) {
-                    data.isSelected = true;
-                }
-                var ctrlScope = angular.element('#qc-question-bank-model').scope();
-                var selQueIndex = _.findLastIndex(ctrlScope.questions, {
-                    identifier: data.identifier
-                });
-                if (selQueIndex < 0) {
-                    ctrlScope.questions.unshift(data);
-                } else {
-                    ctrlScope.questions[selQueIndex] = data;
-                }
-                selQueIndex = _.findLastIndex(ctrlScope.selectedQuestions, {
-                    identifier: data.identifier
-                });
-                if (selQueIndex < 0) {
-                    ctrlScope.selectedQuestions.unshift(data);
-                } else {
 
-                    ctrlScope.selectedQuestions[selQueIndex] = data;
-                    ctrlScope.$safeApply();
-                }
-
-                ctrlScope.setDisplayandScore();
-                ctrlScope.editConfig(ctrlScope.selectedQuestions[0], 0);
-                ctrlScope.previewItem(ctrlScope.selectedQuestions[0], true);
-                ctrlScope.$safeApply();
-            });
 
         }
 
