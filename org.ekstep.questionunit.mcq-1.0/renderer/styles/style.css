@@ -94,7 +94,9 @@ header.qc-long-text-header {
     position: relative;
     padding: -2% 1% 2% 9%;
 }
-
+.grid-check-space{
+    max-width: 50%;
+}
 input.qc-option-input-checkbox {
     -webkit-appearance: checkbox;
     -moz-appearance: checkbox;
