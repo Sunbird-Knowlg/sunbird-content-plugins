@@ -36,12 +36,12 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="ui secondary right aligned segment custom-sec-segment">
+                                <div class="ui secondary right aligned segment custom-sec-segment" ng-if="mtfConfiguartion.questionConfig.isImage || mtfConfiguartion.questionConfig.isAudio">
                                     <div class="ui grid">
                                         <div class="one column row segment-column">
                                             <div class="column right floated">
                                                 <span class="custom-bottom-label">Add: </span>
-                                                <span class="custom-bottom-segment ui icon" ng-if="mtfFormData.question.image.length <= 0" data-tooltip="Add image" data-inverted=""><i class="image large icon"></i></span>
+                                                <span class="custom-bottom-segment ui icon" ng-if="mtfFormData.question.image.length <= 0 && mtfConfiguartion.questionConfig.isImage" data-tooltip="Add image" data-inverted=""><i class="image large icon"></i></span>
                                                 <span class="custom-bottom-segment ui icon" ng-if="mtfFormData.question.image.length > 0" data-tooltip="Edit image" data-inverted=""><i class="image large icon"></i></span>
                                                 <span class="custom-bottom-segment ui icon" ng-if="mtfFormData.question.audio.length <= 0" data-tooltip="Add audio" data-inverted=""><i class="music large icon"></i></span>
                                                 <span class="custom-bottom-segment ui icon" ng-if="mtfFormData.question.audio.length > 0" data-tooltip="Edit audio" data-inverted=""><i class="music large icon"></i></span>
@@ -88,7 +88,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="ui secondary segment custom-sec-segment">
+                                            <div class="ui secondary segment custom-sec-segment" ng-if="mtfConfiguartion.optionsConfig.isImage || mtfConfiguartion.optionsConfig.isAudio">
                                                 <div class="ui grid">
                                                     <div class="row">
                                                         <div class="column right aligned">
@@ -132,7 +132,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="ui secondary segment custom-sec-segment">
+                                            <div class="ui secondary segment custom-sec-segment" ng-if="mtfConfiguartion.optionsConfig.isImage || mtfConfiguartion.optionsConfig.isAudio">
                                                 <div class="ui grid">
                                                     <div class="row">
                                                         <div class="column right aligned">
