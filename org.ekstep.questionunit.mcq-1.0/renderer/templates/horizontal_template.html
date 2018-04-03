@@ -11,11 +11,9 @@
             </div>
         </div>
         <header ng-class="{'qc-long-text-header-image': questionObj.question.image.length > 0,'qc-long-text-header':questionObj.question.image.length==0}">
-            <span ng-if="questionObj.question.image.length" class="qc-question-zoomin" ng-click="showImageModel(questionObj.question.image) > 0">+</span>
-            <div ng-if="questionObj.question.image.length>0" class="qc-opt"><img class="qc-question-image" ng-click="showImageModel()" ng src={{checkBaseUrl(questionObj.question.image)}}></div>
-
-            <div ng-class="{'qclc-question-text': expandQ,'qcl-question-text':collapseQ }" ng-if="questionObj.question.text.length > 100"><span ng-click="expandQuestion($event)">{{questionObj.question.text}}</span></div>
-            <div class="qc-question-text" ng-if="questionObj.question.text.length < 100"><span>{{questionObj.question.text}}</span></div>
+            <div ng-if="questionObj.question.image.length>0" class="qc-opt"><img class="qc-question-image" ng-click="showImageModel(questionObj.question.image)" ng src={{checkBaseUrl(questionObj.question.image)}}></div>
+            <div ng-class="{'qclc-question-text': expandQ,'qcl-question-text':collapseQ }" ng-if="questionObj.question.text.length > 100"><span class="qc-expandtext-ques" ng-click="expandQuestion($event)">{{questionObj.question.text}}</span></div>
+            <div class="qc-question-text" ng-if="questionObj.question.text.length < 100">{{questionObj.question.text}}</div>
             <div ng-if="questionObj.question.audio.length > 0" class="qc-opt">
                 <img src="{{audioImage}}" class="qc-question-audio-image" ng-click="playAudio(questionObj.question.audio)" />
             </div>

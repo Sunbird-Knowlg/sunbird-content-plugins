@@ -20,10 +20,9 @@ header.qc-long-text-header {
     width: 80vw;
     background-color: #404041;
     /*min-height: 17vh;*/
-    height: 17vh;
+    height: 21vh;
     text-align: center;
 }
-
 .qc-question-text {
     color: white;
     font-size: initial;
@@ -161,9 +160,11 @@ input.qc-option-input-checkbox:checked::after {
 }
 
 img.qc-question-image {
-        max-width: 21%;
-    max-height: 53px;
-    float: left;
+        width: 15%;
+        height: 56px;
+        float: left;
+        margin-left: -1%;
+    object-fit: fill;
 }
 
 img.qc-option-image {
