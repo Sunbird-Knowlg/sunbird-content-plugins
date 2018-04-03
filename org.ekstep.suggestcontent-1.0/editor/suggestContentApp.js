@@ -86,28 +86,28 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             searchService.search(searchBody, function(err, res) {
                 if (err) {
                     console.error("Oops! Something went wrong. Please try again later.", err);
-                } else {
-                    if(res.data.result.content != undefined) {
-                        $scope.responseData[concepts] = _.concat(_.uniqBy($scope.responseData, 'identifier'), res.data.result.content);
-                        if(!$scope.suggestedContentList.content.length) {
-                            $('.card-list').transition({
-                                animation  : 'fade in',
-                                duration   : '3s',
-                            });
-                        }
-                        angular.forEach(res.data.result.content, function(lessonContent) {
-                            /* Exclude Already Added content in the currently selected node */
-                            if($scope.excludeContents.length) {
-                                if(_.indexOf($scope.excludeContents, lessonContent.identifier) < 0) $scope.suggestedContentList.content.push(lessonContent);
-                            } else {
-                                $scope.suggestedContentList.content.push(lessonContent);
-                            }
+                }else if(res.data.result.content) {
+                    $scope.responseData[concepts] = _.concat(_.uniqBy($scope.responseData, 'identifier'), res.data.result.content);
+                    if(!$scope.suggestedContentList.content.length) {
+                        $('.card-list').transition({
+                            animation  : 'fade in',
+                            duration   : '3s',
                         });
-                        ecEditor.jQuery('#suggestions-loader').dimmer('hide');
-                        $scope.$safeApply();
-                        /*  Remove Duplicate contents from the list */
-                        $scope.suggestedContentList.content = _.uniqBy($scope.suggestedContentList.content, 'identifier');
                     }
+                    angular.forEach(res.data.result.content, function(lessonContent) {
+                        /* Exclude Already Added content in the currently selected node */
+                        if($scope.excludeContents.length) {
+                            if(_.indexOf($scope.excludeContents, lessonContent.identifier) < 0) $scope.suggestedContentList.content.push(lessonContent);
+                        } else {
+                            $scope.suggestedContentList.content.push(lessonContent);
+                        }
+                    });
+                    ecEditor.jQuery('#suggestions-loader').dimmer('hide');
+                    $scope.$safeApply();
+                    /*  Remove Duplicate contents from the list */
+                    $scope.suggestedContentList.content = _.uniqBy($scope.suggestedContentList.content, 'identifier');
+                }else{
+                    ecEditor.jQuery('#suggestions-loader').dimmer('hide');
                 }
             });
         }
