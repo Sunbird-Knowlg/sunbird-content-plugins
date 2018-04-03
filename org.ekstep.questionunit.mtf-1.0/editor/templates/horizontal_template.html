@@ -102,7 +102,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div href="" ng-click="deletePair($index)" class="delete-pair-row-LHS"><span data-tooltip="Delete Pair" data-inverted=""><i class="trash large icon delete-icon"></i>Delete Pair</span></div>
+                                        <div class="delete-pair-row-LHS"><span ng-click="deletePair($index)" data-tooltip="Delete Pair" data-inverted=""><i class="trash large icon delete-icon"></i>Delete Pair</span></div>
                                     </td>
                                     <td class="mtf-pair-td">
                                         <div class="ui segments inner-segment" ng-class="{cardBorder: focused, 'has-errorCard': submitted && mtfForm['option.optionsRHS_' + $index].$error.required}" id="eachCard">
