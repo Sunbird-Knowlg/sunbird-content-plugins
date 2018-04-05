@@ -122,6 +122,7 @@
               </div>
             </div>
           </form>
+           <span class="has-success-text" ng-show="mcqFormData.options.length<2">Minimum two answer will be required</span>
           <div class="one column row">
             <div class="column addAns">
               <button class="ui primary basic button large" id="mcq-add-ans-button" ng-click="addAnswerField();generateTelemetry({type: 'click', subtype: 'select', target: 'addAnswer'}, $event);">Add answer</button>
