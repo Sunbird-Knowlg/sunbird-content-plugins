@@ -210,8 +210,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
             },
             framework: function(callback) {
                 // get the framworkData
-                var meta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'))
-                ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(request.framework || meta.framework, function(error, response) {
+                ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(request.framework, function(error, response) {
                     if (!error) callback(undefined, response)
                     else callback(error, undefined)
                 })
