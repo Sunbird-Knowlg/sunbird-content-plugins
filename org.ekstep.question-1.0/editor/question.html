@@ -79,7 +79,10 @@
           <div ng-if="$ctrl.questionUnitTemplateURL" ng-show="!$ctrl.questionMetadataScreen && !$ctrl.templatesScreen">
             <ng-include src="$ctrl.questionUnitTemplateURL"></ng-include>
           </div>
-          <div class="QuestionMetaForm" ng-show="$ctrl.questionMetadataScreen">
+          <div class="QuestionMetaForm" ng-show="$ctrl.metadataform && $ctrl.questionMetadataScreen">
+              <div ng-include="$ctrl.metadataform"></div>
+          </div>
+          <!-- <div class="QuestionMetaForm" ng-show="$ctrl.questionMetadataScreen">
             <div class="seven wide column md" style="margin-right: 1%">
               <form name="questionUnitBrowserForm" novalidate>
                 <div class="ui grid two column row">
@@ -153,11 +156,11 @@
                     </label>
                     <textarea type="text" class="form-control" id="questionTitle" placeholder="Question description" name="questionDesc" ng-model="$ctrl.questionData.questionDesc"></textarea>
                     <!-- <small ng-show="questionUnitBrowserForm.questionDesc.$invalid && !questionUnitBrowserForm.questionDesc.$pristine" class="qcError">Enter question Description.</small> -->
-                  </div>
+                 <!--  </div>
                 </div>
               </form>
             </div>
-          </div>
+          </div> --> 
         </div>
         <div class="five wide column previewArea" ng-show="!$ctrl.templatesScreen" >
           <div class="previewAreaHead">
@@ -208,7 +211,8 @@
       <button class="ui basic primary button" id="back-button" ng-show="!$ctrl.templatesScreen" ng-click="$ctrl.back();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" ng-disabled="$ctrl.setBackButtonState()">Back</button>
       <div class="or" ng-show="!$ctrl.templatesScreen"></div>
       <button class="ui large blue button" ng-show="!$ctrl.questionMetadataScreen && !$ctrl.templatesScreen" id="back-button" ng-click="$ctrl.showMetaform();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Next</button>
-      <button class="ui large blue button" ng-if="$ctrl.questionMetadataScreen" id="save-question-button" ng-click="$ctrl.sendData(questionUnitBrowserForm.$valid);$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Submit</button>
+      <button class="ui large blue button" ng-if="$ctrl.questionMetadataScreen" id="save-question-button" ng-click="$ctrl.sendMetaData();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" >Submit</button>
+
     </div>
   </div>
 </div>

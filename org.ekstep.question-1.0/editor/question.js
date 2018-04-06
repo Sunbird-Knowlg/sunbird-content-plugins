@@ -3,7 +3,7 @@
  * @class org.ekstep.question:createquestionController
  * Jagadish Pujari<jagadish.pujari@tarento.com>
  */
- angular.module('org.ekstep.question', [])
+ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
  .controller('QuestionCreationFormController', ['$scope', 'instance', 'questionData', function($scope, instance, questionData) {
   var ctrl = this;
   ctrl.templatesScreen = true;
@@ -31,6 +31,7 @@
   ctrl.refreshPreview = false;
   ctrl.noTemplatesFound = "";
   ctrl.allMenuItems = [];
+  ctrl.questionMetaData = {};
   ctrl.menuItems['MCQ'] = {
     'category': 'MCQ',
     'data': { 'name': 'Multiple Choice', 'icon': 'list icon' },
@@ -59,6 +60,10 @@
   };
 
   ctrl.init = function() {
+    ecEditor.addEventListener('editor:template:loaded', function(event, object) {
+      ctrl.metadataform = object.templatePath;
+     })
+    
     ecEditor.getService('meta').getConfigOrdinals(function(err, res) {
       if (!err) {
         ctrl.grades = res.data.result.ordinals.gradeLevel;
@@ -92,6 +97,8 @@
 
     $scope.$on('question:form:valid', ctrl.formValid);
     $scope.$on('question:form:inValid', ctrl.formInValid);
+    EventBus.listeners['editor:form:data'] = undefined;
+    ecEditor.addEventListener('editor:form:data', ctrl.saveMetaData);
   }
 
   ctrl.showTemplates = function(){
@@ -143,7 +150,10 @@
       ctrl.questionData.qcGrade = questionData1.data.config.metadata.gradeLevel;
       ctrl.questionData.isShuffleOption = questionData1.data.config.isShuffleOption;
       ctrl.category = questionData.category;
-      ctrl.Totalconcepts = questionData1.data.config.metadata.concepts.length; //_.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
+      if(questionData1.data.config.metadata.concepts){
+        ctrl.Totalconcepts = questionData1.data.config.metadata.concepts.length; 
+      }//_.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
+      ctrl.questionData.concepts = questionData1.data.config.metadata.concepts;
       ctrl.selectedConceptsData = questionData1.data.config.metadata.concepts;
       ctrl.questionData.questionDesc = questionData1.data.config.metadata.description;
       ctrl.questionData.questionMaxScore = questionData1.data.config.metadata.max_score;
@@ -304,6 +314,19 @@
       ctrl.questionData.questionTitle = _.isUndefined(ctrl.questionData.questionTitle) ? ctrl.questionCreationFormData.question.text : ctrl.questionData.questionTitle;
     }
      $('.QuestionMetaForm .ui.dropdown').dropdown({});
+      ctrl.questionMetaData.name = ctrl.questionData.questionTitle;
+      ctrl.questionMetaData.medium = ctrl.questionData.qcLanguage;
+      ctrl.questionMetaData.level = ctrl.questionData.qcLevel;
+      ctrl.questionMetaData.description = ctrl.questionData.questionDesc;
+      ctrl.questionMetaData.max_score = ctrl.questionData.questionMaxScore;
+      ctrl.questionMetaData.gradeLevel = ctrl.questionData.qcGrade;
+      ctrl.questionMetaData.concepts = ctrl.questionData.concepts;
+      if(ctrl.questionMetaData.concepts){
+        ctrl.questionMetaData.conceptData = "(" + ctrl.questionData.concepts.length + ") concepts selected";
+      }
+
+      ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'question-meta-save', subType: 'questions', framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: false, metadata: ctrl.questionMetaData})
+
   }
 
   ctrl.saveQuestion = function(assessmentId, data) {
@@ -324,31 +347,43 @@
     });
   }
 
-  ctrl.sendData = function(isValid) {
-    if (isValid && ctrl.Totalconcepts > 0) {
+   ctrl.sendMetaData = function() {
+     // body...
+     var formScope = $("#content-meta-form");
+     var frmScope = formScope.scope().metaForm;
+     ecEditor.dispatchEvent("metadata:form:onsuccess", { form: frmScope });
+ }
+
+  ctrl.saveMetaData = function(event, object) {
+    var metaDataObject = object.formData.metaData;
+      for (var property in object.formData.metaData) {
+        if (metaDataObject[property]) {
+            ctrl.questionMetaData[property] = metaDataObject[property];
+        }
+      }
       var questionFormData = {};
       var data = {}; // TODO: You have to get this from Q.Unit plugin(getData())
       data.plugin = ctrl.selectedTemplatePluginData.plugin;
       data.data = ctrl.questionCreationFormData; //{"question":ctrl.questionCreationFormData.question.text,"options":ctrl.questionCreationFormData.options};   
-      var metadataObj = { category: ctrl.category, title: ctrl.questionData.questionTitle, language: [ctrl.questionData.qcLanguage], qlevel: ctrl.questionData.qcLevel, gradeLevel: ctrl.questionData.qcGrade, concepts: ctrl.selectedConceptsData, description: ctrl.questionData.questionDesc, max_score: ctrl.questionData.questionMaxScore };
+     // var metadataObj = { category: ctrl.category, title: ctrl.questionData.questionTitle, language: [ctrl.questionData.qcLanguage], qlevel: ctrl.questionData.qcLevel, gradeLevel: ctrl.questionData.qcGrade, concepts: ctrl.selectedConceptsData, description: ctrl.questionData.questionDesc, max_score: ctrl.questionData.questionMaxScore };
+      var metadataObj = { category: ctrl.category, title:  ctrl.questionMetaData.name, language: [ ctrl.questionMetaData.medium], qlevel:  ctrl.questionMetaData.level, gradeLevel:  ctrl.questionMetaData.gradeLevel, concepts:  ctrl.questionMetaData.concepts, description:  ctrl.questionMetaData.description, max_score:  ctrl.questionMetaData.max_score };
       data.config = { "metadata": metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": ctrl.questionData.isPartialScore, "layout": ctrl.questionData.templateType, "isShuffleOption" : ctrl.questionData.isShuffleOption};
       data.media = ctrl.questionCreationFormData.media;
       questionFormData.data = data;
       var bodyData = '';
-
       var metadata = {
         "code": "NA",
-        "name": ctrl.questionData.questionTitle,
-        "qlevel": ctrl.questionData.qcLevel,
-        "title": ctrl.questionData.questionTitle,
+        "name": ctrl.questionMetaData.name,
+        "qlevel": ctrl.questionMetaData.level,
+        "title": ctrl.questionMetaData.name,
         "question": ctrl.questionCreationFormData.question.text,
-        "max_score": ctrl.questionData.questionMaxScore,
+        "max_score": ctrl.questionMetaData.max_score,
         "body": JSON.stringify(questionFormData),
-        "language": [ctrl.questionData.qcLanguage],
+        "language": [ctrl.questionMetaData.medium],
         "itemType": "UNIT",
         "version": 2,
         "category": ctrl.category,
-        "description": ctrl.questionData.questionDesc,
+        "description": ctrl.questionMetaData.description,
         "createdBy": window.context.user.id,
         "channel": "in.ekstep", //default value
         "type": ctrl.category.toLowerCase(), // backward compatibility
@@ -394,10 +429,7 @@
 
       /*Save data and get response and dispatch event with response to questionbank plugin*/
       ctrl.saveQuestion(ctrl.assessmentId, ctrl.qFormData);
-    } else {
-      ctrl.qcconcepterr = true;
-    }
-
+    
   }
 
   ctrl.generateTelemetry = function(data, event) {

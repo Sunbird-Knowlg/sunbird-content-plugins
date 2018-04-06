@@ -21,6 +21,7 @@ angular.module('createquestionapp', [])
         $scope.grades;
         $scope.languages;
         $scope.versions = [1, 2];
+        $scope.framework  = ecEditor.getContext('framework');
         $scope.difficultyLevels = ['All', 'Easy', 'Medium', 'Difficult'];
         $scope.questionTypes = [{
             "name": "Multiple Choice Questions",
@@ -92,10 +93,9 @@ angular.module('createquestionapp', [])
                 }
             };
             if ($scope.isMyQuestions) {
-              var userId = $scope.currentUserId;
+                var userId = $scope.currentUserId;
                 data.request.filters.createdBy = userId;
-            } else {
-            }
+            } else {}
             // setting filters values and title to request data
             ecEditor._.forEach($scope.filterObj, function(value, key) {
                 if (value) {
@@ -155,6 +155,38 @@ angular.module('createquestionapp', [])
             $scope.itemsLoading = true;
             $scope.searchQuestions();
             $scope.selectedIndex = undefined;
+
+            ecEditor.addEventListener(pluginInstance.manifest.id + ":saveQuestion", function(event, data) {
+                if (!data.isSelected) {
+                    data.isSelected = true;
+                }
+                var ctrlScope = angular.element('#qc-question-bank-model').scope();
+                var selQueIndex = _.findLastIndex(ctrlScope.questions, {
+                    identifier: data.identifier
+                });
+                if (selQueIndex < 0) {
+                    ctrlScope.questions.unshift(data);
+                } else {
+                    ctrlScope.questions[selQueIndex] = data;
+                }
+                selQueIndex = _.findLastIndex(ctrlScope.selectedQuestions, {
+                    identifier: data.identifier
+                });
+                if (selQueIndex < 0) {
+                    ctrlScope.selectedQuestions.unshift(data);
+                } else {
+
+                    ctrlScope.selectedQuestions[selQueIndex] = data;
+                    ctrlScope.$safeApply();
+                }
+
+                ctrlScope.setDisplayandScore();
+                ctrlScope.editConfig(ctrlScope.selectedQuestions[0], 0);
+                ctrlScope.previewItem(ctrlScope.selectedQuestions[0], true);
+                ctrlScope.$safeApply();
+            });
+
+
             if (pluginInstance.editData) {
                 $scope.selectedQuestions = pluginInstance.editData.data;
                 $scope.questionSetConfigObj = pluginInstance.editData.config;
@@ -190,49 +222,35 @@ angular.module('createquestionapp', [])
                 }
             });
 
-            ecEditor.getService('meta').getConfigOrdinals(function(err, res) {
-                if (!err) {
-                    $scope.grades = res.data.result.ordinals.gradeLevel;
-                    $scope.languages = res.data.result.ordinals.language;
-                    $scope.languages.unshift("All");
+            // Service call to get the question meta data filter values 
+            ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys($scope.framework, function(error, response) {
+                if (!error) {
+                    var categories = response.data.result.framework.categories;
+                    ecEditor._.forEach(categories, function(value, key) {
+                        var terms = [];
+                        ecEditor._.forEach(value.terms, function(val, key) {
+                            terms.push(val.name);
+                        })
+                        switch (value.code) {
+                            case "medium":
+                                $scope.languages = terms;
+                                $scope.languages.unshift("All");
+                                break;
+                            case "gradeLevel":
+                                $scope.grades = terms;
+                                break
+                        }
+                    })
                     ecEditor.jQuery('.ui.dropdown.lableCls').dropdown({
                         useLabels: false,
                         forceSelection: false
                     });
                     $scope.$safeApply();
 
-                }
-
-            });
-            ecEditor.addEventListener(pluginInstance.manifest.id + ":saveQuestion", function(event, data) {
-                if (!data.isSelected) {
-                    data.isSelected = true;
-                }
-                var ctrlScope = angular.element('#qc-question-bank-model').scope();
-                var selQueIndex = _.findLastIndex(ctrlScope.questions, {
-                    identifier: data.identifier
-                });
-                if (selQueIndex < 0) {
-                    ctrlScope.questions.unshift(data);
                 } else {
-                    ctrlScope.questions[selQueIndex] = data;
+                    console.log(error);
                 }
-                selQueIndex = _.findLastIndex(ctrlScope.selectedQuestions, {
-                    identifier: data.identifier
-                });
-                if (selQueIndex < 0) {
-                    ctrlScope.selectedQuestions.unshift(data);
-                } else {
-
-                    ctrlScope.selectedQuestions[selQueIndex] = data;
-                    ctrlScope.$safeApply();
-                }
-
-                ctrlScope.setDisplayandScore();
-                ctrlScope.editConfig(ctrlScope.selectedQuestions[0], 0);
-                ctrlScope.previewItem(ctrlScope.selectedQuestions[0], true);
-                ctrlScope.$safeApply();
-            });
+            })
 
         }
 

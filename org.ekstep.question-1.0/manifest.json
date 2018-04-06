@@ -33,7 +33,12 @@
          "type": "plugin",
         "plugin": "org.ekstep.questionunit.mtf",
         "ver": "1.0"
-        }
+      },
+      {
+         "type": "plugin",
+        "plugin": "org.ekstep.sunbirdmetadata",
+        "ver": "1.0"
+      }
     ],
     "menu": [],
     "init-data":{},

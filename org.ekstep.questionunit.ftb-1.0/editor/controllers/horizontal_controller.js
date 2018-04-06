@@ -8,12 +8,20 @@ angular.module('ftbApp', [])
   .controller('ftbQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope) {
 
     $scope.formVaild = false;
+    $scope.ftbConfiguartion = {
+      'questionConfig': {
+        'isText': true,
+        'isImage': false,
+        'isAudio': false,
+        'isHint': false
+      }
+    };
     $scope.ftbFormData = {
       'question': { 'text': '', 'image': '', 'audio': '' },
       'answer': [],
       'parsedQuestion': { 'text': '', 'image': '', 'audio': '' }
     };
-    
+
     var questionInput = CKEDITOR.replace('ftbQuestion', {
       customConfig: CKEDITOR.basePath + "config.js",
       skin: 'moono-lisa,' + CKEDITOR.basePath + "skins/moono-lisa/",
@@ -64,10 +72,17 @@ angular.module('ftbApp', [])
       return matches;
     }
 
+
     $scope.formValidation = function() {
       $scope.submitted = true;
       var formValid = $scope.ftbForm.$valid && /\[\[.*?\]\]/g.test($scope.ftbFormData.question.text);
-      return (formValid) ? true : false;
+      if (formValid) {
+        return true;
+      } else {
+        $scope.ftbForm.ftbQuestion.$valid = false;
+        return false;
+      }
+
     }
 
     $scope.generateTelemetry = function(data, event) {
