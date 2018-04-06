@@ -7,6 +7,12 @@
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
+        "dependencies": [
+            {
+                "type": "js",
+                "src": "editor/libs/ckeditor.js"
+            }
+        ],
         "help": {
             "src": "editor/help.md",
             "dataType": "text"

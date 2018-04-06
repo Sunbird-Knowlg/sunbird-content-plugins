@@ -17,8 +17,8 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
   $scope.lastAudio;
   $scope.isShuffleOptions;
   $scope.bigImage = false;
-  $scope.expandQ = true;
-  $scope.collapseQ = true;
+  $scope.expandQ = false;
+  //$scope.collapseQ = true;
   $scope.audioImage;
   $scope.init = function() {
     $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.mcq");
@@ -56,11 +56,11 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
      */
     EkstepRendererAPI.addEventListener($scope.events.eval, $scope.evalListener);
   }
-   /**
-     * renderer:questionunit.ftb:question set add audio icon in device and browser.
-     * @event renderer:questionunit.ftb:load
-     * @memberof org.ekstep.questionunit.ftb
-     */
+  /**
+   * renderer:questionunit.ftb:question set add audio icon in device and browser.
+   * @event renderer:questionunit.ftb:load
+   * @memberof org.ekstep.questionunit.ftb
+   */
   $scope.addAudioIcon = function() {
     if (isbrowserpreview) {
       $scope.audioImage = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png");
@@ -89,16 +89,11 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     $scope.bigImage = false;
   }
   $scope.expandQuestion = function(event) {
-    if ($scope.collapseQ) {
-      $scope.expandQ = true;
-      $scope.collapseQ = false;
-      $(event.target.parentElement.parentElement).css('height', '50vh');
-    } else {
-      $(event.target.parentElement.parentElement).css('height', '21vh');
+    if ($scope.expandQ) {
       $scope.expandQ = false;
-      $scope.collapseQ = true;
+    } else {
+      $scope.expandQ = true;
     }
-    console.log(event.target.parentElement.parentElement);
   }
   $scope.checkBaseUrl = function(url) {
     if (isbrowserpreview) {
@@ -131,6 +126,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
       questionData.options = qState.options;
     }
     ctrlScope.questionObj = questionData;
+    ctrlScope.questionObj.plainQuestion = $scope.extractHTML(ctrlScope.questionObj.question.text);
     ctrlScope.questionObj.topOptions = [];
     ctrlScope.questionObj.bottomOptions = [];
     ctrlScope.questionObj.options.forEach(function(option, key) {
@@ -194,6 +190,17 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
     });
     EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
   }
+
+  $scope.trustAsHtml = function(string) {
+    return $sce.trustAsHtml(string);
+  }
+
+  $scope.extractHTML = function(htmlElement) {
+    var divElement = document.createElement('div');
+    divElement.innerHTML = htmlElement;
+    return divElement.textContent || divElement.innerText;
+  }
+
   $scope.evaluate = function(callback) {
     var correctAnswer;
     var telValues = {};

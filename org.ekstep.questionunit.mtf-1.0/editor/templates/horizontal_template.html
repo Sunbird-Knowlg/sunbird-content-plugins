@@ -11,14 +11,14 @@
                             <div class="ui segments inner-segment" ng-class="{cardBorder: $ctrl.focused, 'has-errorCard': submitted && mtfForm.question.$error.required}">
                                 <div class="ui segment">
                                     <div class="ui grid">
-                                        <div class="eleven wide column">
+                                        <div class="twelve wide column">
                                             <div class="form-group segment textBoxDiv">
-                                                <textarea class="form-control textboxQ" ng-class="{'has-success':mtfForm.question.$valid, 'has-error': submitted && mtfForm.question.$error.required}" placeholder="Enter the question" name="question" ng-model="mtfFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'mtfQues'}, $event)" ng-blur="$ctrl.focused = false" ng-required="!(mtfFormData.question.text.length)"></textarea>
+                                                <textarea class="form-control textboxQ" ng-class="{'has-success':mtfForm.question.$valid, 'has-error': submitted && mtfForm.question.$error.required}" placeholder="Enter the question" name="mtfQuestion" ng-model="mtfFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'mtfQues'}, $event)" ng-blur="$ctrl.focused = false" ng-required="!(mtfFormData.question.text.length)"></textarea>
                                             </div>
                                         </div>
-                                        <div class="one wide column text-len">
+                                        <!-- <div class="one wide column text-len">
                                             <span class="maxLengthText">{{mtfFormData.question.text.length}}<span class="length-divider">/</span>220</span>
-                                        </div>
+                                        </div> -->
                                         <div class="six column row">
                                             <div class="two wide column" ng-if="mtfFormData.question.image.length > 0">
                                                 <img src="{{mtfFormData.question.image}}" class="imgWidth"/>

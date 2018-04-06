@@ -658,7 +658,7 @@ app.service('ngDraggable', [function() {
   }]);
 
 
-app.controllerProvider.register("MTFRendererController", function($scope, $rootScope) {
+app.controllerProvider.register("MTFRendererController", function($scope, $rootScope, $sce) {
   $scope.pluginInstance;
   $scope.showTemplate = true;
   $scope.question;
@@ -759,6 +759,10 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
     var callback = event.target;
     ctrlScope.evaluate(callback);
     ctrlScope.safeApply();
+  }
+
+  $scope.trustAsHtml = function(string) {
+    return $sce.trustAsHtml(string);
   }
 
   $scope.onDropToLHS = function(index, data, evt) {

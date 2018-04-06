@@ -13,7 +13,7 @@
                   <div class="ui grid">
                     <div class="eleven wide column">
                       <div class="form-group segment textBoxDiv">
-                        <textarea class="form-control textboxQ" ng-class="{'has-success':mcqForm.question.$valid, 'has-error': submitted && mcqForm.question.$error.required}" placeholder="Enter the question" name="question" ng-model="mcqFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'mcqQues'}, $event)" ng-blur="$ctrl.focused = false" ng-required="!(mcqFormData.question.text.length || mcqFormData.question.image.length || mcqFormData.question.audio.length)"></textarea>
+                        <textarea class="form-control textboxQ" ng-class="{'has-success':mcqForm.question.$valid, 'has-error': submitted && mcqForm.question.$error.required}" placeholder="Enter the question" name="ckedit" ng-model="mcqFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'mcqQues'}, $event)" ng-blur="$ctrl.focused = false" ng-required="!(mcqFormData.question.text.length || mcqFormData.question.image.length || mcqFormData.question.audio.length)"></textarea>
                       </div>
                     </div>
                     <div class="one wide column text-len">
@@ -34,7 +34,7 @@
                         <a href="" ng-click="deleteAudio('q');generateTelemetry({type: 'click', subtype: 'select', target: 'deleteAudio'}, $event);" class="deleteMedia" data-tooltip="Delete audio" data-inverted=""><i class="trash large icon delete-icon"></i></a>
                       </div>
                       <div class="three wide column" ng-if="mcqFormData.question.hint.length > 0 || qHint">
-                        <input type="text" class="form-control textbox" placeholder="Enter hint" name="qHint" ng-model="mcqFormData.question.hint" maxlength="50" ng-focus="qHint" />
+                        <input type="text" class="form-control textbox" placeholder="Enter hint" name="qHint" ng-model="mcqFormData.question.hint" maxlength="25" ng-focus="qHint" />
                       </div>
                       <div class="one wide column" ng-if="mcqFormData.question.hint.length > 0 || qHint">
                         <a href="" ng-click="deleteHint('q');generateTelemetry({type: 'click', subtype: 'select', target: 'deleteHint'}, $event);" class="deleteMedia" data-tooltip="Delete hint" data-inverted=""><i class="trash large icon delete-icon"></i></a>
