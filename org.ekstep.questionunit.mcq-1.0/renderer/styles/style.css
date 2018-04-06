@@ -29,16 +29,41 @@ header.qc-long-text-header {
     font-size: initial;
     text-align: center;
     line-height: 1;
-    height: 10vh;
-    width: 72%;
+    height: 100%;
+    width: 100%;
     display: inline-block;
-    padding-top: 4%;
+    padding-top: 0;
 }
-.qcl-question-text {
+
+.qc-question-text p,
+.collapse-ques-text p,
+.expand-ques-text p{
+    width: 100%;
+    height: 100%;
+    display: table;
+}
+
+.qc-question-text p > :first-child,
+.collapse-ques-text p > :first-child,
+.expand-ques-text p > :first-child{
+    display: table-cell;
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.qc-question-text p span{
+    width: 100%;
+    height: 100%;
+}
+
+.collapse-ques-text {
     display: -webkit-box;
-    max-width: 83%;
-    height: auto;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 100%;
+    height: 17vh;
+    padding: 0px;
+    margin: 0px;
     font-size: 15px;
     line-height: 1.6;
     overflow: hidden;
@@ -46,21 +71,26 @@ header.qc-long-text-header {
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     color: white;
-    padding-top: 1%;
 }
 
-.qclc-question-text {
+.expand-ques-text {
     display: -webkit-box;
-    max-width: 83%;
-    height: auto;
-    margin: 0 auto;
+    width: 100%;
+    max-width: 100%;
+    padding: 0px;
+    margin: 0px;
     font-size: 15px;
     line-height: 1.6;
     color: white;
-    padding-top: 1%;
+    height: 50vh;
+    position: absolute;
+    z-index: 9999;
 }
 
-
+.expand-ques-text p{
+    table-layout: fixed;
+    word-wrap: break-word;
+}
 .qc-option-container {
     width: 100%;
     display: block;
