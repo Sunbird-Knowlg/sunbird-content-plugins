@@ -94,7 +94,7 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
       $scope.collapseQ = false;
       $(event.target.parentElement.parentElement).css('height', '50vh');
     } else {
-      $(event.target.parentElement.parentElement).css('height', '17vh');
+      $(event.target.parentElement.parentElement).css('height', '21vh');
       $scope.expandQ = false;
       $scope.collapseQ = true;
     }

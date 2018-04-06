@@ -51,7 +51,7 @@
                         <span class="custom-bottom-segment ui icon" ng-if="mcqFormData.question.image.length > 0" data-tooltip="Edit image" data-inverted="" ng-click="addImage('q')"><i class="image large icon"></i></span>
                         <span class="custom-bottom-segment ui icon" ng-if="mcqFormData.question.audio.length <= 0" data-tooltip="Add audio" data-inverted="" ng-click="addAudio('q')"><i class="music large icon"></i></span>
                         <span class="custom-bottom-segment ui icon" ng-if="mcqFormData.question.audio.length > 0" data-tooltip="Edit audio" data-inverted="" ng-click="addAudio('q')"><i class="music large icon"></i></span>
-                        <span class="custom-bottom-segment ui icon" ng-if="!qHint" data-tooltip="Add hint" data-inverted="" ng-click="addHint('q')"><i class="idea large icon"></i></span>
+                        <span class="custom-bottom-segment ui icon" ng-if="!qHint && mcqConfiguartion.questionConfig.isHint" data-tooltip="Add hint" data-inverted="" ng-click="addHint('q')"><i class="idea large icon"></i></span>
                         <span class="custom-bottom-segment ui icon" ng-if="qHint" data-tooltip="Edit hint" data-inverted="" ng-click="addHint('q')"><i class="idea large icon"></i></span>
                       </div>
                     </div>

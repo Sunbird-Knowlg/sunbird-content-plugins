@@ -6,8 +6,15 @@
 
 angular.module('ftbApp', [])
  .controller('ftbQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope) {
-
   $scope.formVaild = false;
+   $scope.ftbConfiguartion = {
+    'questionConfig': {
+      'isText': true,
+      'isImage': false,
+      'isAudio': false,
+      'isHint': false
+    }
+  };
   $scope.ftbFormData = {
     question: { text: '', image: '', audio: '', hint: ''},
     answer: [],

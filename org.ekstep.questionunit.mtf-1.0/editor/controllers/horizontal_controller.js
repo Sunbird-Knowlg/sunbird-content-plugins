@@ -6,6 +6,25 @@
 angular.module('mtfApp', []).controller('mtfQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope) {
   $scope.formVaild = false;
   $scope.indexCount=4;
+   $scope.mtfConfiguartion = {
+    'questionConfig': {
+      'isText': true,
+      'isImage': false,
+      'isAudio': false,
+      'isHint': false
+    },
+    'optionsConfig': [{
+      'isText': true,
+      'isImage': false,
+      'isAudio': false,
+      'isHint': false
+    }, {
+      'isText': true,
+      'isImage': false,
+      'isAudio': false,
+      'isHint': false
+    }]
+  };
   $scope.mtfFormData = {
     'question': {
       'text': '',

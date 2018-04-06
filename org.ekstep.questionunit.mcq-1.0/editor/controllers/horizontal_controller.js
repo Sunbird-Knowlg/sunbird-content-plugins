@@ -10,18 +10,18 @@ angular.module('mcqApp', []).controller('mcqQuestionFormController', ['$scope', 
       'isText': true,
       'isImage': true,
       'isAudio': true,
-      'isHint': true
+      'isHint': false
     },
     'optionsConfig': [{
       'isText': true,
       'isImage': true,
       'isAudio': true,
-      'isHint': true
+      'isHint': false
     }, {
       'isText': true,
       'isImage': true,
       'isAudio': true,
-      'isHint': true
+      'isHint': false
     }]
   };
   $scope.mcqFormData = {
