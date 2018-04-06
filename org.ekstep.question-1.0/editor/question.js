@@ -182,7 +182,7 @@
   ctrl.setPreviewData = function() {
     var confData = {};
     var qObj = {
-      "config": '{"metadata":{"title":"question title","description":"question description","language":"English"},"max_time":0,"max_score":1,"partial_scoring":'+ctrl.questionData.isPartialScore +',"isShuffleOption":'+ctrl.questionData.isShuffleOption +',"layout":'+JSON.stringify(ctrl.questionData.templateType)+'}',
+      "config": '{"metadata":{"title":"question title","description":"question description","language":"English"},"max_time":0,"max_score":1,"partial_scoring":'+ctrl.questionData.isPartialScore +',"isShuffleOption":'+ctrl.questionData.isShuffleOption +',"hintText":'+ctrl.questionCreationFormData.question.hint +',"layout":'+JSON.stringify(ctrl.questionData.templateType)+'}',
       "data": JSON.stringify(ctrl.questionCreationFormData),
       "id": "c943d0a907274471a0572e593eab49c2",
       "pluginId": ctrl.selectedTemplatePluginData.plugin.id,
@@ -367,7 +367,7 @@
       data.data = ctrl.questionCreationFormData; //{"question":ctrl.questionCreationFormData.question.text,"options":ctrl.questionCreationFormData.options};   
      // var metadataObj = { category: ctrl.category, title: ctrl.questionData.questionTitle, language: [ctrl.questionData.qcLanguage], qlevel: ctrl.questionData.qcLevel, gradeLevel: ctrl.questionData.qcGrade, concepts: ctrl.selectedConceptsData, description: ctrl.questionData.questionDesc, max_score: ctrl.questionData.questionMaxScore };
       var metadataObj = { category: ctrl.category, title:  ctrl.questionMetaData.name, language: [ ctrl.questionMetaData.medium], qlevel:  ctrl.questionMetaData.level, gradeLevel:  ctrl.questionMetaData.gradeLevel, concepts:  ctrl.questionMetaData.concepts, description:  ctrl.questionMetaData.description, max_score:  ctrl.questionMetaData.max_score };
-      data.config = { "metadata": metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": ctrl.questionData.isPartialScore, "layout": ctrl.questionData.templateType, "isShuffleOption" : ctrl.questionData.isShuffleOption};
+      data.config = { "metadata": metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": ctrl.questionData.isPartialScore, "layout": ctrl.questionData.templateType, "isShuffleOption" : ctrl.questionData.isShuffleOption, "hintText" : ctrl.questionCreationFormData.question.hint};
       data.media = ctrl.questionCreationFormData.media;
       questionFormData.data = data;
       var bodyData = '';

@@ -15,8 +15,10 @@ angular.module('genie-canvas')
 	 		attrs.$observe('path', function (p) {
 	 			scope.contentUrl = p;
 	 		});
+	 		console.log("attrs", attrs);
+	 		
 	 	},
-	 	template: '<div ng-include="contentUrl"></div>'
+	 	template: '<div><button ng-click="showhint()" ng-show="currentQue.showHint" style="position:absolute; right: 2%;">hints</button></div><div ng-include="contentUrl"></div>'
 	 }
 	})
 .directive('qsGoodJob', function($rootScope) {
@@ -62,14 +64,36 @@ angular.module('genie-canvas')
 		}
 	}
 })
+.directive('qsShowHint', function($rootScope) {
+	return {
+		restrict: 'AE',
+		template: '<div class="popup" style="z-index: 9999999;"><div class="popup-overlay"></div><div class="popup-full-body"><div class="font-lato assess-popup assess-tryagain-popup"><div id="popup-buttons-container"><div>{{currentQue.hintText}}</div><button ng-click="hideHintPopup();" style="float: right;">close</button></div></div></div></div>',
+		link: function(scope, element, attrs) {
+			EkstepRendererAPI.addEventListener('renderer:load:popup:showHint', function (event) {
+				element.show();
+			});
+			scope.hideHintPopup = function(){
+				element.hide();
+			}
+			
+		}
+	}
+})
+
+
 .controllerProvider.register("questionsetctrl", function($scope, $ocLazyLoad,$compile) {
 
+$scope.showhint = function() {
+    EkstepRendererAPI.dispatchEvent('renderer:load:popup:showHint');
+}
 /**
  * Event handler to dynamically load HTML file and add it to DOM.
  * @event "renderer:load:html"
  */
  EkstepRendererAPI.addEventListener('renderer:load:html', function (event) {
  	var data = event.target;
+ 	$scope.currentQue = data.currentQuestionObj;
+ 	//$scope.currentQue.showHint = false;
  	if (data.path) {
  		$ocLazyLoad.load([{type: 'html', path: data.path}]).then(function () {
  			if (data.toElement) {

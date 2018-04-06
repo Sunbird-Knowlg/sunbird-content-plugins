@@ -43,34 +43,38 @@ IteratorPlugin.extend({
         qsQuizPlugin: 'org.ekstep.questionset.quiz'
     },
     _questionUnitPlugins: [],
-    initialize: function () {
+    initialize: function() {
         var ctrlPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(this._manifest.id, this._manifest.ver, "renderer/controller/questionset_ctrl.js");
         var tempPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(this._manifest.id, this._manifest.ver, "renderer/templates/questionset_template.html");
         org.ekstep.service.controller.loadNgModules(tempPath, ctrlPath);
     },
-    initPlugin: function (data) {
-        var instance = this;  
+    initPlugin: function(data) {
+        var instance = this;
 
         // Register for navigation hooks
         this.registerNavigation(instance);
 
         // On content replay, reset all question set information.
-        EkstepRendererAPI.addEventListener('renderer:content:replay', function (event) {
+        EkstepRendererAPI.addEventListener('renderer:content:replay', function(event) {
             instance.resetQS.call(instance);
         }, instance);
 
         // Remove duplicate event listener 
         EventBus.listeners['org.ekstep.questionset:feedback:retry'] = [];
-        EkstepRendererAPI.addEventListener('org.ekstep.questionset:feedback:retry', function (event) {
+        EkstepRendererAPI.addEventListener('org.ekstep.questionset:feedback:retry', function(event) {
+            if (instance._currentQuestion.hintText) {
+                instance._currentQuestion.showHint = true;
+            }
             this._displayedPopup = false;
         }, instance);
 
         // Event handler to save question state
         EventBus.listeners['org.ekstep.questionset:saveQuestionState'] = undefined;
-        EkstepRendererAPI.addEventListener(instance._data.pluginType + ':saveQuestionState', function (event) {
+        EkstepRendererAPI.addEventListener(instance._data.pluginType + ':saveQuestionState', function(event) {
             var state = event.target;
-            if(instance._currentQuestion) {
-              instance.saveQuestionState(instance._currentQuestion.id, state);
+            if (instance._currentQuestion) {
+                state.showHint = instance._currentQuestion.showHint;
+                instance.saveQuestionState(instance._currentQuestion.id, state);
             }
         }, this);
 
@@ -102,14 +106,14 @@ IteratorPlugin.extend({
         // Render the question
         this.renderQuestion(this._currentQuestion);
     },
-    renderQuestion: function (question) {
+    renderQuestion: function(question) {
         var instance = this;
 
-    // If this is not the first question, hide the current question
-    if (this._currentQuestion) {
-      EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
-      jQuery('#' + this._currentQuestion.id).remove();
-    }
+        // If this is not the first question, hide the current question
+        if (this._currentQuestion) {
+            EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
+            jQuery('#' + this._currentQuestion.id).remove();
+        }
 
         if (question.pluginId === this._constants.qsQuizPlugin) {
             // For V1 questions, invoke the 'questionset.quiz' plugin.
@@ -119,20 +123,27 @@ IteratorPlugin.extend({
             // Mark the question as rendered
             this._currentQuestion = question;
             this.setRendered(question);
-            setTimeout(function () {
+            setTimeout(function() {
                 Renderer.update = true;
             }, 500);
         } else {
             // For V2 questions, load the AngularJS template and controller and invoke the event to render the question
 
+            // Fetch the question state if it was already rendered before
+            this._currentQuestionState = this.getQuestionState(question.id);
+            if (!(_.isUndefined(this._currentQuestionState)) && !(_.isUndefined(this._currentQuestionState.showHint))) {
+                question.showHint = this._currentQuestionState.showHint;
+            } else {
+                question.showHint = false;
+            }
+
             // Mark the question as rendered
             this._currentQuestion = question;
             this.setRendered(question);
 
-            // Fetch the question state if it was already rendered before
-            this._currentQuestionState = this.getQuestionState(question.id);
-            this.loadModules(question, function () {
-                setTimeout(function () {
+
+            this.loadModules(question, function() {
+                setTimeout(function() {
                     // Set current question for telmetry to log events from question-unit
                     QSTelemetryLogger.setQuestion(instance._currentQuestion, instance.getRenderedIndex());
 
@@ -142,13 +153,13 @@ IteratorPlugin.extend({
             });
         }
     },
-    setRendered: function (question) {
+    setRendered: function(question) {
         var instance = this,
             element;
 
         // Mark the question as rendered in the _masterQuestionSet
         // This is to ensure that we do not re-render the same question twice (in case of shuffle)
-        element = _.find(instance._masterQuestionSet, function (item) {
+        element = _.find(instance._masterQuestionSet, function(item) {
             return item.id === question.id;
         });
         element.rendered = true;
@@ -156,7 +167,7 @@ IteratorPlugin.extend({
         // Add the rendered question to the _renderedQuestions array - this will be saved for future
         // when the question set may be re-rendered when revisiting the stage
         // This array also helps in navigation between already rendered questions.
-        var renderedQuestion = _.find(instance._renderedQuestions, function (q) {
+        var renderedQuestion = _.find(instance._renderedQuestions, function(q) {
             return q.id === question.id
         });
         if (_.isUndefined(renderedQuestion)) {
@@ -168,30 +179,30 @@ IteratorPlugin.extend({
         // this._lastQuestion = (this._renderedQuestions.length + 1 >= this._questionSetConfig.total_items);
         this._itemIndex = this.getRenderedIndex();
     },
-    endOfQuestionSet: function () {
+    endOfQuestionSet: function() {
         return (this._renderedQuestions.length >= this._questionSetConfig.total_items);
     },
-    nextQuestion: function () {
+    nextQuestion: function() {
         // Trigger the evaluation for the question
         var instance = this;
-        if(!this._displayedPopup) {
-          EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ":evaluate", function (result) {
-            if (instance._questionSetConfig.show_feedback == true) {
-              // Display feedback popup (tryagain or goodjob)
-              // result.pass is added to handle sorting-template(Custom IEvaluator) issue. This can be generic solution for other
-              instance.displayFeedback(result.eval ? result.eval : result.pass);
+        if (!this._displayedPopup) {
+            EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ":evaluate", function(result) {
+                if (instance._questionSetConfig.show_feedback == true) {
+                    // Display feedback popup (tryagain or goodjob)
+                    // result.pass is added to handle sorting-template(Custom IEvaluator) issue. This can be generic solution for other
+                    instance.displayFeedback(result.eval ? result.eval : result.pass);
 
-            } else {
-              // If show_feedback is set to false, move to next question without displaying feedback popup
-              instance.renderNextQuestion();
-            }
-          });
+                } else {
+                    // If show_feedback is set to false, move to next question without displaying feedback popup
+                    instance.renderNextQuestion();
+                }
+            });
         } else {
             this._displayedPopup = false;
             instance.renderNextQuestion();
         }
     },
-    displayFeedback: function (res) {
+    displayFeedback: function(res) {
         if (res === true) {
             EkstepRendererAPI.dispatchEvent('renderer:load:popup:goodJob');
         } else {
@@ -199,7 +210,7 @@ IteratorPlugin.extend({
         }
         this._displayedPopup = true;
     },
-    renderNextQuestion: function () {
+    renderNextQuestion: function() {
         // Get the next question to be rendered
         var nextQ = this.getNextQuestion();
         if (nextQ) {
@@ -214,16 +225,16 @@ IteratorPlugin.extend({
             // this.resetNavigation();
             this.resetListeners();
             this.resetTemplates();
-            if(!this._displayedPopup) {
-              this.deregisterNavigation(this);
+            if (!this._displayedPopup) {
+                this.deregisterNavigation(this);
             }
             OverlayManager.skipAndNavigateNext();
         }
     },
-    prevQuestion: function () {
+    prevQuestion: function() {
         this.renderPrevQuestion();
     },
-    renderPrevQuestion: function () {
+    renderPrevQuestion: function() {
         // Get the previous question to be rendered
         var prevQ = this.getPrevQuestion();
         if (prevQ) {
@@ -242,13 +253,13 @@ IteratorPlugin.extend({
             OverlayManager.navigatePrevious();
         }
     },
-    getNextQuestion: function () {
+    getNextQuestion: function() {
         // Check if the next question has already been rendered (are we moving back and forth within the question set?)
         var renderIndex = this.getRenderedIndex();
         if ((renderIndex + 1 >= this._renderedQuestions.length) && !this.endOfQuestionSet()) {
             // The next question should be picked from the master question array, so fetch the list of all questions
             // that are NOT marked as 'rendered'
-            var unRenderedQuestions = this._masterQuestionSet.filter(function (q) {
+            var unRenderedQuestions = this._masterQuestionSet.filter(function(q) {
                 return (_.isUndefined(q.rendered)) ? true : !q.rendered;
             });
             // If shuffle is on, return a random question from the list of NOT rendered questions
@@ -262,7 +273,7 @@ IteratorPlugin.extend({
             return this._renderedQuestions[renderIndex + 1];
         }
     },
-    getPrevQuestion: function () {
+    getPrevQuestion: function() {
         // The previous question is always obtained from the _renderedQuestions array.
         // If the index becomes < 0, it means that we have already returned the first question
         // and can go back any further
@@ -272,51 +283,52 @@ IteratorPlugin.extend({
         }
         return this._renderedQuestions[renderIndex - 1];
     },
-    getRenderedIndex: function () {
+    getRenderedIndex: function() {
         var instance = this;
-        var index = _.findIndex(this._renderedQuestions, function (q) {
+        var index = _.findIndex(this._renderedQuestions, function(q) {
             return q.id === instance._currentQuestion.id;
         });
         return index;
     },
-    loadModules: function (question, callback) {
+    loadModules: function(question, callback) {
         this._questionUnitPlugins = _.union(this._questionUnitPlugins, [question.pluginId]);
         var instance = this;
         var getPluginManifest = org.ekstep.pluginframework.pluginManager.pluginObjs[question.pluginId];
         var unitTemplates = getPluginManifest._manifest.templates;
-        var templateData = _.find(unitTemplates, function (template) {
+        var templateData = _.find(unitTemplates, function(template) {
             return template.id === question.templateId;
         });
 
         var pluginVer = (question.pluginVer === 1) ? '1.0' : question.pluginVer.toString();
         var templatePath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(question.pluginId, pluginVer, templateData.renderer.template);
         var controllerPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(question.pluginId, pluginVer, templateData.renderer.controller);
-        this.loadController(controllerPath, function (data) {
-            instance.loadTemplate(templatePath, instance._constants.qsElement, instance._currentQuestion.id, function (data) {
+        this.loadController(controllerPath, function(data) {
+            instance.loadTemplate(templatePath, instance._constants.qsElement, instance._currentQuestion, function(data) {
                 instance._loadedTemplates.push(templateData.id);
                 callback();
             });
         });
     },
-    loadController: function (path, callback) {
-        setTimeout(function () {
+    loadController: function(path, callback) {
+        setTimeout(function() {
             EkstepRendererAPI.dispatchEvent('renderer:load:js', {
                 path: path,
                 callback: callback
             });
         }, 400);
     },
-    loadTemplate: function (path, toElement, questionId, callback) {
-        setTimeout(function () {
+    loadTemplate: function(path, toElement, questionObj, callback) {
+        setTimeout(function() {
             EkstepRendererAPI.dispatchEvent('renderer:load:html', {
                 path: path,
                 toElement: toElement,
-                questionId: questionId,
+                questionId: questionObj.id,
+                currentQuestionObj: questionObj,
                 callback: callback
             });
         }, 400);
     },
-    loadTemplateContainer: function () {
+    loadTemplateContainer: function() {
         var qsElement = angular.element(this._constants.qsElement);
         if (qsElement.length === 0) {
             angular.element('body').append(angular.element('<div id="' + this._constants.qsElement.replace('#', '') + '"></div>'));
@@ -405,13 +417,13 @@ IteratorPlugin.extend({
         this.showCustomNextNav();
         this.showCustomPrevNav();
     },*/
-    getQuestionState: function (questionId) {
+    getQuestionState: function(questionId) {
         return this._questionStates[questionId];
     },
-    getQuestionSetState: function () {
+    getQuestionSetState: function() {
         return Renderer.theme.getParam(this._data.id);
     },
-    saveQuestionState: function (questionId, state) {
+    saveQuestionState: function(questionId, state) {
         if (state) {
             var qsState = this.getQuestionSetState();
             qsState = _.isUndefined(qsState) ? {} : qsState;
@@ -420,7 +432,7 @@ IteratorPlugin.extend({
             Renderer.theme.setParam(this._data.id, JSON.parse(JSON.stringify(qsState)));
         }
     },
-    saveQuestionSetState: function () {
+    saveQuestionSetState: function() {
         var qsState = {
             masterQuestionSet: this._masterQuestionSet,
             renderedQuestions: this._renderedQuestions,
@@ -429,26 +441,26 @@ IteratorPlugin.extend({
         };
         Renderer.theme.setParam(this._data.id, JSON.parse(JSON.stringify(qsState)));
     },
-    resetTemplates: function () {
+    resetTemplates: function() {
         // Remove all templates loaded for the question set
         jQuery(this._constants.qsElement).remove();
     },
-    resetQS: function () {
+    resetQS: function() {
         // this.resetNavigation();
         var instance = this;
         Renderer.theme.setParam(this._data.id, undefined);
         if (this._currentQuestion) {
             EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
         }
-        setTimeout(function () {
+        setTimeout(function() {
             instance.resetListeners();
         }, 100);
     },
-    resetListeners: function () {
+    resetListeners: function() {
         // The following code will unregister all event listeners added by the question unit plugins
         // This is to ensure that the event listeners do not overlap when there are two or more question sets
         // in the same content.
-        this._questionUnitPlugins.forEach(function (qu) {
+        this._questionUnitPlugins.forEach(function(qu) {
             for (key in EventBus.listeners) {
                 if (key.indexOf(qu) !== -1) {
                     if (EventBus.listeners.hasOwnProperty(key)) {
@@ -458,7 +470,7 @@ IteratorPlugin.extend({
             }
         });
     },
-    generateNavigateTelemetry: function (buttonId, currentQuestion) {
+    generateNavigateTelemetry: function(buttonId, currentQuestion) {
         var instance = this;
         var stageTo, objid;
         var stageid = EkstepRendererAPI.getCurrentStageId();
@@ -483,25 +495,26 @@ IteratorPlugin.extend({
         }
         TelemetryService.navigate(stageid, stageTo, data)
     },
-    handleNext: function () {
-      this.nextQuestion();
+    handleNext: function() {
+        this.nextQuestion();
     },
-    handlePrevious: function () {
-      this.prevQuestion();
-    }/*,
-    hasPrevious: function (navType) {
-      if(this._currentQuestion) {
-          if(navType === "next") {
-            if(this._firstQuestion && this._displayedPopup) {
-              return false;
-            } else {
-              return (this.getRenderedIndex() + 1) > 0;
-            }
-          } else {
-            return (this.getRenderedIndex() - 1) > 0;
+    handlePrevious: function() {
+        this.prevQuestion();
+    }
+    /*,
+        hasPrevious: function (navType) {
+          if(this._currentQuestion) {
+              if(navType === "next") {
+                if(this._firstQuestion && this._displayedPopup) {
+                  return false;
+                } else {
+                  return (this.getRenderedIndex() + 1) > 0;
+                }
+              } else {
+                return (this.getRenderedIndex() - 1) > 0;
+              }
           }
-      }
-      return false;
-    }*/
+          return false;
+        }*/
 });
 //# sourceURL=questionSetRenderer.js

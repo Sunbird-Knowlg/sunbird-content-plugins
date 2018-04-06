@@ -9,9 +9,9 @@ angular.module('ftbApp', [])
 
   $scope.formVaild = false;
   $scope.ftbFormData = {
-    question: { text: '', image: '', audio: '' },
+    question: { text: '', image: '', audio: '', hint: ''},
     answer: [],
-    parsedQuestion: { text: '', image: '', audio: '' }
+    parsedQuestion: { text: '', image: '', audio: '', hint: '' }
   };
 
   $scope.init = function() {
@@ -62,6 +62,19 @@ angular.module('ftbApp', [])
        return false;
     }
  
+  }
+
+  $scope.addHint = function(id) {
+    if (id == 'q') {
+      $scope.qHint = true;
+    }
+  }
+
+  $scope.deleteHint = function(id) {
+    if (id == 'q') {
+      $scope.qHint = false;
+      $scope.ftbFormData.question.hint = '';
+    }
   }
 
   $scope.generateTelemetry = function(data, event) {

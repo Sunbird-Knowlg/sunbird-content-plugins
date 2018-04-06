@@ -19,6 +19,14 @@
                   <div class="one wide column text-len">
                     <span class="maxLengthText">{{ftbFormData.question.text.length}}<span class="length-divider">/</span>220</span>
                   </div>
+                  <div class="six column row">
+                      <div class="three wide column" ng-if="ftbFormData.question.hint.length > 0 || qHint">
+                        <input type="text" class="form-control textbox" placeholder="Enter hint" name="qHint" ng-model="ftbFormData.question.hint" maxlength="50" ng-focus="qHint" />
+                      </div>
+                      <div class="one wide column" ng-if="ftbFormData.question.hint.length > 0 || qHint">
+                        <a href="" ng-click="deleteHint('q');generateTelemetry({type: 'click', subtype: 'select', target: 'deleteHint'}, $event);" class="deleteMedia" data-tooltip="Delete hint" data-inverted=""><i class="trash large icon delete-icon"></i></a>
+                      </div>
+                  </div>
                 </div>
               </div>
               <div class="ui secondary right aligned segment custom-sec-segment">
@@ -28,6 +36,8 @@
                       <span class="custom-bottom-label">Add: </span>
                       <span class="custom-bottom-segment"><i class="image large icon"></i></span>
                       <span class="custom-bottom-segment"><i class="music large icon"></i></span>
+                      <span class="custom-bottom-segment ui icon" ng-if="!qHint" data-tooltip="Add hint" data-inverted="" ng-click="addHint('q')"><i class="idea large icon"></i></span>
+                        <span class="custom-bottom-segment ui icon" ng-if="qHint" data-tooltip="Edit hint" data-inverted="" ng-click="addHint('q')"><i class="idea large icon"></i></span>
                     </div>
                   </div>
                 </div>

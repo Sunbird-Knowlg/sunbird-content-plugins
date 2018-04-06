@@ -112,6 +112,10 @@
       {
         "type": "js",
         "src": "renderer/utils/telemetry_logger.js"
+      },
+       {
+        "type": "css",
+        "src": "renderer/styles/style.css"
       }
     ]
   },
