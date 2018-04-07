@@ -6,6 +6,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     initialize: function() {
         this.service = ecEditor.getService('telemetry');
         ecEditor.addEventListener('content:load:complete', this.registerEvents, this);
+        ecEditor.addEventListener('content:load:complete', this.logPluginErrors, this);
     },
     registerEvents: function() {
         var instance = this;
@@ -72,6 +73,19 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     interactEvent: function(type, subtype, target, pluginid, pluginver, objectId) {
         this.service.interact({ "type": type, "subtype": subtype, "target": target, "pluginid": pluginid, "pluginver": pluginver, "objectid": objectId, "stage": ecEditor.getCurrentStage().id })
+    },
+    logPluginErrors:function(event, data){
+        var instance = this;
+        var pkgVersion = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId')).pkgVersion;
+        var object = {
+            id: org.ekstep.contenteditor.api.getContext('contentId'),
+            ver: !_.isUndefined(pkgVersion) && pkgVersion.toString() || '0',
+            type:'Content'
+        }
+        var failedPlugins = org.ekstep.pluginframework.pluginManager.getErrors();
+        _.each(failedPlugins, function(data){
+            instance.service.error({err:data.error, errtype:'CONTENT',stacktrace:data.stackTrace || '', object:object, plugin:{id:data.plugin, ver:data.version, category:""}})
+        })
     }
 });
 //# sourceURL=telemetryPlugin.js
