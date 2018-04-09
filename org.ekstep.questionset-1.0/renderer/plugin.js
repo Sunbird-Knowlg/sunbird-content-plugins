@@ -64,6 +64,9 @@ IteratorPlugin.extend({
         EkstepRendererAPI.addEventListener('org.ekstep.questionset:feedback:retry', function(event) {
             if (instance._currentQuestion.hintText) {
                 instance._currentQuestion.showHint = true;
+                var queState = this.getQuestionState(instance._currentQuestion.id);
+                queState.showHint = true;
+                instance.saveQuestionState(instance._currentQuestion.id, queState);
             }
             this._displayedPopup = false;
         }, instance);
@@ -131,12 +134,17 @@ IteratorPlugin.extend({
 
             // Fetch the question state if it was already rendered before
             this._currentQuestionState = this.getQuestionState(question.id);
+
             if (!(_.isUndefined(this._currentQuestionState)) && !(_.isUndefined(this._currentQuestionState.showHint))) {
                 question.showHint = this._currentQuestionState.showHint;
             } else {
                 question.showHint = false;
             }
-
+            var qConfig = question.config.__cdata || question.config;
+            var qConf = JSON.parse(qConfig);
+            if(qConf.hintText){
+                question.hintText = qConf.hintText;
+            }
             // Mark the question as rendered
             this._currentQuestion = question;
             this.setRendered(question);
