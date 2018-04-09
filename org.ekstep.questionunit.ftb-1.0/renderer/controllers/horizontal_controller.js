@@ -146,7 +146,6 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
         $scope.safeApply();
     }
     $scope.callbackFromKeyboard = function(ans){
-      console.log("Answer from keyboard",ans);
       $("#ans-field1").val(ans);
     }
     /**

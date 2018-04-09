@@ -7,13 +7,20 @@
     background: #ebebeb;
 }
 
-.textBoxArea{
-    width: 100%;
+.qBoxArea{
     background-color: white;
-    height: 50%;
+    height: 13%;
     position: absolute;
     z-index: 10;
     text-align: center;
+    margin-left: 37%;
+    margin-top: 2%;
+}
+.textBoxArea{
+    position: absolute;
+    margin-top: 8%;
+    z-index: 20;
+    width: 100%;
 }
 
 .keyboardArea{
