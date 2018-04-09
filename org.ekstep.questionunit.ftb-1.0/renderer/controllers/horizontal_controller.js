@@ -70,7 +70,7 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
         var qData = $scope.question._currentQuestion.data.__cdata || $scope.question._currentQuestion.data;
         var questionData = JSON.parse(qData);
         $($scope.constant.ftbText).html(questionData.parsedQuestion.text);
-        $($scope.constant.ftbContainerId).on('click', '.ans-field', $scope.doTextBoxHandle);
+        //$($scope.constant.ftbContainerId).on('click', '.ans-field', $scope.doTextBoxHandle);
         var qState = $scope.question._currentQuestionState;
         if (qState && qState.val) {
             $scope.textboxtarget.state = qState.val;
@@ -137,15 +137,16 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
      */
     $scope.doTextBoxHandle = function() {
         var questionConfig = $scope.question._currentQuestion.data.__cdata || $scope.question._currentQuestion.data;
-        $scope.qcblank = true;
-        $scope.textboxtarget.id = this.id;
-        $scope.textboxtarget.value = this.value.trim();
+        // $scope.qcblank = true;
+        // $scope.textboxtarget.id = this.id;
+        // $scope.textboxtarget.value = this.value.trim();
        
         EkstepRendererAPI.dispatchEvent("renderer:keyboard:invoke", JSON.parse(questionConfig),$scope.callbackFromKeyboard);
-        $($scope.constant.tempanswertext).val($scope.textboxtarget.value);
+        // $($scope.constant.tempanswertext).val($scope.textboxtarget.value);
         $scope.safeApply();
     }
     $scope.callbackFromKeyboard = function(ans){
+      console.log("Answer from keyboard",ans);
       $("#ans-field1").val(ans);
     }
     /**

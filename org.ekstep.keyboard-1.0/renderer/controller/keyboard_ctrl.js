@@ -7,11 +7,11 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
   $scope.upperCase = true;
   $scope.lowerCase = false;
   EkstepRendererAPI.addEventListener("renderer:keyboard:invoke", function(e, callback) {
-    // var temp = JSON.parse('{"question":{"text":"FTB custom keys[[2]]","image":"","audio":"","keyboardConfig":{"keyboardType":"Custom","customKeys":["j","a","g","a","d","i","s","h"]}},"answer":["2"]}');
+    // var temp = JSON.parse('{"question":{"text":"FTB custom keys[[2]]","image":"","audio":"","keyboardConfig":{"keyboardType":"English","customKeys":["j","a","g","a","d","i","s","h"]}},"answer":["2"]}');
     // console.log(temp);
     $scope.callback = callback;
     $scope.config = e.target;
-    // $scope.config = temp;
+    //$scope.config = temp;
     $scope.question = $scope.config.question.text;
     $scope.keyboardVisible = true;
     var customButtons = '';

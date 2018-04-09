@@ -8,13 +8,15 @@
 }
 
 .qBoxArea{
+    font-weight: bold;
     background-color: white;
-    height: 13%;
+    height: 40%;
     position: absolute;
     z-index: 10;
     text-align: center;
     margin-left: 37%;
     margin-top: 2%;
+    width: 27%;
 }
 .textBoxArea{
     position: absolute;
