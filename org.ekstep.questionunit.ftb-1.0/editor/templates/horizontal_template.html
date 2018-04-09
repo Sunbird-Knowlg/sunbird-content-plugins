@@ -1,48 +1,81 @@
 <div ng-controller="ftbQuestionFormController" ng-init="init()">
-  <div class="ui grid mcqFullGrid">
-    <div class="one column row">
-      <div class="column innerScroll">
-        <form name="ftbForm">
-          <div class="one column row qHeader">
-            <span>Enter the question</span>
-          </div>
-          <div class="outer-segment">
-            <div class="ui segments inner-segment" ng-class="{'cardBorder': $ctrl.focused, 'has-success-card':ftbForm.ftbQuestion.$valid, 'has-errorCard': submitted && (ftbForm.ftbQuestion.question.text.length == 0 || ftbForm.ftbQuestion.$error.pattern)}">
-              <div class="ui segment">
-                <div class="ui grid">
-                  <div class="twelve wide column">
-                    <div class="form-group segment textBoxDiv">
-                      <textarea class="form-control textboxQ-ftb" ng-class="{'has-success':ftbForm.ftbQuestion.$valid, 'has-error': submitted && (ftbForm.ftbQuestion.$error.required != true || ftbForm.ftbQuestion.$error.pattern !=true)}" placeholder="Enter the question" name="ftbQuestion" id="ftbQuestion" ng-model="ftbFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'ftbTextarea'}, $event)" ng-blur="$ctrl.focused = false" required>
-                      </textarea>
+    <div class="ui grid mcqFullGrid">
+        <div class="one column row">
+            <div class="column">
+                <form name="ftbForm">
+                    <div class="one column row qHeader">
+                        <span>Enter the question</span>
                     </div>
-                  </div>
-               
-                </div>
-              </div>
-              <div class="ui secondary right aligned segment custom-sec-segment" ng-if="ftbConfiguartion.questionConfig.isImage || ftbConfiguartion.questionConfig.isAudio ||ftbConfiguartion.questionConfig.isHint">
-                <div class="ui grid">
-                 <!--  <div class="one column row segment-column">
-                    <div class="column right floated">
-                      <span class="custom-bottom-label">Add: </span>
-                      <!-- <span class="custom-bottom-segment"><i class="image large icon"></i></span>
-                      <span class="custom-bottom-segment"><i class="music large icon"></i></span> -->
-                     <!--  <span class="custom-bottom-segment ui icon" ng-if="!qHint" data-tooltip="Add hint" data-inverted="" ng-click="addHint('q')"><i class="idea large icon"></i></span>
-                        <span class="custom-bottom-segment ui icon" ng-if="qHint" data-tooltip="Edit hint" data-inverted="" ng-click="addHint('q')"><i class="idea large icon"></i></span>
+                    <div class="outer-segment">
+                        <div class="ui segments inner-segment" ng-class="{'cardBorder': $ctrl.focused, 'has-success-card':ftbForm.ftbQuestion.$valid, 'has-errorCard': submitted && (ftbForm.ftbQuestion.question.text.length == 0 || ftbForm.ftbQuestion.$error.pattern)}">
+                            <div class="ui segment">
+                                <div class="ui grid">
+                                    <div class="eleven wide column">
+                                        <div class="form-group segment textBoxDiv">
+                                            <textarea class="form-control textboxQ-ftb" ng-class="{'has-success':ftbForm.ftbQuestion.$valid, 'has-error': submitted && (ftbForm.ftbQuestion.$error.required != true || ftbForm.ftbQuestion.$error.pattern !=true)}" placeholder="Enter the question" name="ftbQuestion" id="ftbQuestion" ng-model="ftbFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'ftbTextarea'}, $event)" ng-blur="$ctrl.focused = false" required>
+                                            </textarea>
+                                        </div>
+                                    </div>
+                                    <div class="one wide column text-len">
+                                        <span class="maxLengthText">{{ftbFormData.question.text.length}}<span class="length-divider">/</span>220</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="ui secondary right aligned segment custom-sec-segment" ng-if="ftbConfiguartion.questionConfig.isImage || ftbConfiguartion.questionConfig.isAudio">
+                                <div class="ui grid">
+                                    <div class="one column row segment-column">
+                                        <div class="column right floated">
+                                            <span class="custom-bottom-label">Add: </span>
+                                            <span class="custom-bottom-segment"><i class="image large icon"></i></span>
+                                            <span class="custom-bottom-segment"><i class="music large icon"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                  </div> -->
+                    <div class="instructions">
+                        <p>
+                            * Use square brackets [[ ]] to indicate blanks in the sentence. The words between [[ ]] will appear as blanks to student.</p>
+                        <p>
+                            * Example: 'The tree is [[tall]] and [[strong]].' The question will be created as: 'The tree is _______ and _______.' The correct answers will be 'tall' and 'strong'.
+                        </p>
+                    </div>
+                    <div class="ui header">Keyboard configuration:</div>
+                    <div class="ui grid">
+                        <div class="two row column">
+                            <div class="two wide column">
+                              <label class="qcMetadateFormLbl">
+                                    Select keyboard type <span class="star">&nbsp;*</span>
+                                </label>    
+                            </div>
+                            <div class="four wide column">
+                                <!-- <select class="ui dropdown" ng-model="keyboardType" ng-change="selectKeyboardType()">
+                                    <option value="" selected="selected">Select</option>
+                                    <option ng-repeat="type in keyboardTypes" value="{{type}}">{{type}}</option> 
+                                </select> -->
+                                
+                                <select class="form-control" ng-model="ftbFormData.question.keyboardConfig.keyboardType" ng-change="selectKeyboardType()" ng-class="{'has-success':ftbFormData.question.keyboardConfig.keyboardType.$valid, 'has-error': submitted && (ftbFormData.question.keyboardConfig.keyboardType.$error.required != true)}"  required>
+                                    <option value="" selected="selected">Choose Level</option>
+                                    <option ng-repeat="item in keyboardTypes" value="{{item}}">{{item}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="two row column" ng-if="customTag">
+                            <div class="two wide column">
+                                <label class="qcMetadateFormLbl">
+                                    Add keys <span class="star">&nbsp;*</span>
+                                </label>   
+                              </div>
+                            <div class="four wide column">
+                                <!-- <tags-input ng-model="tags" add-on-space="true" min-tags="1" max-tags="26" min-length="1" max-length="1" display-property="text" key-property="id" on-tag-added="onTagAdded($tag)"></tags-input> -->
+                                <div class="ui input" style="width: 100%">
+                                    <input class="form-control" type="text" ng-model="keys" ng-blur="tokenizeTags($event)" maxlength="26" placeholder="Add keys seprated by comma(,)" required>
+                                </div>
+                            </div>
+                        </div>
+                </form>
                 </div>
-              </div>
             </div>
-          </div>
-          <div class="instructions">
-            <p>
-              * Use square brackets [[ ]] to indicate blanks in the sentence. The words between [[ ]] will appear as blanks to student.</p>
-            <p>
-              * Example: 'The tree is [[tall]] and [[strong]].' The question will be created as: 'The tree is _______ and _______.' The correct answers will be 'tall' and 'strong'.
-            </p>
-          </div>
-        </form>
-      </div>
+        </div>
     </div>
-  </div>
-</div>

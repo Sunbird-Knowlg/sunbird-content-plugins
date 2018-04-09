@@ -5,116 +5,118 @@
  */
 
 angular.module('ftbApp', [])
+    .controller('ftbQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope) {
+        $scope.formVaild = false;
+        $scope.ftbConfiguartion = {
+            'questionConfig': {
+                'isText': true,
+                'isImage': false,
+                'isAudio': false,
+                'isHint': false
+            }
+        };
+        $scope.customTag = false;
+        $scope.keyboardTypes = ['Device', 'English', 'Custom'];
+        $scope.ftbFormData = {
+            question: { text: '', image: '', audio: '',keyboardConfig:{keyboardType:'',customKeys:[]}},
+            answer: [],
+            parsedQuestion: { text: '', image: '', audio: '' }
+        };
 
-  .controller('ftbQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope) {
-    $scope.formVaild = false;
-    $scope.ftbConfiguartion = {
-      'questionConfig': {
-        'isText': true,
-        'isImage': false,
-        'isAudio': false,
-        'isHint': false
-      }
-    };
-    $scope.ftbFormData = {
-      'question': { 'text': '', 'image': '', 'audio': '', 'hint' : '' },
-      'answer': [],
-      'parsedQuestion': { 'text': '', 'image': '', 'audio': '', 'hint' : ''}
-    };
+        $scope.init = function() {
+            $('.menu .item').tab();
+            $('.ui.dropdown').dropdown({ useLabels: false });
+            if (!ecEditor._.isUndefined($scope.questionEditData)) {
+                var data = $scope.questionEditData.data;
+                $scope.ftbFormData.question = data.question;
+            }
 
-    var questionInput = CKEDITOR.replace('ftbQuestion', {
-      customConfig: CKEDITOR.basePath + "config.js",
-      skin: 'moono-lisa,' + CKEDITOR.basePath + "skins/moono-lisa/",
-      contentsCss: CKEDITOR.basePath + "contents.css"
-    });
-    questionInput.on('change', function() {
-      $scope.ftbFormData.question.text = this.getData();
-    });
-    $scope.init = function() {
-      $('.menu .item').tab();
-      $('.ui.dropdown').dropdown({ useLabels: false });
-
-      if (!ecEditor._.isUndefined($scope.questionEditData)) {
-        var data = $scope.questionEditData.data;
-        $scope.ftbFormData.question = data.question;
-      }
-
-      $scope.$parent.$on('question:form:val', function(event) {
-        var regexForAns = /(?:^|)\[\[(.*?)(?:\]\]|$)/g;
-        var index = 0;
-        $scope.ftbFormData.answer = $scope.getMatches($scope.ftbFormData.question.text, regexForAns, 1).map(function(a) {
-          return a.toLowerCase().trim();
-        });
-        if ($scope.formValidation()) {
-          $scope.ftbFormData.parsedQuestion.text = $scope.ftbFormData.question.text.replace(/\[\[.*?\]\]/g, function(a, b) {
-            index = index + 1;
-            return '<input type="text" class="ans-field" id=ans-field' + index + '>';
-          })
-          $scope.$emit('question:form:valid', $scope.ftbFormData);
-        } else {
-          $scope.$emit('question:form:inValid', $scope.ftbFormData);
+            $scope.$parent.$on('question:form:val', function(event) {
+                var regexForAns = /(?:^|)\[\[(.*?)(?:\]\]|$)/g;
+                var index = 0;
+                $scope.ftbFormData.answer = $scope.getMatches($scope.ftbFormData.question.text, regexForAns, 1).map(function(a) {
+                    return a.toLowerCase().trim();
+                });
+                if ($scope.formValidation()) {
+                    $scope.ftbFormData.parsedQuestion.text = $scope.ftbFormData.question.text.replace(/\[\[.*?\]\]/g, function(a, b) {
+                        index = index + 1;
+                        return '<input type="text" class="ans-field" id=ans-field' + index + '>';
+                    })
+                    $scope.$emit('question:form:valid', $scope.ftbFormData);
+                } else {
+                    $scope.$emit('question:form:inValid', $scope.ftbFormData);
+                }
+            })
         }
-      })
-      ckeditor.editor.on('change', function() {
-        ngModel.$setViewValue(this.getData());
-      });
-    }
+
+        $scope.selectKeyboardType = function() {
+            if ($scope.ftbFormData.question.keyboardConfig.keyboardType == 'Custom') {
+                $scope.customTag = true;
+            } else {
+                $scope.customTag = false;
+            }
+
+        }
+        $scope.tokenizeTags = function(event) {
+          $scope.tags = event.target.value;
+          if($scope.tags.length>0){
+            var tagsArr = $scope.tags.split(",");
+            // $scope.keys = [];
+            _.each(tagsArr, function(val, key) {
+                if (val.length > 1) {
+                    var subChar = val.split('');
+                    _.each(subChar, function(val1, key1) {
+                        $scope.ftbFormData.question.keyboardConfig.customKeys.push(val1);
+                    });
+                } else {
+                    $scope.ftbFormData.question.keyboardConfig.customKeys.push(val);
+                }
+            });
+          }
+          //console.log("Final keys", $scope.ftbFormData);
+        }
+    //}]);
 
 
-
-    $scope.getMatches = function(string, regex, index) {
-      index || (index = 1); // default to the first capturing group
-      var matches = [];
-      var match;
-      while (match = regex.exec(string)) {
+$scope.getMatches = function(string, regex, index) {
+    index || (index = 1); // default to the first capturing group
+    var matches = [];
+    var match;
+    while (match = regex.exec(string)) {
         matches.push(match[index]);
-      }
-      return matches;
     }
+    return matches;
+}
 
-
-    $scope.formValidation = function() {
-      $scope.submitted = true;
-      var formValid = $scope.ftbForm.$valid && /\[\[.*?\]\]/g.test($scope.ftbFormData.question.text);
-      if (formValid) {
+$scope.formValidation = function() {
+    $scope.submitted = true;
+    var formValid = $scope.ftbForm.$valid && /\[\[.*?\]\]/g.test($scope.ftbFormData.question.text);
+    if (formValid) {
         return true;
-      } else {
+    } else {
         $scope.ftbForm.ftbQuestion.$valid = false;
         return false;
-      }
-
     }
 
-  $scope.addHint = function(id) {
-    if (id == 'q') {
-      $scope.qHint = true;
-    }
-  }
+}
 
-  $scope.deleteHint = function(id) {
-    if (id == 'q') {
-      $scope.qHint = false;
-      $scope.ftbFormData.question.hint = '';
-    }
-  }
+$scope.generateTelemetry = function(data, event) {
+if (data) ecEditor.getService('telemetry').interact({
+"type": data.type,
+"subtype": data.subtype,
+"id": data.id,
+"pageId": ecEditor.getCurrentStage().id,
+"target": {
+    "id": event.target.id,
+    "ver": "1.0",
+    "type": data.type
+},
+"plugin": {
+    "id": "org.ekstep.questionunit.ftb",
+    "ver": "1.0"
+}
+})
+}
 
-  $scope.generateTelemetry = function(data, event) {
-      if (data) ecEditor.getService('telemetry').interact({
-        "type": data.type,
-        "subtype": data.subtype,
-        "id": data.id,
-        "pageId": ecEditor.getCurrentStage().id,
-        "target": {
-          "id": event.target.id,
-          "ver": "1.0",
-          "type": data.type
-        },
-        "plugin": {
-          "id": "org.ekstep.questionunit.ftb",
-          "ver": "1.0"
-        }
-      })
-    }
-
-  }]);
+}]);
 //# sourceURL=horizontalFTB.js
