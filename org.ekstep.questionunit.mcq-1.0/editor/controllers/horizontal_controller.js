@@ -11,7 +11,7 @@ angular.module('mcqApp', [])
         'isText': true,
         'isImage': true,
         'isAudio': true,
-        'isHint': true
+        'isHint': false
       },
       'optionsConfig': [{
         'isText': true,

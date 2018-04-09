@@ -13,7 +13,7 @@ angular.module('ftbApp', [])
         'isText': true,
         'isImage': false,
         'isAudio': false,
-        'isHint': true
+        'isHint': false
       }
     };
     $scope.ftbFormData = {
