@@ -11,7 +11,7 @@ angular.module('assetbrowserapp', ['angularAudioRecorder']).config(['recorderSer
     recorderServiceProvider.withMp3Conversion(true, config);
 }]);
 
-angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
+angular.module('assetbrowserapp',['angular-inview']).controller('browsercontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
     var audiodata = {},
         assetMedia,
         assetdata = {},
@@ -21,6 +21,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         audioTabSelected = false,
         imageTabSelected = true,
         ctrl = this;
+        ctrl.inViewLogs = [];
 
     var $sce = $injector.get('$sce');
     ctrl.file = {
@@ -293,6 +294,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
     }
 
     ctrl.cancel = function() {
+        ctrl.generateImpression({ type: 'view', subtype: 'popup-exit', pageid: 'AssetsBrowser' });
+        ctrl.inViewLogs = [];
         $scope.closeThisDialog();
     };
 
@@ -616,6 +619,41 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         ecEditor.ngSafeApply(ecEditor.getAngularScope());
     }
 
+    // visits
+    $scope.lineInView = function(index, inview, item, section, pageSectionId) {
+        var obj = _.filter(ctrl.inViewLogs, function(o) {
+            return o.identifier === item.identifier
+        })
+        if (inview && obj.length === 0) {
+            ctrl.inViewLogs.push({
+                objid: item.identifier,
+                objtype: item.contentType,
+                section: section,
+                index: index
+            })
+        }
+    }
+        
+    // Generate Impression telemetry
+    ctrl.generateImpression = function(data) {
+        if (data) ecEditor.getService('telemetry').impression({
+            "type": data.type,
+            "subtype": data.subtype || "",
+            "pageid": data.pageid || "",
+            "uri": window.location.href,
+            "visits": ctrl.inViewLogs
+        });
+    }
+
+    // Close the popup
+    $scope.closePopup = function() {
+        ctrl.generateImpression({ type: 'view', subtype: 'popup-exit', pageid: 'AssetsBrowser' });
+        ctrl.inViewLogs = [];
+        ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeAssetBrowser'});
+        $scope.closeThisDialog();
+    };    
+    
+
     ctrl.loadMoreAsset = function(data) {
         /**Check for max limit and Increment offset by 50**/
         if (ctrl.offset+50 >= ctrl.maxLimit){
@@ -634,6 +672,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         // Show loader
         ctrl.loadMoreAssetSpinner = true;
 
+        ctrl.selectBtnDisable = false;
         var createdBy = ctrl.tabSelected == "all" ? undefined :  ctrl.createdBy;
         imageTabSelected = true;
         audioTabSelected = false;
@@ -751,3 +790,4 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             });
     }, 100);
 }]);
+
