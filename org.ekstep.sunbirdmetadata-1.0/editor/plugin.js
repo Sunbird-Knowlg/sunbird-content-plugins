@@ -34,7 +34,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     /**
      * @property      - List of are event are mapped with the action
      */
-    eventMap: { savemeta: 'org.ekstep.contenteditor:save:meta', review: 'org.ekstep.contenteditor:review', save: 'org.ekstep.contenteditor:save' },
+    eventMap: { savemeta: 'org.ekstep.contenteditor:save:meta', review: 'org.ekstep.contenteditor:review', save: 'org.ekstep.contenteditor:save', close: 'org.ekstep.collectioneditor:content:notfound' },
 
     /**
      * 
@@ -68,6 +68,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     invoke: function(event, config) {
         var instance = this;
         instance.model = config.metadata;
+        instance.editMode = config.editMode;
         if (!this.isConfigurationsExists(config.subType, config.action)) {
             this.getConfigurations(config, function(error, res) {
                 if (res) {
@@ -79,9 +80,8 @@ org.ekstep.contenteditor.metadataPlugin.extend({
 
             })
         } else {
-            config.popup ? instance.showForm() : this.loadTemplate(instance.getTemplate(), function(templatePath, controller) {
-                ecEditor.dispatchEvent("editor:template:loaded", { "templatePath": templatePath })
-            })
+            var mappedRes = instance.getMappedResponse(config.subType, config.action)
+            instance.renderForm(config.popup, { resourceBundle: mappedRes.resourceBundle, framework: mappedRes.framework, formConfig: mappedRes.formConfig })
         }
     },
 
@@ -134,15 +134,21 @@ org.ekstep.contenteditor.metadataPlugin.extend({
      */
     reviewContent: function(data, callbackFn) {
         var instance = this
-        var reviewCallBackFn = function(err, res) {
+        var saveCallBackFn = function(err, res) {
             if (!err) {
-                ecEditor.dispatchEvent(instance.eventMap[instance.config.action], callbackFn)
+                ecEditor.dispatchEvent(instance.eventMap[instance.config.action], reviewCallBackFn)
             } else {
                 throw 'Unable to update the fields value before sending to review status'
                 callbackFn(err)
             }
         }
-        this.saveContent(data, reviewCallBackFn)
+        var reviewCallBackFn = function(err, res) {
+            if (!err) {
+                ecEditor.dispatchEvent(instance.eventMap['close']);
+            }
+            callbackFn()
+        }
+        this.saveContent(data, saveCallBackFn)
     },
 
     /**
@@ -314,7 +320,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     },
 
     returnConfigs: function(event, callbackFn) {
-        callbackFn({ model: this.getModel(), template: this.config.templateName || this.DEFAULT_TEMPLATE_NAME, fields: this.form })
+        callbackFn({ model: this.getModel(), template: this.config.templateName || this.DEFAULT_TEMPLATE_NAME, fields: this.form, editMode: this.editMode })
     }
 })
 
