@@ -6,6 +6,7 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
   $scope.answerText = undefined;
   $scope.upperCase = true;
   $scope.lowerCase = false;
+  $scope.answerText = '';
   EkstepRendererAPI.addEventListener("renderer:keyboard:invoke", function(e, callback) {
     // var temp = JSON.parse('{"question":{"text":"FTB custom keys[[2]]","image":"","audio":"","keyboardConfig":{"keyboardType":"English","customKeys":["j","a","g","a","d","i","s","h"]}},"answer":["2"]}');
     // console.log(temp);
@@ -208,7 +209,6 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
       var instance = this;
       if (btn != null) {
           btn.addEventListener("click", function(event) {
-              console.log("BTN", event.target.innerText);
               if (event.target.innerText.endsWith("MK") == true) {
                   event.target.innerText = " ";
 
@@ -219,8 +219,7 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
               } else {
                   $scope.addLetter(event);
               }
-              //$(".ansField").val($(".ansField").val() + event.target.innerText);
-              console.log(event.target.innerText)
+              
           });
       }
   }

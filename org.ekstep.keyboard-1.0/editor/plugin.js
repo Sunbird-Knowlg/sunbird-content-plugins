@@ -1,7 +1,7 @@
 /**
  * @class  org.ekstep.keyboard.EditorPlugin
  */
-org.ekstep.keyboard.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
 
     /**
      * @memberOf org.ekstep.keyboard.EditorPlugin#

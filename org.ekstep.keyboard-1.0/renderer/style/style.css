@@ -41,7 +41,7 @@
 
 #parentDivMainKeyboard,
 #parentDivNumericKeyboard {
-    width: 80%;
+    /*width: 80%;*/
     height: 100%;
     top: 62%;
     position: absolute;

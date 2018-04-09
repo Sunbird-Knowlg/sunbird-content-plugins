@@ -11,7 +11,7 @@ angular.module('keyBoardApp', [])
     .directive('keyboardConfig', function($rootScope) {
 	return {
 		restrict: 'AE',
-		template: '<div class="ui header">Jagadish</div>',
+		template: '<div class="ui header">Custom keyboard</div>',
 		link: function(scope, element, attrs) {
 				
 			});
