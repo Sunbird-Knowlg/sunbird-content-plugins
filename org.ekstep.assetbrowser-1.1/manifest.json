@@ -10,8 +10,7 @@
         "main": "editor/plugin.js",
         "dependencies": [
             {"type": "js", "src": "editor/recorder/wave/wavesurfer.min.js"},
-            {"type": "js", "src": "editor/recorder/angular-audio-recorder.js"},
-            {"type": "js","src": "editor/libs/angular-inview.js"}
+            {"type": "js", "src": "editor/recorder/angular-audio-recorder.js"}
         ]
     }
 }
