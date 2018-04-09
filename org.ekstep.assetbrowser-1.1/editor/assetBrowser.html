@@ -232,7 +232,7 @@
    					<span ng-if="$ctrl.uploadView && $ctrl.plugin == 'audio'"><i class="upload icon"></i> Upload/ Record</span>
    				</div>
    				<div class="column right aligned">
-   					<i class="close link icon" ng-click="closeThisDialog(); $ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'closeAssetBrowser'})"></i>
+   					<i class="close link icon" ng-click="closePopup()"></i>
    				</div>
    			</div>
    		</div>
@@ -258,7 +258,7 @@
    				<div class="clearfix">&nbsp;</div>
    				<div class="asset_item_container" id="my-image-tab">
    					<div class="ui grid">
-   						<div ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
+   						<div ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index" in-view="lineInView($index, $inview, image, 'AssetsBrowser', $index)" in-view-options="{ throttle: 1000 }">
    							<div class="column templatebrowser_thumbnail">
    								<div class="ui small images templatecard infopopover" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected}; $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'selectImage'})" data-html="<b>{{image.name}}</b> <br/> License: {{image.license}}">
     									<a class="item" ng-show="$ctrl.selected_images[$index].selected">
@@ -364,7 +364,7 @@
    				</div>
    				<div class="clearfix">&nbsp;</div>
    				<div class="ui grid asset_item_container" id="all-image-tab">
-   					<div ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index">
+   					<div ng-show="$ctrl.imageList.length > 0" ng-repeat="image in $ctrl.imageList track by $index" in-view="lineInView($index, $inview, image, 'AssetsBrowser', $index)" in-view-options="{ throttle: 1000 }">
    						<div class="column templatebrowser_thumbnail">
    							<div class="ui small images templatecard infopopover" id="assetbrowser-{{$index}}" ng-click="$ctrl.ImageSource($event, $index); $ctrl.selected_images[$index]={selected: !$ctrl.selected_images[$index].selected}; $ctrl.generateTelemetry({type: 'click', subtype: 'select', target: 'selectImageAsset'});" data-html="<b>{{image.name}}</b> <br/> License:{{image.license}} ">
    								<a class="item" ng-show="$ctrl.selected_images[$index].selected">
