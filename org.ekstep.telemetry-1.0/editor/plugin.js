@@ -67,8 +67,13 @@ org.ekstep.contenteditor.basePlugin.extend({
             if(data) instance.service.pluginLifeCycle({ type: 'add', pluginid: data.plugin, pluginver: data.version, objectid: data.instanceId, stage: stageId, containerid: "", containerplugin: "" });
         }, this);
         ecEditor.addEventListener('plugin:error', function(event, data) {
-            var stageId = ecEditor.getCurrentStage() ? ecEditor.getCurrentStage().id : "";
-            if(data) instance.service.error({ "env": "content", "stage": stageId, "action": data.action, "objectid": data.plugin, objecttype: "plugin", "err": data.err, "type": "PORTAL", "data": "", "severity": "error" });
+            var pkgVersion = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId')).pkgVersion;
+            var object = {
+                id: org.ekstep.contenteditor.api.getContext('contentId'),
+                ver: !_.isUndefined(pkgVersion) && pkgVersion.toString() || '0',
+                type: 'Content'
+            }
+            instance.service.error({err: data.err, errtype: 'CONTENT', stacktrace: data.stackTrace || '', object: object, plugin: {id: data.plugin, ver: data.version, category: ""} }) 
         }, this);
     },
     interactEvent: function(type, subtype, target, pluginid, pluginver, objectId) {
