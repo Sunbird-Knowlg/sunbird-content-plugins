@@ -841,7 +841,9 @@ app.controllerProvider.register("MTFRendererController", function($scope, $rootS
         }
       },
       score: partialScore,
-      values: teleValues
+      values: teleValues,
+      noOfCorrectAns: tempCount,
+      totalAns: $scope.qData.option.optionsLHS.length
     }
     if (_.isFunction(callback)) {
       callback(result);
