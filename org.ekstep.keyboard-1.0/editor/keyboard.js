@@ -5,17 +5,15 @@
  */
 'use strict';
 angular.module('keyBoardApp', [])
-    .controller('keyboardCtrl', ['$scope', function($scope) {
+  .controller('keyboardCtrl', ['$scope', function($scope) {
 
-    }])
-    .directive('keyboardConfig', function($rootScope) {
-	return {
-		restrict: 'AE',
-		template: '<div class="ui header">Custom keyboard</div>',
-		link: function(scope, element, attrs) {
-				
-			});
-			
-		}
-	}
-})
+  }])
+  .directive('keyboardConfig', function($rootScope) {
+    return {
+            restrict: 'AE',
+            template: '<div class="ui header">Custom keyboard</div>',
+            link: function(scope, element, attrs) {
+          });
+        }
+    }
+});
