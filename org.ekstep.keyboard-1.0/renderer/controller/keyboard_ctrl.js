@@ -1,7 +1,6 @@
 'use strict';
 
 app.controllerProvider.register("KeyboardCtrl", function($scope) {
-
     $scope.keyboardVisible = false;
     $scope.answerText = undefined;
     $scope.upperCase = true;
@@ -24,12 +23,10 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
         } else if ($scope.config.question.keyboardConfig.keyboardType == 'Device') {
             $scope.keyboardVisible = false;
         }
-
         $scope.safeApply();
     });
     $scope.erasIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.keyboard", "1.0", "renderer/assets/eras_icon.png");
     $scope.langIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.keyboard", "1.0", "renderer/assets/language_icon.png");
-
     $scope.createKeyboard = function(customButtons) {
         $scope.answerText = '';
         $scope.deleteText();
@@ -37,10 +34,8 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
         var asset = undefined;
         var type = "custom";
         var parentDiv = document.getElementById('keyboard');
-
         var keyboardMainKeysParentDiv = document.createElement('div');
         keyboardMainKeysParentDiv.id = "parentDivMainKeyboard";
-
         if (type == "custom") {
             customButtons = customButtons.replace(/ /g, '');
             customButtons = customButtons.split(',');
@@ -48,35 +43,26 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
             var buttons = customButtons.splice(0, customButtons.length);
             var keyHeight;
             var keyWidth;
-
             var specialKeyButtons = ["123", " ", ",", "."];
-
             var firstRowdiv = document.createElement('div');
             firstRowdiv.id = "firstRow";
-
             var secondRowdiv = document.createElement('div');
             secondRowdiv.id = "secondRow";
-
             var thirdRowdiv = document.createElement('div');
             thirdRowdiv.id = "thirdRow";
-
             var fontSize = 3.0;
             var customKeys = '';
             var keysForFirstRow = '';
             var keysForSecondRow = '';
             var keysForThirdRow = '';
             var eachRowLength = parseInt(buttons.length / 2);
-
-
             for (var i = 0; i < buttons.length; i++) {
-
                 if (i < eachRowLength) {
                     keysForFirstRow += '<div class="key_barakhadi" id="' + buttons[i] + '_btn" style="width: ' + keyWidth + 'px"><span>' + buttons[i] + '</span></div>';
                 } else {
                     keysForSecondRow += '<div class="key_barakhadi" id="' + buttons[i] + '_btn" style="width: ' + keyWidth + 'px"><span>' + buttons[i] + '</span></div>';
                 }
             }
-
             for (var i = 0; i < specialKeyButtons.length; i++) {
                 var keyWidth = "41";
 
@@ -93,9 +79,7 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
         keyboardMainKeysParentDiv.appendChild(firstRowdiv);
         keyboardMainKeysParentDiv.appendChild(secondRowdiv);
         keyboardMainKeysParentDiv.appendChild(thirdRowdiv);
-
         parentDiv.appendChild(keyboardMainKeysParentDiv);
-
         var elmnt = document.getElementById("firstRow");
         var divWidth = elmnt.offsetWidth;
         var keyWidth = (divWidth / (buttons.length - eachRowLength)) - 2;
@@ -107,18 +91,14 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
         for (var i = buttons.length - 1; i >= 0; i--) {
             $scope.assignButtonEvent(buttons[i], 25);
         };
-
         for (var i = specialKeyButtons.length - 1; i >= 0; i--) {
             $scope.assignButtonEvent(specialKeyButtons[i] + "MK", 25);
         };
 
         /*Numeric Keyboard*/
-
         var keyboardNumericKeysParentDiv = document.createElement('div');
         keyboardNumericKeysParentDiv.id = "parentDivNumericKeyboard";
-
         customButtons = "1,2,3,4,5,6,7,8,9,0,@,?,!,%,&,*,(,),+,-,÷,×,=";
-
         if (type == "custom") {
             customButtons = customButtons.replace(/ /g, '');
             customButtons = customButtons.split(',');
@@ -126,38 +106,28 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
             var buttons = customButtons.splice(0, customButtons.length);
             var keyHeight;
             var keyWidth;
-
             var specialKeyButtons = ["<", ">", " ", ",", "."];
-
             var firstRowdiv = document.createElement('div');
             firstRowdiv.id = "firstRow";
-
             var secondRowdiv = document.createElement('div');
             secondRowdiv.id = "secondRow";
-
             var thirdRowdiv = document.createElement('div');
             thirdRowdiv.id = "thirdRow";
-
             var fontSize = 3.0;
             var customKeys = '';
             var keysForFirstRow = '';
             var keysForSecondRow = '';
             var keysForThirdRow = '';
             var eachRowLength = parseInt(buttons.length / 2);
-
-
             for (var i = 0; i < buttons.length; i++) {
-
                 if (i < eachRowLength) {
                     keysForFirstRow += '<div class="key_barakhadi_numeric" id="' + buttons[i] + '_btn" style="width: ' + keyWidth + 'px"><span>' + buttons[i] + '</span></div>';
                 } else {
                     keysForSecondRow += '<div class="key_barakhadi_numeric" id="' + buttons[i] + '_btn" style="width: ' + keyWidth + 'px"><span>' + buttons[i] + '</span></div>';
                 }
             }
-
             for (var i = 0; i < specialKeyButtons.length; i++) {
                 var keyWidth = "41";
-
                 if (specialKeyButtons[i] == " ") {
                     keysForThirdRow += '<div id="languageIconDiv"><img id="languageIconImage" src=" ' + $scope.langIcon + ' ">' + specialKeyButtons[i] + '</img></div>';
                     keysForThirdRow += '<div class="spaceBar" style=" font-size:' + fontSize + 'vw;" id="' + specialKeyButtons[i] + '_btn"><span>' + specialKeyButtons[i] + '</span>&nbsp;</div>';
@@ -169,39 +139,30 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
             secondRowdiv.innerHTML = '' + keysForSecondRow + '';
             thirdRowdiv.innerHTML = '' + keysForThirdRow + '';
         }
-
         keyboardNumericKeysParentDiv.appendChild(firstRowdiv);
         keyboardNumericKeysParentDiv.appendChild(secondRowdiv);
         keyboardNumericKeysParentDiv.appendChild(thirdRowdiv);
-
         parentDiv.appendChild(keyboardNumericKeysParentDiv);
-
         var elmnt = document.getElementById("firstRow");
         var divWidth = elmnt.offsetWidth;
         var keyWidth = (divWidth / (buttons.length - eachRowLength)) - 2;
         $(".key_barakhadi_numeric").css('width', '37px');
-
         $("#parentDivNumericKeyboard").hide();
-
         $("#languageIconDiv").click(function() {
             $("#parentDivMainKeyboard").show();
             $("#parentDivNumericKeyboard").hide();
         });
-
         $("#123MK_btn").click(function() {
             $("#parentDivMainKeyboard").hide();
             $("#parentDivNumericKeyboard").show();
         });
-
         for (var i = buttons.length - 1; i >= 0; i--) {
             $scope.assignButtonEvent(buttons[i], 25);
         };
         for (var i = specialKeyButtons.length - 1; i >= 0; i--) {
             $scope.assignButtonEvent(specialKeyButtons[i], 25);
         };
-
     }
-
     $scope.assignButtonEvent = function(id, limit) {
         var btn = document.getElementById(id + "_btn");
         var instance = this;
@@ -209,7 +170,6 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
             btn.addEventListener("click", function(event) {
                 if (event.target.innerText.endsWith("MK") == true) {
                     event.target.innerText = " ";
-
                 }
                 if (event.target.innerText == " ") {
                     $scope.answerText = $scope.answerText + " ";
@@ -217,11 +177,9 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
                 } else {
                     $scope.addLetter(event);
                 }
-
             });
         }
     }
-
     $scope.addLetter = function(event) {
         if (!_.isUndefined($scope.answerText)) {
             if (event.target.innerText != '123')
@@ -231,9 +189,7 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
                 $scope.answerText = event.target.innerText;
         }
         $scope.safeApply();
-
     }
-
     $scope.deleteText = function() {
         div = document.createElement('div');
         div.id = "parentDivEraser";
@@ -244,12 +200,9 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
         var eraserImageElement = document.createElement("img");
         eraserImageElement.setAttribute("id", "eraserImg");
         eraserImageElement.setAttribute("src", $scope.erasIcon);
-
         eraser.appendChild(eraserImageElement);
-
         eraserParent.appendChild(eraser);
         div.appendChild(eraserParent);
-
         var parentDiv = document.getElementById(Renderer.divIds.gameArea);
         parentDiv.insertBefore(div, parentDiv.childNodes[0]);
         div.addEventListener("click", function() {
@@ -271,22 +224,18 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
         }
         $scope.safeApply();
     }
-
     $scope.numericKeys = function() {
         $scope.upperCase = false;
         $scope.keyboard = $scope.keyboardArr['numeric'];
     }
-
     $scope.deleteLetter = function() {
         $scope.answerText = $scope.answerText.substring(0, $scope.answerText.length - 1);
     }
-
     $scope.hideKeyboard = function() {
         $scope.keyboardVisible = false;
         $("#erasedDiv").hide();
         $scope.callback($scope.answerText);
     }
-
 });
 
 //# sourceURL=keyboardCtrl.js

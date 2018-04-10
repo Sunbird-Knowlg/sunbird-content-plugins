@@ -12,8 +12,7 @@
     var instance = this;
     this._templatePath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(this._manifest.id, this._manifest.ver, "renderer/templates/keyboard.html");
     this.controllerPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource(this._manifest.id, this._manifest.ver, "renderer/controller/keyboard_ctrl.js");
-    org.ekstep.service.controller.loadNgModules(this._templatePath, this.controllerPath);
-         
+    org.ekstep.service.controller.loadNgModules(this._templatePath, this.controllerPath);     
   }
 });
 //#sourceURL=keyboardPlugin.js
