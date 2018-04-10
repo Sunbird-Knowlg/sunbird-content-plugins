@@ -6,6 +6,9 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
     $scope.upperCase = true;
     $scope.lowerCase = false;
     $scope.answerText = '';
+    $scope.erasIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.keyboard", "1.0", "renderer/assets/eras_icon.png");
+    $scope.langIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.keyboard", "1.0", "renderer/assets/language_icon.png");
+
     EkstepRendererAPI.addEventListener("renderer:keyboard:invoke", function(e, callback) {
         $scope.callback = callback;
         $scope.config = e.target;
@@ -25,8 +28,7 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
         }
         $scope.safeApply();
     });
-    $scope.erasIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.keyboard", "1.0", "renderer/assets/eras_icon.png");
-    $scope.langIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.keyboard", "1.0", "renderer/assets/language_icon.png");
+    
     $scope.createKeyboard = function(customButtons) {
         $scope.answerText = '';
         $scope.deleteText();
@@ -163,6 +165,7 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
             $scope.assignButtonEvent(specialKeyButtons[i], 25);
         };
     }
+
     $scope.assignButtonEvent = function(id, limit) {
         var btn = document.getElementById(id + "_btn");
         var instance = this;
@@ -180,6 +183,7 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
             });
         }
     }
+
     $scope.addLetter = function(event) {
         if (!_.isUndefined($scope.answerText)) {
             if (event.target.innerText != '123')
@@ -190,6 +194,7 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
         }
         $scope.safeApply();
     }
+
     $scope.deleteText = function() {
         div = document.createElement('div');
         div.id = "parentDivEraser";
@@ -212,6 +217,7 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
         });
         $("#erasedDiv").show();
     }
+
     $scope.changeCase = function() {
         if ($scope.upperCase == true) {
             $scope.keyboardArr.english = $scope.englishKeyboard['lowerCase'];
@@ -224,13 +230,16 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
         }
         $scope.safeApply();
     }
+
     $scope.numericKeys = function() {
         $scope.upperCase = false;
         $scope.keyboard = $scope.keyboardArr['numeric'];
     }
+
     $scope.deleteLetter = function() {
         $scope.answerText = $scope.answerText.substring(0, $scope.answerText.length - 1);
     }
+
     $scope.hideKeyboard = function() {
         $scope.keyboardVisible = false;
         $("#erasedDiv").hide();
