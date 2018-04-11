@@ -108,7 +108,7 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     EkstepRendererAPI.dispatchEvent("renderer:keyboard:invoke", JSON.parse(questionConfig), $scope.callbackFromKeyboard);
   }
   $scope.callbackFromKeyboard = function(ans) {
-    console.log("Answer from keyboard", ans);
+    $("#qs-ftb-text").show();
     $("#ans-field1").val(ans);
   }
   /**

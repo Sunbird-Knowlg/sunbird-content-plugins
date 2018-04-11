@@ -1,11 +1,12 @@
 <div ng-controller="KeyboardCtrl">
   <div ng-show="keyboardVisible">
     <div class="qBoxArea" ng-show="keyboardVisible" ng-click="hideKeyboard()">
-      <div class="question" ng-click="hideKeyboard()">{{question}}</div>	
+      <div class="question" ng-click="hideKeyboard()">{{question}}</div>  
     </div>
     <div class="textBoxArea">
-      <input type="text" id="txtfillblank1" class="ansField" placeholder="Enter answer" ng-model="answerText" autofocus />
+      <input type="text" id="txtfillblank1" class="ansField" placeholder="Enter answer" ng-model="answerText" disabled autofocus />
     </div>
+
     <div id="keyboard" class="keyboardArea" ng-show="keyboardVisible">
     </div>
   </div>

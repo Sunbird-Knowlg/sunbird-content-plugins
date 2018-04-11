@@ -1,3 +1,4 @@
+
 .ansField{
     width: 75%;
     margin-left: 12%;
@@ -5,16 +6,17 @@
     margin-top: 17%;
     background: #ebebeb;
 }
+
 .qBoxArea{
     font-weight: bold;
     background-color: white;
-    height: 40%;
+    /* height: 40%; */
     position: absolute;
     z-index: 10;
     text-align: center;
-    margin-left: 37%;
-    margin-top: 2%;
-    width: 27%;
+    margin-left: 0%;
+    margin-top: 0;
+    width: 100%;
 }
 .textBoxArea{
     position: absolute;
@@ -22,6 +24,7 @@
     z-index: 20;
     width: 100%;
 }
+
 .keyboardArea{
     /*height: 50%;
     position: fixed;
@@ -34,22 +37,26 @@
     margin-top: 7%;
     font-weight: bold;
 }
+
+
 #parentDivMainKeyboard,
 #parentDivNumericKeyboard {
-    width: 83%;
+    width: 80%;
     height: 100%;
     top: 62%;
     position: absolute;
-    left: 6%;
+    left: 10%;
     font-size: 2.5vw;
     z-index: 10;
 }
+
 .key_barakhadi:active,
 .key_barakhadi_numeric:active {
     background-color: rgb(215, 215, 215);
     box-shadow: 0 5px rgb(215, 215, 215);
     transform: translateY(-5px);
 }
+
 .speacial_keys {
     float: left;
     margin: 2px;
@@ -57,6 +64,7 @@
     text-align: center;
     width: 5.5%;
 }
+
 .key_barakhadi,
 .key_barakhadi_numeric {
     float: left;
@@ -64,6 +72,7 @@
     vertical-align: middle;
     text-align: center;
 }
+
 .key_barakhadi_last_key {
     position: relative;
     clear: left;
@@ -73,6 +82,7 @@
     text-align: center;
     height: 38px;
 }
+
 .spaceBar {
     float: left;
     border: none;
@@ -99,6 +109,7 @@
     height: 11%;
     position: relative;
 }
+
 #thirdRow {
     width: 100%;
     top: 2%;
@@ -110,21 +121,25 @@
     flex-wrap: wrap;
     justify-content: center;
 }
+
+
 #parentDivEraser {
     width: 80%;
     height: 100%;
-    top: 63%;
+    top: 55%;
     position: absolute;
-    left: 12%
+    left: 10%;
 }
+
 #erasedDivParent {
     position: absolute;
     height: 6%;
     width: 5%;
-    left: 95%;
-    top: 14%;
+    left: 97%;
+    top: 13%;
     z-index: 20;
 }
+
 #erasedDiv {
     width: 100%;
     height: 100%;
@@ -136,19 +151,23 @@
     width: 100%;
     height: 100%;
 }
+
 #languageIconDiv {
     float: left;
     padding: 0.35em 0.1em 0.15em 0;
     height: 75%;
     width: 6%;
 }
+
 #languageIconImage{
     width: 100%;
     height: 100%;
 }
+
 .speacial_keys {
     display: inline-block;
 }
+
 .speacial_keys>span {
     vertical-align: middle;
 }
