@@ -36,11 +36,11 @@
 }
 #parentDivMainKeyboard,
 #parentDivNumericKeyboard {
-    width: 80%;
+    width: 83%;
     height: 100%;
     top: 62%;
     position: absolute;
-    left: 10%;
+    left: 6%;
     font-size: 2.5vw;
     z-index: 10;
 }
@@ -113,9 +113,9 @@
 #parentDivEraser {
     width: 80%;
     height: 100%;
-    top: 62%;
+    top: 63%;
     position: absolute;
-    left: 10%;
+    left: 12%
 }
 #erasedDivParent {
     position: absolute;
