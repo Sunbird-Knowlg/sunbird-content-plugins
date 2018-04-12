@@ -156,11 +156,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div ng-show="questions.length == 0">
-                                <p>No Data Found Redefine your search filters!.</p>
-                                Please click on "Create question" button to create new question
-                            </div>
-                            <div class="load-more-assets-warning-msg endpage" ng-show="questions.length == 200">
+                            <div class="load-more-assets-warning-msg endpage" ng-show="questions.length == 200 || resultNotFound == 0">
                                 <img class="ui centered tiny image" src="{{contentNotFound}}">
                                 <p>Didn’t find what you were looking for? Try <a href="#">search</a> for something more specific
                                 </p>
@@ -214,7 +210,7 @@
             <br> Redefine your search filters!
         </div>
     </div>
-    <div class="actions button-actions">
+    <div class="actions button-actions qs-footer-action">
         <button class="ui blue left floated button" ng-show="!isQuestionSetConfig" id="create-question-button" ng-click="createQuestion();generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Create question</button>
         <div class="ui buttons">
             <button class="ui orange button" id="add-more-ques-button" ng-click="showSelectedQue(0);searchQuestions();isQuestionSetConfig = false;generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event);closeConfigForm();previewItem(questions[0], true);" ng-show="isQuestionSetConfig" type="button">Add More Questions</button>
