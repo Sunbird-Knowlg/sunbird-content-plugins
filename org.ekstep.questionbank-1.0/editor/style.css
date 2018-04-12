@@ -102,12 +102,12 @@
 }
 
 .qb-question-bank .content.wizard {
-  height: 99vh;
+  height: 80vh;
   padding: 0;
 }
 
 .qb-questions-list {
-  height: 60vh;
+  height: auto;
 }
 
 .qb-list-container > .ui.divided.items>.item:first-child {
@@ -130,7 +130,7 @@
 
 
 .qb-list-container {
-  max-height: 70vh;
+  max-height: auto;
   overflow-y: scroll;
 }
 
@@ -140,8 +140,9 @@ padding-right: : 1% !important;
 }
 
 .qb-question-list-container {
-  max-height: 57vh;
-  overflow-y: scroll;
+ height: 56vh;
+    padding-bottom: 15%;
+    overflow-y: scroll;
 }
 
 .quesSelector {
@@ -171,7 +172,7 @@ padding-right: : 1% !important;
 }
 .preview-body{
   text-align: center;
-  padding: 2rem 0;
+  padding: 1rem 0;
   overflow-x: auto;
 }
 .filterField{
@@ -180,7 +181,6 @@ padding-right: : 1% !important;
 
 .preview-and-config{
   border: 1px solid #ccc;
-  padding: 1rem;
   overflow: auto;
 }
 .button-actions{
@@ -204,4 +204,15 @@ padding-right: : 1% !important;
 }
 .endpage{
   text-align: center;
+}
+/*fix footer in bottom of screen*/
+.qs-footer-action{
+  height: 60px;
+    position: fixed;
+    bottom: 0%;
+    width: 100%;
+}
+/*increase scroll in question bank question list*/
+.row.qb-question-list-container::-webkit-scrollbar-thumb{
+  height: 70px;
 }
