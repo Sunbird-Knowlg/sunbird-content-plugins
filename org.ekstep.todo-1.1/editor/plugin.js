@@ -251,7 +251,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 // Append empty message
                 ecEditor.jQuery(todoThreadsWrapperDiv).html(emptyMessage);
             }
-            //ecEditor.jQuery("#todoCommentsLoader").removeClass('active');
+            ecEditor.jQuery("#todoCommentsLoader").removeClass('active');
         }
     },
     /**
