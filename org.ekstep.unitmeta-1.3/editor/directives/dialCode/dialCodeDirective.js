@@ -37,6 +37,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                     org.ekstep.services.stateService.setState('invaliddialCodeMap', nodeId, this.dialcodes);
                     $scope.status = "failure";
                 }
+                ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
                 $scope.editFlag = true;
             } else{
                 $scope.editFlag = false;
