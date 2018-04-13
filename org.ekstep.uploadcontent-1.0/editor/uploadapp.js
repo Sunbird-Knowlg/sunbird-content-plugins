@@ -86,13 +86,56 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
             case 'webm':
                 return 'video/webm';
             default:
-                if ($scope.validateYoutubeURL(fileName)) {
-                    return 'video/x-youtube';
-                }
-                return '';
+               return $scope.validateUploadURL(fileName);
         }
     }
+    $scope.validateUploadURL = function(url){
+            var response = ''
+            if($scope.isValidURL(url)){
+                if($scope.isWhitelistedURL(url)){
+                    if($scope.validateYoutubeURL(url)){
+                        response = 'video/x-youtube';
+                    } else {
+                        response =  'x-url';
+                    }
+                }
+            }
+            return response
+    }
+    $scope.isValidURL = function(url){
+        var res = url.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+        if(res == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    $scope.isWhitelistedURL = function(url){
+        var domainList = $scope.getWhitelistedDomains();
+        var isWhitelistedURL = false;
+        var hostName = $scope.getHostName(url);
+        for (let domain of domainList){
+            if(hostName[2] === domain || (hostName[1]+hostName[2]) === domain ){
+                isWhitelistedURL = true;
+            }
+        }
+        return isWhitelistedURL;
+    }
 
+    $scope.getHostName = function(url){ 
+        var match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+        if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
+            return match;
+        }
+        else {
+            return null;
+        }
+    }
+    $scope.getWhitelistedDomains = function(){
+        var domainList = [], domains = ecEditor.getConfig('extContWhitelistedDomains');
+        domainList = domains.split(',');
+        return domainList;
+    }
     $scope.validateYoutubeURL = function(fileName) {
         var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
         var match = fileName.match(regExp);
