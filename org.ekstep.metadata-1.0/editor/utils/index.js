@@ -23,21 +23,15 @@ function invokeDialCode() {
 }
 
 /**
- * @description         - Which is used to convert to data types
+ * @description         - Which is used to convert to data to target data type format
  */
 function convertToDataType(targetType, data) {
     switch (targetType.toUpperCase()) {
         case 'LIST':
-            if (_.isString(data)) {
-                return data.split(",");
-            } else {
-                return data
-            }
+            return _.isString(data) ? data.split(",") : data;
             break;
         case 'TEXT':
-            if (_.isNumber(data)) {
-                return data.toString();
-            }
+            return (_.isArray(data) || _.isNumber(data)) ? data.toString() : data;
             break;
     }
 }
@@ -97,7 +91,6 @@ function getUpdatedMetadata(currentMetadata, originalMetadata, fields) {
     if (metadata.keywords) {
         metadata.keywords = getArrayOfKeywords(metadata.keywords);
     }
-
     // Passing mandatory fields when save is invoked
     !metadata['name'] && (metadata['name'] = originalMetadata['name']);
     !metadata['contentType'] && (metadata['contentType'] = originalMetadata['contentType']);

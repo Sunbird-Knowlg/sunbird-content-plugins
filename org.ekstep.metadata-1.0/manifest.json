@@ -17,7 +17,8 @@
             { "type": "js", "src": "editor/config.js" },
             { "type": "js", "src": "editor/directives/appIcon/appIcon.js" },
             { "type": "css", "src": "editor/css/contentmetaform.css" },
-            { "type": "js", "src": "editor/utils/index.js" }
+            { "type": "js", "src": "editor/utils/index.js" },
+            { "type": "js", "src": "editor/directives/dialCode/dialCodeDirective.js" }
         ]
     }
 }

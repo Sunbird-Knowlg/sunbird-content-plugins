@@ -154,10 +154,6 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         });
         $scope.showImageIcon = true;
         $scope.getPath();
-        ecEditor.dispatchEvent("editor:update:dialcode", {
-            data: org.ekstep.services.collectionService.getActiveNode(),
-            contentId: org.ekstep.contenteditor.api.getContext('contentId')
-        });
         $scope.$safeApply();
     }
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:TextBookUnit', $scope.onNodeSelect);

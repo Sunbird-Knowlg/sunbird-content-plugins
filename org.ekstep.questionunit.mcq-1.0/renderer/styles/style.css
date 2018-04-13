@@ -76,7 +76,7 @@ header.qc-long-text-header {
     cursor: pointer;
     padding: 5%;
     display: list-item;
-    min-height: : 15vh;
+    min-height: 15vh;
     border-left: 7px solid transparent;
 }
 
@@ -171,6 +171,7 @@ img.qc-option-image {
     margin-top: 0%;
     margin-left: -5%;
     height: 56px;
+    object-fit: scale-down;
 }
 
 img.qc-vertical-option-image {

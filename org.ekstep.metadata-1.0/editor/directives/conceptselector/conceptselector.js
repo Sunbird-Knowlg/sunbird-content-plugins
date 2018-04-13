@@ -3,13 +3,13 @@
  * @author Manjunath Davanam <manjunathd@ilimi.in>
  */
 
-formApp.directive('concetpselector', function() {
+formApp.directive('conceptselector', function() {
     const manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.metadata");
 
     var conceptController = ['$scope', '$rootScope', '$controller', function($scope, $rootScope, $controller) {
         var selectedConcepts = [];
         $scope.contentMeta = $scope.$parent.contentMeta;
-        $scope.contentMeta.conceptData = $scope.$parent.contentMeta.conceptData || '(0) concepts selected';
+        $scope.conceptSelectorMessage = $scope.contentMeta.concepts ? '(' + $scope.contentMeta.concepts.length + ') concepts selected' : '(0) concepts selected'
         $scope.fieldConfig = $scope.config;
         if ($scope.contentMeta.concepts) {
             if ($scope.contentMeta.concepts.length)
@@ -23,7 +23,7 @@ formApp.directive('concetpselector', function() {
                 selectedConcepts: selectedConcepts,
                 callback: function(data) {
                     console.log("Length", data)
-                    $scope.contentMeta.conceptData = '(' + data.length + ') concepts selected';
+                    $scope.conceptSelectorMessage = '(' + data.length + ') concepts selected';
                     $scope.contentMeta.concepts = _.map(data, function(concept) {
                         return {
                             "identifier": concept.id,
