@@ -70,7 +70,6 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
     });
 
     $scope.detectMimeType = function(fileName) {
-
         var extn = fileName.split('.').pop()
         switch (extn) {
             case 'pdf':
@@ -89,6 +88,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                return $scope.validateUploadURL(fileName);
         }
     }
+
     $scope.validateUploadURL = function(url){
             var response = ''
             if($scope.isValidURL(url)){
@@ -102,6 +102,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
             }
             return response
     }
+
     $scope.isValidURL = function(url){
         var res = url.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
         if(res == null) {
@@ -110,6 +111,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
             return true;
         }
     }
+
     $scope.isWhitelistedURL = function(url){
         var domainList = $scope.getWhitelistedDomains();
         var isWhitelistedURL = false;
@@ -131,11 +133,13 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
             return null;
         }
     }
+
     $scope.getWhitelistedDomains = function(){
         var domainList = [], domains = ecEditor.getConfig('extContWhitelistedDomains');
         domainList = domains.split(',');
         return domainList;
     }
+    
     $scope.validateYoutubeURL = function(fileName) {
         var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
         var match = fileName.match(regExp);
