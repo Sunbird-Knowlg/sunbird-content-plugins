@@ -20,6 +20,7 @@ angular.module('createquestionapp', [])
         $scope.selectedQueIndex;
         $scope.grades;
         $scope.languages;
+        $scope.resultNotFound = 0;
         $scope.versions = [1, 2];
         $scope.framework  = ecEditor.getContext('framework');
         $scope.difficultyLevels = ['All', 'Easy', 'Medium', 'Difficult'];
@@ -129,6 +130,7 @@ angular.module('createquestionapp', [])
             ecEditor.getService('assessment').getQuestions(data, function(err, resp) {
                 if (!err) {
                     $scope.questions = resp.data.result.items;
+                    $scope.resultNotFound = resp.data.result.count;
                     for (var i = 0; i < $scope.selectedQuestions.length; i++) {
                         for (var j = 0; j < $scope.questions.length; j++) {
                             if ($scope.selectedQuestions[i].identifier == $scope.questions[j].identifier) {
