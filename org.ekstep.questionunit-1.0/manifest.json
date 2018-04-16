@@ -10,7 +10,7 @@
         "dependencies": [
             {
                 "type": "js",
-                "src": "editor/libs/ckeditor.js"
+                "src": "editor/libs/ck-editor/ckeditor.js"
             }
         ],
         "help": {

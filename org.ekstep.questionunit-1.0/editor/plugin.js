@@ -8,7 +8,7 @@
 org.ekstep.contenteditor.questionUnitPlugin = org.ekstep.contenteditor.basePlugin.extend({
 	type: "org.ekstep.contenteditor.questionUnitPlugin",
 	initialize: function() {
-		CKEDITOR.basePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/libs/");
+		CKEDITOR.basePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/libs/ck-editor/");
 	}
 	// TODO: Interfaces
 });
