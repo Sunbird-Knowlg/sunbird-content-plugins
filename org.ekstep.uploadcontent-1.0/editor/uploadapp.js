@@ -90,17 +90,17 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
     }
 
     $scope.validateUploadURL = function(url){
-            var response = ''
-            if($scope.isValidURL(url)){
-                if($scope.isWhitelistedURL(url)){
-                    if($scope.validateYoutubeURL(url)){
-                        response = 'video/x-youtube';
-                    } else {
-                        response =  'x-url';
-                    }
+        var response = ''
+        if($scope.isValidURL(url)){
+            if($scope.isWhitelistedURL(url)){
+                if($scope.validateYoutubeURL(url)){
+                    response = 'video/x-youtube';
+                } else {
+                    response =  'x-url';
                 }
             }
-            return response
+        }
+        return response
     }
 
     $scope.isValidURL = function(url){
@@ -128,8 +128,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
         var match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
         if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
             return match;
-        }
-        else {
+        } else {
             return null;
         }
     }
