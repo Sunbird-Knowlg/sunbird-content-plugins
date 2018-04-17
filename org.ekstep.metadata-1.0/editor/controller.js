@@ -219,7 +219,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var fixedLayout = [];
         var dynamicLayout = [];
         _.map($scope.fields, function(field) {
-            if (field.code === 'dialcode') { invokeDialCode() }
             if (field.validation) {
                 _.forEach(field.validation, function(value, key) {
                     if (value.type === 'regex') {
@@ -366,6 +365,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 useLabels: labels,
                 forceSelection: forceSelection
             });
+            _.find($scope.fields, ['code', "dialcode"]) && invokeDialCode();
+            $scope.$safeApply();
         }, 0)
     }
 
