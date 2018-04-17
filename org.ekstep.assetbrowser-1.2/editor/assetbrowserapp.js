@@ -1,8 +1,9 @@
 'use strict';
-angular.module('assetbrowserapp', ['angularAudioRecorder']).config(['recorderServiceProvider', function(recorderServiceProvider) {
+angular.module('assetbrowserapp', ['angularAudioRecorder', 'angular-inview']).config(['recorderServiceProvider', function(recorderServiceProvider) {
 
     recorderServiceProvider.forceSwf(false);
-    var lameJsUrl = ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource("org.ekstep.assetbrowser", "1.0", "editor/recorder/lib2/lame.min.js");
+    var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.assetbrowser");
+    var lameJsUrl = ecEditor.getConfig('absURL') + ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/recorder/lib2/lame.min.js");
     var config = {
         lameJsUrl: lameJsUrl,
         bitRate: 92
@@ -11,7 +12,7 @@ angular.module('assetbrowserapp', ['angularAudioRecorder']).config(['recorderSer
     recorderServiceProvider.withMp3Conversion(true, config);
 }]);
 
-angular.module('assetbrowserapp',['angular-inview']).controller('browsercontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
+angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
     var audiodata = {},
         assetMedia,
         assetdata = {},
