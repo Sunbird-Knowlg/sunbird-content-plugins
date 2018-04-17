@@ -375,8 +375,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      *              - Which partions the fixedLayout and dynamic layout section fields
      */
     $scope.init = function() {
-        ecEditor.addEventListener('metadata:form:onsuccess', $scope.success, $scope);
-        ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
+        !EventBus.hasEventListener('metadata:form:onsuccess') && ecEditor.addEventListener('metadata:form:onsuccess', $scope.success, $scope);
+        !EventBus.hasEventListener('metadata:form:oncancel') && ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
         var callbackFn = function(config) {
             $scope.fields = config.fields;
             $scope.tempalteName = config.template;
