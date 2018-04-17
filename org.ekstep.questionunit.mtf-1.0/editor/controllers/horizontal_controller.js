@@ -71,7 +71,8 @@ angular.module('mtfApp', [])
           'audio': '',
           'hint': '',
           'mapIndex': 3
-        }]
+        }],
+        'questionCount': 0
       }
     };
     $scope.questionMedia = {};
@@ -102,6 +103,9 @@ angular.module('mtfApp', [])
       }
       $scope.$parent.$on('question:form:val', function(event) {
         if ($scope.formValidation()) {
+          /*if dynamic question assign how many questions are create that count to $scope.mcqFormData.questionCount
+          Or else assign 1*/
+          $scope.mtfFormData.questionCount = 1;
           $scope.$emit('question:form:valid', $scope.mtfFormData);
         } else {
           $scope.$emit('question:form:inValid', $scope.mtfFormData);

@@ -44,7 +44,8 @@ angular.module('mcqApp', [])
         'audio': '',
         'hint': '',
         'isCorrect': false
-      }]
+      }],
+      'questionCount':0
     };
     $scope.oHint = [];
     $scope.questionMedia = {};
@@ -88,6 +89,9 @@ angular.module('mcqApp', [])
       }
       $scope.$parent.$on('question:form:val', function(event) {
         if ($scope.formValidation()) {
+          /*if dynamic question assign how many questions are create that count to $scope.mcqFormData.questionCount
+          Or else assign 1*/
+          $scope.mcqFormData.questionCount = 1;
           $scope.$emit('question:form:valid', $scope.mcqFormData);
         } else {
           $scope.$emit('question:form:inValid', $scope.mcqFormData);

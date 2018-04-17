@@ -19,7 +19,8 @@ angular.module('ftbApp', [])
     $scope.ftbFormData = {
       'question': { 'text': '', 'image': '', 'audio': '', 'hint' : '' },
       'answer': [],
-      'parsedQuestion': { 'text': '', 'image': '', 'audio': '', 'hint' : ''}
+      'parsedQuestion': { 'text': '', 'image': '', 'audio': '', 'hint' : ''},
+      'questionCount': 0
     };
 
     var questionInput = CKEDITOR.replace('ftbQuestion', {
@@ -46,6 +47,9 @@ angular.module('ftbApp', [])
           return a.toLowerCase().trim();
         });
         if ($scope.formValidation()) {
+          /*f dynamic question assign how many questions are create that count to $scope.mcqFormData.questionCount
+          Or else assign 1*/
+          $scope.ftbFormData.questionCount = 1;
           $scope.ftbFormData.parsedQuestion.text = $scope.ftbFormData.question.text.replace(/\[\[.*?\]\]/g, function(a, b) {
             index = index + 1;
             return '<input type="text" class="ans-field" id=ans-field' + index + '>';

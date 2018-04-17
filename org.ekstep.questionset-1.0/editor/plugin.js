@@ -124,9 +124,10 @@ org.ekstep.contenteditor.basePlugin.extend({
     return fabricGroup;
   },
   addQS: function(event, dataObj) {
-
     var instance = this;
     var questions = [];
+    //Getting numberf questions for assessment summary : testing purpose
+    instance.getSummary(dataObj);
     if (_.isArray(dataObj.data.data)) {
       dataObj.data.data.forEach(function(question) {
         questions.push(question);
@@ -306,6 +307,19 @@ org.ekstep.contenteditor.basePlugin.extend({
       callback: callback,
       data: data
     });
+  },
+  getSummary: function(dataObj) {
+    var summary = 0;
+    if (_.isArray(dataObj.data.data)) {
+      dataObj.data.data.forEach(function(question) {
+        console.log(question.body);
+        if(question.body != undefined){
+        var questionCount = JSON.parse(question.body).data.config.questionCount == undefined ? 1 : JSON.parse(question.body).data.config.questionCount;
+        summary = summary + parseInt(questionCount);
+        }
+      });
+    }
+    return summary;
   }
 });
 //# sourceURL=questionsetPlugin.js

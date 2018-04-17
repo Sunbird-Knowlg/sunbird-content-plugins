@@ -326,7 +326,7 @@
       }
 
       ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'question-meta-save', subType: 'questions', framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: false, metadata: ctrl.questionMetaData})
-
+      //ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup1", { action: 'question-meta-save', subType: 'questions', framework: "NCF", rootOrgId: "*", type: "content", popup: false, metadata: ctrl.questionMetaData });
   }
 
   ctrl.saveQuestion = function(assessmentId, data) {
@@ -364,10 +364,10 @@
       var questionFormData = {};
       var data = {}; // TODO: You have to get this from Q.Unit plugin(getData())
       data.plugin = ctrl.selectedTemplatePluginData.plugin;
-      data.data = ctrl.questionCreationFormData; //{"question":ctrl.questionCreationFormData.question.text,"options":ctrl.questionCreationFormData.options};   
-     // var metadataObj = { category: ctrl.category, title: ctrl.questionData.questionTitle, language: [ctrl.questionData.qcLanguage], qlevel: ctrl.questionData.qcLevel, gradeLevel: ctrl.questionData.qcGrade, concepts: ctrl.selectedConceptsData, description: ctrl.questionData.questionDesc, max_score: ctrl.questionData.questionMaxScore };
+      data.data = ctrl.questionCreationFormData; 
+
       var metadataObj = { category: ctrl.category, title:  ctrl.questionMetaData.name, language: [ ctrl.questionMetaData.medium], qlevel:  ctrl.questionMetaData.level, gradeLevel:  ctrl.questionMetaData.gradeLevel, concepts:  ctrl.questionMetaData.concepts, description:  ctrl.questionMetaData.description, max_score:  ctrl.questionMetaData.max_score };
-      data.config = { "metadata": metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": ctrl.questionData.isPartialScore, "layout": ctrl.questionData.templateType, "isShuffleOption" : ctrl.questionData.isShuffleOption};
+      data.config = { "metadata": metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": ctrl.questionData.isPartialScore, "layout": ctrl.questionData.templateType, "isShuffleOption" : ctrl.questionData.isShuffleOption, "questionCount": ctrl.questionCreationFormData.questionCount};
       data.media = ctrl.questionCreationFormData.media;
       questionFormData.data = data;
       var bodyData = '';
