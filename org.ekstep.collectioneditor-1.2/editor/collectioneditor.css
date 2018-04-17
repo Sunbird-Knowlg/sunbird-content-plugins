@@ -57,7 +57,7 @@ body {
 }
 
 #contents-pane {
-    height: 90vh;
+    height: calc(100vh - 97px);
     padding: 0;
     overflow-y: auto;
     padding-left: 2px;
@@ -329,6 +329,7 @@ span.fancytree-expander {
     border: solid 1px #dedede;
     line-height: 1.3;
     color: #434343;
+    z-index: 999;
 }
 
 .ui-menu.ui-widget.ui-widget-content kbd {
@@ -684,4 +685,8 @@ ul.fancytree-container>li>ul {
     top: 40%;
     position: relative;
     height: 20%;
+}
+
+.margin-none {
+    margin: 0!important;
 }

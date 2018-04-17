@@ -9,4 +9,4 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
     }	
 });
-//# sourceURL=textbookMeta.js
+//# sourceURL=contentMeta.js

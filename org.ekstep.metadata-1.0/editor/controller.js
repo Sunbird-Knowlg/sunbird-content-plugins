@@ -50,6 +50,18 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.isNew = true;
 
+
+    /**
+     * 
+     */
+    $scope.editMode = true;
+
+
+    /**
+     * 
+     */
+    $scope.headerMessage = 'Edit Details'
+
     /**
      * @description          - Which is used to dispatch an event.
      * 
@@ -90,8 +102,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.onConfigChange = function(object) {
         if (object.field) {
             var type = (object.field.inputType == 'select' || object.field.inputType == 'multiselect') ? 'change' : 'click'
-            object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: object.field.code }, $scope.manifest);
-        }!object.form.$valid && $scope.updateErrorMessage(object.form);
+            object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: {id: object.field.code, type:"field", ver:"" }}, $scope.manifest);
+        };
+        var validationStatus = $scope.isValidInputs(object);
+        !validationStatus && $scope.updateErrorMessage(object.form);
         $scope.updateForm(object);
     }
 
@@ -234,7 +248,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             id: "save",
             type: 'click',
             subtype: 'button',
-            target: 'save'
+            target: {id:'save',type:"button",ver:""}
         }, $scope.manifest);
         $scope.isSubmit = true;
         var validationStatus = $scope.isValidInputs(object);
@@ -271,7 +285,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @description             - Which is used to show an error message to resepective field 
      */
     $scope.updateErrorMessage = function(form) {
-        if ($scope.metaForm.$valid) return
         var errorKeys = undefined;
         _.forEach($scope.fields, function(value, key) {
             if (form[value.code] && form[value.code].$invalid) {
@@ -300,7 +313,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.cancel = function() {
         // Note: Reset the all selected fields (If required)
-        logTelemetry({ id: "cancel", type: 'click', subtype: 'button', target: 'close' }, $scope.manifest);
+        logTelemetry({ id: "cancel", type:'click', subtype: 'button', target:{id:'close',type:"button", ver:"" }}, $scope.manifest);
         ecEditor.dispatchEvent('editor:form:cancel', { callback: $scope.closeThisDialog })
     }
 
@@ -366,7 +379,17 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var callbackFn = function(config) {
             $scope.fields = config.fields;
             $scope.tempalteName = config.template;
+            if (_.isUndefined(config.editMode)) {
+                config.editMode = true
+            }
+            $scope.editMode = config.editMode;
+            if (!$scope.editMode) {
+                $scope.headerMessage = 'View Details'
+            }
             var field = undefined;
+            _.forEach($scope.fields, function(value, key) {
+                value.editable = $scope.editMode;
+            });
             // Currently, Dropdown value is coming as array of string ex: Audience: ["Learner"]
             // this fails to show the value in the dropdown hence converting value to string format
             _.forEach(config.model, function(value, key) {
@@ -376,7 +399,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                     config.model[key] = convertToDataType('TEXT', value);
                 }
             });
-
             $scope.contentMeta = config.model;
             $scope.originalContentMeta = _.clone($scope.contentMeta);
             var layoutConfigurations = $scope.getLayoutConfigurations();
@@ -393,17 +415,23 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     }
 
     $scope.isValidInputs = function(object) {
+        var meta = $scope.getScopeMeta();
         var isValid = true;
         var appIconConfig = _.filter($scope.fields, { 'code': 'appicon' })[0];
         var conceptSelector = _.filter($scope.fields, { 'code': 'concepts' })[0]
-        if (appIconConfig && appIconConfig.visible && appIconConfig.required && !$scope.contentMeta['appIcon']) {
+        if (appIconConfig && appIconConfig.visible && appIconConfig.required && !meta['appIcon']) {
             isValid = false;
         };
-        if (conceptSelector && conceptSelector.required && !_.size($scope.contentMeta['concepts'])) {
+        if (conceptSelector && conceptSelector.required && !_.size(meta['concepts'])) {
             isValid = false
         }
         return (object.form.$valid && isValid) ? true : false
     };
+
+    $scope.getScopeMeta = function() {
+        var template = $('#content-meta-form');
+        return template.scope().contentMeta || {};
+    }
 
     $scope.init()
 

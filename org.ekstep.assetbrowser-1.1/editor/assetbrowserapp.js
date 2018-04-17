@@ -751,4 +751,3 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             });
     }, 100);
 }]);
-
