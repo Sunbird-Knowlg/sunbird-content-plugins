@@ -1,13 +1,75 @@
 <div ng-controller="KeyboardCtrl">
-  <div ng-show="keyboardVisible">
-    <div class="qBoxArea" ng-show="keyboardVisible" ng-click="hideKeyboard()">
-      <div class="question" ng-click="hideKeyboard()">{{question}}</div>  
+    <div ng-show="keyboardVisible">
+        <div class="qBoxArea" ng-show="keyboardVisible" ng-click="hideKeyboard()">
+            <div class="question" ng-click="hideKeyboard()">{{question}}</div>
+        </div>
+        <div class="textBoxArea">
+            <input type="text" id="txtfillblank1" class="ansField" placeholder="Enter answer" ng-model="answerText" disabled autofocus />
+        </div>
+        <div id="keyboard" class="keyboardArea" ng-show="keyboardVisible">
+            <div class="parentDivMainKeyboard" ng-show="!numerickeys" ng-class="{'qc-keyboard-bottom':buttons.length<=13}">
+                <div id="firstRow" ng-if="buttons.firstRow.length >0">
+                    <div ng-repeat="btn in buttons.firstRow" ng-click="addLetter($event);" class="key_barakhadi" style="width:{{keyWidth}}%">
+                        <span>{{btn}}</span>
+                    </div>
+                </div>
+                <div id="secondRow">
+                    <div ng-repeat="btn in buttons.secondRow" ng-click="addLetter($event);" class="key_barakhadi" style="width:{{keyWidth}}%">
+                        <span>{{btn}}</span>
+                    </div>
+                    <div class="erasedDivParent">
+                        <img src="{{erasIcon}}" class="qc-erase-icon" ng-click="deleteText()" />
+                    </div>
+                </div>
+                <div ng-if="buttons.length > 10" id="secondRowdiv"></div>
+                <div id="thirdRow">
+                    <div class="speacial_keys" ng-click="changeToNumeric()" style="font-size: 2vw;"><span>123</span></div>
+                    <div class="spaceBar" ng-click="addLetter($event);" style=" font-size:3vw;"><span> </span>&nbsp;</div>
+                    <div class="speacial_keys" ng-click="addLetter($event);"><span>,</span></div>
+                    <div class="speacial_keys" ng-click="addLetter($event);"><span>.</span></div>
+                </div>
+            </div>
+            <div id="parentDivNumericKeyboard" ng-show="numerickeys">
+                <div id="firstRow">
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);" style="width: 9%;"><span>1</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);" style="width: 9%;"><span>2</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);" style="width: 9%;"><span>3</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);" style="width: 9%;"><span>4</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);" style="width: 9%;"><span>5</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);" style="width: 9%;"><span>6</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);" style="width: 9%;"><span>7</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);" style="width: 9%;"><span>8</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);" style="width: 9%;"><span>9</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);" style="width: 9%;"><span>0</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);" style="width: 9%;"><span>@</span></div>
+                </div>
+                <div id="secondRow">
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);"><span>?</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);"><span>!</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);"><span>%</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);"><span>&amp;</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);"><span>*</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);"><span>(</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);"><span>)</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);"><span>+</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);"><span>-</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);"><span>÷</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);"><span>×</span></div>
+                    <div class="key_barakhadi_numeric" ng-click="addLetter($event);"><span>=</span></div>
+                    <div class="erasedDivParent">
+                        <img src="{{erasIcon}}" class="qc-erase-icon" ng-click="deleteText()" />
+                    </div>
+                </div>
+                <div class="third-row-numeric">
+                    <div class="speacial_keys" ng-click="addLetter($event);" id="<_btn"><span>&lt;</span></div>
+                    <div class="speacial_keys" ng-click="addLetter($event);" id=">_btn"><span>&gt;</span></div>
+                    <div>
+                        <img src="{{langIcon}}" class="qc-language-icon" ng-click="changeToAlphabet()" /> </div>
+                    <div class="spaceBar" ng-click="addLetter($event);" style=" font-size:3vw;"><span> </span>&nbsp;</div>
+                    <div class="speacial_keys" ng-click="addLetter($event);"><span>,</span></div>
+                    <div class="speacial_keys" ng-click="addLetter($event);"><span>.</span></div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="textBoxArea">
-      <input type="text" id="txtfillblank1" class="ansField" placeholder="Enter answer" ng-model="answerText" disabled autofocus />
-    </div>
-
-    <div id="keyboard" class="keyboardArea" ng-show="keyboardVisible">
-    </div>
-  </div>
 </div>
