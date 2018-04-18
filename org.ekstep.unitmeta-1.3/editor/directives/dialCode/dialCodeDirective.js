@@ -64,6 +64,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
         }
 
         $scope.changeDialCode = function () {
+            $scope.errorMessage = "";
             if(_.isEmpty(this.dialcodes)){
                 var nodeId = org.ekstep.services.collectionService.getActiveNode().data.id;
                 if (org.ekstep.collectioneditor.cache.nodesModified && org.ekstep.collectioneditor.cache.nodesModified[nodeId]) {
@@ -76,8 +77,6 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
             }else if (!String(this.dialcodes).match(/^[A-Z0-9]{6}$/) || this.dialcodes.length < 6) {
                 $scope.editFlag = false;
                 $scope.errorMessage = "Please enter valid DIAL code";
-            }else{
-                $scope.errorMessage = "";
             }
         }
 
