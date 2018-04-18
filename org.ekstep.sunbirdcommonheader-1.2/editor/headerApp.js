@@ -114,6 +114,12 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                             icon: 'fa fa-check-circle'
                         });
                     }
+                }else{
+                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                        title: 'DIAL code linking failed!',
+                        position: 'topCenter',
+                        icon: 'fa fa-warning'
+                    });   
                 }
             });
         }else{
