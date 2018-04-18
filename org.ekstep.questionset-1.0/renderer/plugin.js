@@ -181,7 +181,7 @@ IteratorPlugin.extend({
                 if (instance._questionSetConfig.show_feedback == true) {
                     // Display feedback popup (tryagain or goodjob)
                     // result.pass is added to handle sorting-template(Custom IEvaluator) issue. This can be generic solution for other
-                    instance.displayFeedback(result.eval ? result.eval : result.pass);
+                    instance.displayFeedback(result);
 
                 } else {
                     // If show_feedback is set to false, move to next question without displaying feedback popup
@@ -193,11 +193,18 @@ IteratorPlugin.extend({
             instance.renderNextQuestion();
         }
     },
-    displayFeedback: function(res) {
+    displayFeedback: function(result) {
+        var res = result.eval ? result.eval : result.pass;
         if (res === true) {
             EkstepRendererAPI.dispatchEvent('renderer:load:popup:goodJob');
         } else {
-            EkstepRendererAPI.dispatchEvent('renderer:load:popup:tryAgain');
+            if(result.score > 0){
+              var partialScoreRes = result.noOfCorrectAns + ' / ' + result.totalAns;
+              EkstepRendererAPI.dispatchEvent('renderer:load:popup:partialCorrect',partialScoreRes);
+            }
+            else{    
+              EkstepRendererAPI.dispatchEvent('renderer:load:popup:tryAgain');
+            }
         }
         this._displayedPopup = true;
     },

@@ -11,7 +11,7 @@
             <div class="ui huge breadcrumb breadcrumbTitle">
               <div ng-class="{activeBreadcumb: $ctrl.templatesScreen == true}" class="section">Choose Template</div>
               <i class="right chevron icon divider"></i>
-              <div class="section" ng-class="{activeBreadcumb: !$ctrl.questionMetadataScreen == true}">Question Configuration</div>
+              <div class="section" ng-class="{activeBreadcumb: !$ctrl.questionMetadataScreen == true && $ctrl.templatesScreen != true}">Question Configuration</div>
               <i class="right chevron icon divider"></i>
               <div class="section" ng-class="{activeBreadcumb: $ctrl.questionMetadataScreen == true}">Question Details</div>
             </div>
@@ -208,6 +208,7 @@
   </div>
   <div class="actions bottomActionButtons">
     <div class="ui buttons">
+      <button class="ui orange button" id="cancel-button" ng-show="$ctrl.templatesScreen" ng-click="$ctrl.cancel();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" >Cancel</button>
       <button class="ui basic primary button" id="back-button" ng-show="!$ctrl.templatesScreen" ng-click="$ctrl.back();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)" ng-disabled="$ctrl.setBackButtonState()">Back</button>
       <div class="or" ng-show="!$ctrl.templatesScreen"></div>
       <button class="ui large blue button" ng-show="!$ctrl.questionMetadataScreen && !$ctrl.templatesScreen" id="back-button" ng-click="$ctrl.showMetaform();$ctrl.generateTelemetry({type: 'click', subtype: 'select', id: 'button'},$event)">Next</button>
