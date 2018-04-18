@@ -378,6 +378,7 @@
         "title": ctrl.questionMetaData.name,
         "question": ctrl.questionCreationFormData.question.text,
         "max_score": ctrl.questionMetaData.max_score,
+        "isShuffleOption" : ctrl.questionData.isShuffleOption,
         "body": JSON.stringify(questionFormData),
         "language": [ctrl.questionMetaData.medium],
         "itemType": "UNIT",
