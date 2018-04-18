@@ -123,7 +123,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                 if(_.isArray($scope.dialcodes)){
                     $scope.dialcodes = $scope.dialcodes[0];
                 }
-                $scope.editFlag = ($scope.dialcodes.length == $scope.maxLength) ? true : false;
+                $scope.editFlag = ($scope.dialcodes && ($scope.dialcodes.length == $scope.maxLength)) ? true : false;
                 if($scope.editFlag && org.ekstep.services.collectionService.dialcodeList.length === 0){
                     $scope.getAllDialCodes(function(){
                         $scope.status = ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, $scope.dialcodes) == -1 ? "failure" : "success";

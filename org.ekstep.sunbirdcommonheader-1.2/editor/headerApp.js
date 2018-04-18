@@ -53,8 +53,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 if (res && res.data && res.data.responseCode == "OK") {
                     $scope.lastSaved = Date.now();
                     if ($scope.editorEnv == "COLLECTION") {
-                        if (org.ekstep.services.stateService.state.dialCodeMap || org.ekstep.services.stateService.state.invaliddialCodeMap)
-                            $scope.dialcodeLink(res);
                         $scope.hideReviewBtn = false;
                         $scope.resolveReviewBtnStatus();
                     }
@@ -67,75 +65,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             }
         });
     };
-
-    $scope.dialcodeLink = function(res, dialcodeMap) {
-        var dialcodeMap = org.ekstep.services.stateService.state.dialCodeMap;
-        var mapArr = [];
-        ecEditor._.forEach(org.ekstep.services.stateService.state.invaliddialCodeMap, function(value, key) {
-            if (_.has(res.data.result.identifiers, key)) {
-                delete org.ekstep.services.stateService.state.invaliddialCodeMap[key];
-                org.ekstep.services.stateService.setState('invaliddialCodeMap', res.data.result.identifiers[key], value);
-                org.ekstep.services.collectionService.highlightNode(res.data.result.identifiers[key]);
-                $scope.storeDialCodes(res.data.result.identifiers[key], value);
-            }else{
-                $scope.storeDialCodes(key, value);
-                org.ekstep.services.collectionService.highlightNode(key); 
-           }
-        });
-        ecEditor._.forEach(dialcodeMap, function(value, key) {
-            if (_.has(res.data.result.identifiers, key)) {
-                delete org.ekstep.services.stateService.state.dialCodeMap[key];
-                org.ekstep.services.stateService.setState('dialCodeMap', res.data.result.identifiers[key], value);
-                mapArr.push({ "identifier": res.data.result.identifiers[key], "dialcode": value });
-                $scope.storeDialCodes(res.data.result.identifiers[key], value);
-            } else {
-                mapArr.push({ "identifier": key, "dialcode": value });
-                $scope.storeDialCodes(key, value);
-            }
-        });
-        if(!_.isEmpty(mapArr)){
-            var request = {
-                "request": {
-                    "content": mapArr
-                }
-            };
-            ecEditor.getService('dialcode').dialcodeLink(ecEditor.getContext('channel'), request, function(err, rep) {
-                if (!err) {
-                    if( org.ekstep.services.stateService.state.dialCodeMap && org.ekstep.services.stateService.state.invaliddialCodeMap){
-                        ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
-                            title: 'Unable to link some of the DIAL codes',
-                            position: 'topCenter',
-                            icon: 'fa fa-warning'
-                        });
-                    }else{
-                        ecEditor.dispatchEvent("org.ekstep.toaster:success", {
-                            title: 'DIAL code linking successfully!',
-                            position: 'topCenter',
-                            icon: 'fa fa-check-circle'
-                        });
-                    }
-                }else{
-                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                        title: 'DIAL code linking failed!',
-                        position: 'topCenter',
-                        icon: 'fa fa-warning'
-                    });   
-                }
-            });
-        }else{
-            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                title: 'DIAL code linking failed!',
-                position: 'topCenter',
-                icon: 'fa fa-warning'
-            });   
-        }
-    }
-
-    $scope.storeDialCodes = function(nodeId, dialCode){
-        var node = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(nodeId);
-        if(node && node.data)
-            node.data.metadata["dialcodes"] = dialCode;
-    }
 
     $scope.previewContent = function(fromBeginning) {
         ecEditor.dispatchEvent('org.ekstep.contenteditor:preview', { fromBeginning: fromBeginning });
