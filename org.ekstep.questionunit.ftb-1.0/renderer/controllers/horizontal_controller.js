@@ -7,7 +7,6 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     ftbText: "#qs-ftb-text",
     ftbQuestionClass: ".ftb-question-header",
     tempanswertext: "#tempanswertext"
-
   }
   $scope.qcquestion = true;
   $scope.textboxtarget = {};
@@ -21,55 +20,51 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
   $scope.init = function() {
     $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.ftb", "1.0", "renderer/styles/style.css");
     $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.ftb");
-
     $scope.events.eval = $scope.pluginInstance._manifest.id + ":evaluate";
     $scope.events.show = $scope.pluginInstance._manifest.id + ":show";
     $scope.events.hide = $scope.pluginInstance._manifest.id + ":hide";
-
     $scope.removeEvents();
     $scope.registerEvents();
     if (!$rootScope.isFTBRendererd) {
       $rootScope.isFTBRendererd = true;
     }
     if (EventBus.hasEventListener($scope.events.eval)) {
-      if (EventBus.listeners[$scope.events.eval].length > 1)
-        EventBus.removeEventListener($scope.events.eval, $scope.evalListener)
+      if (EventBus.listeners[$scope.events.eval].length > 1) EventBus.removeEventListener($scope.events.eval, $scope.evalListener)
     }
   }
-
   $scope.registerEvents = function() {
     /**
      * renderer:questionunit.ftb:dispatch an event in question set with question data.
      * @event renderer:questionunit.ftb:dispatch
      * @memberof org.ekstep.questionunit.ftb
      */
-     EkstepRendererAPI.addEventListener($scope.events.show, $scope.showEventListener);
+    EkstepRendererAPI.addEventListener($scope.events.show, $scope.showEventListener);
     /**
      * renderer:questionunit.ftb:hide template on question set navigation.
      * @event renderer:questionunit.ftb:dispatch
      * @memberof org.ekstep.questionunit.ftb
      */
-     EkstepRendererAPI.addEventListener($scope.events.hide, $scope.hideEventListener);
+    EkstepRendererAPI.addEventListener($scope.events.hide, $scope.hideEventListener);
     /**
      * renderer:questionunit.ftb:question set call evalution using plugin instance.
      * @event renderer:questionunit.ftb:click
      * @memberof org.ekstep.questionunit.ftb
      */
-     EkstepRendererAPI.addEventListener($scope.events.eval, $scope.evalListener);
+    EkstepRendererAPI.addEventListener($scope.events.eval, $scope.evalListener);
   }
-
   $scope.removeEvents = function() {
     EkstepRendererAPI.removeEventListener($scope.events.hide, $scope.hideEventListener, undefined);
     EkstepRendererAPI.removeEventListener($scope.events.show, $scope.showEventListener, undefined);
     EkstepRendererAPI.removeEventListener($scope.events.eval, $scope.evalListener, undefined);
   }
-
   $scope.showEventListener = function(event) {
     $scope.question = event.target;
     var gererateId = 0;
     var qData = $scope.question._currentQuestion.data.__cdata || $scope.question._currentQuestion.data;
     var questionData = JSON.parse(qData);
     $($scope.constant.ftbText).html(questionData.parsedQuestion.text);
+    $($scope.constant.ftbContainerId).off('click');
+    $($scope.constant.ftbContainerId).on('click', '.ans-field', $scope.doTextBoxHandle);
     var qState = $scope.question._currentQuestionState;
     if (qState && qState.val) {
       $scope.textboxtarget.state = qState.val;
@@ -79,7 +74,6 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     $scope.showTemplate = true;
     $scope.safeApply();
   }
-
   //if question state their then bind the value in text box
   $scope.setStateInput = function() {
     var textBoxCollection = angular.element($($scope.constant.ftbQuestionClass).find("input[type=text]"));
@@ -87,67 +81,106 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
       $("#" + element.id).val($scope.textboxtarget.state[index]);
     });
   }
-
   $scope.hideEventListener = function(event) {
     $scope.showTemplate = false;
     $scope.safeApply();
   }
-
   $scope.evalListener = function(event) {
     var callback = event.target;
     $scope.evaluate(callback);
     $scope.safeApply();
   }
   /**
+   * renderer:questionunit.ftb:show keyboard in device.
+   * @event renderer:questionunit.ftb:click
+   * @memberof org.ekstep.questionunit.ftb
+   */
+  window.addEventListener('native.keyboardshow', function(e) {
+    $scope.qcquestion = false;
+    $scope.qcblank = true;
+    $scope.qcmiddlealign = true;
+    $($scope.constant.tempanswertext).val($("#" + $scope.textboxtarget.id).val());
+    //for text focus
+    $($scope.constant.tempanswertext).focus();
+    $scope.safeApply();
+    //for text focus
+    $('#tempanswertext').focus();
+  });
+  /**
+   * renderer:questionunit.ftb:hide keyboard in device.
+   * @event renderer:questionunit.ftb:click
+   * @memberof org.ekstep.questionunit.ftb
+   */
+  window.addEventListener('native.keyboardhide', function() {
+    $scope.qcquestion = true;
+    $scope.qcblank = false;
+    $scope.qcmiddlealign = false;
+    $("#" + $scope.textboxtarget.id).val($($scope.constant.tempanswertext).val().trim());
+    $scope.qcmiddlealign = false;
+    $scope.safeApply();
+  });
+  /**
+  /**
    * renderer:questionunit.ftb:set target and value.
    * @event renderer:questionunit.ftb:click
    * @memberof org.ekstep.questionunit.ftb
    */
-   $scope.doTextBoxHandle = function() {
+  $scope.doTextBoxHandle = function() {
     var questionConfig = $scope.question._currentQuestion.data.__cdata || $scope.question._currentQuestion.data;
-    EkstepRendererAPI.dispatchEvent("renderer:keyboard:invoke", JSON.parse(questionConfig), $scope.callbackFromKeyboard);
+    var qConfig = {
+      'qData': questionConfig,
+      'inputoldValue': $scope.textboxtarget
+    }
+    if (isbrowserpreview) {
+      $scope.qcblank = false;
+    } else if ($scope.questionObj.question.keyboardConfig.keyboardType == "Device" && !isbrowserpreview) {
+      $scope.qcblank = true;
+    }
+    $scope.textboxtarget.id = this.id;
+    $scope.textboxtarget.value = this.value.trim();
+    EkstepRendererAPI.dispatchEvent("renderer:keyboard:invoke", qConfig, $scope.callbackFromKeyboard);
   }
   $scope.callbackFromKeyboard = function(ans) {
     $("#qs-ftb-text").show();
-    $("#ans-field1").val(ans);
+    $("#" + $scope.textboxtarget.id).val(ans);
   }
   /**
    * renderer:questionunit.ftb:evalution.
    * @event renderer:questionunit.ftb:click
    * @memberof org.ekstep.questionunit.ftb
    */
-   $scope.evaluate = function(callback) {
-      var telemetryAnsArr = [], //array have all answer
+  $scope.evaluate = function(callback) {
+    var telemetryAnsArr = [], //array have all answer
       correctAnswer = false,
       answerArray = [],
       ansObj = {};
-      //check for evalution
-      //get all text box value inside the class
-      var textBoxCollection = angular.element($($scope.constant.ftbQuestionClass).find("input[type=text]"));
-      _.each(textBoxCollection, function(element, index) {
-        answerArray.push(element.value.toLowerCase().trim());
-        ansObj = {
-          ["ans" + index]: element.value
-        }
-        telemetryAnsArr.push(ansObj);
-      });
-      //compare two array
-      if (_.isEqual(answerArray, $scope.questionObj.answer)) {
-        correctAnswer = true;
+    //check for evalution
+    //get all text box value inside the class
+    var textBoxCollection = angular.element($($scope.constant.ftbQuestionClass).find("input[type=text]"));
+    _.each(textBoxCollection, function(element, index) {
+      answerArray.push(element.value.toLowerCase().trim());
+      ansObj = {
+        ["ans" + index]: element.value
       }
-      var result = {
-        eval: correctAnswer,
-        state: {
-          val: answerArray
-        }
+      telemetryAnsArr.push(ansObj);
+    });
+    //compare two array
+    if (_.isEqual(answerArray, $scope.questionObj.answer)) {
+      correctAnswer = true;
+    }
+    var result = {
+      eval: correctAnswer,
+      state: {
+        val: answerArray
       }
-      if (_.isFunction(callback)) {
-          //$scope.removeEvents();
-          callback(result);
-        }
-        EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
-        $scope.generateItemResponse(telemetryAnsArr);
-      }
+    }
+    if (_.isFunction(callback)) {
+      //$scope.removeEvents();
+      callback(result);
+    }
+    EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
+    $scope.generateItemResponse(telemetryAnsArr);
+  }
   $scope.generateItemResponse = function(telemetryAnsArr) {
     var edata = {
       "target": {
@@ -160,7 +193,6 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     }
     TelemetryService.itemResponse(edata);
   }
-
   $scope.telemetry = function(event) {
     TelemetryService.interact("TOUCH", event.target.id, "TOUCH", {
       stageId: Renderer.theme._currentStage

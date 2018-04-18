@@ -64,7 +64,7 @@ angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', 
           index = index + 1;
           if ($scope.ftbFormData.question.keyboardConfig.keyboardType == 'English' || $scope.ftbFormData.question.keyboardConfig.keyboardType == 'Custom')
           {
-            return '<input type="text" class="ans-field" id="ans-field' + index + '" disabled>';
+           return '<input type="text" class="ans-field" id="ans-field' + index + '" readonly="readonly">';
           }
           else
           {
