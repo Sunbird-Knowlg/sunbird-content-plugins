@@ -309,16 +309,21 @@ org.ekstep.contenteditor.basePlugin.extend({
     });
   },
   getSummary: function(dataObj) {
-    var summary = 0;
+    var summary = {'total_questions': 0,'total_score': 0};
     if (_.isArray(dataObj.data.data)) {
       dataObj.data.data.forEach(function(question) {
-        console.log(question.body);
         if(question.body != undefined){
-        var questionCount = JSON.parse(question.body).data.config.questionCount == undefined ? 1 : JSON.parse(question.body).data.config.questionCount;
-        summary = summary + parseInt(questionCount);
+          var questionCount = JSON.parse(question.body).data.config.questionCount == undefined ? 1 : JSON.parse(question.body).data.config.questionCount;
+          var scoreCount = JSON.parse(question.body).data.config.max_score == undefined ? 1 : JSON.parse(question.body).data.config.max_score;
+          summary.total_questions = summary.total_questions + parseInt(questionCount);
+          summary.total_score = summary.total_score + parseInt(scoreCount);
+        }else{
+          summary.total_questions = summary.total_questions + parseInt(1);
+          summary.total_score = summary.total_score + parseInt(1); 
         }
       });
     }
+    console.log("QS Summary",summary);
     return summary;
   }
 });
