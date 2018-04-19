@@ -32,6 +32,13 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
         ctrl.contentMeta.appIcon = null;
     }
 
+    var keywords = ctrl.contentMeta.keywords;
+    if (keywords) {
+        ctrl.contentMeta.keywords = keywords.map(function(a) {
+            return a.lemma ? a.lemma : a
+        })
+    }
+
     // Create array of content concept Ids to use with the concept selector
     ctrl.conceptIds = [];
     if (!_.isUndefined(ctrl.contentMeta.concepts)) {
