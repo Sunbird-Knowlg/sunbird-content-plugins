@@ -116,15 +116,6 @@ org.ekstep.contenteditor.basePlugin.extend({
 
                 }
             } else if (res && res.data.responseCode == "OK") {
-                var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
-                if(meta.mimeType === 'application/vnd.ekstep.content-collection' && org.ekstep.services.stateService.state.dialCodeMap){
-                    var dialCode = _.get(org.ekstep.services.stateService.state.dialCodeMap, ecEditor.getContext('contentId'));
-                    if(!_.isUndefined(dialCode)){
-                        instance.dialcodeLink([{"dialcode" : dialCode, "identifier": ecEditor.getContext('contentId')}]);
-                        instance.storeDialCodes(ecEditor.getContext('contentId'), dialCode);
-                        _.unset(org.ekstep.services.stateService.state.dialCodeMap, ecEditor.getContext('contentId'))
-                    }
-                }
                 if (options && options.successPopup) {
                     if (!options.savingPopup) instance.saveNotification();
                     instance.changePopupValues('success');
@@ -389,7 +380,6 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     saveCollectionContent: function(event, data) {
         data = data || {};
-        var instance = this;
         var nodes = { validNodes: [], invalidNodes: [] }
         var contentBody = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy();
         if (contentBody) {
@@ -439,8 +429,6 @@ org.ekstep.contenteditor.basePlugin.extend({
                     var node = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(oldId);
                     if (node) node.data.id = newId;
                 });
-                if (org.ekstep.services.stateService.state.dialCodeMap || org.ekstep.services.stateService.state.invaliddialCodeMap)
-                    instance.highlightNodeForInvalidDialCode(res);
                 ecEditor.dispatchEvent("meta:after:save", {});
 
             } else {
@@ -452,76 +440,6 @@ org.ekstep.contenteditor.basePlugin.extend({
             }
             data.callback && data.callback(err, res);
         });
-    },
-    highlightNodeForInvalidDialCode: function(res) {
-        var instance = this;
-        var mapArr = [];
-        ecEditor._.forEach(org.ekstep.services.stateService.state.invaliddialCodeMap, function(value, key) {
-            if (_.has(res.data.result.identifiers, key)) {
-                delete org.ekstep.services.stateService.state.invaliddialCodeMap[key];
-                org.ekstep.services.stateService.setState('invaliddialCodeMap', res.data.result.identifiers[key], value);
-                org.ekstep.services.collectionService.highlightNode(res.data.result.identifiers[key]);
-                instance.storeDialCodes(res.data.result.identifiers[key], value);
-            }else{
-                instance.storeDialCodes(key, value);
-                org.ekstep.services.collectionService.highlightNode(key); 
-           }
-        });
-        ecEditor._.forEach(org.ekstep.services.stateService.state.dialCodeMap, function(value, key) {
-            if (_.has(res.data.result.identifiers, key)) {
-                delete org.ekstep.services.stateService.state.dialCodeMap[key];
-                org.ekstep.services.stateService.setState('dialCodeMap', res.data.result.identifiers[key], value);
-                mapArr.push({ "identifier": res.data.result.identifiers[key], "dialcode": value });
-                instance.storeDialCodes(res.data.result.identifiers[key], value);
-            } else {
-                mapArr.push({ "identifier": key, "dialcode": value });
-                instance.storeDialCodes(key, value);
-            }
-        });
-        instance.dialcodeLink(mapArr);
-    },
-    dialcodeLink: function(dialcodeMap) {
-        if(!_.isEmpty(dialcodeMap)){
-            var request = {
-                "request": {
-                    "content": dialcodeMap
-                }
-            };
-            ecEditor.getService('dialcode').dialcodeLink(ecEditor.getContext('channel'), request, function(err, rep) {
-                if (!err) {
-                    if( org.ekstep.services.stateService.state.dialCodeMap && org.ekstep.services.stateService.state.invaliddialCodeMap){
-                        ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
-                            title: 'Unable to update some of the DIAL codes.',
-                            position: 'topCenter',
-                            icon: 'fa fa-warning'
-                        });
-                    }else{
-                        ecEditor.dispatchEvent("org.ekstep.toaster:success", {
-                            title: 'DIAL code(s) updated successfully!',
-                            position: 'topCenter',
-                            icon: 'fa fa-check-circle'
-                        });
-                    }
-                }else{
-                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                        title: 'DIAL code(s) updating failed!',
-                        position: 'topCenter',
-                        icon: 'fa fa-warning'
-                    });   
-                }
-            });
-        }else if(!ecEditor._.isEmpty(org.ekstep.services.stateService.state.invaliddialCodeMap)){
-            ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
-                title: 'Unable to update some of the DIAL codes.',
-                position: 'topCenter',
-                icon: 'fa fa-warning'
-            });
-        }
-    },
-    storeDialCodes: function(nodeId, dialCode){
-        var node = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(nodeId);
-        if(node && node.data)
-            node.data.metadata["dialcodes"] = dialCode;
     },
     hightlightNode: function(invalidNodes) {
         _.forEach(_.omitBy(_.uniq(invalidNodes), _.isEmpty), function(key) {
