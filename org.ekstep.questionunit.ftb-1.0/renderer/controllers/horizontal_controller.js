@@ -172,11 +172,7 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
       eval: correctAnswer,
       state: {
         val: answerArray
-      },
-      score: partialScore,
-      values: telemetryAnsArr,
-      noOfCorrectAns: tempCount,
-      totalAns: $scope.qData.answer.length
+      }
     }
     if (_.isFunction(callback)) {
       //$scope.removeEvents();

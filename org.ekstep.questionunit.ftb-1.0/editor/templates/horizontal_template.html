@@ -41,40 +41,8 @@
                             * Example: 'The tree is [[tall]] and [[strong]].' The question will be created as: 'The tree is _______ and _______.' The correct answers will be 'tall' and 'strong'.
                         </p>
                     </div>
-                    <div class="ui header">Keyboard configuration:</div>
-                    <div class="ui grid">
-                        <div class="two row column">
-                            <div class="two wide column">
-                              <label class="qcMetadateFormLbl">
-                                    Select keyboard type <span class="star">&nbsp;*</span>
-                                </label>    
-                            </div>
-                            <div class="four wide column">
-                                <!-- <select class="ui dropdown" ng-model="keyboardType" ng-change="selectKeyboardType()">
-                                    <option value="" selected="selected">Select</option>
-                                    <option ng-repeat="type in keyboardTypes" value="{{type}}">{{type}}</option> 
-                                </select> -->
-                                
-                                <select class="form-control" ng-model="ftbFormData.question.keyboardConfig.keyboardType" ng-change="selectKeyboardType()" ng-class="{'has-success':ftbFormData.question.keyboardConfig.keyboardType.$valid, 'has-error': submitted && (ftbFormData.question.keyboardConfig.keyboardType.$error.required != true)}"  required>
-                                    <option value="" selected="selected">Choose Level</option>
-                                    <option ng-repeat="item in keyboardTypes" value="{{item}}">{{item}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="two row column" ng-if="customTag">
-                            <div class="two wide column">
-                                <label class="qcMetadateFormLbl">
-                                    Add keys <span class="star">&nbsp;*</span>
-                                </label>   
-                              </div>
-                            <div class="four wide column">
-                                <!-- <tags-input ng-model="tags" add-on-space="true" min-tags="1" max-tags="26" min-length="1" max-length="1" display-property="text" key-property="id" on-tag-added="onTagAdded($tag)"></tags-input> -->
-                                <div class="ui input" style="width: 100%">
-                                    <input class="form-control" type="text" ng-model="keys" ng-blur="tokenizeTags($event)" maxlength="52" placeholder="Add keys seprated by comma(,)" required>
-                                </div>
-                            </div>
-                        </div>
                 </form>
+                <keyboard-config data="keyboardConfig"></keyboard-config>
                 </div>
             </div>
         </div>

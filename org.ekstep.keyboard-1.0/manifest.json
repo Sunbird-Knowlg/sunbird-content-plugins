@@ -7,7 +7,12 @@
   "description": "",
   "editor": {
     "main": "editor/plugin.js",
-    "dependencies": [],
+    "dependencies": [
+      {
+        "type": "css",
+        "src": "editor/style.css"
+      }
+    ],
     "menu": []
   },
   "renderer": {

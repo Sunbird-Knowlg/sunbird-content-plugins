@@ -5,6 +5,10 @@
     margin-top: 17%;
     background: #ebebeb;
 }
+#txtfillblank1{
+    background-color: #ebebeb;
+    height: 43px;
+}
 
 .qBoxArea {
     font-weight: bold;
@@ -55,8 +59,8 @@
 .key_barakhadi:active,
 .key_barakhadi_numeric:active {
     background-color: rgb(215, 215, 215);
-    box-shadow: 0 5px rgb(215, 215, 215);
-    transform: translateY(-5px);
+    box-shadow: 0 15px rgb(215, 215, 215);
+    transform: translateY(-15px);
 }
 
 .speacial_keys {
@@ -96,23 +100,23 @@
     display: inline-block;
 }
 
-#firstRow {
-    width: 80%;
+#firstRowAlpha {
+    width: 92%;
     top: 6%;
-    left: 10%;
+    left: 9%;
     height: 11%;
     position: relative;
 }
 
-#secondRow {
-    width: 80%;
+#secondRowAlpha {
+    width: 92%;
     top: 4%;
-    left: 10%;
+    left: 7%;
     height: 12%;
     position: relative;
 }
 
-#thirdRow {
+#thirdRowAlpha {
     width: 85%;
     top: 2%;
     left: 6%;
@@ -123,6 +127,22 @@
     flex-wrap: wrap;
     justify-content: center;
 }
+#firstRowNum {
+    width: 80%;
+    top: 6%;
+    left: 9%;
+    height: 11%;
+    position: relative;
+}
+
+#secondRowNum {
+    width: 88%;
+    top: 4%;
+    left: 7%;
+    height: 12%;
+    position: relative;
+}
+
 
 
 #parentDivEraser {
@@ -175,7 +195,7 @@
 }
 
 img.qc-erase-icon {
-    width: 6%;
+    width: 4.5%;
 }
 
 img.qc-language-icon {
@@ -183,7 +203,11 @@ img.qc-language-icon {
     margin-top: 7%;
 }
 
-#secondRow .key_barakhadi_numeric {
+#firstRowNum .key_barakhadi_numeric {
+    width: 9%;
+}
+
+#secondRowNum .key_barakhadi_numeric {
     width: 7.5%;
 }
 
@@ -200,5 +224,5 @@ img.qc-language-icon {
 }
 
 .qc-keyboard-bottom {
-    top: 72%;
+    top: 60%;
 }

@@ -5,6 +5,10 @@
  */
 angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope)
 {
+  $scope.keyboardConfig = {
+    keyboardType: 'Device',
+    customKeys: []
+  };
   $scope.formVaild = false;
   $scope.ftbConfiguartion = {
     'questionConfig':
@@ -15,7 +19,7 @@ angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', 
       'isHint': false
     }
   };
-  $scope.customTag = false;
+  //$scope.customTag = false;
   $scope.keyboardTypes = ['Device', 'English', 'Custom'];
   $scope.ftbFormData = {
     question:
@@ -23,11 +27,7 @@ angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', 
       text: '',
       image: '',
       audio: '',
-      keyboardConfig:
-      {
-        keyboardType: '',
-        customKeys: []
-      }
+      keyboardConfig:$scope.keyboardConfig
     },
     answer: [],
     parsedQuestion:
@@ -64,7 +64,7 @@ angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', 
           index = index + 1;
           if ($scope.ftbFormData.question.keyboardConfig.keyboardType == 'English' || $scope.ftbFormData.question.keyboardConfig.keyboardType == 'Custom')
           {
-           return '<input type="text" class="ans-field" id="ans-field' + index + '" readonly="readonly">';
+            return '<input type="text" class="ans-field" id="ans-field' + index + '" readonly style="cursor: pointer;">';
           }
           else
           {
@@ -79,42 +79,42 @@ angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', 
       }
     })
   }
-  $scope.selectKeyboardType = function()
-  {
-    if ($scope.ftbFormData.question.keyboardConfig.keyboardType == 'Custom')
-    {
-      $scope.customTag = true;
-    }
-    else
-    {
-      $scope.customTag = false;
-    }
-  }
-  $scope.tokenizeTags = function(event)
-  {
-    $scope.tags = event.target.value;
-    if ($scope.tags.length > 0)
-    {
-      var tagsArr = $scope.tags.split(",");
-      // $scope.keys = [];
-      _.each(tagsArr, function(val, key)
-      {
-        if (val.length > 1)
-        {
-          var subChar = val.split('');
-          _.each(subChar, function(val1, key1)
-          {
-            $scope.ftbFormData.question.keyboardConfig.customKeys.push(val1);
-          });
-        }
-        else
-        {
-          $scope.ftbFormData.question.keyboardConfig.customKeys.push(val);
-        }
-      });
-    }
-    //console.log("Final keys", $scope.ftbFormData);
-  }
+  // $scope.selectKeyboardType = function()
+  // {
+  //   if ($scope.ftbFormData.question.keyboardConfig.keyboardType == 'Custom')
+  //   {
+  //     $scope.customTag = true;
+  //   }
+  //   else
+  //   {
+  //     $scope.customTag = false;
+  //   }
+  // }
+  // $scope.tokenizeTags = function(event)
+  // {
+  //   $scope.tags = event.target.value;
+  //   if ($scope.tags.length > 0)
+  //   {
+  //     var tagsArr = $scope.tags.split(",");
+  //     // $scope.keys = [];
+  //     _.each(tagsArr, function(val, key)
+  //     {
+  //       if (val.length > 1)
+  //       {
+  //         var subChar = val.split('');
+  //         _.each(subChar, function(val1, key1)
+  //         {
+  //           $scope.ftbFormData.question.keyboardConfig.customKeys.push(val1);
+  //         });
+  //       }
+  //       else
+  //       {
+  //         $scope.ftbFormData.question.keyboardConfig.customKeys.push(val);
+  //       }
+  //     });
+  //   }
+  //   //console.log("Final keys", $scope.ftbFormData);
+  // }
   //}]);
   $scope.getMatches = function(string, regex, index)
   {
