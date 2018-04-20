@@ -215,3 +215,37 @@
 .row.qb-question-list-container::-webkit-scrollbar-thumb {
     height: 70px;
 }
+
+.ui.checkbox.filter-toggle-button {
+    padding: 0 15px;
+    display: flex;
+    align-items: center;
+}
+
+.ui.label.filter-input-label{
+    min-width: 26%;
+}
+
+#filter-meta-form{
+    margin-left: 0;
+}
+
+.ui.form .field .ui.input.checkbox.filter-toggle-button input{
+    margin: 0 0 0 15px;
+    width: 30px!important;
+}
+
+.ui.grid>.column:not(.row).filter-column{
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 1rem;
+}
+
+.ui.grid.filter-grid{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+}
+
+.concept-field{
+    width: 100%;
+}

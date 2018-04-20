@@ -23,7 +23,8 @@
         </div>
         <div class="content wizard">
             <div class="qb-filters-container" ng-show="!isQuestionSetConfig">
-                <div class="ui form">
+                <div ng-include="filterForm"></div>
+                <!-- <div class="ui form">
                     <div class="field">
                         <div class="ui fluid icon input">
                             <input ng-model="filterObj.question_title" placeholder="Search by question title"
@@ -114,7 +115,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
             <div class="qb-filters-container" ng-show="isQuestionSetConfig">
                 <div class="ui form">

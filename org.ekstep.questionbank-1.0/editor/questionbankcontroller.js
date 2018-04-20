@@ -22,6 +22,7 @@ angular.module('createquestionapp', [])
     $scope.languages;
     $scope.resultNotFound = 0;
     $scope.versions = [1, 2];
+    $scope.filterForm = '';
     $scope.framework = ecEditor.getContext('framework');
     $scope.difficultyLevels = ['All', 'Easy', 'Medium', 'Difficult'];
     $scope.questionTypes = [{
@@ -78,6 +79,16 @@ angular.module('createquestionapp', [])
       questionsetPlugin: 'org.ekstep.questionset',
       questionbankPlugin: 'org.ekstep.questionbank'
     };
+    
+    ecEditor.addEventListener('editor:form:change', function(event, data) {
+      $scope.filterObj.concepts = [];
+      if(data.key == "concepts")
+        _.forEach(data.value, function(dataid) {
+            $scope.filterObj.concepts.push(dataid.identifier);
+        });
+      $scope.searchQuestions($scope.filterObj);
+    });
+
     $scope.searchQuestions = function () {
       // var activity = ctrl.activity;
       // ctrl.isItemAvailable = true;
@@ -93,15 +104,19 @@ angular.module('createquestionapp', [])
           limit: 200
         }
       };
-      if ($scope.isMyQuestions) {
+      if (filterData) {
+        $scope.filterObj = filterData;
+      }
+
+      if ($scope.filterObj.myQuestions) {
         var userId = $scope.currentUserId;
         data.request.filters.createdBy = userId;
-      }
+      } else {}
       // setting filters values and title to request data
-      ecEditor._.forEach($scope.filterObj, function (value, key) {
+      ecEditor._.forEach($scope.filterObj, function(value, key) {
         if (value) {
           switch (key) {
-            case "question_title":
+            case "searchText":
               data.request.query = value;
               break;
             case "gradeLevel":
@@ -109,16 +124,18 @@ angular.module('createquestionapp', [])
                 data.request.filters.gradeLevel = value;
               }
               break;
-            case "language":
+            case "medium":
               data.request.filters.language = [value];
               break;
-            case "qlevel":
+            case "level":
               data.request.filters.qlevel = value;
               break;
-            case "type":
-              if (value.length) {
-                data.request.filters.type = value;
-              }
+            case "questionType":
+              ecEditor._.forEach($scope.questionTypes, function(val, key) {
+                if (value.length && value == val.name) {
+                  data.request.filters.type = val.value;
+                }
+              });
               break;
             case "concepts":
               data.request.filters.concepts = value;
@@ -157,6 +174,10 @@ angular.module('createquestionapp', [])
       $scope.itemsLoading = true;
       $scope.searchQuestions();
       $scope.selectedIndex = undefined;
+
+      ecEditor.addEventListener('editor:template:loaded', function(event, object) {
+        $scope.filterForm = object.templatePath;
+      })
 
       ecEditor.addEventListener(pluginInstance.manifest.id + ":saveQuestion", function (event, data) {
         if (!data.isSelected) {
@@ -209,6 +230,9 @@ angular.module('createquestionapp', [])
 
       }
 
+      var filterMetaData = {};
+      ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup1", { action: 'question-filter-view', subType: 'questions', framework: "NCF", rootOrgId: "*", type: "content", popup: false, metadata: filterMetaData });
+
       ecEditor.dispatchEvent($scope.pluginIdObj.concepts_id + ':init', {
         element: 'queSetConceptsTextBox',
         selectedConcepts: [], // All composite keys except mediaType
@@ -248,6 +272,8 @@ angular.module('createquestionapp', [])
             forceSelection: false
           });
           $scope.$safeApply();
+        } else {
+          console.log(error);
         }
       })
 
