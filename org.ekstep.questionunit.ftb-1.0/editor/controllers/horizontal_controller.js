@@ -22,14 +22,6 @@ angular.module('ftbApp', [])
       'parsedQuestion': { 'text': '', 'image': '', 'audio': '', 'hint' : ''}
     };
 
-    var questionInput = CKEDITOR.replace('ftbQuestion', {
-      customConfig: CKEDITOR.basePath + "config.js",
-      skin: 'moono-lisa,' + CKEDITOR.basePath + "skins/moono-lisa/",
-      contentsCss: CKEDITOR.basePath + "contents.css"
-    });
-    questionInput.on('change', function() {
-      $scope.ftbFormData.question.text = this.getData();
-    });
     $scope.init = function() {
       $('.menu .item').tab();
       $('.ui.dropdown').dropdown({ useLabels: false });
@@ -55,9 +47,6 @@ angular.module('ftbApp', [])
           $scope.$emit('question:form:inValid', $scope.ftbFormData);
         }
       })
-      ckeditor.editor.on('change', function() {
-        ngModel.$setViewValue(this.getData());
-      });
     }
 
 
