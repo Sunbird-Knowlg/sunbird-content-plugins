@@ -79,7 +79,7 @@ angular.module('createquestionapp', [])
       questionsetPlugin: 'org.ekstep.questionset',
       questionbankPlugin: 'org.ekstep.questionbank'
     };
-    
+
     ecEditor.addEventListener('editor:form:change', function(event, data) {
       $scope.filterObj.concepts = [];
       if(data.key == "concepts")
@@ -89,7 +89,7 @@ angular.module('createquestionapp', [])
       $scope.searchQuestions($scope.filterObj);
     });
 
-    $scope.searchQuestions = function () {
+    $scope.searchQuestions = function (filterData) {
       // var activity = ctrl.activity;
       // ctrl.isItemAvailable = true;
       // ctrl.itemsLoading = true;
@@ -458,6 +458,8 @@ angular.module('createquestionapp', [])
     $scope.showSelectedQue = function (index) {
       delete $scope.selectedQueIndex;
       $scope.selectedQueIndex = index;
+      var filterMetaData = {};
+      ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup1", { action: 'question-filter-view', subType: 'questions', framework: "NCF", rootOrgId: "*", type: "content", popup: false, metadata: filterMetaData });
     }
 
 

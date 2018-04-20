@@ -226,7 +226,7 @@
     min-width: 26%;
 }
 
-#filter-meta-form{
+#questionFilterTemplate #content-meta-form{
     margin-left: 0;
 }
 
