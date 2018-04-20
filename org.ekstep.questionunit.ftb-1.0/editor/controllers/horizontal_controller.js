@@ -19,7 +19,6 @@ angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', 
       'isHint': false
     }
   };
-  //$scope.customTag = false;
   $scope.keyboardTypes = ['Device', 'English', 'Custom'];
   $scope.ftbFormData = {
     question:
@@ -79,43 +78,7 @@ angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', 
       }
     })
   }
-  // $scope.selectKeyboardType = function()
-  // {
-  //   if ($scope.ftbFormData.question.keyboardConfig.keyboardType == 'Custom')
-  //   {
-  //     $scope.customTag = true;
-  //   }
-  //   else
-  //   {
-  //     $scope.customTag = false;
-  //   }
-  // }
-  // $scope.tokenizeTags = function(event)
-  // {
-  //   $scope.tags = event.target.value;
-  //   if ($scope.tags.length > 0)
-  //   {
-  //     var tagsArr = $scope.tags.split(",");
-  //     // $scope.keys = [];
-  //     _.each(tagsArr, function(val, key)
-  //     {
-  //       if (val.length > 1)
-  //       {
-  //         var subChar = val.split('');
-  //         _.each(subChar, function(val1, key1)
-  //         {
-  //           $scope.ftbFormData.question.keyboardConfig.customKeys.push(val1);
-  //         });
-  //       }
-  //       else
-  //       {
-  //         $scope.ftbFormData.question.keyboardConfig.customKeys.push(val);
-  //       }
-  //     });
-  //   }
-  //   //console.log("Final keys", $scope.ftbFormData);
-  // }
-  //}]);
+  
   $scope.getMatches = function(string, regex, index)
   {
     index || (index = 1); // default to the first capturing group

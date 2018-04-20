@@ -81,14 +81,6 @@ angular.module('mtfApp', [])
     };
     $scope.mtfFormData.media = [];
     $scope.editMedia = [];
-    var questionInput = CKEDITOR.replace('mtfQuestion', {
-      customConfig: CKEDITOR.basePath + "config.js",
-      skin: 'moono-lisa,' + CKEDITOR.basePath + "skins/moono-lisa/",
-      contentsCss: CKEDITOR.basePath + "contents.css"
-    });
-    questionInput.on('change', function() {
-      $scope.mtfFormData.question.text = this.getData();
-    });
 
     $scope.init = function() {
       if (!ecEditor._.isUndefined($scope.questionEditData)) {
