@@ -50,6 +50,18 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.isNew = true;
 
+
+    /**
+     * 
+     */
+    $scope.editMode = true;
+
+
+    /**
+     * 
+     */
+    $scope.headerMessage = 'Edit Details'
+
     /**
      * @description          - Which is used to dispatch an event.
      * 
@@ -88,11 +100,12 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @param {Object} object - Field information
      */
     $scope.onConfigChange = function(object) {
-        $scope.isSubmit = false;
         if (object.field) {
             var type = (object.field.inputType == 'select' || object.field.inputType == 'multiselect') ? 'change' : 'click'
-            object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: object.field.code }, $scope.manifest);
-        }!object.form.$valid && $scope.updateErrorMessage(object.form);
+            object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: {id: object.field.code, type:"field", ver:"" }}, $scope.manifest);
+        };
+        var validationStatus = $scope.isValidInputs(object);
+        !validationStatus && $scope.updateErrorMessage(object.form);
         $scope.updateForm(object);
     }
 
@@ -117,11 +130,24 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @param {Object} range           - Which refers to framework terms/range object
      */
     $scope.getAssociations = function(keys, range, callback) {
+        var names = [];
         var associations = [];
-        var values = _.filter(range, function(res) { return _.includes(keys, res.name); });
-        _.forEach(values, function(key, value) {
-            if (key.associations) {
-                _.forEach(key.associations, function(key, value) {
+        var filteredAssociations = [];
+        if (_.isString(keys)) {
+            names.push(keys);
+        } else {
+            names = keys
+        }
+        _.filter(range, function(res) {
+            _.forEach(names, function(value, key) {
+                if (res.name === value) {
+                    filteredAssociations.push(res)
+                }
+            });
+        });
+        _.forEach(filteredAssociations, function(val, index) {
+            if (val.associations) {
+                _.forEach(val.associations, function(key, value) {
                     associations.push(key);
                 })
             }
@@ -143,13 +169,24 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         //reset the depended field first
         // Update the depended field with associated value
         // Currently, supported only for the dropdown values
-        var dependedValues;
+        var dependedValues, groupdFields;
         if (field.depends && field.depends.length) {
             _.forEach(field.depends, function(id) {
                 resetSelected && $scope.resetSelectedField(id);
-                dependedValues = _.map(associations, i => _.pick(i, 'name'))
-                $scope.updateDropDownList(id, dependedValues);
-                $scope.$safeApply();
+                dependedValues = _.map(associations, i => _.pick(i, ['name', 'category']))
+                groupdFields = _.chain(dependedValues)
+                    .groupBy('category')
+                    .map((name, category) => ({ name, category }))
+                    .value();
+                if (groupdFields.length) {
+                    _.forEach(groupdFields, function(value, key) {
+                        $scope.updateDropDownList(value.category, _.map(value.name, i => _.pick(i, 'name')));
+                        $scope.$safeApply();
+                    })
+                } else {
+                    $scope.updateDropDownList(id, [])
+                    $scope.$safeApply();
+                }
             });
         }
 
@@ -166,7 +203,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.updateDropDownList = function(fieldCode, values) {
         if (values.length) {
-            $scope.categoryList[fieldCode] = values;
+            $scope.categoryList[fieldCode] = _.unionBy(values, 'name');
         } else {
             $scope.mapMasterCategoryList($scope.fields, fieldCode);
         }
@@ -211,10 +248,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             id: "save",
             type: 'click',
             subtype: 'button',
-            target: 'save'
+            target: {id:'save',type:"button",ver:""}
         }, $scope.manifest);
         $scope.isSubmit = true;
-        !object.form.$valid && $scope.updateErrorMessage(object.form);
+        var validationStatus = $scope.isValidInputs(object);
+        !validationStatus && $scope.updateErrorMessage(object.form);
         var successCB = function(err, res) {
                 if (res) {
                     // success toast message which is already handled by content editor function plugin
@@ -236,7 +274,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         form.metaData = getUpdatedMetadata(template.scope().contentMeta, $scope.originalContentMeta, $scope.fields);
         form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
         ecEditor.dispatchEvent('editor:form:success', {
-            isValid: object.form.$valid,
+            isValid: validationStatus,
             formData: form,
             callback: successCB
         })
@@ -247,7 +285,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @description             - Which is used to show an error message to resepective field 
      */
     $scope.updateErrorMessage = function(form) {
-        if ($scope.metaForm.$valid) return
         var errorKeys = undefined;
         _.forEach($scope.fields, function(value, key) {
             if (form[value.code] && form[value.code].$invalid) {
@@ -257,7 +294,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                         $scope.validation[value.code]["errorMessage"] = value.validation.regex.message;
                         break;
                     case 'required': // When input validation of type is required
-                        $scope.validation[value.code]["errorMessage"] = 'Plese Input a value';
+                        $scope.validation[value.code]["errorMessage"] = 'Please Input a value';
                         break;
                     case "maxlength": // When input validation of type is max
                         $scope.validation[value.code]["errorMessage"] = value.validation.max.message;
@@ -276,7 +313,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.cancel = function() {
         // Note: Reset the all selected fields (If required)
-        logTelemetry({ id: "cancel", type: 'click', subtype: 'button', target: 'close' }, $scope.manifest);
+        logTelemetry({ id: "cancel", type:'click', subtype: 'button', target:{id:'close',type:"button", ver:"" }}, $scope.manifest);
         ecEditor.dispatchEvent('editor:form:cancel', { callback: $scope.closeThisDialog })
     }
 
@@ -342,6 +379,26 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var callbackFn = function(config) {
             $scope.fields = config.fields;
             $scope.tempalteName = config.template;
+            if (_.isUndefined(config.editMode)) {
+                config.editMode = true
+            }
+            $scope.editMode = config.editMode;
+            if (!$scope.editMode) {
+                $scope.headerMessage = 'View Details'
+            }
+            var field = undefined;
+            _.forEach($scope.fields, function(value, key) {
+                value.editable = $scope.editMode;
+            });
+            // Currently, Dropdown value is coming as array of string ex: Audience: ["Learner"]
+            // this fails to show the value in the dropdown hence converting value to string format
+            _.forEach(config.model, function(value, key) {
+                field = _.find($scope.fields, ['code', key]);
+                if (field && field.inputType == 'select') {
+                    // converting array of value to string format only for the case of `SELECT` inputType dropdown
+                    config.model[key] = convertToDataType('TEXT', value);
+                }
+            });
             $scope.contentMeta = config.model;
             $scope.originalContentMeta = _.clone($scope.contentMeta);
             var layoutConfigurations = $scope.getLayoutConfigurations();
@@ -356,6 +413,26 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var map = { 'defaultTemplate': ["name", "description", "keywords", "appicon"] }
         return map[$scope.tempalteName] || {}
     }
+
+    $scope.isValidInputs = function(object) {
+        var meta = $scope.getScopeMeta();
+        var isValid = true;
+        var appIconConfig = _.filter($scope.fields, { 'code': 'appicon' })[0];
+        var conceptSelector = _.filter($scope.fields, { 'code': 'concepts' })[0]
+        if (appIconConfig && appIconConfig.visible && appIconConfig.required && !meta['appIcon']) {
+            isValid = false;
+        };
+        if (conceptSelector && conceptSelector.required && !_.size(meta['concepts'])) {
+            isValid = false
+        }
+        return (object.form.$valid && isValid) ? true : false
+    };
+
+    $scope.getScopeMeta = function() {
+        var template = $('#content-meta-form');
+        return template.scope().contentMeta || {};
+    }
+
     $scope.init()
 
 }]);

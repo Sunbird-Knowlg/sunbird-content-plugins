@@ -291,13 +291,15 @@
     width: 50%;
     text-align: left;
     font-size: 14px;
-    line-height: 1 !important
+    line-height: 1 !important;
+    word-break: break-all;
 }
 
 .cardDetailsSectionTitle {
     font-size: 16px;
     font-weight: 600;
     line-height: 1.25;
+    word-break: break-word;
 }
 
 .cardDetails-list {
