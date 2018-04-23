@@ -91,13 +91,11 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
 
     $scope.validateUploadURL = function(url){
         var response = ''
-        if($scope.isValidURL(url)){
-            if($scope.isWhitelistedURL(url)){
-                if($scope.validateYoutubeURL(url)){
-                    response = 'video/x-youtube';
-                } else {
-                    response =  'x-url';
-                }
+        if($scope.isValidURL(url) && $scope.isWhitelistedURL(url)){
+            if($scope.validateYoutubeURL(url)){
+                response = 'video/x-youtube';
+            } else {
+                response =  'x-url';
             }
         }
         return response
