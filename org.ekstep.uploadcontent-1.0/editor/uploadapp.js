@@ -21,7 +21,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
             validation: {
                 allowedExtensions: ['pdf', 'epub', 'mp4', 'h5p', 'zip', 'webm'],
                 itemLimit: 1,
-                sizeLimit: 25000000 // 25 MB = 25 * 1024 * 1024 bytes
+                sizeLimit: 50000000 // 50 MB = 50 * 1024 * 1024 bytes
             },
             callbacks: {
                 onStatusChange: function(id, oldStatus, newStatus) {
