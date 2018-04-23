@@ -18,7 +18,12 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
       $scope.createKeyboard(customButtons, $scope.config);
     } else if ($scope.config.question.keyboardConfig.keyboardType == 'Custom') {
       $("#qs-ftb-text").hide();
-      customButtons = $scope.config.question.keyboardConfig.customKeys;
+      customButtons = '';
+      _.each($scope.config.question.keyboardConfig.customKeys, function(key, val) {
+        if(val < $scope.config.question.keyboardConfig.customKeys.length)
+        customButtons = customButtons + key + ',';
+      });
+      //customButtons = $scope.config.question.keyboardConfig.customKeys;
       $scope.createKeyboard(customButtons, $scope.config);
     } else if ($scope.config.question.keyboardConfig.keyboardType == 'Device') {
       $scope.keyboardVisible = false;
