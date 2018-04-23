@@ -82,6 +82,7 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     });
   }
   $scope.hideEventListener = function(event) {
+    EkstepRendererAPI.dispatchEvent("org.ekstep.keyboard:hide"); 
     $scope.showTemplate = false;
     $scope.safeApply();
   }
@@ -138,7 +139,7 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     }
     $scope.textboxtarget.id = this.id;
     $scope.textboxtarget.value = this.value.trim();
-    EkstepRendererAPI.dispatchEvent("renderer:keyboard:invoke", qConfig, $scope.callbackFromKeyboard);
+    EkstepRendererAPI.dispatchEvent("org.ekstep.keyboard:invoke", qConfig, $scope.callbackFromKeyboard);
   }
   $scope.callbackFromKeyboard = function(ans) {
     $("#qs-ftb-text").show();

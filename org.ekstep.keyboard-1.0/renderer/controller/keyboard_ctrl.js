@@ -5,7 +5,7 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
   $scope.answerText = '';
   $scope.numerickeys = false;
 
-  EkstepRendererAPI.addEventListener("renderer:keyboard:invoke", function(e, callback) {
+  EkstepRendererAPI.addEventListener("org.ekstep.keyboard:invoke", function(e, callback) {
     $scope.callback = callback;
     $scope.config = JSON.parse(e.target.qData);
     $scope.question = $scope.config.question.text.replace(/\[\[.*?\]\]/g, '____');
@@ -13,17 +13,14 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
     var customButtons = '';
     $scope.answerText = _.isUndefined(e.target.inputoldValue.value) ? '' : e.target.inputoldValue.value;
     if ($scope.config.question.keyboardConfig.keyboardType == "English") {
-      $("#qs-ftb-text").hide();
       customButtons = "Q,W,E,R,T,Y,U,I,O,P,A,S,D,F,G,H,J,K,L,Z,X,C,V,B,N,M";
       $scope.createKeyboard(customButtons, $scope.config);
     } else if ($scope.config.question.keyboardConfig.keyboardType == 'Custom') {
-      $("#qs-ftb-text").hide();
       customButtons = '';
       _.each($scope.config.question.keyboardConfig.customKeys, function(key, val) {
         if(val < $scope.config.question.keyboardConfig.customKeys.length)
         customButtons = customButtons + key + ',';
       });
-      //customButtons = $scope.config.question.keyboardConfig.customKeys;
       $scope.createKeyboard(customButtons, $scope.config);
     } else if ($scope.config.question.keyboardConfig.keyboardType == 'Device') {
       $scope.keyboardVisible = false;
@@ -31,12 +28,17 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
     $scope.safeApply();
   });
 
+  EkstepRendererAPI.addEventListener("org.ekstep.keyboard:hide", function() {
+    $scope.keyboardVisible = false;
+    $scope.safeApply();
+  }); 
+
   $scope.erasIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.keyboard", "1.0", "renderer/assets/eras_icon.png");
   $scope.langIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.keyboard", "1.0", "renderer/assets/language_icon.png");
 
   $scope.createKeyboard = function(customButtons, config) {
     var customButtons = customButtons;
-    customButtons = customButtons.replace(/ /g, '');
+    customButtons = customButtons.replace(/ /g,'');
     customButtons = customButtons.split(',');
     customButtons = _.uniq(customButtons);
     $scope.buttons = customButtons.splice(0, customButtons.length);
