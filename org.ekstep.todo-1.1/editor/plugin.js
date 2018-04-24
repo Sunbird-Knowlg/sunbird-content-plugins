@@ -16,6 +16,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     controllerCallback: function(event, data) {
         ctrl = this;
+        ecEditor.jQuery("#todoCommentsLoader").addClass('active');
         setTimeout(function() {
             ctrl.initializeTodoWidget();
         }, 3000);
@@ -250,6 +251,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 // Append empty message
                 ecEditor.jQuery(todoThreadsWrapperDiv).html(emptyMessage);
             }
+            ecEditor.jQuery("#todoCommentsLoader").removeClass('active');
         }
     },
     /**

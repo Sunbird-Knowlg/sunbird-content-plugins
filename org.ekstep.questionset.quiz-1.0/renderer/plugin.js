@@ -51,7 +51,15 @@ Plugin.extend({
     registerEvents: function () {
         var instance = this;
         EkstepRendererAPI.addEventListener("org.ekstep.questionset.quiz:hide", function () {
-            instance._stage.removeChildAt(0);
+            var qsQuizIndex = _.findIndex(instance._stage._childIds, function (ci) {
+                var childInstance = EkstepRendererAPI.getPluginInstance(ci);
+                if(childInstance._data && childInstance._data.pluginId) {
+                  return childInstance._data.pluginId == 'org.ekstep.questionset.quiz';
+                } else {
+                  return false;
+                }
+            });
+            instance._stage.removeChildAt(qsQuizIndex);
             instance.removeHtmlElements();
             instance.update();
         });
@@ -62,6 +70,9 @@ Plugin.extend({
             instance.evaluate(callback, instance);
 
         });
+        setTimeout(function () {
+          $('#text1').show();
+        }, 800);
     },
 
     invokeTemplate: function () {
@@ -110,6 +121,10 @@ Plugin.extend({
             this._stage._stageController = stageController;
             this._stage._stageControllerName = controllerName; //+ Math.random();
             this._stage._stageController.reset();
+            // Override the 'resetItem' function for rendering the V1 templates. This is to ensure that the saved
+            // question states are not reset by the controller. This will not affect the rendering because
+            // we always render only one question in one instance of 'questionset.quiz'
+            this._stage._stageController.resetItem = function() {};
             this._stage._stageController.next();
             var stageKey = this._stage.getStagestateKey();
 
@@ -120,7 +135,7 @@ Plugin.extend({
                 var questionState = this._theme.getParam(this.qid);
                 // var questionState = this.getStates(this.qid);
                 if (questionState) {
-                    this._stage._stageController._model = _.clone(questionState.model);
+                    this._stage._stageController._model = JSON.parse(JSON.stringify(questionState.model));
                 }
             }
         }

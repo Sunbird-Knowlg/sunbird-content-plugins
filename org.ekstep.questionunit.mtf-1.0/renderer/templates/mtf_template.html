@@ -24,7 +24,7 @@
     </div>
     <div class="mtf-hori-container" ng-drop="true" ng-drop-success="onDropToRHS($data,$event);" on-drop="logTelemetryInteract('drop-rhs');">
       <div class="mtf-hori-option" ng-repeat="rval in draggableObjects" ng-class="{'width20': qData.option.optionsRHS.length == 5, 'width25': qData.option.optionsRHS.length == 4,'width33': qData.option.optionsRHS.length == 3}">
-        <div class="mtfHoriRhsOption" ng-drag="true" ng-drag-data="{{rval}}" ng-drag-start="logTelemetryInteract(rval.mapIndex);" id="drag-rhs">
+        <div ng-class="{'mtfHoriRhsOption':rval.mapIndex != undefined}" ng-drag="true" ng-drag-data="{{rval}}" ng-drag-start="logTelemetryInteract(rval.mapIndex);" id="drag-rhs">
           <div class="mtf-hori-ques-text">
             <div class="mtf-hori-ques-text-inner" id="{{$index}}">{{rval.text}}</div>
           </div>
