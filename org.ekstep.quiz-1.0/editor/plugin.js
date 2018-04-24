@@ -379,6 +379,31 @@ org.ekstep.contenteditor.basePlugin.extend({
             data = ecEditor.getCurrentObject().data;
         }
         ecEditor.dispatchEvent("org.ekstep.assessmentbrowser:show", {callback : callback, data : data});  
+    },
+    /**    
+     *      
+     * To get quiz summary. 
+     * @memberof summary
+     * 
+     */
+    getSummary: function() {
+      var instance = this;
+      var summary = {'totalQuestions': 0,'totalScore': 0};
+      var totalQuestionsToRender = instance.data.questionnaire.total_items; 
+      if(instance.data.questionnaire.shuffle){
+        // Total number of items/questions to render
+        summary.totalQuestions = totalQuestionsToRender;  
+        summary.totalScore = totalQuestionsToRender;     
+      }else{
+        var questionnaireID = instance.data.questionnaire.item_sets[0].id;
+        instance.data.questionnaire.items[questionnaireID].forEach(function(question,key) {
+            if(key < totalQuestionsToRender){
+                summary.totalQuestions = summary.totalQuestions + parseInt(1);
+                summary.totalScore = summary.totalScore + parseInt(question.max_score);
+            } 
+          });
+      }
+      return summary;
     }
 });
 //# sourceURL=quizPlugin.js
