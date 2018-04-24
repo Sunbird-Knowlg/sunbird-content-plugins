@@ -384,7 +384,6 @@ org.ekstep.contenteditor.basePlugin.extend({
      *      
      * To get quiz summary. 
      * @memberof summary
-     * 
      */
     getSummary: function() {
       var instance = this;
