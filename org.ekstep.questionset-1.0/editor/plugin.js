@@ -97,6 +97,8 @@ org.ekstep.contenteditor.basePlugin.extend({
       instance.editorObj.scaleToWidth(props.w);
       instance.postInit();
     }, props);
+    //Getting numberf questions for assessment summary : testing purpose
+    //instance.getSummary();//Testing 
   },
   getPropsForEditor: function(qTittle, qCount, maxscore) {
     /* Display the all properties(title,count and maxscore) on the editor*/
@@ -126,8 +128,6 @@ org.ekstep.contenteditor.basePlugin.extend({
   addQS: function(event, dataObj) {
     var instance = this;
     var questions = [];
-    //Getting numberf questions for assessment summary : testing purpose
-    instance.getSummary(dataObj);
     if (_.isArray(dataObj.data.data)) {
       dataObj.data.data.forEach(function(question) {
         questions.push(question);
@@ -308,22 +308,30 @@ org.ekstep.contenteditor.basePlugin.extend({
       data: data
     });
   },
-  getSummary: function(dataObj) {
-    var summary = {'total_questions': 0,'total_score': 0};
-    if (_.isArray(dataObj.data.data)) {
-      dataObj.data.data.forEach(function(question) {
-        if(question.body != undefined){
-          var questionCount = JSON.parse(question.body).data.config.questionCount == undefined ? 1 : JSON.parse(question.body).data.config.questionCount;
-          var scoreCount = JSON.parse(question.body).data.config.max_score == undefined ? 1 : JSON.parse(question.body).data.config.max_score;
-          summary.total_questions = summary.total_questions + parseInt(questionCount);
-          summary.total_score = summary.total_score + parseInt(scoreCount);
-        }else{
-          summary.total_questions = summary.total_questions + parseInt(1);
-          summary.total_score = summary.total_score + parseInt(1); 
-        }
-      });
+  getSummary: function() {
+    var instance = this;
+    console.log("Questions",instance._questions);
+    var summary = {'totalQuestions': 0,'totalScore': 0};
+    var totalQuestionsToRender = instance.config.total_items; 
+    if(instance.config.shuffle_questions){
+      // Total number of items/questions to render
+      summary.totalQuestions = totalQuestionsToRender;  
+      summary.totalScore = totalQuestionsToRender;     
+    }else{
+        instance._questions.forEach(function(question,key) {
+          if(key < totalQuestionsToRender){
+            if(question.body != undefined){
+              var questionCount = JSON.parse(question.body).data.config.questionCount == undefined ? 1 : JSON.parse(question.body).data.config.questionCount;
+              var scoreCount = JSON.parse(question.body).data.config.max_score == undefined ? 1 : JSON.parse(question.body).data.config.max_score;
+              summary.totalQuestions = summary.totalQuestions + parseInt(questionCount);
+              summary.totalScore = summary.totalScore + parseInt(scoreCount);
+            }else{
+              summary.totalQuestions = summary.totalQuestions + parseInt(1);
+              summary.totalScore = summary.totalScore + parseInt(1);
+            }
+          } 
+        });
     }
-    console.log("QS Summary",summary);
     return summary;
   }
 });
