@@ -323,3 +323,8 @@
 .activity-browser-controls .ui.selection.dropdown.custom-dropdown{
     min-width: unset;
 }
+
+/* for add activity-browser */
+.activity-browser-controls .ui.selection.dropdown .menu>.item {
+    text-transform: capitalize;
+}
