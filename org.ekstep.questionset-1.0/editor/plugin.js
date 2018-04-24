@@ -327,7 +327,7 @@ org.ekstep.contenteditor.basePlugin.extend({
               summary.totalScore = summary.totalScore + parseInt(scoreCount);
             }else{
               summary.totalQuestions = summary.totalQuestions + parseInt(1);
-              summary.totalScore = summary.totalScore + parseInt(1);
+              summary.totalScore = summary.totalScore + question.max_score;
             }
           } 
         });
