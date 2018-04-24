@@ -4,12 +4,12 @@ angular.module('org.ekstep.editcontentmeta', ['ngTokenField']).controller('editc
     var ctrl = this;
 
     var data = _.cloneDeep(data) || {};
-    var keywords =  _.get(data,'contentMeta.keywords')
-        if (keywords) {
-                data.contentMeta.keywords = keywords.map(function(a) {
-                return a.lemma ? a.lemma : a
+    var keywords = _.get(data, 'contentMeta.keywords');
+    if (keywords) {
+        data.contentMeta.keywords = keywords.map(function(a) {
+            return a.lemma ? a.lemma : a
         })
-     }
+    }
 
     // Init controller data
     ctrl.plugin = {id: "org.ekstep.editcontentmeta", ver: "1.0"};
