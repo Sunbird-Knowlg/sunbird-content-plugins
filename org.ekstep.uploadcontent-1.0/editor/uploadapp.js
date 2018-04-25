@@ -237,10 +237,10 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                         position: 'topCenter',
                         icon: 'fa fa-check-circle'
                     });
-                    ecEditor.dispatchEvent("org.ekstep.genericeditor:reload");
-                    if(mimeType !== 'text/x-url'){
+                    if(mimeType === 'text/x-url'){
                         ecEditor.jQuery('#genericEditorBody').hide();
                     }
+                    ecEditor.dispatchEvent("org.ekstep.genericeditor:reload");
                     $scope.closeThisDialog();
                 }
             })
