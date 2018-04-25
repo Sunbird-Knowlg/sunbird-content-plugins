@@ -439,10 +439,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                     var node = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(oldId);
                     if (node) node.data.id = newId;
                 });
-                if (org.ekstep.services.stateService.state.dialCodeMap || org.ekstep.services.stateService.state.invaliddialCodeMap)
-                    instance.highlightNodeForInvalidDialCode(res);
+                instance.highlightNodeForInvalidDialCode(res);
                 ecEditor.dispatchEvent("meta:after:save", {});
-
             } else {
                 if (data.showNotification) ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                     message: 'Unable to save the content, try again!',
@@ -472,9 +470,11 @@ org.ekstep.contenteditor.basePlugin.extend({
                 delete org.ekstep.services.stateService.state.dialCodeMap[key];
                 org.ekstep.services.stateService.setState('dialCodeMap', res.data.result.identifiers[key], value);
                 mapArr.push({ "identifier": res.data.result.identifiers[key], "dialcode": value });
+                org.ekstep.services.collectionService.lowLightNode(res.data.result.identifiers[key]);
                 instance.storeDialCodes(res.data.result.identifiers[key], value);
             } else {
                 mapArr.push({ "identifier": key, "dialcode": value });
+                org.ekstep.services.collectionService.lowLightNode(key);
                 instance.storeDialCodes(key, value);
             }
         });
@@ -489,7 +489,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             };
             ecEditor.getService('dialcode').dialcodeLink(ecEditor.getContext('channel'), request, function(err, rep) {
                 if (!err) {
-                    if( org.ekstep.services.stateService.state.dialCodeMap && org.ekstep.services.stateService.state.invaliddialCodeMap){
+                    if( !ecEditor._.isEmpty(org.ekstep.services.stateService.state.dialCodeMap) && !ecEditor._.isEmpty(org.ekstep.services.stateService.state.invaliddialCodeMap)){
                         ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
                             title: 'Unable to update some of the DIAL codes.',
                             position: 'topCenter',
