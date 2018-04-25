@@ -1,8 +1,0 @@
-{
-    "id": "org.ekstep.collectionkeyboardshortcuts",
-    "ver": "1.0",
-    "author": "Akash Gupta",
-    "editor": {
-        "main": "editor/plugin.js"
-    }
-}

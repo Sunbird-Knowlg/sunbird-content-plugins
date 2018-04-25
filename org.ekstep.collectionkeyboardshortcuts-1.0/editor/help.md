@@ -1,3 +1,0 @@
-***org.ekstep.collectionkeyboardshortcuts***
-
-
