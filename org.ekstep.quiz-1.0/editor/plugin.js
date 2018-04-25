@@ -389,19 +389,9 @@ org.ekstep.contenteditor.basePlugin.extend({
       var instance = this;
       var summary = {'totalQuestions': 0,'totalScore': 0};
       var totalQuestionsToRender = instance.data.questionnaire.total_items; 
-      if(instance.data.questionnaire.shuffle){
-        // Total number of items/questions to render
+        // Total number of score/questions is equal to total_items  because evaluator setting max_score to 1 for each question, irrespective of question's max_score
         summary.totalQuestions = totalQuestionsToRender;  
         summary.totalScore = totalQuestionsToRender;     
-      }else{
-        var questionnaireID = instance.data.questionnaire.item_sets[0].id;
-        instance.data.questionnaire.items[questionnaireID].forEach(function(question,key) {
-            if(key < totalQuestionsToRender){
-                summary.totalQuestions = summary.totalQuestions + parseInt(1);
-                summary.totalScore = summary.totalScore + parseInt(question.max_score);
-            } 
-          });
-      }
       return summary;
     }
 });
