@@ -157,7 +157,6 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                 $scope.editFlag = ($scope.dialcodes && ($scope.dialcodes.length == $scope.maxLength)) ? true : false;
                 if (ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, $scope.dialcodes) != -1) {
                     $scope.status = "success";
-                    $scope.$safeApply();
                 }else{
                     $scope.searchDialCode($scope.dialcodes, function(response){
                         $scope.status = (response === 1) ? "success"  : "failure"
@@ -167,6 +166,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
             } else{
                 $scope.editFlag = false;
             }
+            $scope.$safeApply();
         }
 
         $scope.retrunDialCode = function () {
