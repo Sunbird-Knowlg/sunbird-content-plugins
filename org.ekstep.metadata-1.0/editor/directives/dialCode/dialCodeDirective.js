@@ -25,7 +25,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                 }
             };
             ecEditor.getService('dialcode').getAllDialCodes(channel, reqObj, function(dialerr, dialrep) {
-                if (!dialerr & dialrep.data.result) {
+                if (!dialerr) {
                     if (dialrep.data.result.count === 1)
                         ecEditor._.uniq(org.ekstep.services.collectionService.dialcodeList.push(dialrep.data.result.dialcodes[0].identifier));
                     callback && callback(dialrep.data.result.count);
