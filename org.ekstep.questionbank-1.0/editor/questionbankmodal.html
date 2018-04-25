@@ -191,7 +191,7 @@
                                 <div class="field">
                                     <div class="ui fluid labeled input">
                                         <div class="ui label">Configure Score</div>
-                                        <input id="max_score" name="max_score" ng-model="selQuestionObj.max_score" type="number" min="1" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" ng-change="saveConfig();setDisplayandScore();" ng-disabled="configScore || questionSetConfigObj.shuffle_questions />
+                                        <input id="max_score" name="max_score" ng-model="selQuestionObj.max_score" type="number" min="1" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" ng-change="saveConfig();setDisplayandScore();" ng-disabled="configScore || questionSetConfigObj.shuffle_questions" />
                                     </div>
                                 </div>
                             </div>
