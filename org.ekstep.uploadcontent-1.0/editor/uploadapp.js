@@ -115,8 +115,9 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
         var isWhitelistedURL = false;
         var hostName = $scope.getHostName(url);
         for (let domain of domainList){
-            if(hostName[2] === domain || (hostName[1]+hostName[2]) === domain ){
+            if(hostName[2] === domain || (hostName[1]+hostName[2]) === domain ){ //the whitelisted domain can be either youtube.com or www.youtube.com 
                 isWhitelistedURL = true;
+                break;
             }
         }
         return isWhitelistedURL;
@@ -237,6 +238,9 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                         icon: 'fa fa-check-circle'
                     });
                     ecEditor.dispatchEvent("org.ekstep.genericeditor:reload");
+                    if(mimeType !== 'text/x-url'){
+                        ecEditor.jQuery('#genericEditorBody').hide();
+                    }
                     $scope.closeThisDialog();
                 }
             })
