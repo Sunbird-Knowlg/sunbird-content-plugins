@@ -102,7 +102,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.onConfigChange = function(object) {
         if (object.field) {
             var type = (object.field.inputType == 'select' || object.field.inputType == 'multiselect') ? 'change' : 'click'
-            object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: object.field.code }, $scope.manifest);
+            object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: {id: object.field.code, type:"field", ver:"" }}, $scope.manifest);
         };
         var validationStatus = $scope.isValidInputs(object);
         !validationStatus && $scope.updateErrorMessage(object.form);
@@ -219,7 +219,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var fixedLayout = [];
         var dynamicLayout = [];
         _.map($scope.fields, function(field) {
-            if (field.code === 'dialcode') { invokeDialCode() }
             if (field.validation) {
                 _.forEach(field.validation, function(value, key) {
                     if (value.type === 'regex') {
@@ -248,7 +247,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             id: "save",
             type: 'click',
             subtype: 'button',
-            target: 'save'
+            target: {id:'save',type:"button",ver:""}
         }, $scope.manifest);
         $scope.isSubmit = true;
         var validationStatus = $scope.isValidInputs(object);
@@ -313,7 +312,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      */
     $scope.cancel = function() {
         // Note: Reset the all selected fields (If required)
-        logTelemetry({ id: "cancel", type: 'click', subtype: 'button', target: 'close' }, $scope.manifest);
+        logTelemetry({ id: "cancel", type:'click', subtype: 'button', target:{id:'close',type:"button", ver:"" }}, $scope.manifest);
         ecEditor.dispatchEvent('editor:form:cancel', { callback: $scope.closeThisDialog })
     }
 
@@ -366,6 +365,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 useLabels: labels,
                 forceSelection: forceSelection
             });
+            _.find($scope.fields, ['code', "dialcode"]) && invokeDialCode();
+            $scope.$safeApply();
         }, 0)
     }
 
@@ -374,8 +375,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      *              - Which partions the fixedLayout and dynamic layout section fields
      */
     $scope.init = function() {
-        ecEditor.addEventListener('metadata:form:onsuccess', $scope.success, $scope);
-        ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
+        !EventBus.hasEventListener('metadata:form:onsuccess') && ecEditor.addEventListener('metadata:form:onsuccess', $scope.success, $scope);
+        !EventBus.hasEventListener('metadata:form:oncancel') && ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
         var callbackFn = function(config) {
             $scope.fields = config.fields;
             $scope.tempalteName = config.template;
