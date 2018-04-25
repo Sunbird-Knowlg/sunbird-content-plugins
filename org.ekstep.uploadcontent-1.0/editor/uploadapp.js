@@ -142,7 +142,9 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
 
     $scope.getWhitelistedDomains = function(){
         var domainList = [], domains = ecEditor.getConfig('extContWhitelistedDomains');
-        domainList = domains.split(',');
+        if(typeof domains !== 'undefined' && domains){
+            domainList = domains.split(',');
+        }
         return domainList;
     }
     
