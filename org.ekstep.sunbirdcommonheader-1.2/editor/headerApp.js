@@ -476,4 +476,5 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     //others
     ecEditor.addEventListener("org.ekstep:sunbirdcommonheader:close:editor", $scope.closeEditor, $scope);
 }]);
+
 //# sourceURL=sunbirdheaderapp.js
