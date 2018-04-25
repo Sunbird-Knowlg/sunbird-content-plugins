@@ -21,7 +21,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
             validation: {
                 allowedExtensions: ['pdf', 'epub', 'mp4', 'h5p', 'zip', 'webm'],
                 itemLimit: 1,
-                sizeLimit: 25000000 // 25 MB = 25 * 1024 * 1024 bytes
+                sizeLimit: 50000000 // 50 MB = 50 * 1024 * 1024 bytes
             },
             callbacks: {
                 onStatusChange: function(id, oldStatus, newStatus) {
@@ -47,17 +47,25 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                         position: 'topCenter',
                         icon: 'fa fa-warning'
                     });
-                    ecEditor.getService('telemetry').error({
-                        "env": 'content',
-                        "stage": '',
-                        "action": 'upload',
-                        "objectid": "",
-                        "objecttype": "content",
-                        "err": "",
-                        "type": "API",
-                        "data": errorReason,
-                        "severity": "error"
-                    })
+                    const manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.uploadcontent");
+                    var pkgVersion = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId')).pkgVersion;
+                    var object = {
+                        id: org.ekstep.contenteditor.api.getContext('contentId'),
+                        ver: !_.isUndefined(pkgVersion) && pkgVersion.toString() || '0',
+                        type: 'Content'
+                    }
+                    org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).error({
+                        "err": name || 'Unable to upload',
+                        "errtype": 'CONTENT',
+                        "stacktrace": errorReason,
+                        "pageid": "",
+                        "object": object,
+                        "plugin": {
+                            id: manifest.id,
+                            ver: manifest.ver,
+                            category: 'core'
+                        }
+                    });
                     $scope.uploader.reset();
                 }
             },
@@ -273,3 +281,4 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
         })
     }    
 }]);
+

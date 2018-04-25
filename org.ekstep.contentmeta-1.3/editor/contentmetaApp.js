@@ -108,7 +108,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
     }
 
-    $scope.onNodeSelect = function(evant, data) {
+    $scope.onNodeSelect = function(event, data) {
         var contentArr = ["Story", "Collection", "Game", "Worksheet", "Resource"];
         $scope.editable = (!data.data.root && data.data.metadata.visibility === 'Default') ? false : true;
         if (_.indexOf(contentArr, data.data.objectType) != -1) {
@@ -144,10 +144,12 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
             }
             $scope.content.name = $scope.content.name || 'Untitled Collection';
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
+            $scope.changeTitle();
         }
         $scope.$safeApply();
     }
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.onNodeSelect);
+
 
     $scope.getPartentNode = function() {
         var activeNode = org.ekstep.services.collectionService.getActiveNode();
@@ -212,9 +214,12 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
                 }
             }
         }, true);
+        $scope.onNodeSelect(undefined, org.ekstep.services.collectionService.getActiveNode())
     }
-    $scope.changeTitle = function(){
-        org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
+    $scope.changeTitle = function() {
+        if ($scope.content) {
+            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
+        }
     }
 
     $scope.loadKeywords = function($query) {
@@ -227,7 +232,21 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
         }
     };
 
+    $scope.updateRootNode = function(){
+        if ($scope.nodeType === DEFAULT_NODETYPE){
+            var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
+            if(activeNode && activeNode.data.root){
+                $scope.content = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
+                ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
+                $scope.changeTitle();
+            }
+        }
+    }   
+
     ecEditor.addEventListener("org.ekstep.collectioneditor:content:update", $scope.updateContent, $scope);
+    ecEditor.addEventListener("org.ekstep.contenteditor:after-save", $scope.updateRootNode, $scope);
+    ecEditor.addEventListener("meta:after:save", $scope.updateRootNode, $scope)
+
     $scope.init();
 }]);
 //# sourceURL=contentmetaApp.js

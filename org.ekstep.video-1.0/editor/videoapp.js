@@ -33,17 +33,13 @@ angular.module('videoApp', [])
                         ctrl.messageDiv = true;
                         ctrl.showAddLessonBtn = false;
                     });
-                    org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).error({ 
-                        "env": "content", 
-                        "stage": ecEditor.getCurrentStage().id, 
-                        "action": "paly video url", 
-                        "err": "Sorry could not load preview of the video link. Please check the link and try again.", 
-                        "type": "SYSTEM", 
-                        "data": encodeURIComponent(ctrl.videoUrl),
-                        "objecttype": "video",
-                        "objectid": ctrl.id,
-                        "severity": "error" 
-                    });
+                    var pkgVersion = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId')).pkgVersion;
+                    var object = {
+                        id: org.ekstep.contenteditor.api.getContext('contentId'),
+                        ver: !_.isUndefined(pkgVersion) && pkgVersion.toString() || '0',
+                        type: 'Content'
+                    }
+                    org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).error({"err": err.code || '', "errtype": 'CONTENT', "stacktrace": err, "pageid": ecEditor.getCurrentStage().id, "object":object, "plugin": {id: instance.manifest.id, ver: instance.manifest.ver, category: 'core'} }); 
                     console.log("Invalid URL:", err);
                 });
         };

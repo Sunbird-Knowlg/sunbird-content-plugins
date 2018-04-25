@@ -68,7 +68,7 @@ function logTelemetry(data, plugin) {
         "pluginver": plugin.ver,
         "objectid": data.objectid || "",
         "targetid": data.targetid || "",
-        "stage": data.stage || ""
+        "stage": data.stage || ecEditor.getCurrentStage().id
     })
 }
 
