@@ -224,7 +224,7 @@ angular.module('createquestionapp', [])
                 }
             });
 
-            // Service call to get the question meta data filter values 
+           // Service call to get the question meta data filter values
             ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys($scope.framework, function(error, response) {
                 if (!error) {
                     var categories = response.data.result.framework.categories;
@@ -449,6 +449,15 @@ angular.module('createquestionapp', [])
             } else {
                 ecEditor.dispatchEvent($scope.pluginIdObj.question_create_id + ":showpopup", questionObj);
             }
+        }
+
+        $scope.shuffleWarnPopUp = function(){
+					if($scope.questionSetConfigObj.shuffle_questions){
+							ecEditor.dispatchEvent("org.ekstep.toaster:info", {
+									title: 'Each question will carry equal weightage of 1 mark when using Shuffle. To provide different weightage to individual questions please turn off Shuffle.',
+									position: 'topCenter',
+							});
+					}
         }
 
         $scope.previewItem = function(question, bool) {
