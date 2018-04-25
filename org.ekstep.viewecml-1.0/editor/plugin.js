@@ -52,8 +52,6 @@ org.ekstep.contenteditor.basePlugin.extend({
     showECMLBrowser: function(err, data) {
         var instance = this,
             popupConfig;
-        var ecmlToCopy = org.ekstep.contenteditor.stageManager.toECML();
-
         popupConfig = {
             template: data,
             data: {

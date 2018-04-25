@@ -64,7 +64,8 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.1"
                 "org.ekstep.breadcrumb-1.0"
                 "org.ekstep.sunbirdmetadata-1.0"
                 "org.ekstep.editcontentmeta-1.1"
-                "org.ekstep.metadata-1.0");
+                "org.ekstep.metadata-1.0"
+                "org.ekstep.collectionkeyboardshortcuts-1.0");
 
 for i in "${coreplugins[@]}"
 do
