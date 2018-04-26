@@ -1,12 +1,12 @@
 'use strict';
 var fileUploader;
-angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
+angular.module('org.ekstep.uploadcontent-1.1', []).controller('uploadController', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
 
     $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
     $scope.contentURL = undefined;
     $scope.newContent = false;
     $scope.showLoaderIcon = false;
-    $scope.loaderIcon = ecEditor.resolvePluginResource("org.ekstep.uploadcontent", "1.0", "editor/loader.gif");
+    $scope.loaderIcon = ecEditor.resolvePluginResource("org.ekstep.uploadcontent", "1.1", "editor/loader.gif");
     $scope.uploadCancelLabel = ecEditor.getContext('contentId') ? 'Cancel' : 'Close Editor';
 
     $scope.$on('ngDialog.opened', function() {
@@ -78,7 +78,6 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
     });
 
     $scope.detectMimeType = function(fileName) {
-
         var extn = fileName.split('.').pop()
         switch (extn) {
             case 'pdf':
@@ -94,13 +93,61 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
             case 'webm':
                 return 'video/webm';
             default:
-                if ($scope.validateYoutubeURL(fileName)) {
-                    return 'video/x-youtube';
-                }
-                return '';
+               return $scope.validateUploadURL(fileName);
         }
     }
 
+    $scope.validateUploadURL = function(url){
+        var response = '';
+        if($scope.isValidURL(url) && $scope.isWhitelistedURL(url)){
+            if($scope.validateYoutubeURL(url)){
+                response = 'video/x-youtube';
+            } else {
+                response =  'text/x-url';
+            }
+        }
+        return response;
+    }
+
+    $scope.isValidURL = function(url){
+        var res = url.match(/(http(s)?:\/\/.)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/g);
+        if(res == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    $scope.isWhitelistedURL = function(url){
+        var domainList = $scope.getWhitelistedDomains();
+        var isWhitelistedURL = false;
+        var hostName = $scope.getHostName(url);
+        for (let domain of domainList){
+            if(hostName[2] === domain || (hostName[1]+hostName[2]) === domain ){ //the whitelisted domain can be either youtube.com or www.youtube.com 
+                isWhitelistedURL = true;
+                break;
+            }
+        }
+        return isWhitelistedURL;
+    }
+
+    $scope.getHostName = function(url){ 
+        var match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
+        if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
+            return match;
+        } else {
+            return null;
+        }
+    }
+
+    $scope.getWhitelistedDomains = function(){
+        var domainList = [], domains = ecEditor.getConfig('extContWhitelistedDomains');
+        if(typeof domains !== 'undefined' && domains){
+            domainList = domains.split(',');
+        }
+        return domainList;
+    }
+    
     $scope.validateYoutubeURL = function(fileName) {
         var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
         var match = fileName.match(regExp);
@@ -200,6 +247,9 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                         position: 'topCenter',
                         icon: 'fa fa-check-circle'
                     });
+                    if(mimeType === 'text/x-url'){
+                        ecEditor.jQuery('#genericEditorBody').hide();
+                    }
                     ecEditor.dispatchEvent("org.ekstep.genericeditor:reload");
                     $scope.closeThisDialog();
                 }
@@ -274,7 +324,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
             "subtype": data.subtype || "",
             "target": data.target || "",
             "pluginid": "org.ekstep.uploadcontent",
-            "pluginver": "1.0",
+            "pluginver": "1.1",
             "objectid": "",
             "targetid": "",
             "stage": ""
