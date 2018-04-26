@@ -429,6 +429,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                     var node = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(oldId);
                     if (node) node.data.id = newId;
                 });
+                ecEditor.dispatchEvent("meta:after:save", {});
+
             } else {
                 if (data.showNotification) ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                     message: 'Unable to save the content, try again!',

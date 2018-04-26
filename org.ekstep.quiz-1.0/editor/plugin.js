@@ -379,6 +379,20 @@ org.ekstep.contenteditor.basePlugin.extend({
             data = ecEditor.getCurrentObject().data;
         }
         ecEditor.dispatchEvent("org.ekstep.assessmentbrowser:show", {callback : callback, data : data});  
+    },
+    /**    
+     *      
+     * To get quiz summary. 
+     * @memberof summary
+     */
+    getSummary: function() {
+      var instance = this;
+      var summary = {'totalQuestions': 0,'totalScore': 0};
+      var totalQuestionsToRender = instance.data.questionnaire.total_items; 
+        // Total number of score/questions is equal to total_items  because evaluator setting max_score to 1 for each question, irrespective of question's max_score
+        summary.totalQuestions = totalQuestionsToRender;  
+        summary.totalScore = totalQuestionsToRender;     
+      return summary;
     }
 });
 //# sourceURL=quizPlugin.js

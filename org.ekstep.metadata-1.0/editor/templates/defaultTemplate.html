@@ -16,7 +16,7 @@
             <div class="ui two column grid">
                 <div class="row">
                     <div class="column">
-                        <span><i class="icon edit"></i> Edit Details</span>
+                        <span><i  ng-class="!editMode ? 'eye icon':'edit icon' " ></i>{{headerMessage}}</span>
                     </div>
                     <div class="right aligned column">
                         <i class="close link icon" ng-click="cancel()"></i>
@@ -52,7 +52,7 @@
                                     <label>{{fixedField.label | uppercase}}</label>
                                     <div class=" ui input " ng-class="{ 'disabled':!fixedField.editable } ">
                                         <textarea id="{{fixedField.code}} " placeholder={{field.placeholde}} ng-model="contentMeta.description " rows="{{fixedField.renderingHints.rows}} " name="{{fixedField.code}} " ng-required="{{fixedField.required}}" ng-pattern="fixedField.validation.regex['value']"
-                                            ng-maxlength="{{fixedField.validation.max['value']}}" ng-keyup="onConfigChange({form:metaForm})" ng-click="onConfigChange({field:fixedField,form:metaForm})"></textarea>
+                                            ng-maxlength="{{fixedField.validation.max['value']}}" ng-keyup="onConfigChange({form:metaForm})" ng-click="onConfigChange({field:fixedField,form:metaForm})" ng-disabled="{{!fixedField.editable}}"></textarea>
                                     </div>
                                     <div ng-show="!metaForm[fixedField.code].$valid  && isSubmit" class="ui pointing red basic label ">
                                         {{validation[fixedField.code].errorMessage || DEFAULT_ERROR_MESSAGE}}
@@ -77,7 +77,7 @@
                                                 " ng-if="(dynamicField.inputType=='text') ">
                                         <label>{{dynamicField.label | uppercase}}</label>
                                         <div>
-                                            <div class="ui input " ng-class="{ 'disabled':!dynamicField.editable} ">
+                                            <div class="ui input " ng-class="{ 'disabled':isEditMode || !dynamicField.editable } ">
                                                 <input id="{{dynamicField.code}} " placeholder={{dynamicField.placeholder}} name="{{dynamicField.code}} " ng-model="contentMeta[dynamicField.code] " type="text " ng-required="{{dynamicField.required}} " ng-pattern="dynamicField.validation.regex['value']"
                                                     ng-maxlength="{{dynamicField.validation.max[ 'value']}}" ng-keyup="onConfigChange({form:metaForm})" ng-click="onConfigChange({field:dynamicField, form:metaForm})">
                                             </div>
@@ -116,7 +116,7 @@
                                         <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui search dropdown placeholder-padding " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm}) "
                                             ng-required="{{dynamicField.required}} ">
                                                 <option value = "">{{dynamicField.placeholder}}</option> 
-                                                <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code]" ng-selected="contentMeta[dynamicField.code] == category"  >{{category.name || category}}</option>
+                                                <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code]" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)"  >{{category.name || category}}</option>
                                         </select>
                                         <div ng-show="!metaForm[dynamicField.code].$valid  && isSubmit" class="ui pointing red basic label ">
                                             Please Select
@@ -149,14 +149,13 @@
                 </div>
                 <!-- ACTION SECTION LAYOUT -->
             </form>
-
         </div>
         <div class="actions ">
             <div class="twelve wide column right aligned ">
                 <div class="ui buttons ">
-                    <button id="closePopUp " class="ui orange button " type="button " ng-click="cancel() ">Cancel</button>
+                    <button id="closePopUp " class="ui orange button" ng-class="{'disabled':!editMode}" type="button " ng-click="cancel()">Cancel</button>
                     <div class="or "></div>
-                    <button class="ui blue button " type="button " ng-click="success(undefined, {form:metaForm})">Save</button>
+                    <button class="ui blue button " type="button " ng-class="{'disabled':!editMode}" ng-click="success(undefined, {form:metaForm})">Save</button>
                 </div>
             </div>
         </div>

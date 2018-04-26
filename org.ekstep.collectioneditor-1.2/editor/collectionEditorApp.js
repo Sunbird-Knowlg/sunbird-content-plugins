@@ -267,29 +267,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
                 $scope.showsuggestedContent = $scope.sidebarPages.length > 0 ? true : false;
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
-                var rootNodeConfig = ecEditor._.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
-                if(rootNodeConfig.type.toLowerCase() === "textbook"){
-                    var channel = ecEditor.getContext('channel');
-                    var reqObj = {
-                        "request": {
-                            "search": {}
-                        }
-                    };
-                    ecEditor.getService('dialcode').getAllDialCodes(channel, reqObj, function(dialerr, dialrep) {
-                        if (!dialerr) {
-                            _.forEach(dialrep.data.result.dialcodes, function(dialcodeData){
-                                org.ekstep.services.collectionService.dialcodeList.push(dialcodeData.identifier);
-                            });
-                            $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
-                            $scope.$safeApply();
-                            callback && callback(err, res);
-                        }else{
-                            callback && callback('unable to fetch dialcodes!', dialrep);
-                        }
-                    });
-                }else{
-                    callback && callback('unable to fetch the content!', res);
-                }
+                $scope.$safeApply();
+                callback && callback(err, res);
             } else {
                 callback && callback('unable to fetch the content!', res);
             }

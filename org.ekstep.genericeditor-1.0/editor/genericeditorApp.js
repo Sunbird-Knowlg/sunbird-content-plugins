@@ -75,7 +75,8 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
 
 
     $scope.telemetry = function(data) {
-        org.ekstep.services.telemetryService.interact({ "type": 'click', "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.collectioneditor", "pluginver": "1.0", "objectid": ecEditor.getCurrentStage().id, "stage": ecEditor.getCurrentStage().id });
+        var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.genericeditor");
+        org.ekstep.services.telemetryService.interact({ "type": 'click', "subtype": data.subtype, "target": data.target, "pluginid": manifest.ver, "pluginver": manifest.id, "objectid": ecEditor.getCurrentStage().id, "stage": ecEditor.getCurrentStage().id });
     };
 
     ecEditor.addEventListener('org.ekstep.genericeditor:reload', function() {
@@ -108,21 +109,7 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
                 }
             });
         } else {
-            if (!ecEditor.getContext('framework')) {
-                var channel = ecEditor.getContext('channel') || "in.ekstep";
-                ecEditor.getService(ServiceConstants.META_SERVICE).getFrameworks(channel, function(err, res) {
-                    if (res && res.data) {
-                        ecEditor.setContext("framework", res.data.result.channel.defaultFramework);
-                        window.loading_screen && window.loading_screen.finish();
-                    } else {
-                        ecEditor.jQuery('.loading-message').remove();
-                        ecEditor.jQuery('.sk-cube-grid').remove();
-                        ecEditor.jQuery('.pg-loading-html').prepend('<p class="loading-message">Unable to fetch defaultFramework! Please try again later</p><button class="ui red button" onclick="ecEditor.dispatchEvent(\'org.ekstep.collectioneditor:content:notfound\');"><i class="window close icon"></i>Close Editor!</button>');
-                    }
-                });
-            } else {
-                window.loading_screen && window.loading_screen.finish();
-            }
+            window.loading_screen && window.loading_screen.finish();
         }
     });
 }]);

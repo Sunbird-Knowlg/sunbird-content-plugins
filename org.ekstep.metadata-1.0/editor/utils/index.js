@@ -18,7 +18,7 @@ function invokeDialCode() {
             data: ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild(),
             contentId: org.ekstep.contenteditor.api.getContext('contentId')
         }
-        ecEditor.dispatchEvent("editor:update:dialcode", configurations)
+        ecEditor.dispatchEvent("editor:metadata:update:dialcode", configurations)
     }
 }
 
@@ -68,7 +68,7 @@ function logTelemetry(data, plugin) {
         "pluginver": plugin.ver,
         "objectid": data.objectid || "",
         "targetid": data.targetid || "",
-        "stage": data.stage || ""
+        "stage": data.stage || ecEditor.getCurrentStage().id
     })
 }
 

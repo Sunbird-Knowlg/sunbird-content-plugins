@@ -1,10 +1,10 @@
-/**
+/*
  * Plugin to create MCQ question
  * @class org.ekstep.questionunitmcq:mcqQuestionFormController
  * Jagadish P<jagadish.pujari@tarento.com>
  */
 angular.module('mcqApp', [])
-  .controller('mcqQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope) {
+  .controller('mcqQuestionFormController', ['$scope', '$rootScope', function ($scope) {
     $scope.formVaild = false;
     $scope.mcqConfiguartion = {
       'questionConfig': {
@@ -54,8 +54,8 @@ angular.module('mcqApp', [])
     };
     $scope.mcqFormData.media = [];
     $scope.editMedia = [];
-    
-    $scope.init = function() {
+
+    $scope.init = function () {
       $('.menu .item').tab();
       if (!ecEditor._.isUndefined($scope.questionEditData)) {
         var data = $scope.questionEditData.data;
@@ -79,7 +79,7 @@ angular.module('mcqApp', [])
           $scope.mcqFormData.options.splice(2, 1);
         }
       }
-      $scope.$parent.$on('question:form:val', function(event) {
+      $scope.$parent.$on('question:form:val', function (event) { // eslint-disable-line no-unused-vars
         if ($scope.formValidation()) {
           $scope.$emit('question:form:valid', $scope.mcqFormData);
         } else {
@@ -87,7 +87,7 @@ angular.module('mcqApp', [])
         }
       })
     }
-    $scope.addAnswerField = function() {
+    $scope.addAnswerField = function () {
       var option = {
         'text': '',
         'image': '',
@@ -96,19 +96,19 @@ angular.module('mcqApp', [])
       };
       if ($scope.mcqFormData.options.length < 8) $scope.mcqFormData.options.push(option);
     }
-    $scope.formValidation = function() {
+    $scope.formValidation = function () {
       var opSel = false;
       var valid = false;
       var formValid = $scope.mcqForm.$valid && $scope.mcqFormData.options.length > 1;
       $scope.submitted = true;
       if (!_.isUndefined($scope.selectedOption)) {
-        _.each($scope.mcqFormData.options, function(k, v) {
+        _.each($scope.mcqFormData.options, function (k, v) {
           $scope.mcqFormData.options[v].isCorrect = false;
         });
         valid = true;
         $scope.mcqFormData.options[$scope.selectedOption].isCorrect = true;
       } else {
-        _.each($scope.mcqFormData.options, function(k, v) {
+        _.each($scope.mcqFormData.options, function (k, v) { // eslint-disable-line no-unused-vars
           if (k.isCorrect) {
             valid = true;
           }
@@ -126,27 +126,26 @@ angular.module('mcqApp', [])
       var temp = [];
       _.isEmpty($scope.questionMedia.image) ? 0 : tempArray.push($scope.questionMedia.image);
       _.isEmpty($scope.questionMedia.audio) ? 0 : tempArray.push($scope.questionMedia.audio);
-      _.each($scope.optionsMedia.image, function(key, val) {
+      _.each($scope.optionsMedia.image, function (key, val) { // eslint-disable-line no-unused-vars
         tempArray.push(key);
       });
-      _.each($scope.optionsMedia.audio, function(key, val) {
+      _.each($scope.optionsMedia.audio, function (key, val) { // eslint-disable-line no-unused-vars
         tempArray.push(key);
       });
-      temp = tempArray.filter(function(element) {
+      temp = tempArray.filter(function (element) {
         return element !== undefined;
       });
       $scope.editMedia = _.isEmpty(temp) ? 0 : _.union($scope.editMedia, temp);
       $scope.mcqFormData.media = _.isEmpty($scope.editMedia[0]) ? temp : $scope.editMedia;
       //check if audio is their then add audio icon in media array
       if ($scope.optionsMedia.audio.length > 0 || _.has($scope.questionMedia, "audio")) $scope.addAudioImage();
-      console.log("Form data", $scope.mcqFormData);
       return (formValid && opSel) ? true : false;
     }
-    $scope.deleteAnswer = function(id) {
+    $scope.deleteAnswer = function (id) {
       if (id >= 0) $scope.mcqFormData.options.splice(id, 1);
     }
     //if audio added then audio icon id sent to ecml add stage
-    $scope.addAudioImage = function() {
+    $scope.addAudioImage = function () {
       var audioIcon = {
         id: "org.ekstep.questionset.audioicon",
         src: ecEditor.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", 'renderer/assets/audio.png'),
@@ -156,11 +155,11 @@ angular.module('mcqApp', [])
       };
       $scope.mcqFormData.media.push(audioIcon);
     }
-    $scope.addImage = function(id) {
+    $scope.addImage = function (id) {
       ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
         type: 'image',
         search_filter: {}, // All composite keys except mediaType
-        callback: function(data) {
+        callback: function (data) {
           var tempImage = {
             "id": Math.floor(Math.random() * 1000000000), // Unique identifier
             "src": org.ekstep.contenteditor.mediaManager.getMediaOriginURL(data.assetMedia.src), // Media URL
@@ -179,11 +178,11 @@ angular.module('mcqApp', [])
         }
       });
     }
-    $scope.addAudio = function(id) {
+    $scope.addAudio = function (id) {
       ecEditor.dispatchEvent('org.ekstep.assetbrowser:show', {
         type: 'audio',
         search_filter: {}, // All composite keys except mediaType
-        callback: function(data) {
+        callback: function (data) {
           var tempAudio = {
             "id": Math.floor(Math.random() * 1000000000), // Unique identifier
             "src": org.ekstep.contenteditor.mediaManager.getMediaOriginURL(data.assetMedia.src), // Media URL
@@ -201,14 +200,14 @@ angular.module('mcqApp', [])
         }
       });
     }
-    $scope.addHint = function(id) {
+    $scope.addHint = function (id) {
       if (id == 'q') {
         $scope.qHint = true;
       } else {
         $scope.oHint[id] = true;
       }
     }
-    $scope.deleteImage = function(id) {
+    $scope.deleteImage = function (id) {
       if (id == 'q') {
         $scope.mcqFormData.question.image = '';
         delete $scope.questionMedia.image;
@@ -218,7 +217,7 @@ angular.module('mcqApp', [])
         delete $scope.optionsMedia.image[id];
       }
     }
-    $scope.deleteAudio = function(id) {
+    $scope.deleteAudio = function (id) {
       if (id == 'q') {
         $scope.isPlayingQ = false;
         $scope.mcqFormData.question.audio = '';
@@ -229,7 +228,7 @@ angular.module('mcqApp', [])
         delete $scope.optionsMedia.audio[id];
       }
     }
-    $scope.deleteHint = function(id) {
+    $scope.deleteHint = function (id) {
       if (id == 'q') {
         $scope.qHint = false;
         $scope.mcqFormData.question.hint = '';
@@ -238,7 +237,7 @@ angular.module('mcqApp', [])
         $scope.mcqFormData.options[id].hint = '';
       }
     }
-    $scope.generateTelemetry = function(data, event) {
+    $scope.generateTelemetry = function (data, event) {
       if (data) ecEditor.getService('telemetry').interact({
         "type": data.type,
         "subtype": data.subtype,

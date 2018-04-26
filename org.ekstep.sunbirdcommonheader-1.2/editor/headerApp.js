@@ -16,11 +16,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.pendingChanges = false;
     $scope.hideReviewBtn = false;
     $scope.publishMode = false;
-    $scope.isFalgReviewer = false;
+    $scope.isFlagReviewer = false;
     $scope.editorEnv = "";
-    $scope.headerSettings = {
-        showEditMeta: true
-    }
+    $scope.showEditMeta = true;
 
     $scope.setEditorDetails = function() {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
@@ -31,9 +29,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             case "application/vnd.ekstep.content-collection":
                 $scope.editorEnv = "COLLECTION"
                 $scope.publishMode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').publishMode;
-                $scope.isFalgReviewer = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').isFalgReviewer;
-                if (ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').mode.toLowerCase() === "read")
-                    $scope.headerSettings.showEditMeta = false;
+                $scope.isFlagReviewer = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').isFlagReviewer;
+                if(ecEditor.getConfig('editorConfig').mode === 'Read')
+                    $scope.showEditMeta = false;
                 $scope.resolveReviewBtnStatus();
                 break;
             default:
@@ -75,6 +73,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         var mapArr = [];
         ecEditor._.forEach(org.ekstep.services.stateService.state.invaliddialCodeMap, function(value, key) {
             if (_.has(res.data.result.identifiers, key)) {
+                delete org.ekstep.services.stateService.state.invaliddialCodeMap[key];
+                org.ekstep.services.stateService.setState('invaliddialCodeMap', res.data.result.identifiers[key], value);
                 org.ekstep.services.collectionService.highlightNode(res.data.result.identifiers[key]);
                 $scope.storeDialCodes(res.data.result.identifiers[key], value);
             }else{
@@ -84,6 +84,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         });
         ecEditor._.forEach(dialcodeMap, function(value, key) {
             if (_.has(res.data.result.identifiers, key)) {
+                delete org.ekstep.services.stateService.state.dialCodeMap[key];
+                org.ekstep.services.stateService.setState('dialCodeMap', res.data.result.identifiers[key], value);
                 mapArr.push({ "identifier": res.data.result.identifiers[key], "dialcode": value });
                 $scope.storeDialCodes(res.data.result.identifiers[key], value);
             } else {
@@ -91,25 +93,42 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.storeDialCodes(key, value);
             }
         });
-        var request = {
-            "request": {
-                "content": mapArr
-            }
-        };
-        ecEditor.getService('dialcode').dialcodeLink(ecEditor.getContext('channel'), request, function(err, rep) {
-            if (!err) {
-                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
-                    title: 'DIAL code linking successfully!',
-                    position: 'topCenter',
-                    icon: 'fa fa-check-circle'
-                });
-            }
-        });
+        if(!_.isEmpty(mapArr)){
+            var request = {
+                "request": {
+                    "content": mapArr
+                }
+            };
+            ecEditor.getService('dialcode').dialcodeLink(ecEditor.getContext('channel'), request, function(err, rep) {
+                if (!err) {
+                    if( org.ekstep.services.stateService.state.dialCodeMap && org.ekstep.services.stateService.state.invaliddialCodeMap){
+                        ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
+                            title: 'Unable to link some of the DIAL codes',
+                            position: 'topCenter',
+                            icon: 'fa fa-warning'
+                        });
+                    }else{
+                        ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                            title: 'DIAL code linking successfully!',
+                            position: 'topCenter',
+                            icon: 'fa fa-check-circle'
+                        });
+                    }
+                }
+            });
+        }else{
+            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                title: 'DIAL code linking failed!',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });   
+        }
     }
 
     $scope.storeDialCodes = function(nodeId, dialCode){
         var node = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(nodeId);
-        node.data.metadata["dialcodes"] = dialCode;
+        if(node && node.data)
+            node.data.metadata["dialcodes"] = dialCode;
     }
 
     $scope.previewContent = function(fromBeginning) {
@@ -118,13 +137,23 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope.editContentMeta = function() {
         var subType = $scope.getContentType();
-        ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'save', subType: subType.toLowerCase(), framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: true })
+        var editMode = true;
+        if($scope.editorEnv === "COLLECTION")
+                editMode = ecEditor.getConfig('editorConfig').mode === 'Edit' ? true : false;
+        ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'save', subType: subType.toLowerCase(), framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: true , editMode: $scope.getViewMode() })
     }
 
     $scope._sendReview = function() {
         var subType = $scope.getContentType();
-        ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'review', subType: subType.toLowerCase(), framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: true })
+        ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'review', subType: subType.toLowerCase(), framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: true ,editMode: $scope.getViewMode() })
     };
+
+    $scope.getViewMode = function(){
+        var editMode = true;
+        if($scope.editorEnv === "COLLECTION")
+            editMode = ecEditor.getConfig('editorConfig').mode === 'Edit' ? true : false;
+        return editMode;
+    }
 
     $scope.getContentType = function() {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
@@ -447,4 +476,5 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     //others
     ecEditor.addEventListener("org.ekstep:sunbirdcommonheader:close:editor", $scope.closeEditor, $scope);
 }]);
+
 //# sourceURL=sunbirdheaderapp.js

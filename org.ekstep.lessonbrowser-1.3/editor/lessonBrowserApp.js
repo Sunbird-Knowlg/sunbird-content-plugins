@@ -97,13 +97,23 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         // Meta APIs integration
         var metaService = org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE);
         ctrl.learningConfig = function() {
-            metaService.getLearningConfig(function(err, res) {
+            var framework = ecEditor.getContext('framework');
+            ecEditor.getService('meta').getCategorys(framework, function(err, res) {
                 if (err) {
                     ctrl.langErr = "Oops! Something went wrong with learning config. Please try again later.";
                 } else {
-                    ctrl.meta.languages = res.data.result.medium.values;
-                    ctrl.meta.grades = res.data.result.gradeLevel.values;
-                    ctrl.meta.subjects = res.data.result.subject.values;
+                    ctrl.meta.languages = [];
+                    ctrl.meta.grades = [];
+                    ctrl.meta.subjects = [];
+                    var medium = _.find(res.data.result.framework.categories, ['code', 'medium']);
+                    if(medium && medium.terms)
+                        ctrl.meta.languages = medium.terms;
+                    var gradeLevel = _.find(res.data.result.framework.categories, ['code', 'gradeLevel']);
+                    if(gradeLevel && gradeLevel.terms)
+                        ctrl.meta.grades = gradeLevel.terms;
+                    var subject = _.find(res.data.result.framework.categories, ['code', 'subject']);
+                    if(subject && subject.terms)
+                        ctrl.meta.subjects = subject.terms;
                 }
                 $scope.$safeApply();
             });
@@ -190,7 +200,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     ctrl.concepts = concepts.length + ' selected';
                     $scope.filterSelection.concept = [];
                     angular.forEach(concepts, function(concept) {
-                        $scope.filterSelection.concept.push(concept.name);
+                        $scope.filterSelection.concept.push(concept.id);
                     });
                     $scope.$safeApply();
                 }
@@ -518,7 +528,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     } else {
                         console.error("Unable to fetch response", err);
                         ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
-                            message: "Content list for resources not available",
+                            message: "Unable to load categories to browse resources. You can use search to find resources.",
                             position: 'topCenter',
                             icon: 'fa fa-warning'
                         });
@@ -590,7 +600,21 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 delete searchBody.request.sort_by;
             }
             ctrl.searchRes = { count: 0, content: [] };
-            if (_.isUndefined(sectionIndex)) {
+            
+            if(!_.isUndefined(query.request.mode)){
+                $scope.mainTemplate = 'selectedResult';
+                searchBody = query;
+                ctrl.searchLessons(function(res) {
+                    $scope.defaultResources = ctrl.res.content;
+                    ctrl.dropdownAndCardsConfig();
+                    ctrl.setFilterValues();
+                    ctrl.conceptSelector();
+                    $scope.isLoading = false;
+                    $scope.noResultFound = false;
+                    ecEditor.jQuery('#resourceSearch').val('');
+                    $scope.$safeApply();
+                });
+            }else if (_.isUndefined(sectionIndex)) {
                 $scope.mainTemplate = 'selectedResult';
                 ctrl.searchLessons(function(res) {
                     $scope.defaultResources = ctrl.res.content;
@@ -600,6 +624,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     $scope.isLoading = false;
                     $scope.noResultFound = false;
                     ecEditor.jQuery('#resourceSearch').val('');
+                    $scope.$safeApply();
                 });
             } else {
                 if (!$scope.viewAllAvailableResponse.hasOwnProperty(sectionIndex)) {
@@ -615,7 +640,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                         $scope.noResultFound = false;
                         if (!_.isUndefined(sectionIndex))
                             $scope.viewAllAvailableResponse[sectionIndex] = $scope.defaultResources;
-
+                        $scope.$safeApply();
                     });
                 } else {
                     ctrl.res.content = $scope.viewAllAvailableResponse[sectionIndex];

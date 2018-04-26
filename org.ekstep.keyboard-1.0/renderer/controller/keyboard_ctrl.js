@@ -5,7 +5,7 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
   $scope.answerText = '';
   $scope.numerickeys = false;
 
-  EkstepRendererAPI.addEventListener("renderer:keyboard:invoke", function(e, callback) {
+  EkstepRendererAPI.addEventListener("org.ekstep.keyboard:invoke", function(e, callback) {
     $scope.callback = callback;
     $scope.answer = [];
     $scope.config = JSON.parse(e.target.qData);
@@ -28,16 +28,20 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
     }else{
       $scope.keyboardVisible = false;
     }
-
     $scope.safeApply();
   });
+
+  EkstepRendererAPI.addEventListener("org.ekstep.keyboard:hide", function() {
+    $scope.keyboardVisible = false;
+    $scope.safeApply();
+  }); 
 
   $scope.erasIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.keyboard", "1.0", "renderer/assets/eras_icon.png");
   $scope.langIcon = EkstepRendererAPI.resolvePluginResource("org.ekstep.keyboard", "1.0", "renderer/assets/language_icon.png");
 
   $scope.createKeyboard = function(customButtons, config) {
     var customButtons = customButtons;
-    customButtons = customButtons.replace(/ /g, '');
+    customButtons = customButtons.replace(/ /g,'');
     customButtons = customButtons.split(',');
     customButtons = _.uniq(customButtons);
     $scope.buttons = customButtons.splice(0, customButtons.length);
