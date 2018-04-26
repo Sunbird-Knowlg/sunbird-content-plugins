@@ -11,44 +11,47 @@ org.ekstep.contenteditor.basePlugin.extend({
     type: "shortcuts",
     initialize: function() {
         var instance = this;
-        var config = org.ekstep.services.collectionService.config;
-        var fancyTreeElem = ecEditor.jQuery("#collection-tree");
         ecEditor.registerKeyboardCommand('alt+mod+shift+n', function (event) {
+            var config = org.ekstep.services.collectionService.config;
             if (config.mode === 'Edit') {
                 event.preventDefault();
-                ecEditor.jQuery(fancyTreeElem).trigger("nodeCommand", { cmd: "addSibling" });
+                ecEditor.jQuery(ecEditor.jQuery("#collection-tree")).trigger("nodeCommand", { cmd: "addSibling" });
                 return false;
             }
         })
 
         ecEditor.registerKeyboardCommand('alt+mod+a', function (event) {
+            var config = org.ekstep.services.collectionService.config;
             if (config.mode === 'Edit') {
                 event.preventDefault();
-                ecEditor.jQuery(fancyTreeElem).trigger("nodeCommand", { cmd: "addLesson" });
+                ecEditor.jQuery(ecEditor.jQuery("#collection-tree")).trigger("nodeCommand", { cmd: "addLesson" });
                 return false;
             }
         })
 
         ecEditor.registerKeyboardCommand(['alt+ctrl+n', 'alt+command+`'], function (event) {
+            var config = org.ekstep.services.collectionService.config;
             if (config.mode === 'Edit') {
                 event.preventDefault();
-                ecEditor.jQuery(fancyTreeElem).trigger("nodeCommand", { cmd: "addChild" });
+                ecEditor.jQuery(ecEditor.jQuery("#collection-tree")).trigger("nodeCommand", { cmd: "addChild" });
                 return false;
             }
         })
 
         ecEditor.registerKeyboardCommand(['del', 'ctrl+del', 'mod+backspace'], function (event) {
+            var config = org.ekstep.services.collectionService.config;
             if (config.mode === 'Edit') {
                 event.preventDefault();
-                ecEditor.jQuery(fancyTreeElem).trigger("nodeCommand", { cmd: "remove" });
+                ecEditor.jQuery(ecEditor.jQuery("#collection-tree")).trigger("nodeCommand", { cmd: "remove" });
                 return false;
             }
         })
 
         ecEditor.registerKeyboardCommand('mod+/', function (event) {
+            var config = org.ekstep.services.collectionService.config;
             if (config.mode === 'Edit') {
                 event.preventDefault();
-                ecEditor.jQuery(fancyTreeElem).trigger("nodeCommand", { cmd: "showMenu" });
+                ecEditor.jQuery(ecEditor.jQuery("#collection-tree")).trigger("nodeCommand", { cmd: "showMenu" });
                 return false;
             }
         })
