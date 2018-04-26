@@ -134,9 +134,16 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     }
     if (isbrowserpreview) {
       $scope.qcblank = false;
-    } else if ($scope.questionObj.question.keyboardConfig.keyboardType == "Device" && !isbrowserpreview) {
+    } else if (_.isUndefined($scope.questionObj.question.keyboardConfig)){
       $scope.qcblank = true;
-    }
+    } else {
+        if($scope.questionObj.question.keyboardConfig.keyboardType == "Device" && !isbrowserpreview){
+        $scope.qcblank = true;
+      }
+      else{
+        $scope.qcblank = false;
+      }
+      }
     $scope.textboxtarget.id = this.id;
     $scope.textboxtarget.value = this.value.trim();
     EkstepRendererAPI.dispatchEvent("org.ekstep.keyboard:invoke", qConfig, $scope.callbackFromKeyboard);
