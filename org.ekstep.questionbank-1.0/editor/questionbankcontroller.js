@@ -5,7 +5,7 @@
  */
 'use strict';
 angular.module('createquestionapp', [])
-  .controller('QuestionFormController', ['$scope', 'pluginInstance', function($scope, pluginInstance) {
+  .controller('QuestionFormController', ['$scope', 'pluginInstance', function ($scope, pluginInstance) {
     $scope.currentUserId = ecEditor.getContext('user').id;
     $scope.isQuestionTab = true;
     $scope.selectedQuestions = [];
@@ -20,12 +20,12 @@ angular.module('createquestionapp', [])
     $scope.selectedQueIndex;
     $scope.grades;
     $scope.languages;
+    $scope.resultNotFound = 0;
     $scope.versions = [1, 2];
-
     $scope.filterForm = '';
     $scope.framework = ecEditor.getContext('framework');
     $scope.difficultyLevels = ['All', 'Easy', 'Medium', 'Difficult'];
-    $scope.configScore = false; 
+    $scope.configScore = false;
     $scope.questionTypes = [{
       "name": "Multiple Choice Questions",
       "value": "mcq"
@@ -46,26 +46,23 @@ angular.module('createquestionapp', [])
     }
     $scope.filterData = {
       request: {
-        "metadata": {
-          "filters": [{
-            "property": "version",
-            "operator": "in",
-            "value": $scope.versions
-          }, {
-            "property": "status",
-            "operator": "=",
-            "value": "Live"
-          }]
+        "filters": {
+          "objectType": [
+            "AssessmentItem"
+          ],
+          "status": [],
+          "language": [
+            "English"
+          ]
         },
-        "sortOrder": [{
-          "sortField": "code",
-          "sortOrder": "DESC"
-        }],
-        "resultSize": 200
+        "sort_by": {
+          "name": "desc"
+        },
+        "limit": 200
       }
     };
     $scope.csspath = ecEditor.resolvePluginResource(pluginInstance.manifest.id, pluginInstance.manifest.ver, 'editor/style.css');
-    $scope.contentNotFound = ecEditor.resolvePluginResource(pluginInstance.manifest.id, pluginInstance.manifest.ver, 'assets/contentNotFound.jpg');
+    $scope.contentNotFound = ecEditor.resolvePluginResource(pluginInstance.manifest.id, pluginInstance.manifest.ver, 'assets/contentnotfound.jpg');
 
     $scope.questionSetConfigObj = {
       "title": "",
@@ -115,8 +112,7 @@ angular.module('createquestionapp', [])
       if ($scope.filterObj.myQuestions) {
         var userId = $scope.currentUserId;
         data.request.filters.createdBy = userId;
-      } 
-
+      } else {}
       // setting filters values and title to request data
       ecEditor._.forEach($scope.filterObj, function(value, key) {
         if (value) {
@@ -126,11 +122,7 @@ angular.module('createquestionapp', [])
               break;
             case "gradeLevel":
               if (value.length) {
-                $scope.filterData.request.metadata.filters.push({
-                  "property": "gradeLevel",
-                  "operator": "in",
-                  "value": value
-                });
+                data.request.filters.gradeLevel = value;
               }
               break;
             case "medium":
@@ -147,20 +139,16 @@ angular.module('createquestionapp', [])
               });
               break;
             case "concepts":
-              if (value.length > 0) {
-                $scope.filterData.request.metadata.filters.push({
-                  "property": "concepts",
-                  "operator": "in",
-                  "value": value
-                });
-              }
+              data.request.filters.concepts = value;
               break;
           }
         }
       });
-      ecEditor.getService('assessment').getQuestionItems($scope.filterData, function(err, resp) {
+      // get Questions from questions api
+      ecEditor.getService('assessment').getQuestions(data, function (err, resp) {
         if (!err) {
-          $scope.questions = resp.data.result.assessment_items;
+          $scope.questions = resp.data.result.items;
+          $scope.resultNotFound = resp.data.result.count;
           for (var i = 0; i < $scope.selectedQuestions.length; i++) {
             for (var j = 0; j < $scope.questions.length; j++) {
               if ($scope.selectedQuestions[i].identifier == $scope.questions[j].identifier) {
@@ -179,13 +167,11 @@ angular.module('createquestionapp', [])
       });
     };
 
-
-
     /**
      *  init funtion is called when html is loaded
      *  @memberof QuestionFormController
      */
-    $scope.init = function() {
+    $scope.init = function () {
       $scope.itemsLoading = true;
       $scope.searchQuestions();
       $scope.selectedIndex = undefined;
@@ -224,6 +210,7 @@ angular.module('createquestionapp', [])
         ctrlScope.$safeApply();
       });
 
+
       if (pluginInstance.editData) {
         $scope.selectedQuestions = pluginInstance.editData.data;
         $scope.questionSetConfigObj = pluginInstance.editData.config;
@@ -250,10 +237,10 @@ angular.module('createquestionapp', [])
       ecEditor.dispatchEvent($scope.pluginIdObj.concepts_id + ':init', {
         element: 'queSetConceptsTextBox',
         selectedConcepts: [], // All composite keys except mediaType
-        callback: function(data) {
+        callback: function (data) {
           $scope.Totalconcepts = data.length;
           $scope.conceptsText = '(' + data.length + ') concepts selected';
-          $scope.filterObj.concepts = _.map(data, function(concept) {
+          $scope.filterObj.concepts = _.map(data, function (concept) {
             return concept.id;
           });
           $scope.selectedConceptsData = data;
@@ -262,11 +249,25 @@ angular.module('createquestionapp', [])
         }
       });
 
-      ecEditor.getService('meta').getConfigOrdinals(function(err, res) {
-        if (!err) {
-          $scope.grades = res.data.result.ordinals.gradeLevel;
-          $scope.languages = res.data.result.ordinals.language;
-          $scope.languages.unshift("All");
+      // Service call to get the question meta data filter values
+      ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys($scope.framework, function (error, response) {
+        if (!error) {
+          var categories = response.data.result.framework.categories;
+          ecEditor._.forEach(categories, function (value, key) { // eslint-disable-line no-unused-vars
+            var terms = [];
+            ecEditor._.forEach(value.terms, function (val, key) { // eslint-disable-line no-unused-vars
+              terms.push(val.name);
+            })
+            switch (value.code) {
+              case "medium":
+                $scope.languages = terms;
+                $scope.languages.unshift("All");
+                break;
+              case "gradeLevel":
+                $scope.grades = terms;
+                break
+            }
+          })
           ecEditor.jQuery('.ui.dropdown.lableCls').dropdown({
             useLabels: false,
             forceSelection: false
@@ -275,38 +276,7 @@ angular.module('createquestionapp', [])
         } else {
           console.log(error);
         }
-
-      });
-      ecEditor.addEventListener(pluginInstance.manifest.id + ":saveQuestion", function(event, data) {
-        if (!data.isSelected) {
-          data.isSelected = true;
-        }
-        var ctrlScope = angular.element('#qc-question-bank-model').scope();
-        var selQueIndex = _.findLastIndex(ctrlScope.questions, {
-          identifier: data.identifier
-        });
-        if (selQueIndex < 0) {
-          ctrlScope.questions.unshift(data);
-        } else {
-          ctrlScope.questions[selQueIndex] = data;
-        }
-        selQueIndex = _.findLastIndex(ctrlScope.selectedQuestions, {
-          identifier: data.identifier
-        });
-        if (selQueIndex < 0) {
-          ctrlScope.selectedQuestions.unshift(data);
-        } else {
-          
-          ctrlScope.selectedQuestions[selQueIndex] = data;
-          console.log("slected questions", ctrlScope.selectedQuestions);
-          ctrlScope.$safeApply();
-        }
-
-        ctrlScope.setDisplayandScore();
-        ctrlScope.editConfig(ctrlScope.selectedQuestions[0], 0);
-        ctrlScope.previewItem(ctrlScope.selectedQuestions[0], true);
-        ctrlScope.$safeApply();
-      });
+      })
 
     }
 
@@ -314,7 +284,7 @@ angular.module('createquestionapp', [])
      *  creating range of number of items to display as per number of question selected
      *  @memberof QuestionFormController
      */
-    $scope.createTotalItemRange = function() {
+    $scope.createTotalItemRange = function () {
       $scope.itemRange = [];
       for (var i = 1; i <= $scope.selectedQuestions.length; i++) {
         $scope.itemRange.push(i);
@@ -325,11 +295,12 @@ angular.module('createquestionapp', [])
     /**
      *  Creating list of selected questions for creating question set
      *  @memberof QuestionFormController
+     *  @param {Object} selQuestion Selected question object
      */
-    $scope.selectQuestion = function(selQuestion) {
+    $scope.selectQuestion = function (selQuestion) {
       var isQuestionSelected = selQuestion.isSelected;
       if (ecEditor._.isUndefined(selQuestion.body)) {
-        $scope.getItem(selQuestion, function(selQuestion) {
+        $scope.getItem(selQuestion, function (selQuestion) {
           var selObjindex = _.findLastIndex($scope.questions, {
             identifier: selQuestion.identifier
           });
@@ -349,8 +320,9 @@ angular.module('createquestionapp', [])
     /**
      *  Creating list of selected questions for creating question set
      *  @memberof QuestionFormController
+     *  @param {Object} selQuestion Selected question object
      */
-    $scope.selectQuestionData = function(selQuestion) {
+    $scope.selectQuestionData = function (selQuestion) {
       var selObjindex = _.findLastIndex($scope.selectedQuestions, {
         identifier: selQuestion.identifier
       });
@@ -365,8 +337,10 @@ angular.module('createquestionapp', [])
     /**
      *  Funtion to edit the config data of question
      *  @memberof QuestionFormController
+     *  @param {Object} quesObj Question Object
+     *  @param {int} index Index of the question object
      */
-    $scope.editConfig = function(quesObj, index) {
+    $scope.editConfig = function (quesObj, index) {
       $scope.selectedIndex = index;
       $scope.selQuestionObj = {};
       $scope.selQuestionObj = quesObj;
@@ -377,8 +351,9 @@ angular.module('createquestionapp', [])
     /**
      *  Funtion to remove question from selected question list
      *  @memberof QuestionFormController
+     *  @param {Object} selQuestion Selected question object
      */
-    $scope.removeQuestion = function(selQuestion) {
+    $scope.removeQuestion = function (selQuestion) {
       var selObjindex = $scope.selectedQuestions.indexOf(selQuestion);
       if (selObjindex > -1) {
         $scope.selectedQuestions.splice(selObjindex, 1);
@@ -406,13 +381,13 @@ angular.module('createquestionapp', [])
      *  Funtion to remove question from selected question list
      *  @memberof QuestionFormController
      */
-    $scope.saveConfig = function() {
+    $scope.saveConfig = function () {
 
       //Update max_score question->config->metadata
       var qBody = JSON.parse($scope.selQuestionObj.body);
       qBody.data.config.metadata.max_score = $scope.selQuestionObj.max_score;
       $scope.selQuestionObj.body = JSON.stringify(qBody);
-      
+
       var selectedObjIndex = _.findLastIndex($scope.questions, {
         identifier: $scope.selQuestionObj.identifier
       });
@@ -423,12 +398,12 @@ angular.module('createquestionapp', [])
       delete $scope.questionObj;
     }
 
-    $scope.closeConfigForm = function() {
+    $scope.closeConfigForm = function () {
       $scope.selQuestionObj = {};
       $scope.showConfigForm = false;
     }
 
-    $scope.setDisplayandScore = function() {
+    $scope.setDisplayandScore = function () {
       var length = $scope.selectedQuestions.length;
       $scope.questionSetConfigObj.total_items = length;
       var score = 0;
@@ -446,10 +421,10 @@ angular.module('createquestionapp', [])
      *  Funtion to save question set
      *  @memberof QuestionFormController
      */
-    $scope.createQuestionSet = function() {
-      _.each($scope.selectedQuestions, function(question) {
+    $scope.createQuestionSet = function () {
+      _.each($scope.selectedQuestions, function (question) {
         if (question.version == 1 && question.template_id) {
-          $scope.getv1Template(question.template_id, question, function(controller) {
+          $scope.getv1Template(question.template_id, question, function (controller) {
             question.template = controller.template;
             if (controller.mediamanifest) question.mediamanifest = controller.mediamanifest;
           });
@@ -468,7 +443,7 @@ angular.module('createquestionapp', [])
      *  Funtion to add question set to editor. It dispatch an event to question set plugin for adding question set
      *  @memberof QuestionFormController
      */
-    $scope.addQuestionSet = function() {
+    $scope.addQuestionSet = function () {
       var questionSet = {};
       var callback = pluginInstance.callback;
       questionSet.data = [];
@@ -481,7 +456,7 @@ angular.module('createquestionapp', [])
       $scope.closeThisDialog();
     }
 
-    $scope.showSelectedQue = function(index) {
+    $scope.showSelectedQue = function (index) {
       delete $scope.selectedQueIndex;
       $scope.selectedQueIndex = index;
       var filterMetaData = {};
@@ -490,17 +465,16 @@ angular.module('createquestionapp', [])
     }
 
 
-
     /**  Funtion to dispatch event to question creation plugin for creating new questions
      *  @memberof QuestionFormController
      */
-    $scope.createQuestion = function() {
+    $scope.createQuestion = function () {
       ecEditor.dispatchEvent($scope.pluginIdObj.question_create_id + ":showpopup", {});
     }
 
-    $scope.editQuestion = function(questionObj) {
+    $scope.editQuestion = function (questionObj) {
       if (ecEditor._.isUndefined(questionObj.body)) {
-        $scope.getItem(questionObj, function(questionObj) {
+        $scope.getItem(questionObj, function (questionObj) {
           ecEditor.dispatchEvent($scope.pluginIdObj.question_create_id + ":showpopup", questionObj);
         });
       } else {
@@ -530,9 +504,9 @@ angular.module('createquestionapp', [])
       }
     }
 
-    $scope.previewItem = function(question, bool) {
+    $scope.previewItem = function (question, bool) { // eslint-disable-line no-unused-vars
       if (ecEditor._.isUndefined(question.body)) {
-        $scope.getItem(question, function(questionData) {
+        $scope.getItem(question, function (questionData) {
           var selObjindex = _.findLastIndex($scope.questions, {
             identifier: questionData.identifier
           });
@@ -548,11 +522,11 @@ angular.module('createquestionapp', [])
       }
     }
 
-    $scope.showPreview = function(question, bool) {
+    $scope.showPreview = function (question, bool) { // eslint-disable-line no-unused-vars
       if (question.version == 1) {
         var templateRef = question.template_id;
         if (templateRef)
-          $scope.getv1Template(templateRef, question, function(controller) {
+          $scope.getv1Template(templateRef, question, function (controller) {
             $scope.sendForPreview(controller, question.version);
           });
       } else {
@@ -566,16 +540,15 @@ angular.module('createquestionapp', [])
 
     }
 
-    $scope.getv1Template = function(templateRef, question, callback) {
-      ecEditor.getService('assessment').getTemplate(templateRef, function(err, response) {
+    $scope.getv1Template = function (templateRef, question, callback) {
+      ecEditor.getService('assessment').getTemplate(templateRef, function (err, response) {
         if (!err) {
-          var x2js = new X2JS({
+          var x2js = new X2JS({ // eslint-disable-line no-undef
             attributePrefix: 'none',
             enableToStringFunc: false
           });
-          var templateJson = x2js.xml_str2json(response.data.result.content.body);
+          var templateJson = x2js.xml_str2json(response.data.result.content.body); // eslint-disable-line no-undef
           var questionSets = {},
-            _assessmentData = {},
             config = {},
             quesBody = {
               "questionnaire": {},
@@ -587,7 +560,7 @@ angular.module('createquestionapp', [])
           questionSets[question.identifier] = [];
           questionSets[question.identifier].push(question);
           if (_.isArray(question.media)) {
-            question.media.forEach(function(mediaItem) {
+            question.media.forEach(function (mediaItem) {
               quesBody.mediamanifest.media.push(mediaItem);
             });
           }
@@ -598,12 +571,11 @@ angular.module('createquestionapp', [])
           }]
           quesBody["questionnaire"] = ecEditor._.assign(quesBody.questionnaire, config);
           quesBody["template"].push(templateJson.theme.template);
-          if (!(ecEditor._.isUndefined(templateJson.theme.manifest)) && !(ecEditor._.isUndefined(templateJson.theme.manifest.media)) &&  _.isArray(templateJson.theme.manifest.media)) {
-            templateJson.theme.manifest.media.forEach(function(mediaItem) {
+          if (!(ecEditor._.isUndefined(templateJson.theme.manifest)) && !(ecEditor._.isUndefined(templateJson.theme.manifest.media)) && _.isArray(templateJson.theme.manifest.media)) {
+            templateJson.theme.manifest.media.forEach(function (mediaItem) {
               quesBody.mediamanifest.media.push(mediaItem);
             });
-          }
-          else if(!(ecEditor._.isUndefined(templateJson.theme.manifest)) && !(ecEditor._.isUndefined(templateJson.theme.manifest.media))){
+          } else if (!(ecEditor._.isUndefined(templateJson.theme.manifest)) && !(ecEditor._.isUndefined(templateJson.theme.manifest.media))) {
             quesBody.mediamanifest.media.push(templateJson.theme.manifest.media);
           }
           callback(quesBody);
@@ -611,9 +583,10 @@ angular.module('createquestionapp', [])
       });
     }
 
-    $scope.sendForPreview = function(quesBody, version) {
+    $scope.sendForPreview = function (quesBody, version) {
+      var qObj;
       if (version == 1) {
-        var qObj = {
+        qObj = {
           "data": {
             __cdata: JSON.stringify(quesBody)
           },
@@ -636,7 +609,7 @@ angular.module('createquestionapp', [])
           "y": "6"
         };
       } else {
-        var qObj = {
+        qObj = {
           "config": JSON.stringify(quesBody.data.config),
           "data": JSON.stringify(quesBody.data.data),
           "id": "c943d0a907274471a0572e593eab49c2",
@@ -663,19 +636,19 @@ angular.module('createquestionapp', [])
       var previewInstance = _.find(pluginInstances, function (pi) {
         return pi.manifest.id === $scope._constants.previewPlugin
       });
-      if(_.isUndefined(previewInstance)) {
+      if (_.isUndefined(previewInstance)) {
         previewInstance = ecEditor.instantiatePlugin($scope._constants.previewPlugin);
       }
       confData.contentBody = previewInstance.getQuestionPreviwContent(data[$scope._constants.questionsetPlugin]);
       ecEditor.dispatchEvent("atpreview:show", confData);
     }
 
-    $scope.cancel = function() {
+    $scope.cancel = function () {
       $scope.closeThisDialog();
     }
 
-    $scope.getItem = function(item, callback) {
-      ecEditor.getService('assessment').getItem(item.identifier, function(err, resp) {
+    $scope.getItem = function (item, callback) {
+      ecEditor.getService('assessment').getItem(item.identifier, function (err, resp) {
         if (!err) {
           item = resp.data.result.assessment_item ? resp.data.result.assessment_item : item;
         }
@@ -683,7 +656,7 @@ angular.module('createquestionapp', [])
       });
     }
 
-    $scope.generateTelemetry = function(data, event) {
+    $scope.generateTelemetry = function (data, event) {
       var eventId;
       if (event.target) eventId = event.target.id;
       else eventId = event;
@@ -706,5 +679,6 @@ angular.module('createquestionapp', [])
 
 
   }])
+
 
 //# sourceURL=questionbankctrl.js
