@@ -36,6 +36,14 @@ angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', 
       audio: ''
     }
   };
+  var questionInput = CKEDITOR.replace('ftbQuestion', {
+    customConfig: CKEDITOR.basePath + "config.js",
+    skin: 'moono-lisa,' + CKEDITOR.basePath + "skins/moono-lisa/",
+    contentsCss: CKEDITOR.basePath + "contents.css"
+  });
+  questionInput.on('change', function() {
+    $scope.ftbFormData.question.text = this.getData();
+  });
   $scope.init = function()
   {
     $('.menu .item').tab();

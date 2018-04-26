@@ -11,13 +11,10 @@
               <div class="ui segments inner-segment" ng-class="{cardBorder: $ctrl.focused, 'has-errorCard': submitted && mcqForm.question.$error.required}">
                 <div class="ui segment">
                   <div class="ui grid">
-                    <div class="eleven wide column">
+                    <div class="twelve wide column">
                       <div class="form-group segment textBoxDiv">
                         <textarea class="form-control textboxQ" ng-class="{'has-success':mcqForm.question.$valid, 'has-error': submitted && mcqForm.question.$error.required}" placeholder="Enter the question" name="ckedit" ng-model="mcqFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'mcqQues'}, $event)" ng-blur="$ctrl.focused = false" ng-required="!(mcqFormData.question.text.length || mcqFormData.question.image.length || mcqFormData.question.audio.length)"></textarea>
                       </div>
-                    </div>
-                    <div class="one wide column text-len">
-                      <span class="maxLengthText">{{mcqFormData.question.text.length}}<span class="length-divider">/</span>220</span>
                     </div>
                     <div class="six column row">
                       <div class="two wide column" ng-if="mcqFormData.question.image.length > 0">

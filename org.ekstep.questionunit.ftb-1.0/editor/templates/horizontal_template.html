@@ -10,14 +10,11 @@
                         <div class="ui segments inner-segment" ng-class="{'cardBorder': $ctrl.focused, 'has-success-card':ftbForm.ftbQuestion.$valid, 'has-errorCard': submitted && (ftbForm.ftbQuestion.question.text.length == 0 || ftbForm.ftbQuestion.$error.pattern)}">
                             <div class="ui segment">
                                 <div class="ui grid">
-                                    <div class="eleven wide column">
+                                    <div class="twelve wide column">
                                         <div class="form-group segment textBoxDiv">
                                             <textarea class="form-control textboxQ-ftb" ng-class="{'has-success':ftbForm.ftbQuestion.$valid, 'has-error': submitted && (ftbForm.ftbQuestion.$error.required != true || ftbForm.ftbQuestion.$error.pattern !=true)}" placeholder="Enter the question" name="ftbQuestion" id="ftbQuestion" ng-model="ftbFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'ftbTextarea'}, $event)" ng-blur="$ctrl.focused = false" required>
                                             </textarea>
                                         </div>
-                                    </div>
-                                    <div class="one wide column text-len">
-                                        <span class="maxLengthText">{{ftbFormData.question.text.length}}<span class="length-divider">/</span>220</span>
                                     </div>
                                 </div>
                             </div>
