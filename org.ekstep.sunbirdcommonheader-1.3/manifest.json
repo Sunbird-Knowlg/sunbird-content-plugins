@@ -1,6 +1,6 @@
 {
     "id": "org.ekstep.sunbirdcommonheader",
-    "ver": "1.2",    
+    "ver": "1.3",    
     "author": "Sunil A S",    
     "description": "",
     "publishedDate": "",
@@ -14,7 +14,7 @@
             { "type": "css", "src": "editor/header.css"},
             { "type": "js", "src": "editor/lib/angular-timeago.min.js"},
             { "type": "plugin", "plugin": "org.ekstep.toaster", "ver": "1.0" },
-            { "type": "plugin", "plugin": "org.ekstep.contenteditorfunctions", "ver": "1.0" }          
+            { "type": "plugin", "plugin": "org.ekstep.contenteditorfunctions", "ver": "1.2" }          
         ]
     }
 }

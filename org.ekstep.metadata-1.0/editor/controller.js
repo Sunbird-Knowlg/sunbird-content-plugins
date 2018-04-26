@@ -219,7 +219,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var fixedLayout = [];
         var dynamicLayout = [];
         _.map($scope.fields, function(field) {
-            if (field.code === 'dialcode') { invokeDialCode() }
             if (field.validation) {
                 _.forEach(field.validation, function(value, key) {
                     if (value.type === 'regex') {
@@ -366,6 +365,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 useLabels: labels,
                 forceSelection: forceSelection
             });
+            _.find($scope.fields, ['code', "dialcode"]) && invokeDialCode();
+            $scope.$safeApply();
         }, 0)
     }
 
@@ -374,8 +375,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      *              - Which partions the fixedLayout and dynamic layout section fields
      */
     $scope.init = function() {
-        ecEditor.addEventListener('metadata:form:onsuccess', $scope.success, $scope);
-        ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
+        !EventBus.hasEventListener('metadata:form:onsuccess') && ecEditor.addEventListener('metadata:form:onsuccess', $scope.success, $scope);
+        !EventBus.hasEventListener('metadata:form:oncancel') && ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
         var callbackFn = function(config) {
             $scope.fields = config.fields;
             $scope.tempalteName = config.template;
