@@ -243,7 +243,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     instance.refreshContent();
                 };
                 $scope.firetelemetry = function(menu, menuType) {
-                    instance.telemetryService.interact({ "type": "click", "subtype": "popup", "target": menuType, "pluginid": 'org.ekstep.contenteditorfunctions', 'pluginver': '1.2', "objectid": menu.id, "stage": ecEditor.getCurrentStage().id });
+                    instance.telemetryService.interact({ "type": "click", "subtype": "popup", "target": menuType, "pluginid": 'org.ekstep.contenteditorfunctions', 'pluginver': '1.3', "objectid": menu.id, "stage": ecEditor.getCurrentStage().id });
                 };
                 $scope.showAdvancedOption = false;
             }],
@@ -298,7 +298,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     publishContent: function(event, data) {
         var contentId = ecEditor.getContext('contentId');
-        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).publishContent({ contentId: contentId }, function(err, res) {
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).publishContent({ contentId: contentId, data:data }, function(err, res) {
             if (res && res.data && res.data.responseCode == "OK") {
                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                     title: 'Content published successfully!',
@@ -316,7 +316,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
     },
     rejectContent: function(event, data) {
-        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).rejectContent({ contentId: ecEditor.getContext('contentId') }, function(err, res) {
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).rejectContent({ contentId: ecEditor.getContext('contentId'),data:data }, function(err, res) {
             if (res && res.data && res.data.responseCode == "OK") {
                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                     title: 'Content rejected successfully!',
@@ -441,6 +441,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 });
                 instance.highlightNodeForInvalidDialCode(res);
                 ecEditor.dispatchEvent("meta:after:save", {});
+
             } else {
                 if (data.showNotification) ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                     message: 'Unable to save the content, try again!',
