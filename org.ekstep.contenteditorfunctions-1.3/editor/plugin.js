@@ -92,6 +92,12 @@ org.ekstep.contenteditor.basePlugin.extend({
         org.ekstep.pluginframework.eventManager.dispatchEvent('content:before:save');
         // TODO: Show saving dialog
         var contentBody = org.ekstep.contenteditor.stageManager.toECML();
+        // Get and set assessment summary
+        var summary = org.ekstep.contenteditor.stageManager.getSummary();
+        if (summary){
+            contentMeta.totalQuestions = summary.totalQuestions;
+            contentMeta.totalScore = summary.totalScore;
+        }
         contentMeta.editorState = JSON.stringify(this.editorState);
         this._patchContent(contentMeta, contentBody, options);
     },
