@@ -17,9 +17,9 @@
                     <div ng-repeat="btn in buttons.secondRow" ng-click="addLetter($event);" class="key_barakhadi" style="width:{{keyWidth}}%">
                         <span>{{btn}}</span>
                     </div>
-                    <div class="erasedDivParent">
-                        <img src="{{erasIcon}}" class="qc-erase-icon" ng-click="deleteText()" />
-                    </div>
+                </div>
+                <div class="erasedDivParent">
+                    <img src="{{erasIcon}}" class="qc-erase-icon" ng-click="deleteText()" />
                 </div>
                 <div ng-if="buttons.length > 10" id="secondRowdiv"></div>
                 <div id="thirdRowAlpha">

@@ -3,6 +3,7 @@
  * @class org.ekstep.questionunitmcq:mcqQuestionFormController
  * Jagadish P<jagadish.pujari@tarento.com>
  */
+
 angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', '$rootScope', function($scope, $rootScope)
 {
   $scope.keyboardConfig = {
@@ -55,6 +56,7 @@ angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', 
     {
       var data = $scope.questionEditData.data;
       $scope.ftbFormData.question = data.question;
+      $scope.keyboardConfig = data.question.keyboardConfig;
     }
     $scope.$parent.$on('question:form:val', function(event)
     {
