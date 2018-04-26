@@ -154,12 +154,9 @@
 }
 
 .erasedDivParent {
-    /* position: absolute;
-    height: 6%;
-    width: 5%;
-    left: 97%;
-    top: 13%;
-    z-index: 20;*/
+    float: right;
+    margin-top: -4.5%;
+    position: relative;
 }
 
 #erasedDiv {
@@ -195,7 +192,7 @@
 }
 
 img.qc-erase-icon {
-    width: 4.5%;
+    width: 45%;
 }
 
 img.qc-language-icon {

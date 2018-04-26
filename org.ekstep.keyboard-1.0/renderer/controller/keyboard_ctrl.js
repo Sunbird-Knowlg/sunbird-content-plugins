@@ -38,7 +38,7 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
     var splitButtonto = parseInt($scope.buttons.length / 2);
     $scope.buttons.firstRow = $scope.buttons.slice(0, splitButtonto);
     $scope.buttons.secondRow = $scope.buttons.slice(splitButtonto, $scope.buttons.length);
-    $scope.keyWidth = parseInt(100 / $scope.buttons.secondRow.length);;
+    $scope.keyWidth = parseInt(100 / $scope.buttons.secondRow.length);
   }
 
   $scope.changeToNumeric = function() {
