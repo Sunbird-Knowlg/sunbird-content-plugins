@@ -21,7 +21,7 @@
                 <div class="column" ng-repeat="list in checklistItems.contents | orderBy: 'index'">
                     <h5 class="ui tiny header">{{list.name}}</h5>
                     <div class="column" ng-repeat="item in list.checkList" style="padding:2%">
-                        <div class="ui checkbox">
+                        <div class="ui checkbox checklist">
                             <input type="checkbox" class="listItem" ng-checked="rejectedReasons.indexOf(item)!== -1" ng-click="onCheckboxSelect(item)">
                             <label>{{item}}</label>
                         </div>
@@ -30,17 +30,18 @@
             </div>
 
             <h5 ng-show="checklistMode == 'reject'">
-                <div class="ui checkbox">
+                <div class="ui checkbox checklist">
                     <input type="checkbox" class="otherItem" ng-click="onCheckboxSelect('Others')">
-                    <label>Other Issue(s) (if there is any other issue, tick this and provide details in the comments box)</label>
+                    <label>Other Issue(s) (if there are any other issues, tick this and provide details in the comments box)
+                        </label>
                 </div>
             </h5>
             <h5 class="ui tiny header" ng-show="checklistItems.comments.required">{{checklistItems.comments.label}}</h5>
             <div class="ui row">
-                <textarea rows="3" ng-show="checklistItems.comments.required" ng-model="reviewComments" ng-change="onCheckboxSelect()" style="width:100%;border-radius:2px"></textarea>
+                <textarea id="review-comments" rows="3" ng-show="checklistItems.comments.required" ng-model="reviewComments" ng-change="onCheckboxSelect()" style="width:100%;border-radius:2px"></textarea>
             </div>
         </div>
-        <div class="actions footer">
+        <div class="actions footer" id="review-footer">
             <div class="ui buttons">
                 <button id="closePopUp " class="ui orange button" type="button " ng-click="closeThisDialog()">{{checklistItems.buttons.cancel}}</button>
                 <div class="or"></div>

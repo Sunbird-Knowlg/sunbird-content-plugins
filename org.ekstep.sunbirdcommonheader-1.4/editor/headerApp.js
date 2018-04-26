@@ -17,6 +17,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
      */
     var reviewPublish = 'publish';
 
+
     $scope.isReviewCommentsPresent = false;
 
     /**
@@ -464,9 +465,10 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             $scope.reviewComments = meta.rejectComment;
             $scope.rejectedReasons = meta.rejectReasons;
             setTimeout(function() {
-                $(".footer").hide();
-                $(".ui.checkbox input").prop("disabled", true);
-                $("textarea").prop("disabled", true);
+                $("#review-footer").hide();
+                $(".ui.checkbox.checklist input ").prop("disabled", true);
+                $("#review-comments").prop("disabled", true);
+                $("#review-comments").css("opacity", 0.5);
             }, 0);
         }
     };
