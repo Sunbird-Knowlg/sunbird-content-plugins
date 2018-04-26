@@ -112,16 +112,18 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
     }
 
     if (question.pluginId === this._constants.qsQuizPlugin) {
-      // For V1 questions, invoke the 'questionset.quiz' plugin.
-      // TODO: Move state saving of V1 questions from questionset.quiz to here, like V2 questions
-      PluginManager.invoke(question.pluginId, question, this._stage, this._stage, this._theme);
 
       // Mark the question as rendered
       this._currentQuestion = question;
       this.setRendered(question);
+      // Set current question for telmetry to log events from question-unit
+      QSTelemetryLogger.setQuestion(instance._currentQuestion, instance.getRenderedIndex()); // eslint-disable-line no-undef
       setTimeout(function () {
         Renderer.update = true;
       }, 500);
+      // For V1 questions, invoke the 'questionset.quiz' plugin.
+      // TODO: Move state saving of V1 questions from questionset.quiz to here, like V2 questions
+      PluginManager.invoke(question.pluginId, question, this._stage, this._stage, this._theme);
     } else {
       // For V2 questions, load the AngularJS template and controller and invoke the event to render the question
 
