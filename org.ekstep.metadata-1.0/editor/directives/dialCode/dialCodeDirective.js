@@ -133,7 +133,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
 
         $scope.init = function () {
             ecEditor.addEventListener("editor:dialcode:get", $scope.getCurrentDialCode, $scope);
-            ecEditor.addEventListener("editor:update:dialcode", $scope.updateDialCode);
+            ecEditor.addEventListener("editor:metadata:update:dialcode", $scope.updateDialCode);
         }
 
         $scope.updateDialCode = function (event, data) {
@@ -164,6 +164,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
             } else{
                 $scope.editFlag = false;
             }
+            $scope.$safeApply();
         }
 
         $scope.retrunDialCode = function() {

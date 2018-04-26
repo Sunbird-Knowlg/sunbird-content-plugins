@@ -166,6 +166,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
             } else{
                 $scope.editFlag = false;
             }
+            $scope.$safeApply();
         }
 
         $scope.retrunDialCode = function () {
