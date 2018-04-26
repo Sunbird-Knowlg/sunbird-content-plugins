@@ -54,7 +54,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div ng-show="!isFlagReviewer && isReviewCommentsPresent" class="icon-box popup-item label-icon-box" data-content="Review comments" data-variation="tiny inverted" data-position="bottom center" ng-click="openCheckList('read')">
+                        <div ng-show="!publishMode && !isFlagReviewer && isReviewCommentsPresent" class="icon-box popup-item label-icon-box" data-content="Review comments" data-variation="tiny inverted" data-position="bottom center" ng-click="openCheckList('read')">
                             <i class="fa fa-comment"></i>
                             <span class="label-icon-box-text">Reviewer Suggestions</span>
                         </div>
