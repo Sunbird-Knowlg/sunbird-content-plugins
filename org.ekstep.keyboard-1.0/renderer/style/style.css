@@ -59,8 +59,8 @@
 .key_barakhadi:active,
 .key_barakhadi_numeric:active {
     background-color: rgb(215, 215, 215);
-    box-shadow: 0 15px rgb(215, 215, 215);
-    transform: translateY(-15px);
+    box-shadow: 0 9px rgb(215, 215, 215);
+    /* transform: translateY(-15px); */
 }
 
 .speacial_keys {

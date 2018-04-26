@@ -7,22 +7,28 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
 
   EkstepRendererAPI.addEventListener("renderer:keyboard:invoke", function(e, callback) {
     $scope.callback = callback;
+    $scope.answer = [];
     $scope.config = JSON.parse(e.target.qData);
     $scope.question = $scope.config.question.text.replace(/\[\[.*?\]\]/g, '____');
     $scope.keyboardVisible = true;
     var customButtons = '';
     $scope.answerText = _.isUndefined(e.target.inputoldValue.value) ? '' : e.target.inputoldValue.value;
-    if ($scope.config.question.keyboardConfig.keyboardType == "English") {
-      $("#qs-ftb-text").hide();
-      customButtons = "Q,W,E,R,T,Y,U,I,O,P,A,S,D,F,G,H,J,K,L,Z,X,C,V,B,N,M";
-      $scope.createKeyboard(customButtons, $scope.config);
-    } else if ($scope.config.question.keyboardConfig.keyboardType == 'Custom') {
-      $("#qs-ftb-text").hide();
-      customButtons = $scope.config.question.keyboardConfig.customKeys;
-      $scope.createKeyboard(customButtons, $scope.config);
-    } else if ($scope.config.question.keyboardConfig.keyboardType == 'Device') {
+    if (!_.isUndefined($scope.config.question.keyboardConfig)) {
+      if ($scope.config.question.keyboardConfig.keyboardType == "English") {
+        $("#qs-ftb-text").hide();
+        customButtons = "Q,W,E,R,T,Y,U,I,O,P,A,S,D,F,G,H,J,K,L,Z,X,C,V,B,N,M";
+        $scope.createKeyboard(customButtons, $scope.config);
+      } else if ($scope.config.question.keyboardConfig.keyboardType == 'Custom') {
+        $("#qs-ftb-text").hide();
+        customButtons = $scope.config.question.keyboardConfig.customKeys;
+        $scope.createKeyboard(customButtons, $scope.config);
+      } else if ($scope.config.question.keyboardConfig.keyboardType == 'Device') {
+        $scope.keyboardVisible = false;
+      }
+    }else{
       $scope.keyboardVisible = false;
     }
+
     $scope.safeApply();
   });
 
@@ -51,7 +57,10 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
 
   $scope.addLetter = function(event) {
     if (!_.isUndefined($scope.answerText)) {
-      if (event.target.innerText != '123') $scope.answerText = $scope.answerText + event.target.innerText;
+      if (event.target.innerText != '123') {
+        $scope.answer.push(event.target.innerText);
+        $scope.answerText = $scope.answer.join("");
+      }
     } else {
       if (event.target.innerText != '123') $scope.answerText = event.target.innerText;
     }
@@ -59,10 +68,11 @@ app.controllerProvider.register("KeyboardCtrl", function($scope) {
   }
 
   $scope.deleteText = function() {
-    $scope.answerText = $scope.answerText.substring(0, $scope.answerText.length - 1);
+    $scope.answer.pop();
+    $scope.answerText = $scope.answer.join("");
     $scope.safeApply();
   }
-  
+
   $scope.hideKeyboard = function() {
     $scope.keyboardVisible = false;
     $scope.callback($scope.answerText);
