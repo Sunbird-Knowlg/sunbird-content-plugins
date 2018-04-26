@@ -88,7 +88,7 @@ var checkListConfigurations = {
         }
     },
     "read": {
-        "title": "Review Comments",
+        "title": "Reviewer Suggestions",
         "subtitle": ""
     }
 }
