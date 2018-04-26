@@ -93,6 +93,7 @@ Plugin.extend({
     embedData["var-item"] = this._pluginConfig.var || "item";
     // this.setState('mcq', undefined, false);
     PluginManager.invoke('embed', embedData, this, this._stage, this._theme);
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS);// eslint-disable-line no-undef
   },
   initquestionnaire: function () {
     var controllerName = "item";
@@ -139,8 +140,7 @@ Plugin.extend({
     }
   },
   evaluate: function (callback) {
-    var result = {},
-      res = {};
+    var result = {};
     var item = this._stage._stageController._model[0];
 
     var state = {
@@ -160,13 +160,15 @@ Plugin.extend({
         result = MTFEvaluator.evaluate(item); // eslint-disable-line no-undef
       }
     }
-
-    result.eval = res.pass;
-    result.score = res.score;
-    result.res = res.res;
+    result.values = result.res;
+    result.eval = result.pass;
+    // result.eval = res.pass;
+    // result.score = res.score;
+    // result.res = res.res;
     if (_.isFunction(callback)) {
       callback(result);
     }
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);// eslint-disable-line no-undef
   },
   /*getStates: function(questionId) {
       var qState;
