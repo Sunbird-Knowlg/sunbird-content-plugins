@@ -21,6 +21,9 @@ angular.module('createquestionapp', [])
     $scope.grades;
     $scope.languages;
     $scope.versions = [1, 2];
+
+    $scope.filterForm = '';
+    $scope.framework = ecEditor.getContext('framework');
     $scope.difficultyLevels = ['All', 'Easy', 'Medium', 'Difficult'];
     $scope.configScore = false; 
     $scope.questionTypes = [{
@@ -81,53 +84,45 @@ angular.module('createquestionapp', [])
       questionbankPlugin: 'org.ekstep.questionbank'
     };
 
-    $scope.searchQuestions = function() {
-      $scope.filterData.request.metadata = {};
-      $scope.filterData.request.metadata.filters = [{
-        "property": "version",
-        "operator": "in",
-        "value": $scope.versions
-      }, {
-        "property": "status",
-        "operator": "=",
-        "value": "Live"
-      }];
-
-      // For my Questions option
-      if ($scope.isMyQuestions) {
-
-        var userId = $scope.currentUserId;
-        $scope.filterData.request.metadata.filters.push({
-          "property": "createdBy",
-          "operator": "=",
-          "value": userId
+    ecEditor.addEventListener('editor:form:change', function(event, data) {
+      $scope.filterObj.concepts = [];
+      if(data.key == "concepts")
+        _.forEach(data.value, function(dataid) {
+            $scope.filterObj.concepts.push(dataid.identifier);
         });
+      $scope.searchQuestions($scope.filterObj);
+    });
+
+    $scope.searchQuestions = function (filterData) {
+      // var activity = ctrl.activity;
+      // ctrl.isItemAvailable = true;
+      // ctrl.itemsLoading = true;
+      var data = {
+        request: {
+          filters: {
+            objectType: ["AssessmentItem"],
+            status: []
+          },
+
+          sort_by: {"name": "desc"},
+          limit: 200
+        }
+      };
+      if (filterData) {
+        $scope.filterObj = filterData;
       }
+
+      if ($scope.filterObj.myQuestions) {
+        var userId = $scope.currentUserId;
+        data.request.filters.createdBy = userId;
+      } 
 
       // setting filters values and title to request data
       ecEditor._.forEach($scope.filterObj, function(value, key) {
         if (value) {
           switch (key) {
-            case "question_title":
-              //$scope.filterData.request.metadata.filters.push({ "property": "title", "operator": "like", "value": value });
-              $scope.filterData.request.metadata.op = "AND";
-              $scope.filterData.request.metadata.metadata = [];
-              var descMetadata = [{
-                "filters": [{
-                  "property": "title",
-                  "operator": "like",
-                  "value": value
-                }],
-                "op": "OR",
-                "metadata": [{
-                  "filters": [{
-                    "property": "description",
-                    "operator": "like",
-                    "value": value
-                  }]
-                }]
-              }];
-              $scope.filterData.request.metadata.metadata = descMetadata;
+            case "searchText":
+              data.request.query = value;
               break;
             case "gradeLevel":
               if (value.length) {
@@ -138,34 +133,18 @@ angular.module('createquestionapp', [])
                 });
               }
               break;
-            case "language":
-              var lan = [];
-              lan.push(value);
-              if (value != "All") {
-                $scope.filterData.request.metadata.filters.push({
-                  "property": "language",
-                  "operator": "=",
-                  "value": lan
-                });
-              }
+            case "medium":
+              data.request.filters.language = [value];
               break;
-            case "qlevel":
-              if (value != "All") {
-                $scope.filterData.request.metadata.filters.push({
-                  "property": "qlevel",
-                  "operator": "=",
-                  "value": value
-                });
-              }
+            case "level":
+              data.request.filters.qlevel = value;
               break;
-            case "type":
-              if (value.length) {
-                $scope.filterData.request.metadata.filters.push({
-                  "property": "type",
-                  "operator": "in",
-                  "value": value
-                });
-              }
+            case "questionType":
+              ecEditor._.forEach($scope.questionTypes, function(val, key) {
+                if (value.length && value == val.name) {
+                  data.request.filters.type = val.value;
+                }
+              });
               break;
             case "concepts":
               if (value.length > 0) {
@@ -210,6 +189,41 @@ angular.module('createquestionapp', [])
       $scope.itemsLoading = true;
       $scope.searchQuestions();
       $scope.selectedIndex = undefined;
+
+      ecEditor.addEventListener('editor:template:loaded', function(event, object) {
+        $scope.filterForm = object.templatePath;
+      })
+
+      ecEditor.addEventListener(pluginInstance.manifest.id + ":saveQuestion", function (event, data) {
+        if (!data.isSelected) {
+          data.isSelected = true;
+        }
+        var ctrlScope = angular.element('#qc-question-bank-model').scope();
+        var selQueIndex = _.findLastIndex(ctrlScope.questions, {
+          identifier: data.identifier
+        });
+        if (selQueIndex < 0) {
+          ctrlScope.questions.unshift(data);
+        } else {
+          ctrlScope.questions[selQueIndex] = data;
+        }
+        selQueIndex = _.findLastIndex(ctrlScope.selectedQuestions, {
+          identifier: data.identifier
+        });
+        if (selQueIndex < 0) {
+          ctrlScope.selectedQuestions.unshift(data);
+        } else {
+
+          ctrlScope.selectedQuestions[selQueIndex] = data;
+          ctrlScope.$safeApply();
+        }
+
+        ctrlScope.setDisplayandScore();
+        ctrlScope.editConfig(ctrlScope.selectedQuestions[0], 0);
+        ctrlScope.previewItem(ctrlScope.selectedQuestions[0], true);
+        ctrlScope.$safeApply();
+      });
+
       if (pluginInstance.editData) {
         $scope.selectedQuestions = pluginInstance.editData.data;
         $scope.questionSetConfigObj = pluginInstance.editData.config;
@@ -230,6 +244,9 @@ angular.module('createquestionapp', [])
 
       }
 
+      var filterMetaData = {};
+      //ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup1", { action: 'question-filter-view', subType: 'questions', framework: "NCF", rootOrgId: "*", type: "content", popup: false, metadata: filterMetaData });
+      ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'question-filter-view', subType: 'questions', framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: false, metadata: filterMetaData})
       ecEditor.dispatchEvent($scope.pluginIdObj.concepts_id + ':init', {
         element: 'queSetConceptsTextBox',
         selectedConcepts: [], // All composite keys except mediaType
@@ -255,7 +272,8 @@ angular.module('createquestionapp', [])
             forceSelection: false
           });
           $scope.$safeApply();
-
+        } else {
+          console.log(error);
         }
 
       });
@@ -466,6 +484,9 @@ angular.module('createquestionapp', [])
     $scope.showSelectedQue = function(index) {
       delete $scope.selectedQueIndex;
       $scope.selectedQueIndex = index;
+      var filterMetaData = {};
+      //ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup1", { action: 'question-filter-view', subType: 'questions', framework: "NCF", rootOrgId: "*", type: "content", popup: false, metadata: filterMetaData });
+      ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'question-filter-view', subType: 'questions', framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: false, metadata: filterMetaData})
     }
 
 
@@ -496,7 +517,6 @@ angular.module('createquestionapp', [])
           if($scope.selectedQuestions[key].body == undefined){
           	$scope.selectedQuestions[key].max_score = 1;
           }else{
-            debugger;
           	JSON.parse($scope.selectedQuestions[key].body).data.config.metadata.max_score = 1;
           }				
           $scope.selQuestionObj.max_score = 1;
@@ -686,6 +706,5 @@ angular.module('createquestionapp', [])
 
 
   }])
-
 
 //# sourceURL=questionbankctrl.js
