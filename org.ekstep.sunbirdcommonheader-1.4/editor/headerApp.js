@@ -251,6 +251,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope.setPendingChangingStatus = function(event, data) {
         $scope.pendingChanges = true;
+        $scope.pendingChanges = ($scope.editorEnv === "COLLECTION" && ecEditor.getConfig('editorConfig').mode === 'Read') ? false : true;
         $scope.disableSaveBtn = false;
         $scope.$safeApply();
     };
