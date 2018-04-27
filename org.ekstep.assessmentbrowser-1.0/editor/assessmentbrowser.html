@@ -190,7 +190,7 @@
         </div>
         <div ng-show="($ctrl.isAdvanceOptionOpen && $ctrl.items.length > 0) || (!$ctrl.isAdvanceOptionOpen && $ctrl.cart.items.length > 0)">
             <div class="ui two column horizontally padded grid" ng-show="!$ctrl.itemsLoading">
-                <div class="column" style="width: 480px;height: 284px; overflow-y: scroll;">
+                <div class="column" id="scrolQuestion" style="width: 480px;height: 284px; overflow-y: scroll;">
                     <div class="ui large divided items" ng-show="$ctrl.isAdvanceOptionOpen">
                         <div class="item select" ng-repeat="item in $ctrl.items" ng-click=" item.isSelected ? $ctrl.cart.remove(item) : $ctrl.cart.add(item); $event.stopPropagation(); $ctrl.generateTelemetry({type: 'select', subtype: 'checkbox', target: 'selectQuestion'})">
                             <div class="middle aligned content">
