@@ -45,6 +45,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     text: 'text',
                     value: 'value'
                 },
+                minCharacters: 1,
                 forceSelection: false
             });
         });
