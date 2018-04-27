@@ -108,6 +108,7 @@ angular.module('assessmentbrowserapp', [])
         });
 
         ctrl.searchQuestions = function() {
+            $('#scrolQuestion').scrollTop(0);
             var activity = ctrl.activity;
             ctrl.isItemAvailable = true;
             ctrl.itemsLoading = true;
