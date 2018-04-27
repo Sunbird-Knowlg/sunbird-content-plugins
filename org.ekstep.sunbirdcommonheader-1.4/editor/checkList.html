@@ -21,7 +21,7 @@
                 <div class="column" ng-repeat="list in checklistItems.contents | orderBy: 'index'">
                     <h5 class="ui tiny header">{{list.name}}</h5>
                     <div class="column" ng-repeat="item in list.checkList" style="padding:2%">
-                        <div class="ui checkbox">
+                        <div class="ui checkbox checklist">
                             <input type="checkbox" class="listItem" ng-checked="rejectedReasons.indexOf(item)!== -1" ng-click="onCheckboxSelect(item)">
                             <label>{{item}}</label>
                         </div>
@@ -29,23 +29,24 @@
                 </div>
             </div>
 
-            <h5 ng-show="checklistMode == 'reject'">
-                <div class="ui checkbox">
-                    <input type="checkbox" class="otherItem" ng-click="onCheckboxSelect('Others')">
-                    <label>Other Issue(s) (if there is any other issue, tick this and provide details in the comments box)</label>
+            <h5 ng-show="checklistMode == 'reject' || checklistMode === 'read' ">
+                <div class="ui checkbox checklist">
+                    <input type="checkbox" class="otherItem" ng-checked="rejectedReasons.indexOf('Others')!== -1" " ng-click="onCheckboxSelect( 'Others') ">
+                    <label>Other Issue(s) (if there are any other issues, tick this and provide details in the comments box)
+                        </label>
                 </div>
             </h5>
-            <h5 class="ui tiny header" ng-show="checklistItems.comments.required">{{checklistItems.comments.label}}</h5>
-            <div class="ui row">
-                <textarea rows="3" ng-show="checklistItems.comments.required" ng-model="reviewComments" ng-change="onCheckboxSelect()" style="width:100%;border-radius:2px"></textarea>
+            <h5 class="ui tiny header " ng-show="checklistItems.comments.required ">{{checklistItems.comments.label}}</h5>
+            <div class="ui row ">
+                <textarea id="review-comments" rows="3 " ng-show="checklistItems.comments.required " ng-model="reviewComments " ng-change="onCheckboxSelect() " style="width:100%;border-radius:2px "></textarea>
             </div>
         </div>
-        <div class="actions footer">
-            <div class="ui buttons">
-                <button id="closePopUp " class="ui orange button" type="button " ng-click="closeThisDialog()">{{checklistItems.buttons.cancel}}</button>
-                <div class="or"></div>
-                <button ng-show="checklistItems.buttons.proceed == 'Publish'" class="ui blue button " type="button " ng-disabled="enableBtn != 'Publish'" ng-click="publishContent()">{{checklistItems.buttons.proceed}}</button>
-                <button ng-show="checklistItems.buttons.proceed == 'Request changes'" class="ui blue button " type="button " ng-disabled="enableBtn != 'Reject'" ng-click="requestChanges()">{{checklistItems.buttons.proceed}}</button>
+        <div class="actions footer" id="review-footer">
+            <div class="ui buttons ">
+                <button id="closePopUp " class="ui orange button " type="button " ng-click="closeThisDialog() ">{{checklistItems.buttons.cancel}}</button>
+                <div class="or "></div>
+                <button ng-show="checklistItems.buttons.proceed=='Publish' " class="ui blue button " type="button " ng-disabled="enableBtn !='Publish' " ng-click="publishContent() ">{{checklistItems.buttons.proceed}}</button>
+                <button ng-show="checklistItems.buttons.proceed=='Request changes' " class="ui blue button " type="button " ng-disabled="enableBtn !='Reject' " ng-click="requestChanges() ">{{checklistItems.buttons.proceed}}</button>
             </div>
         </div>
     </div>
