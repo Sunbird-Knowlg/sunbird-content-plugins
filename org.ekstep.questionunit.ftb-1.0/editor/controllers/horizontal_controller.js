@@ -45,6 +45,9 @@ angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', 
   questionInput.on('change', function() {
     $scope.ftbFormData.question.text = this.getData();
   });
+  questionInput.on('focus', function() {
+    $scope.generateTelemetry({type: 'TOUCH', id: 'input', target: {id: 'questionunit-ftb-question', ver: '', type: 'input'}})
+  });
   $scope.init = function()
   {
     $('.menu .item').tab();
@@ -114,26 +117,22 @@ angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', 
       return false;
     }
   }
-  $scope.generateTelemetry = function(data, event)
-  {
-    if (data) ecEditor.getService('telemetry').interact(
-    {
+  $scope.generateTelemetry = function(data, event) {
+    if (data) ecEditor.getService('telemetry').interact({
       "type": data.type,
-      "subtype": data.subtype,
       "id": data.id,
-      "pageId": ecEditor.getCurrentStage().id,
-      "target":
-      {
-        "id": event.target.id,
-        "ver": "1.0",
-        "type": data.type
+      "pageid": 'question-creation-ftb-form',
+      "target": {
+        "id": data.target.id,
+        "ver": data.target.ver,
+        "type": data.target.type
       },
-      "plugin":
-      {
+      "plugin": {
         "id": "org.ekstep.questionunit.ftb",
         "ver": "1.0"
       }
     })
   }
+
 }]);
 //# sourceURL=horizontalFTB.js

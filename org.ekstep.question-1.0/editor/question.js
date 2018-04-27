@@ -442,16 +442,28 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       ctrl.saveQuestion(ctrl.assessmentId, ctrl.qFormData);
     };
 
-    ctrl.generateTelemetry = function (data, event) {
-      if (data) ecEditor.getService('telemetry').interact({
+    ctrl.genImpressionTelemetry = function(data) {
+      if (data) ecEditor.getService('telemetry').impression({
         "type": data.type,
         "subtype": data.subtype,
+        "pageid": data.pageid,
+        "uri": encodeURIComponent(location.href),
+        "visits": {
+          'objid': data.visits.objid,
+          'objtype': data.visits.objtype
+        }
+      })
+    }
+
+    ctrl.generateTelemetry = function(data, event) {
+      if (data) ecEditor.getService('telemetry').interact({
+        "type": data.type,
         "id": data.id,
-        "pageId": ecEditor.getCurrentStage().id,
+        "pageid": 'question-creation-form',
         "target": {
-          "id": event.target.id,
-          "ver": "1.0",
-          "type": data.type
+          "id": data.target.id,
+          "ver": data.target.ver,
+          "type": data.target.type
         },
         "plugin": {
           "id": instance.manifest.id,

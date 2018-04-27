@@ -90,6 +90,12 @@ angular.module('mtfApp', [])
     questionInput.on('change', function() {
       $scope.mtfFormData.question.text = this.getData();
     });
+    questionInput.on('focus', function() {
+      $scope.generateTelemetry({type: 'TOUCH', id: 'input', target: {id: 'questionunit-mtf-question', ver: '', type: 'input'}})
+    });
+    angular.element('.innerScroll').on('scroll',function(){
+      $scope.generateTelemetry({type: 'SCROLL', id: 'form', target: {id: 'questionunit-mtf-form', ver: '', type: 'form'}})
+    });
     $scope.init = function() {
       if (!ecEditor._.isUndefined($scope.questionEditData)) {
         var data = $scope.questionEditData.data;
@@ -244,16 +250,15 @@ angular.module('mtfApp', [])
         delete $scope.optionsMedia.audio[id];
       }
     }
-    $scope.generateTelemetry = function(data, event) {
+    $scope.generateTelemetry = function(data) {
       if (data) ecEditor.getService('telemetry').interact({
         "type": data.type,
-        "subtype": data.subtype,
         "id": data.id,
-        "pageId": ecEditor.getCurrentStage().id,
+        "pageid": 'question-creation-mtf-form',
         "target": {
-          "id": event.target.id,
-          "ver": "1.0",
-          "type": data.type
+          "id": data.target.id,
+          "ver": data.target.ver,
+          "type": data.target.type
         },
         "plugin": {
           "id": "org.ekstep.questionunit.mtf",

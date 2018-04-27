@@ -13,7 +13,7 @@
                                     <div class="ui grid">
                                         <div class="twelve wide column">
                                             <div class="form-group segment textBoxDiv">
-                                                <textarea class="form-control textboxQ" ng-class="{'has-success':mtfForm.question.$valid, 'has-error': submitted && mtfForm.question.$error.required}" placeholder="Enter the question" name="mtfQuestion" ng-model="mtfFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'mtfQues'}, $event)" ng-blur="$ctrl.focused = false" ng-required="!(mtfFormData.question.text.length)"></textarea>
+                                                <textarea class="form-control textboxQ" ng-class="{'has-success':mtfForm.question.$valid, 'has-error': submitted && mtfForm.question.$error.required}" placeholder="Enter the question" name="mtfQuestion" ng-model="mtfFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;" ng-blur="$ctrl.focused = false" ng-required="!(mtfFormData.question.text.length)"></textarea>
                                             </div>
                                         </div>
                                         <!-- <div class="one wide column text-len">
@@ -24,14 +24,14 @@
                                                 <img src="{{mtfFormData.question.image}}" class="imgWidth"/>
                                             </div>
                                             <div class="one wide column" ng-if="mtfFormData.question.image.length > 0">
-                                                <a href="" class="deleteMedia" data-tooltip="Delete image" data-inverted=""><i id="mtf-question-image" class="trash large icon delete-icon" ng-click="deleteImage('q');generateTelemetry({type: 'click', subtype: 'select', target: 'deleteImage'}, $event);"></i></a>
+                                                <a href="" class="deleteMedia" data-tooltip="Delete image" data-inverted=""><i id="mtf-question-image" class="trash large icon delete-icon" ng-click="deleteImage('q');generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'questionunit-mtf-delete-image', ver: '', type: 'button'}});"></i></a>
                                             </div>
                                             <div class="one wide column" ng-if="mtfFormData.question.audio.length > 0">
-                                                <audio src="{{mtfFormData.question.audio}}" controls controlsList="nodownload" preload="none" class="audio-container myAudio" ng-click="addAudio('q')" data-tooltip="Play audio" data-inverted="">
+                                                <audio src="{{mtfFormData.question.audio}}" controls controlsList="nodownload" preload="none" class="audio-container myAudio" ng-click="addAudio('q');generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'questionunit-mtf-add-audio', ver: '', type: 'button'}});" data-tooltip="Play audio" data-inverted="">
                                                 </audio>
                                             </div>
                                             <div class="one wide column" ng-if="mtfFormData.question.audio.length > 0">
-                                                <a href="" ng-click="deleteAudio('q');generateTelemetry({type: 'click', subtype: 'select', target: 'deleteAudio'}, $event);" class="deleteMedia" data-tooltip="Delete audio" data-inverted=""><i class="trash large icon delete-icon"></i></a>
+                                                <a href="" ng-click="deleteAudio('q');generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'questionunit-mtf-delete-audio', ver: '', type: 'button'}});" class="deleteMedia" data-tooltip="Delete audio" data-inverted=""><i class="trash large icon delete-icon"></i></a>
                                             </div>
                                         </div>
                                     </div>
@@ -64,7 +64,7 @@
                                                 <div class="ui grid">
                                                     <div class="twelve wide column">
                                                         <div class="form-group segment textBoxDiv">
-                                                            <input type="text" class="form-control textbox" ng-class="{'has-success':mtfForm['option.optionsLHS_' + $index].$valid, 'has-error': submitted && mtfForm['option.optionsLHS_' + $index].$error.required}" placeholder="Enter answer" name="option.optionsLHS_{{$index}}" id="mtf-optionLHS" ng-model="mtfFormData.option.optionsLHS[$index].text" maxlength="25" ng-init="focused = false" ng-focus="focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'mtfoptionLHS'}, $event)" ng-blur="focused = false" ng-required="!(mtfFormData.option.optionsLHS[$index].text.length)" />
+                                                            <input type="text" class="form-control textbox" ng-class="{'has-success':mtfForm['option.optionsLHS_' + $index].$valid, 'has-error': submitted && mtfForm['option.optionsLHS_' + $index].$error.required}" placeholder="Enter answer" name="option.optionsLHS_{{$index}}" id="mtf-optionLHS" ng-model="mtfFormData.option.optionsLHS[$index].text" maxlength="25" ng-init="focused = false" ng-focus="focused = true;generateTelemetry({type: 'TOUCH', id: 'input', target: {id: 'questionunit-mtf-lhs-answer', ver: '', type: 'input'}})" ng-blur="focused = false" ng-required="!(mtfFormData.option.optionsLHS[$index].text.length)" />
                                                            
                                                         <span class="maxLengthText">{{mtfFormData.option.optionsLHS[$index].text.length}}<span class="length-divider">/</span>25</span>
                                                     
@@ -73,17 +73,17 @@
                                                     
                                                     <div class="four column row">
                                                         <div class="two wide column" ng-if="mtfFormData.option.optionsLHS[$index].image.length > 0">
-                                                            <img src="{{mtfFormData.option.optionsLHS[$index].image}}" class="imgWidth" ng-click="addImage($index,'LHS')" />
+                                                            <img src="{{mtfFormData.option.optionsLHS[$index].image}}" class="imgWidth" ng-click="addImage($index,'LHS');generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'questionunit-mtf-add-lhs-img', ver: '', type: 'button'}})" />
                                                         </div>
                                                         <div class="one wide column" ng-if="mtfFormData.option.optionsLHS[$index].image.length > 0">
-                                                            <a href="" ng-click="deleteImage($index,'LHS');generateTelemetry({type: 'click', subtype: 'select', target: 'deleteImage'}, $event);" id="mtf-optionLHS-delete-img" class="deleteMedia" data-tooltip="Delete image" data-inverted=""><i class="trash large icon delete-icon"></i></a>
+                                                            <a href="" ng-click="deleteImage($index,'LHS');generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'questionunit-mtf-delete-lhs-img', ver: '', type: 'button'}});" id="mtf-optionLHS-delete-img" class="deleteMedia" data-tooltip="Delete image" data-inverted=""><i class="trash large icon delete-icon"></i></a>
                                                         </div>
                                                         <div class="one wide column" ng-if="mtfFormData.option.optionsLHS[$index].audio.length > 0">
-                                                            <audio src="{{mtfFormData.option.optionsLHS[$index].audio}}" controls controlsList="nodownload" preload="none" class="audio-container myAudio" ng-click="addAudio($index,'LHS')">
+                                                            <audio src="{{mtfFormData.option.optionsLHS[$index].audio}}" controls controlsList="nodownload" preload="none" class="audio-container myAudio" ng-click="addAudio($index,'LHS');generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'questionunit-mtf-add-lhs-audio', ver: '', type: 'button'}})">
                                                             </audio>
                                                         </div>
                                                         <div class="one wide column" ng-if="mtfFormData.option.optionsLHS[$index].audio.length > 0">
-                                                            <a href="" ng-click="deleteAudio($index,'LHS');generateTelemetry({type: 'click', subtype: 'select', target: 'deleteAudio'}, $event);" id="mtf-optionLHS-delete-audio" class="deleteMedia" data-tooltip="Delete audio" data-inverted=""><i class="trash large icon delete-icon"></i></a>
+                                                            <a href="" ng-click="deleteAudio($index,'LHS');generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'questionunit-mtf-delete-lhs-audio', ver: '', type: 'button'}})" id="mtf-optionLHS-delete-audio" class="deleteMedia" data-tooltip="Delete audio" data-inverted=""><i class="trash large icon delete-icon"></i></a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -102,7 +102,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="delete-pair-row-LHS"><span ng-click="deletePair($index)" data-tooltip="Delete Pair" data-inverted=""><i class="trash large icon delete-icon"></i>Delete Pair</span></div>
+                                        <div class="delete-pair-row-LHS"><span ng-click="deletePair($index);generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'questionunit-mtf-delete-pair', ver: '', type: 'button'}})" data-tooltip="Delete Pair" data-inverted=""><i class="trash large icon delete-icon"></i>Delete Pair</span></div>
                                     </td>
                                     <td class="mtf-pair-td">
                                         <div class="ui segments inner-segment" ng-class="{cardBorder: focused, 'has-errorCard': submitted && mtfForm['option.optionsRHS_' + $index].$error.required}" id="eachCard">
@@ -110,7 +110,7 @@
                                                 <div class="ui grid">
                                                     <div class="twelve wide column">
                                                         <div class="form-group segment textBoxDiv">
-                                                            <input type="text" class="form-control textbox" ng-class="{'has-success':mtfForm['option.optionsRHS_' + $index].$valid, 'has-error': submitted && mtfForm['option.optionsRHS_' + $index].$error.required}" placeholder="Enter answer" name="option.optionsRHS_{{$index}}" ng-model="mtfFormData.option.optionsRHS[$index].text" maxlength="25" ng-init="focused = false" ng-focus="focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'mtfoptionRHS'}, $event)" id="mtf-optionRHS-input" ng-blur="focused = false" ng-required="!(mtfFormData.option.optionsRHS[$index].text.length)" />
+                                                            <input type="text" class="form-control textbox" ng-class="{'has-success':mtfForm['option.optionsRHS_' + $index].$valid, 'has-error': submitted && mtfForm['option.optionsRHS_' + $index].$error.required}" placeholder="Enter answer" name="option.optionsRHS_{{$index}}" ng-model="mtfFormData.option.optionsRHS[$index].text" maxlength="25" ng-init="focused = false" ng-focus="focused = true;generateTelemetry({type: 'TOUCH', id: 'input', target: {id: 'questionunit-mtf-rhs-answer', ver: '', type: 'input'}})" id="mtf-optionRHS-input" ng-blur="focused = false" ng-required="!(mtfFormData.option.optionsRHS[$index].text.length)" />
                                                         <span class="maxLengthText">{{mtfFormData.option.optionsRHS[$index].text.length}}<span class="length-divider">/</span>25</span>
                                                         </div>
                                                     </div>
@@ -120,14 +120,14 @@
                                                             <img src="{{mtfFormData.option.optionsRHS[$index].image}}" class="imgWidth"/>
                                                         </div>
                                                         <div class="one wide column" ng-if="mtfFormData.option.optionsRHS[$index].image.length > 0">
-                                                            <a href="" ng-click="deleteImage($index,'RHS');generateTelemetry({type: 'click', subtype: 'select', target: 'deleteImage'}, $event);" id="mtf-optionRHS-delete-img" class="deleteMedia" data-tooltip="Delete image" data-inverted=""><i class="trash large icon delete-icon"></i></a>
+                                                            <a href="" ng-click="deleteImage($index,'RHS');generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'questionunit-mtf-delete-rhs-image', ver: '', type: 'button'}})" id="mtf-optionRHS-delete-img" class="deleteMedia" data-tooltip="Delete image" data-inverted=""><i class="trash large icon delete-icon"></i></a>
                                                         </div>
                                                         <div class="one wide column" ng-if="mtfFormData.option.optionsRHS[$index].audio.length > 0">
                                                             <audio src="{{mtfFormData.option.optionsRHS[$index].audio}}" controls controlsList="nodownload" preload="none" class="audio-container myAudio">
                                                             </audio>
                                                         </div>
                                                         <div class="one wide column" ng-if="mtfFormData.option.optionsRHS[$index].audio.length > 0">
-                                                            <a href="" ng-click="deleteAudio($index,'RHS');generateTelemetry({type: 'click', subtype: 'select', target: 'deleteAudio'}, $event);" id="mtf-optionRHS-delete-audio" class="deleteMedia" data-tooltip="Delete audio" data-inverted=""><i class="trash large icon delete-icon"></i></a>
+                                                            <a href="" ng-click="deleteAudio($index,'RHS');generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'questionunit-mtf-delete-rhs-image', ver: '', type: 'button'}})" id="mtf-optionRHS-delete-audio" class="deleteMedia" data-tooltip="Delete audio" data-inverted=""><i class="trash large icon delete-icon"></i></a>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -146,7 +146,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div href="" ng-click="deletePair($index)" class="delete-pair-row-RHS" data-tooltip="Delete Pair" data-inverted=""><i class="trash large icon delete-icon"></i></div>
+                                        <div href="" ng-click="deletePair($index);generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'questionunit-mtf-delete-pair', ver: '', type: 'button'}})" class="delete-pair-row-RHS" data-tooltip="Delete Pair" data-inverted=""><i class="trash large icon delete-icon"></i></div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -156,7 +156,7 @@
                 </form>
                 <div class="one column row">
                     <div class="column addAns">
-                        <button ng-hide="mtfFormData.option.optionsLHS.length==5" class="ui primary basic button large" id="mtf-add-pair-button" id="mtf-pair-btn" ng-click="addPair();generateTelemetry({type: 'click', subtype: 'select', target: 'addpair'}, $event);">Add another question-answer pair</button>
+                        <button ng-hide="mtfFormData.option.optionsLHS.length==5" class="ui primary basic button large" id="mtf-add-pair-button" id="mtf-pair-btn" ng-click="addPair();generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'questionunit-mtf-add-pair', ver: '', type: 'button'}});">Add another question-answer pair</button>
                     </div>
                 </div>
             </div>

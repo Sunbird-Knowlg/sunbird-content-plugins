@@ -63,7 +63,12 @@ angular.module('mcqApp', [])
     questionInput.on('change', function() {
       $scope.mcqFormData.question.text = this.getData();
     });
-    
+    questionInput.on('focus', function() {
+      $scope.generateTelemetry({type: 'TOUCH', id: 'input', pageid: 'question-creation-mcq-form', target: {id: 'questionunit-mcq-question', ver: '', type: 'input'}})
+    });
+    angular.element('.innerScroll').on('scroll',function(){
+      $scope.generateTelemetry({type: 'SCROLL', id: 'form', target: {id: 'questionunit-mcq-form', ver: '', type: 'form'}})
+    });
     $scope.init = function () {
       $('.menu .item').tab();
       if (!ecEditor._.isUndefined($scope.questionEditData)) {
@@ -249,16 +254,15 @@ angular.module('mcqApp', [])
         $scope.mcqFormData.options[id].hint = '';
       }
     }
-    $scope.generateTelemetry = function (data, event) {
+    $scope.generateTelemetry = function(data) {
       if (data) ecEditor.getService('telemetry').interact({
         "type": data.type,
-        "subtype": data.subtype,
         "id": data.id,
-        "pageId": ecEditor.getCurrentStage().id,
+        "pageid": 'question-creation-mcq-form',
         "target": {
-          "id": event.target.id,
-          "ver": "1.0",
-          "type": data.type
+          "id": data.target.id,
+          "ver": data.target.ver,
+          "type": data.target.type
         },
         "plugin": {
           "id": "org.ekstep.questionunit.mcq",
