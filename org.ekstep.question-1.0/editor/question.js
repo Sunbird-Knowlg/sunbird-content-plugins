@@ -314,6 +314,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       } else {
         ctrl.questionData.questionTitle = _.isUndefined(ctrl.questionData.questionTitle) ? ctrl.questionCreationFormData.question.text : ctrl.questionData.questionTitle;
       }
+      ctrl.questionData.questionTitle = ctrl.extractHTML(ctrl.questionData.questionTitle);
       $('.QuestionMetaForm .ui.dropdown').dropdown({});
       ctrl.questionMetaData.name = ctrl.questionData.questionTitle;
       ctrl.questionMetaData.medium = ctrl.questionData.qcLanguage;
@@ -441,6 +442,12 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       /*Save data and get response and dispatch event with response to questionbank plugin*/
       ctrl.saveQuestion(ctrl.assessmentId, ctrl.qFormData);
     };
+
+    ctrl.extractHTML = function(htmlElement) {
+      var divElement= document.createElement('div');
+      divElement.innerHTML= htmlElement;
+      return divElement.textContent || divElement.innerText;
+    }
 
     ctrl.genImpressionTelemetry = function(data) {
       if (data) ecEditor.getService('telemetry').impression({
