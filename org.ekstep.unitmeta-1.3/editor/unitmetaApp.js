@@ -121,7 +121,9 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                 $scope.$safeApply();
             }
         });
-        ecEditor.dispatchEvent("editor:update:dialcode");
+        setTimeout(function(){
+            ecEditor.dispatchEvent("editor:update:dialcode");
+        }, 0);
         ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
         $scope.$safeApply();
     }
