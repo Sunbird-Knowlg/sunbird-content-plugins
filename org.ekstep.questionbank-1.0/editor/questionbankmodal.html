@@ -62,11 +62,10 @@
                                 <label>Show Immediate Feedback</label>
                             </div>
                         </div>
+
                         <div class="field">
                             <div class="ui toggle checkbox filterField">
-                                <input type="checkbox" ng-model="questionSetConfigObj.shuffle_questions"
-                                       id="shuffle0questions"
-                                       ng-click="generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)"/>
+                                <input type="checkbox" ng-model="questionSetConfigObj.shuffle_questions" id="shuffle0questions" ng-click="shuffleWarnPopUp();generateTelemetry({type: 'click', subtype: 'toggle', id: 'checkbox'},$event)" />
                                 <label>Shuffle Questions</label>
                             </div>
                         </div>
@@ -150,10 +149,7 @@
                                     <div class="field">
                                         <div class="ui fluid labeled input">
                                             <div class="ui label">Configure Score</div>
-                                            <input id="max_score" name="max_score" ng-model="selQuestionObj.max_score"
-                                                   type="number" min="1"
-                                                   ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)"
-                                                   ng-change="saveConfig();setDisplayandScore();"/>
+                                            <input id="max_score" name="max_score" ng-model="selQuestionObj.max_score" type="number" min="1" ng-click="generateTelemetry({type: 'select', subtype: 'dropDown', id: 'dropDown'},$event)" ng-change="saveConfig();setDisplayandScore();" ng-disabled="configScore || questionSetConfigObj.shuffle_questions" />
                                         </div>
                                     </div>
                                 </div>

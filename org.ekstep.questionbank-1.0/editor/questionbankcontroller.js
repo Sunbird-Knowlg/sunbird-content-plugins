@@ -25,6 +25,7 @@ angular.module('createquestionapp', [])
     $scope.filterForm = '';
     $scope.framework = ecEditor.getContext('framework');
     $scope.difficultyLevels = ['All', 'Easy', 'Medium', 'Difficult'];
+    $scope.configScore = false;
     $scope.questionTypes = [{
       "name": "Multiple Choice Questions",
       "value": "mcq"
@@ -384,7 +385,7 @@ angular.module('createquestionapp', [])
 
       //Update max_score question->config->metadata
       var qBody = JSON.parse($scope.selQuestionObj.body);
-      qBody.data.config.max_score = $scope.selQuestionObj.max_score;
+      qBody.data.config.metadata.max_score = $scope.selQuestionObj.max_score;
       $scope.selQuestionObj.body = JSON.stringify(qBody);
 
       var selectedObjIndex = _.findLastIndex($scope.questions, {
@@ -478,6 +479,28 @@ angular.module('createquestionapp', [])
         });
       } else {
         ecEditor.dispatchEvent($scope.pluginIdObj.question_create_id + ":showpopup", questionObj);
+      }
+    }
+    $scope.shuffleWarnPopUp = function(){
+      if($scope.questionSetConfigObj.shuffle_questions){
+        $scope.configScore = true;
+        $scope.questionSetConfigObj.max_score = $scope.selectedQuestions.length;
+        _.each($scope.selectedQuestions, function(question,key){
+          $scope.selectedQuestions[key].max_score = 1;
+          //JSON.parse($scope.selectedQuestions[key].body).data.config.metadata.max_score = 1;
+          if($scope.selectedQuestions[key].body == undefined){
+          	$scope.selectedQuestions[key].max_score = 1;
+          }else{
+          	JSON.parse($scope.selectedQuestions[key].body).data.config.metadata.max_score = 1;
+          }				
+          $scope.selQuestionObj.max_score = 1;
+        });
+          ecEditor.dispatchEvent("org.ekstep.toaster:info", {
+              title: 'Each question will carry equal weightage of 1 mark when using Shuffle. To provide different weightage to individual questions please turn off Shuffle.',
+              position: 'topCenter',
+          });
+      }else{
+        $scope.configScore = false;
       }
     }
 

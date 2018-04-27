@@ -71,7 +71,8 @@ angular.module('mtfApp', [])
           'audio': '',
           'hint': '',
           'mapIndex': 3
-        }]
+        }],
+        'questionCount': 0
       }
     };
     $scope.questionMedia = {};
@@ -81,7 +82,14 @@ angular.module('mtfApp', [])
     };
     $scope.mtfFormData.media = [];
     $scope.editMedia = [];
-
+    var questionInput = CKEDITOR.replace('mtfQuestion', {
+      customConfig: CKEDITOR.basePath + "config.js",
+      skin: 'moono-lisa,' + CKEDITOR.basePath + "skins/moono-lisa/",
+      contentsCss: CKEDITOR.basePath + "contents.css"
+    });
+    questionInput.on('change', function() {
+      $scope.mtfFormData.question.text = this.getData();
+    });
     $scope.init = function() {
       if (!ecEditor._.isUndefined($scope.questionEditData)) {
         var data = $scope.questionEditData.data;
@@ -94,6 +102,9 @@ angular.module('mtfApp', [])
       }
       $scope.$parent.$on('question:form:val', function(event) {
         if ($scope.formValidation()) {
+          /*if dynamic question assign how many questions are create that count to $scope.mcqFormData.questionCount
+          Or else assign 1*/
+          $scope.mtfFormData.questionCount = 1;
           $scope.$emit('question:form:valid', $scope.mtfFormData);
         } else {
           $scope.$emit('question:form:inValid', $scope.mtfFormData);

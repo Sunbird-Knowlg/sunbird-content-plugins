@@ -44,7 +44,8 @@ angular.module('mcqApp', [])
         'audio': '',
         'hint': '',
         'isCorrect': false
-      }]
+      }],
+      'questionCount':0
     };
     $scope.oHint = [];
     $scope.questionMedia = {};
@@ -54,7 +55,15 @@ angular.module('mcqApp', [])
     };
     $scope.mcqFormData.media = [];
     $scope.editMedia = [];
-
+    var questionInput = CKEDITOR.replace('ckedit', {
+      customConfig: CKEDITOR.basePath + "config.js",
+      skin: 'moono-lisa,' + CKEDITOR.basePath + "skins/moono-lisa/",
+      contentsCss: CKEDITOR.basePath + "contents.css"
+    });
+    questionInput.on('change', function() {
+      $scope.mcqFormData.question.text = this.getData();
+    });
+    
     $scope.init = function () {
       $('.menu .item').tab();
       if (!ecEditor._.isUndefined($scope.questionEditData)) {
@@ -81,6 +90,9 @@ angular.module('mcqApp', [])
       }
       $scope.$parent.$on('question:form:val', function (event) { // eslint-disable-line no-unused-vars
         if ($scope.formValidation()) {
+          /*if dynamic question assign how many questions are create that count to $scope.mcqFormData.questionCount
+          Or else assign 1*/
+          $scope.mcqFormData.questionCount = 1;
           $scope.$emit('question:form:valid', $scope.mcqFormData);
         } else {
           $scope.$emit('question:form:inValid', $scope.mcqFormData);
