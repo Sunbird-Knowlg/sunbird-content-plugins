@@ -61,8 +61,6 @@
 .key_barakhadi:active,
 .key_barakhadi_numeric:active {
     background-color: rgb(215, 215, 215);
-    /* box-shadow: 0 15px rgb(215, 215, 215); */
-    /* transform: translateY(-15px); */
     height: 70%;
 }
 
@@ -157,12 +155,9 @@
 }
 
 .erasedDivParent {
-    /* position: absolute;
-    height: 6%;
-    width: 5%;
-    left: 97%;
-    top: 13%;
-    z-index: 20;*/
+    float: right;
+    margin-top: -4.5%;
+    position: relative;
 }
 
 #erasedDiv {
@@ -198,7 +193,7 @@
 }
 
 img.qc-erase-icon {
-    width: 4.5%;
+    width: 45%;
 }
 
 img.qc-language-icon {
