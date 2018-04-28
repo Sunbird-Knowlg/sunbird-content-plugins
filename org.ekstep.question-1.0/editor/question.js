@@ -61,7 +61,9 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
 
     ctrl.init = function () {
       ecEditor.addEventListener('editor:template:loaded', function (event, object) {
-        ctrl.metadataform = object.templatePath;
+        if(object.formAction == 'question-meta-save') {
+          ctrl.metadataform = object.templatePath;
+        }
       })
 
       ecEditor.getService('meta').getConfigOrdinals(function (err, res) {

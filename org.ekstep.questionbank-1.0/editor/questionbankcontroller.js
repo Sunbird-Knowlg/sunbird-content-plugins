@@ -177,7 +177,9 @@ angular.module('createquestionapp', [])
       $scope.selectedIndex = undefined;
 
       ecEditor.addEventListener('editor:template:loaded', function(event, object) {
-        $scope.filterForm = object.templatePath;
+        if(object.formAction == 'question-filter-view') {
+          $scope.filterForm = object.templatePath;
+        }
       })
 
       ecEditor.addEventListener(pluginInstance.manifest.id + ":saveQuestion", function (event, data) {
