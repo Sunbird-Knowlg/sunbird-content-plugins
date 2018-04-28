@@ -235,7 +235,7 @@
                 <div class="or" ng-show="!$ctrl.templatesScreen"></div>
                 <button class="ui large blue button" ng-show="!$ctrl.questionMetadataScreen && !$ctrl.templatesScreen"
                         id="back-button"
-                        ng-click="$ctrl.showMetaform();$ctrl.generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'question-next', ver: '', type: 'button'}});$ctrl.genImpressionTelemetry({type: 'edit', subtype: 'Paginate', visits: {objid: 'meta-data-form', objtype: 'form'}});">
+                        ng-click="$ctrl.showMetaform();$ctrl.generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'question-next', ver: '', type: 'button'}});$ctrl.genImpressionTelemetry({type: 'edit', subtype: 'Paginate', pageid: 'question-creation-form', visits: {objid: 'meta-data-form', objtype: 'form'}});">
                     Next
                 </button>
                 <button class="ui large blue button" ng-if="$ctrl.questionMetadataScreen" id="save-question-button"
