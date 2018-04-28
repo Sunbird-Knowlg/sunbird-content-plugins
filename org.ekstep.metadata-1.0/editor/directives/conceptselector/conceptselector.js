@@ -17,9 +17,10 @@ formApp.directive('conceptselector', function() {
                     selectedConcepts.push(concept.identifier);
                 });
         }
+        $scope.conceptElementId = (!_.isUndefined($scope.$parent.$parent.tempalteName)) ? $scope.$parent.$parent.tempalteName + '-concept' : 'metaform-concept';
         $scope.invokeConceptSelector = function() {
             ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
-                element: 'metaform-concept',
+                element: $scope.conceptElementId,
                 selectedConcepts: selectedConcepts,
                 callback: function(data) {
                     console.log("Length", data)
