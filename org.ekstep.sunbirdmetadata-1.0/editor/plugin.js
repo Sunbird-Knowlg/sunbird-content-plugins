@@ -263,7 +263,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
         this.config = config.formConfig
         this.form = this.mapObject(this.config.fields, this.framework.categories)
         this.loadTemplate(this.config.templateName, function(templatePath) {
-            isPopup ? instance.showForm() : ecEditor.dispatchEvent("editor:template:loaded", { "templatePath": templatePath })
+            isPopup ? instance.showForm() : ecEditor.dispatchEvent("editor:template:loaded", { "templatePath": templatePath, "formAction": instance.config.action })
         })
 
     },
