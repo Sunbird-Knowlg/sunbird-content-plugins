@@ -148,6 +148,7 @@ angular.module('org.ekstep.uploadcontent-1.0', []).controller('uploadController'
                         "createdBy": ecEditor.getContext('user').id,
                         "createdFor": ecEditor.getContext('user').orgIds,
                         "contentType": "Resource",
+                        "resourceType": "Study material",
                         "creator": ecEditor.getContext('user').name,
                         "framework": ecEditor.getContext('framework')
                     }
