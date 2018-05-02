@@ -1,7 +1,7 @@
 <div ng-controller="KeyboardCtrl">
     <div ng-show="keyboardVisible">
         <div class="qBoxArea" ng-show="keyboardVisible">
-            <div class="question">{{question}}</div>
+            <div class="question"><p ng-bind-html="question"></p></div>
         </div>
         <div class="textBoxArea">
             <input type="text" id="txtfillblank1" class="ansField" placeholder="Enter answer" ng-model="answerText" disabled autofocus />
