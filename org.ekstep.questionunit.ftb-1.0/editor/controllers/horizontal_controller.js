@@ -74,7 +74,7 @@ angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', 
         $scope.ftbFormData.parsedQuestion.text = $scope.ftbFormData.question.text.replace(/\[\[.*?\]\]/g, function(a, b)
         {
           index = index + 1;
-          if ($scope.ftbFormData.question.keyboardConfig.keyboardType == 'English' || $scope.ftbFormData.question.keyboardConfig.keyboardType == 'Custom')
+          if (!_.isUndefined($scope.ftbFormData.question.keyboardConfig) && $scope.ftbFormData.question.keyboardConfig.keyboardType == 'English' || $scope.ftbFormData.question.keyboardConfig.keyboardType == 'Custom')
           {
             return '<input type="text" class="ans-field" id="ans-field' + index + '" readonly style="cursor: pointer;">';
           }

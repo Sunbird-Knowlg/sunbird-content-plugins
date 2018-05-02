@@ -48,6 +48,7 @@ angular.module('keyBoardApp', [])
 				</form>`,
 			link: function (scope, element, attrs) {
 				scope.keyboardTypes = ['Device', 'English', 'Custom'];
+				if(!_.isUndefined(scope.data) && !_.isUndefined(scope.data.keyboardType))
 				scope.keyboardType = scope.data.keyboardType;
 				scope.customTag = false;
 				scope.selectKeyboardType = function () {

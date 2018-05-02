@@ -144,8 +144,6 @@
     position: relative;
 }
 
-
-
 #parentDivEraser {
     width: 80%;
     height: 100%;
@@ -156,8 +154,9 @@
 
 .erasedDivParent {
     float: right;
-    margin-top: -4.5%;
+    margin-top: -4.3%;
     position: relative;
+    margin-right: -2%;
 }
 
 #erasedDiv {
