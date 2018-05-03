@@ -13,7 +13,7 @@
                 </div>
             </div>
         </div>
-        <div class="content" style="height: 480px;overflow-y: scroll;">
+        <div class="content" style="max-height: 480px;overflow-y: scroll;">
             <div class="ui tiny header">
                 <h4>{{checklistItems.subtitle}}</h4>
             </div>
@@ -31,7 +31,7 @@
 
             <h5 ng-show="checklistMode == 'reject' || checklistMode === 'read' ">
                 <div class="ui checkbox checklist">
-                    <input type="checkbox" class="otherItem" ng-checked="rejectedReasons.indexOf('Others')!== -1" " ng-click="onCheckboxSelect( 'Others') ">
+                    <input type="checkbox" class="otherItem" ng-checked="rejectedReasons.indexOf('Others')!== -1" ng-click="onCheckboxSelect( 'Others') ">
                     <label>Other Issue(s) (if there are any other issues, tick this and provide details in the comments box)
                         </label>
                 </div>
