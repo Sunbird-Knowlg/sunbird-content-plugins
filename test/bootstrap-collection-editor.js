@@ -8,7 +8,7 @@ var testConfig = {
   dispatcher: 'console',
   pluginRepo: 'http://localhost:9876/base',
   corePluginsPackaged: false,
-  plugins: [{ "id": "org.ekstep.collectioneditor", "ver": "1.2", "type": "plugin" }],
+  plugins: [{ "id": "org.ekstep.sunbirdcommonheader", "ver": "1.4", "type": "plugin" }],
   keywordsLimit:500,
   editorConfig: {
     "mode": "Edit",

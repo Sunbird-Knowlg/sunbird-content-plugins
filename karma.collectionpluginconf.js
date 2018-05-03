@@ -24,7 +24,7 @@ module.exports = function(config) {
             { pattern: '**/*.js', watched: true, served: true, included: false },
             { pattern: '**/*.png', watched: true, served: true, included: false },
             // '**/test/editor/*.spec.js'            
-            'org.ekstep.collectioneditor-1.2/test/editor/*.spec.js'
+            'org.ekstep.sunbirdcommonheader-1.4/test/editor/*.spec.js'
         ],
         exclude: [
             'node_modules/**',
