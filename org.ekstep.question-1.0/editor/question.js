@@ -264,6 +264,15 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
         ctrl.templatesScreen = true;
         ctrl.showTemplates();
       } else {
+        var metaFormScope = $('#question-meta-form #content-meta-form').scope();
+        ctrl.questionData.questionTitle = metaFormScope.contentMeta.name;
+        ctrl.questionData.qcLanguage = metaFormScope.contentMeta.medium;
+        ctrl.questionData.qcLevel = metaFormScope.contentMeta.level;
+        ctrl.questionData.questionDesc = metaFormScope.contentMeta.description;
+        ctrl.questionData.questionMaxScore = metaFormScope.contentMeta.max_score;
+        ctrl.questionData.qcGrade = metaFormScope.contentMeta.gradeLevel;
+        ctrl.questionData.concepts = metaFormScope.contentMeta.concepts;
+
         ctrl.questionMetadataScreen = false;
       }
     }
