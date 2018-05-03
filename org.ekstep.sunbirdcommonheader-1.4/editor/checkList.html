@@ -1,6 +1,6 @@
 <!-- checklist template -->
 <script type="text/ng-template" ng-app="org.ekstep.sunbirdcommonheader:app" ng-controller="headerController as $ctrl" id="org.ekstep.checklist.html">
-    <div id="checklistModal" class="ui active modal" style="top:5%" ng-init="initPopup()">
+    <div id="checklistModal" class="ui active modal reviewer-popup-top-align" ng-init="initPopup()">
         <div class="header">
             <div class="ui two column grid">
                 <div class="row">
@@ -13,14 +13,14 @@
                 </div>
             </div>
         </div>
-        <div class="content" style="max-height: 480px;overflow-y: scroll;">
+        <div class="content reviewer-popup-height">
             <div class="ui tiny header">
                 <h4>{{checklistItems.subtitle}}</h4>
             </div>
             <div class="ui three column grid">
                 <div class="column" ng-repeat="list in checklistItems.contents | orderBy: 'index'">
                     <h5 class="ui tiny header">{{list.name}}</h5>
-                    <div class="column" ng-repeat="item in list.checkList" style="padding:2%">
+                    <div class="column reviewer-content" ng-repeat="item in list.checkList">
                         <div class="ui checkbox checklist">
                             <input type="checkbox" class="listItem" ng-checked="rejectedReasons.indexOf(item)!== -1" ng-click="onCheckboxSelect(item)">
                             <label>{{item}}</label>
@@ -38,7 +38,7 @@
             </h5>
             <h5 class="ui tiny header " ng-show="checklistItems.comments.required ">{{checklistItems.comments.label}}</h5>
             <div class="ui row ">
-                <textarea id="review-comments" rows="3 " ng-show="checklistItems.comments.required " ng-model="reviewComments " ng-change="onCheckboxSelect() " style="width:100%;border-radius:2px "></textarea>
+                <textarea id="review-comments" rows="3 " class="reviewer-comment-box" ng-show="checklistItems.comments.required " ng-model="reviewComments " ng-change="onCheckboxSelect() "></textarea>
             </div>
         </div>
         <div class="actions footer" id="review-footer">
