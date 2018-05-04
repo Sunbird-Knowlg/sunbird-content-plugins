@@ -445,6 +445,9 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             var searchQuery = this.searchKeyword;
             ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'button-search' });
             searchBody.request.filters.name = { "value": this.searchKeyword };
+            if(!searchBody.request.filters.contentType){
+               searchBody.request.filters.contentType = collectionService.getObjectTypeByAddType('Browser');
+            }
             delete searchBody.request.query;
             searchService.search(searchBody, function(err, res) {
                 if (err) {
