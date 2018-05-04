@@ -264,7 +264,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.closeEditor = function() {
-        if ($scope.alertOnUnload === true && $scope.pendingChanges === true && ecEditor.getConfig('editorConfig').mode !== 'Read') {
+        var mode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').mode;
+        if ($scope.alertOnUnload === true && $scope.pendingChanges === true && mode !== 'Read') {
             if (window.confirm("You have unsaved changes! Do you want to leave?")) {
                 window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
             }
