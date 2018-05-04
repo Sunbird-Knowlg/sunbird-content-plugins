@@ -16,6 +16,7 @@ describe("Sunbird header plugin:", function() {
             ecEditor.getContext = jasmine.createSpy().and.callFake(function() {
                 return "do_1143535346658585";
             });
+
             done();
         })
     })
@@ -219,7 +220,7 @@ describe("Sunbird header plugin:", function() {
                 console.log(object.message)
             })
             ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById = jasmine.createSpy().and.callFake(function() {
-                return { data: {} }
+                return { data: { metadata: { status: 'Draft' } } }
             });
             spyOn($scope, "sendForReview").and.callThrough();
             $scope.sendForReview();
@@ -248,6 +249,45 @@ describe("Sunbird header plugin:", function() {
             expect(contentType).toBe('resource');
             done();
         })
+        it('Should invoke the get content meta', function(done) {
+            spyOn($scope, "getContentMetadata").and.callThrough();
+            $scope.getContentMetadata();
+            expect($scope.getContentMetadata).toHaveBeenCalled();
+            done()
+        });
+        it('Should not hide the review button when status is Draft', function(done) {
+            var contentMeta = { data: { metadata: { status: 'Draft' } } }
+            org.ekstep.services.collectionService.getNodeById = jasmine.createSpy().and.callFake(function() {
+                return contentMeta
+            });
+            spyOn($scope, "getContentMetadata").and.callThrough();
+            $scope.getContentMetadata();
+            expect($scope.getContentMetadata).toHaveBeenCalled();
+            expect($scope.hideReviewBtn).toBe(false);
+            done()
+        });
+        it('Should not hide the review button when status is Draft', function(done) {
+            var contentMeta = { data: { metadata: { status: 'FlagDraft' } } }
+            org.ekstep.services.collectionService.getNodeById = jasmine.createSpy().and.callFake(function() {
+                return contentMeta
+            });
+            spyOn($scope, "getContentMetadata").and.callThrough();
+            $scope.getContentMetadata();
+            expect($scope.getContentMetadata).toHaveBeenCalled();
+            expect($scope.hideReviewBtn).toBe(false);
+            done()
+        });
+        it('Should hide the review button when status is other than `DRAFT/FLAGDRAFT`', function(done) {
+            var contentMeta = { data: { metadata: { status: 'Live' } } }
+            org.ekstep.services.collectionService.getNodeById = jasmine.createSpy().and.callFake(function() {
+                return contentMeta
+            });
+            spyOn($scope, "getContentMetadata").and.callThrough();
+            $scope.getContentMetadata();
+            expect($scope.getContentMetadata).toHaveBeenCalled();
+            expect($scope.hideReviewBtn).toBe(true);
+            done()
+        });
 
     })
     describe("Content download", function() {
@@ -413,7 +453,7 @@ describe("Sunbird header plugin:", function() {
     describe("SetEditorDetail", function() {
         it('Should invoke setEditor details and set editor env to ecml,When mime type is ecml mimeType', function(done) {
             ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta = jasmine.createSpy().and.callFake(function(done) {
-                return { mimeType: 'application/vnd.ekstep.ecml-archive' }
+                return { mimeType: 'application/vnd.ekstep.ecml-archive', contentType: "TextBook" }
             })
             spyOn($scope, 'setEditorDetails').and.callThrough();
             $scope.setEditorDetails();
@@ -424,7 +464,7 @@ describe("Sunbird header plugin:", function() {
         })
         it('Should invoke setEditor details and set editor env to Collection, When mime type is collection mimeType', function(done) {
             ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta = jasmine.createSpy().and.callFake(function(done) {
-                return { mimeType: 'application/vnd.ekstep.content-collection' }
+                return { mimeType: 'application/vnd.ekstep.content-collection', contentType: "TextBook" }
             })
             ecEditor.getConfig = jasmine.createSpy().and.callFake(function() {
                 return { mode: 'Read' };
@@ -438,7 +478,7 @@ describe("Sunbird header plugin:", function() {
         })
         it("should hide the `Show edit meta` link in the header plugin, when mode is `READ`", function(done) {
             ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta = jasmine.createSpy().and.callFake(function(done) {
-                return { mimeType: 'application/vnd.ekstep.content-collection' }
+                return { mimeType: 'application/vnd.ekstep.content-collection', contentType: "TextBook" }
             })
             ecEditor.getConfig = jasmine.createSpy().and.callFake(function() {
                 return { mode: 'Read' };
@@ -467,13 +507,15 @@ describe("Sunbird header plugin:", function() {
             expect($scope.previewContent).toHaveBeenCalled();
             done();
         });
-        it("Should dispatch dynamic form event, when editmeta is inovked", function(done) {
-            var config = { "dispatcher": "console", "pluginRepo": "http://localhost:9876/base", "corePluginsPackaged": false, "plugins": [{ "id": "org.ekstep.sunbirdcommonheader", "ver": "1.4", "type": "plugin" }], "keywordsLimit": 500, "editorConfig": { "mode": "Edit", "contentStatus": "draft", "rules": { "levels": 7, "objectTypes": [{ "type": "TextBook", "label": "Textbook", "isRoot": true, "editable": true, "childrenTypes": ["TextBookUnit"], "addType": "Editor", "iconClass": "fa fa-book" }, { "type": "TextBookUnit", "label": "Textbook Unit", "isRoot": false, "editable": true, "childrenTypes": ["TextBookUnit", "Collection", "Content"], "addType": "Editor", "iconClass": "fa fa-folder-o" }, { "type": "Collection", "label": "Collection", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file-o" }, { "type": "Content", "label": "Content", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file-o" }] }, "defaultTemplate": {} } }
+        it("Should dispatch dynamic form event, when editmeta is invoked", function(done) {
+            var config = { "mode": "Edit", "contentStatus": "draft", "rules": { "levels": 7, "objectTypes": [{ "type": "TextBook", "label": "Textbook", "isRoot": true, "editable": true, "childrenTypes": ["TextBookUnit"], "addType": "Editor", "iconClass": "fa fa-book" }, { "type": "TextBookUnit", "label": "Textbook Unit", "isRoot": false, "editable": true, "childrenTypes": ["TextBookUnit", "Collection", "Content"], "addType": "Editor", "iconClass": "fa fa-folder-o" }, { "type": "Collection", "label": "Collection", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file-o" }, { "type": "Content", "label": "Content", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file-o" }] }, "defaultTemplate": {} }
             ecEditor.getConfig = jasmine.createSpy().and.callFake(function() {
                 return config
             });
+            ecEditor.getContext = jasmine.createSpy().and.callFake(function() {
+                return { framework: "NCF", channel: "*" }
+            });
             ecEditor.addEventListener('org.ekstep.editcontentmeta:showpopup', function(event, data) {
-                console.log("Meta form is invoked");
                 expect(data.action).toBe('save');
                 expect(data.popup).toBe(true);
                 expect(data.framework).not.toBe(undefined);
@@ -487,6 +529,71 @@ describe("Sunbird header plugin:", function() {
             done();
         })
     })
+    describe('whatsNew', function() {
+        it('Should load the whats new plugin when mimeType is Collection', function(done) {
+            spyOn($scope, "whatsNew").and.callThrough();
+            $scope.whatsNew();
+            expect($scope.whatsNew).toHaveBeenCalled();
+            setTimeout(function() {
+                var whatsNewPlugin = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.collectionwhatsnew");
+                expect(whatsNewPlugin).not.toBe(undefined);
+                expect(whatsNewPlugin.ver).toBe('1.0'); // Must change the testcase when ever what's new plugin version is changed
+                done()
+            }, 100)
+        });
+        it("Whats new should enable if content type is `TEXTBOOK`", function(done) {
+            var contentMeta = { "code": "e4992e72-370a-49b5-8eb4-a17d065d5e0e", "subject": "Urdu", "channel": "b00bc992ef25f1a9a8d63291e20efc8d", "showNotification": true, "language": ["English"], "mimeType": "application/pdf", "medium": "Marathi", "idealScreenSize": "normal", "createdOn": "2018-05-02T11:13:25.099+0000", "gradeLevel": ["Class 1"], "appIcon": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/6f00e56680fa722f16bd8a282480c786_1476254079786.jpeg", "appId": "dev.sunbird.portal", "contentDisposition": "inline", "artifactUrl": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/assets/do_1124949266849792001142/pdf.pdf", "contentEncoding": "identity", "lastUpdatedOn": "2018-05-02T11:14:03.919+0000", "sYS_INTERNAL_LAST_UPDATED_ON": "2018-05-02T11:13:25.981+0000", "contentType": "TextBook", "lastUpdatedBy": "6d4da241-a31b-4041-bbdb-dd3a898b3f85", "identifier": "do_1124949266849792001142", "audience": ["Learner"], "creator": "N. T. RAO . creator_org_001", "createdFor": ["ORG_001"], "visibility": "Default", "os": ["All"], "consumerId": "72e54829-6402-4cf0-888e-9b30733c1b88", "mediaType": "content", "osId": "org.ekstep.quiz.app", "languageCode": "en", "versionKey": "1525259643919", "idealScreenDensity": "hdpi", "framework": "NCF", "createdBy": "6d4da241-a31b-4041-bbdb-dd3a898b3f85", "compatibilityLevel": 1, "name": "UP", "board": "NCERT", "resourceType": "Study material", "status": "Draft" }
+            ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta = jasmine.createSpy().and.callFake(function() {
+                return contentMeta
+            });
+            setTimeout(function() {
+                console.log("ContentType", contentMeta.contentType)
+                spyOn($scope, "whatsNew").and.callThrough();
+                $scope.whatsNew();
+                expect($scope.whatsNew).toHaveBeenCalled();
+                var whatsNewPlugin = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.collectionwhatsnew");
+                expect(whatsNewPlugin).not.toBe(undefined);
+                expect($scope.showWhatsNew).toBe(true);
+                done()
+            }, 100)
+        })
+        it("Whats new should enable if content type is `COURSE`", function(done) {
+            var contentMeta = { "code": "e4992e72-370a-49b5-8eb4-a17d065d5e0e", "subject": "Urdu", "channel": "b00bc992ef25f1a9a8d63291e20efc8d", "showNotification": true, "language": ["English"], "mimeType": "application/pdf", "medium": "Marathi", "idealScreenSize": "normal", "createdOn": "2018-05-02T11:13:25.099+0000", "gradeLevel": ["Class 1"], "appIcon": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/6f00e56680fa722f16bd8a282480c786_1476254079786.jpeg", "appId": "dev.sunbird.portal", "contentDisposition": "inline", "artifactUrl": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/assets/do_1124949266849792001142/pdf.pdf", "contentEncoding": "identity", "lastUpdatedOn": "2018-05-02T11:14:03.919+0000", "sYS_INTERNAL_LAST_UPDATED_ON": "2018-05-02T11:13:25.981+0000", "contentType": "Course", "lastUpdatedBy": "6d4da241-a31b-4041-bbdb-dd3a898b3f85", "identifier": "do_1124949266849792001142", "audience": ["Learner"], "creator": "N. T. RAO . creator_org_001", "createdFor": ["ORG_001"], "visibility": "Default", "os": ["All"], "consumerId": "72e54829-6402-4cf0-888e-9b30733c1b88", "mediaType": "content", "osId": "org.ekstep.quiz.app", "languageCode": "en", "versionKey": "1525259643919", "idealScreenDensity": "hdpi", "framework": "NCF", "createdBy": "6d4da241-a31b-4041-bbdb-dd3a898b3f85", "compatibilityLevel": 1, "name": "UP", "board": "NCERT", "resourceType": "Study material", "status": "Draft" }
+            ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta = jasmine.createSpy().and.callFake(function() {
+                return contentMeta
+            });
+            spyOn($scope, "whatsNew").and.callThrough();
+            $scope.whatsNew();
+            expect($scope.whatsNew).toHaveBeenCalled();
+            setTimeout(function() {
+                expect($scope.showWhatsNew).toBe(true);
+                done();
+            }, 100)
+        })
+        it("Whats new should enable if content type is `LESSON PLAN`", function(done) {
+            var contentMeta = { "code": "e4992e72-370a-49b5-8eb4-a17d065d5e0e", "subject": "Urdu", "channel": "b00bc992ef25f1a9a8d63291e20efc8d", "showNotification": true, "language": ["English"], "mimeType": "application/pdf", "medium": "Marathi", "idealScreenSize": "normal", "createdOn": "2018-05-02T11:13:25.099+0000", "gradeLevel": ["Class 1"], "appIcon": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/6f00e56680fa722f16bd8a282480c786_1476254079786.jpeg", "appId": "dev.sunbird.portal", "contentDisposition": "inline", "artifactUrl": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/assets/do_1124949266849792001142/pdf.pdf", "contentEncoding": "identity", "lastUpdatedOn": "2018-05-02T11:14:03.919+0000", "sYS_INTERNAL_LAST_UPDATED_ON": "2018-05-02T11:13:25.981+0000", "contentType": "LessonPlan", "lastUpdatedBy": "6d4da241-a31b-4041-bbdb-dd3a898b3f85", "identifier": "do_1124949266849792001142", "audience": ["Learner"], "creator": "N. T. RAO . creator_org_001", "createdFor": ["ORG_001"], "visibility": "Default", "os": ["All"], "consumerId": "72e54829-6402-4cf0-888e-9b30733c1b88", "mediaType": "content", "osId": "org.ekstep.quiz.app", "languageCode": "en", "versionKey": "1525259643919", "idealScreenDensity": "hdpi", "framework": "NCF", "createdBy": "6d4da241-a31b-4041-bbdb-dd3a898b3f85", "compatibilityLevel": 1, "name": "UP", "board": "NCERT", "resourceType": "Study material", "status": "Draft" }
+            ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta = jasmine.createSpy().and.callFake(function() {
+                return contentMeta
+            });
+            spyOn($scope, "whatsNew").and.callThrough();
+            $scope.whatsNew();
+            expect($scope.whatsNew).toHaveBeenCalled();
+            expect($scope.showWhatsNew).toBe(true);
+            done();
+        })
+        xit('Whats new plugin should be hidden when content Type is other than`COURSE, TEXTBOOK, LESSON PLAN`', function(done) {
+            var contentMeta = { "code": "e4992e72-370a-49b5-8eb4-a17d065d5e0e", "subject": "Urdu", "channel": "b00bc992ef25f1a9a8d63291e20efc8d", "showNotification": true, "language": ["English"], "mimeType": "application/pdf", "medium": "Marathi", "idealScreenSize": "normal", "createdOn": "2018-05-02T11:13:25.099+0000", "gradeLevel": ["Class 1"], "appIcon": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/6f00e56680fa722f16bd8a282480c786_1476254079786.jpeg", "appId": "dev.sunbird.portal", "contentDisposition": "inline", "artifactUrl": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/assets/do_1124949266849792001142/pdf.pdf", "contentEncoding": "identity", "lastUpdatedOn": "2018-05-02T11:14:03.919+0000", "sYS_INTERNAL_LAST_UPDATED_ON": "2018-05-02T11:13:25.981+0000", "contentType": undefined, "lastUpdatedBy": "6d4da241-a31b-4041-bbdb-dd3a898b3f85", "identifier": "do_1124949266849792001142", "audience": ["Learner"], "creator": "N. T. RAO . creator_org_001", "createdFor": ["ORG_001"], "visibility": "Default", "os": ["All"], "consumerId": "72e54829-6402-4cf0-888e-9b30733c1b88", "mediaType": "content", "osId": "org.ekstep.quiz.app", "languageCode": "en", "versionKey": "1525259643919", "idealScreenDensity": "hdpi", "framework": "NCF", "createdBy": "6d4da241-a31b-4041-bbdb-dd3a898b3f85", "compatibilityLevel": 1, "name": "UP", "board": "NCERT", "resourceType": "Study material", "status": "Draft" }
+            ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta = jasmine.createSpy().and.callFake(function() {
+                return contentMeta
+            });
+            spyOn($scope, "whatsNew").and.callThrough();
+            $scope.whatsNew();
+            expect($scope.whatsNew).toHaveBeenCalled();
+            expect($scope.showWhatsNew).toBe(false);
+            done();
+        })
+    })
+
 
 
 })
