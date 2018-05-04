@@ -127,7 +127,7 @@ describe("Sunbird header plugin:", function() {
         });
         it('`org.ekstep.contenteditor:save`:Should register the event only once', function(done) {
             expect(org.ekstep.contenteditor.api.hasEventListener('org.ekstep.contenteditor:save')).toBe(true)
-            expect(EventBus.listeners["org.ekstep.contenteditor:save"].length).toBe(1);
+            expect(EventBus.listeners["org.ekstep.contenteditor:save"].length).toBe(2);
             done()
         });
         it('`org.ekstep.genericeditor:reload`:Should register the event only once', function(done) {
@@ -143,6 +143,7 @@ describe("Sunbird header plugin:", function() {
 
     })
     describe("Content rejection", function() {
+        window.parent = { $: function() { return { iziModal: function() { return {} } } } }
         it("Should initialize the content-review popup", function(done) {
             spyOn($scope, "initPopup").and.callThrough();
             $scope.initPopup();
@@ -245,7 +246,6 @@ describe("Sunbird header plugin:", function() {
             spyOn($scope, "publishContent").and.callThrough();
             $scope.publishContent();
             expect($scope.publishContent).toHaveBeenCalled();
-            don()
         })
 
     })
@@ -384,7 +384,6 @@ describe("Sunbird header plugin:", function() {
             expect($scope.hideReviewBtn).toBe(true);
             done()
         });
-
     })
     describe("Content download", function() {
         it("Should download the content, when input a valid fileName and content Id", function(done) {
@@ -470,6 +469,12 @@ describe("Sunbird header plugin:", function() {
             spyOn($scope, 'generateTelemetry').and.callThrough();
             $scope.generateTelemetry({});
             expect($scope.generateTelemetry).toHaveBeenCalled();
+            done()
+        })
+        it("Should invoke Telemetry method", function(done) {
+            spyOn($scope, 'telemetry').and.callThrough();
+            $scope.telemetry({});
+            expect($scope.telemetry).toHaveBeenCalled();
             done()
         })
     })
@@ -590,6 +595,7 @@ describe("Sunbird header plugin:", function() {
         })
     })
     describe('General methods', function() {
+        window.parent = { $: function() { return { iziModal: function() { return {} } } } }
         it('should dispatch an event when preview content is invoked', function(done) {
             ecEditor.addEventListener('org.ekstep.contenteditor:preview', function(event, data) {
                 console.log("Content preview is invoked");
@@ -623,6 +629,54 @@ describe("Sunbird header plugin:", function() {
             $scope.editContentMeta();
             expect($scope.editContentMeta).toHaveBeenCalled();
             done();
+        });
+        it("Should invoke showNoContent method", function(done) {
+            spyOn($scope, 'showNoContent').and.callThrough();
+            $scope.showNoContent();
+            expect($scope.showNoContent).toHaveBeenCalled();
+            done()
+        })
+        it("Should invoke limitedSharing", function(done) {
+            spyOn($scope, 'limitedSharing').and.callThrough();
+            $scope.limitedSharing();
+            expect($scope.limitedSharing).toHaveBeenCalled();
+            done()
+        });
+        it("Should invoke internetStatusFn", function(done) {
+            spyOn($scope, 'internetStatusFn').and.callThrough();
+            $scope.internetStatusFn();
+            expect($scope.internetStatusFn).toHaveBeenCalled();
+            done()
+        });
+        it("should invoke acceptContentFlag", function(done) {
+            ecEditor.addEventListener('org.ekstep.contenteditor:acceptFlag', function(event, data) {
+                expect(data.callback).not.toBe(undefined);
+                data.callback && data.callback(undefined, {})
+            })
+            spyOn($scope, 'acceptContentFlag').and.callThrough();
+            $scope.acceptContentFlag();
+            expect($scope.acceptContentFlag).toHaveBeenCalled();
+            done()
+        })
+        it("should invoke discardContentFlag", function(done) {
+            ecEditor.addEventListener('org.ekstep.contenteditor:discardFlag', function(event, data) {
+                expect(data.callback).not.toBe(undefined);
+                data.callback && data.callback(undefined, {})
+            })
+            spyOn($scope, 'discardContentFlag').and.callThrough();
+            $scope.discardContentFlag();
+            expect($scope.discardContentFlag).toHaveBeenCalled();
+            done()
+        })
+        it("should invoke retireContent", function(done) {
+            ecEditor.addEventListener('org.ekstep.contenteditor:retire', function(event, data) {
+                expect(data.callback).not.toBe(undefined);
+                data.callback && data.callback(undefined, {})
+            })
+            spyOn($scope, 'retireContent').and.callThrough();
+            $scope.retireContent();
+            expect($scope.retireContent).toHaveBeenCalled();
+            done()
         })
     })
     describe('Whats New', function() {
@@ -699,6 +753,24 @@ describe("Sunbird header plugin:", function() {
             spyOn($scope, "displayWhatsNew").and.callThrough();
             $scope.displayWhatsNew();
             expect($scope.displayWhatsNew).toHaveBeenCalled();
+            done();
+        })
+    })
+    describe('Close Editor', function() {
+        it('Should show an alert on unload and if any pending changes are present ', function(done) {
+            $scope.alertOnUnload = true;
+            $scope.pendingChanges = true;
+            spyOn($scope, "closeEditor").and.callThrough();
+            $scope.closeEditor();
+            expect($scope.closeEditor).toHaveBeenCalled();
+            done();
+        })
+        it('Should close an editor if no pending changes', function(done) {
+            $scope.alertOnUnload = true;
+            $scope.pendingChanges = false;
+            spyOn($scope, "closeEditor").and.callThrough();
+            $scope.closeEditor();
+            expect($scope.closeEditor).toHaveBeenCalled();
             done();
         })
     })
