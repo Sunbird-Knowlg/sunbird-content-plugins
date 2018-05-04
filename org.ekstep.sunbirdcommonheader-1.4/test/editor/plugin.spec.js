@@ -49,6 +49,99 @@ describe("Sunbird header plugin:", function() {
             }, 10);
         });
     });
+    describe('Events registration', function() {
+        it('`org.ekstep.collectioneditor:node:added`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('org.ekstep.collectioneditor:node:added')).toBe(true)
+            expect(EventBus.listeners["org.ekstep.collectioneditor:node:added"].length).toBe(1);
+            done()
+        });
+        it('`org.ekstep.collectioneditor:node:modified`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('org.ekstep.collectioneditor:node:modified')).toBe(true)
+            expect(EventBus.listeners["org.ekstep.collectioneditor:node:modified"].length).toBe(1);
+            done()
+        });
+        it('`org.ekstep.collectioneditor:node:removed`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('org.ekstep.collectioneditor:node:removed')).toBe(true)
+            expect(EventBus.listeners["org.ekstep.collectioneditor:node:removed"].length).toBe(1);
+            done()
+        });
+        it('`org.ekstep.collectioneditor:content:notfound`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('org.ekstep.collectioneditor:content:notfound')).toBe(true)
+            expect(EventBus.listeners["org.ekstep.collectioneditor:content:notfound"].length).toBe(1);
+            done()
+        });
+        it('`org.ekstep.collectioneditor:content:load`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('org.ekstep.collectioneditor:content:load')).toBe(true)
+            expect(EventBus.listeners["org.ekstep.collectioneditor:content:load"].length).toBe(2);
+            done()
+        });
+        it('`content:title:update`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('content:title:update')).toBe(true)
+            expect(EventBus.listeners["content:title:update"].length).toBe(1);
+            done()
+        });
+        it('`content:icon:update`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('content:icon:update')).toBe(true)
+            expect(EventBus.listeners["content:icon:update"].length).toBe(1);
+            done()
+        });
+        it('`content:load:complete`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('content:load:complete')).toBe(true)
+            expect(EventBus.listeners["content:load:complete"].length).toBe(1);
+            done()
+        });
+        it('`object:modified`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('object:modified')).toBe(true)
+            expect(EventBus.listeners["object:modified"].length).toBe(1);
+            done()
+        });
+        it('`object:added`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('object:added')).toBe(true)
+            expect(EventBus.listeners["object:added"].length).toBe(1);
+            done()
+        });
+        it('`stage:add`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('stage:add')).toBe(true)
+            expect(EventBus.listeners["stage:add"].length).toBe(1);
+            done()
+        });
+        it('`stage:delete`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('stage:delete')).toBe(true)
+            expect(EventBus.listeners["stage:delete"].length).toBe(1);
+            done()
+        });
+        it('`stage:duplicate`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('stage:duplicate')).toBe(true)
+            expect(EventBus.listeners["stage:duplicate"].length).toBe(1);
+            done()
+        });
+        it('`stage:reorder`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('stage:reorder')).toBe(true)
+            expect(EventBus.listeners["stage:reorder"].length).toBe(1);
+            done()
+        });
+        it('`object:removed`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('object:removed')).toBe(true)
+            expect(EventBus.listeners["object:removed"].length).toBe(1);
+            done()
+        });
+        it('`org.ekstep.contenteditor:save`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('org.ekstep.contenteditor:save')).toBe(true)
+            expect(EventBus.listeners["org.ekstep.contenteditor:save"].length).toBe(1);
+            done()
+        });
+        it('`org.ekstep.genericeditor:reload`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('org.ekstep.genericeditor:reload')).toBe(true)
+            expect(EventBus.listeners["org.ekstep.genericeditor:reload"].length).toBe(1);
+            done()
+        });
+        it('`org.ekstep:sunbirdcommonheader:close:editor`:Should register the event only once', function(done) {
+            expect(org.ekstep.contenteditor.api.hasEventListener('org.ekstep:sunbirdcommonheader:close:editor')).toBe(true)
+            expect(EventBus.listeners["org.ekstep:sunbirdcommonheader:close:editor"].length).toBe(1);
+            done()
+        });
+
+    })
     describe("Content rejection", function() {
         it("Should initialize the content-review popup", function(done) {
             spyOn($scope, "initPopup").and.callThrough();
@@ -178,6 +271,9 @@ describe("Sunbird header plugin:", function() {
             expect($scope.disableSaveBtn).toBe(false);
             expect($scope.pendingChanges).not.toBe(undefined);
             expect($scope.pendingChanges).toBe(false);
+            setTimeout(function() {
+                ecEditor.removeEventListener('org.ekstep.contenteditor:save');
+            })
             done();
         })
         it('Should invoke save content when env != `COLLECTION` ', function(done) {
@@ -529,7 +625,7 @@ describe("Sunbird header plugin:", function() {
             done();
         })
     })
-    describe('whatsNew', function() {
+    describe('Whats New', function() {
         it('Should load the whats new plugin when mimeType is Collection', function(done) {
             spyOn($scope, "whatsNew").and.callThrough();
             $scope.whatsNew();
@@ -590,6 +686,19 @@ describe("Sunbird header plugin:", function() {
             $scope.whatsNew();
             expect($scope.whatsNew).toHaveBeenCalled();
             expect($scope.showWhatsNew).toBe(false);
+            done();
+        })
+        it('Should invoke displayWhatsnew method', function(done) {
+            var contentMeta = { "code": "e4992e72-370a-49b5-8eb4-a17d065d5e0e", "subject": "Urdu", "channel": "b00bc992ef25f1a9a8d63291e20efc8d", "showNotification": true, "language": ["English"], "mimeType": "application/pdf", "medium": "Marathi", "idealScreenSize": "normal", "createdOn": "2018-05-02T11:13:25.099+0000", "gradeLevel": ["Class 1"], "appIcon": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/content/6f00e56680fa722f16bd8a282480c786_1476254079786.jpeg", "appId": "dev.sunbird.portal", "contentDisposition": "inline", "artifactUrl": "https://ekstep-public-dev.s3-ap-south-1.amazonaws.com/assets/do_1124949266849792001142/pdf.pdf", "contentEncoding": "identity", "lastUpdatedOn": "2018-05-02T11:14:03.919+0000", "sYS_INTERNAL_LAST_UPDATED_ON": "2018-05-02T11:13:25.981+0000", "contentType": "LessonPlan", "lastUpdatedBy": "6d4da241-a31b-4041-bbdb-dd3a898b3f85", "identifier": "do_1124949266849792001142", "audience": ["Learner"], "creator": "N. T. RAO . creator_org_001", "createdFor": ["ORG_001"], "visibility": "Default", "os": ["All"], "consumerId": "72e54829-6402-4cf0-888e-9b30733c1b88", "mediaType": "content", "osId": "org.ekstep.quiz.app", "languageCode": "en", "versionKey": "1525259643919", "idealScreenDensity": "hdpi", "framework": "NCF", "createdBy": "6d4da241-a31b-4041-bbdb-dd3a898b3f85", "compatibilityLevel": 1, "name": "UP", "board": "NCERT", "resourceType": "Study material", "status": "Draft" }
+            ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta = jasmine.createSpy().and.callFake(function() {
+                return contentMeta
+            });
+            spyOn($scope, "whatsNew").and.callThrough();
+            $scope.whatsNew();
+            expect($scope.whatsNew).toHaveBeenCalled();
+            spyOn($scope, "displayWhatsNew").and.callThrough();
+            $scope.displayWhatsNew();
+            expect($scope.displayWhatsNew).toHaveBeenCalled();
             done();
         })
     })
