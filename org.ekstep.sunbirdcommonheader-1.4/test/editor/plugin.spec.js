@@ -388,7 +388,7 @@ describe("Sunbird header plugin:", function() {
         it("Should set the pendingChanges to false when env is collection and mode is read", function(done) {
             $scope.editorEnv = "COLLECTION";
             ecEditor.getConfig = jasmine.createSpy().and.callFake(function() {
-                return { editorConfig: { mode: 'Read' } };
+                return { mode: 'Read' };
             });
             spyOn($scope, 'setPendingChangingStatus').and.callThrough();
             $scope.setPendingChangingStatus();
@@ -400,13 +400,90 @@ describe("Sunbird header plugin:", function() {
         it("Should set the pendingChanges to true when env is other than collection and mode is edit", function(done) {
             $scope.editorEnv = "Editor";
             ecEditor.getConfig = jasmine.createSpy().and.callFake(function() {
-                return { editorConfig: { mode: 'Edit' } };
+                return { mode: 'Edit' };
             });
             spyOn($scope, 'setPendingChangingStatus').and.callThrough();
             $scope.setPendingChangingStatus();
             expect($scope.setPendingChangingStatus).toHaveBeenCalled();
             expect($scope.pendingChanges).toBe(true);
             expect($scope.disableSaveBtn).toBe(false);
+            done();
+        })
+    })
+    describe("SetEditorDetail", function() {
+        it('Should invoke setEditor details and set editor env to ecml,When mime type is ecml mimeType', function(done) {
+            ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta = jasmine.createSpy().and.callFake(function(done) {
+                return { mimeType: 'application/vnd.ekstep.ecml-archive' }
+            })
+            spyOn($scope, 'setEditorDetails').and.callThrough();
+            $scope.setEditorDetails();
+            expect($scope.setEditorDetails).toHaveBeenCalled();
+            expect($scope.editorEnv).toBe('ECML');
+            expect($scope.editorEnv).not.toBe(undefined);
+            done();
+        })
+        it('Should invoke setEditor details and set editor env to Collection, When mime type is collection mimeType', function(done) {
+            ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta = jasmine.createSpy().and.callFake(function(done) {
+                return { mimeType: 'application/vnd.ekstep.content-collection' }
+            })
+            ecEditor.getConfig = jasmine.createSpy().and.callFake(function() {
+                return { mode: 'Read' };
+            });
+            spyOn($scope, 'setEditorDetails').and.callThrough();
+            $scope.setEditorDetails();
+            expect($scope.setEditorDetails).toHaveBeenCalled();
+            expect($scope.editorEnv).toBe('COLLECTION');
+            expect($scope.editorEnv).not.toBe(undefined);
+            done();
+        })
+        it("should hide the `Show edit meta` link in the header plugin, when mode is `READ`", function(done) {
+            ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta = jasmine.createSpy().and.callFake(function(done) {
+                return { mimeType: 'application/vnd.ekstep.content-collection' }
+            })
+            ecEditor.getConfig = jasmine.createSpy().and.callFake(function() {
+                return { mode: 'Read' };
+            });
+            spyOn($scope, 'setEditorDetails').and.callThrough();
+            $scope.setEditorDetails();
+            expect($scope.setEditorDetails).toHaveBeenCalled();
+            expect($scope.editorEnv).toBe('COLLECTION');
+            expect($scope.editorEnv).not.toBe(undefined);
+            expect($scope.showEditMeta).toBe(false);
+            expect($scope.showEditMeta).not.toBe(undefined);
+            done();
+        })
+    })
+    describe('General methods', function() {
+        it('should dispatch an event when preview content is invoked', function(done) {
+            ecEditor.addEventListener('org.ekstep.contenteditor:preview', function(event, data) {
+                console.log("Content preview is invoked");
+            })
+            org.ekstep.contenteditor.stageManager = {};
+            org.ekstep.contenteditor.stageManager.toECML = jasmine.createSpy().and.callFake(function() {
+                return { mode: 'Read' };
+            });
+            spyOn($scope, 'previewContent').and.callThrough();
+            $scope.previewContent();
+            expect($scope.previewContent).toHaveBeenCalled();
+            done();
+        });
+        it("Should dispatch dynamic form event, when editmeta is inovked", function(done) {
+            var config = { "dispatcher": "console", "pluginRepo": "http://localhost:9876/base", "corePluginsPackaged": false, "plugins": [{ "id": "org.ekstep.sunbirdcommonheader", "ver": "1.4", "type": "plugin" }], "keywordsLimit": 500, "editorConfig": { "mode": "Edit", "contentStatus": "draft", "rules": { "levels": 7, "objectTypes": [{ "type": "TextBook", "label": "Textbook", "isRoot": true, "editable": true, "childrenTypes": ["TextBookUnit"], "addType": "Editor", "iconClass": "fa fa-book" }, { "type": "TextBookUnit", "label": "Textbook Unit", "isRoot": false, "editable": true, "childrenTypes": ["TextBookUnit", "Collection", "Content"], "addType": "Editor", "iconClass": "fa fa-folder-o" }, { "type": "Collection", "label": "Collection", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file-o" }, { "type": "Content", "label": "Content", "isRoot": false, "editable": false, "childrenTypes": [], "addType": "Browser", "iconClass": "fa fa-file-o" }] }, "defaultTemplate": {} } }
+            ecEditor.getConfig = jasmine.createSpy().and.callFake(function() {
+                return config
+            });
+            ecEditor.addEventListener('org.ekstep.editcontentmeta:showpopup', function(event, data) {
+                console.log("Meta form is invoked");
+                expect(data.action).toBe('save');
+                expect(data.popup).toBe(true);
+                expect(data.framework).not.toBe(undefined);
+                expect(data.rootOrgId).not.toBe(undefined);
+                expect(data.editMode).not.toBe(undefined);
+                expect(data.subType).not.toBe(undefined);
+            })
+            spyOn($scope, 'editContentMeta').and.callThrough();
+            $scope.editContentMeta();
+            expect($scope.editContentMeta).toHaveBeenCalled();
             done();
         })
     })
