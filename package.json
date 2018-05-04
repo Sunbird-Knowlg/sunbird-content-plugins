@@ -15,11 +15,16 @@
         "karma-jasmine-matchers": "3.7.0",
         "karma-phantomjs-launcher": "1.0.2",
         "phantomjs": "2.1.7",
-        "karma-mocha-reporter": "^2.2.3"
+        "karma-mocha-reporter": "^2.2.3",
+        "karma-jasmine-jquery": "^0.1.1",
+        "karma-junit-reporter": "^1.2.0",
+        "karma-ng-html2js-preprocessor": "^1.0.0",
+        "karma-verbose-reporter": "0.0.6"
     },
     "scripts": {
         "test": "karma start karma.pluginconf.js",
-        "testCollection": "karma start karma.collectionpluginconf.js"
+        "testCollection": "karma start karma.collectionpluginconf.js",
+        "renderer": "karma start karma.renderer.pluginconf.js"
     },
     "repository": {
         "type": "git",
