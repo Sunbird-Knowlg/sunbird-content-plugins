@@ -151,7 +151,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                                 /**displayFormat: function(picked) { return "Concepts ("+picked.length+" selected)"; },**/
                                 minSearchQueryLength: 1
                             });
-                        }, 0);
+                        }, 1000);
                     }
                 });
             });
@@ -171,7 +171,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                         /**displayFormat: function(picked) { return "Concepts ("+picked.length+" selected)"; },**/
                         minSearchQueryLength: 1
                     });
-                }, 0);
+                }, 1000);
             }
         }
     },
