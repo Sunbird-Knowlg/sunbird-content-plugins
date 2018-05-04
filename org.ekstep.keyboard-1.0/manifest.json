@@ -11,6 +11,10 @@
       {
         "type": "css",
         "src": "editor/style.css"
+      },
+      {
+        "type": "js",
+        "src": "editor/keyboard.js"
       }
     ],
     "menu": []
