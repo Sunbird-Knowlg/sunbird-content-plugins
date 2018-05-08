@@ -68,6 +68,8 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
           }
         } else {
           var quesMedia = JSON.parse(question.body);
+          quesMedia.data.config.max_score = question.max_score;
+          question.body = JSON.stringify(quesMedia);
           var questionData = quesMedia.data;
           if (_.isEmpty(questionData.media) && _.has(quesMedia, "media")) {
             questionData.media.forEach(function (mediaItem) {
@@ -300,7 +302,6 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
   },
   getSummary: function() {
     var instance = this;
-    console.log("Questions",instance._questions);
     var summary = {'totalQuestions': 0,'totalScore': 0};
     var totalQuestionsToRender = instance.config.total_items; 
     if(instance.config.shuffle_questions){
