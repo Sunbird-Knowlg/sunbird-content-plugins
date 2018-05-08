@@ -311,3 +311,21 @@ body {
     vertical-align: middle;
     line-height: 50px;
 }
+
+.ui.active.modal.reviewer-popup-top-align{
+    top:5%;
+}
+
+.reviewer-popup-height{
+    max-height: 480px;
+    overflow-y: scroll;
+}
+
+.reviewer-comment-box{
+    width:100%;
+    border-radius:2px 
+}
+
+.reviewer-content{
+    padding:2%;
+}

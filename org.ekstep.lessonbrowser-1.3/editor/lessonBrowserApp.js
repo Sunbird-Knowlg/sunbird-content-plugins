@@ -445,6 +445,9 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             var searchQuery = this.searchKeyword;
             ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'button-search' });
             searchBody.request.filters.name = { "value": this.searchKeyword };
+            if(!searchBody.request.filters.contentType){
+               searchBody.request.filters.contentType = collectionService.getObjectTypeByAddType('Browser');
+            }
             delete searchBody.request.query;
             searchService.search(searchBody, function(err, res) {
                 if (err) {
@@ -559,6 +562,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             ctrl.learningConfig();
             ctrl.meta.lessonTypes = collectionService.getObjectTypeByAddType('Browser');
             if (query.request.filters.contentType) {
+                query.request.filters.contentType = _.intersectionWith(ctrl.meta.lessonTypes, query.request.filters.contentType , _.isEqual)
                 query.request.filters.contentType = _.isString(query.request.filters.contentType) ? (query.request.filters.contentType.split(",") || []) : query.request.filters.contentType;
                 $scope.filterSelection.lessonType = query.request.filters.contentType;
                 searchBody.request.filters.contentType = query.request.filters.contentType;

@@ -62,6 +62,10 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope.setEditorDetails = function() {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        if (meta.rejectComment || meta.rejectedReasons) {
+             $scope.isReviewCommentsPresent = true;
+             $scope.$safeApply();
+        }
         switch (meta.mimeType) {
             case "application/vnd.ekstep.ecml-archive":
                 $scope.editorEnv = "ECML"
@@ -260,7 +264,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.closeEditor = function() {
-        if ($scope.alertOnUnload === true && $scope.pendingChanges === true) {
+        var mode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').mode;
+        if ($scope.alertOnUnload === true && $scope.pendingChanges === true && mode !== 'Read') {
             if (window.confirm("You have unsaved changes! Do you want to leave?")) {
                 window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
             }
@@ -478,10 +483,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         if ($scope.editorEnv == "NON-ECML" && !ecEditor.getContext('contentId')) {
             $scope.disableSaveBtn = false;
             $scope.showUploadForm();
-        }
-        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
-        if (meta.rejectComment || meta.rejectedReasons) {
-            $scope.isReviewCommentsPresent = true;
         }
     })()
 
