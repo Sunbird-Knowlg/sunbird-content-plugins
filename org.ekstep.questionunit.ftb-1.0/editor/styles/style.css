@@ -76,11 +76,12 @@
   margin-top: 0%
 }
 
-.innerScroll {
+.innerScroll.ftb-layout {
   padding-left: 4%;
   overflow-y: auto;
   overflow-x: hidden;
   margin-left: 5%;
+  padding-bottom: 20%;
 }
 
 /*#eachCard {
