@@ -264,7 +264,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.closeEditor = function() {
-        if ($scope.alertOnUnload === true && $scope.pendingChanges === true) {
+        var mode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').mode;
+        if ($scope.alertOnUnload === true && $scope.pendingChanges === true && mode !== 'Read') {
             if (window.confirm("You have unsaved changes! Do you want to leave?")) {
                 window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
             }
@@ -439,10 +440,10 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         } else {
             console.log('invalid content... $scope.checkedContents is', $scope.checkedContents);
         }
-        if (ecEditor.jQuery('.listItem:checked').length == ecEditor.jQuery('.listItem').length) {
-            $scope.enableBtn = 'Publish'; // to enable publish button
-        } else if (((ecEditor.jQuery('.listItem:checked').length > 0) || (ecEditor.jQuery('.otherItem:checked').length > 0)) && ($scope.reviewComments.length > 0)) {
-            $scope.enableBtn = 'Reject'; // to enable reject button
+        if (((ecEditor.jQuery('.listItem:checked').length > 0) || (ecEditor.jQuery('.otherItem:checked').length > 0)) && ($scope.reviewComments.length > 0)) {
+            $scope.enableBtn = 'Reject'; // to enable publish button
+        } else if (ecEditor.jQuery('.listItem:checked').length == ecEditor.jQuery('.listItem').length) {
+            $scope.enableBtn = 'Publish'; // to enable reject button
         } else {
             $scope.enableBtn = ''; // to disable checklist buttons(Publish / Request changes)
         }
