@@ -14,7 +14,7 @@
     </div>
     <div class="four wide column">
       <div class="ui input" style="width: 100%">
-        <input class="form-control" type="text" ng-class="{'has-success':keyboardForm.keys.$valid, 'has-error': keyboardForm.keys.$error.required != true}" ng-model="keys" ng-blur="tokenizeTags($event)" maxlength="51" placeholder="Add keys seprated by comma(,)" required>
+        <input class="form-control" type="text" ng-class="{'has-success':keyboardForm.keys.$valid, 'has-error': keyboardForm.keys.$error.required != true}" ng-model="keys" ng-blur="tokenizeTags($event)" maxlength="51" placeholder="Add keys seprated by comma(,)(Supports upto 26 characters)." required>
       </div>
     </div>
   </div>
