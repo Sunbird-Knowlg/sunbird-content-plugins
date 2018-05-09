@@ -13,8 +13,8 @@
         <header ng-class="{'qc-long-text-header-image': questionObj.question.image.length > 0,'qc-long-text-header':questionObj.question.image.length==0}">
             <!-- <span ng-if="questionObj.question.image.length" class="qc-question-zoomin" ng-click="showImageModel(questionObj.question.image) > 0">+</span> -->
             <div ng-if="questionObj.question.image.length>0" class="qc-opt"><img class="qc-question-image" ng-click="showImageModel(questionObj.question.image)" ng src={{checkBaseUrl(questionObj.question.image)}}></div>
-            <div class="qc-question-text" ng-if="questionObj.plainQuestion.length < 50" ng-bind-html="trustAsHtml(questionObj.question.text)"></div>
-            <div ng-class="{'expand-ques-text': expandQ == true,'collapse-ques-text':expandQ == false }" ng-click="expandQuestion($event)" ng-if="questionObj.plainQuestion.length >= 50" ng-bind-html="trustAsHtml(questionObj.question.text)"></div>
+            <div class="qc-question-text" ng-if="questionObj.plainQuestion.length < 72 &&questionObj.plainQuestion.length>0" ng-bind-html="trustAsHtml(questionObj.question.text)"></div>
+            <div ng-class="{'expand-ques-text': expandQ == true,'collapse-ques-text':expandQ == false }" ng-click="expandQuestion($event)" ng-if="questionObj.plainQuestion.length >= 72" ng-bind-html="trustAsHtml(questionObj.question.text)"></div>
             <div ng-if="questionObj.question.audio.length > 0" class="qc-opt">
                 <img src="{{audioImage}}" class="qc-question-audio-image" ng-click="playAudio(questionObj.question.audio)" />
             </div>

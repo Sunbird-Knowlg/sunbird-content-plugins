@@ -90,8 +90,12 @@ angular.module('genie-canvas').controllerProvider.register("MCQRendererControlle
   }
   $scope.expandQuestion = function (event) { // eslint-disable-line no-unused-vars
     if ($scope.expandQ) {
+       $(event.target.parentElement.parentElement).css('height','21vh');
+       $(".qc-question-audio-image").css("margin-top",'0%');
       $scope.expandQ = false;
     } else {
+       $(event.target.parentElement.parentElement).css('height','50vh');
+        $(".qc-question-audio-image").css("margin-top",'-8%');
       $scope.expandQ = true;
     }
   }
