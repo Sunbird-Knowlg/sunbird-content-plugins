@@ -1,10 +1,11 @@
 'use strict';
-angular.module('org.ekstep.keyboard')
+angular.module('genie-canvas')
 .controllerProvider.register("KeyboardCtrl", function($scope) {
   $scope.keyboardVisible = false;
   $scope.answerText = undefined;
   $scope.answerText = '';
   $scope.numerickeys = false;
+  $scope.ftbInputTarget = '';
 
   EkstepRendererAPI.addEventListener("org.ekstep.keyboard:invoke", function(e, callback) {
     $scope.callback = callback;
@@ -14,6 +15,7 @@ angular.module('org.ekstep.keyboard')
     $scope.keyboardVisible = true;
     var customButtons = '';
     $scope.answerText = _.isUndefined(e.target.inputoldValue.value) ? '' : e.target.inputoldValue.value;
+    $scope.ftbInputTarget = e.target.inputoldValue.id;
     if (!_.isUndefined($scope.config.question.keyboardConfig)) {
       if ($scope.config.question.keyboardConfig.keyboardType == "English") {
         $("#qs-ftb-text").hide();
@@ -69,6 +71,7 @@ angular.module('org.ekstep.keyboard')
     } else {
       if (event.target.innerText != '123') $scope.answerText = event.target.innerText;
     }
+    $("#" + $scope.ftbInputTarget).val($scope.answerText);
     $scope.safeApply();
   }
 

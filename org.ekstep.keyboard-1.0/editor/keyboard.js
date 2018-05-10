@@ -16,7 +16,13 @@ angular.module('keyBoardApp', [])
       scope.keyboardTypes = ['Device', 'English', 'Custom'];
       if (!_.isUndefined(scope.data) && !_.isUndefined(scope.data.keyboardType))
         scope.keyboardType = scope.data.keyboardType;
-      scope.customTag = false;
+      if (!_.isUndefined(scope.data) && !_.isUndefined(scope.data.keyboardType) && scope.data.keyboardType == 'Custom'){
+        scope.customTag = true;
+        scope.keys = scope.data.customKeys;
+      }
+      else{
+        scope.customTag = false;
+      }
       scope.selectKeyboardType = function() {
         scope.data.keyboardType = scope.keyboardType;
         if (scope.keyboardType == 'Custom') {
