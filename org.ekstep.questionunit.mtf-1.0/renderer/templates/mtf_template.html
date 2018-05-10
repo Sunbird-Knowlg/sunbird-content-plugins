@@ -1,8 +1,8 @@
-<div id="mtf-renderer" ng-controller="MTFRendererController" ng-init="init()" ng-show="showTemplate">
+<div id="mtf-renderer" ng-app="MTFRendererApp" ng-controller="MTFRendererController" ng-init="init()" ng-show="showTemplate">
   <link rel="stylesheet" type="text/css" href="{{cssPath}}">
   <div class="mtf-layout">
     <header class="mtf-header">
-      <div class="mtf-question-text">{{qData.question.text}}</div>
+      <div class="mtf-question-text" ng-bind-html="trustAsHtml(qData.question.text)"></div>
     </header>
     <div class="mtf-hori-container">
       <div class="mtf-hori-option" ng-repeat="lval in qData.option.optionsLHS" ng-class="{'width20': qData.option.optionsLHS.length == 5, 'width25': qData.option.optionsLHS.length == 4,'width33': qData.option.optionsLHS.length == 3}">

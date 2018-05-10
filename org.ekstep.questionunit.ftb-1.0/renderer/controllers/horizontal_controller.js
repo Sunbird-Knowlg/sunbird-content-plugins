@@ -1,41 +1,37 @@
 'use strict';
 angular.module('genie-canvas').controllerProvider.register("FTBRendererController", function($scope, $rootScope, $sce) {
-  $scope.pluginInstance;
   $scope.showTemplate = true;
   $scope.question;
-  $scope.qData;
-  $scope.qConfig;
-  $scope.events = { "show": "", "hide": "", "eval": "" };
   $scope.constant = {
     ftbContainerId: "#preview-ftb-horizontal",
     ftbText: "#qs-ftb-text",
     ftbQuestionClass: ".ftb-question-header",
     tempanswertext: "#tempanswertext"
-
   }
   $scope.qcquestion = true;
   $scope.textboxtarget = {};
   $scope.qcblank = false;
-
+  $scope.events = {
+    "show": "",
+    "hide": "",
+    "eval": ""
+  };
+  var ctrl = this;
   $scope.init = function() {
     $scope.cssPath = org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.ftb", "1.0", "renderer/styles/style.css");
     $scope.pluginInstance = EkstepRendererAPI.getPluginObjs("org.ekstep.questionunit.ftb");
-
     $scope.events.eval = $scope.pluginInstance._manifest.id + ":evaluate";
     $scope.events.show = $scope.pluginInstance._manifest.id + ":show";
     $scope.events.hide = $scope.pluginInstance._manifest.id + ":hide";
-
     $scope.removeEvents();
     $scope.registerEvents();
     if (!$rootScope.isFTBRendererd) {
       $rootScope.isFTBRendererd = true;
     }
     if (EventBus.hasEventListener($scope.events.eval)) {
-      if (EventBus.listeners[$scope.events.eval].length > 1)
-        EventBus.removeEventListener($scope.events.eval, $scope.evalListener)
+      if (EventBus.listeners[$scope.events.eval].length > 1) EventBus.removeEventListener($scope.events.eval, $scope.evalListener)
     }
   }
-
   $scope.registerEvents = function() {
     /**
      * renderer:questionunit.ftb:dispatch an event in question set with question data.
@@ -56,34 +52,31 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
      */
     EkstepRendererAPI.addEventListener($scope.events.eval, $scope.evalListener);
   }
-
   $scope.removeEvents = function() {
     EkstepRendererAPI.removeEventListener($scope.events.hide, $scope.hideEventListener, undefined);
     EkstepRendererAPI.removeEventListener($scope.events.show, $scope.showEventListener, undefined);
     EkstepRendererAPI.removeEventListener($scope.events.eval, $scope.evalListener, undefined);
   }
-
   $scope.showEventListener = function(event) {
     $scope.question = event.target;
     var gererateId = 0;
     var qData = $scope.question._currentQuestion.data.__cdata || $scope.question._currentQuestion.data;
-    $scope.qData = JSON.parse(qData);
-
+    var questionData = JSON.parse(qData);
     var questionConfig = $scope.question._currentQuestion.config.__cdata || $scope.question._currentQuestion.config;
     $scope.qConfig = JSON.parse(questionConfig);
-
-    $($scope.constant.ftbText).html($scope.qData.parsedQuestion.text);
+    $($scope.constant.ftbText).html(questionData.parsedQuestion.text);
+    $($scope.constant.ftbContainerId).off('click');
     $($scope.constant.ftbContainerId).on('click', '.ans-field', $scope.doTextBoxHandle);
     var qState = $scope.question._currentQuestionState;
     if (qState && qState.val) {
       $scope.textboxtarget.state = qState.val;
       $scope.setStateInput();
-    }    
+    }
+    $scope.questionObj = questionData;
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS);
     $scope.showTemplate = true;
     $scope.safeApply();
   }
-
   //if question state their then bind the value in text box
   $scope.setStateInput = function() {
     var textBoxCollection = angular.element($($scope.constant.ftbQuestionClass).find("input[type=text]"));
@@ -91,19 +84,16 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
       $("#" + element.id).val($scope.textboxtarget.state[index]);
     });
   }
-
   $scope.hideEventListener = function(event) {
+    EkstepRendererAPI.dispatchEvent("org.ekstep.keyboard:hide");
     $scope.showTemplate = false;
     $scope.safeApply();
   }
-
   $scope.evalListener = function(event) {
     var callback = event.target;
     $scope.evaluate(callback);
     $scope.safeApply();
   }
-
-
   /**
    * renderer:questionunit.ftb:show keyboard in device.
    * @event renderer:questionunit.ftb:click
@@ -113,13 +103,13 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     $scope.qcquestion = false;
     $scope.qcblank = true;
     $scope.qcmiddlealign = true;
+    $($scope.constant.tempanswertext).val($("#" + $scope.textboxtarget.id).val());
     //for text focus
     $($scope.constant.tempanswertext).focus();
     $scope.safeApply();
     //for text focus
     $('#tempanswertext').focus();
   });
-
   /**
    * renderer:questionunit.ftb:hide keyboard in device.
    * @event renderer:questionunit.ftb:click
@@ -134,20 +124,35 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
     $scope.safeApply();
   });
   /**
+  /**
    * renderer:questionunit.ftb:set target and value.
    * @event renderer:questionunit.ftb:click
    * @memberof org.ekstep.questionunit.ftb
    */
   $scope.doTextBoxHandle = function() {
+    var questionConfig = $scope.question._currentQuestion.data.__cdata || $scope.question._currentQuestion.data;
+    var qConfig = {
+      'qData': questionConfig,
+      'inputoldValue': $scope.textboxtarget
+    }
     if (isbrowserpreview) {
       $scope.qcblank = false;
-    } else {
+    } else if (_.isUndefined($scope.questionObj.question.keyboardConfig)) {
       $scope.qcblank = true;
+    } else {
+      if ($scope.questionObj.question.keyboardConfig.keyboardType == "Device" && !isbrowserpreview) {
+        $scope.qcblank = true;
+      } else {
+        $scope.qcblank = false;
+      }
     }
     $scope.textboxtarget.id = this.id;
     $scope.textboxtarget.value = this.value.trim();
-    $($scope.constant.tempanswertext).val($scope.textboxtarget.value);
-    $scope.safeApply();
+    EkstepRendererAPI.dispatchEvent("org.ekstep.keyboard:invoke", qConfig, $scope.callbackFromKeyboard);
+  }
+  $scope.callbackFromKeyboard = function(ans) {
+    $("#qs-ftb-text").show();
+    $("#" + $scope.textboxtarget.id).val(ans);
   }
   /**
    * renderer:questionunit.ftb:evalution.
@@ -170,19 +175,18 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
       telemetryAnsArr.push(ansObj);
     });
     //compare two array
-    if (_.isEqual(answerArray, $scope.qData.answer)) {
+    if (_.isEqual(answerArray, $scope.questionObj.answer)) {
       correctAnswer = true;
     }
-
-    // Calculate partial score
+    // Calculate partial score   
     var tempCount = 0;
-    _.each($scope.qData.answer, function(ans, index) {
+    _.each($scope.questionObj.answer, function(ans, index) {
       if (ans == answerArray[index]) {
         tempCount++;
       }
     });
 
-    var partialScore = (tempCount / $scope.qData.answer.length) * $scope.qConfig.max_score;
+    var partialScore = (tempCount / $scope.questionObj.answer.length) * $scope.qConfig.max_score;
 
     var result = {
       eval: correctAnswer,
@@ -190,21 +194,23 @@ angular.module('genie-canvas').controllerProvider.register("FTBRendererControlle
         val: answerArray
       },
       score: partialScore,
-      values: telemetryAnsArr
+      values: telemetryAnsArr,
+      noOfCorrectAns: tempCount,
+      totalAns: $scope.questionObj.answer.length
     }
     if (_.isFunction(callback)) {
       //$scope.removeEvents();
       callback(result);
     }
-    EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
+    EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result);
 
     console.log("FTB Tel", telemetryAnsArr);
-    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, {"type": "INPUT", "values": telemetryAnsArr});
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { "type": "INPUT", "values": telemetryAnsArr });
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);
-  }
 
+  }
   $scope.logTelemetryInteract = function(event) {
-    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, {type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event.target.id});
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event.target.id });
   }
 });
 //# sourceURL=questionunitFtbRenderereTmpPlugin.js

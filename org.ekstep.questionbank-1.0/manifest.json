@@ -4,8 +4,8 @@
   "shortId": "questionbank",
   "author": "Swati Singh",
   "type": "plugin",
-  "title": "questionbank",
-  "description": "This plugin is for question bank",
+  "title": "Question Bank Plugin",
+  "description": "Plugin to browse existing questions and add them to question set",
   "editor": {
     "main": "editor/plugin.js",
     "dependencies": [
@@ -25,6 +25,10 @@
       },{
         "type": "plugin",
         "plugin": "org.ekstep.questionunit.ftb",
+        "ver": "1.0"
+      },{
+        "type": "plugin",
+        "plugin": "org.ekstep.toaster",
         "ver": "1.0"
       }
     ],

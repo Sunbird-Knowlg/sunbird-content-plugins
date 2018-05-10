@@ -1,42 +1,39 @@
 /**
- *
  * Plugin to add questions in question stage.
- * @class questionbank
+ * @class org.ekstep.questionbank
  * @extends org.ekstep.contenteditor.basePlugin
  * @author Swati Singh <swati.singh@tarento.com>
  */
- org.ekstep.contenteditor.basePlugin.extend({
+org.ekstep.questionbank = {};
+org.ekstep.questionbank.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend({
   type: "org.ekstep.questionbank",
-  _pluginInstance: undefined,
-    /**
-     * Register events.
-     * @member of questionbank
-     */
-     initialize: function() {
-      ecEditor.addEventListener(this.manifest.id + ":showpopup", this.loadHtml, this);
-      var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/questionbankmodal.html');
-      var controllerPath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/questionbankcontroller.js');
-      ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath);
+  initialize: function () {
+    ecEditor.addEventListener(this.manifest.id + ":showpopup", this.loadHtml, this);
+    var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/questionbankmodal.html');
+    var controllerPath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'editor/questionbankcontroller.js');
+    ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath);
 
-    },
-    /**
-     *  Open window to add question and options
-     *  @memberof org.ekstep.questionbank
-     */
-     loadHtml: function(event, dataObj) {
-      _pluginInstance = this;
-      _pluginInstance.callback = dataObj.callback;
-      _pluginInstance.editData = (!ecEditor._.isUndefined(dataObj.data)) ? dataObj.data : '';
-      ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
-        template: 'QuestionFormTemplate',
-        controller: 'QuestionFormController',
-        controllerAs: '$ctrl',
-        resolve: {
-          'pluginInstance': function() {
-            return _pluginInstance;
-          }
+  },
+  /**
+   * Open window to add question and options
+   * @memberOf org.ekstep.questionbank
+   * @param {string} event Type of event
+   * @param {Object} dataObj Object passed when dispatched
+   */
+  loadHtml: function (event, dataObj) {
+    var instance = this;
+    instance.callback = dataObj.callback;
+    instance.editData = (!ecEditor._.isUndefined(dataObj.data)) ? dataObj.data : '';
+    ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
+      template: 'QuestionFormTemplate',
+      controller: 'QuestionFormController',
+      controllerAs: '$ctrl',
+      resolve: {
+        'pluginInstance': function () {
+          return instance;
         }
-      });
-    },
-  });
+      }
+    });
+  },
+});
 //# sourceURL=questionBankPlugin.js
