@@ -210,7 +210,9 @@ org.ekstep.contenteditor.metadataPlugin.extend({
             },
             framework: function(callback) {
                 // get the framworkData
-                ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(request.framework, function(error, response) {
+                var metaData = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'))
+                var frameworkId = request.framework || metaData.framework;
+                ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(frameworkId, function(error, response) {
                     if (!error) callback(undefined, response)
                     else callback(error, undefined)
                 })
@@ -263,7 +265,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
         this.config = config.formConfig
         this.form = this.mapObject(this.config.fields, this.framework.categories)
         this.loadTemplate(this.config.templateName, function(templatePath) {
-            isPopup ? instance.showForm() : ecEditor.dispatchEvent("editor:template:loaded", { "templatePath": templatePath })
+            isPopup ? instance.showForm() : ecEditor.dispatchEvent("editor:template:loaded", { "templatePath": templatePath, "formAction": instance.config.action })
         })
 
     },

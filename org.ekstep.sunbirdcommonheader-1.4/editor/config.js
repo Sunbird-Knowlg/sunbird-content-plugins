@@ -1,45 +1,36 @@
 var checkListConfigurations = {
     "reject": {
-        "title": "Request Changes Checklist",
-        "subtitle": "Please select the items that need changes:",
+        "title": "Request Changes",
+        "subtitle": "Please tick the reasons for requesting changes and provide detailed comments.",
         "contents": [{
-                "name": "Appropriateness Check",
-                "index": 3,
+                "name": "Appropriateness",
+                "index": 1,
                 "checkList": [
-                    "Has Hate speech, Abuse, Violence",
-                    "Has profanity or abusive language",
-                    "Has Sexually explicit content, Nudity or Vulgarity",
+                    "Has Hate speech, Abuse, Violence, Profanity",
+                    "Has Sexual content, Nudity or Vulgarity",
                     "Has Discriminatory or Defamatory content",
                     "Is not suitable for children"
                 ]
             },
             {
-                "name": "Content details Check",
+                "name": "Content details",
                 "index": 2,
                 "checkList": [
-                    " Inappropriate Title",
-                    "Inappropriate Description",
-                    "Correct Grade, Subject, Medium",
-                    "Incorrect Board",
-                    "Incorrect Grade, Subject, Medium",
-                    "Incorrect  Resource Type",
-                    "Incorrect Concepts",
-                    "Irrelevant Keywords",
-                    "Objectives unclear",
-                    "Insufficient content for objectives",
-                    " Duration of content is too long for the objectives"
+                    "Inappropriate Title or Description",
+                    "Incorrect Board, Grade, Subject or Medium",
+                    "Inappropriate tags such as Resource Type or Concepts",
+                    "Irrelevant Keywords"
                 ]
             },
             {
-                "name": "Usability Check",
-                "index": 1,
+                "name": "Usability",
+                "index": 3,
                 "checkList": [
-                    "Content is NOT rendering well on desktop and App",
-                    "Content DOES NOT have visual clarity",
-                    "Content  DOES NOT play correctly",
-                    "Language is NOT simple to understand",
+                    "Content is NOT playing correctly ",
+                    "CANNOT see the content clearly on Desktop and App",
+                    "Audio is NOT clear or NOT easy to understand",
                     "Spelling mistakes found in text used",
-                    " Audio (if any) is inaudible and not easy to understand"
+                    "Language is NOT simple to understand"
                 ]
             }
         ],
@@ -53,46 +44,37 @@ var checkListConfigurations = {
         }
     },
     "publish": {
-        "title": "Publish Checklist",
-        "subtitle": "Please review and accept that following before you publish:",
+        "title": "Publish",
+        "subtitle": "Please confirm that ALL the following items are verified (by ticking the check-boxes) before you can publish:",
         "contents": [{
-                "name": "Appropriateness Check",
+                "name": "Appropriateness",
                 "index": 1,
                 "checkList": [
-                    " Has Hate speech, Abuse, Violence",
-                    " Has profanity or abusive language",
-                    "Has Sexually explicit content, Nudity or Vulgarity",
-                    "Has Discriminatory or Defamatory content",
-                    "Is not suitable for children"
+                    "No Hate speech, Abuse, Violence, Profanity",
+                    "No Sexual content, Nudity or Vulgarity",
+                    "No Discrimination or Defamation",
+                    "Is suitable for children"
                 ]
             },
             {
-                "name": "Content details Check",
-                "index": 3,
-                "checkList": [
-                    " Inappropriate Title",
-                    "Inappropriate Description",
-                    "Correct Grade, Subject, Medium",
-                    "Incorrect Board",
-                    "Incorrect Grade, Subject, Medium",
-                    "Incorrect  Resource Type",
-                    "Incorrect Concepts",
-                    "Irrelevant Keywords",
-                    "Objectives unclear",
-                    "Insufficient content for objectives",
-                    " Duration of content is too long for the objectives"
-                ]
-            },
-            {
-                "name": "Usability Check",
+                "name": "Content details",
                 "index": 2,
                 "checkList": [
-                    "Content is NOT rendering well on desktop and App",
-                    "Content DOES NOT have visual clarity",
-                    "Content  DOES NOT play correctly",
-                    "Language is NOT simple to understand",
-                    "Spelling mistakes found in text used",
-                    " Audio (if any) is inaudible and not easy to understand"
+                    "Appropriate Title, Description",
+                    "Correct Board, Grade, Subject, Medium",
+                    "Appropriate tags such as Resource Type, Concepts",
+                    "Relevant Keywords"
+                ]
+            },
+            {
+                "name": "Usability",
+                "index": 3,
+                "checkList": [
+                    "Content plays correctly",
+                    "Can see the content clearly on Desktop and App",
+                    "Audio (if any) is clear and easy to understand",
+                    "No Spelling mistakes in the text",
+                    "Language is simple to understand"
                 ]
             }
         ],
@@ -106,7 +88,7 @@ var checkListConfigurations = {
         }
     },
     "read": {
-        "title": "Review Comments",
+        "title": "Reviewer Suggestions",
         "subtitle": ""
     }
 }

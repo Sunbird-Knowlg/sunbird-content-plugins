@@ -17,6 +17,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
      */
     var reviewPublish = 'publish';
 
+
     $scope.isReviewCommentsPresent = false;
 
     /**
@@ -61,6 +62,10 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope.setEditorDetails = function() {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        if (meta.rejectComment || meta.rejectedReasons) {
+             $scope.isReviewCommentsPresent = true;
+             $scope.$safeApply();
+        }
         switch (meta.mimeType) {
             case "application/vnd.ekstep.ecml-archive":
                 $scope.editorEnv = "ECML"
@@ -249,7 +254,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.setPendingChangingStatus = function(event, data) {
-        $scope.pendingChanges = true;
+        $scope.pendingChanges = ($scope.editorEnv === "COLLECTION" && ecEditor.getConfig('editorConfig').mode === 'Read') ? false : true;
         $scope.disableSaveBtn = false;
         $scope.$safeApply();
     };
@@ -259,7 +264,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.closeEditor = function() {
-        if ($scope.alertOnUnload === true && $scope.pendingChanges === true) {
+        var mode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').mode;
+        if ($scope.alertOnUnload === true && $scope.pendingChanges === true && mode !== 'Read') {
             if (window.confirm("You have unsaved changes! Do you want to leave?")) {
                 window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
             }
@@ -434,10 +440,10 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         } else {
             console.log('invalid content... $scope.checkedContents is', $scope.checkedContents);
         }
-        if (ecEditor.jQuery('.listItem:checked').length == ecEditor.jQuery('.listItem').length) {
-            $scope.enableBtn = 'Publish'; // to enable publish button
-        } else if (((ecEditor.jQuery('.listItem:checked').length > 0) || (ecEditor.jQuery('.otherItem:checked').length > 0)) && ($scope.reviewComments.length > 0)) {
-            $scope.enableBtn = 'Reject'; // to enable reject button
+        if (((ecEditor.jQuery('.listItem:checked').length > 0) || (ecEditor.jQuery('.otherItem:checked').length > 0)) && ($scope.reviewComments.length > 0)) {
+            $scope.enableBtn = 'Reject'; // to enable publish button
+        } else if (ecEditor.jQuery('.listItem:checked').length == ecEditor.jQuery('.listItem').length) {
+            $scope.enableBtn = 'Publish'; // to enable reject button
         } else {
             $scope.enableBtn = ''; // to disable checklist buttons(Publish / Request changes)
         }
@@ -464,9 +470,10 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             $scope.reviewComments = meta.rejectComment;
             $scope.rejectedReasons = meta.rejectReasons;
             setTimeout(function() {
-                $(".footer").hide();
-                $(".ui.checkbox input").prop("disabled", true);
-                $("textarea").prop("disabled", true);
+                $("#review-footer").hide();
+                $(".ui.checkbox.checklist input ").prop("disabled", true);
+                $("#review-comments").prop("disabled", true);
+                $("#review-comments").css("opacity", 0.5);
             }, 0);
         }
     };
@@ -476,10 +483,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         if ($scope.editorEnv == "NON-ECML" && !ecEditor.getContext('contentId')) {
             $scope.disableSaveBtn = false;
             $scope.showUploadForm();
-        }
-        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
-        if (meta.rejectComment || meta.rejectedReasons) {
-            $scope.isReviewCommentsPresent = true;
         }
     })()
 
