@@ -198,14 +198,16 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
   displayFeedback: function (result) {
     var res = result.eval ? result.eval : result.pass;
     if (res === true) {
-      EkstepRendererAPI.dispatchEvent('renderer:load:popup:goodJob');
+      //EkstepRendererAPI.dispatchEvent('renderer:load:popup:goodJob');
+      QSFeedbackPopup.addGoodJobPopup();
     } else {
       if (result.score > 0) {
         var partialScoreRes = result.noOfCorrectAns + ' / ' + result.totalAns;
         EkstepRendererAPI.dispatchEvent('renderer:load:popup:partialCorrect', partialScoreRes);
       }
       else {
-        EkstepRendererAPI.dispatchEvent('renderer:load:popup:tryAgain');
+        //EkstepRendererAPI.dispatchEvent('renderer:load:popup:tryAgain');
+        QSFeedbackPopup.addTryAgainPopup();
       }
     }
     this._displayedPopup = true;
