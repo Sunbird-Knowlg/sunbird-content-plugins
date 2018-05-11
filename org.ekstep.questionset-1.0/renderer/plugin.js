@@ -203,7 +203,8 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
     } else {
       if (result.score > 0) {
         var partialScoreRes = result.noOfCorrectAns + ' / ' + result.totalAns;
-        EkstepRendererAPI.dispatchEvent('renderer:load:popup:partialCorrect', partialScoreRes);
+        QSFeedbackPopup.qsPartialCorrect(partialScoreRes);
+        //EkstepRendererAPI.dispatchEvent('renderer:load:popup:partialCorrect', partialScoreRes);
       }
       else {
         //EkstepRendererAPI.dispatchEvent('renderer:load:popup:tryAgain');

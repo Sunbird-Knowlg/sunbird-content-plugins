@@ -62,31 +62,31 @@ angular.module('genie-canvas')
   //     }
   //   }
   // })
-  .directive('qsPartialCorrect', function () {
-    return {
-      restrict: 'AE',
-      template: '<div class="popup" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="font-lato assess-popup assess-tryagain-popup"> <div class="wrong-answer" style=" text-align: center;"> <div class="banner"> <img ng-src="assets/icons/banner2.png" height="100%" width="100%" src="assets/icons/banner2.png"> </div> <div class="sign-board"><span width="40%" style="font-size: 1.8em;color: #7d7d7d;font-family:noto-sans;font-weight: 900;" id="incorrectButton">{{partialScoreRes}}</span> </div> </div> <div id="popup-buttons-container"> <div ng-click="tryAgainHidePopup();moveToNextStage();" class="left button ng-binding">Next</div> <div ng-click="tryAgainSameQues();" class="right primary button ng-binding">Try Again</div> </div> </div> </div> </div>',
-      link: function (scope, element) {
-        EkstepRendererAPI.addEventListener('renderer:load:popup:partialCorrect', function (event) {
-          scope.partialScoreRes = event.target;
-          element.show();
-        });
-        scope.tryHidePopup = function () {
-          element.hide();
-        }
-        scope.moveToNextStage = function () {
-          EkstepRendererAPI.dispatchEvent('renderer:navigation:next');
-          scope.tryHidePopup();
-          element.hide();
-        }
-        scope.tryAgainSameQues = function () {
-          EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:feedback:retry');
-          scope.tryHidePopup();
-          element.hide();
-        }
-      }
-    }
-  })
+  // .directive('qsPartialCorrect', function () {
+  //   return {
+  //     restrict: 'AE',
+  //     template: '<div class="popup" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="font-lato assess-popup assess-tryagain-popup"> <div class="wrong-answer" style=" text-align: center;"> <div class="banner"> <img ng-src="assets/icons/banner2.png" height="100%" width="100%" src="assets/icons/banner2.png"> </div> <div class="sign-board"><span width="40%" style="font-size: 1.8em;color: #7d7d7d;font-family:noto-sans;font-weight: 900;" id="incorrectButton">{{partialScoreRes}}</span> </div> </div> <div id="popup-buttons-container"> <div ng-click="tryAgainHidePopup();moveToNextStage();" class="left button ng-binding">Next</div> <div ng-click="tryAgainSameQues();" class="right primary button ng-binding">Try Again</div> </div> </div> </div> </div>',
+  //     link: function (scope, element) {
+  //       EkstepRendererAPI.addEventListener('renderer:load:popup:partialCorrect', function (event) {
+  //         scope.partialScoreRes = event.target;
+  //         element.show();
+  //       });
+  //       scope.tryHidePopup = function () {
+  //         element.hide();
+  //       }
+  //       scope.moveToNextStage = function () {
+  //         EkstepRendererAPI.dispatchEvent('renderer:navigation:next');
+  //         scope.tryHidePopup();
+  //         element.hide();
+  //       }
+  //       scope.tryAgainSameQues = function () {
+  //         EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:feedback:retry');
+  //         scope.tryHidePopup();
+  //         element.hide();
+  //       }
+  //     }
+  //   }
+  // })
   .controllerProvider.register("questionsetctrl", function ($scope, $ocLazyLoad, $compile) {
     /**
      * Event handler to dynamically load HTML file and add it to DOM.

@@ -1,32 +1,55 @@
 var QSFeedbackPopup = {}
+/**
+ * Show Good job success model popup on navigation
+ * @memberof org.ekstep.questionset.qs_feedback_popup#
+ */
 QSFeedbackPopup.addGoodJobPopup = function() {
-	var goodJobTemplate = _.template('<div class="popup" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="font-lato assess-popup assess-goodjob-popup"> <div class="correct-answer" style=" text-align: center;"> <div class="banner"> <img height="100%" width="100%" src="assets/icons/banner1.png"> </div> <div class="sign-board"> <img id="correctButton" width="40%" src="assets/icons/check.png"> </div> </div> <div id="popup-buttons-container"> <div onclick="QSFeedbackPopup.hideGoodJobPopup();QSFeedbackPopup.moveNextStage();" class="primary center button">Next</div> </div> </div> </div> </div>');
-	$("#qs-good-job").append(goodJobTemplate);
-	$("#qs-good-job").show();
+  var goodJobTemplate = _.template('<div class="popup" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="font-lato assess-popup assess-goodjob-popup"> <div class="correct-answer" style=" text-align: center;"> <div class="banner"> <img height="100%" width="100%" src="assets/icons/banner1.png"> </div> <div class="sign-board"> <img id="correctButton" width="40%" src="assets/icons/check.png"> </div> </div> <div id="popup-buttons-container"> <div onclick="QSFeedbackPopup.hidethePopup();QSFeedbackPopup.moveToNextStage();" class="primary center button">Next</div> </div> </div> </div> </div>');
+  $("#qs-good-job").html(goodJobTemplate);
+  $("#qs-good-job").show();
 }
-QSFeedbackPopup.hideGoodJobPopup = function() {
-	$("#qs-good-job").hide();
+/**
+ * Hide the model popup on navigation
+ * @memberof org.ekstep.questionset.qs_feedback_popup#
+ */
+QSFeedbackPopup.hidethePopup = function() {
+  $("#qs-good-job").hide();
+  $("#qs-try-again").hide();
+  $("#qs-partial-score").hide();
 }
-QSFeedbackPopup.moveNextStage = function() {
-	EkstepRendererAPI.dispatchEvent('renderer:navigation:next');
-	QSFeedbackPopup.hidePopup();
+/**
+ * move to next stage or next question
+ * @memberof org.ekstep.questionset.qs_feedback_popup#
+ */
+QSFeedbackPopup.moveToNextStage = function() {
+  EkstepRendererAPI.dispatchEvent('renderer:navigation:next');
+  QSFeedbackPopup.hidethePopup();
 }
+/**
+ * show try again model popup on navigation
+ * @memberof org.ekstep.questionset.qs_feedback_popup#
+ */
 QSFeedbackPopup.addTryAgainPopup = function() {
-	var goodJobTemplate = _.template('<div class="popup" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="font-lato assess-popup assess-tryagain-popup"> <div class="wrong-answer" style=" text-align: center;"> <div class="banner"> <img height="100%" width="100%" src="assets/icons/banner2.png"> </div> <div class="sign-board"><img width="40%" id="incorrectButton" src="assets/icons/incorrect.png"> </div> </div> <div id="popup-buttons-container"> <div onclick="QSFeedbackPopup.tryAgainHidePopup();QSFeedbackPopup.moveNextStage();" class="left button">Next</div> <div onclick="QSFeedbackPopup.tryAgainSameQ();" class="right primary button">Try Again</div> </div> </div> </div> </div>');
-	$("#qs-try-again").append(goodJobTemplate);
-	$("#qs-try-again").show();
+  var tryAgainTemplate = _.template('<div class="popup" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="font-lato assess-popup assess-tryagain-popup"> <div class="wrong-answer" style=" text-align: center;"> <div class="banner"> <img height="100%" width="100%" src="assets/icons/banner2.png"> </div> <div class="sign-board"><img width="40%" id="incorrectButton" src="assets/icons/incorrect.png"> </div> </div> <div id="popup-buttons-container"> <div onclick="QSFeedbackPopup.hidethePopup();QSFeedbackPopup.moveToNextStage();" class="left button">Next</div> <div onclick="QSFeedbackPopup.tryAgainPopup();" class="right primary button">Try Again</div> </div> </div> </div> </div>');
+  $("#qs-try-again").html(tryAgainTemplate);
+  $("#qs-try-again").show();
 }
-QSFeedbackPopup.tryAgainHidePopup = function() {
-	$("#qs-try-again").hide();
+/**
+ * hide try again model popup on navigation
+ * @memberof org.ekstep.questionset.qs_feedback_popup#
+ */
+QSFeedbackPopup.tryAgainPopup = function() {
+  EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:feedback:retry');
+  QSFeedbackPopup.hidethePopup();
 }
-QSFeedbackPopup.moveNextStage = function() {
-	EkstepRendererAPI.dispatchEvent('renderer:navigation:next');
-	QSFeedbackPopup.tryAgainHidePopup();
-	$("#qs-try-again").hide();
-}
-QSFeedbackPopup.tryAgainSameQ = function() {
-	EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:feedback:retry');
-	QSFeedbackPopup.tryAgainHidePopup();
-	$("#qs-try-again").hide();
+/**
+ * show partialscore model popup
+ * @memberof org.ekstep.questionset.qs_feedback_popup#
+ */
+QSFeedbackPopup.qsPartialCorrect=function(partialScoreRes){
+   var partialTemplate = _.template('<div class="popup" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="font-lato assess-popup assess-tryagain-popup"> <div class="wrong-answer" style=" text-align: center;"> <div class="banner"> <img height="100%" width="100%" src="assets/icons/banner2.png"> </div> <div class="sign-board"><span width="40%" style="font-size: 1.8em;color: #7d7d7d;font-family:noto-sans;font-weight: 900;" id="incorrectButton"> <%= score %> </span> </div> </div> <div id="popup-buttons-container"> <div onclick="QSFeedbackPopup.hidethePopup();QSFeedbackPopup.moveToNextStage();" class="left button">Next</div> <div onclick="QSFeedbackPopup.tryAgainPopup();" class="right primary button">Try Again</div> </div> </div> </div> </div>');
+  var partialelement=partialTemplate({score:partialScoreRes});
+  $("#qs-partial-score").html(partialelement);
+  $("#qs-partial-score").show();
 }
 //# sourceURL=goodJob.js
