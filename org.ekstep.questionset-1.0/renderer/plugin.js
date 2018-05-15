@@ -28,7 +28,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
     questionsetCSS: {
       width: '100%',
       position: 'absolute',
-      top: 0,
+      top: '2%',
       left: 0,
       height: '100%'
     },
