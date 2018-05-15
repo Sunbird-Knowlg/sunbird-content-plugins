@@ -91,13 +91,13 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
   renderQuestion: function(question) {
     var instance = this;
     // If this is not the first question, hide the current question
-    if (this._currentQuestion) {
-      EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
-      jQuery('#' + this._currentQuestion.id).remove();
+    if (instance._currentQuestion) {
+      EkstepRendererAPI.dispatchEvent(instance._currentQuestion.pluginId + ':hide');
+      jQuery('#' + instance._currentQuestion.id).remove();
     }
     if (question.pluginId === this._constants.qsQuizPlugin) {
       // Mark the question as rendered
-      this._currentQuestion = question;
+      instance._currentQuestion = question;
       this.setRendered(question);
       // Set current question for telmetry to log events from question-unit
       QSTelemetryLogger.setQuestion(instance._currentQuestion, instance.getRenderedIndex()); // eslint-disable-line no-undef
@@ -112,7 +112,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
       // Fetch the question state if it was already rendered before
       this._currentQuestionState = this.getQuestionState(question.id);
       // Mark the question as rendered
-      this._currentQuestion = question;
+      instance._currentQuestion = question;
       this.setRendered(question);
       EkstepRendererAPI.dispatchEvent(question.pluginId + ':show', instance);
     }
@@ -165,16 +165,14 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
   displayFeedback: function(result) {
     var res = result.eval ? result.eval : result.pass;
     if (res === true) {
-      //EkstepRendererAPI.dispatchEvent('renderer:load:popup:goodJob');
-      QSFeedbackPopup.addGoodJobPopup();
+      QSFeedbackPopup.addGoodJobPopup(); // eslint-disable-line no-undef
     } else {
       if (result.score > 0) {
         var partialScoreRes = result.noOfCorrectAns + ' / ' + result.totalAns;
-        QSFeedbackPopup.qsPartialCorrect(partialScoreRes);
-        //EkstepRendererAPI.dispatchEvent('renderer:load:popup:partialCorrect', partialScoreRes);
-      } else {
-        //EkstepRendererAPI.dispatchEvent('renderer:load:popup:tryAgain');
-        QSFeedbackPopup.addTryAgainPopup();
+        QSFeedbackPopup.qsPartialCorrect(partialScoreRes); // eslint-disable-line no-undef
+      }
+      else {
+        QSFeedbackPopup.addTryAgainPopup(); // eslint-disable-line no-undef
       }
     }
     this._displayedPopup = true;
