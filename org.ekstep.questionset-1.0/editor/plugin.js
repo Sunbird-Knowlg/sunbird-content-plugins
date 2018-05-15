@@ -99,7 +99,7 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
       instance.postInit();
     }, props);
     //Getting numberf questions for assessment summary : testing purpose
-    //instance.getSummary();//Testing 
+    //instance.getSummary();//Testing
   },
   getPropsForEditor: function (qTittle, qCount, maxscore) {
     /* Display the all properties(title,count and maxscore) on the editor*/
@@ -303,25 +303,25 @@ org.ekstep.questionset.EditorPlugin = org.ekstep.contenteditor.basePlugin.extend
   getSummary: function() {
     var instance = this;
     var summary = {'totalQuestions': 0,'totalScore': 0};
-    var totalQuestionsToRender = instance.config.total_items; 
+    var totalQuestionsToRender = instance.config.total_items;
     if(instance.config.shuffle_questions){
       // Total number of items/questions to render
-      summary.totalQuestions = totalQuestionsToRender;  
-      summary.totalScore = totalQuestionsToRender;     
+      summary.totalQuestions = totalQuestionsToRender;
+      summary.totalScore = totalQuestionsToRender;
     }else{
-        instance._questions.forEach(function(question,key) {
-          if(key < totalQuestionsToRender){
-            if(question.body != undefined){
-              var questionCount = JSON.parse(question.body).data.config.questionCount == undefined ? 1 : JSON.parse(question.body).data.config.questionCount;
-              var scoreCount = JSON.parse(question.body).data.config.max_score == undefined ? 1 : JSON.parse(question.body).data.config.max_score;
-              summary.totalQuestions = summary.totalQuestions + parseInt(questionCount);
-              summary.totalScore = summary.totalScore + parseInt(scoreCount);
-            }else{
-              summary.totalQuestions = summary.totalQuestions + parseInt(1);
-              summary.totalScore = summary.totalScore + question.max_score;
-            }
-          } 
-        });
+      instance._questions.forEach(function(question,key) {
+        if(key < totalQuestionsToRender){
+          if(question.body != undefined){
+            var questionCount = JSON.parse(question.body).data.config.questionCount == undefined ? 1 : JSON.parse(question.body).data.config.questionCount;
+            var scoreCount = JSON.parse(question.body).data.config.max_score == undefined ? 1 : JSON.parse(question.body).data.config.max_score;
+            summary.totalQuestions = summary.totalQuestions + parseInt(questionCount);
+            summary.totalScore = summary.totalScore + parseInt(scoreCount);
+          }else{
+            summary.totalQuestions = summary.totalQuestions + parseInt(1);
+            summary.totalScore = summary.totalScore + question.max_score;
+          }
+        }
+      });
     }
     return summary;
   }

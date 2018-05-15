@@ -40,13 +40,14 @@ QSFeedbackPopup.tryAgainPopup = function() {
   EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:feedback:retry');
   QSFeedbackPopup.hidethePopup();
 }
-/**
- * show partialscore model popup
+/*
+ * Show partialscore model popup
  * @memberof org.ekstep.questionset.qs_feedback_popup#
+ * @param { string } partialScoreRes.
  */
-QSFeedbackPopup.qsPartialCorrect=function(partialScoreRes){
+QSFeedbackPopup.qsPartialCorrect = function(partialScoreRes) {
   var partialTemplate = _.template('<div class="popup" style="z-index: 9999999;"> <div class="popup-overlay"></div> <div class="popup-full-body"> <div class="font-lato assess-popup assess-tryagain-popup"> <div class="wrong-answer" style=" text-align: center;"> <div class="banner"> <img height="100%" width="100%" src="assets/icons/banner2.png"> </div> <div class="sign-board"><span width="40%" style="font-size: 1.8em;color: #7d7d7d;font-family:noto-sans;font-weight: 900;" id="incorrectButton"> <%= score %> </span> </div> </div> <div id="popup-buttons-container"> <div onclick="QSFeedbackPopup.hidethePopup();QSFeedbackPopup.moveToNextStage();" class="left button">Next</div> <div onclick="QSFeedbackPopup.tryAgainPopup();" class="right primary button">Try Again</div> </div> </div> </div> </div>');
-  var partialelement=partialTemplate({score:partialScoreRes});
+  var partialelement = partialTemplate({ score: partialScoreRes });
   $("#qs-feedback-model-popup").html(partialelement);
   $("#qs-feedback-model-popup").show();
 }
