@@ -327,11 +327,38 @@ audio.qc-question-audio {
 }
 
 .qc-long-text-header-image {
-    height: 16vh;
+    height: 17.7vh;
     width: 80vw;
     background-color: #404041;
     min-height: 56px;
     padding: 0% 1% 1% 1%;
+}
+ /*new css*/
+.mcq-question{
+    height: 17.7vh;
+    width: 100%;
+    background-color: #404041;
+    /* min-height: 56px; */
+    padding: 0% 1% 1% 1%;
+}
+.mcq-question-image{
+    width: 15%;
+    height: 56px;
+    float: left;
+    margin-left: -1%;
+    object-fit: fill;
+}
+.mcq-question-text > span{
+    color: white;
+    font-size: initial;
+    text-align: center;
+    line-height: 1;
+    height: 100%;
+    width: 50%;
+    display: inline-block;
+    padding-top: 0;
+    padding: 1% 1% 1% 1%;
+    line-height: 1.3;
 }
 
 
