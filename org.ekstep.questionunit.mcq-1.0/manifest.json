@@ -54,7 +54,13 @@
         "controllerURL": "editor/controllers/horizontal_controller.js",
         "template": "horizontalMCQ",
         "controller": "QuestionFormController"
+      },
+      "renderer":
+      {
+        "template": "renderer/templates/horizontal_template.html",
+        "controller": "renderer/controllers/horizontal_controller.js"
       }
+
     }],
     "renderer":
     {
@@ -70,8 +76,14 @@
             },
              {
                 "type": "js",
-                "src": "renderer/js/mcq_template.js"
+                "src": "renderer/controllers/horizontal_controller.js"
+            },
+            {
+                "type": "js",
+                "src": "renderer/templates/horizontal_template.html"
+
             }
+
         ]
     },
     "dependencies": [
