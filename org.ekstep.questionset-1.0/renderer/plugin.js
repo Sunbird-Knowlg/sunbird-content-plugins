@@ -172,7 +172,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
         QSFeedbackPopup.qsPartialCorrect(partialScoreRes); // eslint-disable-line no-undef
       }
       else {
-        QSFeedbackPopup.addTryAgainPopup(); // eslint-disable-line no-undef
+        QSFeedbackPopup.showTryAgain(); // eslint-disable-line no-undef
       }
     }
     this._displayedPopup = true;
