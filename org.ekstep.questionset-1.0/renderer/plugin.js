@@ -198,14 +198,14 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
   displayFeedback: function (result) {
     var res = result.eval ? result.eval : result.pass;
     if (res === true) {
-      QSFeedbackPopup.addGoodJobPopup(); // eslint-disable-line no-undef
+      QSFeedbackPopup.showGoodJob(); // eslint-disable-line no-undef
     } else {
       if (result.score > 0) {
         var partialScoreRes = result.noOfCorrectAns + ' / ' + result.totalAns;
         QSFeedbackPopup.qsPartialCorrect(partialScoreRes); // eslint-disable-line no-undef
       }
       else {
-        QSFeedbackPopup.addTryAgainPopup(); // eslint-disable-line no-undef
+        QSFeedbackPopup.showTryAgain(); // eslint-disable-line no-undef
       }
     }
     this._displayedPopup = true;
