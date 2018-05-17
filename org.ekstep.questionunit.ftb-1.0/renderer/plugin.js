@@ -27,9 +27,10 @@ org.ekstep.contentrenderer.questionUnitPlugin.extend({
   postShow: function(currentquesObj) {
     ftbQuestionData = currentquesObj.questionData;
     ftbQuestionConfig = currentquesObj.questionConfig;
+    QS_FTBTemplate.questionObj = currentquesObj.questionData;
     $(QS_FTBTemplate.constant.ftbText).html(questionData.parsedQuestion.text);
-    $(QS_FTBTemplate.constant.ftbContainerId).off('click');
-    $(QS_FTBTemplate.constant.ftbContainerId).on('click', '.ans-field', QS_FTBTemplate.doTextBoxHandle);
+    $(QS_FTBTemplate.constant.parentDiv).off('click');
+    $(QS_FTBTemplate.constant.parentDiv).on('click', '.ans-field', QS_FTBTemplate.doTextBoxHandle);
 
     if (currentquesObj.qState && currentquesObj.qState.val) {
       QS_FTBTemplate.textboxtarget.state = currentquesObj.qState.val;

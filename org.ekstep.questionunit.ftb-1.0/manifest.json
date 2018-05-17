@@ -1,111 +1,102 @@
 {
-    "id": "org.ekstep.questionunit.ftb",
-    "ver": "1.0",
-    "author": "Gourav More",
-    "title": "FTB question",
-    "description": "",
-    "publishedDate": "",
-    "languages": ["English"],
-    "categories": [],
-    "keywords": ["ftbplugin"],
-    "editor":
-    {
-        "main": "editor/plugin.js",
-        "dependencies": [
-        {
-            "type": "plugin",
-            "plugin": "org.ekstep.questionunit",
-            "ver": "1.0"
-        },
-        {
-            "type": "css",
-            "src": "editor/styles/style.css"
-        }],
-        "menu": [],
-        "init-data":
-        {
-            "type": "rect",
-            "x": 10,
-            "y": 2,
-            "w": 80,
-            "h": 80,
-            "fill": "#DCDCDC"
-        },
-        "configManifest": [
-        {
-
-        }],
-        "help":
-        {
-            "src": "editor/help.md",
-            "dataType": "text"
-        }
-    },
+  "id": "org.ekstep.questionunit.ftb",
+  "ver": "1.0",
+  "author": "Gourav More",
+  "title": "FTB question",
+  "description": "",
+  "publishedDate": "",
+  "languages": ["English"],
+  "categories": [],
+  "keywords": ["ftbplugin"],
+  "editor":
+  {
+    "main": "editor/plugin.js",
     "dependencies": [
-        {
-            "type": "plugin",
-            "plugin": "org.ekstep.questionunit",
-            "ver": "1.0",
-            "scope": "renderer"
-        },
-        {
-            "type":"js",
-            "src":"renderer/util/evaluator.js",
-            "scope":"renderer"
-        }
-    ],
-    "templates": [
     {
-        "id": "ftbtemplate",
-        "thumbnail": "editor/assets/ftb-horizontal.png",
-        "title": "Fill in the Blanks",
-        "disc": "A type of question or phrase with one or more words replaced with a blank line, giving the reader the chance to add the missing word(s).",
-        "category": "FTB",
-        "editor":
-        {
-            "templateURL": "editor/templates/horizontal_template.html",
-            "controllerURL": "editor/controllers/horizontal_controller.js",
-            "template": "ftbtemplate",
-            "controller": "QuestionFormController"
-        },
-        "renderer":
-        {
-            "template": "renderer/templates/horizontal_template.html",
-            "controller": "renderer/controllers/horizontal_controller.js"
-        }
+      "type": "plugin",
+      "plugin": "org.ekstep.questionunit",
+      "ver": "1.0"
+    },
+    {
+      "type": "css",
+      "src": "editor/styles/style.css"
+    }],
+    "menu": [],
+    "init-data":
+    {
+      "type": "rect",
+      "x": 10,
+      "y": 2,
+      "w": 80,
+      "h": 80,
+      "fill": "#DCDCDC"
+    },
+    "configManifest": [
+    {
 
     }],
-    "renderer":
+    "help":
     {
-        "main": "renderer/plugin.js",
-         "dependencies": [
-            {
-                "type": "css",
-                "src": "renderer/styles/style.css"
-            },
-             {
-                "type": "js",
-                "src": "renderer/controllers/horizontal_controller.js"
-            },
-            {
-                "type": "js",
-                "src": "renderer/templates/horizontal_template.html"
-            }
-
-        ]
+      "src": "editor/help.md",
+      "dataType": "text"
+    }
+  },
+  "dependencies": [
+  {
+    "type": "plugin",
+    "plugin": "org.ekstep.questionunit",
+    "ver": "1.0",
+    "scope": "renderer"
+  },
+  {
+    "type": "js",
+    "src": "renderer/util/evaluator.js",
+    "scope": "renderer"
+  }],
+  "templates": [
+  {
+    "id": "ftbtemplate",
+    "thumbnail": "editor/assets/ftb-horizontal.png",
+    "title": "Fill in the Blanks",
+    "disc": "A type of question or phrase with one or more words replaced with a blank line, giving the reader the chance to add the missing word(s).",
+    "category": "FTB",
+    "editor":
+    {
+      "templateURL": "editor/templates/horizontal_template.html",
+      "controllerURL": "editor/controllers/horizontal_controller.js",
+      "template": "ftbtemplate",
+      "controller": "QuestionFormController"
     },
+    "renderer":
+    {}
+
+  }],
+  "renderer":
+  {
+    "main": "renderer/plugin.js",
     "dependencies": [
-        {
-            "plugin": "org.ekstep.questionunit",
-            "ver": "1.0",
-            "type": "plugin",
-            "scope": "all"
-        },
-        {
-                "plugin": "org.ekstep.keyboard",
-                "ver": "1.0",
-                "type": "plugin",
-                "scope": "renderer"
-        }
+      {
+        "type": "css",
+        "src": "renderer/styles/style.css"
+      },
+      {
+        "type": "js",
+        "src": "renderer/ftbTemplate.js"
+      }
+
     ]
+  },
+  "dependencies": [
+  {
+    "plugin": "org.ekstep.questionunit",
+    "ver": "1.0",
+    "type": "plugin",
+    "scope": "all"
+  },
+  {
+    "plugin": "org.ekstep.keyboard",
+    "ver": "1.0",
+    "type": "plugin",
+    "scope": "renderer"
+  }]
 }

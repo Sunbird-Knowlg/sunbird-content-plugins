@@ -9,7 +9,7 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
 	},
 	initialize: function(data) { // eslint-disable-line no-unused-vars
 		EkstepRendererAPI.addEventListener(this._manifest.id + ":show", this.showQuestion, this);
-		EkstepRendererAPI.addEventListener(this._manifest.id + ":hide", this.hideQeustion);
+		EkstepRendererAPI.addEventListener(this._manifest.id + ":hide", this.hideQeustion, this);
 		EkstepRendererAPI.addEventListener(this._manifest.id + ":evaluate", this.evaluateQuestion);
 	},
 	showQuestion: function(event) {
@@ -38,7 +38,8 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
 	postShow: function(currentquesObj) { // eslint-disable-line no-unused-vars
 		// overridden by MCQ or FTB or MTF if additional events has to be added.
 	},
-	hideQuestion: function() {
+	hideQeustion: function() {
+		$("#questionset").children().hide();
 		this.postHide();
 	},
 	postHide: function() {

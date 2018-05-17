@@ -24,18 +24,6 @@ QS_FTBTemplate.htmlLayout = '<div class="qc-ftb-layout">\
 		<% } %> \
 	</div>';
 
-/**
- * renderer:questionunit.ftb:set the layout for the ftb.
- * @event renderer:questionunit.ftb:show
- * @memberof org.ekstep.questionunit.ftb
- */
-QS_FTBTemplate.layout = function(questionObj) {
-	QS_FTBTemplate.questionObj = questionObj;
-	var ftbContainer = "<div id=" + QS_FTBTemplate.constant.ftbParentDiv.replace('#', '') + "></div>";
-	$("#questionset").html(ftbContainer);
-	var template = _.template(QS_FTBTemplate.htmlLayout);
-	$(QS_FTBTemplate.constant.ftbParentDiv).html(template({ questionObj: questionObj }));
-};
 
 /**
  * renderer:questionunit.ftb:set state in the text box.
