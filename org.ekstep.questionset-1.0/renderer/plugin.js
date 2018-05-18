@@ -106,15 +106,15 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
     var instance = this;
 
     // If this is not the first question, hide the current question
-    if (this._currentQuestion) {
-      EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
-      jQuery('#' + this._currentQuestion.id).remove();
+    if (instance._currentQuestion) {
+      EkstepRendererAPI.dispatchEvent(instance._currentQuestion.pluginId + ':hide');
+      jQuery('#' + instance._currentQuestion.id).remove();
     }
 
     if (question.pluginId === this._constants.qsQuizPlugin) {
 
       // Mark the question as rendered
-      this._currentQuestion = question;
+      instance._currentQuestion = question;
       this.setRendered(question);
       // Set current question for telmetry to log events from question-unit
       QSTelemetryLogger.setQuestion(instance._currentQuestion, instance.getRenderedIndex()); // eslint-disable-line no-undef
@@ -131,7 +131,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
       this._currentQuestionState = this.getQuestionState(question.id);
 
       // Mark the question as rendered
-      this._currentQuestion = question;
+      instance._currentQuestion = question;
       this.setRendered(question);
 
 
@@ -198,14 +198,14 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
   displayFeedback: function (result) {
     var res = result.eval ? result.eval : result.pass;
     if (res === true) {
-      EkstepRendererAPI.dispatchEvent('renderer:load:popup:goodJob');
+      QSFeedbackPopup.showGoodJob(); // eslint-disable-line no-undef
     } else {
       if (result.score > 0) {
         var partialScoreRes = result.noOfCorrectAns + ' / ' + result.totalAns;
-        EkstepRendererAPI.dispatchEvent('renderer:load:popup:partialCorrect', partialScoreRes);
+        QSFeedbackPopup.qsPartialCorrect(partialScoreRes); // eslint-disable-line no-undef
       }
       else {
-        EkstepRendererAPI.dispatchEvent('renderer:load:popup:tryAgain');
+        QSFeedbackPopup.showTryAgain(); // eslint-disable-line no-undef
       }
     }
     this._displayedPopup = true;
@@ -334,89 +334,6 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
       angular.element('body').append(angular.element('<div id="' + this._constants.qsElement.replace('#', '') + '"></div>'));
     }
   },
-  /*resetNavigation: function () {
-      this.showDefaultNextNav();
-      this.showDefaultPrevNav();
-  },
-  showDefaultPrevNav: function () {
-      $('#qs-custom-prev').hide();
-      // $('.nav-previous').show();
-    EkstepRendererAPI.dispatchEvent('renderer:previous:show');
-  },
-  showDefaultNextNav: function () {
-      $('#qs-custom-next').hide();
-      // $('.nav-next').show();
-    EkstepRendererAPI.dispatchEvent('renderer:next:show');
-  },
-  showCustomPrevNav: function () {
-      var prevButton = $('#qs-custom-prev');
-      var navigateToStage = EkstepRendererAPI.getStageParam('previous');
-      var stage = EkstepRendererAPI.getCurrentStage();
-      if (stage && !_.isUndefined(navigateToStage)) {
-          // prevButton.attr("disabled", "disabled");
-          prevButton.show();
-          // $('.nav-previous').hide();
-        EkstepRendererAPI.dispatchEvent('renderer:prev:hide');
-      } else {
-        if(this.getRenderedIndex() > 0) {
-          // prevButton.attr("disabled", "disabled");
-          prevButton.show();
-          $('.nav-previous').hide();
-          EkstepRendererAPI.dispatchEvent('renderer:prev:hide');
-        } else {
-          prevButton.hide();
-          setTimeout(function () {
-              console.log('show-prev');
-            EkstepRendererAPI.dispatchEvent('renderer:previous:show');
-          }, 500);
-        }
-      }
-  },
-  showCustomNextNav: function () {
-      $('#qs-custom-next').show();
-      // $('.nav-next').hide();
-    EkstepRendererAPI.dispatchEvent('renderer:next:hide');
-  },
-  setupNavigation: function () {
-      instance = this;
-
-      // Next
-      var next = angular.element('#qs-custom-next');
-      if (next.length === 0) {
-          var nextButton = $('.nav-next');
-          var nextImageSrc = nextButton.find('img').attr('src');
-
-          var customNextButton = $('<img />', {
-              src: nextImageSrc,
-              id: 'qs-custom-next',
-              class: ''
-          }).css(this._constants.nextCSS);
-          customNextButton.on('click', function () {
-              instance.nextQuestion();
-          });
-          customNextButton.appendTo('#gameArea');
-      }
-
-      // Prev
-      var prev = angular.element('#qs-custom-prev')
-      if (prev.length === 0) {
-          var prevButton = $('.nav-previous');
-          var prevImageSrc = prevButton.find('img').attr('src');
-
-          var customPrevButton = $('<img />', {
-              src: prevImageSrc,
-              id: 'qs-custom-prev',
-              class: ''
-          }).css(this._constants.prevCSS);
-          customPrevButton.on('click', function () {
-              instance.prevQuestion();
-          });
-          customPrevButton.appendTo('#gameArea');
-      }
-      // Show Custom Navigation
-      this.showCustomNextNav();
-      this.showCustomPrevNav();
-  },*/
   getQuestionState: function (questionId) {
     return this._questionStates[questionId];
   },
@@ -500,20 +417,5 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
   handlePrevious: function () {
     this.prevQuestion();
   }
-  /*,
-      hasPrevious: function (navType) {
-        if(this._currentQuestion) {
-            if(navType === "next") {
-              if(this._firstQuestion && this._displayedPopup) {
-                return false;
-              } else {
-                return (this.getRenderedIndex() + 1) > 0;
-              }
-            } else {
-              return (this.getRenderedIndex() - 1) > 0;
-            }
-        }
-        return false;
-      }*/
 });
 //# sourceURL=questionSetRenderer.js
