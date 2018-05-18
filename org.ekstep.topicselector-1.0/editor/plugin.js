@@ -34,14 +34,14 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
 
         /**Register event**/
-        ecEditor.addEventListener(instance.manifest.id + ":init", this.initTopicBrowser, this);
+        ecEditor.addEventListener(instance.manifest.id + ":init", this.showTopicBrowser, this);
     },
     /**
      *
      * Registers events.
      * @memberof topicselector
      */
-    initData: function(instance, cb) {
+    initData: function(cb) {
         /**Set Topics and subtopic tree data**/
     },
     /**
@@ -50,19 +50,8 @@ org.ekstep.contenteditor.basePlugin.extend({
      * @memberof topicselector
      *
      */
-    initTopicBrowser: function(event, data) {
-        instance.initData(instance, function(){
-            ecEditor.jQuery('#' + data.element).treePicker({
-                data: instance.topicData,
-                name: 'Topics',
-                picked: data.selectedTopics,
-                onSubmit: function(nodes) {
-                    data.callback(nodes);
-                },
-                nodeName:"topicSelector_" + data.element,
-                minSearchQueryLength: 1
-            });
-        });
+    showTopicBrowser: function(event, data) {
+        // Call treepicker lib to show topics and subtopics tree
     },
     /**
      *   To generate telemetry events
