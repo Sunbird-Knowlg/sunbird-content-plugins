@@ -265,8 +265,8 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
     }).css(this._constants.questionsetCSS);
     if ($(this._constants.qsElement).length === 0) {
       var qsFeedback  = $('<div />', {
-      id: this._constants.qsPopup,
-    }).css(this._constants.feedbackCSS);;
+        id: this._constants.qsPopup,
+      }).css(this._constants.feedbackCSS);
       $("#gameArea").append(qsElement);
       $("#gameArea").append(qsFeedback);
     }
