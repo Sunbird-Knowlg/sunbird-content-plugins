@@ -9,6 +9,11 @@
  */
 
 org.ekstep.contenteditor.basePlugin.extend({
+    /**
+     *
+     * topic data for topic tree
+     * @memberof topicselector
+     */
     topicData: undefined,
     /**
      * set default limit to framework API
@@ -22,19 +27,13 @@ org.ekstep.contenteditor.basePlugin.extend({
     selectors: [],
     /**
      *
-     * topic data for topic tree
-     * @memberof topicselector
-     */
-    topics: [],
-    /**
-     *
      * Registers events.
      * @memberof topicselector
      */
     initialize: function() {
         var instance = this;
 
-        /**Get topics data**/
+        /**Register event**/
         ecEditor.addEventListener(instance.manifest.id + ":init", this.initTopicBrowser, this);
     },
     /**
