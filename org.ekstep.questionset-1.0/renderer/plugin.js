@@ -32,12 +32,13 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
       left: 0,
       height: '100%'
     },
-    nextCSS: {
-      cursor: 'pointer',
+    feedbackCSS: {
       position: 'absolute',
-      width: '7.5%',
-      top: '44%',
-      right: '1%'
+      width: '100%',
+      height: '100%',
+      'z-index': 999999,
+      top: 0,
+      display: 'none'
     },
     qsPrefix: 'qs',
     qsQuizPlugin: 'org.ekstep.questionset.quiz'
@@ -265,7 +266,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
     if ($(this._constants.qsElement).length === 0) {
       var qsFeedback  = $('<div />', {
       id: this._constants.qsPopup,
-    });
+    }).css(this._constants.feedbackCSS);;
       $("#gameArea").append(qsElement);
       $("#gameArea").append(qsFeedback);
     }
