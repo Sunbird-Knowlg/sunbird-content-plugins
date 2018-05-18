@@ -4,7 +4,7 @@
   /*box-shadow: 0 4px 6px -6px #000000;*/
   border-color: #9090e4;
 }
-.textboxQ:focus {
+.textboxQ-ftb:focus {
   border-width: 0px 0px 1px 0px solid #aeabab;
   outline: 0;
   /*box-shadow: 0 4px 6px -6px #000000;*/
@@ -18,8 +18,8 @@
   color: inherit;
   text-align: center;
 }
-.textboxQ {
-  width: 99%;
+.textboxQ-ftb {
+  width: 93%;
   border-width: 0px 0px 1px 0px;
   height: 33px;
   color: inherit;
@@ -32,6 +32,8 @@
 .maxLengthText {
   float: right;
   padding-top: 2%;
+  position: relative;
+    left: -10%;
 }
 
 .optionError {
@@ -74,11 +76,12 @@
   margin-top: 0%
 }
 
-.innerScroll {
+.innerScroll.ftb-layout {
   padding-left: 4%;
   overflow-y: auto;
   overflow-x: hidden;
   margin-left: 5%;
+  padding-bottom: 20%;
 }
 
 /*#eachCard {

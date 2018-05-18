@@ -448,6 +448,12 @@ org.ekstep.contenteditor.basePlugin.extend({
                 instance.highlightNodeForInvalidDialCode(res);
                 ecEditor.dispatchEvent("meta:after:save", {});
 
+            } else if(err && res.status === 401 && res.statusText === "Unauthorized") {
+                if (data.showNotification) ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'Your session has timed out due to inactivity. Please login to resume!',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
             } else {
                 if (data.showNotification) ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                     message: 'Unable to save the content, try again!',

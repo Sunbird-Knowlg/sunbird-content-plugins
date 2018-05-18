@@ -36,7 +36,7 @@
         "type": "icon",
         "toolTip": "Add Question Set",
         "title": "Question Set",
-        "iconClass": "fa fa-question",
+        "iconClass": "icon-questions icon",
         "onclick": {
           "id": "org.ekstep.questionset:showPopup"
         }
@@ -112,6 +112,10 @@
       {
         "type": "js",
         "src": "renderer/utils/telemetry_logger.js"
+      },
+      {
+        "type": "js",
+        "src": "renderer/utils/qs_feedback_popup.js"
       }
     ]
   },

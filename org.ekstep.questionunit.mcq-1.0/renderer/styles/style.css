@@ -20,47 +20,81 @@ header.qc-long-text-header {
     width: 80vw;
     background-color: #404041;
     /*min-height: 17vh;*/
-    height: 17vh;
+    height: 21vh;
     text-align: center;
 }
-
 .qc-question-text {
     color: white;
     font-size: initial;
     text-align: center;
     line-height: 1;
-    height: 10vh;
-    width: 72%;
+    height: 100%;
+    width: 75%;
     display: inline-block;
-    padding-top: 4%;
+    padding-top: 0;
+        padding: 1% 1% 1% 1%;
+    line-height: 1.3;
 }
-.qcl-question-text {
+
+.qc-question-text p,
+.collapse-ques-text p,
+.expand-ques-text p{
+    width: 100%;
+    height: 100%;
+    display: table;
+}
+
+.qc-question-text p > :first-child,
+.collapse-ques-text p > :first-child,
+.expand-ques-text p > :first-child{
+    display: table-cell;
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+}
+
+.qc-question-text p span{
+    width: 100%;
+    height: 100%;
+}
+
+.collapse-ques-text {
     display: -webkit-box;
-    max-width: 83%;
-    height: auto;
-    margin: 0 auto;
+   /* width: 100%;*/
+    max-width: 100%;
+    height: 21vh;
+    padding: 0px;
+    margin: 0px;
+    margin-right: 6%;
     font-size: 15px;
-    line-height: 1.6;
+    line-height: 1.7;
+}
+.collapse-ques-text > p{
     overflow: hidden;
+    display: -webkit-box;
     text-overflow: ellipsis;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
     color: white;
-    padding-top: 1%;
 }
 
-.qclc-question-text {
-    display: -webkit-box;
+.expand-ques-text >p {
+      display: -webkit-box;
     max-width: 83%;
     height: auto;
     margin: 0 auto;
+    margin-right: 4%;
     font-size: 15px;
-    line-height: 1.6;
+    line-height: 1.7;
     color: white;
     padding-top: 1%;
 }
 
 
+.expand-ques-text p{
+    table-layout: fixed;
+    word-wrap: break-word;
+}
 .qc-option-container {
     width: 100%;
     display: block;
@@ -95,7 +129,9 @@ header.qc-long-text-header {
     position: relative;
     padding: -2% 1% 2% 9%;
 }
-
+.grid-check-space{
+    max-width: 50%;
+}
 input.qc-option-input-checkbox {
     -webkit-appearance: checkbox;
     -moz-appearance: checkbox;
@@ -161,9 +197,11 @@ input.qc-option-input-checkbox:checked::after {
 }
 
 img.qc-question-image {
-        max-width: 21%;
-    max-height: 53px;
-    float: left;
+        width: 15%;
+        height: 56px;
+        float: left;
+        margin-left: -1%;
+    object-fit: fill;
 }
 
 img.qc-option-image {
@@ -375,7 +413,7 @@ audio.qc-question-audio {
 
 .qc-vertical-option-value {
     /* border: 1px solid #c8ccd0;*/
-    height: 100%;
+    height: 98%;
     display: table;
     width: 100%;
 }
@@ -393,10 +431,9 @@ audio.qc-question-audio {
     border: 1px solid #c8ccd0;
     display: table-cell;
     vertical-align: middle;
-
     word-break: break-word;
     line-height: 1.2;
-    width: 65%;
+    width: 62%;
 }
 
 .qc-option-vertical-checkbox {
@@ -407,9 +444,12 @@ audio.qc-question-audio {
 }
 
 .qsverticalselectedopt {
-    border-left: 3px solid #4a90e2;
+    background-color: #4a90e2;
 }
-
+.qsverticalselect{
+    display: table-cell;
+    width: 3px;
+}
 .qc-opt {
     display: inline;
 }
@@ -448,5 +488,7 @@ audio.qc-vertical-audio {
 .qc-question-audio-image {
     width: 6%;
     -webkit-filter: invert(100%);
-    margin-top: 5%;
+    margin-top: 0%;
+    display: inline-block;
+    float: right;
 }

@@ -3,7 +3,7 @@
   "ver": "1.0",
   "author": "Jagadish",
   "title": "Question Plugin",
-  "description": "Plugin to add questions to question sets.",
+  "description": "Plugin to create questions",
   "editor":
   {
     "main": "editor/plugin.js",
@@ -33,7 +33,12 @@
          "type": "plugin",
         "plugin": "org.ekstep.questionunit.mtf",
         "ver": "1.0"
-        }
+      },
+      {
+         "type": "plugin",
+        "plugin": "org.ekstep.sunbirdmetadata",
+        "ver": "1.0"
+      }
     ],
     "menu": [],
     "init-data":{},
