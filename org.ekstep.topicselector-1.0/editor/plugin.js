@@ -51,15 +51,17 @@ org.ekstep.contenteditor.basePlugin.extend({
      *
      */
     initTopicBrowser: function(event, data) {
-        ecEditor.jQuery('#' + data.element).treePicker({
-            data: instance.topicData,
-            name: 'Topics',
-            picked: data.selectedTopics,
-            onSubmit: function(nodes) {
-                data.callback(nodes);
-            },
-            nodeName:"topicSelector_" + data.element,
-            minSearchQueryLength: 1
+        instance.initData(instance, function(){
+            ecEditor.jQuery('#' + data.element).treePicker({
+                data: instance.topicData,
+                name: 'Topics',
+                picked: data.selectedTopics,
+                onSubmit: function(nodes) {
+                    data.callback(nodes);
+                },
+                nodeName:"topicSelector_" + data.element,
+                minSearchQueryLength: 1
+            });
         });
     },
     /**
