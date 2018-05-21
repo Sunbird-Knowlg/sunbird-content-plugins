@@ -1,8 +1,6 @@
-QS_FTB_Keyboard = {};
+var QS_FTB_Keyboard = {};
 QS_FTB_Keyboard.constant = {
   keyboardVisible: false,
-  answerText: undefined,
-  answerText: '',
   ftbInputTarget: '',
   buttons: {},
   keyWidth: 0,
@@ -126,28 +124,28 @@ QS_FTB_Keyboard.changeToAlphabet = function() {
 };
 
 QS_FTB_Keyboard.addLetter = function(event) {
-  keyValue = event.target;
-  if (!_.isUndefined(answerText)) {
+  var keyValue = event.target;
+  if (!_.isUndefined(answerText)) { // eslint-disable-line no-undef
     if (keyValue.innerText != '123') {
-      answer.push(keyValue.innerText);
-      answerText = answer.join("");
+      answer.push(keyValue.innerText); // eslint-disable-line no-undef
+      answerText = answer.join(""); // eslint-disable-line no-undef
     }
   } else {
-    if (keyValue.innerText != '123') answerText = event.target.innerText;
+    if (keyValue.innerText != '123') answerText = event.target.innerText; // eslint-disable-line no-undef
   }
-  $("#txtfillblank1").val(answerText);
-  $("#" + QS_FTB_Keyboard.constant.ftbInputTarget).val(answerText);
+  $("#txtfillblank1").val(answerText); // eslint-disable-line no-undef
+  $("#" + QS_FTB_Keyboard.constant.ftbInputTarget).val(answerText); // eslint-disable-line no-undef
 };
 
 QS_FTB_Keyboard.deleteText = function() {
-  answer.pop();
-  answerText = answer.join("");
-  $("#txtfillblank1").val(answerText);
-  $("#" + QS_FTB_Keyboard.constant.ftbInputTarget).val(answerText);
+  answer.pop(); // eslint-disable-line no-undef
+  answerText = answer.join(""); // eslint-disable-line no-undef
+  $("#txtfillblank1").val(answerText); // eslint-disable-line no-undef
+  $("#" + QS_FTB_Keyboard.constant.ftbInputTarget).val(answerText); // eslint-disable-line no-undef
 }
 QS_FTB_Keyboard.hideKeyboard = function() {
   $("#questionset #preview-ftb-horizontal").show();
   $("#qs_keyboard").hide();
-  QS_FTB_Keyboard.constant.callbackFromKeyboard(answerText);
+  QS_FTB_Keyboard.constant.callbackFromKeyboard(answerText); // eslint-disable-line no-undef
 }
 //# sourceURL=qs_keyboard.js

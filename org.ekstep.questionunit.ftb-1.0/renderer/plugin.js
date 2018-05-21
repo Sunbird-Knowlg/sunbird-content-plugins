@@ -36,6 +36,7 @@ org.ekstep.contentrenderer.questionUnitPlugin.extend({
       QS_FTBTemplate.textboxtarget.state = currentquesObj.qState.val;
       QS_FTBTemplate.setStateInput();
     }
+    $("#qcblank").hide();
   },
   postHide: function(){
     EkstepRendererAPI.dispatchEvent("org.ekstep.keyboard:hide");
