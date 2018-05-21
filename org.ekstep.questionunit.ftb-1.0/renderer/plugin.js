@@ -37,6 +37,9 @@ org.ekstep.contentrenderer.questionUnitPlugin.extend({
       QS_FTBTemplate.setStateInput();
     }
   },
+  postHide: function(){
+    EkstepRendererAPI.dispatchEvent("org.ekstep.keyboard:hide");
+  },
   /**
    * renderer:questionunit.ftb:evaluateEventListener.
    * @event renderer:questionunit.ftb:evaluate
