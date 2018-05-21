@@ -57,7 +57,9 @@
     z-index: 10;
     background-color: #ebebeb;
 }
-
+#parentDivNumericKeyboard{
+    display: none;
+}
 .key_barakhadi:active,
 .key_barakhadi_numeric:active {
     background-color: rgb(215, 215, 215);

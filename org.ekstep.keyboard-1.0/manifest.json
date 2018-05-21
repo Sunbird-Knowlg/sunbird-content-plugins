@@ -24,12 +24,7 @@
     "dependencies": [
       {
             "type": "js",
-            "src": "renderer/controller/keyboard_ctrl.js",
-            "scope": "renderer"
-      },
-      {
-            "type": "js",
-            "src": "renderer/templates/keyboard.html",
+            "src": "renderer/qs_keyboard.js",
             "scope": "renderer"
       },
       {
