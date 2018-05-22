@@ -14,12 +14,17 @@ org.ekstep.contenteditor.basePlugin.extend({
      * topic data for topic tree
      * @memberof topicselector
      */
-    topicData: undefined,
+    topicData: [],
     /**
      * set default limit to framework API
      * @memberof topicselector
      */
     limit: 500,
+    /**
+     * set default timeout for api response
+     * @memberof topicselector
+     */
+    apiResponseTimeout: 3000,
     /**
      * Selected topic array
      * @memberof topicselector
@@ -51,7 +56,20 @@ org.ekstep.contenteditor.basePlugin.extend({
      *
      */
     showTopicBrowser: function(event, data) {
-        // Call treepicker lib to show topics and subtopics tree
+        var instance = this;
+        setTimeout(function() {
+            ecEditor.jQuery('#' + data.element).treePicker({
+                data: instance.topicData,
+                name: 'Topics',
+                apiResponseTimeout: instance.apiResponseTimeout,
+                picked: data.selectedTopics,
+                onSubmit: function(nodes) {
+                    data.callback(nodes);
+                },
+                nodeName:"topicSelector_" + data.element,
+                minSearchQueryLength: 1
+            });
+        }, 1000);
     },
     /**
      *   To generate telemetry events

@@ -7,7 +7,7 @@ var conceptModal;
         nodes = [];
         tabs = {};
         $("#" + options.nodeName).length == 0 ? '' : $("#" + options.nodeName).remove();
-        modal = $("<div id="+ options.nodeName +" class=\"ui tree-picker small modal\">\n  <div class=\"header\">\n    " + options.name + "\n\n    <div class=\"ui menu\">\n      <a class=\"active tree item\">\n        <i class=\"list icon\"></i> Concepts\n      </a>\n      <a class=\"picked item\">\n        <i class=\"checkmark icon\"></i> Selected Concepts <span class=\"count\"></span>\n      </a>\n    </div>\n  </div>\n  <div class=\"ui search form\">\n    <div class=\"field\">\n      <div class=\"ui icon input\">\n        <input type=\"text\" placeholder=\"Search\">\n        <i class=\"search icon\"></i>\n      </div>\n    </div>\n  </div>\n  <div class=\"content\">\n    <div class=\"ui active inverted dimmer\"><div class=\"ui text loader\">Loading data</div></div>\n    <div class=\"tree-tab\">\n      <div style=\"height: 400px\"></div>\n    </div>\n\n    <div class=\"search-tab\">\n    </div>\n\n    <div class=\"picked-tab\">\n    </div>\n  </div>\n  <div class=\"actions\">\n    <a class=\"pick-search\"><i class=\"checkmark icon\"></i> Choose All</a>\n    <a class=\"unpick-search\"><i class=\"remove icon\"></i> Remove All</a>\n    <a class=\"unpick-picked\"><i class=\"remove icon\"></i> Remove All</a>\n    \n    <a class=\"ui button close\">Cancel</a>\n<a class=\"ui blue button accept\">Done</a>\n  </div>\n</div>").modal({
+        modal = $("<div id="+ options.nodeName +" class=\"ui tree-picker small modal\">\n  <div class=\"header\">\n    " + options.name + "\n\n    <div class=\"ui menu\">\n      <a class=\"active tree item\">\n        <i class=\"list icon\"></i> Topics\n      </a>\n      <a class=\"picked item\">\n        <i class=\"checkmark icon\"></i> Selected Topics <span class=\"count\"></span>\n      </a>\n    </div>\n  </div>\n  <div class=\"ui search form\">\n    <div class=\"field\">\n      <div class=\"ui icon input\">\n        <input type=\"text\" placeholder=\"Search\">\n        <i class=\"search icon\"></i>\n      </div>\n    </div>\n  </div>\n  <div class=\"content\">\n <div class=\"ui warning hidden message\"><i class=\"close icon\"></i><div class=\"header\">No topic/subtopic is available with provided Board, Grade, and Subject combinations.</div>Please verify the provided values for Board, Grade, and Subject</div><div class=\"ui active inverted dimmer\"><div class=\"ui text loader\">Loading data</div></div>\n    <div class=\"tree-tab\">\n      <div style=\"height: 400px\"></div>\n    </div>\n\n    <div class=\"search-tab\">\n    </div>\n\n    <div class=\"picked-tab\">\n    </div>\n  </div>\n  <div class=\"actions\">\n    <a class=\"pick-search\"><i class=\"checkmark icon\"></i> Choose All</a>\n    <a class=\"unpick-search\"><i class=\"remove icon\"></i> Remove All</a>\n    <a class=\"unpick-picked\"><i class=\"remove icon\"></i> Remove All</a>\n    \n    <a class=\"ui button close\">Cancel</a>\n<a class=\"ui blue button accept\">Done</a>\n  </div>\n</div>").modal({
             duration: 200,
             allowMultiple: true
         });
@@ -27,6 +27,7 @@ var conceptModal;
             childrenKey: 'nodes',
             singlePick: false,
             minSearchQueryLength: 3,
+            apiResponseTimeout:5000,
             hidden: function(node) {
                 return false;
             },
@@ -34,7 +35,7 @@ var conceptModal;
                 return false;
             },
             displayFormat: function(picked) {
-                return options.name + " (Выбрано " + picked.length + ")";
+                return options.name + " (Selected " + picked.length + ")";
             }
         };
         $.extend(config, options);
@@ -67,11 +68,19 @@ var conceptModal;
                     if (config.url) {
                         return loadNodes(config.url, {}, function(nodes) {
                             $('.ui.active.dimmer', modal).removeClass('active');
+                            $(".ui.tree-picker.small.modal .field").removeClass("disabled");
                             return initializeNodes(nodes);
                         });
+                    }else{
+                        setTimeout(function(){
+                            $('.ui.active.dimmer', modal).removeClass('active');
+                            $(".ui.tree-picker.small.modal .field").addClass("disabled");
+                            $(".ui.tree-picker.modal .ui.warning.message").removeClass("hidden");
+                        },config.apiResponseTimeout);
                     }
                 } else {
                     $('.ui.active.dimmer', modal).removeClass('active');
+                    $(".ui.tree-picker.small.modal .field").removeClass("disabled");
                     return initializeNodes(nodes);
                 }
             });
