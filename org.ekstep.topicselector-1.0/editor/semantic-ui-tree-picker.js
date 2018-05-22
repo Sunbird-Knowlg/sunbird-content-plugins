@@ -1,6 +1,6 @@
 var conceptModal;
 (function() {
-    $.fn.treePicker = function(options) {
+    $.fn.topicTreePicker = function(options) {
         var actionButtons, config, count, initialize, initializeNodeList, initializeNodes, loadNodes, modal, nodeClicked, nodeIsPicked, nodes, pickNode, picked, recursiveNodeSearch, renderList, renderTree, showPicked, showSearch, showTree, tabs, unpickNode, updatePickedIds, updatePickedNodes, widget;
         widget = $(this);
         picked = [];

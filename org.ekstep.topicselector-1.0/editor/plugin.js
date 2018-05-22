@@ -58,7 +58,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     showTopicBrowser: function(event, data) {
         var instance = this;
         setTimeout(function() {
-            ecEditor.jQuery('#' + data.element).treePicker({
+            ecEditor.jQuery('#' + data.element).topicTreePicker({
                 data: instance.topicData,
                 name: 'Topics',
                 apiResponseTimeout: instance.apiResponseTimeout,
