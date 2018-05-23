@@ -99,7 +99,10 @@ header.mtf-header {
 }
 
 .width33 {
-  width: 33.33%;
+  width: 31.33%;
+}
+.width100 {
+  width: 85%;
 }
 
 .width20 [ng-drag].dragging {
@@ -113,3 +116,15 @@ header.mtf-header {
 .width33 [ng-drag].dragging {
   width: 28.33%;
 }
+
+.LHS{
+  display: inline; 
+  border: 1px solid red; 
+  margin:10px;
+}
+.RHS{
+  display: inline; 
+  border: 1px solid red; 
+  margin:10px;
+}
+

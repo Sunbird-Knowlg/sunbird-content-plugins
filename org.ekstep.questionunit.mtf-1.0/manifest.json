@@ -77,12 +77,11 @@
             },
             {
                 "type": "js",
-                "src": "renderer/controllers/mtf_controller.js"
+                "src": "renderer/js/html5sortable.js"
             },
             {
                 "type": "js",
-                "src": "renderer/templates/mtf_template.html"
-
+                "src": "renderer/js/mtftemplate.js"
             }
         ]
     },
