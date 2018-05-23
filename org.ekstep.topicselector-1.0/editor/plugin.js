@@ -21,6 +21,11 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     limit: 500,
     /**
+     * For Board, gradelevel, medium, Subject filters data
+     * @memberof topicselector
+     */
+    filtersData: [],
+    /**
      * set default timeout for api response
      * @memberof topicselector
      */
@@ -38,16 +43,35 @@ org.ekstep.contenteditor.basePlugin.extend({
     initialize: function() {
         var instance = this;
 
-        /**Register event**/
-        ecEditor.addEventListener(instance.manifest.id + ":init", this.showTopicBrowser, this);
+        /**Register event to show topic selector browser**/
+        ecEditor.addEventListener(instance.manifest.id + ":init", this.initData, this);
+        /**Register event for update filters data**/
+        ecEditor.addEventListener("editor:field:association", this.updateFilters, this);
     },
     /**
      *
-     * Registers events.
+     * To init topic selector data.
      * @memberof topicselector
      */
-    initData: function(cb) {
-        /**Set Topics and subtopic tree data**/
+    initData: function(event, data) {
+        //Data mapping
+        this.showTopicBrowser(event, data);
+    },
+    /**
+     *
+     * To update filters data
+     * @memberof topicselector
+     */
+    updateFilters: function(event, data) {
+        var dependedValues, groupdFields;
+        if (data.field.depends && data.field.depends.length) {
+            _.forEach(data.field.depends, function(id) {
+                if(id == 'topics'){
+                    //TODO Data mapping
+                    console.log('update data', data);
+                }
+            });
+        }
     },
     /**
      *
