@@ -21,24 +21,35 @@ org.ekstep.contentrenderer.questionUnitPlugin.extend({
    * @memberof org.ekstep.questionunit.ftb
    */
   initialize: function() {
-    this._template = QS_FTBTemplate;
+    this._template = QS_FTBTemplate.htmlLayout;
     this._super();
+  },
+  showQuestion: function(event) {
+    var questionObj = event.target;
+    var qData = questionObj._currentQuestion.data.__cdata || questionObj._currentQuestion.data;
+    questionData = JSON.parse(qData);
+
+    var parsedQuestionData = QS_FTBTemplate.generateHTML(questionData);
+    event.target._currentQuestion.data.__cdata = JSON.stringify(parsedQuestionData);
+
+    this._super(event);
   },
   postShow: function(currentquesObj) {
     ftbQuestionData = currentquesObj.questionData;
     ftbQuestionConfig = currentquesObj.questionConfig;
     QS_FTBTemplate.questionObj = currentquesObj.questionData;
-    $(QS_FTBTemplate.constant.ftbText).html(questionData.parsedQuestion.text);
-    $(QS_FTBTemplate.constant.parentDiv).off('click');
-    $(QS_FTBTemplate.constant.parentDiv).on('click', '.ans-field', QS_FTBTemplate.doTextBoxHandle);
 
+    $("#preview-ftb-horizontal").off('click');
+    $("#preview-ftb-horizontal").on('click', '.ans-field', QS_FTBTemplate.invokeKeyboard);
+
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS);
     if (currentquesObj.qState && currentquesObj.qState.val) {
       QS_FTBTemplate.textboxtarget.state = currentquesObj.qState.val;
       QS_FTBTemplate.setStateInput();
     }
-    $("#qcblank").hide();
+    // $("#qcblank").hide();
   },
-  postHide: function(){
+  postHide: function() {
     EkstepRendererAPI.dispatchEvent("org.ekstep.keyboard:hide");
   },
   /**
@@ -53,7 +64,7 @@ org.ekstep.contentrenderer.questionUnitPlugin.extend({
       ansObj = {};
     //check for evalution
     //get all text box value inside the class
-    var textBoxCollection = $(QS_FTBTemplate.constant.ftbQuestionClass).find("input[type=text]");
+    var textBoxCollection = $("#qs-ftb-text").find("input[type=text]");
     _.each(textBoxCollection, function(element, index) {
       answerArray.push(element.value.toLowerCase().trim());
       ansObj = {
@@ -92,6 +103,8 @@ org.ekstep.contentrenderer.questionUnitPlugin.extend({
     EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
 
     console.log("FTB Tel", telemetryAnsArr);
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { "type": "INPUT", "values": telemetryAnsArr });
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);
   }
 });
 //# sourceURL=questionunitFtbRendererPlugin.js

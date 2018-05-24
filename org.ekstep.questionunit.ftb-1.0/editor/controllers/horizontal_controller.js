@@ -30,13 +30,24 @@ angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', 
       keyboardConfig:$scope.keyboardConfig
     },
     answer: [],
-    parsedQuestion:
-    {
-      text: '',
-      image: '',
-      audio: ''
-    }
+    media: []
   };
+  var eraserIcon = {
+    id: "org.ekstep.keyboard.eras_icon",
+    src: ecEditor.resolvePluginResource("org.ekstep.keyboard", "1.0", 'renderer/assets/eras_icon.png'),
+    assetId: "org.ekstep.keyboard.eras_icon",
+    type: "image",
+    preload: true
+  };
+  $scope.ftbFormData.media.push(eraserIcon);
+  var languageIcon = {
+    id: "org.ekstep.keyboard.language_icon",
+    src: ecEditor.resolvePluginResource("org.ekstep.keyboard", "1.0", 'renderer/assets/language_icon.png'),
+    assetId: "org.ekstep.keyboard.language_icon",
+    type: "image",
+    preload: true
+  };
+  $scope.ftbFormData.media.push(languageIcon);
   var questionInput = CKEDITOR.replace('ftbQuestion', {
     customConfig: CKEDITOR.basePath + "config.js",
     skin: 'moono-lisa,' + CKEDITOR.basePath + "skins/moono-lisa/",
@@ -64,25 +75,12 @@ angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', 
     $scope.$parent.$on('question:form:val', function(event)
     {
       var regexForAns = /(?:^|)\[\[(.*?)(?:\]\]|$)/g;
-      var index = 0;
       $scope.ftbFormData.answer = $scope.getMatches($scope.ftbFormData.question.text, regexForAns, 1).map(function(a)
       {
         return a.toLowerCase().trim();
       });
       if ($scope.formValidation())
       {
-        $scope.ftbFormData.parsedQuestion.text = $scope.ftbFormData.question.text.replace(/\[\[.*?\]\]/g, function(a, b)
-        {
-          index = index + 1;
-          if (!_.isUndefined($scope.ftbFormData.question.keyboardConfig) && $scope.ftbFormData.question.keyboardConfig.keyboardType == 'English' || $scope.ftbFormData.question.keyboardConfig.keyboardType == 'Custom')
-          {
-            return '<input type="text" class="ans-field" id="ans-field' + index + '" readonly style="cursor: pointer;">';
-          }
-          else
-          {
-            return '<input type="text" class="ans-field" id="ans-field' + index + '">';
-          }
-        })
         $scope.$emit('question:form:valid', $scope.ftbFormData);
       }
       else

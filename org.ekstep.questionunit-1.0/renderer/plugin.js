@@ -9,37 +9,34 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
 	},
 	initialize: function(data) { // eslint-disable-line no-unused-vars
 		EkstepRendererAPI.addEventListener(this._manifest.id + ":show", this.showQuestion, this);
-		EkstepRendererAPI.addEventListener(this._manifest.id + ":hide", this.hideQeustion, this);
+		EkstepRendererAPI.addEventListener(this._manifest.id + ":hide", this.hideQuestion, this);
 		EkstepRendererAPI.addEventListener(this._manifest.id + ":evaluate", this.evaluateQuestion);
 	},
 	showQuestion: function(event) {
 		var instance = this;
-		var questionObj = event.target;
-		var qData = questionObj._currentQuestion.data.__cdata || questionObj._currentQuestion.data;
+		var questionsetInstance = event.target;
+		var qData = questionsetInstance._currentQuestion.data.__cdata || questionsetInstance._currentQuestion.data;
 		questionData = JSON.parse(qData);
 
-		var qConfig = questionObj._currentQuestion.config.__cdata || questionObj._currentQuestion.config;
+		var qConfig = questionsetInstance._currentQuestion.config.__cdata || questionsetInstance._currentQuestion.config;
 		questionConfig = JSON.parse(qConfig);
 
-		var qState = questionObj._currentQuestionState;
-
-		$("#questionset").html("<div id=" + instance._template.constant.parentDiv.replace('#', '') + "></div>");
-		var template = _.template(instance._template.htmlLayout);
-		$(instance._template.constant.parentDiv).html(template({ questionObj: questionData }));
-
+		var qState = questionsetInstance._currentQuestionState;
 		var currentquesObj = {
 			"questionData": questionData,
 			"questionConfig": questionConfig,
 			"qState": qState
 		};
+		var template = _.template(instance._template);
+		$(questionsetInstance._constants.qsElement).html(template({ questionObj: questionData }));
 		this.postShow(currentquesObj);
 	},
-
 	postShow: function(currentquesObj) { // eslint-disable-line no-unused-vars
 		// overridden by MCQ or FTB or MTF if additional events has to be added.
 	},
-	hideQeustion: function() {
-		$("#questionset").children().hide();
+	hideQuestion: function(event) {
+		var questionsetInstance = event.target;
+		$(questionsetInstance._constants.qsElement).children().hide();
 		this.postHide();
 	},
 	postHide: function() {

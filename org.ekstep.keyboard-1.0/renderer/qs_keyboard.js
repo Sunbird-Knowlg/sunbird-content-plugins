@@ -7,15 +7,8 @@ QS_FTB_Keyboard.constant = {
   callbackFromKeyboard: undefined
 };
 QS_FTB_Keyboard.htmlLayout = '<div id = "qs_keyboard">\
-    <div class="qBoxArea">\
-      <div class="question">\
-        <p>\
-          <%= questionText %>\
-        </p>\
-      </div>\
-    </div>\
     <div class="textBoxArea">\
-      <input type="text" id="txtfillblank1" class="ansField" placeholder="Enter answer" disabled autofocus />\
+      <input type="text" id="txtfillblank1" class="ansField" placeholder="Enter answer"  onclick="QS_FTB_Keyboard.logTelemetryInteract(event);" disabled autofocus />\
     </div>\
     <div id="keyboard" class="keyboardArea">\
         <div class="parentDivMainKeyboard qc-keyboard-bottom">\
@@ -35,7 +28,7 @@ QS_FTB_Keyboard.htmlLayout = '<div id = "qs_keyboard">\
               <% }); %>\
             </div>\
             <div class="erasedDivParent">\
-                <img src=<%= eraserIcon %> class="qc-erase-icon" onclick="QS_FTB_Keyboard.deleteText()" />\
+                <img src=<%=_instance.addImageIcon("renderer/assets/eras_icon.png") %> class="qc-erase-icon" onclick="QS_FTB_Keyboard.deleteText();" />\
             </div>\
             <% if(QS_FTB_Keyboard.constant.buttons.length > 10) { %> \
               <div id="secondRowdiv"></div>\
@@ -81,20 +74,20 @@ QS_FTB_Keyboard.htmlLayout = '<div id = "qs_keyboard">\
                 <div class="key_barakhadi_numeric" onclick="QS_FTB_Keyboard.addLetter(event);"><span>×</span></div>\
                 <div class="key_barakhadi_numeric" onclick="QS_FTB_Keyboard.addLetter(event);"><span>=</span></div>\
                 <div class="erasedDivParent">\
-                    <img src=<%= eraserIcon %> class="qc-erase-icon" onclick="QS_FTB_Keyboard.deleteText()" />\
+                    <img src=<%=_instance.addImageIcon("renderer/assets/eras_icon.png") %> class="qc-erase-icon" onclick="QS_FTB_Keyboard.deleteText()" />\
                 </div>\
             </div>\
             <div class="third-row-numeric">\
                 <div class="speacial_keys" onclick="QS_FTB_Keyboard.addLetter(event);" id="<_btn"><span>&lt;</span></div>\
                 <div class="speacial_keys" onclick="QS_FTB_Keyboard.addLetter(event);" id=">_btn"><span>&gt;</span></div>\
                 <div>\
-                    <img src=<%= languageIcon %> class="qc-language-icon" onclick="QS_FTB_Keyboard.changeToAlphabet()" /> </div>\
+                    <img src=<%=_instance.addImageIcon("renderer/assets/language_icon.png") %> class="qc-language-icon" onclick="QS_FTB_Keyboard.changeToAlphabet()" /> </div>\
                 <div class="spaceBar" onclick="QS_FTB_Keyboard.addLetter(event);" style=" font-size:3vw;"><span> </span>&nbsp;</div>\
                 <div class="speacial_keys" onclick="QS_FTB_Keyboard.addLetter(event);"><span>,</span></div>\
                 <div class="speacial_keys" onclick="QS_FTB_Keyboard.addLetter(event);"><span>.</span></div>\
             </div>\
             <div class="hideKeyboard">\
-                <svg onclick="QS_FTB_Keyboard.hideKeyboard()" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="float: right;margin-right: 6%;margin-top: -4%;">\
+                <svg onclick="QS_FTB_Keyboard.hideKeyboard();QS_FTB_Keyboard.logTelemetryInteract(event);" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="float: right;margin-right: 6%;margin-top: -4%;">\
                     <path d="M20 3H4c-1.1 0-1.99.9-1.99 2L2 15c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 3h2v2h-2V6zm0 3h2v2h-2V9zM8 6h2v2H8V6zm0 3h2v2H8V9zm-1 2H5V9h2v2zm0-3H5V6h2v2zm9 7H8v-2h8v2zm0-4h-2V9h2v2zm0-3h-2V6h2v2zm3 3h-2V9h2v2zm0-3h-2V6h2v2zm-7 15l4-4H8l4 4z" />\
                 </svg>\
             </div>\
@@ -136,7 +129,6 @@ QS_FTB_Keyboard.addLetter = function(event) {
   $("#txtfillblank1").val(answerText); // eslint-disable-line no-undef
   $("#" + QS_FTB_Keyboard.constant.ftbInputTarget).val(answerText); // eslint-disable-line no-undef
 };
-
 QS_FTB_Keyboard.deleteText = function() {
   answer.pop(); // eslint-disable-line no-undef
   answerText = answer.join(""); // eslint-disable-line no-undef
@@ -144,8 +136,10 @@ QS_FTB_Keyboard.deleteText = function() {
   $("#" + QS_FTB_Keyboard.constant.ftbInputTarget).val(answerText); // eslint-disable-line no-undef
 }
 QS_FTB_Keyboard.hideKeyboard = function() {
-  $("#questionset #preview-ftb-horizontal").show();
   $("#qs_keyboard").hide();
   QS_FTB_Keyboard.constant.callbackFromKeyboard(answerText); // eslint-disable-line no-undef
+}
+QS_FTB_Keyboard.logTelemetryInteract = function(event) {
+  QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event.target.id });
 }
 //# sourceURL=qs_keyboard.js

@@ -28,7 +28,7 @@
 
 .qc-ftb-question-text {
     font-size: 16px;
-    text-align: initial;
+    text-align: center;
     width: 100%;
 }
 
@@ -53,6 +53,9 @@ input.ans-field {
 }
 .qc-answertxt{
     text-align: center;
+}
+input.ans-field.highlightInput{
+    border: 1px solid blue;
 }
 @media (min-width:801px){
     .qc-ftb-layout{
