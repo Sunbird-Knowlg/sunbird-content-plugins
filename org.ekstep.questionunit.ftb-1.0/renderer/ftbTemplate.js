@@ -1,15 +1,19 @@
 var QS_FTBTemplate = {};
-
+QS_FTBTemplate.constant = {
+  qsFtbElement: "#ftb-template",
+  qsFtbContainer: ".qs-ftb-container",
+  qsFtbQuestion: "#qs-ftb-question"
+}
 QS_FTBTemplate.textboxtarget = {};
 QS_FTBTemplate.questionObj = undefined;
-QS_FTBTemplate.htmlLayout = '<div id="preview-ftb-horizontal">\
-  <div class="qc-ftb-layout">\
-		<div class="ftb-question-header">\
-				<div class="qc-ftb-question-text" id="qs-ftb-text" class="qc-text-cls">\
-					<%= questionObj.question.text %>\
-				</div>\
-		</div>\
-	</div>\
+QS_FTBTemplate.htmlLayout = '<div id="ftb-template">\
+  <div class="qs-ftb-container">\
+    <div class="qs-ftb-content">\
+        <div class="qs-ftb-question" id="qs-ftb-question">\
+          <%= questionObj.question.text %>\
+        </div>\
+    </div>\
+  </div>\
 </div>';
 
 
@@ -19,59 +23,66 @@ QS_FTBTemplate.htmlLayout = '<div id="preview-ftb-horizontal">\
  * @memberof org.ekstep.questionunit.ftb
  */
 QS_FTBTemplate.setStateInput = function() {
-	var textBoxCollection = $("#qs-ftb-text").find("input[type=text]");
-	_.each(textBoxCollection, function(element, index) {
-		$("#" + element.id).val(QS_FTBTemplate.textboxtarget.state[index]);
-	});
+  var textBoxCollection = $(QS_FTBTemplate.constant.qsFtbQuestion).find("input[type=text]");
+  _.each(textBoxCollection, function(element, index) {
+    $("#" + element.id).val(QS_FTBTemplate.textboxtarget.state[index]);
+  });
 }
 
 /**
  * renderer:questionunit.ftb:set target and value.
  * @event renderer:questionunit.ftb:click
+ * @param {Object} event from question set plugin
  * @memberof org.ekstep.questionunit.ftb
  */
-QS_FTBTemplate.invokeKeyboard = function(event) {
-	var qConfig = {
-		'qData': JSON.stringify(QS_FTBTemplate.questionObj),
-		'inputoldValue': QS_FTBTemplate.textboxtarget
-	}
-	QS_FTBTemplate.textboxtarget.id = this.id;
-	QS_FTBTemplate.textboxtarget.value = this.value.trim();
-	if (!(isbrowserpreview && (_.isUndefined(QS_FTBTemplate.questionObj.question.keyboardConfig) || QS_FTBTemplate.questionObj.question.keyboardConfig.keyboardType == "Device"))) {
-		$(".qc-ftb-layout").addClass("qcalgin");
-	}
-	$("#" + QS_FTBTemplate.textboxtarget.id).addClass("highlightInput");
-	$("#" + QS_FTBTemplate.textboxtarget.id).siblings().removeClass("highlightInput");
-	EkstepRendererAPI.dispatchEvent("org.ekstep.keyboard:invoke", qConfig, QS_FTBTemplate.callbackFromKeyboard);
+QS_FTBTemplate.invokeKeyboard = function(event) { // eslint-disable-line no-unused-vars
+  var qConfig = {
+    'qData': JSON.stringify(QS_FTBTemplate.questionObj),
+    'inputoldValue': QS_FTBTemplate.textboxtarget
+  }
+  QS_FTBTemplate.textboxtarget.id = this.id;
+  QS_FTBTemplate.textboxtarget.value = this.value.trim();
+  if (!(isbrowserpreview && (_.isUndefined(QS_FTBTemplate.questionObj.question.keyboardConfig) || QS_FTBTemplate.questionObj.question.keyboardConfig.keyboardType == "Device"))) { // eslint-disable-line no-undef
+    $(QS_FTBTemplate.constant.qsFtbContainer).addClass("align-question");
+  }
+  $("#" + QS_FTBTemplate.textboxtarget.id).addClass("highlightInput");
+  $("#" + QS_FTBTemplate.textboxtarget.id).siblings().removeClass("highlightInput");
+  EkstepRendererAPI.dispatchEvent("org.ekstep.keyboard:invoke", qConfig, QS_FTBTemplate.callbackFromKeyboard);
 };
 
 /**
  * renderer:questionunit.ftb:callback from the keyboard with answer.
  * @event renderer:questionunit.ftb:doTextBoxHandle
+ * @param {Object} ans object
  * @memberof org.ekstep.questionunit.ftb
  */
 QS_FTBTemplate.callbackFromKeyboard = function(ans) {
-	$("#" + QS_FTBTemplate.textboxtarget.id).val(ans);
-	$(".qc-ftb-layout").removeClass("qcalgin");
+  $("#" + QS_FTBTemplate.textboxtarget.id).val(ans);
+  $(QS_FTBTemplate.constant.qsFtbContainer).removeClass("align-question");
 }
 
 /**
  * renderer:questionunit.ftb:get currentQuesData.
  * @event renderer:questionunit.ftb:doTextBoxHandle
+ * @param {Object} quesData object without HTML
+ * @returns {Object} quesData
  * @memberof org.ekstep.questionunit.ftb
  */
 QS_FTBTemplate.generateHTML = function(quesData) {
-	var index = 0;
-	// Add parsedQuestion to the currentQuesData
-	quesData.question.text = quesData.question.text.replace(/\[\[.*?\]\]/g, function(a, b) {
-		index = index + 1;
-		if (!_.isUndefined(quesData.question.keyboardConfig) && quesData.question.keyboardConfig.keyboardType == 'English' || quesData.question.keyboardConfig.keyboardType == 'Custom') {
-			return '<input type="text" class="ans-field" id="ans-field' + index + '" readonly style="cursor: pointer;"  onclick="QS_FTBTemplate.logTelemetryInteract(event);">';
-		} else {
-			return '<input type="text" class="ans-field" id="ans-field' + index + '"  onclick="QS_FTBTemplate.logTelemetryInteract(event);">';
-		}
-	})
-	return quesData;
+  var index = 0,
+    template, ansTemplate, keyboardConfig;
+  // Add parsedQuestion to the currentQuesData
+  quesData.question.text = quesData.question.text.replace(/\[\[.*?\]\]/g, function(a, b) { // eslint-disable-line no-unused-vars
+    index = index + 1;
+    template = _.template(QS_FTBAnsTemplate.htmlLayout);
+    ansFieldConfig = { 
+      "index": index, 
+      "keyboardType": quesData.question.keyboardConfig.keyboardType
+    }
+    ansTemplate = template({ ansFieldConfig:ansFieldConfig });
+    return ansTemplate;
+  })
+  return quesData;
 }
 
 /**
@@ -79,10 +90,8 @@ QS_FTBTemplate.generateHTML = function(quesData) {
  * @event renderer:questionunit.ftb:click
  * @memberof org.ekstep.questionunit.ftb
  */
-window.addEventListener('native.keyboardshow', function(e) {
-	$(".qc-ftb-layout").addClass("qcalgin");
-	$("#tempanswertext").val($("#" + QS_FTBTemplate.textboxtarget.id).val());
-	$('#tempanswertext').focus();
+window.addEventListener('native.keyboardshow', function(e) { // eslint-disable-line no-unused-vars
+  $(QS_FTBTemplate.constant.qsFtbContainer).addClass("align-question");
 });
 
 /**
@@ -91,11 +100,10 @@ window.addEventListener('native.keyboardshow', function(e) {
  * @memberof org.ekstep.questionunit.ftb
  */
 window.addEventListener('native.keyboardhide', function() {
-	$(".qc-ftb-layout").removeClass("qcalgin");
-	$("#" + QS_FTBTemplate.textboxtarget.id).val($("#tempanswertext").val().trim());
+  $(QS_FTBTemplate.constant.qsFtbContainer).removeClass("align-question");
 });
 
 QS_FTBTemplate.logTelemetryInteract = function(event) {
-	QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event.target.id });
+  QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event.target.id }); // eslint-disable-line no-undef
 }
 //# sourceURL=QS_FTBTemplate.js

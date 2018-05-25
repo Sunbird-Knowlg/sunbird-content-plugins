@@ -1,4 +1,4 @@
-#qs_keyboard {
+#keyboardDiv {
   position: absolute;
   top: 45%;
   left: 0;
@@ -14,7 +14,7 @@
   background: #ebebeb;
 }
 
-#txtfillblank1 {
+#keyboardInput {
   background-color: #ebebeb;
   height: 43px;
   margin-top: 0;
@@ -78,7 +78,7 @@
   height: 70%;
 }
 
-.speacial_keys {
+.special_keys {
   float: left;
   margin: 2px;
   vertical-align: middle;
@@ -167,11 +167,16 @@
   left: 10%;
 }
 
-.erasedDivParent {
+.erasedDivParent,
+.hideKeyboard {
   float: right;
   margin-top: -4.3%;
   position: relative;
   margin-right: -2%;
+}
+
+.hideKeyboard {
+  margin-right: 4%;
 }
 
 #erasedDiv {
@@ -198,11 +203,11 @@
   height: 100%;
 }
 
-.speacial_keys {
+.special_keys {
   display: inline-block;
 }
 
-.speacial_keys>span {
+.special_keys>span {
   vertical-align: middle;
 }
 

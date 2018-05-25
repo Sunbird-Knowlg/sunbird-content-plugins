@@ -8,50 +8,50 @@
 Plugin.extend({
   _type: 'org.ekstep.keyboard',
   _render: true,
-  answerText: '',
+  inputValue: '',
   ftbInputTarget: '',
-  answer: [],
-  _instance: undefined,
+  targetInputValue: [],
+  _keyboardInstance: undefined,
   initialize: function() {
-    _instance = this;
+    _keyboardInstance = this; // eslint-disable-line no-undef
     EkstepRendererAPI.addEventListener("org.ekstep.keyboard:invoke", this.showKeyboard);
     EkstepRendererAPI.addEventListener("org.ekstep.keyboard:hide", this.hideKeyboard);
   },
   showKeyboard: function(event, callback) {
     if (_.isFunction(callback)) {
-      QS_FTB_Keyboard.constant.callbackFromKeyboard = callback; // eslint-disable-line no-undef
+      Keyboard.constant.callbackFromKeyboard = callback; // eslint-disable-line no-undef
     }
     var questionObj = event.target;
-    answer = []; // eslint-disable-line no-undef
+    targetInputValue = []; // eslint-disable-line no-undef
     var questionData = JSON.parse(questionObj.qData);
-    $("#qs_keyboard").show();
+    $(Keyboard.constant.keyboardElement).show(); // eslint-disable-line no-undef
 
     var customButtons = '';
-    answerText = _.isUndefined(event.target.inputoldValue.value) ? '' : event.target.inputoldValue.value; // eslint-disable-line no-undef
-    $("#txtfillblank1").val(answerText);
-    if (answerText != " ") {
-      answer = answerText.split("");
+    inputValue = _.isUndefined(event.target.inputoldValue.value) ? '' : event.target.inputoldValue.value; // eslint-disable-line no-undef
+    $(Keyboard.constant.keyboardInput).val(inputValue); // eslint-disable-line no-undef
+    if (inputValue != " ") { // eslint-disable-line no-undef
+      targetInputValue = inputValue.split(""); // eslint-disable-line no-undef
     }
-    QS_FTB_Keyboard.constant.ftbInputTarget = event.target.inputoldValue.id; // eslint-disable-line no-undef
+    Keyboard.constant.ftbInputTarget = event.target.inputoldValue.id; // eslint-disable-line no-undef
     if (_.isUndefined(questionData.question.keyboardConfig) || questionData.question.keyboardConfig.keyboardType == 'Device') {
-      $("#qs_keyboard").hide();
+      $(Keyboard.constant.keyboardElement).hide(); // eslint-disable-line no-undef
     } else {
       if (questionData.question.keyboardConfig.keyboardType == "English") {
         customButtons = "Q,W,E,R,T,Y,U,I,O,P,A,S,D,F,G,H,J,K,L,Z,X,C,V,B,N,M";
-        QS_FTB_Keyboard.createKeyboard(customButtons); // eslint-disable-line no-undef
+        Keyboard.createKeyboard(customButtons); // eslint-disable-line no-undef
       } else if (questionData.question.keyboardConfig.keyboardType == 'Custom') {
         customButtons = questionData.question.keyboardConfig.customKeys;
         customButtons = customButtons.toString();
-        QS_FTB_Keyboard.createKeyboard(customButtons); // eslint-disable-line no-undef
+        Keyboard.createKeyboard(customButtons); // eslint-disable-line no-undef
       }
-      var template = _.template(QS_FTB_Keyboard.htmlLayout); // eslint-disable-line no-undef
-      if ($("#qs_keyboard").length <= 0) {
-        $("#gameArea").append(template({ answerText: answerText })); // eslint-disable-line no-undef
+      var template = _.template(Keyboard.htmlLayout); // eslint-disable-line no-undef
+      if ($(Keyboard.constant.keyboardElement).length <= 0) { // eslint-disable-line no-undef
+        $("#gameArea").append(template({ inputValue: inputValue })); // eslint-disable-line no-undef
       }
     }
   },
   hideKeyboard: function() {
-    $("#qs_keyboard").remove();
+    $(Keyboard.constant.keyboardElement).remove(); // eslint-disable-line no-undef
   },
   addImageIcon: function(imgURL) {
     if (isbrowserpreview) { // eslint-disable-line no-undef
