@@ -169,7 +169,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         //reset the depended field first
         // Update the depended field with associated value
         // Currently, supported only for the dropdown values
-        ecEditor.dispatchEvent("editor:field:association",{'associations':associations, 'field':field})
+        ecEditor.dispatchEvent("editor:field:association",{'associations':associations, 'field':field});
         var dependedValues, groupdFields;
         if (field.depends && field.depends.length) {
             _.forEach(field.depends, function(id) {
