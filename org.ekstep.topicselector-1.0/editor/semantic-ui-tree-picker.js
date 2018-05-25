@@ -1,4 +1,4 @@
-var conceptModal;
+var topicModal;
 (function() {
     $.fn.topicTreePicker = function(options) {
         var actionButtons, config, count, initialize, initializeNodeList, initializeNodes, loadNodes, modal, nodeClicked, nodeIsPicked, nodes, pickNode, picked, recursiveNodeSearch, renderList, renderTree, showPicked, showSearch, showTree, tabs, unpickNode, updatePickedIds, updatePickedNodes, widget;
@@ -11,7 +11,7 @@ var conceptModal;
             duration: 200,
             allowMultiple: true
         });
-        conceptModal = modal;
+        topicModal = modal;
         count = $('.count', modal);
         tabs = {
             tree: $('.tree-tab', modal),
@@ -40,7 +40,7 @@ var conceptModal;
         };
         $.extend(config, options);
         initialize = function() {
-            console.log('Concept selector initializing....');
+            console.log('Topic selector initializing....');
             if (config.data) {
                 nodes = config.data;
             }
@@ -112,7 +112,7 @@ var conceptModal;
             $('.menu .picked', modal).on('click', function(e) {
                 return showPicked();
             });
-            console.log('Concept selector initialized');
+            console.log('Topic selector initialized');
             return $('.search input', modal).on('keyup', function(e) {
                 return showSearch($(this).val());
             });

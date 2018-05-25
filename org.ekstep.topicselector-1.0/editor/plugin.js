@@ -29,7 +29,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      * set default timeout for api response
      * @memberof topicselector
      */
-    apiResponseTimeout: 3000,
+    apiResponseTimeout: 1000,
     /**
      * Selected topic array
      * @memberof topicselector
@@ -60,14 +60,13 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     initData: function(event, data) {
         var instance = this;
-        instance.getTopicCategory(function(categories){
-            if(categories){
-                instance.mapData(categories, function(topics){
-                    instance.showTopicBrowser(event, topics);       
+        instance.getTopicCategory(function(){
+            if(instance.categories.length){
+                instance.mapData(instance.categories, function(){
+                    instance.topicData = ecEditor._.uniqBy(instance.topicData, "id");
+                    instance.showTopicBrowser(event, data);
                 });
-            }else{
-                instance.showTopicBrowser(event, data);
-            }
+            }else instance.showTopicBrowser(event, data);
         });
     },
     /**
@@ -85,7 +84,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             topic.nodes = instance.getSubtopics(value.children);
             instance.topicData.push(topic)
             if (index === data.length - 1){ 
-                callback(ecEditor._.uniqBy(instance.topicData, "id"));
+                callback();
             }
         });
     },
@@ -102,7 +101,6 @@ org.ekstep.contenteditor.basePlugin.extend({
             child.id = value.identifier;
             child.name = value.name;
             child.selectable = "selectable";
-
             child.nodes = instance.getSubtopics(value.children);
             childArray.push(child);
         });
@@ -116,13 +114,11 @@ org.ekstep.contenteditor.basePlugin.extend({
     getTopicCategory: function(callback) {
         var instance = this;
         ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys('cmd_fw_16', function(error, response) {
-            if (error) {
+            if (!error) {
                 var categories = window.frameworkConfigurations.result.framework.categories;//response.data.result.framework.categories;
                 ecEditor._.forEach(categories, function (value, key) {
-                    if (value.code == "topic"){
-                        callback(value.terms);
-                    }
-                })
+                    if (value.code == "topic") instance.categories = value.terms;
+                });
             }
             callback();
         })
@@ -153,19 +149,17 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     showTopicBrowser: function(event, data) {
         var instance = this;
-        setTimeout(function() {
-            ecEditor.jQuery('#' + data.element).topicTreePicker({
-                data: instance.topicData,
-                name: 'Topics',
-                apiResponseTimeout: instance.apiResponseTimeout,
-                picked: data.selectedTopics,
-                onSubmit: function(nodes) {
-                    data.callback(nodes);
-                },
-                nodeName:"topicSelector_" + data.element,
-                minSearchQueryLength: 1
-            });
-        }, 1000);
+        ecEditor.jQuery('#' + data.element).topicTreePicker({
+            data: instance.topicData,
+            name: 'Topics',
+            apiResponseTimeout: instance.apiResponseTimeout,
+            picked: data.selectedTopics,
+            onSubmit: function(nodes) {
+                data.callback(nodes);
+            },
+            nodeName:"topicSelector_" + data.element,
+            minSearchQueryLength: 1
+        });
     },
     /**
      *   To generate telemetry events
