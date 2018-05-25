@@ -77,7 +77,7 @@
             },
             {
                 "type": "js",
-                "src": "renderer/js/html5sortable.js"
+                "src": "renderer/js/dragula.min.js"
             },
             {
                 "type": "js",

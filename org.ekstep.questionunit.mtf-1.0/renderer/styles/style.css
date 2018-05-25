@@ -1,4 +1,4 @@
-#mtf-renderer {
+/*#mtf-renderer {
   height: 90vh;
   margin: auto;
   text-align: center;
@@ -6,7 +6,7 @@
   width: 80%;
   margin-top: 2%;
   display: grid;
-}
+}*/
 
 
 .mtf-layout {
@@ -117,14 +117,66 @@ header.mtf-header {
   width: 28.33%;
 }
 
-.LHS{
-  display: inline; 
-  border: 1px solid red; 
-  margin:10px;
+
+/* dragula-specific example page styles */
+/* dragula-specific example page styles */
+.wrapper {
+  height: 50px;
+    max-width: 760px;
+    min-height: 50px !important;
+    min-width: 400px;
+    margin-right:auto;
+    margin-left:auto;
+    margin-top:40px;
 }
-.RHS{
-  display: inline; 
-  border: 1px solid red; 
-  margin:10px;
+.cont-dragula {
+  /*display: inline-block;*/
+    width: 29%;
+    /*border: 1px solid;*/
+    margin-left: 3%;
+    height: 100%;
+    text-align: center;
+    margin-top: -4%;
+    margin-bottom: 10%
 }
 
+/*
+ * note that styling gu-mirror directly is a bad practice because it"s too generic.
+ * you"re better off giving the draggable elements a unique class and styling that directly!
+ */
+.cont-dragula > div,
+.gu-mirror {
+  /*margin: 10px;*/
+  /*padding: 10px;*/
+  background-color: rgba(0, 0, 0, 0.2);
+  transition: opacity 0.4s ease-in-out;
+}
+.cont-dragula > div {
+  cursor: move;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.cont-dragula > p {
+  /*margin: 10px;*/
+  /*padding: 10px;*/
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.2);
+  transition: opacity 0.4s ease-in-out;
+}
+
+.cont-dragula > p {
+  cursor: move;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+
+.cont-dragula .ex-moved {
+  background-color: #e74c3c;
+}
+.cont-dragula.ex-over {
+  background-color: rgba(255, 255, 255, 0.3);
+}
