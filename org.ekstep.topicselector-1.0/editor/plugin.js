@@ -41,6 +41,11 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     categories: [],
     /**
+     * Data to Topic tree library
+     * @memberof topicselector
+     */
+    data: [],
+    /**
      *
      * Registers events.
      * @memberof topicselector
@@ -51,7 +56,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         /**Register event to show topic selector browser**/
         ecEditor.addEventListener(instance.manifest.id + ":init", this.initData, this);
         /**Register event for update filters data**/
-        ecEditor.addEventListener("editor:field:association", this.updateFilters, this);
+        ecEditor.addEventListener("editor:field:association", this.getFilters, this);
     },
     /**
      *
@@ -60,13 +65,14 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     initData: function(event, data) {
         var instance = this;
+        instance.data = data;
         instance.getTopicCategory(function(){
             if(instance.categories.length){
-                instance.mapData(instance.categories, function(){
-                    instance.topicData = ecEditor._.uniqBy(instance.topicData, "id");
-                    instance.showTopicBrowser(event, data);
+                instance.mapData(instance.categories, function(data){
+                    instance.topicData = ecEditor._.uniqBy(data, "id");
+                    instance.showTopicBrowser(event, instance.data);
                 });
-            }else instance.showTopicBrowser(event, data);
+            }else instance.showTopicBrowser(event, instance.data);
         });
     },
     /**
@@ -76,15 +82,16 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     mapData: function(data, callback) {
         var instance = this;
-        ecEditor._.forEach(data, function(value, index, ) {
+        var mappedData = [];
+        ecEditor._.forEach(data, function(value, index) {
             var topic = {};
             topic.id = value.identifier;
             topic.name = value.name;
             topic.selectable = "selectable";
             topic.nodes = instance.getSubtopics(value.children);
-            instance.topicData.push(topic)
+            mappedData.push(topic)
             if (index === data.length - 1){ 
-                callback();
+                callback(mappedData);
             }
         });
     },
@@ -114,7 +121,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     getTopicCategory: function(callback) {
         var instance = this;
         ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys('cmd_fw_16', function(error, response) {
-            if (!error) {
+            if (error) {
                 var categories = window.frameworkConfigurations.result.framework.categories;//response.data.result.framework.categories;
                 ecEditor._.forEach(categories, function (value, key) {
                     if (value.code == "topic") instance.categories = value.terms;
@@ -125,21 +132,43 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     /**
      *
-     * To update filters data
+     * To get filters data
      * @memberof topicselector
      */
-    updateFilters: function(event, data) {
-        var dependedValues,
-            groupdFields,
-            instance = this;
+    getFilters: function(event, data) {
+        var instance = this;
+        var filters = [];
         if (data.field.depends && data.field.depends.length) {
             _.forEach(data.field.depends, function(id) {
                 if(id == 'topics'){
-                    //TODO Data mapping
-                    console.log('update data', data);
+                    instance.getAssociations(data.associations, function(association){
+                        instance.mapData(association, function(mappedData){
+                            _.forEach(instance.topicData, function(topicId, index) {
+                                _.forEach(mappedData, function(associationId) {
+                                    if(associationId.id == topicId.id)
+                                        filters.push(instance.topicData[index]);
+                                });
+                            });
+                            instance.topicData = ecEditor._.uniqBy(filters, "id");
+                            instance.showTopicBrowser(event, instance.data);
+                        });
+                    });
                 }
             });
         }
+    },
+    /**
+     *
+     * To get associations data
+     * @memberof topicselector
+     */
+    getAssociations: function(data, callback) {
+        var instance = this;
+        var association = [];
+        _.forEach(data, function(obj, index) {
+            if (obj.category == "topic") association.push(obj);
+            if (index === data.length - 1) callback(association);
+        });
     },
     /**
      *
@@ -149,6 +178,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     showTopicBrowser: function(event, data) {
         var instance = this;
+        instance.data = data;
         ecEditor.jQuery('#' + data.element).topicTreePicker({
             data: instance.topicData,
             name: 'Topics',
