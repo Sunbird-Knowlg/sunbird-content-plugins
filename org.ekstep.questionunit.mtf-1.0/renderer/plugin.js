@@ -11,6 +11,7 @@
   _render: true,
   _selectedAanswers: [],
   _mtfData: undefined,
+  _mtfConfig: undefined,
   initTemplate: function(){
     this._template = QS_MTFTemplate.htmlLayout;
   },
@@ -24,7 +25,7 @@
     questionData.option.optionsRHS.sort(() => Math.random() - 0.5);
     var qConfig = questionsetInstance._currentQuestion.config.__cdata || questionsetInstance._currentQuestion.config;
     questionConfig = JSON.parse(qConfig);
-
+    instance._mtfConfig = questionConfig;
     var qState = questionsetInstance._currentQuestionState;
     var currentquesObj = {
       "questionData": questionData,
@@ -35,7 +36,6 @@
   },
   postQuestionShow: function(currentquesObj) {
     var instance = this;
-    console.log("Current obj",currentquesObj);
     var drake = dragula([left1, right1, left2, right2, left3, right3], {
       accepts: function(el, t, s, si) {
         if ($(t).children().length > 0) {
@@ -53,8 +53,21 @@
         var text = $(ts).html();
         rhsData.mapIndex = $(s).attr('mapIndex');
         rhsData.selText = text;
-        instance._selectedAanswers.push(rhsData);
+        //check element existing in array if remove it or add into array
+        var existEle =   _.some(instance._selectedAanswers, function (elem) {
+          return elem.mapIndex == $(s).attr('mapIndex');
+        });
+        if(!existEle){
+          instance._selectedAanswers.push(rhsData); 
+        }else{
+          //console.log("Remove element dont remove");
+        }
+      }else{
+        instance._selectedAanswers = _.filter(instance._selectedAanswers, function(item) {
+          return item.mapIndex !== $(t).attr('mapIndex')
+        });
       }
+      console.log(instance._selectedAanswers);
     });
   },
   evaluateQuestion: function(callback) {
@@ -80,7 +93,7 @@
         }
       }
     }
-    var partialScore = (tempCount / qLhsData.length) * 3;
+    var partialScore = (tempCount / qLhsData.length) * instance._mtfConfig.max_score;
     var result = {
       eval: correctAnswer,
       state: {
