@@ -3,7 +3,7 @@
  * @extends EkstepRenderer.Plugin
  * @author sachin.kumar@goodworklabs.com>
  */
-IteratorPlugin.extend({ // eslint-disable-line no-undef
+org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line no-undef
   _type: 'org.ekstep.questionset',
   _isContainer: true,
   _render: true,
@@ -314,7 +314,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
     // The following code will unregister all event listeners added by the question unit plugins
     // This is to ensure that the event listeners do not overlap when there are two or more question sets
     // in the same content.
-    this._questionUnitPlugins.forEach(function(qu) {
+   /* this._questionUnitPlugins.forEach(function(qu) {
       for (var key in EventBus.listeners) {
         if (key.indexOf(qu) !== -1) {
           if (EventBus.listeners.hasOwnProperty(key)) {
@@ -322,7 +322,17 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
           }
         }
       }
-    });
+    });*/
+    _.forEach(this._questionUnitPlugins, function(value){
+      for (var key in EventBus.listeners) {
+        if (key.indexOf(value) !== -1) {
+          if (EventBus.listeners.hasOwnProperty(key)) {
+            EventBus.listeners[key] = undefined;
+          }
+        }
+      }
+    })
+
   },
   generateNavigateTelemetry: function(buttonId, currentQuestion) {
     var stageTo, objid;

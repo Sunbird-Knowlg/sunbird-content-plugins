@@ -5,5 +5,8 @@
     },
     "devDependencies": {
         "ekstep-content-plugin-dev-common": "ekstep/ekstep-content-plugin-dev-common"
+    },
+    "dependencies": {
+        "eslint-config-ekstep-content-plugin": "git+https://github.com/ekstep/eslint-config-ekstep-content-plugin.git"
     }
 }
