@@ -66,7 +66,7 @@ angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', 
       $scope.ftbFormData.question = data.question;
       $scope.keyboardConfig = data.question.keyboardConfig;
     }
-    $scope.$parent.$on('question:form:val', function(event) { // eslint-disable-line no-unused-vars
+    $scope.$parent.$on('question:form:val', function() { // eslint-disable-line no-unused-vars
       var regexForAns = /(?:^|)\[\[(.*?)(?:\]\]|$)/g;
       $scope.ftbFormData.answer = $scope.getMatches($scope.ftbFormData.question.text, regexForAns, 1).map(function(a) {
         return a.toLowerCase().trim();

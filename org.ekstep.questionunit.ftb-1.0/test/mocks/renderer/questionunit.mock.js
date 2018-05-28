@@ -1,7 +1,7 @@
 org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
   _type: 'org.ekstep.questionUnitPlugin'
 });
-QSTelemetryLogger = {
+QSTelemetryLogger = { // eslint-disable-line no-undef
   EVENT_TYPES: {
     TOUCH: 'TOUCH',
     RESPONSE: 'RESPONSE',
@@ -14,7 +14,7 @@ QSTelemetryLogger = {
   _qData: {},
   _qConfig: {}
 };
-QSTelemetryLogger.logEvent = function(type, data) {
+QSTelemetryLogger.logEvent = function(type) { // eslint-disable-line no-undef
   switch (type.toUpperCase()) {
     case 'DEFAULT':
       return true;

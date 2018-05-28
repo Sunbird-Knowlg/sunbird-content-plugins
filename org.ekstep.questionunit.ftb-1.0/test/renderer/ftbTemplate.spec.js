@@ -1,6 +1,6 @@
 describe('QS_FTBTemplate', function() {
-  var expectedQuesData
-  qsFTBTemplate = QS_FTBTemplate;
+  var deviceQuesData, engQuesData, expectedEngQuesData, expectedDeviceQuesData, qsFTBTemplate;
+  qsFTBTemplate = QS_FTBTemplate; // eslint-disable-line no-undef
   beforeEach(function() {
     qsFTBTemplate.questionObj = {
       "question": {
@@ -23,7 +23,47 @@ describe('QS_FTBTemplate', function() {
       }
     };
     qsFTBTemplate.textboxtarget = {};
-    expectedQuesData = {
+    deviceQuesData = {
+      "question": {
+        "text": "<p>Device a [[b]] c [[d]]</p>\n",
+        "image": "",
+        "audio": "",
+        "keyboardConfig": {
+          "keyboardType": "Device",
+          "customKeys": []
+        }
+      },
+      "answer": [
+        "b",
+        "d"
+      ],
+      "parsedQuestion": {
+        "text": "<p>Device a <input type=\"text\" class=\"ans-field\" id=\"ans-field1\"> c <input type=\"text\" class=\"ans-field\" id=\"ans-field2\"></p>\n",
+        "image": "",
+        "audio": ""
+      }
+    }
+    engQuesData = {
+      "question": {
+        "text": "<p>English a [[b]] c [[d]]</p>\n",
+        "image": "",
+        "audio": "",
+        "keyboardConfig": {
+          "keyboardType": "English",
+          "customKeys": []
+        }
+      },
+      "answer": [
+        "b",
+        "d"
+      ],
+      "parsedQuestion": {
+        "text": "<p>English a <input type=\"text\" class=\"ans-field\" id=\"ans-field1\" readonly style=\"cursor: pointer;\"> c <input type=\"text\" class=\"ans-field\" id=\"ans-field2\" readonly style=\"cursor: pointer;\"></p>\n",
+        "image": "",
+        "audio": ""
+      }
+    };
+    expectedEngQuesData = {
       "question": {
         "text": "<p>English a  <input type=\"text\" class=\"ans-field\" id=\"ans-field1\" readonly style=\"cursor: pointer;\" onclick=\"QS_FTBTemplate.logTelemetryInteract(event);\"> c  <input type=\"text\" class=\"ans-field\" id=\"ans-field2\" readonly style=\"cursor: pointer;\" onclick=\"QS_FTBTemplate.logTelemetryInteract(event);\"></p>\n",
         "image": "",
@@ -43,12 +83,32 @@ describe('QS_FTBTemplate', function() {
         "audio": ""
       }
     };
+    expectedDeviceQuesData = {
+      "question": {
+        "text": "<p>Device a  <input type=\"text\" class=\"ans-field\" id=\"ans-field1\" onclick=\"QS_FTBTemplate.logTelemetryInteract(event);\"> c  <input type=\"text\" class=\"ans-field\" id=\"ans-field2\" onclick=\"QS_FTBTemplate.logTelemetryInteract(event);\"></p>\n",
+        "image": "",
+        "audio": "",
+        "keyboardConfig": {
+          "keyboardType": "Device",
+          "customKeys": []
+        }
+      },
+      "answer": [
+        "b",
+        "d"
+      ],
+      "parsedQuestion": {
+        "text": "<p>Device a <input type=\"text\" class=\"ans-field\" id=\"ans-field1\"> c <input type=\"text\" class=\"ans-field\" id=\"ans-field2\"></p>\n",
+        "image": "",
+        "audio": ""
+      }
+    };
     //spyOn("qsFTBTemplate", invokeKeyboard).and.callThrough();
 
   });
 
   describe('invokeKeyboard function', function() {
-    var keyboardEvent, trim;
+    var keyboardEvent;
     beforeEach(function() {
       keyboardEvent = {
         "target": '<input type="text" class="ans-field highlightInput" value="b" id="ans-field1" readonly="" style="cursor: pointer;" onclick="QS_FTBTemplate.logTelemetryInteract(event);">'
@@ -57,37 +117,25 @@ describe('QS_FTBTemplate', function() {
       spyOn(EkstepRendererAPI, "dispatchEvent").and.callThrough();
       spyOn(qsFTBTemplate, "generateHTML").and.callThrough();
     });
+
     it("should dispatch the event", function() {
       qsFTBTemplate.invokeKeyboard(keyboardEvent);
       expect(EkstepRendererAPI.dispatchEvent).toHaveBeenCalled();
     });
+
     it("should generateHTML", function() {
-      var expectedQData = qsFTBTemplate.generateHTML(qsFTBTemplate.questionObj);
-      expect(expectedQData).toEqual(expectedQuesData);
+      var expectedQData = qsFTBTemplate.generateHTML(engQuesData);
+      expect(expectedQData).toEqual(expectedEngQuesData);
     });
 
     it("should generateHTML", function() {
-      var quesData = {
-      "question": {
-        "text": "<p>English a  <input type=\"text\" class=\"ans-field\" id=\"ans-field1\" readonly style=\"cursor: pointer;\" onclick=\"QS_FTBTemplate.logTelemetryInteract(event);\"> c  <input type=\"text\" class=\"ans-field\" id=\"ans-field2\" onclick=\"QS_FTBTemplate.logTelemetryInteract(event);\"></p>\n",
-        "image": "",
-        "audio": "",
-        "keyboardConfig": {
-          "keyboardType": "Device"
-        }
-      },
-      "answer": [
-        "b",
-        "d"
-      ],
-      "parsedQuestion": {
-        "text": "<p>English a <input type=\"text\" class=\"ans-field\" id=\"ans-field1\"> c <input type=\"text\" class=\"ans-field\" id=\"ans-field2\" readonly style=\"cursor: pointer;\"></p>\n",
-        "image": "",
-        "audio": ""
-      }
-    };
-      var expectedQData = qsFTBTemplate.generateHTML(qsFTBTemplate.questionObj);
-      expect(expectedQData).toEqual(expectedQuesData);
+      var expectedQData = qsFTBTemplate.generateHTML(engQuesData);
+      expect(expectedQData).toEqual(expectedEngQuesData);
+    });
+
+    it("should generateHTML Device Keyboard", function() {
+      var expectedQData = qsFTBTemplate.generateHTML(deviceQuesData);
+      expect(expectedQData).toEqual(expectedDeviceQuesData);
     });
   });
 });

@@ -23,16 +23,16 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
     this._template = QS_FTBTemplate.htmlLayout; // eslint-disable-line no-undef
   },
   preQuestionShow: function(event) {
-    var instance = this;
     var questionsetInstance = event.target;
-    var qData = questionsetInstance._currentQuestion.data.__cdata || questionsetInstance._currentQuestion.data;
-    var quesData = JSON.parse(qData);
+    var qData, quesData, questionData, qConfig, questionConfig, qState, currentquesObj;
+    qData = questionsetInstance._currentQuestion.data.__cdata || questionsetInstance._currentQuestion.data;
+    quesData = JSON.parse(qData);
     questionData = QS_FTBTemplate.generateHTML(quesData); // eslint-disable-line no-undef
-    var qConfig = questionsetInstance._currentQuestion.config.__cdata || questionsetInstance._currentQuestion.config;
+    qConfig = questionsetInstance._currentQuestion.config.__cdata || questionsetInstance._currentQuestion.config;
     questionConfig = JSON.parse(qConfig);
 
-    var qState = questionsetInstance._currentQuestionState;
-    var currentquesObj = {
+    qState = questionsetInstance._currentQuestionState;
+    currentquesObj = {
       "questionData": questionData,
       "questionConfig": questionConfig,
       "qState": qState

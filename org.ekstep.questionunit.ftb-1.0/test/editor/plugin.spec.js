@@ -1,6 +1,6 @@
 describe("EditorPlugin", function() {
   describe("newInstance", function() {
-    var plugin;
+    var plugin, popupService;
 
     beforeEach(function() {
       plugin = new org.ekstep.questionunitFTB.EditorPlugin({}, {}, {});

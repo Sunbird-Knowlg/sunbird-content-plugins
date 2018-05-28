@@ -6,7 +6,7 @@ describe('RendererPlugin', function() {
 
   beforeEach(function() {
     plugin = new org.ekstep.questionunitFTB.RendererPlugin({}, {}, {});
-    qsFTBTemplate = QS_FTBTemplate;
+    qsFTBTemplate = QS_FTBTemplate; // eslint-disable-line no-undef
     spyOn(plugin, "initTemplate").and.callThrough();
     spyOn(plugin, "preQuestionShow").and.callThrough();
     spyOn(plugin, "postQuestionShow").and.callThrough();
@@ -169,7 +169,7 @@ describe('RendererPlugin', function() {
     it('should dispatch evaluate event', function() {
       var evaluateEvent = {
         "type": "org.ekstep.questionunit.ftb:evaluate",
-        "target": function(){
+        "target": function() {
           return {};
         }
       };

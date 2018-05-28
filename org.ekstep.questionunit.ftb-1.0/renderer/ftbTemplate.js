@@ -70,13 +70,13 @@ QS_FTBTemplate.callbackFromKeyboard = function(ans) {
  */
 QS_FTBTemplate.generateHTML = function(quesData) {
   var index = 0,
-    template, ansTemplate, keyboardConfig;
+    template, ansTemplate;
   // Add parsedQuestion to the currentQuesData
   quesData.question.text = quesData.question.text.replace(/\[\[.*?\]\]/g, function(a, b) { // eslint-disable-line no-unused-vars
     index = index + 1;
-    template = _.template(QS_FTBAnsTemplate.htmlLayout);
-    ansFieldConfig = { 
-      "index": index, 
+    template = _.template(QS_FTBAnsTemplate.htmlLayout); // eslint-disable-line no-undef
+    var ansFieldConfig = {
+      "index": index,
       "keyboardType": quesData.question.keyboardConfig.keyboardType
     }
     ansTemplate = template({ ansFieldConfig:ansFieldConfig });
