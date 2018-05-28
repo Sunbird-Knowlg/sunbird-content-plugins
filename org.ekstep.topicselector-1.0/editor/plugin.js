@@ -72,7 +72,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                     instance.topicData = ecEditor._.uniqBy(data, "id");
                     instance.showTopicBrowser(event, instance.data);
                 });
-            }else instance.showTopicBrowser(event, instance.data);
+            }else{
+                instance.showTopicBrowser(event, instance.data);
+            }
         });
     },
     /**
@@ -83,6 +85,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     mapData: function(data, callback) {
         var instance = this;
         var mappedData = [];
+        if (!data) return callback();
         ecEditor._.forEach(data, function(value, index) {
             var topic = {};
             topic.id = value.identifier;
@@ -120,7 +123,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     getTopicCategory: function(callback) {
         var instance = this;
-        ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys('cmd_fw_16', function(error, response) {
+        ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(org.ekstep.contenteditor.globalContext.framework, function(error, response) {
             if (error) {
                 var categories = window.frameworkConfigurations.result.framework.categories;//response.data.result.framework.categories;
                 ecEditor._.forEach(categories, function (value, key) {
@@ -165,6 +168,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     getAssociations: function(data, callback) {
         var instance = this;
         var association = [];
+        if (!data) return callback();
         _.forEach(data, function(obj, index) {
             if (obj.category == "topic") association.push(obj);
             if (index === data.length - 1) callback(association);
@@ -186,6 +190,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             picked: data.selectedTopics,
             onSubmit: function(nodes) {
                 data.callback(nodes);
+                instance.generateTelemetry({type: 'click', subtype: 'submit', target: 'TopicSelectorSubmit'});
             },
             nodeName:"topicSelector_" + data.element,
             minSearchQueryLength: 1
@@ -196,7 +201,24 @@ org.ekstep.contenteditor.basePlugin.extend({
      *   @memberof topicselector
      */
     generateTelemetry: function(data) {
-        //Generate telemetry
+        var instance = this;
+        if (data) ecEditor.getService('telemetry').interact({
+            "type": data.type,
+            "subtype": data.subtype,
+            "id": data.target,
+            "pageid": org.ekstep.contenteditor.api.getCurrentStage().id || "",
+            "target":{
+                "id":  data.targetid || "",
+                "type": "plugin",
+                "ver": ""
+            },
+            "plugin":{
+                "id": instance.manifest.id,
+                "ver": instance.manifest.ver,
+                "category": "core"
+            },
+            "ver": "3.0"
+        });
     }
 });
 //# sourceURL=topicselectorplugin.js
