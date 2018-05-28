@@ -12,11 +12,13 @@
   _selectedAanswers: [],
   _mtfData: undefined,
   _mtfConfig: undefined,
+  _dragularContainers: [],
   initTemplate: function(){
     this._template = QS_MTFTemplate.htmlLayout;
-  },
+  }, 
   preQuestionShow: function(event) {
     var instance = this;
+    QS_MTFTemplate.optionsWidth = undefined;
     var questionsetInstance = event.target;
     var qData = questionsetInstance._currentQuestion.data.__cdata || questionsetInstance._currentQuestion.data;
     questionData = JSON.parse(qData);
@@ -32,10 +34,29 @@
       "questionConfig": questionConfig,
       "qState": qState
     };
+    if (qState && qState.val) {
+      instance._selectedAanswers = qState;
+      instance._mtfData.option.optionsRHS = qState.val.rhs;
+      console.log("Question saved state",qState);
+    }
+    if(instance._mtfData.option.optionsLHS.length == 3){
+      QS_MTFTemplate.optionsWidth = 'width33';
+    }else if(instance._mtfData.option.optionsLHS.length == 4){
+      QS_MTFTemplate.optionsWidth = 'width25';
+    }else if(instance._mtfData.option.optionsLHS.length == 5){
+      QS_MTFTemplate.optionsWidth = 'width20';
+    }
+    _.each(instance._mtfData.option.optionsLHS, function(v,k){
+      var lhs = 'left'+(k+1);
+      var rhs = 'right'+(k+1);
+      instance._dragularContainers.push(lhs);
+      instance._dragularContainers.push(rhs);
+    });
     return currentquesObj;
   },
   postQuestionShow: function(currentquesObj) {
     var instance = this;
+    //console.log("Dragula contaniners-------",instance._dragularContainers);
     var drake = dragula([left1, right1, left2, right2, left3, right3], {
       accepts: function(el, t, s, si) {
         if ($(t).children().length > 0) {
@@ -45,6 +66,7 @@
       }
     });
     var leftList = document.querySelector('#left1');
+    //console.log("Left List",leftList);
     var rightList = document.querySelector('#right1');
     drake.on('drop', function(el, t, s, si) {
       if(!_.isUndefined($(s).attr('mapIndex'))){
@@ -67,7 +89,6 @@
           return item.mapIndex !== $(t).attr('mapIndex')
         });
       }
-      console.log(instance._selectedAanswers);
     });
   },
   evaluateQuestion: function(callback) {
@@ -83,7 +104,8 @@
         if(!_.isUndefined(instance._selectedAanswers[i])){
           telObj[qLhsData[i].text] = instance._selectedAanswers[i].selText;
           teleValues.push(telObj);
-          if(qLhsData[i].index != instance._selectedAanswers[i].mapIndex){
+          var t = instance._selectedAanswers[i].mapIndex;
+          if(qLhsData[i].index != Number(t)){
             correctAnswer = false;
           } else {
             tempCount++;
@@ -110,6 +132,7 @@
     if (_.isFunction(cb)) {
       cb(result);
     }
+    EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
   }
 });
 //# sourceURL=questionunitMTFPlugin.js

@@ -9,7 +9,7 @@ QS_MTFTemplate.htmlLayout = "<div class='mtf-layout'>\
     </header>\
     <div class='mtf-hori-container'>\
       <% _.each(questionObj.option.optionsLHS,function(val,key){ %>\
-        <div class='mtf-hori-option width33'>\
+        <div class='mtf-hori-option <%= QS_MTFTemplate.optionsWidth %>'>\
           <div class='mtf-hori-ques-option'>\
             <div class='mtf-hori-ques-text'>\
               <div class='mtf-hori-ques-text-inner'><%= val.text %></div>\
@@ -18,12 +18,12 @@ QS_MTFTemplate.htmlLayout = "<div class='mtf-layout'>\
         </div>\
       <% });%>\
     </div>\
-    <div class='mtf-hori-container panel panel-body'>\
+    <div class='mtf-hori-container panel panel-body' id='left'>\
       <% _.each(questionObj.option.optionsLHS,function(val,key){ %>\
-        <div class='mtf-hori-option width33'>\
+        <div class='mtf-hori-option <%= QS_MTFTemplate.optionsWidth %>'>\
           <div class='mtf-hori-ques-option'>\
             <div class='mtf-hori-ques-text'>\
-              <div class='mtf-hori-ques-text-inner cont-dragula' id='left<%= (key+1) %>'></div>\
+              <div class='mtf-hori-ques-text-inner cont-dragula' id='left<%= (key+1) %>' leftindex='<%= val.index %>'></div>\
             </div>\
           </div>\
         </div>\
@@ -31,7 +31,7 @@ QS_MTFTemplate.htmlLayout = "<div class='mtf-layout'>\
     </div>\
     <div class='mtf-hori-container panel panel-body'>\
       <% _.each(questionObj.option.optionsRHS,function(val,key){ %>\
-        <div class='mtf-hori-option width33'>\
+        <div class='mtf-hori-option <%= QS_MTFTemplate.optionsWidth %>'>\
           <div class='mtf-hori-ques-option'>\
             <div class='mtf-hori-ques-text'>\
               <div class='mtf-hori-ques-text-inner cont-dragula' id='right<%= (key+1) %>' mapIndex='<%= val.mapIndex %>'><p><%= val.text %></p></div>\
@@ -42,8 +42,4 @@ QS_MTFTemplate.htmlLayout = "<div class='mtf-layout'>\
     </div>\
 </div>";
 
-function shuffleRHSOptions(){
-  debugger;
-  //console.log("Sorting======",questionObj.option.optionsRHS.sort(() => Math.random() - 0.5));
-}
 //# sourceURL=QS_MTFTemplate.js
