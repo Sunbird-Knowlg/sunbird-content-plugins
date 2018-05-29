@@ -116,6 +116,9 @@ describe('QS_FTBTemplate', function() {
       spyOn(qsFTBTemplate, "invokeKeyboard").and.callThrough();
       spyOn(EkstepRendererAPI, "dispatchEvent").and.callThrough();
       spyOn(qsFTBTemplate, "generateHTML").and.callThrough();
+      spyOn(qsFTBTemplate, "callbackFromKeyboard").and.callThrough();
+      spyOn($.fn, "removeClass");
+      spyOn(window, "addEventListener");
     });
 
     it("should dispatch the event", function() {
@@ -123,19 +126,19 @@ describe('QS_FTBTemplate', function() {
       expect(EkstepRendererAPI.dispatchEvent).toHaveBeenCalled();
     });
 
-    it("should generateHTML", function() {
+    it("should generateHTML for English Keyboard", function() {
       var expectedQData = qsFTBTemplate.generateHTML(engQuesData);
       expect(expectedQData).toEqual(expectedEngQuesData);
     });
 
-    it("should generateHTML", function() {
-      var expectedQData = qsFTBTemplate.generateHTML(engQuesData);
-      expect(expectedQData).toEqual(expectedEngQuesData);
-    });
-
-    it("should generateHTML Device Keyboard", function() {
+    it("should generateHTML for Device Keyboard", function() {
       var expectedQData = qsFTBTemplate.generateHTML(deviceQuesData);
       expect(expectedQData).toEqual(expectedDeviceQuesData);
+    });
+
+    it("should call callbackFromKeyboard and remove alignment", function() {
+      qsFTBTemplate.callbackFromKeyboard("B");
+      expect($(QS_FTBTemplate.constant.qsFtbContainer).removeClass).toHaveBeenCalledWith("align-question");
     });
   });
 });

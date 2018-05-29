@@ -99,7 +99,7 @@ describe('RendererPlugin', function() {
         "qState": {
           "val": [
             "b",
-            ""
+            "d"
           ]
         }
       };
@@ -167,6 +167,10 @@ describe('RendererPlugin', function() {
   });
   describe('evaluateQuestion function', function() {
     it('should dispatch evaluate event', function() {
+      var resultState = {
+        "val": [
+        ]
+      };
       var evaluateEvent = {
         "type": "org.ekstep.questionunit.ftb:evaluate",
         "target": function() {
@@ -174,7 +178,7 @@ describe('RendererPlugin', function() {
         }
       };
       plugin.evaluateQuestion(evaluateEvent);
-      expect(EkstepRendererAPI.dispatchEvent).toHaveBeenCalled();
+      expect(EkstepRendererAPI.dispatchEvent).toHaveBeenCalledWith('org.ekstep.questionset:saveQuestionState', resultState);
     });
   });
 });
