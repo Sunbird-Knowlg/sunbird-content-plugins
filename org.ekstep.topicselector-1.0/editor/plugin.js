@@ -16,6 +16,12 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     topicData: [],
     /**
+     *
+     * for master data of topic tree
+     * @memberof topicselector
+     */
+    topics: [],
+    /**
      * set default limit to framework API
      * @memberof topicselector
      */
@@ -46,6 +52,11 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     data: [],
     /**
+     * check for is topic selector initialized
+     * @memberof topicselector
+     */
+    isTopicPopupOpened: false,
+    /**
      *
      * Registers events.
      * @memberof topicselector
@@ -70,9 +81,12 @@ org.ekstep.contenteditor.basePlugin.extend({
             if(instance.categories.length){
                 instance.mapData(instance.categories, function(data){
                     instance.topicData = ecEditor._.uniqBy(data, "id");
+                    instance.topics = instance.topicData;
+                    instance.isTopicPopupOpened = true;
                     instance.showTopicBrowser(event, instance.data);
                 });
             }else{
+                instance.isTopicPopupOpened = true;
                 instance.showTopicBrowser(event, instance.data);
             }
         });
@@ -85,18 +99,21 @@ org.ekstep.contenteditor.basePlugin.extend({
     mapData: function(data, callback) {
         var instance = this;
         var mappedData = [];
-        if (!data) return callback();
-        ecEditor._.forEach(data, function(value, index) {
-            var topic = {};
-            topic.id = value.identifier;
-            topic.name = value.name;
-            topic.selectable = "selectable";
-            topic.nodes = instance.getSubtopics(value.children);
-            mappedData.push(topic)
-            if (index === data.length - 1){ 
-                callback(mappedData);
-            }
-        });
+        if (data && data.length){
+            ecEditor._.forEach(data, function(value, index) {
+                var topic = {};
+                topic.id = value.identifier;
+                topic.name = value.name;
+                topic.selectable = "selectable";
+                topic.nodes = instance.getSubtopics(value.children);
+                mappedData.push(topic)
+                if (index === data.length - 1){ 
+                    callback(mappedData);
+                }
+            });
+        }else{
+             return callback(mappedData);
+        }
     },
     /**
      *
@@ -124,8 +141,8 @@ org.ekstep.contenteditor.basePlugin.extend({
     getTopicCategory: function(callback) {
         var instance = this;
         ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(org.ekstep.contenteditor.globalContext.framework, function(error, response) {
-            if (error) {
-                var categories = window.frameworkConfigurations.result.framework.categories;//response.data.result.framework.categories;
+            if (!error) {
+                var categories = response.data.result.framework.categories;
                 ecEditor._.forEach(categories, function (value, key) {
                     if (value.code == "topic") instance.categories = value.terms;
                 });
@@ -140,25 +157,50 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     getFilters: function(event, data) {
         var instance = this;
-        var filters = [];
-        if (data.field.depends && data.field.depends.length) {
+        if (instance.isTopicPopupOpened && data.field.depends && data.field.depends.length) {
             _.forEach(data.field.depends, function(id) {
-                if(id == 'topics'){
+                /** Check for associations and dependent topics field **/
+                if(id == 'topic'){
+                    /** Get topics from associations **/
                     instance.getAssociations(data.associations, function(association){
-                        instance.mapData(association, function(mappedData){
-                            _.forEach(instance.topicData, function(topicId, index) {
-                                _.forEach(mappedData, function(associationId) {
-                                    if(associationId.id == topicId.id)
-                                        filters.push(instance.topicData[index]);
+                        if (association.length > 0){
+                            /** Map data with semantic ui tree picker lib **/
+                            instance.mapData(association, function(mappedData){
+                                instance.getIntersection(mappedData, function(filteredData){
+                                    if (filteredData.length){
+                                        instance.topicData = instance.filtersData = filteredData;
+                                        instance.showTopicBrowser(event, instance.data);
+                                    }
                                 });
                             });
-                            instance.topicData = ecEditor._.uniqBy(filters, "id");
+                        }else if(instance.filtersData.length > 0){
+                            instance.getIntersection(instance.topicData, function(filteredData){
+                                if (filteredData.length){
+                                    instance.topicData = instance.filtersData = filteredData;
+                                    instance.showTopicBrowser(event, instance.data);
+                                }
+                            });
+                        }else{
                             instance.showTopicBrowser(event, instance.data);
-                        });
+                        }
                     });
                 }
             });
         }
+    },
+    /**
+     *
+     * To get intersection data
+     * @memberof topicselector
+     */
+    getIntersection: function(data, callback) {
+        var instance = this;
+        var filters = [];
+        /** Check existing filters **/
+        var categories = (!instance.filtersData.length) ? instance.topics : instance.filtersData;
+        /** Get intersection of master data and filters data **/
+        filters = _.intersectionBy(categories, data, 'id');
+        callback(filters);
     },
     /**
      *
@@ -168,11 +210,14 @@ org.ekstep.contenteditor.basePlugin.extend({
     getAssociations: function(data, callback) {
         var instance = this;
         var association = [];
-        if (!data) return callback();
-        _.forEach(data, function(obj, index) {
-            if (obj.category == "topic") association.push(obj);
-            if (index === data.length - 1) callback(association);
-        });
+        if (data && data.length){
+            _.forEach(data, function(obj, index) {
+                if (obj.category == "topic") association.push(obj);
+                if (index === data.length - 1) callback(association);
+            });
+        }else{
+            callback(association);
+        }
     },
     /**
      *
@@ -183,18 +228,20 @@ org.ekstep.contenteditor.basePlugin.extend({
     showTopicBrowser: function(event, data) {
         var instance = this;
         instance.data = data;
-        ecEditor.jQuery('#' + data.element).topicTreePicker({
-            data: instance.topicData,
-            name: 'Topics',
-            apiResponseTimeout: instance.apiResponseTimeout,
-            picked: data.selectedTopics,
-            onSubmit: function(nodes) {
-                data.callback(nodes);
-                instance.generateTelemetry({type: 'click', subtype: 'submit', target: 'TopicSelectorSubmit'});
-            },
-            nodeName:"topicSelector_" + data.element,
-            minSearchQueryLength: 1
-        });
+        setTimeout(function() {
+            ecEditor.jQuery('#' + data.element).topicTreePicker({
+                data: instance.topicData,
+                name: 'Topic',
+                apiResponseTimeout: instance.apiResponseTimeout,
+                picked: data.selectedTopics,
+                onSubmit: function(nodes) {
+                    data.callback(nodes);
+                    instance.generateTelemetry({type: 'click', subtype: 'submit', target: 'TopicSelectorSubmit'});
+                },
+                nodeName:"topicSelector_" + data.element,
+                minSearchQueryLength: 1
+            });
+        }, instance.apiResponseTimeout);
     },
     /**
      *   To generate telemetry events
