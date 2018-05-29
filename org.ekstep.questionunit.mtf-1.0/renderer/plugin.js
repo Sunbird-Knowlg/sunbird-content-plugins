@@ -19,6 +19,7 @@
   preQuestionShow: function(event) {
     var instance = this;
     QS_MTFTemplate.optionsWidth = undefined;
+    QS_MTFTemplate.selAns = [];
     var questionsetInstance = event.target;
     var qData = questionsetInstance._currentQuestion.data.__cdata || questionsetInstance._currentQuestion.data;
     questionData = JSON.parse(qData);
@@ -34,10 +35,17 @@
       "questionConfig": questionConfig,
       "qState": qState
     };
+    for (var l = 0; l < questionData.option.optionsLHS.length; l++) {
+      var emptyBox = {
+        "index": questionData.option.optionsLHS[l].index,
+        "selText": " "
+      };
+      QS_MTFTemplate.selAns.push(emptyBox);
+    }
     if (qState && qState.val) {
-      instance._selectedAanswers = qState;
+      instance._selectedAanswers = qState.val.lhs;
+      QS_MTFTemplate.selAns = qState.val.lhs;
       instance._mtfData.option.optionsRHS = qState.val.rhs;
-      console.log("Question saved state",qState);
     }
     if(instance._mtfData.option.optionsLHS.length == 3){
       QS_MTFTemplate.optionsWidth = 'width33';
@@ -56,9 +64,10 @@
   },
   postQuestionShow: function(currentquesObj) {
     var instance = this;
-    //console.log("Dragula contaniners-------",instance._dragularContainers);
+    //console.log("Dragula contaniners-------",currentquesObj);
     var drake = dragula([left1, right1, left2, right2, left3, right3], {
       accepts: function(el, t, s, si) {
+        //$(t).children().remove();
         if ($(t).children().length > 0) {
           return false;
         }
@@ -66,13 +75,12 @@
       }
     });
     var leftList = document.querySelector('#left1');
-    //console.log("Left List",leftList);
     var rightList = document.querySelector('#right1');
     drake.on('drop', function(el, t, s, si) {
       if(!_.isUndefined($(s).attr('mapIndex'))){
         var rhsData = {};
         var ts = $(t)[0].childNodes[0];
-        var text = $(ts).html();
+        var text = $(t).text();
         rhsData.mapIndex = $(s).attr('mapIndex');
         rhsData.selText = text;
         //check element existing in array if remove it or add into array
@@ -115,6 +123,7 @@
         }
       }
     }
+    // console.log("Selected answers list",instance._selectedAanswers);
     var partialScore = (tempCount / qLhsData.length) * instance._mtfConfig.max_score;
     var result = {
       eval: correctAnswer,
