@@ -1,18 +1,21 @@
 /**
 Todo: Need to remove the "ui form classes"
 currently editor semantic ui is using 12 gird layout
-and collectio is using 16 grid layout so
+and collection is using 16 grid layout so
 **/
 
-#metadataForm .ui.form .ten.wide.field {
+#metadataForm .ui.form .ten.wide.field , 
+#metadataForm .readMode .ten.wide.field{
     width: 82.5%!important;
 }
 
-#metadataForm .ui.form .six.wide.field {
+#metadataForm .ui.form .six.wide.field,
+#metadataForm .readMode .six.wide.field {
     width: 50%!important;
 }
 
-#metadataForm .ui.form .twelve.wide.field {
+#metadataForm .ui.form .twelve.wide.field,
+#metadataForm .readMode .twelve.wide.field {
     width: 100%!important
 }
 
@@ -150,4 +153,32 @@ and collectio is using 16 grid layout so
     width:100%;
     padding-top: 25%;
     align-items: center;
+}
+
+.ui.table.contentDetails tr td {
+    border-top: 0px ;
+}
+
+.view-details-app-icon > app-icon > div.app-icon-area{
+   font-weight: bold;
+   color: black;
+}
+
+.first-letter-capitalize{
+    text-transform: capitalize;
+}
+
+.fixed-footer{
+    position: absolute;
+    bottom: 0%;
+    left:0%;
+    width: 100%;
+    background: white;
+    padding: 1rem;
+    border-top: 1px solid rgba(34,36,38,.15);
+    text-align: right;
+}
+
+form .ui.grid.form-bottom-allign{
+    margin-bottom: 5%;
 }
