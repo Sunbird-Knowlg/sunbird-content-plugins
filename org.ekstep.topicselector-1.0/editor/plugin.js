@@ -15,6 +15,10 @@ org.ekstep.contenteditor.basePlugin.extend({
      * @memberof topicselector
      */
     topicData: [],
+    apiData:[],
+    categoryList:[],
+    selectedFilters:[],
+    selectedArray:[],
     /**
      *
      * for master data of topic tree
@@ -55,7 +59,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      * check for is topic selector initialized
      * @memberof topicselector
      */
-    isTopicPopupOpened: false,
+    isPopupInitialized: false,
     /**
      *
      * Registers events.
@@ -82,7 +86,30 @@ org.ekstep.contenteditor.basePlugin.extend({
                 instance.mapData(instance.categories, function(data){
                     instance.topicData = ecEditor._.uniqBy(data, "id");
                     instance.topics = instance.topicData;
-                    instance.isTopicPopupOpened = true;
+                    instance.isPopupInitialized = true;
+                    instance.selectedFilters = [];
+                    ecEditor.dispatchEvent("metadata:form:getmeta", function(data){
+                        ecEditor._.forEach(instance.categoryList, function(value, index) {
+                            var category = {};
+                            category.name = value;
+                            category.value = data[value];
+                            category.association = [];
+                            ecEditor._.forEach(instance.apiData, function(apiCategory, index) {
+                                if(apiCategory.code == value){
+                                    ecEditor._.forEach(apiCategory.terms, function(term, index) {
+                                        if(_.isArray(data[value])){
+                                            ecEditor._.forEach(data[value], function(select, index) {
+                                                if(term.name == select) category.association.push(term.associations);
+                                            });
+                                        }else{
+                                            if(term.name == data[value]) category.association.push(term.associations);
+                                        }
+                                    });
+                                }
+                            });
+                            instance.selectedFilters.push(category);
+                        });
+                    });
                     instance.showTopicBrowser(event, instance.data);
                 });
             }else{
@@ -142,9 +169,10 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(org.ekstep.contenteditor.globalContext.framework, function(error, response) {
             if (!error) {
-                var categories = response.data.result.framework.categories;
-                ecEditor._.forEach(categories, function (value, key) {
+                instance.apiData = response.data.result.framework.categories;
+                ecEditor._.forEach(instance.apiData, function (value, key) {
                     if (value.code == "topic") instance.categories = value.terms;
+                    else instance.categoryList.push(value.code);
                 });
             }
             callback();
@@ -157,36 +185,58 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     getFilters: function(event, data) {
         var instance = this;
-        if (instance.isTopicPopupOpened && data.field.depends && data.field.depends.length) {
-            _.forEach(data.field.depends, function(id) {
-                /** Check for associations and dependent topics field **/
-                if(id == 'topic'){
-                    /** Get topics from associations **/
-                    instance.getAssociations(data.associations, function(association){
-                        if (association.length > 0){
-                            /** Map data with semantic ui tree picker lib **/
-                            instance.mapData(association, function(mappedData){
-                                instance.getIntersection(mappedData, function(filteredData){
-                                    if (filteredData.length){
-                                        instance.topicData = instance.filtersData = filteredData;
-                                        instance.showTopicBrowser(event, instance.data);
-                                    }
-                                });
-                            });
-                        }else if(instance.filtersData.length > 0){
-                            instance.getIntersection(instance.topicData, function(filteredData){
-                                if (filteredData.length){
-                                    instance.topicData = instance.filtersData = filteredData;
-                                    instance.showTopicBrowser(event, instance.data);
+        instance.selectedFilters = [];
+        if(instance.isPopupInitialized && data.field.code != 'topic'){
+            ecEditor.dispatchEvent("metadata:form:getmeta", function(data){
+                ecEditor._.forEach(instance.categoryList, function(value, index) {
+                    var category = {};
+                    category.name = value;
+                    category.value = data[value];
+                    category.association = [];
+                    ecEditor._.forEach(instance.apiData, function(apiCategory, index) {
+                        if(apiCategory.code == value){
+                            ecEditor._.forEach(apiCategory.terms, function(term, index) {
+                                if(_.isArray(data[value])){
+                                    ecEditor._.forEach(data[value], function(select, index) {
+                                        if(term.name == select) category.association.push(term.associations);
+                                    });
+                                }else{
+                                    if(term.name == data[value]) category.association.push(term.associations);
                                 }
                             });
-                        }else{
-                            instance.showTopicBrowser(event, instance.data);
                         }
                     });
-                }
+                    instance.selectedFilters.push(category);
+                });
+                setTimeout(function() {
+                    instance.getFiltersData();
+                },100);
             });
         }
+    },
+    /**
+     *
+     * To get filters data.
+     * @memberof topicselector
+     */
+    getFiltersData: function(callback) {
+        var instance = this;
+        var associations = [];
+        ecEditor._.forEach(instance.selectedFilters, function(value, index) {
+            if(value.association.length > 0){
+                ecEditor._.forEach(value.association, function(association, index) {
+                    if(associations.length > 0)
+                    association = _.intersectionBy(associations, association, 'identifier');
+                    associations.push(association);
+                });
+            }
+            if (index === instance.selectedFilters.length - 1){ 
+                var selectedIntersection = _.intersection.apply(_, associations);
+                instance.getAssociations(selectedIntersection, function(data){
+                    console.log(data);
+                });
+            }
+        });    
     },
     /**
      *
@@ -212,7 +262,13 @@ org.ekstep.contenteditor.basePlugin.extend({
         var association = [];
         if (data && data.length){
             _.forEach(data, function(obj, index) {
-                if (obj.category == "topic") association.push(obj);
+                if(_.isArray(obj)){
+                    ecEditor._.forEach(obj, function(select, index) {
+                        if (select.category == "topic") association.push(select);
+                    });
+                }else{
+                    if (obj.category == "topic") association.push(obj);
+                }
                 if (index === data.length - 1) callback(association);
             });
         }else{
