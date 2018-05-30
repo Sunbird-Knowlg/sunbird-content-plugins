@@ -70,7 +70,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         /**Register event to show topic selector browser**/
         ecEditor.addEventListener(instance.manifest.id + ":init", this.initData, this);
         /**Register event for update filters data**/
-        ecEditor.addEventListener("editor:field:association", this.getFilters, this);
+        ecEditor.addEventListener("editor:field:association", this.applyFilters, this);
     },
     /**
      *
@@ -88,8 +88,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                     instance.isPopupInitialized = true;
                     instance.selectedFilters = [];
                     ecEditor.dispatchEvent("metadata:form:getmeta", function(data){
-                        instance.filterSearch(data, function(){
-                            instance.getFiltersData(function(){
+                        instance.setAssociations(data, function(){
+                            instance.setFiltersData(function(){
                                 instance.showTopicBrowser(event, instance.data);         
                             });
                         });
@@ -122,7 +122,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 }
             });
         }else{
-             return callback(mappedData);
+             callback(mappedData);
         }
     },
     /**
@@ -163,16 +163,16 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     /**
      *
-     * To get filters data
+     * To apply filters data
      * @memberof topicselector
      */
-    getFilters: function(event, data) {
+    applyFilters: function(event, data) {
         var instance = this;
         instance.selectedFilters = [];
         if(instance.isPopupInitialized && data.field.code != 'topic'){
             ecEditor.dispatchEvent("metadata:form:getmeta", function(data){
-                instance.filterSearch(data, function(){
-                    instance.getFiltersData(function(){
+                instance.setAssociations(data, function(){
+                    instance.setFiltersData(function(){
                         instance.showTopicBrowser(event, instance.data);
                     });
                 });
@@ -181,10 +181,10 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     /**
      *
-     * To get filters data.
+     * To set filters data.
      * @memberof topicselector
      */
-    getFiltersData: function(callback) {
+    setFiltersData: function(callback) {
         var instance = this;
         var associations = [];
         if (instance.selectedFilters.length > 0){
@@ -217,10 +217,10 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     /**
      *
-     * return associations according to the filters
+     * Set associations according to the filters
      * @memberof topicselector
      */
-    filterSearch: function(data, callback){
+    setAssociations: function(data, callback){
         var instance = this;
         instance.categoryList = ecEditor._.uniq(instance.categoryList);
         ecEditor._.forEach(instance.categoryList, function(value, index) {
