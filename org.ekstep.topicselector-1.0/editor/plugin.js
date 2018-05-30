@@ -11,14 +11,28 @@
 org.ekstep.contenteditor.basePlugin.extend({
     /**
      *
-     * topic data for topic tree
+     * topic data for sematic ui tree picker lib
      * @memberof topicselector
      */
     topicData: [],
-    apiData:[],
+    /**
+     *
+     * Api response for categories
+     * @memberof topicselector
+     */
+    response:[],
+    /**
+     *
+     * CategoryList from API
+     * @memberof topicselector
+     */
     categoryList:[],
+    /**
+     *
+     * Selected filters data from metaform
+     * @memberof topicselector
+     */
     selectedFilters:[],
-    selectedArray:[],
     /**
      *
      * for master data of topic tree
@@ -26,25 +40,10 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     topics: [],
     /**
-     * set default limit to framework API
-     * @memberof topicselector
-     */
-    limit: 500,
-    /**
-     * For Board, gradelevel, medium, Subject filters data
-     * @memberof topicselector
-     */
-    filtersData: [],
-    /**
      * set default timeout for api response
      * @memberof topicselector
      */
     apiResponseTimeout: 1000,
-    /**
-     * Selected topic array
-     * @memberof topicselector
-     */
-    selectors: [],
     /**
      * categories of framework
      * @memberof topicselector
@@ -89,28 +88,12 @@ org.ekstep.contenteditor.basePlugin.extend({
                     instance.isPopupInitialized = true;
                     instance.selectedFilters = [];
                     ecEditor.dispatchEvent("metadata:form:getmeta", function(data){
-                        ecEditor._.forEach(instance.categoryList, function(value, index) {
-                            var category = {};
-                            category.name = value;
-                            category.value = data[value];
-                            category.association = [];
-                            ecEditor._.forEach(instance.apiData, function(apiCategory, index) {
-                                if(apiCategory.code == value){
-                                    ecEditor._.forEach(apiCategory.terms, function(term, index) {
-                                        if(_.isArray(data[value])){
-                                            ecEditor._.forEach(data[value], function(select, index) {
-                                                if(term.name == select) category.association.push(term.associations);
-                                            });
-                                        }else{
-                                            if(term.name == data[value]) category.association.push(term.associations);
-                                        }
-                                    });
-                                }
+                        instance.filterSearch(data, function(){
+                            instance.getFiltersData(function(){
+                                instance.showTopicBrowser(event, instance.data);         
                             });
-                            instance.selectedFilters.push(category);
                         });
                     });
-                    instance.showTopicBrowser(event, instance.data);
                 });
             }else{
                 instance.isTopicPopupOpened = true;
@@ -169,8 +152,8 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(org.ekstep.contenteditor.globalContext.framework, function(error, response) {
             if (!error) {
-                instance.apiData = response.data.result.framework.categories;
-                ecEditor._.forEach(instance.apiData, function (value, key) {
+                instance.response = response.data.result.framework.categories;
+                ecEditor._.forEach(instance.response, function (value, key) {
                     if (value.code == "topic") instance.categories = value.terms;
                     else instance.categoryList.push(value.code);
                 });
@@ -188,36 +171,11 @@ org.ekstep.contenteditor.basePlugin.extend({
         instance.selectedFilters = [];
         if(instance.isPopupInitialized && data.field.code != 'topic'){
             ecEditor.dispatchEvent("metadata:form:getmeta", function(data){
-                ecEditor._.forEach(instance.categoryList, function(value, index) {
-                    var category = {};
-                    category.name = value;
-                    category.value = data[value];
-                    category.association = [];
-                    ecEditor._.forEach(instance.apiData, function(apiCategory, index) {
-                        if(apiCategory.code == value){
-                            ecEditor._.forEach(apiCategory.terms, function(term, index) {
-                                if(_.isArray(data[value])){
-                                    ecEditor._.forEach(data[value], function(select, index) {
-                                        if(term.name == select) {
-                                            if (category.association.length > 0){
-                                                term.associations  = _.union(category.association[0], term.associations);
-                                                category.association = term.associations;
-                                            }else{                                      
-                                                category.association.push(term.associations);
-                                            }
-                                        }
-                                    });
-                                }else{
-                                    if(term.name == data[value]) category.association.push(term.associations);
-                                }
-                            });
-                        }
+                instance.filterSearch(data, function(){
+                    instance.getFiltersData(function(){
+                        instance.showTopicBrowser(event, instance.data);
                     });
-                    instance.selectedFilters.push(category);
                 });
-                setTimeout(function() {
-                    instance.getFiltersData();
-                },100);
             });
         }
     },
@@ -229,71 +187,68 @@ org.ekstep.contenteditor.basePlugin.extend({
     getFiltersData: function(callback) {
         var instance = this;
         var associations = [];
-        ecEditor._.forEach(instance.selectedFilters, function(value, index) {
-            if(value.association.length > 0){
-                var topics = [];
-                ecEditor._.forEach(value.association[0], function(topic, index) {
-                   if(topic.category == 'topic') topics.push(topic.identifier); 
-                });
-                associations.push(topics);
-                /*ecEditor._.forEach(value.association, function(association, index) {
-                    if(associations.length > 0)
-                    association = _.intersectionBy(associations, association, 'identifier');
-                    associations.push(association);
-                });*/
-            }
-            if (index === instance.selectedFilters.length - 1){ 
-                var selectedIntersection = _.intersection.apply(_, associations);
-                var topicData = [];
-                ecEditor._.forEach(instance.topicData, function(topic, index) {
-                    ecEditor._.forEach(selectedIntersection, function(id) {
-                        if (topic.identifier == id)
-                         topicData.push(topic);
+        if (instance.selectedFilters.length > 0){
+            ecEditor._.forEach(instance.selectedFilters, function(value, index) {
+                if(value.association.length > 0){
+                    var topics = [];
+                    ecEditor._.forEach(value.association[0], function(topic, index) {
+                        if(topic.category == 'topic') topics.push(topic.identifier); 
                     });
-                    if (index === instance.topicData.length - 1){ 
-                        instance.topicData = topicData;
-                        instance.showTopicBrowser(event, instance.data);
-                    }
-                });
-            }
-        });    
-    },
-    /**
-     *
-     * To get intersection data
-     * @memberof topicselector
-     */
-    getIntersection: function(data, callback) {
-        var instance = this;
-        var filters = [];
-        /** Check existing filters **/
-        var categories = (!instance.filtersData.length) ? instance.topics : instance.filtersData;
-        /** Get intersection of master data and filters data **/
-        filters = _.intersectionBy(categories, data, 'id');
-        callback(filters);
-    },
-    /**
-     *
-     * To get associations data
-     * @memberof topicselector
-     */
-    getAssociations: function(data, callback) {
-        var instance = this;
-        var association = [];
-        if (data && data.length){
-            _.forEach(data, function(obj, index) {
-                if(_.isArray(obj)){
-                    ecEditor._.forEach(obj, function(select, index) {
-                        if (select.category == "topic") association.push(select);
-                    });
-                }else{
-                    if (obj.category == "topic") association.push(obj);
+                    if(topics.length > 0) associations.push(topics);
                 }
-                if (index === data.length - 1) callback(association);
+                if (index === instance.selectedFilters.length - 1){ 
+                    var selectedIntersection = _.intersection.apply(_, associations);
+                    var topicData = [];
+                    ecEditor._.forEach(instance.topics, function(topic, index) {
+                        ecEditor._.forEach(selectedIntersection, function(id) {
+                            if (topic.id == id)
+                            topicData.push(topic);
+                        });
+                        if (index === instance.topics.length - 1){ 
+                            if(topicData.length > 0) instance.topicData = topicData;
+                            callback();
+                        }
+                    });
+                }
             });
         }else{
-            callback(association);
-        }
+            callback();
+        }    
+    },
+    /**
+     *
+     * return associations according to the filters
+     * @memberof topicselector
+     */
+    filterSearch: function(data, callback){
+        var instance = this;
+        instance.categoryList = ecEditor._.uniq(instance.categoryList);
+        ecEditor._.forEach(instance.categoryList, function(value, index) {
+            var category = {};
+            category.name = value;
+            category.value = data[value];
+            category.association = [];
+            ecEditor._.forEach(instance.response, function(apiCategory, index) {
+                if(apiCategory.code == value){
+                    ecEditor._.forEach(apiCategory.terms, function(term, index) {
+                        if(_.isArray(data[value]) && term.associations.length > 0){
+                            ecEditor._.forEach(data[value], function(select, index) {
+                                if(term.name == select && category.association.length > 0) {
+                                    term.associations  = _.union(category.association[0], term.associations);
+                                    category.association = term.associations;
+                                }else if(term.name == select){                                      
+                                    category.association.push(term.associations);
+                                }
+                            });
+                        }else if(term.name == data[value] && term.associations.length > 0){
+                            category.association.push(term.associations);
+                        }
+                    });
+                }
+            });
+            instance.selectedFilters.push(category);
+        });
+        callback();
     },
     /**
      *
@@ -304,6 +259,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     showTopicBrowser: function(event, data) {
         var instance = this;
         instance.data = data;
+        console.log(instance.topicData.length);
         setTimeout(function() {
             ecEditor.jQuery('#' + data.element).topicTreePicker({
                 data: instance.topicData,

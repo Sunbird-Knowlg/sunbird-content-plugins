@@ -9,11 +9,11 @@ formApp.directive('topicSelector', function() {
     var topicController = ['$scope', '$rootScope', '$controller', function($scope, $rootScope, $controller) {
         var selectedTopics = [];
         $scope.contentMeta = $scope.$parent.contentMeta;
-        $scope.topicSelectorMessage = $scope.contentMeta.topics ? '(' + $scope.contentMeta.topics.length + ') topics selected' : '(0) topics selected'
+        $scope.topicSelectorMessage = $scope.contentMeta.topic ? '(' + $scope.contentMeta.topic.length + ') topics selected' : '(0) topics selected'
         $scope.fieldConfig = $scope.config;
-        if ($scope.contentMeta.topics) {
-            if ($scope.contentMeta.topics.length)
-                _.forEach($scope.contentMeta.topics, function(topic) {
+        if ($scope.contentMeta.topic) {
+            if ($scope.contentMeta.topic.length)
+                _.forEach($scope.contentMeta.topic, function(topic) {
                     selectedTopics.push(topic.identifier);
                 });
         }
@@ -25,13 +25,10 @@ formApp.directive('topicSelector', function() {
                 callback: function(data) {
                     console.log("Length", data)
                     $scope.topicSelectorMessage = '(' + data.length + ') topics selected';
-                    $scope.contentMeta.topics = _.map(data, function(topic) {
-                        return {
-                            "identifier": topic.id,
-                            "name": topic.name
-                        };
+                    $scope.contentMeta.topic = _.map(data, function(topic) {
+                        return  topic.name;
                     });
-                    ecEditor.dispatchEvent('editor:form:change', {key: 'topics', value: $scope.contentMeta.topics});
+                    ecEditor.dispatchEvent('editor:form:change', {key: 'topic', value: $scope.contentMeta.topic});
                     $rootScope.$safeApply();
                 }
             });

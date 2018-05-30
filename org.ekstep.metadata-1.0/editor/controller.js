@@ -190,8 +190,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 }
             });
         }
-
-
     }
 
 
@@ -378,6 +376,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.init = function() {
         !EventBus.hasEventListener('metadata:form:onsuccess') && ecEditor.addEventListener('metadata:form:onsuccess', $scope.success, $scope);
         !EventBus.hasEventListener('metadata:form:oncancel') && ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
+        !EventBus.hasEventListener('metadata:form:getmeta') && ecEditor.addEventListener('metadata:form:getmeta', $scope.getMetaData, $scope);
         var callbackFn = function(config) {
             $scope.fields = config.fields;
             $scope.tempalteName = config.template;
@@ -409,6 +408,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             $scope.mapMasterCategoryList($scope.fields);
         }
         ecEditor.dispatchEvent("editor:form:getconfig", callbackFn);
+    };
+
+    $scope.getMetaData = function(event, callback){
+        var data = $scope.getScopeMeta();
+        callback(data);
     };
 
     $scope.getFixedFieldCode = function(tempalteName) {
