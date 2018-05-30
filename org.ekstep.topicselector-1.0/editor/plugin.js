@@ -198,7 +198,14 @@ org.ekstep.contenteditor.basePlugin.extend({
                             ecEditor._.forEach(apiCategory.terms, function(term, index) {
                                 if(_.isArray(data[value])){
                                     ecEditor._.forEach(data[value], function(select, index) {
-                                        if(term.name == select) category.association.push(term.associations);
+                                        if(term.name == select) {
+                                            if (category.association.length > 0){
+                                                term.associations  = _.union(category.association[0], term.associations);
+                                                category.association = term.associations;
+                                            }else{                                      
+                                                category.association.push(term.associations);
+                                            }
+                                        }
                                     });
                                 }else{
                                     if(term.name == data[value]) category.association.push(term.associations);
@@ -224,16 +231,29 @@ org.ekstep.contenteditor.basePlugin.extend({
         var associations = [];
         ecEditor._.forEach(instance.selectedFilters, function(value, index) {
             if(value.association.length > 0){
-                ecEditor._.forEach(value.association, function(association, index) {
+                var topics = [];
+                ecEditor._.forEach(value.association[0], function(topic, index) {
+                   if(topic.category == 'topic') topics.push(topic.identifier); 
+                });
+                associations.push(topics);
+                /*ecEditor._.forEach(value.association, function(association, index) {
                     if(associations.length > 0)
                     association = _.intersectionBy(associations, association, 'identifier');
                     associations.push(association);
-                });
+                });*/
             }
             if (index === instance.selectedFilters.length - 1){ 
                 var selectedIntersection = _.intersection.apply(_, associations);
-                instance.getAssociations(selectedIntersection, function(data){
-                    console.log(data);
+                var topicData = [];
+                ecEditor._.forEach(instance.topicData, function(topic, index) {
+                    ecEditor._.forEach(selectedIntersection, function(id) {
+                        if (topic.identifier == id)
+                         topicData.push(topic);
+                    });
+                    if (index === instance.topicData.length - 1){ 
+                        instance.topicData = topicData;
+                        instance.showTopicBrowser(event, instance.data);
+                    }
                 });
             }
         });    
