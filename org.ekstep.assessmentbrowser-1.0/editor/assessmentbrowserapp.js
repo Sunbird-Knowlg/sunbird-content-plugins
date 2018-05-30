@@ -50,62 +50,71 @@ angular.module('assessmentbrowserapp', [])
         }
         ctrl.context = org.ekstep.contenteditor.globalContext;
 
-        //get languages from languages api
-        ecEditor.getService('language').getLanguages(function(err, respLan) {
+        /* 
+         * Get Langauge, Grade, Class and Subject from NCF Api. 
+        */
+        ecEditor.getService('meta').getCategorys('NCF', function(err, respCat) {
             if (!err) {
-                var assessmentlanguages = {};
-                ecEditor._.forEach(respLan.data.result.languages, function(lang) {
-                    assessmentlanguages[lang.code] = lang.name;
+                ecEditor._.forEach(respCat.data.result.framework.categories, function(cat) {
+                    switch (cat.code) {
+                        case "medium":
+                            ctrl.assessment.medium = cat.name;
+                            ctrl.assessment.language = cat.terms;
+                            break;
+                        case "gradeLevel":
+                            ctrl.assessment.grade = cat.name;
+                            ctrl.assessment.gradeLevel = cat.terms;
+                            break;
+                    }
                 });
-                ctrl.assessment.language = ecEditor._.values(assessmentlanguages);
-                //get questiontype, grade and difficulty dropdown values from definitions api
-                ecEditor.getService('meta').getDefinitions('AssessmentItem', function(err, resp) {
+            } else {
+                ctrl.errorMessage = true;
+                $scope.$safeApply();
+                return;
+            }
+        });
+
+        //get questiontype, grade and difficulty dropdown values from definitions api
+        ecEditor.getService('meta').getDefinitions('AssessmentItem', function(err, resp) {
+            if (!err) {
+                var questionTypes = {};
+                ecEditor._.forEach(resp.data.result.definition_node.properties, function(prop) {
+                    switch (prop.propertyName) {
+                        case "qlevel":
+                            ctrl.assessment.qlevel = prop.range;
+                            break;
+                        case "type":
+                            ctrl.assessment.type = prop.range;
+                            break;
+                    }
+                });
+                //get question type full defination from resource bundles api
+                ecEditor.getService('meta').getResourceBundles(ctrl.languagecode, function(err, resourceResp) {
                     if (!err) {
-                        var questionTypes = {};
-                        ecEditor._.forEach(resp.data.result.definition_node.properties, function(prop) {
-                            switch (prop.propertyName) {
-                                case "qlevel":
-                                    ctrl.assessment.qlevel = prop.range;
-                                    break;
-                                case "gradeLevel":
-                                    ctrl.assessment.gradeLevel = prop.range;
-                                    break;
-                                case "type":
-                                    ctrl.assessment.type = prop.range;
-                                    break;
+                        ecEditor._.forEach(ctrl.assessment.type, function(data) {
+                            if (resourceResp.data.result.en[data] == undefined) {
+                                questionTypes[data] = data;
+                            } else {
+                                questionTypes[data] = resourceResp.data.result.en[data];
                             }
                         });
-                        //get question type full defination from resource bundles api
-                        ecEditor.getService('meta').getResourceBundles(ctrl.languagecode, function(err, resourceResp) {
-                            if (!err) {
-                                ecEditor._.forEach(ctrl.assessment.type, function(data) {
-                                    if (resourceResp.data.result.en[data] == undefined) {
-                                        questionTypes[data] = data;
-                                    } else {
-                                        questionTypes[data] = resourceResp.data.result.en[data];
-                                    }
-                                });
-                                ctrl.assessment.type = questionTypes;
-                                $scope.$safeApply();
-                            }else{
-                                ctrl.errorMessage = true;
-                                $scope.$safeApply();
-                                return;
-                            }
-                        });
-                        ecEditor.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});
+                        ctrl.assessment.type = questionTypes;
+                        $scope.$safeApply();
                     }else{
                         ctrl.errorMessage = true;
                         $scope.$safeApply();
                         return;
                     }
                 });
+                ecEditor.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});
             }else{
                 ctrl.errorMessage = true;
                 $scope.$safeApply();
                 return;
             }
         });
+           
+        
 
         ctrl.searchQuestions = function() {
             $('#scrolQuestion').scrollTop(0);

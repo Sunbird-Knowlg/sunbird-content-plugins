@@ -75,11 +75,12 @@
                         <i class="dropdown icon" ng-if="$ctrl.showAdvancedFilter" style="transform: rotate(90deg);"></i> Advanced Filters
                     </div>
                     <div class="content transition {{$ctrl.showAdvancedFilter ? 'visible': 'hidden'}}">
+                        
                         <div class="three fields">
                             <div class="field">
                                 <div class="ui fluid labeled input">
-                                    <div class="ui label">Language</div>
-                                    <select class="ui fluid dropdown search" ng-model="$ctrl.activity.language" ng-options="lang for lang in $ctrl.assessment.language" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'languageDropDown'})">
+                                    <div class="ui label">{{$ctrl.assessment.medium}}</div>
+                                    <select class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.language" ng-options="lang.code as lang.name for lang in $ctrl.assessment.language" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'languageDropDown'})">
                                         <option value="">
                                             All
                                         </option>
@@ -89,7 +90,7 @@
                             <div class="field">
                                 <div class="ui fluid labeled input">
                                     <div class="ui label">Difficulty</div>
-                                    <select class="ui fluid dropdown search" ng-model="$ctrl.activity.qlevel" ng-options="level for level in $ctrl.assessment.qlevel" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'difficultyDropDown'})">
+                                    <select class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.qlevel" ng-options="level for level in $ctrl.assessment.qlevel" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'difficultyDropDown'})">
                                         <option value="">
                                             Difficulty
                                         </option>
@@ -110,8 +111,8 @@
                         <div class="three fields">
                             <div class="field">
                                 <div class="ui fluid labeled input">
-                                    <div class="ui label">&emsp;Grade&nbsp;&nbsp;&nbsp;</div>
-                                    <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.gradeLevel" ng-options="grade for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'gradeDropDown'})">
+                                    <div class="ui label">&emsp;{{$ctrl.assessment.grade}}&nbsp;&nbsp;&nbsp;</div>
+                                    <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.gradeLevel" ng-options="grade.code as grade.name for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'gradeDropDown'})">
                                         <option value="">
                                             Grade
                                         </option>
