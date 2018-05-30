@@ -190,7 +190,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 }
             });
         }
+    
+
     }
+
+
     /**
      * @description            - Which updates the drop down value list 
      *                           If the specified values are empty then drop down will get update with master list
