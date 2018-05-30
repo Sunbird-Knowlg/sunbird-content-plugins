@@ -108,21 +108,24 @@ describe('QS_FTBTemplate', function() {
   });
 
   describe('invokeKeyboard function', function() {
-    var keyboardEvent;
+    var event;
     beforeEach(function() {
-      keyboardEvent = {
-        "target": '<input type="text" class="ans-field highlightInput" value="b" id="ans-field1" readonly="" style="cursor: pointer;" onclick="QS_FTBTemplate.logTelemetryInteract(event);">'
+      event = {
+        "target": {
+          "id": "ans-field1",
+          "value": "b"
+        }
       };
       spyOn(qsFTBTemplate, "invokeKeyboard").and.callThrough();
       spyOn(EkstepRendererAPI, "dispatchEvent").and.callThrough();
       spyOn(qsFTBTemplate, "generateHTML").and.callThrough();
       spyOn(qsFTBTemplate, "callbackFromKeyboard").and.callThrough();
       spyOn($.fn, "removeClass");
-      spyOn(window, "addEventListener");
+      spyOn(qsFTBTemplate, "logTelemetryInteract").and.callThrough();
     });
 
     it("should dispatch the event", function() {
-      qsFTBTemplate.invokeKeyboard(keyboardEvent);
+      qsFTBTemplate.invokeKeyboard(event);
       expect(EkstepRendererAPI.dispatchEvent).toHaveBeenCalled();
     });
 

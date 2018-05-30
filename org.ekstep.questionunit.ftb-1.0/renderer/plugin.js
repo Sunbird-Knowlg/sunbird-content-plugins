@@ -85,7 +85,7 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
     // Calculate partial score
     var tempCount = 0;
     _.each(ftbQuestionData.answer, function(ans, index) { // eslint-disable-line no-undef
-      if (ans == answerArray[index]) {
+       if (ans.toLowerCase().trim() == answerArray[index].toLowerCase().trim()) {
         tempCount++;
       }
     });

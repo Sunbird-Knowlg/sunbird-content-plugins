@@ -10,16 +10,15 @@ describe('RendererPlugin', function() {
     spyOn(plugin, "initTemplate").and.callThrough();
     spyOn(plugin, "preQuestionShow").and.callThrough();
     spyOn(plugin, "postQuestionShow").and.callThrough();
+    spyOn(plugin, "evaluateQuestion").and.callThrough();
     spyOn(qsFTBTemplate, "setStateInput").and.callThrough();
     spyOn(EkstepRendererAPI, "dispatchEvent").and.callThrough();
+    spyOn(QS_FTBTemplate, "generateHTML").and.callThrough();
   });
   describe('initTemplate', function() {
-    it('should ?', function() {
-      plugin.initTemplate();
-      expect(plugin._template).not.toBe(undefined);
-    });
-    it('should set questionData', function() {
-      var questionsetEvent = {
+    var questionsetEvent;
+    beforeEach(function(){
+      questionsetEvent = {
         "target": {
           "_currentQuestion": {
             "id": "4963582c-0a01-48a6-8a14-c97a3ad10094",
@@ -44,8 +43,20 @@ describe('RendererPlugin', function() {
         },
         "type": "org.ekstep.questionunit.ftb:show"
       }
+    })
+    it('should ?', function() {
+      plugin.initTemplate();
+      expect(plugin._template).not.toBe(undefined);
+    });
+    it('should set questionData', function() {
+      
       var questionObj = plugin.preQuestionShow(questionsetEvent);
       expect(questionObj).not.toBeNull();
+    });
+    it('should call generateHTML', function() {
+      
+      var questionObj = plugin.preQuestionShow(questionsetEvent);
+      expect(QS_FTBTemplate.generateHTML).toHaveBeenCalled();
     });
   });
 
@@ -166,9 +177,12 @@ describe('RendererPlugin', function() {
     });
   });
   describe('evaluateQuestion function', function() {
+    var currentquesObj;
+
     it('should dispatch evaluate event', function() {
       var resultState = {
         "val": [
+          
         ]
       };
       var evaluateEvent = {
@@ -176,6 +190,20 @@ describe('RendererPlugin', function() {
         "target": function() {
           return {};
         }
+      };
+      ftbQuestionData = {
+        "question": {
+          "text": "<p>English a  <input type=\"text\" class=\"ans-field\" id=\"ans-field1\" readonly style=\"cursor: pointer;\" onclick=\"QS_FTBTemplate.logTelemetryInteract(event);\"> c  <input type=\"text\" class=\"ans-field\" id=\"ans-field2\" readonly style=\"cursor: pointer;\" onclick=\"QS_FTBTemplate.logTelemetryInteract(event);\"></p>\n",
+          "image": "",
+          "audio": "",
+          "keyboardConfig": {
+            "keyboardType": "English",
+            "customKeys": []
+          }
+        },
+        "answer": [
+        
+        ]
       };
       plugin.evaluateQuestion(evaluateEvent);
       expect(EkstepRendererAPI.dispatchEvent).toHaveBeenCalledWith('org.ekstep.questionset:saveQuestionState', resultState);

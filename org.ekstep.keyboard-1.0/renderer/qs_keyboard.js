@@ -121,6 +121,10 @@ Keyboard.addLetter = function(event) {
       targetInputValue.push(keyValue.innerText); // eslint-disable-line no-undef
       inputValue = targetInputValue.join(""); // eslint-disable-line no-undef
     }
+    if (keyValue.innerText == " ") {
+      keyValue.push(String.fromCharCode(32));
+      inputValue = targetInputValue.join("");
+    }
   } else {
     if (keyValue.innerText != '123') inputValue = event.target.innerText; // eslint-disable-line no-undef
   }

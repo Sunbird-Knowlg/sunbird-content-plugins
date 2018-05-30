@@ -26,6 +26,8 @@
 
 .align-question {
   margin: 33px 0px 0px 2px;
+  height: 25vh;
+  overflow-y: auto;
 }
 
 input#answer {

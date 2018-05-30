@@ -40,8 +40,8 @@ QS_FTBTemplate.invokeKeyboard = function(event) { // eslint-disable-line no-unus
     'qData': JSON.stringify(QS_FTBTemplate.questionObj),
     'inputoldValue': QS_FTBTemplate.textboxtarget
   }
-  QS_FTBTemplate.textboxtarget.id = this.id;
-  QS_FTBTemplate.textboxtarget.value = this.value.trim();
+  QS_FTBTemplate.textboxtarget.id = event.target.id;
+  QS_FTBTemplate.textboxtarget.value = event.target.value.trim();
   if (!(isbrowserpreview && (_.isUndefined(QS_FTBTemplate.questionObj.question.keyboardConfig) || QS_FTBTemplate.questionObj.question.keyboardConfig.keyboardType == "Device"))) { // eslint-disable-line no-undef
     $(QS_FTBTemplate.constant.qsFtbContainer).addClass("align-question");
   }
