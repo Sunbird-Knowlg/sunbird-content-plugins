@@ -81,7 +81,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         instance.data = data;
         instance.getTopicCategory(function(){
-            if(instance.categories.length){
+            if(instance.categories.length > 0){
                 instance.mapData(instance.categories, function(data){
                     instance.topicData = ecEditor._.uniqBy(data, "id");
                     instance.topics = instance.topicData;
@@ -96,7 +96,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     });
                 });
             }else{
-                instance.isTopicPopupOpened = true;
+                instance.isPopupInitialized = true;
                 instance.showTopicBrowser(event, instance.data);
             }
         });
