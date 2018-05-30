@@ -190,7 +190,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 }
             });
         }
-    
 
     }
 
