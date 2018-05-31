@@ -5,13 +5,15 @@
  * @extends org.ekstep.contentrenderer.questionUnitPlugin
  * @author Manoj Chandrashekar <manoj.chandrashekar@tarento.com>
  */
-org.ekstep.contentrenderer.questionUnitPlugin.extend({
+org.ekstep.questionunitmtf = {};
+org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionUnitPlugin.extend({
   _type: 'org.ekstep.questionunit.mtf',
   _isContainer: true,
   _render: true,
   _selectedAanswers: [],
   _mtfData: undefined,
   _mtfConfig: undefined,
+  _dragularContainers: [],
   initTemplate: function() {
     this._template = QS_MTFTemplate.htmlLayout;
   },
@@ -25,7 +27,7 @@ org.ekstep.contentrenderer.questionUnitPlugin.extend({
     questionData = JSON.parse(qData);
     instance._mtfData = questionData;
     //RHS options data shuffle
-    questionData.option.optionsRHS.sort(() => Math.random() - 0.5);
+    questionData.option.optionsRHS = _.shuffle(questionData.option.optionsRHS);
     var qConfig = questionsetInstance._currentQuestion.config.__cdata || questionsetInstance._currentQuestion.config;
     questionConfig = JSON.parse(qConfig);
     instance._mtfConfig = questionConfig;
@@ -47,7 +49,7 @@ org.ekstep.contentrenderer.questionUnitPlugin.extend({
       QS_MTFTemplate.selAns = qState.val.lhs;
       instance._mtfData.option.optionsRHS = qState.val.rhs;
     }
-    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS);
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS); // eslint-disable-line no-undef
     if (instance._mtfData.option.optionsLHS.length == 3) {
       QS_MTFTemplate.optionsWidth = 'width33';
     } else if (instance._mtfData.option.optionsLHS.length == 4) {
@@ -55,7 +57,16 @@ org.ekstep.contentrenderer.questionUnitPlugin.extend({
     } else if (instance._mtfData.option.optionsLHS.length == 5) {
       QS_MTFTemplate.optionsWidth = 'width20';
     }
+    _.each(instance._mtfData.option.optionsLHS, function(v, k) {
+      var lhs = 'left' + (k + 1);
+      var rhs = 'right' + (k + 1);
+      instance._dragularContainers.push(lhs);
+      instance._dragularContainers.push(rhs);
+    });
     return currentquesObj;
+  },
+  dragulaIsContainer: function(el){
+    return el.classList.contains('cont-dragula');
   },
   postQuestionShow: function(currentquesObj) {
     var instance = this;
@@ -63,7 +74,7 @@ org.ekstep.contentrenderer.questionUnitPlugin.extend({
     var left1 = $('#left1')
     var drake = dragula({
       isContainer: function (el) {
-      return el.classList.contains('cont-dragula');
+        return instance.dragulaIsContainer(el);
         },
       accepts: function(el, t, s, si) {
         if ($(t).children().length > 0) {
@@ -146,7 +157,7 @@ org.ekstep.contentrenderer.questionUnitPlugin.extend({
     EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);
   },
-  logTelemetryItemResponse: function(data) {
+  logTelemetryItemResponse: function(data) { 
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { "type": "INPUT", "values": data });
   }
 });
