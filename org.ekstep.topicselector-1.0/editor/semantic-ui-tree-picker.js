@@ -147,7 +147,7 @@ var topicModal;
                 for (i = 0, len = ref.length; i < len; i++) {
                     id = ref[i];
                     searchResult = recursiveNodeSearch(nodes, function(node) {
-                        return ("" + node.id) === ("" + id);
+                        return ("" + node.name) === ("" + id);
                     });
                     if (searchResult.length) {
                         results1.push(picked.push(searchResult[0]));

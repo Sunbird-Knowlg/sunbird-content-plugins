@@ -169,7 +169,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         //reset the depended field first
         // Update the depended field with associated value
         // Currently, supported only for the dropdown values
-        ecEditor.dispatchEvent("editor:field:association", field);
+        ecEditor.dispatchEvent("editor:field:association", {'field': field, 'resetSelected': resetSelected});
         var dependedValues, groupdFields;
         if (field.depends && field.depends.length) {
             _.forEach(field.depends, function(id) {
@@ -325,7 +325,13 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.resetSelectedField = function(id) {
         setTimeout(function() {
             $('#_select' + id).dropdown('clear');
-            $scope.contentMeta[id] = undefined;
+            _.forEach($scope.fields, function(field, value) {
+                if (field.code === id && field.dataType === 'list'){
+                    $scope.contentMeta[id] = [];
+                }else if(field.code === id){
+                    $scope.contentMeta[id] = undefined;
+                }
+            });
             $scope.$safeApply();
         }, 0)
     }

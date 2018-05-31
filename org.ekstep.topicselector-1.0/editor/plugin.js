@@ -23,10 +23,10 @@ org.ekstep.contenteditor.basePlugin.extend({
     response:[],
     /**
      *
-     * CategoryList from API
+     * Topic terms from API
      * @memberof topicselector
      */
-    categoryList:[],
+    terms:[],
     /**
      *
      * Selected filters data from metaform
@@ -112,7 +112,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         if (data && data.length){
             ecEditor._.forEach(data, function(value, index) {
                 var topic = {};
-                topic.id = value.name;
+                topic.id = value.identifier;
                 topic.name = value.name;
                 topic.selectable = "selectable";
                 topic.nodes = instance.getSubtopics(value.children);
@@ -135,7 +135,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var childArray = [];
         ecEditor._.forEach(topic, function(value) {
             var child = {};
-            child.id = value.name;
+            child.id = value.identifier;
             child.name = value.name;
             child.selectable = "selectable";
             child.nodes = instance.getSubtopics(value.children);
@@ -155,7 +155,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 instance.response = response.data.result.framework.categories;
                 ecEditor._.forEach(instance.response, function (value, key) {
                     if (value.code == "topic") instance.categories = value.terms;
-                    else instance.categoryList.push(value.code);
+                    else instance.terms.push(value.code);
                 });
             }
             callback();
@@ -169,13 +169,19 @@ org.ekstep.contenteditor.basePlugin.extend({
     applyFilters: function(event, data) {
         var instance = this;
         instance.selectedFilters = [];
-        if(instance.isPopupInitialized && data.code != 'topic'){
-            ecEditor.dispatchEvent("metadata:form:getformdata", function(data){
-                instance.setAssociations(data, function(){
-                    instance.setFiltersData(function(){
-                        instance.showTopicBrowser(event, instance.data);
+        if(instance.isPopupInitialized && data.field.depends && data.field.depends.length){
+            _.forEach(data.field.depends, function(id) {
+                if (id == 'topic' && data.resetSelected){
+                    instance.data.selectedTopics = [];
+                    ecEditor.dispatchEvent('editor:form:change', {key: 'topic', value: []});
+                    ecEditor.dispatchEvent("metadata:form:getformdata", function(data){
+                        instance.setAssociations(data, function(){
+                            instance.setFiltersData(function(){
+                                instance.showTopicBrowser(event, instance.data);
+                            });
+                        });
                     });
-                });
+                }
             });
         }
     },
@@ -207,7 +213,6 @@ org.ekstep.contenteditor.basePlugin.extend({
                         if (index === instance.topics.length - 1){ 
                             if(topicData.length > 0){
                                 instance.topicData = topicData;
-                                instance.data.selectedTopics = [];
                             }
                             callback();
                         }
@@ -225,8 +230,8 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     setAssociations: function(data, callback){
         var instance = this;
-        instance.categoryList = ecEditor._.uniq(instance.categoryList);
-        ecEditor._.forEach(instance.categoryList, function(value, index) {
+        instance.terms = ecEditor._.uniq(instance.terms);
+        ecEditor._.forEach(instance.terms, function(value, index) {
             var category = {};
             category.name = value;
             category.value = data[value];
@@ -234,17 +239,19 @@ org.ekstep.contenteditor.basePlugin.extend({
             ecEditor._.forEach(instance.response, function(apiCategory, index) {
                 if(apiCategory.code == value){
                     ecEditor._.forEach(apiCategory.terms, function(term, index) {
-                        if(_.isArray(data[value]) && term.associations.length > 0){
-                            ecEditor._.forEach(data[value], function(select, index) {
-                                if(term.name == select && category.association.length > 0) {
-                                    term.associations  = _.union(category.association[0], term.associations);
-                                    category.association = term.associations;
-                                }else if(term.name == select){                                      
-                                    category.association.push(term.associations);
-                                }
-                            });
-                        }else if(term.name == data[value] && term.associations.length > 0){
-                            category.association.push(term.associations);
+                        if(!ecEditor._.isUndefined(term.associations)){
+                            if(_.isArray(data[value]) && term.associations.length > 0){
+                                ecEditor._.forEach(data[value], function(select, index) {
+                                    if(term.name == select && category.association.length > 0) {
+                                        term.associations  = _.union(category.association[0], term.associations);
+                                        category.association = term.associations;
+                                    }else if(term.name == select){                                      
+                                        category.association.push(term.associations);
+                                    }
+                                });
+                            }else if(term.name == data[value] && term.associations.length > 0){
+                                category.association.push(term.associations);
+                            }
                         }
                     });
                 }
@@ -262,7 +269,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     showTopicBrowser: function(event, data) {
         var instance = this;
         instance.data = data;
-        console.log(instance.topicData.length);
+        console.log("topics:- ", instance.topicData.length);
         setTimeout(function() {
             ecEditor.jQuery('#' + data.element).topicTreePicker({
                 data: instance.topicData,

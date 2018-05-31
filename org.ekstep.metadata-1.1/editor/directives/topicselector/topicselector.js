@@ -19,6 +19,7 @@ formApp.directive('topicSelector', function() {
         }
         $scope.topicElementId = (!_.isUndefined($scope.$parent.$parent.tempalteName)) ? $scope.$parent.$parent.tempalteName + '-topic' : 'metaform-topic';
         $scope.invokeTopicSelector = function() {
+            ecEditor.addEventListener('editor:form:change', $scope.resetTopics, this);
             ecEditor.dispatchEvent('org.ekstep.topicselector:init', {
                 element: $scope.topicElementId,
                 selectedTopics: selectedTopics,
@@ -32,6 +33,13 @@ formApp.directive('topicSelector', function() {
                     $rootScope.$safeApply();
                 }
             });
+        }
+        $scope.resetTopics = function(event, data){
+            if(data.key == 'topic' && data.value.length == 0){
+                $scope.topicSelectorMessage = '(0) topics selected';
+                $scope.contentMeta.topic = [];
+                $rootScope.$safeApply();
+            }    
         }
         $scope.invokeTopicSelector()
     }]
