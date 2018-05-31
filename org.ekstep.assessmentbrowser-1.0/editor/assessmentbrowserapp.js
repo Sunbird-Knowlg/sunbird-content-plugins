@@ -17,7 +17,7 @@ angular.module('assessmentbrowserapp', [])
             'title': '',
             'qlevel': '',
             'type': '',
-            'language': 'English',
+            'medium': '',
             'gradeLevel': '',
             'conceptIds': []
         };
@@ -77,47 +77,7 @@ angular.module('assessmentbrowserapp', [])
             $scope.$safeApply();
         }
         ctrl.context = org.ekstep.contenteditor.globalContext;
-
-        //get questiontype, grade and difficulty dropdown values from definitions api
-        ecEditor.getService('meta').getDefinitions('AssessmentItem', function(err, resp) {
-            if (!err) {
-                var questionTypes = {};
-                ecEditor._.forEach(resp.data.result.definition_node.properties, function(prop) {
-                    switch (prop.propertyName) {
-                        case "qlevel":
-                            ctrl.assessment.qlevel = prop.range;
-                            break;
-                        case "type":
-                            ctrl.assessment.type = prop.range;
-                            break;
-                    }
-                });
-                //get question type full defination from resource bundles api
-                ecEditor.getService('meta').getResourceBundles(ctrl.languagecode, function(err, resourceResp) {
-                    if (!err) {
-                        ecEditor._.forEach(ctrl.assessment.type, function(data) {
-                            if (resourceResp.data.result.en[data] == undefined) {
-                                questionTypes[data] = data;
-                            } else {
-                                questionTypes[data] = resourceResp.data.result.en[data];
-                            }
-                        });
-                        ctrl.assessment.type = questionTypes;
-                        $scope.$safeApply();
-                    }else{
-                        ctrl.errorMessage = true;
-                        $scope.$safeApply();
-                        return;
-                    }
-                });
-                ecEditor.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});
-            }else{
-                ctrl.errorMessage = true;
-                $scope.$safeApply();
-                return;
-            }
-        });
-           
+        
         ctrl.searchQuestions = function() {
             $('#scrolQuestion').scrollTop(0);
             var activity = ctrl.activity;
@@ -153,8 +113,8 @@ angular.module('assessmentbrowserapp', [])
                                 data.request.filters.gradeLevel = value;
                             }
                             break;
-                        case "language":
-                            data.request.filters.language = [value];
+                        case "medium":
+                            data.request.filters.medium = [value];
                             break;
                         case "qlevel":
                             data.request.filters.qlevel = value;
@@ -207,6 +167,68 @@ angular.module('assessmentbrowserapp', [])
                     $scope.$safeApply();
                     return;
                 }
+            });
+        };
+
+
+         ctrl.getFrameworkData = function(callback) {
+            var framework = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).framework || 'NCF';
+            ecEditor.getService('meta').getCategorys(framework, function(err, respCat) {
+                if (!err) {
+                    ecEditor._.forEach(respCat.data.result.framework.categories, function(category) {
+                        switch (category.code) {
+                            case "medium":
+                                ctrl.assessment.medium = category.terms;
+                                break;
+                            case "gradeLevel":
+                                ctrl.assessment.gradeLevel = category.terms;
+                                break;
+                        }
+                    });
+                    ecEditor.getService('meta').getDefinitions('AssessmentItem', function(err, resp) {
+                        if (!err) {
+                            var questionTypes = {};
+                            ecEditor._.forEach(resp.data.result.definition_node.properties, function(prop) {
+                                switch (prop.propertyName) {
+                                    case "qlevel":
+                                        ctrl.assessment.qlevel = prop.range;
+                                        break;
+                                    case "type":
+                                        ctrl.assessment.type = prop.range;
+                                        break;
+                                }
+                            });
+                            //get question type full defination from resource bundles api
+                            ecEditor.getService('meta').getResourceBundles(ctrl.languagecode, function(err, resourceResp) {
+                                if (!err) {
+                                    ecEditor._.forEach(ctrl.assessment.type, function(data) {
+                                        if (resourceResp.data.result.en[data] == undefined) {
+                                            questionTypes[data] = data;
+                                        } else {
+                                            questionTypes[data] = resourceResp.data.result.en[data];
+                                        }
+                                    });
+                                    ctrl.assessment.type = questionTypes;
+                                    callback()
+                                    $scope.$safeApply();
+                                }else{
+                                    ctrl.errorMessage = true;
+                                    $scope.$safeApply();
+                                    return;
+                                }
+                            });
+                            ecEditor.jQuery('.ui.dropdown.lableCls').dropdown({ useLabels: false, forceSelection: false});
+                        }else{
+                            ctrl.errorMessage = true;
+                            $scope.$safeApply();
+                            return;
+                        }
+                    });
+                }else{
+                    ctrl.errorMessage = true;
+                    $scope.$safeApply();
+                    return;
+                }          
             });
         };
 
@@ -328,7 +350,6 @@ angular.module('assessmentbrowserapp', [])
         ctrl.cancel = function() {
             $scope.closeThisDialog();
         };
-        ctrl.searchQuestions();
         ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
             element: 'assessmentConceptSelector',
             selectedConcepts: [], // All composite keys except mediaType
@@ -342,7 +363,9 @@ angular.module('assessmentbrowserapp', [])
                 console.log('concepts data received - ', ctrl.activity.concepts);
             }
         });
-
+        ctrl.getFrameworkData(function(){
+            ctrl.searchQuestions();
+        });
         ctrl.generateTelemetry = function(data) {
           if (data) ecEditor.getService('telemetry').interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", "stage": ecEditor.getCurrentStage().id })
         }

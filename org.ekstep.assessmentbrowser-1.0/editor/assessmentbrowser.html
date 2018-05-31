@@ -79,10 +79,10 @@
                         <div class="three fields">
                             <div class="field">
                                 <div class="ui fluid labeled input">
-                                    <div class="ui label">{{$ctrl.assessment.mediumLevel}}</div>
-                                    <select class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.language" ng-options="lang.code as lang.name for lang in $ctrl.assessment.languageList" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'languageDropDown'})">
+                                    <div class="ui label">Medium</div>
+                                    <select class="ui fluid dropdown search" ng-model="$ctrl.activity.medium" ng-options="medium.code as medium.name for medium in $ctrl.assessment.medium" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'mediumDropDown'})">
                                         <option value="">
-                                            All
+                                            Medium
                                         </option>
                                     </select>
                                 </div>
@@ -111,10 +111,10 @@
                         <div class="three fields">
                             <div class="field">
                                 <div class="ui fluid labeled input">
-                                    <div class="ui label">&emsp;{{$ctrl.assessment.gradeLevel}}&nbsp;&nbsp;&nbsp;</div>
-                                    <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.gradeLevel" ng-options="grade.code as grade.name for grade in $ctrl.assessment.gradeList" data-bind="options:assessment.gradeList" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'gradeDropDown'})">
+                                    <div class="ui label">&emsp;Class&nbsp;&nbsp;</div>
+                                    <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.gradeLevel" ng-options="grade.name for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'gradeDropDown'})">
                                         <option value="">
-                                            Grade
+                                            Class
                                         </option>
                                     </select>
                                 </div>
@@ -189,7 +189,7 @@
                 <p>Unable to fetch the Questions! Please try again later!</p>
             </div>
         </div>
-        <div ng-show="($ctrl.isAdvanceOptionOpen && $ctrl.items.length > 0) || (!$ctrl.isAdvanceOptionOpen && $ctrl.cart.items.length > 0)">
+        <div ng-show="!$ctrl.errorMessage && (($ctrl.isAdvanceOptionOpen && $ctrl.items.length > 0) || (!$ctrl.isAdvanceOptionOpen && $ctrl.cart.items.length > 0))">
             <div class="ui two column horizontally padded grid" ng-show="!$ctrl.itemsLoading">
                 <div class="column" id="scrolQuestion" style="width: 480px;height: 284px; overflow-y: scroll;">
                     <div class="ui large divided items" ng-show="$ctrl.isAdvanceOptionOpen">

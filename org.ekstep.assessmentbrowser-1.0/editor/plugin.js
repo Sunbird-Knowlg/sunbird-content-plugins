@@ -39,8 +39,6 @@ org.ekstep.contenteditor.basePlugin.extend({
             var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assessmentbrowserapp.js");
             ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
         }, 1000);
-        instance.getFrameworkData();
-
     },
     /**        
      *   invokes popup service to show the popup window
@@ -66,14 +64,6 @@ org.ekstep.contenteditor.basePlugin.extend({
             className: 'ngdialog-theme-plain'
         });
 
-    },
-
-    getFrameworkData : function() {
-        var instance = this;
-        ecEditor.getService('meta').getCategorys('NCF', function(err, respCat) {
-            !err && (instance.frameworkObject = respCat) 
-        });
     }
-
 });
 //# sourceURL=assessmentbrowserplugin.js
