@@ -22,8 +22,31 @@ angular.module('assessmentbrowserapp', [])
             'conceptIds': []
         };
 
-        ctrl.init = function() {
-            ctrl.getFramworkData();
+        /* 
+         * Get Langauge, Grade, Class and Subject from NCF Api. 
+        */
+        ctrl.getFrameworkData = function() {
+            if(!instance.frameworkObject) {
+                ecEditor.getService('meta').getCategorys('NCF', function(err, respCat) {
+                    !err && (ctrl.frameworkCatData = respCat) 
+                    instance.frameworkObject = respCat;
+                    ctrl.frameworkCatData = respCat;
+                });
+            } else {
+                ctrl.frameworkCatData = instance.frameworkObject;
+            }    
+            ecEditor._.forEach(ctrl.frameworkCatData.data.result.framework.categories, function(category) {
+                switch (category.code) {
+                    case "medium":
+                        ctrl.assessment.mediumLevel = category.name;
+                        ctrl.assessment.languageList = category.terms;
+                        break;
+                    case "gradeLevel":
+                        ctrl.assessment.gradeLevel = category.name;
+                        ctrl.assessment.gradeList = category.terms;
+                        break;
+                }
+            });
         }
 
         if(ecEditor._.isUndefined(instance.data.questionnaire)){
@@ -54,34 +77,6 @@ angular.module('assessmentbrowserapp', [])
             $scope.$safeApply();
         }
         ctrl.context = org.ekstep.contenteditor.globalContext;
-
-
-        ctrl.updateCategory = function(err, respCat){
-             if (!err) {
-                    ecEditor._.forEach(respCat.data.result.framework.categories, function(category) {
-                        switch (category.code) {
-                            case "medium":
-                                ctrl.assessment.medium = category.name;
-                                ctrl.assessment.language = category.terms;
-                                break;
-                            case "gradeLevel":
-                                ctrl.assessment.grade = category.name;
-                                ctrl.assessment.gradeLevel = category.terms;
-                                break;
-                        }
-                    });
-                } else {
-                    ctrl.errorMessage = true;
-                    $scope.$safeApply();
-                    return;
-                }
-        }
-        /* 
-         * Get Langauge, Grade, Class and Subject from NCF Api. 
-        */
-        ctrl.getFramworkData = function() {
-            ecEditor.getService('meta').getCategorys('NCF', ctrl.updateCategory)
-        };
 
         //get questiontype, grade and difficulty dropdown values from definitions api
         ecEditor.getService('meta').getDefinitions('AssessmentItem', function(err, resp) {
@@ -123,8 +118,6 @@ angular.module('assessmentbrowserapp', [])
             }
         });
            
-        
-
         ctrl.searchQuestions = function() {
             $('#scrolQuestion').scrollTop(0);
             var activity = ctrl.activity;
@@ -354,6 +347,6 @@ angular.module('assessmentbrowserapp', [])
           if (data) ecEditor.getService('telemetry').interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", "stage": ecEditor.getCurrentStage().id })
         }
 
-        ctrl.init();
+        ctrl.getFrameworkData();
     }]);
 //# sourceURL=assessmentbrowserapp.js
