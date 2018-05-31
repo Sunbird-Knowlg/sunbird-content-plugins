@@ -177,10 +177,75 @@ describe('RendererPlugin', function() {
     });
   });
   describe('evaluateQuestion function', function() {
+    beforeEach(function() {
+      var currentquesObj = {
+        "questionData": {
+          "question": {
+            "text": "<p>English a  <input type=\"text\" class=\"ans-field\" id=\"ans-field1\" readonly style=\"cursor: pointer;\" onclick=\"QS_FTBTemplate.logTelemetryInteract(event);\"> c  <input type=\"text\" class=\"ans-field\" id=\"ans-field2\" readonly style=\"cursor: pointer;\" onclick=\"QS_FTBTemplate.logTelemetryInteract(event);\"></p>\n",
+            "image": "",
+            "audio": "",
+            "keyboardConfig": {
+              "keyboardType": "English",
+              "customKeys": []
+            }
+          },
+          "answer": [
+            "b",
+            "d"
+          ],
+          "parsedQuestion": {
+            "text": "<p>English a <input type=\"text\" class=\"ans-field\" id=\"ans-field1\" readonly style=\"cursor: pointer;\"> c <input type=\"text\" class=\"ans-field\" id=\"ans-field2\" readonly style=\"cursor: pointer;\"></p>\n",
+            "image": "",
+            "audio": ""
+          }
+        },
+        "questionConfig": {
+          "metadata": {
+            "category": "FTB",
+            "title": "English a ____ c ____\n",
+            "language": [
+              "English"
+            ],
+            "qlevel": "EASY",
+            "gradeLevel": [
+              "Kindergarten"
+            ],
+            "concepts": [{
+              "identifier": "do_112300246933831680110",
+              "name": "abcd"
+            }],
+            "description": "English a ____ c ____",
+            "max_score": 1
+          },
+          "max_time": 0,
+          "max_score": 1,
+          "partial_scoring": true,
+          "layout": "Horizontal",
+          "isShuffleOption": false
+        },
+        "qState": {
+          "val": [
+            "b",
+            "d"
+          ]
+        }
+      }; // eslint-disable-line no-unused-vars
+      var questionset = document.createElement('div');
+      questionset.setAttribute("id", "questionset");
+      $(document.body).append(questionset);
+      var template = _.template(QS_FTBTemplate.htmlLayout); // eslint-disable-line no-undef
+      var questionData = qsFTBTemplate.generateHTML(currentquesObj.questionData);
+      $("#questionset").html(template({ questionObj: questionData }));
+      $("#ans-field1").val("b");
+      $("#ans-field2").val("d");
+    })
 
     it('should dispatch evaluate event', function() {
       var resultState = {
-        "val": []
+        "val": [
+        "b",
+        "d"
+        ]
       };
       var evaluateEvent = {
         "type": "org.ekstep.questionunit.ftb:evaluate",
@@ -202,7 +267,8 @@ describe('RendererPlugin', function() {
           }
         },
         "answer": [
-
+          "b",
+          "d"
         ]
       };
       plugin.evaluateQuestion(evaluateEvent);

@@ -1,38 +1,42 @@
-var Keyboard = {};
-Keyboard.constant = {
+var Keyboard = {
   keyboardVisible: false,
   ftbInputTarget: '',
   buttons: {},
   keyWidth: 0,
   callbackFromKeyboard: undefined,
-  keyboardElement: "#keyboardDiv",
-  keyboardInput: "#keyboardInput"
+  inputValue: '',
+  targetInputValue: [],
 };
+Keyboard.constant = {
+  keyboardElement: "#keyboardDiv",
+  keyboardInput: "#keyboardInput",
+};
+
 Keyboard.htmlLayout = '<div id = "keyboardDiv">\
     <div class="textBoxArea">\
       <input type="text" id="keyboardInput" class="ansField" placeholder="Enter answer"  onclick="Keyboard.logTelemetryInteract(event);" disabled autofocus />\
     </div>\
     <div id="keyboard" class="keyboardArea">\
         <div class="parentDivMainKeyboard qc-keyboard-bottom">\
-          <% if(Keyboard.constant.buttons.firstRow.length >0) { %> \
+          <% if(Keyboard.buttons.firstRow.length >0) { %> \
             <div id="firstRowAlpha">\
-              <% _.each(Keyboard.constant.buttons.firstRow, function(but) { %> \
-                <div onclick="Keyboard.addLetter(event);" class="key_barakhadi" style="width:<%= Keyboard.constant.keyWidth %>%">\
+              <% _.each(Keyboard.buttons.firstRow, function(but) { %> \
+                <div onclick="Keyboard.addLetter(event);" class="key_barakhadi" style="width:<%= Keyboard.keyWidth %>%">\
                   <span><%= but %>\</span>\
                 </div>\
               <% }); %>\
             </div>\
             <div id="secondRowAlpha">\
-              <% _.each(Keyboard.constant.buttons.secondRow, function(but) { %> \
-                <div onclick="Keyboard.addLetter(event);" class="key_barakhadi" style="width:<%= Keyboard.constant.keyWidth %>%">\
+              <% _.each(Keyboard.buttons.secondRow, function(but) { %> \
+                <div onclick="Keyboard.addLetter(event);" class="key_barakhadi" style="width:<%= Keyboard.keyWidth %>%">\
                   <span><%= but %>\</span>\
                 </div>\
               <% }); %>\
             </div>\
             <div class="erasedDivParent">\
-                <img src=<%=_keyboardInstance.addImageIcon("renderer/assets/eras_icon.png") %> class="qc-erase-icon" onclick="Keyboard.deleteText();" />\
+                <img src=<%=Keyboard.addImageIcon("renderer/assets/eras_icon.png") %> class="qc-erase-icon" onclick="Keyboard.deleteText();" />\
             </div>\
-            <% if(Keyboard.constant.buttons.length > 10) { %> \
+            <% if(Keyboard.buttons.length > 10) { %> \
               <div id="secondRowdiv"></div>\
             <% } %> \
             <div id="thirdRowAlpha">\
@@ -42,7 +46,7 @@ Keyboard.htmlLayout = '<div id = "keyboardDiv">\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);"><span>.</span></div>\
             </div>\
             <div class="hideKeyboard">\
-                <img src=<%=_keyboardInstance.addImageIcon("renderer/assets/keyboard.svg") %> onclick="Keyboard.hideKeyboard();Keyboard.logTelemetryInteract(event);" />\
+                <img src=<%=Keyboard.addImageIcon("renderer/assets/keyboard.svg") %> onclick="Keyboard.hideKeyboard();Keyboard.logTelemetryInteract(event);" />\
             </div>\
           <% } %> \
         </div>\
@@ -74,20 +78,20 @@ Keyboard.htmlLayout = '<div id = "keyboardDiv">\
                 <div class="key_barakhadi_numeric" onclick="Keyboard.addLetter(event);"><span>×</span></div>\
                 <div class="key_barakhadi_numeric" onclick="Keyboard.addLetter(event);"><span>=</span></div>\
                 <div class="erasedDivParent">\
-                    <img src=<%=_keyboardInstance.addImageIcon("renderer/assets/eras_icon.png") %> class="qc-erase-icon" onclick="Keyboard.deleteText()" />\
+                    <img src=<%=Keyboard.addImageIcon("renderer/assets/eras_icon.png") %> class="qc-erase-icon" onclick="Keyboard.deleteText()" />\
                 </div>\
             </div>\
             <div class="third-row-numeric">\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);" id="<_btn"><span>&lt;</span></div>\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);" id=">_btn"><span>&gt;</span></div>\
                 <div>\
-                    <img src=<%=_keyboardInstance.addImageIcon("renderer/assets/language_icon.png") %> class="qc-language-icon" onclick="Keyboard.changeToAlphabet()" /> </div>\
+                    <img src=<%=Keyboard.addImageIcon("renderer/assets/language_icon.png") %> class="qc-language-icon" onclick="Keyboard.changeToAlphabet()" /> </div>\
                 <div class="spaceBar" onclick="Keyboard.addLetter(event);" style=" font-size:3vw;"><span> </span>&nbsp;</div>\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);"><span>,</span></div>\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);"><span>.</span></div>\
             </div>\
             <div class="hideKeyboard">\
-              <img src=<%=_keyboardInstance.addImageIcon("renderer/assets/keyboard.svg") %> onclick="Keyboard.hideKeyboard();Keyboard.logTelemetryInteract(event);" />\
+              <img src=<%=Keyboard.addImageIcon("renderer/assets/keyboard.svg") %> onclick="Keyboard.hideKeyboard();Keyboard.logTelemetryInteract(event);" />\
             </div>\
         </div>\
     </div>\
@@ -97,51 +101,71 @@ Keyboard.createKeyboard = function(customButtons) {
   customButtons = customButtons.replace(/ /g, '');
   customButtons = customButtons.split(',');
   customButtons = _.uniq(customButtons);
-  Keyboard.constant.buttons = customButtons.splice(0, customButtons.length);
-  var splitButtonto = parseInt(Keyboard.constant.buttons.length / 2);
-  Keyboard.constant.buttons.firstRow = Keyboard.constant.buttons.slice(0, splitButtonto);
-  Keyboard.constant.buttons.secondRow = Keyboard.constant.buttons.slice(splitButtonto, Keyboard.constant.buttons.length);
-  Keyboard.constant.keyWidth = parseInt(100 / Keyboard.constant.buttons.secondRow.length);
-};
+  Keyboard.buttons = customButtons.splice(0, customButtons.length);
+  var splitButtonto = parseInt(Keyboard.buttons.length / 2);
+  Keyboard.buttons.firstRow = Keyboard.buttons.slice(0, splitButtonto);
+  Keyboard.buttons.secondRow = Keyboard.buttons.slice(splitButtonto, Keyboard.buttons.length);
+  Keyboard.keyWidth = parseInt(100 / Keyboard.buttons.secondRow.length);
+}
 
 Keyboard.changeToNumeric = function() {
   $(".parentDivMainKeyboard").hide();
   $("#parentDivNumericKeyboard").show();
-};
+}
 
 Keyboard.changeToAlphabet = function() {
   $(".parentDivMainKeyboard").show();
   $("#parentDivNumericKeyboard").hide();
-};
+}
 
 Keyboard.addLetter = function(event) {
   var keyValue = event.target;
-  if (!_.isUndefined(inputValue)) { // eslint-disable-line no-undef
+  if (!_.isUndefined(Keyboard.inputValue)) {
     if (keyValue.innerText != '123') {
-      targetInputValue.push(keyValue.innerText); // eslint-disable-line no-undef
-      inputValue = targetInputValue.join(""); // eslint-disable-line no-undef
+      Keyboard.targetInputValue.push(keyValue.innerText);
+      Keyboard.inputValue = Keyboard.targetInputValue.join("");
     }
     if (keyValue.innerText == " ") {
       keyValue.push(String.fromCharCode(32));
-      inputValue = targetInputValue.join("");
+      Keyboard.inputValue = Keyboard.targetInputValue.join("");
     }
   } else {
-    if (keyValue.innerText != '123') inputValue = event.target.innerText; // eslint-disable-line no-undef
+    if (keyValue.innerText != '123') Keyboard.inputValue = event.target.innerText; // eslint-disable-line no-undef
   }
-  $(Keyboard.constant.keyboardInput).val(inputValue); // eslint-disable-line no-undef
-  $("#" + Keyboard.constant.ftbInputTarget).val(inputValue); // eslint-disable-line no-undef
-};
+  $(Keyboard.constant.keyboardInput).val(Keyboard.inputValue); // eslint-disable-line no-undef
+  $("#" + Keyboard.ftbInputTarget).val(Keyboard.inputValue); // eslint-disable-line no-undef
+}
+
 Keyboard.deleteText = function() {
-  targetInputValue.pop(); // eslint-disable-line no-undef
-  inputValue = targetInputValue.join(""); // eslint-disable-line no-undef
-  $(Keyboard.constant.keyboardInput).val(inputValue); // eslint-disable-line no-undef
-  $("#" + Keyboard.constant.ftbInputTarget).val(inputValue); // eslint-disable-line no-undef
+  Keyboard.targetInputValue.pop(); // eslint-disable-line no-undef
+  Keyboard.inputValue = Keyboard.targetInputValue.join(""); // eslint-disable-line no-undef
+  $(Keyboard.constant.keyboardInput).val(Keyboard.inputValue); // eslint-disable-line no-undef
+  $("#" + Keyboard.ftbInputTarget).val(Keyboard.inputValue); // eslint-disable-line no-undef
 }
 Keyboard.hideKeyboard = function() {
   $(Keyboard.constant.keyboardElement).hide();
-  Keyboard.constant.callbackFromKeyboard(inputValue); // eslint-disable-line no-undef
+  Keyboard.callbackFromKeyboard(Keyboard.inputValue); // eslint-disable-line no-undef
 }
+
+Keyboard.keyboardShow = function(questionObj) {
+  $(Keyboard.constant.keyboardElement).show();
+  Keyboard.inputValue = _.isUndefined(questionObj.inputoldValue.value) ? '' : questionObj.inputoldValue.value;
+  $(Keyboard.constant.keyboardInput).val(Keyboard.inputValue);
+  if (Keyboard.inputValue != " ") {
+    Keyboard.targetInputValue = Keyboard.inputValue.split("");
+  }
+  Keyboard.ftbInputTarget = questionObj.inputoldValue.id; // eslint-disable-line no-undef
+}
+
+Keyboard.addImageIcon = function(imgURL) {
+  if (isbrowserpreview) { // eslint-disable-line no-undef
+    return org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.keyboard", "1.0", imgURL);
+  } else {
+    return 'file:///' + EkstepRendererAPI.getBaseURL() + "content-plugins/org.ekstep.keyboard-1.0/" + imgURL;
+  }
+}
+
 Keyboard.logTelemetryInteract = function(event) {
   QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event.target.id }); // eslint-disable-line no-undef
 }
-//# sourceURL=qs_keyboard.js
+//# sourceURL=keyboard.js

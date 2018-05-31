@@ -46,7 +46,7 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
   hideQuestion: function(event) {
     this.preHideQuestion(event);
     var questionsetInstance = event.target;
-    $(questionsetInstance._constants.qsElement).children().hide();
+    $(questionsetInstance._constants.qsElement).children().remove();
     this.postHideQuestion();
   },
   preHideQuestion: function(event) {
