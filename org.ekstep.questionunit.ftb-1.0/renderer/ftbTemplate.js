@@ -91,24 +91,21 @@ QS_FTBTemplate.generateHTML = function(quesData) {
  * @event renderer:questionunit.ftb:click
  * @memberof org.ekstep.questionunit.ftb
  */
-window.addEventListener('native.keyboardshow', QS_FTBTemplate.nativeKeyboardShow);
+window.addEventListener('native.keyboardshow', function() { // eslint-disable-line no-unused-vars
+  $(QS_FTBTemplate.constant.qsFtbContainer).addClass("align-question");
+});
 
 /**
  * renderer:questionunit.ftb:hide keyboard in device.
  * @event renderer:questionunit.ftb:click
  * @memberof org.ekstep.questionunit.ftb
  */
-window.addEventListener('native.keyboardhide', QS_FTBTemplate.nativeKeyboardHide);
+window.addEventListener('native.keyboardhide', function() {
+  $(QS_FTBTemplate.constant.qsFtbContainer).removeClass("align-question");
+});
 
 QS_FTBTemplate.logTelemetryInteract = function(event) {
   QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event.target.id }); // eslint-disable-line no-undef
 }
 
-QS_FTBTemplate.nativeKeyboardHide = function() {
-  $(QS_FTBTemplate.constant.qsFtbContainer).removeClass("align-question");
-}
-
-QS_FTBTemplate.nativeKeyboardShow = function() { // eslint-disable-line no-unused-vars
-  $(QS_FTBTemplate.constant.qsFtbContainer).addClass("align-question");
-}
 //# sourceURL=QS_FTBTemplate.js
