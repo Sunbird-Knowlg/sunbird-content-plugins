@@ -24,7 +24,8 @@
     "scripts": {
         "test": "karma start karma.pluginconf.js",
         "testCollection": "karma start karma.collectionpluginconf.js",
-        "renderer": "karma start karma.renderer.pluginconf.js"
+        "renderer": "karma start karma.renderer.pluginconf.js",
+        "testPlugins": "karma start karma.funcational.pluginconfig.js"
     },
     "repository": {
         "type": "git",
