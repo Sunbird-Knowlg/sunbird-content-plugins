@@ -169,6 +169,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         //reset the depended field first
         // Update the depended field with associated value
         // Currently, supported only for the dropdown values
+        ecEditor.dispatchEvent("editor:field:association", field);
         var dependedValues, groupdFields;
         if (field.depends && field.depends.length) {
             _.forEach(field.depends, function(id) {
@@ -377,6 +378,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.init = function() {
         !EventBus.hasEventListener('metadata:form:onsuccess') && ecEditor.addEventListener('metadata:form:onsuccess', $scope.success, $scope);
         !EventBus.hasEventListener('metadata:form:oncancel') && ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
+        !EventBus.hasEventListener('metadata:form:getformdata') && ecEditor.addEventListener('metadata:form:getformdata', $scope.getScopeMeta, $scope);
         var callbackFn = function(config) {
             $scope.fields = config.fields;
             $scope.tempalteName = config.template;
@@ -429,9 +431,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         return (object.form.$valid && isValid) ? true : false
     };
 
-    $scope.getScopeMeta = function() {
+    $scope.getScopeMeta = function(event, callback) {
         var template = $('#content-meta-form');
-        return template.scope().contentMeta || {};
+        var returnData = template.scope().contentMeta || {};
+        callback && callback(returnData);
+        return returnData;
     }
 
     $scope.init()

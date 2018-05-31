@@ -21540,4 +21540,13 @@ describe("Topic selector plugin", function() {
         expect(pluginInstance.mapData).toHaveBeenCalled();
         done()
     });
+    it('filters should apply to topic tree', function(done){
+        spyOn(pluginInstance, "applyFilters").and.callThrough();
+        pluginInstance.isPopupInitialized = true;
+        pluginInstance.applyFilters('', {
+            "field": {"code": 'topic'}
+        });
+        expect(pluginInstance.applyFilters).toHaveBeenCalled();
+        done()
+    });
 });

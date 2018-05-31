@@ -87,7 +87,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     instance.topics = instance.topicData;
                     instance.isPopupInitialized = true;
                     instance.selectedFilters = [];
-                    ecEditor.dispatchEvent("metadata:form:getmeta", function(data){
+                    ecEditor.dispatchEvent("metadata:form:getformdata", function(data){
                         instance.setAssociations(data, function(){
                             instance.setFiltersData(function(){
                                 instance.showTopicBrowser(event, instance.data);         
@@ -169,8 +169,8 @@ org.ekstep.contenteditor.basePlugin.extend({
     applyFilters: function(event, data) {
         var instance = this;
         instance.selectedFilters = [];
-        if(instance.isPopupInitialized && data.field.code != 'topic'){
-            ecEditor.dispatchEvent("metadata:form:getmeta", function(data){
+        if(instance.isPopupInitialized && data.code != 'topic'){
+            ecEditor.dispatchEvent("metadata:form:getformdata", function(data){
                 instance.setAssociations(data, function(){
                     instance.setFiltersData(function(){
                         instance.showTopicBrowser(event, instance.data);
