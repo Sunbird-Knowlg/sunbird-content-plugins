@@ -132,6 +132,7 @@ describe("compatibility check `org.ekstep.sunbirdmetdata-1.1` with ` Editor 3.2.
         it('When configurations are exists then it should fetch the config from local cache', function(done) {
             var key1 = 'textbook',
                 key2 = 'save';
+            pluginInstance.invoke('', { model: {}, editMode: true, subType: 'textbook', action: "save" })
             expect(pluginInstance.isConfigurationsExists(key1, key2)).toBe(true);
             expect(pluginInstance.config).not.toBe(undefined);
             var configurations = pluginInstance.getMappedResponse('textbook', 'save');
@@ -158,7 +159,6 @@ describe("compatibility check `org.ekstep.sunbirdmetdata-1.1` with ` Editor 3.2.
             }
         });
     });
-
     describe('From success action', function() {
         describe('Form review', function() {
             it('When valid configurations are passed', function(done) {
@@ -192,7 +192,7 @@ describe("compatibility check `org.ekstep.sunbirdmetdata-1.1` with ` Editor 3.2.
                     reviewFn(undefined, {});
                 })
                 ecEditor.addEventListener('org.ekstep.collectioneditor:content:notfound', function(event, reviewFn) {
-                    console.log('Content close is invoked');
+                    //console.log('Content close is invoked');
                 })
                 pluginInstance.successAction('', data);
 
@@ -300,7 +300,7 @@ describe("compatibility check `org.ekstep.sunbirdmetdata-1.1` with ` Editor 3.2.
                     reviewFn(undefined, {});
                 })
                 ecEditor.addEventListener('org.ekstep.collectioneditor:content:notfound', function(event, reviewFn) {
-                    console.log('Content close is invoked');
+                    // console.log('Content close is invoked');
                 })
                 pluginInstance.successAction('', data);
             })
