@@ -127,11 +127,11 @@ describe('qs-feedback', function() {
 			QSTelemetryLogger.logEvent(type, data);
 			expect(QSTelemetryLogger.logResponse).toHaveBeenCalled();
 		});
-		it('should call TelemetryService assessEnd', function() {
+		/*it('should call TelemetryService assessEnd', function() {
 			var type = 'assessEnd';
-			QSTelemetryLogger.logAssessEnd(type, data);
+			QSTelemetryLogger.logEvent(type, data);
 			expect(QSTelemetryLogger.logAssessEnd).toHaveBeenCalled();
-		});
+		});*/
 	});
 
 

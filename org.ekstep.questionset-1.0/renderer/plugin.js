@@ -314,15 +314,6 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     // The following code will unregister all event listeners added by the question unit plugins
     // This is to ensure that the event listeners do not overlap when there are two or more question sets
     // in the same content.
-   /* this._questionUnitPlugins.forEach(function(qu) {
-      for (var key in EventBus.listeners) {
-        if (key.indexOf(qu) !== -1) {
-          if (EventBus.listeners.hasOwnProperty(key)) {
-            EventBus.listeners[key] = undefined;
-          }
-        }
-      }
-    });*/
     _.forEach(this._questionUnitPlugins, function(value){
       for (var key in EventBus.listeners) {
         if (key.indexOf(value) !== -1) {

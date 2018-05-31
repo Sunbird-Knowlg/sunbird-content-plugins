@@ -1,5 +1,27 @@
 describe('org.ekstep.questionset', function() {
   var questionSetPlugin, data, question, quizQuestion;
+  _constants= {
+    questionPluginId: 'org.ekstep.question',
+    qsElement: '#questionset',
+    qsPopup:'qs-feedback-model-popup',
+    questionsetCSS: {
+      width: '100%',
+      position: 'absolute',
+      top: '2%',
+      left: 0,
+      height: '100%'
+    },
+    feedbackCSS: {
+      position: 'absolute',
+      width: '100%',
+      height: '100%',
+      'z-index': 999999,
+      top: 0,
+      display: 'none'
+    },
+    qsPrefix: 'qs',
+    qsQuizPlugin: 'org.ekstep.questionset.quiz'
+  };
 
   beforeEach(function() {
     data = {
@@ -11,6 +33,22 @@ describe('org.ekstep.questionset', function() {
       "z-index": -1,
       "id": "c5e08126-5ab9-488c-b0dc-70a8250a3235",
       "org.ekstep.question": [{
+        "id": "0a11ac6d-e801-425a-bd02-a43dea315dc9",
+        "type": "ftb",
+        "pluginId": "org.ekstep.questionunit.ftb",
+        "pluginVer": "1.0",
+        "templateId": "ftbtemplate",
+        "data": {
+          "__cdata": "{\"question\":{\"text\":\"<p>ಮರದ ಎತ್ತರ ಮತ್ತು [[ಬಲವಾಗಿರುತ್ತದೆ]]</p>\\n\",\"image\":\"\",\"audio\":\"\",\"keyboardConfig\":{\"keyboardType\":\"Custom\",\"customKeys\":\"ಬ,ಲ,ವಾ,ಗಿ,ರು,ತ್ತ,ದೆ\"}},\"answer\":[\"ಬಲವಾಗಿರುತ್ತದೆ\"],\"parsedQuestion\":{\"text\":\"<p>ಮರದ ಎತ್ತರ ಮತ್ತು <input type=\\\"text\\\" class=\\\"ans-field\\\" id=\\\"ans-field1\\\" readonly style=\\\"cursor: pointer;\\\"></p>\\n\",\"image\":\"\",\"audio\":\"\"}}"
+        },
+        "config": {
+          "__cdata": "{\"metadata\":{\"category\":\"FTB\",\"title\":\"ಮರದ ಎತ್ತರ ಮತ್ತು ____\\n\",\"language\":[\"English\"],\"qlevel\":\"EASY\",\"gradeLevel\":[\"Grade 1\"],\"concepts\":[{\"identifier\":\"AI33\",\"name\":\"Perceptron\"}],\"description\":\"test\",\"max_score\":1},\"max_time\":0,\"max_score\":1,\"partial_scoring\":true,\"layout\":\"Horizontal\",\"isShuffleOption\":false}"
+        },
+        "w": 80,
+        "h": 85,
+        "x": 9,
+        "y": 6
+      }, {
         "id": "514d0902-1566-453b-b6ee-6a263d2209b9",
         "type": "mtf",
         "pluginId": "org.ekstep.questionset.quiz",
@@ -73,10 +111,18 @@ describe('org.ekstep.questionset', function() {
       "y": 6
     }
 
+
+
+
     questionSetPlugin = new org.ekstep.questionsetRenderer(data, Renderer.theme._currentScene, Renderer.theme._currentScene, Renderer.theme);
 
 
     questionSetPlugin._data = data;
+    questionSetPlugin._questionStates = {
+      "0a11ac6d-e801-425a-bd02-a43dea315dc9" : {
+        val : ""
+      }
+    }
     spyOn(questionSetPlugin, 'loadTemplateContainer');
     spyOn(questionSetPlugin, 'saveQuestionSetState');
     spyOn(questionSetPlugin, 'setRendered');
@@ -89,8 +135,11 @@ describe('org.ekstep.questionset', function() {
     spyOn(questionSetPlugin, 'renderPrevQuestion');
     spyOn(questionSetPlugin, 'getPrevQuestion');
     spyOn(TelemetryService, 'navigate');
+    spyOn(questionSetPlugin, 'generateNavigateTelemetry').and.callThrough();
     var themeObj = Renderer.theme;
+    spyOn(jQuery.fn, "remove");
     spyOn(themeObj, 'setParam');
+    spyOn($.fn, "append");
 
   });
 
@@ -115,27 +164,14 @@ describe('org.ekstep.questionset', function() {
       questionSetPlugin.renderQuestion(question);
       expect(questionSetPlugin.setRendered).toHaveBeenCalled();
     });
-    /*it('should dispatchEvent', function(question) {
-
-        questionSetPlugin.renderQuestion(question);
-        expect(EkstepRendererAPI.dispatchEvent).toHaveBeenCalled();
-    });*/
-
-
   });
 
   describe("set rendered", function() {
     it('should set renderedquestions', function() {
 
-      questionSetPlugin.setRendered(question);
+      questionSetPlugin.setRendered(quizQuestion);
       expect(questionSetPlugin._renderedQuestions).not.toBe(undefined);
     });
-    /* it('should dispatchEvent', function() {
-
-         questionSetPlugin.renderQuestion(data);
-         expect(EkstepRendererAPI.dispatchEvent).toHaveBeenCalled();
-     });*/
-
 
   });
 
@@ -184,17 +220,10 @@ describe('org.ekstep.questionset', function() {
     });
   });
 
-  describe("renderPrevQuestion", function(){
-    it('should call navigatePrevious', function() {
-      questionSetPlugin.renderPrevQuestion();
-      expect(questionSetPlugin.getPrevQuestion).toHaveBeenCalled();
-    });
-  })
-
-  describe("getNextQuestion", function() {
+  describe("getPrevQuestion", function() {
     it('should return a value', function() {
-      var res = questionSetPlugin.getNextQuestion();
-      expect(res).not.toBe(undefined);
+      var res = questionSetPlugin.getPrevQuestion();
+      expect(res).toBe(undefined);
     });
   });
 
@@ -205,19 +234,27 @@ describe('org.ekstep.questionset', function() {
     });
   });
 
-   describe("resetQS", function() {
+  describe("resetQS", function() {
     it('should dispatch event', function() {
-     questionSetPlugin.resetQS();
-     expect(EkstepRendererAPI.dispatchEvent).toHaveBeenCalled();
+      questionSetPlugin.resetQS();
+      expect(EkstepRendererAPI.dispatchEvent).toHaveBeenCalled();
     });
   });
 
-  describe("saveQuestionState", function() {
-    it('should call set param', function() {
-      questionSetPlugin.saveQuestionState(question.id, {});
-      expect(themeObj.setParam).toHaveBeenCalled();
-    });
-  });
+   describe("getQuestionState", function() {
+     it('should return question state', function() {
+       var res = questionSetPlugin.getQuestionState('0a11ac6d-e801-425a-bd02-a43dea315dc9');
+       expect(res).not.toBe(undefined);
+     });
+   });
+
+    describe("resetTemplates", function() {
+     it('should call jQuery remove function', function() {
+        questionSetPlugin.resetTemplates();
+       expect(jQuery.fn.remove).toHaveBeenCalled();
+     });
+   });
+   
 
 
   describe("generateNavigateTelemetry", function() {
