@@ -24,7 +24,7 @@
     "dependencies": [
       {
             "type": "js",
-            "src": "renderer/qs_keyboard.js",
+            "src": "renderer/keyboard.js",
             "scope": "renderer"
       },
       {

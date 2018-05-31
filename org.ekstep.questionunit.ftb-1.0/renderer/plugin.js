@@ -48,6 +48,7 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
     $(QS_FTBTemplate.constant.qsFtbElement).on('click', '.ans-field', QS_FTBTemplate.invokeKeyboard); // eslint-disable-line no-undef
 
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS); // eslint-disable-line no-undef
+    /*istanbul ignore else*/
     if (currentquesObj.qState && currentquesObj.qState.val) {
       QS_FTBTemplate.textboxtarget.state = currentquesObj.qState.val; // eslint-disable-line no-undef
       QS_FTBTemplate.setStateInput(); // eslint-disable-line no-undef
@@ -79,13 +80,15 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
       telemetryAnsArr.push(ansObj);
     });
     //compare two array
+    /*istanbul ignore else*/
     if (_.isEqual(answerArray, ftbQuestionData.answer)) { // eslint-disable-line no-undef
       correctAnswer = true;
     }
     // Calculate partial score
     var tempCount = 0;
     _.each(ftbQuestionData.answer, function(ans, index) { // eslint-disable-line no-undef
-       if (ans.toLowerCase().trim() == answerArray[index].toLowerCase().trim()) {
+      /*istanbul ignore else*/
+      if (ans.toLowerCase().trim() == answerArray[index].toLowerCase().trim()) {
         tempCount++;
       }
     });
@@ -103,6 +106,7 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
       totalAns: ftbQuestionData.answer.length // eslint-disable-line no-undef
     }
     var callback = event.target;
+    /*istanbul ignore else*/
     if (_.isFunction(callback)) {
       callback(result);
     }

@@ -1,5 +1,5 @@
 describe("FTB Editor template controller", function() {
-  var $controller, $scope, ctrl, $rootScope, telemetryService, questionInput;
+  var $controller, $scope, ctrl, $rootScope, telemetryService;
   beforeEach(module('ftbApp'));
   beforeEach(function(done) {
     setTimeout(function() {
@@ -26,8 +26,8 @@ describe("FTB Editor template controller", function() {
       telemetryService = jasmine.createSpyObj("telemetry", ["interact"]);
       spyOn(ecEditor, "getService").and.callFake(function() {
         return telemetryService;
-      });      
-      spyOn(CKEDITOR, "replace").and.callThrough();
+      });
+      spyOn(CKEDITOR, "replace").and.callThrough(); // eslint-disable-line no-undef
       $scope.ftbForm = {
         $invalid: true,
         $name: "ftbForm",

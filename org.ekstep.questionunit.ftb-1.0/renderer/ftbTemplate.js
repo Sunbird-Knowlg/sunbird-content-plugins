@@ -42,6 +42,7 @@ QS_FTBTemplate.invokeKeyboard = function(event) { // eslint-disable-line no-unus
   }
   QS_FTBTemplate.textboxtarget.id = event.target.id;
   QS_FTBTemplate.textboxtarget.value = event.target.value.trim();
+  /*istanbul ignore else*/
   if (!(isbrowserpreview && (_.isUndefined(QS_FTBTemplate.questionObj.question.keyboardConfig) || QS_FTBTemplate.questionObj.question.keyboardConfig.keyboardType == "Device"))) { // eslint-disable-line no-undef
     $(QS_FTBTemplate.constant.qsFtbContainer).addClass("align-question");
   }
@@ -79,7 +80,7 @@ QS_FTBTemplate.generateHTML = function(quesData) {
       "index": index,
       "keyboardType": quesData.question.keyboardConfig.keyboardType
     }
-    ansTemplate = template({ ansFieldConfig:ansFieldConfig });
+    ansTemplate = template({ ansFieldConfig: ansFieldConfig });
     return ansTemplate;
   })
   return quesData;
@@ -90,20 +91,24 @@ QS_FTBTemplate.generateHTML = function(quesData) {
  * @event renderer:questionunit.ftb:click
  * @memberof org.ekstep.questionunit.ftb
  */
-window.addEventListener('native.keyboardshow', function(e) { // eslint-disable-line no-unused-vars
-  $(QS_FTBTemplate.constant.qsFtbContainer).addClass("align-question");
-});
+window.addEventListener('native.keyboardshow', QS_FTBTemplate.nativeKeyboardShow);
 
 /**
  * renderer:questionunit.ftb:hide keyboard in device.
  * @event renderer:questionunit.ftb:click
  * @memberof org.ekstep.questionunit.ftb
  */
-window.addEventListener('native.keyboardhide', function() {
-  $(QS_FTBTemplate.constant.qsFtbContainer).removeClass("align-question");
-});
+window.addEventListener('native.keyboardhide', QS_FTBTemplate.nativeKeyboardHide);
 
 QS_FTBTemplate.logTelemetryInteract = function(event) {
   QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event.target.id }); // eslint-disable-line no-undef
+}
+
+QS_FTBTemplate.nativeKeyboardHide = function() {
+  $(QS_FTBTemplate.constant.qsFtbContainer).removeClass("align-question");
+}
+
+QS_FTBTemplate.nativeKeyboardShow = function() { // eslint-disable-line no-unused-vars
+  $(QS_FTBTemplate.constant.qsFtbContainer).addClass("align-question");
 }
 //# sourceURL=QS_FTBTemplate.js

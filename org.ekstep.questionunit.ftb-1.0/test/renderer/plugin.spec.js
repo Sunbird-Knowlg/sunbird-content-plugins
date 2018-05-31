@@ -13,11 +13,11 @@ describe('RendererPlugin', function() {
     spyOn(plugin, "evaluateQuestion").and.callThrough();
     spyOn(qsFTBTemplate, "setStateInput").and.callThrough();
     spyOn(EkstepRendererAPI, "dispatchEvent").and.callThrough();
-    spyOn(QS_FTBTemplate, "generateHTML").and.callThrough();
+    spyOn(QS_FTBTemplate, "generateHTML").and.callThrough(); // eslint-disable-line no-undef
   });
   describe('initTemplate', function() {
     var questionsetEvent;
-    beforeEach(function(){
+    beforeEach(function() {
       questionsetEvent = {
         "target": {
           "_currentQuestion": {
@@ -49,14 +49,14 @@ describe('RendererPlugin', function() {
       expect(plugin._template).not.toBe(undefined);
     });
     it('should set questionData', function() {
-      
-      var questionObj = plugin.preQuestionShow(questionsetEvent);
+
+      var questionObj = plugin.preQuestionShow(questionsetEvent); // eslint-disable-line no-unused-vars
       expect(questionObj).not.toBeNull();
     });
     it('should call generateHTML', function() {
-      
-      var questionObj = plugin.preQuestionShow(questionsetEvent);
-      expect(QS_FTBTemplate.generateHTML).toHaveBeenCalled();
+
+      var questionObj = plugin.preQuestionShow(questionsetEvent); // eslint-disable-line no-unused-vars
+      expect(QS_FTBTemplate.generateHTML).toHaveBeenCalled(); // eslint-disable-line no-undef
     });
   });
 
@@ -113,8 +113,8 @@ describe('RendererPlugin', function() {
             "d"
           ]
         }
-      };
-      plugin.postQuestionShow(currentquesObj);
+      }; // eslint-disable-line no-unused-vars
+      plugin.postQuestionShow(currentquesObj); // eslint-disable-line no-unused-vars
       expect(qsFTBTemplate.setStateInput).toHaveBeenCalled();
     });
 
@@ -177,13 +177,10 @@ describe('RendererPlugin', function() {
     });
   });
   describe('evaluateQuestion function', function() {
-    var currentquesObj;
 
     it('should dispatch evaluate event', function() {
       var resultState = {
-        "val": [
-          
-        ]
+        "val": []
       };
       var evaluateEvent = {
         "type": "org.ekstep.questionunit.ftb:evaluate",
@@ -191,7 +188,10 @@ describe('RendererPlugin', function() {
           return {};
         }
       };
-      ftbQuestionData = {
+      ftbQuestionConfig = { // eslint-disable-line no-undef
+        "max_score": 1
+      };
+      ftbQuestionData = { // eslint-disable-line no-undef
         "question": {
           "text": "<p>English a  <input type=\"text\" class=\"ans-field\" id=\"ans-field1\" readonly style=\"cursor: pointer;\" onclick=\"QS_FTBTemplate.logTelemetryInteract(event);\"> c  <input type=\"text\" class=\"ans-field\" id=\"ans-field2\" readonly style=\"cursor: pointer;\" onclick=\"QS_FTBTemplate.logTelemetryInteract(event);\"></p>\n",
           "image": "",
@@ -202,7 +202,7 @@ describe('RendererPlugin', function() {
           }
         },
         "answer": [
-        
+
         ]
       };
       plugin.evaluateQuestion(evaluateEvent);
