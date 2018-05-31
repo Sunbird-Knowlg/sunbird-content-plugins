@@ -14,7 +14,7 @@ formApp.directive('topicSelector', function() {
         if ($scope.contentMeta.topic) {
             if ($scope.contentMeta.topic.length)
                 _.forEach($scope.contentMeta.topic, function(topic) {
-                    selectedTopics.push(topic.identifier);
+                    selectedTopics.push(topic);
                 });
         }
         $scope.topicElementId = (!_.isUndefined($scope.$parent.$parent.tempalteName)) ? $scope.$parent.$parent.tempalteName + '-topic' : 'metaform-topic';

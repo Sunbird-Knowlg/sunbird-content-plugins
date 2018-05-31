@@ -80,9 +80,9 @@ org.ekstep.contenteditor.basePlugin.extend({
     initData: function(event, data) {
         var instance = this;
         instance.data = data;
-        instance.getTopicCategory(function(){
+        instance.getCategory(function(){
             if(instance.categories.length > 0){
-                instance.mapData(instance.categories, function(data){
+                instance.getTopics(instance.categories, function(data){
                     instance.topicData = ecEditor._.uniqBy(data, "id");
                     instance.topics = instance.topicData;
                     instance.isPopupInitialized = true;
@@ -103,16 +103,16 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     /**
      *
-     * Map topic data.
+     * get topic data.
      * @memberof topicselector
      */
-    mapData: function(data, callback) {
+    getTopics: function(data, callback) {
         var instance = this;
         var mappedData = [];
         if (data && data.length){
             ecEditor._.forEach(data, function(value, index) {
                 var topic = {};
-                topic.id = value.identifier;
+                topic.id = value.name;
                 topic.name = value.name;
                 topic.selectable = "selectable";
                 topic.nodes = instance.getSubtopics(value.children);
@@ -135,7 +135,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var childArray = [];
         ecEditor._.forEach(topic, function(value) {
             var child = {};
-            child.id = value.identifier;
+            child.id = value.name;
             child.name = value.name;
             child.selectable = "selectable";
             child.nodes = instance.getSubtopics(value.children);
@@ -148,7 +148,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      * To all topics data.
      * @memberof topicselector
      */
-    getTopicCategory: function(callback) {
+    getCategory: function(callback) {
         var instance = this;
         ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(org.ekstep.contenteditor.globalContext.framework, function(error, response) {
             if (!error) {

@@ -40,7 +40,6 @@ var topicModal;
         };
         $.extend(config, options);
         initialize = function() {
-            console.log('Topic selector initializing....');
             if (config.data) {
                 nodes = config.data;
             }
@@ -112,7 +111,6 @@ var topicModal;
             $('.menu .picked', modal).on('click', function(e) {
                 return showPicked();
             });
-            console.log('Topic selector initialized');
             return $('.search input', modal).on('keyup', function(e) {
                 return showSearch($(this).val());
             });
