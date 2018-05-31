@@ -37,9 +37,9 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
       "questionConfig": questionConfig,
       "qState": qState
     };
-    for (var l = 0; l < questionData.option.optionsLHS.length; l++) {
+    for (var lhs = 0; lhs < questionData.option.optionsLHS.length; lhs++) {
       var emptyBox = {
-        "index": questionData.option.optionsLHS[l].index,
+        "index": questionData.option.optionsLHS[lhs].index,
         "selText": " "
       };
       QS_MTFTemplate.selAns.push(emptyBox);
