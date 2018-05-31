@@ -1,9 +1,9 @@
 describe('org.ekstep.questionset', function() {
   var questionSetPlugin, data, question, quizQuestion;
-  _constants= {
+  _constants = {
     questionPluginId: 'org.ekstep.question',
     qsElement: '#questionset',
-    qsPopup:'qs-feedback-model-popup',
+    qsPopup: 'qs-feedback-model-popup',
     questionsetCSS: {
       width: '100%',
       position: 'absolute',
@@ -90,7 +90,7 @@ describe('org.ekstep.questionset', function() {
       "w": 80,
       "h": 85,
       "x": 9,
-      "y": 6
+      "y": 6m
     };
 
     question = {
@@ -119,8 +119,8 @@ describe('org.ekstep.questionset', function() {
 
     questionSetPlugin._data = data;
     questionSetPlugin._questionStates = {
-      "0a11ac6d-e801-425a-bd02-a43dea315dc9" : {
-        val : ""
+      "0a11ac6d-e801-425a-bd02-a43dea315dc9": {
+        val: ""
       }
     }
     spyOn(questionSetPlugin, 'loadTemplateContainer');
@@ -241,20 +241,20 @@ describe('org.ekstep.questionset', function() {
     });
   });
 
-   describe("getQuestionState", function() {
-     it('should return question state', function() {
-       var res = questionSetPlugin.getQuestionState('0a11ac6d-e801-425a-bd02-a43dea315dc9');
-       expect(res).not.toBe(undefined);
-     });
-   });
+  describe("getQuestionState", function() {
+    it('should return question state', function() {
+      var res = questionSetPlugin.getQuestionState('0a11ac6d-e801-425a-bd02-a43dea315dc9');
+      expect(res).not.toBe(undefined);
+    });
+  });
 
-    describe("resetTemplates", function() {
-     it('should call jQuery remove function', function() {
-        questionSetPlugin.resetTemplates();
-       expect(jQuery.fn.remove).toHaveBeenCalled();
-     });
-   });
-   
+  describe("resetTemplates", function() {
+    it('should call jQuery remove function', function() {
+      questionSetPlugin.resetTemplates();
+      expect(jQuery.fn.remove).toHaveBeenCalled();
+    });
+  });
+
 
 
   describe("generateNavigateTelemetry", function() {

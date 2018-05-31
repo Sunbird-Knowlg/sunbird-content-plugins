@@ -4,7 +4,6 @@ var IteratorPlugin = Plugin.extend({
   _render: true,
   _itemIndex: -1,
   initialize: function() {
-    var instance = this;
   },
   registerNavigation: function(PluginInstance) {
     EkstepRendererAPI.dispatchEvent('renderer:navigation:register', PluginInstance);
@@ -16,11 +15,5 @@ var IteratorPlugin = Plugin.extend({
 
   },
   handlePrevious: function() {
-
   }
-  /*,
-    hasPrevious: function (navType) {
-      // navType: String --> "prev" or "next"
-      // Denotes the navigation event that it is triggered for
-    }*/
 });
