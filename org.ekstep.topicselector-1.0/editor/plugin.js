@@ -205,7 +205,10 @@ org.ekstep.contenteditor.basePlugin.extend({
                             topicData.push(topic);
                         });
                         if (index === instance.topics.length - 1){ 
-                            if(topicData.length > 0) instance.topicData = topicData;
+                            if(topicData.length > 0){
+                                instance.topicData = topicData;
+                                instance.data.selectedTopics = [];
+                            }
                             callback();
                         }
                     });

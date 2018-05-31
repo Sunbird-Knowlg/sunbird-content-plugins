@@ -13974,7 +13974,7 @@ describe("Topic selector plugin", function() {
         expect(ApiResponse.data.result.framework.identifier).toEqual('rj_k-12_2');
         done()
     });
-    it('if api return data, all topics should show in topic tree', function(done){
+    xit('if api return data, all topics should show in topic tree', function(done){
         ecEditor.getService('meta').getCategorys = jasmine.createSpy().and.callFake(function(data, callBack) {
             pluginInstance.categories = ApiResponse.data.result.framework.categories[4].terms; 
             callBack();
