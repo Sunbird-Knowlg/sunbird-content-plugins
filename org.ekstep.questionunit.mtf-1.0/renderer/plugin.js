@@ -73,11 +73,11 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
     var responseData = {};
     var left1 = $('#left1')
     var drake = dragula({
-      isContainer: function (el) {
-        return instance.dragulaIsContainer(el);
+      isContainer: function (elem) {
+        return instance.dragulaIsContainer(elem);
         },
-      accepts: function(el, t, s, si) {
-        if ($(t).children().length > 0) {
+      accepts: function(elem, target, source, sibling) {
+        if ($(target).children().length > 0) {
           return false;
         }
         return true;
@@ -85,16 +85,16 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
     });
     var leftList = document.querySelector('#left1');
     var rightList = document.querySelector('#right1');
-    drake.on('drop', function(el, t, s, si) {
-      if (!_.isUndefined($(s).attr('mapIndex'))) {
+    drake.on('drop', function(elem, target, source, sibling) {
+      if (!_.isUndefined($(source).attr('mapIndex'))) {
         var rhsData = {};
-        var ts = $(t)[0].childNodes[0];
-        var text = $(t).text();
-        rhsData.mapIndex = $(s).attr('mapIndex');
+        var ts = $(target)[0].childNodes[0];
+        var text = $(target).text();
+        rhsData.mapIndex = $(source).attr('mapIndex');
         rhsData.selText = text.trim();
         //check element existing in array if remove it or add into array
         var existEle = _.some(instance._selectedAanswers, function(elem) {
-          return elem.mapIndex == $(s).attr('mapIndex');
+          return elem.mapIndex == $(source).attr('mapIndex');
         });
         if (!existEle) {
           instance._selectedAanswers.push(rhsData);
@@ -108,7 +108,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
         }
       } else {
         instance._selectedAanswers = _.filter(instance._selectedAanswers, function(item) {
-          return item.mapIndex !== $(t).attr('mapIndex')
+          return item.mapIndex !== $(target).attr('mapIndex')
         });
       }
     });
