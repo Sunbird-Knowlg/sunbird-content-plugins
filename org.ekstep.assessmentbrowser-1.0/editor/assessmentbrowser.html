@@ -80,7 +80,7 @@
                             <div class="field">
                                 <div class="ui fluid labeled input">
                                     <div class="ui label">Medium</div>
-                                    <select class="ui fluid dropdown search" ng-model="$ctrl.activity.medium" ng-options="medium.code as medium.name for medium in $ctrl.assessment.medium" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'mediumDropDown'})">
+                                    <select class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.medium" ng-options="medium.name as medium.name for medium in $ctrl.assessment.medium" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'mediumDropDown'})">
                                         <option value="">
                                             Medium
                                         </option>
@@ -112,7 +112,7 @@
                             <div class="field">
                                 <div class="ui fluid labeled input">
                                     <div class="ui label">&emsp;Class&nbsp;&nbsp;</div>
-                                    <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.gradeLevel" ng-options="grade.name for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'gradeDropDown'})">
+                                    <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.gradeLevel" ng-options="grade.name as grade.name for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'gradeDropDown'})">
                                         <option value="">
                                             Class
                                         </option>
