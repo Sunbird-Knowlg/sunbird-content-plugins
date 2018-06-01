@@ -369,7 +369,5 @@ angular.module('assessmentbrowserapp', [])
         ctrl.generateTelemetry = function(data) {
           if (data) ecEditor.getService('telemetry').interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver, "objectid": "", "stage": ecEditor.getCurrentStage().id })
         }
-
-        ctrl.getFrameworkData();
     }]);
 //# sourceURL=assessmentbrowserapp.js
