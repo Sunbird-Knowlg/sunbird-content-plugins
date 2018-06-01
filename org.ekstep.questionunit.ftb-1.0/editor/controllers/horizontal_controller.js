@@ -45,6 +45,14 @@ angular.module('ftbApp', []).controller('ftbQuestionFormController', ['$scope', 
     preload: true
   };
   $scope.ftbFormData.media.push(languageIcon);
+  var hideKeyboardIcon = {
+    id: "org.ekstep.keyboard.hide_keyboard",
+    src: ecEditor.resolvePluginResource("org.ekstep.keyboard", "1.0", 'renderer/assets/keyboard.svg'),
+    assetId: "org.ekstep.keyboard.hide_keyboard",
+    type: "image",
+    preload: true
+  };
+  $scope.ftbFormData.media.push(hideKeyboardIcon);
   var questionInput = CKEDITOR.replace('ftbQuestion', { // eslint-disable-line no-undef
     customConfig: CKEDITOR.basePath + "config.js", // eslint-disable-line no-undef
     skin: 'moono-lisa,' + CKEDITOR.basePath + "skins/moono-lisa/", // eslint-disable-line no-undef

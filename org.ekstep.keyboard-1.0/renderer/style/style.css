@@ -41,15 +41,6 @@
   background: white;
 }
 
-.keyboardArea {
-  /*height: 50%;
-    position: fixed;
-    margin-top: 33%;
-    z-index: 1;
-    width: 100%;
-    background-color:#ebebeb;*/
-}
-
 .question {
   margin-top: 7%;
   font-weight: bold;
