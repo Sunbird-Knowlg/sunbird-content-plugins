@@ -30,6 +30,26 @@ describe("compatibility check `org.ekstep.sunbirdmetdata-1.1` with ` Editor 3.2.
         });
 
     });
+    describe('Get configurations,`Framework`,`form config`,`resourceBundle`', function() {
+        it('Should get the configurations', function(done) {
+            var requestObject = { "action": "save", "subType": "course", "framework": "NCF", "rootOrgId": "b00bc992ef25f1a9a8d63291e20efc8d", "type": "content", "popup": true, "editMode": true }
+            org.ekstep.services.config.apislug = 'https://dev.ekstep.in/api'
+            var frameworkId = 'NCFCOPY';
+            org.ekstep.services.iService.requestHeaders = {
+                "headers": {
+                    "content-type": "application/json",
+                    "user-id": "content-editor",
+                    "Authorization": "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIwNjM3ODhjMDFjMTg0OGEwOGJjNTRkNzZjYjFkNjQ0ZiIsImlhdCI6bnVsbCwiZXhwIjpudWxsLCJhdWQiOiIiLCJzdWIiOiIifQ.k-C981IZ7clwqDNtBNZ4vL_Iz0BN25MgCbyeZX89Lp0"
+                }
+            };
+            pluginInstance.getConfigurations(requestObject, function(err, res) {
+                console.log("res", res);
+                expect(err).toBe(undefined);
+                expect(res).not.toBe(undefined);
+                done()
+            })
+        })
+    })
     describe('Plugin invoke', function() {
         xit('It should invoke the plugin when `org.ekstep.editcontentmeta:showpopup` event is dispatched', function(done) {
             ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { model: {}, editMode: true });
@@ -129,6 +149,15 @@ describe("compatibility check `org.ekstep.sunbirdmetdata-1.1` with ` Editor 3.2.
             expect(pluginInstance.form).not.toBe(undefined);
             done()
         });
+        it('Should throw an error, When invalid configurations are passed', function(done) {
+            try {
+                pluginInstance.invoke('', undefined);
+            } catch (e) {
+                expect(e).not.toBe(undefined);
+                expect(e).toBe('Invalid config data');
+                done()
+            }
+        });
         it('When configurations are exists then it should fetch the config from local cache', function(done) {
             var key1 = 'textbook',
                 key2 = 'save';
@@ -149,15 +178,7 @@ describe("compatibility check `org.ekstep.sunbirdmetdata-1.1` with ` Editor 3.2.
             expect(configurations).toBe(undefined);
             done()
         })
-        xit('Should throw an error, When invalid configurations are passed', function(done) {
-            try {
-                pluginInstance.invoke('', undefined);
-            } catch (e) {
-                expect(e).not.toBe(undefined);
-                expect(e).toBe('Invalid config data');
-                done()
-            }
-        });
+
     });
     describe('From success action', function() {
         describe('Form review', function() {
