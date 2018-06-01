@@ -87,13 +87,17 @@ org.ekstep.contenteditor.basePlugin.extend({
                     instance.topics = instance.topicData;
                     instance.isPopupInitialized = true;
                     instance.selectedFilters = [];
-                    ecEditor.dispatchEvent("metadata:form:getformdata", function(data){
-                        instance.setAssociations(data, function(){
-                            instance.setFiltersData(function(){
-                                instance.showTopicBrowser(event, instance.data);         
+                    if(instance.data.isCategoryDependant){
+                        ecEditor.dispatchEvent("metadata:form:getformdata", function(data){
+                            instance.setAssociations(data, function(){
+                                instance.setFiltersData(function(){
+                                    instance.showTopicBrowser(event, instance.data);         
+                                });
                             });
                         });
-                    });
+                    }else{
+                        instance.showTopicBrowser(event, instance.data);
+                    }
                 });
             }else{
                 instance.isPopupInitialized = true;

@@ -23,6 +23,7 @@ formApp.directive('topicSelector', function() {
             ecEditor.dispatchEvent('org.ekstep.topicselector:init', {
                 element: $scope.topicElementId,
                 selectedTopics: selectedTopics,
+                isCategoryDependant : true,
                 callback: function(data) {
                     console.log("Length", data)
                     $scope.topicSelectorMessage = '(' + data.length + ') topics selected';

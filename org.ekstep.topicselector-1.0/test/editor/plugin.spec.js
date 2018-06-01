@@ -13954,7 +13954,7 @@ describe("Topic selector plugin", function() {
     });
     it('Should show topic tree picker popup', function(done){
         spyOn(pluginInstance, "initData").and.callThrough();
-        spyOn(pluginInstance, "getTopicCategory").and.callThrough();
+        spyOn(pluginInstance, "getCategory").and.callThrough();
         ecEditor.getService('meta').getCategorys = jasmine.createSpy().and.callFake(function(data, callBack) {
             callBack(true, []);
         });
@@ -13964,19 +13964,19 @@ describe("Topic selector plugin", function() {
         });
         expect(pluginInstance.initData).toHaveBeenCalled();
         expect(pluginInstance.isPopupInitialized).toBe(true)
-        done()
+        done();
     });
     it('if framework has topic then it should return topics categories', function(done){
-        spyOn(pluginInstance, "getTopicCategory").and.callThrough();
+        spyOn(pluginInstance, "getCategory").and.callThrough();
         ecEditor.getService('meta').getCategorys = jasmine.createSpy().and.callFake(function(data, callBack) {
-            callBack(true, ApiResponse);
+            callBack(true, ApiResponse.data.result.framework.categories[4].terms);
         });
         expect(ApiResponse.data.result.framework.identifier).toEqual('rj_k-12_2');
         done()
     });
     it('if api return data, all topics should show in topic tree', function(done){
         spyOn(pluginInstance, "initData").and.callThrough();
-        spyOn(pluginInstance, "getTopicCategory").and.callThrough();
+        spyOn(pluginInstance, "getCategory").and.callThrough();
         ecEditor.getService('meta').getCategorys = jasmine.createSpy().and.callFake(function(data, callBack) {
             pluginInstance.categories = ApiResponse.data.result.framework.categories[4].terms;
         });
@@ -21533,11 +21533,11 @@ describe("Topic selector plugin", function() {
             ]
         }
         ];
-        spyOn(pluginInstance, "mapData").and.callThrough();
-        pluginInstance.mapData(ApiResponse.data.result.framework.categories[4].terms, function(data){
+        spyOn(pluginInstance, "getTopics").and.callThrough();
+        pluginInstance.getTopics(ApiResponse.data.result.framework.categories[4].terms, function(data){
             expect(data).toEqual(returnData);
         });
-        expect(pluginInstance.mapData).toHaveBeenCalled();
+        expect(pluginInstance.getTopics).toHaveBeenCalled();
         done()
     });
     it('filters should apply to topic tree', function(done){
