@@ -240,24 +240,22 @@ org.ekstep.contenteditor.basePlugin.extend({
             category.name = value;
             category.value = data[value];
             category.association = [];
-            ecEditor._.forEach(instance.response, function(apiCategory, index) {
-                if(apiCategory.code == value){
-                    ecEditor._.forEach(apiCategory.terms, function(term, index) {
-                        if(!ecEditor._.isUndefined(term.associations)){
-                            if(_.isArray(data[value]) && term.associations.length > 0){
-                                ecEditor._.forEach(data[value], function(select, index) {
-                                    if(term.name == select && category.association.length > 0) {
-                                        term.associations  = _.union(category.association[0], term.associations);
-                                        category.association = term.associations;
-                                    }else if(term.name == select){                                      
-                                        category.association.push(term.associations);
-                                    }
-                                });
-                            }else if(term.name == data[value] && term.associations.length > 0){
+            
+            var categoryTerms = _.find(instance.response, function(o){ return o.code === value;}).terms;
+            ecEditor._.forEach(categoryTerms, function(term, index) {
+                if(!ecEditor._.isUndefined(term.associations)){
+                    if(_.isArray(data[value]) && term.associations.length > 0){
+                        ecEditor._.forEach(data[value], function(select, index) {
+                            if(term.name == select && category.association.length > 0) {
+                                term.associations  = _.union(category.association[0], term.associations);
+                                category.association = term.associations;
+                            }else if(term.name == select){                                      
                                 category.association.push(term.associations);
                             }
-                        }
-                    });
+                        });
+                    }else if(term.name == data[value] && term.associations.length > 0){
+                        category.association.push(term.associations);
+                    }
                 }
             });
             instance.selectedFilters.push(category);
