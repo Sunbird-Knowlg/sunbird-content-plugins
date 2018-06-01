@@ -22,33 +22,6 @@ angular.module('assessmentbrowserapp', [])
             'conceptIds': []
         };
 
-        /* 
-         * Get Langauge, Grade, Class and Subject from NCF Api. 
-        */
-        ctrl.getFrameworkData = function() {
-            if(!instance.frameworkObject) {
-                ecEditor.getService('meta').getCategorys('NCF', function(err, respCat) {
-                    !err && (ctrl.frameworkCatData = respCat) 
-                    instance.frameworkObject = respCat;
-                    ctrl.frameworkCatData = respCat;
-                });
-            } else {
-                ctrl.frameworkCatData = instance.frameworkObject;
-            }    
-            ecEditor._.forEach(ctrl.frameworkCatData.data.result.framework.categories, function(category) {
-                switch (category.code) {
-                    case "medium":
-                        ctrl.assessment.mediumLevel = category.name;
-                        ctrl.assessment.languageList = category.terms;
-                        break;
-                    case "gradeLevel":
-                        ctrl.assessment.gradeLevel = category.name;
-                        ctrl.assessment.gradeList = category.terms;
-                        break;
-                }
-            });
-        }
-
         if(ecEditor._.isUndefined(instance.data.questionnaire)){
             ctrl.activityOptions = {    
                 title: "",
