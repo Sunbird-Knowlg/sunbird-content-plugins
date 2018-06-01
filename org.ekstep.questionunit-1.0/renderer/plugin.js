@@ -8,7 +8,7 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
     this.initTemplate(this);
     EkstepRendererAPI.addEventListener(this._manifest.id + ":show", this.showQuestion, this);
     EkstepRendererAPI.addEventListener(this._manifest.id + ":hide", this.hideQuestion, this);
-    EkstepRendererAPI.addEventListener(this._manifest.id + ":evaluate", this.evaluateQuestion);
+    EkstepRendererAPI.addEventListener(this._manifest.id + ":evaluate", this.evaluateQuestion, this);
   },
   initTemplate: function() {
 
