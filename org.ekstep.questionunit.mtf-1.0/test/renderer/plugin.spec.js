@@ -153,7 +153,6 @@ describe('MTFRendererPlugin', function() {
       }
     };
     plugin = new org.ekstep.questionunitmtf.RendererPlugin({}, {}, {});
-    //dragula = new dragula();
     mtfInstance = plugin;
     mtfInstance.questionData = {};
     mtfInstance.questionData.questionConfig = currentquesObj.questionConfig;
@@ -197,10 +196,7 @@ describe('MTFRendererPlugin', function() {
         expect(questionObj).toBeUndefined();
     });
     it("should call dragula drag and drop function", function() {
-      //plugin.postQuestionShow(currentquesObj);
-      //expect(plugin.dragulaIsContainer).toHaveBeenCalled();
-      //var el = plugin.dragulaIsContainer("html");
-      //expect(el).not.toBe(true);
+
     });
   });
   describe('evaluateQuestion', function() {

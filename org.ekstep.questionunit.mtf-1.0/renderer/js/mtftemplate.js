@@ -1,7 +1,4 @@
 var QS_MTFTemplate = {};
-QS_MTFTemplate.constant = {
-    parentDiv: "#preview-mtf-horizontal"
-};
 QS_MTFTemplate.htmlLayout = "<div class='mtf-layout'>\
     <header class='mtf-header'>\
       <div class='mtf-question-text'><%= questionObj.question.text %>\</div>\

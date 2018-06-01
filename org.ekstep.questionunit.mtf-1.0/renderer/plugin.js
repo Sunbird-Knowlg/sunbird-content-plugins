@@ -92,14 +92,11 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
         var text = $(target).text();
         rhsData.mapIndex = $(source).attr('mapIndex');
         rhsData.selText = text.trim();
-        //check element existing in array if remove it or add into array
-        var existEle = _.some(instance._selectedAanswers, function(elem) {
-          return elem.mapIndex == $(source).attr('mapIndex');
-        });
+        var existEle = _.contains(instance._selectedAanswers,rhsData);
         if (!existEle) {
-          instance._selectedAanswers.push(rhsData);
+          instance._selectedAanswers[Number($(target).attr('leftindex'))-1] = rhsData;
           responseData = [{
-            "lhs": currentquesObj.questionData.option.optionsLHS[($(s).attr('mapIndex')-1)].text,
+            "lhs": currentquesObj.questionData.option.optionsLHS[($(source).attr('mapIndex')-1)].text,
             "rhs": text.trim()
           }];
           instance.logTelemetryItemResponse(responseData);
@@ -121,13 +118,13 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
     var tempCount = 0;
     var qLhsData = instance._mtfData.option.optionsLHS;
     if (!_.isUndefined(instance._selectedAanswers)) {
-      for (var i = 0; i < instance._mtfData.option.optionsLHS.length; i++) {
+      _.each(instance._mtfData.option.optionsLHS,function(val,key){
         var telObj = {};
-        if (!_.isUndefined(instance._selectedAanswers[i])) {
-          telObj[qLhsData[i].text] = instance._selectedAanswers[i].selText;
+        if (!_.isUndefined(instance._selectedAanswers[key])) {
+          telObj[qLhsData[key].text] = instance._selectedAanswers[key].selText;
           teleValues.push(telObj);
-          var t = instance._selectedAanswers[i].mapIndex;
-          if (qLhsData[i].index != Number(t)) {
+          var t = instance._selectedAanswers[key].mapIndex;
+          if (qLhsData[key].index != Number(t)) {
             correctAnswer = false;
           } else {
             tempCount++;
@@ -135,7 +132,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
         } else {
           correctAnswer = false;
         }
-      }
+      });
     }
     var partialScore = (tempCount / qLhsData.length) * instance._mtfConfig.max_score;
     var result = {
@@ -149,7 +146,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
       score: partialScore,
       values: teleValues,
       noOfCorrectAns: tempCount,
-      totalAns: instance._mtfData.option.optionsLHS.length
+      totalAns: qLhsData.length
     }
     if (_.isFunction(cb)) {
       cb(result);
