@@ -66,7 +66,6 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     initialize: function() {
         var instance = this;
-
         /**Register event to show topic selector browser**/
         ecEditor.addEventListener(instance.manifest.id + ":init", this.initData, this);
         /**Register event for update filters data**/
@@ -212,7 +211,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     ecEditor._.forEach(instance.topics, function(topic, index) {
                         ecEditor._.forEach(selectedIntersection, function(id) {
                             if (topic.id == id)
-                            topicData.push(topic);
+                                topicData.push(topic);
                         });
                         if (index === instance.topics.length - 1){ 
                             if(topicData.length > 0){
@@ -240,7 +239,6 @@ org.ekstep.contenteditor.basePlugin.extend({
             category.name = value;
             category.value = data[value];
             category.association = [];
-            
             var categoryTerms = _.find(instance.response, function(o){ return o.code === value;}).terms;
             ecEditor._.forEach(categoryTerms, function(term, index) {
                 if(!ecEditor._.isUndefined(term.associations)){
