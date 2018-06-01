@@ -1,4 +1,5 @@
 var topicModal;
+/* istanbul ignore next */
 (function() {
     $.fn.topicTreePicker = function(options) {
         var actionButtons, config, count, initialize, initializeNodeList, initializeNodes, loadNodes, modal, nodeClicked, nodeIsPicked, nodes, pickNode, picked, recursiveNodeSearch, renderList, renderTree, showPicked, showSearch, showTree, tabs, unpickNode, updatePickedIds, updatePickedNodes, widget;

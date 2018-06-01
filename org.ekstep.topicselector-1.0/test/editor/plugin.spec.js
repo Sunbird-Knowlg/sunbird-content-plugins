@@ -13938,6 +13938,1161 @@ describe("Topic selector plugin", function() {
                 "status": "Live"
             }
         }}};
+    
+    var selected_filters = [
+        {
+            "name": "board",
+            "association": []
+        },
+        {
+            "name": "medium",
+            "value": "Hindi",
+            "association": [
+            [
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_63",
+                "code": "mathematics_l1Con_63",
+                "name": "Circle",
+                "description": "Circle",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_30",
+                "code": "science_l1Con_30",
+                "name": "Health, Disease And Yoga",
+                "description": "Health, Disease And Yoga",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_38",
+                "code": "science_l1Con_38",
+                "name": "Chemical Reaction, Calatyst",
+                "description": "Chemical Reaction, Calatyst",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_22",
+                "code": "science_l1Con_22",
+                "name": "Structure Of Living Organism",
+                "description": "Structure Of Living Organism",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_2",
+                "code": "mathematics_l1Con_2",
+                "name": "Number System",
+                "description": "Number System",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_41",
+                "code": "science_l1Con_41",
+                "name": "Light,",
+                "description": "Light,",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_14",
+                "code": "mathematics_l1Con_14",
+                "name": "Triginometric Ratios Of Acute Angles",
+                "description": "Triginometric Ratios Of Acute Angles",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_65",
+                "code": "mathematics_l1Con_65",
+                "name": "Constructions",
+                "description": "Constructions",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_60",
+                "code": "mathematics_l1Con_60",
+                "name": "Coordinate Geometry",
+                "description": "Coordinate Geometry",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_15",
+                "code": "mathematics_l1Con_15",
+                "name": "Statistics",
+                "description": "Statistics",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_48",
+                "code": "science_l1Con_48",
+                "name": "Universe And Organic Evolution",
+                "description": "Universe And Organic Evolution",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_8",
+                "code": "mathematics_l1Con_8",
+                "name": "Construction Of Triangles",
+                "description": "Construction Of Triangles",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_25",
+                "code": "science_l1Con_25",
+                "name": "Force And Motion",
+                "description": "Force And Motion",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_42",
+                "code": "science_l1Con_42",
+                "name": "Electric Current",
+                "description": "Electric Current",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_68",
+                "code": "mathematics_l1Con_68",
+                "name": "Measures Of Central Tendency",
+                "description": "Measures Of Central Tendency",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_36",
+                "code": "science_l1Con_36",
+                "name": "Immunity, Blood Group, Types Of Blood",
+                "description": "Immunity, Blood Group, Types Of Blood",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_31",
+                "code": "science_l1Con_31",
+                "name": "Natural Resources And Agriculture",
+                "description": "Natural Resources And Agriculture",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_4",
+                "code": "mathematics_l1Con_4",
+                "name": "Linear Equations In Two Variables",
+                "description": "Linear Equations In Two Variables",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_61",
+                "code": "mathematics_l1Con_61",
+                "name": "Locus",
+                "description": "Locus",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_58",
+                "code": "mathematics_l1Con_58",
+                "name": "Trignometric Identities",
+                "description": "Trignometric Identities",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_27",
+                "code": "science_l1Con_27",
+                "name": "Sound",
+                "description": "Sound",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_21",
+                "code": "science_l1Con_21",
+                "name": "Concept Of Life",
+                "description": "Concept Of Life",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_54",
+                "code": "mathematics_l1Con_54",
+                "name": "Polynomials And Quadratc Equations",
+                "description": "Polynomials And Quadratc Equations",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_subject_mathematics",
+                "code": "mathematics",
+                "name": "Mathematics",
+                "description": "Mathematics",
+                "category": "subject",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_gradelevel_class9",
+                "code": "class9",
+                "name": "Class 9",
+                "description": "Class 9",
+                "category": "gradeLevel",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_17",
+                "code": "science_l1Con_17",
+                "name": "Bharat And Science",
+                "description": "Bharat And Science",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_43",
+                "code": "science_l1Con_43",
+                "name": "Work, Energy, Power",
+                "description": "Work, Energy, Power",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_33",
+                "code": "science_l1Con_33",
+                "name": "Food And Human Health, Importance Of Food For Human Body",
+                "description": "Food And Human Health, Importance Of Food For Human Body",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_16",
+                "code": "mathematics_l1Con_16",
+                "name": "Road Safety Education",
+                "description": "Road Safety Education",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_69",
+                "code": "mathematics_l1Con_69",
+                "name": "Probability",
+                "description": "Probability",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_62",
+                "code": "mathematics_l1Con_62",
+                "name": "Similarity",
+                "description": "Similarity",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_11",
+                "code": "mathematics_l1Con_11",
+                "name": "Area Of Plane Figures",
+                "description": "Area Of Plane Figures",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_10",
+                "code": "mathematics_l1Con_10",
+                "name": "Area Of Triangles And Quadrilaterals",
+                "description": "Area Of Triangles And Quadrilaterals",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_56",
+                "code": "mathematics_l1Con_56",
+                "name": "Arithmetic Progressions",
+                "description": "Arithmetic Progressions",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_46",
+                "code": "science_l1Con_46",
+                "name": "Economic Importance Of Plants And Animals",
+                "description": "Economic Importance Of Plants And Animals",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_37",
+                "code": "science_l1Con_37",
+                "name": "Chemistry In Everyday Life, Importance Of Chemistry",
+                "description": "Chemistry In Everyday Life, Importance Of Chemistry",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_49",
+                "code": "science_l1Con_49",
+                "name": "Search Of Life Outside Earth",
+                "description": "Search Of Life Outside Earth",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_18",
+                "code": "science_l1Con_18",
+                "name": "Structure Of Matter And Molecule",
+                "description": "Structure Of Matter And Molecule",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_50",
+                "code": "science_l1Con_50",
+                "name": "Indian Scientist Biography And Achievement",
+                "description": "Indian Scientist Biography And Achievement",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_23",
+                "code": "science_l1Con_23",
+                "name": "Biodiversity",
+                "description": "Biodiversity",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_32",
+                "code": "science_l1Con_32",
+                "name": "Glossary",
+                "description": "Glossary",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_51",
+                "code": "science_l1Con_51",
+                "name": "Biodiversity And Its Conservation",
+                "description": "Biodiversity And Its Conservation",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_26",
+                "code": "science_l1Con_26",
+                "name": "Gravitation",
+                "description": "Gravitation",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_6",
+                "code": "mathematics_l1Con_6",
+                "name": "Rectilinear Figures",
+                "description": "Rectilinear Figures",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_59",
+                "code": "mathematics_l1Con_59",
+                "name": "Heights And Distance",
+                "description": "Heights And Distance",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_24",
+                "code": "science_l1Con_24",
+                "name": "Vital Function Of Living Organism",
+                "description": "Vital Function Of Living Organism",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_13",
+                "code": "mathematics_l1Con_13",
+                "name": "Angle And Their Measurement",
+                "description": "Angle And Their Measurement",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_44",
+                "code": "science_l1Con_44",
+                "name": "Natural Resources",
+                "description": "Natural Resources",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_67",
+                "code": "mathematics_l1Con_67",
+                "name": "Surface Area And Volume",
+                "description": "Surface Area And Volume",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_1",
+                "code": "mathematics_l1Con_1",
+                "name": "Vedic Mathematics",
+                "description": "Vedic Mathematics",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_29",
+                "code": "science_l1Con_29",
+                "name": "Environment",
+                "description": "Environment",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_5",
+                "code": "mathematics_l1Con_5",
+                "name": "Plane Geometry And Line & Angle",
+                "description": "Plane Geometry And Line & Angle",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_55",
+                "code": "mathematics_l1Con_55",
+                "name": "Linear Equations And Inequalities In Two Variables",
+                "description": "Linear Equations And Inequalities In Two Variables",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_52",
+                "code": "science_l1Con_52",
+                "name": "Road Safety",
+                "description": "Road Safety",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_57",
+                "code": "mathematics_l1Con_57",
+                "name": "Trigonometric Ratios",
+                "description": "Trigonometric Ratios",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_40",
+                "code": "science_l1Con_40",
+                "name": "Carbon, Compounds Of Carbon",
+                "description": "Carbon, Compounds Of Carbon",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_39",
+                "code": "science_l1Con_39",
+                "name": "Atomic Theory, Periodic Classification Of Elements, Properties Of Elements",
+                "description": "Atomic Theory, Periodic Classification Of Elements, Properties Of Elements",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_subject_science",
+                "code": "science",
+                "name": "Science",
+                "description": "Science",
+                "category": "subject",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_64",
+                "code": "mathematics_l1Con_64",
+                "name": "Circle And Tangent",
+                "description": "Circle And Tangent",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_45",
+                "code": "science_l1Con_45",
+                "name": "Waste And Its Management",
+                "description": "Waste And Its Management",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_47",
+                "code": "science_l1Con_47",
+                "name": "Structure Of Earth",
+                "description": "Structure Of Earth",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_19",
+                "code": "science_l1Con_19",
+                "name": "Atomic Structure",
+                "description": "Atomic Structure",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_34",
+                "code": "science_l1Con_34",
+                "name": "Human System",
+                "description": "Human System",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_9",
+                "code": "mathematics_l1Con_9",
+                "name": "Quadrilaterals",
+                "description": "Quadrilaterals",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_gradelevel_class10",
+                "code": "class10",
+                "name": "Class 10",
+                "description": "Class 10",
+                "category": "gradeLevel",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_35",
+                "code": "science_l1Con_35",
+                "name": "Genetics, Heredity",
+                "description": "Genetics, Heredity",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_66",
+                "code": "mathematics_l1Con_66",
+                "name": "Circumference Of A Circle And Area",
+                "description": "Circumference Of A Circle And Area",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_28",
+                "code": "science_l1Con_28",
+                "name": "Celestial Bodies And Indian Calendar",
+                "description": "Celestial Bodies And Indian Calendar",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_7",
+                "code": "mathematics_l1Con_7",
+                "name": "Congruence And Inequalities Of Triangles",
+                "description": "Congruence And Inequalities Of Triangles",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_3",
+                "code": "mathematics_l1Con_3",
+                "name": "Polynomials",
+                "description": "Polynomials",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_53",
+                "code": "mathematics_l1Con_53",
+                "name": "Real Numbers",
+                "description": "Real Numbers",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_12",
+                "code": "mathematics_l1Con_12",
+                "name": "Surface Area And Volume Of Cube And Cuboid",
+                "description": "Surface Area And Volume Of Cube And Cuboid",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_20",
+                "code": "science_l1Con_20",
+                "name": "Chemical Bond And Chemical Equation",
+                "description": "Chemical Bond And Chemical Equation",
+                "category": "topic",
+                "status": "Live"
+                }
+            ]
+            ]
+        },
+        {
+            "name": "gradeLevel",
+            "value": [
+            "Class 9"
+            ],
+            "association": [
+            [
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_10",
+                "code": "mathematics_l1Con_10",
+                "name": "Area Of Triangles And Quadrilaterals",
+                "description": "Area Of Triangles And Quadrilaterals",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_19",
+                "code": "science_l1Con_19",
+                "name": "Atomic Structure",
+                "description": "Atomic Structure",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_23",
+                "code": "science_l1Con_23",
+                "name": "Biodiversity",
+                "description": "Biodiversity",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_11",
+                "code": "mathematics_l1Con_11",
+                "name": "Area Of Plane Figures",
+                "description": "Area Of Plane Figures",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_26",
+                "code": "science_l1Con_26",
+                "name": "Gravitation",
+                "description": "Gravitation",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_20",
+                "code": "science_l1Con_20",
+                "name": "Chemical Bond And Chemical Equation",
+                "description": "Chemical Bond And Chemical Equation",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_24",
+                "code": "science_l1Con_24",
+                "name": "Vital Function Of Living Organism",
+                "description": "Vital Function Of Living Organism",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_28",
+                "code": "science_l1Con_28",
+                "name": "Celestial Bodies And Indian Calendar",
+                "description": "Celestial Bodies And Indian Calendar",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_3",
+                "code": "mathematics_l1Con_3",
+                "name": "Polynomials",
+                "description": "Polynomials",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_subject_mathematics",
+                "code": "mathematics",
+                "name": "Mathematics",
+                "description": "Mathematics",
+                "category": "subject",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_32",
+                "code": "science_l1Con_32",
+                "name": "Glossary",
+                "description": "Glossary",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_22",
+                "code": "science_l1Con_22",
+                "name": "Structure Of Living Organism",
+                "description": "Structure Of Living Organism",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_7",
+                "code": "mathematics_l1Con_7",
+                "name": "Congruence And Inequalities Of Triangles",
+                "description": "Congruence And Inequalities Of Triangles",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_30",
+                "code": "science_l1Con_30",
+                "name": "Health, Disease And Yoga",
+                "description": "Health, Disease And Yoga",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_9",
+                "code": "mathematics_l1Con_9",
+                "name": "Quadrilaterals",
+                "description": "Quadrilaterals",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_15",
+                "code": "mathematics_l1Con_15",
+                "name": "Statistics",
+                "description": "Statistics",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_21",
+                "code": "science_l1Con_21",
+                "name": "Concept Of Life",
+                "description": "Concept Of Life",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_2",
+                "code": "mathematics_l1Con_2",
+                "name": "Number System",
+                "description": "Number System",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_13",
+                "code": "mathematics_l1Con_13",
+                "name": "Angle And Their Measurement",
+                "description": "Angle And Their Measurement",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_8",
+                "code": "mathematics_l1Con_8",
+                "name": "Construction Of Triangles",
+                "description": "Construction Of Triangles",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_6",
+                "code": "mathematics_l1Con_6",
+                "name": "Rectilinear Figures",
+                "description": "Rectilinear Figures",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_4",
+                "code": "mathematics_l1Con_4",
+                "name": "Linear Equations In Two Variables",
+                "description": "Linear Equations In Two Variables",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_29",
+                "code": "science_l1Con_29",
+                "name": "Environment",
+                "description": "Environment",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_18",
+                "code": "science_l1Con_18",
+                "name": "Structure Of Matter And Molecule",
+                "description": "Structure Of Matter And Molecule",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_subject_science",
+                "code": "science",
+                "name": "Science",
+                "description": "Science",
+                "category": "subject",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_27",
+                "code": "science_l1Con_27",
+                "name": "Sound",
+                "description": "Sound",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_12",
+                "code": "mathematics_l1Con_12",
+                "name": "Surface Area And Volume Of Cube And Cuboid",
+                "description": "Surface Area And Volume Of Cube And Cuboid",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_1",
+                "code": "mathematics_l1Con_1",
+                "name": "Vedic Mathematics",
+                "description": "Vedic Mathematics",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_25",
+                "code": "science_l1Con_25",
+                "name": "Force And Motion",
+                "description": "Force And Motion",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_31",
+                "code": "science_l1Con_31",
+                "name": "Natural Resources And Agriculture",
+                "description": "Natural Resources And Agriculture",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_16",
+                "code": "mathematics_l1Con_16",
+                "name": "Road Safety Education",
+                "description": "Road Safety Education",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_14",
+                "code": "mathematics_l1Con_14",
+                "name": "Triginometric Ratios Of Acute Angles",
+                "description": "Triginometric Ratios Of Acute Angles",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_5",
+                "code": "mathematics_l1Con_5",
+                "name": "Plane Geometry And Line & Angle",
+                "description": "Plane Geometry And Line & Angle",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_science_l1con_17",
+                "code": "science_l1Con_17",
+                "name": "Bharat And Science",
+                "description": "Bharat And Science",
+                "category": "topic",
+                "status": "Live"
+                }
+            ]
+            ]
+        },
+        {
+            "name": "subject",
+            "value": "Mathematics",
+            "association": [
+            [
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_67",
+                "code": "mathematics_l1Con_67",
+                "name": "Surface Area And Volume",
+                "description": "Surface Area And Volume",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_58",
+                "code": "mathematics_l1Con_58",
+                "name": "Trignometric Identities",
+                "description": "Trignometric Identities",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_64",
+                "code": "mathematics_l1Con_64",
+                "name": "Circle And Tangent",
+                "description": "Circle And Tangent",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_8",
+                "code": "mathematics_l1Con_8",
+                "name": "Construction Of Triangles",
+                "description": "Construction Of Triangles",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_9",
+                "code": "mathematics_l1Con_9",
+                "name": "Quadrilaterals",
+                "description": "Quadrilaterals",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_7",
+                "code": "mathematics_l1Con_7",
+                "name": "Congruence And Inequalities Of Triangles",
+                "description": "Congruence And Inequalities Of Triangles",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_60",
+                "code": "mathematics_l1Con_60",
+                "name": "Coordinate Geometry",
+                "description": "Coordinate Geometry",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_12",
+                "code": "mathematics_l1Con_12",
+                "name": "Surface Area And Volume Of Cube And Cuboid",
+                "description": "Surface Area And Volume Of Cube And Cuboid",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_3",
+                "code": "mathematics_l1Con_3",
+                "name": "Polynomials",
+                "description": "Polynomials",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_15",
+                "code": "mathematics_l1Con_15",
+                "name": "Statistics",
+                "description": "Statistics",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_61",
+                "code": "mathematics_l1Con_61",
+                "name": "Locus",
+                "description": "Locus",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_14",
+                "code": "mathematics_l1Con_14",
+                "name": "Triginometric Ratios Of Acute Angles",
+                "description": "Triginometric Ratios Of Acute Angles",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_68",
+                "code": "mathematics_l1Con_68",
+                "name": "Measures Of Central Tendency",
+                "description": "Measures Of Central Tendency",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_5",
+                "code": "mathematics_l1Con_5",
+                "name": "Plane Geometry And Line & Angle",
+                "description": "Plane Geometry And Line & Angle",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_1",
+                "code": "mathematics_l1Con_1",
+                "name": "Vedic Mathematics",
+                "description": "Vedic Mathematics",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_16",
+                "code": "mathematics_l1Con_16",
+                "name": "Road Safety Education",
+                "description": "Road Safety Education",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_69",
+                "code": "mathematics_l1Con_69",
+                "name": "Probability",
+                "description": "Probability",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_56",
+                "code": "mathematics_l1Con_56",
+                "name": "Arithmetic Progressions",
+                "description": "Arithmetic Progressions",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_11",
+                "code": "mathematics_l1Con_11",
+                "name": "Area Of Plane Figures",
+                "description": "Area Of Plane Figures",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_62",
+                "code": "mathematics_l1Con_62",
+                "name": "Similarity",
+                "description": "Similarity",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_59",
+                "code": "mathematics_l1Con_59",
+                "name": "Heights And Distance",
+                "description": "Heights And Distance",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_53",
+                "code": "mathematics_l1Con_53",
+                "name": "Real Numbers",
+                "description": "Real Numbers",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_65",
+                "code": "mathematics_l1Con_65",
+                "name": "Constructions",
+                "description": "Constructions",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_55",
+                "code": "mathematics_l1Con_55",
+                "name": "Linear Equations And Inequalities In Two Variables",
+                "description": "Linear Equations And Inequalities In Two Variables",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_66",
+                "code": "mathematics_l1Con_66",
+                "name": "Circumference Of A Circle And Area",
+                "description": "Circumference Of A Circle And Area",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_63",
+                "code": "mathematics_l1Con_63",
+                "name": "Circle",
+                "description": "Circle",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_2",
+                "code": "mathematics_l1Con_2",
+                "name": "Number System",
+                "description": "Number System",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_6",
+                "code": "mathematics_l1Con_6",
+                "name": "Rectilinear Figures",
+                "description": "Rectilinear Figures",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_10",
+                "code": "mathematics_l1Con_10",
+                "name": "Area Of Triangles And Quadrilaterals",
+                "description": "Area Of Triangles And Quadrilaterals",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_57",
+                "code": "mathematics_l1Con_57",
+                "name": "Trigonometric Ratios",
+                "description": "Trigonometric Ratios",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_4",
+                "code": "mathematics_l1Con_4",
+                "name": "Linear Equations In Two Variables",
+                "description": "Linear Equations In Two Variables",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_54",
+                "code": "mathematics_l1Con_54",
+                "name": "Polynomials And Quadratc Equations",
+                "description": "Polynomials And Quadratc Equations",
+                "category": "topic",
+                "status": "Live"
+                },
+                {
+                "identifier": "rj_k-12_2_topic_mathematics_l1con_13",
+                "code": "mathematics_l1Con_13",
+                "name": "Angle And Their Measurement",
+                "description": "Angle And Their Measurement",
+                "category": "topic",
+                "status": "Live"
+                }
+            ]
+            ]
+        }
+        ];
+    
+    
     beforeAll(function(done) {
         CollectionEditorTestFramework.init(function() {
             manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.topicselector");
@@ -13956,7 +15111,7 @@ describe("Topic selector plugin", function() {
         spyOn(pluginInstance, "initData").and.callThrough();
         spyOn(pluginInstance, "getCategory").and.callThrough();
         ecEditor.getService('meta').getCategorys = jasmine.createSpy().and.callFake(function(data, callBack) {
-            callBack(true, []);
+            callBack(undefined, ApiResponse);
         });
         pluginInstance.initData('', {
             "element": "defaultTemplate-topic",
@@ -13968,23 +15123,17 @@ describe("Topic selector plugin", function() {
     });
     it('if framework has topic then it should return topics categories', function(done){
         spyOn(pluginInstance, "getCategory").and.callThrough();
-        ecEditor.getService('meta').getCategorys = jasmine.createSpy().and.callFake(function(data, callBack) {
-            callBack(true, ApiResponse.data.result.framework.categories[4].terms);
-        });
-        expect(ApiResponse.data.result.framework.identifier).toEqual('rj_k-12_2');
+        expect(pluginInstance.categories[0].category).toEqual('topic');
         done()
     });
     it('if api return data, all topics should show in topic tree', function(done){
         spyOn(pluginInstance, "initData").and.callThrough();
         spyOn(pluginInstance, "getCategory").and.callThrough();
-        ecEditor.getService('meta').getCategorys = jasmine.createSpy().and.callFake(function(data, callBack) {
-            pluginInstance.categories = ApiResponse.data.result.framework.categories[4].terms;
-        });
         pluginInstance.initData('', {
             "element": "defaultTemplate-topic",
             "selectedTopics": []
         });
-        expect(pluginInstance.categories[0].identifier).toEqual('rj_k-12_2_topic_mathematics_l1con_1');
+        expect(pluginInstance.categories.length).toEqual(69);
         done()
     });
     it('Should mapped data for semantic ui tree picker', function(done){
@@ -21540,13 +22689,36 @@ describe("Topic selector plugin", function() {
         expect(pluginInstance.getTopics).toHaveBeenCalled();
         done()
     });
-    it('filters should apply to topic tree', function(done){
+    it('if dependent filters changed, selected topics should also reset', function(done){
         spyOn(pluginInstance, "applyFilters").and.callThrough();
         pluginInstance.isPopupInitialized = true;
         pluginInstance.applyFilters('', {
-            "field": {"code": 'topic'}
+            "field": {"depends": ['topic']},
+            "resetSelected" : true
         });
-        expect(pluginInstance.applyFilters).toHaveBeenCalled();
+        expect(pluginInstance.data.selectedTopics).toEqual([]);
         done()
+    });
+    it('if dependent filters changed, dependant topic associations should set', function(done){
+        spyOn(pluginInstance, "setAssociations").and.callThrough();
+        var data = {
+            "subject": "Mathematics",
+            "medium": "Hindi",
+            "gradeLevel": [
+                "Class 9"
+            ],
+            "framework": "rj_k-12_2"
+        };
+        pluginInstance.setAssociations(data, function(){
+            done()
+        });
+        expect(instance.selectedFilters).toEqual(selected_filters);
+    });
+    it('if apply selected filters, should set correct filtered associations', function(done){
+        spyOn(pluginInstance, "setFiltersData").and.callThrough();
+        pluginInstance.setFiltersData(function(){
+            done()
+        });
+        expect(instance.topicData.length).toEqual(16);
     });
 });
