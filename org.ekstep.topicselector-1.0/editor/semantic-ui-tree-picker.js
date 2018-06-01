@@ -180,7 +180,7 @@ var topicModal;
                 });
                 foundNodes = formatedNodes;
                 list = renderList(foundNodes, {
-                    height: '400px',
+                    height: '300px',
                     overflowY: 'auto'
                 });
                 $('.menu .item', modal).removeClass('active');
@@ -203,7 +203,7 @@ var topicModal;
         showPicked = function() {
             var list;
             list = renderList(picked, {
-                height: '400px',
+                height: '300px',
                 overflowY: 'auto'
             });
             $('.menu .item', modal).removeClass('active');
