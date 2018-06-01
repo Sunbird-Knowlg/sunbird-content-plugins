@@ -18,8 +18,7 @@ describe("Compatibility check `org.ekstep.sunbirdmetdata-1.1` with ` Editor 3.2.
 
 
     describe('Plugin initialization', function() {
-        // Assertions       - Should register all the events, cancel,success,change
-        //                  - When plugin spec runs stand-alone
+        // Assertions       - Should register these events[cancel,success,change,reset, showpopup](When plugin run stand alone)
         //              
         it('Should register the events', function(done) {
             spyOn(pluginInstance, "initialize").and.callThrough();
@@ -36,12 +35,12 @@ describe("Compatibility check `org.ekstep.sunbirdmetdata-1.1` with ` Editor 3.2.
     });
 
     describe('Plugin invoke', function() {
-        xit('It should invoke the plugin when `org.ekstep.editcontentmeta:showpopup` event is dispatched', function(done) {
-            ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { model: {}, editMode: true });
-            expect(pluginInstance.model).not.toBe(undefined);
-            expect(pluginInstance.editMode).toBe(true);
-            done()
-        });
+        // xit('It should invoke the plugin when `org.ekstep.editcontentmeta:showpopup` event is dispatched', function(done) {
+        //     ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { model: {}, editMode: true });
+        //     expect(pluginInstance.model).not.toBe(undefined);
+        //     expect(pluginInstance.editMode).toBe(true);
+        //     done()
+        // });
         it('It should render the form with configurations, On invoke of plugin with valid configurations', function(done) {
             // Assertions       - When valid configurations are passed 
             //                  - Framework object should set to the instance level object
@@ -137,6 +136,9 @@ describe("Compatibility check `org.ekstep.sunbirdmetdata-1.1` with ` Editor 3.2.
             expect(pluginInstance.resourceBundle).toBe(undefined);
             expect(pluginInstance.framework).not.toBe(undefined);
             expect(pluginInstance.config).not.toBe(undefined);
+            expect(pluginInstance.config.templateName).not.toBe(undefined);
+            expect(pluginInstance.config.action).not.toBe(undefined);
+            expect(pluginInstance.config.fields).not.toBe(undefined);
             expect(pluginInstance.form).not.toBe(undefined);
             done()
         });
