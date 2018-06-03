@@ -3,7 +3,6 @@
  * Plugin to browse topic and select
  * @class topicselector
  * @extends org.ekstep.contenteditor.basePlugin
- *
  * @author Gourav More <gourav_m@tekditechnologies.com>
  * @listens org.ekstep.topicselector:init
  * @listens editor:field:association
@@ -62,15 +61,15 @@ org.ekstep.contenteditor.basePlugin.extend({
     initialize: function() {
         var instance = this;
         /**Register event to show topic selector browser**/
-        ecEditor.addEventListener(instance.manifest.id + ":init", this.initData, this);
+        ecEditor.addEventListener(instance.manifest.id + ":init", this.initTopicBrowser, this);
         /**Register event for update filters data**/
         ecEditor.addEventListener("editor:field:association", this.applyFilters, this);
     },
     /**
-     * To init topic selector data.
+     * To init topic selector browser.
      * @memberof topicselector
      */
-    initData: function(event, data) {
+    initTopicBrowser: function(event, data) {
         var instance = this;
         instance.data = data;
         instance.getCategory(function(){
