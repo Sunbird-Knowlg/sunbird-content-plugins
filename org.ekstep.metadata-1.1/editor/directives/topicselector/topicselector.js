@@ -7,33 +7,27 @@ formApp.directive('topicSelector', function() {
     const manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.metadata");
 
     var topicController = ['$scope', '$rootScope', '$controller', function($scope, $rootScope, $controller) {
-        var selectedTopics = [];
         $scope.contentMeta = $scope.$parent.contentMeta;
-        $scope.topicSelectorMessage = $scope.contentMeta.topic ? '(' + $scope.contentMeta.topic.length + ') topics selected' : '(0) topics selected'
-        $scope.fieldConfig = $scope.config;
-        if ($scope.contentMeta.topic) {
-            if ($scope.contentMeta.topic.length)
-                _.forEach($scope.contentMeta.topic, function(topic) {
-                    selectedTopics.push(topic);
-                });
-        }
+        $scope.topicSelectorMessage = $scope.contentMeta.topic ? '(' + $scope.contentMeta.topic.length + ') topics selected' : '(0) topics selected';
+        /**Added for more than one topic selector on same page, element id should be unique as per template **/
         $scope.topicElementId = (!_.isUndefined($scope.$parent.$parent.tempalteName)) ? $scope.$parent.$parent.tempalteName + '-topic' : 'metaform-topic';
         $scope.invokeTopicSelector = function() {
-            ecEditor.addEventListener('editor:form:change', $scope.resetTopics, this);
+            ecEditor.addEventListener('editor.topic.change', $scope.resetTopics, this);
             ecEditor.dispatchEvent('org.ekstep.topicselector:init', {
                 element: $scope.topicElementId,
-                selectedTopics: selectedTopics,
+                selectedTopics: $scope.contentMeta.topic || [],
                 isCategoryDependant : true,
-                callback: function(data) {
-                    console.log("Length", data)
-                    $scope.topicSelectorMessage = '(' + data.length + ') topics selected';
-                    $scope.contentMeta.topic = _.map(data, function(topic) {
-                        return  topic.name;
-                    });
-                    ecEditor.dispatchEvent('editor:form:change', {key: 'topic', value: $scope.contentMeta.topic});
-                    $rootScope.$safeApply();
-                }
+                callback: $scope.callbackFn
             });
+        }
+        $scope.callbackFn = function(data) {
+            console.log("Length", data)
+            $scope.topicSelectorMessage = '(' + data.length + ') topics selected';
+            $scope.contentMeta.topic = _.map(data, function(topic) {
+                return  topic.name;
+            });
+            ecEditor.dispatchEvent('editor:form:change', {key: 'topic', value: $scope.contentMeta.topic});
+            $rootScope.$safeApply();
         }
         $scope.resetTopics = function(event, data){
             if(data.key == 'topic' && data.value.length == 0){

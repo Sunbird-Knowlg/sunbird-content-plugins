@@ -6,35 +6,31 @@
  *
  * @author Gourav More <gourav_m@tekditechnologies.com>
  * @listens org.ekstep.topicselector:init
+ * @listens editor:field:association
  */
 
 org.ekstep.contenteditor.basePlugin.extend({
     /**
-     *
      * topic data for sematic ui tree picker lib
      * @memberof topicselector
      */
     topicData: [],
     /**
-     *
      * Api response for categories
      * @memberof topicselector
      */
     response:[],
     /**
-     *
      * Topic terms from API
      * @memberof topicselector
      */
     terms:[],
     /**
-     *
      * Selected filters data from metaform
      * @memberof topicselector
      */
     selectedFilters:[],
     /**
-     *
      * for master data of topic tree
      * @memberof topicselector
      */
@@ -60,7 +56,6 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     isPopupInitialized: false,
     /**
-     *
      * Registers events.
      * @memberof topicselector
      */
@@ -72,7 +67,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.addEventListener("editor:field:association", this.applyFilters, this);
     },
     /**
-     *
      * To init topic selector data.
      * @memberof topicselector
      */
@@ -105,7 +99,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
     },
     /**
-     *
      * get topic data.
      * @memberof topicselector
      */
@@ -129,7 +122,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         }
     },
     /**
-     *
      * To Get topic child recursively.
      * @memberof topicselector
      */
@@ -147,7 +139,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         return ecEditor._.uniqBy(childArray, "id");
     },
     /**
-     *
      * To all topics data.
      * @memberof topicselector
      */
@@ -165,7 +156,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         })
     },
     /**
-     *
      * To apply filters data
      * @memberof topicselector
      */
@@ -176,7 +166,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             _.forEach(data.field.depends, function(id) {
                 if (id == 'topic' && data.resetSelected){
                     instance.data.selectedTopics = [];
-                    ecEditor.dispatchEvent('editor:form:change', {key: 'topic', value: []});
+                    ecEditor.dispatchEvent('editor.topic.change', {key: 'topic', value: []});
                     ecEditor.dispatchEvent("metadata:form:getformdata", function(data){
                         instance.setAssociations(data, function(){
                             instance.setFiltersData(function(){
@@ -189,7 +179,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         }
     },
     /**
-     *
      * To set filters data.
      * @memberof topicselector
      */
@@ -227,7 +216,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         }    
     },
     /**
-     *
      * Set associations according to the filters
      * @memberof topicselector
      */
@@ -261,10 +249,8 @@ org.ekstep.contenteditor.basePlugin.extend({
         callback();
     },
     /**
-     *
      * open topic selector to select topics and subtopics
      * @memberof topicselector
-     *
      */
     showTopicBrowser: function(event, data) {
         var instance = this;
