@@ -384,7 +384,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.init = function() {
         !EventBus.hasEventListener('metadata:form:onsuccess') && ecEditor.addEventListener('metadata:form:onsuccess', $scope.success, $scope);
         !EventBus.hasEventListener('metadata:form:oncancel') && ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
-        !EventBus.hasEventListener('metadata:form:getformdata') && ecEditor.addEventListener('metadata:form:getformdata', $scope.getScopeMeta, $scope);
+        !EventBus.hasEventListener('metadata:form:getdata') && ecEditor.addEventListener('metadata:form:getdata', $scope.getScopeMeta, $scope);
         var callbackFn = function(config) {
             $scope.fields = config.fields;
             $scope.tempalteName = config.template;

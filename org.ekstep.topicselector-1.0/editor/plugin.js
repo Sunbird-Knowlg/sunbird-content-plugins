@@ -80,7 +80,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     instance.isPopupInitialized = true;
                     instance.selectedFilters = [];
                     if(instance.data.isCategoryDependant){
-                        ecEditor.dispatchEvent("metadata:form:getformdata", function(data){
+                        ecEditor.dispatchEvent("metadata:form:getdata", function(data){
                             instance.setAssociations(data, function(){
                                 instance.setFiltersData(function(){
                                     instance.showTopicBrowser(event, instance.data);         
@@ -143,16 +143,21 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     getCategory: function(callback) {
         var instance = this;
-        ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(org.ekstep.contenteditor.globalContext.framework, function(error, response) {
-            if (!error) {
-                instance.response = response.data.result.framework.categories;
-                ecEditor._.forEach(instance.response, function (value, key) {
-                    if (value.code == "topic") instance.categories = value.terms;
-                    else instance.terms.push(value.code);
-                });
-            }
+        var frameworkId = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId')).framework;
+        if (frameworkId){
+            ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(frameworkId, function(error, response) {
+                if (!error) {
+                    instance.response = response.data.result.framework.categories;
+                    ecEditor._.forEach(instance.response, function (value, key) {
+                        if (value.code == "topic") instance.categories = value.terms;
+                        else instance.terms.push(value.code);
+                    });
+                }
+                callback();
+            });
+        }else{
             callback();
-        })
+        }
     },
     /**
      * To apply filters data
@@ -166,7 +171,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 if (id == 'topic' && data.resetSelected){
                     instance.data.selectedTopics = [];
                     ecEditor.dispatchEvent('editor.topic.change', {key: 'topic', value: []});
-                    ecEditor.dispatchEvent("metadata:form:getformdata", function(data){
+                    ecEditor.dispatchEvent("metadata:form:getdata", function(data){
                         instance.setAssociations(data, function(){
                             instance.setFiltersData(function(){
                                 instance.showTopicBrowser(event, instance.data);
