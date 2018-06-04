@@ -10,7 +10,7 @@ MCQTemplate.getVerticalTemplate = function() {
    <div id=<%=key%> class='qc-option-vertical-text'> \
     <% if(val.audio.length > 0 && val.image.length == 0){%> \
       <div> \
-       <img class='qc-vertical-audio-with-image' onclick=MCQTemplate.pluginInstance.playAudio('<%= val.audio %>')  src=<%=MCQTemplate.pluginInstance.addAudioIcon(val.audio) %>>\
+       <img class='qc-vertical-audio-with-image' onclick=MCQTemplate.pluginInstance.playAudio('<%= val.audio %>')  src=<%=MCQTemplate.pluginInstance.checkBaseUrl() %>>\
       </div> \
       <%}%> \
     <% if(val.image.length>0){%> \
@@ -30,7 +30,7 @@ MCQTemplate.getVerticalTemplate = function() {
      </div> \
      <% if(val.audio.length > 0 && val.image.length > 0){%> \
       <div> \
-       <img class='qc-horizontal-audio' onclick=MCQTemplate.pluginInstance.playAudio('<%= val.audio %>')  src=<%=MCQTemplate.pluginInstance.addAudioIcon(val.audio) %>>\
+       <img class='qc-horizontal-audio' onclick=MCQTemplate.pluginInstance.playAudio('<%= val.audio %>')  src=<%=MCQTemplate.pluginInstance.checkBaseUrl() %>>\
      </div>\
      <%}%> \
    </div> \

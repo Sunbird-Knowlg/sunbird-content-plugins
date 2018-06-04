@@ -1,4 +1,4 @@
-#preview-mcq-template {
+#qs-mcq-template {
     height: 90vh;
     margin: auto;
     text-align: center;
@@ -251,8 +251,6 @@ audio.qc-option-audio-with-image {
 
 .qc-option-txt {
     position: relative;
-    /* margin-left: 32%;
-    height: 30vh;*/
     left: inherit;
     top: inherit;
     width: 100%;
@@ -377,7 +375,6 @@ audio.qc-question-audio {
 
 .qc-grid-option-value {
     margin: 0 5px;
-    /*border: 1px solid #c8ccd0;*/
     height: 100%;
 }
 
@@ -426,7 +423,6 @@ audio.qc-question-audio {
 }
 
 .qc-vertical-option-value {
-    /* border: 1px solid #c8ccd0;*/
     height: 98%;
     display: table;
     width: 100%;
@@ -478,16 +474,10 @@ audio.qc-vertical-audio {
 }
 
 .qc-vertical-audio-with-image {
-    /*margin-left: -3%;
-    position: fixed;
-    top: 70%;*/
     width: 30%;
 }
 
 .qc-grid-audio-with-image {
-    /*margin-left: -3%;
-    position: fixed;
-    top: 70%;*/
     width: 77%;
 }
 

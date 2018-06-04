@@ -12,7 +12,10 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
   _render: true,
   _selectedanswere: undefined,
   _constant: {
-    gridLayout: "Grid"
+    gridLayout: "Grid",
+    mcqParentDiv:"#qs-mcq-template",
+    mcqSelectOption:".mcq-option-value",
+    optionSelectionUI:"qsselectedopt"
   },
   _questionData:undefined,
   _selectedIndex:undefined,
@@ -49,15 +52,15 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
     return currentquesObj;
   },
   postQuestionShow: function(currentquesObj) {
-    this._questionData = currentquesObj.questionData; // eslint-disable-line no-undef
-    this._questionData.questionConfig = currentquesObj.questionConfig; // eslint-disable-line no-undef
+    this._questionData = currentquesObj.questionData;
+    this._questionData.questionConfig = currentquesObj.questionConfig;
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS);// eslint-disable-line no-undef
     MCQTemplate.renderQuestion(this._questionData); // eslint-disable-line no-undef
     if (currentquesObj.qState && _.has(currentquesObj.qState, 'val')) {
-      this._selectedIndex = currentquesObj.qState.val; // eslint-disable-line no-undef
-      $("input[name='radio']", $('#preview-mcq-template'))[this._selectedIndex].checked = true; // eslint-disable-line no-undef
+      this._selectedIndex = currentquesObj.qState.val;
+      $("input[name='radio']", $(this._constant.mcqParentDiv))[this._selectedIndex].checked = true; // eslint-disable-line no-undef
     } else {
-      this._selectedIndex = undefined; // eslint-disable-line no-undef
+      this._selectedIndex = undefined;
     }
   },
   /**
@@ -134,21 +137,10 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
    */
   checkBaseUrl: function(url) {
     if (isbrowserpreview) { // eslint-disable-line no-undef
-      return url;
+      return _.isUndefined(url)?org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png"):url;
     } else {
-      return 'file:///' + EkstepRendererAPI.getBaseURL() + url;
-    }
-  },
-  /**
-   * add audio icon in device and browser
-   * @memberof org.ekstep.questionunit.mcq
-   * @returns {String} url.
-   */
-  addAudioIcon: function() {
-    if (isbrowserpreview) { // eslint-disable-line no-undef
-      return org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png");
-    } else {
-      return 'file:///' + EkstepRendererAPI.getBaseURL() + "/content-plugins/org.ekstep.questionunit.mcq-1.0/renderer/assets/audio.png";
+
+      return 'file:///' + EkstepRendererAPI.getBaseURL() + _.isUndefined(url)?"/content-plugins/org.ekstep.questionunit.mcq-1.0/renderer/assets/audio.png":url;
     }
   },
   /**
@@ -180,7 +172,7 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
     var state = {},
       value,
       telValues = {};
-    $(".mcq-option-value").removeClass("qsselectedopt");
+    $(this._constant.mcqSelectOption).removeClass(this._constant.optionSelectionUI);
     $('input:radio[name=radio]')[index].checked = true;
     if (!_.isUndefined(event)) {
       this.selectOptionUI(event);//eslint-disable-line no-undef
@@ -200,10 +192,10 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
     EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
   },
   selectOptionUI: function(event) {
-    if ($(event.target).hasClass('mcq-option-value')) {
-      $(event.target).addClass("qsselectedopt");
+    if ($(event.target).hasClass(this._constant.mcqSelectOption.replace(".", ""))) {
+      $(event.target).addClass(this._constant.optionSelectionUI);
     } else {
-      $(event.target).parents('.mcq-option-value').addClass("qsselectedopt");
+      $(event.target).parents(this._constant.mcqSelectOption).addClass(this._constant.optionSelectionUI);
     }
     //event.stopPropagation(); //stop event because its added in all child template
   },

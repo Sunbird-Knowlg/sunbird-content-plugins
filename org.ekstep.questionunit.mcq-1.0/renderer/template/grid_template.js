@@ -9,7 +9,7 @@ MCQTemplate.getGridTemplate = function() {
       <div class='qc-grid-option-text'>\
               <% if(val.option.audio.length > 0 && val.option.image.length == 0){%> \
           <div class='qc-opt'>\
-                   <img class='qc-vertical-audio-with-image' onclick=MCQTemplate.pluginInstance.playAudio('<%= val.option.audio %>')  src=<%=MCQTemplate.pluginInstance.addAudioIcon(val.option.audio) %>>\
+                   <img class='qc-vertical-audio-with-image' onclick=MCQTemplate.pluginInstance.playAudio('<%= val.option.audio %>')  src=<%=MCQTemplate.pluginInstance.checkBaseUrl() %>>\
           </div>\
                 <%}%> \
                   <% if(val.option.image.length>0){%> \
@@ -29,7 +29,7 @@ MCQTemplate.getGridTemplate = function() {
                                 </div> \
                  <% if(val.option.audio.length>0 && val.option.image.length > 0){%> \
                <div>\
-                      <img class='qc-grid-audio-with-image' onclick=MCQTemplate.pluginInstance.playAudio('<%= val.option.audio %>')  src=<%=MCQTemplate.pluginInstance.addAudioIcon(val.option.audio) %>>\
+                      <img class='qc-grid-audio-with-image' onclick=MCQTemplate.pluginInstance.playAudio('<%= val.option.audio %>')  src=<%=MCQTemplate.pluginInstance.checkBaseUrl() %>>\
                </div>\
                 <%}%> \
             </div>\
@@ -49,7 +49,7 @@ MCQTemplate.getGridTemplate = function() {
       <div class='qc-grid-option-text'>\
               <% if(val.option.audio.length > 0 && val.option.image.length == 0){%> \
           <div class='qc-opt'>\
-                   <img class='qc-vertical-audio-with-image' onclick=MCQTemplate.pluginInstance.playAudio('<%= val.option.audio %>')  src=<%=MCQTemplate.pluginInstance.addAudioIcon(val.option.audio) %>>\
+                   <img class='qc-vertical-audio-with-image' onclick=MCQTemplate.pluginInstance.playAudio('<%= val.option.audio %>')  src=<%=MCQTemplate.pluginInstance.checkBaseUrl(val.option.audio) %>>\
           </div>\
                 <%}%> \
                   <% if(val.option.image.length>0){%> \
@@ -69,7 +69,7 @@ MCQTemplate.getGridTemplate = function() {
                                 </div> \
                  <% if(val.option.audio.length>0 && val.option.image.length > 0){%> \
                <div>\
-                      <img class='qc-grid-audio-with-image' onclick=MCQTemplate.pluginInstance.playAudio('<%= val.option.audio %>')  src=<%=MCQTemplate.pluginInstance.addAudioIcon(val.option.audio) %>>\
+                      <img class='qc-grid-audio-with-image' onclick=MCQTemplate.pluginInstance.playAudio('<%= val.option.audio %>')  src=<%=MCQTemplate.pluginInstance.checkBaseUrl() %>>\
                </div>\
                 <%}%> \
             </div>\

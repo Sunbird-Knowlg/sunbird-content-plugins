@@ -12,7 +12,7 @@ MCQTemplate.getHorizontalTemplate = function() {
       <% } %> \
         <% if(val.audio.length>0){%> \
       <div class='qc-opt'>\
-      <img class='qc-horizontal-audio' onclick=MCQTemplate.pluginInstance.playAudio('<%= val.audio %>')  src=<%=MCQTemplate.pluginInstance.addAudioIcon(val.audio) %>>\
+      <img class='qc-horizontal-audio' onclick=MCQTemplate.pluginInstance.playAudio('<%= val.audio %>')  src=<%=MCQTemplate.pluginInstance.checkBaseUrl() %>>\
       </div>\
       <% } %> \
         <% if(val.audio.length>0 || val.image.length>0){%> \

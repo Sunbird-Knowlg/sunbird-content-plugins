@@ -167,7 +167,7 @@ describe('templateController', function() {
   afterEach(function() {});
   describe('loadTemplateContent', function() {
     it("should call the load template function", function() {
-      var template = "<div id='preview-mcq-template'><div id='qc-mcqlayout'></div></div>";
+      var template = "<div id='qs-mcq-template'><div id='qc-mcqlayout'></div></div>";
       var html = MCQTemplate.loadTemplateContent(); //eslint-disable-line no-undef
       expect(html).toEqual(template);
     })

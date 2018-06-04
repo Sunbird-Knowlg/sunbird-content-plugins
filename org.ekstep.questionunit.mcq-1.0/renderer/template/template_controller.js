@@ -3,7 +3,7 @@ MCQTemplate.initTemplate = function(pluginInstance) {
   MCQTemplate.pluginInstance = pluginInstance;
 };
 MCQTemplate.loadTemplateContent = function() {
-  return "<div id='preview-mcq-template'><div id='qc-mcqlayout'></div></div>";
+  return "<div id='qs-mcq-template'><div id='qc-mcqlayout'></div></div>";
 },
 MCQTemplate.renderQuestion = function(questionObj) {
   var template = _.template(MCQTemplate.getQuesLayout());
@@ -61,7 +61,7 @@ MCQTemplate.getQuesLayout = function() {
     </div>\
     <% if ( questionObj.question.audio.length > 0 ){ %> \
       <div class='mcq-question-audio'>\
-      <img class='qc-question-audio-image' src=<%=MCQTemplate.pluginInstance.addAudioIcon() %> onclick=MCQTemplate.pluginInstance.playAudio('<%= questionObj.question.audio %>') > \
+      <img class='qc-question-audio-image' src=<%=MCQTemplate.pluginInstance.checkBaseUrl() %> onclick=MCQTemplate.pluginInstance.playAudio('<%= questionObj.question.audio %>') > \
         </div>\
        <% } %> \
 </header>\
@@ -84,7 +84,7 @@ MCQTemplate.showImageModel = function() {
   var templateData = template({
     src: eventData
   })
-  $("#preview-mcq-template").append(templateData);
+  $("#qs-mcq-template").append(templateData);
 },
 /**
   * onclick overlay or X button the popup will be hide
