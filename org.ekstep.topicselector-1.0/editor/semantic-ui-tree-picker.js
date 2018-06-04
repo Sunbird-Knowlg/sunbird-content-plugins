@@ -28,7 +28,7 @@ var topicModal;
             childrenKey: 'nodes',
             singlePick: false,
             minSearchQueryLength: 3,
-            apiResponseTimeout:5000,
+            apiResponseTimeout:1000,
             hidden: function(node) {
                 return false;
             },

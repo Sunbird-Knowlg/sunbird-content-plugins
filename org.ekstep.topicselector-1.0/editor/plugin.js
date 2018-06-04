@@ -258,7 +258,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.jQuery('#' + data.element).topicTreePicker({
             data: instance.topicData,
             name: 'Topic',
-            apiResponseTimeout: instance.apiResponseTimeout,
             picked: data.selectedTopics,
             onSubmit: function(nodes) {
                 data.callback(nodes);
