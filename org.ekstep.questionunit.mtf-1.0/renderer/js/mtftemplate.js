@@ -20,7 +20,7 @@ QS_MTFTemplate.htmlLayout = "<div class='mtf-layout'>\
         <div class='mtf-hori-option <%= QS_MTFTemplate.optionsWidth %>'>\
           <div class='mtf-hori-ques-option'>\
             <div class='mtf-hori-ques-text'>\
-              <div class='mtf-hori-ques-text-inner cont-dragula' id='left<%= (key+1) %>' leftindex='<%= val.index %>'><% if(val.selText.length > 1){ %> <p><%= val.selText %></p> <% }else{ %><%= val.selText %><% } %></div>\
+              <div class='mtf-hori-ques-text-inner cont-dragula' id='left<%= (key+1) %>' leftindex='<%= val.index %>'><% if(val.selText.length > 0){ %> <p><%= val.selText  %> </p> <% }else{ %><%= val.selText %><% } %></div>\
             </div>\
           </div>\
         </div>\

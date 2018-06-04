@@ -40,7 +40,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
     for (var lhs = 0; lhs < questionData.option.optionsLHS.length; lhs++) {
       var emptyBox = {
         "index": questionData.option.optionsLHS[lhs].index,
-        "selText": " "
+        "selText": ""
       };
       QS_MTFTemplate.selAns.push(emptyBox);
     }
