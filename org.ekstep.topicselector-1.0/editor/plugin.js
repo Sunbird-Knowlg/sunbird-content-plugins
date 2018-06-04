@@ -35,11 +35,6 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     topics: [],
     /**
-     * set default timeout for api response
-     * @memberof topicselector
-     */
-    apiResponseTimeout: 1000,
-    /**
      * categories of framework
      * @memberof topicselector
      */
@@ -143,7 +138,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     getCategory: function(callback) {
         var instance = this;
-        var frameworkId = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId')).framework;
+        var frameworkId = org.ekstep.contenteditor.api.getContext('framework') || ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId')).framework;
         if (frameworkId){
             ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(frameworkId, function(error, response) {
                 if (!error) {
@@ -260,20 +255,18 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         instance.data = data;
         console.log("topics:- ", instance.topicData.length);
-        setTimeout(function() {
-            ecEditor.jQuery('#' + data.element).topicTreePicker({
-                data: instance.topicData,
-                name: 'Topic',
-                apiResponseTimeout: instance.apiResponseTimeout,
-                picked: data.selectedTopics,
-                onSubmit: function(nodes) {
-                    data.callback(nodes);
-                    instance.generateTelemetry({type: 'click', subtype: 'submit', target: 'TopicSelectorSubmit'});
-                },
-                nodeName:"topicSelector_" + data.element,
-                minSearchQueryLength: 1
-            });
-        }, instance.apiResponseTimeout);
+        ecEditor.jQuery('#' + data.element).topicTreePicker({
+            data: instance.topicData,
+            name: 'Topic',
+            apiResponseTimeout: instance.apiResponseTimeout,
+            picked: data.selectedTopics,
+            onSubmit: function(nodes) {
+                data.callback(nodes);
+                instance.generateTelemetry({type: 'click', subtype: 'submit', target: 'TopicSelectorSubmit'});
+            },
+            nodeName:"topicSelector_" + data.element,
+            minSearchQueryLength: 1
+        });
     },
     /**
      *   To generate telemetry events
