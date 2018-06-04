@@ -133,14 +133,14 @@ Keyboard.addLetter = function(event) {
     if (keyValue.innerText != '123') Keyboard.inputValue = event.target.innerText; // eslint-disable-line no-undef
   }
   $(Keyboard.constant.keyboardInput).val(Keyboard.inputValue); // eslint-disable-line no-undef
-  $("#" + Keyboard.targetInput).val(Keyboard.inputValue); // eslint-disable-line no-undef
+  $(Keyboard.targetInput).val(Keyboard.inputValue); // eslint-disable-line no-undef
 };
 
 Keyboard.deleteText = function() {
   Keyboard.inputArray.pop(); // eslint-disable-line no-undef
   Keyboard.inputValue = Keyboard.inputArray.join(""); // eslint-disable-line no-undef
   $(Keyboard.constant.keyboardInput).val(Keyboard.inputValue); // eslint-disable-line no-undef
-  $("#" + Keyboard.targetInput).val(Keyboard.inputValue); // eslint-disable-line no-undef
+  $(Keyboard.targetInput).val(Keyboard.inputValue); // eslint-disable-line no-undef
 };
 Keyboard.hideKeyboard = function() {
   $(Keyboard.constant.keyboardElement).hide();

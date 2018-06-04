@@ -41,18 +41,6 @@
       "dataType": "text"
     }
   },
-  "dependencies": [
-  {
-    "type": "plugin",
-    "plugin": "org.ekstep.questionunit",
-    "ver": "1.0",
-    "scope": "renderer"
-  },
-  {
-    "type": "js",
-    "src": "renderer/util/evaluator.js",
-    "scope": "renderer"
-  }],
   "templates": [
   {
     "id": "ftbtemplate",
@@ -75,16 +63,18 @@
   {
     "main": "renderer/plugin.js",
     "dependencies": [
-      {
-        "type": "css",
-        "src": "renderer/styles/style.css"
-      },
-      {
-        "type": "js",
-        "src": "renderer/ftbTemplate.js"
-      }
-
-    ]
+    {
+      "type": "css",
+      "src": "renderer/styles/style.css"
+    },
+    {
+      "type": "js",
+      "src": "renderer/ftbanstemplate.js"
+    },
+    {
+      "type": "js",
+      "src": "renderer/ftbtemplate.js"
+    }]
   },
   "dependencies": [
   {

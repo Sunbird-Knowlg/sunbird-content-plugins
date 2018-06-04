@@ -40,7 +40,7 @@ QS_FTBTemplate.invokeKeyboard = function(event) { // eslint-disable-line no-unus
   var keyboardConfig = {
     type: QS_FTBTemplate.question.data.question.keyboardConfig.keyboardType,
     keys: QS_FTBTemplate.question.data.question.keyboardConfig.customKeys,
-    target: event.target
+    targetInput: event.target
   };
   /*istanbul ignore else*/
   if (!(isbrowserpreview && (_.isUndefined(QS_FTBTemplate.question.data.question.keyboardConfig) || QS_FTBTemplate.question.data.question.keyboardConfig.keyboardType == "Device"))) { // eslint-disable-line no-undef
@@ -50,7 +50,7 @@ QS_FTBTemplate.invokeKeyboard = function(event) { // eslint-disable-line no-unus
   target.addClass("highlightInput");
   target.siblings().removeClass("highlightInput");
 
-  EkstepRendererAPI.dispatchEvent(QS_FTBTemplate.keyboardPlugin + ":invoke", keyboardConfig, QS_FTBTemplate.keyboardCallback);
+  EkstepRendererAPI.dispatchEvent(QS_FTBTemplate.constant.keyboardPlugin + ":invoke", keyboardConfig, QS_FTBTemplate.keyboardCallback);
 };
 
 /**
