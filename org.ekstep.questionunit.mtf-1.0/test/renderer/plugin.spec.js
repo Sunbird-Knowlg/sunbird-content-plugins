@@ -193,7 +193,7 @@ describe('MTFRendererPlugin', function() {
   describe('postQuestionShow', function() {
     it("should call postquestion function", function() {
         var questionObj = plugin.postQuestionShow(currentquesObj);
-        expect(questionObj).toBeUndefined();
+        expect(questionObj).toBeUndefined(); 
     });
     it("should call dragula drag and drop function", function() {
 
@@ -211,7 +211,7 @@ describe('MTFRendererPlugin', function() {
     });
   });
   describe('logTelemetryItemResponse', function() {
-    it('should call logTelemetryItemResponse', function() {
+    it('should call logTelemetryItemResponse to log dragged element', function() {
       var responseData = [{
         "lhs": "A",
         "rhs": "b"
