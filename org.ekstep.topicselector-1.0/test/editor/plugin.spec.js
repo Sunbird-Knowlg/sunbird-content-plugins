@@ -15108,16 +15108,20 @@ describe("Topic selector plugin", function() {
         expect(EventBus.hasEventListener(event)).toBeTruthy();
     });
     it('Should show topic tree picker popup', function(done){
-        spyOn(pluginInstance, "initData").and.callThrough();
+        spyOn(pluginInstance, "initTopicBrowser").and.callThrough();
         spyOn(pluginInstance, "getCategory").and.callThrough();
+        //spyOn(pluginInstance, "getContentMeta").and.callThrough();
+        ecEditor.getService('content').getContentMeta = jasmine.createSpy().and.callFake(function(data, callBack) {
+            return {"framework": "rj_k-12_2"};
+        });
         ecEditor.getService('meta').getCategorys = jasmine.createSpy().and.callFake(function(data, callBack) {
             callBack(undefined, ApiResponse);
         });
-        pluginInstance.initData('', {
+        pluginInstance.initTopicBrowser('', {
             "element": "defaultTemplate-topic",
             "selectedTopics": []
         });
-        expect(pluginInstance.initData).toHaveBeenCalled();
+        expect(pluginInstance.initTopicBrowser).toHaveBeenCalled();
         expect(pluginInstance.isPopupInitialized).toBe(true)
         done();
     });
@@ -15127,9 +15131,9 @@ describe("Topic selector plugin", function() {
         done()
     });
     it('if api return data, all topics should show in topic tree', function(done){
-        spyOn(pluginInstance, "initData").and.callThrough();
+        spyOn(pluginInstance, "initTopicBrowser").and.callThrough();
         spyOn(pluginInstance, "getCategory").and.callThrough();
-        pluginInstance.initData('', {
+        pluginInstance.initTopicBrowser('', {
             "element": "defaultTemplate-topic",
             "selectedTopics": []
         });
