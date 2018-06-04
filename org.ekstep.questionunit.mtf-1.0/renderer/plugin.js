@@ -81,7 +81,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
           return false;
         }
         return true;
-      }
+      } 
     });
     var leftList = document.querySelector('#left1');
     var rightList = document.querySelector('#right1');
