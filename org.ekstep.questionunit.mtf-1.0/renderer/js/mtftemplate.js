@@ -2,10 +2,10 @@ var QS_MTFTemplate = {};
 
 QS_MTFTemplate.htmlLayout = "<div class='mtf-layout'>\
     <header class='mtf-header'>\
-      <div class='mtf-question-text'><%= questionObj.question.text %>\</div>\
+      <div class='mtf-question-text'><%= question.data.question.text %>\</div>\
     </header>\
     <div class='mtf-hori-container'>\
-      <% _.each(questionObj.option.optionsLHS,function(val,key){ %>\
+      <% _.each(question.data.option.optionsLHS,function(val,key){ %>\
         <div class='mtf-hori-option <%= QS_MTFTemplate.optionsWidth %>'>\
           <div class='mtf-hori-ques-option'>\
             <div class='mtf-hori-ques-text'>\
@@ -27,7 +27,7 @@ QS_MTFTemplate.htmlLayout = "<div class='mtf-layout'>\
       <% });%>\
     </div>\
     <div class='mtf-hori-container panel panel-body'>\
-      <% _.each(questionObj.option.optionsRHS,function(val,key){ %>\
+      <% _.each(question.data.option.optionsRHS,function(val,key){ %>\
         <div class='mtf-hori-option <%= QS_MTFTemplate.optionsWidth %>'>\
           <div class='mtf-hori-ques-option'>\
             <div class='mtf-hori-ques-text'>\
