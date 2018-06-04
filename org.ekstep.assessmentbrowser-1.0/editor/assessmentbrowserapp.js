@@ -145,7 +145,7 @@ angular.module('assessmentbrowserapp', [])
 
 
          ctrl.getFrameworkData = function(callback) {
-            var framework = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).framework || 'NCF';
+            var framework = ecEditor.getContext('framework') || ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).framework;
             ecEditor.getService('meta').getCategorys(framework, function(err, respCat) {
                 if (!err) {
                     ecEditor._.forEach(respCat.data.result.framework.categories, function(category) {
