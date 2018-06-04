@@ -69,7 +69,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       ecEditor.getService('meta').getConfigOrdinals(function (err, res) {
         if (!err) {
           ctrl.grades = res.data.result.ordinals.gradeLevel;
-          ctrl.languages = res.data.result.ordinals.language;
+          ctrl.languages = res.data.result.ordinals.medium;
           $scope.$safeApply();
         }
       });
@@ -144,9 +144,11 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       ctrl.assessmentId = questionData.identifier;
       ctrl.questionData = questionData1;
       ctrl.questionCreationFormData = questionData1.data.data;
-      ctrl.questionData.qcLanguage = questionData1.data.config.metadata.language[0];
+      ctrl.questionData.qcLanguage = questionData1.data.config.metadata.medium;
       ctrl.questionData.questionTitle = questionData1.data.config.metadata.title;
       ctrl.questionData.qcLevel = questionData1.data.config.metadata.qlevel;
+      ctrl.questionData.subject = questionData1.data.config.metadata.subject;
+      ctrl.questionData.board = questionData1.data.config.metadata.board;
       ctrl.questionData.templateType = questionData1.data.config.layout;
       ctrl.questionData.isPartialScore = questionData1.data.config.partial_scoring;
       ctrl.questionData.qcGrade = questionData1.data.config.metadata.gradeLevel;
@@ -184,7 +186,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
     ctrl.setPreviewData = function () {
       var confData = {};
       var qObj = {
-        "config": '{"metadata":{"title":"question title","description":"question description","language":"English"},"max_time":0,"max_score":1,"partial_scoring":' + ctrl.questionData.isPartialScore + ',"isShuffleOption":' + ctrl.questionData.isShuffleOption + ',"layout":' + JSON.stringify(ctrl.questionData.templateType) + '}',
+        "config": '{"metadata":{"title":"question title","description":"question description","medium":"English"},"max_time":0,"max_score":1,"partial_scoring":' + ctrl.questionData.isPartialScore + ',"isShuffleOption":' + ctrl.questionData.isShuffleOption + ',"layout":' + JSON.stringify(ctrl.questionData.templateType) + '}',
         "data": JSON.stringify(ctrl.questionCreationFormData),
         "id": "c943d0a907274471a0572e593eab49c2",
         "pluginId": ctrl.selectedTemplatePluginData.plugin.id,
@@ -334,6 +336,8 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       ctrl.questionMetaData.max_score = ctrl.questionData.questionMaxScore;
       ctrl.questionMetaData.gradeLevel = ctrl.questionData.qcGrade;
       ctrl.questionMetaData.concepts = ctrl.questionData.concepts;
+      ctrl.questionMetaData.subject = ctrl.questionData.subject;
+      ctrl.questionMetaData.board = ctrl.questionData.board;
       if (ctrl.questionMetaData.concepts) {
         ctrl.questionMetaData.conceptData = "(" + ctrl.questionData.concepts.length + ") concepts selected";
       }
@@ -387,7 +391,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       data.plugin = ctrl.selectedTemplatePluginData.plugin;
       data.data = ctrl.questionCreationFormData; 
 
-      var metadataObj = { category: ctrl.category, title:  ctrl.questionMetaData.name, language: [ ctrl.questionMetaData.medium], qlevel:  ctrl.questionMetaData.level, gradeLevel:  ctrl.questionMetaData.gradeLevel, concepts:  ctrl.questionMetaData.concepts, description:  ctrl.questionMetaData.description, max_score:  ctrl.questionMetaData.max_score };
+      var metadataObj = { category: ctrl.category, title:  ctrl.questionMetaData.name, medium: ctrl.questionMetaData.medium, qlevel:  ctrl.questionMetaData.level, gradeLevel:  ctrl.questionMetaData.gradeLevel, concepts:  ctrl.questionMetaData.concepts, description:  ctrl.questionMetaData.description, max_score:  ctrl.questionMetaData.max_score, subject:  ctrl.questionMetaData.subject, board:  ctrl.questionMetaData.board  };
       data.config = { "metadata": metadataObj, "max_time": 0, "max_score": ctrl.questionData.questionMaxScore, "partial_scoring": ctrl.questionData.isPartialScore, "layout": ctrl.questionData.templateType, "isShuffleOption" : ctrl.questionData.isShuffleOption, "questionCount": ctrl.questionCreationFormData.questionCount};
 
       data.media = ctrl.questionCreationFormData.media;
@@ -402,7 +406,9 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
         "max_score": ctrl.questionMetaData.max_score,
         "isShuffleOption" : ctrl.questionData.isShuffleOption,
         "body": JSON.stringify(questionFormData),
-        "language": [ctrl.questionMetaData.medium],
+        "medium": ctrl.questionMetaData.medium,
+        "subject": ctrl.questionMetaData.subject,
+        "board": ctrl.questionMetaData.board,
         "itemType": "UNIT",
         "version": 2,
         "category": ctrl.category,

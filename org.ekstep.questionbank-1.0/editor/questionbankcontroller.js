@@ -51,7 +51,7 @@ angular.module('createquestionapp', [])
             "AssessmentItem"
           ],
           "status": [],
-          "language": [
+          "medium": [
             "English"
           ]
         },
@@ -126,10 +126,16 @@ angular.module('createquestionapp', [])
               }
               break;
             case "medium":
-              data.request.filters.language = [value];
+              data.request.filters.medium = value;
               break;
             case "level":
               data.request.filters.qlevel = value;
+              break;
+            case "board":
+              data.request.filters.board = value;
+              break;
+            case "subject":
+              data.request.filters.subject = value;
               break;
             case "questionType":
               ecEditor._.forEach($scope.questionTypes, function(val, key) {
