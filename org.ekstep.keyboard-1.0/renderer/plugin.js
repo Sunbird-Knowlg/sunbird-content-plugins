@@ -15,25 +15,23 @@ org.ekstep.contentrenderer.keyboardRenderer = Plugin.extend({
   showKeyboard: function(event, callback) {
     var customButtons = '';
     if (_.isFunction(callback)) {
-      Keyboard.callbackFromKeyboard = callback; // eslint-disable-line no-undef
+      Keyboard.keyboardCallback = callback; // eslint-disable-line no-undef
     }
-    var questionObj = event.target;
-    var questionData = JSON.parse(questionObj.qData);
-    Keyboard.keyboardShow(questionObj);
-    if (_.isUndefined(questionData.question.keyboardConfig) || questionData.question.keyboardConfig.keyboardType == 'Device') {
+    var keyboardConfig = event.target;
+    Keyboard.keyboardShow(keyboardConfig);
+    if (_.isUndefined(keyboardConfig) || keyboardConfig.type == 'Device') {
       $(Keyboard.constant.keyboardElement).hide(); // eslint-disable-line no-undef
     } else {
-      if (questionData.question.keyboardConfig.keyboardType == "English") {
+      if (keyboardConfig.type == "English") {
         customButtons = "A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z";
         Keyboard.createKeyboard(customButtons); // eslint-disable-line no-undef
-      } else if (questionData.question.keyboardConfig.keyboardType == 'Custom') {
-        customButtons = questionData.question.keyboardConfig.customKeys;
-        customButtons = customButtons.toString();
+      } else if (keyboardConfig.type == 'Custom') {
+        customButtons = keyboardConfig.keys.toString();
         Keyboard.createKeyboard(customButtons); // eslint-disable-line no-undef
       }
       var template = _.template(Keyboard.htmlLayout); // eslint-disable-line no-undef
       if ($(Keyboard.constant.keyboardElement).length <= 0) { // eslint-disable-line no-undef
-        $("#gameArea").append(template({ inputValue: Keyboard.inputValue })); // eslint-disable-line no-undef
+        $("#gameArea").append(template({ inputValue: Keyboard.targetInput.value.trim() })); // eslint-disable-line no-undef
       }
     }
   },

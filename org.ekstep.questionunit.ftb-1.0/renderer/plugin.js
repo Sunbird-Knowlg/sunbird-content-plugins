@@ -10,47 +10,44 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
   _type: 'org.ekstep.questionunit.ftb',
   _isContainer: true,
   _render: true,
-  _selectedanswere: undefined,
-  ftbQuestionData: {}, // eslint-disable-line no-undef
-  ftbQuestionConfig: {}, // eslint-disable-line no-undef
-
   /**
    * renderer:questionunit.ftb:showEventListener.
    * @event renderer:questionunit.ftb:show
    * @memberof org.ekstep.questionunit.ftb
    */
-  initTemplate: function() {
-    this._template = QS_FTBTemplate.htmlLayout; // eslint-disable-line no-undef
+  setQuestionTemplate: function() {
+    this._question.template = QS_FTBTemplate.htmlLayout; // eslint-disable-line no-undef
   },
   preQuestionShow: function(event) {
-    var questionsetInstance = event.target;
-    var qData, quesData, questionData, qConfig, questionConfig, qState, currentquesObj;
-    qData = questionsetInstance._currentQuestion.data.__cdata || questionsetInstance._currentQuestion.data;
-    quesData = JSON.parse(qData);
-    questionData = QS_FTBTemplate.generateHTML(quesData); // eslint-disable-line no-undef
-    qConfig = questionsetInstance._currentQuestion.config.__cdata || questionsetInstance._currentQuestion.config;
-    questionConfig = JSON.parse(qConfig);
-
-    qState = questionsetInstance._currentQuestionState;
-    currentquesObj = {
-      "questionData": questionData,
-      "questionConfig": questionConfig,
-      "qState": qState
-    };
-    return currentquesObj;
+    // TODO: Remove commented code
+    // var questionsetInstance = event.target;
+    // var qData, quesData, questionData, qConfig, questionConfig, qState, currentquesObj;
+    // qData = questionsetInstance._currentQuestion.data.__cdata || questionsetInstance._currentQuestion.data;
+    // quesData = JSON.parse(qData);
+    // questionData = QS_FTBTemplate.generateHTML(quesData); // eslint-disable-line no-undef
+    // qConfig = questionsetInstance._currentQuestion.config.__cdata || questionsetInstance._currentQuestion.config;
+    // questionConfig = JSON.parse(qConfig);
+    //
+    // qState = questionsetInstance._currentQuestionState;
+    // currentquesObj = {
+    //   "questionData": questionData,
+    //   "questionConfig": questionConfig,
+    //   "qState": qState
+    // };
+    // return currentquesObj;
+    // TODO: Remove commented code.
+    this._super(event);
+    this._question.data = QS_FTBTemplate.generateHTML(this._question.data);
   },
-  postQuestionShow: function(currentquesObj) {
-    ftbQuestionData = currentquesObj.questionData; // eslint-disable-line no-undef
-    ftbQuestionConfig = currentquesObj.questionConfig; // eslint-disable-line no-undef
-    QS_FTBTemplate.questionObj = currentquesObj.questionData; // eslint-disable-line no-undef
+  postQuestionShow: function(event) {
+    QS_FTBTemplate.question = this._question; // eslint-disable-line no-undef
 
     $(QS_FTBTemplate.constant.qsFtbElement).off('click'); // eslint-disable-line no-undef
     $(QS_FTBTemplate.constant.qsFtbElement).on('click', '.ans-field', QS_FTBTemplate.invokeKeyboard); // eslint-disable-line no-undef
 
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS); // eslint-disable-line no-undef
     /*istanbul ignore else*/
-    if (currentquesObj.qState && currentquesObj.qState.val) {
-      QS_FTBTemplate.textboxtarget.state = currentquesObj.qState.val; // eslint-disable-line no-undef
+    if (this._question.state && this._question.state.val) {
       QS_FTBTemplate.setStateInput(); // eslint-disable-line no-undef
     }
   },
@@ -76,24 +73,24 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
       var key = "ans" + index; // eslint-disable-line no-unused-vars
       ansObj = {
         key: element.value
-      }
+      };
       telemetryAnsArr.push(ansObj);
     });
     //compare two array
     /*istanbul ignore else*/
-    if (_.isEqual(answerArray, ftbQuestionData.answer)) { // eslint-disable-line no-undef
+    if (_.isEqual(answerArray, this._question.data.answer)) { // eslint-disable-line no-undef
       correctAnswer = true;
     }
     // Calculate partial score
     var tempCount = 0;
-    _.each(ftbQuestionData.answer, function(ans, index) { // eslint-disable-line no-undef
+    _.each(this._question.data.answer, function(ans, index) { // eslint-disable-line no-undef
       /*istanbul ignore else*/
       if (ans.toLowerCase().trim() == answerArray[index].toLowerCase().trim()) {
         tempCount++;
       }
     });
 
-    var partialScore = (tempCount / ftbQuestionData.answer.length) * ftbQuestionConfig.max_score; // eslint-disable-line no-undef
+    var partialScore = (tempCount / this._question.data.answer.length) * this._question.config.max_score; // eslint-disable-line no-undef
 
     var result = {
       eval: correctAnswer,
@@ -103,16 +100,18 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
       score: partialScore,
       values: telemetryAnsArr,
       noOfCorrectAns: tempCount,
-      totalAns: ftbQuestionData.answer.length // eslint-disable-line no-undef
-    }
+      totalAns: this._question.data.answer.length
+    };
+
     var callback = event.target;
     /*istanbul ignore else*/
     if (_.isFunction(callback)) {
       callback(result);
     }
-    EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
 
-    //console.log("FTB Tel", telemetryAnsArr);
+    var questionsetInstance = event.target;
+    EkstepRendererAPI.dispatchEvent(questionsetInstance._manifest.id + ':saveQuestionState', result.state);
+
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { "type": "INPUT", "values": telemetryAnsArr }); // eslint-disable-line no-undef
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result); // eslint-disable-line no-undef
   }

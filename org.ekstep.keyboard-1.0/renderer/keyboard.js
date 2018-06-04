@@ -1,11 +1,11 @@
 var Keyboard = {
   keyboardVisible: false,
-  ftbInputTarget: '',
+  targetInput: '',
   buttons: {},
   keyWidth: 0,
-  callbackFromKeyboard: undefined,
+  keyboardCallback: undefined,
   inputValue: '',
-  targetInputValue: [],
+  inputArray: [],
 };
 Keyboard.constant = {
   keyboardElement: "#keyboardDiv",
@@ -41,7 +41,7 @@ Keyboard.htmlLayout = '<div id = "keyboardDiv">\
             <% } %> \
             <div id="thirdRowAlpha">\
                 <div class="special_keys" onclick="Keyboard.changeToNumeric()" style="font-size: 2vw;"><span>123</span></div>\
-                <div class="spaceBar" onclick="Keyboard.addLetter(event);" style=" font-size:3vw;"><span> </span>&nbsp;</div>\
+                <div class="spaceBar" onclick="Keyboard.addLetter(event);" style=" font-size:3vw;"><span> </span></div>\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);"><span>,</span></div>\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);"><span>.</span></div>\
             </div>\
@@ -86,7 +86,7 @@ Keyboard.htmlLayout = '<div id = "keyboardDiv">\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);" id=">_btn"><span>&gt;</span></div>\
                 <div>\
                     <img src=<%=Keyboard.addImageIcon("renderer/assets/language_icon.png") %> class="qc-language-icon" onclick="Keyboard.changeToAlphabet()" /> </div>\
-                <div class="spaceBar" onclick="Keyboard.addLetter(event);" style=" font-size:3vw;"><span> </span>&nbsp;</div>\
+                <div class="spaceBar" onclick="Keyboard.addLetter(event);" style=" font-size:3vw;"><span> </span></div>\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);"><span>,</span></div>\
                 <div class="special_keys" onclick="Keyboard.addLetter(event);"><span>.</span></div>\
             </div>\
@@ -106,56 +106,54 @@ Keyboard.createKeyboard = function(customButtons) {
   Keyboard.buttons.firstRow = Keyboard.buttons.slice(0, splitButtonto);
   Keyboard.buttons.secondRow = Keyboard.buttons.slice(splitButtonto, Keyboard.buttons.length);
   Keyboard.keyWidth = parseInt(100 / Keyboard.buttons.secondRow.length);
-}
+};
 
 Keyboard.changeToNumeric = function() {
   $(".parentDivMainKeyboard").hide();
   $("#parentDivNumericKeyboard").show();
-}
+};
 
 Keyboard.changeToAlphabet = function() {
   $(".parentDivMainKeyboard").show();
   $("#parentDivNumericKeyboard").hide();
-}
+};
 
 Keyboard.addLetter = function(event) {
   var keyValue = event.target;
   if (!_.isUndefined(Keyboard.inputValue)) {
     if (keyValue.innerText != '123') {
-      Keyboard.targetInputValue.push(keyValue.innerText);
-      Keyboard.inputValue = Keyboard.targetInputValue.join("");
+      Keyboard.inputArray.push(keyValue.innerText);
+      Keyboard.inputValue = Keyboard.inputArray.join("");
     }
-    if (keyValue.innerText == " ") {
-      keyValue.push(String.fromCharCode(32));
-      Keyboard.inputValue = Keyboard.targetInputValue.join("");
+    if (keyValue.innerText == "") {
+      Keyboard.inputArray.push(String.fromCharCode(32));
+      Keyboard.inputValue = Keyboard.inputArray.join("");
     }
   } else {
     if (keyValue.innerText != '123') Keyboard.inputValue = event.target.innerText; // eslint-disable-line no-undef
   }
   $(Keyboard.constant.keyboardInput).val(Keyboard.inputValue); // eslint-disable-line no-undef
-  $("#" + Keyboard.ftbInputTarget).val(Keyboard.inputValue); // eslint-disable-line no-undef
-}
+  $("#" + Keyboard.targetInput).val(Keyboard.inputValue); // eslint-disable-line no-undef
+};
 
 Keyboard.deleteText = function() {
-  Keyboard.targetInputValue.pop(); // eslint-disable-line no-undef
-  Keyboard.inputValue = Keyboard.targetInputValue.join(""); // eslint-disable-line no-undef
+  Keyboard.inputArray.pop(); // eslint-disable-line no-undef
+  Keyboard.inputValue = Keyboard.inputArray.join(""); // eslint-disable-line no-undef
   $(Keyboard.constant.keyboardInput).val(Keyboard.inputValue); // eslint-disable-line no-undef
-  $("#" + Keyboard.ftbInputTarget).val(Keyboard.inputValue); // eslint-disable-line no-undef
-}
+  $("#" + Keyboard.targetInput).val(Keyboard.inputValue); // eslint-disable-line no-undef
+};
 Keyboard.hideKeyboard = function() {
   $(Keyboard.constant.keyboardElement).hide();
-  Keyboard.callbackFromKeyboard(Keyboard.inputValue); // eslint-disable-line no-undef
-}
+  Keyboard.keyboardCallback(Keyboard.inputValue); // eslint-disable-line no-undef
+};
 
-Keyboard.keyboardShow = function(questionObj) {
+Keyboard.keyboardShow = function(config) {
   $(Keyboard.constant.keyboardElement).show();
-  Keyboard.inputValue = _.isUndefined(questionObj.inputoldValue.value) ? '' : questionObj.inputoldValue.value;
+  Keyboard.inputValue = _.isUndefined(config.targetInput.value) ? '' : config.targetInput.value.trim();
   $(Keyboard.constant.keyboardInput).val(Keyboard.inputValue);
-  if (Keyboard.inputValue != " ") {
-    Keyboard.targetInputValue = Keyboard.inputValue.split("");
-  }
-  Keyboard.ftbInputTarget = questionObj.inputoldValue.id; // eslint-disable-line no-undef
-}
+  Keyboard.inputArray = Keyboard.inputValue.split("");
+  Keyboard.targetInput = config.targetInput; // eslint-disable-line no-undef
+};
 
 Keyboard.addImageIcon = function(imgURL) {
   if (isbrowserpreview) { // eslint-disable-line no-undef
@@ -163,9 +161,9 @@ Keyboard.addImageIcon = function(imgURL) {
   } else {
     return 'file:///' + EkstepRendererAPI.getBaseURL() + "content-plugins/org.ekstep.keyboard-1.0/" + imgURL;
   }
-}
+};
 
 Keyboard.logTelemetryInteract = function(event) {
   QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event.target.id }); // eslint-disable-line no-undef
-}
+};
 //# sourceURL=keyboard.js

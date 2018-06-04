@@ -2,15 +2,16 @@ var QS_FTBTemplate = {};
 QS_FTBTemplate.constant = {
   qsFtbElement: "#ftb-template",
   qsFtbContainer: ".qs-ftb-container",
-  qsFtbQuestion: "#qs-ftb-question"
-}
+  qsFtbQuestion: "#qs-ftb-question",
+  keyboardPlugin: 'org.ekstep.keyboard'
+};
 QS_FTBTemplate.textboxtarget = {};
-QS_FTBTemplate.questionObj = undefined;
+QS_FTBTemplate.question = undefined;
 QS_FTBTemplate.htmlLayout = '<div id="ftb-template">\
   <div class="qs-ftb-container">\
     <div class="qs-ftb-content">\
         <div class="qs-ftb-question" id="qs-ftb-question">\
-          <%= questionObj.question.text %>\
+          <%= question.data.question.text %>\
         </div>\
     </div>\
   </div>\
@@ -25,9 +26,9 @@ QS_FTBTemplate.htmlLayout = '<div id="ftb-template">\
 QS_FTBTemplate.setStateInput = function() {
   var textBoxCollection = $(QS_FTBTemplate.constant.qsFtbQuestion).find("input[type=text]");
   _.each(textBoxCollection, function(element, index) {
-    $("#" + element.id).val(QS_FTBTemplate.textboxtarget.state[index]);
+    $("#" + element.id).val(QS_FTBTemplate.question.state[index]);
   });
-}
+};
 
 /**
  * renderer:questionunit.ftb:set target and value.
@@ -36,19 +37,20 @@ QS_FTBTemplate.setStateInput = function() {
  * @memberof org.ekstep.questionunit.ftb
  */
 QS_FTBTemplate.invokeKeyboard = function(event) { // eslint-disable-line no-unused-vars
-  var qConfig = {
-    'qData': JSON.stringify(QS_FTBTemplate.questionObj),
-    'inputoldValue': QS_FTBTemplate.textboxtarget
-  }
-  QS_FTBTemplate.textboxtarget.id = event.target.id;
-  QS_FTBTemplate.textboxtarget.value = event.target.value.trim();
+  var keyboardConfig = {
+    type: QS_FTBTemplate.question.data.question.keyboardConfig.keyboardType,
+    keys: QS_FTBTemplate.question.data.question.keyboardConfig.customKeys,
+    target: event.target
+  };
   /*istanbul ignore else*/
-  if (!(isbrowserpreview && (_.isUndefined(QS_FTBTemplate.questionObj.question.keyboardConfig) || QS_FTBTemplate.questionObj.question.keyboardConfig.keyboardType == "Device"))) { // eslint-disable-line no-undef
+  if (!(isbrowserpreview && (_.isUndefined(QS_FTBTemplate.question.data.question.keyboardConfig) || QS_FTBTemplate.question.data.question.keyboardConfig.keyboardType == "Device"))) { // eslint-disable-line no-undef
     $(QS_FTBTemplate.constant.qsFtbContainer).addClass("align-question");
   }
-  $("#" + QS_FTBTemplate.textboxtarget.id).addClass("highlightInput");
-  $("#" + QS_FTBTemplate.textboxtarget.id).siblings().removeClass("highlightInput");
-  EkstepRendererAPI.dispatchEvent("org.ekstep.keyboard:invoke", qConfig, QS_FTBTemplate.callbackFromKeyboard);
+  var target = $('#' + event.target.id);
+  target.addClass("highlightInput");
+  target.siblings().removeClass("highlightInput");
+
+  EkstepRendererAPI.dispatchEvent(QS_FTBTemplate.keyboardPlugin + ":invoke", keyboardConfig, QS_FTBTemplate.keyboardCallback);
 };
 
 /**
@@ -57,10 +59,11 @@ QS_FTBTemplate.invokeKeyboard = function(event) { // eslint-disable-line no-unus
  * @param {Object} ans object
  * @memberof org.ekstep.questionunit.ftb
  */
-QS_FTBTemplate.callbackFromKeyboard = function(ans) {
-  $("#" + QS_FTBTemplate.textboxtarget.id).val(ans);
+QS_FTBTemplate.keyboardCallback = function(ans) {
+  //TODO: check
+  // $("#" + QS_FTBTemplate.textboxtarget.id).val(ans);
   $(QS_FTBTemplate.constant.qsFtbContainer).removeClass("align-question");
-}
+};
 
 /**
  * renderer:questionunit.ftb:get currentQuesData.
@@ -79,12 +82,12 @@ QS_FTBTemplate.generateHTML = function(quesData) {
     var ansFieldConfig = {
       "index": index,
       "keyboardType": quesData.question.keyboardConfig.keyboardType
-    }
+    };
     ansTemplate = template({ ansFieldConfig: ansFieldConfig });
     return ansTemplate;
-  })
+  });
   return quesData;
-}
+};
 
 /**
  * renderer:questionunit.ftb:show keyboard in device.
@@ -106,6 +109,6 @@ window.addEventListener('native.keyboardhide', function() {
 
 QS_FTBTemplate.logTelemetryInteract = function(event) {
   QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { type: QSTelemetryLogger.EVENT_TYPES.TOUCH, id: event.target.id }); // eslint-disable-line no-undef
-}
+};
 
 //# sourceURL=QS_FTBTemplate.js
