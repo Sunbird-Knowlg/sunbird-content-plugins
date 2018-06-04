@@ -81,7 +81,7 @@
     },
     "dependencies": [
         {
-            "plugin": "org.ekstep.questionunit",
+            "plugin": "org.ekstep.questionunit", 
             "ver": "1.0",
             "type": "plugin",
             "scope": "all"

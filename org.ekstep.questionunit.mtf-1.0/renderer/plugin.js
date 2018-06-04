@@ -5,7 +5,7 @@
  * @extends org.ekstep.contentrenderer.questionUnitPlugin
  * @author Manoj Chandrashekar <manoj.chandrashekar@tarento.com>
  */
-org.ekstep.questionunitmtf = {};
+org.ekstep.questionunitmtf = {}; 
 org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionUnitPlugin.extend({
   _type: 'org.ekstep.questionunit.mtf',
   _isContainer: true,
@@ -86,35 +86,14 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
     var leftList = document.querySelector('#left1');
     var rightList = document.querySelector('#right1');
     drake.on('drop', function(elem, target, source, sibling) {
-      if (!_.isUndefined($(source).attr('mapIndex'))) {
-        var rhsData = {};
-        var ts = $(target)[0].childNodes[0];
-        var text = $(target).text();
-        rhsData.mapIndex = $(source).attr('mapIndex');
-        rhsData.selText = text.trim();
-        var existEle = _.contains(instance._selectedAanswers,rhsData);
-        if (!existEle) {
-          instance._selectedAanswers[Number($(target).attr('leftindex'))-1] = rhsData;
-          responseData = [{
-            "lhs": currentquesObj.questionData.option.optionsLHS[($(source).attr('mapIndex')-1)].text,
-            "rhs": text.trim()
-          }];
-          instance.logTelemetryItemResponse(responseData);
-        } else {
-          //console.log("Remove element dont remove");
-        }
-      } else {
-        instance._selectedAanswers = _.filter(instance._selectedAanswers, function(item) {
-          return item.mapIndex !== $(target).attr('mapIndex')
-        });
-      }
+      instance.onDropElement(elem, target, source, sibling,currentquesObj);
     });
   },
-  evaluateQuestion: function(callback) {
+  evaluateQuestion: function(event){
     var instance = this;
-    var cb = callback.target;
+    var cb = event.target;
     var correctAnswer = true;
-    var teleValues = [];
+    var telemetryValues = []; 
     var tempCount = 0;
     var qLhsData = instance._mtfData.option.optionsLHS;
     if (!_.isUndefined(instance._selectedAanswers)) {
@@ -122,7 +101,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
         var telObj = {};
         if (!_.isUndefined(instance._selectedAanswers[key])) {
           telObj[qLhsData[key].text] = instance._selectedAanswers[key].selText;
-          teleValues.push(telObj);
+          telemetryValues.push(telObj);
           var t = instance._selectedAanswers[key].mapIndex;
           if (qLhsData[key].index != Number(t)) {
             correctAnswer = false;
@@ -144,15 +123,40 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
         }
       },
       score: partialScore,
-      values: teleValues,
-      noOfCorrectAns: tempCount,
+      values: telemetryValues,
+      correctAnsCount: tempCount,
       totalAns: qLhsData.length
     }
     if (_.isFunction(cb)) {
       cb(result);
     }
-    EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
+    EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState',result.state);
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);
+  },
+  onDropElement: function(elem, target, source, sibling,currentquesObj){
+    var instance = this;
+    if (!_.isUndefined($(source).attr('mapIndex'))) {
+        var rhsData = {};
+        var targetNode = $(target)[0].childNodes[0];
+        var text = $(target).text();
+        rhsData.mapIndex = $(source).attr('mapIndex');
+        rhsData.selText = text.trim();
+        var existEle = _.contains(instance._selectedAanswers,rhsData);
+        if (!existEle) {
+          instance._selectedAanswers[Number($(target).attr('leftindex'))-1] = rhsData;
+          responseData = [{
+            "lhs": currentquesObj.questionData.option.optionsLHS[($(source).attr('mapIndex')-1)].text,
+            "rhs": text.trim()
+          }];
+          instance.logTelemetryItemResponse(responseData);
+        } else {
+          //console.log("Remove element dont remove");
+        }
+      } else {
+        instance._selectedAanswers = _.filter(instance._selectedAanswers, function(item) {
+          return item.mapIndex !== $(target).attr('mapIndex')
+        });
+      }
   },
   logTelemetryItemResponse: function(data) { 
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { "type": "INPUT", "values": data });
