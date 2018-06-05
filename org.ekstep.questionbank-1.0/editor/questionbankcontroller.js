@@ -192,7 +192,6 @@ angular.module('createquestionapp', [])
         if (!data.isSelected) {
           data.isSelected = true;
         }
-        var ctrlScope = angular.element('#qc-question-bank-model').scope();
         var selQueIndex = _.findLastIndex($scope.questions, {
           identifier: data.identifier
         });
