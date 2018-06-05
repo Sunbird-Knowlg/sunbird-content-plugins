@@ -120,10 +120,10 @@
                         <div ng-show="whatsNewBadge" class="icon-box popup-item" data-content="What's New" data-variation="tiny inverted" data-position="bottom center" ng-click="displayWhatsNew()">
                             <i class="gift red icon custom-icon"></i>
                         </div>
-                        <div class="icon-box popup-item" data-content="Download to try it out on a mobile device" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'download:content'});">
+                        <div class="icon-box popup-item" data-content="Download to try it out on a mobile device" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'download:content'});fireTelemetry({id: 'download'}, 'donwloadButton')">
                             <i class="download icon custom-icon"></i>
                         </div>
-                        <div class="icon-box popup-item" data-content="Add Collaborator" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'collaborator:add'});">
+                        <div class="icon-box popup-item" data-content="Add Collaborator" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'collaborator:add'}); fireTelemetry({id: 'collaborator'}, 'collaboratorButton')">
                             <i class="add user icon custom-icon"></i>
                         </div>
                     </div>
@@ -147,7 +147,7 @@
                             <span class="label-icon-box-text save-button-text disabled" ng-if="!saveBtnEnabled">Save</span>
                             <span class="label-icon-box-text save-button-text" ng-if="saveBtnEnabled">Save</span>
                         </div>
-                        <div class="icon-box label-icon-box popup-item" data-content="Send for review" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'org.ekstep.review:review'});">
+                        <div class="icon-box label-icon-box popup-item" data-content="Send for review" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'org.ekstep.review:review'});fireTelemetry({id: 'review'}, 'reviewButton')">
                             <i class="send icon"></i>
                             <span class="label-icon-box-text">Send for review</span>
                         </div>
