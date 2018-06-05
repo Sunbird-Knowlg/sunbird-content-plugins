@@ -152,41 +152,46 @@ describe('MTFRendererPlugin', function() {
         "val": 0
       }
     };
+    el = '<p class="gu-transit">z</p>';
+    target = '<div class="mtf-hori-ques-text-inner cont-dragula" id="left1" leftindex="1"><p class="gu-transit">z</p></div>';
+    source = '<div class="mtf-hori-ques-text-inner cont-dragula" id="right1" mapindex="1">  </div>';
+    si = null;
     plugin = new org.ekstep.questionunitmtf.RendererPlugin({}, {}, {});
     mtfInstance = plugin;
     mtfInstance.questionData = {};
     mtfInstance.questionData.questionConfig = currentquesObj.questionConfig;
-    spyOn(plugin, "initTemplate").and.callThrough();
+    spyOn(plugin, "setQuestionTemplate").and.callThrough();
     qconfig = JSON.parse(questionsetEvent.target._currentQuestion.config.__cdata);
     spyOn(plugin, "preQuestionShow").and.callThrough();
     spyOn(plugin, "postQuestionShow").and.callThrough();
     spyOn(plugin, "logTelemetryItemResponse").and.callThrough();
     spyOn(window, "dragula").and.callThrough();
     spyOn(plugin, "dragulaIsContainer").and.callThrough();
+    spyOn(plugin, "onDropElement").and.callThrough();
     done();
   });
-  describe('initTemplate', function() {
+  describe('setQuestionTemplate', function() {
     it('should plugin will initialize', function() {
       expect(org.ekstep.pluginframework.pluginManager.plugins['mtf']).not.toBe(undefined);
-      plugin.initTemplate();
-      expect(plugin._template).not.toBe(undefined);
+      plugin.setQuestionTemplate();
+      expect(plugin._question.template).not.toBe(undefined);
     });
     it('should call the template', function() {
-      expect(plugin._template).not.toBe(undefined);
+      expect(plugin._question.template).not.toBe(undefined);
     });
   });
-  describe('preQuestionShow', function() {
+  xdescribe('preQuestionShow', function() {
     it("should call preQuestionShow function", function() {
-      var questionObj = plugin.preQuestionShow(questionsetEvent);
+      var questionObj = plugin.preQuestionShow(plugin._question.data);
       expect(questionObj).not.toBeUndefined();
     });
     it("check question state", function() {
-      var questionObj = plugin.preQuestionShow(questionsetEvent);
+      var questionObj = plugin.preQuestionShow(plugin._question.data);
       var qState = questionObj._currentQuestionState;
       expect(qState).toBe(undefined);
     });
     it("Set options width dynamically", function() {
-      var questionObj = plugin.preQuestionShow(questionsetEvent);
+      var questionObj = plugin.preQuestionShow(plugin._question.data);
       expect(questionObj.questionData.option.optionsLHS.length).toEqual(3);
     });
   });
@@ -195,9 +200,16 @@ describe('MTFRendererPlugin', function() {
         var questionObj = plugin.postQuestionShow(currentquesObj);
         expect(questionObj).toBeUndefined(); 
     });
-    it("should call dragula drag and drop function", function() {
-
-    });
+    // it("should call dragula drag and drop function", function() {
+    //   //plugin.postQuestionShow(currentquesObj);
+    //   plugin.onDropElement();
+    // });
+    it("Is defined drag element",function(){
+      plugin.onDropElement();
+      var id = $(source).attr('mapIndex');
+      expect(typeof id).toEqual('string');
+      // expect($(source).attr('mapIndex')).toBeUndefined();
+    })
   });
   describe('evaluateQuestion', function() {
     it('should dispatch evaluate event', function() {
@@ -207,7 +219,11 @@ describe('MTFRendererPlugin', function() {
             return {};
         }
       };
-      plugin.evaluateQuestion(evaluateEvent);
+      expect(function(){
+            plugin.evaluateQuestion(evaluateEvent)
+        }).toThrow();
+      // plugin.evaluateQuestion(evaluateEvent);
+
     });
   });
   describe('logTelemetryItemResponse', function() {

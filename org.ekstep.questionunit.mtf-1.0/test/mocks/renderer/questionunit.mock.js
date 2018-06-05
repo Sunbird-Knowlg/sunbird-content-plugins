@@ -1,3 +1,4 @@
 org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
-  _type: 'org.ekstep.questionUnitPlugin'
+  _type: 'org.ekstep.questionUnitPlugin',
+  _question: {}
 });
