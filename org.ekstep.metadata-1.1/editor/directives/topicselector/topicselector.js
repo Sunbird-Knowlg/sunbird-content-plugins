@@ -2,7 +2,6 @@
  * @description topic selector directive
  * @author Gourav More <gourav_m@tekditechnologies.com>
  */
-var formApp = angular.module('org.ekstep.metadataform', []);
 formApp.directive('topicSelector', function() {
     const manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.metadata");
 
