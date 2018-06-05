@@ -18,6 +18,15 @@ fabric.ITextbox = fabric.util.createClass(fabric.Textbox, fabric.Observable, {
         }
         finalWidth = width + additionalSpace;
         return finalWidth > 0 ? finalWidth : 0;
+    },
+    /**
+     * This method orerride the fabric text _setTextStyles function
+     * called internally by fabric text plugin
+     */
+    _setTextStyles: function(ctx) {
+        ctx.textBaseline = this.textBaseline || 'alphabetic';
+        ctx.textAlign = "left";
+        ctx.font = this._getFontDeclaration();
     }
 });
 /* istanbul ignore next*/

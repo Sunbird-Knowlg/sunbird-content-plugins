@@ -27,6 +27,10 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     editorWidth: 720,
     /**
+     * Contains fonts which doesn't support default baseline config for WYSIWYG.
+     */
+    middleBaselineFonts: ["NotoSans", "NotoSansKannada", "NotoNastaliqUrdu"],
+    /**
      * The events are registred which are used which are used to add or remove fabric events and other custom events
      * @memberof Text
      */
@@ -258,6 +262,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                 this.editorObj.setFontFamily(value);
                 this.attributes.fontFamily = value;
                 this.attributes.fontfamily = value;
+                // Assign WYSIWYG config to current text instance
+                var wysiwygConfig = this.getWysiwygConfig();
                 break;
             case "fontsize":
                 this.editorObj.setFontSize(value);
@@ -374,7 +380,8 @@ org.ekstep.contenteditor.basePlugin.extend({
             retData.align = data.align;
         }
         if (data.rotate) retData.angle = data.rotate;
-        delete retData.lineHeight // line height set to default value
+        // Removing deleting of lineheight in editor.(editor is using fabricjs default lineheight 1.16 previously)
+        // delete retData.lineHeight // line height set to default value
         return retData;
     },
     getConfigManifest: function() {
@@ -577,6 +584,16 @@ org.ekstep.contenteditor.basePlugin.extend({
         }else{
             return instance._super();
         }
+    },
+    /**
+     * This method returns the config to support WYSIWYG in renderer(createjs)
+     * called on changing fontfamily config
+     * return object contain textbaseline, lineheight & offsetY
+     * @param {string} font - fontfamily name
+     * @memberof Text
+     */
+    getWysiwygConfig: function(font) {
+        
     }
 });
 //# sourceURL=textplugin.js
