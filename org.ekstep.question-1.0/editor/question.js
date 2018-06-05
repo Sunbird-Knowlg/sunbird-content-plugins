@@ -136,7 +136,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       ctrl.assessmentId = questionData.identifier;
       ctrl.questionData = questionData1;
       ctrl.questionCreationFormData = questionData1.data.data;
-      ctrl.questionData.qcLanguage = questionData1.data.config.metadata.medium;
+      ctrl.questionData.qcMedium = questionData1.data.config.metadata.medium;
       ctrl.questionData.questionTitle = questionData1.data.config.metadata.title;
       ctrl.questionData.qcLevel = questionData1.data.config.metadata.qlevel;
       ctrl.questionData.subject = questionData1.data.config.metadata.subject;
@@ -259,7 +259,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       } else {
         var metaFormScope = $('#question-meta-form #content-meta-form').scope();
         ctrl.questionData.questionTitle = metaFormScope.contentMeta.name;
-        ctrl.questionData.qcLanguage = metaFormScope.contentMeta.medium;
+        ctrl.questionData.qcMedium = metaFormScope.contentMeta.medium;
         ctrl.questionData.qcLevel = metaFormScope.contentMeta.level;
         ctrl.questionData.questionDesc = metaFormScope.contentMeta.description;
         ctrl.questionData.questionMaxScore = metaFormScope.contentMeta.max_score;
@@ -321,7 +321,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       ctrl.questionData.questionTitle = ctrl.extractHTML(ctrl.questionData.questionTitle);
       $('.QuestionMetaForm .ui.dropdown').dropdown({});
       ctrl.questionMetaData.name = ctrl.questionData.questionTitle;
-      ctrl.questionMetaData.medium = ctrl.questionData.qcLanguage;
+      ctrl.questionMetaData.medium = ctrl.questionData.qcMedium;
       ctrl.questionMetaData.level = ctrl.questionData.qcLevel;
       ctrl.questionMetaData.description = ctrl.questionData.questionDesc;
       ctrl.questionMetaData.max_score = ctrl.questionData.questionMaxScore;
