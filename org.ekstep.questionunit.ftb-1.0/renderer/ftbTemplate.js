@@ -59,7 +59,7 @@ QS_FTBTemplate.invokeKeyboard = function(event) { // eslint-disable-line no-unus
  * @param {Object} ans object
  * @memberof org.ekstep.questionunit.ftb
  */
-QS_FTBTemplate.keyboardCallback = function(ans) {
+QS_FTBTemplate.keyboardCallback = function(ans) { // eslint-disable-line no-unused-vars
   //TODO: check
   // $("#" + QS_FTBTemplate.textboxtarget.id).val(ans);
   $(QS_FTBTemplate.constant.qsFtbContainer).removeClass("align-question");

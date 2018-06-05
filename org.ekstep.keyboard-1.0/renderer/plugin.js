@@ -18,7 +18,7 @@ org.ekstep.contentrenderer.keyboardRenderer = Plugin.extend({
       Keyboard.keyboardCallback = callback; // eslint-disable-line no-undef
     }
     var keyboardConfig = event.target;
-    Keyboard.keyboardShow(keyboardConfig);
+    Keyboard.keyboardShow(keyboardConfig); // eslint-disable-line no-undef
     if (_.isUndefined(keyboardConfig) || keyboardConfig.type == 'Device') {
       $(Keyboard.constant.keyboardElement).hide(); // eslint-disable-line no-undef
     } else {
