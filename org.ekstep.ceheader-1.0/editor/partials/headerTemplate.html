@@ -65,7 +65,7 @@
                     <span ng-if="contentDetails.contentTitle.length > 30">...</span></label>
             </div>
             <div class="row custom-row-2">
-                <a class="btn at-btn at-btn-ok" ng-click="editContentMeta(); fireTelemetry({id: 'editMeta',}, 'editMetaButton')">
+                <a class="btn at-btn at-btn-ok" ng-click="editContentMeta(); fireTelemetry({id: 'editMeta'}, 'editMetaButton')">
                     <i class="edit icon link"></i>&nbsp;Edit Lesson Details
                 </a>
                 <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}"><span class="spinner"></span>{{internetStatusObj.text}}</label>
