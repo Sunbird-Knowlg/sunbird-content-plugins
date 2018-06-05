@@ -26,7 +26,7 @@ QS_FTBTemplate.htmlLayout = '<div id="ftb-template">\
 QS_FTBTemplate.setStateInput = function() {
   var textBoxCollection = $(QS_FTBTemplate.constant.qsFtbQuestion).find("input[type=text]");
   _.each(textBoxCollection, function(element, index) {
-    $("#" + element.id).val(QS_FTBTemplate.question.state[index]);
+    $("#" + element.id).val(QS_FTBTemplate.question.state.val[index]);
   });
 };
 
