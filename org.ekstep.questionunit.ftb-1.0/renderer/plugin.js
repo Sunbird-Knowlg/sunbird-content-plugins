@@ -16,22 +16,22 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
    * @memberof org.ekstep.questionunit.ftb
    */
   setQuestionTemplate: function() {
-    this._question.template = QS_FTBTemplate.htmlLayout; // eslint-disable-line no-undef
+    this._question.template = FTBController.template; // eslint-disable-line no-undef
   },
   preQuestionShow: function(event) {
     this._super(event);
-    this._question.data = QS_FTBTemplate.generateHTML(this._question.data); // eslint-disable-line no-undef
+    this._question.data = FTBController.generateHTML(this._question.data); // eslint-disable-line no-undef
   },
   postQuestionShow: function(event) { // eslint-disable-line no-unused-vars
-    QS_FTBTemplate.question = this._question; // eslint-disable-line no-undef
+    FTBController.question = this._question; // eslint-disable-line no-undef
 
-    $(QS_FTBTemplate.constant.qsFtbElement).off('click'); // eslint-disable-line no-undef
-    $(QS_FTBTemplate.constant.qsFtbElement).on('click', '.ans-field', QS_FTBTemplate.invokeKeyboard); // eslint-disable-line no-undef
+    $(FTBController.constant.qsFtbElement).off('click'); // eslint-disable-line no-undef
+    $(FTBController.constant.qsFtbElement).on('click', '.ans-field', FTBController.invokeKeyboard); // eslint-disable-line no-undef
 
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS); // eslint-disable-line no-undef
     /*istanbul ignore else*/
     if (this._question.state && this._question.state.val) {
-      QS_FTBTemplate.setStateInput(); // eslint-disable-line no-undef
+      FTBController.setStateInput(); // eslint-disable-line no-undef
     }
   },
   postHideQuestion: function() {
@@ -50,7 +50,7 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
       ansObj = {};
     //check for evalution
     //get all text box value inside the class
-    var textBoxCollection = $(QS_FTBTemplate.constant.qsFtbQuestion).find("input[type=text]"); // eslint-disable-line no-undef
+    var textBoxCollection = $(FTBController.constant.qsFtbQuestion).find("input[type=text]"); // eslint-disable-line no-undef
     _.each(textBoxCollection, function(element, index) {
       answerArray.push(element.value.toLowerCase().trim());
       var key = "ans" + index; // eslint-disable-line no-unused-vars

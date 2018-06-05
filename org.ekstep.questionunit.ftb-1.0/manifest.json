@@ -69,11 +69,7 @@
     },
     {
       "type": "js",
-      "src": "renderer/ftbanstemplate.js"
-    },
-    {
-      "type": "js",
-      "src": "renderer/ftbtemplate.js"
+      "src": "renderer/ftbcontroller.js"
     }]
   },
   "dependencies": [
