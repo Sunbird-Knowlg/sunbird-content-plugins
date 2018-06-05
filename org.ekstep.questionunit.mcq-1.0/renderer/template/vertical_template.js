@@ -1,9 +1,9 @@
 var MCQTemplate = MCQTemplate || {};
-MCQTemplate.getVerticalTemplate = function() {
+MCQTemplate.getVerticalTemplate = function () {
   return "<div class='qc-vertical-option-container'> \
   <table class='qc-vertical-option-table'> \
   <tr class='qc-vertical-option-outer'> \
-  <% _.each(questionObj.options, function(val,key,index) { %> \
+  <% _.each(question.data.options, function(val,key,index) { %> \
    <td class='qc-vertical-option-td mcq-option-value' onclick=MCQTemplate.pluginInstance.logTelemetryInteract(event);MCQTemplate.checkOptioninVertical('<%= key %>');MCQTemplate.pluginInstance.selectedvalue(event,'<%= key %>')> \
    <div class='qc-vertical-option-value'> \
    <div class='mcq-selected-option'></div> \
@@ -42,7 +42,7 @@ MCQTemplate.getVerticalTemplate = function() {
   </table> \
   </div>";
 };
-MCQTemplate.checkOptioninVertical = function(index) {
+MCQTemplate.checkOptioninVertical = function (index) {
   $(".mcq-selected-option").removeClass("mcq-option-checked");
   $('.mcq-selected-option').eq(index).addClass('mcq-option-checked');
 };

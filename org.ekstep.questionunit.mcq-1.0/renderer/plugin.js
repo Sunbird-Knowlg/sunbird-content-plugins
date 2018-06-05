@@ -13,16 +13,15 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
   _selectedanswere: undefined,
   _constant: {
     gridLayout: "Grid",
-    mcqParentDiv:"#qs-mcq-template",
-    mcqSelectOption:".mcq-option-value",
-    optionSelectionUI:"qsselectedopt"
+    mcqParentDiv: "#qs-mcq-template",
+    mcqSelectOption: ".mcq-option-value",
+    optionSelectionUI: "qsselectedopt"
   },
-  _questionData:undefined,
-  _selectedIndex:undefined,
-  _lastAudio:undefined,
-  _currentAudio :undefined,
-  initTemplate: function() {
-    this._template = MCQTemplate.loadTemplateContent(); // eslint-disable-line no-undef
+  _selectedIndex: undefined,
+  _lastAudio: undefined,
+  _currentAudio: undefined,
+  setQuestionTemplate: function () {
+    this._question.template = MCQTemplate.loadTemplateContent(); // eslint-disable-line no-undef
     MCQTemplate.initTemplate(this);// eslint-disable-line no-undef
   },
   /**
@@ -31,33 +30,20 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
    * @param {Object} event from question set.
    * @returns {currentquesObj} current question object.
    */
-  preQuestionShow: function(event) {
-    var questionsetInstance = event.target;
-    var qData = questionsetInstance._currentQuestion.data.__cdata || questionsetInstance._currentQuestion.data;
-    var questionData = JSON.parse(qData);
-    var qConfig = questionsetInstance._currentQuestion.config.__cdata || questionsetInstance._currentQuestion.config;
-    var questionConfig = JSON.parse(qConfig);
-    if (questionConfig.layout == this._constant.gridLayout) { // eslint-disable-line no-undef
-      this.divideOption(questionData); // eslint-disable-line no-undef
+  preQuestionShow: function (event) {
+    this._super();
+    if (this._question.config.layout == this._constant.gridLayout) { // eslint-disable-line no-undef
+      this.divideOption(this._question.data); // eslint-disable-line no-undef
     }
-    if (questionConfig.isShuffleOption) {
-      questionData.options = _.shuffle(questionData.options);
+    if (this._question.config.isShuffleOption) {
+      this._question.data.options = _.shuffle(this._question.data.options);
     }
-    var qState = questionsetInstance._currentQuestionState;
-    var currentquesObj = {
-      "questionData": questionData,
-      "questionConfig": questionConfig,
-      "qState": qState
-    };
-    return currentquesObj;
   },
-  postQuestionShow: function(currentquesObj) {
-    this._questionData = currentquesObj.questionData;
-    this._questionData.questionConfig = currentquesObj.questionConfig;
+  postQuestionShow: function (event) {
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS);// eslint-disable-line no-undef
-    MCQTemplate.renderQuestion(this._questionData); // eslint-disable-line no-undef
-    if (currentquesObj.qState && _.has(currentquesObj.qState, 'val')) {
-      this._selectedIndex = currentquesObj.qState.val;
+    MCQTemplate.renderQuestion(); // eslint-disable-line no-undef
+    if (this._question.state && _.has(this._question.state, 'val')) {
+      this._selectedIndex = this._question.state.val;
       $("input[name='radio']", $(this._constant.mcqParentDiv))[this._selectedIndex].checked = true; // eslint-disable-line no-undef
     } else {
       this._selectedIndex = undefined;
@@ -69,9 +55,9 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
    * @param {Object} questionData from question set.
    * @returns {_questionData} current question object.
    */
-  divideOption: function(questionData) {
+  divideOption: function (questionData) {
     questionData.topOptions = [], questionData.bottomOptions = [];
-    questionData.options.forEach(function(option, key) {
+    questionData.options.forEach(function (option, key) {
       if (questionData.options.length <= 4 || questionData.options.length > 6) {
         if (key < 4) questionData.topOptions.push({
           'option': option,
@@ -92,24 +78,19 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
         });
       }
     });
-    return questionData;
-  },
-  postHideQuestion: function() {
-    EkstepRendererAPI.dispatchEvent("org.ekstep.keyboard:hide");
+    // return questionData;
   },
   /**
    * Question evalution
    * @memberof org.ekstep.questionunit.mcq
    * @param {callback} event from question set.
    */
-  evaluateQuestion: function(event) {
+  evaluateQuestion: function (event) {
     var callback = event.target;
-    var correctAnswer = false,
-      telValues = {},
-      selectedAnsData, selectedAns, result = {};
-    selectedAnsData = MCQTemplate.pluginInstance._questionData.options[MCQTemplate.pluginInstance._selectedIndex]; // eslint-disable-line no-undef
+    var correctAnswer = false, telValues = {}, selectedAnsData, selectedAns, result = {};
+    selectedAnsData = MCQTemplate.pluginInstance._question.data.options[MCQTemplate.pluginInstance._selectedIndex]; // eslint-disable-line no-undef
     selectedAns = _.isUndefined(selectedAnsData) ? false : selectedAnsData.isCorrect;
-    MCQTemplate.pluginInstance._questionData.options.forEach(function(option) { // eslint-disable-line no-undef
+    MCQTemplate.pluginInstance._question.data.options.forEach(function (option) { // eslint-disable-line no-undef
       if (option.isCorrect === selectedAns) {
         correctAnswer = option.isCorrect;
       }
@@ -119,9 +100,9 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
       eval: correctAnswer,
       state: {
         val: MCQTemplate.pluginInstance._selectedIndex, // eslint-disable-line no-undef
-        options: MCQTemplate.pluginInstance._questionData.options // eslint-disable-line no-undef
+        options: MCQTemplate.pluginInstance._question.data.options // eslint-disable-line no-undef
       },
-      score: correctAnswer ? MCQTemplate.pluginInstance._questionData.questionConfig.max_score : 0, // eslint-disable-line no-undef
+      score: correctAnswer ? MCQTemplate.pluginInstance._question.config.max_score : 0, // eslint-disable-line no-undef
       values: [telValues]
     }
     if (_.isFunction(callback)) {
@@ -135,12 +116,12 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
    * @param {String} url from question set.
    * @returns {String} url.
    */
-  checkBaseUrl: function(url) {
+  checkBaseUrl: function (url) {
     if (isbrowserpreview) { // eslint-disable-line no-undef
-      return _.isUndefined(url)?org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png"):url;
+      return _.isUndefined(url) ? org.ekstep.pluginframework.pluginManager.resolvePluginResource("org.ekstep.questionunit.mcq", "1.0", "renderer/assets/audio.png") : url;
     } else {
 
-      return 'file:///' + EkstepRendererAPI.getBaseURL() + _.isUndefined(url)?"/content-plugins/org.ekstep.questionunit.mcq-1.0/renderer/assets/audio.png":url;
+      return 'file:///' + EkstepRendererAPI.getBaseURL() + _.isUndefined(url) ? "/content-plugins/org.ekstep.questionunit.mcq-1.0/renderer/assets/audio.png" : url;
     }
   },
   /**
@@ -148,7 +129,7 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
    * @memberof org.ekstep.questionunit.mcq
    * @param {String} audio from question set.
    */
-  playAudio: function(audio) {
+  playAudio: function (audio) {
     audio = this.checkBaseUrl(audio);
     if (this._lastAudio && (this._lastAudio != audio)) { // eslint-disable-line no-undef
       this._currentAudio.pause(); // eslint-disable-line no-undef
@@ -168,22 +149,20 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
    * @param {event} event from question set.
    * @param {Integer} index from question set.
    */
-  selectedvalue: function(event, index) {
-    var state = {},
-      value,
-      telValues = {};
+  selectedvalue: function (event, index) {
+    var state = {}, value, telValues = {};
     $(this._constant.mcqSelectOption).removeClass(this._constant.optionSelectionUI);
     $('input:radio[name=radio]')[index].checked = true;
     if (!_.isUndefined(event)) {
       this.selectOptionUI(event);//eslint-disable-line no-undef
     }
-    value=this._questionData.options[index];
+    value = this._question.data.options[index];
     this._selectedIndex = index; // eslint-disable-line no-undef
     state = {
       val: this._selectedIndex, // eslint-disable-line no-undef
-      options: this._questionData.options, // eslint-disable-line no-undef
-      score: this._questionData.questionConfig.max_score // eslint-disable-line no-undef
-    }
+      options: this._question.data.options, // eslint-disable-line no-undef
+      score: this._question.config.max_score // eslint-disable-line no-undef
+    };
     telValues['option' + index] = value.image.length > 0 ? value.image : value.text;
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { // eslint-disable-line no-undef
       "type": "MCQ",
@@ -191,7 +170,7 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
     });
     EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
   },
-  selectOptionUI: function(event) {
+  selectOptionUI: function (event) {
     if ($(event.target).hasClass(this._constant.mcqSelectOption.replace(".", ""))) {
       $(event.target).addClass(this._constant.optionSelectionUI);
     } else {
@@ -199,7 +178,7 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
     }
     //event.stopPropagation(); //stop event because its added in all child template
   },
-  logTelemetryInteract: function(event) {
+  logTelemetryInteract: function (event) {
     if (event != undefined) QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.TOUCH, { // eslint-disable-line no-undef
       type: QSTelemetryLogger.EVENT_TYPES.TOUCH, // eslint-disable-line no-undef
       id: event.target.id

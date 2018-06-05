@@ -1,8 +1,8 @@
 var MCQTemplate = MCQTemplate || {};
-MCQTemplate.getHorizontalTemplate = function() {
+MCQTemplate.getHorizontalTemplate = function () {
   return "<div class='qc-option-container'> \
-   <% if(questionObj.questionConfig.layout == 'Horizontal' || (questionObj.questionConfig.layout == undefined)){ %> \
-     <% _.each(questionObj.options, function(val,key,index) { %> \
+   <% if(question.config.layout == 'Horizontal' || (question.config.layout == undefined)){ %> \
+     <% _.each(question.data.options, function(val,key,index) { %> \
       <div class='qc-option-value mcq-option-value' onclick=MCQTemplate.pluginInstance.logTelemetryInteract(event);MCQTemplate.pluginInstance.selectedvalue(event,<%= key %>)> \
       <div class='qc-option-text'> \
       <% if(val.image.length>0){%> \

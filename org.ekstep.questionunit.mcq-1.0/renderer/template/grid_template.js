@@ -1,7 +1,7 @@
 var MCQTemplate = MCQTemplate || {};
-MCQTemplate.getGridTemplate = function() {
+MCQTemplate.getGridTemplate = function () {
   return "<div class='qc-grid-option-container'>\
-        <% _.each(questionObj.topOptions, function(val,key,index) { %> \
+        <% _.each(question.data.topOptions, function(val,key,index) { %> \
 <div class='qc-grid-option-outer-value'> \
 <div class='qc-grid-option-value'> \
   <div class='qc-grid-option-text-outer' id=<%=key%>  onclick=MCQTemplate.pluginInstance.logTelemetryInteract(event);MCQTemplate.checkOptioninGrid(<%=val.keyIndex%>);MCQTemplate.pluginInstance.selectedvalue(event,<%=val.keyIndex%>) id='option'> \
@@ -39,9 +39,9 @@ MCQTemplate.getGridTemplate = function() {
             <% }); %> \
 </div> \
 <div class='qc-grid-option-container'> \
-<% if(questionObj.bottomOptions.length != 0){%>\
+<% if(question.data.bottomOptions.length != 0){%>\
   <div class='qc-grid-option-container'>\
-  <% _.each(questionObj.bottomOptions, function(val,key,index) { %> \
+  <% _.each(question.data.bottomOptions, function(val,key,index) { %> \
 <div class='qc-grid-option-outer-value'> \
 <div class='qc-grid-option-value'> \
   <div class='qc-grid-option-text-outer mcq-option-value' id=<%=key%> onclick=MCQTemplate.pluginInstance.logTelemetryInteract(event);MCQTemplate.checkOptioninGrid(<%=val.keyIndex%>);MCQTemplate.pluginInstance.selectedvalue(event,<%=val.keyIndex%>) id='option'> \
@@ -81,7 +81,7 @@ MCQTemplate.getGridTemplate = function() {
 <%}%>\
       </div>";
 };
-MCQTemplate.checkOptioninGrid = function(index) {
+MCQTemplate.checkOptioninGrid = function (index) {
   $(".mcq-selected-option").removeClass("mcq-option-checked");
   $('.mcq-selected-option').eq(index).addClass('mcq-option-checked');
 };
