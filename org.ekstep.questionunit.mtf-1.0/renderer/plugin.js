@@ -108,7 +108,7 @@ org.ekstep.questionunitmtf.RendererPlugin = org.ekstep.contentrenderer.questionU
       },
       score: partialScore,
       values: telemetryValues,
-      correctAnsCount: tempCount,
+      noOfCorrectAns: tempCount,
       totalAns: qLhsData.length
     };
     if (_.isFunction(callback)) {
