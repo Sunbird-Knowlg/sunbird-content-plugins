@@ -31,7 +31,7 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
    * @returns {currentquesObj} current question object.
    */
   preQuestionShow: function (event) {
-    this._super();
+    this._super(event);
     if (this._question.config.layout == this._constant.gridLayout) { // eslint-disable-line no-undef
       this.divideOption(this._question.data); // eslint-disable-line no-undef
     }
