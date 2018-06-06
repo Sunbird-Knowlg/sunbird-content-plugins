@@ -127,8 +127,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                         identifier: obj.identifier,
                         name: obj.name,
                         mimeType: obj.mimeType,
-                        license: obj.license,
-                        contentType: obj.contentType
+                        license: obj.license
                     });
                 }
             });
@@ -692,8 +691,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                             identifier: obj.identifier,
                             name: obj.name,
                             mimeType: obj.mimeType,
-                            license: obj.license,
-                            contentType: obj.contentType
+                            license: obj.license
                         });
                     }
                 });
