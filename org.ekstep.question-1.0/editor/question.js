@@ -19,7 +19,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
     ctrl.questionCreationFormData = {};
     ctrl.TotalconceptsData = [];
     ctrl.selectedConceptsData = [];
-    ctrl.questionUnitValidated = false
+    ctrl.questionUnitValidated = false;
     ctrl.level = ['EASY', 'MEDIUM', 'DIFFICULT'];
     ctrl.conceptsCheck = false;
     ctrl.questionData = {'questionMaxScore': 1};
@@ -63,14 +63,6 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       ecEditor.addEventListener('editor:template:loaded', function (event, object) {
         if(object.formAction == 'question-meta-save') {
           ctrl.metadataform = object.templatePath;
-        }
-      })
-
-      ecEditor.getService('meta').getConfigOrdinals(function (err, res) {
-        if (!err) {
-          ctrl.grades = res.data.result.ordinals.gradeLevel;
-          ctrl.languages = res.data.result.ordinals.medium;
-          $scope.$safeApply();
         }
       });
 
@@ -129,7 +121,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
                 }
               });
             } else {
-              ctrl.noTemplatesFound = "There are not templates available";
+              ctrl.noTemplatesFound = "There are no templates available";
             }
           }
         });
@@ -144,7 +136,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       ctrl.assessmentId = questionData.identifier;
       ctrl.questionData = questionData1;
       ctrl.questionCreationFormData = questionData1.data.data;
-      ctrl.questionData.qcLanguage = questionData1.data.config.metadata.medium;
+      ctrl.questionData.qcMedium = questionData1.data.config.metadata.medium;
       ctrl.questionData.questionTitle = questionData1.data.config.metadata.title;
       ctrl.questionData.qcLevel = questionData1.data.config.metadata.qlevel;
       ctrl.questionData.subject = questionData1.data.config.metadata.subject;
@@ -156,7 +148,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       ctrl.category = questionData.category;
       if (questionData1.data.config.metadata.concepts) {
         ctrl.Totalconcepts = questionData1.data.config.metadata.concepts.length;
-      }//_.isUndefined(questionData.config.metadata.concepts) ? questionData.config.metadata.concepts.length : 0;
+      }
       ctrl.questionData.concepts = questionData1.data.config.metadata.concepts;
       ctrl.selectedConceptsData = questionData1.data.config.metadata.concepts;
       ctrl.questionData.questionDesc = questionData1.data.config.metadata.description;
@@ -169,7 +161,6 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       var editCreateQuestionFormInstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(questionData1.data.plugin.id);
       _.each(editCreateQuestionFormInstance.templates, function (value, key) { // eslint-disable-line no-unused-vars
         if (value.editor.template == questionData1.data.plugin.templateId) {
-          // var controllerPathEdit = ecEditor.resolvePluginResource(pluginID, pluginVer, value.editor.controllerURL);
           var templatePathEdit = ecEditor.resolvePluginResource(pluginID, pluginVer, value.editor.templateURL);
           ctrl.questionUnitTemplateURL = templatePathEdit;
         }
@@ -181,7 +172,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
         "templateId": pluginTemplateId // Template Id of the question unit
       };
       $scope.$safeApply();
-    }
+    };
 
     ctrl.setPreviewData = function () {
       var confData = {};
@@ -197,7 +188,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       var questions = [];
       var data = {
         "org.ekstep.questionset": {}
-      }
+      };
 
       questions.push(qObj);
       data[ctrl._constants.questionsetPlugin][ctrl._constants.questionPlugin] = questions;
@@ -212,7 +203,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       }
       confData.contentBody = previewInstance.getQuestionPreviwContent(data[ctrl._constants.questionsetPlugin]);
       ecEditor.dispatchEvent("atpreview:show", confData);
-    }
+    };
 
     ctrl.loadPreview = function () {
       if (ctrl.editMode === true) {
@@ -220,20 +211,20 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
           ctrl.setPreviewData();
         }, 100);
       }
-    }
+    };
 
     ctrl.loadDropdown = function () {
       $('.ui.dropdown').dropdown({});
-    }
+    };
 
     ctrl.updatePreview = function () {
       ctrl.showPreview();
-    }
+    };
 
     ctrl.showMetaform = function () {
       ctrl.refreshPreview = false;
       ctrl.validateQuestionCreationForm();
-    }
+    };
 
     ctrl.showPreview = function () {
       ctrl.refreshPreview = true;
@@ -242,11 +233,11 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       } else {
         ctrl.setPreviewData();
       }
-    }
+    };
 
     ctrl.cancel = function () {
       $scope.closeThisDialog();
-    }
+    };
 
     ctrl.setBackButtonState = function () {
       if (ctrl.editState) {
@@ -258,7 +249,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       } else {
         return false;
       }
-    }
+    };
 
     ctrl.back = function () {
       if (!ctrl.questionMetadataScreen) {
@@ -268,7 +259,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       } else {
         var metaFormScope = $('#question-meta-form #content-meta-form').scope();
         ctrl.questionData.questionTitle = metaFormScope.contentMeta.name;
-        ctrl.questionData.qcLanguage = metaFormScope.contentMeta.medium;
+        ctrl.questionData.qcMedium = metaFormScope.contentMeta.medium;
         ctrl.questionData.qcLevel = metaFormScope.contentMeta.level;
         ctrl.questionData.questionDesc = metaFormScope.contentMeta.description;
         ctrl.questionData.questionMaxScore = metaFormScope.contentMeta.max_score;
@@ -277,11 +268,11 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
 
         ctrl.questionMetadataScreen = false;
       }
-    }
+    };
 
     ctrl.switchTab = function (id, res) {
       ctrl.selectedMenuItemData = ctrl.menuItems[res.category].templatesData;
-    }
+    };
 
     ctrl.addCreateQuestionForm = function (obj) {
       $('.ui.dropdown').dropdown({});
@@ -300,12 +291,12 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       // var controllerPath = ecEditor.resolvePluginResource(obj.pluginID, obj.ver, obj.editor.controllerURL);
       var templatePath = ecEditor.resolvePluginResource(obj.pluginID, obj.ver, obj.editor.templateURL);
       ctrl.questionUnitTemplateURL = templatePath + '?BUILDNUMBER';
-    }
+    };
 
     ctrl.validateQuestionCreationForm = function (event) { // eslint-disable-line no-unused-vars
       // ctrl.refreshPreview = false;
       $scope.$broadcast('question:form:val');
-    }
+    };
 
     ctrl.formValid = function (event, data) {
       ctrl.questionCreationFormData = data;
@@ -313,11 +304,11 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       if (!ctrl.refreshPreview) {
         ctrl.formIsValid();
       }
-    }
+    };
 
     ctrl.formInValid = function () {
 
-    }
+    };
 
     ctrl.formIsValid = function () {
       ctrl.questionMetadataScreen = true;
@@ -330,7 +321,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       ctrl.questionData.questionTitle = ctrl.extractHTML(ctrl.questionData.questionTitle);
       $('.QuestionMetaForm .ui.dropdown').dropdown({});
       ctrl.questionMetaData.name = ctrl.questionData.questionTitle;
-      ctrl.questionMetaData.medium = ctrl.questionData.qcLanguage;
+      ctrl.questionMetaData.medium = ctrl.questionData.qcMedium;
       ctrl.questionMetaData.level = ctrl.questionData.qcLevel;
       ctrl.questionMetaData.description = ctrl.questionData.questionDesc;
       ctrl.questionMetaData.max_score = ctrl.questionData.questionMaxScore;
@@ -350,9 +341,8 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
         type: 'content',
         popup: false,
         metadata: ctrl.questionMetaData
-      })
-
-    }
+      });
+    };
 
     ctrl.saveQuestion = function (assessmentId, data) {
       //If identifier present update the question data
@@ -418,7 +408,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
         "type": ctrl.category.toLowerCase(), // backward compatibility
         "template": "NA", // backward compatibility
         "template_id": "NA", // backward compatibility
-      }
+      };
       var dynamicOptions = [{"answer": true, "value": {"type": "text", "asset": "1"}}];
       var mtfoptions = [{
         "value": {
