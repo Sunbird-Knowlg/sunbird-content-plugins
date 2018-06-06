@@ -168,37 +168,37 @@ describe('templateController', function() {
   describe('loadTemplateContent', function() {
     it("should call the load template function", function() {
       var template = "<div id='qs-mcq-template'><div id='qc-mcqlayout'></div></div>";
-      var html = MCQTemplate.loadTemplateContent(); //eslint-disable-line no-undef
+      var html = MCQController.loadTemplateContent(); //eslint-disable-line no-undef
       expect(html).toEqual(template);
     })
   })
   describe('renderQuestion', function() {
     it("should call the renderQuestion function", function() {
-      spyOn(MCQTemplate, "renderQuestion"); //eslint-disable-line no-undef
-      MCQTemplate.renderQuestion(questionObj); //eslint-disable-line no-undef
-      expect(MCQTemplate.renderQuestion).toHaveBeenCalled(); //eslint-disable-line no-undef
+      spyOn(MCQController, "renderQuestion"); //eslint-disable-line no-undef
+      MCQController.renderQuestion(questionObj); //eslint-disable-line no-undef
+      expect(MCQController.renderQuestion).toHaveBeenCalled(); //eslint-disable-line no-undef
     })
   })
   describe('renderTemplateLayout', function() {
     it("should call the renderTemplateLayout function", function() {
-      spyOn(MCQTemplate, "renderTemplateLayout"); //eslint-disable-line no-undef
-      MCQTemplate.renderTemplateLayout(questionObj); //eslint-disable-line no-undef
-      expect(MCQTemplate.renderTemplateLayout).toHaveBeenCalled(); //eslint-disable-line no-undef
+      spyOn(MCQController, "renderTemplateLayout"); //eslint-disable-line no-undef
+      MCQController.renderTemplateLayout(questionObj); //eslint-disable-line no-undef
+      expect(MCQController.renderTemplateLayout).toHaveBeenCalled(); //eslint-disable-line no-undef
     })
     it("should get the layout undefined", function() {
       questionObj.questionConfig.layout = undefined;
-      MCQTemplate.renderTemplateLayout(questionObj); //eslint-disable-line no-undef
+      MCQController.renderTemplateLayout(questionObj); //eslint-disable-line no-undef
     })
     it("should get the layout grid", function() {
-      MCQTemplate.renderTemplateLayout(gridobj); //eslint-disable-line no-undef
+      MCQController.renderTemplateLayout(gridobj); //eslint-disable-line no-undef
     })
     it("should get the layout vertical", function() {
       questionObj.questionConfig.layout = "Vertical";
-      MCQTemplate.renderTemplateLayout(questionObj); //eslint-disable-line no-undef
+      MCQController.renderTemplateLayout(questionObj); //eslint-disable-line no-undef
     })
-    it("should get call with MCQTemplate undefined", function() { //eslint-disable-line no-undef
+    it("should get call with MCQController undefined", function() { //eslint-disable-line no-undef
       questionObj.questionConfig.layout = "Vertical";
-      MCQTemplate.renderTemplateLayout(questionObj); //eslint-disable-line no-undef
+      MCQController.renderTemplateLayout(questionObj); //eslint-disable-line no-undef
     })
   })
   describe('showImageModel', function() {
@@ -208,12 +208,12 @@ describe('templateController', function() {
           "src": "https://dev.ekstep.in/assets/public/content/do_1123016850062950401107/artifact/black_city_by_fersy-d6vkj2j_1501670533324.jpg"
         }
       }
-      MCQTemplate.showImageModel(event.target.src); //eslint-disable-line no-undef
+      MCQController.showImageModel(event.target.src); //eslint-disable-line no-undef
     })
   })
   describe('hideImageModel', function() {
     it("should remove element in body", function() {
-      MCQTemplate.hideImageModel(); //eslint-disable-line no-undef
+      MCQController.hideImageModel(); //eslint-disable-line no-undef
       expect($("#image-model-popup").length).toEqual(0);
     })
   })
@@ -224,7 +224,7 @@ describe('templateController', function() {
           "parentElement": "collapse-ques-text"
         }
       }
-      expect(MCQTemplate.expandQuestion(event)).toBe(undefined)//eslint-disable-line no-undef
+      expect(MCQController.expandQuestion(event)).toBe(undefined)//eslint-disable-line no-undef
     })
   })
 });

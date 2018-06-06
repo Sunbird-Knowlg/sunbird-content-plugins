@@ -1,21 +1,21 @@
-var MCQTemplate = MCQTemplate || {};
-MCQTemplate.getVerticalTemplate = function () {
+var MCQController = MCQController || {};
+MCQController.getVerticalTemplate = function () {
   return "<div class='qc-vertical-option-container'> \
   <table class='qc-vertical-option-table'> \
   <tr class='qc-vertical-option-outer'> \
   <% _.each(question.data.options, function(val,key,index) { %> \
-   <td class='qc-vertical-option-td mcq-option-value' onclick=MCQTemplate.pluginInstance.logTelemetryInteract(event);MCQTemplate.checkOptioninVertical('<%= key %>');MCQTemplate.pluginInstance.selectedvalue(event,'<%= key %>')> \
+   <td class='qc-vertical-option-td mcq-option-value' onclick=MCQController.pluginInstance.logTelemetryInteract(event);MCQController.checkOptioninVertical('<%= key %>');MCQController.pluginInstance.selectedvalue(event,'<%= key %>')> \
    <div class='qc-vertical-option-value'> \
    <div class='mcq-selected-option'></div> \
    <div id=<%=key%> class='qc-option-vertical-text'> \
     <% if(val.audio.length > 0 && val.image.length == 0){%> \
       <div> \
-       <img class='qc-vertical-audio-with-image' onclick=MCQTemplate.pluginInstance.playAudio('<%= val.audio %>')  src=<%=MCQTemplate.pluginInstance.checkBaseUrl() %>>\
+       <img class='qc-vertical-audio-with-image' onclick=MCQController.pluginInstance.playAudio('<%= val.audio %>')  src=<%=MCQController.pluginInstance.checkBaseUrl() %>>\
       </div> \
       <%}%> \
     <% if(val.image.length>0){%> \
       <div class='qc-opt'> \
-       <img class='qc-vertical-option-image' onclick='MCQTemplate.showImageModel(event)' src=<%=MCQTemplate.pluginInstance.checkBaseUrl( val.image) %>>\
+       <img class='qc-vertical-option-image' onclick='MCQController.showImageModel(event)' src=<%=MCQController.pluginInstance.checkBaseUrl( val.image) %>>\
       </div> \
       <%}%> \
       <% if(val.image.length == 0 && val.audio.length == 0) {%> \
@@ -26,11 +26,11 @@ MCQTemplate.getVerticalTemplate = function () {
    </div> \
     <div class='qc-option-vertical-checkbox'> \
      <div> \
-      <input type='radio' name='radio' value='pass' class='qc-option-input-checkbox' onclick=MCQTemplate.pluginInstance.logTelemetryInteract(event);MCQTemplate.pluginInstance.selectedvalue(event,'<%= key %>') id='option'> \
+      <input type='radio' name='radio' value='pass' class='qc-option-input-checkbox' onclick=MCQController.pluginInstance.logTelemetryInteract(event);MCQController.pluginInstance.selectedvalue(event,'<%= key %>') id='option'> \
      </div> \
      <% if(val.audio.length > 0 && val.image.length > 0){%> \
       <div> \
-       <img class='qc-horizontal-audio' onclick=MCQTemplate.pluginInstance.playAudio('<%= val.audio %>')  src=<%=MCQTemplate.pluginInstance.checkBaseUrl() %>>\
+       <img class='qc-horizontal-audio' onclick=MCQController.pluginInstance.playAudio('<%= val.audio %>')  src=<%=MCQController.pluginInstance.checkBaseUrl() %>>\
      </div>\
      <%}%> \
    </div> \
@@ -42,7 +42,7 @@ MCQTemplate.getVerticalTemplate = function () {
   </table> \
   </div>";
 };
-MCQTemplate.checkOptioninVertical = function (index) {
+MCQController.checkOptioninVertical = function (index) {
   $(".mcq-selected-option").removeClass("mcq-option-checked");
   $('.mcq-selected-option').eq(index).addClass('mcq-option-checked');
 };

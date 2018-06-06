@@ -247,16 +247,16 @@ describe('MCQRendererPlugin', function() {
     plugin._selectedIndex = "0";
     plugin.questionData.options = currentquesObj.questionData.options;
     plugin.questionData.questionConfig = currentquesObj.questionConfig;
-    spyOn(plugin, "initTemplate").and.callThrough();
+    spyOn(plugin, "setQuestionTemplate").and.callThrough();
     qconfig = JSON.parse(questionsetEvent.target._currentQuestion.config.__cdata);
     spyOn(plugin, "preQuestionShow").and.callThrough();
     spyOn(plugin, "postQuestionShow").and.callThrough();
     done();
   });
-  describe('initTemplate', function() {
+  describe('setQuestionTemplate', function() {
     it('should plugin will initialize', function() {
       expect(org.ekstep.pluginframework.pluginManager.plugins['mcq']).not.toBe(undefined);
-      plugin.initTemplate();
+      plugin.setQuestionTemplate();
       expect(plugin._template).not.toBe(undefined);
     });
     it('should call the template', function() {
@@ -322,8 +322,8 @@ describe('MCQRendererPlugin', function() {
       expect(questionObj).toBeUndefined();
     })
     it("should load mcq template", function() {
-      spyOn(MCQTemplate, "renderQuestion"); //eslint-disable-line no-undef
-      MCQTemplate.renderQuestion(); //eslint-disable-line no-undef
+      spyOn(MCQController, "renderQuestion"); //eslint-disable-line no-undef
+      MCQController.renderQuestion(); //eslint-disable-line no-undef
     })
     it("should check qstate undefined", function() {
       delete currentquesObj.qState;
