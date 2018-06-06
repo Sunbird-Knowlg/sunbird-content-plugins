@@ -628,7 +628,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         if (inview && obj.length === 0) {
             ctrl.inViewLogs.push({
                 objid: item.identifier,
-                objtype: item.contentType,
+                objtype: item.contentType ||'Asset',
                 section: section,
                 index: index
             })
