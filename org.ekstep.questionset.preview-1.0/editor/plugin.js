@@ -38,13 +38,13 @@ org.ekstep.questionsetPreview.EditorPlugin = org.ekstep.contenteditor.basePlugin
       }
     };
     qAndMediaObj = this.getQuestionList(questionSet['org.ekstep.question']);
-    qAndMediaObj['org.ekstep.question'].forEach(function (questionArray) {
+    _.each(qAndMediaObj['org.ekstep.question'], function (questionArray, v) {
       if (_.has(questionArray.data, "__cdata"))
         var qdata = JSON.parse(questionArray.data.__cdata);
       if (_.has(qdata, "mediamanifest")) {
         var questionMediaArr = qdata.mediamanifest.media;
         if (_.isArray(questionMediaArr)) {
-          questionMediaArr.forEach(function (mediaItem) {
+          _.each(questionMediaArr, function (mediaItem, v) {
             story.theme['manifest'].media.push(mediaItem);
           })
         }
