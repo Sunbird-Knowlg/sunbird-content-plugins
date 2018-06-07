@@ -134,6 +134,11 @@
                                             <label>{{dynamicField.label}}</label>
                                             <conceptselector config=dynamicField ng-click="onConfigChange({field:dynamicField, form:metaForm})"></conceptselector>
                                         </div>
+                                        <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code].length && dynamicField.required  && isSubmit) , 'required': dynamicField.required} " name="{{dynamicField.code}}
+                                        " ng-if="dynamicField.inputType==='topicselector'">
+                                            <label>{{dynamicField.label}}</label>
+                                            <topic-selector config=dynamicField ng-click="onConfigChange({field:dynamicField, form:metaForm})"></topic-selector>
+                                        </div>
                                         <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code].length && fixedField.required  && isSubmit), 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="(dynamicField.inputType=='keywordsuggestion'
                                         && dynamicField.visible) " ng-required="{{dynamicField.required}} ">
                                             <label>{{dynamicField.label | uppercase}}</label>
