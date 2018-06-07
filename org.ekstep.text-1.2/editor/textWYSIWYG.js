@@ -105,7 +105,7 @@ var TextWYSIWYG = (function() {
     function setProperties(data) {
         if (isOldPlugin(data.attributes)) return;
         setOffsetY(data);
-        setAlignment(data);
+        // setAlignment(data);
         setLineHeight(data);
         ecEditor.render();
     }
