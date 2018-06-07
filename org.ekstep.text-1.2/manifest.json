@@ -1,6 +1,6 @@
 {
     "id": "org.ekstep.text",
-    "ver": "1.1",
+    "ver": "1.2",
     "shortId": "org.ekstep.text",
     "displayName": "Text",
     "author": "Santhosh Vasabhaktula",
@@ -19,7 +19,11 @@
             "type": "js",
             "src": "editor/multilineTransliterator.js"
         },
-                {
+        {
+            "type": "js",
+            "src": "editor/textWYSIWYG.js"
+        },
+        {
             "type": "css",
             "src": "editor/style/plugin.css"
         }],

@@ -31,7 +31,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     middleBaselineFonts: ["NotoSans", "NotoSansKannada", "NotoNastaliqUrdu"],
     /**
-     * The events are registred which are used which are used to add or remove fabric events and other custom events
+     * The events are registred which are used to add or remove fabric events and other custom events
      * @memberof Text
      */
     initialize: function() {
@@ -45,6 +45,9 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.addEventListener("org.ekstep.text:wordinfo:show", this.showWordInfo, this);
         ecEditor.addEventListener("org.ekstep.text:delete:enhancement", this.deleteEnhancement, this);
         ecEditor.addEventListener("org.ekstep.text:modified", this.dblClickHandler, this);
+        ecEditor.addEventListener("object:modified", function() {
+            ecEditor.dispatchEvent(instance.type + ':migrate', ecEditor.getCurrentObject());
+        }, this);
         var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/delete_confirmation_dialog.html");
         ecEditor.getService('popup').loadNgModules(templatePath);
 
@@ -147,6 +150,8 @@ org.ekstep.contenteditor.basePlugin.extend({
         if (this.config.text == '') {
             textEditor.showEditor(this.id);
         }
+        // Assign WYSIWYG config to current text instance
+        TextWYSIWYG.setProperties(this);
 
         if (!ecEditor._.isUndefined(this.attributes.timings) || this.attributes.textType === 'readalong') {
             if (ecEditor._.isUndefined(this.attributes.textType)) {
@@ -262,8 +267,6 @@ org.ekstep.contenteditor.basePlugin.extend({
                 this.editorObj.setFontFamily(value);
                 this.attributes.fontFamily = value;
                 this.attributes.fontfamily = value;
-                // Assign WYSIWYG config to current text instance
-                var wysiwygConfig = this.getWysiwygConfig();
                 break;
             case "fontsize":
                 this.editorObj.setFontSize(value);
@@ -293,6 +296,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                 this.config.wordunderlinecolor = value;
                 break;
         }
+        // Assign WYSIWYG config to current text instance
+        TextWYSIWYG.setProperties(this);
         ecEditor.render();
         ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
     },
@@ -585,15 +590,13 @@ org.ekstep.contenteditor.basePlugin.extend({
             return instance._super();
         }
     },
-    /**
-     * This method returns the config to support WYSIWYG in renderer(createjs)
-     * called on changing fontfamily config
-     * return object contain textbaseline, lineheight & offsetY
-     * @param {string} font - fontfamily name
-     * @memberof Text
-     */
-    getWysiwygConfig: function(font) {
-        
+    toECML: function() {
+        var prop = this._super();
+        return TextWYSIWYG.toECML(prop);
+    },
+    fromECML: function() {
+        this._super(this.editorData);
+        TextWYSIWYG.fromECML(this)
     }
 });
 //# sourceURL=textplugin.js
