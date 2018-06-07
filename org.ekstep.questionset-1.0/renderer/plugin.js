@@ -51,6 +51,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
     // On content replay, reset all question set information.
     EkstepRendererAPI.addEventListener('renderer:content:replay', function() {
       instance.resetQS.call(instance);
+      this.registerNavigation(instance);
     }, instance);
     // Remove duplicate event listener
     EventBus.listeners['org.ekstep.questionset:feedback:retry'] = [];
@@ -303,9 +304,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
     // this.resetNavigation();
     var instance = this;
     Renderer.theme.setParam(this._data.id, undefined);
-    if (this._currentQuestion) {
-      EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
-    }
+    this.deregisterNavigation(instance);
     setTimeout(function() {
       instance.resetListeners();
     }, 100);
