@@ -22,8 +22,10 @@ MCQController.getHorizontalTemplate = function () {
       </span> \
        </div>\
         <% }else{ %>  \
-            <div class='qc-opt qc-option-txt-only'> \
+            <div class='qc-opt'> \
+             <span class='qc-option-txt'> \
       <%=val.text%> \
+      </span>\
        </div>\
       <%}%> \
          </div> \
