@@ -90,7 +90,7 @@ describe('org.ekstep.questionset', function() {
       "w": 80,
       "h": 85,
       "x": 9,
-      "y": 6m
+      "y": 6
     };
 
     question = {
