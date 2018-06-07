@@ -98,6 +98,19 @@ var TextWYSIWYG = (function() {
         }
     }
     /**
+     * This will reset the font if font family is other that defined in hashmap
+     * @param {object} data - text instance.
+     * @returns {void}
+     */
+    function resetFont(data) {
+        var hashData = hashMap[data.attributes.fontFamily];
+        if (!hashData) {
+            data.editorObj.setFontFamily("NotoSans");
+            data.attributes.fontFamily = "NotoSans";
+            data.attributes.fontfamily = "NotoSans";
+        }
+    }
+    /**
      * This function will set all WYSIWYG values of new text element.
      * @param {object} data - text instance.
      * @returns {void}
@@ -112,7 +125,8 @@ var TextWYSIWYG = (function() {
     return {
         setProperties: setProperties,
         toECML: toECML,
-        fromECML: fromECML
+        fromECML: fromECML,
+        resetFont: resetFont
     };
 })();
 
