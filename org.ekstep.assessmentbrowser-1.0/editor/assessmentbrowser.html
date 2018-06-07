@@ -75,13 +75,14 @@
                         <i class="dropdown icon" ng-if="$ctrl.showAdvancedFilter" style="transform: rotate(90deg);"></i> Advanced Filters
                     </div>
                     <div class="content transition {{$ctrl.showAdvancedFilter ? 'visible': 'hidden'}}">
+                        
                         <div class="three fields">
                             <div class="field">
                                 <div class="ui fluid labeled input">
-                                    <div class="ui label">Language</div>
-                                    <select class="ui fluid dropdown search" ng-model="$ctrl.activity.language" ng-options="lang for lang in $ctrl.assessment.language" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'languageDropDown'})">
+                                    <div class="ui label">Medium</div>
+                                    <select class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.medium" ng-options="medium.name as medium.name for medium in $ctrl.assessment.medium" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'mediumDropDown'})">
                                         <option value="">
-                                            All
+                                            Medium
                                         </option>
                                     </select>
                                 </div>
@@ -89,7 +90,7 @@
                             <div class="field">
                                 <div class="ui fluid labeled input">
                                     <div class="ui label">Difficulty</div>
-                                    <select class="ui fluid dropdown search" ng-model="$ctrl.activity.qlevel" ng-options="level for level in $ctrl.assessment.qlevel" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'difficultyDropDown'})">
+                                    <select class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.qlevel" ng-options="level for level in $ctrl.assessment.qlevel" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'difficultyDropDown'})">
                                         <option value="">
                                             Difficulty
                                         </option>
@@ -110,10 +111,10 @@
                         <div class="three fields">
                             <div class="field">
                                 <div class="ui fluid labeled input">
-                                    <div class="ui label">&emsp;Grade&nbsp;&nbsp;&nbsp;</div>
-                                    <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.gradeLevel" ng-options="grade for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'gradeDropDown'})">
+                                    <div class="ui label">&emsp;Class&nbsp;&nbsp;</div>
+                                    <select multiple="" class="ui fluid dropdown search lableCls" ng-model="$ctrl.activity.gradeLevel" ng-options="grade.name as grade.name for grade in $ctrl.assessment.gradeLevel" data-bind="options:assessment.gradeLevel" ng-change="$ctrl.searchQuestions(); $ctrl.generateTelemetry({type: 'select', subtype: 'dropDown', target: 'gradeDropDown'})">
                                         <option value="">
-                                            Grade
+                                            Class
                                         </option>
                                     </select>
                                 </div>
@@ -188,7 +189,7 @@
                 <p>Unable to fetch the Questions! Please try again later!</p>
             </div>
         </div>
-        <div ng-show="($ctrl.isAdvanceOptionOpen && $ctrl.items.length > 0) || (!$ctrl.isAdvanceOptionOpen && $ctrl.cart.items.length > 0)">
+        <div ng-show="!$ctrl.errorMessage && (($ctrl.isAdvanceOptionOpen && $ctrl.items.length > 0) || (!$ctrl.isAdvanceOptionOpen && $ctrl.cart.items.length > 0))">
             <div class="ui two column horizontally padded grid" ng-show="!$ctrl.itemsLoading">
                 <div class="column" id="scrolQuestion" style="width: 480px;height: 284px; overflow-y: scroll;">
                     <div class="ui large divided items" ng-show="$ctrl.isAdvanceOptionOpen">
