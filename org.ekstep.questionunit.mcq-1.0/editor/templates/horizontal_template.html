@@ -57,11 +57,11 @@
                   <div class="ui grid">
                     <div class="eleven wide column">
                       <div class="form-group segment textBoxDiv">
-                        <input type="text" class="form-control textbox" ng-class="{'has-success':mcqForm['options_' + $index].$valid, 'has-error': submitted && mcqForm['options_' + $index].$error.required}" placeholder="Enter answer" name="options_{{$index}}" ng-model="mcqFormData.options[key].text" maxlength="25" ng-init="focused = false" ng-focus="focused = true;generateTelemetry({type: 'TOUCH', id: 'input', target: {id: 'questionunit-mcq-answer', ver: '', type: 'input'}})" ng-blur="focused = false" ng-required="!(mcqFormData.options[key].text.length || mcqFormData.options[key].image.length || mcqFormData.options[key].audio.length)"/>
+                        <input type="text" class="form-control textbox" ng-class="{'has-success':mcqForm['options_' + $index].$valid, 'has-error': submitted && mcqForm['options_' + $index].$error.required}" placeholder="Enter answer" name="options_{{$index}}" ng-model="mcqFormData.options[key].text" maxlength="60" ng-init="focused = false" ng-focus="focused = true;generateTelemetry({type: 'TOUCH', id: 'input', target: {id: 'questionunit-mcq-answer', ver: '', type: 'input'}})" ng-blur="focused = false" ng-required="!(mcqFormData.options[key].text.length || mcqFormData.options[key].image.length || mcqFormData.options[key].audio.length)"/>
                       </div>
                     </div>
                     <div class="one wide column text-len">
-                      <span class="maxLengthText">{{value.text.length}}<span class="length-divider">/</span>25</span>
+                      <span class="maxLengthText">{{value.text.length}}<span class="length-divider">/</span>60</span>
                     </div>
                     <div class="four column row">
                       <div class="two wide column" ng-if="mcqFormData.options[key].image.length > 0">
