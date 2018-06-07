@@ -93,7 +93,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
     var instance = this;
     // If this is not the first question, hide the current question
     if (instance._currentQuestion) {
-      EkstepRendererAPI.dispatchEvent(instance._currentQuestion.pluginId + ':hide');
+      EkstepRendererAPI.dispatchEvent(instance._currentQuestion.pluginId + ':hide', instance);
       jQuery('#' + instance._currentQuestion.id).remove();
     }
     if (question.pluginId === this._constants.qsQuizPlugin) {
@@ -114,6 +114,8 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
       this._currentQuestionState = this.getQuestionState(question.id);
       // Mark the question as rendered
       instance._currentQuestion = question;
+      // Set current question for telmetry to log events from question-unit
+      QSTelemetryLogger.setQuestion(instance._currentQuestion, instance.getRenderedIndex()); // eslint-disable-line no-undef
       this.setRendered(question);
       EkstepRendererAPI.dispatchEvent(question.pluginId + ':show', instance);
     }
@@ -180,6 +182,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
   },
   renderNextQuestion: function() {
     // Get the next question to be rendered
+    var instance = this;
     var nextQ = this.getNextQuestion();
     if (nextQ) {
       this.renderQuestion(nextQ);
@@ -189,7 +192,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
       // hiding the last question and some housekeeping
       this.saveQuestionSetState();
       this.generateNavigateTelemetry('next', 'ContentApp-EndScreen');
-      EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
+      EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide', instance);
       // this.resetNavigation();
       this.resetListeners();
       this.resetTemplates();
@@ -204,6 +207,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
   },
   renderPrevQuestion: function() {
     // Get the previous question to be rendered
+    var instance = this;
     var prevQ = this.getPrevQuestion();
     if (prevQ) {
       this.renderQuestion(prevQ);
@@ -213,7 +217,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
       // hiding the first question and some housekeeping
       this.saveQuestionSetState();
       this.generateNavigateTelemetry('previous', 'ContentApp-StartScreen');
-      EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
+      EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide', instance);
       // this.resetNavigation();
       this.resetListeners();
       this.resetTemplates();
@@ -304,7 +308,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
     var instance = this;
     Renderer.theme.setParam(this._data.id, undefined);
     if (this._currentQuestion) {
-      EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
+      EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide', instance);
     }
     setTimeout(function() {
       instance.resetListeners();
