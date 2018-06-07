@@ -49,7 +49,7 @@ MCQController.getGridTemplate = function () {
       <div class='qc-grid-option-text'>\
               <% if(val.option.audio.length > 0 && val.option.image.length == 0){%> \
           <div class='qc-opt'>\
-                   <img class='qc-vertical-audio-with-image' onclick=MCQController.pluginInstance.playAudio('<%= val.option.audio %>')  src=<%=MCQController.pluginInstance.checkBaseUrl(val.option.audio) %>>\
+                   <img class='qc-vertical-audio-with-image' onclick=MCQController.pluginInstance.playAudio('<%= val.option.audio %>')  src=<%=MCQController.pluginInstance.checkBaseUrl() %>>\
           </div>\
                 <%}%> \
                   <% if(val.option.image.length>0){%> \
