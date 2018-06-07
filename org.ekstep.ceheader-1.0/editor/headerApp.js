@@ -1,14 +1,13 @@
 angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).controller('headerController', ['$scope', '$window', function($scope,$window) {
 
-    var plugin = { id: "org.ekstep.ceheader", ver: "1.0" };
-    
+    $scope.manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.ceheader");
     $scope.reportIssueLink = (($window.context && $window.context.reportIssueLink) ? $window.context.reportIssueLink : "");
     $scope.lastSaved = undefined;
     $scope.pendingChanges = false;
     $scope.saveBtnEnabled = false;
     $scope.userDetails = !_.isUndefined(window.context) ? window.context.user : undefined;
     $scope.telemetryService = org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE);
-    $scope.ekstepLogo = ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/images/ekstep_logo_white.png");
+    $scope.ekstepLogo = ecEditor.resolvePluginResource($scope.manifest.id, $scope.manifest.ver, "editor/images/ekstep_logo_white.png");
     console.log('$scope.ekstepLogo', $scope.ekstepLogo);
     $scope.showDropDown = false;
     $scope.internetStatusObj = {
@@ -46,7 +45,7 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
 
     $scope.editContentMeta = function() {
         var config = {
-            template: ecEditor.resolvePluginResource(plugin.id, plugin.ver, "editor/partials/editContentMetaDialog.html"),
+            template: ecEditor.resolvePluginResource($scope.manifest.id, $scope.manifest.ver, "editor/partials/editContentMetaDialog.html"),
             controller: ['$scope', 'mainCtrlScope', function($scope, mainCtrlScope) {
                 $scope.routeToContentMeta = function(save) {
                     $scope.closeThisDialog();
@@ -54,7 +53,7 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
                 }
 
                 $scope.fireTelemetry = function(data) {
-                    mainCtrlScope.telemetryService.interact({ "type": "click", "subtype": data.subtype, "target": data.target, "pluginid": 'org.ekstep.ceheader', 'pluginver': '1.0', "objectid": data.id, "stage": org.ekstep.contenteditor.stageManager.currentStage.id });
+                    mainCtrlScope.telemetryService.interact({ "type": "click", "subtype": data.subtype, "target": data.target, "pluginid": $scope.manifest.id, 'pluginver': $scope.manifest.ver, "objectid": data.id, "stage": org.ekstep.contenteditor.stageManager.currentStage.id });
                 }
             }],
             resolve: {
@@ -73,7 +72,7 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
     };
 
     $scope.fireTelemetry = function(menu, menuType) {
-        $scope.telemetryService.interact({ "type": "click", "subtype": "menu", "target": menuType, "pluginid": 'org.ekstep.ceheader', 'pluginver': '1.0', "objectid": menu.id, "stage": org.ekstep.contenteditor.stageManager.currentStage.id });
+        $scope.telemetryService.interact({ "type": "click", "subtype": "menu", "target": menuType, "pluginid": $scope.manifest.id, 'pluginver': $scope.manifest.ver, "objectid": menu.id, "stage": org.ekstep.contenteditor.stageManager.currentStage.id });
     };
 
     $scope.internetStatusFn = function(event) {

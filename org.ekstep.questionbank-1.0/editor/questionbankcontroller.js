@@ -51,7 +51,7 @@ angular.module('createquestionapp', [])
             "AssessmentItem"
           ],
           "status": [],
-          "language": [
+          "medium": [
             "English"
           ]
         },
@@ -126,10 +126,16 @@ angular.module('createquestionapp', [])
               }
               break;
             case "medium":
-              data.request.filters.language = [value];
+              data.request.filters.medium = value;
               break;
             case "level":
               data.request.filters.qlevel = value;
+              break;
+            case "board":
+              data.request.filters.board = value;
+              break;
+            case "subject":
+              data.request.filters.subject = value;
               break;
             case "questionType":
               ecEditor._.forEach($scope.questionTypes, function(val, key) {
@@ -186,30 +192,29 @@ angular.module('createquestionapp', [])
         if (!data.isSelected) {
           data.isSelected = true;
         }
-        var ctrlScope = angular.element('#qc-question-bank-model').scope();
-        var selQueIndex = _.findLastIndex(ctrlScope.questions, {
+        var selQueIndex = _.findLastIndex($scope.questions, {
           identifier: data.identifier
         });
         if (selQueIndex < 0) {
-          ctrlScope.questions.unshift(data);
+          $scope.questions.unshift(data);
         } else {
-          ctrlScope.questions[selQueIndex] = data;
+          $scope.questions[selQueIndex] = data;
         }
-        selQueIndex = _.findLastIndex(ctrlScope.selectedQuestions, {
+        selQueIndex = _.findLastIndex($scope.selectedQuestions, {
           identifier: data.identifier
         });
         if (selQueIndex < 0) {
-          ctrlScope.selectedQuestions.unshift(data);
+          $scope.selectedQuestions.unshift(data);
         } else {
 
-          ctrlScope.selectedQuestions[selQueIndex] = data;
-          ctrlScope.$safeApply();
+          $scope.selectedQuestions[selQueIndex] = data;
+          $scope.$safeApply();
         }
 
-        ctrlScope.setDisplayandScore();
-        ctrlScope.editConfig(ctrlScope.selectedQuestions[0], 0);
-        ctrlScope.previewItem(ctrlScope.selectedQuestions[0], true);
-        ctrlScope.$safeApply();
+        $scope.setDisplayandScore();
+        $scope.editConfig($scope.selectedQuestions[0], 0);
+        $scope.previewItem($scope.selectedQuestions[0], true);
+        $scope.$safeApply();
       });
 
 

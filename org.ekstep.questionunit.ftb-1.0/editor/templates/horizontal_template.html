@@ -12,7 +12,7 @@
                                 <div class="ui grid">
                                     <div class="twelve wide column">
                                         <div class="form-group segment textBoxDiv">
-                                            <textarea class="form-control textboxQ-ftb" ng-class="{'has-success':ftbForm.ftbQuestion.$valid, 'has-error': submitted && (ftbForm.ftbQuestion.$error.required != true || ftbForm.ftbQuestion.$error.pattern !=true)}" placeholder="Enter the question" name="ftbQuestion" id="ftbQuestion" ng-model="ftbFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;generateTelemetry({type: 'select', subtype: 'keyPress', target: 'ftbTextarea'}, $event)" ng-blur="$ctrl.focused = false" required>
+                                            <textarea class="form-control textboxQ-ftb" ng-class="{'has-success':ftbForm.ftbQuestion.$valid, 'has-error': submitted && (ftbForm.ftbQuestion.$error.required != true || ftbForm.ftbQuestion.$error.pattern !=true)}" placeholder="Enter the question" name="ftbQuestion" id="ftbQuestion" ng-model="ftbFormData.question.text" maxlength="220" ng-init="$ctrl.focused = false" ng-focus="$ctrl.focused = true;" ng-blur="$ctrl.focused = false" required>
                                             </textarea>
                                         </div>
                                     </div>
