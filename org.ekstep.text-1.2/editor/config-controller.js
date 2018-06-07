@@ -1,5 +1,6 @@
 angular.module('editorApp')
     .controller('org.ekstep.text:config-controller', ['$scope', function($scope) {
+        var pluginInstance = org.ekstep.pluginframework.pluginManager.plugins['org.ekstep.text'].p.prototype
         $scope.openTransliterator = function() {
             ecEditor.dispatchEvent("org.ekstep.text:showpopup");
         };
@@ -24,7 +25,7 @@ angular.module('editorApp')
             title: "Highlight Color"
         }]
         // Removed unsupported font family
-        $scope.fontFamily = ["NotoSans", "NotoSansKannada", "NotoSansGujarati", "NotoSansBengali", "NotoSansGurmukhi", "NotoSansOriya", "NotoSansDevanagari", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu", "NotoSansMalayalam"];
+        $scope.fontFamily = pluginInstance.supportedFonts;
         $scope.fontSize = [18, 20, 22, 24, 26, 28, 32, 36, 40, 44, 48, 54, 60, 66, 72, 80, 88, 96];
         $scope.fontGroupConfig = {
             "propertyName": "font",

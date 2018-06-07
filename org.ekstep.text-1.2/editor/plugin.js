@@ -27,34 +27,41 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     editorWidth: 720,
     /**
-     * Contains fonts which doesn't support default baseline config for WYSIWYG.
+     * Supported fonts list names
+     * @member {Number} supportedFonts
+     * @memberof Text
      */
-    middleBaselineFonts: ["NotoSans", "NotoSansKannada", "NotoNastaliqUrdu"],
+    supportedFonts: ["NotoSans", "NotoSansKannada", "NotoSansGujarati", "NotoSansBengali", "NotoSansGurmukhi", "NotoSansOriya", "NotoSansDevanagari", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu", "NotoSansMalayalam"],
     /**
      * The events are registred which are used to add or remove fabric events and other custom events
      * @memberof Text
      */
     initialize: function() {
-
-
         var instance = this;
-        ecEditor.addEventListener("org.ekstep.text:showpopup", this.loadHtml, this);
+        ecEditor.addEventListener(this.type + ":showpopup", this.loadHtml, this);
         ecEditor.addEventListener("object:unselected", this.objectUnselected, this);
         ecEditor.addEventListener("stage:unselect", this.stageUnselect, this);
-        ecEditor.addEventListener("org.ekstep.text:readalong:show", this.showReadalong, this);
-        ecEditor.addEventListener("org.ekstep.text:wordinfo:show", this.showWordInfo, this);
-        ecEditor.addEventListener("org.ekstep.text:delete:enhancement", this.deleteEnhancement, this);
-        ecEditor.addEventListener("org.ekstep.text:modified", this.dblClickHandler, this);
-        ecEditor.addEventListener("object:modified", function() {
-            ecEditor.dispatchEvent(instance.type + ':migrate', ecEditor.getCurrentObject());
-        }, this);
+        ecEditor.addEventListener(this.type + ":readalong:show", this.showReadalong, this);
+        ecEditor.addEventListener(this.type + ":wordinfo:show", this.showWordInfo, this);
+        ecEditor.addEventListener(this.type + ":delete:enhancement", this.deleteEnhancement, this);
+        ecEditor.addEventListener(this.type + ":modified", this.dblClickHandler, this);
+        ecEditor.addEventListener(this.type + ":modified", this.doMigrate, this);
         var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/delete_confirmation_dialog.html");
         ecEditor.getService('popup').loadNgModules(templatePath);
-
         var transliterationTemplatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/transliterationconfig.html');
         var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/transliterationapp.js');
         var popupService = org.ekstep.contenteditor.api.getService(ServiceConstants.POPUP_SERVICE);
         popupService.loadNgModules(transliterationTemplatePath, controllerPath);
+    },
+    /**
+     * Dispatch migrate text event if text is old plugin
+     * Any change in properties or move/resize of object
+     * @memberof Text
+     */
+    doMigrate: function() {
+        if (this.isOldPlugin()) {
+            ecEditor.dispatchEvent(this.type + ':migrate', ecEditor.getCurrentObject());
+        }
     },
     /**
     * This method uses popup service to open the transliteration wizard
@@ -106,7 +113,7 @@ org.ekstep.contenteditor.basePlugin.extend({
 
 
 
-        org.ekstep.contenteditor.api.instantiatePlugin('org.ekstep.text', textAttributes, org.ekstep.contenteditor.api.getCurrentStage());
+        org.ekstep.contenteditor.api.instantiatePlugin(currentObject.type, textAttributes, org.ekstep.contenteditor.api.getCurrentStage());
 
     },
     /**
@@ -150,8 +157,10 @@ org.ekstep.contenteditor.basePlugin.extend({
         if (this.config.text == '') {
             textEditor.showEditor(this.id);
         }
-        // Assign WYSIWYG config to current text instance
-        TextWYSIWYG.setProperties(this);
+        // Assign WYSIWYG config to text 1.2 instance
+        if (!this.isOldPlugin()) {
+            TextWYSIWYG.setProperties(this);
+        }
 
         if (!ecEditor._.isUndefined(this.attributes.timings) || this.attributes.textType === 'readalong') {
             if (ecEditor._.isUndefined(this.attributes.textType)) {
@@ -296,8 +305,10 @@ org.ekstep.contenteditor.basePlugin.extend({
                 this.config.wordunderlinecolor = value;
                 break;
         }
-        // Assign WYSIWYG config to current text instance
-        TextWYSIWYG.setProperties(this);
+        // Assign WYSIWYG config to text 1.2 instance
+        if (!this.isOldPlugin()) {
+            TextWYSIWYG.setProperties(this);
+        }
         ecEditor.render();
         ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
     },
@@ -385,8 +396,10 @@ org.ekstep.contenteditor.basePlugin.extend({
             retData.align = data.align;
         }
         if (data.rotate) retData.angle = data.rotate;
-        // Removing deleting of lineheight in editor.(editor is using fabricjs default lineheight 1.16 previously)
-        // delete retData.lineHeight // line height set to default value
+        // deleting of lineheight in editor.(editor is using fabricjs default lineheight 1.16 previously)
+        if (this.isOldPlugin()) {
+            delete retData.lineHeight // line height set to default value
+        }
         return retData;
     },
     getConfigManifest: function() {
@@ -592,11 +605,28 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     toECML: function() {
         var prop = this._super();
-        return TextWYSIWYG.toECML(prop);
+        if (!this.isOldPlugin()) {
+            prop = TextWYSIWYG.toECML(prop);
+        }
+        return prop;
     },
     fromECML: function() {
         this._super(this.editorData);
-        TextWYSIWYG.fromECML(this)
+        if (!this.isOldPlugin()) {
+            TextWYSIWYG.fromECML(this)
+        }
+    },
+    /**
+     * This will return boolean value if text instance is not or old version
+     * @param {object} textInstance - text instance.
+     * @returns {boolean} text instance is old or not
+     */
+     isOldPlugin: function(){
+        if (!this.attributes.version || this.attributes.version < 1.2) {
+            return true;
+        } else {
+            return false;
+        }
     }
 });
 //# sourceURL=textplugin.js
