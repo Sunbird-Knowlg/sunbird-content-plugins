@@ -183,7 +183,7 @@ angular.module('activityBrowserApp', ['angular-inview'])
             if (inview && obj.length === 0) {
                 ctrl.inViewLogs.push({
                     objid: item.identifier,
-                    objtype: item.contentType,
+                    objtype: item.contentType ||'Plugin',
                     section: section,
                     index: index
                 })
