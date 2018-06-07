@@ -183,6 +183,7 @@ form .ui.grid.form-bottom-allign{
     margin-bottom: 5%;
 }
 
-.marginBottomClass{
+.advanceFilterClass{
     margin-bottom: 1%;
+    cursor: pointer;
 }
