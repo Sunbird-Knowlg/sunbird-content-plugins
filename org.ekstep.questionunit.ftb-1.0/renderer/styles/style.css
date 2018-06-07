@@ -1,61 +1,53 @@
-#preview-ftb-horizontal {
-    position: relative;
-    margin: auto;
-    text-align: center;
-    line-height: 2em;
-    width: 80%;
-    margin-top: 2%;
-    display: grid;
-    height: 90vh;
+#ftb-template {
+  position: relative;
+  margin: auto;
+  text-align: center;
+  line-height: 2em;
+  width: 80%;
+  margin-top: 2%;
+  display: grid;
+  height: 90vh;
 }
 
-.ftbanswer-container input {
-    border-bottom: 3px dotted;
-    width: -webkit-fill-available;
-}
-.ftbanswer-container {
-    width: 90%;
-    left: 5%;
-    height: 70%;
-    text-align: center;
-    position: relative;
+.qs-ftb-container {
+  margin: auto;
+  text-align: center;
 }
 
-.qc-ftb-layout {
-    margin: auto;
-    text-align: center;
+.qs-ftb-content {
+  line-height: 3;
 }
 
-.qc-ftb-question-text {
-    font-size: 16px;
-    text-align: initial;
-    width: 100%;
+.qs-ftb-question {
+  font-size: 16px;
+  text-align: center;
+  width: 100%;
+}
+
+.align-question {
+  margin: 33px 0px 0px 2px;
+  height: 25vh;
+  overflow-y: auto;
 }
 
 input#answer {
-    text-align: center;
-    font-size: 100%;
-    width: 100%;
-}
-
-.qcalgin {
-    margin: 33px 0px 0px 2px;
+  text-align: center;
+  font-size: 100%;
+  width: 100%;
 }
 
 input.ans-field {
-    border: 2px solid #ececec;
-    display: inline;
-    text-align: center;
+  border: 2px solid #ececec;
+  display: inline;
+  text-align: center;
 }
 
-.ftb-question-header {
-    line-height: 3;
+input.ans-field.highlightInput {
+  border: 1px solid blue;
 }
-.qc-answertxt{
-    text-align: center;
-}
-@media (min-width:801px){
-    .qc-ftb-layout{
+
+@media (min-width:801px) {
+  .qs-ftb-container {
     margin-top: 20%;
-}
+  }
 }

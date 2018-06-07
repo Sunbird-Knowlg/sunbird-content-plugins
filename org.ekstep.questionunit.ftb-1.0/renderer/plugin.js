@@ -5,41 +5,42 @@
  * @extends org.ekstep.contentrenderer.questionUnitPlugin
  * @author Gourav More <gourav_m@tekditechnologies.com>
  */
-org.ekstep.contentrenderer.questionUnitPlugin.extend({
+org.ekstep.questionunitFTB = {};
+org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionUnitPlugin.extend({
   _type: 'org.ekstep.questionunit.ftb',
   _isContainer: true,
   _render: true,
-  _selectedanswere: undefined,
-  ftbQuestionData: {},
-  ftbQuestionConfig: {},
-  initPlugin: function(data) {
-
-  },
   /**
    * renderer:questionunit.ftb:showEventListener.
    * @event renderer:questionunit.ftb:show
    * @memberof org.ekstep.questionunit.ftb
    */
-  initialize: function() {
-    this._template = QS_FTBTemplate;
-    this._super();
+  setQuestionTemplate: function() {
+    this._question.template = FTBController.template; // eslint-disable-line no-undef
   },
-  postShow: function(currentquesObj) {
-    ftbQuestionData = currentquesObj.questionData;
-    ftbQuestionConfig = currentquesObj.questionConfig;
-    QS_FTBTemplate.questionObj = currentquesObj.questionData;
-    $(QS_FTBTemplate.constant.ftbText).html(questionData.parsedQuestion.text);
-    $(QS_FTBTemplate.constant.parentDiv).off('click');
-    $(QS_FTBTemplate.constant.parentDiv).on('click', '.ans-field', QS_FTBTemplate.doTextBoxHandle);
+  preQuestionShow: function(event) {
+    this._super(event);
+    this._question.data = FTBController.generateHTML(this._question.data); // eslint-disable-line no-undef
+  },
+  postQuestionShow: function(event) { // eslint-disable-line no-unused-vars
+    FTBController.question = this._question; // eslint-disable-line no-undef
 
-    if (currentquesObj.qState && currentquesObj.qState.val) {
-      QS_FTBTemplate.textboxtarget.state = currentquesObj.qState.val;
-      QS_FTBTemplate.setStateInput();
+    $(FTBController.constant.qsFtbElement).off('click'); // eslint-disable-line no-undef
+    $(FTBController.constant.qsFtbElement).on('click', '.ans-field', FTBController.invokeKeyboard); // eslint-disable-line no-undef
+
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESS); // eslint-disable-line no-undef
+    /*istanbul ignore else*/
+    if (this._question.state && this._question.state.val) {
+      FTBController.setStateInput(); // eslint-disable-line no-undef
     }
+  },
+  postHideQuestion: function() {
+    EkstepRendererAPI.dispatchEvent("org.ekstep.keyboard:hide");
   },
   /**
    * renderer:questionunit.ftb:evaluateEventListener.
    * @event renderer:questionunit.ftb:evaluate
+   * @param {Object} event object from questionset
    * @memberof org.ekstep.questionunit.ftb
    */
   evaluateQuestion: function(event) {
@@ -49,27 +50,30 @@ org.ekstep.contentrenderer.questionUnitPlugin.extend({
       ansObj = {};
     //check for evalution
     //get all text box value inside the class
-    var textBoxCollection = $(QS_FTBTemplate.constant.ftbQuestionClass).find("input[type=text]");
+    var textBoxCollection = $(FTBController.constant.qsFtbQuestion).find("input[type=text]"); // eslint-disable-line no-undef
     _.each(textBoxCollection, function(element, index) {
       answerArray.push(element.value.toLowerCase().trim());
+      var key = "ans" + index; // eslint-disable-line no-unused-vars
       ansObj = {
-        ["ans" + index]: element.value
-      }
+        key: element.value
+      };
       telemetryAnsArr.push(ansObj);
     });
     //compare two array
-    if (_.isEqual(answerArray, ftbQuestionData.answer)) {
+    /*istanbul ignore else*/
+    if (_.isEqual(answerArray, this._question.data.answer)) { // eslint-disable-line no-undef
       correctAnswer = true;
     }
-    // Calculate partial score   
+    // Calculate partial score
     var tempCount = 0;
-    _.each(ftbQuestionData.answer, function(ans, index) {
-      if (ans == answerArray[index]) {
+    _.each(this._question.data.answer, function(ans, index) { // eslint-disable-line no-undef
+      /*istanbul ignore else*/
+      if (ans.toLowerCase().trim() == answerArray[index].toLowerCase().trim()) {
         tempCount++;
       }
     });
 
-    var partialScore = (tempCount / ftbQuestionData.answer.length) * ftbQuestionConfig.max_score;
+    var partialScore = (tempCount / this._question.data.answer.length) * this._question.config.max_score; // eslint-disable-line no-undef
 
     var result = {
       eval: correctAnswer,
@@ -79,15 +83,19 @@ org.ekstep.contentrenderer.questionUnitPlugin.extend({
       score: partialScore,
       values: telemetryAnsArr,
       noOfCorrectAns: tempCount,
-      totalAns: ftbQuestionData.answer.length
-    }
+      totalAns: this._question.data.answer.length
+    };
+
     var callback = event.target;
+    /*istanbul ignore else*/
     if (_.isFunction(callback)) {
       callback(result);
     }
-    EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
 
-    console.log("FTB Tel", telemetryAnsArr);
+    this.saveQuestionSetState(result.state);
+
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { "type": "INPUT", "values": telemetryAnsArr }); // eslint-disable-line no-undef
+    QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result); // eslint-disable-line no-undef
   }
 });
 //# sourceURL=questionunitFtbRendererPlugin.js
