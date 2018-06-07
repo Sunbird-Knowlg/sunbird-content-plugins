@@ -103,37 +103,82 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       ecEditor.addEventListener('editor:form:data', ctrl.saveMetaData);
     }
 
-    ctrl.showTemplates = function () {
+   
+    ctrl.loadPlugins = function(plugins, manifestMedia, cb) {
+      var pluginObj = []
+      if (!Array.isArray(plugins)) {
+        pluginObj.push(plugins);
+        plugins = pluginObj;
+      }
+      org.ekstep.pluginframework.pluginManager.loadAllPlugins(plugins, manifestMedia, function() {
+        if (typeof PluginManager != 'undefined') {
+          PluginManager.pluginMap = org.ekstep.pluginframework.pluginManager.plugins;
+        }
+        if (cb) cb();
+      });
+    };
+
+    ctrl.showTemplates = function() {
       ctrl.templatesScreen = true;
       ctrl.questionMetadataScreen = false;
-      if (ctrl.allMenuItems.length == 0) {
-        var questionplugininstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(instance.manifest.id);
-        _.each(questionplugininstance.editor.dependencies, function (val, key) { // eslint-disable-line no-unused-vars
-          if (val.type == 'plugin') {
-            var instance = org.ekstep.pluginframework.pluginManager.getPluginManifest(val.plugin);
-            var pluginID = val.plugin;
-            var ver = val.ver;
-            if (!_.isUndefined(instance.templates)) {
-              _.each(instance.templates, function (v, k) { // eslint-disable-line no-unused-vars
-                v.pluginID = pluginID;
-                v.ver = ver;
-                var thumbnail = ecEditor.resolvePluginResource(pluginID, ver, v.thumbnail); //Get image source and update in template object
-                v.thumbnail1 = thumbnail;
-                var allMenus = v;
-                allMenus.data = ctrl.menuItems[v.category].data;
-                ctrl.allMenuItems.push(allMenus);
-                if (ctrl.menuItems.hasOwnProperty(v.category)) {
-                  ctrl.menuItems[v.category].templatesData.push(v);
-                } else {
-                  ctrl.menuItems['other'].templatesData = v;
-                }
-              });
-            } else {
-              ctrl.noTemplatesFound = "There are not templates available";
+      var data = {
+        "request": {
+          "filters": {
+            "objectType": ["Content"],
+            "status": [],
+            "targets.id": "org.ekstep.questionset",
+            "targets.ver": 1
+          },
+          "limit": 200
+        }
+      };
+
+      ecEditor.getService('search').search(data, function(err, resp) {
+
+        var PluginsData = resp.data.result.content; //ctrl.questionUnitPluginResponse.result.content; // Todo : needs to be replaced with actual response of api after api integration
+        var plugins = []
+
+        ecEditor._.forEach(PluginsData, function(value, key) {
+          if (value) {
+            var obj = {
+              "id": value.code,
+              "ver": value.semanticVersion,
+              "type": 'plugin'
             }
+            plugins.push(obj);
           }
         });
-      }
+
+        ctrl.loadPlugins(plugins, [], function() {
+          ctrl.allMenuItems = [];
+          _.each(PluginsData, function(val, key) { // eslint-disable-line no-unused-vars
+            if (val.contentType == "Plugin") {
+              var instance = org.ekstep.pluginframework.pluginManager.getPluginManifest(val.code);
+              var pluginID = val.code;
+              var ver = val.semanticVersion;
+              if (!_.isUndefined(instance.templates)) {
+                _.each(instance.templates, function(v, k) { // eslint-disable-line no-unused-vars
+                  v.pluginID = pluginID;
+                  v.ver = ver;
+                  var thumbnail = val.appIcon; //ecEditor.resolvePluginResource(pluginID, ver, v.thumbnail); //Get image source and update in template object
+                  v.thumbnail1 = thumbnail;
+                  var allMenus = v;
+                  allMenus.data = ctrl.menuItems[v.category].data;
+                  ctrl.allMenuItems.push(allMenus);
+                  if (ctrl.menuItems.hasOwnProperty(v.category)) {
+                    ctrl.menuItems[v.category].templatesData.push(v);
+                  } else {
+                    ctrl.menuItems['other'].templatesData = v;
+                  }
+                });
+              } else {
+                ctrl.noTemplatesFound = "There are not templates available";
+              }
+            }
+          });
+          $scope.$safeApply();
+        });
+      });
     }
 
     ctrl.showQuestionForm = function () {
