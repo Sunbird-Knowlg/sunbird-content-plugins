@@ -92,7 +92,7 @@ org.ekstep.questionunitFTB.RendererPlugin = org.ekstep.contentrenderer.questionU
       callback(result);
     }
 
-    EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', result.state);
+    this.saveQuestionSetState(result.state);
 
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.RESPONSE, { "type": "INPUT", "values": telemetryAnsArr }); // eslint-disable-line no-undef
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result); // eslint-disable-line no-undef

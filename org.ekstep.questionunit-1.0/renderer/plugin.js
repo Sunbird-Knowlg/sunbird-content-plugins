@@ -9,6 +9,9 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
   },
   /**
    * Initialize the plugin
+   * @listens module:org.ekstep.contentrenderer.questionUnitPlugin~org.ekstep.questionunit:show
+   * @listens module:org.ekstep.contentrenderer.questionUnitPlugin~org.ekstep.questionunit:hide
+   * @listens module:org.ekstep.contentrenderer.questionUnitPlugin~org.ekstep.questionunit:evaluate
    * @param {object} data Plugin data
    */
   initialize: function (data) { // eslint-disable-line no-unused-vars
@@ -70,6 +73,15 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
   },
   evaluateQuestion: function (event) { // eslint-disable-line no-unused-vars
     // overridden by MCQ or FTB or MTF for the evaluation of question.
+  },
+  /**
+   * Saves the question state
+   * @emits org.ekstep.questionset:saveQuestionState
+   * @param {object} state - State of the question to save
+   */
+  saveQuestionState: function (state) {
+    this.setQuestionState(state);
+    EkstepRendererAPI.dispatchEvent('org.ekstep.questionset:saveQuestionState', state);
   },
   /**
    * Set the HTML template needed for rendering the question.
