@@ -127,7 +127,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                         identifier: obj.identifier,
                         name: obj.name,
                         mimeType: obj.mimeType,
-                        license: obj.license
+                        license: obj.license,
+                        contentType: obj.contentType
                     });
                 }
             });
@@ -628,7 +629,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
         if (inview && obj.length === 0) {
             ctrl.inViewLogs.push({
                 objid: item.identifier,
-                objtype: item.contentType,
+                objtype: item.contentType ||'Asset',
                 section: section,
                 index: index
             })
@@ -691,7 +692,8 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
                             identifier: obj.identifier,
                             name: obj.name,
                             mimeType: obj.mimeType,
-                            license: obj.license
+                            license: obj.license,
+                            contentType: obj.contentType
                         });
                     }
                 });
