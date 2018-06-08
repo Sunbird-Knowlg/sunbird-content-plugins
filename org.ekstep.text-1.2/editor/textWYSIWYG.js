@@ -11,7 +11,7 @@ var TextWYSIWYG = (function() {
      * This will return the fontMap value for font family used text instance
      * @returns {object} fontMap data
      */
-    function getFontMap() {
+    function getFontProperties() {
         return (fontMap[_textInstance.attributes.fontFamily] || fontMap['default']);
     }
     /**
@@ -66,11 +66,11 @@ var TextWYSIWYG = (function() {
      */
     function setInstance(textInstance) {
         _textInstance = textInstance // Setting Instance to private variable
-        var fontHashMap = getFontMap();
-        setProperties('lineHeight', fontHashMap.lineHeight);
-        setProperties('offsetY', fontHashMap.offsetY);
-        // if (fontHashMap.align && !_textInstance.attributes.align) {
-        //     setProperties('align', fontHashMap.align);
+        var fontProperties = getFontProperties();
+        setProperties('lineHeight', fontProperties.lineHeight);
+        setProperties('offsetY', fontProperties.offsetY);
+        // if (fontProperties.align && !_textInstance.attributes.align) {
+        //     setProperties('align', fontProperties.align);
         // }
         ecEditor.render();
     }
