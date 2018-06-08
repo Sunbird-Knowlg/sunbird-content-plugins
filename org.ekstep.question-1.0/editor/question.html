@@ -53,7 +53,7 @@
                 </div>
             </div>
             <div class="two column row">
-                <div class="seven wide column">
+                <div class="seven wide column formDiv">
                     <div class="templateHead"><span ng-show="!$ctrl.questionMetadataScreen && !$ctrl.templatesScreen">{{$ctrl.templateName}}</span>
                     </div>
                     <div ng-if="$ctrl.questionUnitTemplateURL"
@@ -117,13 +117,12 @@
                         ng-click="$ctrl.cancel();$ctrl.generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'question-cancel', ver: '', type: 'button'}})">
                     Cancel
                 </button>
-                <button class="ui basic primary button" id="back-button" ng-show="!$ctrl.templatesScreen"
-                        ng-click="$ctrl.back();$ctrl.generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'question-back', ver: '', type: 'button'}})"
-                        ng-disabled="$ctrl.setBackButtonState()">Back
+                <button class="ui basic primary button" id="back-button" ng-show="!$ctrl.templatesScreen" ng-disabled="$ctrl.setBackButtonState()"
+                        ng-click="$ctrl.back();$ctrl.generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'question-back', ver: '', type: 'button'}})">
+                    Back
                 </button>
                 <div class="or" ng-show="!$ctrl.templatesScreen"></div>
-                <button class="ui large blue button" ng-show="!$ctrl.questionMetadataScreen && !$ctrl.templatesScreen"
-                        id="back-button"
+                <button class="ui large blue button" ng-show="!$ctrl.questionMetadataScreen && !$ctrl.templatesScreen" id="next-button"
                         ng-click="$ctrl.showMetaform();$ctrl.generateTelemetry({type: 'TOUCH', id: 'button', target: {id: 'question-next', ver: '', type: 'button'}});$ctrl.genImpressionTelemetry({type: 'edit', subtype: 'Paginate', pageid: 'question-creation-form', visits: {objid: 'meta-data-form', objtype: 'form'}});">
                     Next
                 </button>

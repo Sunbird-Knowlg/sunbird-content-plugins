@@ -55,10 +55,10 @@ angular.module('mcqApp', [])
     };
     $scope.mcqFormData.media = [];
     $scope.editMedia = [];
-    var questionInput = CKEDITOR.replace('ckedit', {
-      customConfig: CKEDITOR.basePath + "config.js",
-      skin: 'moono-lisa,' + CKEDITOR.basePath + "skins/moono-lisa/",
-      contentsCss: CKEDITOR.basePath + "contents.css"
+    var questionInput = CKEDITOR.replace('ckedit', {// eslint-disable-line no-undef
+      customConfig: CKEDITOR.basePath + "config.js",// eslint-disable-line no-undef
+      skin: 'moono-lisa,' + CKEDITOR.basePath + "skins/moono-lisa/",// eslint-disable-line no-undef
+      contentsCss: CKEDITOR.basePath + "contents.css"// eslint-disable-line no-undef
     });
     questionInput.on('change', function() {
       $scope.mcqFormData.question.text = this.getData();

@@ -182,3 +182,8 @@ and collection is using 16 grid layout so
 form .ui.grid.form-bottom-allign{
     margin-bottom: 5%;
 }
+
+.advanceFilterClass{
+    margin-bottom: 1%;
+    cursor: pointer;
+}

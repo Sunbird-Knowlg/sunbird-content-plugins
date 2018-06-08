@@ -1,12 +1,12 @@
- /**
-  *
-  * Plugin to create question
-  * @class org.ekstep.plugins.ftbplugin.EditorPlugin
-  * @extends org.ekstep.contenteditor.basePlugin
-  * @author Gourav More <gourav_m@tekditechnologies.com>
-  */
- org.ekstep.contenteditor.questionUnitPlugin.extend({
-
+/**
+*
+* Plugin to create question
+* @class org.ekstep.plugins.ftbplugin.EditorPlugin
+* @extends org.ekstep.contenteditor.basePlugin
+* @author Gourav More <gourav_m@tekditechnologies.com>
+*/
+org.ekstep.questionunitFTB = {};
+org.ekstep.questionunitFTB.EditorPlugin = org.ekstep.contenteditor.questionUnitPlugin.extend({
   /**
    *  Adds event listeners and loads template and controller
    *  @memberof org.ekstep.plugins.mcqplugin.EditorPlugin#
@@ -20,5 +20,5 @@
     ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath);
 
   }
- });
- //# sourceURL=ftbpluginEditorPlugin.js
+});
+//# sourceURL=ftbpluginEditorPlugin.js
