@@ -8,8 +8,8 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-            {"type": "js", "src": "editor/semantic-ui-tree-picker.js"},
-            {"type": "css", "src": "editor/semantic-ui-tree-picker.css"}
+            {"type": "js", "src": "editor/topic-semantic-ui-tree-picker.js"},
+            {"type": "css", "src": "editor/topic-semantic-ui-tree-picker.css"}
         ]
     }
 }
