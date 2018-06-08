@@ -6,6 +6,7 @@
     "title": "Question Unit Base Plugin",
     "description": "Question Unit Base Plugin that declares the interfaces that Question Unit Plugins must define.",
     "publishedDate": "",
+    "targets": [],
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [

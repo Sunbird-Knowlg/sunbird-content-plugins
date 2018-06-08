@@ -77,18 +77,19 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     // If this isn't the first time the question set is being rendered, restore its earlier state
     this._questionStates = {};
     this._renderedQuestions = [];
+    var question = undefined;
     var savedQSState = this.getQuestionSetState();
     if (savedQSState) {
       this._renderedQuestions = savedQSState.renderedQuestions;
-      this._currentQuestion = savedQSState.currentQuestion;
+      question = savedQSState.currentQuestion;
       this._questionStates = savedQSState.questionStates;
       this._currentQuestionState = this.getQuestionState(this._currentQuestion.id);
     } else {
-      this._currentQuestion = this.getNextQuestion();
+      question = this.getNextQuestion();
     }
     this.saveQuestionSetState();
     // Render the question
-    this.renderQuestion(this._currentQuestion);
+    this.renderQuestion(question);
   },
   renderQuestion: function(question) {
     var instance = this;
