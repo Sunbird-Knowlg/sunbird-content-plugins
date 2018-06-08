@@ -19,9 +19,9 @@ FTBController.template = '<div id="ftb-template">\
 </div>';
 
 FTBController.answerTemplate = '<% if(ansFieldConfig.keyboardType != "undefined" && (ansFieldConfig.keyboardType == "English" || ansFieldConfig.keyboardType == "Custom")) %> \
-<input type="text" class="ans-field" id="ans-field<%= ansFieldConfig.index %>" readonly style="cursor: pointer;" onclick="QS_FTBTemplate.logTelemetryInteract(event);">\
+<input type="text" class="ans-field" id="ans-field<%= ansFieldConfig.index %>" readonly style="cursor: pointer;" onclick="FTBController.logTelemetryInteract(event);">\
 <% else %> \
-<input type="text" class="ans-field" id="ans-field<%= ansFieldConfig.index %>" onclick="QS_FTBTemplate.logTelemetryInteract(event);">';
+<input type="text" class="ans-field" id="ans-field<%= ansFieldConfig.index %>" onclick="FTBController.logTelemetryInteract(event);">';
 
 
 /**
