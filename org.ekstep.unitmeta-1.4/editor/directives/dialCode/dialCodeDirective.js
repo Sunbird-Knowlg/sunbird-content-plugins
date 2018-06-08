@@ -8,11 +8,11 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
     var dialCodeController = ['$scope', '$controller', '$filter', function ($scope, $controller, $filter) {
         $scope.mode = ecEditor.getConfig('editorConfig').mode;
         $scope.contentMeta = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
-        $scope.maxLength = 6;
-        $scope.minLength = 0;
+        $scope.maxChar = 6;
+        $scope.minChar = 0;
         $scope.editFlag = false;
         $scope.errorMessage = "";
-        $scope.status = "";
+        $scope.status = true;
 
         $scope.searchDialCode = function(dialcode, callback){
             var channel = ecEditor.getContext('channel');
@@ -23,13 +23,16 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                     }
                 }
             };
-            ecEditor.getService('dialcode').getAllDialCodes(channel, reqObj, function(dialerr, dialrep) {
-                if (!dialerr) {
-                    if (dialrep.data.result.count === 1)
-                        ecEditor._.uniq(org.ekstep.services.collectionService.dialcodeList.push(dialrep.data.result.dialcodes[0].identifier));
-                    callback && callback(dialrep.data.result.count);
+            ecEditor.getService('dialcode').getAllDialCodes(channel, reqObj, function(err, res) {
+                if (!err) {
+                    if (res.data.result.count){
+                        ecEditor._.uniq(org.ekstep.services.collectionService.dialcodeList.push(res.data.result.dialcodes[0].identifier));
+                        callback && callback({ isValid:true, dialcode:res.data.result.dialcodes });
+                    } else{
+                        callback && callback({ isValid:false, dialcode:undefined });
+                    }
                 }else{
-                    console.log('unable to find dialcodes!', dialrep);
+                    console.error('Invalid DIAL Code!', err);
                 }
             });
         }
@@ -43,8 +46,8 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                 if (org.ekstep.collectioneditor.cache.nodesModified && org.ekstep.collectioneditor.cache.nodesModified[node.data.id]) {
                     org.ekstep.collectioneditor.cache.nodesModified[node.data.id].metadata["dialcodes"] = this.dialcodes;
                 }
-                if (false) {
-                    $scope.status = "success";
+                if (ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, this.dialcodes) != -1 ) {
+                    $scope.status = true;
                     if ($scope.contentMeta.mimeType == 'application/vnd.ekstep.content-collection') {
                         if (!org.ekstep.services.stateService.state.dialCodeMap) {
                             org.ekstep.services.stateService.create('dialCodeMap');
@@ -58,8 +61,8 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
                 }else{
                     $scope.searchDialCode(this.dialcodes, function(response){
-                        if(1 === 1){
-                            $scope.status = "success";
+                        if(response.isValid){
+                            $scope.status = response.isValid;
                             if ($scope.contentMeta.mimeType == 'application/vnd.ekstep.content-collection') {
                                 if (!org.ekstep.services.stateService.state.dialCodeMap) {
                                     org.ekstep.services.stateService.create('dialCodeMap');
@@ -77,7 +80,7 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                                 org.ekstep.services.stateService.create('invaliddialCodeMap');
                             }
                             org.ekstep.services.stateService.setState('invaliddialCodeMap', node.data.id, instance.dialcodes);
-                            $scope.status = "failure";
+                            $scope.status = response.isValid;
                             $scope.editFlag = true;
                             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
                             $scope.$safeApply();
@@ -154,12 +157,12 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                 if(_.isArray($scope.dialcodes)){
                     $scope.dialcodes = $scope.dialcodes[0];
                 }
-                $scope.editFlag = ($scope.dialcodes && ($scope.dialcodes.length == $scope.maxLength)) ? true : false;
+                $scope.editFlag = ($scope.dialcodes && ($scope.dialcodes.length == $scope.maxChar)) ? true : false;
                 if (ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, $scope.dialcodes) != -1) {
-                    $scope.status = "success";
+                    $scope.status = true;
                 }else{
                     $scope.searchDialCode($scope.dialcodes, function(response){
-                        $scope.status = (response === 1) ? "success"  : "failure"
+                        $scope.status = response.isValid;
                         $scope.$safeApply();
                     });
                 }
