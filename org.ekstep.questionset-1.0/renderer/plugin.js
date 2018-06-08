@@ -99,6 +99,8 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
       jQuery('#' + instance._currentQuestion.id).remove();
     }
     if (question.pluginId === this._constants.qsQuizPlugin) {
+      //if question is quiz then remove question set div
+      this.removeTemplateContainer();
       // Mark the question as rendered
       instance._currentQuestion = question;
       this.setRendered(question);
@@ -111,6 +113,7 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
       // TODO: Move state saving of V1 questions from questionset.quiz to here, like V2 questions
       PluginManager.invoke(question.pluginId, question, this._stage, this._stage, this._theme);
     } else {
+      this.loadTemplateContainer();
       // For V2 questions, load the AngularJS template and controller and invoke the event to render the question
       // Fetch the question state if it was already rendered before
       this._currentQuestionState = this.getQuestionState(question.id);
@@ -264,6 +267,11 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     });
     return index;
   },
+  //remove question set div inside the game area
+  removeTemplateContainer:function(){
+    $(this._constants.qsElement).remove();
+  },
+  //add questionset div inside the game Area
   loadTemplateContainer: function() {
     var qsElement = $('<div />', {
       id: this._constants.qsElement.replace('#', ''),
