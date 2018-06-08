@@ -31,7 +31,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      * @member {Number} supportedFonts
      * @memberof Text
      */
-    supportedFonts: ["NotoSans", "NotoSansKannada", "NotoSansGujarati", "NotoSansBengali", "NotoSansGurmukhi", "NotoSansOriya", "NotoSansDevanagari", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu", "NotoSansMalayalam"],
+    supportedFonts: ["NotoSans", "NotoSansBengali", "NotoSansDevanagari", "NotoSansGujarati", "NotoSansGurmukhi", "NotoSansKannada", "NotoSansMalayalam", "NotoSansOriya", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu"],
     /**
      * The events are registred which are used to add or remove fabric events and other custom events
      * @memberof Text
@@ -44,8 +44,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.addEventListener(this.type + ":readalong:show", this.showReadalong, this);
         ecEditor.addEventListener(this.type + ":wordinfo:show", this.showWordInfo, this);
         ecEditor.addEventListener(this.type + ":delete:enhancement", this.deleteEnhancement, this);
-        ecEditor.addEventListener(this.type + ":modified", this.dblClickHandler, this);
-        ecEditor.addEventListener(this.type + ":modified", this.doMigrate, this);
+        ecEditor.addEventListener(this.type + ":modified", this.modifyText, this);
         var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/delete_confirmation_dialog.html");
         ecEditor.getService('popup').loadNgModules(templatePath);
         var transliterationTemplatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/transliterationconfig.html');
@@ -53,13 +52,17 @@ org.ekstep.contenteditor.basePlugin.extend({
         var popupService = org.ekstep.contenteditor.api.getService(ServiceConstants.POPUP_SERVICE);
         popupService.loadNgModules(transliterationTemplatePath, controllerPath);
     },
+    modifyText: function(event) {
+        this.checkMigrate();
+        this.dblClickHandler(event);
+    },
     /**
      * Dispatch migrate text event if text is old plugin
      * Any change in properties or move/resize of object
      * @memberof Text
      */
-    doMigrate: function() {
-        if (this.isOldPlugin()) {
+    checkMigrate: function() {
+        if (!this.isV2Plugin(ecEditor.getCurrentObject())) {
             ecEditor.dispatchEvent(this.type + ':migrate', ecEditor.getCurrentObject());
         }
     },
@@ -157,9 +160,9 @@ org.ekstep.contenteditor.basePlugin.extend({
         if (this.config.text == '') {
             textEditor.showEditor(this.id);
         }
-        // Assign WYSIWYG config to text 1.2 instance
-        if (!this.isOldPlugin()) {
-            TextWYSIWYG.setProperties(this);
+        // Assign WYSIWYG config to text V2 instance
+        if (this.isV2Plugin()) {
+            TextWYSIWYG.setInstance(this);
         }
 
         if (!ecEditor._.isUndefined(this.attributes.timings) || this.attributes.textType === 'readalong') {
@@ -305,9 +308,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                 this.config.wordunderlinecolor = value;
                 break;
         }
-        // Assign WYSIWYG config to text 1.2 instance
-        if (!this.isOldPlugin()) {
-            TextWYSIWYG.setProperties(this);
+        // Assign WYSIWYG config to text V2 instance
+        if (this.isV2Plugin()) {
+            TextWYSIWYG.setInstance(this);
         }
         ecEditor.render();
         ecEditor.dispatchEvent('object:modified', { target: ecEditor.getEditorObject() });
@@ -397,7 +400,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         }
         if (data.rotate) retData.angle = data.rotate;
         // deleting of lineheight in editor.(editor is using fabricjs default lineheight 1.16 previously)
-        if (this.isOldPlugin()) {
+        if (!this.isV2Plugin()) {
             delete retData.lineHeight // line height set to default value
         }
         return retData;
@@ -605,27 +608,27 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     toECML: function() {
         var prop = this._super();
-        if (!this.isOldPlugin()) {
+        if (this.isV2Plugin()) {
             prop = TextWYSIWYG.toECML(prop);
         }
         return prop;
     },
     fromECML: function() {
         this._super(this.editorData);
-        if (!this.isOldPlugin()) {
+        if (this.isV2Plugin()) {
             TextWYSIWYG.fromECML(this)
         }
     },
     /**
-     * This will return boolean value if text instance is not or old version
-     * @param {object} textInstance - text instance.
-     * @returns {boolean} text instance is old or not
+     * This will return boolean value if text instance is V2 version or not
+     * @returns {boolean} text instance is V2 or not
      */
-     isOldPlugin: function(){
-        if (!this.attributes.version || this.attributes.version < 1.2) {
-            return true;
-        } else {
+     isV2Plugin: function(instance){
+        var textInstance = instance || this;
+        if (!textInstance.attributes.version || textInstance.attributes.version !== 'V2') {
             return false;
+        } else {
+            return true;
         }
     }
 });

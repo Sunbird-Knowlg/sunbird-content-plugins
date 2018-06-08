@@ -24,7 +24,6 @@ fabric.ITextbox = fabric.util.createClass(fabric.Textbox, fabric.Observable, {
      * called internally by fabric text plugin
      */
     _setTextStyles: function(ctx) {
-        ctx.textBaseline = this.textBaseline || 'alphabetic';
         ctx.textAlign = "left";
         ctx.font = this._getFontDeclaration();
     }

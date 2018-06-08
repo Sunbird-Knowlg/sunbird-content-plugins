@@ -1,6 +1,6 @@
 var TextWYSIWYG = (function() {
     // Hashmap for text wysiwyg for fabricjs & createjs
-    hashMap = {
+    fontMap = {
         'NotoSans': {offsetY: 0.04, lineHeight: 1},
         'NotoSansKannada': {offsetY: 0.24, lineHeight: 1},
         'NotoNastaliqUrdu': {offsetY: -0.6, align: 'right', lineHeight: 2},
@@ -8,59 +8,32 @@ var TextWYSIWYG = (function() {
     };
     _textInstance = undefined;
     /**
-     * This will return the hashmap value for font family used text instance
-     * @returns {object} hashmap data
+     * This will return the fontMap value for font family used text instance
+     * @returns {object} fontMap data
      */
-    function getHashMap() {
-        return (hashMap[_textInstance.attributes.fontFamily] || hashMap['default']);
+    function getFontProperties() {
+        return (fontMap[_textInstance.attributes.fontFamily] || fontMap['default']);
     }
     /**
-     * This will set the offsetY value for text instance based on hashmap
-     * @returns {void}
-     */
-    function setOffsetY() {
-        var fontHashMap = getHashMap(_textInstance);
-        _textInstance.attributes.offsetY = _textInstance.attributes.fontSize * fontHashMap.offsetY;
-    }
-    /**
-     * This will set the alignment of text instance based on hashmap
-     * @returns {void}
-     */
-    function setAlignment() {
-        var fontHashMap = getHashMap(_textInstance);
-        if (fontHashMap.align && !_textInstance.attributes.align) {
-            _textInstance.attributes.align = fontHashMap.align;
-            setEditorProperties('align', fontHashMap.align)
-        }
-    }
-    /**
-     * This will set the baseline of text instance based on hashmap
-     * @returns {void}
-     */
-    function setLineHeight() {
-        var fontHashMap = getHashMap(_textInstance);
-        _textInstance.attributes.lineHeight = fontHashMap.lineHeight;
-        setEditorProperties('lineHeight', fontHashMap.lineHeight)
-    }
-    /**
-     * Update the text instance editor data
+     * Update the properties of text instance
      * @param {string} prop - properties which should be updated.
      * @param {string} value - value of properties.
      * @returns {void}
      */
-    function setEditorProperties(prop, value) {
+    function setProperties(prop, value) {
         switch (prop) {
             case "lineHeight":
+                _textInstance.attributes.lineHeight = value;
                 _textInstance.editorObj.lineHeight = value;
                 break;
             case "align":
+                _textInstance.attributes.align = value;
                 _textInstance.editorObj.setTextAlign(value);
                 break;
+            case "offsetY":
+                _textInstance.attributes.offsetY = _textInstance.attributes.fontSize * value;
+                break;
         }
-        ecEditor.render();
-    }
-    function setTextInstance(textInstance) {
-        _textInstance = textInstance
     }
     /**
      * This will set the lineheight of both old and new instance of text based on condition
@@ -91,14 +64,18 @@ var TextWYSIWYG = (function() {
      * @param {object} textInstance - text instance.
      * @returns {void}
      */
-    function setProperties(textInstance) {
-        setTextInstance(textInstance)
-        setOffsetY();
-        // setAlignment();
-        setLineHeight();
+    function setInstance(textInstance) {
+        _textInstance = textInstance // Setting Instance to private variable
+        var fontProperties = getFontProperties();
+        setProperties('lineHeight', fontProperties.lineHeight);
+        setProperties('offsetY', fontProperties.offsetY);
+        // if (fontProperties.align && !_textInstance.attributes.align) {
+        //     setProperties('align', fontProperties.align);
+        // }
+        ecEditor.render();
     }
     return {
-        setProperties: setProperties,
+        setInstance: setInstance,
         toECML: toECML,
         fromECML: fromECML
     };
