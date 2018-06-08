@@ -90,7 +90,7 @@ angular.module('createquestionapp', [])
       $scope.searchQuestions($scope.filterObj);
     });
 
-    $scope.searchQuestions = function (filterData) {
+    $scope.searchQuestions = function (filterData, callback) {
       // var activity = ctrl.activity;
       // ctrl.isItemAvailable = true;
       // ctrl.itemsLoading = true;
@@ -164,6 +164,9 @@ angular.module('createquestionapp', [])
           }
           $scope.itemsLoading = false;
           $scope.$safeApply();
+          if(_.isFunction(callback)){
+            callback($scope.questions);
+          }
         } else {
           $scope.itemsLoading = false;
           $scope.errorMessage = true;
@@ -189,33 +192,35 @@ angular.module('createquestionapp', [])
       })
 
       ecEditor.addEventListener(pluginInstance.manifest.id + ":saveQuestion", function (event, data) {
-        $scope.searchQuestions($scope.filterObj);
-        if (!data.isSelected) {
-          data.isSelected = true;
-        }
-        var selQueIndex = _.findLastIndex($scope.questions, {
-          identifier: data.identifier
-        });
-        if (selQueIndex < 0) {
-          $scope.questions.unshift(data);
-        } else {
-          $scope.questions[selQueIndex] = data;
-        }
-        selQueIndex = _.findLastIndex($scope.selectedQuestions, {
-          identifier: data.identifier
-        });
-        if (selQueIndex < 0) {
-          $scope.selectedQuestions.unshift(data);
-        } else {
+        $scope.searchQuestions({}, function(questions) {
+          $scope.questions = questions;
+          if (!data.isSelected) {
+            data.isSelected = true;
+          }
+          var selQueIndex = _.findLastIndex($scope.questions, {
+            identifier: data.identifier
+          });
+          if (selQueIndex < 0) {
+            $scope.questions.unshift(data);
+          } else {
+            $scope.questions[selQueIndex] = data;
+          }
+          selQueIndex = _.findLastIndex($scope.selectedQuestions, {
+            identifier: data.identifier
+          });
+          if (selQueIndex < 0) {
+            $scope.selectedQuestions.unshift(data);
+          } else {
 
-          $scope.selectedQuestions[selQueIndex] = data;
+            $scope.selectedQuestions[selQueIndex] = data;
+            $scope.$safeApply();
+          }
+
+          $scope.setDisplayandScore();
+          $scope.editConfig($scope.selectedQuestions[0], 0);
+          $scope.previewItem($scope.selectedQuestions[0], true);
           $scope.$safeApply();
-        }
-
-        $scope.setDisplayandScore();
-        $scope.editConfig($scope.selectedQuestions[0], 0);
-        $scope.previewItem($scope.selectedQuestions[0], true);
-        $scope.$safeApply();
+        });
       });
 
 
