@@ -11,7 +11,7 @@
   "keywords": ["mtfplugin"],
   "targets": [
     {
-      "id": "org.ekstep.questionunit.mtf",
+      "id": "org.ekstep.questionset",
       "ver": 1
     }
   ],
