@@ -112,8 +112,7 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
     if (isbrowserpreview) { // eslint-disable-line no-undef
       return _.isUndefined(url) ? org.ekstep.pluginframework.pluginManager.resolvePluginResource(this._manifest.id, this._manifest.ver, "renderer/assets/audio.png") : url;
     } else {
-
-      return 'file:///' + EkstepRendererAPI.getBaseURL() + _.isUndefined(url) ? "/content-plugins/org.ekstep.questionunit.mcq-1.0/renderer/assets/audio.png" : url;
+      return _.isUndefined(url) ? 'file:///' + EkstepRendererAPI.getBaseURL() + "/content-plugins/org.ekstep.questionunit.mcq-1.0/renderer/assets/audio.png" :'file:///' + EkstepRendererAPI.getBaseURL()+ url;
     }
   },
   /**
