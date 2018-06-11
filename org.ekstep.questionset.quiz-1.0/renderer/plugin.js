@@ -39,7 +39,8 @@ Plugin.extend({
     var gameAreaEle = jQuery('#' + Renderer.divIds.gameArea);
     var chilElemtns = gameAreaEle.children();
     jQuery(chilElemtns).each(function () {
-      if ((this.id !== "overlay") && (this.id !== "qs-custom-prev") && (this.id !== "gameCanvas") && (this.id !== 'qs-custom-next')) {
+      //id "qs-feedback-model-popup" for showing feedback popup
+      if ((this.id !== "overlay") && (this.id !== "qs-custom-prev") && (this.id !== "gameCanvas") && (this.id !== "qs-feedback-model-popup") && (this.id !== 'qs-custom-next')) {
         jQuery(this).remove();
       }
     });
