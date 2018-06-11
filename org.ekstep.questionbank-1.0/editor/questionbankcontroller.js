@@ -497,7 +497,6 @@ angular.module('createquestionapp', [])
         $scope.questionSetConfigObj.max_score = $scope.selectedQuestions.length;
         _.each($scope.selectedQuestions, function(question,key){
           $scope.selectedQuestions[key].max_score = 1;
-          //JSON.parse($scope.selectedQuestions[key].body).data.config.metadata.max_score = 1;
           if($scope.selectedQuestions[key].body == undefined){
           	$scope.selectedQuestions[key].max_score = 1;
           }else{
@@ -520,7 +519,6 @@ angular.module('createquestionapp', [])
           var selObjindex = _.findLastIndex($scope.questions, {
             identifier: questionData.identifier
           });
-          // var selObjindex = $scope.selectedQuestions.indexOf(selQuestion);
           if (selObjindex > -1) {
             $scope.questions[selObjindex] = questionData;
           }

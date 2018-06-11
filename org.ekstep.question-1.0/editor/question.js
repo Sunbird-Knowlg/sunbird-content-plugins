@@ -310,7 +310,6 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
     };
 
     ctrl.validateQuestionCreationForm = function (event) { // eslint-disable-line no-unused-vars
-      // ctrl.refreshPreview = false;
       $scope.$broadcast('question:form:val');
     };
 
@@ -402,7 +401,6 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
 
       data.media = ctrl.questionCreationFormData.media;
       questionFormData.data = data;
-      // var bodyData = '';
       var metadata = {
         "code": "NA",
         "name": ctrl.questionMetaData.name,
