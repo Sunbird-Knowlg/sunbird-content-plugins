@@ -5,7 +5,6 @@
   "title": "Question Set Plugin",
   "description": "Plugin to add question set to content",
   "publishedDate": "",
-  "targets":[],
   "editor": {
     "main": "editor/plugin.js",
     "dependencies": [

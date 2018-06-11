@@ -5,7 +5,6 @@
     "title": "Question Set Quiz Plugin",
     "description": "Used to render V1 questions within Question Set plugin.",
     "publishedDate": "",
-    "targets":[],
     "editor": {
         "main": "editor/plugin.js"
     },
