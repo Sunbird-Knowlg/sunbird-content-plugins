@@ -1,14 +1,25 @@
-describe("EditorPlugin", function () {
-  describe("newInstance", function () {
-    var plugin;
+describe("EditorPlugin", function() {
+  var plugin, popupService;
 
-    beforeEach(function () {
-      plugin = new org.ekstep.question.EditorPlugin({}, {}, {});
+  beforeEach(module('org.ekstep.question'));
+
+  beforeEach(function() {
+    plugin = new org.ekstep.question.EditorPlugin({}, {}, {});
+    spyOn(plugin, "loadHtml");
+
+    popupService = jasmine.createSpyObj("popupService", ["loadNgModules", "open"]);
+    spyOn(ecEditor, "getService").and.callFake(function(serviceName) {
+      if (serviceName === ServiceConstants.POPUP_SERVICE) {
+        return popupService;
+      }
     });
+  });
 
-    it("should ?", function () {
+  describe("newInstance", function() {
+    it("should ?", function() {
       plugin.initialize();
       expect(plugin instanceof Class).toBeTruthy();
     });
   });
+
 });

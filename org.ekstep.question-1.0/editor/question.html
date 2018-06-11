@@ -34,7 +34,7 @@
             <div class="two column row" ng-show="$ctrl.templatesScreen">
                 <div class="twelve wide column" id="templatsCards">
                     <div class="ui five stackable cards">
-                        <div class="card card-hover-effect" ng-repeat="(key, value) in $ctrl.allMenuItems">
+                        <div class="card card-hover-effect" ng-repeat="(key, value) in $ctrl.questionTemplates">
                             <div class="image">
                                 <img src="{{value.thumbnail1}}"/>
                             </div>
@@ -86,7 +86,6 @@
                         </label>
                         <select class="ui dropdown form-control" name="templateType"
                                 ng-model="$ctrl.questionData.templateType" ng-change="$ctrl.updatePreview();"  ng-click="$ctrl.generateTelemetry({type: 'TOUCH', id: 'select', target: {id: 'question-layout', ver: '', type: 'select'}})" required>
-                            <!-- <option value="" selected="selected">Choose Layout</option> -->
                             <option ng-repeat="tem in $ctrl.templatesType" value="{{tem}}">{{tem}}</option>
                         </select>
                         <div>
