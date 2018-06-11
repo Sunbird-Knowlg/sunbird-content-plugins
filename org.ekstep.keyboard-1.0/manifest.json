@@ -5,12 +5,6 @@
   "type": "plugin",
   "title": "Keyboard",
   "description": "",
-  "targets": [
-    {
-      "id": "org.ekstep.questionunit.ftb",
-      "ver": 1
-    }
-  ],
   "editor": {
     "main": "editor/plugin.js",
     "dependencies": [
