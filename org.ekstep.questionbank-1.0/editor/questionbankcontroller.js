@@ -91,9 +91,6 @@ angular.module('createquestionapp', [])
     });
 
     $scope.searchQuestions = function (filterData, callback) {
-      // var activity = ctrl.activity;
-      // ctrl.isItemAvailable = true;
-      // ctrl.itemsLoading = true;
       var data = {
         request: {
           filters: {

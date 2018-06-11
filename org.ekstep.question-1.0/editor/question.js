@@ -108,7 +108,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
 
       ecEditor.getService('search').search(data, function(err, resp) {
 
-        var PluginsData = resp.data.result.content; //ctrl.questionUnitPluginResponse.result.content; // Todo : needs to be replaced with actual response of api after api integration
+        var PluginsData = resp.data.result.content;
         var plugins = []
 
         ecEditor._.forEach(PluginsData, function(value, key) {
@@ -133,7 +133,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
                 _.each(instance.templates, function(v, k) { // eslint-disable-line no-unused-vars
                   v.pluginID = pluginID;
                   v.ver = ver;
-                  var thumbnail = val.appIcon; //ecEditor.resolvePluginResource(pluginID, ver, v.thumbnail); //Get image source and update in template object
+                  var thumbnail = val.appIcon;
                   v.thumbnail1 = thumbnail;
                   var allMenus = v;
                   ctrl.questionTemplates.push(allMenus);
