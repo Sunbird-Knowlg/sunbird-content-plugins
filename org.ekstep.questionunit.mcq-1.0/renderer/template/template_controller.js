@@ -47,7 +47,7 @@ MCQController.loadTemplateContent = function () {
  <header id='mcq-question'> \
  <% if ( question.data.question.image.length > 0 ){ %> \
     <div class='question-image'>\
-      <img class='mcq-question-image' onclick='MCQController.showImageModel(event)' src=<%=MCQController.pluginInstance.checkBaseUrl( question.data.question.image) %>> \
+      <img class='mcq-question-image' onclick='MCQController.showImageModel(event)' src=<%=MCQController.pluginInstance.getAssetUrl( question.data.question.image) %>> \
     </div>\
      <% } %> \
     <div class='mcq-question-text'>\
@@ -61,7 +61,7 @@ MCQController.loadTemplateContent = function () {
     </div>\
     <% if ( question.data.question.audio.length > 0 ){ %> \
       <div class='mcq-question-audio'>\
-      <img class='qc-question-audio-image' src=<%=MCQController.pluginInstance.checkBaseUrl() %> onclick=MCQController.pluginInstance.playAudio('<%= question.data.question.audio %>') > \
+      <img class='qc-question-audio-image' src=<%=MCQController.pluginInstance.getAudioIcon() %> onclick=MCQController.pluginInstance.playAudio('<%= question.data.question.audio %>') > \
         </div>\
        <% } %> \
 </header>\

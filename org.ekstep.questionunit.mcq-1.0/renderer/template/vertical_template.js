@@ -10,12 +10,12 @@ MCQController.getVerticalTemplate = function () {
    <div id=<%=key%> class='qc-option-vertical-text'> \
     <% if(val.audio.length > 0 && val.image.length == 0){%> \
       <div> \
-       <img class='qc-vertical-audio-with-image' onclick=MCQController.pluginInstance.playAudio('<%= val.audio %>')  src=<%=MCQController.pluginInstance.checkBaseUrl() %>>\
+       <img class='qc-vertical-audio-with-image' onclick=MCQController.pluginInstance.playAudio('<%= val.audio %>')  src=<%=MCQController.pluginInstance.getAudioIcon() %>>\
       </div> \
       <%}%> \
     <% if(val.image.length>0){%> \
       <div class='qc-opt'> \
-       <img class='qc-vertical-option-image' onclick='MCQController.showImageModel(event)' src=<%=MCQController.pluginInstance.checkBaseUrl( val.image) %>>\
+       <img class='qc-vertical-option-image' onclick='MCQController.showImageModel(event)' src=<%=MCQController.pluginInstance.getAssetUrl( val.image) %>>\
       </div> \
       <%}%> \
       <% if(val.image.length == 0 && val.audio.length == 0) {%> \
@@ -30,7 +30,7 @@ MCQController.getVerticalTemplate = function () {
      </div> \
      <% if(val.audio.length > 0 && val.image.length > 0){%> \
       <div> \
-       <img class='qc-horizontal-audio' onclick=MCQController.pluginInstance.playAudio('<%= val.audio %>')  src=<%=MCQController.pluginInstance.checkBaseUrl() %>>\
+       <img class='qc-horizontal-audio' onclick=MCQController.pluginInstance.playAudio('<%= val.audio %>')  src=<%=MCQController.pluginInstance.getAudioIcon() %>>\
      </div>\
      <%}%> \
    </div> \
