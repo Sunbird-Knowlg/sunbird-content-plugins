@@ -47,7 +47,7 @@ QSTelemetryLogger.logAssess = function() {
       }
     }
   } else {
-    this._assessStart = TelemetryService.assess(this._question.id, this._qConfig.metadata.language[0], this._qConfig.metadata.qlevel, { maxscore: this._qConfig.metadata.max_score }).start();
+    this._assessStart = TelemetryService.assess(this._question.id, this._qConfig.metadata.medium, this._qConfig.metadata.qlevel, { maxscore: this._qConfig.metadata.max_score }).start();
   }
 };
 QSTelemetryLogger.logAssessEnd = function(result) {

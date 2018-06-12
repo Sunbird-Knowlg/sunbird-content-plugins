@@ -355,12 +355,8 @@ describe('MCQRendererPlugin', function() {
   });
   describe('checkBaseUrl', function() {
     it("should call the checkBaseUrl function", function() {
-      window.isbrowserpreview = false;
-      expect(plugin.checkBaseUrl("http://localhost:9877/assets/sounds/goodjob.mp3")).toEqual("/content-plugins/org.ekstep.questionunit.mcq-1.0/renderer/assets/audio.png");
-    });
-    it("should call the checkBaseUrl function", function() {
       window.isbrowserpreview = true;
-      expect(plugin.checkBaseUrl("http://localhost:9877/assets/sounds/goodjob.mp3")).toEqual("http://localhost:9877/assets/sounds/goodjob.mp3");
+      expect(plugin.getAssetUrl("http://localhost:9877/assets/sounds/goodjob.mp3")).toEqual("http://localhost:9877/assets/sounds/goodjob.mp3");
     });
   });
   describe('playAudio', function() {

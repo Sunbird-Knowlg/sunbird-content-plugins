@@ -17,11 +17,6 @@ Plugin.extend({
             delete data.id;
         }
         this.id = _.uniqueId('org.ekstep.text');
-        var parentDims = EkstepRendererAPI.getCanvas();
-        var additionalWidth = 5 * 100 / parentDims.offsetWidth;
-        var additionalHeight = 5 * 100 / parentDims.offsetHeight;
-        data.w = data.w + additionalWidth;
-        data.h = data.h + additionalHeight;
         this._data = data;
         var data = _.clone(this._data);
         data.id = pid;
