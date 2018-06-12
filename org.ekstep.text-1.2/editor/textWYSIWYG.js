@@ -41,9 +41,14 @@ var TextWYSIWYG = (function() {
      * @returns {object} text instance
      */
     function toECML(prop) {
-        // converting new text instance lineheight to createjs supported value
-        var config = JSON.parse(prop.config.__cdata);
-        prop.lineHeight = 1.13 * prop.lineHeight * config.fontsize;
+        if (prop.textType === 'text') {
+            // converting new text instance lineheight to createjs supported value
+            var config = JSON.parse(prop.config.__cdata);
+            prop.lineHeight = 1.13 * prop.lineHeight * config.fontsize;
+        } else {
+            // setting lineHeight config for wordinfo & readalong for createJs;
+            prop.lineHeight = 1.3;
+        }
         return prop;
     }
     /**
@@ -52,11 +57,16 @@ var TextWYSIWYG = (function() {
      * @returns {void}
      */
     function fromECML(textInstance) {
-        var fontSize = textInstance.config.fontsize;
-        if (fontSize) {
-            // converting new text instance lineheight to fabricJs supported value
-            var lineHeight = textInstance.editorData.lineHeight/(1.13 * fontSize);
-            textInstance.attributes.lineHeight = lineHeight;
+        if (textInstance.attributes.textType === 'text') {
+            var fontSize = textInstance.config.fontsize;
+            if (fontSize) {
+                // converting new text instance lineheight to fabricJs supported value
+                var lineHeight = textInstance.editorData.lineHeight/(1.13 * fontSize);
+                textInstance.attributes.lineHeight = lineHeight;
+            }
+        } else {
+            // setting lineHeight config for wordinfo & readalong for fabricJs;
+            textInstance.attributes.lineHeight = 1.16;
         }
     }
     /**
@@ -65,14 +75,20 @@ var TextWYSIWYG = (function() {
      * @returns {void}
      */
     function setInstance(textInstance) {
-        _textInstance = textInstance // Setting Instance to private variable
-        var fontProperties = getFontProperties();
-        setProperties('lineHeight', fontProperties.lineHeight);
-        setProperties('offsetY', fontProperties.offsetY);
-        // if (fontProperties.align && !_textInstance.attributes.align) {
-        //     setProperties('align', fontProperties.align);
-        // }
-        ecEditor.render();
+        if (textInstance.attributes.textType === "text") {
+            _textInstance = textInstance // Setting Instance to private variable
+            var fontProperties = getFontProperties();
+            setProperties('lineHeight', fontProperties.lineHeight);
+            setProperties('offsetY', fontProperties.offsetY);
+            // if (fontProperties.align && !_textInstance.attributes.align) {
+            //     setProperties('align', fontProperties.align);
+            // }
+            ecEditor.render();
+        } else {
+            // deleting WYSIWYG config for wordinfo & readalong;
+            delete textInstance.attributes.lineHeight;
+            delete textInstance.attributes.offsetY;
+        }
     }
     return {
         setInstance: setInstance,
