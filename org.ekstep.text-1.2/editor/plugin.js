@@ -428,6 +428,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     convertTexttoReadalong: function(data){
         var textObj = ecEditor.getCurrentObject();
         var instance = ecEditor.getPluginInstance(textObj.id);
+        TextWYSIWYG.resetProperties(textObj);   // This will reset all WYSIWYG properties of text instance for Readalong;
         textObj.config.text = textObj.editorObj.text = data.text;
         textObj.config.audio = data.audio;
         textObj.config.timings = data.timings;
@@ -462,6 +463,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     convertTexttoWordinfo: function(data, templateData){
         var textObj = ecEditor.getCurrentObject();
         var instance = ecEditor.getPluginInstance(textObj.id);
+        TextWYSIWYG.resetProperties(textObj); // This will reset all WYSIWYG properties of text instance for WordInfo.
         textObj.data = templateData;
         textObj.config.text = textObj.editorObj.text = data.text;
         textObj.config.words = data.words;
