@@ -166,11 +166,13 @@ angular.module('editorApp')
                 $scope.hasReadAlong = true;
                 $scope.hasWordInfo = false;
                 $scope.textTypeSelected = "readalong";
+                delete data.attributes.offsetY; // This is text WYSIWYG prop and not handled fot readalong so deleting here
                 $scope.updateAdvancedTab();
                 $scope.showReadAlong(data);
             } else if (data.attributes.textType == "wordinfo") {
                 $scope.hasWordInfo = true;
                 $scope.hasReadAlong = false;
+                delete data.attributes.offsetY;  // This is text WYSIWYG prop and not handled fot wordInfo so deleting here
                 $scope.textTypeSelected = "wordinfo";
                 $scope.updateAdvancedTab();
                 $scope.showWordInfo(data);

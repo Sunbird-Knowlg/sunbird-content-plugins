@@ -6,8 +6,14 @@ var TextWYSIWYG = (function() {
         'NotoNastaliqUrdu': {offsetY: -0.6, align: 'right', lineHeight: 2},
         "default": {offsetY: 0.2, lineHeight: 1}
     };
-    _constants: {
-        supportedTextType: 'text'
+    _constants = {
+        textType: 'text', // We are only supporting 'text' type for WYSIWYG. 'htext' & 'wordInfo' is not available for WYSIWYG, htext & wordinfo render as html elemnent in content-renderer
+        createJsLineHeight: 1.3, // Previously editor is sending 1.3 as lineheight for all text
+        lineHeightMagicNumber: 1.13, // Fabricjs is using magic number 1.13 in their library
+        lineHeight: 'lineHeight',
+        align: 'align',
+        offsetY: 'offsetY',
+        default: 'default'
     };
     _textInstance = undefined;
     /**
@@ -15,7 +21,7 @@ var TextWYSIWYG = (function() {
      * @returns {object} fontMap data
      */
     function getFontProperties() {
-        return (fontMap[_textInstance.attributes.fontFamily] || fontMap['default']);
+        return (fontMap[_textInstance.attributes.fontFamily] || fontMap[_constants.default]);
     }
     /**
      * Update the properties of text instance
@@ -25,15 +31,15 @@ var TextWYSIWYG = (function() {
      */
     function setProperties(prop, value) {
         switch (prop) {
-            case "lineHeight":
+            case _constants.lineHeight:
                 _textInstance.attributes.lineHeight = value;
                 _textInstance.editorObj.lineHeight = value;
                 break;
-            case "align":
+            case _constants.align:
                 _textInstance.attributes.align = value;
                 _textInstance.editorObj.setTextAlign(value);
                 break;
-            case "offsetY":
+            case _constants.offsetY:
                 _textInstance.attributes.offsetY = _textInstance.attributes.fontSize * value;
                 break;
         }
@@ -44,13 +50,13 @@ var TextWYSIWYG = (function() {
      * @returns {object} text instance
      */
     function toECML(prop) {
-        if (prop.textType === _constants.supportedTextType) {
+        if (prop.textType === _constants.textType) {
             // converting new text instance lineheight to createjs supported value
             var config = JSON.parse(prop.config.__cdata);
-            prop.lineHeight = 1.13 * prop.lineHeight * config.fontsize;
+            prop.lineHeight = _constants.lineHeightMagicNumber * prop.lineHeight * config.fontsize;
         } else {
-            // setting lineHeight config for wordinfo & readalong for createJs;
-            prop.lineHeight = 1.3;
+            // setting lineHeight config for wordinfo & readalong for createJs for backward compatibility;
+            prop.lineHeight = _constants.createJsLineHeight;
         }
         return prop;
     }
@@ -60,16 +66,16 @@ var TextWYSIWYG = (function() {
      * @returns {void}
      */
     function fromECML(textInstance) {
-        if (textInstance.attributes.textType === _constants.supportedTextType) {
+        if (textInstance.attributes.textType === _constants.textType) {
             var fontSize = textInstance.config.fontsize;
             if (fontSize) {
                 // converting new text instance lineheight to fabricJs supported value
-                var lineHeight = textInstance.editorData.lineHeight/(1.13 * fontSize);
+                var lineHeight = textInstance.editorData.lineHeight/(_constants.lineHeightMagicNumber * fontSize);
                 textInstance.attributes.lineHeight = lineHeight;
             }
         } else {
-            // setting lineHeight config for wordinfo & readalong for fabricJs;
-            textInstance.attributes.lineHeight = 1.16;
+            // deleting lineHeight config for wordinfo & readalong for fabricJs as for backward compatibility it is using fabricjs default lineheight;
+            delete textInstance.attributes.lineHeight;
         }
     }
     /**
@@ -78,19 +84,15 @@ var TextWYSIWYG = (function() {
      * @returns {void}
      */
     function setInstance(textInstance) {
-        if (textInstance.attributes.textType === _constants.supportedTextType) {
+        if (textInstance.attributes.textType === _constants.textType) {
             _textInstance = textInstance // Setting Instance to private variable
             var fontProperties = getFontProperties();
-            setProperties('lineHeight', fontProperties.lineHeight);
-            setProperties('offsetY', fontProperties.offsetY);
+            setProperties(_constants.lineHeight, fontProperties.lineHeight);
+            setProperties(_constants.offsetY, fontProperties.offsetY);
             // if (fontProperties.align && !_textInstance.attributes.align) {
-            //     setProperties('align', fontProperties.align);
+                // setProperties(_constants.align, fontProperties.align);
             // }
             ecEditor.render();
-        } else {
-            // deleting WYSIWYG config for wordinfo & readalong;
-            delete textInstance.attributes.lineHeight;
-            delete textInstance.attributes.offsetY;
         }
     }
     return {
