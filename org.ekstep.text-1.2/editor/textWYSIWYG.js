@@ -95,10 +95,20 @@ var TextWYSIWYG = (function() {
             ecEditor.render();
         }
     }
+    /**
+     * This will reset all WYSIWYG properties of text instance.
+     * @param {object} textInstance - text instance.
+     * @returns {void}
+     */
+    function resetProperties(instance) {
+        delete instance.attributes.offsetY;
+        delete instance.attributes.lineHeight;
+    }
     return {
         setInstance: setInstance,
         toECML: toECML,
-        fromECML: fromECML
+        fromECML: fromECML,
+        resetProperties: resetProperties
     };
 })();
 
