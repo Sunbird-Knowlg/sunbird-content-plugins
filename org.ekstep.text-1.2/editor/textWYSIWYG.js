@@ -6,6 +6,9 @@ var TextWYSIWYG = (function() {
         'NotoNastaliqUrdu': {offsetY: -0.6, align: 'right', lineHeight: 2},
         "default": {offsetY: 0.2, lineHeight: 1}
     };
+    _constants: {
+        supportedTextType: 'text'
+    };
     _textInstance = undefined;
     /**
      * This will return the fontMap value for font family used text instance
@@ -41,7 +44,7 @@ var TextWYSIWYG = (function() {
      * @returns {object} text instance
      */
     function toECML(prop) {
-        if (prop.textType === 'text') {
+        if (prop.textType === _constants.supportedTextType) {
             // converting new text instance lineheight to createjs supported value
             var config = JSON.parse(prop.config.__cdata);
             prop.lineHeight = 1.13 * prop.lineHeight * config.fontsize;
@@ -57,7 +60,7 @@ var TextWYSIWYG = (function() {
      * @returns {void}
      */
     function fromECML(textInstance) {
-        if (textInstance.attributes.textType === 'text') {
+        if (textInstance.attributes.textType === _constants.supportedTextType) {
             var fontSize = textInstance.config.fontsize;
             if (fontSize) {
                 // converting new text instance lineheight to fabricJs supported value
@@ -75,7 +78,7 @@ var TextWYSIWYG = (function() {
      * @returns {void}
      */
     function setInstance(textInstance) {
-        if (textInstance.attributes.textType === "text") {
+        if (textInstance.attributes.textType === _constants.supportedTextType) {
             _textInstance = textInstance // Setting Instance to private variable
             var fontProperties = getFontProperties();
             setProperties('lineHeight', fontProperties.lineHeight);
