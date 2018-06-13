@@ -177,7 +177,7 @@ angular.module('org.ekstep.uploadcontent-1.1', []).controller('uploadController'
         var mimeType = fileUpload ? $scope.detectMimeType($scope.uploader.getName(0)) : $scope.detectMimeType($scope.contentURL);
         if (!mimeType) {
             ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                message: 'Invalid content type (supported type: pdf, epub, h5p, mp4, youtube, html-zip, webm)',
+                message: 'Invalid content type (supported type: pdf, epub, h5p, mp4, youtube, html-zip, webm, whitelisted-domain)',
                 position: 'topCenter',
                 icon: 'fa fa-warning'
             });
@@ -247,9 +247,6 @@ angular.module('org.ekstep.uploadcontent-1.1', []).controller('uploadController'
                         position: 'topCenter',
                         icon: 'fa fa-check-circle'
                     });
-                    if(mimeType === 'text/x-url'){
-                        ecEditor.jQuery('#genericEditorBody').hide();
-                    }
                     ecEditor.dispatchEvent("org.ekstep.genericeditor:reload");
                     $scope.closeThisDialog();
                 }
