@@ -39,7 +39,7 @@ angular.module('videoApp', [])
                         ver: !_.isUndefined(pkgVersion) && pkgVersion.toString() || '0',
                         type: 'Content'
                     }
-                    org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).error({"err": err.code || '', "errtype": 'CONTENT', "stacktrace": err, "pageid": ecEditor.getCurrentStage().id, "object":object, "plugin": {id: instance.manifest.id, ver: instance.manifest.ver, category: 'core'} }); 
+                    org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).error({"err": err.code || '', "errtype": 'CONTENT', "stacktrace": err.toString(), "pageid": ecEditor.getCurrentStage().id, "object":object, "plugin": {id: instance.manifest.id, ver: instance.manifest.ver, category: 'core'} }); 
                     console.log("Invalid URL:", err);
                 });
         };

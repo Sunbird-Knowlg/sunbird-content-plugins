@@ -66,7 +66,6 @@ org.ekstep.contenteditor.basePlugin.extend({
             case "application/pdf":
             case "video/x-youtube":
             case "video/webm":
-            case "text/x-url":
                 this.saveGenericEditorContent(event, data);
                 break;
             default:
@@ -93,6 +92,12 @@ org.ekstep.contenteditor.basePlugin.extend({
         org.ekstep.pluginframework.eventManager.dispatchEvent('content:before:save');
         // TODO: Show saving dialog
         var contentBody = org.ekstep.contenteditor.stageManager.toECML();
+        // Get and set assessment summary
+        var summary = org.ekstep.contenteditor.stageManager.getSummary();
+        if (summary){
+            contentMeta.totalQuestions = summary.totalQuestions;
+            contentMeta.totalScore = summary.totalScore;
+        }
         contentMeta.editorState = JSON.stringify(this.editorState);
         this._patchContent(contentMeta, contentBody, options);
     },
@@ -299,7 +304,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     publishContent: function(event, data) {
         var contentId = ecEditor.getContext('contentId');
-        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).publishContent({ contentId: contentId }, function(err, res) {
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).publishContent({ contentId: contentId, data:data }, function(err, res) {
             if (res && res.data && res.data.responseCode == "OK") {
                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                     title: 'Content published successfully!',
@@ -317,7 +322,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
     },
     rejectContent: function(event, data) {
-        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).rejectContent({ contentId: ecEditor.getContext('contentId') }, function(err, res) {
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).rejectContent({ contentId: ecEditor.getContext('contentId'),data:data }, function(err, res) {
             if (res && res.data && res.data.responseCode == "OK") {
                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                     title: 'Content rejected successfully!',
@@ -442,6 +447,13 @@ org.ekstep.contenteditor.basePlugin.extend({
                 });
                 instance.highlightNodeForInvalidDialCode(res);
                 ecEditor.dispatchEvent("meta:after:save", {});
+
+            } else if(err && res.status === 401 && res.statusText === "Unauthorized") {
+                if (data.showNotification) ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'Your session has timed out due to inactivity. Please login to resume!',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
             } else {
                 if (data.showNotification) ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                     message: 'Unable to save the content, try again!',
