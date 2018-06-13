@@ -269,7 +269,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             }
             // TODO: Scope of metaform was not lossing  when state was changing
             // Need to remove the below line of snippet 
-        var template = $('#content-meta-form');
+        var template = $('#' + $scope.tempalteName + ' #content-meta-form');
         var form = {};
         form.metaData = getUpdatedMetadata(template.scope().contentMeta, $scope.originalContentMeta, $scope.fields);
         form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
@@ -438,7 +438,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     };
 
     $scope.getScopeMeta = function(event, callback) {
-        var template = $('#content-meta-form');
+        var template = $('#' + $scope.tempalteName + ' #content-meta-form');
         var returnData = template.scope().contentMeta || {};
         callback && callback(returnData);
         return returnData;
