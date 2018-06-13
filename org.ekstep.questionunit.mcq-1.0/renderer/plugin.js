@@ -103,17 +103,25 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
     QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result); // eslint-disable-line no-undef
   },
   /**
-   * provide media url to audio and image
+   * provide media url to audio image
+   * @memberof org.ekstep.questionunit.mcq
+   * @returns {String} url.
+   */
+  getAudioIcon:function(){
+    return this.getAssetUrl(org.ekstep.pluginframework.pluginManager.resolvePluginResource(this._manifest.id, this._manifest.ver, "renderer/assets/audio.png"));
+  },
+   /**
+   * provide media url to asset
    * @memberof org.ekstep.questionunit.mcq
    * @param {String} url from question set.
    * @returns {String} url.
    */
-  checkBaseUrl: function (url) {
-    if (isbrowserpreview) { // eslint-disable-line no-undef
-      return _.isUndefined(url) ? org.ekstep.pluginframework.pluginManager.resolvePluginResource(this._manifest.id, this._manifest.ver, "renderer/assets/audio.png") : url;
-    } else {
-
-      return 'file:///' + EkstepRendererAPI.getBaseURL() + _.isUndefined(url) ? "/content-plugins/org.ekstep.questionunit.mcq-1.0/renderer/assets/audio.png" : url;
+  getAssetUrl:function(url){
+    if(isbrowserpreview){// eslint-disable-line no-undef
+      return url;
+    }
+    else{
+      return 'file:///' + EkstepRendererAPI.getBaseURL()+ url;
     }
   },
   /**
@@ -122,7 +130,7 @@ org.ekstep.questionunitmcq.RendererPlugin = org.ekstep.contentrenderer.questionU
    * @param {String} audio from question set.
    */
   playAudio: function (audio) {
-    audio = this.checkBaseUrl(audio);
+    audio = this.getAssetUrl(audio);
     if (this._lastAudio && (this._lastAudio != audio)) { // eslint-disable-line no-undef
       this._currentAudio.pause(); // eslint-disable-line no-undef
     }

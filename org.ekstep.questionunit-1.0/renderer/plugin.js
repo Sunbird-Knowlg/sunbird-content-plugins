@@ -15,7 +15,6 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
    * @param {object} data Plugin data
    */
   initialize: function (data) { // eslint-disable-line no-unused-vars
-    this.setQuestionTemplate();
     EkstepRendererAPI.addEventListener(this._manifest.id + ":show", this.showQuestion, this);
     EkstepRendererAPI.addEventListener(this._manifest.id + ":hide", this.hideQuestion, this);
     EkstepRendererAPI.addEventListener(this._manifest.id + ":evaluate", this.evaluateQuestion, this);
@@ -39,6 +38,8 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
    * @param {object} event - Event object
    */
   preQuestionShow: function (event) {
+    this.setQuestionTemplate();
+    
     var questionsetInstance = event.target;
     var qData = questionsetInstance._currentQuestion.data.__cdata || questionsetInstance._currentQuestion.data;
     this.setQuestionData(JSON.parse(qData));

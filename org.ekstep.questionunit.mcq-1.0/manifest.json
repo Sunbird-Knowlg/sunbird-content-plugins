@@ -8,6 +8,10 @@
     "languages": ["English"],
     "categories": [],
     "keywords": ["mcqplugin"],
+    "targets":[{
+       "id": "org.ekstep.questionset",
+        "ver": 1.0
+      }],
     "editor":
     {
         "main": "editor/plugin.js",

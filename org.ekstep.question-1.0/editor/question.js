@@ -13,7 +13,6 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
     ctrl.editState = false;
     ctrl.questionUnitTemplateURL = '';
     ctrl.editMode = false;
-    ctrl.menuItems = {};
     ctrl.defaultActiveMenu = 'MCQ';
     ctrl.selectedTemplatePluginData = {};
     ctrl.questionCreationFormData = {};
@@ -30,28 +29,8 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
     ctrl.questionData.templateType = ctrl.templatesType[0];
     ctrl.refreshPreview = false;
     ctrl.noTemplatesFound = "";
-    ctrl.allMenuItems = [];
+    ctrl.questionTemplates = [];
     ctrl.questionMetaData = {};
-    ctrl.menuItems['MCQ'] = {
-      'category': 'MCQ',
-      'data': {'name': 'Multiple Choice', 'icon': 'list icon'},
-      'templatesData': []
-    };
-    ctrl.menuItems['FTB'] = {
-      'category': 'FTB',
-      'data': {'name': 'Fill in the Blanks', 'icon': 'minus square outline icon'},
-      'templatesData': []
-    };
-    ctrl.menuItems['MTF'] = {
-      'category': 'MTF',
-      'data': {'name': 'Match the following', 'icon': 'block layout icon'},
-      'templatesData': []
-    };
-    ctrl.menuItems['OTHER'] = {
-      'category': 'OTHER',
-      'data': {'name': 'Other', 'icon': 'ellipsis horizontal icon'},
-      'templatesData': []
-    };
     ctrl._constants = {
       previewPlugin: 'org.ekstep.questionset.preview',
       questionPlugin: 'org.ekstep.question',
@@ -87,45 +66,86 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
         }
       });
 
-      ctrl.selectedMenuItemData = ctrl.menuItems[ctrl.defaultActiveMenu].templatesData;
-
       $scope.$on('question:form:valid', ctrl.formValid);
       $scope.$on('question:form:inValid', ctrl.formInValid);
       EventBus.listeners['editor:form:data'] = undefined;
       ecEditor.addEventListener('editor:form:data', ctrl.saveMetaData);
     }
 
-    ctrl.showTemplates = function () {
+   
+    ctrl.loadPlugins = function(plugins, manifestMedia, cb) {
+      var pluginObj = [];
+      if (!Array.isArray(plugins)) {
+        pluginObj.push(plugins);
+        plugins = pluginObj;
+      }
+      org.ekstep.pluginframework.pluginManager.loadAllPlugins(plugins, manifestMedia, function() {
+        if (typeof PluginManager != 'undefined') {
+          PluginManager.pluginMap = org.ekstep.pluginframework.pluginManager.plugins;
+        }
+        if (cb) cb();
+      });
+    };
+
+    ctrl.showTemplates = function() {
       ctrl.templatesScreen = true;
       ctrl.questionMetadataScreen = false;
-      if (ctrl.allMenuItems.length == 0) {
-        var questionplugininstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(instance.manifest.id);
-        _.each(questionplugininstance.editor.dependencies, function (val, key) { // eslint-disable-line no-unused-vars
-          if (val.type == 'plugin') {
-            var instance = org.ekstep.pluginframework.pluginManager.getPluginManifest(val.plugin);
-            var pluginID = val.plugin;
-            var ver = val.ver;
-            if (!_.isUndefined(instance.templates)) {
-              _.each(instance.templates, function (v, k) { // eslint-disable-line no-unused-vars
-                v.pluginID = pluginID;
-                v.ver = ver;
-                var thumbnail = ecEditor.resolvePluginResource(pluginID, ver, v.thumbnail); //Get image source and update in template object
-                v.thumbnail1 = thumbnail;
-                var allMenus = v;
-                allMenus.data = ctrl.menuItems[v.category].data;
-                ctrl.allMenuItems.push(allMenus);
-                if (ctrl.menuItems.hasOwnProperty(v.category)) {
-                  ctrl.menuItems[v.category].templatesData.push(v);
-                } else {
-                  ctrl.menuItems['other'].templatesData = v;
-                }
-              });
-            } else {
-              ctrl.noTemplatesFound = "There are no templates available";
+      var qsInstance = org.ekstep.pluginframework.pluginManager.getPluginManifest(ctrl._constants.questionsetPlugin);
+      var qsVesrion = qsInstance.ver.split('.')[0];
+      var data = {
+        "request": {
+          "filters": {
+            "objectType": ["Content"],
+            "contentType": ["Plugin"],
+            "targets.id": ctrl._constants.questionsetPlugin,
+            "targets.ver": {'<=': Number(qsVesrion)},
+            "status": "Live"
+          },
+          "limit": 50,
+          "fields": ['contentType','semanticVersion','appIcon']
+        }
+      };
+
+      ecEditor.getService('search').search(data, function(err, resp) {
+
+        var PluginsData = resp.data.result.content;
+        var plugins = []
+
+        ecEditor._.forEach(PluginsData, function(value, key) {
+          if (value) {
+            var obj = {
+              "id": value.identifier,
+              "ver": value.semanticVersion,
+              "type": 'plugin'
             }
+            plugins.push(obj);
           }
         });
-      }
+
+        ctrl.loadPlugins(plugins, [], function() {
+          ctrl.questionTemplates = [];
+          _.each(PluginsData, function(val, key) { // eslint-disable-line no-unused-vars
+            if (val.contentType == "Plugin") {
+              var instance = org.ekstep.pluginframework.pluginManager.getPluginManifest(val.identifier);
+              var pluginID = val.identifier;
+              var ver = val.semanticVersion;
+              if (!_.isUndefined(instance.templates)) {
+                _.each(instance.templates, function(v, k) { // eslint-disable-line no-unused-vars
+                  v.pluginID = pluginID;
+                  v.ver = ver;
+                  var thumbnail = val.appIcon;
+                  v.thumbnail1 = thumbnail;
+                  var allMenus = v;
+                  ctrl.questionTemplates.push(allMenus);
+                });
+              } else {
+                ctrl.noTemplatesFound = "There are no templates available";
+              }
+            }
+          });
+          $scope.$safeApply();
+        });
+      });
     }
 
     ctrl.showQuestionForm = function () {
@@ -270,10 +290,6 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       }
     };
 
-    ctrl.switchTab = function (id, res) {
-      ctrl.selectedMenuItemData = ctrl.menuItems[res.category].templatesData;
-    };
-
     ctrl.addCreateQuestionForm = function (obj) {
       $('.ui.dropdown').dropdown({});
       ctrl.category = obj.category;
@@ -294,7 +310,6 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
     };
 
     ctrl.validateQuestionCreationForm = function (event) { // eslint-disable-line no-unused-vars
-      // ctrl.refreshPreview = false;
       $scope.$broadcast('question:form:val');
     };
 
@@ -386,7 +401,6 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
 
       data.media = ctrl.questionCreationFormData.media;
       questionFormData.data = data;
-      // var bodyData = '';
       var metadata = {
         "code": "NA",
         "name": ctrl.questionMetaData.name,
@@ -404,7 +418,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
         "category": ctrl.category,
         "description": ctrl.questionMetaData.description,
         "createdBy": window.context.user.id,
-        "channel": "in.ekstep", //default value
+        "channel": ecEditor.getContext('channel'),
         "type": ctrl.category.toLowerCase(), // backward compatibility
         "template": "NA", // backward compatibility
         "template_id": "NA", // backward compatibility

@@ -7,12 +7,12 @@ MCQController.getHorizontalTemplate = function () {
       <div class='qc-option-text'> \
       <% if(val.image.length>0){%> \
       <div class='qc-opt'>\
-      <img class='qc-option-image' onclick='MCQController.showImageModel(event)' src=<%=MCQController.pluginInstance.checkBaseUrl( val.image) %>>\
+      <img class='qc-option-image' onclick='MCQController.showImageModel(event)' src=<%=MCQController.pluginInstance.getAssetUrl( val.image) %>>\
       </div>\
       <% } %> \
         <% if(val.audio.length>0){%> \
       <div class='qc-opt'>\
-      <img class='qc-horizontal-audio' onclick=MCQController.pluginInstance.playAudio('<%= val.audio %>')  src=<%=MCQController.pluginInstance.checkBaseUrl() %>>\
+      <img class='qc-horizontal-audio' onclick=MCQController.pluginInstance.playAudio('<%= val.audio %>')  src=<%=MCQController.pluginInstance.getAudioIcon() %>>\
       </div>\
       <% } %> \
         <% if(val.audio.length>0 || val.image.length>0){%> \

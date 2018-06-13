@@ -145,6 +145,9 @@
 
 .qb-question-container {
     padding: 1%;
+   /* fix for question set list if question is more then scroll show*/
+    overflow-y: auto;
+    height: 66vh;
 }
 
 .qb-config-form {
