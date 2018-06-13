@@ -104,8 +104,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             var type = (object.field.inputType == 'select' || object.field.inputType == 'multiselect') ? 'change' : 'click'
             object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: {id: object.field.code, type:"field", ver:"" }}, $scope.manifest);
         };
+        object.scope = $scope;
         var validationStatus = $scope.isValidInputs(object);
-        !validationStatus && $scope.updateErrorMessage(object.form);
+        !validationStatus && $scope.updateErrorMessage(object);
         $scope.updateForm(object);
     }
 
@@ -237,6 +238,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         return { fixedLayout: fixedLayout, dynamicLayout: dynamicLayout };
     };
 
+    $scope.submit = function(form) {
+        $scope.success(undefined, { form: form, scope: $scope });
+    };
 
     /** 
      * @description - Which is used to invoke an action on click of the submit button.
@@ -252,7 +256,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         }, $scope.manifest);
         $scope.isSubmit = true;
         var validationStatus = $scope.isValidInputs(object);
-        !validationStatus && $scope.updateErrorMessage(object.form);
+        !validationStatus && $scope.updateErrorMessage(object);
         var successCB = function(err, res) {
                 if (res) {
                     // success toast message which is already handled by content editor function plugin
@@ -268,8 +272,14 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 $scope.closeThisDialog();
             }
             // TODO: Scope of metaform was not lossing  when state was changing
-            // Need to remove the below line of snippet 
-        var template = $('#' + $scope.tempalteName).find('#content-meta-form');
+            // Need to check the below logic
+        var template = undefined;
+        if(object.scope) {
+            object.scope.isSubmit = true;
+            template = $('.' + object.scope.tempalteName).find('#content-meta-form');
+        } else {
+            template = $('#content-meta-form');
+        }
         var form = {};
         form.metaData = getUpdatedMetadata(template.scope().contentMeta, $scope.originalContentMeta, $scope.fields);
         form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
@@ -284,23 +294,29 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * 
      * @description             - Which is used to show an error message to resepective field 
      */
-    $scope.updateErrorMessage = function(form) {
+    $scope.updateErrorMessage = function(object) {
         var errorKeys = undefined;
-        _.forEach($scope.fields, function(value, key) {
-            if (form[value.code] && form[value.code].$invalid) {
-                $scope.validation[value.code] = {}
-                switch (_.keys(form[value.code].$error)[0]) {
+        var scope = undefined;
+        if(object.scope) {
+            scope = object.scope
+        } else {
+            scope = $scope;
+        }
+        _.forEach(scope.fields, function(value, key) {
+            if (object.form[value.code] && object.form[value.code].$invalid) {
+                scope.validation[value.code] = {}
+                switch (_.keys(object.form[value.code].$error)[0]) {
                     case 'pattern': // When input validation of type is regex
-                        $scope.validation[value.code]["errorMessage"] = value.validation.regex.message;
+                        scope.validation[value.code]["errorMessage"] = value.validation.regex.message;
                         break;
                     case 'required': // When input validation of type is required
-                        $scope.validation[value.code]["errorMessage"] = 'Please Input a value';
+                        scope.validation[value.code]["errorMessage"] = 'Please Input a value';
                         break;
                     case "maxlength": // When input validation of type is max
-                        $scope.validation[value.code]["errorMessage"] = value.validation.max.message;
+                        scope.validation[value.code]["errorMessage"] = value.validation.max.message;
                         break;
                     default:
-                        $scope.validation[value.code]["errorMessage"] = "Invalid Input";
+                        scope.validation[value.code]["errorMessage"] = "Invalid Input";
                 }
             }
         });
@@ -424,25 +440,31 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     }
 
     $scope.isValidInputs = function(object) {
-        var meta = $scope.getScopeMeta();
+        var meta = $scope.getScopeMeta({target: object});
         var isValid = true;
-        var appIconConfig = _.filter($scope.fields, { 'code': 'appicon' })[0];
-        var conceptSelector = _.filter($scope.fields, { 'code': 'concepts' })[0]
+        var appIconConfig = _.filter(object.scope.fields, { 'code': 'appicon' })[0];
+        var conceptSelector = _.filter(object.scope.fields, { 'code': 'concepts' })[0]
         if (appIconConfig && appIconConfig.visible && appIconConfig.required && !meta['appIcon']) {
             isValid = false;
         };
         if (conceptSelector && conceptSelector.required && !_.size(meta['concepts'])) {
             isValid = false
         }
-        return (object.form.$valid && isValid) ? true : false
+        return (object.form.$valid && isValid) ? true : false;
     };
 
     $scope.getScopeMeta = function(event, callback) {
-        var template = $('#' + $scope.tempalteName).find('#content-meta-form');
+        var scope = event.target.scope;
+        var template = undefined;
+        if(scope) {
+          template = $('.' + scope.tempalteName).find('#content-meta-form');
+        } else {
+          template = $('#content-meta-form');
+        }
         var returnData = template.scope().contentMeta || {};
         callback && callback(returnData);
         return returnData;
-    }
+    };
 
     $scope.init()
 
