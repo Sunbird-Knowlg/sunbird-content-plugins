@@ -185,4 +185,5 @@ form .ui.grid.form-bottom-allign{
 
 .advanceFilterDiv{
     margin-bottom: 1%;
+    cursor: pointer;
 }
