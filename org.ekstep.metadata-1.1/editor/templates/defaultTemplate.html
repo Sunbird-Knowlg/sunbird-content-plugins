@@ -10,8 +10,8 @@
     DynamicLayout Support any kind of input Types
 
 -->
-<script type="text/ng-template" ng-app="org.ekstep.metadataform" ng-controller="metadataForm as $ctrl" id="defaultTemplate">
-    <div class="ui modal active defaultTemplate" id="meta-modal">
+<script type="text/ng-template" ng-app="org.ekstep.metadataform" ng-controller="metadataForm as $ctrl" id="metadataTemplate">
+    <div class="ui modal active" id="meta-modal">
         <div class="header">
             <div class="ui two column grid">
                 <div class="row">
@@ -159,7 +159,7 @@
                     <div class="ui buttons ">
                         <button id="closePopUp " class="ui orange button" ng-class="{'disabled':!editMode}" type="button " ng-click="cancel()">Cancel</button>
                         <div class="or "></div>
-                        <button class="ui blue button " type="button " ng-class="{'disabled':!editMode}" ng-click="submit({form:metaForm})">Save</button>
+                        <button class="ui blue button " type="button " ng-class="{'disabled':!editMode}" ng-click="success(undefined, {{form:metaForm})">Save</button>
                     </div>
                 </div>          
             </div> 
