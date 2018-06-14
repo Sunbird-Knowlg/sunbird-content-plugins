@@ -103,6 +103,7 @@ var TextWYSIWYG = (function() {
     function resetProperties(instance) {
         delete instance.attributes.offsetY;
         delete instance.attributes.lineHeight;
+        delete instance.editorObj.lineHeight;
     }
     return {
         setInstance: setInstance,
