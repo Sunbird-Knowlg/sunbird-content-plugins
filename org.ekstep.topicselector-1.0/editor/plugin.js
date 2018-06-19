@@ -67,6 +67,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     initTopicBrowser: function(event, data) {
         var instance = this;
         instance.data = data;
+        instance.terms = [];
         instance.getCategory(function(){
             if(instance.categories.length > 0){
                 instance.getTopics(instance.categories, function(data){
@@ -75,10 +76,23 @@ org.ekstep.contenteditor.basePlugin.extend({
                     instance.isPopupInitialized = true;
                     instance.selectedFilters = [];
                     if(instance.data.isCategoryDependant){
-                        ecEditor.dispatchEvent("metadata:form:getdata", function(data){
-                            instance.setAssociations(data, function(){
-                                instance.setFiltersData(function(){
-                                    instance.showTopicBrowser(event, instance.data);         
+                        var categoryTerms = [];
+                        ecEditor.dispatchEvent("editor:form:getconfig",function(configData){
+                            var dependedValues = _.map(configData.fields, i => _.pick(i, ['code', 'depends']));
+                            ecEditor._.forEach(instance.terms, function(term, i) {
+                                var category = _.find(dependedValues, function(o){ return o.code === term;});
+                                categoryTerms.push(category);
+                            });
+                            ecEditor.dispatchEvent("metadata:form:getdata", function(data){
+                                var formData = {};
+                                ecEditor._.forEach(categoryTerms, function(category, index) {
+                                    if(data[category.code] && _.includes(category.depends, "topic"))
+                                        formData[category.code] = data[category.code];
+                                });
+                                instance.setAssociations(formData, function(){
+                                    instance.setFiltersData(function(){
+                                        instance.showTopicBrowser(event, instance.data);         
+                                    });
                                 });
                             });
                         });
