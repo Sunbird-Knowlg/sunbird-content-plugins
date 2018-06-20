@@ -237,6 +237,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         return { fixedLayout: fixedLayout, dynamicLayout: dynamicLayout };
     };
 
+    $scope.submit = function(form) {
+        $scope.success(undefined, { form: form, scope: $scope });
+    };
 
     /** 
      * @description - Which is used to invoke an action on click of the submit button.
@@ -268,7 +271,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 $scope.closeThisDialog();
             }
             // TODO: Scope of metaform was not lossing  when state was changing
-            // Need to remove the below line of snippet 
+            // Need to check the below logic
         var template = $('#content-meta-form');
         var form = {};
         form.metaData = getUpdatedMetadata(template.scope().contentMeta, $scope.originalContentMeta, $scope.fields);
@@ -285,7 +288,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @description             - Which is used to show an error message to resepective field 
      */
     $scope.updateErrorMessage = function(form) {
-        var errorKeys = undefined;
+         var errorKeys = undefined;
         _.forEach($scope.fields, function(value, key) {
             if (form[value.code] && form[value.code].$invalid) {
                 $scope.validation[value.code] = {}
@@ -434,7 +437,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         if (conceptSelector && conceptSelector.required && !_.size(meta['concepts'])) {
             isValid = false
         }
-        return (object.form.$valid && isValid) ? true : false
+        return (object.form.$valid && isValid) ? true : false;
     };
 
     $scope.getScopeMeta = function(event, callback) {
@@ -442,7 +445,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var returnData = template.scope().contentMeta || {};
         callback && callback(returnData);
         return returnData;
-    }
+    };
 
     $scope.init()
 
