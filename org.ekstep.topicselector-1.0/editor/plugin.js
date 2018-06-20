@@ -78,10 +78,10 @@ org.ekstep.contenteditor.basePlugin.extend({
                     if(instance.data.isCategoryDependant){
                         instance.getFormData(function(data){
                             instance.setAssociations(data, function(){
-                            instance.setFiltersData(function(){
-                                instance.showTopicBrowser(event, instance.data);         
+                                instance.setFiltersData(function(){
+                                    instance.showTopicBrowser(event, instance.data);         
+                                });
                             });
-                        });
                         });
                     }else{
                         instance.showTopicBrowser(event, instance.data);
