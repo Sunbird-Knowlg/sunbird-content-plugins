@@ -163,6 +163,9 @@ org.ekstep.contenteditor.basePlugin.extend({
         // Assign WYSIWYG config to text V2 instance
         if (this.isV2Plugin()) {
             TextWYSIWYG.setInstance(this);
+            var canvas = ecEditor.getCanvas();
+            this.attributes.parentW = canvas.width;
+            this.attributes.parentH = canvas.height;
         }
 
         if (!ecEditor._.isUndefined(this.attributes.timings) || this.attributes.textType === 'readalong') {

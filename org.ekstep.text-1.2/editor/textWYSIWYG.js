@@ -40,7 +40,7 @@ var TextWYSIWYG = (function() {
                 _textInstance.editorObj.setTextAlign(value);
                 break;
             case _constants.offsetY:
-                _textInstance.attributes.offsetY = _textInstance.attributes.fontSize * value;
+                _textInstance.attributes.offsetY = value;
                 break;
         }
     }
@@ -103,6 +103,7 @@ var TextWYSIWYG = (function() {
     function resetProperties(instance) {
         delete instance.attributes.offsetY;
         delete instance.attributes.lineHeight;
+        delete instance.editorObj.lineHeight;
     }
     return {
         setInstance: setInstance,
