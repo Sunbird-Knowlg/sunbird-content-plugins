@@ -76,8 +76,8 @@ org.ekstep.contenteditor.basePlugin.extend({
                     instance.isPopupInitialized = true;
                     instance.selectedFilters = [];
                     if(instance.data.isCategoryDependant){
-                        instance.getFormConfigData(function(configData){
-                            instance.setAssociations(configData, function(){
+                        instance.getFormData(function(data){
+                            instance.setAssociations(data, function(){
                             instance.setFiltersData(function(){
                                 instance.showTopicBrowser(event, instance.data);         
                             });
@@ -113,7 +113,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      * get form data.
      * @memberof topicselector
      */
-    getFormConfigData: function(callback) {
+    getFormData: function(callback) {
         var instance = this;
         instance.getFormConfig(function(formConfig){
             ecEditor.dispatchEvent("metadata:form:getdata", function(data){
