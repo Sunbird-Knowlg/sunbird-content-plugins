@@ -163,7 +163,9 @@ org.ekstep.contenteditor.basePlugin.extend({
         // Assign WYSIWYG config to text V2 instance
         if (this.isV2Plugin()) {
             TextWYSIWYG.setInstance(this);
-            this.setParentProperties();
+            var canvas = ecEditor.getCanvas();
+            this.attributes.parentW = canvas.width;
+            this.attributes.parentH = canvas.height;
         }
 
         if (!ecEditor._.isUndefined(this.attributes.timings) || this.attributes.textType === 'readalong') {
@@ -633,15 +635,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         } else {
             return true;
         }
-    },
-    /**
-     * This will set the parent width and height to text instance attributes
-     * @returns {void}
-     */
-    setParentProperties: function() {
-        var canvas = ecEditor.getCanvas();
-        this.attributes.parentW = canvas.width;
-        this.attributes.parentH = canvas.height;
     }
 });
 //# sourceURL=textplugin.js

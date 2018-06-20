@@ -40,7 +40,7 @@ var TextWYSIWYG = (function() {
                 _textInstance.editorObj.setTextAlign(value);
                 break;
             case _constants.offsetY:
-                _textInstance.attributes.offsetY = _textInstance.attributes.fontSize * value;
+                _textInstance.attributes.offsetY = value;
                 break;
         }
     }
