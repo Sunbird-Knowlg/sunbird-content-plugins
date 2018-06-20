@@ -99,13 +99,8 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     getFormConfig: function(callback) {
         var instance = this;
-        var formConfig = [];
         ecEditor.dispatchEvent("editor:form:getconfig",function(configData){
-            var dependedValues = _.map(configData.fields, i => _.pick(i, ['code', 'depends']));
-            ecEditor._.forEach(instance.terms, function(term, i) {
-                var category = _.find(dependedValues, function(o){ return o.code === term;});
-                formConfig.push(category);
-            });
+            var formConfig = _.filter(configData.fields, _.matches({ 'depends': ['topic']}));
             callback(formConfig);
         });
     },
@@ -119,7 +114,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             ecEditor.dispatchEvent("metadata:form:getdata", function(data){
                 var formData = {};
                 ecEditor._.forEach(formConfig, function(category, index) {
-                    if(data[category.code] && _.includes(category.depends, "topic"))
+                    if(data[category.code])
                         formData[category.code] = data[category.code];
                 });
                 callback(formData);
