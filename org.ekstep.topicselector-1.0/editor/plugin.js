@@ -76,25 +76,12 @@ org.ekstep.contenteditor.basePlugin.extend({
                     instance.isPopupInitialized = true;
                     instance.selectedFilters = [];
                     if(instance.data.isCategoryDependant){
-                        var categoryTerms = [];
-                        ecEditor.dispatchEvent("editor:form:getconfig",function(configData){
-                            var dependedValues = _.map(configData.fields, i => _.pick(i, ['code', 'depends']));
-                            ecEditor._.forEach(instance.terms, function(term, i) {
-                                var category = _.find(dependedValues, function(o){ return o.code === term;});
-                                categoryTerms.push(category);
+                        instance.getFormConfigData(function(configData){
+                            instance.setAssociations(configData, function(){
+                            instance.setFiltersData(function(){
+                                instance.showTopicBrowser(event, instance.data);         
                             });
-                            ecEditor.dispatchEvent("metadata:form:getdata", function(data){
-                                var formData = {};
-                                ecEditor._.forEach(categoryTerms, function(category, index) {
-                                    if(data[category.code] && _.includes(category.depends, "topic"))
-                                        formData[category.code] = data[category.code];
-                                });
-                                instance.setAssociations(formData, function(){
-                                    instance.setFiltersData(function(){
-                                        instance.showTopicBrowser(event, instance.data);         
-                                    });
-                                });
-                            });
+                        });
                         });
                     }else{
                         instance.showTopicBrowser(event, instance.data);
@@ -104,6 +91,39 @@ org.ekstep.contenteditor.basePlugin.extend({
                 instance.isPopupInitialized = true;
                 instance.showTopicBrowser(event, instance.data);
             }
+        });
+    },
+    /**
+     * get form config data.
+     * @memberof topicselector
+     */
+    getFormConfig: function(callback) {
+        var instance = this;
+        var formConfig = [];
+        ecEditor.dispatchEvent("editor:form:getconfig",function(configData){
+            var dependedValues = _.map(configData.fields, i => _.pick(i, ['code', 'depends']));
+            ecEditor._.forEach(instance.terms, function(term, i) {
+                var category = _.find(dependedValues, function(o){ return o.code === term;});
+                formConfig.push(category);
+            });
+            callback(formConfig);
+        });
+    },
+    /**
+     * get form data.
+     * @memberof topicselector
+     */
+    getFormConfigData: function(callback) {
+        var instance = this;
+        instance.getFormConfig(function(formConfig){
+            ecEditor.dispatchEvent("metadata:form:getdata", function(data){
+                var formData = {};
+                ecEditor._.forEach(formConfig, function(category, index) {
+                    if(data[category.code] && _.includes(category.depends, "topic"))
+                        formData[category.code] = data[category.code];
+                });
+                callback(formData);
+            });
         });
     },
     /**
