@@ -1,7 +1,8 @@
 <div ng-app="suggestcontentApp" ng-controller="suggestcontentController">
     <div class="suggest-content-header">
         <div class="suggest-content-header-content suggest-content-header-text">
-            <span class="suggest-content-header-title">Explore suggestions</span>
+            <a><i class="angle right icon"></i></a>
+            <span class="suggest-content-header-title">Suggested content</span>
             <span ng-class="suggestedContentList.content.length ? 'color-blue' : 'disabled'" class="float-right">
                 <i ng-click="searchLessons(); generateTelemetry({type: 'click', subtype: 'RefreshContentButton', target: 'Refresh Content'})"
                     ng-class="suggestedContentList.content.length ? 'color-blue' : 'disabled'" class="undo icon refresh-btn"></i>
@@ -33,14 +34,12 @@
             <div class="item margin-bottom-5 margin-top-0">
                 <div class="content">
                     <p class="description text-block-ellipsis" ng-if="lesson.description">{{ lesson.description }}</p>
-                    <div class="extra">
                         <div class="ui right floated content" ng-click="addContent(lesson, $index);generateTelemetry({type: 'click', subtype: 'AddButton', target: 'Add'})" ng-if="mode.toLowerCase() === 'edit'">
-                            <a><span class="suggestedbottom">ADD</span></a> 
+                            <a>Add</a> 
                         </div>
-                        <div class="middle aligned content">
-                            <div class="meta" ng-if="lesson.creator" ><span class="suggestedbottom">By {{ lesson.creator }}</span></div>
+                        <div class="middle aligned content" ng-if="lesson.creator">
+                                <span class="suggestedbottom">By {{ lesson.creator }}</span>
                         </div>
-                    </div>
                 </div>
             </div>
         <div>

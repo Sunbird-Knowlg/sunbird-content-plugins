@@ -20,7 +20,7 @@
                 <div class="padding-top-none"> 
                     <div class="ui two buttons table-of-contents-btn">
                         <button class="ui basic button text-transform-none" ng-click="addNodeType('sibling')" ng-disabled="isNewCollection"><a><i class="plus icon"></i>New Sibling</button>
-                        <button class="ui basic button text-transform-none" ng-click="addNodeType('child')"><a> <i class="reply icon table-of-contents-child-icon "></i>New Child</a></button>  
+                        <button class="ui basic button text-transform-none" ng-click="addNodeType('child')"><a> <i class="level up icon clockwise rotated table-of-contents-child-icon "></i>New Child</a></button>  
                     </div>
                 </div>    
             </div>
@@ -41,8 +41,11 @@
                                 </div>
                                 <div class="ui" id="content-list">
                                     <div ng-if="!isContent && contentList.length<1" class="list-drag">
+                                        <div class="dropzone-text">
                                         <!-- Drag and Drop Suggested Content here or <span class="blue-color">View Library</span> -->
-                                        <p>No Contents are available</p><p ng-show="!isCollection &&  mode === 'Edit'">You can add resource by Ctrl + Alt + A</p>
+                                        <p>Add Resources here from Suggested Content or by clicking on the 
+                                                Add Resource button</p><p ng-show="!isCollection &&  mode === 'Edit'"><a>You can also Add a resource by Ctrl + Alt + A</a></p>
+                                        </div>        
                                     </div>
                                     <div ui-sortable="sortableOptions" ng-model="contentList">
                                         <div class="ui raised segment padding-none" ng-repeat="child in contentList" ng-class="{'unsortable': isCollection}">

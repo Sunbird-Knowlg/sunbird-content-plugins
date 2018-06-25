@@ -536,11 +536,15 @@ switched to Github for the search after API changes
 }
 
 .list-drag {
-    border: 1px dashed #c5c3c3 !important;
-    height: 90px;
-    text-align: center !important;
-    line-height: 90px;
+    background-color: #fcfcfc;
+    border: 1px dashed #dedede;
+    border-radius: 4px;
+    text-align: center;
     color: black;
+}
+
+.dropzone-text{
+padding: 1% 15% 1% 15%;
 }
 
 .custom-modal-heading {
@@ -689,4 +693,8 @@ ul.fancytree-container>li>ul {
 
 .margin-none {
     margin: 0!important;
+}
+
+tags-input .tags .tag-item {
+    font-weight: normal !important;
 }
