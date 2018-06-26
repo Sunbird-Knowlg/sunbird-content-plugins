@@ -67,6 +67,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     initTopicBrowser: function(event, data) {
         var instance = this;
         instance.data = data;
+        instance.terms = [];
         instance.getCategory(function(){
             if(instance.categories.length > 0){
                 instance.getTopics(instance.categories, function(data){
@@ -75,7 +76,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     instance.isPopupInitialized = true;
                     instance.selectedFilters = [];
                     if(instance.data.isCategoryDependant){
-                        ecEditor.dispatchEvent("metadata:form:getdata", function(data){
+                        instance.getFormData(function(data){
                             instance.setAssociations(data, function(){
                                 instance.setFiltersData(function(){
                                     instance.showTopicBrowser(event, instance.data);         
@@ -90,6 +91,30 @@ org.ekstep.contenteditor.basePlugin.extend({
                 instance.isPopupInitialized = true;
                 instance.showTopicBrowser(event, instance.data);
             }
+        });
+    },
+    /**
+     * get form config data.
+     * @memberof topicselector
+     */
+    getFormConfig: function(callback) {
+        var instance = this;
+        ecEditor.dispatchEvent("editor:form:getconfig",function(configData){
+            var formConfig = _.map(_.filter(configData.fields, _.matches({ 'depends': ['topic']})), 'code');
+            callback(formConfig);
+        });
+    },
+    /**
+     * get form data.
+     * @memberof topicselector
+     */
+    getFormData: function(callback) {
+        var instance = this;
+        instance.getFormConfig(function(formConfig){
+            ecEditor.dispatchEvent("metadata:form:getdata", function(data){
+                var formData = _.pick(data, formConfig);
+                callback(formData);
+            });
         });
     },
     /**

@@ -15135,7 +15135,8 @@ describe("Topic selector plugin", function() {
         spyOn(pluginInstance, "getCategory").and.callThrough();
         pluginInstance.initTopicBrowser('', {
             "element": "defaultTemplate-topic",
-            "selectedTopics": []
+            "selectedTopics": [],
+            "isCategoryDependant":true
         });
         expect(pluginInstance.categories.length).toEqual(69);
         done()
