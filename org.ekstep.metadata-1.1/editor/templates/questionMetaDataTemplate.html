@@ -1,4 +1,4 @@
-<div ng-app="org.ekstep.metadataform" ng-controller="metadataForm as $ctrl" id="questionMetadataTemplate">
+<div ng-app="org.ekstep.metadataform" ng-controller="metadataForm as $ctrl" id="questionMetaDataTemplate">
     <div class="ui active" id="meta-modal">
         <div class="">
             <form class="ui form" id="content-meta-form" ng-init="initDropdown()" name="metaForm" novalidate ng-class="!appIconConfig.visible ? 'marginClass' : ''">
@@ -72,6 +72,11 @@
                                     " ng-if="dynamicField.inputType==='conceptselector'">
                                         <label>{{dynamicField.label | uppercase}}</label>
                                         <conceptselector config=dynamicField ng-click="onConfigChange({field:dynamicField, form:metaForm})"></conceptselector>
+                                    </div>
+                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code].length && dynamicField.required  && isSubmit) , 'required': dynamicField.required} " name="{{dynamicField.code}}
+                                       " ng-if="dynamicField.inputType==='topicselector'">
+                                        <label>{{dynamicField.label | uppercase}}</label>
+                                        <topic-selector config=dynamicField ng-click="onConfigChange({field:dynamicField, form:metaForm})"></topic-selector>
                                     </div>
                                     <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code].length && fixedField.required && isSubmit), 'required': dynamicField.required} " name="{{dynamicField.code}} " ng-if="(dynamicField.inputType=='keywordsuggestion'
                                     && dynamicField.visible) " ng-required="{{dynamicField.required}} ">

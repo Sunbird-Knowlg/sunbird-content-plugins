@@ -62,6 +62,13 @@
                                             <conceptselector class="concept-field" config=dynamicField ng-click="onConfigChange({field:dynamicField, form:metaForm});"></conceptselector>
                                         </div>
                                     </div>
+                                    <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required) , 'required': dynamicField.required} " name="{{dynamicField.code}}
+                                       " ng-if="dynamicField.inputType==='topicselector'">
+                                           <div class="ui fluid labeled input">
+                                            <div class="ui label filter-input-label">{{dynamicField.label | uppercase}}</div>
+                                           <topic-selector class="concept-field" config=dynamicField ng-click="onConfigChange({field:dynamicField, form:metaForm})"></topic-selector>
+                                       </div>
+                                       </div>
                                     <!-- TOGGLE BUTTON -->
                                     <div id="{{dynamicField.code}} " class="field " ng-class="{'error': (!metaForm[dynamicField.code].$valid), 'required': dynamicField.required}" name="{{dynamicField.code}}" ng-if="(dynamicField.inputType=='checkbox') ">
                                         <div class="ui fluid labeled input">
