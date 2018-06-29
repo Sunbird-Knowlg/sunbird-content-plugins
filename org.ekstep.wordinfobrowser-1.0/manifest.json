@@ -13,9 +13,10 @@
             "dataType": "text"
         },
         "dependencies": [
-            {"type": "css", "src": "editor/plugin.css"},
-            {"type": "template","src": "./wordinfobrowser.html", "bundle":true},
-            {"type": "ctrl","src": "./wordinfobrowserapp.js","bundle":true }
+            {"type": "css", "src": "editor/plugin.css"}
+        ],
+        "views":[
+            {"template":"./wordinfobrowser.html", "controller":"./wordinfobrowserapp.js"}
         ],
         "configManifest": [{
             "propertyName": "color",

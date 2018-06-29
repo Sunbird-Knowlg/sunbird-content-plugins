@@ -10,9 +10,10 @@
         "dependencies": [
             {"type": "css", "src": "editor/plugin.css"},
             {"type": "js","src": "editor/libs/angular-inview.js"},
-            {"type": "js", "src": "editor/camelize.js"},
-            {"type": "template","src": "./activityBrowser.html", "bundle":true},
-            {"type": "ctrl","src": "./activityBrowser.js","bundle":true }
+            {"type": "js", "src": "editor/camelize.js"}
+        ],
+        "views":[
+            {"template":"./activityBrowser.html", "controller":"./activityBrowser.js"}
         ],
         "menu": [{
             "id": "activitybrowser",
