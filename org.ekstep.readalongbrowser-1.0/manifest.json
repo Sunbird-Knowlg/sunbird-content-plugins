@@ -16,7 +16,10 @@
             { "type": "js", "src": "editor/libs/karaoke.js" },
             { "type": "js", "src": "editor/libs/jquery.scrollTo.js" },
             { "type": "js", "src": "editor/libs/jquery.jplayer.min.js" },
-            { "type": "css", "src": "editor/css/jquery-ui.css" }
+            { "type": "css", "src": "editor/css/jquery-ui.css" },
+            {"type": "template","src": "./readalongbrowser.html", "bundle":true},
+            {"type": "js","src": "./readalongbrowserapp.js","bundle":true }
+            
         ],
         "configManifest": [{
             "propertyName": "highlight",

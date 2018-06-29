@@ -165,7 +165,5 @@ org.ekstep.contenteditor.basePlugin.extend({
     }
 });
 
-var converter;
-
 
 //# sourceURL=ECMLplugin.js

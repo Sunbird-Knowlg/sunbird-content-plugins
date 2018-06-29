@@ -13,7 +13,9 @@
             "dataType": "text"
         },
         "dependencies": [
-            {"type": "css", "src": "editor/plugin.css"}
+            {"type": "css", "src": "editor/plugin.css"},
+            {"type": "template","src": "./wordinfobrowser.html", "bundle":true},
+            {"type": "js","src": "./wordinfobrowserapp.js","bundle":true }
         ],
         "configManifest": [{
             "propertyName": "color",

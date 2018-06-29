@@ -10,7 +10,9 @@
         "dependencies": [
             { "type": "js", "src": "editor/libs/dist/E2EConverter.js" },
             { "type": "css", "src": "editor/libs/prism/prism.css" },
-            { "type": "js", "src": "editor/libs/prism/prism.js" }
+            { "type": "js", "src": "editor/libs/prism/prism.js" },
+            {"type": "template","src": "./ECMLbrowser.html", "bundle":true}
+
         ],
         "menu": [{
         }]

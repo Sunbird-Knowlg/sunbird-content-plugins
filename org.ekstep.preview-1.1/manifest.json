@@ -7,6 +7,9 @@
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
-        "menu": []
+        "menu": [],
+        "dependencies": [
+            {"type": "template","src": "./popup.html", "bundle":true}
+        ]
     }
 }
