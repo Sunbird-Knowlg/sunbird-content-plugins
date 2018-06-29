@@ -12,7 +12,7 @@
         "dependencies": [
             { "type": "js", "src": "editor/libs/ckeditor.js" },
             {"type": "template","src": "./richtexteditor.html", "bundle":true},
-            {"type": "js","src": "./richtexteditorapp.js", "bundle":true}
+            {"type": "ctrl","src": "./richtexteditorapp.js", "bundle":true}
         ],
         "behaviour": {
             "rotatable": false

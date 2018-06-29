@@ -13,7 +13,7 @@
             { "type": "js", "src": "editor/assessmentbrowser_util.js" },
             { "type": "js", "src": "editor/libs/xml2json.js" },
             {"type": "template","src": "./assessmentbrowser.html", "bundle":true},
-            {"type": "js","src": "./assessmentbrowserapp.js","bundle":true }
+            {"type": "ctrl","src": "./assessmentbrowserapp.js","bundle":true }
         ]
     }
 }

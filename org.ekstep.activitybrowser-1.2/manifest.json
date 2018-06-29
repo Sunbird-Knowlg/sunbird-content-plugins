@@ -12,7 +12,7 @@
             {"type": "js","src": "editor/libs/angular-inview.js"},
             {"type": "js", "src": "editor/camelize.js"},
             {"type": "template","src": "./activityBrowser.html", "bundle":true},
-            {"type": "js","src": "./activityBrowser.js","bundle":true }
+            {"type": "ctrl","src": "./activityBrowser.js","bundle":true }
         ],
         "menu": [{
             "id": "activitybrowser",

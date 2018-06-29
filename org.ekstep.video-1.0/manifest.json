@@ -22,7 +22,7 @@
         }],
         "dependencies": [
             {"type": "template","src": "./video.html", "bundle":true},
-            {"type": "js","src": "./videoapp.js","bundle":true }
+            {"type": "ctrl","src": "./videoapp.js","bundle":true }
         ],
         "configManifest": [{
             "propertyName": "autoplay",

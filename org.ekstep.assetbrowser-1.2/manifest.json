@@ -13,7 +13,7 @@
             {"type": "js", "src": "editor/recorder/angular-audio-recorder.js"},
             {"type": "js","src": "editor/libs/angular-inview.js"},
             {"type": "template","src": "./assetBrowser.html", "bundle":true},
-            {"type": "js","src": "./assetbrowserapp.js","bundle":true }
+            {"type": "ctrl","src": "./assetbrowserapp.js","bundle":true }
         ]
     }
 }
