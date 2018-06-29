@@ -4,8 +4,9 @@
     "author": "Akash Gupta",
     "editor": {
         "main": "editor/plugin.js",
-        "dependencies": [
-            {"type": "template","src": "./templates/shortcutspopup.html", "bundle":true}
+        "views":[
+            {"template":"./templates/shortcutspopup.html", "controller":""}
         ]
+
     }
 }
