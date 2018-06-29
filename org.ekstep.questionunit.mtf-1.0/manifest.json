@@ -1,48 +1,54 @@
 {
-    "id": "org.ekstep.questionunit.mtf",
-    "ver": "1.0",
-    "author": "Jagadish",
-    "title": "Add question",
-    "description": "",
-    "publishedDate": "",
-    "icon": "assets/createquestion.png",
-    "languages": ["English"],
-    "categories": [],
-    "keywords": ["mtfplugin"],
-    "editor":
+  "id": "org.ekstep.questionunit.mtf",
+  "ver": "1.0",
+  "author": "Jagadish",
+  "title": "Add question",
+  "description": "",
+  "publishedDate": "",
+  "icon": "assets/createquestion.png",
+  "languages": ["English"],
+  "categories": [],
+  "keywords": ["mtfplugin"],
+  "targets": [
     {
-        "main": "editor/plugin.js",
-        "dependencies": [
-        {
-            "type": "plugin",
-            "plugin": "org.ekstep.questionunit",
-            "ver": "1.0"
-        },
-        {
-            "type": "css",
-            "src": "editor/styles/style.css"
-        }],
-        "menu": [],
-        "init-data":
-        {
-            "type": "rect",
-            "x": 10,
-            "y": 2,
-            "w": 80,
-            "h": 80,
-            "fill": "#DCDCDC"
-        },
-        "configManifest": [
-        {
-
-        }],
-        "help":
-        {
-            "src": "editor/help.md",
-            "dataType": "text"
-        }
+      "id": "org.ekstep.questionset",
+      "ver": 1
+    }
+  ],
+  "editor":
+  {
+    "main": "editor/plugin.js",
+    "dependencies": [
+      {
+        "type": "plugin",
+        "plugin": "org.ekstep.questionunit",
+        "ver": "1.0"
+      },
+      {
+        "type": "css",
+        "src": "editor/styles/style.css"
+      }],
+    "menu": [],
+    "init-data":
+    {
+      "type": "rect",
+      "x": 10,
+      "y": 2,
+      "w": 80,
+      "h": 80,
+      "fill": "#DCDCDC"
     },
-    "templates": [
+    "configManifest": [
+      {
+
+      }],
+    "help":
+    {
+      "src": "editor/help.md",
+      "dataType": "text"
+    }
+  },
+  "templates": [
     {
       "id": "horizontalMTF",
       "thumbnail": "editor/assets/mtf-horizontal.png",
@@ -55,44 +61,37 @@
         "controllerURL": "editor/controllers/horizontal_controller.js",
         "template": "horizontalMTF",
         "controller": "QuestionFormController"
-      },
-      "renderer":
-      {
-        "template": "renderer/templates/mtf_template.html",
-        "controller": "renderer/controllers/mtf_controller.js"
       }
-
     }],
-    "renderer":
-    {
-        "main": "renderer/plugin.js",
-        "dependencies": [
-            {
-                "type": "css",
-                "src": "renderer/styles/style.css"
-            },
-            {
-                "type": "js",
-                "src": "renderer/util/evaluator.js"
-            },
-            {
-                "type": "js",
-                "src": "renderer/controllers/mtf_controller.js"
-            },
-            {
-                "type": "js",
-                "src": "renderer/templates/mtf_template.html"
-
-            }
-        ]
-    },
+  "renderer":
+  {
+    "main": "renderer/plugin.js",
     "dependencies": [
-        {
-            "plugin": "org.ekstep.questionunit",
-            "ver": "1.0",
-            "type": "plugin",
-            "scope": "all"
-        }
-
+      {
+        "type": "css",
+        "src": "renderer/styles/style.css"
+      },
+      {
+        "type": "js",
+        "src": "renderer/util/evaluator.js"
+      },
+      {
+        "type": "js",
+        "src": "renderer/js/dragula.min.js"
+      },
+      {
+        "type": "js",
+        "src": "renderer/js/mtftemplate.js"
+      }
     ]
+  },
+  "dependencies": [
+    {
+      "plugin": "org.ekstep.questionunit", 
+      "ver": "1.0",
+      "type": "plugin",
+      "scope": "all"
+    }
+
+  ]
 }

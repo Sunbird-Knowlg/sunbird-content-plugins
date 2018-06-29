@@ -169,6 +169,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         //reset the depended field first
         // Update the depended field with associated value
         // Currently, supported only for the dropdown values
+        ecEditor.dispatchEvent("editor:field:association", {'field': field, 'resetSelected': resetSelected});
         var dependedValues, groupdFields;
         if (field.depends && field.depends.length) {
             _.forEach(field.depends, function(id) {
@@ -236,6 +237,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         return { fixedLayout: fixedLayout, dynamicLayout: dynamicLayout };
     };
 
+    $scope.submit = function(form) {
+        $scope.success(undefined, { form: form, scope: $scope });
+    };
 
     /** 
      * @description - Which is used to invoke an action on click of the submit button.
@@ -267,7 +271,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 $scope.closeThisDialog();
             }
             // TODO: Scope of metaform was not lossing  when state was changing
-            // Need to remove the below line of snippet 
+            // Need to check the below logic
         var template = $('#content-meta-form');
         var form = {};
         form.metaData = getUpdatedMetadata(template.scope().contentMeta, $scope.originalContentMeta, $scope.fields);
@@ -284,7 +288,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @description             - Which is used to show an error message to resepective field 
      */
     $scope.updateErrorMessage = function(form) {
-        var errorKeys = undefined;
+         var errorKeys = undefined;
         _.forEach($scope.fields, function(value, key) {
             if (form[value.code] && form[value.code].$invalid) {
                 $scope.validation[value.code] = {}
@@ -324,7 +328,13 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.resetSelectedField = function(id) {
         setTimeout(function() {
             $('#_select' + id).dropdown('clear');
-            $scope.contentMeta[id] = undefined;
+            _.forEach($scope.fields, function(field, value) {
+                if (field.code === id && field.dataType === 'list'){
+                    $scope.contentMeta[id] = [];
+                }else if(field.code === id){
+                    $scope.contentMeta[id] = undefined;
+                }
+            });
             $scope.$safeApply();
         }, 0)
     }
@@ -377,6 +387,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.init = function() {
         !EventBus.hasEventListener('metadata:form:onsuccess') && ecEditor.addEventListener('metadata:form:onsuccess', $scope.success, $scope);
         !EventBus.hasEventListener('metadata:form:oncancel') && ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
+        !EventBus.hasEventListener('metadata:form:getdata') && ecEditor.addEventListener('metadata:form:getdata', $scope.getScopeMeta, $scope);
         var callbackFn = function(config) {
             $scope.fields = config.fields;
             $scope.tempalteName = config.template;
@@ -426,13 +437,15 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         if (conceptSelector && conceptSelector.required && !_.size(meta['concepts'])) {
             isValid = false
         }
-        return (object.form.$valid && isValid) ? true : false
+        return (object.form.$valid && isValid) ? true : false;
     };
 
-    $scope.getScopeMeta = function() {
+    $scope.getScopeMeta = function(event, callback) {
         var template = $('#content-meta-form');
-        return template.scope().contentMeta || {};
-    }
+        var returnData = template.scope().contentMeta || {};
+        callback && callback(returnData);
+        return returnData;
+    };
 
     $scope.init()
 

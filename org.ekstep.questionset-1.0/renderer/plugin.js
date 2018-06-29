@@ -3,7 +3,7 @@
  * @extends EkstepRenderer.Plugin
  * @author sachin.kumar@goodworklabs.com>
  */
-IteratorPlugin.extend({ // eslint-disable-line no-undef
+org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line no-undef
   _type: 'org.ekstep.questionset',
   _isContainer: true,
   _render: true,
@@ -51,6 +51,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
     // On content replay, reset all question set information.
     EkstepRendererAPI.addEventListener('renderer:content:replay', function() {
       instance.resetQS.call(instance);
+      this.registerNavigation(instance);
     }, instance);
     // Remove duplicate event listener
     EventBus.listeners['org.ekstep.questionset:feedback:retry'] = [];
@@ -76,27 +77,30 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
     // If this isn't the first time the question set is being rendered, restore its earlier state
     this._questionStates = {};
     this._renderedQuestions = [];
+    var question = undefined;
     var savedQSState = this.getQuestionSetState();
     if (savedQSState) {
       this._renderedQuestions = savedQSState.renderedQuestions;
-      this._currentQuestion = savedQSState.currentQuestion;
+      question = savedQSState.currentQuestion;
       this._questionStates = savedQSState.questionStates;
       this._currentQuestionState = this.getQuestionState(this._currentQuestion.id);
     } else {
-      this._currentQuestion = this.getNextQuestion();
+      question = this.getNextQuestion();
     }
     this.saveQuestionSetState();
     // Render the question
-    this.renderQuestion(this._currentQuestion);
+    this.renderQuestion(question);
   },
   renderQuestion: function(question) {
     var instance = this;
     // If this is not the first question, hide the current question
     if (instance._currentQuestion) {
-      EkstepRendererAPI.dispatchEvent(instance._currentQuestion.pluginId + ':hide');
+      EkstepRendererAPI.dispatchEvent(instance._currentQuestion.pluginId + ':hide', instance);
       jQuery('#' + instance._currentQuestion.id).remove();
     }
     if (question.pluginId === this._constants.qsQuizPlugin) {
+      //if question is quiz then remove question set div
+      this.removeTemplateContainer();
       // Mark the question as rendered
       instance._currentQuestion = question;
       this.setRendered(question);
@@ -109,11 +113,14 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
       // TODO: Move state saving of V1 questions from questionset.quiz to here, like V2 questions
       PluginManager.invoke(question.pluginId, question, this._stage, this._stage, this._theme);
     } else {
+      this.loadTemplateContainer();
       // For V2 questions, load the AngularJS template and controller and invoke the event to render the question
       // Fetch the question state if it was already rendered before
       this._currentQuestionState = this.getQuestionState(question.id);
       // Mark the question as rendered
       instance._currentQuestion = question;
+      // Set current question for telmetry to log events from question-unit
+      QSTelemetryLogger.setQuestion(instance._currentQuestion, instance.getRenderedIndex()); // eslint-disable-line no-undef
       this.setRendered(question);
       EkstepRendererAPI.dispatchEvent(question.pluginId + ':show', instance);
     }
@@ -180,6 +187,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
   },
   renderNextQuestion: function() {
     // Get the next question to be rendered
+    var instance = this;
     var nextQ = this.getNextQuestion();
     if (nextQ) {
       this.renderQuestion(nextQ);
@@ -189,7 +197,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
       // hiding the last question and some housekeeping
       this.saveQuestionSetState();
       this.generateNavigateTelemetry('next', 'ContentApp-EndScreen');
-      EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
+      EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide', instance);
       // this.resetNavigation();
       this.resetListeners();
       this.resetTemplates();
@@ -204,6 +212,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
   },
   renderPrevQuestion: function() {
     // Get the previous question to be rendered
+    var instance = this;
     var prevQ = this.getPrevQuestion();
     if (prevQ) {
       this.renderQuestion(prevQ);
@@ -213,7 +222,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
       // hiding the first question and some housekeeping
       this.saveQuestionSetState();
       this.generateNavigateTelemetry('previous', 'ContentApp-StartScreen');
-      EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
+      EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide', instance);
       // this.resetNavigation();
       this.resetListeners();
       this.resetTemplates();
@@ -258,6 +267,11 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
     });
     return index;
   },
+  //remove question set div inside the game area
+  removeTemplateContainer:function(){
+    $(this._constants.qsElement).remove();
+  },
+  //add questionset div inside the game Area
   loadTemplateContainer: function() {
     var qsElement = $('<div />', {
       id: this._constants.qsElement.replace('#', ''),
@@ -303,9 +317,7 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
     // this.resetNavigation();
     var instance = this;
     Renderer.theme.setParam(this._data.id, undefined);
-    if (this._currentQuestion) {
-      EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ':hide');
-    }
+    this.deregisterNavigation(instance);
     setTimeout(function() {
       instance.resetListeners();
     }, 100);
@@ -314,15 +326,16 @@ IteratorPlugin.extend({ // eslint-disable-line no-undef
     // The following code will unregister all event listeners added by the question unit plugins
     // This is to ensure that the event listeners do not overlap when there are two or more question sets
     // in the same content.
-    this._questionUnitPlugins.forEach(function(qu) {
+    _.forEach(this._questionUnitPlugins, function(value){
       for (var key in EventBus.listeners) {
-        if (key.indexOf(qu) !== -1) {
+        if (key.indexOf(value) !== -1) {
           if (EventBus.listeners.hasOwnProperty(key)) {
             EventBus.listeners[key] = undefined;
           }
         }
       }
-    });
+    })
+
   },
   generateNavigateTelemetry: function(buttonId, currentQuestion) {
     var stageTo, objid;

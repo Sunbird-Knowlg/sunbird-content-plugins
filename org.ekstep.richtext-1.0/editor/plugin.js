@@ -81,10 +81,13 @@ org.ekstep.contenteditor.basePlugin.extend({
     resizeObject: function(e) {
         if (ecEditor.getCurrentObject() && ecEditor.getCurrentObject().manifest.id == 'org.ekstep.richtext') {
                var canvasCord = ecEditor.jQuery('#canvas').offset();
+               var editorObject = ecEditor.getCurrentObject().editorObj;
                ecEditor.jQuery("#" + e.target.id).offset({
                      'top':e.target.top + canvasCord.top, 
                      'left':e.target.left + canvasCord.left
                });
+               editorObject.width =  e.target.getWidth();
+               editorObject.height =  e.target.getHeight();
                ecEditor.jQuery("#" + e.target.id).width(e.target.getWidth());
                ecEditor.jQuery("#" + e.target.id).height(e.target.getHeight());
         }

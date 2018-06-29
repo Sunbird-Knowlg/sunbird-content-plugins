@@ -33,7 +33,7 @@ angular.module('org.ekstep.genericeditor', ["Scope.safeApply", "oc.lazyLoad"]).c
     $scope.loadNgModules = function(templatePath, controllerPath) {
         var files = [];
         if (templatePath) files.push({ type: 'html', path: templatePath });
-        if (controllerPath) files.push({ type: 'js', path: controllerPath });
+        if (controllerPath) files.push({ type: 'js', path: controllerPath + '?' + ecEditor.getConfig('build_number') });
         if (files.length) return $ocLazyLoad.load(files)
     };
 
