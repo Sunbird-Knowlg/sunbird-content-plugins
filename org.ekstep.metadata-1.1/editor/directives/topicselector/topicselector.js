@@ -25,7 +25,7 @@ formApp.directive('topicSelector', function() {
             $scope.contentMeta.topic = _.map(data, function(topic) {
                 return  topic.name;
             });
-            ecEditor.dispatchEvent('editor:form:change', {key: 'topic', value: $scope.contentMeta.topic});
+            ecEditor.dispatchEvent('editor:form:change', {key: 'topic', value: $scope.contentMeta.topic, templateId: $scope.$parent.$parent.tempalteName ? $scope.$parent.$parent.tempalteName : 'metaform'});
             $rootScope.$safeApply();
         }
         $scope.resetTopics = function(event, data){

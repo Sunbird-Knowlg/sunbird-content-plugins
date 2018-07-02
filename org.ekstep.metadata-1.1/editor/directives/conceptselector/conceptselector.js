@@ -31,7 +31,7 @@ formApp.directive('conceptselector', function() {
                             "name": concept.name
                         };
                     });
-                    ecEditor.dispatchEvent('editor:form:change', {key: 'concepts', value: $scope.contentMeta.concepts});
+                    ecEditor.dispatchEvent('editor:form:change', {key: 'concepts', value: $scope.contentMeta.concepts, templateId: $scope.$parent.$parent.tempalteName ? $scope.$parent.$parent.tempalteName : 'metaform'});
                     $rootScope.$safeApply();
                 }
             });
