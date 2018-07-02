@@ -20,7 +20,7 @@
                 <div class="padding-top-none"> 
                     <div class="ui two buttons table-of-contents-btn">
                         <button class="ui basic button text-transform-none" ng-click="addNodeType('sibling')" ng-disabled="isNewCollection"><a><i class="plus icon"></i>New Sibling</button>
-                        <button class="ui basic button text-transform-none" ng-click="addNodeType('child')"><a> <i class="reply icon table-of-contents-child-icon "></i>New Child</a></button>  
+                        <button class="ui basic button text-transform-none" ng-click="addNodeType('child')"><a> <i class="level up icon clockwise rotated table-of-contents-child-icon "></i>New Child</a></button>  
                     </div>
                 </div>    
             </div>
@@ -34,15 +34,18 @@
                     </div>
                     <div class="ui grid padded">
                         <div class="row">
-                            <div class="twelve wide column list-container" ng-if="!isContent">
+                            <div class="twelve wide column list-container" ng-show="!isContent">
                                 <div class="list-header">
                                     <div class="ui label list-leftheader">RESOURCES</div>
                                     <button class="ui blue button list-addResource" ng-click="addResource()" ng-show="!isCollection && mode === 'Edit'">ADD RESOURCE</button>
                                 </div>
                                 <div class="ui" id="content-list">
                                     <div ng-if="!isContent && contentList.length<1" class="list-drag">
+                                        <div class="dropzone-text">
                                         <!-- Drag and Drop Suggested Content here or <span class="blue-color">View Library</span> -->
-                                        <p>No Contents are available</p><p ng-show="!isCollection &&  mode === 'Edit'">You can add resource by Ctrl + Alt + A</p>
+                                        <p>Add Resources here <span ng-show="showsuggestedContent && mode === 'Edit'">from Suggested Content or </span>by clicking on the 
+                                                Add Resource button</p><p ng-show="!isCollection &&  mode === 'Edit'"><a>You can also Add a resource by Ctrl + Alt + A</a></p>
+                                        </div>        
                                     </div>
                                     <div ui-sortable="sortableOptions" ng-model="contentList">
                                         <div class="ui raised segment padding-none" ng-repeat="child in contentList" ng-class="{'unsortable': isCollection}">
@@ -78,7 +81,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="twelve wide column list-container"  ng-show="isContent">
+                            <div class="twelve wide column list-container"  ng-if="isContent">
                                 <div class="content-width padding-top-10 centerAligned">
                                     <div class="ui label list-leftheader">CONTENT PREVIEW</div>
                                     <div class="ui label content-rightheader delete-node" ng-show="!isCollection" ng-if="mode === 'Edit'" ng-click="deleteNode(selectedContent, $event);"><i class="fa fa-trash right floated" aria-hidden="true"> </i><span>&nbsp;&nbsp;REMOVE</span></div>

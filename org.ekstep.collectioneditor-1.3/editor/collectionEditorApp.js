@@ -61,6 +61,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         $scope.isContent = false;
         var iframe = document.getElementById('previewContentIframe');
         if (iframe) {
+            iframe.src = "";
             // Stopping all video as iframe is only hidden not destroyed
             if (iframe.contentWindow.EkstepRendererAPI) iframe.contentWindow.EkstepRendererAPI.removeHtmlElements();
             iframe.style.display = "none";
@@ -275,7 +276,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 org.ekstep.services.collectionService.fromCollection(res.data.result.content);
                 $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
                 $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
-                $scope.showsuggestedContent = $scope.sidebarPages.length > 0 ? true : false;
+                $scope.showsuggestedContent = res.data.result.content.contentType === 'TextBook' ? true : false;
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
                 $scope.$safeApply();
                 callback && callback(err, res);
