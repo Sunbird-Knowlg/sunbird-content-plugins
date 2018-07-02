@@ -13,6 +13,9 @@
             "src": "editor/help.md",
             "dataType": "text"
         },
+        "dependencies": [
+            { "type": "plugin", "plugin": "org.ekstep.assetbrowser", "ver": "1.2" }
+        ],
         "menu": [{
             "id": "image",
             "category": "main",
