@@ -61,7 +61,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         $scope.isContent = false;
         var iframe = document.getElementById('previewContentIframe');
         if (iframe) {
-            iframe.src = "";
             // Stopping all video as iframe is only hidden not destroyed
             if (iframe.contentWindow.EkstepRendererAPI) iframe.contentWindow.EkstepRendererAPI.removeHtmlElements();
             iframe.style.display = "none";
