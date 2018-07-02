@@ -699,6 +699,6 @@ tags-input .tags .tag-item {
     font-weight: normal !important;
 }
 
-.ui.two.buttons.table-of-contents-btn .text-transform-none a{
+.ui.two.buttons.table-of-contents-btn .text-transform-none a, #content-list .dropzone-text a{
     color: #007aff;
 }
