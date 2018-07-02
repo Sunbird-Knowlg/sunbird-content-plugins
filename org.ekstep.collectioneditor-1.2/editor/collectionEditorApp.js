@@ -265,7 +265,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 org.ekstep.services.collectionService.fromCollection(res.data.result.content);
                 $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
                 $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
-                $scope.showsuggestedContent = $scope.sidebarPages.length > 0 ? true : false;
+                $scope.showsuggestedContent = res.data.result.content.contentType === 'TextBook' ? true : false;
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
                 $scope.$safeApply();
                 callback && callback(err, res);

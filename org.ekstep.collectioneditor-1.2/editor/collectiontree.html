@@ -43,7 +43,7 @@
                                     <div ng-if="!isContent && contentList.length<1" class="list-drag">
                                         <div class="dropzone-text">
                                         <!-- Drag and Drop Suggested Content here or <span class="blue-color">View Library</span> -->
-                                        <p>Add Resources here from Suggested Content or by clicking on the 
+                                        <p>Add Resources here <span ng-show="showsuggestedContent && mode === 'Edit'">from Suggested Content or </span>by clicking on the 
                                                 Add Resource button</p><p ng-show="!isCollection &&  mode === 'Edit'"><a>You can also Add a resource by Ctrl + Alt + A</a></p>
                                         </div>        
                                     </div>
