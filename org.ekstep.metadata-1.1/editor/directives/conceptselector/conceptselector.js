@@ -17,7 +17,8 @@ formApp.directive('conceptselector', function() {
                     selectedConcepts.push(concept.identifier);
                 });
         }
-        $scope.conceptElementId = (!_.isUndefined($scope.$parent.$parent.tempalteName)) ? $scope.$parent.$parent.tempalteName + '-concept' : 'metaform-concept';
+        $scope.templateId = (!_.isUndefined($scope.$parent.$parent.tempalteName)) ? $scope.$parent.$parent.tempalteName : 'metaform';
+        $scope.conceptElementId = $scope.templateId + '-concept';
         $scope.invokeConceptSelector = function() {
             ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
                 element: $scope.conceptElementId,
@@ -31,7 +32,7 @@ formApp.directive('conceptselector', function() {
                             "name": concept.name
                         };
                     });
-                    ecEditor.dispatchEvent('editor:form:change', {key: 'concepts', value: $scope.contentMeta.concepts, templateId: $scope.$parent.$parent.tempalteName ? $scope.$parent.$parent.tempalteName : 'metaform'});
+                    ecEditor.dispatchEvent('editor:form:change', {key: 'concepts', value: $scope.contentMeta.concepts, templateId: $scope.templateId});
                     $rootScope.$safeApply();
                 }
             });

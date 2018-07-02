@@ -9,7 +9,8 @@ formApp.directive('topicSelector', function() {
         $scope.contentMeta = $scope.$parent.contentMeta;
         $scope.topicSelectorMessage = $scope.contentMeta.topic ? '(' + $scope.contentMeta.topic.length + ') topics selected' : '(0) topics selected';
         /**Added for more than one topic selector on same page, element id should be unique as per template **/
-        $scope.topicElementId = (!_.isUndefined($scope.$parent.$parent.tempalteName)) ? $scope.$parent.$parent.tempalteName + '-topic' : 'metaform-topic';
+        $scope.templateId = (!_.isUndefined($scope.$parent.$parent.tempalteName)) ? $scope.$parent.$parent.tempalteName : 'metaform';
+        $scope.topicElementId = $scope.templateId + '-topic';
         $scope.invokeTopicSelector = function() {
             ecEditor.addEventListener('editor.topic.change', $scope.resetTopics, this);
             ecEditor.dispatchEvent('org.ekstep.topicselector:init', {
@@ -25,7 +26,7 @@ formApp.directive('topicSelector', function() {
             $scope.contentMeta.topic = _.map(data, function(topic) {
                 return  topic.name;
             });
-            ecEditor.dispatchEvent('editor:form:change', {key: 'topic', value: $scope.contentMeta.topic, templateId: $scope.$parent.$parent.tempalteName ? $scope.$parent.$parent.tempalteName : 'metaform'});
+            ecEditor.dispatchEvent('editor:form:change', {key: 'topic', value: $scope.contentMeta.topic, templateId: $scope.templateId});
             $rootScope.$safeApply();
         }
         $scope.resetTopics = function(event, data){
