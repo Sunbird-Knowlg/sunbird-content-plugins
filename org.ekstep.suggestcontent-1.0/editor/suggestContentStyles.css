@@ -35,7 +35,7 @@
 .card-list .ui.items>.item>.content>.description, .suggestedbottom{
     font-size: 12px;
 }
-.ui.items>.item a{
+.ui.items>.item a.addResource{
     font-size: 12px;
     color: #0073ff;
     font-weight: bold;
