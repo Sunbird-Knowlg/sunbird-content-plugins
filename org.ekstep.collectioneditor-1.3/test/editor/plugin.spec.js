@@ -109,4 +109,19 @@ describe("collection editor plugin", function() {
         $scope.getSubCollection("do_1122032681006366721436");
         expect($scope.contentList.length).toBe(childernData.length);
     });
+    it('First time function call should add iframe source', function() {
+        var youtubeContent = JSON.parse('{"context":{"mode":"edit","contentId":"do_112416367927336960115","sid":"rctrs9r0748iidtuhh79ust993","uid":"390","channel":"in.ekstep","pdata":{"id":"in.ekstep","ver":"1.0","pid":"contenteditor"},"app":[],"dims":[],"partner":[]},"config":{"showEndpage":true},"metadata":{"code":"Test_QA","keywords":["QA_Content"],"methods":[],"description":"Test_QA","language":["English"],"mimeType":"video/x-youtube","createdOn":"2017-08-16T11:24:15.143+0000","collections":[],"children":[],"usesContent":[],"lastUpdatedOn":"2018-05-15T11:42:43.354+0000","artifactUrl":"https://www.youtube.com/watch?v=O5cOxUWlT58","contentType":"Story","item_sets":[],"identifier":"do_112311614710931456119","audience":["Learner"],"visibility":"Default","libraries":[],"mediaType":"content","osId":"org.ekstep.quiz.app","languageCode":"en","pkgVersion":3,"versionKey":"1526384563354","tags":["QA_Content"],"concepts":[],"name":"youtube-content","usedByContent":[],"status":"Live"},"data":{}}');
+        iframe.contentWindow.initializePreview(youtubeContent)
+        var iframe = document.getElementById('previewContentIframe');
+        expect(iframe.src).not.toBeUndefined();
+    });
+
+    it('Second time function call should not remove iframe src', function() {
+        var youtubeContent = JSON.parse('{"context":{"mode":"edit","contentId":"do_112416367927336960115","sid":"rctrs9r0748iidtuhh79ust993","uid":"390","channel":"in.ekstep","pdata":{"id":"in.ekstep","ver":"1.0","pid":"contenteditor"},"app":[],"dims":[],"partner":[]},"config":{"showEndpage":true},"metadata":{"code":"Test_QA","keywords":["QA_Content"],"methods":[],"description":"Test_QA","language":["English"],"mimeType":"video/x-youtube","createdOn":"2017-08-16T11:24:15.143+0000","collections":[],"children":[],"usesContent":[],"lastUpdatedOn":"2018-05-15T11:42:43.354+0000","artifactUrl":"https://www.youtube.com/watch?v=O5cOxUWlT58","contentType":"Story","item_sets":[],"identifier":"do_112311614710931456119","audience":["Learner"],"visibility":"Default","libraries":[],"mediaType":"content","osId":"org.ekstep.quiz.app","languageCode":"en","pkgVersion":3,"versionKey":"1526384563354","tags":["QA_Content"],"concepts":[],"name":"youtube-content","usedByContent":[],"status":"Live"},"data":{}}');
+        delete youtubeContent.context;
+        delete youtubeContent.config;
+        iframe.contentWindow.initializePreview(youtubeContent)
+        var iframe = document.getElementById('previewContentIframe');
+        expect(iframe.src).not.toBeUndefined();
+    });
 });

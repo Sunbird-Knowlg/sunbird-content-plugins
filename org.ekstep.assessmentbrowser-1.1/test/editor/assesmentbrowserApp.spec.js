@@ -130,7 +130,7 @@ describe("Ekstep Assesment Browser Plugin:", function() {
 
         it("Should generate telemetry event", function(done) {
             var data = { type: "select", subtype: "dropDown", target: "languageDropDown" };
-            var instance = { manifest: {id: "org.ekstep.assessmentbrowser", ver: "1.0"}};
+            var instance = { manifest: {id: "org.ekstep.assessmentbrowser", ver: "1.1"}};
             spyOn(ctrl, "generateTelemetry").and.callThrough();
             ctrl.generateTelemetry(data);
             expect(ecEditor.getService('telemetry').interact).toHaveBeenCalledWith({
