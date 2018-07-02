@@ -33,36 +33,10 @@
             "description": "Choose a  from the browser",
             "dataType": "browser",
             "required": true,
-            "onclick":{
+            "onclick": {
                 "id": "org.ekstep.assetbrowser:show",
                 "type": "image"
             }
-        },{
-            "propertyName": "clipimage",
-            "title": "Clipimage",
-            "placeholder": "ClipImage",
-            "description": "Clip the image",
-            "dataType": "clipimage",
-            "valueType": "number",
-            "required": true,
-            "onclick":{
-                "id": "org.ekstep.image:clipimage:create",
-                "type": "clipimage"
-            }
-        },
-        {
-            "propertyName": "doneclipimage",
-            "title": "DoneClipImage",
-            "placeholder": "DoneClipImage",
-            "description": "Done Clipping the image",
-            "dataType": "doneclipimage",
-            "valueType": "number",
-            "required": true,
-            "onclick":{
-                "id": "org.ekstep.image:doneclipimage:create",
-                "type": "doneclipimage"
-            }
-        }
-]
+        }]
     }
 }
