@@ -698,3 +698,7 @@ ul.fancytree-container>li>ul {
 tags-input .tags .tag-item {
     font-weight: normal !important;
 }
+
+.ui.two.buttons.table-of-contents-btn .text-transform-none a{
+    color: #007aff;
+}
