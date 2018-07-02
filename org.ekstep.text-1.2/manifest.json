@@ -27,6 +27,10 @@
             "type": "css",
             "src": "editor/style/plugin.css"
         }],
+        "views":[
+            {"template":"./delete_confirmation_dialog.html", "controller":""},
+            {"template": "./transliterationconfig.html", "controller": "./transliterationapp.js"}
+        ],
         "menu": [
         {
             "id": "org.ekstep.text",
