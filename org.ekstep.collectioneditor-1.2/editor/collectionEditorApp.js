@@ -4,7 +4,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     };
     $scope.contentId = ecEditor.getContext('contentId');
     $scope.metaPages = [];
-    $scope.sidebarPages = [];
     $scope.selectedObjectType = undefined;
     $scope.nodeFilter = "";
     $scope.expandNodeFlag = true;
@@ -263,9 +262,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             if (res && res.data && res.data.responseCode === "OK") {
                 res.data.result.content.keywords = $scope.parseKeywords(res.data.result.content.keywords);
                 org.ekstep.services.collectionService.fromCollection(res.data.result.content);
-                $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
                 $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
-                $scope.showsuggestedContent = $scope.sidebarPages.length > 0 ? true : false;
+                $scope.showsuggestedContent = res.data.result.content.contentType === 'TextBook' ? true : false;
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
                 $scope.$safeApply();
                 callback && callback(err, res);
