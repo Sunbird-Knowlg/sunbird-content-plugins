@@ -3,13 +3,11 @@ var TextWYSIWYG = (function() {
     fontMap = {
         'NotoSans': {offsetY: 0.04, lineHeight: 1},
         'NotoSansKannada': {offsetY: 0.24, lineHeight: 1},
-        'NotoNastaliqUrdu': {offsetY: -0.6, align: 'right', lineHeight: 2},
+        'NotoNastaliqUrdu': {offsetY: -0.65, align: 'right', lineHeight: 2},
         "default": {offsetY: 0.2, lineHeight: 1}
     };
     _constants = {
         textType: 'text', // We are only supporting 'text' type for WYSIWYG. 'htext' & 'wordInfo' is not available for WYSIWYG, htext & wordinfo render as html elemnent in content-renderer
-        createJsLineHeight: 1.3, // Previously editor is sending 1.3 as lineheight for all text
-        lineHeightMagicNumber: 1.13, // Fabricjs is using magic number 1.13 in their library
         lineHeight: 'lineHeight',
         align: 'align',
         offsetY: 'offsetY',
@@ -45,40 +43,6 @@ var TextWYSIWYG = (function() {
         }
     }
     /**
-     * This will set the lineheight of both old and new instance of text based on condition
-     * @param {object} textInstance - text instance.
-     * @returns {object} text instance
-     */
-    function toECML(prop) {
-        if (prop.textType === _constants.textType) {
-            // converting new text instance lineheight to createjs supported value
-            var config = JSON.parse(prop.config.__cdata);
-            prop.lineHeight = _constants.lineHeightMagicNumber * prop.lineHeight * config.fontsize;
-        } else {
-            // setting lineHeight config for wordinfo & readalong for createJs for backward compatibility;
-            prop.lineHeight = _constants.createJsLineHeight;
-        }
-        return prop;
-    }
-    /**
-     * This will set the alignment of text instance based on hashmap
-     * @param {object} textInstance - text instance.
-     * @returns {void}
-     */
-    function fromECML(textInstance) {
-        if (textInstance.attributes.textType === _constants.textType) {
-            var fontSize = textInstance.config.fontsize;
-            if (fontSize) {
-                // converting new text instance lineheight to fabricJs supported value
-                var lineHeight = textInstance.editorData.lineHeight/(_constants.lineHeightMagicNumber * fontSize);
-                textInstance.attributes.lineHeight = lineHeight;
-            }
-        } else {
-            // deleting lineHeight config for wordinfo & readalong for fabricJs as for backward compatibility it is using fabricjs default lineheight;
-            delete textInstance.attributes.lineHeight;
-        }
-    }
-    /**
      * This function will set all WYSIWYG values of new text element.
      * @param {object} textInstance - text instance.
      * @returns {void}
@@ -107,8 +71,6 @@ var TextWYSIWYG = (function() {
     }
     return {
         setInstance: setInstance,
-        toECML: toECML,
-        fromECML: fromECML,
         resetProperties: resetProperties
     };
 })();
