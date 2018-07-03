@@ -181,16 +181,6 @@
     padding-left: 10px;
 }
 
-.blueColor {
-    color: #007aff !important;
-    background-color: transparent !important;
-}
-
-.blueBackGround{
-    background-color: #007aff !important;
-    color: white !important;
-}
-
 .bodyContainer {
     height: 100%;
 }
@@ -405,7 +395,6 @@ cursor:pointer;
 }
 
 .footerElement button.proceed-btn{
-    background-color: #007aff !important;
     font-size: 14px !important;
     font-weight: 600;
     padding: 2% 5% 2% 5%;
