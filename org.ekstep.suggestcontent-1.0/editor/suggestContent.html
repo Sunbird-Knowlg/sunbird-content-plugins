@@ -1,11 +1,11 @@
 <div ng-app="suggestcontentApp" ng-controller="suggestcontentController">
     <div class="suggest-content-header">
         <div class="suggest-content-header-content suggest-content-header-text">
-            <a><i class="angle right icon"></i></a>
+            <a><i class="angle right icon blueColor"></i></a>
             <span class="suggest-content-header-title">Explore Suggestions</span>
-            <span ng-class="suggestedContentList.content.length ? 'color-blue' : 'disabled'" class="float-right">
+            <span ng-class="suggestedContentList.content.length ? 'blueColor' : 'disabled'" class="float-right">
                 <i ng-click="searchLessons(); generateTelemetry({type: 'click', subtype: 'RefreshContentButton', target: 'Refresh Content'})"
-                    ng-class="suggestedContentList.content.length ? 'color-blue' : 'disabled'" class="undo icon refresh-btn"></i>
+                    ng-class="suggestedContentList.content.length ? 'blueColor' : 'disabled'" class="undo icon refresh-btn"></i>
                 <span ng-click="openResourceBrowser();generateTelemetry({type: 'click', subtype: 'ViewAllButton', target: 'View All'})" class="padding-right-20 padding-left-8">View All</span>
             </span>
         </div>

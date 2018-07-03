@@ -43,3 +43,7 @@ body {
 .ngdialog.ngdialog-theme-default .ngdialog-content {
     padding: 0!important;
 }
+
+.blueColor, .blueColor:hover{
+  color: #007aff;
+}

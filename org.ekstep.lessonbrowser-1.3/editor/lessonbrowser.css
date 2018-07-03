@@ -183,7 +183,12 @@
 
 .blueColor {
     color: #007aff !important;
-    background-color: white !important;
+    background-color: transparent !important;
+}
+
+.blueBackGround{
+    background-color: #007aff !important;
+    color: white !important;
 }
 
 .bodyContainer {

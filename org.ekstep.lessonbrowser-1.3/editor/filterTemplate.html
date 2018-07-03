@@ -20,7 +20,7 @@
         <div class="item">
             <p class="padding-top-3px sidebarSectionHeader">
                 FILTERS</p>
-            <a class="ui right floated" ng-style="((filterSelection.language.length || filterSelection.grade.length || filterSelection.subject.length || filterSelection.concept.length) && {'cursor':'pointer'})  || ((!filterSelection.lessonType.length && !filterSelection.language.length && !filterSelection.grade.length && !filterSelection.subject.length && !filterSelection.concept.length) && {'cursor':'not-allowed'})" ng-click="(filterSelection.lessonType.length || filterSelection.language.length || filterSelection.grade.length || filterSelection.subject.length || filterSelection.concept.length) ? resetFilters() : 'null'">Clear All</a>
+            <a class="ui right floated blueColor" ng-style="((filterSelection.language.length || filterSelection.grade.length || filterSelection.subject.length || filterSelection.concept.length) && {'cursor':'pointer'})  || ((!filterSelection.lessonType.length && !filterSelection.language.length && !filterSelection.grade.length && !filterSelection.subject.length && !filterSelection.concept.length) && {'cursor':'not-allowed'})" ng-click="(filterSelection.lessonType.length || filterSelection.language.length || filterSelection.grade.length || filterSelection.subject.length || filterSelection.concept.length) ? resetFilters() : 'null'">Clear All</a>
         </div>
         <div class="filterMetaDetails">
             <div class="ui sub header paraHeading">
@@ -90,6 +90,6 @@
         </div>
     </div>
     <div class="filterApplyBtn">
-        <button id="apply-lesson-filter-button" class="ui small right floated button primary" ng-disabled="!filterSelection.lessonType.length && !filterSelection.language.length && !filterSelection.grade.length && !filterSelection.subject.length && !filterSelection.concept.length" ng-click="applyFilters()">Apply</button>
+        <button id="apply-lesson-filter-button" class="ui small right floated button primary blueBackGround" ng-disabled="!filterSelection.lessonType.length && !filterSelection.language.length && !filterSelection.grade.length && !filterSelection.subject.length && !filterSelection.concept.length" ng-click="applyFilters()">Apply</button>
     </div>
 </div>

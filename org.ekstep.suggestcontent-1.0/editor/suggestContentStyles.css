@@ -23,7 +23,7 @@
     font-weight: 400;
 }
 .color-blue {
-    color: #0073ff;
+    color: #007aff;
     cursor: pointer;
 }
 .refresh-btn {
@@ -37,7 +37,7 @@
 }
 .ui.items>.item a.addResource{
     font-size: 12px;
-    color: #0073ff;
+    color: #007aff;
     font-weight: bold;
 }
 .card-list .ui.items>.item>.content>.header.suggestedheader{

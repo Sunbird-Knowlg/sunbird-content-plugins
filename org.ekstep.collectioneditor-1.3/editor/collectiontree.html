@@ -19,8 +19,8 @@
             <div class="table-of-contents-fixed-btns" ng-show="{{mode == 'Edit'}}">
                 <div class="padding-top-none"> 
                     <div class="ui two buttons table-of-contents-btn">
-                        <button class="ui basic button text-transform-none" ng-click="addNodeType('sibling')" ng-disabled="isNewCollection"><a><i class="plus icon"></i>New Sibling</button>
-                        <button class="ui basic button text-transform-none" ng-click="addNodeType('child')"><a> <i class="level up icon clockwise rotated table-of-contents-child-icon "></i>New Child</a></button>  
+                        <button class="ui basic button text-transform-none" ng-click="addNodeType('sibling')" ng-disabled="isNewCollection"><a class="blueColor"><i class="plus icon"></i>New Sibling</button>
+                        <button class="ui basic button text-transform-none" ng-click="addNodeType('child')"><a class="blueColor"> <i class="level up icon clockwise rotated table-of-contents-child-icon "></i>New Child</a></button>  
                     </div>
                 </div>    
             </div>
@@ -43,8 +43,9 @@
                                     <div ng-if="!isContent && contentList.length<1" class="list-drag">
                                         <div class="dropzone-text">
                                         <!-- Drag and Drop Suggested Content here or <span class="blue-color">View Library</span> -->
-                                        <p>Add Resources here <span ng-show="showsuggestedContent && mode === 'Edit'">from Suggested Content or </span>by clicking on the 
-                                                Add Resource button</p><p ng-show="!isCollection &&  mode === 'Edit'"><a>You can also Add a resource by Ctrl + Alt + A</a></p>
+                                        <p ng-show="mode.toLowerCase() !== 'edit'">No Contents Available</p>
+                                        <p ng-show="mode.toLowerCase() === 'edit'">Add Resources here <span ng-show="showsuggestedContent">from Suggested Content or </span>by clicking on the 
+                                                Add Resource button</p><p ng-show="!isCollection && mode.toLowerCase() === 'edit'"><a class="blueColor">You can also Add a resource by Ctrl + Alt + A</a></p>
                                         </div>        
                                     </div>
                                     <div ui-sortable="sortableOptions" ng-model="contentList">
