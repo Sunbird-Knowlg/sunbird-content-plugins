@@ -12,6 +12,9 @@
             {"type": "js","src": "editor/libs/angular-inview.js"},
             {"type": "js", "src": "editor/camelize.js"}
         ],
+        "views":[
+            {"template":"./activityBrowser.html", "controller":"./activityBrowser.js"}
+        ],
         "menu": [{
             "id": "activitybrowser",
             "category": "main",

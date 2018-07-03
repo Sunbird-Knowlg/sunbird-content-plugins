@@ -12,6 +12,9 @@
             { "type": "plugin", "plugin": "org.ekstep.conceptselector", "ver": "1.1" },
             { "type": "js", "src": "editor/assessmentbrowser_util.js" },
             { "type": "js", "src": "editor/libs/xml2json.js" }
+        ],
+        "views":[
+            {"template": "./assessmentbrowser.html", "controller":"./assessmentbrowserapp.js"}
         ]
     }
 }

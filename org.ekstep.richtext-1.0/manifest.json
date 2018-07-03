@@ -12,6 +12,9 @@
         "dependencies": [
             { "type": "js", "src": "editor/libs/ckeditor.js" }
         ],
+        "views":[
+            {"template":"./richtexteditor.html", "controller":"./richtexteditorapp.js"}
+        ],
         "behaviour": {
             "rotatable": false
         },

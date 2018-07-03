@@ -14,7 +14,7 @@
             "dataType": "text"
         },
         "dependencies": [
-            {"type": "plugin", "plugin": "org.ekstep.assetbrowser", "ver": "1.2"}
+            { "type": "plugin", "plugin": "org.ekstep.assetbrowser", "ver": "1.2" }
         ],
         "menu": [{
             "id": "image",
@@ -36,7 +36,7 @@
             "description": "Choose a  from the browser",
             "dataType": "browser",
             "required": true,
-            "onclick":{
+            "onclick": {
                 "id": "org.ekstep.assetbrowser:show",
                 "type": "image"
             }

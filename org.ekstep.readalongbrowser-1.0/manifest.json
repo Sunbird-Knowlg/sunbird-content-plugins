@@ -18,6 +18,9 @@
             { "type": "js", "src": "editor/libs/jquery.jplayer.min.js" },
             { "type": "css", "src": "editor/css/jquery-ui.css" }
         ],
+        "views":[
+            {"template":"./readalongbrowser.html", "controller":"./readalongbrowserapp.js"}
+        ],
         "configManifest": [{
             "propertyName": "highlight",
             "title": "Highlight Color",

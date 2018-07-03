@@ -1,5 +1,3 @@
-'use strict';
-
 org.ekstep.contenteditor.basePlugin.extend({
     type: 'org.ekstep.telemetry',
     service: undefined,
