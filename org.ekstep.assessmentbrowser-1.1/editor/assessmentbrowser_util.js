@@ -1,4 +1,4 @@
-var assessmentBrowserUtil = (function() {
+window.assessmentBrowserUtil = (function() {
 
     function getQuestionPreviwContent(templateJson, itemJson) {
         try {

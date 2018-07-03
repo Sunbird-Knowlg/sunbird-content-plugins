@@ -559,3 +559,4 @@ function X2JS(config) {
     };
 
 }
+window.X2JS = X2JS;
