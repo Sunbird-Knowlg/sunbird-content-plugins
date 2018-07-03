@@ -33,6 +33,16 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     supportedFonts: ["NotoSans", "NotoSansBengali", "NotoSansDevanagari", "NotoSansGujarati", "NotoSansGurmukhi", "NotoSansKannada", "NotoSansMalayalam", "NotoSansOriya", "NotoSansTamil", "NotoSansTelugu", "NotoNastaliqUrdu"],
     /**
+     * Constants used in file
+     * @member {object} constants
+     * @memberof Text
+     */
+    constants : {
+        v2supportedText: 'text', // We are only supporting 'text' type for WYSIWYG. 'htext' & 'wordInfo' is not available for WYSIWYG, htext & wordinfo render as html elemnent in content-renderer
+        createJsLineHeight: 1.3, // Previously editor is sending 1.3 as lineheight for all text
+    },
+
+    /**
      * The events are registred which are used to add or remove fabric events and other custom events
      * @memberof Text
      */
@@ -160,13 +170,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         if (this.config.text == '') {
             textEditor.showEditor(this.id);
         }
-        // Assign WYSIWYG config to text V2 instance
-        if (this.isV2Plugin()) {
-            TextWYSIWYG.setInstance(this);
-            var canvas = ecEditor.getCanvas();
-            this.attributes.parentW = canvas.width;
-            this.attributes.parentH = canvas.height;
-        }
 
         if (!ecEditor._.isUndefined(this.attributes.timings) || this.attributes.textType === 'readalong') {
             if (ecEditor._.isUndefined(this.attributes.textType)) {
@@ -195,6 +198,11 @@ org.ekstep.contenteditor.basePlugin.extend({
             this.addWordinfoconfigManifest(this);
         } else {
             this.attributes.textType = "text";
+        }
+
+        // Assign WYSIWYG config to text V2 instance
+        if (this.isV2Plugin()) {
+            TextWYSIWYG.setInstance(this);
         }
     },
     /**
@@ -534,6 +542,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                     }
                     textObj.attributes.textType = "text";
                     ecEditor.dispatchEvent("config:show");
+                    if (this.isV2Plugin()) {
+                        TextWYSIWYG.setInstance(this);
+                    }
                     ecEditor.render();
                 }
             }],
@@ -613,15 +624,17 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     toECML: function() {
         var prop = this._super();
-        if (this.isV2Plugin()) {
-            prop = TextWYSIWYG.toECML(prop);
+        if (prop.textType !== this.constants.v2supportedText) {
+            // setting lineHeight config for wordinfo & readalong for createJs for backward compatibility;
+            prop.lineHeight = this.constants.createJsLineHeight;
         }
         return prop;
     },
     fromECML: function() {
         this._super(this.editorData);
-        if (this.isV2Plugin()) {
-            TextWYSIWYG.fromECML(this)
+        if (this.attributes.textType !== this.constants.v2supportedText) {
+            // deleting lineHeight config for wordinfo & readalong for fabricJs as for backward compatibility it is using fabricjs default lineheight;
+            delete this.attributes.lineHeight;
         }
     },
     /**
