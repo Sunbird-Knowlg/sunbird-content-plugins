@@ -525,7 +525,6 @@ switched to Github for the search after API changes
 .list-addResource {
     float: right;
     padding: 10px !important;
-    background-color: #0071ff !important;
     border-radius: 5px !important;
 }
 
@@ -697,8 +696,4 @@ ul.fancytree-container>li>ul {
 
 tags-input .tags .tag-item {
     font-weight: normal !important;
-}
-
-.ui.two.buttons.table-of-contents-btn .text-transform-none a, #content-list .dropzone-text a{
-    color: #007aff;
 }
