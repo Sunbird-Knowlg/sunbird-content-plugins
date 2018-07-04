@@ -13,7 +13,9 @@ var conceptModal;
                 closable: false,
                 allowMultiple: true,
                 onDeny: function(){
-                    config.onCancel();
+                    if(config.onCancel) {
+                        config.onCancel();
+                    }
                     return true;
                 }
         });
