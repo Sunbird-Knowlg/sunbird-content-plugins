@@ -146,6 +146,11 @@ org.ekstep.contenteditor.basePlugin.extend({
                                 picked: data.selectedConcepts,
                                 onSubmit: function(nodes) {
                                     data.callback(nodes);
+                                    data.selectedConcepts = _.map(nodes, 'id');
+                                    instance.generateTelemetry({type: 'click', subtype: 'submit', target: 'ConceptSelectorSubmit'});
+                                },
+                                onCancel: function(){
+                                    instance.initConceptBrowser(event, data);
                                 },
                                 nodeName:"conceptSelector_" + data.element,
                                 /**displayFormat: function(picked) { return "Concepts ("+picked.length+" selected)"; },**/
@@ -165,7 +170,11 @@ org.ekstep.contenteditor.basePlugin.extend({
                         picked: data.selectedConcepts,
                         onSubmit: function(nodes) {
                             data.callback(nodes);
+                            data.selectedConcepts = _.map(nodes, 'id');
                             instance.generateTelemetry({type: 'click', subtype: 'submit', target: 'ConceptSelectorSubmit'});
+                        },
+                        onCancel: function(){
+                            instance.initConceptBrowser(event, data);
                         },
                         nodeName:"conceptSelector_" + data.element,
                         /**displayFormat: function(picked) { return "Concepts ("+picked.length+" selected)"; },**/

@@ -286,7 +286,11 @@ org.ekstep.contenteditor.basePlugin.extend({
             picked: data.selectedTopics,
             onSubmit: function(nodes) {
                 data.callback(nodes);
+                data.selectedTopics = _.map(nodes, 'name');
                 instance.generateTelemetry({type: 'click', subtype: 'submit', target: 'TopicSelectorSubmit'});
+            },
+            onCancel: function(){
+                instance.showTopicBrowser(event, data);
             },
             nodeName:"topicSelector_" + data.element,
             minSearchQueryLength: 1
