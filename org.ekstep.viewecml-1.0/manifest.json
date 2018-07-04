@@ -12,6 +12,9 @@
             { "type": "css", "src": "editor/libs/prism/prism.css" },
             { "type": "js", "src": "editor/libs/prism/prism.js" }
         ],
+        "views":[
+            {"template":"./ECMLbrowser.html", "controller":""}
+        ],
         "menu": [{
         }]
     }

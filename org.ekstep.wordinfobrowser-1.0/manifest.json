@@ -15,6 +15,9 @@
         "dependencies": [
             {"type": "css", "src": "editor/plugin.css"}
         ],
+        "views":[
+            {"template":"./wordinfobrowser.html", "controller":"./wordinfobrowserapp.js"}
+        ],
         "configManifest": [{
             "propertyName": "color",
             "title": "Font color",

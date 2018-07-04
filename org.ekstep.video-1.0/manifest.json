@@ -20,6 +20,9 @@
                 "id": "org.ekstep.video:showpopup"
             }
         }],
+        "views":[
+            {"template":"./video.html", "controller":"./videoapp.js"}
+        ],
         "configManifest": [{
             "propertyName": "autoplay",
             "title": "Auto Play",

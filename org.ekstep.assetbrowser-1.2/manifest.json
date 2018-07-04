@@ -12,6 +12,9 @@
             {"type": "js", "src": "editor/recorder/wave/wavesurfer.min.js"},
             {"type": "js", "src": "editor/recorder/angular-audio-recorder.js"},
             {"type": "js","src": "editor/libs/angular-inview.js"}
+        ],
+        "views":[
+            {"template":"./assetBrowser.html", "controller":"./assetbrowserapp.js"}
         ]
     }
 }
