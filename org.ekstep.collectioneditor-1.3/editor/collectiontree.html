@@ -30,7 +30,7 @@
             <div class="ui grid no-margin" ng-show="!isNewCollection">
                 <div class="padded ui eight" ng-class="(showsuggestedContent && mode === 'Edit') ? 'wide column' : 'twelve wide column'" id="contents-pane">
                     <div class="content-manifest">
-                        <div class="sixteen wide column metacontent-holder metadata-form-container" ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" ng-include="page.templateURL"></div>
+                        <div class="sixteen wide column metacontent-holder metadata-form-container" ng-repeat="page in metaPages" ng-show="getObjectType(page.objectType) === selectedObjectType" data-attr="{{page.objectType[0]}}" ng-include="page.objectType[0] || page.templateURL"></div>
                     </div>
                     <div class="ui grid padded">
                         <div class="row">

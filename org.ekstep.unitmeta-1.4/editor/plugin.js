@@ -4,8 +4,9 @@ org.ekstep.collectioneditor.basePlugin.extend({
         var controllerPath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/unitmetaApp.js");                    
         org.ekstep.collectioneditor.api.registerMetaPage({
         	objectType: ["TextBookUnit"],
-        	templateURL: templatePath,
-        	controllerURL: controllerPath
+            templateURL: require('./unitmeta.html'),
+            controllerURL: require('./unitmetaApp'),
+            allowTemplateCache: true
         });
     }	
 });
