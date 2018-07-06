@@ -140,7 +140,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                         ecEditor.jQuery('.special.cards .image').dimmer({
                             on: 'hover'
                         });
-                    }, 500);
+                    }, 0);
                 }
                 return cb();
             });
