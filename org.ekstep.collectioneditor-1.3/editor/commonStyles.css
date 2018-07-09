@@ -43,3 +43,23 @@ body {
 .ngdialog.ngdialog-theme-default .ngdialog-content {
     padding: 0!important;
 }
+
+.blueColor, .blueColor:hover{
+  color: #007aff !important;
+}
+
+.cursorLink{
+  cursor: pointer;
+}
+
+.blueBackGround{
+  background-color: #007aff !important;
+}
+
+.whiteColor{
+  color: white !important;
+}
+
+.whiteBackGround{
+  background-color: white !important;
+}
