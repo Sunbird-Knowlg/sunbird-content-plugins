@@ -137,7 +137,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     $scope.$safeApply();
                     $timeout(function() {
                         ctrl.toggleContent(ctrl.res.content);
-                        ctrl.conceptSelector();
                         ecEditor.jQuery('.special.cards .image').dimmer({
                             on: 'hover'
                         });
