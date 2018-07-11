@@ -12,6 +12,9 @@
         	{ "plugin": "org.ekstep.conceptselector", "ver": "1.1", "type": "plugin" },
             { "type": "css", "src": "editor/libs/tokens.css" },
             { "type": "js", "src": "editor/libs/tokens.js" }  
+        ],
+        "views":[
+            {"template":"./courseunitmeta.html", "controller":"./courseunitmetaApp.js"}
         ]
     }
 }
