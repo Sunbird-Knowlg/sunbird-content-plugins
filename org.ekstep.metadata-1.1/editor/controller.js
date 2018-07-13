@@ -104,11 +104,15 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             var type = (object.field.inputType == 'select' || object.field.inputType == 'multiselect') ? 'change' : 'click'
             object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: {id: object.field.code, type:"field", ver:"" }}, $scope.manifest);
         };
-        if($scope.isSubmit) {
-            var validationStatus = $scope.isValidInputs(object);
-            !validationStatus && $scope.updateErrorMessage(object.form);
-            $scope.updateForm(object);
+        if(object.target) {
+            object.target = $(object.target).find('#content-meta-form').scope();
+        } else {
+            object.target = $('#content-meta-form').scope();
         }
+        var validationStatus = $scope.isValidInputs(object);
+        !validationStatus && $scope.updateErrorMessage(object);
+        $scope.updateForm(object);
+        
     }
 
     /**
@@ -256,8 +260,13 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             target: {id:'save',type:"button",ver:""}
         }, $scope.manifest);
         $scope.isSubmit = true;
+        if(object.target) {
+            object.target = $(object.target).find('#content-meta-form').scope();
+        } else {
+            object.target = $('#content-meta-form').scope();
+        }
         var validationStatus = $scope.isValidInputs(object);
-        !validationStatus && $scope.updateErrorMessage(object.form);
+        !validationStatus && $scope.updateErrorMessage(object);
         var successCB = function(err, res) {
                 if (res) {
                     // success toast message which is already handled by content editor function plugin
@@ -274,9 +283,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             }
             // TODO: Scope of metaform was not lossing  when state was changing
             // Need to check the below logic
-        var template = $('#content-meta-form');
         var form = {};
-        form.metaData = getUpdatedMetadata(template.scope().contentMeta, $scope.originalContentMeta, $scope.fields);
+        form.metaData = getUpdatedMetadata(object.target.contentMeta, $scope.originalContentMeta, $scope.fields);
         form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
         ecEditor.dispatchEvent('editor:form:success', {
             isValid: validationStatus,
@@ -289,9 +297,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * 
      * @description             - Which is used to show an error message to resepective field 
      */
-    $scope.updateErrorMessage = function(form) {
+    $scope.updateErrorMessage = function(formObj) {
+        var form = formObj.form;
         var errorKeys = undefined;
-        var scope =  $('#content-meta-form').scope();
+
+        var scope = formObj.target;
         scope.isSubmit = true;
         _.forEach(scope.fields, function(value, key) {
             if (form[value.code] && form[value.code].$invalid) {
@@ -431,7 +441,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     }
 
     $scope.isValidInputs = function(object) {
-        var scope = $('#content-meta-form').scope();
+        var scope = object.target;
         var isValid = true;
         var appIconConfig = _.filter(scope.fields, { 'code': 'appicon' })[0];
         var conceptSelector = _.filter(scope.fields, { 'code': 'concepts' })[0]
@@ -444,10 +454,16 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         return (object.form.$valid && isValid) ? true : false
     };
 
-    $scope.getScopeMeta = function(event, callback) {
-        var template = $('#content-meta-form');
-        var returnData = template.scope().contentMeta || {};
-        callback && callback(returnData);
+    $scope.getScopeMeta = function(event, object) {
+        
+        if(object.target) {
+            object.target = $(object.target).find('#content-meta-form').scope();
+        } else {
+            object.target = $('#content-meta-form').scope();
+        }
+        
+        var returnData = object.target.contentMeta || {};
+        object.callback && object.callback(returnData);
         return returnData;
     };
 
