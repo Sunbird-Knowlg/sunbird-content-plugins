@@ -109,8 +109,10 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         } else {
             object.target = $('#content-meta-form').scope();
         }
-        var validationStatus = $scope.isValidInputs(object);
-        !validationStatus && $scope.updateErrorMessage(object);
+        if(object.target.isSubmit){
+            var validationStatus = $scope.isValidInputs(object);
+            !validationStatus && $scope.updateErrorMessage(object);
+        }
         $scope.updateForm(object);
         
     }

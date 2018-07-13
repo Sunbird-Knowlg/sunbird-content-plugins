@@ -226,13 +226,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                             if (topic.id == id)
                                 topicData.push(topic);
                         });
-                        if (index === instance.topics.length - 1){ 
-                            if(topicData.length > 0){
-                                instance.topicData = topicData;
-                            }
-                            callback();
-                        }
                     });
+                    instance.topicData = topicData;
+                    callback();
                 }
             });
         }else{
@@ -247,28 +243,30 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         instance.terms = ecEditor._.uniq(instance.terms);
         ecEditor._.forEach(instance.terms, function(value, index) {
-            var category = {};
-            category.name = value;
-            category.value = data[value];
-            category.association = [];
-            var categoryTerms = _.find(instance.response, function(o){ return o.code === value;}).terms;
-            ecEditor._.forEach(categoryTerms, function(term, index) {
-                if(!ecEditor._.isUndefined(term.associations)){
-                    if(_.isArray(data[value]) && term.associations.length > 0){
-                        ecEditor._.forEach(data[value], function(select, index) {
-                            if(term.name == select && category.association.length > 0) {
-                                term.associations  = _.union(category.association[0], term.associations);
-                                category.association = term.associations;
-                            }else if(term.name == select){                                      
-                                category.association.push(term.associations);
-                            }
-                        });
-                    }else if(term.name == data[value] && term.associations.length > 0){
-                        category.association.push(term.associations);
+            if(data[value]){
+                var category = {};
+                category.name = value;
+                category.value = data[value];
+                category.association = [];
+                var categoryTerms = _.find(instance.response, function(o){ return o.code === value;}).terms;
+                ecEditor._.forEach(categoryTerms, function(term, index) {
+                    if(!ecEditor._.isUndefined(term.associations)){
+                        if(_.isArray(data[value]) && term.associations.length > 0){
+                            ecEditor._.forEach(data[value], function(select, index) {
+                                if(term.name == select && category.association.length > 0) {
+                                    term.associations  = _.union(category.association[0], term.associations);
+                                    category.association = term.associations;
+                                }else if(term.name == select){                                      
+                                    category.association.push(term.associations);
+                                }
+                            });
+                        }else if(term.name == data[value] && term.associations.length > 0){
+                            category.association.push(term.associations);
+                        }
                     }
-                }
-            });
-            instance.selectedFilters.push(category);
+                });
+                instance.selectedFilters.push(category);
+            }
         });
         callback();
     },
