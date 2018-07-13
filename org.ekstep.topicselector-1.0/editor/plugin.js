@@ -101,6 +101,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         ecEditor.dispatchEvent("editor:form:getconfig",function(configData){
             var formConfig = _.map(_.filter(configData.fields, _.matches({ 'depends': ['topic']})), 'code');
+            instance.terms = formConfig;
             callback(formConfig);
         });
     },
@@ -170,7 +171,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     instance.response = response.data.result.framework.categories;
                     ecEditor._.forEach(instance.response, function (value, key) {
                         if (value.code == "topic") instance.categories = value.terms;
-                        else instance.terms.push(value.code);
+                        //else instance.terms.push(value.code);
                     });
                 }
                 callback();
