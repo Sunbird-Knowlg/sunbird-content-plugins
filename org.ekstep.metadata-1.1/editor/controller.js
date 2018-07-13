@@ -288,22 +288,24 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @description             - Which is used to show an error message to resepective field 
      */
     $scope.updateErrorMessage = function(form) {
-         var errorKeys = undefined;
-        _.forEach($scope.fields, function(value, key) {
+        var errorKeys = undefined;
+        var scope =  $('#content-meta-form').scope();
+        scope.isSubmit = true;
+        _.forEach(scope.fields, function(value, key) {
             if (form[value.code] && form[value.code].$invalid) {
-                $scope.validation[value.code] = {}
+                scope.validation[value.code] = {}
                 switch (_.keys(form[value.code].$error)[0]) {
                     case 'pattern': // When input validation of type is regex
-                        $scope.validation[value.code]["errorMessage"] = value.validation.regex.message;
+                        scope.validation[value.code]["errorMessage"] = value.validation.regex.message;
                         break;
                     case 'required': // When input validation of type is required
-                        $scope.validation[value.code]["errorMessage"] = 'Please Input a value';
+                        scope.validation[value.code]["errorMessage"] = 'Please Input a value';
                         break;
                     case "maxlength": // When input validation of type is max
-                        $scope.validation[value.code]["errorMessage"] = value.validation.max.message;
+                        scope.validation[value.code]["errorMessage"] = value.validation.max.message;
                         break;
                     default:
-                        $scope.validation[value.code]["errorMessage"] = "Invalid Input";
+                        scope.validation[value.code]["errorMessage"] = "Invalid Input";
                 }
             }
         });
@@ -427,17 +429,17 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     }
 
     $scope.isValidInputs = function(object) {
-        var meta = $scope.getScopeMeta();
+        var scope = $('#content-meta-form').scope();
         var isValid = true;
-        var appIconConfig = _.filter($scope.fields, { 'code': 'appicon' })[0];
-        var conceptSelector = _.filter($scope.fields, { 'code': 'concepts' })[0]
-        if (appIconConfig && appIconConfig.visible && appIconConfig.required && !meta['appIcon']) {
+        var appIconConfig = _.filter(scope.fields, { 'code': 'appicon' })[0];
+        var conceptSelector = _.filter(scope.fields, { 'code': 'concepts' })[0]
+        if (appIconConfig && appIconConfig.visible && appIconConfig.required && !scope.contentMeta['appIcon']) {
             isValid = false;
         };
-        if (conceptSelector && conceptSelector.required && !_.size(meta['concepts'])) {
+        if (conceptSelector && conceptSelector.required && !_.size(scope.contentMeta['concepts'])) {
             isValid = false
         }
-        return (object.form.$valid && isValid) ? true : false;
+        return (object.form.$valid && isValid) ? true : false
     };
 
     $scope.getScopeMeta = function(event, callback) {
