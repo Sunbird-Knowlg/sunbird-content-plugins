@@ -34,7 +34,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.addEventListener("atpreview:show", this.initPreview, this);
         var div = document.createElement('div');
         div.classList.add("modal");
-        div.id="myModal";
+        div.id="atPreviewModal";
         div.innerHTML = '<div class="modal-content"><div class="main"><div class="child preview-bgimage"></div><div class="child preview-iframe"><iframe id="previewContentIframe" width=100% height=100%></iframe></div></div>';
         document.body.appendChild(div);
     },
@@ -105,7 +105,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
 
         if (data.parentElement) {
-            configuration.config.showEndPage = false;
+            configuration.config.showEndPage = configuration.config.showEndPage || false;
             previewContentIframe = ecEditor.jQuery(data.element)[0];
         } else {
             var imageUrl = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/images/editor-frame.png');
@@ -119,7 +119,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         } else {
             previewContentIframe.contentWindow.initializePreview(configuration);
         }
-        var modal = document.getElementById('myModal');
+        var modal = document.getElementById('atPreviewModal');
         var modalContent = document.getElementsByClassName('modal-content')[0];
         modal.style.display = "block";
         window.onclick = function(event) {
