@@ -34,7 +34,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.addEventListener("atpreview:show", this.initPreview, this);
         var div = document.createElement('div');
         div.classList.add("modal");
-        div.id="atPreviewModal";
+        div.id="contentPreview";
         div.innerHTML = '<div class="modal-content"><div class="main"><div class="child preview-bgimage"></div><div class="child preview-iframe"><iframe id="previewContentIframe" width=100% height=100%></iframe></div></div>';
         document.body.appendChild(div);
     },
@@ -119,7 +119,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         } else {
             previewContentIframe.contentWindow.initializePreview(configuration);
         }
-        var modal = document.getElementById('atPreviewModal');
+        var modal = document.getElementById('contentPreview');
         var modalContent = document.getElementsByClassName('modal-content')[0];
         modal.style.display = "block";
         window.onclick = function(event) {
