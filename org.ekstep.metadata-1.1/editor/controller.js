@@ -104,9 +104,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             var type = (object.field.inputType == 'select' || object.field.inputType == 'multiselect') ? 'change' : 'click'
             object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: {id: object.field.code, type:"field", ver:"" }}, $scope.manifest);
         };
-        var validationStatus = $scope.isValidInputs(object);
-        !validationStatus && $scope.updateErrorMessage(object.form);
-        $scope.updateForm(object);
+        if($scope.isSubmit) {
+            var validationStatus = $scope.isValidInputs(object);
+            !validationStatus && $scope.updateErrorMessage(object.form);
+            $scope.updateForm(object);
+        }
     }
 
     /**
