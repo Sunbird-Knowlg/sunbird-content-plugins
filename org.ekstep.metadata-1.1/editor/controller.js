@@ -78,13 +78,14 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     /**
      * @description     - It Initialize the dropdown with selected values
      */
-    $scope.initDropdown = function() {
+    $scope.initDropdown = function(object) {
         const DROPDOWN_INPUT_TYPES = ['select', 'multiSelect'];
         _.forEach($scope.fields, function(field) {
             if (_.includes(DROPDOWN_INPUT_TYPES, field.inputType)) {
                 if (field.depends && field.depends.length) {
                     $scope.getAssociations($scope.contentMeta[field.code], field.range, function(associations) {
-                        $scope.applyDependencyRules(field, associations, false);
+                        var target = (object && object.target) ?  object.target : undefined;
+                        $scope.applyDependencyRules(field, associations, false, target);
                     });
                 }
             }
@@ -125,7 +126,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.updateForm = function(object) {
         if (object.field && object.field.range) {
             $scope.getAssociations(object.value, object.field.range, function(associations) {
-                $scope.applyDependencyRules(object.field, associations, true);
+                $scope.applyDependencyRules(object.field, associations, true, '#'+object.target.tempalteName);
             });
         }
     };
@@ -173,11 +174,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @param {Boolean} resetSelected  - @default true Which defines while resolving the dependency dropdown
      *                                   Should reset the selected values of the field or not
      */
-    $scope.applyDependencyRules = function(field, associations, resetSelected) {
+    $scope.applyDependencyRules = function(field, associations, resetSelected, target) {
         //reset the depended field first
         // Update the depended field with associated value
         // Currently, supported only for the dropdown values
-        ecEditor.dispatchEvent("editor:field:association", {'field': field, 'resetSelected': resetSelected});
+        ecEditor.dispatchEvent("editor:field:association", {'field': field, 'resetSelected': resetSelected, 'target': target});
         var dependedValues, groupdFields;
         if (field.depends && field.depends.length) {
             _.forEach(field.depends, function(id) {

@@ -49,6 +49,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      * @memberof topicselector
      */
     isPopupInitialized: false,
+    template: undefined,
     /**
      * Registers events.
      * @memberof topicselector
@@ -100,6 +101,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     getFormConfig: function(callback) {
         var instance = this;
         ecEditor.dispatchEvent("editor:form:getconfig",function(configData){
+            instance.template = configData.template;
             var formConfig = _.map(_.filter(configData.fields, _.matches({ 'depends': ['topic']})), 'code');
             instance.terms = formConfig;
             callback(formConfig);
@@ -112,7 +114,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     getFormData: function(callback) {
         var instance = this;
         instance.getFormConfig(function(formConfig){
-            ecEditor.dispatchEvent("metadata:form:getdata", {callback: function(data){
+            ecEditor.dispatchEvent("metadata:form:getdata", {target: '#'+instance.template, callback: function(data){
                 var formData = _.pick(data, formConfig);
                 callback(formData);
             }});
@@ -192,7 +194,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 if (id == 'topic' && data.resetSelected){
                     instance.data.selectedTopics = [];
                     ecEditor.dispatchEvent('editor.topic.change', {key: 'topic', value: []});
-                    ecEditor.dispatchEvent("metadata:form:getdata", {callback: function(data){
+                    ecEditor.dispatchEvent("metadata:form:getdata", {target: data.target, callback: function(data){
                         instance.setAssociations(data, function(){
                             instance.setFiltersData(function(){
                                 instance.showTopicBrowser(event, instance.data);
