@@ -194,9 +194,16 @@ org.ekstep.contenteditor.basePlugin.extend({
                 if (id == 'topic' && data.resetSelected){
                     instance.data.selectedTopics = [];
                     ecEditor.dispatchEvent('editor.topic.change', {key: 'topic', value: []});
+                    var targetElement;
+                    if(data.target){
+                       targetElement = data.target.replace('#', '');
+                    }
                     ecEditor.dispatchEvent("metadata:form:getdata", {target: data.target, callback: function(data){
                         instance.setAssociations(data, function(){
                             instance.setFiltersData(function(){
+                                if(targetElement){
+                                    instance.data.element = targetElement +'-topic';
+                                }
                                 instance.showTopicBrowser(event, instance.data);
                             });
                         });
