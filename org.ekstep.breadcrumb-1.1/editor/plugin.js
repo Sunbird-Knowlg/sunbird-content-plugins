@@ -15,7 +15,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         var templatePath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/template.html");
         var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/breadcrumbApp.js");
         org.ekstep.collectioneditor.api.registerBreadcrumb({
-            objectType: ['breadCrumbID'],
             templateURL: templatePath,
             controllerURL: controllerPath,
         });
