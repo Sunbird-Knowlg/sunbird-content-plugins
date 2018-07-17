@@ -448,7 +448,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var isValid = true;
         var appIconConfig = _.filter(scope.fields, { 'code': 'appicon' })[0];
         var conceptSelector = _.filter(scope.fields, { 'code': 'concepts' })[0]
-        var topicSelector = _.filter($scope.fields, { 'code': 'topic' })[0];
+        var topicSelector = _.filter(scope.fields, { 'code': 'topic' })[0];
         if (appIconConfig && appIconConfig.visible && appIconConfig.required && !scope.contentMeta['appIcon']) {
             isValid = false;
         };
