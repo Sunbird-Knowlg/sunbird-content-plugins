@@ -455,7 +455,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         if (conceptSelector && conceptSelector.required && !_.size(scope.contentMeta['concepts'])) {
             isValid = false
         }
-        if (topicSelector && topicSelector.required && !_.size(meta['topic'])) {
+        if (topicSelector && topicSelector.required && !_.size(scope.contentMeta['topic'])) {
             isValid = false
         }
         return (object.form.$valid && isValid) ? true : false
