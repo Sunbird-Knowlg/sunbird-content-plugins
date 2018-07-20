@@ -6,6 +6,9 @@
     "publishedDate": "",
     "editor": {
     	"main": "editor/plugin.js",
-    	"dependencies": []
+        "dependencies": [],
+        "views":[
+            {"template":"./template.html", "controller":"./breadcrumbApp.js"}
+        ]
     }
 }

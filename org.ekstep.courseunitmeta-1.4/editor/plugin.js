@@ -5,7 +5,7 @@ org.ekstep.collectioneditor.basePlugin.extend({
         org.ekstep.collectioneditor.api.registerMetaPage({
         	objectType: ["CourseUnit"],
         	templateURL: templatePath,
-        	controllerURL: controllerPath
+            controllerURL: controllerPath
         });
     }	
 });

@@ -5,7 +5,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         org.ekstep.collectioneditor.api.registerMetaPage({
         	objectType: ["Story", "Game", "Collection", "Worksheet", "Resource"],
         	templateURL: templatePath,
-        	controllerURL: controllerPath
+            controllerURL: controllerPath
         });
     }	
 });

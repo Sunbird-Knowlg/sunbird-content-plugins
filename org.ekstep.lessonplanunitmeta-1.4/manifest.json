@@ -7,8 +7,9 @@
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",
-        "dependencies": [
-        	{ "plugin": "org.ekstep.assetbrowser", "ver": "1.2", "type": "plugin" }               
+    
+        "views":[
+            {"template":"./lessonplanunitmeta.html", "controller": "./lessonplanunitmetaApp.js"}
         ]
     }
 }
