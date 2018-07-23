@@ -78,13 +78,14 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     /**
      * @description     - It Initialize the dropdown with selected values
      */
-    $scope.initDropdown = function() {
+    $scope.initDropdown = function(object) {
         const DROPDOWN_INPUT_TYPES = ['select', 'multiSelect'];
         _.forEach($scope.fields, function(field) {
             if (_.includes(DROPDOWN_INPUT_TYPES, field.inputType)) {
                 if (field.depends && field.depends.length) {
                     $scope.getAssociations($scope.contentMeta[field.code], field.range, function(associations) {
-                        $scope.applyDependencyRules(field, associations, false);
+                        var target = (object && object.target) ?  object.target : undefined;
+                        $scope.applyDependencyRules(field, associations, false, target);
                     });
                 }
             }
@@ -104,9 +105,17 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             var type = (object.field.inputType == 'select' || object.field.inputType == 'multiselect') ? 'change' : 'click'
             object.field && logTelemetry({ type: type, subtype: object.field.inputType, target: {id: object.field.code, type:"field", ver:"" }}, $scope.manifest);
         };
-        var validationStatus = $scope.isValidInputs(object);
-        !validationStatus && $scope.updateErrorMessage(object.form);
+        if(object.target) {
+            object.target = $(object.target).find('#content-meta-form').scope();
+        } else {
+            object.target = $('#content-meta-form').scope();
+        }
+        if(object.target.isSubmit){
+            var validationStatus = $scope.isValidInputs(object);
+            !validationStatus && $scope.updateErrorMessage(object);
+        }
         $scope.updateForm(object);
+        
     }
 
     /**
@@ -117,7 +126,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.updateForm = function(object) {
         if (object.field && object.field.range) {
             $scope.getAssociations(object.value, object.field.range, function(associations) {
-                $scope.applyDependencyRules(object.field, associations, true);
+                $scope.applyDependencyRules(object.field, associations, true, '#'+object.target.tempalteName);
             });
         }
     };
@@ -165,11 +174,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * @param {Boolean} resetSelected  - @default true Which defines while resolving the dependency dropdown
      *                                   Should reset the selected values of the field or not
      */
-    $scope.applyDependencyRules = function(field, associations, resetSelected) {
+    $scope.applyDependencyRules = function(field, associations, resetSelected, target) {
         //reset the depended field first
         // Update the depended field with associated value
         // Currently, supported only for the dropdown values
-        ecEditor.dispatchEvent("editor:field:association", {'field': field, 'resetSelected': resetSelected});
+        ecEditor.dispatchEvent("editor:field:association", {'field': field, 'resetSelected': resetSelected, 'target': target});
         var dependedValues, groupdFields;
         if (field.depends && field.depends.length) {
             _.forEach(field.depends, function(id) {
@@ -254,8 +263,13 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             target: {id:'save',type:"button",ver:""}
         }, $scope.manifest);
         $scope.isSubmit = true;
+        if(object.target) {
+            object.target = $(object.target).find('#content-meta-form').scope();
+        } else {
+            object.target = $('#content-meta-form').scope();
+        }
         var validationStatus = $scope.isValidInputs(object);
-        !validationStatus && $scope.updateErrorMessage(object.form);
+        !validationStatus && $scope.updateErrorMessage(object);
         var successCB = function(err, res) {
                 if (res) {
                     // success toast message which is already handled by content editor function plugin
@@ -272,9 +286,8 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             }
             // TODO: Scope of metaform was not lossing  when state was changing
             // Need to check the below logic
-        var template = $('#content-meta-form');
         var form = {};
-        form.metaData = getUpdatedMetadata(template.scope().contentMeta, $scope.originalContentMeta, $scope.fields);
+        form.metaData = getUpdatedMetadata(object.target.contentMeta, $scope.originalContentMeta, $scope.fields);
         form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
         ecEditor.dispatchEvent('editor:form:success', {
             isValid: validationStatus,
@@ -287,23 +300,27 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
      * 
      * @description             - Which is used to show an error message to resepective field 
      */
-    $scope.updateErrorMessage = function(form) {
-         var errorKeys = undefined;
-        _.forEach($scope.fields, function(value, key) {
+    $scope.updateErrorMessage = function(formObj) {
+        var form = formObj.form;
+        var errorKeys = undefined;
+
+        var scope = formObj.target;
+        scope.isSubmit = true;
+        _.forEach(scope.fields, function(value, key) {
             if (form[value.code] && form[value.code].$invalid) {
-                $scope.validation[value.code] = {}
+                scope.validation[value.code] = {}
                 switch (_.keys(form[value.code].$error)[0]) {
                     case 'pattern': // When input validation of type is regex
-                        $scope.validation[value.code]["errorMessage"] = value.validation.regex.message;
+                        scope.validation[value.code]["errorMessage"] = value.validation.regex.message;
                         break;
                     case 'required': // When input validation of type is required
-                        $scope.validation[value.code]["errorMessage"] = 'Please Input a value';
+                        scope.validation[value.code]["errorMessage"] = 'Please Input a value';
                         break;
                     case "maxlength": // When input validation of type is max
-                        $scope.validation[value.code]["errorMessage"] = value.validation.max.message;
+                        scope.validation[value.code]["errorMessage"] = value.validation.max.message;
                         break;
                     default:
-                        $scope.validation[value.code]["errorMessage"] = "Invalid Input";
+                        scope.validation[value.code]["errorMessage"] = "Invalid Input";
                 }
             }
         });
@@ -427,23 +444,33 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     }
 
     $scope.isValidInputs = function(object) {
-        var meta = $scope.getScopeMeta();
+        var scope = object.target;
         var isValid = true;
-        var appIconConfig = _.filter($scope.fields, { 'code': 'appicon' })[0];
-        var conceptSelector = _.filter($scope.fields, { 'code': 'concepts' })[0]
-        if (appIconConfig && appIconConfig.visible && appIconConfig.required && !meta['appIcon']) {
+        var appIconConfig = _.filter(scope.fields, { 'code': 'appicon' })[0];
+        var conceptSelector = _.filter(scope.fields, { 'code': 'concepts' })[0]
+        var topicSelector = _.filter(scope.fields, { 'code': 'topic' })[0];
+        if (appIconConfig && appIconConfig.visible && appIconConfig.required && !scope.contentMeta['appIcon']) {
             isValid = false;
         };
-        if (conceptSelector && conceptSelector.required && !_.size(meta['concepts'])) {
+        if (conceptSelector && conceptSelector.required && !_.size(scope.contentMeta['concepts'])) {
             isValid = false
         }
-        return (object.form.$valid && isValid) ? true : false;
+        if (topicSelector && topicSelector.required && !_.size(scope.contentMeta['topic'])) {
+            isValid = false
+        }
+        return (object.form.$valid && isValid) ? true : false
     };
 
-    $scope.getScopeMeta = function(event, callback) {
-        var template = $('#content-meta-form');
-        var returnData = template.scope().contentMeta || {};
-        callback && callback(returnData);
+    $scope.getScopeMeta = function(event, object) {
+        
+        if(object.target) {
+            object.target = $(object.target).find('#content-meta-form').scope();
+        } else {
+            object.target = $('#content-meta-form').scope();
+        }
+        
+        var returnData = object.target.contentMeta || {};
+        object.callback && object.callback(returnData);
         return returnData;
     };
 

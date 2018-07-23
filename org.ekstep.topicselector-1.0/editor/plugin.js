@@ -49,6 +49,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      * @memberof topicselector
      */
     isPopupInitialized: false,
+    template: undefined,
     /**
      * Registers events.
      * @memberof topicselector
@@ -100,7 +101,9 @@ org.ekstep.contenteditor.basePlugin.extend({
     getFormConfig: function(callback) {
         var instance = this;
         ecEditor.dispatchEvent("editor:form:getconfig",function(configData){
+            instance.template = configData.template;
             var formConfig = _.map(_.filter(configData.fields, _.matches({ 'depends': ['topic']})), 'code');
+            instance.terms = formConfig;
             callback(formConfig);
         });
     },
@@ -111,10 +114,10 @@ org.ekstep.contenteditor.basePlugin.extend({
     getFormData: function(callback) {
         var instance = this;
         instance.getFormConfig(function(formConfig){
-            ecEditor.dispatchEvent("metadata:form:getdata", function(data){
+            ecEditor.dispatchEvent("metadata:form:getdata", {target: '#'+instance.template, callback: function(data){
                 var formData = _.pick(data, formConfig);
                 callback(formData);
-            });
+            }});
         });
     },
     /**
@@ -170,7 +173,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                     instance.response = response.data.result.framework.categories;
                     ecEditor._.forEach(instance.response, function (value, key) {
                         if (value.code == "topic") instance.categories = value.terms;
-                        else instance.terms.push(value.code);
+                        //else instance.terms.push(value.code);
                     });
                 }
                 callback();
@@ -191,13 +194,20 @@ org.ekstep.contenteditor.basePlugin.extend({
                 if (id == 'topic' && data.resetSelected){
                     instance.data.selectedTopics = [];
                     ecEditor.dispatchEvent('editor.topic.change', {key: 'topic', value: []});
-                    ecEditor.dispatchEvent("metadata:form:getdata", function(data){
+                    var targetElement;
+                    if(data.target){
+                       targetElement = data.target.replace('#', '');
+                    }
+                    ecEditor.dispatchEvent("metadata:form:getdata", {target: data.target, callback: function(data){
                         instance.setAssociations(data, function(){
                             instance.setFiltersData(function(){
+                                if(targetElement){
+                                    instance.data.element = targetElement +'-topic';
+                                }
                                 instance.showTopicBrowser(event, instance.data);
                             });
                         });
-                    });
+                    }});
                 }
             });
         }
@@ -226,13 +236,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                             if (topic.id == id)
                                 topicData.push(topic);
                         });
-                        if (index === instance.topics.length - 1){ 
-                            if(topicData.length > 0){
-                                instance.topicData = topicData;
-                            }
-                            callback();
-                        }
                     });
+                    instance.topicData = topicData;
+                    callback();
                 }
             });
         }else{
@@ -247,28 +253,30 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         instance.terms = ecEditor._.uniq(instance.terms);
         ecEditor._.forEach(instance.terms, function(value, index) {
-            var category = {};
-            category.name = value;
-            category.value = data[value];
-            category.association = [];
-            var categoryTerms = _.find(instance.response, function(o){ return o.code === value;}).terms;
-            ecEditor._.forEach(categoryTerms, function(term, index) {
-                if(!ecEditor._.isUndefined(term.associations)){
-                    if(_.isArray(data[value]) && term.associations.length > 0){
-                        ecEditor._.forEach(data[value], function(select, index) {
-                            if(term.name == select && category.association.length > 0) {
-                                term.associations  = _.union(category.association[0], term.associations);
-                                category.association = term.associations;
-                            }else if(term.name == select){                                      
-                                category.association.push(term.associations);
-                            }
-                        });
-                    }else if(term.name == data[value] && term.associations.length > 0){
-                        category.association.push(term.associations);
+            if(data[value]){
+                var category = {};
+                category.name = value;
+                category.value = data[value];
+                category.association = [];
+                var categoryTerms = _.find(instance.response, function(o){ return o.code === value;}).terms;
+                ecEditor._.forEach(categoryTerms, function(term, index) {
+                    if(!ecEditor._.isUndefined(term.associations)){
+                        if(_.isArray(data[value]) && term.associations.length > 0){
+                            ecEditor._.forEach(data[value], function(select, index) {
+                                if(term.name == select && category.association.length > 0) {
+                                    term.associations  = _.union(category.association[0], term.associations);
+                                    category.association = term.associations;
+                                }else if(term.name == select){                                      
+                                    category.association.push(term.associations);
+                                }
+                            });
+                        }else if(term.name == data[value] && term.associations.length > 0){
+                            category.association.push(term.associations);
+                        }
                     }
-                }
-            });
-            instance.selectedFilters.push(category);
+                });
+                instance.selectedFilters.push(category);
+            }
         });
         callback();
     },
