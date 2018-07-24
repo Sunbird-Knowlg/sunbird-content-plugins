@@ -39,7 +39,6 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     initialize: function() {
         var instance = this;
-        CKEDITOR.basePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/libs/");
         ecEditor.addEventListener(this.type + ":showpopup", this.loadHtml, this);
         ecEditor.addEventListener('stage:unselect', this.removeHtmlElements, this);
         ecEditor.addEventListener('stage:create', this.removeHtmlElements, this);
@@ -143,6 +142,11 @@ org.ekstep.contenteditor.basePlugin.extend({
         div.style.pointerEvents = "none";
         ecEditor.jQuery(".canvas-container #" + this.richTextId).append(div);
         ecEditor.jQuery(".canvas-container #" + this.richTextId + " div#" + instance.data.id).html(instance.data.config.text);
+        ecEditor.jQuery('.math-text').each(function (index, element) {
+          console.log(element);
+          var mathText = element.getAttribute('data-math');
+          katex.render(mathText, ecEditor.jQuery(element)[0], { displayMode: true });
+        });
         ecEditor.jQuery("#" + instance.data.id).offset({'top':instance.data.editorObj.top + canvasCord.top, 'left':Number(parseInt(ecEditor.jQuery(".canvas-container").css('margin-left'))) + (instance.data.editorObj.left + canvasCord.left)});
         var elemWidth = ecEditor.jQuery('#' + instance.data.id).width();
         var elemHeight = ecEditor.jQuery('#' + instance.data.id).height();

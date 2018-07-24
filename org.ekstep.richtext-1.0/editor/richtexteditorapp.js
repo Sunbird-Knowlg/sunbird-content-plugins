@@ -13,15 +13,15 @@ angular.module('richtexteditorapp', [])
                     ctrl.generateTelemetry({'type': 'click', 'subtype': data.subtype, 'target': data.target});
                 }
             });
-            ctrl.selectedText = false;
+            ctrl.currentSelectedText = false;
             CKEDITOR.replace( 'editor1', {
-                customConfig: CKEDITOR.basePath + "config.js",
+                customConfig: ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/ckeditor-config.js"),
                 skin: 'moono-lisa,'+CKEDITOR.basePath + "skins/moono-lisa/",
                 contentsCss: CKEDITOR.basePath + "contents.css",
             });
             var textObj = ecEditor.getCurrentObject();
             if(e.currentScope.ngDialogData && e.currentScope.ngDialogData.textSelected && textObj) {
-                ctrl.selectedText = true;
+                ctrl.currentSelectedText = true;
                 CKEDITOR.instances.editor1.setData(textObj.config.text);
             }
         });
@@ -33,17 +33,22 @@ angular.module('richtexteditorapp', [])
                         "target": data.target,
                         "pluginid": instance.manifest.id,
                         "pluginver": instance.manifest.ver,
-                        "objectid": ctrl.selectedText ? org.ekstep.contenteditor.api.getCurrentObject().id : "",
+                        "objectid": ctrl.currentSelectedText ? org.ekstep.contenteditor.api.getCurrentObject().id : "",
                         "stage": ecEditor.getCurrentStage().id
                 });
             }
         };
         ctrl.addText = function() {
             var textObj = ecEditor.getCurrentObject();
-            if(textObj && ctrl.selectedText){
+            if(textObj && ctrl.currentSelectedText){
                 textObj.config.text = CKEDITOR.instances.editor1.getData();
                 textObj.attributes.__text = textObj.config.text;
                 ecEditor.jQuery("#richtext-wrapper div#"+textObj.id).html(textObj.config.text);
+                ecEditor.jQuery('.math-text').each(function (index, element) {
+                    console.log(element);
+                    var mathText = element.getAttribute('data-math');
+                    katex.render(mathText, ecEditor.jQuery(element)[0], { displayMode: true });
+                });
             }else{
                 ecEditor.dispatchEvent('org.ekstep.richtext:create', {
                     "__text":  CKEDITOR.instances.editor1.getData(),

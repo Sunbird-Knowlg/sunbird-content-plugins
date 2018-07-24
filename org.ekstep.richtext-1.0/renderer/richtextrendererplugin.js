@@ -47,6 +47,11 @@ Plugin.extend({
         parentDiv.insertBefore(div, parentDiv.childNodes[0]);
 
         jQuery("#" + data.id).html(data.__text);
+        jQuery('.math-text').each(function (index, element) {
+            var mathText = element.getAttribute('data-math');
+            katex.render(mathText, jQuery(element)[0], { displayMode: true });
+        });
+
         this._div = div;
         this._self = new createjs.DOMElement(div);
         this._self.x = dims.x;

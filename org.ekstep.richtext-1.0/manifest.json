@@ -10,7 +10,11 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-            { "type": "js", "src": "editor/libs/ckeditor.js" }
+            {
+                "type": "plugin",
+                "plugin": "org.ekstep.libs.ckeditor",
+                "ver": "1.0"
+            }
         ],
         "views":[
             {"template":"./richtexteditor.html", "controller":"./richtexteditorapp.js"}
@@ -25,6 +29,60 @@
         }
     },
     "renderer": {
-        "main": "renderer/richtextrendererplugin.js"
+        "main": "renderer/richtextrendererplugin.js",
+        "dependencies": [
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/katex.min.js"
+            },
+            {
+                "type": "css",
+                "src": "renderer/libs/katex/katex.min.css"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_main-bold.ttf"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_main-bolditalic.ttf"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_main-italic.ttf"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_main-regular.ttf"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_math-bolditalic.ttf"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_math-italic.ttf"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_math-regular.ttf"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_size1-regular.ttf"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_size2-regular.ttf"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_size3-regular.ttf"
+            },
+            {
+                "type": "js",
+                "src": "renderer/libs/katex/fonts/katex_size4-regular.ttf"
+            }
+        ]
     }
 }
