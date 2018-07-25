@@ -1,4 +1,4 @@
-var TextWYSIWYG = (function() {
+ window.TextWYSIWYG = (function() {
     // Hashmap for text wysiwyg for fabricjs & createjs
     fontMap = {
         'NotoSans': {offsetY: 0.04, lineHeight: 1},
