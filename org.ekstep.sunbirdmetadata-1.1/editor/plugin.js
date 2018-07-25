@@ -322,7 +322,7 @@ org.ekstep.contenteditor.metadataPlugin.extend({
     },
 
     returnConfigs: function(event, callbackFn) {
-        callbackFn({ model: this.getModel(), template: this.config.templateName || this.DEFAULT_TEMPLATE_NAME, fields: this.form, editMode: this.editMode })
+        callbackFn({ model: this.getModel(), template: this.config.templateName || this.DEFAULT_TEMPLATE_NAME, fields: this.form, editMode: this.editMode, messages: this.config.messages })
     }
 })
 
