@@ -417,7 +417,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         !EventBus.hasEventListener('metadata:form:getdata') && ecEditor.addEventListener('metadata:form:getdata', $scope.getScopeMeta, $scope);
         var callbackFn = function(config) {
             $scope.fields = config.fields;
-            $scope.messages = config.messages;
+            $scope.messages = config.messages || {};
             $scope.tempalteName = config.template;
             if (_.isUndefined(config.editMode)) {
                 config.editMode = true
