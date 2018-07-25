@@ -324,6 +324,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 }
             }
         });
+        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+            message: 'Please provide all required details.',
+            position: 'topCenter',
+            icon: 'fa fa-warning'
+        });
     }
 
     /** 
