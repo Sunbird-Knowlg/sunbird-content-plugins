@@ -16,6 +16,9 @@ angular.module('org.ekstep.uploadcontent-1.2', []).controller('uploadController'
             request: {
                 endpoint: '/server/uploads'
             },
+            cors:{
+                expected: true
+            },
             autoUpload: false,
             multiple: false,
             validation: {
