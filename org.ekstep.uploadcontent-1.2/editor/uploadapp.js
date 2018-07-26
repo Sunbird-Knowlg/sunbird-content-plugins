@@ -16,9 +16,6 @@ angular.module('org.ekstep.uploadcontent-1.2', []).controller('uploadController'
             request: {
                 endpoint: '/server/uploads'
             },
-            cors:{
-                expected: true
-            },
             autoUpload: false,
             multiple: false,
             validation: {
@@ -287,8 +284,11 @@ angular.module('org.ekstep.uploadcontent-1.2', []).controller('uploadController'
                 var config = {
                     processData: false,
                     contentType: contentType,
-                    'x-ms-blob-type': 'BlockBlob'
+                    headers: {
+                        'x-ms-blob-type': 'BlockBlob'
+                    }
                 }
+
                 $scope.contentService.uploadDataToSignedURL(signedURL, $scope.uploader.getFile(0), config, function(err, res) {
                     if (err) {
                         $scope.showLoader(false);
