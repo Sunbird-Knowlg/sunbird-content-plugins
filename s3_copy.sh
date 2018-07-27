@@ -1,6 +1,5 @@
 #!/bin/bash
-declare -a coreplugins=("org.ekstep.activitybrowser-1.1"
-                "org.ekstep.activitybrowser-1.2"
+declare -a coreplugins=("org.ekstep.activitybrowser-1.3"
                 "org.ekstep.assessmentbrowser-1.1"
                 "org.ekstep.collaborator-1.1"
                 "org.ekstep.colorpicker-1.0"
