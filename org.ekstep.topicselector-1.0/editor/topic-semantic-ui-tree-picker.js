@@ -106,13 +106,6 @@ var topicModal;
                 }
             });
 
-            $('.actions .close', modal).on('click', function(e) {
-                modal.modal('hide');
-                if (config.onCancel) {
-                    config.onCancel();
-                }
-            });
-
             actionButtons.pickSearch.on('click', function(e) {
                 return $('.topic-search-tab .node:not(.picked) .name', modal).trigger('click');
             });
