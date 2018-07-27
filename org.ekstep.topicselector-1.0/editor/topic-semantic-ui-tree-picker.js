@@ -8,12 +8,12 @@ var topicModal;
         nodes = [];
         tabs = {};
         $("#" + options.nodeName).length == 0 ? '' : $("#" + options.nodeName).remove();
-        modal = $("<div id="+ options.nodeName +" class=\"ui tree-picker small modal\">\n  <div class=\"header\">\n    " + options.name + "\n\n    <div class=\"ui menu\">\n      <a class=\"active tree item\">\n        <i class=\"list icon\"></i> Topics\n      </a>\n      <a class=\"picked item\">\n        <i class=\"checkmark icon\"></i> Selected Topics <span class=\"count\"></span>\n      </a>\n    </div>\n  </div>\n  <div class=\"ui search form\">\n    <div class=\"field\">\n      <div class=\"ui icon input\">\n        <input type=\"text\" placeholder=\"Search\">\n        <i class=\"search icon\"></i>\n      </div>\n    </div>\n  </div>\n  <div class=\"content\">\n <div class=\"ui warning hidden message\"><i class=\"close icon\"></i><div class=\"header\">No topic/subtopic is available with provided Board, Grade, and Subject combinations.</div>Please verify the provided values for Board, Grade, and Subject</div><div class=\"ui active inverted dimmer\"><div class=\"ui text loader\">Loading data</div></div>\n    <div class=\"topic-tree-tab\">\n      <div style=\"height: 300px\"></div>\n    </div>\n\n    <div class=\"topic-search-tab\">\n    </div>\n\n    <div class=\"topic-picked-tab\">\n    </div>\n  </div>\n  <div class=\"actions\">\n    <a class=\"pick-search\"><i class=\"checkmark icon\"></i> Choose All</a>\n    <a class=\"unpick-search\"><i class=\"remove icon\"></i> Remove All</a>\n    <a class=\"unpick-picked\"><i class=\"remove icon\"></i> Remove All</a>\n    \n    <a class=\"ui button close cancel\">Cancel</a>\n<a class=\"ui blue button accept\">Done</a>\n  </div>\n</div>").modal({
+        modal = $("<div id=" + options.nodeName + " class=\"ui tree-picker small modal\">\n  <div class=\"header\">\n    " + options.name + "\n\n    <div class=\"ui menu\">\n      <a class=\"active tree item\">\n        <i class=\"list icon\"></i> Topics\n      </a>\n      <a class=\"picked item\">\n        <i class=\"checkmark icon\"></i> Selected Topics <span class=\"count\"></span>\n      </a>\n    </div>\n  </div>\n  <div class=\"ui search form\">\n    <div class=\"field\">\n      <div class=\"ui icon input\">\n        <input type=\"text\" placeholder=\"Search\">\n        <i class=\"search icon\"></i>\n      </div>\n    </div>\n  </div>\n  <div class=\"content\">\n <div class=\"ui warning hidden message\"><i class=\"close icon\"></i><div class=\"header\">No topic/subtopic is available with provided Board, Grade, and Subject combinations.</div>Please verify the provided values for Board, Grade, and Subject</div><div class=\"ui active inverted dimmer\"><div class=\"ui text loader\">Loading data</div></div>\n    <div class=\"topic-tree-tab\">\n      <div style=\"height: 300px\"></div>\n    </div>\n\n    <div class=\"topic-search-tab\">\n    </div>\n\n    <div class=\"topic-picked-tab\">\n    </div>\n  </div>\n  <div class=\"actions\">\n    <a class=\"pick-search\"><i class=\"checkmark icon\"></i> Choose All</a>\n    <a class=\"unpick-search\"><i class=\"remove icon\"></i> Remove All</a>\n    <a class=\"unpick-picked\"><i class=\"remove icon\"></i> Remove All</a>\n    \n    <a class=\"ui button close cancel\">Cancel</a>\n<a class=\"ui blue button accept\">Done</a>\n  </div>\n</div>").modal({
             duration: 200,
             allowMultiple: true,
             closable: false,
-            onDeny: function(){
-                if(config.onCancel) {
+            onDeny: function() {
+                if (config.onCancel) {
                     config.onCancel();
                 }
                 return true;
@@ -35,7 +35,7 @@ var topicModal;
             childrenKey: 'nodes',
             singlePick: false,
             minSearchQueryLength: 3,
-            apiResponseTimeout:1000,
+            apiResponseTimeout: 1000,
             hidden: function(node) {
                 return false;
             },
@@ -79,12 +79,12 @@ var topicModal;
                             $(".ui.tree-picker.small.modal .field").removeClass("disabled");
                             return initializeNodes(nodes);
                         });
-                    }else{
-                        setTimeout(function(){
+                    } else {
+                        setTimeout(function() {
                             $('.ui.active.dimmer', modal).removeClass('active');
                             $(".ui.tree-picker.small.modal .field").addClass("disabled");
                             $(".ui.tree-picker.modal .ui.warning.message").removeClass("hidden");
-                        },config.apiResponseTimeout);
+                        }, config.apiResponseTimeout);
                     }
                 } else {
                     $('.ui.active.dimmer', modal).removeClass('active');
@@ -99,6 +99,20 @@ var topicModal;
                 }
                 return widget.html(config.displayFormat(picked));
             });
+            $('.actions .close', modal).on('click', function(e) {
+                modal.modal('hide');
+                if (config.onCancel) {
+                    config.onCancel();
+                }
+            });
+
+            $('.actions .close', modal).on('click', function(e) {
+                modal.modal('hide');
+                if (config.onCancel) {
+                    config.onCancel();
+                }
+            });
+
             actionButtons.pickSearch.on('click', function(e) {
                 return $('.topic-search-tab .node:not(.picked) .name', modal).trigger('click');
             });
@@ -185,7 +199,7 @@ var topicModal;
                     return node.name && node.name.toLowerCase().indexOf(query.toLowerCase()) > -1;
                 });
                 ecEditor._.forEach(foundNodes, function(value) {
-                    if(value.selectable === 'selectable'){
+                    if (value.selectable === 'selectable') {
                         formatedNodes.push(value);
                     }
                 });
@@ -268,24 +282,24 @@ var topicModal;
         };
         initializeNodeList = function(tree) {
             return $('.node', tree).each(function() {
-            var content, head, node;
-            node = $(this);
-            head = $('>.head', node);
-            content = $('>.content', node);
-            $('>.name', head).on('click', function(e) {
-              return nodeClicked(node);
+                var content, head, node;
+                node = $(this);
+                head = $('>.head', node);
+                content = $('>.content', node);
+                $('>.name', head).on('click', function(e) {
+                    return nodeClicked(node);
+                });
+                if (nodeIsPicked(node)) {
+                    node.addClass('picked');
+                }
+                if (!node.hasClass('childless')) {
+                    $('>.icon', head).on('click', function(e) {
+                        node.toggleClass('opened');
+                        return content.slideToggle();
+                    });
+                }
+                return updatePickedIds();
             });
-            if (nodeIsPicked(node)) {
-              node.addClass('picked');
-            }
-            if (!node.hasClass('childless')) {
-              $('>.icon', head).on('click', function(e) {
-                node.toggleClass('opened');
-                return content.slideToggle();
-              });
-            }
-            return updatePickedIds();
-          });
         };
 
         nodeClicked = function(node) {
