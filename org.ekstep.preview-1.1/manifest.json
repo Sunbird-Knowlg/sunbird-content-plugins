@@ -8,8 +8,8 @@
     "editor": {
         "main": "editor/plugin.js",
         "menu": [],
-        "views":[
-            {"template":"./popup.html", "controller":""}
+        "dependencies": [
+            { "type": "css", "src": "editor/style.css" }
         ]
 
     }
