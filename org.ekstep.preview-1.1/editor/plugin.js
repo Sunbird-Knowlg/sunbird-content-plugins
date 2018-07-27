@@ -32,11 +32,8 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     initialize: function () {
         ecEditor.addEventListener("atpreview:show", this.initPreview, this);
-        var div = document.createElement('div');
-        div.classList.add("modal");
-        div.id="contentPreview";
-        div.innerHTML = '<div class="modal-content"><div class="main"><div class="child preview-bgimage"></div><div class="child preview-iframe"><iframe id="previewContentIframe" width=100% height=100%></iframe></div></div>';
-        document.body.appendChild(div);
+        var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/popup.html");
+        ecEditor.getService('popup').loadNgModules(templatePath);
     },
     /**
      *
@@ -63,69 +60,98 @@ org.ekstep.contenteditor.basePlugin.extend({
         }
         this.showPreview(data);
     },
-    getConfiguration: function() {
-        var userData = {};
-        var configuration = {};
+    /**
+     *   @memberof preview
+     */
+    showPreview: function (data) {
+        var instance = this, itemIframe = null;
+        var contentService = ecEditor.getService('content');
         var defaultPreviewConfig = {
             "repos": ecEditor.getConfig('pluginRepo'),   // plugins repo path where all the plugins are pushed s3 or absolute folder path
             showEndpage: true
         };
         var meta = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId'));
-        userData.etags = ecEditor.getContext('etags') || [];
-        configuration.context = {
-            'mode': 'edit',
-            'contentId': ecEditor.getContext('contentId'),
-            'sid': ecEditor.getContext('sid'),
-            'uid': ecEditor.getContext('uid'),
-            'channel': ecEditor.getContext('channel') || "in.ekstep",
-            'pdata': ecEditor.getContext('pdata') || {
-                id: "in.ekstep",
-                pid: "",
-                ver: "1.0"
-            },
-            'app': userData.etags.app || [],
-            'dims': userData.etags.dims || [],
-            'partner': userData.etags.partner || []
+        var modalController = function ($scope) {
+            $scope.$on('ngDialog.opened', function () {
+                var imageUrl = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/images/editor-frame.png');
+                ecEditor.jQuery('.preview-bgimage').css('background', 'url(' + imageUrl + ')');
+                var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
+                previewContentIframe.src = instance.previewURL;
+                var userData = {};
+                previewContentIframe.onload = function () {
+                    var configuration = {};
+                    userData.etags = ecEditor.getContext('etags') || [];
+                    configuration.context = {
+                        'mode': 'edit',
+                        'contentId': ecEditor.getContext('contentId'),
+                        'sid': ecEditor.getContext('sid'),
+                        'uid': ecEditor.getContext('uid'),
+                        'channel': ecEditor.getContext('channel') || "in.ekstep",
+                        'pdata': ecEditor.getContext('pdata') || {
+                            id: "in.ekstep",
+                            pid: "",
+                            ver: "1.0"
+                        },
+                        'app': userData.etags.app || [],
+                        'dims': userData.etags.dims || [],
+                        'partner': userData.etags.partner || []
+                    };
+                    if (ecEditor.getConfig('previewConfig')) {
+                        configuration.config = ecEditor.getConfig('previewConfig');
+                    } else {
+                        configuration.config = defaultPreviewConfig;
+                    }
+                    configuration.metadata = meta;
+                    configuration.data = (meta.mimeType == 'application/vnd.ekstep.ecml-archive') ? instance.contentBody : {};
+                    previewContentIframe.contentWindow.initializePreview(configuration);
+                };
+            });
         };
-        if (ecEditor.getConfig('previewConfig')) {
-            configuration.config = ecEditor.getConfig('previewConfig');
-        } else {
-            configuration.config = defaultPreviewConfig;
-        }
-        configuration.metadata = meta;
-        configuration.data = (meta.mimeType == 'application/vnd.ekstep.ecml-archive') ? this.contentBody : {};
-        return configuration;
-    },
-    /**
-     *   @memberof preview
-     */
-    showPreview: function (data) {
-        var instance = this;
-        var configuration = instance.getConfiguration();
-        var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
-
         if (data.parentElement) {
-            configuration.config.showEndPage = configuration.config.showEndPage || false;
-            previewContentIframe = ecEditor.jQuery(data.element)[0];
-        } else {
-            var imageUrl = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/images/editor-frame.png');
-            ecEditor.jQuery('.preview-bgimage').css('background', 'url(' + imageUrl + ')');
-        }
-        if (ecEditor._.isEmpty(previewContentIframe.src)) {
-            previewContentIframe.src = instance.previewURL;
-            previewContentIframe.onload = function () {
-                previewContentIframe.contentWindow.initializePreview(configuration);
+            var config = _.extend(defaultPreviewConfig, {
+                "showStartPage": false,
+                "showEndPage": false
+            });
+            itemIframe = ecEditor.jQuery(data.element)[0];
+            if (itemIframe.src == "") {
+                itemIframe.src = instance.previewURL;
+            }
+            itemIframe.onload = function () {
+                var userData = {};
+                var configuration = {};
+                userData.etags = ecEditor.getContext('etags') || [];
+                configuration.context = {
+                    'mode': 'edit',
+                    'contentId': ecEditor.getContext('contentId'),
+                    'sid': ecEditor.getContext('sid'),
+                    'uid': ecEditor.getContext('uid'),
+                    'channel': ecEditor.getContext('channel') || "in.ekstep",
+                    'pdata': ecEditor.getContext('pdata') || {
+                        id: "in.ekstep",
+                        pid: "",
+                        ver: "1.0"
+                    },
+                    'app': userData.etags.app || [],
+                    'dims': userData.etags.dims || [],
+                    'partner': userData.etags.partner || []
+                };
+                if (ecEditor.getConfig('previewConfig')) {
+                    configuration.config = ecEditor.getConfig('previewConfig');
+                } else {
+                    configuration.config = config;
+                }
+                configuration.metadata = meta;
+                configuration.data = (meta.mimeType == 'application/vnd.ekstep.ecml-archive') ? instance.contentBody : {};
+                itemIframe.contentWindow.initializePreview(configuration);
             }
         } else {
-            previewContentIframe.contentWindow.initializePreview(configuration);
-        }
-        var modal = document.getElementById('contentPreview');
-        var modalContent = document.getElementsByClassName('modal-content')[0];
-        modal.style.display = "block";
-        window.onclick = function(event) {
-            if (event.target == modalContent) {
-                modal.style.display = "none";
-            }
+            ecEditor.getService('popup').open({
+                template: 'partials_org.ekstep.preview.html',
+                controller: ['$scope', modalController],
+                showClose: false,
+                width: 710,
+                className: 'ngdialog-theme-plain preview-window'
+            });
         }
 
     }
