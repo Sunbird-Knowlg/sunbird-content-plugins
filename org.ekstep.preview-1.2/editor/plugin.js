@@ -30,12 +30,12 @@ org.ekstep.contenteditor.basePlugin.extend({
      *   @memberof preview
      *
      */
-    initialize: function () {
+    initialize: function() {
         ecEditor.addEventListener("atpreview:show", this.initPreview, this);
         var div = document.createElement('div');
-        div.classList.add("modal");
-        div.id="contentPreview";
-        div.innerHTML = '<div class="modal-content"><div class="main"><div class="child preview-bgimage"></div><div class="child preview-iframe"><iframe id="previewContentIframe" width=100% height=100%></iframe></div></div>';
+        div.classList.add("preview-modal");
+        div.id = "contentPreview";
+        div.innerHTML = '<div class="preview-modal-content"><div class="main"><div class="child preview-bgimage"></div><div class="child preview-iframe"><iframe id="previewContentIframe" width=100% height=100%></iframe></div></div>';
         document.body.appendChild(div);
     },
     /**
@@ -44,14 +44,14 @@ org.ekstep.contenteditor.basePlugin.extend({
      *   @param data {Object} ecml
      *   @memberof preview
      */
-    initPreview: function (event, data) {
+    initPreview: function(event, data) {
         this.contentBody = data.contentBody;
         if (data.currentStage) {
             this.contentBody.theme.startStage = ecEditor.getCurrentStage().id;
         }
         var scope = ecEditor.getAngularScope();
         if (scope.developerMode) {
-            if (!this.contentBody.theme['plugin-manifest']) this.contentBody.theme['plugin-manifest'] = {"plugin": []};
+            if (!this.contentBody.theme['plugin-manifest']) this.contentBody.theme['plugin-manifest'] = { "plugin": [] };
             if (!_.isArray(this.contentBody.theme['plugin-manifest'].plugin)) this.contentBody.theme['plugin-manifest'].plugin = [this.contentBody.theme['plugin-manifest'].plugin];
             this.contentBody.theme['plugin-manifest'].plugin.splice(0, 0, {
                 "id": "org.ekstep.developer",
@@ -67,7 +67,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var userData = {};
         var configuration = {};
         var defaultPreviewConfig = {
-            "repos": ecEditor.getConfig('pluginRepo'),   // plugins repo path where all the plugins are pushed s3 or absolute folder path
+            "repos": ecEditor.getConfig('pluginRepo'), // plugins repo path where all the plugins are pushed s3 or absolute folder path
             showEndpage: true
         };
         var meta = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId'));
@@ -99,7 +99,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     /**
      *   @memberof preview
      */
-    showPreview: function (data) {
+    showPreview: function(data) {
         var instance = this;
         var configuration = instance.getConfiguration();
         var previewContentIframe = ecEditor.jQuery('#previewContentIframe')[0];
@@ -113,14 +113,14 @@ org.ekstep.contenteditor.basePlugin.extend({
         }
         if (ecEditor._.isEmpty(previewContentIframe.src)) {
             previewContentIframe.src = instance.previewURL;
-            previewContentIframe.onload = function () {
+            previewContentIframe.onload = function() {
                 previewContentIframe.contentWindow.initializePreview(configuration);
             }
         } else {
             previewContentIframe.contentWindow.initializePreview(configuration);
         }
         var modal = document.getElementById('contentPreview');
-        var modalContent = document.getElementsByClassName('modal-content')[0];
+        var modalContent = document.getElementsByClassName('preview-modal-content')[0];
         modal.style.display = "block";
         window.onclick = function(event) {
             if (event.target == modalContent) {
