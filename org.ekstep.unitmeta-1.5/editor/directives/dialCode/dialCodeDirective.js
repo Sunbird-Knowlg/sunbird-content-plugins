@@ -14,6 +14,8 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
         $scope.errorMessage = "";
         $scope.status = true;
 
+    var stateService = org.ekstep.services.stateService;  
+
         $scope.searchDialCode = function(dialcode, callback){
             var channel = ecEditor.getContext('channel');
             var reqObj = {
@@ -48,14 +50,12 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                 }
                 if (ecEditor._.indexOf(org.ekstep.services.collectionService.dialcodeList, this.dialcodes) != -1 ) {
                     $scope.status = true;
+                    _.has(stateService.state.invaliddialCodeMap, node.data.id) ? _.unset(stateService.state.invaliddialCodeMap, node.data.id) : "";
                     if ($scope.contentMeta.mimeType == 'application/vnd.ekstep.content-collection') {
-                        if (!org.ekstep.services.stateService.state.dialCodeMap) {
-                            org.ekstep.services.stateService.create('dialCodeMap');
+                        if (!stateService.state.dialCodeMap) {
+                            stateService.create('dialCodeMap');
                         }
-                        org.ekstep.services.stateService.setState('dialCodeMap', node.data.id, this.dialcodes);
-                    }
-                    if (org.ekstep.services.stateService.state.invaliddialCodeMap) {
-                        _.unset(org.ekstep.services.stateService.state.invaliddialCodeMap, node.data.id)
+                        stateService.setState('dialCodeMap', node.data.id, this.dialcodes);
                     }
                     $scope.editFlag = true;
                     ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
@@ -63,23 +63,22 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
                     $scope.searchDialCode(this.dialcodes, function(response){
                         if(response.isValid){
                             $scope.status = response.isValid;
+                            _.has(stateService.state.invaliddialCodeMap, node.data.id) ? _.unset(stateService.state.invaliddialCodeMap, node.data.id) : "";
                             if ($scope.contentMeta.mimeType == 'application/vnd.ekstep.content-collection') {
-                                if (!org.ekstep.services.stateService.state.dialCodeMap) {
-                                    org.ekstep.services.stateService.create('dialCodeMap');
+                                if (!stateService.state.dialCodeMap) {
+                                    stateService.create('dialCodeMap');
                                 }
-                                org.ekstep.services.stateService.setState('dialCodeMap', node.data.id, instance.dialcodes);
-                            }
-                            if (org.ekstep.services.stateService.state.invaliddialCodeMap) {
-                                _.unset(org.ekstep.services.stateService.state.invaliddialCodeMap, node.data.id)
+                                stateService.setState('dialCodeMap', node.data.id, instance.dialcodes);
                             }
                             $scope.editFlag = true;
                             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
                             $scope.$safeApply();
                         }else{
-                            if (!org.ekstep.services.stateService.state.invaliddialCodeMap) {
-                                org.ekstep.services.stateService.create('invaliddialCodeMap');
+                            if (!stateService.state.invaliddialCodeMap) {
+                                stateService.create('invaliddialCodeMap');
                             }
-                            org.ekstep.services.stateService.setState('invaliddialCodeMap', node.data.id, instance.dialcodes);
+                            _.has(stateService.state.dialCodeMap, node.data.id) ? _.unset(stateService.state.dialCodeMap, node.data.id) : "";
+                            stateService.setState('invaliddialCodeMap', node.data.id, instance.dialcodes);
                             $scope.status = response.isValid;
                             $scope.editFlag = true;
                             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
@@ -105,35 +104,35 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
             if (org.ekstep.collectioneditor.cache.nodesModified && org.ekstep.collectioneditor.cache.nodesModified[nodeId]) {
                 org.ekstep.collectioneditor.cache.nodesModified[nodeId].metadata["dialcodes"] = [];
             }
-            if (!org.ekstep.services.stateService.state.dialCodeMap) {
-                org.ekstep.services.stateService.create('dialCodeMap');
+            if (!stateService.state.dialCodeMap) {
+                stateService.create('dialCodeMap');
             }
-            org.ekstep.services.stateService.setState('dialCodeMap', nodeId, "");
-            if (org.ekstep.services.stateService.state.invaliddialCodeMap) {
-                _.unset(org.ekstep.services.stateService.state.invaliddialCodeMap, nodeId)
-            }
+            _.has(stateService.state.invaliddialCodeMap, nodeId) ? _.unset(stateService.state.invaliddialCodeMap, nodeId) : "";
+            stateService.setState('dialCodeMap', nodeId, "");
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
         }
 
         $scope.changeDialCode = function () {
-            $scope.errorMessage = "";
-            if(_.isEmpty(this.dialcodes)){
-                var nodeId = org.ekstep.services.collectionService.getActiveNode().data.id;
-                if (org.ekstep.collectioneditor.cache.nodesModified && org.ekstep.collectioneditor.cache.nodesModified[nodeId]) {
-                    org.ekstep.collectioneditor.cache.nodesModified[nodeId].metadata["dialcodes"] = [];
-                }
-                if (!org.ekstep.services.stateService.state.dialCodeMap) {
-                    org.ekstep.services.stateService.create('dialCodeMap');
-                }
-                org.ekstep.services.stateService.setState('dialCodeMap', nodeId, "");
-                if (org.ekstep.services.stateService.state.invaliddialCodeMap) {
-                    _.unset(org.ekstep.services.stateService.state.invaliddialCodeMap, nodeId)
-                }
-                ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
-            }else if (!String(this.dialcodes).match(/^[A-Z0-9]{6}$/) || this.dialcodes.length < 6) {
+            var currentNode = org.ekstep.services.collectionService.getActiveNode().data;
+            if(_.isEmpty(this.dialcodes)) {
+                $scope.errorMessage = "";
                 $scope.editFlag = false;
-                $scope.errorMessage = "Please enter valid DIAL code";
-            }
+                _.has(stateService.state.invaliddialCodeMap, currentNode.id) ? _.unset(stateService.state.invaliddialCodeMap, currentNode.id) : "";
+                _.has(stateService.state.dialCodeMap, currentNode.id) ? _.unset(stateService.state.dialCodeMap, currentNode.id) : "";
+                if(currentNode.metadata && currentNode.metadata.dialcodes && currentNode.metadata.dialcodes.length){
+                    if (org.ekstep.collectioneditor.cache.nodesModified && org.ekstep.collectioneditor.cache.nodesModified[currentNode.id]) {
+                        org.ekstep.collectioneditor.cache.nodesModified[currentNode.id].metadata["dialcodes"] = [];
+                    }
+                    if (!stateService.state.dialCodeMap) {
+                        stateService.create('dialCodeMap');
+                    }
+                    stateService.setState('dialCodeMap', currentNode.id, "");
+                    ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+                }
+            } else {
+                $scope.editFlag = false;
+                $scope.errorMessage = (this.dialcodes.length && !String(this.dialcodes).match(/^[A-Z0-9]{6}$/)) ? "Please enter valid DIAL code" : "";
+            }    
         }
 
         $scope.init = function () {
