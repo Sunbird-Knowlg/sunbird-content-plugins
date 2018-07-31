@@ -63,6 +63,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     $scope.headerMessage = 'Edit Details'
 
     /**
+     * 
+     */
+    $scope.validationErrorMessage = 'Please provide all required details';
+
+    /**
      * @description          - Which is used to dispatch an event.
      * 
      * @param {String} event - Name of the event.
@@ -324,6 +329,11 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 }
             }
         });
+        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+            message: $scope.messages.validationError || $scope.validationErrorMessage,
+            position: 'topCenter',
+            icon: 'fa fa-warning'
+        });
     }
 
     /** 
@@ -407,6 +417,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         !EventBus.hasEventListener('metadata:form:getdata') && ecEditor.addEventListener('metadata:form:getdata', $scope.getScopeMeta, $scope);
         var callbackFn = function(config) {
             $scope.fields = config.fields;
+            $scope.messages = config.messages || {};
             $scope.tempalteName = config.template;
             if (_.isUndefined(config.editMode)) {
                 config.editMode = true
