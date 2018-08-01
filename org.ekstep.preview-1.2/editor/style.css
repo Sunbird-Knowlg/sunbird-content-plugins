@@ -38,7 +38,7 @@
   overflow: auto;
 }
 
-.preview-bgimage {
+#contentPreview .preview-bgimage {
     height: 355px;
     width: 706px;
     background-size: 726px 375px;
