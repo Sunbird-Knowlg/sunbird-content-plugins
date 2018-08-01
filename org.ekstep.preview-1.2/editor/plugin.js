@@ -35,7 +35,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var div = document.createElement('div');
         div.classList.add("preview-modal");
         div.id = "contentPreview";
-        div.innerHTML = '<div class="preview-modal-content"><div class="main"><div class="child preview-bgimage"></div><div class="child preview-iframe"><iframe id="previewContentIframe" width=100% height=100%></iframe></div></div>';
+        div.innerHTML = '<div class="preview-modal-content"><div class="preview-modal-wrapper"><div class="child preview-bgimage"></div><div class="child preview-iframe"><iframe id="previewContentIframe" width=100% height=100%></iframe></div></div>';
         document.body.appendChild(div);
     },
     /**

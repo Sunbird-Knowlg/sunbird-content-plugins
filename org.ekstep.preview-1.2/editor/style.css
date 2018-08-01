@@ -1,18 +1,12 @@
 .preview-modal {
-    display: none;
-    /* Hidden by default */
-    position: fixed;
-    /* Stay in place */
-    z-index: 10;
-    /* Sit on top */
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 10; /* Sit on top */
     left: 0;
     top: 0;
-    width: 100%;
-    /* Full width */
-    height: 100%;
-    /* Full height */
-    background-color: rgba(0, 0, 0, 0.4);
-    /* Black w/ opacity */
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
 
 .preview-modal-content {
@@ -25,23 +19,23 @@
     border: 0px;
 }
 
-.main {
-    position: relative;
-    height: 351px;
-    width: 688px;
-    margin: 0 auto;
+.preview-modal-wrapper {
+  position: relative;
+  height: 351px;
+  width: 688px;
+  margin: 0 auto;
 }
 
-.child {
-    background: black;
-    color: white;
-    width: 100%;
-    transform: translate(-50%, -50%);
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    padding: 20px;
-    overflow: auto;
+#contentPreview .preview-modal-content .child {
+  /* background: black; */
+  color: white;
+  width: 100%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  padding: 20px;
+  overflow: auto;
 }
 
 .preview-bgimage {
@@ -54,7 +48,7 @@
 .preview-iframe {
     height: 324px;
     width: 583px;
-    padding: 0;
+    padding:0;
     border: none !important;
     overflow: hidden;
 }
