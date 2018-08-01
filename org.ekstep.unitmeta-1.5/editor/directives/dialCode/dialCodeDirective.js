@@ -100,15 +100,18 @@ angular.module('editorApp', ['ngDialog', 'oc.lazyLoad', 'Scope.safeApply']).dire
         // clear dial code values
         $scope.clearDialCode = function () {
             $scope.dialcodes = "";
-            var nodeId = org.ekstep.services.collectionService.getActiveNode().data.id;
-            if (org.ekstep.collectioneditor.cache.nodesModified && org.ekstep.collectioneditor.cache.nodesModified[nodeId]) {
-                org.ekstep.collectioneditor.cache.nodesModified[nodeId].metadata["dialcodes"] = [];
+            var currentNode = org.ekstep.services.collectionService.getActiveNode().data;
+            _.has(stateService.state.invaliddialCodeMap, currentNode.id) ? _.unset(stateService.state.invaliddialCodeMap, currentNode.id) : "";
+            _.has(stateService.state.dialCodeMap, currentNode.id) ? _.unset(stateService.state.dialCodeMap, currentNode.id) : "";
+            if(currentNode.metadata && currentNode.metadata.dialcodes && currentNode.metadata.dialcodes.length){
+                if (org.ekstep.collectioneditor.cache.nodesModified && org.ekstep.collectioneditor.cache.nodesModified[currentNode.id]) {
+                    org.ekstep.collectioneditor.cache.nodesModified[currentNode.id].metadata["dialcodes"] = [];
+                }
+                if (!stateService.state.dialCodeMap) {
+                    stateService.create('dialCodeMap');
+                }
+                stateService.setState('dialCodeMap', currentNode.id, "");
             }
-            if (!stateService.state.dialCodeMap) {
-                stateService.create('dialCodeMap');
-            }
-            _.has(stateService.state.invaliddialCodeMap, nodeId) ? _.unset(stateService.state.invaliddialCodeMap, nodeId) : "";
-            stateService.setState('dialCodeMap', nodeId, "");
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
         }
 
