@@ -181,7 +181,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
 
         // show card details
         $scope.showCardDetails = function(lesson) {
-            ecEditor.jQuery('#resourceSearch').val(lesson.name);
             $scope.previousPage = $scope.mainTemplate;
             if ($scope.mainTemplate == 'selectedResult') {
                 $scope.defaultResources = ctrl.res.content;
@@ -194,7 +193,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         ctrl.conceptSelector = function() {
             ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
                 element: 'lessonBrowser_concepts',
-                selectedConcepts: [], // All composite keys except mediaType
+                selectedConcepts: $scope.filterSelection.concept || [], // All composite keys except mediaType
                 callback: function(concepts) {
                     ctrl.concepts = concepts.length + ' selected';
                     $scope.filterSelection.concept = [];
@@ -218,19 +217,32 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
 
         // Search specific lesson
         $scope.lessonBrowserSearch = function() {
-            $scope.isCardSearching = true;
+            if($scope.mainTemplate === 'selectedResult'){
+                $scope.isCardSearching = true;
+            } else{
+                $scope.isLoading = true;
+            }
             ctrl.searchRes = { count: 0, content: [] };
             searchBody.request.query = this.searchKeyword;
             delete searchBody.request.filters.name;
             ctrl.searchLessons(function(res) {
-                $scope.isCardSearching = false;
+                if($scope.mainTemplate === 'selectedResult'){
+                    $scope.isCardSearching = false;
+                } else{
+                    $scope.mainTemplate = 'selectedResult';
+                    ctrl.learningConfig();
+                    ctrl.meta.lessonTypes = collectionService.getObjectTypeByAddType('Browser');
+                    ctrl.dropdownAndCardsConfig();
+                    ctrl.setFilterValues();
+                    ctrl.conceptSelector();
+                    $scope.isLoading = false;
+                }
                 $scope.noResultFound = false;
                 $scope.$safeApply();
                 if (!res) {
                     ecEditor.jQuery('#noLessonMsg').show();
                 } else {
                     ecEditor.jQuery('#noLessonMsg').hide();
-                     ctrl.applyAllJquery();
                 }
             });
         }
@@ -361,9 +373,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             $scope.noResultFound = false;
             if ($scope.mainTemplate == 'selectedResult') {
                 $scope.mainTemplate = 'facetsItemView';
-            } else if ($scope.mainTemplate == 'addedItemsView') {
-                $scope.mainTemplate = 'selectedResult';
-                ctrl.res.content = $scope.defaultResources;
             } else {
                 $scope.mainTemplate = $scope.previousPage;
                 if ($scope.mainTemplate == 'selectedResult') {
@@ -510,6 +519,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                         ctrl.facetsResponse = res.data;
                         var contents = [];
                         $scope.mainTemplate = 'facetsItemView';
+                        ctrl.applyAllJquery();
                         if (ctrl.facetsResponse.result.response.sections) {
                             angular.forEach(ctrl.facetsResponse.result.response.sections, function(section, sectionIndex) {
                                 angular.forEach(section.contents, function(content) {
@@ -609,9 +619,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 searchBody = query;
                 ctrl.searchLessons(function(res) {
                     $scope.defaultResources = ctrl.res.content;
-                    ctrl.dropdownAndCardsConfig();
-                    ctrl.setFilterValues();
-                    ctrl.conceptSelector();
+                    ctrl.applyAllJquery();
                     $scope.isLoading = false;
                     $scope.noResultFound = false;
                     ecEditor.jQuery('#resourceSearch').val('');
@@ -635,9 +643,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     $scope.mainTemplate = 'selectedResult';
                     ctrl.searchLessons(function(res) {
                         $scope.defaultResources = ctrl.res.content;
-                        ctrl.dropdownAndCardsConfig();
-                        ctrl.setFilterValues();
-                        ctrl.conceptSelector();
+                        ctrl.applyAllJquery();
                         ecEditor.jQuery('#resourceSearch').val('');
                         $scope.isLoading = false;
                         $scope.noResultFound = false;
