@@ -121,7 +121,8 @@ org.ekstep.contenteditor.basePlugin.extend({
         }
         var modal = document.getElementById('contentPreview');
         var modalContent = document.getElementsByClassName('preview-modal-content')[0];
-        modal.style.display = "block";
+        if (!data.parentElement)
+            modal.style.display = "block";
         window.onclick = function(event) {
             if (event.target == modalContent) {
                 modal.style.display = "none";
