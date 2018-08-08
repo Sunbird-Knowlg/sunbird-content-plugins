@@ -57,7 +57,7 @@
 <div ng-app="org.ekstep.ceheader:headerApp" ng-controller="headerController" class="ui masthead vertical segment content-masterhead">
     <div class="ui grid fluid container custom-container">
         <div class="one wide centered column custom-1-wide">
-            <img class="ui tiny centered image" src="{{ekstepLogo}}" />
+            <img class="ui tiny centered image" ng-src="{{ekstepLogo}}" />
         </div>
         <div class="six wide column custom-6-wide">
             <div class="row custom-row-1">
@@ -87,7 +87,7 @@
                         <div class="ui fluid popup transition hidden user-details-wrapper" id="userDetailsWrapper">
                             <div class="user-details">
                                 <div class="row user avtar">
-                                    <img src="{{userDetails.avtar}}" />
+                                    <img ng-src="{{userDetails.avtar}}" />
                                 </div>
                                 <div class="row user-name">
                                     <span ng-bind="userDetails.name"></span>
