@@ -6,8 +6,7 @@
 <div ng-if="!isCardSearching">
     <div class="row ui" id="resourceHeading">
         <p ng-if="mainTemplate == 'selectedResult'">
-            RESOURCES
-            <span>({{$ctrl.res.content.length}} / {{$ctrl.res.total_items}} )</span>
+            <span>Showing {{$ctrl.res.content.length}} out of {{$ctrl.res.total_items}} matching results</span>
         </p>
     </div>
     <div class="source-result-container">
@@ -28,7 +27,7 @@
                                     <div class="content contentTitle">Board</div>
                                 </div>
                                 <div class="item">
-                                    <div class="right floated content contentMetaDetail">{{(lesson.class.toString())}}
+                                    <div class="right floated content contentMetaDetail">{{lesson.gradeLevel.toString()}}
                                     </div>
                                     <div class="content contentTitle">Class</div>
                                 </div>

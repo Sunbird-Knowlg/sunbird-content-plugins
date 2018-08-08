@@ -155,7 +155,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     return callback(true);
                 } else {
                     ctrl.res = { count: 0, content: [], total_items: 0 };
-                    ctrl.res.content = res.data.result.content;
+                    ctrl.res.content = res.data.result.content || [];
                     ctrl.res.total_items = res.data.result.count;
                     if (ctrl.res.content) {
                         ctrl.searchConcepts(ctrl.res.content, function() {
