@@ -555,19 +555,15 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 query = JSON.parse(query);
             }
             query.request.limit = limit;
-            if (query && !_.isEmpty(query)) {
-                searchBody = query;
-            } else {
-                searchBody = {
-                    "request": {
-                        "filters": {
-                            "objectType": ["Content"],
-                            "status": ["Live"]
-                        },
-                        "query": ""
-                    }
-                };
-            }
+            searchBody = {
+                "request": {
+                    "filters": {
+                        "objectType": ["Content"],
+                        "status": ["Live"]
+                    },
+                    "query": ""
+                }
+            };
             searchBody.request.filters.objectType = ["Content"];
             searchBody.request.filters.status = ["Live"];
             ctrl.learningConfig();
