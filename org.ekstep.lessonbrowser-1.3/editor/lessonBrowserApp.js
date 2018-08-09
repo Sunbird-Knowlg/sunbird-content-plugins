@@ -500,10 +500,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             let Obj = {
                 request: {
                     source: "web",
-                    name: ecEditor.getContext('pageAPI') || DEFAULT_PAGEAPI,
-                    sort_by: {
-                        "createdOn": "desc"
-                    }
+                    name: ecEditor.getContext('pageAPI') || DEFAULT_PAGEAPI
                 }
             }
             let service = org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE);
