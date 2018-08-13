@@ -244,7 +244,8 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 $scope.noResultFound = false;
                 setTimeout(function() {
                     $scope.$safeApply();
-                }, 1000)
+                    $scope.Sort('timestamp')
+                }, 100)
                 if (!res) {
                     ecEditor.jQuery('#noLessonMsg').show();
                 } else {
