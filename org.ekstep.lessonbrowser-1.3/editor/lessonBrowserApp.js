@@ -223,6 +223,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             } else {
                 $scope.isLoading = true;
             }
+            $scope.filterSelection.lessonType = searchBody.request.filters.contentType;
             ctrl.searchRes = { count: 0, content: [] };
             searchBody.request.query = this.searchKeyword;
             delete searchBody.request.filters.name;
@@ -425,6 +426,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             if ($scope.filterSelection.concept.length) {
                 $("#lessonBrowser_concepts").val($scope.filterSelection.concept.length + ' selected');
             }
+            $scope.$safeApply();
         }
 
         // Add the resource
