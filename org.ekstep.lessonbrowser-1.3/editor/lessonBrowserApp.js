@@ -230,6 +230,8 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             ctrl.searchLessons(function(res) {
                 if ($scope.mainTemplate === 'selectedResult') {
                     $scope.isCardSearching = false;
+                    ctrl.setFilterValues();
+                    ctrl.dropdownAndCardsConfig();
                 } else {
                     $scope.mainTemplate = 'selectedResult';
                     ctrl.learningConfig();
