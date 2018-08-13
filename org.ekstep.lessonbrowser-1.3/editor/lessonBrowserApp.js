@@ -232,7 +232,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     $scope.isCardSearching = false;
                     ctrl.dropdownAndCardsConfig();
                     ctrl.setFilterValues();
-
                 } else {
                     $scope.mainTemplate = 'selectedResult';
                     ctrl.learningConfig();
@@ -243,7 +242,9 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     $scope.isLoading = false;
                 }
                 $scope.noResultFound = false;
-                $scope.$safeApply();
+                setTimeout(function() {
+                    $scope.$safeApply();
+                }, 1000)
                 if (!res) {
                     ecEditor.jQuery('#noLessonMsg').show();
                 } else {
@@ -306,7 +307,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     "query": ""
                 }
             };
-            $scope.getFiltersValue(); /**Get filters values**/
+            $scope.getFiltersValue(); /** Get filters values**/
             $scope.isCardSearching = true;
             ctrl.searchLessons(function(res) {
                 $scope.isCardSearching = false;
@@ -429,9 +430,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             if ($scope.filterSelection.concept.length) {
                 $("#lessonBrowser_concepts").val($scope.filterSelection.concept.length + ' selected');
             }
-            setTimeout(function() {
-                $scope.$safeApply();
-            }, 100)
         }
 
         // Add the resource
