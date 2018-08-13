@@ -575,8 +575,8 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             ctrl.learningConfig();
             ctrl.meta.lessonTypes = collectionService.getObjectTypeByAddType('Browser');
             if (query.request.filters.contentType) {
-                query.request.filters.contentType = _.intersectionWith(ctrl.meta.lessonTypes, query.request.filters.contentType, _.isEqual)
                 query.request.filters.contentType = _.isString(query.request.filters.contentType) ? (query.request.filters.contentType.split(",") || []) : query.request.filters.contentType;
+                query.request.filters.contentType = _.intersectionWith(ctrl.meta.lessonTypes, query.request.filters.contentType, _.isEqual)
                 $scope.filterSelection.lessonType = query.request.filters.contentType;
                 searchBody.request.filters.contentType = query.request.filters.contentType;
             } else {
