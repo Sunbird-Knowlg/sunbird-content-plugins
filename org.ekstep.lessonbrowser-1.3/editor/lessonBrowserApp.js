@@ -230,8 +230,9 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             ctrl.searchLessons(function(res) {
                 if ($scope.mainTemplate === 'selectedResult') {
                     $scope.isCardSearching = false;
-                    ctrl.setFilterValues();
                     ctrl.dropdownAndCardsConfig();
+                    ctrl.setFilterValues();
+
                 } else {
                     $scope.mainTemplate = 'selectedResult';
                     ctrl.learningConfig();
@@ -428,7 +429,9 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             if ($scope.filterSelection.concept.length) {
                 $("#lessonBrowser_concepts").val($scope.filterSelection.concept.length + ' selected');
             }
-            $scope.$safeApply();
+            setTimeout(function() {
+                $scope.$safeApply();
+            }, 100)
         }
 
         // Add the resource
