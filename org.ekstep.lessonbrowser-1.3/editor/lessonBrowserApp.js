@@ -408,27 +408,27 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
 
         // setting filter values
         ctrl.setFilterValues = function() {
-            if ($scope.filterSelection.lessonType.length) {
+            if ($scope.filterSelection.lessonType && $scope.filterSelection.lessonType.length) {
                 angular.forEach($scope.filterSelection.lessonType, function(lessonType) {
                     $("#lessonBrowser_lessonType").dropdown('set selected', lessonType);
                 });
             }
-            if ($scope.filterSelection.language.length) {
+            if ($scope.filterSelection.language && $scope.filterSelection.language.length) {
                 angular.forEach($scope.filterSelection.language, function(language) {
                     $("#lessonBrowser_language").dropdown('set selected', language);
                 });
             }
-            if ($scope.filterSelection.grade.length) {
+            if ( $scope.filterSelection.grade && $scope.filterSelection.grade.length) {
                 angular.forEach($scope.filterSelection.grade, function(grade) {
                     $("#lessonBrowser_grade").dropdown('set selected', grade);
                 });
             }
-            if ($scope.filterSelection.subject.length) {
+            if ($scope.filterSelection.subject && $scope.filterSelection.subject.length) {
                 angular.forEach($scope.filterSelection.subject, function(subject) {
                     $("#lessonBrowser_subject").dropdown('set selected', subject);
                 });
             }
-            if ($scope.filterSelection.concept.length) {
+            if ($scope.filterSelection.concept && $scope.filterSelection.concept.length) {
                 $("#lessonBrowser_concepts").val($scope.filterSelection.concept.length + ' selected');
             }
         }
