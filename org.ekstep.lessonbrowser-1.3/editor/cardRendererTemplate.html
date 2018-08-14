@@ -71,7 +71,7 @@
         <div class="ui negative message errorMessage" ng-if="$ctrl.err">
             <div class="header">{{$ctrl.err}}</div>
         </div>
-        <div id="noLessonMsg" ng-show="!$ctrl.res.content" class="ui negative message errorMessage" style="display:none">
+        <div id="noLessonMsg" ng-show="!$ctrl.res.content.length" class="ui negative message errorMessage">
             <div class="header">{{messages.no_lesson_found_msg}}</div>
             <p>{{messages.try_again_msg}}</p>
         </div>

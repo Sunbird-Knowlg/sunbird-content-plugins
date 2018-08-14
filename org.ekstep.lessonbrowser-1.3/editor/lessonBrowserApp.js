@@ -157,12 +157,13 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     ctrl.res = { count: 0, content: [], total_items: 0 };
                     ctrl.res.content = res.data.result.content || [];
                     ctrl.res.total_items = res.data.result.count;
-                    if (ctrl.res.content) {
+                    if (ctrl.res.content.length) {
                         ctrl.searchConcepts(ctrl.res.content, function() {
                             ecEditor.jQuery('#noLessonMsg').hide();
                             return callback(true);
                         });
                     } else {
+                        ecEditor.jQuery('#noLessonMsg').show();
                         return callback(false);
                     }
                 }
