@@ -1,0 +1,82 @@
+<div ng-app="org.ekstep.metadataform" ng-controller="metadataForm as $ctrl" id="filterLessonDataTemplate" ng-init="init()">
+    <div class="ui active" id="meta-modal">
+        <div class="">
+            <form class="ui form" id="content-meta-form" ng-init="initDropdown({target: '#filterLessonDataTemplate'})" name="metaForm" novalidate ng-class="!appIconConfig.visible ? 'marginClass' : ''">
+                <!-- filter template -->
+                <div class="ui vertical segment sortResource">
+                    <p class="padding-top-3px sidebarSectionHeader">
+                        SORT BY</p>
+                    <div class="ui grid sortButtonsWrapper">
+                        <div class="six wide column" style="padding:0%">
+                            <button ng-click="Sort('alphabetical')" ng-class="{'primary':sortOption == 'name'}" class="ui tiny basic left floated button SortBtns">
+                                A - Z
+                            </button>
+                        </div>
+                        <div class="six wide column" style="padding:0%">
+                            <button ng-click="Sort('timestamp')" ng-class="{'primary':sortOption == 'lastPublishedOn'}" class="ui tiny basic right floated button SortBtns">
+                                PUBLISHED ON
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="ui vertical segment" style="padding:0%">
+                    <div scroll-glue-bottom = 'glued' class="ui form list filterOverflow">
+                        <div class="item">
+                            <p class="padding-top-3px sidebarSectionHeader">
+                                FILTERS</p>
+                            <a class="ui right floated blueColor" ng-style="((filterSelection.language.length || filterSelection.grade.length || filterSelection.subject.length || filterSelection.concept.length) && {'cursor':'pointer'})  || ((!filterSelection.lessonType.length && !filterSelection.language.length && !filterSelection.grade.length && !filterSelection.subject.length && !filterSelection.concept.length) && {'cursor':'not-allowed'})" ng-click="(filterSelection.lessonType.length || filterSelection.language.length || filterSelection.grade.length || filterSelection.subject.length || filterSelection.concept.length) ? resetFilters() : 'null'">Clear All</a>
+                        </div>
+                        <div class="filter-column" ng-class="(dynamicField.code == 'searchText')? 'twelve wide column': 'four wide column'  " ng-repeat="dynamicField in dynamicLayoutConfigurations">
+                            <!-- MULTIPLE SELECT INPUT FIELD -->
+                            <div class="filterMetaDetails">
+                                <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required), 'required': dynamicField.required} " name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='multiselect' ">
+                                    <div class="ui sub header paraHeading">
+                                        <p class="padding-top-3px">{{dynamicField.label | uppercase}}</p>
+                                    </div>
+                                    <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown placeholder-padding lableCls " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#filterLessonDataTemplate', index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm});$parent.$parent.searchQuestions(contentMeta);" multiple=" " ng-required="{{dynamicField.required}} ">
+                                        <option value="">{{dynamicField.placeholder}}</option>
+                                        <option data-value="{{category.name || category}} " ng-repeat="category in categoryList[dynamicField.code]" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)">{{category.name || category}}</option>
+                                    </select>
+                                    <div ng-show="!metaForm[dynamicField.code].$valid " class="ui pointing red basic label ">
+                                        Please Select
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- SINGLE SELECT INPUT FIELD -->
+                            <div class="filterMetaDetails">
+                                 <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required), 'required': dynamicField.required} " name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='select' ">
+                                    <div class="ui sub header paraHeading">
+                                        <p class="padding-top-3px">{{dynamicField.label | uppercase}}</p>
+                                    </div>
+                                    <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown placeholder-padding lableCls " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#filterLessonDataTemplate', index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm});$parent.$parent.searchQuestions(contentMeta);" multiple=" " ng-required="{{dynamicField.required}} ">
+                                        <option value="">{{dynamicField.placeholder}}</option>
+                                        <option data-value="{{category.name || category}} " ng-repeat="category in categoryList[dynamicField.code]" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)">{{category.name || category}}</option>
+                                    </select>
+                                    <div ng-show="!metaForm[dynamicField.code].$valid " class="ui pointing red basic label ">
+                                        Please Select
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- CONCEPT SELECTOR -->
+                            <div class="filterMetaDetails">
+                                <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required) , 'required': dynamicField.required} " name="{{dynamicField.code}}" ng-if="dynamicField.inputType==='conceptselector'">
+                                    <div class="ui sub header paraHeading">
+                                        <p class="padding-top-3px">{{dynamicField.label | uppercase}} ({{filterSelection.concept.length}})</p>
+                                    </div>
+                                    <div class="ui fluid labeled input">
+                                            <conceptselector class="concept-field" config=dynamicField ng-click="onConfigChange({target: '#filterLessonDataTemplate', field:dynamicField, form:metaForm});"></conceptselector>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filterApplyBtn">
+                        <button id="apply-lesson-filter-button" class="ui small right floated button whiteColor blueBackGround" ng-disabled="!filterSelection.lessonType.length && !filterSelection.language.length && !filterSelection.grade.length && !filterSelection.subject.length && !filterSelection.concept.length" ng-click="applyFilters()">Apply</button>
+                    </div>
+                </div>
+                <!-- ACTION SECTION LAYOUT -->
+            </form>
+        </div>
+    </div>
+</div>
