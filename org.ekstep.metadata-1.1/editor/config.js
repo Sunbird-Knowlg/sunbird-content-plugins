@@ -185,8 +185,6 @@ window.formConfigurations = {
       "required": false,
       "visible": true
     }
-
-
   ]
 };
 window.formConfigs = {
@@ -460,6 +458,96 @@ window.formConfigs = {
         "required": false,
         "visible": true
       }*/
+    ]
+  },
+  filterLessonDataTemplate: {
+    "action": "lesson-filter-view",
+    "templateName": "filterLessonTemplate",
+    "fields": [
+      {
+        "code": "board",
+        "dataType": "list",
+        "description": "Board",
+        "editable": true,
+        "index": 1,
+        "inputType": "multiselect",
+        "label": "Board",
+        "name": "Board",
+        "placeholder": "Select Board",
+        "renderingHints": {},
+        "required": false,
+        "visible": true
+      },
+      {
+        "code": "category",
+        "dataType": "list",
+        "description": "Category",
+        "editable": true,
+        "index": 1,
+        "inputType": "multiselect",
+        "label": "Category",
+        "name": "Class",
+        "placeholder": "Select Category",
+        "renderingHints": {},
+        "required": false,
+        "visible": true
+      },
+      {
+        "code": "language",
+        "dataType": "list",
+        "description": "Language",
+        "editable": true,
+        "index": 1,
+        "inputType": "multiselect",
+        "label": "Language",
+        "name": "Language",
+        "placeholder": "Select Language",
+        "renderingHints": {},
+        "required": false,
+        "visible": true
+      },
+      {
+        "code": "gradeLevel",
+        "dataType": "list",
+        "description": "Class",
+        "editable": true,
+        "index": 4,
+        "inputType": "multiselect",
+        "label": "Grade Level",
+        "name": "Class",
+        "placeholder": "Select Class",
+        "renderingHints": {},
+        "required": false,
+        "visible": true
+      },
+      {
+        "code": "subject",
+        "dataType": "list",
+        "description": "Subject",
+        "editable": true,
+        "index": 4,
+        "inputType": "multiselect",
+        "label": "Subject",
+        "name": "Subject",
+        "placeholder": "Select Subject",
+        "renderingHints": {},
+        "required": false,
+        "visible": true
+      },
+      {
+        "code": "concepts",
+        "dataType": "list",
+        "description": "Choose a concept",
+        "editable": true,
+        "inputType": "conceptselector",
+        "label": "Concepts",
+        "name": "Concepts",
+        "placeholder": "Choose Concepts",
+        "renderingHints": {},
+        "required": false,
+        "visible": true,
+        "index": 5
+      }
     ]
   }
 };
