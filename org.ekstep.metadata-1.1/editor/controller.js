@@ -274,7 +274,14 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             object.target = $('#content-meta-form').scope();
         }
         var validationStatus = $scope.isValidInputs(object);
-        !validationStatus && $scope.updateErrorMessage(object);
+        if(!validationStatus){
+            $scope.updateErrorMessage(object);
+            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                message: $scope.messages.validationError || $scope.validationErrorMessage,
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });
+        }
         var successCB = function(err, res) {
                 if (res) {
                     // success toast message which is already handled by content editor function plugin
@@ -294,6 +301,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var form = {};
         form.metaData = getUpdatedMetadata(object.target.contentMeta, $scope.originalContentMeta, $scope.fields);
         form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
+        form.target = object.target;
         ecEditor.dispatchEvent('editor:form:success', {
             isValid: validationStatus,
             formData: form,
@@ -328,11 +336,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                         scope.validation[value.code]["errorMessage"] = "Invalid Input";
                 }
             }
-        });
-        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-            message: $scope.messages.validationError || $scope.validationErrorMessage,
-            position: 'topCenter',
-            icon: 'fa fa-warning'
         });
     }
 
