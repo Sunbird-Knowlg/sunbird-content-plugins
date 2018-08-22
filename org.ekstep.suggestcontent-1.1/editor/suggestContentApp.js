@@ -6,7 +6,10 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
     $scope.metaData = {};
     $scope.responseData = [];
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
-    $scope.suggestedContentList = {count:0, content:[]};
+    $scope.suggestedContentList = {
+        count: 0,
+        content: []
+    };
     var searchBody = {
         "request": {
             "mode": "soft",
@@ -59,10 +62,11 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             "stage": ecEditor.getCurrentStage().id
         })
     }
-
+    /* HashKey to store suggestion responses to avoid api call */
     $scope.setMetaResponseHash = function (meta) {
         var objPick = _.values(_.pick(meta, ['gradeLevel', 'board', 'subject', 'medium', 'concepts']));
-        var flatObj = _.flattenDeep(objPick).toLocaleString().toLowerCase();
+
+        var flatObj = _.flattenDeep(objPick).join('').toLowerCase();
         var hash = 0,
             len = flatObj.length;
         for (var i = 0; i < len; i++) {
@@ -92,7 +96,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             delete searchBody.request.filters.concepts;
         }
         ecEditor.jQuery('#suggestions-loader').dimmer('show');
-        
+
         if ($scope.responseData[concepts]) {
             if (!$scope.suggestedContentList.content.length) {
                 $('.card-list').transition({
@@ -112,7 +116,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             if ($scope.metaData.concepts) {
                 searchBody.request.softConstraints = {
                     "concepts": 100,
-                    "medium": 50,   
+                    "medium": 50,
                     "gradeLevel": 25,
                     "board": 12
                 };
@@ -155,9 +159,6 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                 }
             });
         }
-        console.log($scope.responseData)
-        console.log(concepts)
-
     }
 
     /* Open Resourse Browser with the Given query */
@@ -258,10 +259,10 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                 _.pick(currentNodeData.metadata, ['gradeLevel', 'board', 'subject', 'medium']),
                 (updatedConcepts.length && !_.isEqual(updatedConcepts.sort(), $scope.metaData.concepts.sort())) ? {
                     concepts: updatedConcepts
-                } : {})
-        }
-        else if(updatedConcepts.length == 0){
-            $scope.metaData.concepts = updatedConcepts;
+                } : {}
+            )
+        } else if (updatedConcepts.length == 0) {
+            $scope.metaData.concepts = undefined;
         } else {
             if ($scope.metaData.concepts)
                 $scope.metaData.concepts = $scope.metaData.concepts.sort();
