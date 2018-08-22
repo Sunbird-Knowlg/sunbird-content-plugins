@@ -519,18 +519,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             }
 
             searchBody.request.filters = $scope.filterSelection;
-            var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
             
-            ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup',
-            {
-                action: "resource-filters", 
-                subType: rootNodeConfig.type.toLowerCase(), 
-                framework: ecEditor.getContext('framework'),
-                rootOrgId: ecEditor.getContext('channel'),
-                type: 'content',
-                popup: false, 
-                metadata: $scope.filterSelection
-            });
             ctrl.searchRes = { count: 0, content: [] };
 
             if (!_.isUndefined(query.request.mode)) {
@@ -576,6 +565,20 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     ctrl.applyAllJquery();
                 }
             }
+
+            var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
+            setTimeout(function() {            
+                ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup',
+                {
+                    action: "resource-filters", 
+                    subType: rootNodeConfig.type.toLowerCase(), 
+                    framework: ecEditor.getContext('framework'),
+                    rootOrgId: ecEditor.getContext('channel'),
+                    type: 'content',
+                    popup: false, 
+                    metadata: $scope.filterSelection
+                });
+            }, 100)   
         }
 
         // Sort the resources
