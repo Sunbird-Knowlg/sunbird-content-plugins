@@ -1,7 +1,7 @@
-<div ng-app="org.ekstep.metadataform" ng-controller="metadataForm as $ctrl" id="filterLessonDataTemplate" ng-init="init()">
+<div ng-app="org.ekstep.metadataform" ng-controller="metadataForm as $ctrl" id="resourceFilterTemplate" ng-init="init()">
     <div class="ui active" id="meta-modal">
         <div class="">
-            <form class="ui form" id="content-meta-form" ng-init="initDropdown({target: '#filterLessonDataTemplate'})" name="metaForm" novalidate ng-class="!appIconConfig.visible ? 'marginClass' : ''">
+            <form class="ui form" id="content-meta-form" ng-init="initDropdown({target: '#resourceFilterTemplate'})" name="metaForm" novalidate ng-class="!appIconConfig.visible ? 'marginClass' : ''">
                 <!-- filter template -->
                 <div class="ui vertical segment sortResource">
                     <p class="padding-top-3px sidebarSectionHeader">
@@ -34,7 +34,7 @@
                                         <p class="padding-top-3px">{{dynamicField.label | uppercase}} ({{contentMeta[dynamicField.code].length || 0}})</p>
                                     </div>
                                     
-                                    <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown placeholder-padding lableCls " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#filterLessonDataTemplate', index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm});$parent.$parent.getFiltersValue(contentMeta);" multiple=" " ng-required="{{dynamicField.required}} ">
+                                    <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown placeholder-padding lableCls " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#resourceFilterTemplate', index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm});$parent.$parent.getFiltersValue(contentMeta);" multiple=" " ng-required="{{dynamicField.required}} ">
                                         <option value="">{{dynamicField.placeholder}}</option>
                                         <option data-value="{{category.name || category}} " ng-repeat="category in categoryList[dynamicField.code]" ng-selected="(contentMeta[dynamicField.code] == category.name) || (category in contentMeta[dynamicField.code])">{{category.name || category}}</option>
                                     </select>
@@ -49,7 +49,7 @@
                                     <div class="ui sub header paraHeading">
                                         <p class="padding-top-3px">{{dynamicField.label | uppercase}}</p>
                                     </div>
-                                    <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown placeholder-padding lableCls" ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#filterLessonDataTemplate', index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm});$parent.$parent.getFiltersValue(contentMeta);"
+                                    <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown placeholder-padding lableCls" ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#resourceFilterTemplate', index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm});$parent.$parent.getFiltersValue(contentMeta);"
                                         ng-required="{{dynamicField.required}} ">
                                             <option value = "">{{dynamicField.placeholder}}</option> 
                                             <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code]" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)"  >{{category.name || category}}</option>
@@ -66,7 +66,16 @@
                                     <div class="ui sub header paraHeading">
                                         <p class="padding-top-3px">{{dynamicField.label | uppercase}} ({{contentMeta[dynamicField.code].length || 0}})</p>
                                     </div>
-                                    <conceptselector class="concept-field" config=dynamicField ng-click="onConfigChange({target: '#filterLessonDataTemplate', field:dynamicField, form:metaForm});"></conceptselector>
+                                    <conceptselector class="concept-field" config=dynamicField ng-click="onConfigChange({target: '#resourceFilterTemplate', field:dynamicField, form:metaForm});"></conceptselector>
+                                </div>
+                            </div>
+                            <!-- TOPIC SELECTOR -->
+                            <div class="filterMetaDetails">                                    
+                                <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required) , 'required': dynamicField.required} " name="{{dynamicField.code}}" ng-if="dynamicField.inputType==='topicselector'">
+                                    <div class="ui sub header paraHeading">
+                                        <p class="padding-top-3px">{{dynamicField.label | uppercase}} ({{contentMeta[dynamicField.code].length || 0}})</p>
+                                    </div>
+                                    <topic-selector class="concept-field" config=dynamicField ng-click="onConfigChange({target: '#resourceFilterTemplate', field:dynamicField, form:metaForm})"></topic-selector>
                                 </div>
                             </div>
                         </div>

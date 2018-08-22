@@ -461,98 +461,98 @@ window.formConfigs = {
     ]
   },
   filterLessonDataTemplate: {
-    "action": "resource-filter-view",
+    "action": "resource-filters",
     "templateName": "resourceFilterTemplate",
     "fields": [
-      {
-        "code": "sets",
-        "dataType": "list",
-        "description": "Board",
-        "editable": true,
-        "index": 1,
-        "inputType": "multiselect",
-        "label": "Board",
-        "name": "Board",
-        "placeholder": "Select Board",
-        "renderingHints": {},
-        "required": false,
-        "visible": true
-      },
-      {
-        "code": "contentType",
-        "dataType": "list",
-        "description": "Category",
-        "editable": true,
-        "index": 1,
-        "inputType": "multiselect",
-        "label": "contentType",
-        "name": "contentType",
-        "placeholder": "Select contentType",
-        "renderingHints": {},
-        "required": false,
-        "range": [
-          "Resource",
-          "Collection",
-          "Content"
-        ],
-        "visible": true
-      },
-      {
-        "code": "medium",
-        "dataType": "list",
-        "description": "Language",
-        "editable": true,
-        "index": 1,
-        "inputType": "select",
-        "label": "Language",
-        "name": "Language",
-        "placeholder": "Select Language",
-        "renderingHints": {},
-        "required": false,
-        "visible": true
-      },
-      {
-        "code": "class",
-        "dataType": "list",
-        "description": "Class",
-        "editable": true,
-        "index": 4,
-        "inputType": "multiselect",
-        "label": "Grade Level",
-        "name": "Class",
-        "placeholder": "Select Class",
-        "renderingHints": {},
-        "required": false,
-        "visible": true
-      },
-      {
-        "code": "subject",
-        "dataType": "list",
-        "description": "Subject",
-        "editable": true,
-        "index": 4,
-        "inputType": "multiselect",
-        "label": "Subject",
-        "name": "Subject",
-        "placeholder": "Select Subject",
-        "renderingHints": {},
-        "required": false,
-        "visible": true
-      },
-      {
-        "code": "concepts",
-        "dataType": "list",
-        "description": "Choose a concept",
-        "editable": true,
-        "inputType": "conceptselector",
-        "label": "Concepts",
-        "name": "Concepts",
-        "placeholder": "Choose Concepts",
-        "renderingHints": {},
-        "required": false,
-        "visible": true,
-        "index": 5
-      }
+        {
+            "code": "contentType",
+            "dataType": "list",
+            "description": "Category",
+            "editable": true,
+            "index": 1,
+            "inputType": "multiselect",
+            "label": "contentType",
+            "name": "contentType",
+            "placeholder": "Select contentType",
+            "renderingHints": {},
+            "required": false,
+            "range": [
+              "Resource",
+              "Collection",
+              "Content"
+            ],
+            "visible": true
+        },
+        {
+            "code": "board",
+            "dataType": "text",
+            "description": "Curriculum",
+            "editable": true,
+            "index": 2,
+            "inputType": "select",
+            "label": "Curriculum",
+            "name": "Curriculum",
+            "placeholder": "Select Curriculum",
+            "renderingHints": {},
+            "required": false,
+            "visible": true
+        },
+        {
+            "code": "gradeLevel",
+            "dataType": "list",
+            "description": "Class",
+            "editable": true,
+            "index": 3,
+            "inputType": "multiselect",
+            "label": "Class",
+            "name": "Class",
+            "placeholder": "Select Class",
+            "renderingHints": {},
+            "required": false,
+            "visible": true
+        },
+        {
+            "code": "subject",
+            "dataType": "text",
+            "description": "",
+            "editable": true,
+            "index": 4,
+            "inputType": "select",
+            "label": "Subject",
+            "name": "Subject",
+            "placeholder": "Select Subject",
+            "renderingHints": {},
+            "required": false,
+            "visible": true
+        },
+        {
+            "code": "medium",
+            "dataType": "text",
+            "description": "",
+            "editable": true,
+            "index": 5,
+            "inputType": "select",
+            "label": "Medium",
+            "name": "medium",
+            "placeholder": "Select Medium",
+            "renderingHints": {},
+            "required": false,
+            "visible": true
+        },
+        {
+            "code": "topic",
+            "dataType": "list",
+            "description": "Choose a Topics",
+            "editable": true,
+            "index": 6,
+            "inputType": "topicselector",
+            "label": "Topics",
+            "name": "Topic",
+            "placeholder": "Choose Topics",
+            "renderingHints": {},
+            "required": false,
+            "visible": true
+        }
     ]
   }
 };

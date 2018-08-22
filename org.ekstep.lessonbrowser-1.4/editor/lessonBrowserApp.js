@@ -535,7 +535,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             
             ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup',
             {
-                action: "resource-filter-view', 
+                action: "resource-filters", 
                 subType: rootNodeConfig.type.toLowerCase(), 
                 framework: ecEditor.getContext('framework'),
                 rootOrgId: ecEditor.getContext('channel'),
@@ -667,7 +667,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 $scope.invokeFacetsPage();
             }
             ecEditor.addEventListener('editor:template:loaded', function(event, object) {
-                if(object.formAction == 'resource-filter-view') {
+                if(object.formAction == 'resource-filters') {
                     $scope.filterForm = object.templatePath;
                 }
             });
