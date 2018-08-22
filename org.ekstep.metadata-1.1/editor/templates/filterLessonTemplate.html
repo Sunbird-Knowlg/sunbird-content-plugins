@@ -31,11 +31,12 @@
                             <div class="filterMetaDetails">
                                 <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required), 'required': dynamicField.required} " name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='multiselect' ">
                                     <div class="ui sub header paraHeading">
-                                        <p class="padding-top-3px">{{dynamicField.label | uppercase}}</p>
+                                        <p class="padding-top-3px">{{dynamicField.label | uppercase}} ({{contentMeta[dynamicField.code].length || 0}})</p>
                                     </div>
+                                    
                                     <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown placeholder-padding lableCls " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#filterLessonDataTemplate', index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm});$parent.$parent.getFiltersValue(contentMeta);" multiple=" " ng-required="{{dynamicField.required}} ">
                                         <option value="">{{dynamicField.placeholder}}</option>
-                                        <option data-value="{{category.name || category}} " ng-repeat="category in categoryList[dynamicField.code]" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)">{{category.name || category}}</option>
+                                        <option data-value="{{category.name || category}} " ng-repeat="category in categoryList[dynamicField.code]" ng-selected="(contentMeta[dynamicField.code] == category.name) || (category in contentMeta[dynamicField.code])">{{category.name || category}}</option>
                                     </select>
                                     <div ng-show="!metaForm[dynamicField.code].$valid " class="ui pointing red basic label ">
                                         Please Select
@@ -44,35 +45,34 @@
                             </div>
                             <!-- SINGLE SELECT INPUT FIELD -->
                             <div class="filterMetaDetails">
-                                 <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required), 'required': dynamicField.required} " name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='select' ">
+                                <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required  && isSubmit), 'required': dynamicField.required} " name="{{dynamicField.code}}" ng-if="dynamicField.inputType=='select' && dynamicField.code!='year' ">
                                     <div class="ui sub header paraHeading">
                                         <p class="padding-top-3px">{{dynamicField.label | uppercase}}</p>
                                     </div>
-                                    <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown placeholder-padding lableCls " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#filterLessonDataTemplate', index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm});$parent.$parent.getFiltersValue(contentMeta);" multiple=" " ng-required="{{dynamicField.required}} ">
-                                        <option value="">{{dynamicField.placeholder}}</option>
-                                        <option data-value="{{category.name || category}} " ng-repeat="category in categoryList[dynamicField.code]" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)">{{category.name || category}}</option>
+                                    <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown placeholder-padding lableCls" ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#filterLessonDataTemplate', index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm});$parent.$parent.getFiltersValue(contentMeta);"
+                                        ng-required="{{dynamicField.required}} ">
+                                            <option value = "">{{dynamicField.placeholder}}</option> 
+                                            <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code]" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)"  >{{category.name || category}}</option>
                                     </select>
-                                    <div ng-show="!metaForm[dynamicField.code].$valid " class="ui pointing red basic label ">
+                                    <div ng-show="!metaForm[dynamicField.code].$valid  && isSubmit" class="ui pointing red basic label ">
                                         Please Select
                                     </div>
+
                                 </div>
                             </div>
                             <!-- CONCEPT SELECTOR -->
-                            <div class="filterMetaDetails">
+                            <div class="filterMetaDetails">                                    
                                 <div id="{{dynamicField.code}} " class="field " ng-class="{ 'error': (!contentMeta[dynamicField.code] && dynamicField.required) , 'required': dynamicField.required} " name="{{dynamicField.code}}" ng-if="dynamicField.inputType==='conceptselector'">
                                     <div class="ui sub header paraHeading">
-                                        <p class="padding-top-3px">{{dynamicField.label | uppercase}} ({{filterSelection.concept.length}})</p>
+                                        <p class="padding-top-3px">{{dynamicField.label | uppercase}} ({{contentMeta[dynamicField.code].length || 0}})</p>
                                     </div>
-                                    <div class="ui fluid labeled input">
-                                            <conceptselector class="concept-field" config=dynamicField ng-click="onConfigChange({target: '#filterLessonDataTemplate', field:dynamicField, form:metaForm});"></conceptselector>
-                                        </div>
-                                    </div>
+                                    <conceptselector class="concept-field" config=dynamicField ng-click="onConfigChange({target: '#filterLessonDataTemplate', field:dynamicField, form:metaForm});"></conceptselector>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="filterApplyBtn">
-                        <button id="apply-lesson-filter-button" class="ui small right floated button whiteColor blueBackGround" ng-disabled="!filterSelection.lessonType.length && !filterSelection.language.length && !filterSelection.grade.length && !filterSelection.subject.length && !filterSelection.concept.length" ng-click="applyFilters()">Apply</button>
+                        <button id="apply-lesson-filter-button" class="ui small right floated button whiteColor blueBackGround" ng-click="applyFilters()">Apply</button>
                     </div>
                 </div>
                 <!-- ACTION SECTION LAYOUT -->

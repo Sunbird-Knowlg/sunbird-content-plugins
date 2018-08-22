@@ -97,28 +97,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
 
         // Meta APIs integration
         var metaService = org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE);
-        ctrl.learningConfig = function() {
-            var framework = ecEditor.getContext('framework');
-            ecEditor.getService('meta').getCategorys(framework, function(err, res) {
-                if (err) {
-                    ctrl.langErr = "Oops! Something went wrong with learning config. Please try again later.";
-                } else {
-                    ctrl.meta.languages = [];
-                    ctrl.meta.grades = [];
-                    ctrl.meta.subjects = [];
-                    var medium = _.find(res.data.result.framework.categories, ['code', 'medium']);
-                    if (medium && medium.terms)
-                        ctrl.meta.languages = medium.terms;
-                    var gradeLevel = _.find(res.data.result.framework.categories, ['code', 'gradeLevel']);
-                    if (gradeLevel && gradeLevel.terms)
-                        ctrl.meta.grades = gradeLevel.terms;
-                    var subject = _.find(res.data.result.framework.categories, ['code', 'subject']);
-                    if (subject && subject.terms)
-                        ctrl.meta.subjects = subject.terms;
-                }
-                $scope.$safeApply();
-            });
-        };
 
         // get the concepts name based on concept ids
         ctrl.searchConcepts = function(content, cb) {
@@ -236,7 +214,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     ctrl.setFilterValues();
                 } else {
                     $scope.mainTemplate = 'selectedResult';
-                    ctrl.learningConfig();
+                    // ctrl.learningConfig();
                     ctrl.meta.lessonTypes = collectionService.getObjectTypeByAddType('Browser');
                     ctrl.dropdownAndCardsConfig();
                     ctrl.setFilterValues();
@@ -259,65 +237,16 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         // get filters value
         $scope.getFiltersValue = function(data) {
             ecEditor._.forEach(data, function(value, key) {
-                if (value) {
-                switch (key) {
-                    case "language":
-                    $scope.filterSelection.language = value;
-                    break;
-                    case "gradeLevel":
-                    if (value.length) {
-                        $scope.filterSelection.grade = value;
-                    }
-                    break;
-                    case "medium":
-                    $scope.filterSelection.medium = value;
-                    break;
-                    case "board":
-                    data.request.filters.board = value;
-                    break;
-                    case "subject":
-                    $scope.filterSelection.subject = value;
-                    break;
-                    case "resource":
-                    $scope.filterSelection.lessonType = value;
-                    break;
-                    case "concepts":
-                    data.request.filters.concepts = value;
-                    break;
-                }
+                if (value && value.length){
+                    $scope.filterSelection[key] = value;
+                }else{
+                    delete $scope.filterSelection[key];
                 }
             });
-
-            if ($scope.filterSelection.language.length) {
-                $scope.filterSelection.language = _.isString($scope.filterSelection.language) ? $scope.filterSelection.language.split(",") : $scope.filterSelection.language;
-                searchBody.request.filters.language = $scope.filterSelection.language;
-            } else {
-                delete searchBody.request.filters.language;
-            }
-            if ($scope.filterSelection.grade.length) {
-                $scope.filterSelection.grade = _.isString($scope.filterSelection.grade) ? $scope.filterSelection.grade.split(",") : $scope.filterSelection.grade;
-                searchBody.request.filters.gradeLevel = $scope.filterSelection.grade;
-            } else {
-                delete searchBody.request.filters.gradeLevel;
-            }
-            if ($scope.filterSelection.lessonType.length) {
-                $scope.filterSelection.lessonType = _.isString($scope.filterSelection.lessonType) ? $scope.filterSelection.lessonType.split(",") : $scope.filterSelection.lessonType;
-                searchBody.request.filters.contentType = $scope.filterSelection.lessonType;
-            } else {
-                searchBody.request.filters.contentType = ctrl.meta.lessonTypes;
-            }
-            if ($scope.filterSelection.subject.length) {
-                $scope.filterSelection.subject = _.isString($scope.filterSelection.subject) ? $scope.filterSelection.subject.split(",") : $scope.filterSelection.subject;
-                searchBody.request.filters.subject = $scope.filterSelection.subject;
-            } else {
-                delete searchBody.request.filters.subject;
-            }
-            if ($scope.filterSelection.concept.length) {
-                $scope.filterSelection.concept = _.isString($scope.filterSelection.concept) ? $scope.filterSelection.concept.split(",") : $scope.filterSelection.concept;
-                searchBody.request.filters.concepts = $scope.filterSelection.concept;
-            } else {
-                delete searchBody.request.filters.concepts;
-            }
+            $scope.filterSelection = _.omitBy($scope.filterSelection, _.isEmpty);
+            ecEditor._.forEach($scope.filterSelection, function(value, key) {
+                searchBody.request.filters[key] = value;
+            });
             $scope.$safeApply();
         }
 
@@ -459,26 +388,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             }
         }
 
-        // Add the resource
-        $scope.toggleSelectionLesson = function(lesson) {
-            var idx = $scope.selectedResources.indexOf(lesson.identifier);
-            if (idx > -1) {
-                ctrl.generateTelemetry({ type: 'click', subtype: 'uncheck', target: 'lesson', targetid: lesson.identifier });
-                if ($scope.mainTemplate != 'addedItemsView') {
-                    ecEditor.jQuery('#checkBox_' + lesson.identifier + ' >.checkBox').prop('checked', false);
-                }
-                $scope.lessonSelection.splice(idx, 1); // is currently selected, remove from selection list
-                $scope.selectedResources.splice(idx, 1);
-            } else {
-                ctrl.generateTelemetry({ type: 'click', subtype: 'check', target: 'lesson', targetid: lesson.identifier });
-                if ($scope.mainTemplate != 'addedItemsView') {
-                    ecEditor.jQuery('#checkBox_' + lesson.identifier + ' >.checkBox').prop('checked', true);
-                }
-                $scope.lessonSelection.push(lesson); // is newly selected, add to the selection list
-                $scope.selectedResources.push(lesson.identifier);
-            }
-        };
-
         // search
         $scope.searchByKeyword = function() {
             ecEditor.jQuery('.searchLoader').addClass('active');
@@ -582,20 +491,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
 
         // view all the items for a specific resource
         $scope.viewAll = function(query, sectionIndex) {
-            //ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'lesson-filter-view', subType: 'lessons', framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: false, metadata: {}})
-            var filterMetaData = {};
-            //ecEditor.dispatchEvent("org.ekstep.editcontentmeta:showpopup1", { action: 'question-filter-view', subType: 'questions', framework: "NCF", rootOrgId: "*", type: "content", popup: false, metadata: filterMetaData });
-            ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup',
-            {
-                action: 'lesson-filter-view', 
-                subType: 'lessons', 
-                framework: ecEditor.getContext('framework'),
-                rootOrgId: ecEditor.getContext('channel'),
-                type: 'content',
-                popup: false, 
-                metadata: filterMetaData
-            });
-
             ctrl.generateTelemetry({ type: 'click', subtype: 'submit', target: 'viewAll', targetid: "" });
             if (_.isString(query)) {
                 query = JSON.parse(query);
@@ -612,43 +507,21 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             };
             searchBody.request.filters.objectType = ["Content"];
             searchBody.request.filters.status = ["Live"];
-            ctrl.learningConfig();
-            ctrl.meta.lessonTypes = collectionService.getObjectTypeByAddType('Browser');
+            
+            ecEditor._.forEach(query.request.filters, function(value, key) {
+                if (value && value.length){
+                    $scope.filterSelection[key] = value;
+                }
+            });
+            $scope.filterSelection = _.omitBy($scope.filterSelection, _.isEmpty);
+    
+            ctrl.meta.lessonTypes  = collectionService.getObjectTypeByAddType('Browser');
             if (query.request.filters.contentType) {
                 query.request.filters.contentType = _.isString(query.request.filters.contentType) ? (query.request.filters.contentType.split(",") || []) : query.request.filters.contentType;
                 query.request.filters.contentType = _.intersectionWith(ctrl.meta.lessonTypes, query.request.filters.contentType, _.isEqual)
-                $scope.filterSelection.lessonType = query.request.filters.contentType;
-                searchBody.request.filters.contentType = query.request.filters.contentType;
+                $scope.filterSelection.contentType = query.request.filters.contentType;
             } else {
-                $scope.filterSelection.lessonType = ctrl.meta.lessonTypes;
-                searchBody.request.filters.contentType = ctrl.meta.lessonTypes;
-            }
-            if (query.request.filters.gradeLevel) {
-                query.request.filters.gradeLevel = _.isString(query.request.filters.gradeLevel) ? (query.request.filters.gradeLevel.split(",") || []) : query.request.filters.gradeLevel;
-                $scope.filterSelection.grade = query.request.filters.gradeLevel;
-                searchBody.request.filters.gradeLevel = query.request.filters.gradeLevel;
-            } else {
-                delete searchBody.request.filters.gradeLevel;
-            }
-            if (query.request.filters.language) {
-                query.request.filters.language = _.isString(query.request.filters.language) ? (query.request.filters.language.split(",") || []) : query.request.filters.language;
-                $scope.filterSelection.language = query.request.filters.language;
-                searchBody.request.filters.language = query.request.filters.language;
-            } else {
-                delete searchBody.request.filters.language;
-            }
-            if (query.request.filters.subject) {
-                query.request.filters.subject = _.isString(query.request.filters.subject) ? (query.request.filters.subject.split(",") || []) : query.request.filters.subject;
-                $scope.filterSelection.subject = query.request.filters.subject;
-                searchBody.request.filters.subject = query.request.filters.subject;;
-            } else {
-                delete searchBody.request.filters.subject;
-            }
-            if (query.request.filters.concepts) {
-                $scope.filterSelection.concept = query.request.filters.concepts;
-                searchBody.request.filters.concepts = query.request.filters.concepts;
-            } else {
-                delete searchBody.request.filters.concepts;
+                $scope.filterSelection.contentType = ctrl.meta.lessonTypes;
             }
             if (query.request.sort_by) {
                 $scope.sortOption = query.request.sort_by;
@@ -656,6 +529,18 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             } else {
                 delete searchBody.request.sort_by;
             }
+
+            searchBody.request.filters = $scope.filterSelection;
+            ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup',
+            {
+                action: 'lesson-filter-view', 
+                subType: 'lessons', 
+                framework: ecEditor.getContext('framework'),
+                rootOrgId: ecEditor.getContext('channel'),
+                type: 'content',
+                popup: false, 
+                metadata: $scope.filterSelection
+            });
             ctrl.searchRes = { count: 0, content: [] };
 
             if (!_.isUndefined(query.request.mode)) {
@@ -783,7 +668,23 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 if(object.formAction == 'lesson-filter-view') {
                     $scope.filterForm = object.templatePath;
                 }
-            })
+            });
+            ecEditor.addEventListener('editor:form:change', function(event, data) {
+                if (data.templateId == "filterLessonTemplate") {
+                    if (data.key.toLowerCase() == "concepts") {
+                    $scope.filterSelection.concepts = [];
+                    _.forEach(data.value, function(id) {
+                        $scope.filterSelection.concepts.push(id.identifier);
+                    });
+                    } else if (data.key.toLowerCase() == "topic") {
+                    $scope.filterSelection.topics = [];
+                    _.forEach(data.value, function(id) {
+                        $scope.filterSelection.topics.push(id);
+                    });
+                    }
+                    $scope.getFiltersValue($scope.filterSelection);
+                }
+            });
         };
         $scope.init();
     }]);
