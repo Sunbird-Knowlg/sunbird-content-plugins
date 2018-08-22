@@ -531,10 +531,12 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             }
 
             searchBody.request.filters = $scope.filterSelection;
+            var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
+            
             ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup',
             {
-                action: 'lesson-filter-view', 
-                subType: 'lessons', 
+                action: "resource-filter-view', 
+                subType: rootNodeConfig.type.toLowerCase(), 
                 framework: ecEditor.getContext('framework'),
                 rootOrgId: ecEditor.getContext('channel'),
                 type: 'content',
@@ -665,12 +667,12 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 $scope.invokeFacetsPage();
             }
             ecEditor.addEventListener('editor:template:loaded', function(event, object) {
-                if(object.formAction == 'lesson-filter-view') {
+                if(object.formAction == 'resource-filter-view') {
                     $scope.filterForm = object.templatePath;
                 }
             });
             ecEditor.addEventListener('editor:form:change', function(event, data) {
-                if (data.templateId == "filterLessonTemplate") {
+                if (data.templateId == "resourceFilterTemplate") {
                     if (data.key.toLowerCase() == "concepts") {
                     $scope.filterSelection.concepts = [];
                     _.forEach(data.value, function(id) {

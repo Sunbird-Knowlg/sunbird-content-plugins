@@ -461,11 +461,11 @@ window.formConfigs = {
     ]
   },
   filterLessonDataTemplate: {
-    "action": "lesson-filter-view",
-    "templateName": "filterLessonTemplate",
+    "action": "resource-filter-view",
+    "templateName": "resourceFilterTemplate",
     "fields": [
       {
-        "code": "board",
+        "code": "sets",
         "dataType": "list",
         "description": "Board",
         "editable": true,
@@ -479,26 +479,31 @@ window.formConfigs = {
         "visible": true
       },
       {
-        "code": "category",
+        "code": "contentType",
         "dataType": "list",
         "description": "Category",
         "editable": true,
         "index": 1,
         "inputType": "multiselect",
-        "label": "Category",
-        "name": "Class",
-        "placeholder": "Select Category",
+        "label": "contentType",
+        "name": "contentType",
+        "placeholder": "Select contentType",
         "renderingHints": {},
         "required": false,
+        "range": [
+          "Resource",
+          "Collection",
+          "Content"
+        ],
         "visible": true
       },
       {
-        "code": "language",
+        "code": "medium",
         "dataType": "list",
         "description": "Language",
         "editable": true,
         "index": 1,
-        "inputType": "multiselect",
+        "inputType": "select",
         "label": "Language",
         "name": "Language",
         "placeholder": "Select Language",
@@ -507,7 +512,7 @@ window.formConfigs = {
         "visible": true
       },
       {
-        "code": "gradeLevel",
+        "code": "class",
         "dataType": "list",
         "description": "Class",
         "editable": true,
