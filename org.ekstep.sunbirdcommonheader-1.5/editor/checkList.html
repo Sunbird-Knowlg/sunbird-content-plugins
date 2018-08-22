@@ -32,8 +32,7 @@
             <h5 ng-show="checklistMode == 'reject' || checklistMode === 'read' ">
                 <div class="ui checkbox checklist">
                     <input type="checkbox" class="otherItem" ng-checked="rejectedReasons.indexOf('Others')!== -1" ng-click="onCheckboxSelect( 'Others') ">
-                    <label>Other Issue(s) (if there are any other issues, tick this and provide details in the comments box)
-                        </label>
+                    <label>{{checklistItems.otherReason}}</label>
                 </div>
             </h5>
             <h5 class="ui tiny header " ng-show="checklistItems.comments.required ">{{checklistItems.comments.label}}</h5>

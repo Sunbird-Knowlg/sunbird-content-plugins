@@ -453,15 +453,54 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
      * @description - on init of checklist pop-up
      */
     $scope.initPopup = function() {
+        var request = {
+            subType: $scope.getContentType().toLowerCase(),
+            framework: ecEditor.getContext("framework"),
+            rootOrgId: ecEditor.getContext("channel"),
+            type: "content"
+        };
         var checklistConfig = window.checkListConfigurations;
-        ecEditor.dispatchEvent('org.ekstep.checklist:getMode', function(object) {
+        ecEditor.dispatchEvent("org.ekstep.checklist:getMode", function(object) {
             $scope.checklistMode = object.mode;
             $scope.$safeApply();
         });
         if ($scope.checklistMode == reviewReject) {
-            $scope.checklistItems = checklistConfig.reject;
+            request.action = "requestForChangesChecklist";
+            org.ekstep.services.sunbirdCommonConfiguration.getFormConfigurations({ request: request }, function(error, response) {
+                if (error) {
+                    console.error("Something went wrong ", error)
+                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                        message: 'Something is not right, try after some time',
+                        position: 'topCenter',
+                        icon: 'fa fa-error'
+                    });
+                }  else {
+                    var data = response.result.form.data.fields[0];
+                    checklistConfig.reject.subtitle = data.title;
+                    checklistConfig.reject.otherReason = data.otherReason;
+                    checklistConfig.reject.contents = data.contents;
+                    $scope.checklistItems = checklistConfig.reject;
+                    $scope.$safeApply();
+                }
+            })
         } else if ($scope.checklistMode == reviewPublish) {
-            $scope.checklistItems = checklistConfig.publish;
+            request.action = "publishChecklist";
+            org.ekstep.services.sunbirdCommonConfiguration.getFormConfigurations({ request: request }, function(error, response) {
+                if (error) {
+                    console.error("Something went wrong ", error)
+                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                        message: 'Something is not right, try after some time',
+                        position: 'topCenter',
+                        icon: 'fa fa-error'
+                    });
+                }  else {
+                    var data = response.result.form.data.fields[0];
+                    checklistConfig.publish.subtitle = data.title;
+                    checklistConfig.publish.contents = data.contents;
+                    $scope.checklistItems = checklistConfig.publish;
+                    $scope.$safeApply();
+                }
+            })
         } else {
             var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
             $scope.checklistItems = checklistConfig.reject;
@@ -469,6 +508,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             $scope.checklistItems.subtitle = checklistConfig.read.subtitle;
             $scope.reviewComments = meta.rejectComment;
             $scope.rejectedReasons = meta.rejectReasons;
+            $scope.$safeApply();
             setTimeout(function() {
                 $("#review-footer").hide();
                 $(".ui.checkbox.checklist input ").prop("disabled", true);
