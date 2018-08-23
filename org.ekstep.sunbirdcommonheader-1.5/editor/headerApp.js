@@ -475,7 +475,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         icon: 'fa fa-error'
                     });
                 }  else {
-                    var data = response.result.form.data.fields[0];
+                    var data = response.data.result.form.data.fields[0];
                     checklistConfig.reject.subtitle = data.title;
                     checklistConfig.reject.otherReason = data.otherReason;
                     checklistConfig.reject.contents = data.contents;
@@ -494,7 +494,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         icon: 'fa fa-error'
                     });
                 }  else {
-                    var data = response.result.form.data.fields[0];
+                    var data = response.data.result.form.data.fields[0];
                     checklistConfig.publish.subtitle = data.title;
                     checklistConfig.publish.contents = data.contents;
                     $scope.checklistItems = checklistConfig.publish;
