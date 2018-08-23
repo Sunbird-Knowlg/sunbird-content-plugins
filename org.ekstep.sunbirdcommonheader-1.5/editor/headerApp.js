@@ -502,19 +502,34 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 }
             })
         } else {
-            var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
-            $scope.checklistItems = checklistConfig.reject;
-            $scope.checklistItems.title = checklistConfig.read.title;
-            $scope.checklistItems.subtitle = checklistConfig.read.subtitle;
-            $scope.reviewComments = meta.rejectComment;
-            $scope.rejectedReasons = meta.rejectReasons;
-            $scope.$safeApply();
-            setTimeout(function() {
-                $("#review-footer").hide();
-                $(".ui.checkbox.checklist input ").prop("disabled", true);
-                $("#review-comments").prop("disabled", true);
-                $("#review-comments").css("opacity", 0.5);
-            }, 0);
+            request.action = "publishChecklist";
+            org.ekstep.services.sunbirdCommonConfiguration.getFormConfigurations({ request: request }, function(error, response) {
+                if (error) {
+                    console.error("Something went wrong ", error)
+                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                        message: 'Something is not right, try after some time',
+                        position: 'topCenter',
+                        icon: 'fa fa-error'
+                    });
+                }  else {
+                    var data = response.data.result.form.data.fields[0];
+                    checklistConfig.reject.otherReason = data.otherReason;
+                    checklistConfig.reject.contents = data.contents;
+                    var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+                    $scope.checklistItems = checklistConfig.reject;
+                    $scope.checklistItems.title = checklistConfig.read.title;
+                    $scope.checklistItems.subtitle = checklistConfig.read.subtitle;
+                    $scope.reviewComments = meta.rejectComment;
+                    $scope.rejectedReasons = meta.rejectReasons;
+                    $scope.$safeApply();
+                    setTimeout(function() {
+                        $("#review-footer").hide();
+                        $(".ui.checkbox.checklist input ").prop("disabled", true);
+                        $("#review-comments").prop("disabled", true);
+                        $("#review-comments").css("opacity", 0.5);
+                    }, 0);
+                }
+            })
         }
     };
     (function() {
