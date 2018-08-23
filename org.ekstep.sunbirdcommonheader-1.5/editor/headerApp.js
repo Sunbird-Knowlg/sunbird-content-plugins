@@ -454,7 +454,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
      */
     $scope.initPopup = function() {
         var request = {
-            subType: 'resource',
+            subType: "resource",
             framework: ecEditor.getContext("framework"),
             rootOrgId: ecEditor.getContext("channel"),
             type: "content"
@@ -464,55 +464,27 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             $scope.checklistMode = object.mode;
             $scope.$safeApply();
         });
-        if ($scope.checklistMode == reviewReject) {
-            request.action = "requestForChangesChecklist";
-            org.ekstep.services.sunbirdCommonConfiguration.getFormConfigurations({ request: request }, function(error, response) {
-                if (error) {
-                    console.error("Something went wrong ", error)
-                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                        message: 'Something is not right, try after some time',
-                        position: 'topCenter',
-                        icon: 'fa fa-error'
-                    });
-                }  else {
-                    var data = response.data.result.form.data.fields[0];
+        request.action = ($scope.checklistMode == reviewPublish) ? "publishChecklist" : "requestForChangesChecklist";
+        org.ekstep.services.sunbirdCommonConfiguration.getFormConfigurations({ request: request }, function(error, response) {
+            if (error) {
+                console.error("Something went wrong ", error)
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: "Something is not right, try after some time",
+                    position: "topCenter",
+                    icon: "fa fa-error"
+                });
+            }  else {
+                var data = response.data.result.form.data.fields[0];
+                if ($scope.checklistMode == reviewReject) {
                     checklistConfig.reject.subtitle = data.title;
                     checklistConfig.reject.otherReason = data.otherReason;
                     checklistConfig.reject.contents = data.contents;
                     $scope.checklistItems = checklistConfig.reject;
-                    $scope.$safeApply();
-                }
-            })
-        } else if ($scope.checklistMode == reviewPublish) {
-            request.action = "publishChecklist";
-            org.ekstep.services.sunbirdCommonConfiguration.getFormConfigurations({ request: request }, function(error, response) {
-                if (error) {
-                    console.error("Something went wrong ", error)
-                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                        message: 'Something is not right, try after some time',
-                        position: 'topCenter',
-                        icon: 'fa fa-error'
-                    });
-                }  else {
-                    var data = response.data.result.form.data.fields[0];
+                } else if ($scope.checklistMode == reviewPublish) {
                     checklistConfig.publish.subtitle = data.title;
                     checklistConfig.publish.contents = data.contents;
                     $scope.checklistItems = checklistConfig.publish;
-                    $scope.$safeApply();
-                }
-            })
-        } else {
-            request.action = "publishChecklist";
-            org.ekstep.services.sunbirdCommonConfiguration.getFormConfigurations({ request: request }, function(error, response) {
-                if (error) {
-                    console.error("Something went wrong ", error)
-                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                        message: 'Something is not right, try after some time',
-                        position: 'topCenter',
-                        icon: 'fa fa-error'
-                    });
-                }  else {
-                    var data = response.data.result.form.data.fields[0];
+                } else {
                     checklistConfig.reject.otherReason = data.otherReason;
                     checklistConfig.reject.contents = data.contents;
                     var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
@@ -521,7 +493,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     $scope.checklistItems.subtitle = checklistConfig.read.subtitle;
                     $scope.reviewComments = meta.rejectComment;
                     $scope.rejectedReasons = meta.rejectReasons;
-                    $scope.$safeApply();
                     setTimeout(function() {
                         $("#review-footer").hide();
                         $(".ui.checkbox.checklist input ").prop("disabled", true);
@@ -529,8 +500,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         $("#review-comments").css("opacity", 0.5);
                     }, 0);
                 }
-            })
-        }
+                $scope.$safeApply();
+            }
+        })
     };
     (function() {
         $scope.whatsNew();
