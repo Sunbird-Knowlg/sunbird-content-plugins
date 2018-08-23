@@ -113,24 +113,17 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             }, 2000);
             $scope.$safeApply();
         } else {
-            if ($scope.metaData.concepts) {
-                searchBody.request.softConstraints = {
-                    "concepts": 100,
-                    "medium": 50,
-                    "gradeLevel": 25,
-                    "board": 12
-                };
-            } else {
-                searchBody.request.softConstraints = {
-                    "gradeLevel": 100,
-                    "medium": 50,
-                    "board": 25
-                };
+            searchBody.request.softConstraints =  ($scope.metaData.concepts) ? {
+                "concepts": 100,
+                "medium": 50,
+                "gradeLevel": 25,
+                "board": 12
+            } : {
+                "gradeLevel": 100,
+                "medium": 50,
+                "board": 25
             }
-
-            $scope.searchBody = searchBody;
-
-
+            $scope.searchBody = searchBody; 
             searchService.search(searchBody, function (err, res) {
                 if (err) {
                     console.error("Oops! Something went wrong. Please try again later.", err);
@@ -158,7 +151,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                     ecEditor.jQuery('#suggestions-loader').dimmer('hide');
                 }
             });
-        }
+        }        
     }
 
     /* Open Resourse Browser with the Given query */
