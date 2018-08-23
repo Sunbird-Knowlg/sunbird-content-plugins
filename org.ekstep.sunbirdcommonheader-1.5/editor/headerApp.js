@@ -454,7 +454,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
      */
     $scope.initPopup = function() {
         var request = {
-            subType: $scope.getContentType().toLowerCase(),
+            subType: 'resource',
             framework: ecEditor.getContext("framework"),
             rootOrgId: ecEditor.getContext("channel"),
             type: "content"
