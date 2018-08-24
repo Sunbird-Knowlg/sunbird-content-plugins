@@ -465,7 +465,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             $scope.$safeApply();
         });
         request.action = ($scope.checklistMode == reviewPublish) ? "publishChecklist" : "requestForChangesChecklist";
-        org.ekstep.services.sunbirdCommonConfiguration.getFormConfigurations({ request: request }, function(error, response) {
+        org.ekstep.services.metaService.getFormConfigurations({ request: request }, function(error, response) {
             if (error) {
                 console.error("Something went wrong ", error)
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
