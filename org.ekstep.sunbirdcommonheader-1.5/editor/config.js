@@ -1,7 +1,7 @@
 var checkListConfigurations = {
     "reject": {
         "title": "Request Changes",
-        "subtitle": "Please detail the required changes in the comments' with a comment box below",
+        "subtitle": "Please detail the required changes in the comments' with the comment box below.",
         "contents": [],
         "comments": {
             "required": true,
