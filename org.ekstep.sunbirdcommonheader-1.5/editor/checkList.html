@@ -29,7 +29,7 @@
                 </div>
             </div>
 
-            <h5 ng-show="checklistMode == 'reject' || checklistMode === 'read' ">
+            <h5 ng-show="(checklistMode == 'reject' || checklistMode === 'read') && checklistItems.otherReason">
                 <div class="ui checkbox checklist">
                     <input type="checkbox" class="otherItem" ng-checked="rejectedReasons.indexOf('Others')!== -1" ng-click="onCheckboxSelect( 'Others') ">
                     <label>{{checklistItems.otherReason}}</label>
