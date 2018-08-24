@@ -188,8 +188,8 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
         });
 
         _.forEach(ecEditor.getConfig('editorConfig').rules.objectTypes, function (obj) {
-            if ((obj.type == activeNode.data.objectType) && obj.editable) {
-                if ((obj.type == activeNode.data.objectType) && obj.editable && activeNode.data.metadata.concepts) {
+            if ((obj.type === activeNode.data.objectType) && obj.editable) {
+                if ((obj.type === activeNode.data.objectType) && obj.editable && activeNode.data.metadata.concepts) {
                     _.forEach(activeNode.data.metadata.concepts, function (concept) {
                         activeNodeConcepts.push(concept.identifier);
                     });
