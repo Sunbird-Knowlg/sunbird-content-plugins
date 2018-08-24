@@ -495,8 +495,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         instance.dialcodeLink(mapArr);
     },
     dialcodeLink: function(dialcodeMap) {
-        dialcodeMapObj = _.find(dialcodeMap, 'dialcode');
-        if(dialcodeMapObj && dialcodeMapObj.dialcode){
+        if(!_.isEmpty(dialcodeMap)){
             var request = {
                 "request": {
                     "content": dialcodeMap
