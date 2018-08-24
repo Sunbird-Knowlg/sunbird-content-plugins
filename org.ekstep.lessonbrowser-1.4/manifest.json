@@ -37,6 +37,10 @@
         {
             "type": "css",
             "src": "editor/lessonbrowser.css"
-        }]
+        },{
+        "type": "plugin",
+        "plugin": "org.ekstep.metadata",
+        "ver": "1.1"
+      }]
     }
 }
