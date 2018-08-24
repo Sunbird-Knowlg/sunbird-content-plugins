@@ -342,7 +342,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     popup: false, 
                     metadata: $scope.filterSelection
                 });
-            }, 100);
+            }, 800);
         }
 
         // search
@@ -464,7 +464,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             };
             searchBody.request.filters.objectType = ["Content"];
             searchBody.request.filters.status = ["Live"];
-
             ecEditor._.forEach(query.request.filters, function(value, key) {
                 if (value && value.length){
                     $scope.filterSelection[key] = _.isString(value) ? (value.split(",") || []) : value;
