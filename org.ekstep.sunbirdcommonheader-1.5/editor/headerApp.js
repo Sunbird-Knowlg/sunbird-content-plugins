@@ -454,7 +454,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
      */
     $scope.initPopup = function() {
         var request = {
-            subType: "resource",
+            subType: $scope.getContentType(),
             framework: ecEditor.getContext("framework"),
             rootOrgId: ecEditor.getContext("channel"),
             type: "content"
@@ -474,14 +474,14 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     icon: "fa fa-error"
                 });
             }  else {
-                var data = response.data.result.form.data.fields[0];
+                var data = response.data.result.form ? response.data.result.form.data.fields[0] : {};
                 if ($scope.checklistMode == reviewReject) {
-                    checklistConfig.reject.subtitle = data.title;
+                    checklistConfig.reject.subtitle = data.title ? data.title : checklistConfig.reject.subtitle;
                     checklistConfig.reject.otherReason = data.otherReason;
                     checklistConfig.reject.contents = data.contents;
                     $scope.checklistItems = checklistConfig.reject;
                 } else if ($scope.checklistMode == reviewPublish) {
-                    checklistConfig.publish.subtitle = data.title;
+                    checklistConfig.publish.subtitle = data.title ? data.title : checklistConfig.reject.subtitle;
                     checklistConfig.publish.contents = data.contents;
                     $scope.checklistItems = checklistConfig.publish;
                 } else {

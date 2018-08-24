@@ -1,7 +1,7 @@
 var checkListConfigurations = {
     "reject": {
         "title": "Request Changes",
-        "subtitle": "",
+        "subtitle": "Please detail the required changes in the comments' with a comment box below",
         "contents": [],
         "comments": {
             "required": true,
@@ -14,7 +14,7 @@ var checkListConfigurations = {
     },
     "publish": {
         "title": "Publish",
-        "subtitle": "",
+        "subtitle": "Are you sure you want to publish?",
         "contents": [],
         "comments": {
             "required": false,
