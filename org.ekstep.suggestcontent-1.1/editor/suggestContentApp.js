@@ -6,6 +6,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
     $scope.metaData = {};
     $scope.responseData = [];
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
+    var pickerArray = ['gradeLevel', 'board', 'subject', 'medium', 'concepts'];
     $scope.suggestedContentList = {
         count: 0,
         content: []
@@ -31,7 +32,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
         var rootNodeMetadata = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild().data.metadata;
         Object.assign($scope.metaData,
             _.pick(rootNodeMetadata, ['name', 'description', 'board', 'subject', 'gradeLevel']),
-            (rootNodeMetadata.medium && _.isObject(rootNodeMetadata.medium) ? {
+            (rootNodeMetadata.medium && _.isArray(rootNodeMetadata.medium) ? {
                 medium: _.first(rootNodeMetadata.medium)
             } : {
                 medium: rootNodeMetadata.medium
@@ -43,13 +44,6 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             } : {});
     }
 
-    $scope.getRootNodeData = function () {
-        return ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild().data;
-    }
-
-    $scope.getParentNodeData = function () {
-        return ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().getParent().data;
-    }
 
     $scope.generateTelemetry = function (data) {
         if (data) org.ekstep.services.telemetryService.interact({
@@ -64,7 +58,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
     }
     /* HashKey to store suggestion responses to avoid api call */
     $scope.setMetaResponseHash = function (meta) {
-        var objPick = _.values(_.pick(meta, ['gradeLevel', 'board', 'subject', 'medium', 'concepts']));
+        var objPick = _.values(_.pick(meta, pickerArray));
 
         var flatObj = _.flattenDeep(objPick).join('').toLowerCase();
         var hash = 0,
@@ -78,7 +72,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
 
     $scope.searchLessons = function () {
         Object.assign(searchBody.request.filters,
-            _.pick($scope.metaData, ['gradeLevel', 'board', 'subject', 'medium', 'concepts']), {
+            _.pick($scope.metaData, pickerArray), {
                 contentType: org.ekstep.collectioneditor.api.getService('collection').getObjectTypeByAddType('Browser')
             }
         )
@@ -87,10 +81,9 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             content: []
         };
         var concepts = "";
-        var getMetaHash = $scope.setMetaResponseHash($scope.metaData);
 
         if ($scope.metaData) {
-            concepts = getMetaHash
+            concepts = $scope.setMetaResponseHash($scope.metaData)
         } else if (searchBody.request.filters.concepts) {
             concepts = "No_Concepts";
             delete searchBody.request.filters.concepts;
@@ -213,7 +206,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             $scope.metaData.concepts = $scope.metaData.concepts.sort();
         if (!_.isEqual(activeNodeConcepts.sort(), $scope.metaData.concepts))
             $scope.metaData.concepts = activeNodeConcepts;
-        if (activeNodeConcepts.length == 0)
+        if (!activeNodeConcepts.length)
             $scope.metaData.concepts = undefined;
 
         $scope.searchLessons();
@@ -254,7 +247,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                     concepts: updatedConcepts
                 } : {}
             )
-        } else if (updatedConcepts.length == 0) {
+        } else if (!updatedConcepts.length) {
             $scope.metaData.concepts = undefined;
         } else {
             if ($scope.metaData.concepts)
