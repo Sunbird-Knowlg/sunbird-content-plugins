@@ -287,21 +287,9 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     "query": ""
                 }
             };
-            var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
-            $scope.filterSelection = {};
+            $scope.filterSelection = undefined;
             $scope.$safeApply();
-            setTimeout(function() {            
-                ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup',
-                {
-                    action: "resource-filters", 
-                    subType: rootNodeConfig.type.toLowerCase(), 
-                    framework: ecEditor.getContext('framework'),
-                    rootOrgId: ecEditor.getContext('channel'),
-                    type: 'content',
-                    popup: false, 
-                    metadata: $scope.filterSelection
-                });
-            }, 100) 
+            ctrl.setFilterValues();
             ctrl.searchLessons(function(res) {
                 ctrl.applyAllJquery();
                 $scope.isCardSearching = false;
@@ -341,7 +329,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         }
 
         // setting filter values
-        ctrl.setFilterValues = function() {
+        ctrl.setFilterValues = function() {            
             var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
             setTimeout(function() {            
                 ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup',
@@ -354,7 +342,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                     popup: false, 
                     metadata: $scope.filterSelection
                 });
-            }, 1000);
+            }, 100);
         }
 
         // search
@@ -476,14 +464,10 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             };
             searchBody.request.filters.objectType = ["Content"];
             searchBody.request.filters.status = ["Live"];
-            
-            if (query.request.filters.contentType) {
-                query.request.filters.contentType = _.isString(query.request.filters.contentType) ? (query.request.filters.contentType.split(",") || []) : query.request.filters.contentType;   
-            }
 
             ecEditor._.forEach(query.request.filters, function(value, key) {
                 if (value && value.length){
-                    $scope.filterSelection[key] = value;
+                    $scope.filterSelection[key] = _.isString(value) ? (value.split(",") || []) : value;
                 }
             });
             $scope.filterSelection = _.omitBy($scope.filterSelection, _.isEmpty);
