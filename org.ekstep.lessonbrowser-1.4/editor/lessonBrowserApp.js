@@ -265,7 +265,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                         "objectType": ["Content"],
                         "status": ["Live"]
                     },
-                    "query": ""
+                    "query": ecEditor.jQuery('#resourceSearch').val()
                 }
             };
             $scope.filterSelection = {};
