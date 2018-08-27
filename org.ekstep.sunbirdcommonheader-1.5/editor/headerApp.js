@@ -481,7 +481,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     checklistConfig.reject.contents = data.contents;
                     $scope.checklistItems = checklistConfig.reject;
                 } else if ($scope.checklistMode == reviewPublish) {
-                    checklistConfig.publish.subtitle = data.title ? data.title : checklistConfig.reject.subtitle;
+                    checklistConfig.publish.subtitle = data.title ? data.title : checklistConfig.publish.subtitle;
                     checklistConfig.publish.contents = data.contents;
                     $scope.checklistItems = checklistConfig.publish;
                 } else {
