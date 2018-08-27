@@ -20,6 +20,7 @@ formApp.directive('conceptselector', function() {
         $scope.templateId = (!_.isUndefined($scope.$parent.$parent.tempalteName)) ? $scope.$parent.$parent.tempalteName : 'metaform';
         $scope.conceptElementId = $scope.templateId + '-concept';
         $scope.invokeConceptSelector = function() {
+            ecEditor.addEventListener('editor.concept.change', $scope.resetConcepts, this);
             ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
                 element: $scope.conceptElementId,
                 selectedConcepts: selectedConcepts,
@@ -36,6 +37,13 @@ formApp.directive('conceptselector', function() {
                     $rootScope.$safeApply();
                 }
             });
+        }
+        $scope.resetConcepts = function(event, data){
+            if(data.key == 'concepts' && data.value.length == 0){
+                $scope.conceptSelectorMessage = '(0) concpets selected';
+                $scope.contentMeta.concepts = [];
+                $rootScope.$safeApply();
+            }    
         }
         $scope.invokeConceptSelector()
     }]
