@@ -8,12 +8,12 @@
                         SORT BY</p>
                     <div class="ui grid sortButtonsWrapper">
                         <div class="six wide column" style="padding:0%">
-                            <button ng-click="Sort('alphabetical')" ng-class="{'primary':sortOption == 'name'}" class="ui tiny basic left floated button SortBtns">
+                            <button ng-click="$parent.$parent.Sort('alphabetical')" ng-class="{'primary':sortOption == 'name'}" class="ui tiny basic left floated button SortBtns">
                                 A - Z
                             </button>
                         </div>
                         <div class="six wide column" style="padding:0%">
-                            <button ng-click="Sort('timestamp')" ng-class="{'primary':sortOption == 'lastPublishedOn'}" class="ui tiny basic right floated button SortBtns">
+                            <button ng-click="$parent.$parent.Sort('timestamp')" ng-class="{'primary':sortOption == 'lastPublishedOn'}" class="ui tiny basic right floated button SortBtns">
                                 PUBLISHED ON
                             </button>
                         </div>
@@ -24,7 +24,7 @@
                         <div class="item">
                             <p class="padding-top-3px sidebarSectionHeader">
                                 FILTERS</p>
-                            <a class="ui right floated blueColor" ng-click="resetFilters()">Clear All</a>
+                            <a class="ui right floated blueColor" ng-click="resetAllFilters(); $parent.$parent.resetFilters();">Clear All</a>
                         </div>
                         <div class="filter-column" ng-class="(dynamicField.code == 'searchText')? 'twelve wide column': 'four wide column'  " ng-repeat="dynamicField in dynamicLayoutConfigurations">
                             <!-- MULTIPLE SELECT INPUT FIELD -->
