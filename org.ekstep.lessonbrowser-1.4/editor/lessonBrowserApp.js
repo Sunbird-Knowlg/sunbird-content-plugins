@@ -311,14 +311,6 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             ecEditor.jQuery('.special.cards .image').dimmer({
                 on: 'hover'
             });
-            ecEditor.jQuery('.ui.multiple.selection.dropdown').dropdown({
-                useLabels: false,
-                forceSelection: false,
-                direction: 'downward',
-                onHide: function() {
-                    $scope.getFiltersValue();
-                }
-            });
         }
 
         // setting filter values
