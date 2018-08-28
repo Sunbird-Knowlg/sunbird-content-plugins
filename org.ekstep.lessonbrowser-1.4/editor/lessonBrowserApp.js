@@ -620,9 +620,9 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                         $scope.filterSelection.concepts.push(id.identifier);
                     });
                     } else if (data.key.toLowerCase() == "topic") {
-                    $scope.filterSelection.topics = [];
+                    $scope.filterSelection.topic = [];
                     _.forEach(data.value, function(id) {
-                        $scope.filterSelection.topics.push(id);
+                        $scope.filterSelection.topic.push(id);
                     });
                     }
                     $scope.getFiltersValue($scope.filterSelection);
