@@ -53,7 +53,7 @@ describe("lesson browser plugin", function() {
             expect($scope.mainTemplate).toEqual("cardDetailsView");
             done();
         });
-        it("Should initialize the lesson browser without filters", function(done) {
+        it("Should initialize the lesson browser with filters", function(done) {
             spyOn($scope, "initPreview").and.callThrough();
             ecEditor.dispatchEvent('editor:invoke:viewall', {
                 "client": "org",
