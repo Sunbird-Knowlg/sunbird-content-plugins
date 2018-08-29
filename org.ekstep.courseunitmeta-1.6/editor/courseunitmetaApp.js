@@ -84,8 +84,8 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
         ecEditor.dispatchEvent("org.ekstep.lessonbrowser:show");
     }
 
-    $scope.onNodeSelect = function(evant, data){
-        var selectedConcepts = [];
+    $scope.onNodeSelect = function(event, data){
+        var selectedTopics = [];
         $scope.nodeId = data.data.id;
         $scope.nodeType = data.data.objectType;
         $scope.courseunit = {};
@@ -98,29 +98,30 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
         if($scope.mode === "Edit" && $scope.editable === true){
             $scope.metadataCloneObj = _.clone($scope.courseunit);
         }
-        $scope.courseunit.conceptData = '(0) concepts selected';
+        $scope.courseunit.conceptData = '(0) topics selected';
         $scope.courseunit.name = $scope.courseunit.name || 'Untitled Course Unit'
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
             if(!_.isUndefined(activeNode.data.metadata.concepts)){
                 $scope.courseunit.concepts = activeNode.data.metadata.concepts;
                 if($scope.courseunit.concepts.length > 0){
-                    $scope.courseunit.conceptData = '(' + $scope.courseunit.concepts.length + ') concepts selected';
+                    $scope.courseunit.conceptData = '(' + $scope.courseunit.concepts.length + ') topics selected';
                     _.forEach($scope.courseunit.concepts, function(concept){
-                        selectedConcepts.push(concept.identifier);
+                        selectedTopics.push(concept.identifier);
                     });
                 }else{
-                    $scope.courseunit.conceptData = '(0) concepts selected';
+                    $scope.courseunit.conceptData = '(0) topics selected';
                 }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
         }else{
             $scope.newNode = true;
         }
-        ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
-            element: 'courseunitConceptSelector',
-            selectedConcepts: selectedConcepts,
+        ecEditor.dispatchEvent('org.ekstep.topicselector:init', {
+            element: 'courseunitTopicsSelector',
+            selectedTopics: selectedTopics,
+            isCategoryDependant: false,
             callback: function(data) {
-                $scope.courseunit.conceptData = '(' + data.length + ') concepts selected';
+                $scope.courseunit.conceptData = '(' + data.length + ') topics selected';
                 $scope.courseunit.concepts = _.map(data, function(concept) {
                     return { "identifier" : concept.id , "name" : concept.name} ;
                 });
