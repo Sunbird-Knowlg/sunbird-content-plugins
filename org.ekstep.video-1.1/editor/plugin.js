@@ -51,7 +51,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         };
         return media;
     },
-    getYoutube: function(searchText, offset, cb){
+    getYoutube: function(searchText, limit, offset, cb){
         var instance=  this, requestObj;
         requestObj = {
             "request": {
@@ -60,10 +60,12 @@ org.ekstep.contenteditor.basePlugin.extend({
                 "mimeType": "video/x-youtube",
                 "status": new Array("Live"),
               },
-              "limit" : 200,
+              "limit" : limit,
               "offset": offset
             },
           }
+
+          org.ekstep.contenteditor.api._.isUndefined(searchText) ? null : requestObj.request.query = searchText;
 
           ecEditor.getService('search').search(requestObj, function(err, res){
             if (!err && res.data.responseCode == "OK") {

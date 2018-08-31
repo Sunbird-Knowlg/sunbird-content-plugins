@@ -104,7 +104,7 @@ Plugin.extend({
             video.controls = data.controls,
             video.autoplay = data.autoplay,
             // video.style.visibility = (data.visible===) ? "visible" : "hidden",
-            video.muted = (EkstepRendererAPI.isAudioMuted) ? EkstepRendererAPI.isAudioMuted : data.muted;
+            video.muted = data.muted;
 
         video.controlsList = 'nodownload';
         video.style.position = "absolute",
@@ -145,10 +145,8 @@ Plugin.extend({
                 "techOrder": ["youtube"],
                 "src": path
             },
-            function () {
-                console.log("check 2")
-            });
-
+            function () {});
+        (EkstepRendererAPI.isAudioMuted()) ? videojs(instance._id).muted(true): videojs(instance._id).muted(instance.muted);
         videojs(instance._id).ready(function () {
             var youtubeInstance = this;
             youtubeInstance.src({

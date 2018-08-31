@@ -34,6 +34,54 @@
             max-height: 300px !important;
             padding:5px;
         }
+        .load-more-assets-spinner {
+    margin: 100px auto 0;
+    width: 70px;
+    text-align: center;
+  }
+
+  .load-more-assets-spinner > div {
+    width: 18px;
+    height: 18px;
+    background-color: #333;
+
+    border-radius: 100%;
+    display: inline-block;
+    -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+    animation: sk-bouncedelay 1.4s infinite ease-in-out both;
+  }
+
+  .load-more-assets-spinner .bounce1 {
+    -webkit-animation-delay: -0.32s;
+    animation-delay: -0.32s;
+  }
+
+  .load-more-assets-spinner .bounce2 {
+    -webkit-animation-delay: -0.16s;
+    animation-delay: -0.16s;
+  }
+
+  @-webkit-keyframes sk-bouncedelay {
+    0%, 80%, 100% { -webkit-transform: scale(0) }
+    40% { -webkit-transform: scale(1.0) }
+  }
+
+  @keyframes sk-bouncedelay {
+    0%, 80%, 100% {
+      -webkit-transform: scale(0);
+      transform: scale(0);
+    } 40% {
+      -webkit-transform: scale(1.0);
+      transform: scale(1.0);
+    }
+  }
+  .load-more-assets-warning-msg img{
+    padding:0px!important;
+  }
+  .load-more-assets-warning-msg p{
+    text-align:center;
+  }
+  
     </style>
 
     <div class="ui modal active video-modal">
@@ -54,7 +102,7 @@
         <div class="content">
             <div class="ui pointing secondary menu">
                 <a id="googleDriveTab" class="active item" data-tab="first" ng-click="$ctrl.driveTab();">Google Drive</a>
-                <a id="youtubeTab" class="item" data-tab="second" ng-click="$ctrl.videoLibraryTab();">YouTube</a>
+                <a id="youtubeTab" class="item" data-tab="second" ng-click="$ctrl.videoLibraryTab();">Library</a>
             </div>
         <div class="video__itemContainer">
             <div class="ui fluid grid container tab active" data-tab="first">
@@ -99,7 +147,7 @@
                 <div class="row">
                     <div class="column">
                             <div class="ui  fluid icon input assetbrowser_searchBox">
-                                <input id="searchMyImageAssets" ng-model="$ctrl.query" placeholder="Search Image..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
+                                <input id="searchMyImageAssets" ng-model="$ctrl.query" placeholder="Search the library for YouTube videos published under 'CC-BY 4.0 - license of current content'..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
                                 <i class="circular search link icon inverted" ng-click="$ctrl.search(); $ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'searchAsset'})"></i>
                             </div>
                     </div>
@@ -107,7 +155,7 @@
                 <div class="clearfix">&nbsp;</div>
                 <div class="ui special three cards video-library-tab" id="video-library-tab">
                     <div ng-show="$ctrl.youtubeList.length > 0" ng-click="$ctrl.VideoSource(videoItem)" class="card" style="cursor:pointer" ng-repeat="videoItem in $ctrl.youtubeList  track by $index">
-                        <div class="image infopopover">
+                        <div class="video image infopopover">
                             <img ng-src="{{videoItem.appIcon || $ctrl.defaultImage}}" class="resourceMetaImage ">
                             <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{videoItem.identifier}}' style="z-index:12">
                                 <input class="radioBox" type="radio" name="youtubeVideo">

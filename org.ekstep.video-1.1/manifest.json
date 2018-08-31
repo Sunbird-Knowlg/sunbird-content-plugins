@@ -18,16 +18,10 @@
             "iconStyle": "",
             "onclick": {
                 "id": "org.ekstep.video:showpopup"
-            },
-            "submenu": [{
-                "id": "resourcePlugin",
-                "type": "icon",
-                "title": "Add YouTube video",
-                "iconClass": "",
-                "onclick": {
-                    "id": "org.ekstep.resourcebrowser:show"
-                }
-            }] 
+            }
+        }],
+        "dependencies" : [{
+            "type": "css", "src": "editor/videobrowser.css"
         }],
         "views":[
             {"template":"./video.html", "controller":"./videoapp.js"}

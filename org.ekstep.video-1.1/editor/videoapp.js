@@ -9,6 +9,7 @@ angular.module('videoApp', [])
         ctrl.videoLibraryTabElement = "";
         ctrl.defaultImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/default_image.png");
         ctrl.selectedYoutube = {};
+        ctrl.limit = 200;
         ctrl.offset = 0;
         ctrl.offsetInc = 200;
         ctrl.loadMoreAssetSpinner = false;
@@ -37,18 +38,19 @@ angular.module('videoApp', [])
             }
             hideLoader();
             $scope.$safeApply();
+            ecEditor.jQuery('.special.cards .video').dimmer({
+                on: 'hover'
+            });
         }
         ctrl.videoLibraryTab = function () {
             ecEditor.jQuery("#" + ctrl.videoLibraryTabElement).unbind('scroll').scroll(ctrl.bindScroll);
             ctrl.showLoadMoreWarningMsg = false;
             showLoader();
 
-            instance.getYoutube(undefined, ctrl.offset = 0, getYoutubeCb);
+            instance.getYoutube(undefined, ctrl.limit, ctrl.offset = 0, getYoutubeCb);
 
         }
         ctrl.loadMoreYoutubeVideos = function (data) {
-            console.log(data);
-
             if (ctrl.offset + ctrl.offsetInc >= ctrl.maxLimit) {
                 ecEditor.jQuery("#" + data.target.id).unbind('scroll');
                 ecEditor.ngSafeApply(ecEditor.getAngularScope());
@@ -59,7 +61,7 @@ angular.module('videoApp', [])
             }
             var searchQuery = ctrl.query;
             (searchQuery === "") ? searchQuery = undefined: null;
-            instance.getYoutube(searchQuery, ctrl.offset, function (err, res) {
+            instance.getYoutube(searchQuery, ctrl.limit,  ctrl.offset, function (err, res) {
                 if (res && res.data.result.content) {
                     ecEditor._.forEach(res.data.result.content, function (obj, index) {
                         ctrl.youtubeList.push(obj)
@@ -88,6 +90,15 @@ angular.module('videoApp', [])
                     });
             });
         };
+        ctrl.search =  function(){
+            var searchText;
+
+            searchText =  ctrl.query;
+            (searchText === "") ? searchText = undefined: null;
+            ctrl.showLoadMoreWarningMsg = false;
+            instance.getYoutube(searchText, ctrl.limit, ctrl.offset, getYoutubeCb)
+            ecEditor.jQuery("#" + ctrl.videoLibraryTabElement).unbind('scroll').scroll(ctrl.bindScroll);
+        }
         ctrl.previewVideo = function () {
             ctrl.messageDiv = true;
             ctrl.show = 'loader';
@@ -96,12 +107,8 @@ angular.module('videoApp', [])
                 var gdrive = link.replace('/view?usp=sharing', '').replace('open?id=', 'uc?export=download&id=').replace('file/d/', 'uc?export=download&id=').replace('/edit?usp=sharing', '');
                 ctrl.videoUrl = gdrive;
             }
-
-            if (link.indexOf('youtube.com') != -1 || link.indexOf('youtu.be') != -1) {
-                var videoelement = ctrl.createYoutubeElement(ctrl.videoUrl);
-            } else {
-                var videoelement = ctrl.creteVideoElement(ctrl.videoUrl);
-            }
+           
+            var videoelement = ctrl.creteVideoElement(ctrl.videoUrl);
             ecEditor.jQuery('.content .container #previewVideo').html(videoelement);
             var video = document.getElementsByTagName('video')[0];
             video.play()
@@ -111,7 +118,6 @@ angular.module('videoApp', [])
                         ctrl.messageDiv = false;
                         ctrl.showAddLessonBtn = true;
                     });
-                    console.log("Valid URL:", video);
                 })
                 .catch(function (err) {
                     var scope = angular.element(ecEditor.jQuery("#addToLesson")).scope();
@@ -144,11 +150,7 @@ angular.module('videoApp', [])
         setTimeout(function () {
             ctrl.videoLibraryTabElement = "video-library-tab";
             ecEditor.jQuery('.video-modal .menu .item').tab();
-            ecEditor.jQuery('.special.cards .image').dimmer({
-                on: 'hover'
-            });
             ctrl.bindScroll = function (data) {
-                console.log(data);
 
                 var a = ecEditor.jQuery("#" + data.target.id);
                 var b = ecEditor.jQuery("#" + data.target.id)[0];
@@ -162,30 +164,14 @@ angular.module('videoApp', [])
         }, 100);
 
         ctrl.VideoSource = function (video) {
+            ecEditor.jQuery('#checkBox_' + video.identifier + ' >.radioBox').not(':checked').prop("checked", true);
             var scope = angular.element(ecEditor.jQuery("#addToLesson")).scope();
             scope.$safeApply(function () {
                 ctrl.messageDiv = false;
                 ctrl.showAddLessonBtn = true;
             });
             ctrl.videoUrl = video.artifactUrl;
-            console.log("Valid URL:", video.artifactUrl);
 
-        }
-        ctrl.createYoutubeElement = function (url) {
-            var i, r, rx = /^.*(?:(?:youtu\.be\/|v\/|vi\/|u\/\w\/|embed\/)|(?:(?:watch)?\?v(?:i)?=|\&v(?:i)?=))([^#\&\?]*).*/;
-            var match = url.match(rx);
-            r = url.match(rx);
-            console.log(r[1]);
-            url = `//www.youtube.com/embed/${r[1]}?autoplay=1`
-            console.log(url);
-
-            var element = document.createElement('iframe');
-            element.src = url;
-            element.width = '400';
-            element.height = '200';
-            element.controls = true;
-            element.autoplay = 'autoplay';
-            return element;
         }
         ctrl.creteVideoElement = function (url) {
             var element = document.createElement('video');
