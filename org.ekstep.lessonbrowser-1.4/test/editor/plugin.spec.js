@@ -1,12 +1,10 @@
 describe("lesson browser plugin", function() {
     var manifest, path, ctrl, $scope, pluginInstance;
     beforeAll(function(done) {
-       org.ekstep.pluginframework.pluginManager.loadPlugin('org.ekstep.lessonbrowser', '1.4', function() {
-            manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.lessonbrowser");
-            path = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/lessonBrowserApp.js");
-            pluginInstance = org.ekstep.pluginframework.pluginManager.pluginObjs["org.ekstep.lessonbrowser"];
-            done();
-        });
+        manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.lessonbrowser");
+        path = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/lessonBrowserApp.js");
+        pluginInstance = org.ekstep.pluginframework.pluginManager.pluginObjs["org.ekstep.lessonbrowser"];
+        done();
     });
 
     it('mock controller', function(done) {
@@ -135,6 +133,49 @@ describe("lesson browser plugin", function() {
                             "English"
                         ]}}});
                 expect(ctrl.filterSelection.medium).toEqual(["English"]);
+            });
+        });
+        describe("Apply rootNode Metadata", function() {
+            it("If root node having NCERT board, filters should be prefilled as NCERT board", function() {
+                spyOn(ctrl, 'viewAll').and.callThrough();
+                ctrl.viewAll({"request": {
+                        "filters": {
+                        "objectType": [
+                            "Resource"
+                        ]}}});
+                $scope.contentMeta.board = ["NCERT"]; 
+                expect($scope.rootNodeFilter.board).toEqual($scope.contentMeta.board);
+            });
+            it("If root node having NCERT board and Query having NCF, filters should be prefilled as NCERT, NCF board", function() {
+                spyOn(ctrl, 'viewAll').and.callThrough();
+                ctrl.viewAll({"request": {
+                        "filters": {
+                        "board":["NCF"], 
+                        "objectType": [
+                            "Resource"
+                        ]}}});
+                $scope.contentMeta.board = ["NCERT"]; 
+                expect($scope.rootNodeFilter.board).toEqual($scope.contentMeta.board);
+            });
+            it("If root node having English medium, filters should be prefilled as English medium", function() {
+                spyOn(ctrl, 'viewAll').and.callThrough();
+                ctrl.viewAll({"request": {
+                        "filters": {
+                        "objectType": [
+                            "Resource"
+                        ]}}});
+                $scope.contentMeta.medium = ["English"]; 
+                expect($scope.rootNodeFilter.medium).toEqual($scope.contentMeta.medium);
+            });
+            it("If root node having English subject, filters should be prefilled as English subject", function() {
+                spyOn(ctrl, 'viewAll').and.callThrough();
+                ctrl.viewAll({"request": {
+                        "filters": {
+                        "objectType": [
+                            "Resource"
+                        ]}}});
+                $scope.contentMeta.subject = ["English"]; 
+                expect($scope.rootNodeFilter.subject).toEqual($scope.contentMeta.subject);
             });
         });
     });
