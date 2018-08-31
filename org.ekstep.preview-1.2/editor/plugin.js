@@ -126,9 +126,10 @@ org.ekstep.contenteditor.basePlugin.extend({
         window.onclick = function(event) {
             if (event.target == modalContent) {
                 modal.style.display = "none";
+                previewContentIframe.contentWindow.EkstepRendererAPI.stopAll();
+                previewContentIframe.contentWindow.EkstepRendererAPI.removeHtmlElements();
             }
         }
-
     }
 });
 
