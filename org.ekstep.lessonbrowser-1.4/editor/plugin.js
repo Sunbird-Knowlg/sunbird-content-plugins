@@ -22,14 +22,7 @@ org.ekstep.collectioneditor.basePlugin.extend({
         var templatePath = org.ekstep.contenteditor.api.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/lessonBrowser.html");
         var controllerPath = org.ekstep.contenteditor.api.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/lessonBrowserApp.js");
         org.ekstep.contenteditor.api.getService('popup').loadNgModules(templatePath, controllerPath);
-        ecEditor.addEventListener('editor:invoke:viewall', this.initPreview, this)
-       // this.registerRepo(this.getEkstepRepo());
-    },
-
-    registerRepo: function(repo) {
-        var instance = this;
-        org.ekstep.contenteditor.api.getService('popup').loadNgModules(repo.templateUrl, repo.controllerUrl);
-        instance.repos.push(repo);
+        ecEditor.addEventListener('editor:invoke:viewall', this.initPreview, this);
     },
 
     /**
@@ -66,25 +59,5 @@ org.ekstep.collectioneditor.basePlugin.extend({
             className: 'ngdialog-theme-plain lessonbrowser-dialog'
         });
     },
-
-    getEkstepRepo: function() {
-        var instance = this;
-        var repo = new(org.ekstep.collectioneditor.contentProviderRepo.extend({
-            id: 'ekstep',
-            label: 'EkStep',
-            templateUrl: undefined,
-            controllerUrl: undefined,
-
-            init: function() {
-                this.templateUrl = org.ekstep.contenteditor.api.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/repoEkstep.html");
-                this.controllerUrl = org.ekstep.contenteditor.api.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/repoEkstepApp.js");
-            },
-            getFilters: function() {
-                return { "language": [], "grade": [], "lessonType": [], "domain": [] };
-            }
-        }));
-
-        return repo;
-    }
 });
 //# sourceURL=lessonbrowserplugin.js
