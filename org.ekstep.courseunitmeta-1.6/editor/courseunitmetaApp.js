@@ -106,7 +106,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
                 if($scope.courseunit.topics.length > 0){
                     $scope.courseunit.topicData = '(' + $scope.courseunit.topics.length + ') topics selected';
                     _.forEach($scope.courseunit.topics, function(topic){
-                        selectedTopics.push(topic.identifier);
+                        selectedTopics.push(topic);
                     });
                 }else{
                     $scope.courseunit.topicData = '(0) topics selected';
