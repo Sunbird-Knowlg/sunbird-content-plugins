@@ -16,13 +16,6 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     }
 
     ecEditor.addEventListener("title:update:collection", $scope.updateTitle, $scope);
-
-    ecEditor.getService('meta').getConfigOrdinals(function(err, resp) {
-        if (!err) {
-            $scope.languageList = resp.data.result.ordinals.language;
-            $scope.$safeApply();
-        }
-    });
     $scope.showSubCollection = true;
 
     $scope.updateNode = function() {
