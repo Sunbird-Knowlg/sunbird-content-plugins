@@ -187,15 +187,7 @@
                             <div class="header contentMetaTitle">
                                  {{videoItem.name}}
                             </div>
-                            <div class="description resourceDescription">
-                                {{videoItem.description}}
-                                <span ng-if="videoItem.description.length > 80">
-                                    <span class="ui compact icon desc_ellipsis" data-tooltip="{{videoItem.description}}" data-position="bottom center">
-                                        <a class="moreLink">&nbsp;&nbsp;more...</a>
-                                    </span>
-                                </span>
-                            </div>
-                            <div class="meta">
+                            <div class="meta" ng-if="{{videoItem.creator}}">
                                 <span class="date">Created by {{videoItem.creator}}</span>
                             </div>
                         </div>
