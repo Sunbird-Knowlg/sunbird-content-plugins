@@ -98,18 +98,18 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
         if($scope.mode === "Edit" && $scope.editable === true){
             $scope.metadataCloneObj = _.clone($scope.courseunit);
         }
-        $scope.courseunit.conceptData = '(0) topics selected';
+        $scope.courseunit.topicData = '(0) topics selected';
         $scope.courseunit.name = $scope.courseunit.name || 'Untitled Course Unit'
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
-            if(!_.isUndefined(activeNode.data.metadata.concepts)){
-                $scope.courseunit.concepts = activeNode.data.metadata.concepts;
-                if($scope.courseunit.concepts.length > 0){
-                    $scope.courseunit.conceptData = '(' + $scope.courseunit.concepts.length + ') topics selected';
-                    _.forEach($scope.courseunit.concepts, function(concept){
-                        selectedTopics.push(concept.identifier);
+            if(!_.isUndefined(activeNode.data.metadata.topics)){
+                $scope.courseunit.topics = activeNode.data.metadata.topics;
+                if($scope.courseunit.topics.length > 0){
+                    $scope.courseunit.topicData = '(' + $scope.courseunit.topics.length + ') topics selected';
+                    _.forEach($scope.courseunit.topics, function(topic){
+                        selectedTopics.push(topic.identifier);
                     });
                 }else{
-                    $scope.courseunit.conceptData = '(0) topics selected';
+                    $scope.courseunit.topicData = '(0) topics selected';
                 }
             }
             $scope.metadataCloneObj = _.clone(activeNode.data.metadata);
@@ -121,9 +121,9 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
             selectedTopics: selectedTopics,
             isCategoryDependant: false,
             callback: function(data) {
-                $scope.courseunit.conceptData = '(' + data.length + ') topics selected';
-                $scope.courseunit.concepts = _.map(data, function(concept) {
-                    return { "identifier" : concept.id , "name" : concept.name} ;
+                $scope.courseunit.topicData = '(' + data.length + ') topics selected';
+                $scope.courseunit.topics = _.map(data, function(topic) {
+                    return { "identifier" : topic.id , "name" : topic.name} ;
                 });
                 $scope.$safeApply();
             }
