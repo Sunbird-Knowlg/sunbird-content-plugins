@@ -123,7 +123,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
             callback: function(data) {
                 $scope.courseunit.topicData = '(' + data.length + ') topics selected';
                 $scope.courseunit.topics = _.map(data, function(topic) {
-                    return { "identifier" : topic.id , "name" : topic.name} ;
+                    return topic.name;
                 });
                 $scope.$safeApply();
             }
