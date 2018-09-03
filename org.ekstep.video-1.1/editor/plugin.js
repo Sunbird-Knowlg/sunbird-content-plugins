@@ -15,6 +15,9 @@ org.ekstep.contenteditor.basePlugin.extend({
         this.parent = undefined;
         var props = this.convertToFabric(this.attributes);
         this.editorObj = undefined;        
+        if(instance.isYoutubeURL(instance.getConfig()['url'])){
+            ecEditor.getCurrentStage().addParam('pragma', "external")
+        }
         //var imageURL = "/assets/public/content/do_1122156236916490241183/artifact/maxresdefault_387_1491164926_1491165001510.png";
         // TODO: Comment out the above line and uncomment the below line before upload to dev
         var imageURL = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, 'assets/maxresdefault.png');
@@ -42,14 +45,21 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
     },
     getMedia: function() {
+        var instance =  this;
         var media = {};
-        media[this.id] = {
-            "id": this.id,
-            "src": this.getConfig()['url'] || '',
-            "assetId": this.id,
-            "type": "video"
-        };
+        if(!instance.isYoutubeURL(instance.getConfig()['url'])){
+            media[instance.id] = {
+                "id": instance.id,
+                "src": instance.getConfig()['url'] || '',
+                "assetId": instance.id,
+                "type": "video"
+            }
+        }
         return media;
+    },
+    isYoutubeURL: function(url){
+        var p = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
+        return (url.match(p)) ? true : false;
     },
     getYoutube: function(searchText, limit, offset, cb){
         var instance=  this, requestObj;
@@ -58,7 +68,8 @@ org.ekstep.contenteditor.basePlugin.extend({
               "filters": {
                 "objectType": "Content",
                 "mimeType": "video/x-youtube",
-                "status": new Array("Live"),
+                "status": ["Live"],
+                "license": "Creative Commons Attribution (CC BY)"
               },
               "limit" : limit,
               "offset": offset

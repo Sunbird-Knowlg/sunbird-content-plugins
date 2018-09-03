@@ -69,6 +69,7 @@
             {"type": "js", "src": "renderer/libs/video.js"},
             {"type": "js", "src": "renderer/libs/videoyoutube.js"},
             {"type": "css", "src": "renderer/libs/videojs.css"}
-        ]
+        ],
+        "compatibilityVersion": 4
     }
 }

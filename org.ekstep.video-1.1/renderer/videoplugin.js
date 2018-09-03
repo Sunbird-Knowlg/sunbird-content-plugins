@@ -6,11 +6,16 @@ Plugin.extend({
     _isContainer: false,
     _render: true,
     initPlugin: function (data) {
-        console.log(data)
-        EkstepRendererAPI.addEventListener("actionNavigateNext", this.checkNavigation, false);
-        EkstepRendererAPI.addEventListener("actionNavigatePrevious", this.checkNavigation, false);
-        EkstepRendererAPI.addEventListener("actionReload", this.checkNavigation, false);
-        EkstepRendererAPI.addEventListener("renderer:content:replay", this.checkOtherStagePlayers, false);
+        EkstepRendererAPI.addEventListener("actionNavigateNext", function(){
+            this.disposeStageVideos;
+        }, false);
+        EkstepRendererAPI.addEventListener("actionNavigatePrevious", function(){
+            if(_.size(_.pick(EkstepRendererAPI.getCurrentStage().params, ["previous"])))  this.disposeStageVideos;
+        }, false);
+        EkstepRendererAPI.addEventListener("actionReload", function(){
+            this.disposeStageVideos;
+        }, false);
+        EkstepRendererAPI.addEventListener("renderer:content:replay", this.resetOtherStagePlayers, false);
         EkstepRendererAPI.addEventListener("renderer:overlay:mute", this.muteAll, this);
         EkstepRendererAPI.addEventListener("renderer:overlay:unmute", this.unmuteAll, this);
         var pid = data._id || data.id;
@@ -59,12 +64,13 @@ Plugin.extend({
         this.changeYoutubeAudio(false);
     },
     changeYoutubeAudio: function (val) {
+        this.resetOtherStagePlayers();
         var players = _.keys(_.pick(videojs.getPlayers(), _.identity));
         _.forEach(players, function (item) {
             videojs(item).muted(val)
         });
     },
-    checkOtherStagePlayers: function (event) {
+    resetOtherStagePlayers: function (event) {
         var allPlayers = _.keys(_.pick(videojs.getPlayers(), _.identity));
         var currentStagePlayers = _.map(_.pluck(EkstepRendererAPI.getCurrentStage()._data["org.ekstep.video"], ['videoPlayer']), 'id_');
         var commonPlayers = _.difference(allPlayers, currentStagePlayers);
@@ -74,21 +80,11 @@ Plugin.extend({
             });
         }
     },
-    checkNavigation: function (event) {
+    disposeStageVideos: function(){ 
         var availablePlayers = _.pick(videojs.getPlayers(), _.identity);
-        if (event.target !== "previous") {
-            disposeStageVideos();
-        } else if (event.type === "renderer:content:replay") {
-            disposeStageVideos();
-        } else if (event.target === "previous" && _.size(_.pick(EkstepRendererAPI.getCurrentStage().params, ["previous"]))) {
-            disposeStageVideos();
-        }
-
-        function disposeStageVideos() {
             _.forEach(availablePlayers, function (value, key) {
                 videojs(key).dispose();
             });
-        }
     },
     checkValidYoutube: function (url) {
         var p = /^(?:https?:\/\/)?(?:m\.|www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((\w|-){11})(?:\S+)?$/;
@@ -112,7 +108,6 @@ Plugin.extend({
             video.style.top = dims.y + "px";
         video.preload = "auto";
         video.className = 'video-js vjs-default-skin';
-        console.log(video)
         this.addToGameArea(video);
 
         this.loadYoutube(path);

@@ -2,13 +2,8 @@
 
     <style type="text/css">
         .video-modal {
-            top: 10% !important;
+            top: 4% !important;
         }
-
-        /* .container {
-            margin: 10px !important;
-        } */
-
         .ui.grid .column.video-leftContent {
             height: 200px;
             padding-top: 10px !important;
@@ -147,7 +142,7 @@
                 <div class="row">
                     <div class="column">
                             <div class="ui  fluid icon input assetbrowser_searchBox">
-                                <input id="searchMyImageAssets" ng-model="$ctrl.query" placeholder="Search the library for YouTube videos published under 'CC-BY 4.0 - license of current content'..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
+                                <input id="searchMyImageAssets" ng-model="$ctrl.query" placeholder="Search the library for YouTube videos published under 'CC-BY 4.0'..." ng-keypress="$event.keyCode === 13 ? $ctrl.search() : null" type="text" />
                                 <i class="circular search link icon inverted" ng-click="$ctrl.search(); $ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'searchAsset'})"></i>
                             </div>
                     </div>
@@ -190,8 +185,7 @@
                         </div>
                         <div class="content">
                             <div class="header contentMetaTitle">
-                                 {{videoItem.code}}  {{$index}}
-                                </span>
+                                 {{videoItem.name}}
                             </div>
                             <div class="description resourceDescription">
                                 {{videoItem.description}}
