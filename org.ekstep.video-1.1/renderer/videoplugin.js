@@ -132,6 +132,7 @@ Plugin.extend({
         var elementId = document.getElementById(domElement.id);
     },
     loadYoutube: function (path) {
+        var instance_this = this;
         var instance = this._data;
         if (videojs.getPlayers()[instance._id]) {
             delete videojs.getPlayers()[instance._id];
@@ -149,7 +150,43 @@ Plugin.extend({
                 src: path
             });
             instance.videoPlayer = youtubeInstance;
+            instance_this.addVideoEventListener(youtubeInstance);
         })
+    },
+    addVideoEventListener: function(videoPlayer) {
+        var instance = this;
+
+        videoPlayer.on('play', function(e) {
+            instance.logTelemetry("TOUCH", "PLAY", "play-button", [Math.floor(videoPlayer.currentTime()) * 1000])
+        });
+
+        videoPlayer.on('pause', function(e) {
+            instance.logTelemetry("TOUCH", "PAUSE", "pause-button", [Math.floor(videoPlayer.currentTime()) * 1000])
+        });
+
+        videoPlayer.on('ended', function() {
+            instance.logTelemetry("TOUCH", "STOP", "stop-button", [Math.floor(videoPlayer.currentTime()) * 1000])
+
+        });
+        videoPlayer.on('seeked', function(e) {
+            instance.logTelemetry("TOUCH", "DRAG", "seek-button", [Math.floor(videoPlayer.currentTime()) * 1000])
+        });
+    },
+    logTelemetry: function(type, subtype, id, videoTimestamp) {
+        var eventData = {
+            type: type,
+            subtype: subtype,
+            id: id,
+            pageid: EkstepRendererAPI.getCurrentStageId(),
+            plugin: {
+                "id": "org.ekstep.video", // Need to get from manifest.id
+                "ver": "1.1",
+                "category": "core"
+            },
+            extra: { values: videoTimestamp }
+
+        }
+        $t.interact(eventData); // Directly invoke telemetry library method due to issue with renderer telemetry service lib
     },
     drawBorder: function () {}
 
