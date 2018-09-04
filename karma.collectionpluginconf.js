@@ -7,15 +7,15 @@ module.exports = function(config) {
         basePath: '',
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: ['jasmine'],
+        frameworks: ['jasmine', 'jasmine-matchers'],
         // list of files / patterns to load in the browser
         files: [
             // bower:js
             'node_modules/angular/angular.min.js',            
             'node_modules/angular-mocks/angular-mocks.js',                         
             'https://dev.ekstep.in/collection-editor/scripts/external.min.js',
-            'test/bootstrap-collection-editor-html.js',
             'https://s3.ap-south-1.amazonaws.com/ekstep-public-prod/collection-editor/scripts/script.min.1.35.924.js',
+            'test/bootstrap-collection-editor-html.js',
             'test/bootstrap-collection-editor.js',            
             { pattern: '**/*.md', watched: true, served: true, included: false },
             { pattern: '**/*.css', watched: true, served: true, included: false },
@@ -38,7 +38,8 @@ module.exports = function(config) {
             'karma-jasmine',
             'karma-jasmine-matchers',
             'karma-coverage',
-            'karma-phantomjs-launcher',
+            'karma-chrome-launcher',
+            'karma-coverage-istanbul-reporter',
             'karma-mocha-reporter'
         ],
         // list of files to exclude
@@ -79,7 +80,7 @@ module.exports = function(config) {
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: [
-            "PhantomJS"
+            "ChromeHeadless"
         ],
         // Continuous Integration mode
         // if true, Karma captures browsers, runs the tests and exits
