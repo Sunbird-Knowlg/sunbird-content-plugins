@@ -12,19 +12,19 @@ var testConfig = {
 		{ "id": "org.ekstep.stage", "ver": "1.0", "type": "plugin" },
 		{ "id": "org.ekstep.config", "ver": "1.0", "type": "plugin" },
 		{ "id": "org.ekstep.shape", "ver": "1.0", "type": "plugin" },
-		{ "id": "org.ekstep.quiz", "ver": "1.0", "type": "plugin" },
-		{ "id": "org.ekstep.text", "ver": "1.0", "type": "plugin" },
+		{ "id": "org.ekstep.quiz", "ver": "1.1", "type": "plugin" },
+		{ "id": "org.ekstep.text", "ver": "1.2", "type": "plugin" },
 		{ "id": "org.ekstep.video", "ver": "1.0", "type": "plugin" },
-		{ "id": "org.ekstep.audio", "ver": "1.0", "type": "plugin" },
+		{ "id": "org.ekstep.audio", "ver": "1.1", "type": "plugin" },
 		{ "id": "org.ekstep.readalongbrowser", "ver": "1.0", "type": "plugin" },
-		{ "id": "org.ekstep.activitybrowser", "ver": "1.0", "type": "plugin" },
+		{ "id": "org.ekstep.activitybrowser", "ver": "1.3", "type": "plugin" },
 		{ "id": "org.ekstep.editorstate", "ver": "1.0", "type": "plugin" },
 		{ "id": "org.ekstep.keyboardshortcuts", "ver": "1.0", "type": "plugin" }
 	]
 }
 
 var $scope = {
-	$safeApply: function(cb) { cb()},
+	$safeApply: function(cb) { if (cb) cb()},
 	$watch: function() {},
 	refreshToolbar: function() {}
 }
@@ -43,7 +43,10 @@ ContentEditorTestFramework = {
 		
 		jasmine.DEFAULT_TIMEOUT_INTERVAL = 10000;
 		console.log('####### Initializing Content Editor Framework #######');
+		org.ekstep.contenteditor.sidebarManager.loadNgModules = function() {};
 		if(plugins) testConfig.plugins = plugins;
+		var scripts = document.getElementsByTagName('script');
+		scripts[scripts.length-1].src = "";
 		org.ekstep.contenteditor.init(testContext, testConfig, $scope, $document, function() {
 			if(!ContentEditorTestFramework.initialized) {
 				org.ekstep.contenteditor.stageManager.registerEvents();
@@ -107,4 +110,4 @@ ContentEditorTestFramework = {
 	}
 };
 
-ContentEditorTestFramework.init(function() {});
+// ContentEditorTestFramework.init(function() {});

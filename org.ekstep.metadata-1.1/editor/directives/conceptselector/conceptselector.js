@@ -24,24 +24,31 @@ formApp.directive('conceptselector', function() {
             ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
                 element: $scope.conceptElementId,
                 selectedConcepts: selectedConcepts,
-                callback: function(data) {
-                    console.log("Length", data)
-                    $scope.conceptSelectorMessage = '(' + data.length + ') concepts selected';
-                    $scope.contentMeta.concepts = _.map(data, function(concept) {
-                        return {
-                            "identifier": concept.id,
-                            "name": concept.name
-                        };
-                    });
-                    ecEditor.dispatchEvent('editor:form:change', {key: 'concepts', value: $scope.contentMeta.concepts, templateId: $scope.templateId});
-                    $rootScope.$safeApply();
-                }
+                callback: $scope.callbackFn
             });
+        }
+        $scope.callbackFn = function(data) {
+            console.log("Length", data)
+            $scope.conceptSelectorMessage = '(' + data.length + ') concepts selected';
+            $scope.contentMeta.concepts = _.map(data, function(concept) {
+                return {
+                    "identifier": concept.id,
+                    "name": concept.name
+                };
+            });
+            ecEditor.dispatchEvent('editor:form:change', {key: 'concepts', value: $scope.contentMeta.concepts, templateId: $scope.templateId});
+            $rootScope.$safeApply();
         }
         $scope.resetConcepts = function(event, data){
             if(data.key == 'concepts' && data.value.length == 0){
                 $scope.conceptSelectorMessage = '(0) concpets selected';
                 $scope.contentMeta.concepts = [];
+
+                ecEditor.dispatchEvent('org.ekstep.conceptselector:init', {
+                    element: $scope.conceptElementId,
+                    selectedConcepts: [],
+                    callback: $scope.callbackFn
+                });
                 $rootScope.$safeApply();
             }    
         }

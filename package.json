@@ -2,7 +2,10 @@
     "name": "coreplugins",
     "version": "1.0.0",
     "description": "Testing content plugins",
-    "dependencies": {},
+    "dependencies": {
+        "karma-chrome-launcher": "^2.2.0",
+        "karma-coverage-istanbul-reporter": "^2.0.2"
+    },
     "devDependencies": {
         "angular": "^1.6.4",
         "angular-mocks": "^1.6.4",

@@ -77,7 +77,7 @@ describe("activity browser plugin", function() {
     });
 
     it("should open plugin details page to view the details of given plugin", function() {
-        spyOn(ecEditor.getService('search'), 'search').and.callFake(function(data, cb) {
+        spyOn(ecEditor.getService('content'), 'getContent').and.callFake(function(data, cb) {
             cb(undefined, searchPluginResponse);
         });
         ctrl.getPluginDetails("org.ekstep.five");
@@ -115,7 +115,6 @@ describe("activity browser plugin", function() {
     });
 
     it("should generate telemetry for user interaction", function() {
-        spyOn(ecEditor, 'getCurrentStage').and.returnValue({ id: 24234234234 });
         spyOn(org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE), 'interact');
         var telemetryData = { type: 'click', subtype: 'back', target: 'backButton' };
         ctrl.generateTelemetry(telemetryData);
@@ -126,7 +125,7 @@ describe("activity browser plugin", function() {
             "pluginid": jasmine.any(String),
             "pluginver": jasmine.any(String),
             "objectid": "",
-            "stage": jasmine.any(Number)
+            "stage": jasmine.any(String)
         });
     });
 

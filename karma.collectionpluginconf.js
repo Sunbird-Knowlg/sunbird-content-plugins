@@ -13,9 +13,9 @@ module.exports = function(config) {
             // bower:js
             'node_modules/angular/angular.min.js',            
             'node_modules/angular-mocks/angular-mocks.js',                         
-            'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/collection-editor/scripts/external.min.js',                                               
+            'https://dev.ekstep.in/collection-editor/scripts/external.min.js',
             'test/bootstrap-collection-editor-html.js',
-            'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/collection-editor/scripts/collectioneditor.min.js',
+            'https://s3.ap-south-1.amazonaws.com/ekstep-public-prod/collection-editor/scripts/script.min.1.35.924.js',
             'test/bootstrap-collection-editor.js',            
             { pattern: '**/*.md', watched: true, served: true, included: false },
             { pattern: '**/*.css', watched: true, served: true, included: false },
@@ -24,7 +24,7 @@ module.exports = function(config) {
             { pattern: '**/*.js', watched: true, served: true, included: false },
             { pattern: '**/*.png', watched: true, served: true, included: false },
             // '**/test/editor/*.spec.js'            
-            'org.ekstep.collectioneditor-1.2/test/editor/*.spec.js'
+            'org.ekstep.collectioneditor-1.4/test/editor/*.spec.js'
         ],
         exclude: [
             'node_modules/**',

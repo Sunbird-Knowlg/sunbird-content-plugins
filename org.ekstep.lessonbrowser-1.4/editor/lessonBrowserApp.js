@@ -29,6 +29,10 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         $scope.noResultFound = false;
         $scope.glued = false;
         $scope.filterForm = '';
+        $scope.categories = ["board", "gradeLevel", "subject", "medium"];
+        $scope.rootNodeFilter = {};
+        $scope.contentId = org.ekstep.contenteditor.api.getContext('contentId');
+        $scope.contentMeta = ecEditor.getService('content').getContentMeta($scope.contentId)
 
         // telemetry pluginId and plugin version
         ctrl.lessonbrowser = instance;
@@ -408,10 +412,17 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 }
             }
             let service = org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE);
-            service.getPageAssemble(Obj, function(err, res) {
-                // Initialize the model
-                cb(err, res)
-            })
+            
+            $scope.getRootNodeDataForFilters(function(data){
+                if(!_.isEmpty(data)){
+                    Obj.request.filters = _.omitBy(data, _.isEmpty);
+                    $scope.rootNodeFilter = Obj.request.filters;
+                }
+                service.getPageAssemble(Obj, function(err, res) {
+                    // Initialize the model
+                    cb(err, res)
+                })
+            });
         }
 
         $scope.invokeFacetsPage = function() {
@@ -461,6 +472,12 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             if (_.isString(query)) {
                 query = JSON.parse(query);
             }
+            query.request.filters = _.mergeWith(query.request.filters, $scope.rootNodeFilter, function (objValue, srcValue) {
+                if (_.isArray(objValue)) {
+                    return objValue.concat(srcValue);
+                }
+            });
+    
             query.request.limit = limit;
             searchBody = {
                 "request": {
@@ -602,6 +619,19 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
             $scope.noResultFound = false;
         }
 
+        
+        // to get Root Node Filters Data.
+        $scope.getRootNodeDataForFilters = function(callback) {
+            var returnData = {};
+            ecEditor._.forEach($scope.categories, function(value) {
+                if($scope.contentMeta[value]){
+                    var data = $scope.contentMeta[value];
+                    returnData[value] = _.isString(data) ? (data.split(",") || []) : data;
+                } 
+            });
+            callback(returnData);
+        }
+
         // initial configuration
         $scope.init = function() {
             $scope.messages = Messages;
@@ -623,9 +653,9 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                         $scope.filterSelection.concepts.push(id.identifier);
                     });
                     } else if (data.key.toLowerCase() == "topic") {
-                    $scope.filterSelection.topics = [];
+                    $scope.filterSelection.topic = [];
                     _.forEach(data.value, function(id) {
-                        $scope.filterSelection.topics.push(id);
+                        $scope.filterSelection.topic.push(id);
                     });
                     }
                     $scope.getFiltersValue($scope.filterSelection);

@@ -22,7 +22,6 @@ describe('Editor state plugin', function() {
     it('should construct the state', function() {
         pluginInstance.extPluginsList = [{ plugin: "org.ekstep.someplugin", version: "1.0" }]
         spyOn(ecEditor, 'getAllStages').and.returnValue([1]);
-        spyOn(ecEditor, 'getCurrentStage').and.returnValue({ id: 12345 });
         spyOn(ecEditor, 'getCurrentSidebarMenu').and.returnValue("settings");
         expect(pluginInstance.getEditorState()).toEqual({
             plugin: {
@@ -31,7 +30,7 @@ describe('Editor state plugin', function() {
             },
             stage: {
                 noOfStages: 1,
-                currentStage: 12345,
+                currentStage: jasmine.any(String),
                 selectedPluginObject: undefined
             },
             sidebar: {
@@ -55,6 +54,6 @@ describe('Editor state plugin', function() {
     it('should set default sidebar state when state is not available', function() {
     	spyOn(ecEditor, 'showSidebarMenu');
     	pluginInstance.setSidebarState();
-    	expect(ecEditor.showSidebarMenu).not.toHaveBeenCalled();
+    	expect(ecEditor.showSidebarMenu).toHaveBeenCalledWith('settings');
     });
 });
