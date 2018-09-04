@@ -185,8 +185,6 @@ window.formConfigurations = {
       "required": false,
       "visible": true
     }
-
-
   ]
 };
 window.formConfigs = {
@@ -460,6 +458,101 @@ window.formConfigs = {
         "required": false,
         "visible": true
       }*/
+    ]
+  },
+  filterLessonDataTemplate: {
+    "action": "resource-filters",
+    "templateName": "resourceFilterTemplate",
+    "fields": [
+        {
+            "code": "contentType",
+            "dataType": "list",
+            "description": "Category",
+            "editable": true,
+            "index": 1,
+            "inputType": "multiselect",
+            "label": "contentType",
+            "name": "contentType",
+            "placeholder": "Select contentType",
+            "renderingHints": {},
+            "required": false,
+            "range": [
+              "Resource",
+              "Collection",
+              "Content"
+            ],
+            "visible": true
+        },
+        {
+            "code": "board",
+            "dataType": "text",
+            "description": "Curriculum",
+            "editable": true,
+            "index": 2,
+            "inputType": "select",
+            "label": "Curriculum",
+            "name": "Curriculum",
+            "placeholder": "Select Curriculum",
+            "renderingHints": {},
+            "required": false,
+            "visible": true
+        },
+        {
+            "code": "gradeLevel",
+            "dataType": "list",
+            "description": "Class",
+            "editable": true,
+            "index": 3,
+            "inputType": "multiselect",
+            "label": "Class",
+            "name": "Class",
+            "placeholder": "Select Class",
+            "renderingHints": {},
+            "required": false,
+            "visible": true
+        },
+        {
+            "code": "subject",
+            "dataType": "text",
+            "description": "",
+            "editable": true,
+            "index": 4,
+            "inputType": "select",
+            "label": "Subject",
+            "name": "Subject",
+            "placeholder": "Select Subject",
+            "renderingHints": {},
+            "required": false,
+            "visible": true
+        },
+        {
+            "code": "medium",
+            "dataType": "text",
+            "description": "",
+            "editable": true,
+            "index": 5,
+            "inputType": "select",
+            "label": "Medium",
+            "name": "medium",
+            "placeholder": "Select Medium",
+            "renderingHints": {},
+            "required": false,
+            "visible": true
+        },
+        {
+            "code": "topic",
+            "dataType": "list",
+            "description": "Choose a Topics",
+            "editable": true,
+            "index": 6,
+            "inputType": "topicselector",
+            "label": "Topics",
+            "name": "Topic",
+            "placeholder": "Choose Topics",
+            "renderingHints": {},
+            "required": false,
+            "visible": true
+        }
     ]
   }
 };

@@ -9,20 +9,16 @@ module.exports = function(config) {
 
         // frameworks to use
         // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-        frameworks: ['jasmine'],
+        frameworks: ['jasmine', 'jasmine-matchers'],
 
 
         // list of files / patterns to load in the browser
         files: [
-            // bower:js
-            'node_modules/angular/angular.min.js',            
-            'node_modules/angular-mocks/angular-mocks.js',                         
-            'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/content-editor/scripts/external.min.js',                                               
-            //'test/external.min.js',
-            
+            'node_modules/angular/angular.min.js',
+            'node_modules/angular-mocks/angular-mocks.js',
+            'https://dev.ekstep.in/collection-editor/scripts/external.min.js',
             'test/bootstrap-html.js',
-            'https://s3.ap-south-1.amazonaws.com/ekstep-public-dev/content-editor/scripts/script.min.js',            
-            //'test/script.min.js',
+            'https://s3.ap-south-1.amazonaws.com/ekstep-public-prod/content-editor/scripts/script.min.1.35.859.js',            
             'test/bootstrap-editor.js',            
             //'**/editor/**/*.js',
             // 'plugins/org.ekstep.test-1.0/editor/*.js', // if you want to test your editor plugin only
@@ -35,7 +31,14 @@ module.exports = function(config) {
             { pattern: '**/*.json', watched: true, served: true, included: false },
             { pattern: '**/*.js', watched: true, served: true, included: false },
             { pattern: '**/*.png', watched: true, served: true, included: false },
-            '**/test/editor/*.spec.js'            
+            'org.ekstep.assessmentbrowser-1.1/test/editor/*.spec.js',
+            'org.ekstep.stage-1.0/test/editor/*.spec.js',
+            'org.ekstep.activitybrowser-1.3/test/editor/*.spec.js',
+            'org.ekstep.config-1.0/test/editor/*.spec.js',
+            'org.ekstep.editorstate-1.0/test/editor/*.spec.js',
+            'org.ekstep.shape-1.0/test/editor/*.spec.js',
+            'org.ekstep.quiz-1.1/test/editor/*.spec.js',
+            'org.ekstep.video-1.0/test/editor/*.spec.js'
         ],
 
         exclude: [
@@ -52,7 +55,8 @@ module.exports = function(config) {
             'karma-jasmine',
             'karma-jasmine-matchers',
             'karma-coverage',
-            'karma-phantomjs-launcher',
+            'karma-chrome-launcher',
+            'karma-coverage-istanbul-reporter',
             'karma-mocha-reporter'
         ],
 
@@ -108,7 +112,7 @@ module.exports = function(config) {
         // start these browsers
         // available browser launchers: https://npmjs.org/browse/keyword/karma-launcher
         browsers: [
-            "PhantomJS"
+            "ChromeHeadless"
         ],
 
 

@@ -98,7 +98,7 @@ describe("MultilineTransliterator", function() {
 
         languageService.getTransliteration.calls.mostRecent().args[1](error, { "data": { "result": { "transliterations": {} } } });
         $rootScope.$apply();
-        expect(transliterationCallback).toHaveBeenCalledWith('Transliteration failed','Hello');
+        expect(transliterationCallback).toHaveBeenCalledWith('Transliteration unavailable at the moment','Hello');
 
     });
 
@@ -117,7 +117,7 @@ describe("MultilineTransliterator", function() {
         languageService.getTransliteration.calls.allArgs()[0][1](error, { "data": { "result": { "transliterations": {} } } });
         languageService.getTransliteration.calls.allArgs()[1][1](null, { "data": { "result": { "transliterations": { "hi": { "output": "वर्ल्ड्" } } } } });
         $rootScope.$apply();
-        expect(transliterationCallback).toHaveBeenCalledWith('Transliteration failed', "Hello" + "\n" + "वर्ल्ड्");
+        expect(transliterationCallback).toHaveBeenCalledWith('Transliteration unavailable at the moment', "Hello" + "\n" + "वर्ल्ड्");
 
     });
 
@@ -136,7 +136,7 @@ describe("MultilineTransliterator", function() {
         languageService.getTransliteration.calls.allArgs()[0][1](error, { "data": { "result": { "transliterations": {} } } });
         languageService.getTransliteration.calls.allArgs()[1][1](error, { "data": { "result": { "transliterations": {} } } });
         $rootScope.$apply();
-        expect(transliterationCallback).toHaveBeenCalledWith('Transliteration failed',"Hello" + "\n" + "world");
+        expect(transliterationCallback).toHaveBeenCalledWith('Transliteration unavailable at the moment',"Hello" + "\n" + "world");
 
     });
 

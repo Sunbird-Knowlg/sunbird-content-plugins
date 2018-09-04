@@ -33,6 +33,13 @@ formApp.directive('topicSelector', function() {
             if(data.key == 'topic' && data.value.length == 0){
                 $scope.topicSelectorMessage = '(0) topics selected';
                 $scope.contentMeta.topic = [];
+
+                ecEditor.dispatchEvent('org.ekstep.topicselector:init', {
+                    element: $scope.topicElementId,
+                    selectedTopics: [],
+                    isCategoryDependant : true,
+                    callback: $scope.callbackFn
+                });
                 $rootScope.$safeApply();
             }    
         }

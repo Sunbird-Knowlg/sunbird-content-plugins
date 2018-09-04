@@ -488,6 +488,16 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         return returnData;
     };
 
+    $scope.resetAllFilters = function(){  
+        _.forEach($scope.dynamicLayoutConfigurations, function(field) {
+            $scope.contentMeta[field.code] = [];
+            if(field.code === 'topic')
+                ecEditor.dispatchEvent('editor.topic.change', {key: 'topic', value: []});
+            if(field.code === 'concepts')
+                ecEditor.dispatchEvent('editor.concept.change', {key: 'concepts', value: []});
+            $scope.$safeApply();
+        });
+    }
     $scope.init()
 
 }]);
