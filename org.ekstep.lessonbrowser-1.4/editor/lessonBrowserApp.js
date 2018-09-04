@@ -422,9 +422,10 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                         var contents = [];
                         $scope.mainTemplate = 'facetsItemView';
                         ctrl.applyAllJquery();
-                        var contentCount = _.findIndex(ctrl.facetsResponse.result.response.sections, function(section) { return section.count > 0 });
-                        if (ctrl.facetsResponse.result.response.sections && contentCount > 0) {
-                            angular.forEach(ctrl.facetsResponse.result.response.sections, function(section, sectionIndex) {
+                        var facetsResponseSections = ctrl.facetsResponse.result.response.sections;
+                        var contentCount = _.findIndex(facetsResponseSections, function(section) { return section.count > 0 });
+                        if (facetsResponseSections && contentCount > 0) {
+                            angular.forEach(facetsResponseSections, function(section, sectionIndex) {
                                 angular.forEach(section.contents, function(content) {
                                     contents.push(content);
                                 });
