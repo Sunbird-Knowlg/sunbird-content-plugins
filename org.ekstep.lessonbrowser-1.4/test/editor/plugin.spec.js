@@ -178,7 +178,176 @@ describe("lesson browser plugin", function() {
                 expect($scope.rootNodeFilter.subject).toEqual($scope.contentMeta.subject);
             });
             it("If no result after applying rootnode filters, `Resources not found` message should be shown", function() {
-                var returnData = {"id":"api.page.assemble","ver":"v1","ts":"2018-09-03 11:34:27:737+0000","params":{"resmsgid":null,"msgid":"b54a2f98-d9bb-4569-bd11-be59bfd8e8e5","err":null,"status":"success","errmsg":null},"responseCode":"OK","result":{"response":{"name":"ContentBrowser","id":"01245041694089216064","sections":[{"display":"{\"name\":{\"en\":\"Latest Resource\"}}","alt":null,"count":0,"description":null,"index":1,"sectionDataType":"ContentBrowser","imgUrl":null,"resmsgId":"50d45970-af6d-11e8-9634-53eaaf4a9295","contents":null,"searchQuery":"{\"request\":{\"query\":\"\",\"filters\":{\"contentType\":[\"Resource\"]},\"limit\":\"10\",\"sort_by\":{\"lastUpdatedOn\":\"desc\"}}}","name":"Latest Resource","id":"0124503875868344328","apiId":"api.content.search","group":1},{"display":"{\"name\":{\"en\":\"Most Downloaded Resource\"}}","alt":null,"count":0,"description":null,"index":1,"sectionDataType":"ContentBrowser","imgUrl":null,"resmsgId":"50d51cc0-af6d-11e8-ae30-032e1c361ffa","contents":null,"searchQuery":"{\"request\":{\"filters\":{\"contentType\":[\"Resource\"]},\"sort_by\":{\"me_totalDownloads\":\"desc\"}}}","name":"Most Downloaded Resource","id":"0124503875957800968","apiId":"api.content.search","group":2},{"display":"{\"name\":{\"en\":\"Latest Collection\"}}","alt":null,"count":0,"description":null,"index":1,"sectionDataType":"ContentBrowser","imgUrl":null,"resmsgId":"50d320f0-af6d-11e8-9634-53eaaf4a9295","contents":null,"searchQuery":"{\"request\":{\"query\":\"\",\"filters\":{\"mimeType\":\"application/vnd.ekstep.content-collection\",\"contentType\":\"Collection\"},\"limit\":10,\"exists\":[\"lastUpdatedOn\"],\"sort_by\":{\"lastUpdatedOn\":\"desc\"}}}","name":"Latest Collection","id":"0124503922130452480","apiId":"api.content.search","group":3},{"display":"{\"name\":{\"en\":\"Most Downloaded Collection\"}}","alt":null,"count":0,"description":null,"index":1,"sectionDataType":"ContentBrowser","imgUrl":null,"resmsgId":"50d60720-af6d-11e8-ae30-032e1c361ffa","contents":null,"searchQuery":"{\"request\":{\"query\":\"\",\"filters\":{\"mimeType\":\"application/vnd.ekstep.content-collection\",\"contentType\":\"Collection\"},\"limit\":10,\"sort_by\":{\"me_totalDownloads\":\"desc\"}}}","name":"Most Downloaded Collection","id":"0124503910202245122","apiId":"api.content.search","group":4},{"display":"{\"name\":{\"en\":\"Most Downloaded Interactive Lesson\"}}","alt":null,"count":0,"description":null,"index":1,"sectionDataType":"ContentBrowser","imgUrl":null,"resmsgId":"50d4a790-af6d-11e8-9634-53eaaf4a9295","contents":null,"searchQuery":"{\"request\":{\"query\":\"\",\"filters\":{\"mimeType\":\"application/vnd.ekstep.ecml-archive\",\"contentType\":\"Collection\"},\"limit\":10,\"sort_by\":{\"me_totalDownloads\":\"desc\",\"me_totalInteractions\":\"desc\"}}}","name":"Most Downloaded Interactive Lesson","id":"01245039556523622420","apiId":"api.content.search","group":5},{"display":"{\"name\":{\"en\":\"Most Downloaded Interactive Worksheet\"}}","alt":null,"count":0,"description":null,"index":1,"sectionDataType":"ContentBrowser","imgUrl":null,"resmsgId":"50d591f0-af6d-11e8-ae30-032e1c361ffa","contents":null,"searchQuery":"{\"request\":{\"filters\":{\"mimeType\":\"application/vnd.ekstep.ecml-archive\",\"contentType\":[\"Resource\"],\"resourceType\":[\"Worksheet\"]},\"limit\":10,\"sort_by\":{\"me_totalDownloads\":\"desc\",\"me_totalInteractions\":\"desc\"}}}","name":"Most Downloaded Interactive Worksheet","id":"01245039576209817636","apiId":"api.content.search","group":6},{"display":"{\"name\":{\"en\":\"Most Downloaded Youtube\"}}","alt":null,"count":0,"description":null,"index":1,"sectionDataType":"ContentBrowser","imgUrl":null,"resmsgId":"50d43260-af6d-11e8-9634-53eaaf4a9295","contents":null,"searchQuery":"{\"request\":{\"query\":\"\",\"filters\":{\"objectType\":\"Content\",\"mimeType\":\"video/x-youtube\"},\"limit\":10,\"sort_by\":{\"me_totalDownloads\":\"desc\"}}}","name":"Most Downloaded Youtube","id":"01245040305298636825","apiId":"api.content.search","group":7},{"display":"{\"name\":{\"en\":\"Most Downloaded Pdf\"}}","alt":null,"count":0,"description":null,"index":1,"sectionDataType":"ContentBrowser","imgUrl":null,"resmsgId":"50d543d0-af6d-11e8-ae30-032e1c361ffa","contents":null,"searchQuery":"{\"request\":{\"query\":\"\",\"filters\":{\"objectType\":\"Content\",\"mimeType\":\"application/pdf\"},\"limit\":10,\"sort_by\":{\"me_totalDownloads\":\"desc\"}}}","name":"Most Downloaded Pdf","id":"01245040346686259245","apiId":"api.content.search","group":8},{"display":"{\"name\":{\"en\":\"Most Downloaded Epub\"}}","alt":null,"count":0,"description":null,"index":1,"sectionDataType":"ContentBrowser","imgUrl":null,"resmsgId":"50d56ae0-af6d-11e8-9634-53eaaf4a9295","contents":null,"searchQuery":"{\"request\":{\"query\":\"\",\"filters\":{\"objectType\":\"Content\",\"mimeType\":\"application/epub\"},\"limit\":10,\"sort_by\":{\"me_totalDownloads\":\"desc\"}}}","name":"Most Downloaded Epub","id":"01245040815771648046","apiId":"api.content.search","group":9},{"display":"{\"name\":{\"en\":\"Most Downloaded H5P\"}}","alt":null,"count":0,"description":null,"index":1,"sectionDataType":"ContentBrowser","imgUrl":null,"resmsgId":"50d4f5b0-af6d-11e8-ae30-032e1c361ffa","contents":null,"searchQuery":"{\"request\":{\"query\":\"\",\"filters\":{\"objectType\":\"Content\",\"mimeType\":\"application/vnd.ekstep.h5p-archive\"},\"limit\":10,\"sort_by\":{\"me_totalDownloads\":\"desc\"}}}","name":"Most Downloaded H5P","id":"01245041107574784029","apiId":"api.content.search","group":10}]}}};
+                var returnData = {
+                    "id": "api.page.assemble",
+                    "ver": "v1",
+                    "ts": "2018-09-03 11:34:27:737+0000",
+                    "params": {
+                        "resmsgid": null,
+                        "msgid": "b54a2f98-d9bb-4569-bd11-be59bfd8e8e5",
+                        "err": null,
+                        "status": "success",
+                        "errmsg": null
+                    },
+                    "responseCode": "OK",
+                    "result": {
+                        "response": {
+                            "name": "ContentBrowser",
+                            "id": "01245041694089216064",
+                            "sections": [{
+                                "display": "{\"name\":{\"en\":\"Latest Resource\"}}",
+                                "alt": null,
+                                "count": 0,
+                                "description": null,
+                                "index": 1,
+                                "sectionDataType": "ContentBrowser",
+                                "imgUrl": null,
+                                "resmsgId": "50d45970-af6d-11e8-9634-53eaaf4a9295",
+                                "contents": null,
+                                "searchQuery": "{\"request\":{\"query\":\"\",\"filters\":{\"contentType\":[\"Resource\"]},\"limit\":\"10\",\"sort_by\":{\"lastUpdatedOn\":\"desc\"}}}",
+                                "name": "Latest Resource",
+                                "id": "0124503875868344328",
+                                "apiId": "api.content.search",
+                                "group": 1
+                            }, {
+                                "display": "{\"name\":{\"en\":\"Most Downloaded Resource\"}}",
+                                "alt": null,
+                                "count": 0,
+                                "description": null,
+                                "index": 1,
+                                "sectionDataType": "ContentBrowser",
+                                "imgUrl": null,
+                                "resmsgId": "50d51cc0-af6d-11e8-ae30-032e1c361ffa",
+                                "contents": null,
+                                "searchQuery": "{\"request\":{\"filters\":{\"contentType\":[\"Resource\"]},\"sort_by\":{\"me_totalDownloads\":\"desc\"}}}",
+                                "name": "Most Downloaded Resource",
+                                "id": "0124503875957800968",
+                                "apiId": "api.content.search",
+                                "group": 2
+                            }, {
+                                "display": "{\"name\":{\"en\":\"Latest Collection\"}}",
+                                "alt": null,
+                                "count": 0,
+                                "description": null,
+                                "index": 1,
+                                "sectionDataType": "ContentBrowser",
+                                "imgUrl": null,
+                                "resmsgId": "50d320f0-af6d-11e8-9634-53eaaf4a9295",
+                                "contents": null,
+                                "searchQuery": "{\"request\":{\"query\":\"\",\"filters\":{\"mimeType\":\"application/vnd.ekstep.content-collection\",\"contentType\":\"Collection\"},\"limit\":10,\"exists\":[\"lastUpdatedOn\"],\"sort_by\":{\"lastUpdatedOn\":\"desc\"}}}",
+                                "name": "Latest Collection",
+                                "id": "0124503922130452480",
+                                "apiId": "api.content.search",
+                                "group": 3
+                            }, {
+                                "display": "{\"name\":{\"en\":\"Most Downloaded Collection\"}}",
+                                "alt": null,
+                                "count": 0,
+                                "description": null,
+                                "index": 1,
+                                "sectionDataType": "ContentBrowser",
+                                "imgUrl": null,
+                                "resmsgId": "50d60720-af6d-11e8-ae30-032e1c361ffa",
+                                "contents": null,
+                                "searchQuery": "{\"request\":{\"query\":\"\",\"filters\":{\"mimeType\":\"application/vnd.ekstep.content-collection\",\"contentType\":\"Collection\"},\"limit\":10,\"sort_by\":{\"me_totalDownloads\":\"desc\"}}}",
+                                "name": "Most Downloaded Collection",
+                                "id": "0124503910202245122",
+                                "apiId": "api.content.search",
+                                "group": 4
+                            }, {
+                                "display": "{\"name\":{\"en\":\"Most Downloaded Interactive Lesson\"}}",
+                                "alt": null,
+                                "count": 0,
+                                "description": null,
+                                "index": 1,
+                                "sectionDataType": "ContentBrowser",
+                                "imgUrl": null,
+                                "resmsgId": "50d4a790-af6d-11e8-9634-53eaaf4a9295",
+                                "contents": null,
+                                "searchQuery": "{\"request\":{\"query\":\"\",\"filters\":{\"mimeType\":\"application/vnd.ekstep.ecml-archive\",\"contentType\":\"Collection\"},\"limit\":10,\"sort_by\":{\"me_totalDownloads\":\"desc\",\"me_totalInteractions\":\"desc\"}}}",
+                                "name": "Most Downloaded Interactive Lesson",
+                                "id": "01245039556523622420",
+                                "apiId": "api.content.search",
+                                "group": 5
+                            }, {
+                                "display": "{\"name\":{\"en\":\"Most Downloaded Interactive Worksheet\"}}",
+                                "alt": null,
+                                "count": 0,
+                                "description": null,
+                                "index": 1,
+                                "sectionDataType": "ContentBrowser",
+                                "imgUrl": null,
+                                "resmsgId": "50d591f0-af6d-11e8-ae30-032e1c361ffa",
+                                "contents": null,
+                                "searchQuery": "{\"request\":{\"filters\":{\"mimeType\":\"application/vnd.ekstep.ecml-archive\",\"contentType\":[\"Resource\"],\"resourceType\":[\"Worksheet\"]},\"limit\":10,\"sort_by\":{\"me_totalDownloads\":\"desc\",\"me_totalInteractions\":\"desc\"}}}",
+                                "name": "Most Downloaded Interactive Worksheet",
+                                "id": "01245039576209817636",
+                                "apiId": "api.content.search",
+                                "group": 6
+                            }, {
+                                "display": "{\"name\":{\"en\":\"Most Downloaded Youtube\"}}",
+                                "alt": null,
+                                "count": 0,
+                                "description": null,
+                                "index": 1,
+                                "sectionDataType": "ContentBrowser",
+                                "imgUrl": null,
+                                "resmsgId": "50d43260-af6d-11e8-9634-53eaaf4a9295",
+                                "contents": null,
+                                "searchQuery": "{\"request\":{\"query\":\"\",\"filters\":{\"objectType\":\"Content\",\"mimeType\":\"video/x-youtube\"},\"limit\":10,\"sort_by\":{\"me_totalDownloads\":\"desc\"}}}",
+                                "name": "Most Downloaded Youtube",
+                                "id": "01245040305298636825",
+                                "apiId": "api.content.search",
+                                "group": 7
+                            }, {
+                                "display": "{\"name\":{\"en\":\"Most Downloaded Pdf\"}}",
+                                "alt": null,
+                                "count": 0,
+                                "description": null,
+                                "index": 1,
+                                "sectionDataType": "ContentBrowser",
+                                "imgUrl": null,
+                                "resmsgId": "50d543d0-af6d-11e8-ae30-032e1c361ffa",
+                                "contents": null,
+                                "searchQuery": "{\"request\":{\"query\":\"\",\"filters\":{\"objectType\":\"Content\",\"mimeType\":\"application/pdf\"},\"limit\":10,\"sort_by\":{\"me_totalDownloads\":\"desc\"}}}",
+                                "name": "Most Downloaded Pdf",
+                                "id": "01245040346686259245",
+                                "apiId": "api.content.search",
+                                "group": 8
+                            }, {
+                                "display": "{\"name\":{\"en\":\"Most Downloaded Epub\"}}",
+                                "alt": null,
+                                "count": 0,
+                                "description": null,
+                                "index": 1,
+                                "sectionDataType": "ContentBrowser",
+                                "imgUrl": null,
+                                "resmsgId": "50d56ae0-af6d-11e8-9634-53eaaf4a9295",
+                                "contents": null,
+                                "searchQuery": "{\"request\":{\"query\":\"\",\"filters\":{\"objectType\":\"Content\",\"mimeType\":\"application/epub\"},\"limit\":10,\"sort_by\":{\"me_totalDownloads\":\"desc\"}}}",
+                                "name": "Most Downloaded Epub",
+                                "id": "01245040815771648046",
+                                "apiId": "api.content.search",
+                                "group": 9
+                            }, {
+                                "display": "{\"name\":{\"en\":\"Most Downloaded H5P\"}}",
+                                "alt": null,
+                                "count": 0,
+                                "description": null,
+                                "index": 1,
+                                "sectionDataType": "ContentBrowser",
+                                "imgUrl": null,
+                                "resmsgId": "50d4f5b0-af6d-11e8-ae30-032e1c361ffa",
+                                "contents": null,
+                                "searchQuery": "{\"request\":{\"query\":\"\",\"filters\":{\"objectType\":\"Content\",\"mimeType\":\"application/vnd.ekstep.h5p-archive\"},\"limit\":10,\"sort_by\":{\"me_totalDownloads\":\"desc\"}}}",
+                                "name": "Most Downloaded H5P",
+                                "id": "01245041107574784029",
+                                "apiId": "api.content.search",
+                                "group": 10
+                            }]
+                        }
+                    }
+                };
                 spyOn($scope, 'getPageAssemble').and.returnValue(returnData);
                 $scope.invokeFacetsPage();
                 var contentCount = _.findIndex(returnData.result.response.sections, function(section) { return section.count > 0 });
