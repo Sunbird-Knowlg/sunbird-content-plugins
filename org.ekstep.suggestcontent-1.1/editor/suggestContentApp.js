@@ -246,16 +246,16 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
         if (currentNodeData.root) {
             Object.assign($scope.metaData,
                 _.pick(currentNodeData.metadata, ['gradeLevel', 'board', 'subject', 'medium']),
-                (updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topic.sort())) ? {
+                (updatedTopics && updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topic.sort())) ? {
                     topics: updatedTopics
                 } : {}
             )
-        } else if (!updatedTopics.length) {
+        } else if (updatedTopics && !updatedTopics.length) {
             $scope.metaData.topic = undefined;
         } else {
             if ($scope.metaData.topic)
                 $scope.metaData.topic = $scope.metaData.topic.sort();
-            if (updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topic)) {
+            if (updatedTopics && updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topic)) {
                 $scope.metaData.topic = updatedTopics;
             }
         }
