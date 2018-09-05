@@ -433,8 +433,10 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                         var contents = [];
                         $scope.mainTemplate = 'facetsItemView';
                         ctrl.applyAllJquery();
-                        if (ctrl.facetsResponse.result.response.sections) {
-                            angular.forEach(ctrl.facetsResponse.result.response.sections, function(section, sectionIndex) {
+                        var facetsResponseSections = ctrl.facetsResponse.result.response.sections;
+                        var contentCount = _.findIndex(facetsResponseSections, function(section) { return section.count > 0 });
+                        if (facetsResponseSections && contentCount > 0) {
+                            angular.forEach(facetsResponseSections, function(section, sectionIndex) {
                                 angular.forEach(section.contents, function(content) {
                                     contents.push(content);
                                 });
@@ -446,6 +448,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                                 }, 0);
                             });
                         } else {
+                            $scope.isLoading = false;
                             $timeout(function() {
                                 ecEditor.jQuery('#noLessonMsg').show();
                             }, 0);
