@@ -72,7 +72,11 @@ Plugin.extend({
     },
     resetOtherStagePlayers: function (event) {
         var allPlayers = _.keys(_.pick(videojs.getPlayers(), _.identity));
-        var currentStagePlayers = _.map(_.pluck(EkstepRendererAPI.getCurrentStage()._data["org.ekstep.video"], ['videoPlayer']), 'id_');
+        var tempStageVideos = EkstepRendererAPI.getCurrentStage()._data["org.ekstep.video"];
+        if(!_.isArray(tempStageVideos)){
+            tempStageVideos = [tempStageVideos];
+        }
+        var currentStagePlayers = _.map(_.pluck(tempStageVideos, ['videoPlayer']), 'id_');
         var commonPlayers = _.difference(allPlayers, currentStagePlayers);
         if (!_.isEmpty(commonPlayers)) {
             _.forEach(commonPlayers, function (item) {
