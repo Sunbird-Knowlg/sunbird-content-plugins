@@ -191,7 +191,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             if ((obj.type === activeNode.data.objectType) && obj.editable) {
                 if ((obj.type === activeNode.data.objectType) && obj.editable && activeNode.data.metadata.topics) {
                     _.forEach(activeNode.data.metadata.topics, function (topic) {
-                        activeNodeTopics.push(topic.identifier);
+                        activeNodeTopics.push(topic);
                     });
                 }
                 if (activeNode.data.metadata.keywords && activeNode.data.metadata.keywords.length > 0) {
