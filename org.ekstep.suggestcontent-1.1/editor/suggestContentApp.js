@@ -6,7 +6,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
     $scope.metaData = {};
     $scope.responseData = [];
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
-    var pickerArray = ['gradeLevel', 'board', 'subject', 'medium', 'concepts'];
+    var pickerArray = ['gradeLevel', 'board', 'subject', 'medium', 'topics'];
     $scope.suggestedContentList = {
         count: 0,
         content: []
@@ -37,9 +37,9 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             } : {
                 medium: rootNodeMetadata.medium
             }),
-            (rootNodeMetadata.concepts) ? {
-                concepts: _.forEach(rootNodeMetadata.concepts, function (concept) {
-                    $scope.metaData.concepts.push(concept.identifier)
+            (rootNodeMetadata.topics) ? {
+                topics: _.forEach(rootNodeMetadata.topics, function (topic) {
+                    $scope.metaData.topics.push(topic)
                 })
             } : {});
     }
@@ -80,24 +80,24 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             count: 0,
             content: []
         };
-        var concepts = "";
+        var topics = "";
 
         if ($scope.metaData) {
-            concepts = $scope.setMetaResponseHash($scope.metaData)
-        } else if (searchBody.request.filters.concepts) {
-            concepts = "No_Concepts";
-            delete searchBody.request.filters.concepts;
+            topics = $scope.setMetaResponseHash($scope.metaData)
+        } else if (searchBody.request.filters.topics) {
+            topics = "No_Topics";
+            delete searchBody.request.filters.topics;
         }
         ecEditor.jQuery('#suggestions-loader').dimmer('show');
 
-        if ($scope.responseData[concepts]) {
+        if ($scope.responseData[topics]) {
             if (!$scope.suggestedContentList.content.length) {
                 $('.card-list').transition({
                     animation: 'fade in',
                     duration: '2s',
                 });
             }
-            _.forEach($scope.responseData[concepts], function (lessonContent) {
+            _.forEach($scope.responseData[topics], function (lessonContent) {
                 if (_.indexOf($scope.excludeContents, lessonContent.identifier) == -1)
                     $scope.suggestedContentList.content.push(lessonContent);
             });
@@ -106,8 +106,8 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             }, 2000);
             $scope.$safeApply();
         } else {
-            searchBody.request.softConstraints =  ($scope.metaData.concepts) ? {
-                "concepts": 100,
+            searchBody.request.softConstraints =  ($scope.metaData.topics) ? {
+                "topics": 100,
                 "medium": 50,
                 "gradeLevel": 25,
                 "board": 12
@@ -121,7 +121,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                 if (err) {
                     console.error("Oops! Something went wrong. Please try again later.", err);
                 } else if (res.data.result.content) {
-                    $scope.responseData[concepts] = _.concat(_.uniqBy($scope.responseData, 'identifier'), res.data.result.content);
+                    $scope.responseData[topics] = _.concat(_.uniqBy($scope.responseData, 'identifier'), res.data.result.content);
                     if (!$scope.suggestedContentList.content.length) {
                         $('.card-list').transition({
                             animation: 'fade in',
@@ -180,7 +180,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
     /* Returns list of content or makes new API if contents are not available */
     $scope.onNodeSelect = function () {
         $scope.excludeContents = [];
-        var activeNodeConcepts = [];
+        var activeNodeTopics = [];
         var activeNode = org.ekstep.services.collectionService.getActiveNode();
         /* Fetch the added contents for the currently selected node */
         _.forEach(activeNode.children, function (content) {
@@ -189,9 +189,9 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
 
         _.forEach(ecEditor.getConfig('editorConfig').rules.objectTypes, function (obj) {
             if ((obj.type === activeNode.data.objectType) && obj.editable) {
-                if ((obj.type === activeNode.data.objectType) && obj.editable && activeNode.data.metadata.concepts) {
-                    _.forEach(activeNode.data.metadata.concepts, function (concept) {
-                        activeNodeConcepts.push(concept.identifier);
+                if ((obj.type === activeNode.data.objectType) && obj.editable && activeNode.data.metadata.topics) {
+                    _.forEach(activeNode.data.metadata.topics, function (topic) {
+                        activeNodeTopics.push(topic.identifier);
                     });
                 }
                 if (activeNode.data.metadata.keywords && activeNode.data.metadata.keywords.length > 0) {
@@ -202,12 +202,12 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
         });
 
 
-        if ($scope.metaData.concepts)
-            $scope.metaData.concepts = $scope.metaData.concepts.sort();
-        if (!_.isEqual(activeNodeConcepts.sort(), $scope.metaData.concepts))
-            $scope.metaData.concepts = activeNodeConcepts;
-        if (!activeNodeConcepts.length)
-            $scope.metaData.concepts = undefined;
+        if ($scope.metaData.topics)
+            $scope.metaData.topics = $scope.metaData.topics.sort();
+        if (!_.isEqual(activeNodeTopics.sort(), $scope.metaData.topics))
+            $scope.metaData.topics = activeNodeTopics;
+        if (!activeNodeTopics.length)
+            $scope.metaData.topics = undefined;
 
         $scope.searchLessons();
     }
@@ -216,19 +216,19 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
     $scope.updateMetaData = function () {
         var getNodesModified = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy().nodesModified;
         _.forEach(getNodesModified, function (node) {
-            var updatedConcepts = [];
-            updatedConcepts = _.map(node.metadata.concepts, 'identifier');
+            var updatedTopics = [];
+            updatedTopics = node.metadata.topics;
             if (node.root) {
                 Object.assign($scope.metaData,
                     _.pick(node.metadata, ['gradeLevel', 'board', 'subject', 'medium']),
-                    (updatedConcepts.length && !_.isEqual(updatedConcepts.sort(), $scope.metaData.concepts.sort())) ? {
-                        concepts: updatedConcepts
+                    (updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topics.sort())) ? {
+                        topics: updatedTopics
                     } : {})
             } else {
-                if ($scope.metaData.concepts)
-                    $scope.metaData.concepts = $scope.metaData.concepts.sort();
-                if (updatedConcepts.length && !_.isEqual(updatedConcepts.sort(), $scope.metaData.concepts)) {
-                    $scope.metaData.concepts = updatedConcepts;
+                if ($scope.metaData.topics)
+                    $scope.metaData.topics = $scope.metaData.topics.sort();
+                if (updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topics)) {
+                    $scope.metaData.topics = updatedTopics;
                 }
             }
         })
@@ -238,22 +238,22 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
 
     $scope.refreshSuggestions = function () {
         var currentNodeData = ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().data;
-        var updatedConcepts = [];
-        updatedConcepts = _.map(currentNodeData.metadata.concepts, 'identifier');
+        var updatedTopics = [];
+        updatedTopics = currentNodeData.metadata.topics;
         if (currentNodeData.root) {
             Object.assign($scope.metaData,
                 _.pick(currentNodeData.metadata, ['gradeLevel', 'board', 'subject', 'medium']),
-                (updatedConcepts.length && !_.isEqual(updatedConcepts.sort(), $scope.metaData.concepts.sort())) ? {
-                    concepts: updatedConcepts
+                (updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topics.sort())) ? {
+                    topics: updatedTopics
                 } : {}
             )
-        } else if (!updatedConcepts.length) {
-            $scope.metaData.concepts = undefined;
+        } else if (!updatedTopics.length) {
+            $scope.metaData.topics = undefined;
         } else {
-            if ($scope.metaData.concepts)
-                $scope.metaData.concepts = $scope.metaData.concepts.sort();
-            if (updatedConcepts.length && !_.isEqual(updatedConcepts.sort(), $scope.metaData.concepts)) {
-                $scope.metaData.concepts = updatedConcepts;
+            if ($scope.metaData.topics)
+                $scope.metaData.topics = $scope.metaData.topics.sort();
+            if (updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topics)) {
+                $scope.metaData.topics = updatedTopics;
             }
         }
         $scope.searchLessons();
