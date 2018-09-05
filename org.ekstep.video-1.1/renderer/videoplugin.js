@@ -139,7 +139,10 @@ Plugin.extend({
         }
         var vid = videojs(instance._id, {
                 "techOrder": ["youtube"],
-                "src": path
+                "src": path,
+                "youtube": {
+                    "iv_load_policy": 3
+                }
             },
             function () {});
         (EkstepRendererAPI.isAudioMuted()) ? videojs(instance._id).muted(true): videojs(instance._id).muted(instance.muted);
