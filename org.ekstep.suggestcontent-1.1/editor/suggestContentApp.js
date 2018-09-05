@@ -6,7 +6,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
     $scope.metaData = {};
     $scope.responseData = [];
     $scope.mode = ecEditor.getConfig('editorConfig').mode;
-    var pickerArray = ['gradeLevel', 'board', 'subject', 'medium', 'topics'];
+    var pickerArray = ['gradeLevel', 'board', 'subject', 'medium', 'topic'];
     $scope.suggestedContentList = {
         count: 0,
         content: []
@@ -39,6 +39,9 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             }),
             (rootNodeMetadata.topic) ? {
                 topics: _.forEach(rootNodeMetadata.topic, function (topic) {
+                    if(!$scope.metaData.topic){
+                        $scope.metaData.topic = [];
+                    }
                     $scope.metaData.topic.push(topic)
                 })
             } : {});
