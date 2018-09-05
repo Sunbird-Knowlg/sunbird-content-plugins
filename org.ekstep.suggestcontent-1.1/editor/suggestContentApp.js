@@ -36,15 +36,8 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
                 medium: _.first(rootNodeMetadata.medium)
             } : {
                 medium: rootNodeMetadata.medium
-            }),
-            (rootNodeMetadata.topic) ? {
-                topics: _.forEach(rootNodeMetadata.topic, function (topic) {
-                    if(!$scope.metaData.topic){
-                        $scope.metaData.topic = [];
-                    }
-                    $scope.metaData.topic.push(topic)
-                })
-            } : {});
+            }));
+            $scope.metaData.topic = (rootNodeMetadata.topic) ? rootNodeMetadata.topic : [];
     }
 
 
