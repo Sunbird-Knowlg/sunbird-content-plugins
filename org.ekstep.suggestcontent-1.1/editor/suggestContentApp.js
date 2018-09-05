@@ -200,10 +200,10 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
 
         if ($scope.metaData.topic)
             $scope.metaData.topic = $scope.metaData.topic.sort();
-        if (!_.isEqual(activeNodeTopics.sort(), $scope.metaData.topic))
+        if (activeNodeTopics.length && !_.isEqual(activeNodeTopics.sort(), $scope.metaData.topic))
             $scope.metaData.topic = activeNodeTopics;
-        if (!activeNodeTopics.length)
-            $scope.metaData.topic = undefined;
+        // if (!activeNodeTopics.length)
+        //     $scope.metaData.topic = undefined;
 
         $scope.searchLessons();
     }
@@ -217,8 +217,8 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             if (node.root) {
                 Object.assign($scope.metaData,
                     _.pick(node.metadata, ['gradeLevel', 'board', 'subject', 'medium']),
-                    (updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topic.sort())) ? {
-                        topics: updatedTopics
+                    (updatedTopics && updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topic.sort())) ? {
+                        topic: updatedTopics
                     } : {})
             } else {
                 if ($scope.metaData.topic)
@@ -240,11 +240,9 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             Object.assign($scope.metaData,
                 _.pick(currentNodeData.metadata, ['gradeLevel', 'board', 'subject', 'medium']),
                 (updatedTopics && updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topic.sort())) ? {
-                    topics: updatedTopics
+                    topic: updatedTopics
                 } : {}
             )
-        } else if (updatedTopics && !updatedTopics.length) {
-            $scope.metaData.topic = undefined;
         } else {
             if ($scope.metaData.topic)
                 $scope.metaData.topic = $scope.metaData.topic.sort();
