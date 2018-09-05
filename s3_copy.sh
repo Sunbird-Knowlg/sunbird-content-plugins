@@ -60,9 +60,9 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.3"
                 "org.ekstep.collectionkeyboardshortcuts-1.0"
                 "org.ekstep.topicselector-1.0"
                 "org.ekstep.contentmeta-1.5"
-                "org.ekstep.courseunitmeta-1.5"
+                "org.ekstep.courseunitmeta-1.6"
                 "org.ekstep.lessonplanunitmeta-1.5"
-                "org.ekstep.unitmeta-1.5");
+                "org.ekstep.unitmeta-1.6");
 
 for i in "${coreplugins[@]}"
 do

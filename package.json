@@ -16,8 +16,6 @@
         "karma-coverage": "^1.1.1",
         "karma-jasmine": "1.0.2",
         "karma-jasmine-matchers": "3.7.0",
-        "karma-phantomjs-launcher": "1.0.2",
-        "phantomjs": "2.1.7",
         "karma-mocha-reporter": "^2.2.3",
         "karma-jasmine-jquery": "^0.1.1",
         "karma-junit-reporter": "^1.2.0",
