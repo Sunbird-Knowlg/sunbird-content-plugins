@@ -37,9 +37,9 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             } : {
                 medium: rootNodeMetadata.medium
             }),
-            (rootNodeMetadata.topics) ? {
-                topics: _.forEach(rootNodeMetadata.topics, function (topic) {
-                    $scope.metaData.topics.push(topic)
+            (rootNodeMetadata.topic) ? {
+                topics: _.forEach(rootNodeMetadata.topic, function (topic) {
+                    $scope.metaData.topic.push(topic)
                 })
             } : {});
     }
@@ -106,7 +106,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             }, 2000);
             $scope.$safeApply();
         } else {
-            searchBody.request.softConstraints =  ($scope.metaData.topics) ? {
+            searchBody.request.softConstraints =  ($scope.metaData.topic) ? {
                 "topics": 100,
                 "medium": 50,
                 "gradeLevel": 25,
@@ -189,8 +189,8 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
 
         _.forEach(ecEditor.getConfig('editorConfig').rules.objectTypes, function (obj) {
             if ((obj.type === activeNode.data.objectType) && obj.editable) {
-                if ((obj.type === activeNode.data.objectType) && obj.editable && activeNode.data.metadata.topics) {
-                    _.forEach(activeNode.data.metadata.topics, function (topic) {
+                if ((obj.type === activeNode.data.objectType) && obj.editable && activeNode.data.metadata.topic) {
+                    _.forEach(activeNode.data.metadata.topic, function (topic) {
                         activeNodeTopics.push(topic);
                     });
                 }
@@ -202,12 +202,12 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
         });
 
 
-        if ($scope.metaData.topics)
-            $scope.metaData.topics = $scope.metaData.topics.sort();
-        if (!_.isEqual(activeNodeTopics.sort(), $scope.metaData.topics))
-            $scope.metaData.topics = activeNodeTopics;
+        if ($scope.metaData.topic)
+            $scope.metaData.topic = $scope.metaData.topic.sort();
+        if (!_.isEqual(activeNodeTopics.sort(), $scope.metaData.topic))
+            $scope.metaData.topic = activeNodeTopics;
         if (!activeNodeTopics.length)
-            $scope.metaData.topics = undefined;
+            $scope.metaData.topic = undefined;
 
         $scope.searchLessons();
     }
@@ -217,18 +217,18 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
         var getNodesModified = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy().nodesModified;
         _.forEach(getNodesModified, function (node) {
             var updatedTopics = [];
-            updatedTopics = node.metadata.topics;
+            updatedTopics = node.metadata.topic;
             if (node.root) {
                 Object.assign($scope.metaData,
                     _.pick(node.metadata, ['gradeLevel', 'board', 'subject', 'medium']),
-                    (updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topics.sort())) ? {
+                    (updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topic.sort())) ? {
                         topics: updatedTopics
                     } : {})
             } else {
-                if ($scope.metaData.topics)
-                    $scope.metaData.topics = $scope.metaData.topics.sort();
-                if (updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topics)) {
-                    $scope.metaData.topics = updatedTopics;
+                if ($scope.metaData.topic)
+                    $scope.metaData.topic = $scope.metaData.topic.sort();
+                if (updatedTopics && updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topic)) {
+                    $scope.metaData.topic = updatedTopics;
                 }
             }
         })
@@ -239,21 +239,21 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
     $scope.refreshSuggestions = function () {
         var currentNodeData = ecEditor.jQuery("#collection-tree").fancytree("getTree").getActiveNode().data;
         var updatedTopics = [];
-        updatedTopics = currentNodeData.metadata.topics;
+        updatedTopics = currentNodeData.metadata.topic;
         if (currentNodeData.root) {
             Object.assign($scope.metaData,
                 _.pick(currentNodeData.metadata, ['gradeLevel', 'board', 'subject', 'medium']),
-                (updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topics.sort())) ? {
+                (updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topic.sort())) ? {
                     topics: updatedTopics
                 } : {}
             )
         } else if (!updatedTopics.length) {
-            $scope.metaData.topics = undefined;
+            $scope.metaData.topic = undefined;
         } else {
-            if ($scope.metaData.topics)
-                $scope.metaData.topics = $scope.metaData.topics.sort();
-            if (updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topics)) {
-                $scope.metaData.topics = updatedTopics;
+            if ($scope.metaData.topic)
+                $scope.metaData.topic = $scope.metaData.topic.sort();
+            if (updatedTopics.length && !_.isEqual(updatedTopics.sort(), $scope.metaData.topic)) {
+                $scope.metaData.topic = updatedTopics;
             }
         }
         $scope.searchLessons();
