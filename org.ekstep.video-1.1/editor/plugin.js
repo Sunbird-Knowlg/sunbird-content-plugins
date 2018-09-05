@@ -86,6 +86,14 @@ org.ekstep.contenteditor.basePlugin.extend({
             }
         });
     },
+    getPragmaValue: function () {
+        var instance = this;
+        if(instance.isYoutubeURL(instance.getConfig()['url'])){
+            return "external";
+        }else{
+            return null;
+        }
+    },
     getConfigManifest: function() {
         var config = this._super();
         ecEditor._.remove(config, function(c) {
