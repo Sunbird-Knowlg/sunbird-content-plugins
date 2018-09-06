@@ -135,6 +135,9 @@ Plugin.extend({
         });
         var elementId = document.getElementById(domElement.id);
     },
+    isAudioMuted: function(){
+        return AudioManager.muted;
+    },
     loadYoutube: function (path) {
         var instance_this = this;
         var instance = this._data;
@@ -157,7 +160,7 @@ Plugin.extend({
                 }
             },
             function () {});
-        (EkstepRendererAPI.isAudioMuted()) ? videojs(instance._id).muted(true): videojs(instance._id).muted(instance.muted);
+        (this.isAudioMuted()) ? videojs(instance._id).muted(true): videojs(instance._id).muted(instance.muted);
         videojs(instance._id).ready(function () {
             var youtubeInstance = this;
             youtubeInstance.src({
