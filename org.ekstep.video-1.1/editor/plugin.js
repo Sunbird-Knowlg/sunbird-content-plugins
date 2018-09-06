@@ -94,7 +94,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     getConfigManifest: function() {
         var config = this._super();
         ecEditor._.remove(config, function(c) {
-            return c.propertyName === 'stroke';
+            return c.propertyName === 'stroke' || c.propertyName === 'visible';
         })
         return config;
     }

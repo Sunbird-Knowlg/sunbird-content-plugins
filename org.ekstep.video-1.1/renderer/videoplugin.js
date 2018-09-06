@@ -138,6 +138,14 @@ Plugin.extend({
     loadYoutube: function (path) {
         var instance_this = this;
         var instance = this._data;
+        if (!navigator.onLine) {
+            EkstepRendererAPI.logErrorEvent('No internet', {
+                'type': 'content',
+                'action': 'play',
+                'severity': 'error'
+            });
+            EkstepRendererAPI.dispatchEvent("renderer:toast:show",undefined,{type:"warning",message:"Please connect to the internet and reload"})
+        }
         if (videojs.getPlayers()[instance._id]) {
             delete videojs.getPlayers()[instance._id];
         }
