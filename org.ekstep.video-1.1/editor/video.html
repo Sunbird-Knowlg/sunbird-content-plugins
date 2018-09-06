@@ -111,7 +111,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="five wide left aligned column" style="padding-left:0;">
+                    <div class="six wide left aligned column" style="padding-left:0;">
                         <div ng-show="$ctrl.messageDiv">
                             <div class="ui segment" class="ui" id="previewMessage" ng-if="$ctrl.show == 'message'" style="height: 200px !important">
                                 <div class="ui text">Preview will come here</div>
@@ -128,7 +128,7 @@
                         </div>
                         <div ng-show="!$ctrl.messageDiv" id="previewVideo"></div>
                     </div>
-                    <div class="seven wide column" style="padding-right:0;">
+                    <div class="six wide column" style="padding-right:0;">
                         <p>
                             1. Currently only direct link to video file and Google Drive public shared links are supported.
                             <br/> 2. It is recommended to keep the video file size less than 20 MB.
@@ -164,7 +164,7 @@
                                             <div class="content contentTitle">Board</div>
                                         </div>
                                         <div class="item">
-                                            <div class="right floated content contentMetaDetail">{{(videoItem.class.toString())}}
+                                            <div class="right floated content contentMetaDetail">{{(videoItem.gradeLevel.toString())}}
                                             </div>
                                             <div class="content contentTitle">Class</div>
                                         </div>
@@ -172,12 +172,6 @@
                                             <div class="right floated content contentMetaDetail">{{(videoItem.subject)}}
                                             </div>
                                             <div class="content contentTitle">Subject</div>
-                                        </div>
-                                        <div class="item">
-                                            <div class="right floated content contentMetaDetail">
-                                                <span ng-repeat="concept in videoItem.concepts">{{ conceptsNames[concept]}}{{$last ? '' : ', '}}</span>
-                                            </div>
-                                            <div class="content contentTitle">Concept</div>
                                         </div>
                                     </div>
                                 </div>
