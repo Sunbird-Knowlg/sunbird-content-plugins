@@ -144,7 +144,7 @@ Plugin.extend({
                 'action': 'play',
                 'severity': 'error'
             });
-            EkstepRendererAPI.dispatchEvent("renderer:toast:show",undefined,{type:"warning",message:"`No internet connectivity. Turn on WiFi or mobile data and try again`"})
+            EkstepRendererAPI.dispatchEvent("renderer:toast:show",undefined,{type:"warning",message:"No internet connectivity. Turn on WiFi or mobile data and try again"})
         }
         if (videojs.getPlayers()[instance._id]) {
             delete videojs.getPlayers()[instance._id];
