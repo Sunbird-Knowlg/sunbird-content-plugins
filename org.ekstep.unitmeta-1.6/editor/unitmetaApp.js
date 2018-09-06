@@ -95,11 +95,11 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         $scope.unit.topicData = '(0) topics selected';
         $scope.unit.name = $scope.unit.name || 'Untitled TextBook'
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
-            if(!_.isUndefined(activeNode.data.metadata.topics)){
-                $scope.unit.topics = activeNode.data.metadata.topics;
-                if($scope.unit.topics.length > 0){
-                    $scope.unit.topicData = '(' + $scope.unit.topics.length + ') topics selected';
-                    _.forEach($scope.unit.topics, function(topic){
+            if(!_.isUndefined(activeNode.data.metadata.topic)){
+                $scope.unit.topic = activeNode.data.metadata.topic;
+                if($scope.unit.topic.length > 0){
+                    $scope.unit.topicData = '(' + $scope.unit.topic.length + ') topics selected';
+                    _.forEach($scope.unit.topic, function(topic){
                         selectedTopics.push(topic);
                     });
                 }else{
@@ -115,7 +115,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             selectedTopics: selectedTopics,
             callback: function(data) {
                 $scope.unit.topicData = '(' + data.length + ') topics selected';
-                $scope.unit.topics = _.map(data, function(topic) {
+                $scope.unit.topic = _.map(data, function(topic) {
                     return  topic.name;
                 });
                 $scope.$safeApply();
