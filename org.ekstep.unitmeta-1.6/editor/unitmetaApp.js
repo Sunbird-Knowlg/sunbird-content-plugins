@@ -3,6 +3,9 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
     const DEFAULT_NODETYPE = 'TextBookUnit';
+    var metaData = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
+    var frameworkId = ecEditor.getContext('framework') || metaData.framework;
+
 
     $scope.updateTitle = function(event, title) {
         $scope.unit.name = title;
@@ -22,7 +25,8 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                 $scope.unit.keywords = $scope.unit.keywords.split(',');
             }
             $scope.unit.contentType = $scope.nodeType;
-            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.unit));;
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata, $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.unit));
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.framework = frameworkId;
             var keywords = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords
             if (keywords) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords = keywords.map(function(a) {

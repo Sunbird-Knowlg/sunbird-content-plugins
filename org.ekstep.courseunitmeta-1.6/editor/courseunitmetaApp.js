@@ -3,6 +3,8 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
     const DEFAULT_NODETYPE = 'CourseUnit'
+    var metaData = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
+    var frameworkId = ecEditor.getContext('framework') || metaData.framework;
 
     $scope.updateTitle = function(event, title) {
         $scope.courseunit.name = title;
@@ -28,7 +30,8 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
             }
             $scope.courseunit.contentType = $scope.nodeType;
             console.log("Name:",$scope.courseunit.name)
-            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.courseunit));;
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.courseunit));
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.framework = frameworkId;
             var keywords = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords
             if (keywords) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords = keywords.map(function(a) {
