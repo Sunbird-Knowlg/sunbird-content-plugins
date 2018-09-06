@@ -103,7 +103,7 @@ angular.module('suggestcontentApp', []).controller('suggestcontentController', [
             $scope.$safeApply();
         } else {
             searchBody.request.softConstraints =  ($scope.metaData.topic) ? {
-                "topics": 100,
+                "topic": 100,
                 "medium": 50,
                 "gradeLevel": 25,
                 "board": 12
