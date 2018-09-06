@@ -4,8 +4,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     $scope.nodeId = $scope.nodeType = '';
     const DEFAULT_NODETYPE = 'TextBookUnit';
     var metaData = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
-    var frameworkId = ecEditor.getContext('framework') || metaData.framework;
-
+    var frameworkId = metaData.framework || ecEditor.getContext('framework');
 
     $scope.updateTitle = function(event, title) {
         $scope.unit.name = title;
