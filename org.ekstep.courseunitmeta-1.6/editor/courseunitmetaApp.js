@@ -3,6 +3,8 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
     $scope.metadataCloneOb = {};
     $scope.nodeId = $scope.nodeType = '';
     const DEFAULT_NODETYPE = 'CourseUnit'
+    var metaData = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId'));
+    var frameworkId = metaData.framework || ecEditor.getContext('framework');
 
     $scope.updateTitle = function(event, title) {
         $scope.courseunit.name = title;
@@ -28,7 +30,8 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
             }
             $scope.courseunit.contentType = $scope.nodeType;
             console.log("Name:",$scope.courseunit.name)
-            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.courseunit));;
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata = _.assign(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata , $scope.getUpdatedMetadata($scope.metadataCloneObj, $scope.courseunit));
+            org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.framework = frameworkId;
             var keywords = org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords
             if (keywords) {
                 org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId].metadata.keywords = keywords.map(function(a) {
@@ -101,11 +104,11 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
         $scope.courseunit.topicData = '(0) topics selected';
         $scope.courseunit.name = $scope.courseunit.name || 'Untitled Course Unit'
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
-            if(!_.isUndefined(activeNode.data.metadata.topics)){
-                $scope.courseunit.topics = activeNode.data.metadata.topics;
-                if($scope.courseunit.topics.length > 0){
-                    $scope.courseunit.topicData = '(' + $scope.courseunit.topics.length + ') topics selected';
-                    _.forEach($scope.courseunit.topics, function(topic){
+            if(!_.isUndefined(activeNode.data.metadata.topic)){
+                $scope.courseunit.topic = activeNode.data.metadata.topic;
+                if($scope.courseunit.topic.length > 0){
+                    $scope.courseunit.topicData = '(' + $scope.courseunit.topic.length + ') topics selected';
+                    _.forEach($scope.courseunit.topic, function(topic){
                         selectedTopics.push(topic);
                     });
                 }else{
@@ -122,7 +125,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
             isCategoryDependant: false,
             callback: function(data) {
                 $scope.courseunit.topicData = '(' + data.length + ') topics selected';
-                $scope.courseunit.topics = _.map(data, function(topic) {
+                $scope.courseunit.topic = _.map(data, function(topic) {
                     return topic.name;
                 });
                 $scope.$safeApply();
