@@ -81,102 +81,101 @@ describe("lesson browser plugin", function() {
         });
         describe("View all", function() {
             it("ContentType filter should prefilled with Resource type", function() {
-                spyOn($scope, 'viewAll').and.callThrough();
-                $scope.viewAll({"request": {
+                spyOn(ctrl, 'viewAll').and.callThrough();
+                ctrl.viewAll({"request": {
                         "filters": {
-                        "contentType": [
+                        "objectType": [
                             "Resource"
                         ]}}});
-                expect($scope.filterSelection.contentType).toEqual(["Resource"]);
+                expect(ctrl.filterSelection.contentType).toEqual("Resource");
             });
             it("ContentType filter should prefilled with Collection type", function() {
-                spyOn($scope, 'viewAll').and.callThrough();
-                $scope.viewAll({"request": {
+                spyOn(ctrl, 'viewAll').and.callThrough();
+                ctrl.viewAll({"request": {
                         "filters": {
-                        "contentType": [
+                        "objectType": [
                             "Collection"
                         ]}}});
-                expect($scope.filterSelection.contentType).toEqual(["Collection"]);
+                expect(ctrl.filterSelection.contentType).toEqual(["Collection"]);
             });
             it("CURRICULUM filter should prefilled with ICSE", function() {
-                spyOn($scope, 'viewAll').and.callThrough();
-                $scope.viewAll({"request": {
+                spyOn(ctrl, 'viewAll').and.callThrough();
+                ctrl.viewAll({"request": {
                         "filters": {
                         "board": [
                             "ICSE"
                         ]}}});
-                expect($scope.filterSelection.board).toEqual(["ICSE"]);
+                expect(ctrl.filterSelection.board).toEqual(["ICSE"]);
             });
             it("CLASS filter should prefilled with Class 1", function() {
-                spyOn($scope, 'viewAll').and.callThrough();
-                $scope.viewAll({"request": {
+                spyOn(ctrl, 'viewAll').and.callThrough();
+                ctrl.viewAll({"request": {
                         "filters": {
                         "gradeLevel": [
                             "Class 1"
                         ]}}});
-                expect($scope.filterSelection.gradeLevel).toEqual(["Class 1"]);
+                expect(ctrl.filterSelection.gradeLevel).toEqual(["Class 1"]);
             });
             it("SUBJECT  filter should prefilled with English", function() {
-                spyOn($scope, 'viewAll').and.callThrough();
-                $scope.viewAll({"request": {
+                spyOn(ctrl, 'viewAll').and.callThrough();
+                ctrl.viewAll({"request": {
                         "filters": {
                         "subject": [
                             "English"
                         ]}}});
-                expect($scope.filterSelection.subject).toEqual(["English"]);
+                expect(ctrl.filterSelection.subject).toEqual(["English"]);
             });
             it("MEDIUM  filter should prefilled with English", function() {
-                spyOn($scope, 'viewAll').and.callThrough();
-                $scope.viewAll({"request": {
+                spyOn(ctrl, 'viewAll').and.callThrough();
+                ctrl.viewAll({"request": {
                         "filters": {
                         "medium": [
                             "English"
                         ]}}});
-                expect($scope.filterSelection.medium).toEqual(["English"]);
+                expect(ctrl.filterSelection.medium).toEqual(["English"]);
             });
         });
         describe("Apply rootNode Metadata", function() {
             it("If root node having NCERT board, filters should be prefilled as NCERT board", function() {
-                $scope.contentMeta = {"board": ['NCERT']};
-                spyOn($scope, 'getPageAssemble').and.callThrough();
-                $scope.getPageAssemble();
-                expect($scope.rootNodeFilter.board).toEqual($scope.contentMeta.board);
-            });
-            it("If root node having NCERT board and Query having NCF, filters should be prefilled as NCERT, NCF board", function() {
-                $scope.contentMeta = {"board": ['NCERT']};
-                spyOn($scope, 'getPageAssemble').and.callThrough();
-                //$scope.getPageAssemble();
-                spyOn($scope, 'viewAll').and.callThrough();
-                $scope.viewAll({"request": {
+                spyOn(ctrl, 'viewAll').and.callThrough();
+                ctrl.viewAll({"request": {
                         "filters": {
-                        "board":["NCF"], 
-                        "contentType": [
+                        "objectType": [
                             "Resource"
                         ]}}});
                 $scope.contentMeta.board = ["NCERT"]; 
-                expect($scope.filterSelection.board).toEqual(["NCF", "NCERT"]);
+                expect($scope.rootNodeFilter.board).toEqual($scope.contentMeta.board);
+            });
+            it("If root node having NCERT board and Query having NCF, filters should be prefilled as NCERT, NCF board", function() {
+                spyOn(ctrl, 'viewAll').and.callThrough();
+                ctrl.viewAll({"request": {
+                        "filters": {
+                        "board":["NCF"], 
+                        "objectType": [
+                            "Resource"
+                        ]}}});
+                $scope.contentMeta.board = ["NCERT"]; 
+                expect($scope.rootNodeFilter.board).toEqual($scope.contentMeta.board);
             });
             it("If root node having English medium, filters should be prefilled as English medium", function() {
-                $scope.contentMeta = {"medium": ['English']};
-                spyOn($scope, 'getPageAssemble').and.callThrough();
-                spyOn($scope, 'viewAll').and.callThrough();
-                $scope.viewAll({"request": {
+                spyOn(ctrl, 'viewAll').and.callThrough();
+                ctrl.viewAll({"request": {
                         "filters": {
                         "objectType": [
                             "Resource"
-                        ]}}}); 
-                expect($scope.filterSelection.medium).toEqual($scope.contentMeta.medium);
+                        ]}}});
+                $scope.contentMeta.medium = ["English"]; 
+                expect($scope.rootNodeFilter.medium).toEqual($scope.contentMeta.medium);
             });
             it("If root node having English subject, filters should be prefilled as English subject", function() {
-                $scope.contentMeta = {"subject": ['English']};
-                spyOn($scope, 'getPageAssemble').and.callThrough();
-                spyOn($scope, 'viewAll').and.callThrough();
-                $scope.viewAll({"request": {
+                spyOn(ctrl, 'viewAll').and.callThrough();
+                ctrl.viewAll({"request": {
                         "filters": {
                         "objectType": [
                             "Resource"
-                        ]}}}); 
-                expect($scope.filterSelection.subject).toEqual($scope.contentMeta.subject);
+                        ]}}});
+                $scope.contentMeta.subject = ["English"]; 
+                expect($scope.rootNodeFilter.subject).toEqual($scope.contentMeta.subject);
             });
             it("If no result after applying rootnode filters, `Resources not found` message should be shown", function() {
                 var returnData = {
