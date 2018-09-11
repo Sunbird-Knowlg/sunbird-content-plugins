@@ -33,12 +33,10 @@
                                     <div class="ui sub header paraHeading">
                                         <p class="padding-top-3px">{{dynamicField.label | uppercase}} ({{contentMeta[dynamicField.code].length || 0}})</p>
                                     </div>
-                                    <div data-tooltip="{{contentMeta[dynamicField.code].length ? contentMeta[dynamicField.code].join(', ') : dynamicField.placeholder}}" data-variation="basic">
-                                        <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search downward dropdown placeholder-padding lableCls " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#resourceFilterTemplate', index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm});$parent.$parent.getFiltersValue(contentMeta);" multiple=" " ng-required="{{dynamicField.required}} ">
-                                            <option value="">{{dynamicField.placeholder}}</option>
-                                            <option data-value="{{category.name || category}} " ng-repeat="category in categoryList[dynamicField.code]" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)">{{category.name || category}}</option>
-                                        </select>
-                                    </div>
+                                    <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown placeholder-padding lableCls " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#resourceFilterTemplate', index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm});$parent.$parent.getFiltersValue(contentMeta);" multiple=" " ng-required="{{dynamicField.required}} ">
+                                        <option value="">{{dynamicField.placeholder}}</option>
+                                        <option data-value="{{category.name || category}} " ng-repeat="category in categoryList[dynamicField.code]" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)">{{category.name || category}}</option>
+                                    </select>
                                     <div ng-show="!metaForm[dynamicField.code].$valid " class="ui pointing red basic label ">
                                         Please Select
                                     </div>
@@ -50,13 +48,11 @@
                                     <div class="ui sub header paraHeading">
                                         <p class="padding-top-3px">{{dynamicField.label | uppercase}}</p>
                                     </div>
-                                    <div data-tooltip="{{contentMeta[dynamicField.code] ? contentMeta[dynamicField.code] : dynamicField.placeholder}}" data-variation="basic">
-                                        <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search downward dropdown placeholder-padding lableCls" ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#resourceFilterTemplate', index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm});$parent.$parent.getFiltersValue(contentMeta);"
-                                            ng-required="{{dynamicField.required}} ">
-                                                <option value = "">{{dynamicField.placeholder}}</option> 
-                                                <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code]" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)"  >{{category.name || category}}</option>
-                                        </select>
-                                    </div>
+                                    <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui fluid search dropdown placeholder-padding lableCls" ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({target: '#resourceFilterTemplate', index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm});$parent.$parent.getFiltersValue(contentMeta);"
+                                        ng-required="{{dynamicField.required}} ">
+                                            <option value = "">{{dynamicField.placeholder}}</option> 
+                                            <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code]" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)"  >{{category.name || category}}</option>
+                                    </select>
                                     <div ng-show="!metaForm[dynamicField.code].$valid  && isSubmit" class="ui pointing red basic label ">
                                         Please Select
                                     </div>
@@ -69,7 +65,7 @@
                                     <div class="ui sub header paraHeading">
                                         <p class="padding-top-3px">{{dynamicField.label | uppercase}} ({{contentMeta[dynamicField.code].length || 0}})</p>
                                     </div>
-                                    <conceptselector data-tooltip="{{contentMeta[dynamicField.code].length ? contentMeta[dynamicField.code].join(', ') : dynamicField.placeholder}}" class="concept-field" config=dynamicField ng-click="onConfigChange({target: '#resourceFilterTemplate', field:dynamicField, form:metaForm});"></conceptselector>
+                                    <conceptselector class="concept-field" config=dynamicField ng-click="onConfigChange({target: '#resourceFilterTemplate', field:dynamicField, form:metaForm});"></conceptselector>
                                 </div>
                             </div>
                             <!-- TOPIC SELECTOR -->
@@ -78,7 +74,7 @@
                                     <div class="ui sub header paraHeading">
                                         <p class="padding-top-3px">{{dynamicField.label | uppercase}} ({{contentMeta[dynamicField.code].length || 0}})</p>
                                     </div>
-                                    <topic-selector data-tooltip="{{contentMeta[dynamicField.code].length ? contentMeta[dynamicField.code].join(', ') : dynamicField.placeholder}}" class="concept-field" config=dynamicField ng-click="onConfigChange({target: '#resourceFilterTemplate', field:dynamicField, form:metaForm})"></topic-selector>
+                                    <topic-selector class="concept-field" config=dynamicField ng-click="onConfigChange({target: '#resourceFilterTemplate', field:dynamicField, form:metaForm})"></topic-selector>
                                 </div>
                             </div>
                         </div>
