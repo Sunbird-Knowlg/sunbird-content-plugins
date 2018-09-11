@@ -2,7 +2,10 @@
     "name": "coreplugins",
     "version": "1.0.0",
     "description": "Testing content plugins",
-    "dependencies": {},
+    "dependencies": {
+        "karma-chrome-launcher": "^2.2.0",
+        "karma-coverage-istanbul-reporter": "^2.0.2"
+    },
     "devDependencies": {
         "angular": "^1.6.4",
         "angular-mocks": "^1.6.4",
@@ -13,8 +16,6 @@
         "karma-coverage": "^1.1.1",
         "karma-jasmine": "1.0.2",
         "karma-jasmine-matchers": "3.7.0",
-        "karma-phantomjs-launcher": "1.0.2",
-        "phantomjs": "2.1.7",
         "karma-mocha-reporter": "^2.2.3",
         "karma-jasmine-jquery": "^0.1.1",
         "karma-junit-reporter": "^1.2.0",

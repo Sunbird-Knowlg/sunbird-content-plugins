@@ -4,9 +4,9 @@
 
      var stage, text1, text2, wordinfo_text, readalong_text;
      beforeAll(function() {
-         stage = ecEditor.instantiatePlugin('org.ekstep.stage');
-         org.ekstep.contenteditor.mediaManager.addMedia({ "name": "10", "id": "do_20076098", "src": "https://dev.ekstep.in:443/assets/public/content/10_1466574879197.mp3", "type": "audio" });
-         $('<div class="ui form" id="textEditorContainer"><div class="field"><textarea id="authoringTextEditor" placeholder="Add text here" rows="12">Plain text</textarea><div><div class="ui buttons" id="texteditorBtnGrp"><button id="authoringTextEditorCancel" class="ui secondary button">Cancel</button><div class="or"></div><button id="authoringTextEditorBtn" class="ui primary button">Done</button></div></div></div></div>').appendTo('body');
+        stage = ecEditor.instantiatePlugin('org.ekstep.stage');
+        org.ekstep.contenteditor.mediaManager.addMedia({ "name": "10", "id": "do_20076098", "src": "https://dev.ekstep.in:443/assets/public/content/10_1466574879197.mp3", "type": "audio" });
+        $('<div class="ui form" id="textEditorContainer"><div class="field"><textarea id="authoringTextEditor" placeholder="Add text here" rows="12">Plain text</textarea><div><div class="ui buttons" id="texteditorBtnGrp"><button id="authoringTextEditorCancel" class="ui secondary button">Cancel</button><div class="or"></div><button id="authoringTextEditorBtn" class="ui primary button">Done</button></div></div></div></div>').appendTo('body');
      });
      afterAll(function() {
          $('div#textEditorContainer').remove();

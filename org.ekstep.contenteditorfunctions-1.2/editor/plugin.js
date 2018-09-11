@@ -31,7 +31,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     reviewContent: function(event, callback) {
         var contentId = ecEditor.getContext('contentId');
-        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).sendForReview({ contentId: contentId }, function(err, res) {
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).sendForReview({ contentId: contentId, channel: ecEditor.getContext('channel') }, function(err, res) {
             if (res && res.data && res.data.responseCode == "OK") {
                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                     title: 'Content sent for review...',
@@ -100,6 +100,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             contentMeta.totalScore = summary.totalScore;
         }
         contentMeta.editorState = JSON.stringify(this.editorState);
+        contentMeta.pragma = org.ekstep.contenteditor.stageManager.getPragma();
         this._patchContent(contentMeta, contentBody, options);
     },
     _patchContent: function(contentMeta, contentBody, options) {
@@ -305,7 +306,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     publishContent: function(event, data) {
         var contentId = ecEditor.getContext('contentId');
-        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).publishContent({ contentId: contentId, data:data }, function(err, res) {
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).publishContent({ contentId: contentId, channel: ecEditor.getContext('channel'), data:data }, function(err, res) {
             if (res && res.data && res.data.responseCode == "OK") {
                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                     title: 'Content published successfully!',
@@ -323,7 +324,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
     },
     rejectContent: function(event, data) {
-        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).rejectContent({ contentId: ecEditor.getContext('contentId'),data:data }, function(err, res) {
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).rejectContent({ contentId: ecEditor.getContext('contentId'), channel: ecEditor.getContext('channel'), data:data }, function(err, res) {
             if (res && res.data && res.data.responseCode == "OK") {
                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                     title: 'Content rejected successfully!',

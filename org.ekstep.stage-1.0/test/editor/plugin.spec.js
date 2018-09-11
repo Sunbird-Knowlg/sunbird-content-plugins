@@ -82,7 +82,7 @@ describe('Stage plugin', function() {
             expect(ecEditor.getAngularScope().showGenieControls).toBe(true);
         });
 
-        it('should validate destroyOnLoad function', function() {
+        it('should validate destroyOnLoad function', function(done) {
             var callbackInvoked = false;
             stage2.destroyOnLoad(2, ecEditor.getCanvas(), function() {
                 callbackInvoked = true;
@@ -97,6 +97,7 @@ describe('Stage plugin', function() {
             ecEditor.instantiatePlugin("org.ekstep.shape", { "type": "rect", "x": 15, "y": 30, "fill": "#FFFF00", "w": 14, "h": 25, "stroke": "rgba(255, 255, 255, 0)", "strokeWidth": 1, "opacity": 1 }, ecEditor.getCurrentStage());
             setTimeout(function() {
                 expect(callbackInvoked).toBe(true);
+                done();
             }, 2000);
         });
     });
