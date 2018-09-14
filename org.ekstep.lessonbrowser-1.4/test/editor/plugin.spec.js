@@ -209,7 +209,7 @@ describe("lesson browser plugin", function() {
     });
     
     describe("Lesson browser", function() {
-        xdescribe("Init lesson browser", function() {
+        describe("Init lesson browser", function() {
             it("It should initialized Lesson browser plugin", function() {
                 spyOn(pluginInstance, 'initialize').and.callThrough();
                 pluginInstance.initialize(manifest);
@@ -259,7 +259,7 @@ describe("lesson browser plugin", function() {
                 done();
             });
         });
-        xdescribe("View all", function() {
+        describe("View all", function() {
             it("ContentType filter should prefilled with Resource type", function() {
                 spyOn($scope, 'viewAll').and.callThrough();
                 $scope.viewAll({"request": {
