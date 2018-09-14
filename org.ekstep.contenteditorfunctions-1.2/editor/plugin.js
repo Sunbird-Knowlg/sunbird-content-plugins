@@ -100,6 +100,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             contentMeta.totalScore = summary.totalScore;
         }
         contentMeta.editorState = JSON.stringify(this.editorState);
+        contentMeta.pragma = org.ekstep.contenteditor.stageManager.getPragma();
         this._patchContent(contentMeta, contentBody, options);
     },
     _patchContent: function(contentMeta, contentBody, options) {
