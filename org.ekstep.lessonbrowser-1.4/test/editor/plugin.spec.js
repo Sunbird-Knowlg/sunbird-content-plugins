@@ -382,5 +382,71 @@ describe("lesson browser plugin", function() {
                 done();
             });
         });
+        describe("Search Concept", function(){
+            it("Search concept should have been called", function() {
+                var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
+                searchService.search = jasmine.createSpy().and.callFake(function(data, callback) {
+                    return callback(undefined, {"data": {"result": {"concepts": [{"identifier": "c1", "name": "Concpet1"}]}}});
+                });
+                spyOn(ctrl, 'searchConcepts').and.callThrough();
+                ctrl.searchConcepts(["c1"], function(){
+                    expect(ctrl.searchConcepts).toHaveBeenCalled();
+                });
+            });
+        });
+        describe("Search Lesson", function(){
+            it("Search lesson should have been called", function() {
+                var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
+                searchService.search = jasmine.createSpy().and.callFake(function(data, callback) {
+                    return callback(undefined, {"data": {"result": {"contents": [{"identifier": "L1", "name": "lesson1"}]}}});
+                });
+                spyOn(ctrl, 'searchLessons').and.callThrough();
+                ctrl.searchLessons(function(){
+                    expect(ctrl.searchLessons).toHaveBeenCalled();
+                });
+            });   
+        });
+        describe("Toggle Content", function(){
+            it("Should add or remove resources from content lists", function() {
+                spyOn(ctrl, 'toggleContent').and.callThrough();
+                ctrl.toggleContent([{"identifier": "c1"}]);
+                expect(ctrl.toggleContent).toHaveBeenCalled();
+                expect($("#checkBox_c1>.checkBox"). prop("checked")).toEqual(false); 
+            });
+        });
+        describe("Show details card", function(){
+            it("Details should be dispaly on card", function() {
+                spyOn($scope, 'showCardDetails').and.callThrough();
+                $scope.showCardDetails();
+                expect($scope.showCardDetails).toHaveBeenCalled();
+                expect($scope.mainTemplate).toEqual("cardDetailsView");
+                
+            });
+        });
+        describe("Search specific lessson", function(){
+            it("Should Search specific lesson", function() {
+                spyOn($scope, 'lessonBrowserSearch').and.callThrough();
+                $scope.lessonBrowserSearch();
+                expect($scope.lessonBrowserSearch).toHaveBeenCalled();
+                expect($('#noLessonMsg').is(':visible')).toEqual(true); 
+            });
+        });
+        describe("Get and set filters", function(){
+            it("Should get filters value", function() {
+                spyOn($scope, 'getFiltersValue').and.callThrough();
+                $scope.getFiltersValue({"board": ["NCERT"]});
+                expect($scope.getFiltersValue).toHaveBeenCalled();
+                expect($scope.filterSelection.board).toEqual(["NCERT"]); 
+            });
+            it("Should apply filters in sidebar", function() {
+                spyOn($scope, 'applyFilters').and.callThrough();
+                ctrl.searchLessons = jasmine.createSpy().and.callFake(function(callback) {
+                    return callback([]);
+                });
+                $scope.applyFilters();
+                expect($scope.applyFilters).toHaveBeenCalled();
+                expect($('#noLessonMsg').is(':visible')).toEqual(false);
+            });
+        });
     });
 });
