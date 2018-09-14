@@ -33,6 +33,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      * @memberof RichText
      */
     richTextId: 'richtext-wrapper',
+    supportedFonts: 'NotoSans, NotoSansBengali, NotoSansDevanagari, NotoSansGujarati, NotoSansGurmukhi, NotoSansKannada, NotoSansMalayalam, NotoSansOriya, NotoSansTamil, NotoSansTelugu, NotoNastaliqUrdu',
     /**
      * The events are registred which are used to add or remove fabric events and other custom events
      * @memberof RichText
@@ -137,7 +138,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         div.setAttribute("id", instance.data.id);
         div.style.position = 'absolute';
         div.style.fontSize = '14px';
-        div.style.fontFamily = 'NotoSans';
+        div.style.fontFamily = this.supportedFonts;
         div.style.width = instance.data.editorObj.width ? instance.data.editorObj.width + 1 + 'px' : "auto";
         div.style.height = instance.data.editorObj.height ? instance.data.editorObj.height + 1 + 'px' : "auto";
         div.style.pointerEvents = "none";
@@ -216,6 +217,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      getAttributes: function() {
         var attributes = this._super();
         attributes.fontSize = this.updateFontSize(ecEditor.jQuery('#' + this.richTextId).css("font-size"), false);
+        attributes.font = this.supportedFonts;
         return attributes;
     },
 
@@ -226,7 +228,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     getConfig: function() {
         var config = this._super();
         // config.color = ecEditor.jQuery('#' + this.id).css("color");
-        config.fontfamily = ecEditor.jQuery('#' + this.id).css("font-family");
+        // config.fontfamily = ecEditor.jQuery('#' + this.id).css("font-family");
         config.fontsize = ecEditor.jQuery('#' + this.id).css("font-size");
         config = _.omit(config, ["stroke", "strokeWidth"]);
         return config;
