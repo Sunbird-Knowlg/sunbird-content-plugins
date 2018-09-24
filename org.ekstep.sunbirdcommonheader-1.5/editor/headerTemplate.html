@@ -24,14 +24,14 @@
             <div class="row header-icon-container">
                 <div class="custom-row-2">
                 <div class="content-contributors">
-                    <p>Created with contribution from <span style="color: blue">{{4}}</span></p>
+                    <p>Created with contribution from <span style="color: blue">{{names.length}}</span></p>
                 </div>
                     <div class="icon-group-2">
-                        <div class="ui floating dropdown labeled search icon" id="dropdownitem">
+                        <div class="ui floating dropdown labeled search icon" id="dropdownitem" ng-click="showContributionList()">
                             <i class="blue users icon custom-icon users-icon-position"></i>
                             <div class="menu" style="right: 0;left: auto; width: 250px;">
                                 <div class="item" ng-repeat="item in names | limitTo:listLimit">{{item}}</div>
-                                <button class="fluid ui button" ng-click="addListSize()">See More</button>
+                                <button class="fluid ui button" ng-click="addListSize(); $event.stopPropagation()" ng-if="listLimit <= names.length">See More</button>
                             </div>
                         </div>
                         

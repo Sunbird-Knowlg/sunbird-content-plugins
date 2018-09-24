@@ -16,13 +16,44 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
      * @property - to assign publish string globally
      */
     var reviewPublish = 'publish';
-    $scope.names = ["Emil", "Tobias", "Linus", "linki", "checkListConfigurations", "setEditorDetails", "editMetaOptions", "Emilea", "Tobiass", "Linuss", "linkii", "checkListConfigurationss", "setEditorDetailss", "editMetaOptionss"];
-    $scope.listLimit = 5;
+    $scope.names = [];//["Emil", "Tobias", "Linus", "linki", "checkListConfigurations", "setEditorDetails", "editMetaOptions", "Emilea", "Tobiass", "Linuss", "linkii", "checkListConfigurationss", "setEditorDetailss", "editMetaOptionss"];
+    
+    $scope.updateOwnershipList = function(event, nodeData) {
+        if(nodeData.data.metadata.owner && $scope.names.indexOf(nodeData.data.metadata.owner) == -1) {
+            $scope.names.push(nodeData.data.metadata.owner);
+        }else if(nodeData.data.metadata.creator && $scope.names.indexOf(nodeData.data.metadata.creator) == -1) {
+            $scope.names.push(nodeData.data.metadata.creator);
+        }
+    }
 
+    $scope.removeOwnershipList = function(event, nodeData) {
+        $scope.names = [];
+        var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode");
+        if(rootNode && rootNode.children[0].children) {
+            rootNode.children[0].children.forEach(function(num) { 
+                if(num.data.metadata.owner && $scope.names.indexOf(num.data.metadata.owner) == -1) {
+                    $scope.names.push(num.data.metadata.owner)
+                }else if(num.data.metadata.creator && $scope.names.indexOf(num.data.metadata.creator) == -1) {
+                    $scope.names.push(num.data.metadata.creator);
+                }
+            });
+        }
+    }
+
+    /*
+    * Initialize listLimit value when click on user icon button.
+    */
+    $scope.showContributionList = function() {
+        $scope.listLimit = 5;
+    };
+
+    /*
+    * Increase size of listLimit when click on see more button.
+    */
     $scope.addListSize = function() {
         $scope.listLimit = $scope.listLimit + 5;
         $scope.$safeApply();
-    }
+    };
 
     $scope.isReviewCommentsPresent = false;
 
@@ -537,6 +568,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     ecEditor.addEventListener("content:icon:update", $scope.updateIcon, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:content:load", $scope.setEditorDetails, $scope);
     ecEditor.addEventListener("content:load:complete", $scope.setEditorDetails, $scope);
+    ecEditor.addEventListener("org.ekstep.collectioneditor:node:added", $scope.updateOwnershipList, $scope);
+    ecEditor.addEventListener("org.ekstep.collectioneditor:node:removed", $scope.removeOwnershipList, $scope);
 
     // content editor events
     ecEditor.addEventListener('object:modified', $scope.setPendingChangingStatus, $scope);

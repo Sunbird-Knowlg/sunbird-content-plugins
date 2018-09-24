@@ -453,7 +453,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     };
 
     $scope.getFixedFieldCode = function(tempalteName) {
-        var map = { 'defaultTemplate': ["name", "description", "keywords", "appicon"] }
+        var map = { 'defaultTemplate': ["name", "description", "keywords", "appicon", "ownershipType"] }
         return map[$scope.tempalteName] || {}
     }
 
