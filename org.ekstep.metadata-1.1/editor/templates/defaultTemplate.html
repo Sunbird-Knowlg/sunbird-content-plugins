@@ -64,6 +64,20 @@
                                         <label>{{fixedField.label | uppercase}}</label>
                                         <keywords config=fixedField ng-click="onConfigChange({field:fixedField,form:metaForm})"></keywords>
                                     </div>
+
+                                <div id="{{fixedField.code}} " class="field " ng-class="{ 'error': (!contentMeta[fixedField.code] && fixedField.required   && isSubmit), 'required': fixedField.required} " name="{{dynamicField.code}}
+                                        " ng-if="fixedField.inputType=='select' ">
+                                    <label>{{fixedField.label | uppercase}}</label>
+                                    <select id="_select{{fixedField.code}} " name="{{fixedField.code}} " class="ui fluid search dropdown " multiple=" " ng-class="!fixedField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]
+                                            " ng-change="onConfigChange({index:$index, field:fixedField, value:contentMeta[fixedField.code], form:metaForm}) " ng-required="{{fixedField.required}} ">
+                                            <option value = "">{{fixedField.placeholder}}</option>                                            
+                                            <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[fixedField.code] ">{{category.name || category}}</option>
+                                    </select>
+                                    <div ng-show="!metaForm[fixedField.code].$valid  && isSubmit" class="ui pointing red basic label ">
+                                        Please Select
+                                    </div>
+                                </div>
+
                                 </div>
                             </div>
                         </div>
@@ -73,7 +87,7 @@
                             </div>
                             <div class="{{!appIconConfig.visible ? 'twelve wide field' : 'ten wide field'}}">
                                 <div class="ui grid ">
-                                    <div class="six wide field " ng-repeat="dynamicField in dynamicLayoutConfigurations ">
+                                    <div class="six wide field " ng-repeat="dynamicField in dynamicLayoutConfigurations " ng-repeat="fixedField in fixedLayoutConfigurations">
                                         <div id="{{dynamicField.code}} " class="field " ng-class="{'error': (!metaForm[dynamicField.code].$valid  && isSubmit), 'required': dynamicField.required}" name="{{dynamicField.code}}
                                                     " ng-if="(dynamicField.inputType=='text') ">
                                             <label>{{dynamicField.label | uppercase}}</label>

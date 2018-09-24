@@ -16,6 +16,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
      * @property - to assign publish string globally
      */
     var reviewPublish = 'publish';
+    $scope.names = ["Emil", "Tobias", "Linus", "linki", "checkListConfigurations", "setEditorDetails", "editMetaOptions"];
 
 
     $scope.isReviewCommentsPresent = false;

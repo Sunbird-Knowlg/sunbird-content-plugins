@@ -23,7 +23,17 @@
         <div class="five wide column custom-5-wide" style="padding-top:1rem!important;">
             <div class="row header-icon-container">
                 <div class="custom-row-2">
+                <div class="content-contributors">
+                    <p>Created with contribution from <span style="color: blue">{{4}}</span></p>
+                </div>
                     <div class="icon-group-2">
+                        <div class="ui floating dropdown labeled search icon" id="dropdownitem">
+                            <i class="blue users icon custom-icon users-icon-position"></i>
+                            <div class="menu" style="right: 0;left: auto; width: 250px;">
+                                <div class="item" ng-repeat="item in names">{{item}}</div>
+                            </div>
+                        </div>
+                        
                         <div ng-if="showWhatsNew" class="icon-box popup-item" data-content="What's New" data-variation="tiny inverted" data-position="bottom center" ng-click="displayWhatsNew()">
                             <i class="gift icon custom-icon" ng-class="{red: whatsNewBadge}"></i>
                         </div>
@@ -93,4 +103,5 @@
 </div>
 <script>
     $(".ui.dropdown").dropdown();
+    $("#dropdownitem .item").addClass('disabled');
 </script>

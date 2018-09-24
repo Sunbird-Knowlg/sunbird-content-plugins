@@ -330,3 +330,11 @@ body {
 .reviewer-content{
     padding:2%;
 }
+
+.users-icon-position {
+    top: -16px !important;
+}
+
+.content-contributors {
+    float: left; margin: 0.4em;
+}
