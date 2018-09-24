@@ -24,4 +24,4 @@ You can add a background image or shape, if you want to set a background for qui
 
 ***Are you a developer?***
 
-To get started visit <a href="https://community.ekstep.in/developers" target="_blank">EkStep Developer Community</a>
+To get started visit <a href="http://www.sunbird.org/" target="_blank">Developer Community</a>
