@@ -16,8 +16,13 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
      * @property - to assign publish string globally
      */
     var reviewPublish = 'publish';
-    $scope.names = ["Emil", "Tobias", "Linus", "linki", "checkListConfigurations", "setEditorDetails", "editMetaOptions"];
+    $scope.names = ["Emil", "Tobias", "Linus", "linki", "checkListConfigurations", "setEditorDetails", "editMetaOptions", "Emilea", "Tobiass", "Linuss", "linkii", "checkListConfigurationss", "setEditorDetailss", "editMetaOptionss"];
+    $scope.listLimit = 5;
 
+    $scope.addListSize = function() {
+        $scope.listLimit = $scope.listLimit + 5;
+        $scope.$safeApply();
+    }
 
     $scope.isReviewCommentsPresent = false;
 

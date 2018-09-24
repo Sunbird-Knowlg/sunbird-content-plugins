@@ -30,7 +30,8 @@
                         <div class="ui floating dropdown labeled search icon" id="dropdownitem">
                             <i class="blue users icon custom-icon users-icon-position"></i>
                             <div class="menu" style="right: 0;left: auto; width: 250px;">
-                                <div class="item" ng-repeat="item in names">{{item}}</div>
+                                <div class="item" ng-repeat="item in names | limitTo:listLimit">{{item}}</div>
+                                <button class="fluid ui button" ng-click="addListSize()">See More</button>
                             </div>
                         </div>
                         
