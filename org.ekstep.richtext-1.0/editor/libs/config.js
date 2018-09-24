@@ -28,11 +28,17 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// config.fontSize_defaultLabel = '18';
 
+	// Font family to show in dropdown
+	config.font_names = 'NotoSans;NotoSansBengali;NotoSansDevanagari;NotoSansGujarati;NotoSansGurmukhi;NotoSansKannada;NotoSansMalayalam;NotoSansOriya;NotoSansTamil;NotoSansTelugu;NotoNastaliqUrdu';
+
+	// Default font family
+	config.font_defaultLabel = 'NotoSans';
+
 	config.removePlugins = 'stylescombo, magicline';
 
 	// Remove some buttons provided by the standard plugins, which are
 	// not needed in the Standard(s) toolbar.
-	config.removeButtons = 'Underline,Subscript,Superscript,Font';
+	config.removeButtons = 'Underline,Subscript,Superscript';
 
 	// Set the most common block elemnts.
 	config.format_tags = 'p;h1;h2;h3';

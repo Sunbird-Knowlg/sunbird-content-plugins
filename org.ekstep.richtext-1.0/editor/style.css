@@ -1,0 +1,32 @@
+#richtext-wrapper div * {
+    line-height: 1.3 !important;
+}
+
+#richtext-wrapper p {
+    margin: 0 0 0 !important;
+}
+
+#richtext-wrapper div h1 {
+    min-height: 1rem;
+    font-size: 2rem;
+}
+
+#richtext-wrapper div h2 {
+    font-size: 1.71428571rem;
+}
+
+#richtext-wrapper div h3 {
+    font-size: 1.28571429rem;
+}
+
+#richtext-wrapper div h4 {
+    font-size: 1.07142857rem;
+}
+
+#richtext-wrapper div h5 {
+    font-size: 1rem;
+}
+
+#richtext-wrapper div h6 {
+    font-size: 0.67em;
+}
