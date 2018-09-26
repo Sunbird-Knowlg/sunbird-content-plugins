@@ -78,6 +78,21 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         ecEditor.dispatchEvent(event, data)
     };
 
+    $scope.ownerShipFieldConfig = {
+        "code": "ownershipType",
+        "dataType": "text",
+        "description": "Ownership Type",
+        "editable": true,
+        "inputType": "select",
+        "label": "Owner",
+        "range": {},
+        "name": "level",
+        "placeholder": "Owner",
+        "renderingHints": {},
+        "required": true,
+        "visible": true
+    };
+
 
 
     /**
@@ -422,6 +437,29 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             $scope.fields = config.fields;
             $scope.messages = config.messages || {};
             $scope.tempalteName = config.template;
+
+            if($scope.tempalteName  === 'defaultTemplate') {
+                var ownership = [];
+                var ownershipObject = org.ekstep.collectioneditor.api.getContext('user');
+                if(ecEditor.getContext('ownershipType').length > 1) {
+                    Object.keys(ownershipObject.organisations).map(function(key) {
+                        ownership.push({"value": key, "name" : ownershipObject.organisations[key] });
+                    })
+                    ownership.push({"value":ownershipObject.id, "name": ownershipObject.name});
+                    $scope.ownerShipFieldConfig['range'] =  ownership;
+                }else if(ecEditor.getContext('ownershipType').indexOf('createdFor') != -1) {
+                    Object.keys(ownershipObject.organisations).map(function(key) {
+                        ownership.push({"value": key, "name" : ownershipObject.organisations[key] });
+                    })
+                    $scope.ownerShipFieldConfig['range'] =  ownership;
+                    
+                }else if(ecEditor.getContext('ownershipType').indexOf('createdBy') != -1) {
+                    ownership.push({"value":ownershipObject.id, "name": ownershipObject.name });
+                    $scope.ownerShipFieldConfig['range'] =  ownership;
+                }
+                $scope.fields.push($scope.ownerShipFieldConfig);
+            }
+
             if (_.isUndefined(config.editMode)) {
                 config.editMode = true
             }
@@ -453,7 +491,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     };
 
     $scope.getFixedFieldCode = function(tempalteName) {
-        var map = { 'defaultTemplate': ["name", "description", "keywords", "appicon", "ownershipType"] }
+        var map = { 'defaultTemplate': ["name", "description", "keywords", "appicon"] }
         return map[$scope.tempalteName] || {}
     }
 

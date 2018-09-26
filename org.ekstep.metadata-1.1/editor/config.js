@@ -40,19 +40,6 @@ window.formConfigurations = {
       "visible": true
     },
     {
-      "code": "ownershipType",
-      "dataType": "text",
-      "description": "Choose a ownership",
-      "editable": true,
-      "inputType": "select",
-      "label": "Ownership",
-      "name": "Ownership",
-      "placeholder": "Choose Ownership",
-      "renderingHints": {},
-      "required": false,
-      "visible": true
-    },
-    {
       "code": "appicon",
       "dataType": "url",
       "description": "App Icon",

@@ -64,20 +64,6 @@
                                         <label>{{fixedField.label | uppercase}}</label>
                                         <keywords config=fixedField ng-click="onConfigChange({field:fixedField,form:metaForm})"></keywords>
                                     </div>
-
-                                <div id="{{fixedField.code}} " class="field " ng-class="{ 'error': (!contentMeta[fixedField.code] && fixedField.required   && isSubmit), 'required': fixedField.required} " name="{{dynamicField.code}}
-                                        " ng-if="fixedField.inputType=='select' ">
-                                    <label>{{fixedField.label | uppercase}}</label>
-                                    <select id="_select{{fixedField.code}} " name="{{fixedField.code}} " class="ui fluid search dropdown " multiple=" " ng-class="!fixedField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]
-                                            " ng-change="onConfigChange({index:$index, field:fixedField, value:contentMeta[fixedField.code], form:metaForm}) " ng-required="{{fixedField.required}} ">
-                                            <option value = "">{{fixedField.placeholder}}</option>                                            
-                                            <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[fixedField.code] ">{{category.name || category}}</option>
-                                    </select>
-                                    <div ng-show="!metaForm[fixedField.code].$valid  && isSubmit" class="ui pointing red basic label ">
-                                        Please Select
-                                    </div>
-                                </div>
-
                                 </div>
                             </div>
                         </div>
@@ -130,8 +116,7 @@
                                             <label>{{dynamicField.label | uppercase}}</label>
                                             <select id="_select{{dynamicField.code}} " name="{{dynamicField.code}} " class="ui search dropdown placeholder-padding " ng-class="!dynamicField.editable ? ' disabled ': ' ' " ng-model="contentMeta[dynamicField.code]" ng-change="onConfigChange({index:$index, field:dynamicField, value:contentMeta[dynamicField.code], form:metaForm}) "
                                                 ng-required="{{dynamicField.required}} ">
-                                                    <option value = "">{{dynamicField.placeholder}}</option> 
-                                                    <option data-value="{{category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code]" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)"  >{{category.name || category}}</option>
+                                                    <option data-value="{{category.value ||category.name || category}} "  ng-repeat="category in categoryList[dynamicField.code]" ng-selected="category.name && (contentMeta[dynamicField.code] == category.name) || (contentMeta[dynamicField.code] == category)"  >{{category.name || category}}</option>
                                             </select>
                                             <div ng-show="!metaForm[dynamicField.code].$valid  && isSubmit" class="ui pointing red basic label ">
                                                 Please Select

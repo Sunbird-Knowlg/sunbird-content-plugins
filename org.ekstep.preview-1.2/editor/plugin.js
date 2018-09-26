@@ -125,9 +125,10 @@ org.ekstep.contenteditor.basePlugin.extend({
             modal.style.display = "block";
         window.onclick = function(event) {
             if (event.target == modalContent) {
+                $("#gameCanvas").jPlayer("stop");
                 modal.style.display = "none";
-                previewContentIframe.contentWindow.EkstepRendererAPI.stopAll();
-                previewContentIframe.contentWindow.EkstepRendererAPI.removeHtmlElements();
+                previewContentIframe.contentWindow.EkstepRendererAPI.removeAudio();
+                // previewContentIframe.contentWindow.EkstepRendererAPI.removeHtmlElements();
             }
         }
     }

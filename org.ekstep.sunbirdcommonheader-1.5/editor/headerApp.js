@@ -19,6 +19,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.names = [];//["Emil", "Tobias", "Linus", "linki", "checkListConfigurations", "setEditorDetails", "editMetaOptions", "Emilea", "Tobiass", "Linuss", "linkii", "checkListConfigurationss", "setEditorDetailss", "editMetaOptionss"];
     
     $scope.updateOwnershipList = function(event, nodeData) {
+        var instanceObj = {};
+        var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
+      
         if(nodeData.data.metadata.owner && $scope.names.indexOf(nodeData.data.metadata.owner) == -1) {
             $scope.names.push(nodeData.data.metadata.owner);
         }else if(nodeData.data.metadata.creator && $scope.names.indexOf(nodeData.data.metadata.creator) == -1) {
@@ -28,16 +31,45 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope.removeOwnershipList = function(event, nodeData) {
         $scope.names = [];
-        var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode");
-        if(rootNode && rootNode.children[0].children) {
-            rootNode.children[0].children.forEach(function(num) { 
-                if(num.data.metadata.owner && $scope.names.indexOf(num.data.metadata.owner) == -1) {
-                    $scope.names.push(num.data.metadata.owner)
-                }else if(num.data.metadata.creator && $scope.names.indexOf(num.data.metadata.creator) == -1) {
-                    $scope.names.push(num.data.metadata.creator);
+        var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").children[0].getChildren();
+        
+            var result = _.flatMap(rootNode, function(item) {
+                if(item.children)
+                    return item.children;
+            })
+
+            function ownerObj(data) {
+                var ownerInstance = this;                
+                if (data && data.data) {
+                    ownerInstance.data[data.data.id] = {
+                        "name": data.title,
+                        "contentType": data.data.objectType,
+                        "metadata": data.data.metadata
+                        
+                    }
+        
+                    ecEditor._.forEach(data.children, function(collection) {
+                        ownerInstance._toFlatObj(collection);
+                    });
                 }
-            });
-        }
+        
+                return ownerInstance.data;
+            }
+    
+            instanceObj = ownerObj(rootNode);
+            console.log(instanceObj);
+            
+        // if(result) {
+        //     result.forEach(function(num) { 
+        //         if(num.data.metadata.owner && $scope.names.indexOf(num.data.metadata.owner) == -1) {
+        //             $scope.names.push(num.data.metadata.owner);
+        //             console.log('num.data.metadata.owner', num.data.metadata.owner);
+        //         }else if(num.data.metadata.creator && $scope.names.indexOf(num.data.metadata.creator) == -1) {
+        //             $scope.names.push(num.data.metadata.creator);
+        //             console.log('num.data.metadata.creator',num.data.metadata.creator);
+        //         }
+        //     });
+        // }
     }
 
     /*
