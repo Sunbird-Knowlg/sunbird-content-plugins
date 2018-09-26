@@ -41,5 +41,5 @@
 }
 
 #editRichtext {
-    padding-top: 20px;
+    border-bottom: 0.1px solid #d2d3d5 !important;
 }

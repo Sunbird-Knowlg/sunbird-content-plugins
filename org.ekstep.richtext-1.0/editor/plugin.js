@@ -122,7 +122,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     deselected: function(instance, options, event) {
         fabric.util.removeListener(fabric.document, 'dblclick', this.dblClickHandler);
-        $('#editRichtext').off('click')
+        $(document).off('click', '#editRichtext')
     },
 
     removed: function(instance, options, event) {
