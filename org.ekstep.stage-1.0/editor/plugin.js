@@ -62,7 +62,6 @@ org.ekstep.contenteditor.basePlugin.extend({
             html2canvas($('#canvas-wrapper'), {  
                 onrendered: function (canvas) {
                     stage.thumbnail = canvas.toDataURL({format: 'jpeg', quality: 0.1});
-                    org.ekstep.contenteditor.stageManager.thumbnails[stage.id] = stage.thumbnail;
                     var angScope = ecEditor.getAngularScope();
                     ecEditor.ngSafeApply(angScope);
                 }
