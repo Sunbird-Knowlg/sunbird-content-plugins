@@ -111,6 +111,9 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     selected: function(instance) {
         fabric.util.addListener(fabric.document, 'dblclick', this.dblClickHandler);
+        $(document).on('click', '#editRichtext', function() {
+            ecEditor.dispatchEvent("org.ekstep.richtext:showpopup", {textSelected: true})
+        })
     },
 
     /**
@@ -119,6 +122,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     deselected: function(instance, options, event) {
         fabric.util.removeListener(fabric.document, 'dblclick', this.dblClickHandler);
+        $('#editRichtext').off('click')
     },
 
     removed: function(instance, options, event) {

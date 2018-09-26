@@ -39,3 +39,7 @@
 .cke_combopanel__fontsize {
     width: 175px !important;
 }
+
+#editRichtext {
+    padding-top: 20px;
+}

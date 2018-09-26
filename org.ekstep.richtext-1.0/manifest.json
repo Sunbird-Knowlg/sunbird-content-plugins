@@ -19,7 +19,10 @@
         "behaviour": {
             "rotatable": false
         },
-        "configManifest": [],
+        "configManifest": [{
+            "type": "custom_template",
+            "templateURL": "editor/configTemplate.html"
+        }],
         "help": {
             "src": "editor/help.md",
             "dataType": "text"
