@@ -30,3 +30,12 @@
 #richtext-wrapper div h6 {
     font-size: 0.67em;
 }
+
+/*setting ckeditor dropdown width */
+.cke_combopanel__font, .cke_combopanel__format {
+    width: 200px !important;
+}
+
+.cke_combopanel__fontsize {
+    width: 175px !important;
+}
