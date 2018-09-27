@@ -185,7 +185,6 @@ window.formConfigurations = {
       "required": false,
       "visible": true
     }
-    
   ]
 };
 window.formConfigs = {

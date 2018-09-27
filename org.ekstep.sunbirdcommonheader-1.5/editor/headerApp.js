@@ -16,76 +16,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
      * @property - to assign publish string globally
      */
     var reviewPublish = 'publish';
-    $scope.names = [];//["Emil", "Tobias", "Linus", "linki", "checkListConfigurations", "setEditorDetails", "editMetaOptions", "Emilea", "Tobiass", "Linuss", "linkii", "checkListConfigurationss", "setEditorDetailss", "editMetaOptionss"];
-    
-    $scope.updateOwnershipList = function(event, nodeData) {
-        var instanceObj = {};
-        var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
-      
-        if(nodeData.data.metadata.owner && $scope.names.indexOf(nodeData.data.metadata.owner) == -1) {
-            $scope.names.push(nodeData.data.metadata.owner);
-        }else if(nodeData.data.metadata.creator && $scope.names.indexOf(nodeData.data.metadata.creator) == -1) {
-            $scope.names.push(nodeData.data.metadata.creator);
-        }
-    }
-
-    $scope.removeOwnershipList = function(event, nodeData) {
-        $scope.names = [];
-        var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").children[0].getChildren();
-        
-            var result = _.flatMap(rootNode, function(item) {
-                if(item.children)
-                    return item.children;
-            })
-
-            function ownerObj(data) {
-                var ownerInstance = this;                
-                if (data && data.data) {
-                    ownerInstance.data[data.data.id] = {
-                        "name": data.title,
-                        "contentType": data.data.objectType,
-                        "metadata": data.data.metadata
-                        
-                    }
-        
-                    ecEditor._.forEach(data.children, function(collection) {
-                        ownerInstance._toFlatObj(collection);
-                    });
-                }
-        
-                return ownerInstance.data;
-            }
-    
-            instanceObj = ownerObj(rootNode);
-            console.log(instanceObj);
-            
-        // if(result) {
-        //     result.forEach(function(num) { 
-        //         if(num.data.metadata.owner && $scope.names.indexOf(num.data.metadata.owner) == -1) {
-        //             $scope.names.push(num.data.metadata.owner);
-        //             console.log('num.data.metadata.owner', num.data.metadata.owner);
-        //         }else if(num.data.metadata.creator && $scope.names.indexOf(num.data.metadata.creator) == -1) {
-        //             $scope.names.push(num.data.metadata.creator);
-        //             console.log('num.data.metadata.creator',num.data.metadata.creator);
-        //         }
-        //     });
-        // }
-    }
-
-    /*
-    * Initialize listLimit value when click on user icon button.
-    */
-    $scope.showContributionList = function() {
-        $scope.listLimit = 5;
-    };
-
-    /*
-    * Increase size of listLimit when click on see more button.
-    */
-    $scope.addListSize = function() {
-        $scope.listLimit = $scope.listLimit + 5;
-        $scope.$safeApply();
-    };
 
     $scope.isReviewCommentsPresent = false;
 
@@ -128,6 +58,87 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.isFlagReviewer = false;
     $scope.editorEnv = "";
     $scope.showEditMeta = true;
+    $scope.ownerDetails = [];
+    $scope.contentCredits = [];
+    
+    /*
+    * Add owner details and update current count with new values.
+    */
+    $scope.updateOwnershipList = function(event, nodeData) {
+        var contentCreadit = {'ownedBy':nodeData.data.metadata.identifier, 
+                                'owner':nodeData.data.metadata.owner, 
+                                'ownershipType': nodeData.data.metadata.contentType };
+        
+        var contentCreadit1 = {'ownedBy':nodeData.data.metadata.identifier, 
+                                'owner':nodeData.data.metadata.creator, 
+                                'ownershipType': nodeData.data.metadata.contentType };
+        var index = _.findIndex($scope.contentCredits, function(o) {
+                            return o.owner == nodeData.data.metadata.owner; });
+
+        var index1 = _.findIndex($scope.contentCredits, function(o) {
+            return o.owner == nodeData.data.metadata.creator; });
+                                
+        if(nodeData.data.metadata.owner && index == -1) {
+            $scope.ownerDetails.push(nodeData.data.metadata.owner);
+            $scope.contentCredits.push(contentCreadit);
+        }else if(nodeData.data.metadata.creator &&  index1 == -1) {
+            $scope.ownerDetails.push(nodeData.data.metadata.creator);
+            
+            $scope.contentCredits.push(contentCreadit1);
+        }
+    }
+
+    /*
+    * Remove owern details and update new owner details values.
+    */
+    $scope.removeOwnershipList = function(event, nodeData) {
+        $scope.contentCredits = [];
+        var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
+        rootNode.visit(function(node) {
+
+            var contentCreadit = {'ownedBy':node.data.metadata.identifier, 
+            'owner':node.data.metadata.owner, 
+            'ownershipType': node.data.metadata.contentType };
+
+            var contentCreadit1 = {'ownedBy':node.data.metadata.identifier, 
+                        'owner':node.data.metadata.creator, 
+                        'ownershipType': node.data.metadata.contentType };
+            var index = _.findIndex($scope.contentCredits, function(o) {
+                    return o.owner == node.data.metadata.owner; });
+
+            var index1 = _.findIndex($scope.contentCredits, function(o) {
+            return o.owner == node.data.metadata.creator; });
+                        
+            if(node.data.metadata.owner && index == -1) {
+            $scope.ownerDetails.push(node.data.metadata.owner);
+            $scope.contentCredits.push(contentCreadit);
+            }else if(node.data.metadata.creator &&  index1 == -1) {
+            $scope.ownerDetails.push(node.data.metadata.creator);
+
+            $scope.contentCredits.push(contentCreadit1);
+            }
+
+            // if(node.data.metadata.creator && $scope.contentCredits.indexOf(node.data.metadata.creator) == -1)
+            //     $scope.contentCredits.push(node.data.metadata.creator);
+            // else if( node.data.metadata.owner && $scope.contentCredits.indexOf(node.data.metadata.owner) == -1)
+            //     $scope.contentCredits.push(node.data.metadata.owner);
+        });
+    }
+
+    /*
+    * Initialize listLimit value when click on user icon button.
+    */
+    $scope.showContributionList = function() {
+        $scope.listLimit = 5;
+    };
+
+    /*
+    * Increase size of listLimit when click on see more button.
+    */
+    $scope.addListSize = function() {
+        $scope.listLimit = $scope.listLimit + 5;
+        $scope.$safeApply();
+    };
 
     $scope.setEditorDetails = function() {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));

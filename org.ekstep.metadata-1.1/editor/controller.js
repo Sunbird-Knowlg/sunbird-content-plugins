@@ -79,7 +79,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
     };
 
     $scope.ownerShipFieldConfig = {
-        "code": "ownershipType",
+        "code": "ownedBy",
         "dataType": "text",
         "description": "Ownership Type",
         "editable": true,
@@ -311,11 +311,24 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 }
                 $scope.closeThisDialog();
             }
-            // TODO: Scope of metaform was not lossing  when state was changing
-            // Need to check the below logic
+        // TODO: Scope of metaform was not lossing  when state was changing
+        // Need to check the below logic
         var form = {};
         form.metaData = getUpdatedMetadata(object.target.contentMeta, $scope.originalContentMeta, $scope.fields);
         form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
+        var ownerShipData = org.ekstep.collectioneditor.api.getContext('user');
+        form.metaData.ownedBy = object.target.contentMeta.ownedBy;
+        form.metaData.ownershipType = [];
+        form.metaData.owner = undefined;
+        if(form.metaData.ownedBy == ownerShipData.id) {
+            var createdBy = 'createdBy';
+            form.metaData.ownershipType.push(createdBy);
+            form.metaData.owner = ownerShipData.name;
+        } else {
+            var createdFor = 'createdFor';
+            form.metaData.ownershipType.push(createdFor);
+            form.metaData.owner = ownerShipData.name;
+        }
         form.target = object.target;
         ecEditor.dispatchEvent('editor:form:success', {
             isValid: validationStatus,
@@ -434,6 +447,9 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         !EventBus.hasEventListener('metadata:form:oncancel') && ecEditor.addEventListener('metadata:form:oncancel', $scope.cancel, $scope);
         !EventBus.hasEventListener('metadata:form:getdata') && ecEditor.addEventListener('metadata:form:getdata', $scope.getScopeMeta, $scope);
         var callbackFn = function(config) {
+            config.fields = config.fields.filter(function( obj ) {
+                return obj.code !== 'ownedBy';
+            });
             $scope.fields = config.fields;
             $scope.messages = config.messages || {};
             $scope.tempalteName = config.template;
