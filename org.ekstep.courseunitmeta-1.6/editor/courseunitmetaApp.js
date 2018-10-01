@@ -148,17 +148,16 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
         if (data) org.ekstep.services.telemetryService.interact({ "type": data.type, "subtype": data.subtype, "target": data.target, "pluginid": "org.ekstep.courseunitmeta", "pluginver": "1.2", "objectid": $scope.nodeId, "stage": $scope.nodeId })
     }
     
-     $scope.init = function() {
+    $scope.init = function() {
         $scope.$watch('courseunit', function() {
-            if($scope.courseunit){
-                if(/^[a-z\d\-_\s]+$/i.test($scope.courseunit.name) == false) $scope.courseunit.name = org.ekstep.services.collectionService.removeSpecialChars($scope.courseunit.name);
-                if($scope.nodeType === DEFAULT_NODETYPE){
-                    $scope.updateNode();
-                }
+            $scope.courseunit.name = org.ekstep.services.collectionService.removeSpecialChars($scope.courseunit.name);
+            if($scope.nodeType === DEFAULT_NODETYPE){
+                $scope.updateNode();
             }
         }, true);
     }
     $scope.changeTitle = function(){
+        $scope.courseunit.name = org.ekstep.services.collectionService.removeSpecialChars($scope.courseunit.name);
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.courseunit.name);
     }
     $scope.loadKeywords = function($query) {

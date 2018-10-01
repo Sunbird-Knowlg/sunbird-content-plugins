@@ -60,12 +60,13 @@ angular.module('org.ekstep.breadcrumb', []).controller('breadcrumbController', [
       _.forEach(path.split('/'), function (key) {
          if (key) {
             var node = ecEditor.jQuery($scope.collectionTreeId).fancytree("getTree").getNodeByKey(key);
-               if ((showFolder || (!showFolder && !node.folder)) && (node.data.objectType == 'Collection' || node.getLevel() !== 1)) {
-               $scope.path.push({
-                  'title': node.title,
-                  'nodeId': node.key,
-                  'show': true
-               });
+            if ((showFolder || (!showFolder && !node.folder)) && (node.data.objectType == 'Collection' || node.getLevel() !== 1)) {
+              var title = node.title
+              $scope.path.push({
+                'title': title.replace(/[^\w:&_\-.(\),\/\s]/g, ""),
+                'nodeId': node.key,
+                'show': true
+              });
             }
          }
       });
@@ -137,3 +138,4 @@ angular.module('org.ekstep.breadcrumb', []).controller('breadcrumbController', [
    ecEditor.addEventListener("org.ekstep.collectioneditor:breadcrumb", $scope.getPath, $scope);
    ecEditor.addEventListener("org.ekstep.collectioneditor:addToBreadcrumb", $scope.addToBreadcrumb, $scope);
 }]);
+//# sourceURL=breadcrumbApp.js
