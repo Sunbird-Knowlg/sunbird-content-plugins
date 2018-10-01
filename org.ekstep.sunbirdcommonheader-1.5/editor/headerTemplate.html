@@ -27,11 +27,11 @@
                     <p>Created with contribution from <span style="color: blue">{{contentCredits.length}}</span></p>
                 </div>
                     <div class="icon-group-2">
-                        <div class="ui floating dropdown labeled search icon" id="dropdownitem" ng-click="showContributionList()">
-                            <i class="blue users icon custom-icon users-icon-position"></i>
-                            <div class="menu" style="right: 0;left: auto; width: 250px;">
+                        <div class="ownerlist-dropdown labeled search icon" id="dropdownitem">
+                            <i class="blue users icon custom-icon users-icon-position" ng-click="showContributionList()"></i>
+                            <div class="dropdown-content" style="right: 0;left: auto; width: 250px;">
                                 <div class="item" ng-repeat="contentCredit in contentCredits | limitTo:listLimit">{{contentCredit.owner}}</div>
-                                <button class="fluid ui button" ng-click="addListSize(); $event.stopPropagation()" ng-if="listLimit <= contentCredits.length">See More</button>
+                                <button class="fluid ui button" ng-click="addListSize(); $event.stopPropagation()" ng-if="listLimit < contentCredits.length">See More</button>
                             </div>
                         </div>
                         

@@ -58,33 +58,20 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.isFlagReviewer = false;
     $scope.editorEnv = "";
     $scope.showEditMeta = true;
-    $scope.ownerDetails = [];
     $scope.contentCredits = [];
-    
+    $scope.listLimit = 5;
     /*
     * Add owner details and update current count with new values.
     */
     $scope.updateOwnershipList = function(event, nodeData) {
-        var contentCreadit = {'ownedBy':nodeData.data.metadata.identifier, 
-                                'owner':nodeData.data.metadata.owner, 
-                                'ownershipType': nodeData.data.metadata.contentType };
-        
-        var contentCreadit1 = {'ownedBy':nodeData.data.metadata.identifier, 
+        var contentCredit = {'ownedBy':nodeData.data.metadata.identifier, 
                                 'owner':nodeData.data.metadata.creator, 
                                 'ownershipType': nodeData.data.metadata.contentType };
+        
         var index = _.findIndex($scope.contentCredits, function(o) {
-                            return o.owner == nodeData.data.metadata.owner; });
-
-        var index1 = _.findIndex($scope.contentCredits, function(o) {
-            return o.owner == nodeData.data.metadata.creator; });
-                                
-        if(nodeData.data.metadata.owner && index == -1) {
-            $scope.ownerDetails.push(nodeData.data.metadata.owner);
-            $scope.contentCredits.push(contentCreadit);
-        }else if(nodeData.data.metadata.creator &&  index1 == -1) {
-            $scope.ownerDetails.push(nodeData.data.metadata.creator);
-            
-            $scope.contentCredits.push(contentCreadit1);
+                            return o.owner == nodeData.data.metadata.creator; });
+        if(nodeData.data.metadata.creator && index == -1) {
+            $scope.contentCredits.push(contentCredit);
         }
     }
 
@@ -95,33 +82,15 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.contentCredits = [];
         var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
         rootNode.visit(function(node) {
+            var contentCredit = {'ownedBy':node.data.metadata.identifier, 
+                                    'owner':node.data.metadata.creator, 
+                                    'ownershipType': node.data.metadata.contentType };
 
-            var contentCreadit = {'ownedBy':node.data.metadata.identifier, 
-            'owner':node.data.metadata.owner, 
-            'ownershipType': node.data.metadata.contentType };
-
-            var contentCreadit1 = {'ownedBy':node.data.metadata.identifier, 
-                        'owner':node.data.metadata.creator, 
-                        'ownershipType': node.data.metadata.contentType };
             var index = _.findIndex($scope.contentCredits, function(o) {
-                    return o.owner == node.data.metadata.owner; });
-
-            var index1 = _.findIndex($scope.contentCredits, function(o) {
-            return o.owner == node.data.metadata.creator; });
-                        
-            if(node.data.metadata.owner && index == -1) {
-            $scope.ownerDetails.push(node.data.metadata.owner);
-            $scope.contentCredits.push(contentCreadit);
-            }else if(node.data.metadata.creator &&  index1 == -1) {
-            $scope.ownerDetails.push(node.data.metadata.creator);
-
-            $scope.contentCredits.push(contentCreadit1);
+                    return o.owner == node.data.metadata.creator; });
+            if(node.data.metadata.creator && index == -1) {
+                $scope.contentCredits.push(contentCredit);
             }
-
-            // if(node.data.metadata.creator && $scope.contentCredits.indexOf(node.data.metadata.creator) == -1)
-            //     $scope.contentCredits.push(node.data.metadata.creator);
-            // else if( node.data.metadata.owner && $scope.contentCredits.indexOf(node.data.metadata.owner) == -1)
-            //     $scope.contentCredits.push(node.data.metadata.owner);
         });
     }
 

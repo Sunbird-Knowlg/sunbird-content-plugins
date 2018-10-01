@@ -338,3 +338,32 @@ body {
 .content-contributors {
     float: left; margin: 0.4em;
 }
+
+.ownerlist-dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color:#FFFFFF;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1000;
+    max-height: 240px;
+    overflow: auto;
+    top: 10px;
+    border-radius: 10px;
+}
+
+.dropdown-content .item {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.ownerlist-dropdown:hover .dropdown-content {
+    display: block;
+}
