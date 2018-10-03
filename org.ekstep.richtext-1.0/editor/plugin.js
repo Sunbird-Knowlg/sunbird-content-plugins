@@ -51,6 +51,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
         var divWrapper = document.createElement('div');
         divWrapper.setAttribute("id", this.richTextId);
+        divWrapper.setAttribute("class", this.richTextId);
         ecEditor.jQuery(".canvas-container").append(divWrapper);
     },
 
@@ -111,9 +112,6 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     selected: function(instance) {
         fabric.util.addListener(fabric.document, 'dblclick', this.dblClickHandler);
-        $(document).on('click', '#editRichtext', function() {
-            ecEditor.dispatchEvent("org.ekstep.richtext:showpopup", {textSelected: true})
-        })
     },
 
     /**
@@ -122,7 +120,6 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     deselected: function(instance, options, event) {
         fabric.util.removeListener(fabric.document, 'dblclick', this.dblClickHandler);
-        $(document).off('click', '#editRichtext')
     },
 
     removed: function(instance, options, event) {
