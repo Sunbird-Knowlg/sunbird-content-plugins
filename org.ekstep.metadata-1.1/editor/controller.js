@@ -315,19 +315,17 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var form = {};
         form.metaData = getUpdatedMetadata(object.target.contentMeta, $scope.originalContentMeta, $scope.fields);
         form.nodeId = org.ekstep.contenteditor.api.getContext('contentId');
-        var ownerShipData = org.ekstep.collectioneditor.api.getContext('user');
-        form.metaData.ownedBy = object.target.contentMeta.ownedBy;
-        form.metaData.ownershipType = [];
-        form.metaData.owner = "";
-        if(form.metaData.ownedBy == ownerShipData.id) {
-            var createdBy = 'createdBy';
-            form.metaData.ownershipType.push(createdBy);
-            form.metaData.owner = ownerShipData.name;
-        } else {
-            var createdFor = 'createdFor';
-            var oraganizationDetails =  _.find($scope.ownership, ['value', object.target.contentMeta.ownedBy]);
-            form.metaData.ownershipType.push(createdFor);
-            form.metaData.owner = oraganizationDetails.name;
+        if(object.target.contentMeta.ownedBy){
+            var ownerShipData = ecEditor.getContext('user');
+            form.metaData.ownedBy = object.target.contentMeta.ownedBy;
+            if(form.metaData.ownedBy == ownerShipData.id) {
+                form.metaData.ownershipType = ['createdBy'];
+                form.metaData.owner = ownerShipData.name;
+            } else {
+                var oraganizationDetails =  _.find($scope.ownership, ['value', object.target.contentMeta.ownedBy]);
+                form.metaData.ownershipType = ['createdFor'];
+                form.metaData.owner = oraganizationDetails.name;
+            }
         }
         form.target = object.target;
         ecEditor.dispatchEvent('editor:form:success', {
@@ -457,20 +455,20 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
 
             if($scope.tempalteName  === 'defaultTemplate') {
                 $scope.ownership = [];
-                var ownershipObject = org.ekstep.collectioneditor.api.getContext('user');
-                if(ecEditor.getContext('ownershipType').length > 1) {
+                var ownershipObject = ecEditor.getContext('user');
+                if(ecEditor.getContext('ownershipType') && ecEditor.getContext('ownershipType').length > 1) {
                     Object.keys(ownershipObject.organisations).map(function(key) {
                         $scope.ownership.push({"value": key, "name" : ownershipObject.organisations[key] });
                     })
                     $scope.ownership.push({"value":ownershipObject.id, "name": ownershipObject.name});
                     $scope.ownerShipFieldConfig['range'] =  $scope.ownership;
-                }else if(ecEditor.getContext('ownershipType').indexOf('createdFor') != -1) {
+                }else if(ecEditor.getContext('ownershipType') && ecEditor.getContext('ownershipType').indexOf('createdFor') != -1) {
                     Object.keys(ownershipObject.organisations).map(function(key) {
                         $scope.ownership.push({"value": key, "name" : ownershipObject.organisations[key] });
                     })
                     $scope.ownerShipFieldConfig['range'] =  $scope.ownership;
                     
-                }else if(ecEditor.getContext('ownershipType').indexOf('createdBy') != -1) {
+                }else {
                     $scope.ownership.push({"value":ownershipObject.id, "name": ownershipObject.name });
                     $scope.ownerShipFieldConfig['range'] =  $scope.ownership;
                 }

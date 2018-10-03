@@ -30,7 +30,7 @@
                         <div class="ownerlist-dropdown labeled search icon" id="dropdownitem">
                             <i class="blue users icon custom-icon users-icon-position" ng-click="showContributionList()"></i>
                             <div class="dropdown-content" style="right: 0;left: auto; width: 250px;">
-                                <div class="item" ng-repeat="contentCredit in contentCredits | limitTo:listLimit">{{contentCredit.owner}}</div>
+                                <div class="item" ng-repeat="contentCredit in contentCredits | limitTo:listLimit">{{contentCredit.name}}</div>
                                 <button class="fluid ui button" ng-click="addListSize(); $event.stopPropagation()" ng-if="listLimit < contentCredits.length">See More</button>
                             </div>
                         </div>

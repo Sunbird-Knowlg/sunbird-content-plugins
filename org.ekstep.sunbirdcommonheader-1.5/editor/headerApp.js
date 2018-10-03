@@ -63,15 +63,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     /*
     * Add owner details and update current count with new values.
     */
-    $scope.updateOwnershipList = function(event, nodeData) {
-        var contentCredit = {'ownedBy':nodeData.data.metadata.identifier, 
-                                'owner':nodeData.data.metadata.creator, 
-                                'ownershipType': nodeData.data.metadata.contentType };
-        
-        var index = _.findIndex($scope.contentCredits, function(o) {
-                            return o.owner == nodeData.data.metadata.creator; });
-        if(nodeData.data.metadata.creator && index == -1) {
-            $scope.contentCredits.push(contentCredit);
+    $scope.updateOwnershipList = function(event, node) {
+        if(node.data.metadata.owner) {
+            ecEditor._.uniqBy($scope.contentCredits.push({'id':node.data.metadata.identifier, 
+            'name':node.data.metadata.owner, 
+            'type': node.data.metadata.owershipType === 'createdFor' ? 'organisation' : 'user'}));
         }
     }
 
@@ -82,14 +78,10 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.contentCredits = [];
         var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
         rootNode.visit(function(node) {
-            var contentCredit = {'ownedBy':node.data.metadata.identifier, 
-                                    'owner':node.data.metadata.creator, 
-                                    'ownershipType': node.data.metadata.contentType };
-
-            var index = _.findIndex($scope.contentCredits, function(o) {
-                    return o.owner == node.data.metadata.creator; });
-            if(node.data.metadata.creator && index == -1) {
-                $scope.contentCredits.push(contentCredit);
+            if(node.data.metadata.owner) {
+                ecEditor._.uniqBy($scope.contentCredits.push({'id':node.data.metadata.identifier, 
+                'name':node.data.metadata.owner, 
+                'type': node.data.metadata.owershipType === 'createdFor' ? 'organisation' : 'user'}));
             }
         });
     }
@@ -146,6 +138,14 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 if (res && res.data && res.data.responseCode == "OK") {
                     $scope.lastSaved = Date.now();
                     if ($scope.editorEnv == "COLLECTION") {
+                        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+                        meta.contentCredits = JSON.parse(angular.toJson($scope.contentCredits));
+                        ecEditor.dispatchEvent('org.ekstep.contenteditor:save:meta', {
+                            contentMeta: {contentCredits : JSON.parse(angular.toJson($scope.contentCredits))},
+                            savingPopup: false,
+                            successPopup: false,
+                            failPopup: false
+                        });
                         $scope.hideReviewBtn = false;
                         $scope.resolveReviewBtnStatus();
                     }
