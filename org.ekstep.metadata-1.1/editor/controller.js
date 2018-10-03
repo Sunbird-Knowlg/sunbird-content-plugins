@@ -92,8 +92,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         "required": true,
         "visible": true
     };
-
-
+    $scope.selectedOwnerId;
 
     /**
      * @description     - It Initialize the dropdown with selected values
@@ -310,7 +309,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                     });
                 }
                 $scope.closeThisDialog();
-            }
+        }
         // TODO: Scope of metaform was not lossing  when state was changing
         // Need to check the below logic
         var form = {};
@@ -319,15 +318,16 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         var ownerShipData = org.ekstep.collectioneditor.api.getContext('user');
         form.metaData.ownedBy = object.target.contentMeta.ownedBy;
         form.metaData.ownershipType = [];
-        form.metaData.owner = undefined;
+        form.metaData.owner = "";
         if(form.metaData.ownedBy == ownerShipData.id) {
             var createdBy = 'createdBy';
             form.metaData.ownershipType.push(createdBy);
             form.metaData.owner = ownerShipData.name;
         } else {
             var createdFor = 'createdFor';
+            var oraganizationDetails =  _.find($scope.ownership, ['value', object.target.contentMeta.ownedBy]);
             form.metaData.ownershipType.push(createdFor);
-            form.metaData.owner = ownerShipData.name;
+            form.metaData.owner = oraganizationDetails.name;
         }
         form.target = object.target;
         ecEditor.dispatchEvent('editor:form:success', {
@@ -335,6 +335,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             formData: form,
             callback: successCB
         })
+
     };
 
     /**
@@ -455,23 +456,23 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             $scope.tempalteName = config.template;
 
             if($scope.tempalteName  === 'defaultTemplate') {
-                var ownership = [];
+                $scope.ownership = [];
                 var ownershipObject = org.ekstep.collectioneditor.api.getContext('user');
                 if(ecEditor.getContext('ownershipType').length > 1) {
                     Object.keys(ownershipObject.organisations).map(function(key) {
-                        ownership.push({"value": key, "name" : ownershipObject.organisations[key] });
+                        $scope.ownership.push({"value": key, "name" : ownershipObject.organisations[key] });
                     })
-                    ownership.push({"value":ownershipObject.id, "name": ownershipObject.name});
-                    $scope.ownerShipFieldConfig['range'] =  ownership;
+                    $scope.ownership.push({"value":ownershipObject.id, "name": ownershipObject.name});
+                    $scope.ownerShipFieldConfig['range'] =  $scope.ownership;
                 }else if(ecEditor.getContext('ownershipType').indexOf('createdFor') != -1) {
                     Object.keys(ownershipObject.organisations).map(function(key) {
-                        ownership.push({"value": key, "name" : ownershipObject.organisations[key] });
+                        $scope.ownership.push({"value": key, "name" : ownershipObject.organisations[key] });
                     })
-                    $scope.ownerShipFieldConfig['range'] =  ownership;
+                    $scope.ownerShipFieldConfig['range'] =  $scope.ownership;
                     
                 }else if(ecEditor.getContext('ownershipType').indexOf('createdBy') != -1) {
-                    ownership.push({"value":ownershipObject.id, "name": ownershipObject.name });
-                    $scope.ownerShipFieldConfig['range'] =  ownership;
+                    $scope.ownership.push({"value":ownershipObject.id, "name": ownershipObject.name });
+                    $scope.ownerShipFieldConfig['range'] =  $scope.ownership;
                 }
                 $scope.fields.push($scope.ownerShipFieldConfig);
             }
@@ -497,6 +498,7 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
                 }
             });
             $scope.contentMeta = config.model;
+        
             $scope.originalContentMeta = _.clone($scope.contentMeta);
             var layoutConfigurations = $scope.getLayoutConfigurations();
             $scope.fixedLayoutConfigurations = _.uniqBy(layoutConfigurations.fixedLayout, 'code');
