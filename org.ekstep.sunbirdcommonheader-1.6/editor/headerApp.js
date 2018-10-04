@@ -17,7 +17,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
      */
     var reviewPublish = 'publish';
 
-
     $scope.isReviewCommentsPresent = false;
 
     /**
@@ -59,6 +58,54 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.isFlagReviewer = false;
     $scope.editorEnv = "";
     $scope.showEditMeta = true;
+    $scope.contentCredits = [];
+    $scope.listLimit = 5;
+
+    /*
+    * Update ownership list when adding and removing the content.
+    */
+
+    $scope.updateContentCreditList = function(node) {
+        if(node.data.metadata.owner && node.data.metadata.ownedBy) {
+            $scope.contentCredits.push({'id':node.data.metadata.ownedBy, 
+            'name':node.data.metadata.owner, 
+            'type': node.data.metadata.owershipType === 'createdFor' ? 'organisation' : 'user'});
+            $scope.contentCredits = ecEditor._.uniqBy($scope.contentCredits, "id");
+        }
+    }
+
+    /*
+    * Add owner details and update current count with new values.
+    */
+    $scope.addOwnershipList = function(event, node) {
+        $scope.updateContentCreditList(node);
+    }
+
+    /*
+    * Remove owern details and update new owner details values.
+    */
+    $scope.removeOwnershipList = function() {
+        $scope.contentCredits = [];
+        var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
+        rootNode.visit(function(node) {
+            $scope.updateContentCreditList(node);
+        });
+    }
+
+    /*
+    * Initialize listLimit value when click on user icon button.
+    */
+    $scope.resetList = function() {
+        $scope.listLimit = 5;
+    };
+
+    /*
+    * Increase size of listLimit when click on see more button.
+    */
+    $scope.addListSize = function() {
+        $scope.listLimit = $scope.contentCredits.length;
+        $scope.$safeApply();
+    };
 
     $scope.setEditorDetails = function() {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
@@ -97,6 +144,13 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 if (res && res.data && res.data.responseCode == "OK") {
                     $scope.lastSaved = Date.now();
                     if ($scope.editorEnv == "COLLECTION") {
+                        var contentCredits = JSON.parse(angular.toJson($scope.contentCredits));
+                        ecEditor.dispatchEvent('org.ekstep.contenteditor:save:meta', {
+                            contentMeta: {contentCredits : contentCredits},
+                            savingPopup: false,
+                            successPopup: false,
+                            failPopup: false
+                        });
                         $scope.hideReviewBtn = false;
                         $scope.resolveReviewBtnStatus();
                     }
@@ -293,6 +347,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.getContentMetadata = function() {
         var rootNode = org.ekstep.services.collectionService.getNodeById(ecEditor.getContext('contentId'));
         var status = rootNode.data.metadata.status;
+        if(rootNode.data.metadata.contentCredits)
+            $scope.contentCredits = rootNode.data.metadata.contentCredits;
         $scope.hideReviewBtn = (status === 'Draft' || status === 'FlagDraft') ? false : true;
         $scope.resolveReviewBtnStatus();
         $scope.$safeApply();
@@ -531,6 +587,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     ecEditor.addEventListener("content:icon:update", $scope.updateIcon, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:content:load", $scope.setEditorDetails, $scope);
     ecEditor.addEventListener("content:load:complete", $scope.setEditorDetails, $scope);
+    ecEditor.addEventListener("org.ekstep.collectioneditor:node:added", $scope.addOwnershipList, $scope);
+    ecEditor.addEventListener("org.ekstep.collectioneditor:node:removed", $scope.removeOwnershipList, $scope);
 
     // content editor events
     ecEditor.addEventListener('object:modified', $scope.setPendingChangingStatus, $scope);
