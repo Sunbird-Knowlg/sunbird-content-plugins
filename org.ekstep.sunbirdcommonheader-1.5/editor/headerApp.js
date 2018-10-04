@@ -95,7 +95,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     /*
     * Initialize listLimit value when click on user icon button.
     */
-    $scope.showContributionList = function() {
+    $scope.resetList = function() {
         $scope.listLimit = 5;
     };
 
@@ -103,7 +103,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     * Increase size of listLimit when click on see more button.
     */
     $scope.addListSize = function() {
-        $scope.listLimit = $scope.listLimit + 5;
+        $scope.listLimit = $scope.contentCredits.length;
         $scope.$safeApply();
     };
 
