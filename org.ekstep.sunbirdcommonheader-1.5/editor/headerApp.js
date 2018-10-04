@@ -60,10 +60,12 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.showEditMeta = true;
     $scope.contentCredits = [];
     $scope.listLimit = 5;
+
     /*
-    * Add owner details and update current count with new values.
+    * Update ownership list when adding and removing the content.
     */
-    $scope.updateOwnershipList = function(event, node) {
+
+    $scope.updateContentCreditList = function(node) {
         if(node.data.metadata.owner && node.data.metadata.ownedBy) {
             $scope.contentCredits.push({'id':node.data.metadata.ownedBy, 
             'name':node.data.metadata.owner, 
@@ -73,18 +75,20 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     }
 
     /*
+    * Add owner details and update current count with new values.
+    */
+    $scope.addOwnershipList = function(event, node) {
+        $scope.updateContentCreditList(node);
+    }
+
+    /*
     * Remove owern details and update new owner details values.
     */
     $scope.removeOwnershipList = function(event, nodeData) {
         $scope.contentCredits = [];
         var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
         rootNode.visit(function(node) {
-            if(node.data.metadata.owner && node.data.metadata.ownedBy) {
-                $scope.contentCredits.push({'id':node.data.metadata.ownedBy, 
-                'name':node.data.metadata.owner, 
-                'type': node.data.metadata.owershipType === 'createdFor' ? 'organisation' : 'user'});
-                $scope.contentCredits = ecEditor._.uniqBy($scope.contentCredits, "id");
-            }
+            $scope.updateContentCreditList(node);
         });
     }
 
@@ -582,7 +586,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     ecEditor.addEventListener("content:icon:update", $scope.updateIcon, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:content:load", $scope.setEditorDetails, $scope);
     ecEditor.addEventListener("content:load:complete", $scope.setEditorDetails, $scope);
-    ecEditor.addEventListener("org.ekstep.collectioneditor:node:added", $scope.updateOwnershipList, $scope);
+    ecEditor.addEventListener("org.ekstep.collectioneditor:node:added", $scope.addOwnershipList, $scope);
     ecEditor.addEventListener("org.ekstep.collectioneditor:node:removed", $scope.removeOwnershipList, $scope);
 
     // content editor events
