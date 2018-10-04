@@ -365,3 +365,11 @@ body {
 .ownerlist-dropdown:hover .dropdown-content {
     display: block;
 }
+
+.content-contributors .addcolor, .content-contributors .addcolor .users.icon {
+    color: blue;
+}
+
+.content-contributors .removecolor, .content-contributors .removecolor .users.icon {
+    color: grey;
+}

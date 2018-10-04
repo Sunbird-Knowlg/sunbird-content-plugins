@@ -24,7 +24,7 @@
             <div class="row header-icon-container">
                 <div class="custom-row-2">
                     <div  ng-show="editorEnv === 'COLLECTION'" class="content-contributors ownerlist-dropdown" id="contentCreditsList">
-                        <p>Created with contribution from <span style="color: blue">{{contentCredits.length}}</span>   <i class="blue users icon" ng-mouseover="showContributionList()"></i><span></span></p>
+                        <p>Created with contribution from <span ng-class="contentCredits.length > 0 ? 'addcolor' : 'removecolor'">{{contentCredits.length}}  <i class="users icon" ng-mouseover="showContributionList()"></i></span></p>
                         <div class="dropdown-content">
                             <div class="item" ng-repeat="contentCredit in contentCredits | limitTo:listLimit">{{contentCredit.name}}</div>
                             <button class="fluid ui button" ng-click="addListSize(); $event.stopPropagation()" ng-if="listLimit < contentCredits.length">See More</button>
