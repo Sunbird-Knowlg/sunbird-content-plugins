@@ -23,18 +23,14 @@
         <div class="five wide column custom-5-wide" style="padding-top:1rem!important;">
             <div class="row header-icon-container">
                 <div class="custom-row-2">
-                <div class="content-contributors">
-                    <p>Created with contribution from <span style="color: blue">{{contentCredits.length}}</span></p>
-                </div>
-                    <div class="icon-group-2">
-                        <div class="ownerlist-dropdown labeled search icon" id="dropdownitem">
-                            <i class="blue users icon custom-icon users-icon-position" ng-click="showContributionList()"></i>
-                            <div class="dropdown-content" style="right: 0;left: auto; width: 250px;">
-                                <div class="item" ng-repeat="contentCredit in contentCredits | limitTo:listLimit">{{contentCredit.name}}</div>
-                                <button class="fluid ui button" ng-click="addListSize(); $event.stopPropagation()" ng-if="listLimit < contentCredits.length">See More</button>
-                            </div>
+                    <div  ng-show="editorEnv === 'COLLECTION'"class="content-contributors ownerlist-dropdown" id="dropdownitem">
+                        <p>Created with contribution from <span style="color: blue">{{contentCredits.length}}</span>   <i class="blue users icon" ng-mouseover="showContributionList()"></i><span></span></p>
+                        <div class="dropdown-content" style="right: 0;left: auto; width: 250px;">
+                            <div class="item" ng-repeat="contentCredit in contentCredits | limitTo:listLimit">{{contentCredit.name}}</div>
+                            <button class="fluid ui button" ng-click="addListSize(); $event.stopPropagation()" ng-if="listLimit < contentCredits.length">See More</button>
                         </div>
-                        
+                    </div>
+                    <div class="icon-group-2">
                         <div ng-if="showWhatsNew" class="icon-box popup-item" data-content="What's New" data-variation="tiny inverted" data-position="bottom center" ng-click="displayWhatsNew()">
                             <i class="gift icon custom-icon" ng-class="{red: whatsNewBadge}"></i>
                         </div>

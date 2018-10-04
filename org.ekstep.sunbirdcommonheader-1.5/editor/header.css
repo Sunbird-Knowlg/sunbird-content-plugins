@@ -331,10 +331,6 @@ body {
     padding:2%;
 }
 
-.users-icon-position {
-    top: -16px !important;
-}
-
 .content-contributors {
     float: left; margin: 0.4em;
 }
@@ -353,7 +349,7 @@ body {
     z-index: 1000;
     max-height: 240px;
     overflow: auto;
-    top: 10px;
+    top: 20px;
     border-radius: 10px;
 }
 
