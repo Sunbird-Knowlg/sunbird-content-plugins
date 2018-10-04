@@ -43,3 +43,13 @@
 #editRichtext {
     border-bottom: 0.1px solid #d2d3d5 !important;
 }
+
+.richtext-message{
+    display: flex !important;
+}
+
+.richtext-message p{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+}
