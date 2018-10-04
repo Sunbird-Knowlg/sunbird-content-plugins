@@ -23,9 +23,9 @@
         <div class="five wide column custom-5-wide" style="padding-top:1rem!important;">
             <div class="row header-icon-container">
                 <div class="custom-row-2">
-                    <div  ng-show="editorEnv === 'COLLECTION'"class="content-contributors ownerlist-dropdown" id="dropdownitem">
+                    <div  ng-show="editorEnv === 'COLLECTION'" class="content-contributors ownerlist-dropdown" id="contentCreditsList">
                         <p>Created with contribution from <span style="color: blue">{{contentCredits.length}}</span>   <i class="blue users icon" ng-mouseover="showContributionList()"></i><span></span></p>
-                        <div class="dropdown-content" style="right: 0;left: auto; width: 250px;">
+                        <div class="dropdown-content">
                             <div class="item" ng-repeat="contentCredit in contentCredits | limitTo:listLimit">{{contentCredit.name}}</div>
                             <button class="fluid ui button" ng-click="addListSize(); $event.stopPropagation()" ng-if="listLimit < contentCredits.length">See More</button>
                         </div>
@@ -100,5 +100,5 @@
 </div>
 <script>
     $(".ui.dropdown").dropdown();
-    $("#dropdownitem .item").addClass('disabled');
+    $("#contentCreditsList .item").addClass('disabled');
 </script>

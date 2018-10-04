@@ -92,7 +92,6 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
         "required": true,
         "visible": true
     };
-    $scope.selectedOwnerId;
 
     /**
      * @description     - It Initialize the dropdown with selected values
