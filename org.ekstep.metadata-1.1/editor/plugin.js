@@ -93,7 +93,6 @@ org.ekstep.contenteditor.metadataPlugin = org.ekstep.contenteditor.basePlugin.ex
      * @returns {Object}
      */
     mapObject: function(destination, source) {
-        
         destination.forEach(function(dest) {
             source.forEach(function(src) {
                 if (dest.code === src.code) {
