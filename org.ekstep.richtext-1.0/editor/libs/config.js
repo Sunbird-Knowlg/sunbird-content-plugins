@@ -29,10 +29,11 @@ CKEDITOR.editorConfig = function( config ) {
 	// config.fontSize_defaultLabel = '18';
 
 	// Font family to show in dropdown
-	config.font_names = 'NotoSans;NotoSansBengali;NotoSansDevanagari;NotoSansGujarati;NotoSansGurmukhi;NotoSansKannada;NotoSansMalayalam;NotoSansOriya;NotoSansTamil;NotoSansTelugu;NotoNastaliqUrdu';
+	//config.font_names = 'NotoSans;NotoSansBengali;NotoSansDevanagari;NotoSansGujarati;NotoSansGurmukhi;NotoSansKannada;NotoSansMalayalam;NotoSansOriya;NotoSansTamil;NotoSansTelugu;NotoNastaliqUrdu';
+	config.font_names = 'বাংলা (Bengali)/NotoSansBengali;देवनागरी (Devanagari)/NotoSansDevanagari;English & other languages/NotoSans;ગુજરાતી (Gujarati)/NotoSansGujarati;ਗੁਰਮੁਖੀ (Gurmukhi)/NotoSansGurmukhi;ಕನ್ನಡ (Kannada)/NotoSansKannada;മലയാളലിപി (Malayalam)/NotoSansMalayalam;ଓଡ଼ିଆ (Oriya)/NotoSansOriya;தமிழ் (Tamil)/NotoSansTamil;తెలుగు (Telugu)/NotoSansTelugu;اردو (Urdu)/NotoNastaliqUrdu';
 
 	// Default font family
-	config.font_defaultLabel = 'NotoSans';
+	config.font_defaultLabel = 'English & other languages';
 
 	config.removePlugins = 'stylescombo, magicline';
 
