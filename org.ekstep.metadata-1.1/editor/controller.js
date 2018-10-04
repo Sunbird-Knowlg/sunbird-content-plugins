@@ -455,22 +455,19 @@ angular.module('org.ekstep.metadataform', []).controller('metadataForm', ['$scop
             if($scope.tempalteName  === 'defaultTemplate') {
                 $scope.ownership = [];
                 var ownershipObject = ecEditor.getContext('user');
-                if(ecEditor.getContext('ownershipType') && ecEditor.getContext('ownershipType').length > 1) {
-                    Object.keys(ownershipObject.organisations).map(function(key) {
-                        $scope.ownership.push({"value": key, "name" : ownershipObject.organisations[key] });
-                    })
-                    $scope.ownership.push({"value":ownershipObject.id, "name": ownershipObject.name});
-                    $scope.ownerShipFieldConfig['range'] =  $scope.ownership;
-                }else if(ecEditor.getContext('ownershipType') && ecEditor.getContext('ownershipType').indexOf('createdFor') != -1) {
-                    Object.keys(ownershipObject.organisations).map(function(key) {
-                        $scope.ownership.push({"value": key, "name" : ownershipObject.organisations[key] });
-                    })
-                    $scope.ownerShipFieldConfig['range'] =  $scope.ownership;
-                    
-                }else {
+                if(ecEditor.getContext('ownershipType')){
+                    if(ecEditor.getContext('ownershipType').indexOf('createdFor') != -1){
+                        Object.keys(ownershipObject.organisations).map(function(key) {
+                            $scope.ownership.push({"value": key, "name" : ownershipObject.organisations[key] });
+                        })
+                    }
+                    if(ecEditor.getContext('ownershipType').indexOf('createdBy') != -1){
+                        $scope.ownership.push({"value":ownershipObject.id, "name": ownershipObject.name });
+                    }
+                }else{
                     $scope.ownership.push({"value":ownershipObject.id, "name": ownershipObject.name });
-                    $scope.ownerShipFieldConfig['range'] =  $scope.ownership;
                 }
+                $scope.ownerShipFieldConfig['range'] =  $scope.ownership;
                 $scope.fields.push($scope.ownerShipFieldConfig);
             }
 

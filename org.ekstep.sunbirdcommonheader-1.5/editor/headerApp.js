@@ -84,7 +84,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     /*
     * Remove owern details and update new owner details values.
     */
-    $scope.removeOwnershipList = function(event, nodeData) {
+    $scope.removeOwnershipList = function() {
         $scope.contentCredits = [];
         var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
         rootNode.visit(function(node) {
@@ -347,7 +347,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.getContentMetadata = function() {
         var rootNode = org.ekstep.services.collectionService.getNodeById(ecEditor.getContext('contentId'));
         var status = rootNode.data.metadata.status;
-        $scope.contentCredits = rootNode.data.metadata.contentCredits;
+        if(rootNode.data.metadata.contentCredits)
+            $scope.contentCredits = rootNode.data.metadata.contentCredits;
         $scope.hideReviewBtn = (status === 'Draft' || status === 'FlagDraft') ? false : true;
         $scope.resolveReviewBtnStatus();
         $scope.$safeApply();
