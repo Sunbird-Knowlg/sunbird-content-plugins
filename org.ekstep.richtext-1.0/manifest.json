@@ -10,7 +10,8 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-            { "type": "js", "src": "editor/libs/ckeditor.js" }
+            { "type": "js", "src": "editor/libs/ckeditor.js" },
+            { "type": "css", "src": "editor/style.css" }
         ],
         "views":[
             {"template":"./richtexteditor.html", "controller":"./richtexteditorapp.js"}
@@ -18,7 +19,10 @@
         "behaviour": {
             "rotatable": false
         },
-        "configManifest": [],
+        "configManifest": [{
+            "type": "custom_template",
+            "templateURL": "editor/configTemplate.html"
+        }],
         "help": {
             "src": "editor/help.md",
             "dataType": "text"
