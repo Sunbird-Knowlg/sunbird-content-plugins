@@ -196,13 +196,12 @@ angular.module('org.ekstep.uploadcontent-1.3', []).controller('uploadController'
                         "code": UUID(),
                         "mimeType": mimeType,
                         "createdBy": ecEditor.getContext('user').id,
-                        "createdFor": _.keys(ecEditor.getContext('user').organisation),
+                        "createdFor": ecEditor._.keys(ecEditor.getContext('user').organisation),
                         "contentType": "Resource",
                         "resourceType": "Learn",
                         "creator": ecEditor.getContext('user').name,
                         "framework": ecEditor.getContext('framework'),
-                        "organisation":_.values(ecEditor.getContext('user').organisation)
-
+                        "organisation":ecEditor._.values(ecEditor.getContext('user').organisation)
 
                     }
                 }
