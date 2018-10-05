@@ -50,11 +50,11 @@
                     <td class="eleven wide">{{unit.description || "--"}}</td>
                 </tr>
                 <tr class="top aligned">
-                    <td class="one wide"><b>Concepts</b></td>
+                    <td class="one wide"><b>Topics</b></td>
                     <td class="">:</td>
                     <td class="eleven wide">
-                        <span ng-if="!unit.concepts.length">--</span>
-                        <span ng-repeat="concept in unit.concepts">{{concept.name }}{{$last ? '' : ', '}}</span>
+                        <span ng-if="!unit.topic.length">--</span>
+                        <span ng-repeat="topic in unit.topic">{{topic}}{{$last ? '' : ', '}}</span>
                     </td>
                 </tr>
                 <tr class="top aligned">

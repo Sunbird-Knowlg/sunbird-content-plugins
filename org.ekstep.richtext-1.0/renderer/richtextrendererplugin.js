@@ -37,7 +37,7 @@ Plugin.extend({
         div.style.position = 'absolute';
         var fontSize = this.updateFontSize(parseFloat(data.fontSize));
         div.style.fontSize = fontSize + 'px';
-        // div.style.fontFamily = data.font;
+        div.style.fontFamily = data.font;
         // div.style.fontWeight = this._plginConfig.fontweight ? "bold" : "normal";
         // div.style.fontStyle = this._plginConfig.fontstyle ?  "italic" : "normal";
         div.style.color = data.color;
@@ -53,11 +53,6 @@ Plugin.extend({
         this._self.y = dims.y;
     },
     updateFontSize: function(initFontSize) {
-        var canvas = EkstepRendererAPI.getCanvas();
-        var canvasDim = {
-            width: canvas.width,
-            height: canvas.height,
-        }
         // Convert fontSize to pixel based on device dimensions
         var exp = parseFloat(PluginManager.defaultResWidth * this.relativeDims().w / 100);
         var cw = this._parent.dimensions().w;

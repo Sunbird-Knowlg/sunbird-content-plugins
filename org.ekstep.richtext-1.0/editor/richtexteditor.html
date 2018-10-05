@@ -17,9 +17,18 @@
         </div>
         <div class="actions">
             <div class="ui buttons">
-                <button class="ui orange button" ng-click="closeThisDialog()" type="button">Cancel</button>
-                <div class="or"></div>
-                <button class="ui blue button" id="addLesson" type="button" ng-click="$ctrl.addText()">Add To Lesson</button>
+                <div class="ui grid">
+                    <div class="eight wide column left aligned richtext-message">
+                        <p>Please select appropriate font name (typeface) as per the language of your text.</p>
+                    </div>
+                    <div class="four wide column right aligned">
+                        <div class="ui buttons" style="margin:0;">
+                            <button class="ui orange button" ng-click="closeThisDialog()" type="button">Cancel</button>
+                            <div class="or"></div>
+                            <button class="ui blue button" id="addLesson" type="button" ng-click="$ctrl.addText()">Add To Lesson</button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

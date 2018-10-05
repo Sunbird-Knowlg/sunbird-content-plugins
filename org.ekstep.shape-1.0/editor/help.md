@@ -61,4 +61,4 @@ You can draw a line by changing dimensions of a rectangle.
 
 ***Are you a developer?***
 
-To get started visit <a href="https://community.ekstep.in/developers" target="_blank">EkStep Developer Community</a>
+To get started visit <a href="http://www.sunbird.org/" target="_blank">Developer Community</a>
