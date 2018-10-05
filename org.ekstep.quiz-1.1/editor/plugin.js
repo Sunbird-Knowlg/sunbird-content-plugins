@@ -386,13 +386,17 @@ org.ekstep.contenteditor.basePlugin.extend({
      * @memberof summary
      */
     getSummary: function() {
-      var instance = this;
-      var summary = {'totalQuestions': 0,'totalScore': 0};
-      var totalQuestionsToRender = instance.data.questionnaire.total_items; 
+        var instance = this;
+        var summary = {'totalQuestions': 0, 'totalScore': 0, 'questions': []};
+        var totalQuestionsToRender = instance.data.questionnaire.total_items; 
         // Total number of score/questions is equal to total_items  because evaluator setting max_score to 1 for each question, irrespective of question's max_score
         summary.totalQuestions = totalQuestionsToRender;  
-        summary.totalScore = totalQuestionsToRender;     
-      return summary;
+        summary.totalScore = totalQuestionsToRender; 
+        _.forEach(instance.data.questionnaire.items[instance.data.questionnaire.item_sets[0].id], function(data){
+            summary.questions.push({ 'identifier' : data.identifier })
+        })   
+        //summary.questions = ; 
+        return summary;
     }
 });
 //# sourceURL=quizPlugin.js
