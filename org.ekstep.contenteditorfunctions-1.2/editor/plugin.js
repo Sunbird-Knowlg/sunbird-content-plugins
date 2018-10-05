@@ -98,6 +98,10 @@ org.ekstep.contenteditor.basePlugin.extend({
         if (summary){
             contentMeta.totalQuestions = summary.totalQuestions;
             contentMeta.totalScore = summary.totalScore;
+            var metaData = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId');
+            if( ecEditor._.difference(ecEditor._.map(summary.questions, 'identifier'), ecEditor._.map(metaData.questions, 'identifier')).length > 0 ){
+                contentMeta.questions = summary.questions;
+            }
         }
         contentMeta.editorState = JSON.stringify(this.editorState);
         contentMeta.pragma = org.ekstep.contenteditor.stageManager.getPragma();
