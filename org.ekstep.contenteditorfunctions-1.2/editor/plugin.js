@@ -99,7 +99,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             contentMeta.totalQuestions = summary.totalQuestions;
             contentMeta.totalScore = summary.totalScore;
             var metaData = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'))
-            if( ecEditor._.difference(ecEditor._.map(summary.questions, 'identifier'), ecEditor._.map(metaData.questions, 'identifier')).length > 0 ){
+            if( !ecEditor._.isEqual(ecEditor._.map(summary.questions, 'identifier').sort(), ecEditor._.map(metaData.questions, 'identifier').sort())){
                 contentMeta.questions = summary.questions;
             }
         }
