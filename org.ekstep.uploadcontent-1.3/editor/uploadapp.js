@@ -1,12 +1,12 @@
 'use strict';
 var fileUploader;
-angular.module('org.ekstep.uploadcontent-1.2', []).controller('uploadController', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
+angular.module('org.ekstep.uploadcontent-1.3', []).controller('uploadController', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
 
     $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
     $scope.contentURL = undefined;
     $scope.newContent = false;
     $scope.showLoaderIcon = false;
-    $scope.loaderIcon = ecEditor.resolvePluginResource("org.ekstep.uploadcontent", "1.2", "editor/loader.gif");
+    $scope.loaderIcon = ecEditor.resolvePluginResource("org.ekstep.uploadcontent", "1.3", "editor/loader.gif");
     $scope.uploadCancelLabel = ecEditor.getContext('contentId') ? 'Cancel' : 'Close Editor';
 
     $scope.$on('ngDialog.opened', function() {
@@ -332,7 +332,7 @@ angular.module('org.ekstep.uploadcontent-1.2', []).controller('uploadController'
             "subtype": data.subtype || "",
             "target": data.target || "",
             "pluginid": "org.ekstep.uploadcontent",
-            "pluginver": "1.2",
+            "pluginver": "1.3",
             "objectid": "",
             "targetid": "",
             "stage": ""
