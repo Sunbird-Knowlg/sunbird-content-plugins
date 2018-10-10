@@ -211,7 +211,8 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     }
     $scope.changeTitle = function() {
         if ($scope.content) {
-            $scope.content.name = org.ekstep.services.collectionService.removeSpecialChars($scope.content.name);
+            if($scope.content.visibility === 'Parent')
+                $scope.content.name = org.ekstep.services.collectionService.removeSpecialChars($scope.content.name);
             org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);   
         }
     }
