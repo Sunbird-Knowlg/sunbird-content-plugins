@@ -1,6 +1,6 @@
 **Image**
 
-Browse and add images to your stage. EkStep offers a library of images contributed by the community of users.
+Browse and add images contributed by community of users on the platform.
 
 You can contribute to the library by uploading your images under Creative Commons license. 
 
