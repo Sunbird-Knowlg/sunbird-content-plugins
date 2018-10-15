@@ -42,4 +42,4 @@ As we learn more about the community we will be able to provide accurate suggest
 
 ---
 
-Visit <b>[Creators Resource](https://community.ekstep.in/creators)</b> and <b>[Content Creators group](https://community.ekstep.in/groups/item/5-content-creators)</b> if you need help getting started.
+Visit <b>[Creators Resource](http://www.sunbird.org/)</b> and <b>[Content Creators group](http://www.sunbird.org/)</b> if you need help getting started.

@@ -51,6 +51,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
         var divWrapper = document.createElement('div');
         divWrapper.setAttribute("id", this.richTextId);
+        divWrapper.setAttribute("class", this.richTextId);
         ecEditor.jQuery(".canvas-container").append(divWrapper);
     },
 
@@ -81,13 +82,13 @@ org.ekstep.contenteditor.basePlugin.extend({
     resizeObject: function(e) {
         if (ecEditor.getCurrentObject() && ecEditor.getCurrentObject().manifest.id == 'org.ekstep.richtext') {
                var canvasCord = ecEditor.jQuery('#canvas').offset();
-               var editorObject = ecEditor.getCurrentObject().editorObj;
+               var editorObject = ecEditor.getCurrentObject();
                ecEditor.jQuery("#" + e.target.id).offset({
                      'top':e.target.top + canvasCord.top, 
                      'left':e.target.left + canvasCord.left
                });
-               editorObject.width =  e.target.getWidth();
-               editorObject.height =  e.target.getHeight();
+               editorObject.attributes.w =  e.target.getWidth();
+               editorObject.attributes.h =  e.target.getHeight();
                ecEditor.jQuery("#" + e.target.id).width(e.target.getWidth());
                ecEditor.jQuery("#" + e.target.id).height(e.target.getHeight());
         }
@@ -226,7 +227,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     getConfig: function() {
         var config = this._super();
         // config.color = ecEditor.jQuery('#' + this.id).css("color");
-        config.fontfamily = ecEditor.jQuery('#' + this.id).css("font-family");
+        // config.fontfamily = ecEditor.jQuery('#' + this.id).css("font-family");
         config.fontsize = ecEditor.jQuery('#' + this.id).css("font-size");
         config = _.omit(config, ["stroke", "strokeWidth"]);
         return config;

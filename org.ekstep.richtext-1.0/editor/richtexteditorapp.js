@@ -14,10 +14,11 @@ angular.module('richtexteditorapp', [])
                 }
             });
             ctrl.selectedText = false;
+            var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.richtext");
             CKEDITOR.replace( 'editor1', {
-                customConfig: CKEDITOR.basePath + "config.js",
+                customConfig: ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/libs/config.js"),
                 skin: 'moono-lisa,'+CKEDITOR.basePath + "skins/moono-lisa/",
-                contentsCss: CKEDITOR.basePath + "contents.css",
+                contentsCss: ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/libs/contents.css"),
             });
             var textObj = ecEditor.getCurrentObject();
             if(e.currentScope.ngDialogData && e.currentScope.ngDialogData.textSelected && textObj) {

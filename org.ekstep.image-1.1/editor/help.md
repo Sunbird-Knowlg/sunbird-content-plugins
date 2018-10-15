@@ -1,6 +1,6 @@
 **Image**
 
-Browse and add images to your stage. EkStep offers a library of images contributed by the community of users.
+Browse and add images contributed by community of users on the platform.
 
 You can contribute to the library by uploading your images under Creative Commons license. 
 
@@ -58,4 +58,4 @@ Currently supported actions are
 
 ***Are you a developer?***
 
-To get started visit <a href="https://community.ekstep.in/developers" target="_blank">EkStep Developer Community</a>
+To get started visit <a href="http://www.sunbird.org/" target="_blank">Developer Community</a>

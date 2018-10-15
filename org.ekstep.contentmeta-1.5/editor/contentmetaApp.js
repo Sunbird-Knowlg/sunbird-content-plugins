@@ -200,7 +200,7 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     $scope.init = function() {
         $scope.$watch('content', function() {
             if($scope.content) {
-                if(/^[a-z\d\-_\s]+$/i.test($scope.content.name) == false && $scope.editMode) $scope.content.name = org.ekstep.services.collectionService.removeSpecialChars($scope.content.name);
+                $scope.content.name = org.ekstep.services.collectionService.removeSpecialChars($scope.content.name);
                 var activeNode = org.ekstep.collectioneditor.api.getService('collection').getActiveNode();
                 if ($scope.nodeType === DEFAULT_NODETYPE && ((activeNode && activeNode.data.root) || $scope.content.visibility != 'Default')) {
                     $scope.updateNode();
@@ -211,7 +211,9 @@ angular.module('contentmetaApp', []).controller('contentmetaController', ['$scop
     }
     $scope.changeTitle = function() {
         if ($scope.content) {
-            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);
+            if($scope.content.visibility === 'Parent')
+                $scope.content.name = org.ekstep.services.collectionService.removeSpecialChars($scope.content.name);
+            org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.content.name);   
         }
     }
 

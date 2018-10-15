@@ -10,7 +10,7 @@
   "author": "Chetan Sachdev <cksachdev@gmail.com> (http://chetansachdev.com/)",
   "license": "MIT",
   "devDependencies": {
-    "lodash": "4.17.4",
+    "lodash": "~>4.17.5",
     "xmlbuilder": "8.2.2"
   }
 }

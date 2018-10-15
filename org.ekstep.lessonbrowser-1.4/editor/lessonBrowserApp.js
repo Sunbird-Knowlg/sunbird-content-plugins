@@ -21,7 +21,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
         $scope.mainTemplate = '';
         $scope.isLoading = true;
         $scope.isCardSearching = false;
-        $scope.sortOption = 'name';
+        $scope.sortOption = '';
         $scope.defaultResources = [];
         $scope.lessonView = {};
         $scope.viewAllAvailableResponse = {};
