@@ -75,12 +75,10 @@ angular.module('org.ekstep.breadcrumb', []).controller('breadcrumbController', [
     * Set selected breadcrumb node as active
     */
    $scope.setActiveNode = function (data) {
-      var nodeKey;
       if (data.nodeId) {
          var activeNode = org.ekstep.services.collectionService.getActiveNode();
          activeNode ? org.ekstep.services.collectionService.getActiveNode().setActive(false) : '';
-         nodeKey = data.nodeId === activeNode.key ? data.nodeId : activeNode.parent.key;
-         org.ekstep.collectioneditor.api.getService('collection').setActiveNode(nodeKey);
+         org.ekstep.collectioneditor.api.getService('collection').setActiveNode(data.nodeId);
       } else {
          ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', { 'data': data })
          $scope.updateCollectionBreadcrumb(data);
