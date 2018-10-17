@@ -500,6 +500,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         instance.dialcodeLink(mapArr);
     },
     dialcodeLink: function(dialcodeMap) {
+        var dialcodeMapObj = _.find(dialcodeMap, 'dialcode');
         if(!_.isEmpty(dialcodeMap)){
             var request = {
                 "request": {
@@ -514,7 +515,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                             position: 'topCenter',
                             icon: 'fa fa-warning'
                         });
-                    }else{
+                    }else if(dialcodeMapObj && dialcodeMapObj.dialcode) {
                         ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                             title: 'DIAL code(s) updated successfully!',
                             position: 'topCenter',
@@ -539,7 +540,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     storeDialCodes: function(nodeId, dialCode){
         var node = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(nodeId);
-        if(node && node.data)
+        if(node && node.data) 
             node.data.metadata["dialcodes"] = dialCode;
     },
     hightlightNode: function(invalidNodes) {
