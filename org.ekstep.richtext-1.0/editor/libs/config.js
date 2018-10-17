@@ -46,7 +46,7 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
-	config.extraPlugins = 'colorbutton,font,justify';
+	config.extraPlugins = 'colorbutton,font,justify,readalong';
 };
 
 // Overrride ckeditor line-height css to 1.3
