@@ -515,7 +515,12 @@ org.ekstep.contenteditor.basePlugin.extend({
                             position: 'topCenter',
                             icon: 'fa fa-warning'
                         });
-                    }else if(dialcodeMapObj && dialcodeMapObj.dialcode) {
+                    }else if((dialcodeMapObj && dialcodeMapObj.dialcode) || (org.ekstep.services.collectionService.dialcodeList.length > 0 && org.ekstep.services.stateService.state.dialCodeMap)) {
+                        if(dialcodeMapObj && dialcodeMapObj.dialcode) {
+                            org.ekstep.services.collectionService.dialcodeList = dialcodeMapObj.dialcode;
+                        } else {
+                            org.ekstep.services.collectionService.dialcodeList = [];
+                        }
                         ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                             title: 'DIAL code(s) updated successfully!',
                             position: 'topCenter',
