@@ -1,0 +1,52 @@
+#toolbar .highlight {
+    background: #D7D7D7;
+}
+
+#toolbar .highlight.active {
+    background: #f9f9f9;
+}
+
+#toolbar .highlight:after {
+    content: "";
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    background: rgb(255, 0, 0);
+    right: -5px;
+    top: -5px;
+    border-radius: 50%
+}
+
+#toolbar .highlight.active:after {
+    display: none;
+}
+
+.right.sidebar-column .ui.dividing.header {
+    padding-top: 1em;
+    padding-bottom: 0.5em;
+}
+
+.flex-class {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ui.segment.reviewComments {
+    border: none;
+    background: #f9f9f9;
+}
+
+.ui.segment.reviewComments .comment a.author {
+    color: rgb(47, 109, 176);
+    font-size: 1.1em;
+}
+
+.sidebarContent.ui.comments {
+    color: #878787;
+    font-size: 0.95em;
+}
+
+.sidebarContent.ui.comments span.date {
+    color: #878787;
+    font-size: 0.95em;
+}
