@@ -37,8 +37,8 @@
                         <div class="ui right floated content" ng-click="addContent(lesson, $index);generateTelemetry({type: 'click', subtype: 'AddButton', target: 'Add'})" ng-if="mode.toLowerCase() === 'edit'">
                             <a class="addResource">Add</a> 
                         </div>
-                        <div class="middle aligned content" ng-if="lesson.creator">
-                                <span class="suggestedbottom">By {{ lesson.creator }}</span>
+                        <div class="middle aligned content" ng-if="lesson.owner || lesson.creator">
+                                <span class="suggestedbottom">By {{ lesson.owner || lesson.creator }}</span>
                         </div>
                 </div>
             </div>
