@@ -14,6 +14,9 @@ angular.module('richtexteditorapp', [])
                 }
             });
             ctrl.selectedText = false;
+            // if (CKEDITOR.instances['editor1']) {
+            //     CKEDITOR.remove(CKEDITOR.instances['editor1']);
+            // }
             var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.richtext");
             CKEDITOR.replace( 'editor1', {
                 customConfig: ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/libs/config.js"),
@@ -45,6 +48,7 @@ angular.module('richtexteditorapp', [])
                 textObj.config.text = CKEDITOR.instances.editor1.getData();
                 textObj.attributes.__text = textObj.config.text;
                 ecEditor.jQuery("#richtext-wrapper div#"+textObj.id).html(textObj.config.text);
+               
             }else{
                 ecEditor.dispatchEvent('org.ekstep.richtext:create', {
                     "__text":  CKEDITOR.instances.editor1.getData(),
@@ -58,6 +62,7 @@ angular.module('richtexteditorapp', [])
             org.ekstep.contenteditor.api.dispatchEvent('object:modified');
             $scope.closeThisDialog();
         };
+
         ctrl.mapElementWithName = function(element) {
             var data = {};
             var subType = {select: 'select', dropdown: 'dropdown'};
@@ -129,6 +134,10 @@ angular.module('richtexteditorapp', [])
                     break;
                 case 'Add To Lesson':
                     data.target = 'AddToLesson';
+                    data.subtype = subType.select;
+                    break;
+                case 'Add Wordinfo':
+                    data.target = 'AddWordinfo';
                     data.subtype = subType.select;
                     break;
             }
