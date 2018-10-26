@@ -13,10 +13,15 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.addEventListener("stage:select", this.initShowComments, this);
         this.initShowComments();
     },
-    initShowComments: function () {
-        this.callAPI();
+    initShowComments: function (event) {
+        var instance = this;
+        this.callAPI(function () {
+            setTimeout(function () {
+                instance.initializeComments();
+            }, 1000);
+        });
     },
-    callAPI: function () {
+    callAPI: function (callback) {
         var instance = this;
         if (!instance.isApiCalled) {
             this.context = org.ekstep.contenteditor.globalContext;
@@ -26,36 +31,39 @@ org.ekstep.contenteditor.basePlugin.extend({
                     var data = {
                     };
                     //Do Api call and get the response  
-
-                    ecEditor.getService(ServiceConstants.META_SERVICE).reviewerComment(data, function (error, response) {
+                    ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getComments(data, function (error, response) {
                         if (!error) {
                             this.items = [];
                             instance.response = response;
                             //Loop through the response and generate the comments Thread
                             instance.comments = instance.response.data.result.comments
                             instance.isApiCalled = true;
+                            callback();
                         }
                     });
                 }
             }
+        } else {
+            callback();
         }
-        this.initializeComments();
     },
 
     initializeComments: function () {
+        // console.log('event:', event)
         var instance = this;
         var items = [];
-        ecEditor.jQuery("#reviewerCommentsLoader").addClass('active');
-        setTimeout(function () {
-            if (instance.comments !== undefined) {
-                if (ecEditor.getCurrentStage()) {
-                    //Display the comments by filtering the stage id from the instance.comments
-                    var filtered_comments = _.filter(instance.comments, ['stageId', ecEditor.getCurrentStage().id]);
-                    if (filtered_comments.length == 0) {
-                        jQuery('#reviewerComments').html('No review comments');
-                    }
-                }
-                ecEditor._.forEach(filtered_comments, function (value, key) {
+        if (instance.comments !== undefined) {
+            //Display the comments by filtering the stage id from the instance.comments
+            var filtered_comments = _.filter(instance.comments, ['stageId', ecEditor.getCurrentStage().id]);
+
+            sortedComments = _.sortBy(filtered_comments, function (dateObj) {
+                return new Date(dateObj.createdOn);
+            });
+            if (filtered_comments.length == 0) {
+                jQuery('#reviewerComments').html('<div>No review comments</div>');
+                jQuery('a[data-content ="comments"]').removeClass('highlight');
+            } else {
+                ecEditor._.forEach(sortedComments, function (value, key) {
                     item = {};
                     item = value;
                     if (item.stageId === ecEditor.getCurrentStage().id) {
@@ -74,18 +82,12 @@ org.ekstep.contenteditor.basePlugin.extend({
                         jQuery('a[data-content ="comments"]').addClass('highlight');
                     }
                 });
-
                 jQuery('#reviewerComments').html(items);
-                ecEditor.jQuery("#reviewerCommentsLoader").removeClass('active');
-            } else {
-                jQuery('#reviewerComments').html('No review comments');
             }
-        }, 1000);
-    },
-    showStageComments: function (event, data) {
-        this.context = org.ekstep.contenteditor.globalContext;
-        if (!ecEditor._.isUndefined(this.context)) {
-            var isDataSet;
+
+            ecEditor.jQuery("#reviewerCommentsLoader").removeClass('active');
+        } else {
+            jQuery('#reviewerComments').html('<div>No review comments</div>');
         }
     }
 });

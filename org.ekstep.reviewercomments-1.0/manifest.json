@@ -8,7 +8,8 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-            { "type": "css", "src": "editor/comments.css" }
+            { "type": "css", "src": "editor/comments.css" },
+            { "type": "plugin", "plugin": "org.ekstep.editorstate", "ver": "1.0" }
            ],
         "menu": [],
         "sidebarMenu": [{
@@ -16,7 +17,7 @@
             "type": "icon",
             "toolTip": "comments",
             "title": "comments",
-            "iconClass": "comments icon",
+            "iconClass": "comment icon",
             "templateURL": "editor/partials/sidebarCommentsTemplate.html"
         }]
     }

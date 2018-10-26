@@ -1,24 +1,20 @@
-#toolbar .highlight {
-    background: #D7D7D7;
-}
-
 #toolbar .highlight.active {
     background: #f9f9f9;
 }
 
 #toolbar .highlight:after {
     content: "";
-    width: 10px;
-    height: 10px;
+    width: 8px;
+    height: 8px;
     position: absolute;
     background: rgb(255, 0, 0);
-    right: -5px;
-    top: -5px;
-    border-radius: 50%
+    right: 4px;
+    top: 5px;
+    border-radius: 50%;
 }
 
-#toolbar .highlight.active:after {
-    display: none;
+#toolbar .icon.comment{
+    font-size: 1.2em;
 }
 
 .right.sidebar-column .ui.dividing.header {
@@ -34,11 +30,14 @@
 .ui.segment.reviewComments {
     border: none;
     background: #f9f9f9;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
 }
 
 .ui.segment.reviewComments .comment a.author {
     color: rgb(47, 109, 176);
     font-size: 1.1em;
+    max-width: 82%;
 }
 
 .sidebarContent.ui.comments {
@@ -49,4 +48,10 @@
 .sidebarContent.ui.comments span.date {
     color: #878787;
     font-size: 0.95em;
+}
+.sidebarContent.ui.comments .comment>.avatar~.content {
+    margin-left: 4em;
+}
+.sidebarContent.ui.comments .comment{
+    margin-top: 1.2em;
 }
