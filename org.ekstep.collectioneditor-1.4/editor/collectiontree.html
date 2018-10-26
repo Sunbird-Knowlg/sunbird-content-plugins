@@ -71,7 +71,7 @@
                                                             </p>
                                                         </div>
                                                         <div class="extra">
-                                                            <span ng-if="child.data.metadata.owner">Created by {{child.data.metadata.owner}}</span>
+                                                            <span ng-if="child.data.metadata.owner || child.data.metadata.creator">Created by {{child.data.metadata.owner || child.data.metadata.creator}}</span>
                                                             <i class="long arrow right medium icon right floated blueColor popup-item" data-content="Preview" data-variation: "wide" data-position: "bottom left" ng-click="setActiveNode(child)"></i>
                                                             <i ng-show="!isCollection && mode === 'Edit'" class="fa fa-trash right floated delete-node padding-right-20 popup-item" data-content="Delete" data-variation: "wide" data-position: "bottom left" aria-hidden="true" ng-click="deleteNode(child, $event);"></i>
                                                         </div>
