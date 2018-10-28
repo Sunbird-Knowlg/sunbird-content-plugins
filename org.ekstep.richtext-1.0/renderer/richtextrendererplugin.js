@@ -183,6 +183,57 @@ Plugin.extend({
 
         
     },
+    invokeController: function() {
+        if(_.has(this._theme._controllerMap, this._plginData.controller.id)){
+            _.extend( this._theme._controllerMap[this._plginData.controller.id]["_data"], this._plginData.controller.data);
+        }else{
+            var controllerData = {};
+            controllerData.__cdata = this._plginData.controller.data;
+            controllerData.type = "data";
+            controllerData.id = this._plginData.controller.id;
+            controllerData.name = this._plginData.controller.id;
+            this._theme.addController(controllerData);
+        }
+    },
+    invokeTemplate: function() {
+        this._theme._templateMap[this._plginData.template.id] = this._plginData.template;
+    },
+    invokeEmbed: function(data){
+        console.log('sadasd');
+        var instance = this;
+        var wordsArr = this._plginConfig.words.split(',');
+        _.forEach(wordsArr, function(value, key) {
+            var embedData = {};
+            embedData["id"] = value+'_info';
+            embedData["stroke"] = "white";
+            embedData["template-name"] = instance._plginData.template.id;
+            embedData["var-word"] = "dictionary."+value;
+            embedData["z-index"] = 1001;
+            embedData["visible"] = false;
+            embedData.event = { 'type': 'click', 'action' : [{'type':'command', 'command' : 'SHOWHTMLELEMENTS' , 'asset': "textBg"}, {'type':'command', 'command' : 'hide' , 'asset': value+'_info'}]};
+            PluginManager.invoke('embed', embedData, instance._parent, instance._stage, instance._theme);
+        });
+    },
+    registerEvents: function(id) {
+        var instance = this;
+        jQuery('#'+id).children().each(function () {
+            var data = jQuery(this).data();
+            if (data && data.event) {
+                jQuery(this).click(function(event) {
+                    event.preventDefault();
+                    instance._triggerEvent(data.event);
+                    console.info("Triggered event ",data.event);
+                });
+            }
+        });
+    },
+    _triggerEvent: function(event) {
+        var plugin = PluginManager.getPluginObject(Renderer.theme._currentStage);
+        event = new createjs.Event(event);
+        if(plugin)
+            plugin.dispatchEvent(event);
+    },
+
     updateFontSize: function(initFontSize) {
         // Convert fontSize to pixel based on device dimensions
         var exp = parseFloat(PluginManager.defaultResWidth * this.relativeDims().w / 100);

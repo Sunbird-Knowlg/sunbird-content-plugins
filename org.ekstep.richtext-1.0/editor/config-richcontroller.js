@@ -20,6 +20,24 @@ angular.module('editorApp')
             title: "Word Underline Color"
         }];
 
+        $scope.readAlongColorpicker = [{
+            id: "highlightcolorpicker",
+            title: "Highlight Color"
+        }];
+
+        $scope.showColorpicker = function(id, color) {
+            var eventData = {
+                id: id,
+                callback: function(key, value) {
+                    org.ekstep.contenteditor.api.dispatchEvent('config:on:change', { key: key, value: value });
+                },
+                color: color
+            };
+            setTimeout(function() { org.ekstep.contenteditor.api.dispatchEvent("colorpicker:state", eventData) }, 500);
+        };
+
+        $scope.showColorpicker('textcolor', $scope.configData['color']);
+
 
         $scope.textOpacityConfig = {
             "propertyName": "opacity",
@@ -117,14 +135,14 @@ angular.module('editorApp')
         };
 
         $scope.showReadAlong = function(data) {
-            //$scope.showColorpicker('highlightcolorpicker', data.config.highlight || '#FFFF00');
+            $scope.showColorpicker('highlightcolorpicker', data.config.highlight || '#FFFF00');
         };
 
-        // $scope.showWordInfo = function(data) {
-        //     $scope.showColorpicker('wordfontcolorpicker', data.config.wordfontcolor || '#0000FF');
-        //     $scope.showColorpicker('wordhighlightcolorpicker', data.config.wordhighlightcolor || '#FFFF00');
-        //     $scope.showColorpicker('wordunderlinecolorpicker', data.config.wordunderlinecolor || '#0000FF');
-        // };
+        $scope.showWordInfo = function(data) {
+            $scope.showColorpicker('wordfontcolorpicker', data.config.wordfontcolor || '#0000FF');
+            $scope.showColorpicker('wordhighlightcolorpicker', data.config.wordhighlightcolor || '#FFFF00');
+            $scope.showColorpicker('wordunderlinecolorpicker', data.config.wordunderlinecolor || '#0000FF');
+        };
 
         $scope.onTextSelect();
 
@@ -149,18 +167,18 @@ angular.module('editorApp')
 
 
         $scope.unregisterListeners = function() {
-            ecEditor.removeEventListener("org.ekstep.text:addWordInfo", $scope.onTextSelect, $scope);
+            ecEditor.removeEventListener("org.ekstep.richtext:addWordInfo", $scope.onTextSelect, $scope);
             ecEditor.removeEventListener("org.ekstep.richtext:addReadAlong", $scope.onTextSelect, $scope);
             ecEditor.removeEventListener("org.ekstep.richtext:add", $scope.onTextSelect, $scope);
-            //ecEditor.removeEventListener("org.ekstep.text:modified", $scope.onTextSelect, $scope);
+           // ecEditor.removeEventListener("org.ekstep.text:modified", $scope.onTextSelect, $scope);
             ecEditor.removeEventListener("org.ekstep.richtext:unselected", $scope.unregisterListeners, $scope);
             ecEditor.removeEventListener("config:show", $scope.onTextSelect, $scope);
         };
 
-        ecEditor.addEventListener("org.ekstep.text:addWordInfo", $scope.onTextSelect, $scope);
+        ecEditor.addEventListener("org.ekstep.richtext:addWordInfo", $scope.onTextSelect, $scope);
         ecEditor.addEventListener("org.ekstep.richtext:addReadAlong", $scope.onTextSelect, $scope);
         ecEditor.addEventListener("org.ekstep.richtext:add", $scope.onTextSelect, $scope);
-        //ecEditor.addEventListener("org.ekstep.text:modified", $scope.onTextSelect, $scope);
+        //cEditor.addEventListener("org.ekstep.text:modified", $scope.onTextSelect, $scope);
         ecEditor.addEventListener("org.ekstep.richtext:unselected", $scope.unregisterListeners, $scope);
         ecEditor.addEventListener("config:show", $scope.onTextSelect, $scope);
     }]);

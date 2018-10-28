@@ -12,14 +12,13 @@
 		</span>
 	</div>
 
-
-	   <!--  <div class="title {{hasWordInfo && !hasReadAlong ? 'word-info-enabled' : ''}} {{hasReadAlong && !hasWordInfo ? 'disabled' : ''}}" id="WordInfo" ng-click="toggleActiveAcordionTitle($event);">
-	    <span ng-if="hasWordInfo && !hasReadAlong"><i class="blue check icon"></i>&nbsp;</span>Word Info
-	    <span id="disabledWordInfoIndicator" ng-if="hasReadAlong && !hasWordInfo" ng-init="disabledIndicator();" style="margin-left:1.5em; pointer-events:all !important;" data-tooltip="Disable read along to use &#xa; word info on same text"><i class="fa fa-exclamation-triangle"></i></span>
-	    <span ng-if="hasWordInfo && !hasReadAlong && activeTextPluginControlItem=='WordInfo'" style="float:right; color:#9a9a9a !important;">
-	        <i class="fa fa-pencil" ng-click="fireEvent({id:'org.ekstep.text:wordinfo:show'}); $event.stopPropagation();" style="margin-right:10px;"></i>
-	        <i class="fa fa-trash-o" ng-click="fireEvent({id:'org.ekstep.text:delete:enhancement'}); collapseAllAccordionItems(); $event.stopPropagation();"></i>
-	    </span>
-	</div> -->
+	<div class="title {{hasWordInfo && !hasReadAlong ? 'word-info-enabled' : ''}} {{hasReadAlong && !hasWordInfo ? 'disabled' : ''}}" id="WordInfo" ng-click="toggleActiveAcordionTitle($event);">
+		<span ng-if="hasWordInfo && !hasReadAlong"><i class="blue check icon"></i>&nbsp;</span>Word Info
+		<span id="disabledWordInfoIndicator" ng-if="hasReadAlong && !hasWordInfo" ng-init="disabledIndicator();" style="margin-left:1.5em; pointer-events:all !important;" data-tooltip="Disable read along to use &#xa; word info on same text"><i class="fa fa-exclamation-triangle"></i></span>
+		<span ng-if="hasWordInfo && !hasReadAlong && activeTextPluginControlItem=='WordInfo'" style="float:right; color:#9a9a9a !important;">
+			<i class="fa fa-pencil" ng-click="fireEvent({id:'org.ekstep.richtext:wordinfo:show'}); $event.stopPropagation();" style="margin-right:10px;"></i>
+			<i class="fa fa-trash-o" ng-click="fireEvent({id:'org.ekstep.richtext:delete:enhancement'}); collapseAllAccordionItems(); $event.stopPropagation();"></i>
+		</span>
+	</div>
 	
 </div>
