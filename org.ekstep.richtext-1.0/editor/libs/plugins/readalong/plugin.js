@@ -4,6 +4,10 @@ CKEDITOR.plugins.add('readalong', {
 		if (!org.ekstep.contenteditor.api.hasEventListener(this.type + ":readalong:show")) {
 			org.ekstep.contenteditor.api.addEventListener(this.type + ":readalong:show", openReadAlongDialog, this);
 		}
+		
+		if (!org.ekstep.contenteditor.api.hasEventListener(this.type + ":delete:enhancement")) {
+			org.ekstep.contenteditor.api.addEventListener(this.type + ":delete:enhancement", deleteEnhancement, this);
+		}
 		var instance = this;
 		editor.addCommand('readalong', {
             exec: function(editor) {
@@ -24,7 +28,7 @@ CKEDITOR.plugins.add('readalong', {
 			if (text) {
 				var textObj = _.cloneDeep(ecEditor.getCurrentObject());
 				if (!textObj || textObj.manifest.id != this.type) {
-					textObj = {'config': {}, 'attributes': {}};
+					textObj = {'config': {}, 'attributes': {}, 'addMedia': {}};
 				}
 	        	textObj.config.text = CKEDITOR.instances.editor1.document.getBody().getText();
 		        ecEditor.dispatchEvent('org.ekstep.readalongbrowser:showpopup', {
@@ -37,7 +41,10 @@ CKEDITOR.plugins.add('readalong', {
 		}
 
 		function convertTexttoReadalong(data) {
-	        var object = {'config' : {}, 'attributes': {}};
+			var object1 = {'config' : {}, 'attributes': {}, 'addMedia': function(){	}};
+			var object = ecEditor.getCurrentObject() || object1;
+			TextWYSIWYG.resetProperties(object);
+			object.config.text = data.text;
 	        object.config.audio = data.audio;
 	        object.config.timings = data.timings;
 	        object.config.highlight = data.highlight;
@@ -50,11 +57,43 @@ CKEDITOR.plugins.add('readalong', {
 	        var audioObj = data.audioObj;
 	        if (!ecEditor._.isUndefined(audioObj))
 	            audioObj.src = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(audioObj.src);
-	        this.addMedia(audioObj);
-	        // ecEditor.dispatchEvent('org.ekstep.richtext:addReadAlong', object);
-	        instance.data = object;
+	        object.addMedia(audioObj);
+	        ecEditor.dispatchEvent('org.ekstep.richtext:addReadAlong', object);
+	        //instance.data = object;
 	        ecEditor.dispatchEvent("config:show");
 	        ecEditor.render();
+		}
+
+		function deleteEnhancement() {
+			ecEditor.getService('popup').open({
+				template: 'deleteConfirmationDialog',
+				controller: ['$scope', function($scope) {
+					$scope.warningMessage = ecEditor.getCurrentObject().attributes.textType == 'readalong' ? 'Read-Along' : 'Word Info Popup';
+					$scope.delete = function() {
+						$scope.closeThisDialog();
+						var textObj = ecEditor.getCurrentObject();
+						if (textObj.attributes.textType == 'readalong') {
+							delete textObj.config.audio;
+							delete textObj.config.timings;
+							delete textObj.config.highlight;
+							delete textObj.config.audioObj;
+							delete textObj.config.autoplay;
+							delete textObj.attributes.autoplay;
+						} else {
+							delete textObj.data;
+							delete textObj.config.words;
+							delete textObj.config.wordfontcolor;
+							delete textObj.config.wordhighlightcolor;
+							delete textObj.config.wordunderlinecolor;
+						}
+						textObj.attributes.textType = "text";
+						ecEditor.dispatchEvent("config:show");
+						ecEditor.render();
+					}
+				}],
+				width: 520,
+				showClose: false
+			});
 		}
 	}
 });

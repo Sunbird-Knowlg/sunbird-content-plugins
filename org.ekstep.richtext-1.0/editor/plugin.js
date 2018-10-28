@@ -239,12 +239,21 @@ org.ekstep.contenteditor.basePlugin.extend({
         return config;
     },
 
+    getMedia: function(){
+        var instance = this;
+        if(instance.attributes.textType === 'text'){
+            return {};
+        }else{
+            return instance._super();
+        }
+    },
+
     /**
      * Generates and returns the ECML string for this plugin.
      * @memberof RichText
      */
     toECML: function() {        
-        return _.omit(this._super(), ["__text"]);
+       return _.omit(this._super(), ["__text"]);
     },
 
     /**

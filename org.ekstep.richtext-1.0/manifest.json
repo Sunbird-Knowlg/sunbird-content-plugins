@@ -21,6 +21,7 @@
         },
         "configManifest": [{
             "type": "custom_template",
+            "controllerURL": "editor/config-richcontroller.js",
             "templateURL": "editor/configTemplate.html"
         }],
         "help": {
