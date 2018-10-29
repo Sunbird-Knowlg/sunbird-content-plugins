@@ -39,7 +39,8 @@ CKEDITOR.plugins.add('wordinfo', {
         function convertTexttoWordInfo(data, templateData) {
             var textObj =   ecEditor.getCurrentObject() || {'config' : {}, 'attributes': {}, 'addMedia': function(){}};
             var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.richtext");
-            textObj.config.text = data.text;
+            TextWYSIWYG.resetProperties(textObj);
+            textObj.config.text = textObj.editorObj.text = data.text;
             textObj.config.words = data.words;
             textObj.config.wordfontcolor = data.wordfontcolor;
             textObj.config.wordhighlightcolor = data.wordhighlightcolor;
@@ -47,12 +48,12 @@ CKEDITOR.plugins.add('wordinfo', {
             textObj.attributes.textType = 'wordinfo';
             textObj.data = templateData;
             textObj.addMedia({
-                "id": "org.ekstep.text.popuptint",
+                "id": "org.ekstep.richtext.popuptint",
                 "src": ecEditor.resolvePluginResource(manifest.id, manifest.ver, "icons/popuptint.png"),
                 "type": "image",
-                "assetId": "org.ekstep.text.popuptint"
+                "assetId": "org.ekstep.richtext.popuptint"
             });
-            ecEditor.dispatchEvent('org.ekstep.text:addWordInfo', textObj);
+            ecEditor.dispatchEvent('org.ekstep.richtext:addWordInfo', textObj);
             ecEditor.dispatchEvent("config:show");
             ecEditor.render();
 

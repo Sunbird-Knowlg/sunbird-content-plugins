@@ -53,3 +53,45 @@
     justify-content: center;
     flex-direction: column;
 }
+
+#wordInfoContents .inline.fields>label {
+    width: 10vw;
+    color: grey;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+#textFormattingContents .inline.fields,
+#readAlongContents .inline.fields,
+#wordInfoContents .inline.fields{
+    margin: 0 0 10px;
+    display: flex;
+    flex-flow: row;
+}
+
+#readAlongContents,
+#wordInfoContents {
+    margin-top: 1vh;
+}
+
+
+#readAlongContents .inline.fields>label,
+#wordInfoContents .inline.fields>label {
+    width: 10vw;
+    color: grey;
+    font-size: 12px;
+    font-weight: normal;
+}
+
+#textFormattingContents .inline.fields,
+#readAlongContents .inline.fields,
+#wordInfoContents .inline.fields{
+    margin: 0 0 10px;
+    display: flex;
+    flex-flow: row;
+}
+
+#readAlongContents,
+#wordInfoContents {
+    margin-top: 1vh;
+}

@@ -41,10 +41,9 @@ CKEDITOR.plugins.add('readalong', {
 		}
 
 		function convertTexttoReadalong(data) {
-			var object1 = {'config' : {}, 'attributes': {}, 'addMedia': function(){	}};
-			var object = ecEditor.getCurrentObject() || object1;
+			var object = ecEditor.getCurrentObject() || {'config' : {}, 'attributes': {}, 'addMedia': function(){	}};
 			TextWYSIWYG.resetProperties(object);
-			object.config.text = data.text;
+			object.config.text = object.editorObj.text = data.text;
 	        object.config.audio = data.audio;
 	        object.config.timings = data.timings;
 	        object.config.highlight = data.highlight;
@@ -52,14 +51,12 @@ CKEDITOR.plugins.add('readalong', {
 	        object.config.autoplay = data.autoplay;
 	        object.attributes.autoplay = data.autoplay;
 	        object.attributes.textType = 'readalong';
-	        //textObj.manifest.editor.playable = true;
 	        textEditor.hide();
 	        var audioObj = data.audioObj;
 	        if (!ecEditor._.isUndefined(audioObj))
 	            audioObj.src = org.ekstep.contenteditor.mediaManager.getMediaOriginURL(audioObj.src);
 	        object.addMedia(audioObj);
 	        ecEditor.dispatchEvent('org.ekstep.richtext:addReadAlong', object);
-	        //instance.data = object;
 	        ecEditor.dispatchEvent("config:show");
 	        ecEditor.render();
 		}

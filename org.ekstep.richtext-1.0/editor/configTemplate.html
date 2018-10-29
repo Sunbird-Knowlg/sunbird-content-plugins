@@ -11,6 +11,7 @@
 			<i class="fa fa-trash-o" ng-click="fireEvent({id:'org.ekstep.richtext:delete:enhancement'}); collapseAllAccordionItems(); $event.stopPropagation();"></i>
 		</span>
 	</div>
+	
 
 	<div class="title {{hasWordInfo && !hasReadAlong ? 'word-info-enabled' : ''}} {{hasReadAlong && !hasWordInfo ? 'disabled' : ''}}" id="WordInfo" ng-click="toggleActiveAcordionTitle($event);">
 		<span ng-if="hasWordInfo && !hasReadAlong"><i class="blue check icon"></i>&nbsp;</span>Word Info
@@ -20,5 +21,39 @@
 			<i class="fa fa-trash-o" ng-click="fireEvent({id:'org.ekstep.richtext:delete:enhancement'}); collapseAllAccordionItems(); $event.stopPropagation();"></i>
 		</span>
 	</div>
-	
+
+	<div class="content">
+		<div ng-if="refreshTab">
+			<div style="display: inline-block;">
+				<div class="ui form" id="wordInfoContents">
+					<div class="inline fields" ng-show="hasWordInfo && !hasReadAlong" ng-repeat="colorpicker in wordInfoColorpicker">
+						<label>{{colorpicker.title}}</label>
+						<ui-colorpicker id={{colorpicker.id}}></ui-colorpicker>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="content">
+		<div ng-if="refreshTab">
+			<div style="display: inline-block;">
+				<div class="ui form" id="readAlongContents">
+					<div class="inline fields" ng-show="hasReadAlong && !hasWordInfo" ng-repeat="colorpicker in readAlongColorpicker">
+						<label>{{colorpicker.title}}</label>
+						<ui-colorpicker id={{colorpicker.id}}></ui-colorpicker>
+					</div>
+					<div class="inline fields" ng-show="hasReadAlong && !hasWordInfo">
+						<br>
+						<label>Autoplay</label>
+						<br>
+						<div class="ui toggle checkbox" id="readalongautoplay">
+							<input name="autoplay" type="checkbox" ng-click="fireSidebarTelemetry({id: 'autoplay'}, 'boolean');">
+							<label></label>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
 </div>

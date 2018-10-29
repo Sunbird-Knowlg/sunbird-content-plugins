@@ -11,7 +11,9 @@
         "main": "editor/plugin.js",
         "dependencies": [
             { "type": "js", "src": "editor/libs/ckeditor.js" },
-            { "type": "css", "src": "editor/style.css" }
+            { "type": "css", "src": "editor/style.css" },
+            { "type": "js", "src": "editor/textWYSIWYG.js"}
+           
         ],
         "views":[
             {"template":"./richtexteditor.html", "controller":"./richtexteditorapp.js"}
