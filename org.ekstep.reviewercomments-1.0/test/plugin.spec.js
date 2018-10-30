@@ -70,6 +70,20 @@ describe('Reviewer comments plugin', function () {
         "ver": "1.0"
     }
     };
+    var errorResponse = { "data" : {
+        "id": "api.review.comment",
+        "params": {
+            "resmsgid": "ac022850-df33-4cf6-a78a-870809c0c5be",
+            "msgid": "8aa60e8a-95e4-4e44-aa89-d621107dc2b9",
+            "status": "failed"
+        },
+        "responseCode": "400",
+        "result": {},
+        "ts": "2018-10-22T06:00:39.012Z",
+        "ver": "1.0"
+    }
+    };
+    
     beforeAll(function (done) {
         manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.reviewercomments");
         pluginInstance = ecEditor.instantiatePlugin("org.ekstep.reviewercomments");
@@ -77,46 +91,65 @@ describe('Reviewer comments plugin', function () {
     });
 
     it("Should invoke plugin initialize method for the event `stage:select`", function(done) {
-        spyOn(pluginInstance, "callAPI").and.callThrough();
-        spyOn(pluginInstance, "initShowComments").and.callThrough();
-        spyOn(pluginInstance, "initialize").and.callThrough();      
-        ecEditor.getService('content').getComments = jasmine.createSpy().and.callFake(function(data, callBack) {
-            callBack(undefined, apiResponse);            
-        });
+        spyOn(pluginInstance, "initialize").and.callThrough(); 
         pluginInstance.initialize();
         expect(pluginInstance.initialize).toHaveBeenCalled();
+        expect(manifest).toBeDefined();
         done();
     });
-    xit("Should call the callAPI function to fetch data from the API", function(done) {
-        pluginInstance.isApiCalled = false;
-        spyOn(pluginInstance, "callAPI").and.callThrough();
+    it("Should call the initializeComments function to fetch data from the API", function(done) {
+        ecEditor.jQuery("#collection-tree").fancytree("getTree").activeNode = ecEditor.jQuery("#collection-tree").fancytree("getTree").rootNode;
         spyOn(pluginInstance, "initializeComments").and.callThrough();
+
         ecEditor.getService('content').getComments = jasmine.createSpy().and.callFake(function(data, callBack) {
-            callBack();            
+            callBack(undefined, apiResponse);              
         });
-        pluginInstance.callAPI();
-        expect(pluginInstance.callAPI).toHaveBeenCalled();
-        done();
-    }); 
-    xit("Should call initializeComments function to display comments", function(done) {
-        spyOn(pluginInstance, "initializeComments").and.callThrough();
         pluginInstance.initializeComments();
+       done();
+    }); 
+    it("Should call initializeComments function to display comments", function(done) { 
+        spyOn(pluginInstance, "initializeComments").and.callThrough();
+        spyOn(pluginInstance, "showComments").and.callThrough();
+        ecEditor.getService('content').getComments = jasmine.createSpy().and.callFake(function(data, callBack) {
+            callBack(undefined, apiResponse);              
+        });
+        pluginInstance.initializeComments();
+        pluginInstance.showComments();
+        expect(pluginInstance.initializeComments).toHaveBeenCalled();
+        expect(pluginInstance.showComments).toHaveBeenCalled();
         done();
     });
     
     it("If initializeComments function returns null display `no comments message`", function(done) {
-        spyOn(pluginInstance, "callAPI").and.callThrough();
-        spyOn(pluginInstance, "initShowComments").and.callThrough();
-        spyOn(pluginInstance, "initialize").and.callThrough();      
+        spyOn(pluginInstance, "initializeComments").and.callThrough();
+        spyOn(pluginInstance, "showComments").and.callThrough();
         ecEditor.getService('content').getComments = jasmine.createSpy().and.callFake(function(data, callBack) {
             callBack(undefined, noCommentsResponse);            
         });
-        pluginInstance.initialize();
-        expect(pluginInstance.initialize).toHaveBeenCalled();
+        pluginInstance.initializeComments();
+        expect(pluginInstance.initializeComments).toHaveBeenCalled();
         done();
         
     });
-    xit("If initializeComments function throws error, display the error message", function() {
-
+    it("If initializeComments function throws error, display the error message", function(done) {
+        spyOn(pluginInstance, "initializeComments").and.callThrough();
+        spyOn(pluginInstance, "showComments").and.callThrough();      
+        ecEditor.getService('content').getComments = jasmine.createSpy().and.callFake(function(data, callBack) {
+            callBack(undefined, errorResponse);            
+        });
+        pluginInstance.initializeComments();
+        expect(pluginInstance.initializeComments).toHaveBeenCalled();
+        expect(pluginInstance.initializeComments).toThrow();
+        done();
     });
+    it("show comments should be called", function(done) {
+        spyOn(pluginInstance, "initialize").and.callThrough(); 
+        spyOn(pluginInstance, "showComments").and.callThrough();  
+        spyOn(pluginInstance, "mapComment").and.callThrough(); 
+        pluginInstance.showComments();
+        pluginInstance.mapComment();
+        expect(pluginInstance.showComments).toHaveBeenCalled();
+        done();
+    });
+    
 });

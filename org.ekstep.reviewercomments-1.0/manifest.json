@@ -8,8 +8,7 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-            { "type": "css", "src": "editor/comments.css" },
-            { "type": "plugin", "plugin": "org.ekstep.editorstate", "ver": "1.0" }
+            { "type": "css", "src": "editor/comments.css" }
            ],
         "menu": [],
         "sidebarMenu": [{

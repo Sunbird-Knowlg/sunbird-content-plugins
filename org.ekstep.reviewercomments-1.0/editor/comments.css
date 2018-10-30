@@ -48,10 +48,14 @@
 .sidebarContent.ui.comments span.date {
     color: #878787;
     font-size: 0.95em;
+    font-weight: bold;
 }
 .sidebarContent.ui.comments .comment>.avatar~.content {
     margin-left: 4em;
 }
 .sidebarContent.ui.comments .comment{
     margin-top: 1.2em;
+}
+.reviewComments .text{
+    margin-top: 0.7em;
 }
