@@ -14,6 +14,7 @@ angular.module('videoApp', [])
         ctrl.offsetInc = 200;
         ctrl.loadMoreAssetSpinner = false;
         ctrl.showLoadMoreWarningMsg = false;
+        ctrl.showAddLessonBtn = false;
         ctrl.previewMessages = {
             emptyState : 'Click Go to preview' ,
             previewError: 'Could not load the preview. Check the link and try again',
@@ -49,6 +50,10 @@ angular.module('videoApp', [])
                 on: 'hover'
             });
         }
+        ctrl.checkNgChange =  function(){
+            ctrl.previewHandler();
+            ctrl.toastManager('message', true, false, ctrl.previewMessages.emptyState);
+        }
         ctrl.videoLibraryTab = function () {
             ctrl.previewHandler();
             ecEditor.jQuery("#" + ctrl.videoLibraryTabElement).unbind('scroll').scroll(ctrl.bindScroll);
@@ -59,7 +64,9 @@ angular.module('videoApp', [])
         }
         ctrl.previewHandler = function(){
             if(ctrl.isPreviewPlaying && ctrl.provider ==='youtube'){
-                videojs.getPlayers()['ID'+ctrl.vidID].pause();
+                if (videojs.getPlayers()['ID'+ctrl.vidID]) {
+                    videojs.getPlayers()['ID'+ctrl.vidID].pause();
+                }
             }
             else if(ctrl.isPreviewPlaying && ctrl.provider==='gdrive'){
                 var video = document.getElementsByTagName('video')[0];
