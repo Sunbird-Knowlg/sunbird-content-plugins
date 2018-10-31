@@ -41,7 +41,7 @@ CKEDITOR.plugins.add('readalong', {
 		}
 
 		function convertTexttoReadalong(data) {
-			var object = ecEditor.getCurrentObject() || {'config' : {}, 'attributes': {}, 'addMedia': function(){	}};
+			var object = ecEditor.getCurrentObject() || {'config' : {}, 'attributes': {}, 'addMedia': function(){}, 'editorObj':{}};
 			TextWYSIWYG.resetProperties(object);
 			object.config.text = object.editorObj.text = data.text;
 	        object.config.audio = data.audio;

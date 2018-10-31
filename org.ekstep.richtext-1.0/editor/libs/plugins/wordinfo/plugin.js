@@ -37,7 +37,7 @@ CKEDITOR.plugins.add('wordinfo', {
         }
 
         function convertTexttoWordInfo(data, templateData) {
-            var textObj =   ecEditor.getCurrentObject() || {'config' : {}, 'attributes': {}, 'addMedia': function(){}};
+            var textObj =   ecEditor.getCurrentObject() || {'config' : {}, 'attributes': {}, 'addMedia': function(){}, 'editorObj':{}};
             var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.richtext");
             TextWYSIWYG.resetProperties(textObj);
             textObj.config.text = textObj.editorObj.text = data.text;

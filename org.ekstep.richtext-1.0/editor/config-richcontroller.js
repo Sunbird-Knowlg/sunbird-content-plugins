@@ -170,7 +170,7 @@ angular.module('editorApp')
             ecEditor.removeEventListener("org.ekstep.richtext:addWordInfo", $scope.onTextSelect, $scope);
             ecEditor.removeEventListener("org.ekstep.richtext:addReadAlong", $scope.onTextSelect, $scope);
             ecEditor.removeEventListener("org.ekstep.richtext:add", $scope.onTextSelect, $scope);
-           // ecEditor.removeEventListener("org.ekstep.text:modified", $scope.onTextSelect, $scope);
+            ecEditor.removeEventListener("org.ekstep.text:modified", $scope.onTextSelect, $scope);
             ecEditor.removeEventListener("org.ekstep.richtext:unselected", $scope.unregisterListeners, $scope);
             ecEditor.removeEventListener("config:show", $scope.onTextSelect, $scope);
         };
@@ -178,7 +178,7 @@ angular.module('editorApp')
         ecEditor.addEventListener("org.ekstep.richtext:addWordInfo", $scope.onTextSelect, $scope);
         ecEditor.addEventListener("org.ekstep.richtext:addReadAlong", $scope.onTextSelect, $scope);
         ecEditor.addEventListener("org.ekstep.richtext:add", $scope.onTextSelect, $scope);
-        //cEditor.addEventListener("org.ekstep.text:modified", $scope.onTextSelect, $scope);
+        ecEditor.addEventListener("org.ekstep.text:modified", $scope.onTextSelect, $scope);
         ecEditor.addEventListener("org.ekstep.richtext:unselected", $scope.unregisterListeners, $scope);
         ecEditor.addEventListener("config:show", $scope.onTextSelect, $scope);
     }]);

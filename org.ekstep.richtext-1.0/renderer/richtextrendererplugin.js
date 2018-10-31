@@ -34,6 +34,7 @@ Plugin.extend({
                   else data.event = [event];                  
                 }
                 PluginManager.invoke('htext', data, instance._parent, instance._stage, instance._theme);
+                $("#"+data.id).width("");
                 break;
             case 'wordinfo':
                 this._data = data;
@@ -75,7 +76,7 @@ Plugin.extend({
                 if (data.style)
                     div.setAttribute("style", data.style);
                 div.id = data.id;
-                div.style.width = dims.w + 'px';
+                //div.style.width = dims.w + 'px';
                 div.style.height = dims.h + 'px';
                 div.style.position = 'absolute';
                 div.style.fontSize = fontsize;
