@@ -10,8 +10,7 @@
 
 org.ekstep.contenteditor.basePlugin.extend({
     initialize: function () {
-        ecEditor.addEventListener("stage:select", this.initializeComments, this);
-        ecEditor.addEventListener("stage:render:complete", this.showComments, this)
+        ecEditor.addEventListener("stage:render:complete", this.initializeComments, this);
     },
     initializeComments: function (event, callback) {
         var instance = this;
@@ -30,33 +29,32 @@ org.ekstep.contenteditor.basePlugin.extend({
                     //Do Api call and get the response  
                     ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getComments(data, function (error, response) {
                         if (!error) {
-
                             //Loop through the response and generate the comments Thread
-                            instance.comments = response.data.result.comments
-                            instance.showComments();
+                            // instance.comments = response.data.result.comments
+                            instance.showComments(response.data.result.comments);
+                        } else {
+                            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                                message: "Error in fetching comments, please try again!",
+                                position: 'topCenter',
+                                icon: 'fa fa-warning'
+                            });
                         }
                     });
                 }
             }
+        } else {
+            instance.displayStageComments(instance.comments)
         }
     },
     //Show comments after getting the apiResponse
-    showComments: function () {
+    showComments: function (comments) {
         var instance = this;
         var sortedComments = {}
-        if (instance.comments !== undefined && instance.comments.length > 0) {
-            //Display the comments by filtering the stage id from the instance.comments
-            var filtered_comments = _.filter(instance.comments, ['stageId', ecEditor.getCurrentStage().id]);
-            if (filtered_comments.length == 0) {
-                instance.displayNoComments();
-            } else {
-                sortedComments = _.sortBy(filtered_comments, function (dateObj) {
-                    return new Date(dateObj.createdOn);
-                });
-                instance.mapComment(sortedComments);
-            }
-        } else {
-            instance.displayNoComments();
+        if (comments !== undefined && comments.length > 0) {
+            sortedComments = _.sortBy(comments, function (dateObj) {
+                return new Date(dateObj.createdOn);
+            });
+            instance.mapComment(sortedComments);
         }
     },
     //To show the 'No review message to the user
@@ -74,7 +72,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     //To map the comments from the apiResponse
     mapComment: function (sortedComments) {
         var instance = this;
-        displayComments = [];
+        var displayComments = [];
         var result = _.map(sortedComments, function (item) {
             var commentThread = {};
             commentThread.username = item.userInfo.name
@@ -85,24 +83,34 @@ org.ekstep.contenteditor.basePlugin.extend({
             commentThread.stageId = item.stageId
             displayComments.push(commentThread);
         });
-        //update the mapped comments to the template
+        instance.comments = displayComments;
+        //update the mapped comments to the template      
         instance.displayStageComments(displayComments);
     },
-
+    checkFilter: function (comments) {
+        var filterComments = _.filter(comments, ['stageId', ecEditor.getCurrentStage().id]);
+        return filterComments;
+    },
     displayStageComments: function (displayComments) {
-        var commentTemplate = _.template(
-            '<% _.each(displayComments, function(item) { %>' +
-            '<div class="comment"> ' +
-            '<div class="avatar"><img src= " <%-item.logo %> "/></div>' +
-            '<div class="content"><div class="flex-class"><span class="author"><%- item.username %></span>' +
-            '<span class="date"><%- item.date %> </span></div>' +
-            '<div class="text"> <%-item.body  %> ' +
-            '</div></div></div>' +
-            '<% }); %>');
+        filteredComments = [];
+        filteredComments = this.checkFilter(displayComments)
+        if (filteredComments.length > 0) {
+            var commentTemplate = _.template(
+                '<% _.each(filteredComments, function(item) { %>' +
+                '<div class="comment"> ' +
+                '<div class="avatar"><img src= " <%-item.logo %> "/></div>' +
+                '<div class="content"><div class="flex-class"><span class="author"><%- item.username %></span>' +
+                '<span class="date"><%- item.date %> </span></div>' +
+                '<div class="text"> <%-item.body  %> ' +
+                '</div></div></div>' +
+                '<% }); %>');
 
-        //Add highlight class to the comments tab
-        ecEditor.jQuery('a[data-content ="comments"]').addClass('highlight');
-        ecEditor.jQuery('#reviewerComments').html(commentTemplate);
+            //Add highlight class to the comments tab
+            ecEditor.jQuery('a[data-content ="comments"]').addClass('highlight');
+            ecEditor.jQuery('#reviewerComments').html(commentTemplate);
+        } else {
+            this.displayNoComments();
+        }
     }
 });
 //# sourceURL=reviewercomments.js
