@@ -14,7 +14,14 @@ angular.module('videoApp', [])
         ctrl.offsetInc = 200;
         ctrl.loadMoreAssetSpinner = false;
         ctrl.showLoadMoreWarningMsg = false;
-        
+        ctrl.previewMessages = {
+            emptyState : 'Click Go to preview' ,
+            previewError: 'Could not load the preview. Check the link and try again',
+            invalidURL : 'Please provide valid YouTube URL!',
+            invalidLicense : 'The video you are trying to upload is not license by CC-BY. Please try another video.',
+            loadingState: 'Loading Video...'
+        }
+        ctrl.isPreviewPlaying = false;
         function hideLoader() {
             ctrl.loading = '';
         }
@@ -43,12 +50,21 @@ angular.module('videoApp', [])
             });
         }
         ctrl.videoLibraryTab = function () {
+            ctrl.previewHandler();
             ecEditor.jQuery("#" + ctrl.videoLibraryTabElement).unbind('scroll').scroll(ctrl.bindScroll);
             ctrl.showLoadMoreWarningMsg = false;
             showLoader();
-
             instance.getYoutube(undefined, ctrl.limit, ctrl.offset = 0, getYoutubeCb);
 
+        }
+        ctrl.previewHandler = function(){
+            if(ctrl.isPreviewPlaying && ctrl.provider ==='youtube'){
+                videojs.getPlayers()['ID'+ctrl.vidID].pause();
+            }
+            else if(ctrl.isPreviewPlaying && ctrl.provider==='gdrive'){
+                var video = document.getElementsByTagName('video')[0];
+                video.pause();
+            }
         }
         ctrl.loadMoreYoutubeVideos = function (data) {
             if (ctrl.offset + ctrl.offsetInc >= ctrl.maxLimit) {
@@ -110,12 +126,14 @@ angular.module('videoApp', [])
             ctrl.vidID = ctrl.checkValidYoutube(url)
             if(ctrl.vidID){
                 ctrl.videoUrl = 'https://www.youtube.com/watch?v='+ctrl.vidID;
-                cb(null, ctrl.videoUrl, 'youtube');
+                ctrl.provider = 'youtube';
+                cb(null, ctrl.videoUrl, ctrl.provider);
             }
             else if (url.indexOf('drive') != -1) {
                 var gdrive = url.replace('/view?usp=sharing', '').replace('open?id=', 'uc?export=download&id=').replace('file/d/', 'uc?export=download&id=').replace('/edit?usp=sharing', '');
                 ctrl.videoUrl = gdrive;
-                cb(null, ctrl.videoUrl, 'gdrive');
+                ctrl.provider = 'gdrive'
+                cb(null, ctrl.videoUrl, ctrl.provider);
             }
             else{
                 cb(new Error('invalid url'), null, null)
@@ -130,62 +148,64 @@ angular.module('videoApp', [])
                 ctrl.errorMessage = errMsg;
             });
         }
-        ctrl.previewVideo = function () {
-            ctrl.messageDiv = true;
-            ctrl.show = 'loader';
-            var link = ctrl.videoUrl;
-            
-            ctrl.checkProvider(link, function(err, validURL, provider){
-                var videoelement = ctrl.creteVideoElement(ctrl.videoUrl);
-                ecEditor.jQuery('.content .container #previewVideo').html(videoelement);
-                var video = document.getElementsByTagName('video')[0];
-                if (provider === 'youtube') {
-                    var requestObj = {
-                        "request" : {
-                            "asset" : {
-                                "provider": "youtube",
-                                "url": ctrl.videoUrl
-                            }
-                        }
+
+        ctrl.youtubeLoader = function(videoelement, video){
+            var requestObj = {
+                "request" : {
+                    "asset" : {
+                        "provider": ctrl.provider,
+                        "url": ctrl.videoUrl
                     }
-                    org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE).getVideoLicense(requestObj, function (err, res) {
-                        if (err) {
-                            ctrl.toastManager('error', true, false, 'Please provide valid YouTube URL!');
-                        }
-                        else if(res.data.result.validLicense) {
-                            videoelement.id = ctrl.vidID;
-                            videoelement.className = 'video-js vjs-default-skin';
-                            if (videojs.getPlayers()[ctrl.vidID]) {
-                                delete videojs.getPlayers()[ctrl.vidID];
+                }
+            }
+            org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE).getVideoLicense(requestObj, function (err, res) {
+                if (err) {
+                    ctrl.toastManager('error', true, false, ctrl.previewMessages.invalidURL);
+                    ctrl.isPreviewPlaying = false;
+                }
+                else if(res.data.result.validLicense) {
+                    videoelement.id = 'ID'+ctrl.vidID;
+                    videoelement.className = 'video-js vjs-default-skin';
+                    ctrl.isPreviewPlaying = true;
+
+// Video js uses CSS3 query selector which does not allow #IDs to start with non alphabets
+
+                    var videoInstanceID = 'ID'+ctrl.vidID;
+                    if (videojs.getPlayers()[videoInstanceID]) {
+                        delete videojs.getPlayers()[videoInstanceID];
+                    }
+                    videojs(videoInstanceID, {
+                            "techOrder": ["youtube"],
+                            "src": ctrl.videoUrl,
+                            "youtube": {
+                                "iv_load_policy": 3
                             }
-                            videojs(ctrl.vidID, {
-                                    "techOrder": ["youtube"],
-                                    "src": ctrl.videoUrl,
-                                    "youtube": {
-                                        "iv_load_policy": 3
-                                    }
-                                },
-                                function () {});
-                            videojs(ctrl.vidID).ready(function () {
-                                var youtubeInstance = this;
-                                youtubeInstance.src({
-                                    type: 'video/youtube',
-                                    src: ctrl.videoUrl
-                                });
-                                ctrl.toastManager('', false, true, '');
-                            })
-                        } else {
-                            ctrl.toastManager('error',true, false, 'The video you are trying to upload is not license by CC-BY. Please try another video.');
-                        }
+                        },
+                        function () {});
+                    videojs(videoInstanceID).ready(function () {
+                        var youtubeInstance = this;
+                        youtubeInstance.src({
+                            type: 'video/youtube',
+                            src: ctrl.videoUrl
+                        });
+                        ctrl.toastManager('', false, true, '');
                     })
-                } else if(provider === 'gdrive') {
-                    video.play()
+                } else {
+                    ctrl.isPreviewPlaying = false;
+                    ctrl.toastManager('error',true, false, ctrl.previewMessages.invalidLicense);
+                }
+            })
+        };
+
+        ctrl.driveLoader =  function(videoelement, video){
+            video.play()
                         .then(function () {
+                            ctrl.isPreviewPlaying = true;
                             ctrl.toastManager('', false, true, '');
                         })
                         .catch(function (err) {
-                            ctrl.toastManager('error', true, false, 'Sorry could not load preview of the video link. Please check the link and try again.');
-
+                            ctrl.toastManager('error', true, false, ctrl.previewMessages.previewError);
+                            ctrl.isPreviewPlaying = false;
                             var pkgVersion = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId')).pkgVersion;
                             var object = {
                                 id: org.ekstep.contenteditor.api.getContext('contentId'),
@@ -206,9 +226,23 @@ angular.module('videoApp', [])
                             });
                             console.log("Invalid URL:", err);
                         });
+        }
+        ctrl.previewVideo = function () {            
+            ctrl.messageDiv = true;
+            ctrl.show = 'loader';
+            var link = ctrl.videoUrl;
+            $('input[name="youtubeVideo"]').prop('checked', false);
+            ctrl.checkProvider(link, function(err, validURL, provider){
+                var videoelement = ctrl.createVideoElement(ctrl.videoUrl);
+                ecEditor.jQuery('.content .container #previewVideo').html(videoelement);
+                var video = document.getElementsByTagName('video')[0];
+                if (provider === 'youtube') {
+                    ctrl.youtubeLoader(videoelement, video);
+                } else if(provider === 'gdrive') {
+                    ctrl.driveLoader(videoelement, video)
                 }
                 else{
-                    ctrl.toastManager('error', true, false, 'Sorry could not load preview of the video link. Please check the link and try again.');
+                    ctrl.toastManager('error', true, false, ctrl.previewMessages.previewError);
                 }
             })
         };
@@ -216,7 +250,8 @@ angular.module('videoApp', [])
             ctrl.videoLibraryTabElement = "video-library-tab";
             ecEditor.jQuery('.video-modal .menu .item').tab();
             ctrl.bindScroll = function (data) {
-
+                console.log("tabswithced");
+                
                 var a = ecEditor.jQuery("#" + data.target.id);
                 var b = ecEditor.jQuery("#" + data.target.id)[0];
                 if (a.scrollTop() + a.height() + 40 >= b.scrollHeight) {
@@ -230,10 +265,10 @@ angular.module('videoApp', [])
 
         ctrl.VideoSource = function (video) {
             ecEditor.jQuery('#checkBox_' + video.identifier + ' >.radioBox').not(':checked').prop("checked", true);
-            ctrl.toastManager('', false, true, '');
+            ctrl.toastManager('message', true, true, ctrl.previewMessages.emptyState);
             ctrl.videoUrl = video.artifactUrl;
         }
-        ctrl.creteVideoElement = function (url) {
+        ctrl.createVideoElement = function (url) {
             var element = document.createElement('video');
             element.src = url;
             element.width = '400';
@@ -244,6 +279,7 @@ angular.module('videoApp', [])
         };
 
         ctrl.addVideo = function () {
+            ctrl.isPreviewPlaying = false;
             $scope.closeThisDialog();
             ecEditor.dispatchEvent("org.ekstep.video:create", {
                 "y": 7.9,
