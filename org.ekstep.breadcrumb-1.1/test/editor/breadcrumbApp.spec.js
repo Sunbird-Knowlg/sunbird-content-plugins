@@ -65,7 +65,6 @@ describe("Ekstep Breadcrumb Plugin:", function() {
             spyOn(org.ekstep.services.collectionService, 'setActiveNode');
             spyOn($scope, 'goToRootParent');
             org.ekstep.services.collectionService.setActiveNode(activeNode.parent.key)
-            //expect(org.ekstep.services.collectionService.setActiveNode()).toBeDefined();
             $scope.goToRootParent();
             expect($scope.goToRootParent).toHaveBeenCalled();
             expect($scope.goToRootParent).not.toBeUndefined();
