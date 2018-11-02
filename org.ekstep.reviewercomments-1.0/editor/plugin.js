@@ -9,20 +9,25 @@
  */
 
 org.ekstep.contenteditor.basePlugin.extend({
+    NO_COMMENTS: 'No Reviewer Comments',
     initialize: function () {
         ecEditor.addEventListener("stage:render:complete", this.initializeComments, this);
+        ecEditor.addEventListener("stage:delete", this.deleteComments, this);
     },
-    initializeComments: function (event, callback) {
+    initializeComments: function (event, event) {
         var instance = this;
         if (instance.comments == undefined) {
             this.context = org.ekstep.contenteditor.globalContext;
             if (!ecEditor._.isUndefined(this.context)) {
                 if (!ecEditor._.isUndefined(this.context.contentId) && this.context.contentId != "") {
                     var instance = this;
+                    var pkgVersion = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId')).pkgVersion;
                     var data = {
                         "request": {
                             "contextDetails": {
-                                'cotentId': this.context.contentId
+                                'contentId': ecEditor.getContext('contentId'),
+                                'contentType': 'application/vnd.ekstep.ecml-archive',
+                                'contentVer':  !_.isUndefined(pkgVersion) ? pkgVersion.toString() : '0'
                             }
                         }
                     };
@@ -33,12 +38,25 @@ org.ekstep.contenteditor.basePlugin.extend({
                             // instance.comments = response.data.result.comments
                             instance.showComments(response.data.result.comments);
                         } else {
+                            instance.displayNoComments();
                             ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                                 message: "Error in fetching comments, please try again!",
                                 position: 'topCenter',
                                 icon: 'fa fa-warning'
                             });
+                            ecEditor.getService('telemetry').error({
+                                "env": 'content',
+                                "stage": '',
+                                "action": 'review comments',
+                                "objectid": "",
+                                "objecttype": "",
+                                "err": error.status,
+                                "type": "API",
+                                "data": error,
+                                "severity": "fatal"
+                            })
                         }
+                        callback && callback(error, response);
                     });
                 }
             }
@@ -60,7 +78,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     //To show the 'No review message to the user
     displayNoComments: function () {
         jQuery('a[data-content ="comments"]').removeClass('highlight');
-        jQuery('#reviewerComments').html('<div>No review comments</div>');
+        jQuery('#reviewerComments').html('<div>' + this.NO_COMMENTS + '</div>');
     },
     //Function to format the date 
     getMonthName: function (date) {
@@ -111,6 +129,38 @@ org.ekstep.contenteditor.basePlugin.extend({
         } else {
             this.displayNoComments();
         }
+    },
+    deleteComments: function (event, callback) {
+        console.log('event delete: ', event);
+        console.log('event callback: ', callback);
+        var deleteStageId = callback.stageId;
+        var data = {
+            "request": {
+                "contextDetails": {
+                    'contentId': (this.context.contentId).toString(),
+                    'contentType': 'application/vnd.ekstep.ecml-archive',
+                    'contentVer': "0",
+                    'stageId': deleteStageId
+                }
+            }
+        };
+        //Do Api call and delete the comments related to the stageId
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).deleteComments(data, function (error, response) {
+            if (!error) {
+                //On success show the success message for comments deletion
+                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                    message: "Comments of the stage is deleted",
+                    position: 'topCenter',
+                    icon: 'fa fa-check-circle'
+                });
+            } else {
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: "Error in deleting the stage's comments, please try again!",
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
+            }
+        });
     }
 });
 //# sourceURL=reviewercomments.js
