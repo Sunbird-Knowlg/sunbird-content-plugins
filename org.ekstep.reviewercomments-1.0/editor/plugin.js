@@ -4,7 +4,6 @@
  * @constructor
  * @extends org.ekstep.contenteditor.basePlugin
  * @author Revathi P 
- * @listens stage:select
  * @listens stage:render:complete
  */
 
@@ -12,9 +11,8 @@ org.ekstep.contenteditor.basePlugin.extend({
     NO_COMMENTS: 'No Reviewer Comments',
     initialize: function () {
         ecEditor.addEventListener("stage:render:complete", this.initializeComments, this);
-        ecEditor.addEventListener("stage:delete", this.deleteComments, this);
     },
-    initializeComments: function (event, event) {
+    initializeComments: function (event, callback) {
         var instance = this;
         if (instance.comments == undefined) {
             this.context = org.ekstep.contenteditor.globalContext;
@@ -27,7 +25,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                             "contextDetails": {
                                 'contentId': ecEditor.getContext('contentId'),
                                 'contentType': 'application/vnd.ekstep.ecml-archive',
-                                'contentVer':  !_.isUndefined(pkgVersion) ? pkgVersion.toString() : '0'
+                                'contentVer': !_.isUndefined(pkgVersion) ? pkgVersion.toString() : '0'
                             }
                         }
                     };
@@ -56,7 +54,6 @@ org.ekstep.contenteditor.basePlugin.extend({
                                 "severity": "fatal"
                             })
                         }
-                        callback && callback(error, response);
                     });
                 }
             }
@@ -129,38 +126,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         } else {
             this.displayNoComments();
         }
-    },
-    deleteComments: function (event, callback) {
-        console.log('event delete: ', event);
-        console.log('event callback: ', callback);
-        var deleteStageId = callback.stageId;
-        var data = {
-            "request": {
-                "contextDetails": {
-                    'contentId': (this.context.contentId).toString(),
-                    'contentType': 'application/vnd.ekstep.ecml-archive',
-                    'contentVer': "0",
-                    'stageId': deleteStageId
-                }
-            }
-        };
-        //Do Api call and delete the comments related to the stageId
-        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).deleteComments(data, function (error, response) {
-            if (!error) {
-                //On success show the success message for comments deletion
-                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
-                    message: "Comments of the stage is deleted",
-                    position: 'topCenter',
-                    icon: 'fa fa-check-circle'
-                });
-            } else {
-                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                    message: "Error in deleting the stage's comments, please try again!",
-                    position: 'topCenter',
-                    icon: 'fa fa-warning'
-                });
-            }
-        });
     }
 });
 //# sourceURL=reviewercomments.js
