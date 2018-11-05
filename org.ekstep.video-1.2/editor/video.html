@@ -105,7 +105,7 @@
                     <div class="column" style="padding:0;">
                         <div class="ui fluid action input">
                             <input type="text" ng-keyup="$event.keyCode == 13 && $ctrl.videoUrl !== '' && $ctrl.previewVideo(); $ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'videoUrl'})"
-                                placeholder="Paste video url here..." ng-model="$ctrl.videoUrl" ng-change="$ctrl.showAddLessonBtn = false">
+                                placeholder="Paste video URL here" ng-model="$ctrl.videoUrl" ng-change="$ctrl.hasInputChanged();">
                             <div class="ui blue button" ng-click="$ctrl.previewVideo(); $ctrl.generateTelemetry({type: 'click', subtype: 'search', target: 'videoUrl'})">Go</div>
                         </div>
                     </div>
@@ -114,7 +114,7 @@
                     <div class="six wide left aligned column" style="padding-left:0;">
                         <div ng-show="$ctrl.messageDiv">
                             <div class="ui segment" class="ui" id="previewMessage" ng-if="$ctrl.show == 'message'" style="height: 200px !important">
-                                <div class="ui text">Preview will come here</div>
+                                <div class="ui text">{{$ctrl.previewMessages.emptyState}}</div>
                             </div>
                             <div class="ui segment" id="errorMessage" ng-if="$ctrl.show == 'error'" style="height: 200px !important">
                                 <i class="warning sign large red icon"></i>
@@ -122,7 +122,7 @@
                             </div>
                             <div class="ui segment" ng-if="$ctrl.show == 'loader'" style="height: 200px !important">
                                 <div class="ui active inverted dimmer">
-                                    <div class="ui text loader">Just one second, We're loading the video for you.</div>
+                                    <div class="ui text loader">{{$ctrl.previewMessages.loadingState}}</div>
                                 </div>
                             </div>
                         </div>
@@ -130,9 +130,15 @@
                     </div>
                     <div class="six wide column" style="padding-right:0;">
                         <p>
-                            1. Only YouTube or GoogleDrive links are supported.
-                            <br/> 2. It is recommended to keep the video file size less than 20 MB.
-                            <br/> 3. Currently only WebM & MP4 formats are supported.
+                            <b>YouTube</b>: </br>
+                            <ul>
+                                <li>Only creative commons YouTube links are supported. </li>
+                            </ul>
+                            <b>Google Drive</b>:
+                            <ul>
+                                <li>Supported File Type: WebM, MP4.</li>
+                                <li>Recommended File Size: Less than 20MB</li>
+                            </ul>
                         </p>
                     </div>
                 </div>
@@ -209,10 +215,10 @@
         </div>
         <div class="actions">
             <div class="ui buttons">
-                <button class="ui orange button" ng-click="closeThisDialog();$ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'cancelButton'})"
-                    type="button">Cancel</button>
-                <div class="or"></div>
-                <button id="addToLesson" class="ui blue button" type="button" ng-disabled="!$ctrl.showAddLessonBtn" ng-click="$ctrl.addVideo();$ctrl.generateTelemetry({type: 'click', subtype: 'addToLesson', target: 'addVideo'})">Add To Lesson</button>
+                <!-- <button class="ui orange button" ng-click="closeThisDialog();$ctrl.generateTelemetry({type: 'click', subtype: 'close', target: 'cancelButton'})"
+                    type="button">Cancel</button> -->
+                <!-- <div class="or"></div> -->
+                <button id="addToLesson" class="ui blue button" type="button" ng-disabled="!$ctrl.showAddLessonBtn" ng-click="$ctrl.addVideo();$ctrl.generateTelemetry({type: 'click', subtype: 'addToLesson', target: 'addVideo'})">Add</button>
             </div>
         </div>
     </div>
