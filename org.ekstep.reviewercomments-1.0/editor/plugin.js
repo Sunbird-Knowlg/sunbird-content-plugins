@@ -16,24 +16,23 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         if (instance.comments == undefined) {
             this.context = org.ekstep.contenteditor.globalContext;
-            if (!ecEditor._.isUndefined(this.context)) {
-                if (!ecEditor._.isUndefined(this.context.contentId) && this.context.contentId != "") {
-                    var instance = this;
-                    var pkgVersion = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId')).pkgVersion;
-                    var data = {
-                        "request": {
-                            "contextDetails": {
-                                'contentId': ecEditor.getContext('contentId'),
-                                'contentType': 'application/vnd.ekstep.ecml-archive',
-                                'contentVer': !_.isUndefined(pkgVersion) ? pkgVersion.toString() : '0'
-                            }
+            if (!ecEditor._.get(this.context.contentId)) {
+                var instance = this;
+                var pkgVersion = ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId')).pkgVersion;
+                var data = {
+                    "request": {
+                        "contextDetails": {
+                            'contentId': ecEditor.getContext('contentId'),
+                            'contentType': ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId')).mimeType,
+                            'contentVer': !_.isUndefined(pkgVersion) ? pkgVersion.toString() : '0'
                         }
-                    };
-                    //Do Api call and get the response  
-                    ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getComments(data, function (error, response) {
-                        if (!error) {
+                    }
+                };
+                //Do Api call and get the response  
+                ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getComments(data, function (error, response) {
+                    try {
+                        if (response && response.data.result.comments) {
                             //Loop through the response and generate the comments Thread
-                            // instance.comments = response.data.result.comments
                             instance.showComments(response.data.result.comments);
                         } else {
                             instance.displayNoComments();
@@ -54,8 +53,11 @@ org.ekstep.contenteditor.basePlugin.extend({
                                 "severity": "fatal"
                             })
                         }
-                    });
-                }
+                    } catch (error) {
+                        console.warn("Error fetching the comments: ", err);
+                    }
+
+                });
             }
         } else {
             instance.displayStageComments(instance.comments)
