@@ -50,7 +50,7 @@ angular.module('videoApp', [])
                 on: 'hover'
             });
         }
-        ctrl.checkNgChange =  function(){
+        ctrl.hasInputChanged =  function(){
             ctrl.previewHandler();
             ctrl.toastManager('message', true, false, ctrl.previewMessages.emptyState);
         }
