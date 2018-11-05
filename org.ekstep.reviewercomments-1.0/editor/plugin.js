@@ -31,30 +31,29 @@ org.ekstep.contenteditor.basePlugin.extend({
                 //Do Api call and get the response  
                 ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getComments(data, function (error, response) {
                     try {
-                        if (response && response.data.result.comments) {
+                        if (response && response.data.responseCode && response.data.result.comments) {
                             //Loop through the response and generate the comments Thread
                             instance.showComments(response.data.result.comments);
-                        } else {
-                            instance.displayNoComments();
-                            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                                message: "Error in fetching comments, please try again!",
-                                position: 'topCenter',
-                                icon: 'fa fa-warning'
-                            });
-                            ecEditor.getService('telemetry').error({
-                                "env": 'content',
-                                "stage": '',
-                                "action": 'review comments',
-                                "objectid": "",
-                                "objecttype": "",
-                                "err": error.status,
-                                "type": "API",
-                                "data": error,
-                                "severity": "fatal"
-                            })
                         }
                     } catch (error) {
-                        console.warn("Error fetching the comments: ", err);
+                        instance.displayNoComments();
+                        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                            message: "Error in fetching comments, please try again!",
+                            position: 'topCenter',
+                            icon: 'fa fa-warning'
+                        });
+                        ecEditor.getService('telemetry').error({
+                            "env": 'content',
+                            "stage": ecEditor.getCurrentStage().id,
+                            "action": 'review comments',
+                            "objectid": "",
+                            "objecttype": "",
+                            "err": error.status,
+                            "type": "API",
+                            "data": error,
+                            "severity": "fatal"
+                        });
+                        console.warn('error in fetching review comments: ', error);
                     }
 
                 });
@@ -65,19 +64,18 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     //Show comments after getting the apiResponse
     showComments: function (comments) {
-        var instance = this;
         var sortedComments = {}
-        if (comments !== undefined && comments.length > 0) {
+        if (comments) {
             sortedComments = _.sortBy(comments, function (dateObj) {
                 return new Date(dateObj.createdOn);
             });
-            instance.mapComment(sortedComments);
+            this.mapComment(sortedComments);
         }
     },
     //To show the 'No review message to the user
     displayNoComments: function () {
         jQuery('a[data-content ="comments"]').removeClass('highlight');
-        jQuery('#reviewerComments').html('<div>' + this.NO_COMMENTS + '</div>');
+        ecEditor.jQuery('#reviewerComments').html('<div>' + this.NO_COMMENTS + '</div>');
     },
     //Function to format the date 
     getMonthName: function (date) {
@@ -121,7 +119,6 @@ org.ekstep.contenteditor.basePlugin.extend({
                 '<div class="text"> <%-item.body  %> ' +
                 '</div></div></div>' +
                 '<% }); %>');
-
             //Add highlight class to the comments tab
             ecEditor.jQuery('a[data-content ="comments"]').addClass('highlight');
             ecEditor.jQuery('#reviewerComments').html(commentTemplate);
