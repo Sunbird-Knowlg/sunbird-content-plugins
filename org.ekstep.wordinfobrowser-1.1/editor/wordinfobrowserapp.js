@@ -99,7 +99,7 @@ angular.module('wordinfobrowserapp', []).controller('wordinfobrowsercontroller',
                 }
             }
         };
-        ecEditor.getService('search').search(requestData, function(err, response) {
+        ecEditor.getService('language').getWords(requestData, function(err, response) {
             if (!err) {
                 var dictionary = {};
                 ecEditor._.forEach(response.data.result.words, function(w) {

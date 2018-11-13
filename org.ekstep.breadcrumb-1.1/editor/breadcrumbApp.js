@@ -63,7 +63,7 @@ angular.module('org.ekstep.breadcrumb', []).controller('breadcrumbController', [
             if ((showFolder || (!showFolder && !node.folder)) && (node.data.objectType == 'Collection' || node.getLevel() !== 1)) {
               var title = node.title
               $scope.path.push({
-                'title': title.replace(/[^\w:&_\-.(\),\/\s]/g, ""),
+                'title': title.replace(/[^\u0600-\u06FF\uFB50-\uFDFF\uFE70-\uFEFF\uFB50-\uFDFF\u0980-\u09FF\u0900-\u097F\u0D00-\u0D7F\u0A80-\u0AFF\u0C80-\u0CFF\u0B00-\u0B7F\u0A00-\u0A7F\u0B80-\u0BFF\u0C00-\u0C7F\w:&_\-.(\),\/\s]/g, ""),
                 'nodeId': node.key,
                 'show': true
               });
@@ -76,15 +76,17 @@ angular.module('org.ekstep.breadcrumb', []).controller('breadcrumbController', [
     * Set selected breadcrumb node as active
     */
    $scope.setActiveNode = function (data) {
-      if (data.nodeId) {
-         var activeNode = org.ekstep.services.collectionService.getActiveNode();
-         activeNode ? org.ekstep.services.collectionService.getActiveNode().setActive(false) : '';
-         org.ekstep.collectioneditor.api.getService('collection').setActiveNode(data.nodeId);
-      } else {
-         ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', { 'data': data })
-         $scope.updateCollectionBreadcrumb(data);
-         $scope.hideBreadcrumb()
-      }
+        var nodeKey;
+        if (data.nodeId) {
+            var activeNode = org.ekstep.services.collectionService.getActiveNode();
+            activeNode ? org.ekstep.services.collectionService.getActiveNode().setActive(false) : '';
+            nodeKey = data.nodeId === activeNode.key ? data.nodeId : activeNode.parent.key;
+            org.ekstep.collectioneditor.api.getService('collection').setActiveNode(nodeKey);
+        } else {
+            ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', { 'data': data })
+            $scope.updateCollectionBreadcrumb(data);
+            $scope.hideBreadcrumb()
+        }
    }
 
    /**
