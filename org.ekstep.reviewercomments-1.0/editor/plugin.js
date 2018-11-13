@@ -100,15 +100,16 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
         instance.comments = displayComments;
         //update the mapped comments to the template      
-        instance.displayStageComments(displayComments);
+        instance.displayStageComments();
     },
-    checkFilter: function (comments) {
-        var filterComments = _.filter(comments, ['stageId', ecEditor.getCurrentStage().id]);
+    filterComments: function () {
+        var instance = this;
+        var filterComments = _.filter(instance.comments, ['stageId', ecEditor.getCurrentStage().id]);
         return filterComments;
     },
-    displayStageComments: function (displayComments) {
+    displayStageComments: function () {
         filteredComments = [];
-        filteredComments = this.checkFilter(displayComments)
+        filteredComments = this.filterComments()
         if (filteredComments.length > 0) {
             var commentTemplate = _.template(
                 '<% _.each(filteredComments, function(item) { %>' +

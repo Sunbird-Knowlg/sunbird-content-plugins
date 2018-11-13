@@ -132,14 +132,16 @@ describe('Reviewer comments plugin', function () {
         
     });
     it("If initializeComments function throws error, display the error message", function(done) {
+        spyOn(pluginInstance, "initialize").and.callThrough();
         spyOn(pluginInstance, "initializeComments").and.callThrough();
-        spyOn(pluginInstance, "showComments").and.callThrough();      
+        spyOn(pluginInstance, "displayNoComments").and.callThrough();    
         ecEditor.getService('content').getComments = jasmine.createSpy().and.callFake(function(data, callBack) {
             callBack(undefined, errorResponse);            
         });
-        pluginInstance.initializeComments();
-        expect(pluginInstance.initializeComments).toHaveBeenCalled();
-        expect(pluginInstance.initializeComments).toThrow();
+        pluginInstance.initialize();
+        pluginInstance.displayNoComments();
+        expect(pluginInstance.initialize).toHaveBeenCalled();
+        expect(pluginInstance.displayNoComments).toHaveBeenCalled();
         done();
     });
     it("show comments should be called", function(done) {
