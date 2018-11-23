@@ -1,0 +1,17 @@
+{
+    "id": "org.ekstep.uploadtoc",
+    "ver": "1.0",
+    "author": "Gourav More",
+    "title": "Upload toc",
+    "description": "Upload toc via csv",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            { "type": "css", "src": "editor/libs/fine-uploader-new.min.css" },
+            { "type": "css", "src": "editor/styles/uploadcsv.css" },
+            { "type": "js", "src": "editor/libs/jquery.fine-uploader.min.js" },
+            { "type": "plugin", "plugin": "org.ekstep.toaster", "ver":"1.0"}
+        ]
+    }
+}
