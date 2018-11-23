@@ -16,6 +16,11 @@
             </div>
         </div>
         <div class="two wide column">
+            <div>
+                <button class="ui blue basic button" ng-click="downloadToc(); generateTelemetry({ subtype: 'downloadToc', target: 'downloadTocButton'});" ng-disabled="!disableSaveBtn">
+                    <i class="download disk icon"></i> Download TOC
+                </button>
+            </div>
             <div ng-if="lastSaved" class="last-saved-label">
                 <label class="">Last saved {{lastSaved | timeAgo }}</label>
             </div>
