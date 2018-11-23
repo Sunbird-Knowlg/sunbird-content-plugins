@@ -16,6 +16,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     $scope.isContent = false;
     $scope.isCollection = false;
     $scope.collectionCache = [];
+    $scope.isChildren = false;
     $scope.mode = ecEditor.getConfig('editorConfig').mode; 
     $scope.collectionTreeHeight = ($scope.mode == "Edit") ? "collection-tree-height-with-footer" : "collection-tree-height-without-footer"; 
     $scope.getObjectType = function(objectType) {
@@ -32,6 +33,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             var collectionData = org.ekstep.collectioneditor._.cloneDeep($scope.contentList);
             var activeNode = org.ekstep.services.collectionService.getActiveNode();
             var treeData = activeNode.getChildren();
+            $scope.isChildren =  (treeData.length) ? true : false;
             var fancyTreeChild = org.ekstep.collectioneditor._.cloneDeep(collectionData);
             _.forEach(treeData, function(child) {
                 if (child.folder) {
