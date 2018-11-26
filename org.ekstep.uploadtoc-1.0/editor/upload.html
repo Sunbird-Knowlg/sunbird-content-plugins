@@ -65,7 +65,7 @@
     <div class="header">
         <div class="ui grid">
             <div class="fourteen column row">
-                <div class="left floated three wide column">
+                <div style="width: 27%!important;" class="left floated three wide column">
                     <i class="upload icon"></i>
                     <label>Upload TOC via csv</label>
                 </div>
@@ -73,17 +73,11 @@
         </div>
     </div>
     <div class="content">
-        <div class="field" id='url-upload'>
-            <label>URL</label>
-            <div class="ui fluid transparent input">
-                <input type="text" placeholder="https://" ng-model="contentURL">
-            </div>
-        </div>
         <div id="upload-csv-div" style="margin-top: 15px"></div>
         <div id="upload-content-loader-area" ng-if='showLoaderIcon' style="width:69px;height:89px; top:38%;left:45%; position:absolute; padding:2px;"><img ng-src = "{{loaderIcon}}" width="64" height="64" /><br>Uploading..</div>
         <div class="ui message">
             <ul class="list">
-                <li>File accepted - pdf, mp4, webm, epub, youtube, h5p and html zip</li>
+                <li>File accepted - csv</li>
                 <li>Max file size - 50 Mb</li>
             </ul>
         </div>
