@@ -26,12 +26,13 @@
             </li>
         </ul>
         <div id="qq-upload-actions">
-            <div style="position: absolute;bottom: 45%;left: 44.8%;text-align: center; color: #9b9b9b; user-select: none; cursor: default;">
-                <i class="upload huge icon" style="font-size: 3em"></i><br>
-                <strong>Drag &amp; Drop</strong><br>
-                <span>your files here, or</span>
+            <div class="right-align-buttons">
+                <i class="upload huge icon"></i><br>
+                <div class="heading">Drag &amp; Drop</div>
+                <span>your files here</span><br/>
+                <div>Please only upload CSV files</div>
             </div>
-            <div class="qq-upload-button-selector qq-upload-button custom-qq-upload-button" style="bottom: 20%;">
+            <div class="qq-upload-button-selector qq-upload-button custom-qq-upload-button">
                 <div>Browse</div>
             </div>
         </div>
@@ -61,26 +62,22 @@
         </dialog>
     </div>
 </div>
-<div class="ui modal active" style="top: 10% !important">
+<div class="ui small modal active upload-csv-modal">
     <div class="header">
         <div class="ui grid">
             <div class="fourteen column row">
-                <div style="width: 27%!important;" class="left floated three wide column">
-                    <i class="upload icon"></i>
-                    <label>Upload TOC via csv</label>
+                <div class="left floated twelve wide column">
+                    <h3><label>Update TOC attributes via CSV</label></h3>
                 </div>
+                <p>Please note that no sections could be added or removed using CSV upload, only the values of the attributes can be changes</p>
             </div>
         </div>
     </div>
-    <div class="content">
-        <div id="upload-csv-div" style="margin-top: 15px"></div>
-        <div id="upload-content-loader-area" ng-if='showLoaderIcon' style="width:69px;height:89px; top:38%;left:45%; position:absolute; padding:2px;"><img ng-src = "{{loaderIcon}}" width="64" height="64" /><br>Uploading..</div>
-        <div class="ui message">
-            <ul class="list">
-                <li>File accepted - csv</li>
-                <li>Max file size - 50 Mb</li>
-            </ul>
-        </div>
+    <div class="content padding-top-0">
+        <div id="upload-csv-div"></div>
+        <div id="upload-content-loader-area" ng-if='showLoaderIcon' style="width:69px;height:89px; top:38%;left: 46%;
+         position:absolute; padding:2px;"><img ng-src = "{{loaderIcon}}" width="64" height="64" /><br>Uploading..</div>
+     
     </div>
     <div class="actions">
         <div class="ui buttons">
@@ -90,4 +87,32 @@
         </div>
     </div>
 </div>
+</script>
+<script type="text/ng-template" ng-controller="headerController as $ctrl" id="updateTocError">
+<div class="ui tiny modal active browseFileForUpdate">
+    <div class="header bottomBorder">
+
+        <h5 class="ui header errMessage">
+            <i class="window close icon"></i>
+            <div class="content">
+                CSV Update Error
+
+            </div>
+        </h5>
+
+    </div>
+    <div class="content">
+        <!-- <p>Uploaded CSV file doesnot have the mandatory columns. Please make sure that the file has the same as provided by
+            the administrator. </p> -->
+            <p>File uploaded has invalid extension, Please enter a valid CSV file.</p>
+    </div>
+    <div class="actions">
+        <div class="ui buttons ">
+            <button id="closePopUp " class="ui blue button" type="button " ng-click="closeThisDialog();">Close</button>
+
+        </div>
+    </div>
+</div>
+
+
 </script>
