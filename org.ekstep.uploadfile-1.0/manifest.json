@@ -1,9 +1,9 @@
 {
-    "id": "org.ekstep.uploadtoc",
+    "id": "org.ekstep.uploadfile",
     "ver": "1.0",
     "author": "Gourav More",
-    "title": "Upload toc",
-    "description": "Upload, update toc via csv",
+    "title": "Upload file",
+    "description": "Upload files",
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",

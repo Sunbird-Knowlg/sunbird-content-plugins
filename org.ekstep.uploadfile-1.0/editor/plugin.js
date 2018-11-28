@@ -13,7 +13,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         instance.callback = callback;
         ecEditor.getService('popup').open({
-            template: 'partials_org.ekstep.uploadcsv.html',
+            template: 'partials_org.ekstep.uploadfile.html',
             controller: 'uploadController',
             controllerAs: '$ctrl',
             resolve: {
