@@ -1,9 +1,9 @@
-describe("Upload CSV file Plugin:", function () {
+describe("Upload file Plugin:", function () {
     var manifest, ctrl, $scope, pluginInstance;
-    var instance = { manifest: { id: "org.ekstep.uploadtoc", ver: "1.0" }, "data": "" };
+    var instance = { manifest: { id: "org.ekstep.uploadfile", ver: "1.0" }, "data": "" };
 
     beforeAll(function (done) {
-        manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.uploadtoc");
+        manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.uploadfile");
         path = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/uploadapp.js");
         pluginInstance = ecEditor.instantiatePlugin("org.ekstep.uploadtoc");
         var templatePath = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/upload.html");

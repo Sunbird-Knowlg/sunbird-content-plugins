@@ -13,7 +13,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         instance.callback = callback;
         ecEditor.getService('popup').open({
-            template: 'partials_org.ekstep.uploadcsv.html',
+            template: 'partials_org.ekstep.uploadfile.html',
             controller: 'uploadController',
             controllerAs: '$ctrl',
             resolve: {
@@ -24,7 +24,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             showClose: false,
             closeByDocument: ecEditor.getContext('contentId') ? true : false,
             closeByEscape: ecEditor.getContext('contentId') ? true : false,
-            width: 800,
+            width: 720,
             className: 'ngdialog-theme-plain'
         });
     }
