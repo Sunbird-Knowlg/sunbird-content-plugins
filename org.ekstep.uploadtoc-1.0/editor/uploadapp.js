@@ -37,7 +37,7 @@ angular.module('org.ekstep.uploadtoc-1.0', []).controller('uploadController', ['
                     $('#qq-upload-actions').hide();
                     $("#url-upload").hide();
                     $("#orLabel").hide();
-                    $scope.upload();
+                    $scope.uploadFile();
                 },
                 onError: function(id, name, errorReason) {
                     // log errors
@@ -53,9 +53,39 @@ angular.module('org.ekstep.uploadtoc-1.0', []).controller('uploadController', ['
         fileUploader = $scope.uploader;
     });
 
-    $scope.uploadFile = function(mimeType, cb) {
-        // Call upload csv api
-       // on success dipatch event
+    $scope.uploadByFile = function() {
+        var data = new FormData();
+        data.append("fileUrl", $scope.uploader.getName(0));
+        var config = {
+            enctype: 'multipart/form-data',
+            processData: false,
+            contentType: false,
+            cache: false
+        }
+
+        $scope.contentService.uploadFile(ecEditor.getContext('contentId'), data, config, function(err, res) {
+            if (err) {
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'Unable to upload content!',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
+                $scope.showLoader(false);
+            } else {
+                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                    title: 'content uploaded successfully!',
+                    position: 'topCenter',
+                    icon: 'fa fa-check-circle'
+                });
+                ecEditor.dispatchEvent("org.ekstep.genericeditor:reload");
+                $scope.closeThisDialog();
+            }
+        })
+        if (fileUpload) {
+            $scope.uploadFile(mimeType, cb);
+        } else {
+            cb($scope.contentURL);
+        }
     }
 
     $scope.showLoader = function(flag) {
