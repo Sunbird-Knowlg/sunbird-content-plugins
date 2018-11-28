@@ -18,7 +18,7 @@ module.exports = function(config) {
             'node_modules/angular-mocks/angular-mocks.js',
             'https://dev.ekstep.in/collection-editor/scripts/external.min.js',
             'test/bootstrap-html.js',
-            'https://s3.ap-south-1.amazonaws.com/ekstep-public-prod/content-editor/scripts/script.min.1.35.859.js',            
+            'https://s3.ap-south-1.amazonaws.com/ekstep-public-prod/content-editor/scripts/script.min.1.36.937.js',            
             'test/bootstrap-editor.js',            
             //'**/editor/**/*.js',
             // 'plugins/org.ekstep.test-1.0/editor/*.js', // if you want to test your editor plugin only

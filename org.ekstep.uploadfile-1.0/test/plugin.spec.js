@@ -49,9 +49,12 @@ describe("Upload file Plugin:", function () {
     });
 
     describe('Upload file plugin test cases', function () {
+        
         it("showLoader is called", function (done) {
+            $scope.showLoaderIcon = false;
             spyOn($scope, "showLoader").and.callThrough();
             $scope.showLoader();
+            console.log('loader showLoaderIcon: ',$scope.showLoaderIcon);
             expect($scope.showLoader).toHaveBeenCalled();
             done();
         });
@@ -75,15 +78,6 @@ describe("Upload file Plugin:", function () {
             expect($scope.generateTelemetry).toHaveBeenCalled();
             done();
         })
-
-        it("Should invoke generateTelemetry  method and data is undefined", function (done) {
-            var data = undefined;
-            spyOn($scope, "generateTelemetry").and.callThrough();
-            $scope.generateTelemetry(data);
-            expect($scope.generateTelemetry).toHaveBeenCalled();
-            done();
-        });
-
         xit('Should invoke ngDialog.opened event')
     });
 

@@ -1,4 +1,4 @@
-angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22.angular-timeago"]).controller('headerController', ['$scope', function($scope) {
+angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22.angular-timeago"]).controller('headerController', ['$scope', function ($scope) {
 
     $scope.contentDetails = {
         contentTitle: "",
@@ -61,15 +61,21 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.contentCredits = [];
     $scope.listLimit = 5;
 
+    $scope.updateToc = function () {
+       ecEditor.dispatchEvent("org.ekstep.uploadfile:show");
+      }
+
     /*
     * Update ownership list when adding and removing the content.
     */
 
-    $scope.updateContentCreditList = function(node) {
-        if(node.data.metadata.owner && node.data.metadata.ownedBy) {
-            $scope.contentCredits.push({'id':node.data.metadata.ownedBy, 
-            'name':node.data.metadata.owner, 
-            'type': node.data.metadata.owershipType === 'createdFor' ? 'organisation' : 'user'});
+    $scope.updateContentCreditList = function (node) {
+        if (node.data.metadata.owner && node.data.metadata.ownedBy) {
+            $scope.contentCredits.push({
+                'id': node.data.metadata.ownedBy,
+                'name': node.data.metadata.owner,
+                'type': node.data.metadata.owershipType === 'createdFor' ? 'organisation' : 'user'
+            });
             $scope.contentCredits = ecEditor._.uniqBy($scope.contentCredits, "id");
         }
     }
@@ -77,17 +83,17 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     /*
     * Add owner details and update current count with new values.
     */
-    $scope.addOwnershipList = function(event, node) {
+    $scope.addOwnershipList = function (event, node) {
         $scope.updateContentCreditList(node);
     }
 
     /*
     * Remove owern details and update new owner details values.
     */
-    $scope.removeOwnershipList = function() {
+    $scope.removeOwnershipList = function () {
         $scope.contentCredits = [];
         var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
-        rootNode.visit(function(node) {
+        rootNode.visit(function (node) {
             $scope.updateContentCreditList(node);
         });
     }
@@ -95,23 +101,23 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     /*
     * Initialize listLimit value when click on user icon button.
     */
-    $scope.resetList = function() {
+    $scope.resetList = function () {
         $scope.listLimit = 5;
     };
 
     /*
     * Increase size of listLimit when click on see more button.
     */
-    $scope.addListSize = function() {
+    $scope.addListSize = function () {
         $scope.listLimit = $scope.contentCredits.length;
         $scope.$safeApply();
     };
 
-    $scope.setEditorDetails = function() {
+    $scope.setEditorDetails = function () {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         if (meta.rejectComment || meta.rejectedReasons) {
-             $scope.isReviewCommentsPresent = true;
-             $scope.$safeApply();
+            $scope.isReviewCommentsPresent = true;
+            $scope.$safeApply();
         }
         switch (meta.mimeType) {
             case "application/vnd.ekstep.ecml-archive":
@@ -136,17 +142,17 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.$safeApply();
     };
 
-    $scope.saveContent = function(cb) {
+    $scope.saveContent = function (cb) {
         $scope.disableSaveBtn = true;
         ecEditor.dispatchEvent("org.ekstep.contenteditor:save", {
             showNotification: true,
-            callback: function(err, res) {
+            callback: function (err, res) {
                 if (res && res.data && res.data.responseCode == "OK") {
                     $scope.lastSaved = Date.now();
                     if ($scope.editorEnv == "COLLECTION") {
                         var contentCredits = JSON.parse(angular.toJson($scope.contentCredits));
                         ecEditor.dispatchEvent('org.ekstep.contenteditor:save:meta', {
-                            contentMeta: {contentCredits : contentCredits},
+                            contentMeta: { contentCredits: contentCredits },
                             savingPopup: false,
                             successPopup: false,
                             failPopup: false
@@ -164,11 +170,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         });
     };
 
-    $scope.previewContent = function(fromBeginning) {
+    $scope.previewContent = function (fromBeginning) {
         ecEditor.dispatchEvent('org.ekstep.contenteditor:preview', { fromBeginning: fromBeginning });
     }
 
-    $scope.editContentMeta = function() {
+    $scope.editContentMeta = function () {
         var subType = $scope.getContentType();
         var editMode = true;
         if ($scope.editorEnv === "COLLECTION")
@@ -176,19 +182,19 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'save', subType: subType.toLowerCase(), framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: true, editMode: $scope.getViewMode() })
     }
 
-    $scope._sendReview = function() {
+    $scope._sendReview = function () {
         var subType = $scope.getContentType();
         ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', { action: 'review', subType: subType.toLowerCase(), framework: ecEditor.getContext('framework'), rootOrgId: ecEditor.getContext('channel'), type: 'content', popup: true, editMode: $scope.getViewMode() })
     };
 
-    $scope.getViewMode = function() {
+    $scope.getViewMode = function () {
         var editMode = true;
         if ($scope.editorEnv === "COLLECTION")
             editMode = ecEditor.getConfig('editorConfig').mode === 'Edit' ? true : false;
         return editMode;
     }
 
-    $scope.getContentType = function() {
+    $scope.getContentType = function () {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         if (meta.mimeType === 'application/vnd.ekstep.content-collection') {
             var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
@@ -198,13 +204,13 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         }
     }
 
-    $scope.sendForReview = function() {
+    $scope.sendForReview = function () {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         if (meta.status === "Draft") {
             var editMetaOptions = {
-                callback: function(err, res) {
+                callback: function (err, res) {
                     if (res) {
-                        $scope.saveContent(function(err, res) {
+                        $scope.saveContent(function (err, res) {
                             if (res) {
                                 $scope._sendReview();
                             }
@@ -228,12 +234,12 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         }
     };
 
-    $scope.limitedSharing = function() {
+    $scope.limitedSharing = function () {
         ecEditor.getService('popup').open({
             templateUrl: 'limitedSharingConfirm',
-            controller: ['$scope', function($scope) {
+            controller: ['$scope', function ($scope) {
                 ecEditor.dispatchEvent("org.ekstep.contenteditor:unlistedPublish", {
-                    callback: function(err, res) {
+                    callback: function (err, res) {
                         if (!err) {
                             $scope.closeThisDialog();
                             window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
@@ -249,11 +255,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         });
     };
 
-    $scope.publishContent = function() {
+    $scope.publishContent = function () {
         ecEditor.dispatchEvent("org.ekstep.contenteditor:publish", {
             publishChecklist: $scope.checkedContents,
             publishComment: $scope.reviewComments || "",
-            callback: function(err, res) {
+            callback: function (err, res) {
                 if (!err) {
                     $scope.closeThisDialog();
                     window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
@@ -262,11 +268,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         });
     };
 
-    $scope.requestChanges = function() {
+    $scope.requestChanges = function () {
         ecEditor.dispatchEvent("org.ekstep.contenteditor:reject", {
             rejectReasons: $scope.checkedContents,
             rejectComment: $scope.reviewComments,
-            callback: function(err, res) {
+            callback: function (err, res) {
                 if (!err)
                     window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
             }
@@ -276,48 +282,48 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     /**
      * @description - used to open checklist pop-up
      */
-    $scope.openCheckList = function(mode) {
+    $scope.openCheckList = function (mode) {
         ecEditor.dispatchEvent('org.ekstep.checklist:showpopup', { mode: mode })
     }
 
-    $scope.acceptContentFlag = function() {
+    $scope.acceptContentFlag = function () {
         ecEditor.dispatchEvent("org.ekstep.contenteditor:acceptFlag", {
-            callback: function(err, res) {
+            callback: function (err, res) {
                 if (!err)
                     window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
             }
         });
     };
 
-    $scope.discardContentFlag = function() {
+    $scope.discardContentFlag = function () {
         ecEditor.dispatchEvent("org.ekstep.contenteditor:discardFlag", {
-            callback: function(err, res) {
+            callback: function (err, res) {
                 if (!err)
                     window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
             }
         });
     };
 
-    $scope.retireContent = function() {
+    $scope.retireContent = function () {
         ecEditor.dispatchEvent("org.ekstep.contenteditor:retire", {
-            callback: function(err, res) {
+            callback: function (err, res) {
                 if (!err)
                     window.parent.$('#' + ecEditor.getConfig('modalId')).iziModal('close');
             }
         });
     };
 
-    $scope.setPendingChangingStatus = function(event, data) {
+    $scope.setPendingChangingStatus = function (event, data) {
         $scope.pendingChanges = ($scope.editorEnv === "COLLECTION" && ecEditor.getConfig('editorConfig').mode === 'Read') ? false : true;
         $scope.disableSaveBtn = false;
         $scope.$safeApply();
     };
 
-    $scope.showNoContent = function() {
+    $scope.showNoContent = function () {
         $scope.closeEditor();
     };
 
-    $scope.closeEditor = function() {
+    $scope.closeEditor = function () {
         var mode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').mode;
         if ($scope.alertOnUnload === true && $scope.pendingChanges === true && mode !== 'Read') {
             if (window.confirm("You have unsaved changes! Do you want to leave?")) {
@@ -328,51 +334,51 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         }
     }
 
-    $scope.telemetry = function(data) {
+    $scope.telemetry = function (data) {
         org.ekstep.services.telemetryService.interact({ "type": 'click', "subtype": data.subtype, "target": data.target, "pluginid": plugin.id, "pluginver": plugin.ver, "objectid": ecEditor.getCurrentStage().id, "stage": ecEditor.getCurrentStage().id });
     };
 
-    $scope.internetStatusFn = function(event) {
-        $scope.$safeApply(function() {
+    $scope.internetStatusFn = function (event) {
+        $scope.$safeApply(function () {
             $scope.internetStatusObj.status = navigator.onLine;
         });
     };
 
-    $scope.resolveReviewBtnStatus = function() {
+    $scope.resolveReviewBtnStatus = function () {
         var nodeData = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
         $scope.disableReviewBtn = (!nodeData.children) ? true : false;
         $scope.$safeApply();
     };
 
-    $scope.getContentMetadata = function() {
+    $scope.getContentMetadata = function () {
         var rootNode = org.ekstep.services.collectionService.getNodeById(ecEditor.getContext('contentId'));
         var status = rootNode.data.metadata.status;
-        if(rootNode.data.metadata.contentCredits)
+        if (rootNode.data.metadata.contentCredits)
             $scope.contentCredits = rootNode.data.metadata.contentCredits;
         $scope.hideReviewBtn = (status === 'Draft' || status === 'FlagDraft') ? false : true;
         $scope.resolveReviewBtnStatus();
         $scope.$safeApply();
     };
 
-    $scope.updateTitle = function(event, data) {
+    $scope.updateTitle = function (event, data) {
         $scope.contentDetails.contentTitle = data;
         document.title = data;
         $scope.$safeApply();
         $('.popup-item').popup();
     };
 
-    $scope.updateIcon = function(event, data) {
+    $scope.updateIcon = function (event, data) {
         $scope.contentDetails.contentImage = data
         $scope.$safeApply();
     };
 
-    $scope.onSave = function() {
+    $scope.onSave = function () {
         $scope.pendingChanges = false;
         $scope.lastSaved = Date.now();
         $scope.$safeApply();
     }
 
-    $scope.showUploadForm = function() {
+    $scope.showUploadForm = function () {
         ecEditor.jQuery('.popup-item').popup();
         $scope.contentDetails.contentTitle = (ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name) || 'Untitled-Content';
         if (!ecEditor.getContext('contentId')) { // TODO: replace the check with lodash isEmpty
@@ -382,14 +388,14 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.$safeApply();
     };
 
-    $scope.upload = function() {
+    $scope.upload = function () {
         ecEditor.dispatchEvent('org.ekstep.uploadcontent:show');
     };
 
-    $scope.download = function() {
+    $scope.download = function () {
         var fileName = (ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name);
         if (fileName) {
-            ecEditor.getService('content').downloadContent(ecEditor.getContext('contentId'), fileName.toLowerCase(), function(err, resp) {
+            ecEditor.getService('content').downloadContent(ecEditor.getContext('contentId'), fileName.toLowerCase(), function (err, resp) {
                 if (!err && resp.data.responseCode == "OK") {
                     ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                         title: 'Content download started!',
@@ -427,7 +433,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         }
     };
 
-    $scope.generateTelemetry = function(data) {
+    $scope.generateTelemetry = function (data) {
         if (data) ecEditor.getService('telemetry').interact({
             "type": data.type || "click",
             "subtype": data.subtype || "",
@@ -440,18 +446,18 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         })
     };
 
-    $scope.fireEvent = function(event) {
+    $scope.fireEvent = function (event) {
         if (event) org.ekstep.contenteditor.api.dispatchEvent(event.id, event.data);
     };
 
-    $scope.whatsNew = function() {
+    $scope.whatsNew = function () {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         switch (meta.mimeType) {
             // case "application/vnd.ekstep.ecml-archive":
 
             // break;
             case "application/vnd.ekstep.content-collection":
-                org.ekstep.contenteditor.api.loadPlugin('org.ekstep.collectionwhatsnew', '1.0', function() {
+                org.ekstep.contenteditor.api.loadPlugin('org.ekstep.collectionwhatsnew', '1.0', function () {
                     var replaceData = {}
                     switch (meta.contentType) {
                         case 'Course':
@@ -473,22 +479,22 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     $scope.nextversion = store.get('nextCollectionversion');
                     $scope.previousversion = store.get('previousCollectionversion') || 0;
                     $scope.whatsNewBadge = !($scope.nextversion === $scope.previousversion);
-                    $scope.displayWhatsNew = function() {
+                    $scope.displayWhatsNew = function () {
                         $scope.fireEvent({ id: 'org.ekstep.collectionwhatsnew:showpopup', data: replaceData });
                         store.set('previousCollectionversion', $scope.nextversion);
                         $scope.whatsNewBadge = false;
                     };
                 })
                 break;
-                // default:
+            // default:
 
-                // break;
+            // break;
         };
     };
     /**
      * @description - which is used to enable and disable 'Publish' and 'Request changes' button on click of checkbox
      */
-    $scope.onCheckboxSelect = function(content) {
+    $scope.onCheckboxSelect = function (content) {
         if (content && ($scope.checkedContents.indexOf(content) == -1)) {
             $scope.checkedContents.push(content); // push all the checked contents into checkedContents array
         } else if (content && ($scope.checkedContents.indexOf(content) != -1)) {
@@ -508,7 +514,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     /**
      * @description - on init of checklist pop-up
      */
-    $scope.initPopup = function() {
+    $scope.initPopup = function () {
         var request = {
             subType: $scope.getContentType(),
             framework: ecEditor.getContext("framework"),
@@ -516,12 +522,12 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             type: "content"
         };
         var checklistConfig = window.checkListConfigurations;
-        ecEditor.dispatchEvent("org.ekstep.checklist:getMode", function(object) {
+        ecEditor.dispatchEvent("org.ekstep.checklist:getMode", function (object) {
             $scope.checklistMode = object.mode;
             $scope.$safeApply();
         });
         request.action = ($scope.checklistMode == reviewPublish) ? "publish" : "requestforchanges";
-        org.ekstep.services.metaService.getFormConfigurations({ request: request }, function(error, response) {
+        org.ekstep.services.metaService.getFormConfigurations({ request: request }, function (error, response) {
             if (error) {
                 console.error("Something went wrong ", error)
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
@@ -529,7 +535,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     position: "topCenter",
                     icon: "fa fa-error"
                 });
-            }  else {
+            } else {
                 var data = response.data.result.form ? response.data.result.form.data.fields[0] : {};
                 if ($scope.checklistMode == reviewReject) {
                     checklistConfig.reject.subtitle = data.title ? data.title : checklistConfig.reject.subtitle;
@@ -541,7 +547,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         checklistConfig.publish.subtitle = data.title
                     } else {
                         $scope.onCheckboxSelect();
-                        checklistConfig.publish.subtitle =  checklistConfig.publish.subtitle;
+                        checklistConfig.publish.subtitle = checklistConfig.publish.subtitle;
                     }
                     checklistConfig.publish.contents = data.contents;
                     $scope.checklistItems = checklistConfig.publish;
@@ -554,7 +560,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     $scope.checklistItems.subtitle = checklistConfig.read.subtitle;
                     $scope.reviewComments = meta.rejectComment;
                     $scope.rejectedReasons = meta.rejectReasons;
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $("#review-footer").hide();
                         $(".ui.checkbox.checklist input ").prop("disabled", true);
                         $("#review-comments").prop("disabled", true);
@@ -565,7 +571,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             }
         })
     };
-    (function() {
+    (function () {
         $scope.whatsNew();
         $scope.setEditorDetails();
         if ($scope.editorEnv == "NON-ECML" && !ecEditor.getContext('contentId')) {

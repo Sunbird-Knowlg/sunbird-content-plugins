@@ -7,7 +7,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
     // $scope.newContent = false;
     $scope.showLoaderIcon = false;
     $scope.loaderIcon = ecEditor.resolvePluginResource("org.ekstep.uploadfile", "1.0", "editor/loader.gif");
-    $scope.uploadCancelLabel = ecEditor.getContext('contentId') ? 'Close' : 'Close Editor';
+    $scope.uploadCancelLabel = 'Close';
 
     $scope.$on('ngDialog.opened', function() {
         $scope.uploader = new qq.FineUploader({
@@ -107,6 +107,28 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
         }
     }
 
+    $scope.upload = function () {
+        $scope.showLoader(true);
+        if ($scope.uploader.getFile(0) == null ) {
+            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                message: 'File is required to upload',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });
+            $scope.showLoader(false);
+            return;
+        }
+        var data = {
+            request: {
+                content: {file }
+            }
+        }
+
+        var updatedHierarchyData = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy()
+        console.log('updatedHierarchyData: ', updatedHierarchyData)
+       console.log('collection update: ', ecEditor.dispatchEvent('org.ekstep.collectioneditor:content:update', updatedHierarchyData));
+    }
+
     $scope.showLoader = function(flag) {
         $scope.showLoaderIcon = flag;
         $scope.$safeApply();
@@ -118,7 +140,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
     }
 
     $scope.uploadFormClose = function() {
-        ecEditor.getContext('contentId') ? $scope.closeThisDialog() : ecEditor.dispatchEvent("org.ekstep:sunbirdcommonheader:close:editor");
+       $scope.closeThisDialog();
     }
 
     $scope.generateTelemetry = function(data) {
