@@ -24,7 +24,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             showClose: false,
             closeByDocument: ecEditor.getContext('contentId') ? true : false,
             closeByEscape: ecEditor.getContext('contentId') ? true : false,
-            width: 800,
+            width: 720,
             className: 'ngdialog-theme-plain'
         });
     }

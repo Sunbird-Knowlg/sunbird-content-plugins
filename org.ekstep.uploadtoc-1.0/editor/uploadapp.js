@@ -72,7 +72,7 @@ angular.module('org.ekstep.uploadtoc-1.0', []).controller('uploadController', ['
         fileUploader = $scope.uploader;
     });
 
-    $scope.uploadByFile = function() {
+    $scope.uploadFile = function() {
         var data = new FormData();
         data.append("fileUrl", $scope.uploader.getName(0));
         var config = {
