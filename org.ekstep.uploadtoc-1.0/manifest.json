@@ -3,7 +3,7 @@
     "ver": "1.0",
     "author": "Gourav More",
     "title": "Upload toc",
-    "description": "Upload toc via csv",
+    "description": "Upload, update toc via csv",
     "publishedDate": "",
     "editor": {
         "main": "editor/plugin.js",

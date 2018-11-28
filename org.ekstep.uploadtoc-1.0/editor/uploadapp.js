@@ -3,8 +3,11 @@ var fileUploader;
 angular.module('org.ekstep.uploadtoc-1.0', []).controller('uploadController', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
 
     $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
-    $scope.loaderIcon = ecEditor.resolvePluginResource("org.ekstep.uploadtoc", "1.0", "editor/loader.gif");
-    $scope.uploadCancelLabel = ecEditor.getContext('contentId') ? 'Cancel' : 'Close Editor';
+    // $scope.contentURL = undefined;
+    // $scope.newContent = false;
+    $scope.showLoaderIcon = false;
+    $scope.loaderIcon = ecEditor.resolvePluginResource("org.ekstep.uploadcsv", "1.0", "editor/loader.gif");
+    $scope.uploadCancelLabel = ecEditor.getContext('contentId') ? 'Close' : 'Close Editor';
 
     $scope.$on('ngDialog.opened', function() {
         $scope.uploader = new qq.FineUploader({
@@ -40,8 +43,24 @@ angular.module('org.ekstep.uploadtoc-1.0', []).controller('uploadController', ['
                     $scope.uploadFile();
                 },
                 onError: function(id, name, errorReason) {
+                    console.error("Unable to upload due to:", errorReason);
+                    $scope.showLoader(false);
                     // log errors
                     // show errors
+                        $scope.closeThisDialog();
+                        ecEditor.getService('popup').open({
+                            template: 'updateTocError',
+                            controller: 'headerController',
+                            controllerAs: '$ctrl',
+                            resolve: {
+                                'instance': function () {
+                                    return this;
+                                }
+                            },
+                            width: 200,
+                            showClose: false,
+                            className: 'ngdialog-theme-plain'
+                        });
                     $scope.uploader.reset();
                 }
             },
@@ -108,7 +127,7 @@ angular.module('org.ekstep.uploadtoc-1.0', []).controller('uploadController', ['
             "subtype": data.subtype || "",
             "target": data.target || "",
             "pluginid": "org.ekstep.uploadtoc",
-            "pluginver": "1.3",
+            "pluginver": "1.0",
             "objectid": "",
             "targetid": "",
             "stage": ""
