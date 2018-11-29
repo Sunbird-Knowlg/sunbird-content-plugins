@@ -111,25 +111,26 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     * This method is used for download Table of contents which is created by Textbook creator.
     */
     $scope.downloadToc = function() {
-        console.log("Download Table of Content Called");
-        var fileName = (ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name);
+        $scope.loader = true;
+        var fileName = ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name;
         if (fileName) {
-            console.log( ecEditor.getService('content'));
             ecEditor.getService('content').downloadTableContent(ecEditor.getContext('contentId'), fileName.toLowerCase(), function(err, resp) {
                 if (!err && resp.data.responseCode == "OK") {
+                    $scope.loader = false;
                     ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                         title: 'Table of Content downloaded!',
                         position: 'topCenter',
                         icon: 'fa fa-download'
                     });
                     var link = document.createElement('a');
-                    link.href = encodeURI('data:text/csv;charset=utf-8,' + resp.data.result.ECAR_URL);
+                    link.href = encodeURI('data:text/csv;charset=utf-8,' + resp.data.result.csv);
                     link.download = fileName + '.csv';
                     link.style.display = 'none';
                     document.body.appendChild(link);
                     link.click();
                     document.body.removeChild(link);
                 } else {
+                    $scope.loader = false;
                     ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                         message: 'Unable to download the content, please try again later',
                         position: 'topCenter',
@@ -138,9 +139,15 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                  
                 }
             });
+            
         } else {
             console.error("File name not found");
         }
+        
+        setTimeout(function() {
+            $scope.loader = false;
+            $scope.$safeApply();
+        }, 2000);
     }
 
     $scope.setEditorDetails = function() {
