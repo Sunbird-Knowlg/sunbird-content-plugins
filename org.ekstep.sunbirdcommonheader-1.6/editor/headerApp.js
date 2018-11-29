@@ -62,7 +62,20 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.listLimit = 5;
 
     $scope.updateToc = function () {
-       ecEditor.dispatchEvent("org.ekstep.uploadfile:show");
+       ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
+            headerTitle: 'Update TOC attributes via CSV',
+            description: 'Please note that no sections could be added or removed using CSV upload, only the values of the attributes can be changes', 
+            validation: {
+                'allowedExtension' : ['csv']
+            },
+            buttonText: {
+                'primaryBtn': 'Upload',
+                'exitBtn': 'Close' 
+            },
+            callback: function(data) {
+               console.log('response of cb', data);
+            }
+        });
       }
 
     /*
