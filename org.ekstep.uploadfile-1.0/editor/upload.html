@@ -36,14 +36,6 @@
                 <div>Browse</div>
             </div>
         </div>
-
-        <!-- <dialog class="qq-alert-dialog-selector">
-            <div class="qq-dialog-message-selector"></div>
-            <div class="qq-dialog-buttons">
-                <button type="button" class="qq-cancel-button-selector">Close</button>
-            </div>
-        </dialog> -->
-
         <dialog class="qq-confirm-dialog-selector">
             <div class="qq-dialog-message-selector"></div>
             <div class="qq-dialog-buttons">
@@ -67,9 +59,9 @@
         <div class="ui grid">
             <div class="fourteen column row">
                 <div class="left floated twelve wide column">
-                    <h3><label>Update TOC attributes via CSV</label></h3>
+                    <h3><label>{{configData.headerTitle}}</label></h3>
                 </div>
-                <p>Please note that no sections could be added or removed using CSV upload, only the values of the attributes can be changes</p>
+                <p>{{configData.description}}</p>
             </div>
         </div>
     </div>
@@ -81,38 +73,10 @@
     </div>
     <div class="actions">
         <div class="ui buttons">
-            <button class="ui orange button" ng-click="uploadFormClose();generateTelemetry({subtype:'close',target:'closeupload',})" ng-disabled="showLoaderIcon" ng-bind="uploadCancelLabel"></button>
+            <button class="ui orange button" ng-click="uploadFormClose();generateTelemetry({subtype:'close',target:'closeupload',})" ng-disabled="showLoaderIcon" ng-bind="configData.buttonText.exitBtn"></button>
             <div class="or"></div>
-            <button class="ui blue button" ng-click="upload(); generateTelemetry({subtype:'upload',target:'uploadButton'}) " ng-disabled="showLoaderIcon">Upload</button>
+            <button class="ui blue button" ng-click="upload(); generateTelemetry({subtype:'upload',target:'uploadButton'}) " ng-disabled="showLoaderIcon">{{configData.buttonText.primaryBtn}}</button>
         </div>
     </div>
 </div>
-</script>
-<script type="text/ng-template" ng-controller="headerController as $ctrl" id="updateTocError">
-<div class="ui tiny modal active browseFileForUpdate">
-    <div class="header bottomBorder">
-
-        <h5 class="ui header errMessage">
-            <i class="window close icon"></i>
-            <div class="content">
-                CSV Update Error
-
-            </div>
-        </h5>
-
-    </div>
-    <div class="content">
-        <!-- <p>Uploaded CSV file doesnot have the mandatory columns. Please make sure that the file has the same as provided by
-            the administrator. </p> -->
-            <p>File uploaded has invalid extension, Please enter a valid CSV file.</p>
-    </div>
-    <div class="actions">
-        <div class="ui buttons ">
-            <button id="closePopUp " class="ui blue button" type="button " ng-click="closeThisDialog();">Close</button>
-
-        </div>
-    </div>
-</div>
-
-
 </script>
