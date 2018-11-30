@@ -79,7 +79,7 @@ describe("Sunbird header plugin:", function() {
             done();
         }); 
 
-        xit("Should invoke updateOwnershipList method to update content owner list", function(done) {
+        it("Should invoke updateOwnershipList method to update content owner list", function(done) {
             var data = {"data": {"objectType":"Collection","id":"do_2125627634838978561365","root":false, "metadata":{"keywords":["games","hsxghzgxhzxgc","colors"],"subject":"Tamil","channel":"012315809814749184151","downloadUrl":"https://ekstep-public-qa.s3-ap-south-1.amazonaws.com/ecar_files/do_2125627634838978561365/course-qa_1533541131212_do_2125627634838978561365_2.0_spine.ecar","organisation":["Consumption Org","ORG25"],"language":["English"],"mimeType":"application/vnd.ekstep.content-collection","objectType":"Content","gradeLevel":["Class 2"],"children":["do_2125614164736901121137"],"collections":["do_2126023386662092801121","do_2126023386662010881120"],"identifier":"do_2125627634838978561365","lastUpdatedBy":"68777b59-b28b-4aee-88d6-50d46e4c3509"}}};
             var event = "org.ekstep.collectioneditor:node:added";
             spyOn($scope, "updateOwnershipList").and.callThrough();
@@ -89,7 +89,7 @@ describe("Sunbird header plugin:", function() {
             done();
         });
 
-        xit("Should invoke removeOwnershipList method to content owner from list", function(done) {
+        it("Should invoke removeOwnershipList method to content owner from list", function(done) {
             ecEditor.jQuery("#collection-tree").fancytree("getRootNode").rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild;
             spyOn($scope, "removeOwnershipList").and.callThrough();
             $scope.removeOwnershipList();
