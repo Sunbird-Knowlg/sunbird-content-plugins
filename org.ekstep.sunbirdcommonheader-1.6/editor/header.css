@@ -373,3 +373,34 @@ body {
 .content-contributors .removecolor, .content-contributors .removecolor .users.icon {
     color: grey;
 }
+.ui.buttons.toc-dropdown {
+    float: right;
+}
+
+.toc-dropdown.active .button {
+    color: blue;
+    font-weight: bold
+}
+
+.toc-dropdown i.icon.dropdown:before {
+    font-size: 1.3em
+}
+
+.toc-dropdown .ui.dropdown.icon.button>.dropdown.icon {
+    vertical-align: unset;
+    margin: 0 0 0 1em;
+}
+
+.ui.buttons.toc-dropdown .button {
+    background: none;
+    padding: 0.5em 0 0.25em 0.5em;
+}
+
+.toc-dropdown .active i.icon.dropdown:before {
+    color: blue;
+}
+
+.toc-dropdown.ui.button {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+}

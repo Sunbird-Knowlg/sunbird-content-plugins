@@ -61,6 +61,32 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.contentCredits = [];
     $scope.listLimit = 5;
 
+        $scope.updateToc = function () {
+            ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
+                headerTitle: 'Update Table of Contents Metadata attributes via CSV',
+                description: 'Please note that no sections could be added or removed using CSV upload, only the values of the attributes can be changes',
+                validation: {
+                    'allowedExtension': ['csv']
+                },
+                buttonText: {
+                    'primaryBtn': 'Upload',
+                    'exitBtn': 'Close'
+                },
+                callback: function (data, errTitle) {
+                    console.log('response err', data);
+                    $scope.errTitle = errTitle;
+                    $scope.errMessage = data;
+                    ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
+                        template: 'updateTocError',
+                        controller: 'headerController',
+                        controllerAs: '$ctrl',
+                        showClose: false,
+                        scope: $scope,
+                        className: 'ngdialog-theme-default'
+                    });                   
+                }
+            });
+        }
     /*
     * Update ownership list when adding and removing the content.
     */

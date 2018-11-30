@@ -1,0 +1,95 @@
+#url-upload .url-upload-label {
+    float: left;
+    margin-right: 10px;
+}
+
+#url-upload input {
+    border-bottom: 1px solid #ddd !important;
+    border-radius: 0;
+}
+
+#url-upload input:focus {
+    border-bottom: 1px solid #289fd9 !important;
+}
+
+.qq-uploader.qq-uploader-selector.custom-qq-uploader {
+    background: rgb(245, 245, 245);
+    border-color: #e5e5e5;
+}
+
+.qq-upload-list.custom-qq-upload-list li {
+    background: transparent;
+}
+
+.qq-upload-button.custom-qq-upload-button{
+	background: #4A88CB;
+	border-color: transparent;
+	color: #fff;
+	bottom: 15%; left: 44%; position: relative; overflow: hidden; direction: ltr;
+}
+
+.qq-upload-button.custom-qq-upload-button:hover{
+	background: #317bca;
+}
+
+.qq-upload-cancel.custom-qq-upload-cancel{
+	background: #FF9800;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	border: none;
+	color: #fff;
+	padding: 5px;
+}
+
+.qq-upload-cancel.custom-qq-upload-cancel:hover{
+	background: #e68900;
+}
+
+.qq-upload-file.custom-qq-upload-file{
+	font-size: 1.1em;
+	font-weight: bold;
+}
+.ui.modal>.actions{
+	background: #fff;
+	border: none;
+}
+.heading {
+	font-size: 1.2em;
+    margin: 5px 0;
+}
+.upload-csv-modal{
+	top: 10% !important; 
+	padding: 1.5em
+}
+.upload-csv-modal .header{
+	border: none;
+}
+.upload-csv-modal p{
+	font-size: 0.7em; 
+	margin-left: 1.2em; 
+	font-weight: normal
+}
+.ui.modal.upload-csv-modal .content{
+	padding-top: 0px;
+}
+.ui.modal.upload-csv-modal .header{
+	border: none;
+}
+.upload.huge.icon{
+	font-size: 2.5em
+}
+.right-align-buttons{
+	position: absolute;
+	bottom: 43%;
+	left: 38%;text-align: center; color: #9b9b9b; user-select: none; cursor: default;
+}
+.ui.tiny.modal.active.browseFileForUpdate {
+	left: 57% !important;
+}
+.errMessage .close.icon {
+    font-size: 1.5em;
+    background: red;
+    border-radius: 50%;
+    color: #fff;
+    padding: 5px 6px 6px;
+}

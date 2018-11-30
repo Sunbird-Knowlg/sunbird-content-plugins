@@ -20,11 +20,27 @@
                 <label class="">Last saved {{lastSaved | timeAgo }}</label>
             </div>
         </div>
-        <div class="five wide column custom-5-wide" style="padding-top:1rem!important;">
+        <div class="two wide column">
+                <div class="ui buttons toc-dropdown">               
+                    <div class="ui floating dropdown icon button toc-dropdown">
+                            <div class="ui button">Download/Update ToC</div>
+                        <i class="dropdown icon"></i>
+                        <div class="menu">                           
+                            <div class="item">
+                                <i class="download icon"></i> Download ToC Metadata</div>
+                                <div class="item" ng-click="updateToc()">
+                                        <i class="upload icon"></i> Update ToC Metadata</div>
+                        </div>
+                    </div>
+                </div>
+    
+            </div>
+        <div class="four wide column custom-5-wide" style="padding-top:1rem!important;">
             <div class="row header-icon-container">
                 <div class="custom-row-2">
                     <div  ng-show="editorEnv === 'COLLECTION'" class="content-contributors ownerlist-dropdown" id="contentCreditsList">
-                        <p>Created with contribution from <span ng-class="contentCredits.length > 0 ? 'addcolor' : 'removecolor'">{{contentCredits.length}}  <i class="users icon" ng-mouseover="resetList()"></i></span></p>
+                       <span ng-class="contentCredits.length > 0 ? 'addcolor' : 'removecolor'">{{contentCredits.length}}  <i class="users icon"  data-content="Created with contribution from {{contentCredits.length}} " data-variation="small" ng-mouseover="resetList()" ></i></span>
+                      
                         <div class="dropdown-content">
                             <div class="item" ng-repeat="contentCredit in contentCredits | limitTo:listLimit">{{contentCredit.name}}</div>
                             <button class="fluid ui button" ng-click="addListSize(); $event.stopPropagation()" ng-if="listLimit < contentCredits.length">See More</button>
@@ -101,4 +117,5 @@
 <script>
     $(".ui.dropdown").dropdown();
     $("#contentCreditsList .item").addClass('disabled');
+    $('.users.icon').popup();
 </script>
