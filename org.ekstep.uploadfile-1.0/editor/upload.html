@@ -26,13 +26,12 @@
             </li>
         </ul>
         <div id="qq-upload-actions">
-            <div class="right-align-buttons">
-                <i class="upload huge icon"></i><br>
-                <div class="heading">Drag &amp; Drop</div>
-                <span>your files here</span><br/>
-                <div>Please only upload CSV files</div>
+            <div style="position: absolute;bottom: 46%;left: 43.8%;text-align: center; color: #9b9b9b; user-select: none; cursor: default;">
+                <i class="upload huge icon" style="font-size: 3em"></i><br>
+                <strong>Drag &amp; Drop</strong><br>
+                <span>your files here, or</span>
             </div>
-            <div class="qq-upload-button-selector qq-upload-button custom-qq-upload-button">
+            <div class="qq-upload-button-selector qq-upload-button custom-qq-upload-button" style="bottom: 20%;">
                 <div>Browse</div>
             </div>
         </div>
@@ -64,14 +63,10 @@
 </div>
 <div class="ui small modal active upload-csv-modal">
     <div class="header">
-        <div class="ui grid">
-            <div class="fourteen column row">
-                <div class="left floated twelve wide column">
-                    <h3><label>Update TOC attributes via CSV</label></h3>
-                </div>
-                <p>Please note that no sections could be added or removed using CSV upload, only the values of the attributes can be changes</p>
-            </div>
-        </div>
+        <h3 class="ui header">
+        Create Table of Contents via CSV Upload or Using Editor
+        <div style="line-height: 29px;" class="sub header">Please upload the CSV file in the required format</div>
+        </h3>
     </div>
     <div class="content padding-top-0">
         <div id="upload-csv-div"></div>
@@ -81,9 +76,9 @@
     </div>
     <div class="actions">
         <div class="ui buttons">
-            <button class="ui orange button" ng-click="uploadFormClose();generateTelemetry({subtype:'close',target:'closeupload',})" ng-disabled="showLoaderIcon" ng-bind="uploadCancelLabel"></button>
+            <button class="ui orange button" ng-click="uploadFormClose();generateTelemetry({subtype:'close',target:'closeupload',})">Use Editor</button>
             <div class="or"></div>
-            <button class="ui blue button" ng-click="upload(); generateTelemetry({subtype:'upload',target:'uploadButton'}) " ng-disabled="showLoaderIcon">Upload</button>
+            <button class="ui blue button" ng-click="upload(); generateTelemetry({subtype:'upload',target:'uploadButton'}) " ng-disabled="uploadBtn">Upload CSV</button>
         </div>
     </div>
 </div>
@@ -108,7 +103,7 @@
     </div>
     <div class="actions">
         <div class="ui buttons ">
-            <button id="closePopUp " class="ui blue button" type="button " ng-click="closeThisDialog();">Close</button>
+            <button id="closePopUp " class="ui blue button" type="button " ng-click="closeThisDialog();">Use Editor</button>
 
         </div>
     </div>

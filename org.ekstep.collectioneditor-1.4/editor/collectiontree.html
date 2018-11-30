@@ -1,6 +1,6 @@
 <div ng-app="org.ekstep.collectioneditor" ng-controller="mainController" class="ui masthead vertical segment collection-masterhead" id="collectionMasterhead">
     <div ng-repeat="header in headers" ng-include="header.templateURL"></div>
-    <div ng-show="isChildren" class="ui grid main-body" id="mainBody">
+    <div class="ui grid main-body" id="mainBody">
         <div  class="ui three wide column" id="table-of-contents">
             <div class="ui segment content-editor-segment margin-bottom-none">
                 <div class="ui grid container">
@@ -122,19 +122,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </div>
-    <div ng-hide="isChildren" class="ui centered grid">
-        <div class="ui placeholder">
-            <div class="ui icon header">
-                <i class="upload icon"></i>
-                Start by creating the textbook structure
-            </div>
-            <p>Either by uploading a CSV or by using the editor</p>
-            <div class="inline">
-                <div onclick='ecEditor.dispatchEvent("org.ekstep.uploadtoc:show");' class="ui primary button">Upload TOC</div>
-                <div class="ui button">Create TOC</div>
             </div>
         </div>
     </div>
