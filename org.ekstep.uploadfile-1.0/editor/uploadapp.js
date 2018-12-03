@@ -137,3 +137,4 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
         })
     }    
 }]);
+//# sourceURL=uploadfileplugin.js

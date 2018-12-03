@@ -5,7 +5,7 @@ describe("Upload file Plugin:", function () {
     beforeAll(function (done) {
         manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.uploadfile");
         path = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/uploadapp.js");
-        pluginInstance = ecEditor.instantiatePlugin("org.ekstep.uploadtoc");
+        pluginInstance = ecEditor.instantiatePlugin("org.ekstep.uploadfile");
         var templatePath = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/upload.html");
         var controllerPath = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/uploadapp.js");
         ecEditor.getService(ServiceConstants.POPUP_SERVICE).loadNgModules(templatePath, controllerPath);
@@ -49,6 +49,37 @@ describe("Upload file Plugin:", function () {
     });
 
     describe('Upload file plugin test cases', function () {
+        it("Popup header should be same as config", function (done) {
+            ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
+                headerTitle: 'headerTitle'
+            });
+            expect(pluginInstance.data.headerTitle).toEqual('headerTitle');
+            done();
+        });
+        it("Popup description should be same as config", function (done) {
+            ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
+                description: 'description'
+            });
+            expect(pluginInstance.data.description).toEqual('description');
+            done();
+        });
+        it("Popup description should be same as config", function (done) {
+            ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
+                headerTitle: 'headerTitle',
+                description: 'description',
+                validation: {
+                    'allowedExtension': ['csv']
+                },
+                buttonText: {
+                    'primaryBtn': 'Upload',
+                    'exitBtn': 'Close'
+                },
+                callback: function (data) {
+                }
+            });
+            expect(pluginInstance.data.headerTitle).toEqual('headerTitle');
+            done();
+        });
         it("showLoader is called", function (done) {
             spyOn($scope, "showLoader").and.callThrough();
             $scope.showLoader();

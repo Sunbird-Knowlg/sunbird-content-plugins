@@ -2,6 +2,7 @@
 
 org.ekstep.contenteditor.basePlugin.extend({
     callback: undefined,
+    data: undefined,
     initialize: function() {
         var instance = this;
         ecEditor.addEventListener(this.manifest.id + ":show", this.showUploadForm, this);
@@ -9,9 +10,9 @@ org.ekstep.contenteditor.basePlugin.extend({
         var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/uploadapp.js');
         ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
     },
-    showUploadForm: function(event, callback) {
+    showUploadForm: function(event, data) {
         var instance = this;
-        instance.callback = callback;
+        instance.data = data;
         ecEditor.getService('popup').open({
             template: 'partials_org.ekstep.uploadfile.html',
             controller: 'uploadController',
