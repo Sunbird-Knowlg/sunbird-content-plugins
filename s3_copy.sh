@@ -20,7 +20,7 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.3"
                 "org.ekstep.unsupported-1.0"
                 "org.ekstep.utils-1.0"
                 "org.ekstep.viewecml-1.0"
-                "org.ekstep.video-1.1"
+                "org.ekstep.video-1.3"
                 "org.ekstep.ceheader-1.0"
                 "org.ekstep.review-1.1"
                 "org.ekstep.keyboardshortcuts-1.0"
@@ -63,7 +63,8 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.3"
                 "org.ekstep.contentmeta-1.5"
                 "org.ekstep.courseunitmeta-1.6"
                 "org.ekstep.lessonplanunitmeta-1.5"
-                "org.ekstep.unitmeta-1.6");
+                "org.ekstep.unitmeta-1.6"
+                "org.ekstep.reviewercomments-1.0");
 
 for i in "${coreplugins[@]}"
 do
