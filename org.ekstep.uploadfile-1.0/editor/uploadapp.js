@@ -4,6 +4,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
 
     $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
     $scope.showLoaderIcon = false;
+    $scope.uploadBtn = true;
     $scope.loaderIcon = ecEditor.resolvePluginResource("org.ekstep.uploadfile", "1.0", "editor/loader.gif");
 
    
@@ -15,7 +16,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
             element: document.getElementById("upload-csv-div"),
             template: 'qq-template-validation',
             request: {
-                endpoint: '/server/uploads'
+                endpoint: 'localhost'
             },
             autoUpload: false,
             multiple: false,
@@ -37,11 +38,16 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                         $("#orLabel").show();
                     }
                 },
-                onSubmit: function(id, name) {
+                onSubmit: function(id, name, responseJSON) {
                     $('#qq-upload-actions').hide();
+                    $("#url-upload").hide();
+                    $("#orLabel").hide();
+                    $scope.showLoader(true);
+                    $scope.uploadBtn = false;
                     $scope.uploadFile();
                 },
                 onError: function(id, name, errorReason) {
+                    $scope.uploadBtn = true;
                     console.error("Unable to upload due to:", errorReason);
                     $scope.showLoader(false);
                     $scope.showErrorPopup = true;
@@ -74,16 +80,14 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
 
     $scope.uploadFile = function() {
         var data = new FormData();
-        data.append("fileUrl", $scope.uploader.getName(0));
+        data.append("file", $scope.uploader.getFile(0));
+        
         var config = {
-            enctype: 'multipart/form-data',
             processData: false,
-            contentType: false,
-            cache: false
+            contentType: 'multipart/form-data'
         }
 
-        $scope.contentService.uploadFile(ecEditor.getContext('contentId'), data, config, function(err, res) {
-         
+        $scope.contentService.uploadFile(ecEditor.getContext('contentId'), data ,config, function(err, res) {
             if (err) {
                 const errTitle = 'CSV update Error';
                 const errMessage = err.responseJSON.params.errmsg;

@@ -33,7 +33,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             var collectionData = org.ekstep.collectioneditor._.cloneDeep($scope.contentList);
             var activeNode = org.ekstep.services.collectionService.getActiveNode();
             var treeData = activeNode.getChildren();
-            $scope.isChildren =  (treeData.length) ? true : false;
             var fancyTreeChild = org.ekstep.collectioneditor._.cloneDeep(collectionData);
             _.forEach(treeData, function(child) {
                 if (child.folder) {
@@ -278,6 +277,9 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
                 $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
                 $scope.showsuggestedContent = res.data.result.content.contentType === 'TextBook' ? true : false;
+                if(res.data.result.content.contentType === 'TextBook' && !res.data.result.content.children){
+                    ecEditor.dispatchEvent("org.ekstep.uploadfile:show");
+                }
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
                 $scope.$safeApply();
                 callback && callback(err, res);
