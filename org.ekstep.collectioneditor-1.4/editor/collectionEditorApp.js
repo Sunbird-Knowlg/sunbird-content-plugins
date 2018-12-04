@@ -16,6 +16,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     $scope.isContent = false;
     $scope.isCollection = false;
     $scope.collectionCache = [];
+    $scope.isChildren = false;
     $scope.mode = ecEditor.getConfig('editorConfig').mode; 
     $scope.collectionTreeHeight = ($scope.mode == "Edit") ? "collection-tree-height-with-footer" : "collection-tree-height-without-footer"; 
     $scope.getObjectType = function(objectType) {
@@ -276,6 +277,9 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
                 $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
                 $scope.showsuggestedContent = res.data.result.content.contentType === 'TextBook' ? true : false;
+                if(res.data.result.content.contentType === 'TextBook' && !res.data.result.content.children){
+                    ecEditor.dispatchEvent("org.ekstep.uploadfile:show");
+                }
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
                 $scope.$safeApply();
                 callback && callback(err, res);
