@@ -33,7 +33,6 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                     if (newStatus === 'canceled') {
                         $scope.showLoader(false);
                         $('#qq-upload-actions').show();
-                        $("#url-upload").show();
                         $scope.uploader.reset();
                         $("#orLabel").show();
                     }
@@ -54,19 +53,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                     // log errors
                     // show errors
                         $scope.closeThisDialog();
-                        // ecEditor.getService('popup').open({
-                        //     template: 'updateTocError',
-                        //     controller: 'headerController',
-                        //     controllerAs: '$ctrl',
-                        //     resolve: {
-                        //         'instance': function () {
-                        //             return this;
-                        //         }
-                        //     },
-                        //     width: 200,
-                        //     showClose: false,
-                        //     className: 'ngdialog-theme-plain'
-                        // });
+                     
                     $scope.uploader.reset();
                 }
             },
@@ -90,10 +77,10 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
         $scope.contentService.uploadFile(ecEditor.getContext('contentId'), data ,config, function(err, res) {
             if (err) {
                 const errTitle = 'CSV update Error';
-                const errMessage = err.responseJSON.params.errmsg;
-                console.log('Error message: ', err.responseJSON.params.errmsg);
+                const errMessage = err.params.errmsg;
+                console.log('Error message: ', err.params.errmsg);
                 $scope.closeThisDialog();
-                instance.callback(errMessage, errTitle);     
+                instance.callback(errMessage, errTitle);   
                 $scope.showLoader(false);
             } else {
                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {

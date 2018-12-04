@@ -49,7 +49,29 @@ describe("Upload file Plugin:", function () {
     });
 
     describe('Upload file plugin test cases', function () {
-        
+        it("Should call uploadfile ", function() {
+        var  mockData = {
+                "id": "textbook.toc.upload",
+                "ver": "v1",
+                "ts": "2018-11-15 13:52:50:990+0530",
+                "params": {
+                    "resmsgid": null,
+                    "msgid": null,
+                    "err": null,
+                    "status": "success",
+                    "errmsg": null
+                },
+                "responseCode": "OK",
+                "result": {
+                    "contentId": "content_id",
+                    "versionKey": "101010101010"
+                }
+            };            
+            ecEditor.getService('content').uploadFile = jasmine.createSpy().and.callFake(function(data, callBack) {
+                callBack(undefined, '999999');
+            });
+           
+        })
         it("showLoader is called", function (done) {
             $scope.showLoaderIcon = false;
             spyOn($scope, "showLoader").and.callThrough();
