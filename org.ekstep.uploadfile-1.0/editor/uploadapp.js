@@ -51,20 +51,20 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                     $scope.showLoader(false);
                     // log errors
                     // show errors
-                        $scope.closeThisDialog();
-                        ecEditor.getService('popup').open({
-                            template: 'updateTocError',
-                            controller: 'headerController',
-                            controllerAs: '$ctrl',
-                            resolve: {
-                                'instance': function () {
-                                    return this;
-                                }
-                            },
-                            width: 200,
-                            showClose: false,
-                            className: 'ngdialog-theme-plain'
-                        });
+                    $scope.closeThisDialog();
+                    ecEditor.getService('popup').open({
+                        template: 'updateTocError',
+                        controller: 'headerController',
+                        controllerAs: '$ctrl',
+                        resolve: {
+                            'instance': function () {
+                                return this;
+                            }
+                        },
+                        width: 200,
+                        showClose: false,
+                        className: 'ngdialog-theme-plain'
+                    });
                     $scope.uploader.reset();
                 }
             },
@@ -76,38 +76,66 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
         fileUploader = $scope.uploader;
     });
 
-    $scope.uploadFile = function() {
-        var data = new FormData();
-        data.append("file", $scope.uploader.getFile(0));
-        
-        var config = {
-            processData: false,
-            contentType: 'multipart/form-data'
-        }
-
-        $scope.contentService.uploadFile(ecEditor.getContext('contentId'), data ,config, function(err, res) {
+    $scope.uploadFile = function(cb) {
+        // 1. Get presigned URL
+        $scope.contentService.getPresignedURL(ecEditor.getContext('contentId'), $scope.uploader.getName(0), function(err, res) {
             if (err) {
+                $scope.showLoader(false);
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                    message: 'Unable to upload content!',
+                    message: 'error while uploading!',
                     position: 'topCenter',
                     icon: 'fa fa-warning'
                 });
-                $scope.showLoader(false);
             } else {
-                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
-                    title: 'content uploaded successfully!',
-                    position: 'topCenter',
-                    icon: 'fa fa-check-circle'
-                });
-                ecEditor.dispatchEvent("org.ekstep.genericeditor:reload");
-                $scope.closeThisDialog();
+                // 2. Upload File to signed URL
+                var signedURL = res.data.result.pre_signed_url;
+                var config = {
+                    processData: false,
+                    headers: {
+                        'x-ms-blob-type': 'BlockBlob'
+                    }
+                }
+
+                $scope.contentService.uploadDataToSignedURL(signedURL, $scope.uploader.getFile(0), config, function(err, res) {
+                    if (err) {
+                        $scope.showLoader(false);
+                        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                            message: 'error while uploading!',
+                            position: 'topCenter',
+                            icon: 'fa fa-warning'
+                        });
+                    } else {
+                        var data = new FormData();
+                        data.append("fileUrl", signedURL.split('?')[0]);
+                        var config = {
+                            enctype: 'multipart/form-data',
+                            processData: false,
+                            contentType: false,
+                            cache: false
+                        }
+
+                        $scope.contentService.uploadFile(ecEditor.getContext('contentId'), data, config, function(err, res) {
+                            if (err) {
+                                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                                    message: 'Unable to upload content!',
+                                    position: 'topCenter',
+                                    icon: 'fa fa-warning'
+                                });
+                                $scope.showLoader(false);
+                            } else {
+                                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                                    title: 'content uploaded successfully!',
+                                    position: 'topCenter',
+                                    icon: 'fa fa-check-circle'
+                                });
+                                ecEditor.dispatchEvent("org.ekstep.genericeditor:reload");
+                                $scope.closeThisDialog();
+                            }
+                        })
+                    }
+                })
             }
-        })
-        if (fileUpload) {
-            $scope.uploadFile(mimeType, cb);
-        } else {
-            cb($scope.contentURL);
-        }
+        }, 'toc');
     }
 
     $scope.showLoader = function(flag) {
