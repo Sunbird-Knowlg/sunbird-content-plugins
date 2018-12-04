@@ -20,7 +20,7 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.3"
                 "org.ekstep.unsupported-1.0"
                 "org.ekstep.utils-1.0"
                 "org.ekstep.viewecml-1.0"
-                "org.ekstep.video-1.3"
+                "org.ekstep.video-1.2"
                 "org.ekstep.ceheader-1.0"
                 "org.ekstep.review-1.1"
                 "org.ekstep.keyboardshortcuts-1.0"
@@ -71,4 +71,3 @@ do
    aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/$i/ --recursive
    aws s3 --region ap-south-1 cp ansible/content-plugins/$i s3://ekstep-public-$1/content-plugins/$i --recursive --acl public-read
 done
-
