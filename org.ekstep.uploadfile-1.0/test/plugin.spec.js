@@ -16,10 +16,33 @@
         done();
     });
 
-    beforeAll(function () {
-        manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.uploadfile");
-        pluginInstance = ecEditor.instantiatePlugin("org.ekstep.uploadfile");
-        callback = {};
+    it('mock popup service', function (done) {
+        angular.mock.module('oc.lazyLoad');
+        angular.mock.module('Scope.safeApply');
+        inject(function ($ocLazyLoad, _$rootScope_, _$controller_) {
+            $controller = _$controller_;
+            $scope = _$rootScope_.$new();
+            $ocLazyLoad.load([{
+                type: 'js',
+                path: path
+            }]).then(function () {
+                ctrl = $controller("uploadController", {
+                    $scope: $scope,
+                    instance: instance
+                });
+                $scope.applyPatch = { "applyPatch": "applyPatch" };
+                $scope.$safeApply = function () { };
+                $scope.closeThisDialog = jasmine.createSpy().and.callFake(function () {
+                    console.log("POPUP CLOSED")
+                })
+                done();
+            }, function (error) {
+                done();
+            });
+            setInterval(function () {
+                _$rootScope_.$digest();
+            }, 10);
+        });
     });
 
     describe('Upload file plugin test cases', function () {
