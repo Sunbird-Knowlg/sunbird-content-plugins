@@ -87,8 +87,5 @@
             $scope.generateTelemetry(data);
             expect($scope.generateTelemetry).toHaveBeenCalled();
             done();
-        });
-
-        xit('Should invoke ngDialog.opened event')
-    });
+        });   
 });
