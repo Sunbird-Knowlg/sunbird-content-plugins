@@ -128,6 +128,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 link.download = link.href;
                 link.style.display = 'none';
                 document.body.appendChild(link);
+                if(link.href.split(".").pop() == 'pdf')
+                    link.setAttribute('target', '_blank');
                 link.click();
                 document.body.removeChild(link);
             } else {

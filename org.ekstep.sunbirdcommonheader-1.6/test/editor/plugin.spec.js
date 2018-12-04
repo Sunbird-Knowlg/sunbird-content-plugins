@@ -72,6 +72,47 @@ describe("Sunbird header plugin:", function() {
             done();
         }); 
 
+        it("Should enable downloadtoc button if rootnode has no any child", function(done) {
+            var event = {"type":"org.ekstep.collectioneditor:node:added"};
+            var node = {"children":null,"data":{"objectType":"TextBookUnit","id":"462a48a1-29bc-4acc-81e1-6b99c1189da0","root":false,"metadata":{"mimeType":"application/vnd.ekstep.content-collection","topicData":"(0) topics selected","name":"Untitled TextBook"}}};
+            spyOn($scope, "addOwnershipList").and.callThrough();
+            $scope.addOwnershipList(event, node);
+            var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
+            $scope.disbaleDwonloadToc = rootNode.children == null ? true: false;
+            expect($scope.addOwnershipList).toHaveBeenCalled();
+            done();
+        }); 
+
+        it("Should enable downloadtoc button if rootnode has at leat one child", function(done) {
+            var event = {"type":"org.ekstep.collectioneditor:node:added"};
+            var node = {"children":null,"data":{"objectType":"TextBookUnit","id":"462a48a1-29bc-4acc-81e1-6b99c1189da0","root":false,"metadata":{"mimeType":"application/vnd.ekstep.content-collection","topicData":"(0) topics selected","name":"Untitled TextBook"}}};
+            spyOn($scope, "removeOwnershipList").and.callThrough();
+            $scope.removeOwnershipList(event, node);
+            $scope.disbaleDwonloadToc = false;
+            expect($scope.removeOwnershipList).toHaveBeenCalled();
+            done();
+        }); 
+
+        it("Should enable downloadtoc button if rootnode has no child", function(done) {
+            var event = {"type":"org.ekstep.collectioneditor:node:added"};
+            var node = {"children":{'h':'h1'},"data":{"objectType":"TextBookUnit","id":"462a48a1-29bc-4acc-81e1-6b99c1189da0","root":false,"metadata":{"mimeType":"application/vnd.ekstep.content-collection","topicData":"(0) topics selected","name":"Untitled TextBook"}}};
+            spyOn($scope, "removeOwnershipList").and.callThrough();
+            $scope.removeOwnershipList(event, node);
+            $scope.disbaleDwonloadToc = false;
+            expect($scope.removeOwnershipList).toHaveBeenCalled();
+            done();
+        }); 
+
+        it("Should disable downloadtoc button if enable save button", function(done) {
+            var event = {"type":"org.ekstep.collectioneditor:node:modified"};
+            var data = {};
+            spyOn($scope, "setPendingChangingStatus").and.callThrough();
+            $scope.setPendingChangingStatus(event, data);
+            $scope.disbaleDwonloadToc = true;
+            expect($scope.setPendingChangingStatus).toHaveBeenCalled();
+            done();
+        }); 
+
         it("Should invoke addListSize method to increase listSize", function(done) {
             spyOn($scope, "addListSize").and.callThrough();
             $scope.addListSize();
@@ -79,13 +120,13 @@ describe("Sunbird header plugin:", function() {
             done();
         }); 
 
-        it("Should invoke updateOwnershipList method to update content owner list", function(done) {
-            var data = {"data": {"objectType":"Collection","id":"do_2125627634838978561365","root":false, "metadata":{"keywords":["games","hsxghzgxhzxgc","colors"],"subject":"Tamil","channel":"012315809814749184151","downloadUrl":"https://ekstep-public-qa.s3-ap-south-1.amazonaws.com/ecar_files/do_2125627634838978561365/course-qa_1533541131212_do_2125627634838978561365_2.0_spine.ecar","organisation":["Consumption Org","ORG25"],"language":["English"],"mimeType":"application/vnd.ekstep.content-collection","objectType":"Content","gradeLevel":["Class 2"],"children":["do_2125614164736901121137"],"collections":["do_2126023386662092801121","do_2126023386662010881120"],"identifier":"do_2125627634838978561365","lastUpdatedBy":"68777b59-b28b-4aee-88d6-50d46e4c3509"}}};
+        it("Should invoke updateContentCreditList method to update content owner list", function(done) {
+            var node ={'data': {"objectType":"TextBookUnit","id":"dbd23d1e-1c9e-4a73-8bc8-0c6c5471e8a9","root":false,"metadata":{"mimeType":"application/vnd.ekstep.content-collection","topicData":"(0) topics selected","name":"Untitled TextBook","owner":"rajesh","ownedBy":"rajesh"}}};
             var event = "org.ekstep.collectioneditor:node:added";
-            spyOn($scope, "updateOwnershipList").and.callThrough();
-            $scope.updateOwnershipList(event, data);
-            expect($scope.updateOwnershipList).toHaveBeenCalled();
-            expect($scope.updateOwnershipList).not.toBeUndefined();
+            spyOn($scope, "updateContentCreditList").and.callThrough();
+            $scope.updateContentCreditList(event, node);
+            expect($scope.updateContentCreditList).toHaveBeenCalled();
+            expect($scope.updateContentCreditList).not.toBeUndefined();
             done();
         });
 
