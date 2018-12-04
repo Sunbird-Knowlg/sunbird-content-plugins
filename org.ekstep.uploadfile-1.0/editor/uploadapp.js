@@ -71,8 +71,8 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
             if (err) {
                 $scope.showLoader(false);
                 const errTitle = 'CSV update Error';
-                const errMessage = err.params.errmsg;
-                console.log('Error message: ', err.params.errmsg);
+                const errMessage = err.responseJSON.params.err;
+                console.log('Error message: ', err.responseJSON.params.err);
                 $scope.closeThisDialog();
                 instance.callback(errMessage, errTitle);   
                 $scope.showLoader(false);
