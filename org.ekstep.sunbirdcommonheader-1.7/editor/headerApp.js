@@ -23,7 +23,10 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
      * @property - to get review comments
      */
     $scope.comments = "";
-
+    /**
+     * @property - to get count of nodes that require qr code generation
+     */
+    $scope.qrRequestCount = 0;
     /**
      * @property - used to get rejected reasons
      */
@@ -49,6 +52,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         'text': 'No Internet Connection!'
     };
     $scope.disableSaveBtn = true;
+    $scope.disableQRGenerateBtn = true;
     $scope.disableReviewBtn = false;
     $scope.lastSaved;
     $scope.alertOnUnload = ecEditor.getConfig('alertOnUnload');
@@ -67,8 +71,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     $scope.updateContentCreditList = function(node) {
         if(node.data.metadata.owner && node.data.metadata.ownedBy) {
-            $scope.contentCredits.push({'id':node.data.metadata.ownedBy, 
-            'name':node.data.metadata.owner, 
+            $scope.contentCredits.push({'id':node.data.metadata.ownedBy,
+            'name':node.data.metadata.owner,
             'type': node.data.metadata.owershipType === 'createdFor' ? 'organisation' : 'user'});
             $scope.contentCredits = ecEditor._.uniqBy($scope.contentCredits, "id");
         }
@@ -145,18 +149,24 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     $scope.lastSaved = Date.now();
                     if ($scope.editorEnv == "COLLECTION") {
                         var contentCredits = JSON.parse(angular.toJson($scope.contentCredits));
-                        ecEditor.dispatchEvent('org.ekstep.contenteditor:save:meta', {
-                            contentMeta: {contentCredits : contentCredits},
-                            savingPopup: false,
-                            successPopup: false,
-                            failPopup: false
-                        });
+                        if(contentCredits.length>0){
+                            ecEditor.dispatchEvent('org.ekstep.contenteditor:save:meta', {
+                                contentMeta: {contentCredits : contentCredits},
+                                savingPopup: false,
+                                successPopup: false,
+                                failPopup: false
+                            });
+                        }
                         $scope.hideReviewBtn = false;
                         $scope.resolveReviewBtnStatus();
+                        $scope.getContentMetadata();
+                        // $scope.getQRCodeRequestCount();
                     }
                     $scope.pendingChanges = false;
+                    $scope.disableQRGenerateBtn = true;
                 } else {
                     $scope.disableSaveBtn = false;
+                    $scope.disableQRGenerateBtn = false;
                 }
                 cb && cb(err, res);
                 $scope.$safeApply();
@@ -310,6 +320,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.setPendingChangingStatus = function(event, data) {
         $scope.pendingChanges = ($scope.editorEnv === "COLLECTION" && ecEditor.getConfig('editorConfig').mode === 'Read') ? false : true;
         $scope.disableSaveBtn = false;
+        $scope.disableQRGenerateBtn = false;
+        // $scope.qrRequestCount = 0;
         $scope.$safeApply();
     };
 
@@ -351,6 +363,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             $scope.contentCredits = rootNode.data.metadata.contentCredits;
         $scope.hideReviewBtn = (status === 'Draft' || status === 'FlagDraft') ? false : true;
         $scope.resolveReviewBtnStatus();
+        $scope.getQRCodeRequestCount();
         $scope.$safeApply();
     };
 
@@ -371,7 +384,15 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.lastSaved = Date.now();
         $scope.$safeApply();
     }
-
+    $scope.getQRCodeRequestCount = function(){
+        $scope.qrRequestCount = 0;
+        var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
+        var rootMeta = rootNode.data.metadata;
+        $scope.reservedDialCount = (rootMeta.reservedDialcodes) ? rootMeta.reservedDialcodes.length : 0;
+        rootNode.visit(function(node) {
+            (node.data.metadata.dialcodeRequired == 'Yes') ? $scope.qrRequestCount += 1 : $scope.qrRequestCount;
+        });
+    }
     $scope.showUploadForm = function() {
         ecEditor.jQuery('.popup-item').popup();
         $scope.contentDetails.contentTitle = (ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).name) || 'Untitled-Content';
@@ -485,6 +506,70 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 // break;
         };
     };
+
+    $scope.reserveDialCode  =  function(){
+        var request = {
+            "request": {
+                "dialcodes": {
+                    "count": $scope.qrRequestCount,
+                    "publisher": "publisher1"
+                }
+            }
+        };
+        ecEditor.getService('dialcode').reserveDialCode(org.ekstep.contenteditor.api.getContext("channel"), request, org.ekstep.contenteditor.api.getContext("contentId"), function(err, res) {
+            var toasterPrompt = {};
+            if(err){
+                var errResponse = (err.responseText) ? JSON.parse(err.responseText).result : undefined;
+                console.log('Response result is empty'+ _.isEmpty(errResponse));
+                if(!_.isEmpty(errResponse) && errResponse.hasOwnProperty('count')){
+                        if(errResponse.count >= $scope.qrRequestCount){
+                            toasterPrompt = {
+                                message: 'No new DIAL Codes have been generated!',
+                                type: "org.ekstep.toaster:warning",
+                                icon: 'fa fa-warning'
+                            }
+                        }
+                }
+                else{
+                    toasterPrompt = {
+                        message: 'Unable to generate DIAL codes, please try again later',
+                        type: "org.ekstep.toaster:error",
+                        icon: 'fa fa-warning'
+                    }
+                }
+            }
+            else if(res){
+                res.data.result.processId = "7ab418c6-a9ff-4357-941d-b5f16f623c32";
+                toasterPrompt = {
+                    message: 'DIAL code generated.',
+                    type: "org.ekstep.toaster:success",
+                    icon: 'fa fa-check-circle'
+                }
+                var rootNode =  ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild();
+                rootNode.data.metadata['reservedDialcodes'] = res.data.result.reservedDialcodes;
+                $scope.qrCodeProcessId = res.data.result.processId
+                $scope.getQRCodeRequestCount();
+            }
+            ecEditor.dispatchEvent(toasterPrompt.type, {
+                message: toasterPrompt.message,
+                position: 'topCenter',
+                icon: toasterPrompt.icon
+            });
+        })
+    }
+
+    $scope.downloadQRCodes =  function(){
+        ecEditor.getService('dialcode').downloadQRCode(org.ekstep.contenteditor.api.getContext("channel"), $scope.qrCodeProcessId || '7ab418c6-a9ff-4357-941d-b5f16f623c32' , function(err, res) {
+            if(err){
+                console.log(err);
+            }
+            else{
+                console.log(res.data);
+
+            }
+
+        })
+    }
     /**
      * @description - which is used to enable and disable 'Publish' and 'Request changes' button on click of checkbox
      */
@@ -570,6 +655,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.setEditorDetails();
         if ($scope.editorEnv == "NON-ECML" && !ecEditor.getContext('contentId')) {
             $scope.disableSaveBtn = false;
+            $scope.disableQRGenerateBtn = false;
             $scope.showUploadForm();
         }
     })()
