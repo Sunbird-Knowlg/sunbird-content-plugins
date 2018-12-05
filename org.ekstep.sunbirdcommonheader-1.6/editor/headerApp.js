@@ -60,6 +60,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.showEditMeta = true;
     $scope.contentCredits = [];
     $scope.listLimit = 5;
+    $scope.disbaleDwonloadToc = false;
 
     /**
      * Update the ToC on uploading the CSV file
@@ -107,6 +108,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     * Add owner details and update current count with new values.
     */
     $scope.addOwnershipList = function(event, node) {
+        $scope.disbaleDwonloadToc = false;
         $scope.updateContentCreditList(node);
     }
 
@@ -116,6 +118,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.removeOwnershipList = function() {
         $scope.contentCredits = [];
         var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
+        $scope.disbaleDwonloadToc = rootNode.children == null ? true: false;
         rootNode.visit(function(node) {
             $scope.updateContentCreditList(node);
         });
@@ -135,6 +138,43 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.listLimit = $scope.contentCredits.length;
         $scope.$safeApply();
     };
+
+    /*
+    * This method is used for download Table of contents which is created by Textbook creator.
+    */
+    $scope.downloadToc = function() {
+        $scope.loader = true;
+        ecEditor.getService('content').downloadTableContent(ecEditor.getContext('contentId'), function(err, resp) {
+            if (!err && resp.data.responseCode == "OK") {
+                $scope.loader = false;
+                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                    title: 'Table of Content downloadeding!',
+                    position: 'topCenter',
+                    icon: 'fa fa-download'
+                });
+                var link = document.createElement('a');
+                link.href = resp.data.result.textbook.tocUrl;
+                link.download = link.href;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                if(link.href.split(".").pop() == 'pdf')
+                    link.setAttribute('target', '_blank');
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                $scope.loader = false;
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'Unable to download the content, please try again later',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
+            }
+        });
+        setTimeout(function() {
+            $scope.loader = false;
+            $scope.$safeApply();
+        }, 2000);
+    }
 
     $scope.setEditorDetails = function() {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
@@ -376,6 +416,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.getContentMetadata = function() {
         var rootNode = org.ekstep.services.collectionService.getNodeById(ecEditor.getContext('contentId'));
         var status = rootNode.data.metadata.status;
+        $scope.disbaleDwonloadToc = rootNode.children == null ? true: false;
         if(rootNode.data.metadata.contentCredits)
             $scope.contentCredits = rootNode.data.metadata.contentCredits;
         $scope.hideReviewBtn = (status === 'Draft' || status === 'FlagDraft') ? false : true;
