@@ -267,7 +267,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
 
     //Header scope ends
 
-    $scope.loadContent = function(callback) {      
+    $scope.loadContent = function(callback) {
         var mode;
         if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
@@ -277,32 +277,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
                 $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
                 $scope.showsuggestedContent = res.data.result.content.contentType === 'TextBook' ? true : false;
-                if(res.data.result.content.contentType === 'TextBook' && !res.data.result.content.children){
-                    ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
-                        headerTitle: 'Create Table of Contents via CSV Upload or Using Editor',
-                        description: 'Please upload the CSV file in the required format',
-                        validation: {
-                            'allowedExtension': ['csv']
-                        },
-                        buttonText: {
-                            'primaryBtn': 'Upload CSV',
-                            'exitBtn': 'Use Editor'
-                        },
-                        callback: function (data, errTitle) {
-                            console.log('response err', data);
-                            $scope.errTitle = errTitle;
-                            $scope.errMessage = data;
-                            ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
-                                template: 'updateTocError',
-                                controller: 'headerController',
-                                controllerAs: '$ctrl',
-                                showClose: false,
-                                scope: $scope,
-                                className: 'ngdialog-theme-default'
-                            });                   
-                        }
-                    });
-                }
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
                 $scope.$safeApply();
                 callback && callback(err, res);
@@ -382,8 +356,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:added', $scope.addContent, $scope);
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:removed', $scope.removeContent, $scope);
-    ecEditor.addEventListener('org.ekstep.collectioneditor:node:load', $scope.loadContent, $scope);
-   
+
     $scope.parseKeywords = function(keywords){
         if(_.isString(keywords)){
             return JSON.parse(keywords);
