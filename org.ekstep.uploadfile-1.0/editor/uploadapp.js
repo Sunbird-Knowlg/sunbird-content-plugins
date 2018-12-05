@@ -9,6 +9,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
 
    
     $scope.configData = instance.configData;
+    $scope.callback = instance.callback;
     $scope.showErrorPopup = false;
     console.log('instance.configData: ', instance.configData);
     $scope.$on('ngDialog.opened', function() {
@@ -43,7 +44,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                     $("#orLabel").hide();
                     $scope.showLoader(true);
                     $scope.uploadBtn = false;
-                    $scope.uploadFile();
+                    $scope.uploadFile($scope.callback);
                 },
                 onError: function(id, name, errorReason) {
                     $scope.uploadBtn = true;
@@ -95,7 +96,8 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                         });
                     } else {
                         var data = new FormData();
-                        data.append("fileUrl", signedURL.split('?')[0]);
+                        var fileUrl = signedURL.split('?')[0];
+                        data.append("fileUrl", fileUrl);
                         var config = {
                             enctype: 'multipart/form-data',
                             processData: false,
@@ -103,8 +105,8 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                             cache: false
                         }
 
-                        $scope.contentService.uploadFile(ecEditor.getContext('contentId'), data, config, function(err, res) {
-                            if (err) {                               
+                        org.ekstep.services.textbookService.uploadFile(ecEditor.getContext('contentId'), data, config, function(err, res) {
+                            if (err) {                                                             
                                 const errTitle = 'CSV update Error';
                                 const errMessage = err.responseJSON.params.errmsg;
                                 console.log('Error message: ', err.responseJSON.params.errmsg);
@@ -138,14 +140,6 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
             $scope.showLoader(false);
             return;
         }
-
-        else {
-
-    //     var updatedHierarchyData = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy()
-    //     console.log('updatedHierarchyData: ', updatedHierarchyData)
-    //    console.log('collection update: ', ecEditor.dispatchEvent('org.ekstep.collectioneditor:content:update', updatedHierarchyData));
-    
-    }
 }
 
     $scope.showLoader = function(flag) {
