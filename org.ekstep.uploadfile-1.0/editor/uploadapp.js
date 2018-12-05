@@ -3,13 +3,14 @@ var fileUploader;
 angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', ['$scope', '$injector', 'instance', function($scope, $injector, instance) {
 
     $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
-    // $scope.contentURL = undefined;
-    // $scope.newContent = false;
     $scope.showLoaderIcon = false;
     $scope.uploadBtn = true;
     $scope.loaderIcon = ecEditor.resolvePluginResource("org.ekstep.uploadfile", "1.0", "editor/loader.gif");
-    $scope.uploadCancelLabel = ecEditor.getContext('contentId') ? 'Close' : 'Close Editor';
 
+   
+    $scope.configData = instance.configData;
+    $scope.showErrorPopup = false;
+    console.log('instance.configData: ', instance.configData);
     $scope.$on('ngDialog.opened', function() {
         $scope.uploader = new qq.FineUploader({
             element: document.getElementById("upload-csv-div"),
@@ -20,7 +21,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
             autoUpload: false,
             multiple: false,
             validation: {
-                allowedExtensions: ['csv'],
+                allowedExtensions: instance.configData.validation.allowedExtension,
                 itemLimit: 1,
                 sizeLimit: 52428800 // 50 MB = 50 * 1024 * 1024 bytes
             },
@@ -32,7 +33,6 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                     if (newStatus === 'canceled') {
                         $scope.showLoader(false);
                         $('#qq-upload-actions').show();
-                        $("#url-upload").show();
                         $scope.uploader.reset();
                         $("#orLabel").show();
                     }
@@ -49,22 +49,11 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                     $scope.uploadBtn = true;
                     console.error("Unable to upload due to:", errorReason);
                     $scope.showLoader(false);
+                    $scope.showErrorPopup = true;
                     // log errors
                     // show errors
-                    $scope.closeThisDialog();
-                    ecEditor.getService('popup').open({
-                        template: 'updateTocError',
-                        controller: 'headerController',
-                        controllerAs: '$ctrl',
-                        resolve: {
-                            'instance': function () {
-                                return this;
-                            }
-                        },
-                        width: 200,
-                        showClose: false,
-                        className: 'ngdialog-theme-plain'
-                    });
+                        $scope.closeThisDialog();
+                     
                     $scope.uploader.reset();
                 }
             },
@@ -81,11 +70,12 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
         $scope.contentService.getPresignedURL(ecEditor.getContext('contentId'), $scope.uploader.getName(0), function(err, res) {
             if (err) {
                 $scope.showLoader(false);
-                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                    message: 'error while uploading!',
-                    position: 'topCenter',
-                    icon: 'fa fa-warning'
-                });
+                const errTitle = 'CSV update Error';
+                const errMessage = err.responseJSON.params.err;
+                console.log('Error message: ', err.responseJSON.params.err);
+                $scope.closeThisDialog();
+                instance.callback(errMessage, errTitle);   
+                $scope.showLoader(false);
             } else {
                 // 2. Upload File to signed URL
                 var signedURL = res.data.result.pre_signed_url;
@@ -138,6 +128,27 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
         }, 'toc');
     }
 
+    $scope.upload = function () {
+        $scope.showLoader(true);
+        if ($scope.uploader.getFile(0) == null ) {
+            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                message: 'File is required to upload',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });
+            $scope.showLoader(false);
+            return;
+        }
+
+        else {
+
+    //     var updatedHierarchyData = org.ekstep.collectioneditor.api.getService('collection').getCollectionHierarchy()
+    //     console.log('updatedHierarchyData: ', updatedHierarchyData)
+    //    console.log('collection update: ', ecEditor.dispatchEvent('org.ekstep.collectioneditor:content:update', updatedHierarchyData));
+    
+    }
+}
+
     $scope.showLoader = function(flag) {
         $scope.showLoaderIcon = flag;
         $scope.$safeApply();
@@ -149,7 +160,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
     }
 
     $scope.uploadFormClose = function() {
-        ecEditor.getContext('contentId') ? $scope.closeThisDialog() : ecEditor.dispatchEvent("org.ekstep:sunbirdcommonheader:close:editor");
+       $scope.closeThisDialog();
     }
 
     $scope.generateTelemetry = function(data) {

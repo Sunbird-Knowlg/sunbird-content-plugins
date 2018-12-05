@@ -1,6 +1,3 @@
-describe("Upload file Plugin:", function () {
-    var manifest, ctrl, $scope, pluginInstance;
-    var instance = { manifest: { id: "org.ekstep.uploadfile", ver: "1.0" }, "data": "" };
 
     beforeAll(function (done) {
         manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.uploadfile");
@@ -113,10 +110,5 @@ describe("Upload file Plugin:", function () {
             $scope.generateTelemetry(data);
             expect($scope.generateTelemetry).toHaveBeenCalled();
             done();
-        });
-
-        xit('Should invoke ngDialog.opened event')
-    });
-
-
+        });   
 });
