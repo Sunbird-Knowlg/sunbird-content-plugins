@@ -34,7 +34,9 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             }
             $scope.metadataCloneObj = _.clone($scope.unit);
             $scope.editMode = true;
-            ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+            if($scope.isMetadataUpdated){
+                ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:modified');
+            }
             ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
             $scope.$safeApply();
             $scope.submitted = true;
@@ -42,6 +44,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
     }
 
      $scope.getUpdatedMetadata = function(originalMetadata, currentMetadata){
+        $scope.isMetadataUpdated = false;
         var metadata = { };
         if(_.isEmpty(originalMetadata)){
             _.forEach(currentMetadata, function(value, key){
@@ -50,8 +53,10 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         }else{
             _.forEach(currentMetadata   , function(value, key){
                 if(_.isUndefined(originalMetadata[key])){
+                    $scope.isMetadataUpdated = true;
                     metadata[key] = value;
                 }else if(value != originalMetadata[key]){
+                    $scope.isMetadataUpdated = true;
                     metadata[key] = value;
                 }
             });
@@ -65,8 +70,8 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         if(_.isUndefined(metadata['contentType'])){
             metadata['contentType'] = currentMetadata['contentType'];
         }
-        if(_.isUndefined(metadata['qrCodeRequirement'])){
-            metadata['qrCodeRequirement'] = currentMetadata['qrCodeRequirement'];
+        if(_.isUndefined(metadata['dialcodeRequired'])){
+            metadata['dialcodeRequired'] = currentMetadata['dialcodeRequired'];
         }
         if(_.isUndefined(metadata['code'])){
             metadata['code'] = $scope.nodeId;
@@ -100,8 +105,8 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
             $scope.metadataCloneObj = _.clone($scope.unit);
         }
         $scope.unit.topicData = '(0) topics selected';
-        $scope.unit.name = $scope.unit.name || 'Untitled TextBook'
-        $scope.unit.qrCodeRequirement = $scope.unit.qrCodeRequirement || false;
+        $scope.unit.name = $scope.unit.name || 'Untitled Textbook'
+        $scope.unit.dialcodeRequired = $scope.unit.dialcodeRequired || 'No';
         if(!_.isEmpty(activeNode.data.metadata) && _.has(activeNode.data.metadata, ["name"])){
             if(!_.isUndefined(activeNode.data.metadata.topic)){
                 $scope.unit.topic = activeNode.data.metadata.topic;

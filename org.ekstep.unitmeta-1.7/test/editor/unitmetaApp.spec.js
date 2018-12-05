@@ -1,7 +1,7 @@
 describe("Ekstep Unitmeta Plugin:", function() {
     var manifest, ctrl, $scope, pluginInstance;
     var instance = { manifest: {id: "org.ekstep.unitmeta", ver: "1.6"}, "data":""};
-    
+
     beforeAll(function(done) {
             manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.unitmeta");
             path = ecEditor.resolvePluginResource(manifest.id, manifest.ver, "editor/unitmetaApp.js");
@@ -15,7 +15,7 @@ describe("Ekstep Unitmeta Plugin:", function() {
             ecEditor.getContext = jasmine.createSpy().and.callFake(function() {
                 return "do_1125330285602488321282";
             });
-            
+
             done();
     });
 
@@ -48,7 +48,7 @@ describe("Ekstep Unitmeta Plugin:", function() {
         });
     });
     describe('Unitmeta plugin test cases', function() {
-    
+
         it("Should invoke updateTitle method", function(done) {
             $scope.unit = {};
             $scope.unit.name = 'title';
@@ -107,7 +107,7 @@ describe("Ekstep Unitmeta Plugin:", function() {
             done();
         });
 
-        it("Should invoke changeTitle method", function(done) { 
+        it("Should invoke changeTitle method", function(done) {
             spyOn($scope, "changeTitle").and.callThrough();
             $scope.changeTitle();
             expect($scope.changeTitle).toHaveBeenCalled();
@@ -119,7 +119,7 @@ describe("Ekstep Unitmeta Plugin:", function() {
             done();
         });
 
-        it("Should invoke loadKeywords  method", function(done) { 
+        it("Should invoke loadKeywords method", function(done) {
             var query = ['a', 'b', 'c', 'd'];
             spyOn($scope, "loadKeywords").and.callThrough();
             $scope.loadKeywords(query);

@@ -25,14 +25,14 @@
                         <div class="field">
 
                         <div class="ui radio checkbox qrCodeCheck">
-                            <input type="radio" ng-value='false' ng-model="unit.qrCodeRequirement" required
-                                ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'qrCodeRequirement'})"
-                                name="qrCodeRequirement" tabindex="0">
+                            <input data-qr="{{unit.dialcodeRequired}}" type="radio" ng-value='No' ng-model="unit.dialcodeRequired" required
+                                ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'dialcodeRequired'})"
+                                name="dialcodeRequired" tabindex="0">
                             <label>No</label>
                         </div>
                         <div class="ui radio checkbox qrCodeCheck">
-                            <input type="radio" ng-value='true' ng-model="unit.qrCodeRequirement" required ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'qrCodeRequirement'})"
-                                name="qrCodeRequirement" tabindex="0">
+                            <input data-qr="{{unit.dialcodeRequired}}" type="radio" ng-value='Yes' ng-model="unit.dialcodeRequired" required ng-click="generateTelemetry({type: 'click', subtype: 'input', target: 'dialcodeRequired'})"
+                                name="dialcodeRequired" tabindex="0">
                             <label>Yes</label>
                         </div>
                     </div>
