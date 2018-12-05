@@ -267,7 +267,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
 
     //Header scope ends
 
-    $scope.loadContent = function(callback) {
+    $scope.loadContent = function(callback) {      
         var mode;
         if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
@@ -279,14 +279,14 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 $scope.showsuggestedContent = res.data.result.content.contentType === 'TextBook' ? true : false;
                 if(res.data.result.content.contentType === 'TextBook' && !res.data.result.content.children){
                     ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
-                        headerTitle: 'Update Table of Contents Metadata attributes via CSV',
-                        description: 'Please note that no sections could be added or removed using CSV upload, only the values of the attributes can be changes',
+                        headerTitle: 'Create Table of Contents via CSV Upload or Using Editor',
+                        description: 'Please upload the CSV file in the required format',
                         validation: {
                             'allowedExtension': ['csv']
                         },
                         buttonText: {
-                            'primaryBtn': 'Upload',
-                            'exitBtn': 'Close'
+                            'primaryBtn': 'Upload CSV',
+                            'exitBtn': 'Use Editor'
                         },
                         callback: function (data, errTitle) {
                             console.log('response err', data);
@@ -382,7 +382,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:added', $scope.addContent, $scope);
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:removed', $scope.removeContent, $scope);
-
+    ecEditor.addEventListener('org.ekstep.collectioneditor:node:load', $scope.loadContent, $scope);
+   
     $scope.parseKeywords = function(keywords){
         if(_.isString(keywords)){
             return JSON.parse(keywords);

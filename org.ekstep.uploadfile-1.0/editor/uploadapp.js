@@ -70,12 +70,11 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
         $scope.contentService.getPresignedURL(ecEditor.getContext('contentId'), $scope.uploader.getName(0), function(err, res) {
             if (err) {
                 $scope.showLoader(false);
-                const errTitle = 'CSV update Error';
-                const errMessage = err.responseJSON.params.err;
-                console.log('Error message: ', err.responseJSON.params.err);
-                $scope.closeThisDialog();
-                instance.callback(errMessage, errTitle);   
-                $scope.showLoader(false);
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'Unable to upload content!',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
             } else {
                 // 2. Upload File to signed URL
                 var signedURL = res.data.result.pre_signed_url;
@@ -105,12 +104,12 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                         }
 
                         $scope.contentService.uploadFile(ecEditor.getContext('contentId'), data, config, function(err, res) {
-                            if (err) {
-                                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                                    message: 'Unable to upload content!',
-                                    position: 'topCenter',
-                                    icon: 'fa fa-warning'
-                                });
+                            if (err) {                               
+                                const errTitle = 'CSV update Error';
+                                const errMessage = err.responseJSON.params.errmsg;
+                                console.log('Error message: ', err.responseJSON.params.errmsg);
+                                $scope.closeThisDialog();
+                                instance.callback(errMessage, errTitle);   
                                 $scope.showLoader(false);
                             } else {
                                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
@@ -118,7 +117,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                                     position: 'topCenter',
                                     icon: 'fa fa-check-circle'
                                 });
-                                ecEditor.dispatchEvent("org.ekstep.genericeditor:reload");
+                               
                                 $scope.closeThisDialog();
                             }
                         })
