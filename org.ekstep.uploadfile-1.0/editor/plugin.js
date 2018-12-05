@@ -12,7 +12,8 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     showUploadForm: function(event, data) {
         var instance = this;
-        instance.data = data;
+        instance.configData = data;
+        instance.callback = data.callback;
         ecEditor.getService('popup').open({
             template: 'partials_org.ekstep.uploadfile.html',
             controller: 'uploadController',
@@ -23,8 +24,6 @@ org.ekstep.contenteditor.basePlugin.extend({
                 }
             },
             showClose: false,
-            closeByDocument: ecEditor.getContext('contentId') ? true : false,
-            closeByEscape: ecEditor.getContext('contentId') ? true : false,
             width: 720,
             className: 'ngdialog-theme-plain'
         });

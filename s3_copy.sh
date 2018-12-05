@@ -71,4 +71,3 @@ do
    aws s3 --region ap-south-1 rm s3://ekstep-public-$1/content-plugins/$i/ --recursive
    aws s3 --region ap-south-1 cp ansible/content-plugins/$i s3://ekstep-public-$1/content-plugins/$i --recursive --acl public-read
 done
-
