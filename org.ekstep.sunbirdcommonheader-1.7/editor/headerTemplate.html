@@ -19,9 +19,6 @@
 
         </div>
         <div class="two wide column">
-            <!-- <div ng-show="editorEnv === 'COLLECTION'"  class="">
-                <button ng-class="(!disableQRGenerateBtn || qrRequestCount === 0) ? 'ui positive large button disabled' : 'ui positive large button'" style="padding: 15px;float: left;" ng-click="generateQrCodes()"> <i class="qrcode icon"></i> Generate {{(qrRequestCount > 0 )? qrRequestCount :'' }} QR Codes</button>
-            </div> -->
             <div ng-if="lastSaved" class="last-saved-label">
                 <label class="">Last saved {{lastSaved | timeAgo }}</label>
             </div>
@@ -30,17 +27,41 @@
         <div class="five wide column custom-5-wide" style="padding-top:1rem!important;">
             <div class="row header-icon-container">
                 <div class="custom-row-2" style="float: left;">
-                                <div ng-show="editorEnv === 'COLLECTION'" class="ui dropdown qrCodeStyler">
-                                        <div class="ui dropdown">
-                                            QR Codes
-                                            <i class="dropdown icon"></i>
-                                        </div>
-                                      <div class="menu" style="left: auto; right: 0; top: 25px;">
-                                            <div class="item" ng-class="(!disableQRGenerateBtn || qrRequestCount === 0 || qrRequestCount <= reservedDialCount ) ? 'disabled' : ' '" ng-click="reserveDialCode();"><i class="qrcode icon"></i> <span class="text">Generate {{(qrRequestCount > 0 )? qrRequestCount :'' }} QR Codes</span></div>
-                                            <div class="item" data-disableQRDownloadBtn="{{disableQRDownloadBtn}}" data-disableQRGenerateBtn="{{disableQRGenerateBtn}}" ng-class="(!disableQRDownloadBtn) ? 'disabled' : ' ' " ng-click="downloadQRCodes();"><i class="download icon"></i> <span class="text">Download QR code</span></div>
-                                      </div>
-                                    </div>
+                    <div ng-show="editorEnv === 'COLLECTION'" class="ui dropdown" style=" vertical-align: -webkit-baseline-middle; ">
+                        <div class="ui dropdown">
+                            Download/Update ToC
+                            <i class="dropdown icon"></i>
+                        </div>
+                        <div class="menu" style="left: auto; right: 0; top: 25px;">
+                            <div class="item" ng-click="downloadToc(); generateTelemetry({ subtype: 'downloadToc', target: 'downloadTocButton'});"
+                                ng-class="!disableSaveBtn || disbaleDwonloadToc ? 'disabled' : 'enabled'">
+                                <i class="download icon"></i> Download ToC Metadata
+                            </div>
+                            <div class="item" ng-click="updateToc()">
+                                <i class="upload icon"></i> Update ToC Metadata</div>
+                        </div>
+                    </div>
                 </div>
+                <div class="custom-row-2" style="float: left;margin-left: 30px;" >
+                    <div ng-show="editorEnv === 'COLLECTION'" class="ui dropdown qrCodeStyler" style=" vertical-align: -webkit-baseline-middle; ">
+                        <div class="ui dropdown">
+                            QR Codes
+                            <i class="dropdown icon"></i>
+                        </div>
+                        <div class="menu" style="left: auto; right: 0; top: 25px;">
+                            <div class="item" ng-class="(!disableQRGenerateBtn || qrRequestCount === 0 || qrRequestCount <= reservedDialCount ) ? 'disabled' : ' '"
+                                ng-click="reserveDialCode();"><i class="qrcode icon"></i> <span class="text">Generate
+                                    {{(qrRequestCount > 0 )? qrRequestCount :'' }} QR Codes</span></div>
+                            <div class="item" ng-class="(!disableQRDownloadBtn) ? 'disabled' : ' ' " ng-click="downloadQRCodes();"><i
+                                    class="download icon"></i> <span class="text">Download QR code</span></div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
                 <div class="custom-row-2">
                     <div ng-show="editorEnv === 'COLLECTION'" class="content-contributors ownerlist-dropdown" id="contentCreditsList">
                         <p><span ng-class="contentCredits.length > 0 ? 'addcolor' : 'removecolor'">{{contentCredits.length}}
