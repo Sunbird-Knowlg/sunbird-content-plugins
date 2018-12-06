@@ -3,6 +3,7 @@ var fileUploader;
 angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', ['$scope', '$injector', 'instance', function ($scope, $injector, instance) {
 
     $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
+    $scope.textbookService = ecEditor.getService(ServiceConstants.TEXTBOOK_SERVICE);
     $scope.showLoaderIcon = false;
     $scope.uploadBtn = true;
     $scope.loaderIcon = ecEditor.resolvePluginResource("org.ekstep.uploadfile", "1.0", "editor/loader.gif");
@@ -16,7 +17,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
             element: document.getElementById("upload-csv-div"),
             template: 'qq-template-validation',
             request: {
-                endpoint: 'localhost'
+                endpoint: '/server/uploads'
             },
             autoUpload: false,
             multiple: false,
@@ -78,6 +79,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                 var signedURL = res.data.result.pre_signed_url;
                 var config = {
                     processData: false,
+                    contentType: 'text/csv',
                     headers: {
                         'x-ms-blob-type': 'BlockBlob'
                     }
@@ -91,17 +93,8 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                             icon: 'fa fa-warning'
                         });
                     } else {
-                        var data = new FormData();
                         var fileUrl = signedURL.split('?')[0];
-                        data.append("fileUrl", fileUrl);
-                        var config = {
-                            enctype: 'multipart/form-data',
-                            processData: false,
-                            contentType: false,
-                            cache: false
-                        }
-
-                        org.ekstep.services.textbookService.uploadFile(ecEditor.getContext('contentId'), data, config, function (err, res) {
+                        $scope.textbookService.uploadFile(ecEditor.getContext('contentId'), fileUrl, function(err, res) {
                             if (err) {
                                 const errTitle = 'CSV update Error';
                                 const errMessage = err.responseJSON.params.errmsg;
@@ -110,7 +103,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                                 instance.callback(errMessage, errTitle);
                                 $scope.showLoader(false);
                             } else {
-                                $scope.updateAttrs();
+                                ecEditor.dispatchEvent("org.ekstep.collectioneditor:reload");
                                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                                     title: 'content uploaded successfully!',
                                     position: 'topCenter',
@@ -122,16 +115,9 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                     }
                 })
             }
-        }, 'toc');
+        }, 'hierarchy');
     }
 
-    $scope.updateAttrs = function () {
-        ecEditor.dispatchEvent("org.ekstep.collectioneditor:node:load", showToc = false, function (err, res) {
-            if (res.responseCode == 'OK') {
-                console.log("CSV updated successfully");
-            }
-        });
-    }
     $scope.upload = function () {
         $scope.showLoader(true);
         if ($scope.uploader.getFile(0) == null) {
