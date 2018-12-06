@@ -3,7 +3,7 @@
         <div class="one wide centered column custom-1-wide">
             <img class="ui tiny centered image" ng-show="contentDetails.contentImage != ''" ng-src="{{contentDetails.contentImage}}" />
         </div>
-        <div class="two wide column custom-6-wide">
+        <div class="four wide column custom-6-wide">
             <div class="content-title-container row custom-row-1">
                 <label ng-if="contentDetails.contentTitle.length < 52" class="content-title popup-item">{{contentDetails.contentTitle}}</label>
                 <label ng-if="contentDetails.contentTitle.length >= 52" class="content-title popup-item" data-content="{{contentDetails.contentTitle}}" data-variation="wide" data-position="bottom left">{{contentDetails.contentTitle}}</label>
@@ -18,24 +18,6 @@
         <div class="two wide column">
             <div ng-if="lastSaved" class="last-saved-label">
                 <label class="">Last saved {{lastSaved | timeAgo }}</label>
-            </div>
-        </div>
-        <div class="two wide column">
-            <div class="ui buttons toc-dropdown">               
-                <div class="ui floating dropdown icon button toc-dropdown">
-                        <div class="ui button">TOC</div>
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                        <div class="item" ng-click="updateToc()">
-                            <i class="upload icon"></i> Update TOC</div>
-                        <div class="item" ng-click="downloadToc(); generateTelemetry({ subtype: 'downloadToc', target: 'downloadTocButton'});" ng-class="!disableSaveBtn || disbaleDwonloadToc ? 'disabled' : 'enabled'">
-                            <i class="download icon"></i> Download TOC
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="ui active inverted dimmer" id="downloadtoc-loader" ng-if="loader" style="top:30px !important">
-                <div class="ui large text loader">Downloading</div>
             </div>
         </div>
         <div class="five wide column custom-5-wide" style="padding-top:1rem!important;">
