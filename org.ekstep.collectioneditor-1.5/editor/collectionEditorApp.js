@@ -17,6 +17,12 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     $scope.isCollection = false;
     $scope.collectionCache = [];
     $scope.isChildren = false;
+    $scope.CONSTANTS = {
+        tocUploadHeader: 'Unable to download the content, please try again later',
+        tocUploadDescription: 'Table of Content downloadeding!',
+        tocUploadBtnUpload: 'Upload',
+        tocUploadBtnClose: 'Use Editor' 
+    }
     $scope.mode = ecEditor.getConfig('editorConfig').mode; 
     $scope.collectionTreeHeight = ($scope.mode == "Edit") ? "collection-tree-height-with-footer" : "collection-tree-height-without-footer"; 
     $scope.getObjectType = function(objectType) {
@@ -278,17 +284,18 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
                 $scope.showsuggestedContent = res.data.result.content.contentType === 'TextBook' ? true : false;
                 if(showToc && res.data.result.content.contentType === 'TextBook' && !res.data.result.content.children){
-                    ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
-                        headerTitle: 'Create Table of Contents via CSV Upload or Using Editor',
-                        description: 'Please upload the CSV file in the required format',
+                    var config = {
+                        headerTitle: tocUploadHeader,
+                        description: tocUploadDescription,
                         validation: {
                             'allowedExtension': ['csv']
                         },
                         buttonText: {
-                            'primaryBtn': 'Upload CSV',
-                            'exitBtn': 'Use Editor'
-                        },
-                        callback: function (data, errTitle) {
+                            'primaryBtn': tocUploadBtnUpload,
+                            'exitBtn': tocUploadBtnClose
+                        }
+                    };
+                    ecEditor.dispatchEvent("org.ekstep.uploadfile:show", config, function (data, errTitle) {
                             console.log('response err', data);
                             $scope.errTitle = errTitle;
                             $scope.errMessage = data;
@@ -300,7 +307,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                                 scope: $scope,
                                 className: 'ngdialog-theme-default'
                             });                   
-                        }
                     });
                 }
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();

@@ -11,7 +11,6 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
     $scope.configData = instance.configData;
     $scope.callback = instance.callback;
     $scope.showErrorPopup = false;
-    console.log('instance.configData: ', instance.configData);
     $scope.$on('ngDialog.opened', function () {
         $scope.uploader = new qq.FineUploader({
             element: document.getElementById("upload-csv-div"),
@@ -128,7 +127,6 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
 
     $scope.updateAttrs = function () {
         ecEditor.dispatchEvent("org.ekstep.collectioneditor:node:load", showToc = false, function (err, res) {
-            console.log('result in callback', err, res)
             if (res.responseCode == 'OK') {
                 console.log("CSV updated successfully");
             }
