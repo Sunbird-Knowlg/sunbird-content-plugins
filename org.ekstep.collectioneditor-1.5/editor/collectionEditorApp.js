@@ -267,7 +267,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
 
     //Header scope ends
 
-    $scope.loadContent = function(event, callback) {      
+    $scope.loadContent = function(event, showToc = true, callback) {      
         var mode;
         if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
@@ -277,7 +277,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
                 $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
                 $scope.showsuggestedContent = res.data.result.content.contentType === 'TextBook' ? true : false;
-                if(res.data.result.content.contentType === 'TextBook' && !res.data.result.content.children){
+                if(showToc && res.data.result.content.contentType === 'TextBook' && !res.data.result.content.children){
                     ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
                         headerTitle: 'Create Table of Contents via CSV Upload or Using Editor',
                         description: 'Please upload the CSV file in the required format',
@@ -325,7 +325,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     };
     
     org.ekstep.collectioneditor.api.initEditor(ecEditor.getConfig('editorConfig'), function() {
-        $scope.loadContent(event, function(err, res) {
+        $scope.loadContent(event, showToc = true, function(err, res) {
             if (res) {
                 var activeNode = org.ekstep.services.collectionService.getActiveNode();
                 $scope.contentDetails.contentTitle = activeNode.title ? activeNode.title : "Untitled Content";
