@@ -79,7 +79,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     * Add owner details and update current count with new values.
     */
     $scope.addOwnershipList = function(event, node) {
-        $scope.disbaleDwonloadToc = false;
         $scope.updateContentCreditList(node);
     }
 
@@ -89,7 +88,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.removeOwnershipList = function() {
         $scope.contentCredits = [];
         var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
-        $scope.disbaleDwonloadToc = rootNode.children == null ? true: false;
         rootNode.visit(function(node) {
             $scope.updateContentCreditList(node);
         });
@@ -350,6 +348,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.setPendingChangingStatus = function(event, data) {
         $scope.pendingChanges = ($scope.editorEnv === "COLLECTION" && ecEditor.getConfig('editorConfig').mode === 'Read') ? false : true;
         $scope.disableSaveBtn = false;
+        if($scope.editorEnv === "COLLECTION"){
+            $scope.disbaleDwonloadToc = true;
+        }
         $scope.$safeApply();
     };
 
