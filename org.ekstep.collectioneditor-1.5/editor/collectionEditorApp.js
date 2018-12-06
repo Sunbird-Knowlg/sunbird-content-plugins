@@ -285,14 +285,14 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 $scope.showsuggestedContent = res.data.result.content.contentType === 'TextBook' ? true : false;
                 if(showToc && res.data.result.content.contentType === 'TextBook' && !res.data.result.content.children){
                     var config = {
-                        headerTitle: tocUploadHeader,
-                        description: tocUploadDescription,
+                        headerTitle: $scope.CONSTANTS.tocUploadHeader,
+                        description: $scope.CONSTANTS.tocUploadDescription,
                         validation: {
                             'allowedExtension': ['csv']
                         },
                         buttonText: {
-                            'primaryBtn': tocUploadBtnUpload,
-                            'exitBtn': tocUploadBtnClose
+                            'primaryBtn': $scope.CONSTANTS.tocUploadBtnUpload,
+                            'exitBtn': $scope.CONSTANTS.tocUploadBtnClose
                         }
                     };
                     ecEditor.dispatchEvent("org.ekstep.uploadfile:show", config, function (data, errTitle) {
