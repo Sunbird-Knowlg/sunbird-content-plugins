@@ -104,12 +104,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                                 instance.callback(errMessage, errTitle);
                                 $scope.showLoader(false);
                             } else {
-                                 ecEditor.dispatchEvent("org.ekstep.collectioneditor:reload", showToc = false, function (err, res) {
-                                    console.log('result in callback', err, res)
-                                    if (res.responseCode == 'OK') {
-                                        console.log("CSV updated successfully");
-                                    }
-                                });
+                                ecEditor.dispatchEvent("org.ekstep.collectioneditor:reload");
                                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                                     title: 'content uploaded successfully!',
                                     position: 'topCenter',
@@ -121,7 +116,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                     }
                 })
             }
-        }, 'toc');
+        }, 'hierarchy');
     }
 
     $scope.upload = function () {

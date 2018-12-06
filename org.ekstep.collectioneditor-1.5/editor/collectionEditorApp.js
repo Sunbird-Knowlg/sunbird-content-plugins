@@ -344,6 +344,23 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         });
     });
 
+    $scope.realodContent = function() {
+        var mode;
+        if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
+            if (res && res.data && res.data.responseCode === "OK") {
+                org.ekstep.services.collectionService.reloadTreeFromCollction(res.data.result.content);
+                var activeNode = org.ekstep.services.collectionService.getActiveNode();
+                $scope.contentDetails.contentTitle = activeNode.title ? activeNode.title : "Untitled Content";
+                setTimeout(function() {
+                    ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', activeNode);
+                    ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode);
+                    ecEditor.dispatchEvent("org.ekstep.collectioneditor:content:load");
+                }, 200);
+            }
+        });
+    }
+
     $scope.addNodeType = function(nodeType) {
         if (nodeType == 'sibling') {
             org.ekstep.services.collectionService.addSibling()
@@ -382,7 +399,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:added', $scope.addContent, $scope);
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:removed', $scope.removeContent, $scope);
-    ecEditor.addEventListener('org.ekstep.collectioneditor:node:load', $scope.loadContent, $scope);
+    ecEditor.addEventListener('org.ekstep.collectioneditor:reload', $scope.realodContent, $scope);
    
     $scope.parseKeywords = function(keywords){
         if(_.isString(keywords)){
