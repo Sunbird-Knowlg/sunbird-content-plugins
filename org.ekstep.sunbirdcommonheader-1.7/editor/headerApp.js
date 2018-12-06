@@ -113,7 +113,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     */
     $scope.downloadToc = function() {
         $scope.loader = true;
-        ecEditor.getService('content').downloadTableContent(ecEditor.getContext('contentId'), function(err, resp) {
+        org.ekstep.services.textbookService.downloadFile(ecEditor.getContext('contentId'), function(err, resp) {
             if (!err && resp.data.responseCode == "OK") {
                 $scope.loader = false;
                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
