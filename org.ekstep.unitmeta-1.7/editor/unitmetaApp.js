@@ -164,7 +164,7 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         }
     };
 
-    $scope.init = function(load) {
+    $scope.init = function() {
         var activeNode = undefined;
         $scope.$watch('unit', function() {
             if ($scope.unit) {
@@ -175,12 +175,8 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
                     if (!_.isUndefined(org.ekstep.collectioneditor.cache.nodesModified[$scope.nodeId])) {
                         $scope.newNode = false;
                     }
-                    if(!load) {
                         $scope.updateNode();
-                    }
-                    else{
-                        load = false
-                    }
+
                 }
             }
         }, true);
@@ -190,6 +186,6 @@ angular.module('unitmetaApp', []).controller('unitmetaController', ['$scope', fu
         $scope.unit.name = org.ekstep.services.collectionService.removeSpecialChars($scope.unit.name);
         org.ekstep.collectioneditor.api.getService('collection').setNodeTitle($scope.unit.name);
     }
-    $scope.init(true);
+    $scope.init();
 }]);
 //# sourceURL=unitmetaApp.js
