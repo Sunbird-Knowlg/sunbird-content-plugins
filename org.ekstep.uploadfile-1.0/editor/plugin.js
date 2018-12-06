@@ -2,7 +2,7 @@
 
 org.ekstep.contenteditor.basePlugin.extend({
     callback: undefined,
-    data: undefined,
+    configData: undefined,
     initialize: function() {
         var instance = this;
         ecEditor.addEventListener(this.manifest.id + ":show", this.showUploadForm, this);
