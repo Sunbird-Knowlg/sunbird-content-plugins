@@ -62,6 +62,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.publishMode = false;
     $scope.isFlagReviewer = false;
     $scope.editorEnv = "";
+    $scope.collectionType = "";
     $scope.showEditMeta = true;
     $scope.contentCredits = [];
     $scope.listLimit = 5;
@@ -128,6 +129,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.editorEnv = "COLLECTION"
                 $scope.publishMode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').publishMode;
                 $scope.isFlagReviewer = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').isFlagReviewer;
+                $scope.collectionType =  ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild().data.objectType;
                 if (ecEditor.getConfig('editorConfig').mode === 'Read')
                     $scope.showEditMeta = false;
                 $scope.resolveReviewBtnStatus();
@@ -581,7 +583,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     }
                 } else {
                     toasterPrompt = {
-                        message: 'Unable to generate DIAL codes, please try again later',
+                        message: err.responseJSON.params.errmsg,
                         type: "org.ekstep.toaster:error",
                         icon: 'fa fa-warning'
                     }
@@ -614,7 +616,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             var toasterPrompt = {};
             if (err) {
                 toasterPrompt = {
-                    message: 'Unable to download QR codes, please try again later',
+                    message: err.responseJSON.params.errmsg,
                     type: "org.ekstep.toaster:error",
                     icon: 'fa fa-warning'
                 }
