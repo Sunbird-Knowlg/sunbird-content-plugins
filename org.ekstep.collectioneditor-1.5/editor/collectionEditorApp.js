@@ -18,8 +18,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     $scope.collectionCache = [];
     $scope.isChildren = false;
     $scope.CONSTANTS = {
-        tocUploadHeader: 'Unable to download the content, please try again later',
-        tocUploadDescription: 'Table of Content downloadeding!',
+        tocUploadHeader: 'Create Table of Contents via CSV Upload or Using Editor',
+        tocUploadDescription: 'Please upload the CSV file in the required format',
         tocUploadBtnUpload: 'Upload',
         tocUploadBtnClose: 'Use Editor' 
     }
