@@ -22,7 +22,9 @@
                 <label class="">Last saved {{lastSaved | timeAgo }}</label>
             </div>
         </div>
-
+        <div class="ui active inverted dimmer" id="downloadtoc-loader" ng-if="loader" style="top:30px !important">
+            <div class="ui large text loader">Downloading</div>
+        </div>
         <div class="five wide column custom-5-wide" style="padding-top:1rem!important;">
             <div class="row header-icon-container">
                 <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook')" class="custom-row-2" style="float: left;">

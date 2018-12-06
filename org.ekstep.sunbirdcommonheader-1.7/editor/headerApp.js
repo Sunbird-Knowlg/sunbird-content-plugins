@@ -66,6 +66,12 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.showEditMeta = true;
     $scope.contentCredits = [];
     $scope.listLimit = 5;
+    $scope.disbaleDownloadToc = false;
+    $scope.loader = false;
+    $scope.CONSTANTS = {
+        tocDownloadFailed: 'Unable to download the content, please try again later',
+        tocDownloadSuccess: 'Table of Content downloadeding!'
+    }
 
     /*
      * Update ownership list when adding and removing the content.
@@ -115,7 +121,42 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.$safeApply();
     };
 
-    $scope.setEditorDetails = function () {
+    /*
+    * This method is used for download Table of contents which is created by Textbook creator.
+    */
+    $scope.downloadToc = function() {
+        $scope.loader = true;
+        org.ekstep.services.textbookService.downloadFile(ecEditor.getContext('contentId'), function(err, resp) {
+            if (!err && resp.data.responseCode == "OK") {
+                $scope.loader = false;
+                $scope.$safeApply();
+                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                    title: $scope.CONSTANTS.tocDownloadSuccess,
+                    position: 'topCenter',
+                    icon: 'fa fa-download'
+                });
+                var link = document.createElement('a');
+                link.href = resp.data.result.textbook.tocUrl;
+                link.download = link.href;
+                link.style.display = 'none';
+                document.body.appendChild(link);
+                if(link.href.split(".").pop().toLowerCase() != 'csv')
+                    link.setAttribute('target', '_blank');
+                link.click();
+                document.body.removeChild(link);
+            } else {
+                $scope.loader = false;
+                $scope.$safeApply();
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: $scope.CONSTANTS.tocDownloadFailed,
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
+            }
+        });
+    }
+
+    $scope.setEditorDetails = function() {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         if (meta.rejectComment || meta.rejectedReasons) {
             $scope.isReviewCommentsPresent = true;
@@ -166,6 +207,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         }
                         $scope.hideReviewBtn = false;
                         $scope.resolveReviewBtnStatus();
+                        var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
+                        if(rootNode.children)
+                            $scope.disbaleDownloadToc = false;
                         // $scope.getContentMetadata();
                         $scope.getQRCodeRequestCount();
                     }
@@ -345,7 +389,10 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.setPendingChangingStatus = function (event, data) {
-        $scope.pendingChanges = ($scope.editorEnv === "COLLECTION" && ecEditor.getConfig('editorConfig').mode === 'Read') ? false : true;
+        if($scope.editorEnv === "COLLECTION"){
+            $scope.pendingChanges = ecEditor.getConfig('editorConfig').mode === 'Read' ? false : true;
+            $scope.disbaleDownloadToc = true;
+        }        
         $scope.disableSaveBtn = false;
         $scope.disableQRGenerateBtn = false;
         // $scope.qrRequestCount = 0;
@@ -394,7 +441,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.getContentMetadata = function () {
         var rootNode = org.ekstep.services.collectionService.getNodeById(ecEditor.getContext('contentId'));
         var status = rootNode.data.metadata.status;
-        if (rootNode.data.metadata.contentCredits)
+        $scope.disbaleDownloadToc = rootNode.children == null ? true: false;
+        if(rootNode.data.metadata.contentCredits)
             $scope.contentCredits = rootNode.data.metadata.contentCredits;
         $scope.hideReviewBtn = (status === 'Draft' || status === 'FlagDraft') ? false : true;
         $scope.resolveReviewBtnStatus();

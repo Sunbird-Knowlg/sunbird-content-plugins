@@ -150,9 +150,11 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
     
     $scope.init = function() {
         $scope.$watch('courseunit', function() {
-            $scope.courseunit.name = org.ekstep.services.collectionService.removeSpecialChars($scope.courseunit.name);
-            if($scope.nodeType === DEFAULT_NODETYPE){
-                $scope.updateNode();
+            if($scope.courseunit){
+                $scope.courseunit.name = org.ekstep.services.collectionService.removeSpecialChars($scope.courseunit.name);
+                if($scope.nodeType === DEFAULT_NODETYPE){
+                    $scope.updateNode();
+                }
             }
         }, true);
     }

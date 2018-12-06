@@ -13,7 +13,7 @@
         <div class="ui special link cards cardsWrapper" ng-class="{four: mainTemplate == 'selectedResult',five: mainTemplate == 'addedItemsView'}">
             <div class="card" ng-repeat="lesson in $ctrl.res.content | orderBy:sortOption track by $index" in-view="lineInView($index, $inview, lesson, 'LessonBrowser', $index)" in-view-options="{ throttle: 1000 }" ng-click="toggleSelectionLesson(lesson)">
                 <div class="image">
-                    <img src="{{lesson.appIcon || $ctrl.defaultImage}}" class="resourceMetaImage ">
+                    <img ng-src="{{lesson.appIcon || $ctrl.defaultImage}}" class="resourceMetaImage ">
                     <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{lesson.identifier}}' style="z-index:12">
                         <input class="checkBox" type="checkbox" name="lessons[]">
                         <label></label>

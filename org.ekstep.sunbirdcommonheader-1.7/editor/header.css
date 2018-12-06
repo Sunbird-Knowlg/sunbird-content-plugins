@@ -373,7 +373,6 @@ body {
 .content-contributors .removecolor, .content-contributors .removecolor .users.icon {
     color: grey;
 }
-
 .ui.buttons.toc-dropdown{float: right;}
 .toc-dropdown.active .button { color: blue; font-weight: bold}
 .toc-dropdown i.icon.dropdown:before { font-size: 1.3em }
