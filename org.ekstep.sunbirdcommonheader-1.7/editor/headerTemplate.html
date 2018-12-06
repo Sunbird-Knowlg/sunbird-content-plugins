@@ -49,9 +49,9 @@
                         </div>
                         <div class="menu" style="left: auto; right: 0; top: 25px;">
                             <div class="item" ng-class="(!disableQRGenerateBtn || qrRequestCount === 0 || qrRequestCount <= reservedDialCount ) ? 'disabled' : ' '"
-                                ng-click="reserveDialCode();"><i class="qrcode icon"></i> <span class="text">Generate
+                                ng-click="reserveDialCode(); generateTelemetry({ subtype: 'reserveDialCode', target: 'reserveDialCodeButton'});"><i class="qrcode icon"></i> <span class="text">Generate
                                     {{(qrRequestCount > 0 )? qrRequestCount :'' }} QR Codes</span></div>
-                            <div class="item" ng-class="(!disableQRDownloadBtn) ? 'disabled' : ' ' " ng-click="downloadQRCodes();"><i
+                            <div class="item" ng-class="(!disableQRDownloadBtn) ? 'disabled' : ' ' " ng-click="downloadQRCodes(); generateTelemetry({ subtype: 'downloadQRCodes', target: 'downloadQRCodesButton'});"><i
                                     class="download icon"></i> <span class="text">Download QR code</span></div>
                         </div>
                     </div>
