@@ -355,7 +355,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
             if (res && res.data && res.data.responseCode === "OK") {
-                org.ekstep.services.collectionService.reloadTreeFromCollction(res.data.result.content);
+                org.ekstep.services.collectionService.reloadCollectionTree(res.data.result.content);
                 var activeNode = org.ekstep.services.collectionService.getActiveNode();
                 $scope.contentDetails.contentTitle = activeNode.title ? activeNode.title : "Untitled Content";
                 setTimeout(function() {
