@@ -3,7 +3,7 @@
         <div class="cardMetaDetails">
             <p class="cardDetailsSectionTitle">{{lessonView.name}}</p>
             <div class="image">
-                <img src="{{lessonView.appIcon || $ctrl.defaultImage}}" class="width-100 resourceMetaImage">
+                <img ng-src="{{lessonView.appIcon || $ctrl.defaultImage}}" class="width-100 resourceMetaImage">
             </div>
             <div class="meta">
                 <div class="ui list cardDetails-list">
@@ -52,16 +52,16 @@
                 <div class="flexslider" flexslider>
                     <ul class="slides screenShotSlider">
                         <li>
-                            <img src="{{$ctrl.defaultImage}}" style="height: 280px;">
+                            <img ng-src="{{$ctrl.defaultImage}}" style="height: 280px;">
                         </li>
                         <li>
-                            <img src="{{$ctrl.defaultImage}}" style="height: 280px;">
+                            <img ng-src="{{$ctrl.defaultImage}}" style="height: 280px;">
                         </li>
                         <li>
-                            <img src="{{$ctrl.defaultImage}}" style="height: 280px;">
+                            <img ng-src="{{$ctrl.defaultImage}}" style="height: 280px;">
                         </li>
                         <li>
-                            <img src="{{$ctrl.defaultImage}}" style="height: 280px;">
+                            <img ng-src="{{$ctrl.defaultImage}}" style="height: 280px;">
                         </li>
                     </ul>
                 </div>
