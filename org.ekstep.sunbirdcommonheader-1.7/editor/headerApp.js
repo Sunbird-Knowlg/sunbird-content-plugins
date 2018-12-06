@@ -389,8 +389,10 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.setPendingChangingStatus = function (event, data) {
-        $scope.pendingChanges = ($scope.editorEnv === "COLLECTION" && ecEditor.getConfig('editorConfig').mode === 'Read') ? false : true;
-        $scope.disbaleDwonloadToc = $scope.pendingChanges ? $scope.pendingChanges: false;
+        if($scope.editorEnv === "COLLECTION"){
+            $scope.pendingChanges = ecEditor.getConfig('editorConfig').mode === 'Read' ? false : true;
+            $scope.disbaleDwonloadToc = true;
+        }        
         $scope.disableSaveBtn = false;
         $scope.disableQRGenerateBtn = false;
         // $scope.qrRequestCount = 0;
