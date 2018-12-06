@@ -127,7 +127,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
     }
 
     $scope.updateAttrs = function () {
-        ecEditor.dispatchEvent("org.ekstep.collectioneditor:node:load", showToc = false, function (err, res) {
+        ecEditor.dispatchEvent("org.ekstep.collectioneditor:reload", showToc = false, function (err, res) {
             console.log('result in callback', err, res)
             if (res.responseCode == 'OK') {
                 console.log("CSV updated successfully");

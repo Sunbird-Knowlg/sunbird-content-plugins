@@ -382,7 +382,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:added', $scope.addContent, $scope);
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:removed', $scope.removeContent, $scope);
-    ecEditor.addEventListener('org.ekstep.collectioneditor:node:load', $scope.loadContent, $scope);
+    ecEditor.addEventListener('org.ekstep.collectioneditor:reload', $scope.loadContent, $scope);
    
     $scope.parseKeywords = function(keywords){
         if(_.isString(keywords)){
