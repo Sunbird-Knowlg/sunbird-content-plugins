@@ -70,7 +70,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.loader = false;
     $scope.CONSTANTS = {
         tocDownloadFailed: 'Unable to download the content, please try again later',
-        tocDownloadSuccess: 'Table of Content downloadeding!'
+        tocDownloadSuccess: 'Table of Content downloadeding!',
+        tocUpdateHeader: 'Update Table of Contents Metadata attributes via CSV',
+        tocUpdateDescription: 'Please note that no sections could be added or removed using CSV upload, only the values of the attributes can be changes', 
+        tocUpdateBtnUpload: 'Upload',
+        tocUpdateBtnClose: 'Close' 
     }
 
     /*
@@ -724,6 +728,37 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             $scope.enableBtn = ''; // to disable checklist buttons(Publish / Request changes)
         }
     };
+
+    /**
+     * @description - used to update toc via csv
+     */
+    $scope.updateToc = function () {
+        var config = {
+            headerTitle: $scope.CONSTANTS.tocUpdateHeader,
+            description: $scope.CONSTANTS.tocUpdateDescription,
+            validation: {
+                'allowedExtension': ['csv']
+            },
+            buttonText: {
+                'primaryBtn': $scope.CONSTANTS.tocUpdateBtnUpload,
+                'exitBtn': $scope.CONSTANTS.tocUpdateBtnClose
+            }
+        };
+        
+        ecEditor.dispatchEvent("org.ekstep.uploadfile:show", config, function(data, errTitle){
+            console.log('response err', data);
+            $scope.errTitle = errTitle;
+            $scope.errMessage = data;
+            ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
+                template: 'updateTocError',
+                controller: 'headerController',
+                controllerAs: '$ctrl',
+                showClose: false,
+                scope: $scope,
+                className: 'ngdialog-theme-default'
+            });
+        });
+    }
 
     /**
      * @description - on init of checklist pop-up
