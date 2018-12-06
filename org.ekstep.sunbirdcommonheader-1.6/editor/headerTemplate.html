@@ -3,7 +3,7 @@
         <div class="one wide centered column custom-1-wide">
             <img class="ui tiny centered image" ng-show="contentDetails.contentImage != ''" ng-src="{{contentDetails.contentImage}}" />
         </div>
-        <div class="two wide column custom-6-wide">
+        <div class="four wide column custom-6-wide">
             <div class="content-title-container row custom-row-1">
                 <label ng-if="contentDetails.contentTitle.length < 52" class="content-title popup-item">{{contentDetails.contentTitle}}</label>
                 <label ng-if="contentDetails.contentTitle.length >= 52" class="content-title popup-item" data-content="{{contentDetails.contentTitle}}" data-variation="wide" data-position="bottom left">{{contentDetails.contentTitle}}</label>
@@ -20,31 +20,11 @@
                 <label class="">Last saved {{lastSaved | timeAgo }}</label>
             </div>
         </div>
-        <div class="two wide column">
-            <div class="ui buttons toc-dropdown">               
-                <div class="ui floating dropdown icon button toc-dropdown">
-                        <div class="ui button">Download/Update ToC</div>
-                    <i class="dropdown icon"></i>
-                    <div class="menu">
-                            <div class="item" ng-click="downloadToc(); generateTelemetry({ subtype: 'downloadToc', target: 'downloadTocButton'});" ng-class="!disableSaveBtn || disbaleDwonloadToc ? 'disabled' : 'enabled'">
-                                    <i class="download icon"></i> Download ToC Metadata
-                                </div>
-                        <div class="item" ng-click="updateToc()">
-                            <i class="upload icon"></i> Update ToC Metadata</div>
-                       
-                    </div>
-                </div>
-            </div>
-            <div class="ui active inverted dimmer" id="downloadtoc-loader" ng-if="loader" style="top:30px !important">
-                <div class="ui large text loader">Downloading</div>
-            </div>
-        </div>
         <div class="five wide column custom-5-wide" style="padding-top:1rem!important;">
             <div class="row header-icon-container">
                 <div class="custom-row-2">
                     <div  ng-show="editorEnv === 'COLLECTION'" class="content-contributors ownerlist-dropdown" id="contentCreditsList">
-                       <span ng-class="contentCredits.length > 0 ? 'addcolor' : 'removecolor'">{{contentCredits.length}}  <i class="users icon"  data-content="Created with contribution from {{contentCredits.length}} " data-variation="small" ng-mouseover="resetList()" ></i></span>
-                      
+                        <p>Created with contribution from <span ng-class="contentCredits.length > 0 ? 'addcolor' : 'removecolor'">{{contentCredits.length}}  <i class="users icon" ng-mouseover="resetList()"></i></span></p>
                         <div class="dropdown-content">
                             <div class="item" ng-repeat="contentCredit in contentCredits | limitTo:listLimit">{{contentCredit.name}}</div>
                             <button class="fluid ui button" ng-click="addListSize(); $event.stopPropagation()" ng-if="listLimit < contentCredits.length">See More</button>
@@ -121,31 +101,4 @@
 <script>
     $(".ui.dropdown").dropdown();
     $("#contentCreditsList .item").addClass('disabled');
-    $('.users.icon').popup();
-</script>
-
-<script type="text/ng-template" ng-controller="headerController as $ctrl" id="updateTocError">
-<div class="ui tiny modal active browseFileForUpdate">
-    <div class="header bottomBorder">
-
-        <h5 class="ui header errMessage">
-            <i class="window close icon"></i>
-            <div class="content">
-               {{errTitle}}
-            </div>
-        </h5>
-
-    </div>
-    <div class="content">
-            <p >{{errMessage}}</p>
-    </div>
-    <div class="actions">
-        <div class="ui buttons ">
-            <button id="closePopUp " class="ui blue button" type="button " ng-click="closeThisDialog();">Close</button>
-
-        </div>
-    </div>
-</div>
-
-
 </script>
