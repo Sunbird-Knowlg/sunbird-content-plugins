@@ -42,9 +42,8 @@
         <div class="five wide column custom-5-wide" style="padding-top:1rem!important;">
             <div class="row header-icon-container">
                 <div class="custom-row-2">
-                    <div  ng-show="editorEnv === 'COLLECTION'" class="content-contributors ownerlist-dropdown" id="contentCreditsList">
-                       <span ng-class="contentCredits.length > 0 ? 'addcolor' : 'removecolor'">{{contentCredits.length}}  <i class="users icon"  data-content="Created with contribution from {{contentCredits.length}} " data-variation="small" ng-mouseover="resetList()" ></i></span>
-                      
+                    <div ng-show="editorEnv === 'COLLECTION'" class="content-contributors ownerlist-dropdown" id="contentCreditsList">
+                        <span ng-class="contentCredits.length > 0 ? 'addcolor' : 'removecolor'">{{contentCredits.length}}  <i class="users icon"  data-content="Created with contribution from {{contentCredits.length}} " data-variation="small" ng-mouseover="resetList()" ></i></span>
                         <div class="dropdown-content">
                             <div class="item" ng-repeat="contentCredit in contentCredits | limitTo:listLimit">{{contentCredit.name}}</div>
                             <button class="fluid ui button" ng-click="addListSize(); $event.stopPropagation()" ng-if="listLimit < contentCredits.length">See More</button>
@@ -124,6 +123,7 @@
     $('.users.icon').popup();
 </script>
 <script type="text/ng-template" ng-controller="headerController as $ctrl" id="updateTocError">
+<<<<<<< HEAD
 <div class="ui tiny modal active browseFileForUpdate">
     <div class="header bottomBorder">
 
@@ -147,4 +147,24 @@
 </div>
 
 
+=======
+    <div class="ui tiny modal active browseFileForUpdate">
+        <div class="header bottomBorder">
+            <h5 class="ui header errMessage">
+                <i class="window close icon"></i>
+                <div class="content">
+                {{errTitle}}
+                </div>
+            </h5>
+        </div>
+        <div class="content">
+                <p >{{errMessage}}</p>
+        </div>
+        <div class="actions">
+            <div class="ui buttons ">
+                <button id="closePopUp " class="ui blue button" type="button " ng-click="closeThisDialog();">Close</button>
+            </div>
+        </div>
+    </div>
+>>>>>>> 4919b6bd024d72b07ed954f2063477e8daade3f8
 </script>
