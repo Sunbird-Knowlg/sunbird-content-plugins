@@ -116,6 +116,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         org.ekstep.services.textbookService.downloadFile(ecEditor.getContext('contentId'), function(err, resp) {
             if (!err && resp.data.responseCode == "OK") {
                 $scope.loader = false;
+                $scope.$safeApply();
                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                     title: 'Table of Content downloadeding!',
                     position: 'topCenter',
@@ -132,6 +133,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 document.body.removeChild(link);
             } else {
                 $scope.loader = false;
+                $scope.$safeApply();
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                     message: 'Unable to download the content, please try again later',
                     position: 'topCenter',
@@ -139,10 +141,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 });
             }
         });
-        setTimeout(function() {
-            $scope.loader = false;
-            $scope.$safeApply();
-        }, 2000);
     }
 
     $scope.setEditorDetails = function() {
