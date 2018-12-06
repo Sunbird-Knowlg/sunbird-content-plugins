@@ -191,6 +191,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         });
                         $scope.hideReviewBtn = false;
                         $scope.resolveReviewBtnStatus();
+                        var rootNode = org.ekstep.services.collectionService.getNodeById(ecEditor.getContext('contentId'));
+                        if(rootNode.children)
+                            $scope.disbaleDwonloadToc = false;
                     }
                     $scope.pendingChanges = false;
                 } else {
