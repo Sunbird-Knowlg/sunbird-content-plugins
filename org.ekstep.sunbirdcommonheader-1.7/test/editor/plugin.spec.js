@@ -248,5 +248,38 @@ describe("Sunbird header plugin:", function() {
         })
 
     })
+    describe("update TOC", function() {        
+        it("Should call updateTOC", function (done) {
+            spyOn($scope, "updateToc").and.callThrough();
+            $scope.updateToc();
+            expect($scope.updateToc).toHaveBeenCalled();
+            expect($scope.updateToc).not.toBeUndefined();
+            done();
+        })
+        it('updateToC gets the error response ', function () {
+            spyOn($scope, "updateToc").and.callThrough();
+            spyOn(ecEditor, 'dispatchEvent').and.callThrough();
+            $scope.updateToc();
+            var config = {}
+            var data = { "err": "ERR_SCRIPT_NOT_FOUND", "status": "failed", "errmsg": "Invalid request path: /content/v1/textbook/toc/upload/do_1126448093921853441209", "responseCode": "SERVER_ERROR", "result": {} };
+            var errTitle = 'CSV update error';
+            ecEditor.dispatchEvent('org.ekstep.uploadfile:show', function (event, callback) {
+                callback(data.params.errmsg, errTitle);
+                spyOn(ecEditor.getService('popup'), 'open');
+                expect(ecEditor.getService('popup').open).toHaveBeenCalledWith({
+                    template: 'updateTocError',
+                    controller: 'headerController',
+                    controllerAs: '$ctrl',
+                    resolve: {
+                        'instance': jasmine.any(Function)
+                    },
+                    showClose: false,
+                    className: 'ngdialog-theme-plain'
+                }, jasmine.any(Function));
+                expect($scope.errMessage).toEqual(data.errmsg);
+                expect($scope.errTitle).toEqual(errTitle);
+            });
 
+        })
+    })
 })
