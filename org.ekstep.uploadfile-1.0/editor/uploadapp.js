@@ -18,7 +18,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
             element: document.getElementById("upload-csv-div"),
             template: 'qq-template-validation',
             request: {
-                endpoint: 'localhost'
+                endpoint: '/server/uploads'
             },
             autoUpload: false,
             multiple: false,
