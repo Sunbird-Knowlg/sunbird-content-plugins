@@ -74,7 +74,6 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                     position: 'topCenter',
                     icon: 'fa fa-warning'
                 });
-                $scope.updateAttrs();
             } else {
                 // 2. Upload File to signed URL
                 var signedURL = res.data.result.pre_signed_url;
@@ -84,7 +83,6 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                         'x-ms-blob-type': 'BlockBlob'
                     }
                 }
-
                 $scope.contentService.uploadDataToSignedURL(signedURL, $scope.uploader.getFile(0), config, function (err, res) {
                     if (err) {
                         $scope.showLoader(false);
@@ -93,7 +91,6 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                             position: 'topCenter',
                             icon: 'fa fa-warning'
                         });
-                        $scope.updateAttrs();
                     } else {
                         var data = new FormData();
                         var fileUrl = signedURL.split('?')[0];
@@ -112,10 +109,9 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                                 console.log('Error message: ', err.responseJSON.params.errmsg);
                                 $scope.closeThisDialog();
                                 instance.callback(errMessage, errTitle);
-                                $scope.updateAttrs();
                                 $scope.showLoader(false);
-
                             } else {
+                                $scope.updateAttrs();
                                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                                     title: 'content uploaded successfully!',
                                     position: 'topCenter',
@@ -129,6 +125,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
             }
         }, 'toc');
     }
+
     $scope.updateAttrs = function () {
         ecEditor.dispatchEvent("org.ekstep.collectioneditor:node:load", showToc = false, function (err, res) {
             console.log('result in callback', err, res)
