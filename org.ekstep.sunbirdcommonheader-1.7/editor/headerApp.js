@@ -67,6 +67,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.contentCredits = [];
     $scope.listLimit = 5;
     $scope.disbaleDwonloadToc = false;
+    $scope.loader = false;
+    $scope.CONSTANTS = {
+        tocDownloadFailed: 'Unable to download the content, please try again later',
+        tocDownloadSuccess: 'Table of Content downloadeding!'
+    }
 
     /*
      * Update ownership list when adding and removing the content.
@@ -126,7 +131,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.loader = false;
                 $scope.$safeApply();
                 ecEditor.dispatchEvent("org.ekstep.toaster:success", {
-                    title: 'Table of Content downloadeding!',
+                    title: $scope.CONSTANTS.tocDownloadSuccess,
                     position: 'topCenter',
                     icon: 'fa fa-download'
                 });
@@ -135,7 +140,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 link.download = link.href;
                 link.style.display = 'none';
                 document.body.appendChild(link);
-                if(link.href.split(".").pop() == 'pdf')
+                if(link.href.split(".").pop().toLowerCase() != 'csv')
                     link.setAttribute('target', '_blank');
                 link.click();
                 document.body.removeChild(link);
@@ -143,7 +148,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.loader = false;
                 $scope.$safeApply();
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                    message: 'Unable to download the content, please try again later',
+                    message: $scope.CONSTANTS.tocDownloadFailed,
                     position: 'topCenter',
                     icon: 'fa fa-warning'
                 });
@@ -384,11 +389,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.setPendingChangingStatus = function (event, data) {
-        $scope.pendingChanges = ($scope.editorEnv === "COLLECTION" && ecEditor.getConfig('editorConfig').mode === 'Read') ? false : true;
-        $scope.disableSaveBtn = false;
         if($scope.editorEnv === "COLLECTION"){
             $scope.disbaleDwonloadToc = true;
         }
+        $scope.pendingChanges = ($scope.editorEnv === "COLLECTION" && ecEditor.getConfig('editorConfig').mode === 'Read') ? false : true;
+        $scope.disableSaveBtn = false;
         $scope.disableQRGenerateBtn = false;
         // $scope.qrRequestCount = 0;
         $scope.$safeApply();
