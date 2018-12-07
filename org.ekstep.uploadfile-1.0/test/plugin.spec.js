@@ -26,7 +26,7 @@
                 type: 'js',
                 path: path
             }]).then(function () {
-                ctrl = $controller("uploadController", {
+                ctrl = $controller("uploadfileController", {
                     $scope: $scope,
                     instance: instance
                 });
