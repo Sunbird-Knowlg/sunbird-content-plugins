@@ -13,7 +13,6 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadfileController
     $scope.callback = instance.callback;
     $scope.$on('ngDialog.opened', function () {
         $scope.uploader = new qq.FineUploader({
-            debug: true,
             element: document.getElementById("upload-csv-div"),
             template: 'qq-template-validation',
             request: {
