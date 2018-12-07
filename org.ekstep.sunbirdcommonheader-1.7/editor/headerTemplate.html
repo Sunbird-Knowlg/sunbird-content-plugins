@@ -27,15 +27,14 @@
         </div>
         <div class="five wide column custom-5-wide" style="padding-top:1rem!important;">
             <div class="row header-icon-container">
-                <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook')" class="custom-row-2" style="float: left;">
-                    <div  class="ui dropdown" style=" vertical-align: -webkit-baseline-middle; ">
+                    <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook' && collectionMode != 'Read')" class="custom-row-2" style="float: left;">                    <div  class="ui dropdown" style=" vertical-align: -webkit-baseline-middle; ">
                         <div class="ui dropdown">
                             Download/Update ToC
                             <i class="dropdown icon"></i>
                         </div>
                         <div class="menu" style="left: auto; right: 0; top: 25px;">
                             <div class="item" ng-click="downloadToc(); generateTelemetry({ subtype: 'downloadToc', target: 'downloadTocButton'});"
-                                ng-class="!disableSaveBtn || disbaleDwonloadToc ? 'disabled' : 'enabled'">
+                                ng-class="disbaleDwonloadToc ? 'disabled' : 'enabled'">
                                 <i class="download icon"></i> Download ToC Metadata
                             </div>
                             <div class="item" ng-click="updateToc()">
@@ -43,7 +42,7 @@
                         </div>
                     </div>
                 </div>
-                <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook')" class="custom-row-2" style="float: left;margin-left: 30px;" >
+                <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook' && collectionMode != 'Read')" class="custom-row-2" style="float: left;margin-left: 30px;" >
                     <div class="ui dropdown qrCodeStyler" style=" vertical-align: -webkit-baseline-middle; ">
                         <div class="ui dropdown">
                             QR Codes

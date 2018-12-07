@@ -63,6 +63,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.isFlagReviewer = false;
     $scope.editorEnv = "";
     $scope.collectionType = "";
+    $scope.collectionMode = "";
     $scope.showEditMeta = true;
     $scope.contentCredits = [];
     $scope.listLimit = 5;
@@ -72,9 +73,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         tocDownloadFailed: 'Unable to download the content, please try again later',
         tocDownloadSuccess: 'Table of Content downloadeding!',
         tocUpdateHeader: 'Update Table of Contents Metadata attributes via CSV',
-        tocUpdateDescription: 'Please note that no sections could be added or removed using CSV upload, only the values of the attributes can be changes', 
+        tocUpdateDescription: 'Please note that no sections could be added or removed using CSV upload, only the values of the attributes can be changes',
         tocUpdateBtnUpload: 'Upload',
-        tocUpdateBtnClose: 'Close' 
+        tocUpdateBtnClose: 'Close'
     }
 
     /*
@@ -175,6 +176,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.publishMode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').publishMode;
                 $scope.isFlagReviewer = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').isFlagReviewer;
                 $scope.collectionType =  ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild().data.objectType;
+                $scope.collectionMode = ecEditor.getConfig('editorConfig').mode;
                 if (ecEditor.getConfig('editorConfig').mode === 'Read')
                     $scope.showEditMeta = false;
                 $scope.resolveReviewBtnStatus();
@@ -396,7 +398,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         if($scope.editorEnv === "COLLECTION"){
             $scope.pendingChanges = ecEditor.getConfig('editorConfig').mode === 'Read' ? false : true;
             $scope.disbaleDownloadToc = true;
-        }        
+        }
         $scope.disableSaveBtn = false;
         $scope.disableQRGenerateBtn = false;
         // $scope.qrRequestCount = 0;
