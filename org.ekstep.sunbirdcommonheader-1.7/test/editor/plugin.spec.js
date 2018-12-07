@@ -78,7 +78,7 @@ describe("Sunbird header plugin:", function() {
             spyOn($scope, "addOwnershipList").and.callThrough();
             $scope.addOwnershipList(event, node);
             var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
-            $scope.disbaleDownloadToc = rootNode.children == null ? true: false;
+            $scope.disableDownloadToc = rootNode.children == null ? true: false;
             expect($scope.addOwnershipList).toHaveBeenCalled();
             done();
         }); 
@@ -88,7 +88,7 @@ describe("Sunbird header plugin:", function() {
             var node = {"children":null,"data":{"objectType":"TextBookUnit","id":"462a48a1-29bc-4acc-81e1-6b99c1189da0","root":false,"metadata":{"mimeType":"application/vnd.ekstep.content-collection","topicData":"(0) topics selected","name":"Untitled TextBook"}}};
             spyOn($scope, "removeOwnershipList").and.callThrough();
             $scope.removeOwnershipList(event, node);
-            $scope.disbaleDownloadToc = false;
+            $scope.disableDownloadToc = false;
             expect($scope.removeOwnershipList).toHaveBeenCalled();
             done();
         }); 
@@ -98,7 +98,7 @@ describe("Sunbird header plugin:", function() {
             var node = {"children":{'h':'h1'},"data":{"objectType":"TextBookUnit","id":"462a48a1-29bc-4acc-81e1-6b99c1189da0","root":false,"metadata":{"mimeType":"application/vnd.ekstep.content-collection","topicData":"(0) topics selected","name":"Untitled TextBook"}}};
             spyOn($scope, "removeOwnershipList").and.callThrough();
             $scope.removeOwnershipList(event, node);
-            $scope.disbaleDownloadToc = false;
+            $scope.disableDownloadToc = false;
             expect($scope.removeOwnershipList).toHaveBeenCalled();
             done();
         }); 
@@ -108,7 +108,7 @@ describe("Sunbird header plugin:", function() {
             var data = {};
             spyOn($scope, "setPendingChangingStatus").and.callThrough();
             $scope.setPendingChangingStatus(event, data);
-            $scope.disbaleDownloadToc = true;
+            $scope.disableDownloadToc = true;
             expect($scope.setPendingChangingStatus).toHaveBeenCalled();
             done();
         }); 
