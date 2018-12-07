@@ -1,6 +1,6 @@
 'use strict';
 var fileUploader;
-angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', ['$scope', '$injector', 'instance', function ($scope, $injector, instance) {
+angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadfileController', ['$scope', '$injector', 'instance', function ($scope, $injector, instance) {
 
     $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
     $scope.textbookService = ecEditor.getService(ServiceConstants.TEXTBOOK_SERVICE);
@@ -11,7 +11,6 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
 
     $scope.configData = instance.configData;
     $scope.callback = instance.callback;
-    $scope.showErrorPopup = false;
     $scope.$on('ngDialog.opened', function () {
         $scope.uploader = new qq.FineUploader({
             element: document.getElementById("upload-csv-div"),
@@ -46,14 +45,16 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadController', [
                     $scope.uploadBtn = false;
                     $scope.uploadFile($scope.callback);
                 },
-                onError: function (id, name, errorReason) {
+                onError: function (id, name, errorReason, xhrOrXdr) {
                     $scope.uploadBtn = true;
                     console.error("Unable to upload due to:", errorReason);
-                    $scope.showLoader(false);
-                    $scope.showErrorPopup = true;
-                    $scope.closeThisDialog();
-
                     $scope.uploader.reset();
+                    $scope.showLoader(false); 
+                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                        message: errorReason,
+                        position: 'topCenter',
+                        icon: 'fa fa-warning'
+                    }); 
                 }
             },
             showMessage: function (messages) {

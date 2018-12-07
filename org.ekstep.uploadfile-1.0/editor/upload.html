@@ -1,4 +1,4 @@
-<script type="text/ng-template" ng-app="org.ekstep.uploadfile-1.0" ng-controller="uploadController as $ctrl" id="partials_org.ekstep.uploadfile.html">
+<script type="text/ng-template" ng-app="org.ekstep.uploadfile-1.0" ng-controller="uploadfileController as $ctrl" id="partials_org.ekstep.uploadfile.html">
 <div type="text/template" id="qq-template-validation" style="display: none">
     <div class="qq-uploader-selector qq-uploader custom-qq-uploader" style="min-height:250px;">
 
@@ -53,22 +53,30 @@
         </dialog>
     </div>
 </div>
-<div class="ui small modal active upload-csv-modal">
+<div class="ui modal active upload-csv-modal">
     <div class="header">
         <div class="ui grid">
             <div class="fourteen column row">
                 <div class="left floated twelve wide column">
-                    <h3><label>{{configData.headerTitle}}</label></h3>
-                </div>
-                <p>{{configData.description}}</p>
+                    <i class="upload icon"></i>
+                    <label>{{configData.headerTitle}}</label>
+                </div>                
             </div>
         </div>
     </div>
+    <div class="content">
+    <p>{{configData.description}}</p>
     <div class="content padding-top-0">
         <div id="upload-csv-div"></div>
         <div id="upload-content-loader-area" ng-if='showLoaderIcon' style="width:69px;height:89px; top:38%;left: 46%;
          position:absolute; padding:2px;"><img ng-src = "{{loaderIcon}}" width="64" height="64" /><br>Uploading..</div>
      
+         <div class="ui message">
+                <ul class="list">
+                    <li>File accepted - csv</li>
+                </ul>
+            </div>
+    </div>
     </div>
     <div class="actions">
         <div class="ui buttons">

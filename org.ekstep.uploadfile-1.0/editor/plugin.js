@@ -16,7 +16,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         instance.callback = data.callback;
         ecEditor.getService('popup').open({
             template: 'partials_org.ekstep.uploadfile.html',
-            controller: 'uploadController',
+            controller: 'uploadfileController',
             controllerAs: '$ctrl',
             resolve: {
                 'instance': function() {
