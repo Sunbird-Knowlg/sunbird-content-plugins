@@ -29,3 +29,4 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
     }
 });
+//# sourceURL=uploadContentPlugin.js
