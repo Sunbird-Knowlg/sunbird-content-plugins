@@ -284,7 +284,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
                 $scope.showsuggestedContent = res.data.result.content.contentType === 'TextBook' ? true : false;
                 if(showToc && res.data.result.content.contentType === 'TextBook' && !res.data.result.content.children){
-                    var config = {
+                    ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
                         headerTitle: $scope.CONSTANTS.tocUploadHeader,
                         description: $scope.CONSTANTS.tocUploadDescription,
                         validation: {
@@ -293,9 +293,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                         buttonText: {
                             'primaryBtn': $scope.CONSTANTS.tocUploadBtnUpload,
                             'exitBtn': $scope.CONSTANTS.tocUploadBtnClose
-                        }
-                    };
-                    ecEditor.dispatchEvent("org.ekstep.uploadfile:show", config, function (data, errTitle) {
+                        },
+                        callback: function (data, errTitle) {
                             console.log('response err', data);
                             $scope.errTitle = errTitle;
                             $scope.errMessage = data;
@@ -307,6 +306,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                                 scope: $scope,
                                 className: 'ngdialog-theme-default'
                             });                   
+                        }
                     });
                 }
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
