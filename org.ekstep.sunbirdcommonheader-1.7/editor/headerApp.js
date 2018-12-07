@@ -63,6 +63,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.isFlagReviewer = false;
     $scope.editorEnv = "";
     $scope.collectionType = "";
+    $scope.collectionMode = "";
     $scope.showEditMeta = true;
     $scope.contentCredits = [];
     $scope.listLimit = 5;
@@ -72,9 +73,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         tocDownloadFailed: 'Unable to download the content, please try again later',
         tocDownloadSuccess: 'Table of Content downloadeding!',
         tocUpdateHeader: 'Update Table of Contents Metadata attributes via CSV',
-        tocUpdateDescription: 'Please note that no sections could be added or removed using CSV upload, only the values of the attributes can be changes', 
+        tocUpdateDescription: 'Please note that no sections could be added or removed using CSV upload, only the values of the attributes can be changes',
         tocUpdateBtnUpload: 'Upload',
-        tocUpdateBtnClose: 'Close' 
+        tocUpdateBtnClose: 'Close'
     }
 
     /*
@@ -175,6 +176,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.publishMode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').publishMode;
                 $scope.isFlagReviewer = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').isFlagReviewer;
                 $scope.collectionType =  ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild().data.objectType;
+                $scope.collectionMode = ecEditor.getConfig('editorConfig').mode;
                 if (ecEditor.getConfig('editorConfig').mode === 'Read')
                     $scope.showEditMeta = false;
                 $scope.resolveReviewBtnStatus();
@@ -732,8 +734,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     /**
      * @description - used to update toc via csv
      */
-    $scope.updateToc = function () {
-        var config = {
+    $scope.updateToc = function () {        
+        ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
             headerTitle: $scope.CONSTANTS.tocUpdateHeader,
             description: $scope.CONSTANTS.tocUpdateDescription,
             validation: {
@@ -742,21 +744,20 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             buttonText: {
                 'primaryBtn': $scope.CONSTANTS.tocUpdateBtnUpload,
                 'exitBtn': $scope.CONSTANTS.tocUpdateBtnClose
+            },
+            callback: function(data, errTitle){
+                console.log('response err', data);
+                $scope.errTitle = errTitle;
+                $scope.errMessage = data;
+                ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
+                    template: 'updateTocError',
+                    controller: 'headerController',
+                    controllerAs: '$ctrl',
+                    showClose: false,
+                    scope: $scope,
+                    className: 'ngdialog-theme-default'
+                });
             }
-        };
-        
-        ecEditor.dispatchEvent("org.ekstep.uploadfile:show", config, function(data, errTitle){
-            console.log('response err', data);
-            $scope.errTitle = errTitle;
-            $scope.errMessage = data;
-            ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
-                template: 'updateTocError',
-                controller: 'headerController',
-                controllerAs: '$ctrl',
-                showClose: false,
-                scope: $scope,
-                className: 'ngdialog-theme-default'
-            });
         });
     }
 

@@ -27,8 +27,7 @@
         </div>
         <div class="five wide column custom-5-wide" style="padding-top:1rem!important;">
             <div class="row header-icon-container">
-                <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook')" class="custom-row-2" style="float: left;">
-                    <div  class="ui dropdown" style=" vertical-align: -webkit-baseline-middle; ">
+                    <!-- <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook' && collectionMode != 'Read')" class="custom-row-2" style="float: left;">                    <div  class="ui dropdown" style=" vertical-align: -webkit-baseline-middle; ">
                         <div class="ui dropdown">
                             Download/Update ToC
                             <i class="dropdown icon"></i>
@@ -42,8 +41,8 @@
                                 <i class="upload icon"></i> Update ToC Metadata</div>
                         </div>
                     </div>
-                </div>
-                <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook')" class="custom-row-2" style="float: left;margin-left: 30px;" >
+                </div> -->
+                <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook' && collectionMode != 'Read')" class="custom-row-2" style="float: left;margin-left: 30px;" >
                     <div class="ui dropdown qrCodeStyler" style=" vertical-align: -webkit-baseline-middle; ">
                         <div class="ui dropdown">
                             QR Codes
@@ -158,24 +157,4 @@
     $(".ui.dropdown").dropdown();
     $("#contentCreditsList .item").addClass('disabled');
     $('.users.icon').popup();
-</script>
-<script type="text/ng-template" ng-controller="headerController as $ctrl" id="updateTocError">
-    <div class="ui tiny modal active browseFileForUpdate">
-        <div class="header bottomBorder">
-            <h5 class="ui header errMessage">
-                <i class="window close icon"></i>
-                <div class="content">
-                {{errTitle}}
-                </div>
-            </h5>
-        </div>
-        <div class="content">
-                <p >{{errMessage}}</p>
-        </div>
-        <div class="actions">
-            <div class="ui buttons ">
-                <button id="closePopUp " class="ui blue button" type="button " ng-click="closeThisDialog();">Close</button>
-            </div>
-        </div>
-    </div>
 </script>
