@@ -732,8 +732,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     /**
      * @description - used to update toc via csv
      */
-    $scope.updateToc = function () {
-        var config = {
+    $scope.updateToc = function () {        
+        ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
             headerTitle: $scope.CONSTANTS.tocUpdateHeader,
             description: $scope.CONSTANTS.tocUpdateDescription,
             validation: {
@@ -742,21 +742,20 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             buttonText: {
                 'primaryBtn': $scope.CONSTANTS.tocUpdateBtnUpload,
                 'exitBtn': $scope.CONSTANTS.tocUpdateBtnClose
+            },
+            callback: function(data, errTitle){
+                console.log('response err', data);
+                $scope.errTitle = errTitle;
+                $scope.errMessage = data;
+                ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
+                    template: 'updateTocError',
+                    controller: 'headerController',
+                    controllerAs: '$ctrl',
+                    showClose: false,
+                    scope: $scope,
+                    className: 'ngdialog-theme-default'
+                });
             }
-        };
-        
-        ecEditor.dispatchEvent("org.ekstep.uploadfile:show", config, function(data, errTitle){
-            console.log('response err', data);
-            $scope.errTitle = errTitle;
-            $scope.errMessage = data;
-            ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
-                template: 'updateTocError',
-                controller: 'headerController',
-                controllerAs: '$ctrl',
-                showClose: false,
-                scope: $scope,
-                className: 'ngdialog-theme-default'
-            });
         });
     }
 
