@@ -648,12 +648,21 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     type: "org.ekstep.toaster:success",
                     icon: 'fa fa-check-circle'
                 }
-                var rootNode = ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild();
-                rootNode.data.metadata['reservedDialcodes'] = res.data.result.reservedDialcodes;
-                rootNode.data.metadata['qrCodeProcessId'] = res.data.result.processId;
-                $scope.qrCodeProcessId = res.data.result.processId
-                $scope.getQRCodeRequestCount();
-                $scope.resolveQRDownloadBtn();
+                ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentVersionKey(org.ekstep.contenteditor.api.getContext('contentId'), function(err, content) {
+                    if (err) {
+                        toasterPrompt = {
+                            message: err.responseJSON.params.errmsg,
+                            type: "org.ekstep.toaster:error",
+                            icon: 'fa fa-warning'
+                        }
+                    }
+                    var rootNode = ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild();
+                    rootNode.data.metadata['reservedDialcodes'] = res.data.result.reservedDialcodes;
+                    rootNode.data.metadata['qrCodeProcessId'] = res.data.result.processId;
+                    $scope.qrCodeProcessId = res.data.result.processId
+                    $scope.getQRCodeRequestCount();
+                    $scope.resolveQRDownloadBtn();
+                 });
             }
             ecEditor.dispatchEvent(toasterPrompt.type, {
                 message: toasterPrompt.message,
