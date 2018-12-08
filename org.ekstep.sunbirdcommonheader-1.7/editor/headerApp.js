@@ -648,7 +648,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     type: "org.ekstep.toaster:success",
                     icon: 'fa fa-check-circle'
                 }
-                ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentVersionKey(org.ekstep.contenteditor.api.getContext('contentId'), function(err, content) {
+                ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContent(org.ekstep.contenteditor.api.getContext('contentId'), function(err, content) {
                     if (err) {
                         toasterPrompt = {
                             message: err.responseJSON.params.errmsg,
