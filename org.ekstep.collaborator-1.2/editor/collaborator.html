@@ -26,9 +26,9 @@
 
                 <ul class="searchList" ng-show="searchKeyword.length >= 3 && $ctrl.searchRes.content.length">
                     <li class="searchResult" ng-repeat="user in $ctrl.searchRes.content | limitTo:5">
-                        <p>{{user.firstName}}{{user.lastName}}</p>
+                        <p ng-click="selectUser(user)">{{user.firstName}}{{user.lastName}}</p>
                     </li>
-                    <li ng-if="$ctrl.searchRes.content.length > 5" ng-click="lessonBrowserSearch()" style="padding:2%;color:#007aff;font-size: 14px;cursor:pointer;font-weight:600"><span>View All Results</span></li>
+                    <li ng-if="$ctrl.searchRes.content.length > 5" ng-click="viewAllResults()" style="padding:2%;color:#007aff;font-size: 14px;cursor:pointer;font-weight:600"><span>View All Results</span></li>
                 </ul>
                 <ul class="searchList" ng-show="!$ctrl.searchRes.content.length && searchKeyword.length >= 3 && noResultFound">
                     <li class="searchResultMsg"><strong>No Results</strong>
@@ -45,16 +45,16 @@
         </div>
         <!--END OF HEADER -->
         <!--BODY-->
-        <!-- FOR ADD COLLABORATORS -->
         <div class="ui active inverted dimmer" ng-if="isLoading">
             <div class="ui large text loader">Loading</div>
         </div>
+        <!-- FOR ADD COLLABORATORS -->
         <div class="height-100" ng-if="isAddCollaboratorPopup">
             <div class="margin-left-right-10">
                 <div class="ui grid div-scroll">
                     <div class="twelve wide column" >
                         <div class="ui four stackable cards">
-                            <div class="card" ng-repeat="user in mockUsersList" ng-click="toggleSelectionUser(user)">
+                            <div class="card" ng-repeat="user in usersList" ng-click="toggleSelectionUser(user)">
                                 <div class="content">
                                     <img class="left floated mini ui image" src="{{user.thumbnail || $ctrl.defaultImage}}">
                                     <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{user.identifier}}' style="z-index:12">
@@ -92,7 +92,7 @@
                         </div>
                     </div>
                     <br />
-                    <button class="clear-btn color-blue" ng-click="addCollaborators()">Add collaborators</button>
+                    <button class="clear-btn color-blue" ng-click="showUsersList()">Add collaborators</button>
                 </div>
             </div>
         </div>
@@ -105,7 +105,7 @@
                 <div class="ui grid">
                     <div class="twelve wide column">
                         <button ng-if="isAddCollaboratorPopup" class="ui right floated color-white background-blue tiny button next-btn" ng-click="returnSelectedUsers()" ng-disabled="!selectedUsersId.length">Next</button>
-                        <button ng-if="!isAddCollaboratorPopup" class="ui left floated tiny button next-btn" ng-click="goBack()">Back</button>
+                        <button ng-if="!isAddCollaboratorPopup" class="ui left floated tiny button next-btn" ng-click="showUsersList()">Back</button>
                         <button ng-if="!isAddCollaboratorPopup" class="ui right floated color-white background-blue tiny button next-btn" ng-click="updateCollaborators()">Done</button>
                     </div>
                 </div>

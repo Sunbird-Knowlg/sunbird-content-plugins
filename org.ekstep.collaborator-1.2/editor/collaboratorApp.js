@@ -6,8 +6,18 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply'])
         ctrl.searchRes = { count: 0, content: [] };
 
         $scope.mode = ecEditor.getConfig('editorConfig').mode;
+        $scope.contentId = ecEditor.getContext('contentId');
+        $scope.currentCollaborators = [];
+        $scope.userSelection = []; // Selected User object
+        $scope.selectedUsersId = [];
+        $scope.isAddCollaboratorPopup = false;
+        $scope.searchResponse = [];
+        $scope.usersList = [];
+        $scope.isLoading = true;
+        $scope.noResultFound = false;
 
-        let searchBody =  {
+        let searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
+        let searchBody = {
             "request": {
                 "query": "",
                 "filters": {},
@@ -17,18 +27,156 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply'])
             }
         };
 
-        $scope.userSelection = []; // Selected User object
-        $scope.selectedUsersId = [];
-        $scope.isAddCollaboratorPopup = false;
-        $scope.searchResponse = [];
-        $scope.mockUsersList = [];
-        $scope.isLoading = true;
-        $scope.noResultFound = false;
+        let updateCollaboratorRequest = {
+            "request": {
+                "content": {
+                    "collaborators": []
+                }
+            }
+        };
+
+
+        $scope.init = function () {
+            /*
+                1. First check - Existing collaborators for the current content
+                2. If there are existing collaborators show - collaborators list
+                3. If there are no existing collaborators then show add collaborators screen
+            */
+            // Fetch collaborators list
+            $scope.fetchCollaborators();
+        }
+
+        /**
+        * Makes API call to fetch currently added collaborators/owners
+        */
+        $scope.fetchCollaborators = function () {
+            ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: ecEditor.getContext('contentId'), mode: 'edit' }, function (err, res) {
+                if (err) {
+                    console.error('Unable to fetch collaborators', err);
+                    $scope.loadTemplate();
+                } else if (res && res.data && res.data.responseCode === "OK") {
+                    console.log('Content Collaborators Response=>', res.data.result.content.collaborators);
+
+                    searchBody.request.filters.userId = res.data.result.content.collaborators;
+                    $scope.selectedUsersId = res.data.result.content.collaborators;
+                    searchService.userSearch(searchBody, function (err, res) {
+                        if (err) {
+                            console.error('Unable to fetch collaborators Profile=>', err);
+                        } else {
+                            if (res.data.result.response.content.length) {
+                                $scope.currentCollaborators = res.data.result.response.content;
+                                console.log("currentCOllaborators", $scope.currentCollaborators);
+                                $scope.userSelection = _.cloneDeep(res.data.result.response.content);
+                            }
+                            console.log('Response collaborators object list', $scope.currentCollaborators);
+                        }
+                        $scope.loadTemplate();
+                    });
+                } else {
+                    console.error('Unable to fetch collection hierarchy', res);
+                    $scope.loadTemplate();
+                }
+            });
+        }
+
+        /**
+         * Loads template based on availability of the collaborators
+         */
+        $scope.loadTemplate = function () {
+            if ($scope.userSelection.length) {
+                $scope.isAddCollaboratorPopup = false;
+                $scope.isLoading = false;
+                console.log("Current Collaborators=>", $scope.userSelection);
+            } else {
+                $scope.loadAllUsers();
+            }
+        }
+
+        $scope.loadAllUsers = function () {
+            $scope.isAddCollaboratorPopup = true;
+
+            searchBody.request.query = "";
+            searchBody.request.filters = {};
+            searchService.userSearch(searchBody, function (err, res) {
+                if (err) {
+                    console.log('Unable to fetch All Users ', err);
+                } else {
+                    $scope.usersList = res.data.result.response.content;
+                    $scope.isLoading = false;
+                    console.log('All users response=>', $scope.usersList);
+                    $timeout(function () {
+                        ecEditor.jQuery('.checkbox').checkbox();
+                    });
+                    ctrl.applyAllJquery();
+
+                    angular.element(document).ready(function () {
+                        $timeout(function () {
+                            ecEditor.jQuery('.checkbox').checkbox();
+                        });
+                    });
+
+                }
+            });
+            $scope.$safeApply();
+        }
+
+        /**
+         * Removed existing collaborators
+         */
+        $scope.removeCollaborator = function (user, index) {
+            $scope.userSelection.splice(index, 1);
+            console.log('After Removed Collaborator=>', $scope.userSelection);
+        }
+
+        /**
+         * Updates collaborators
+         */
+        $scope.updateCollaborators = function () {
+
+            console.log('currentCollaborators', $scope.currentCollaborators);
+            console.log('selectedUsersId', $scope.selectedUsersId);
+
+            if (_.isEqual($scope.currentCollaborators.map(user => user.identifier).sort(), $scope.selectedUsersId.sort())) {
+                alert('Coming here');
+                $scope.closePopup();
+            } else {
+                updateCollaboratorRequest.request.content.collaborators = $scope.selectedUsersId;
+
+                var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
+                searchService.updateCollaborators(ecEditor.getContext('contentId'), updateCollaboratorRequest, function (err, res) {
+                    if (err) {
+                        console.log('Unable to update collaborator', err);
+                    } else {
+                        alert('Collaborator updated successfully');
+                        $scope.closePopup();
+                    }
+                });
+            }
+        }
 
         // Close the popup
         $scope.closePopup = function (pageId) {
             $scope.closeThisDialog();
         };
+
+        /**
+         * Opens up window to add multiple collaborators
+         */
+        $scope.showUsersList = function () {
+            if ($scope.showUsersList.length) {
+                $scope.isAddCollaboratorPopup = true;
+                $scope.noResultFound = false;
+                //$scope.userSelection = [];
+                //$scope.selectedUsersId = [];
+                $timeout(function () {
+                    ecEditor.jQuery('.checkbox').checkbox();
+                });
+            } else {
+                $scope.isAddCollaboratorPopup = true;
+                $scope.isLoading = true;
+                $scope.loadAllUsers();
+            }
+        }
 
         // apply all jquery after dom render
         ctrl.applyAllJquery = function () {
@@ -36,11 +184,11 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply'])
                 ecEditor.jQuery('.checkbox').checkbox();
             });
             $timeout(function () {
-                ctrl.toggleUser($scope.mockUsersList);
+                ctrl.toggleUser($scope.usersList);
             }, 0);
         }
 
-        // Add or Remove resources
+        // Add or Remove users
         $scope.toggleSelectionUser = function (user) {
             var idx = $scope.selectedUsersId.indexOf(user.identifier);
             if (idx > -1) {
@@ -52,9 +200,21 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply'])
                 $scope.userSelection.push(user); // is newly selected, add to the selection list
                 $scope.selectedUsersId.push(user.identifier);
             }
+
+            console.log('currentCOllaborator', $scope.currentCollaborators);
+
         }
 
-        // Add or Remove resources
+        /**
+         * Selects User and show check mark checked
+         */
+        $scope.selectUser = function (user) {
+            $scope.userSelection.push(user); // is newly selected, add to the selection list
+            $scope.selectedUsersId.push(user.identifier);
+            // $scope.returnSelectedUsers();
+        }
+
+        // Add or Remove user
         ctrl.toggleUser = function (users) {
             angular.forEach(users, function (user) {
                 if ($scope.selectedUsersId.indexOf(user.identifier) !== -1) {
@@ -65,6 +225,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply'])
             });
         }
 
+
         $scope.searchByKeyword = function () {
             $scope.searchStatus = "start";
             ecEditor.jQuery('.search-Loader').addClass('active');
@@ -73,7 +234,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply'])
             searchBody.request.query = this.searchKeyword;
             searchService.userSearch(searchBody, function (err, res) {
                 if (err) {
-                    console.log('Errror: ', err);
+                    console.log('User Search Failed:=>', err);
                     ctrl.searchRes.content = [];
                     $scope.noResultFound = true;
                     ctrl.searchErr = "Oops! Something went wrong. Please try again later.";
@@ -88,11 +249,16 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply'])
                     }
 
                     ctrl.searchRes.count = res.data.result.response.count;
-                    console.log('Response', ctrl.searchRes);
+                    console.log('User Search Response=>', ctrl.searchRes);
                 }
             });
+        }
 
-            // do search service call here.
+        /**
+         * Shows Search Results in large screen
+         */
+        $scope.viewAllResults = function () {
+            $scope.usersList = ctrl.searchRes.content;
         }
 
         $scope.refreshSearch = function () {
@@ -104,31 +270,6 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply'])
         }
 
         /**
-         * Makes API call to fetch currently added collaborators/owners
-         */
-        $scope.fetchCollaborator = function () {
-
-        }
-
-        /**
-         * Opens up window to add multiple collaborators
-         */
-        $scope.addCollaborators = function () {
-            /* $scope.isAddCollaboratorPopup = true;
-            $timeout(function () {
-                ecEditor.jQuery('.checkbox').checkbox();
-            }); */
-            $scope.goBack();
-        }
-
-        /**
-         * Removed existing collaborators
-         */
-        $scope.removeCollaborator = function (user, index) {
-            $scope.userSelection.splice(index, 1);
-        }
-
-        /**
          * Resets search values
          */
         $scope.resetSearch = function () {
@@ -137,164 +278,11 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply'])
         }
 
         /**
-         * Navigates to add collaboration window
-         */
-        $scope.goBack = function () {
-            $scope.isAddCollaboratorPopup = true;
-            $scope.noResultFound = false;
-            $scope.userSelection = [];
-            $scope.selectedUsersId = [];
-            $timeout(function () {
-                ecEditor.jQuery('.checkbox').checkbox();
-            });
-        }
-
-        /**
          * Generates telemetry
          */
         $scope.generateTelemetry = function (data) {
         }
-
-        $scope.init = function () {
-            if ($scope.userSelection.length) {
-                $scope.isAddCollaboratorPopup = false;
-            } else {
-                $scope.isAddCollaboratorPopup = true;
-            }
-
-            searchBody.request.query = "";
-            var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
-            searchService.userSearch(searchBody, function (err, res) {
-                if (err) {
-                    console.log('Errror: ', err);
-                } else {
-                    $scope.mockUsersList = res.data.result.response.content;
-                    $scope.isLoading = false;
-                    console.log('Response', $scope.mockUsersList);
-                    $timeout(function () {
-                        ecEditor.jQuery('.checkbox').checkbox();
-                    });
-                    $scope.$safeApply();
-                }
-            });
-
-            ctrl.applyAllJquery();
-        }
-
-        angular.element(document).ready(function () {
-            $timeout(function () {
-                ecEditor.jQuery('.checkbox').checkbox();
-            });
-        });
-
         $scope.init();
     }]);
+
 //# sourceURL=collaborator.js
-
-
-        /* $scope.mockUsersList = [
-            {
-                "identifier": "1",
-                "firstName": "John",
-                "lastName": "Doe",
-                "email": "johndoe@gmail.com",
-                "organization": "Ekstep",
-                "avatar": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png"
-            },
-            {
-                "identifier": "2",
-                "firstName": "John",
-                "lastName": "Doe",
-                "email": "johndoe@gmail.com",
-                "organization": "Ekstep",
-                "avatar": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png"
-            },
-            {
-                "identifier": "3",
-                "firstName": "John",
-                "lastName": "Doe",
-                "email": "johndoe@gmail.com",
-                "organization": "Ekstep",
-                "avatar": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png"
-            },
-            {
-                "identifier": "4",
-                "firstName": "John",
-                "lastName": "Doe",
-                "email": "johndoe@gmail.com",
-                "organization": "Ekstep",
-                "avatar": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png"
-            },
-            {
-                "identifier": "5",
-                "firstName": "John",
-                "lastName": "Doe",
-                "email": "johndoe@gmail.com",
-                "organization": "Ekstep",
-                "avatar": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png"
-            },
-            {
-                "identifier": "6",
-                "firstName": "John",
-                "lastName": "Doe",
-                "email": "johndoe@gmail.com",
-                "organization": "Ekstep",
-                "avatar": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png"
-            },
-            {
-                "identifier": "7",
-                "firstName": "John",
-                "lastName": "Doe",
-                "email": "johndoe@gmail.com",
-                "organization": "Ekstep",
-                "avatar": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png"
-            },
-            {
-                "identifier": "8",
-                "firstName": "John",
-                "lastName": "Doe",
-                "email": "johndoe@gmail.com",
-                "organization": "Ekstep",
-                "avatar": ""
-            },
-            {
-                "identifier": "9",
-                "firstName": "John",
-                "lastName": "Doe",
-                "email": "johndoe@gmail.com",
-                "organization": "Ekstep",
-                "avatar": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png"
-            },
-            {
-                "identifier": "10",
-                "firstName": "John",
-                "lastName": "Doe",
-                "email": "johndoe@gmail.com",
-                "organization": "Ekstep",
-                "avatar": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png"
-            },
-            {
-                "identifier": "11",
-                "firstName": "John",
-                "lastName": "Doe",
-                "email": "johndoe@gmail.com",
-                "organization": "Ekstep",
-                "avatar": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png"
-            },
-            {
-                "identifier": "12",
-                "firstName": "John",
-                "lastName": "Doe",
-                "email": "johndoe@gmail.com",
-                "organization": "Ekstep",
-                "avatar": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png"
-            },
-            {
-                "identifier": "13",
-                "firstName": "John",
-                "lastName": "Doe",
-                "email": "johndoe@gmail.com",
-                "organization": "Ekstep",
-                "avatar": "https://cdn.pixabay.com/photo/2013/07/13/10/07/man-156584_960_720.png"
-            }];
- */
