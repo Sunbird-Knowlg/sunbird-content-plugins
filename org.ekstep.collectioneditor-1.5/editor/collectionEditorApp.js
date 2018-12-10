@@ -352,7 +352,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
 
     $scope.realodContent = function() {
         $('#collection-tree').remove();
-        $("#treeWrapper").append('<div id="collection-tree" ng-class="collectionTreeHeight"></div>');
+        $("#treeWrapper").append('<div id="collection-tree" ng-class="collectionTreeHeight" class="collection-tree-height-with-footer"></div>');
         var mode;
         if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
