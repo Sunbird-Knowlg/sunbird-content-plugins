@@ -283,32 +283,32 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
                 $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
                 $scope.showsuggestedContent = res.data.result.content.contentType === 'TextBook' ? true : false;
-                // if(showToc && res.data.result.content.contentType === 'TextBook' && !res.data.result.content.children){
-                //     ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
-                //         headerTitle: $scope.CONSTANTS.tocUploadHeader,
-                //         description: $scope.CONSTANTS.tocUploadDescription,
-                //         validation: {
-                //             'allowedExtension': ['csv']
-                //         },
-                //         buttonText: {
-                //             'primaryBtn': $scope.CONSTANTS.tocUploadBtnUpload,
-                //             'exitBtn': $scope.CONSTANTS.tocUploadBtnClose
-                //         },
-                //         callback: function (data, errTitle) {
-                //             console.log('response err', data);
-                //             $scope.errTitle = errTitle;
-                //             $scope.errMessage = data;
-                //             ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
-                //                 template: 'updateTocError',
-                //                 controller: 'headerController',
-                //                 controllerAs: '$ctrl',
-                //                 showClose: false,
-                //                 scope: $scope,
-                //                 className: 'ngdialog-theme-default'
-                //             });                   
-                //         }
-                //     });
-                // }
+                if(showToc && res.data.result.content.contentType === 'TextBook' && !res.data.result.content.children){
+                    ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
+                        headerTitle: $scope.CONSTANTS.tocUploadHeader,
+                        description: $scope.CONSTANTS.tocUploadDescription,
+                        validation: {
+                            'allowedExtension': ['csv']
+                        },
+                        buttonText: {
+                            'primaryBtn': $scope.CONSTANTS.tocUploadBtnUpload,
+                            'exitBtn': $scope.CONSTANTS.tocUploadBtnClose
+                        },
+                        callback: function (data, errTitle) {
+                            console.log('response err', data);
+                            $scope.errTitle = errTitle;
+                            $scope.errMessage = data;
+                            ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
+                                template: 'updateTocError',
+                                controller: 'headerController',
+                                controllerAs: '$ctrl',
+                                showClose: false,
+                                scope: $scope,
+                                className: 'ngdialog-theme-default'
+                            });                   
+                        }
+                    });
+                }
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
                 $scope.$safeApply();
                 callback && callback(err, res);
