@@ -54,7 +54,7 @@
                 <div class="ui grid div-scroll">
                     <div class="twelve wide column" >
                         <div class="ui four stackable cards">
-                            <div class="card" ng-repeat="user in usersList" ng-click="toggleSelectionUser(user)">
+                            <div class="card" ng-repeat="user in usersList" ng-click="toggleSelectionUser(user)" in-view="lineInView($index, $inview, user, 'collaboratorPopup', $index)" in-view-options="{ throttle: 1000 }">
                                 <div class="content">
                                     <img class="left floated mini ui image" src="{{user.thumbnail || $ctrl.defaultImage}}">
                                     <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{user.identifier}}' style="z-index:12">
