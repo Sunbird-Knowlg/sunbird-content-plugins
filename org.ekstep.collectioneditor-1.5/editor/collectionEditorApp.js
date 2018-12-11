@@ -350,7 +350,8 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         });
     });
 
-    $scope.realodContent = function() {
+    $scope.reloadContent = function() {
+        org.ekstep.collectioneditor.api.getService('collection').clearCache();
         $('#collection-tree').remove();
         $("#treeWrapper").append('<div id="collection-tree" ng-class="collectionTreeHeight" class="collection-tree-height-with-footer"></div>');
         var mode;
@@ -405,7 +406,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:added', $scope.addContent, $scope);
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:removed', $scope.removeContent, $scope);
-    ecEditor.addEventListener('org.ekstep.collectioneditor:reload', $scope.realodContent, $scope);
+    ecEditor.addEventListener('org.ekstep.collectioneditor:reload', $scope.reloadContent, $scope);
    
     $scope.parseKeywords = function(keywords){
         if(_.isString(keywords)){
