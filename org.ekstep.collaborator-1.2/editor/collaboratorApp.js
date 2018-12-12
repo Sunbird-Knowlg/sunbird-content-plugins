@@ -132,7 +132,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
          * Removed existing collaborators
          */
         $scope.removeCollaborator = function (user, index) {
-            $scope.generateTelemetry({ type: 'click', subtype: 'remove', target: 'removeCollaborator', targetid: 'button-remove' });
+            $scope.generateTelemetry({ type: 'click', subtype: 'remove', target: 'removeCollaborator', targetid: 'remove-button' });
             console.log('Before removal', $scope.selectedUsersId);
             $scope.userSelection.splice(index, 1);
             _.remove($scope.selectedUsersId, (userId) => userId === user.identifier);
@@ -145,7 +145,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
          * Updates collaborators
          */
         $scope.updateCollaborators = function () {
-            $scope.generateTelemetry({ type: 'click', subtype: 'update', target: 'updateCollaborator', targetid: 'button-done' });
+            $scope.generateTelemetry({ type: 'click', subtype: 'update', target: 'updateCollaborator', targetid: 'done-button' });
             console.log('currentCollaborators', $scope.currentCollaborators);
             console.log('selectedUsersId', $scope.selectedUsersId);
 
@@ -169,7 +169,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         // Close the popup
         $scope.closePopup = function (pageId) {
             inViewLogs = [];
-            $scope.generateTelemetry({ type: 'click', subtype: 'cancel', target: 'closePopup', targetid: 'button-cancel' });
+            $scope.generateTelemetry({ type: 'click', subtype: 'cancel', target: 'closePopup', targetid: 'close-button' });
             $scope.closeThisDialog();
         };
 
@@ -258,7 +258,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
 
             var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
             searchBody.request.query = this.searchKeyword;
-            $scope.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'button-search' });
+            $scope.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'search-button' });
 
             searchService.userSearch(searchBody, function (err, res) {
                 if (err) {
@@ -291,6 +291,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         }
 
         $scope.refreshSearch = function () {
+            $scope.generateTelemetry({ type: 'click', subtype: 'refresh', target: 'viewAll', targetid: "" });
             this.searchKeyword = '';
         }
 

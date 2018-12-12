@@ -8,7 +8,7 @@
 
             <div class="ui right floated header" ng-if="!isAddCollaboratorPopup">
                 <span>
-                    <i class="close link icon" id="resourceCloseBtn" ng-click="closePopup()"></i>
+                    <i class="close link icon" id="close-button" ng-click="closePopup()"></i>
                 <span>
             </div>
 
@@ -16,7 +16,7 @@
                 <div class="ui action input search-reset-keyword-field">
                     <input type="text" id="user-search" placeholder="Search..." autocomplete="off" spellcheck="false" ng-model="searchKeyword" ng-keyup="searchKeyword.length >= 3 ? searchByKeyword() : resetSearch()">
                     <div class="ui tiny inline loader search-loader"></div>
-                    <div class="search-element" id="refresh-button" ng-show="(searchStatus == 'end' && searchKeyword.length >= 3 )" ng-click="refreshSearch() " title="refresh">
+                    <div class="search-element" id="refresh-button" ng-show="(searchStatus == 'end' && searchKeyword.length >= 3 )" ng-click="refreshSearch()" title="refresh">
                         <i class="close link icon"></i>
                     </div>
                     <div class="search-element" ng-show="((searchKeyword.length < 3 || searchKeyword == (null || undefined)))" id="search-button" ng-click="searchByKeyword()">
@@ -39,7 +39,7 @@
                     <strong class="searchResultMsg">{{$ctrl.searchErr}}</strong>
                 </ul>
                 <span>
-                    <i class="close link icon" id="resourceCloseBtn" ng-click="closePopup()"></i>
+                    <i class="close link icon" id="close-button" ng-click="closePopup()"></i>
                 </span>
             </div>
         </div>
@@ -81,7 +81,7 @@
                             <div class="item padding-bottom-5" ng-repeat="user in userSelection" id="userItem_{{user.identifier}}">
                                 <div class="right floated content remove-button">
                                     <!-- <div class="ui button">DELETE</div> -->
-                                    <button class="clear-btn color-danger vertical-align-middle" ng-click="removeCollaborator(user, $index)">REMOVE</button>
+                                    <button class="clear-btn color-danger vertical-align-middle" id="remove-button" ng-click="removeCollaborator(user, $index)">REMOVE</button>
                                 </div>
                                 <img class="ui avatar tiny image" src="{{user.avatar || $ctrl.defaultImage}}">
                                 <div class="content">
@@ -106,7 +106,7 @@
                     <div class="twelve wide column">
                         <button ng-if="isAddCollaboratorPopup" class="ui right floated color-white background-blue tiny button next-btn" ng-click="returnSelectedUsers()" ng-disabled="!selectedUsersId.length">Next</button>
                         <button ng-if="!isAddCollaboratorPopup" class="ui left floated tiny button next-btn" ng-click="showUsersList()">Back</button>
-                        <button ng-if="!isAddCollaboratorPopup" class="ui right floated color-white background-blue tiny button next-btn" ng-click="updateCollaborators()">Done</button>
+                        <button ng-if="!isAddCollaboratorPopup" id="done-button" class="ui right floated color-white background-blue tiny button next-btn" ng-click="updateCollaborators()">Done</button>
                     </div>
                 </div>
             </div>
