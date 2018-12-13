@@ -14,6 +14,7 @@
                     <span ng-if="showEditMeta"><i class="edit icon link"></i>&nbsp;Edit Details</span>
                     <span ng-if="!showEditMeta"><i class="eye icon link"></i>&nbsp;View Details </span>
                 </a>
+                <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}"><span class="spinner"></span>{{internetStatusObj.text}}</label>
             </div>
 
         </div>
@@ -27,8 +28,7 @@
         </div>
         <div class="five wide column custom-5-wide" style="padding-top:1rem!important;">
             <div class="row header-icon-container">
-                <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook')" class="custom-row-2" style="float: left;">
-                    <div  class="ui dropdown" style=" vertical-align: -webkit-baseline-middle; ">
+                    <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook' && collectionMode != 'Read')" class="custom-row-2" style="float: left;">                    <div  class="ui dropdown" style=" vertical-align: -webkit-baseline-middle; ">
                         <div class="ui dropdown">
                             Download/Update ToC
                             <i class="dropdown icon"></i>
@@ -43,7 +43,7 @@
                         </div>
                     </div>
                 </div>
-                <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook')" class="custom-row-2" style="float: left;margin-left: 30px;" >
+                <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook' && collectionMode != 'Read')" class="custom-row-2" style="float: left;margin-left: 30px;" >
                     <div class="ui dropdown qrCodeStyler" style=" vertical-align: -webkit-baseline-middle; ">
                         <div class="ui dropdown">
                             QR Codes
