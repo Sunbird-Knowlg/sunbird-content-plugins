@@ -57,7 +57,7 @@
                 <div class="ui grid">
                     <div class="ten wide column" style="padding-top: 0">
                         <div ng-if="usersCount">
-                            <strong>Showing <span ng-if="usersCount > defaultLimit">{{defaultLimit}}</span><span ng-if="usersCount < defaultLimit">{{usersCount}}</span> out of {{usersCount}} results</strong>
+                            <strong>Showing {{usersList.length}} out of {{usersCount}} results</strong>
                         </div>
                     </div>
                     <div class="two wide right floated column" style="padding-top: 0">
@@ -78,7 +78,7 @@
                                 <div class="card" style="box-shadow: none; background: #FFFFFF"  ng-repeat="user in usersList" in-view="lineInView($index, $inview, user, 'collaboratorPopup', $index)" in-view-options="{ throttle: 1000 }">
                                     <div class="content" >
                                         <img data-name="{{user.firstName}}" class="left floated tiny ui image profile" />
-                                        <div class="header ellipsis" style="padding-right:15px;">{{user.firstName}} {{user.lastName}}</div>
+                                        <div class="header ellipsis text-capitalize" style="padding-right:15px;">{{user.firstName}} {{user.lastName}}</div>
                                         <div class="meta">
                                             <div class="ellipsis">Ekstep</div>
                                             <br>
@@ -86,8 +86,8 @@
                                                 user_email@gmail.com
                                             </div>
                                             <div>+918698****80
-                                                <span class="right floated clear-btn color-blue" ng-if="!user.isSelected" ng-click="toggleSelectionUser(user, $index)"><strong>+ADD</strong></span>
-                                                <div class="ui right floated compact segment" style="padding:0; border: 0;" ng-if="user.isSelected" ng-click="toggleSelectionUser(user, $index)">
+                                                <span class="right floated clear-btn color-blue" ng-if="!user.isSelected" ng-click="toggleSelectionUser(user, $index, 'selectedUsersId', 'usersList')"><strong>+ADD</strong></span>
+                                                <div class="ui right floated compact segment" style="padding:0; border: 0;" ng-if="user.isSelected" ng-click="toggleSelectionUser(user, $index, 'selectedUsersId', 'usersList')">
                                                     <div class="ui fitted toggle checkbox">
                                                     <input type="checkbox" checked>
                                                     <label></label>
@@ -118,7 +118,7 @@
                                 <div class="card" style="box-shadow: none; background: #FFFFFF"  ng-repeat="user in collaboratorsList" in-view="lineInView($index, $inview, user, 'collaboratorPopup', $index)" in-view-options="{ throttle: 1000 }">
                                     <div class="content" >
                                         <img data-name="{{user.firstName}}" class="left floated tiny ui image profile" />
-                                        <div class="header ellipsis" style="padding-right:15px;">{{user.firstName}} {{user.lastName}}</div>
+                                        <div class="header ellipsis text-capitalize" style="padding-right:15px;">{{user.firstName}} {{user.lastName}}</div>
                                         <div class="meta">
                                             <div class="ellipsis">Ekstep</div>
                                             <br>
@@ -126,8 +126,8 @@
                                                 user_email@gmail.com
                                             </div>
                                             <div>+918698****80
-                                                <span class="right floated clear-btn color-danger" ng-if="!user.isSelected" ng-click="toggleSelectionUser(user, $index)"><strong>Remove</strong></span>
-                                                <div class="ui right floated compact segment" style="padding:0; border: 0;" ng-if="user.isSelected" ng-click="toggleSelectionUser(user, $index)">
+                                                <span class="right floated clear-btn color-danger" ng-if="!user.isSelected" ng-click="toggleSelectionUser(user, $index, 'removedUsersId', 'collaboratorsList')"><strong>Remove</strong></span>
+                                                <div class="ui right floated compact segment" style="padding:0; border: 0;" ng-if="user.isSelected" ng-click="toggleSelectionUser(user, $index, 'removedUsersId', 'collaboratorsList')">
                                                     <div class="ui fitted toggle checkbox">
                                                     <input type="checkbox" checked>
                                                     <label></label>
@@ -151,7 +151,8 @@
             <div class="ui clearing segment">
                 <div class="ui grid">
                     <div class="twelve wide column">
-                        <button id="done-button" class="ui right floated color-white background-blue tiny button next-btn" ng-disabled="!selectedUsersId.length" ng-click="updateCollaborators()">Done</button>
+                        <button ng-if="isAddCollaboratorTab" id="done-button" class="ui right floated color-white background-blue tiny button next-btn" ng-disabled="!selectedUsersId.length" ng-click="updateCollaborators()">Done</button>
+                        <button ng-if="!isAddCollaboratorTab" id="done-button" class="ui right floated color-white background-blue tiny button next-btn" ng-disabled="!removedUsersId.length" ng-click="updateCollaborators()">Done</button>
                     </div>
                 </div>
             </div>

@@ -135,6 +135,10 @@ button.clear-btn:focus {
     height:100% !important;
 }
 
+.text-capitalize {
+    text-transform: capitalize;
+}
+
 /* Footer */
 .footer-element {
     bottom: 0%;

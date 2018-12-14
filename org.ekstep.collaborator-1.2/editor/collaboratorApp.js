@@ -13,6 +13,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             "pluginver": instance.manifest.ver
         };
         $scope.selectedUsersId = [];
+        $scope.removedUsersId = [];
         $scope.isAddCollaboratorTab = false;
         $scope.searchResponse = [];
         $scope.usersList = [];
@@ -44,14 +45,30 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
 
 
         $scope.init = function () {
-            $scope.loadAllUsers();
+            $scope.getContentCollaborators();
+        }
+
+        $scope.getContentCollaborators = function () {
+            ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: ecEditor.getContext('contentId'), mode: 'edit' }, function (err, res) {
+                if (err) {
+                    console.error('Unable to fetch collaborators', err);
+                    $scope.isLoading = false;
+                    $scope.closePopup();
+                } else if (res && res.data && res.data.responseCode === "OK") {
+                    console.log('Content Collaborators Response=>', res.data.result.content.collaborators);
+                    $scope.collaboratorsId = res.data.result.content.collaborators;
+                    $scope.loadAllUsers();
+                }
+            });
         }
 
         $scope.selectTab = function (event) {
-            $scope.selectedUsersId = [];
             if (event.currentTarget.dataset.tab === 'userListTab') {
                 $scope.isAddCollaboratorTab = false;
-                $scope.fetchCollaborators();
+                if (!$scope.collaboratorsList.length) {
+                    $scope.isLoading = true;
+                    $scope.fetchCollaborators();
+                }
             } else {
                 $scope.isAddCollaboratorTab = true;
             }
@@ -70,36 +87,27 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         * Makes API call to fetch currently added collaborators/owners
         */
         $scope.fetchCollaborators = function () {
-            ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: ecEditor.getContext('contentId'), mode: 'edit' }, function (err, res) {
-                if (err) {
-                    console.error('Unable to fetch collaborators', err);
-                    $scope.loadTemplate();
-                } else if (res && res.data && res.data.responseCode === "OK") {
-                    console.log('Content Collaborators Response=>', res.data.result.content.collaborators);
-
-                    searchBody.request.filters.userId = res.data.result.content.collaborators;
-                    $scope.collaboratorsId = res.data.result.content.collaborators;
-                    searchService.userSearch(searchBody, function (err, res) {
-                        if (err) {
-                            console.error('Unable to fetch collaborators Profile=>', err);
-                        } else {
-                            if (res.data.result.response.content.length) {
-                                $scope.collaboratorsList = res.data.result.response.content;
-                                $scope.collaboratorsList.forEach((element) => {
-                                    element.isSelected = false;
-                                });
-                                console.log("currentCollaborators", $scope.collaboratorsList);
-                                $timeout(function () {
-                                    ecEditor.jQuery('.profile').initial({ fontWeight: 700 });
-                                });
-                            }
+            if ($scope.collaboratorsId.length) {
+                searchBody.request.filters.userId = $scope.collaboratorsId;
+                searchService.userSearch(searchBody, function (err, res) {
+                    if (err) {
+                        console.error('Unable to fetch collaborators Profile=>', err);
+                    } else {
+                        if (res.data.result.response.content.length) {
+                            $scope.collaboratorsList = res.data.result.response.content;
+                            $scope.collaboratorsList.forEach((element) => {
+                                element.isSelected = false;
+                            });
+                            console.log("currentCollaborators", $scope.collaboratorsList);
+                            $timeout(function () {
+                                ecEditor.jQuery('.profile').initial({ fontWeight: 700 });
+                            });
                         }
-                        $scope.$safeApply();
-                    });
-                } else {
-                    console.error('Unable to fetch collection hierarchy');
-                }
-            });
+                    }
+                    $scope.isLoading = false;
+                    $scope.$safeApply();
+                });
+            }
         }
 
         $scope.loadAllUsers = function () {
@@ -111,13 +119,14 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                 if (err) {
                     console.error('Unable to fetch All Users ', err);
                 } else {
-                    $scope.usersList = res.data.result.response.content;
-                    $scope.usersCount = res.data.result.response.count;
+                    console.log("Users", res.data.result.response.content);
+                    $scope.usersList = $scope.excludeCollaborators(res.data.result.response.content);
+
+                    $scope.usersCount = res.data.result.response.count < $scope.defaultLimit ? $scope.usersList.length : res.data.result.response.count;
                     $scope.usersList.forEach(element => {
                         element.isSelected = false;
                     });
                     $scope.isLoading = false;
-                    console.log('All users response=>', $scope.usersList);
                     $('.menu .item').tab();
                     ecEditor.jQuery('.ui.dropdown').dropdown({
                         onChange: function (val) {
@@ -136,11 +145,12 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
          */
         $scope.updateCollaborators = function () {
             $scope.generateTelemetry({ type: 'click', subtype: 'update', target: 'updateCollaborator', targetid: 'done-button' });
-            updateCollaboratorRequest.request.content.collaborators = _.uniq($scope.selectedUsersId.concat($scope.collaboratorsId));
-            if (!$scope.isAddCollaboratorTab) {
+            if ($scope.isAddCollaboratorTab) {
+                updateCollaboratorRequest.request.content.collaborators = _.uniq($scope.selectedUsersId.concat($scope.collaboratorsId));
+            } else {
                 var updatedUsersId = [];
                 $scope.collaboratorsId.forEach((element) => {
-                    let index = $scope.selectedUsersId.indexOf(element);
+                    let index = $scope.removedUsersId.indexOf(element);
                     if (index === -1) {
                         updatedUsersId.push(element);
                     }
@@ -169,6 +179,18 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             });
         }
 
+        $scope.excludeCollaborators = function (result) {
+            $scope.collaboratorsId.forEach((id) => {
+                result.forEach((user, index) => {
+                    if (user.identifier === id) {
+                        result.splice(index, 1);
+                        return;
+                    }
+                });
+            });
+            return result;
+        }
+
         // Close the popup
         $scope.closePopup = function (pageId) {
             inViewLogs = [];
@@ -176,30 +198,19 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             $scope.closeThisDialog();
         };
 
-        $scope.toggleSelectionUser = function (user, index) {
+        $scope.toggleSelectionUser = function (user, index, usersId, list) {
             console.log('user', user);
 
-            var idx = $scope.selectedUsersId.indexOf(user.identifier);
+            var idx = $scope[usersId].indexOf(user.identifier);
             if (idx > -1) {
                 $scope.generateTelemetry({ type: 'click', subtype: 'uncheck', target: 'user', targetid: user.identifier });
-                $scope.selectedUsersId.splice(idx, 1);
-
-                if ($scope.isAddCollaboratorTab) {
-                    $scope.usersList[index].isSelected = false;
-                } else {
-                    $scope.collaboratorsList[index].isSelected = false;
-                    $scope.$safeApply();
-                }
+                $scope[usersId].splice(idx, 1);
+                $scope[list][index].isSelected = false;
             } else {
                 $scope.generateTelemetry({ type: 'click', subtype: 'check', target: 'user', targetid: user.identifier });
-                $scope.selectedUsersId.push(user.identifier);
-                if ($scope.isAddCollaboratorTab) {
-                    $scope.usersList[index].isSelected = true;
-                } else {
-                    $scope.collaboratorsList[index].isSelected = true;
-                }
+                $scope[usersId].push(user.identifier);
+                $scope[list][index].isSelected = true;
             }
-
             $scope.$safeApply();
         }
 
@@ -236,9 +247,10 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
 
                     if (res.data.result.response.content.length) {
                         ctrl.searchRes.content = res.data.result.response.content;
+
                     } else {
                         $scope.noResultFound = true;
-                        ctrl.searchRes.content = res.data.result.response.content
+                        ctrl.searchRes.content = $scope.excludeCollaborators(res.data.result.response.content);
                     }
 
                     ctrl.searchRes.count = res.data.result.response.count;
@@ -252,8 +264,8 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
          */
         $scope.viewAllResults = function () {
             $scope.generateTelemetry({ type: 'click', subtype: 'submit', target: 'viewAll', targetid: "" });
-            $scope.usersList = ctrl.searchRes.content;
-            $scope.usersCount = ctrl.searchRes.count;
+            $scope.usersList = $scope.excludeCollaborators(ctrl.searchRes.content);
+            $scope.usersCount = ctrl.searchRes.count < $scope.defaultLimit ? $scope.usersList.length : ctrl.searchRes.count;
             $timeout(function () {
                 ecEditor.jQuery('.profile').initial({ fontWeight: 700 });
             });
