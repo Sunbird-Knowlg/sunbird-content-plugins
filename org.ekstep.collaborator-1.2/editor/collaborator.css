@@ -30,7 +30,6 @@
 }
 
 .searcher .search-reset-keyword-field .search-element {
-    /* padding: 2%; */
     font-size: 60%;
     cursor: pointer;
 }
@@ -71,9 +70,9 @@
 }
 
 #user-search {
-    font-size: 75%;
-    padding-top: 2%;
-    padding-bottom: 2%;
+    font-size: 1rem;
+    padding-top: 10px;
+    padding-bottom: 10px;
     border: none;
     border-radius: 30px;
     background: transparent;
@@ -90,43 +89,19 @@
 }
 
 .div-scroll {
-    max-height: 75vh;
+    max-height: 60vh;
     overflow-y: scroll;
 }
 
-.user-avatar {
-    height: 70px !important;
-    width: 70px !important;
+.tab-bar {
+    margin-bottom: 2px !important;
+    border-bottom-width: 0 !important;
+    margin-top: 0 !important;
 }
 
-.checkBoxOverImage-top-right-corner {
-    position: absolute !important;
-    top: 10px;
-    right: 10px;
-}
-
-.ui.checkbox input:checked ~ .box:after,
-.ui.checkbox input:checked ~ label:after {
-    opacity: 1;
-    color: #007aff !important;
-}
-
-.ui.checkbox input:checked ~ .box:before,
-.ui.checkbox input:checked ~ label:before {
-    background: #fff;
-    border-color: #007aff !important;
-}
-
-.ui.checkbox input[type=checkbox], .ui.checkbox input[type=radio] {
-    cursor: pointer;
-    position: absolute;
-    top: 0;
-    left: 0;
-    opacity: 0 !important;
-    outline: 0;
-    z-index: 3;
-    width: 17px;
-    height: 17px;
+.ui.cards>.card .content img {
+    margin-top: 10px;
+    border-radius: 50%;
 }
 
 .ellipsis {
@@ -153,29 +128,11 @@ button.clear-btn:focus {
     color: red;
 }
 
-.title {
-    font-weight: bold;
-    font-size: 17px;
-    color: #979797 !important;
-}
-
-.list-background {
-    background: #F8F8F8;
-}
-
-.remove-button {
-    line-height: 65px !important;
-    margin-right: 20px !important;
-}
-
-.vertical-align-middle {
-    vertical-align: middle;
-}
-
-.secondary-text {
-    font-size: 12px;
-    margin-top: 5px;
-    color: #979797;
+.body-content {
+    background: #F5F7F9 !important;
+    margin-top: 0 !important;
+    border-top-width: 0 !important;
+    height:100% !important;
 }
 
 /* Footer */
@@ -216,4 +173,8 @@ button.clear-btn:focus {
 
 .color-black {
     color: #000000;
+}
+
+.margin-bottom-0 {
+    margin-bottom: 0;
 }

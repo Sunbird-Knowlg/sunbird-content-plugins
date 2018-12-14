@@ -2,17 +2,16 @@
 
     <div class="ui active longer modal fullscreen-modal">
         <!-- HEADER-->
-        <div class="ui clearing segment overLap-all">
-            <strong class="ui left floated header header-title" ng-if="isAddCollaboratorPopup">Add collaborators</strong>
-            <strong class="ui left floated header header-title" ng-if="!isAddCollaboratorPopup">Collaborators</strong>
+        <div class="ui clearing segment overLap-all margin-bottom-0">
+            <strong class="ui left floated header header-title">Add collaborators</strong>
 
-            <div class="ui right floated header" ng-if="!isAddCollaboratorPopup">
+            <div class="ui right floated header" ng-if="!isAddCollaboratorTab">
                 <span>
                     <i class="close link icon" id="close-button" ng-click="closePopup()"></i>
                 <span>
             </div>
 
-            <div class="ui right floated header searcher" ng-if="isAddCollaboratorPopup">
+            <div class="ui right floated header searcher" ng-if="isAddCollaboratorTab">
                 <div class="ui action input search-reset-keyword-field">
                     <input type="text" id="user-search" placeholder="Search..." autocomplete="off" spellcheck="false" ng-model="searchKeyword" ng-keyup="searchKeyword.length >= 3 ? searchByKeyword() : resetSearch()">
                     <div class="ui tiny inline loader search-loader"></div>
@@ -45,58 +44,102 @@
         </div>
         <!--END OF HEADER -->
         <!--BODY-->
-        <div class="ui active inverted dimmer" ng-if="isLoading">
-            <div class="ui large text loader">Loading</div>
+        <div class="ui pointing secondary menu tab-bar">
+            <a class="item active" data-tab="addCollaboratorTab" ng-click="selectTab($event)">Add Collaborators</a>
+            <a class="item" data-tab="userListTab" ng-click="selectTab($event)">Manage Collaborators</a>
         </div>
-        <!-- FOR ADD COLLABORATORS -->
-        <div class="height-100" ng-if="isAddCollaboratorPopup">
-            <div class="margin-left-right-10">
-                <div class="ui grid div-scroll">
-                    <div class="twelve wide column" >
-                        <div class="ui four stackable cards">
-                            <div class="card" ng-repeat="user in usersList" ng-click="toggleSelectionUser(user)" in-view="lineInView($index, $inview, user, 'collaboratorPopup', $index)" in-view-options="{ throttle: 1000 }">
-                                <div class="content">
-                                    <img class="left floated mini ui image" src="{{user.thumbnail || $ctrl.defaultImage}}">
-                                    <div class="ui checkbox blue-checkbox checkBoxOverImage-top-right-corner" id='checkBox_{{user.identifier}}' style="z-index:12">
-                                        <input class="checkBox" type="checkbox" name="users[]">
+        <div class="ui tab segment active height-100 body-content" data-tab="addCollaboratorTab">
+            <div class="ui active inverted dimmer" ng-if="isLoading">
+                <div class="ui large text loader">Loading</div>
+            </div>
+            <!-- FOR ADD COLLABORATORS -->
+            <div ng-if="isAddCollaboratorTab">
+                <div class="ui grid">
+                    <div class="ten wide column">
+                        <div ng-if="usersCount">
+                            <strong>Showing <span ng-if="usersCount > 200">200</span><span ng-if="usersCount < 200">{{usersCount}}</span> out of {{usersCount}} results</strong>
+                        </div>
+                    </div>
+                    <div class="two wide right floated column">
+                        <div class="ui dropdown"style="float: right;">
+                            <div class="text"><strong>Sort</strong></div>
+                            <i class="dropdown icon"></i>
+                            <div class="menu" style="right: 0;left: auto;">
+                              <div class="item" data-value="name">Name</div>
+                              <div class="item" data-value="org">Organization</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="margin-left-right-10" style="margin-top: 15px">
+                    <div class="ui grid div-scroll">
+                        <div class="twelve wide column" >
+                            <div class="ui four stackable cards">
+                                <div class="card" style="box-shadow: none; background: #FFFFFF"  ng-repeat="user in usersList" in-view="lineInView($index, $inview, user, 'collaboratorPopup', $index)" in-view-options="{ throttle: 1000 }">
+                                    <div class="content" >
+                                        <img data-name="{{user.firstName}}" class="left floated tiny ui image profile" />
+                                        <div class="header ellipsis" style="padding-right:15px;">{{user.firstName}} {{user.lastName}}</div>
+                                        <div class="meta">
+                                            <div class="ellipsis">Ekstep</div>
+                                            <br>
+                                            <div>
+                                                user_email@gmail.com
+                                            </div>
+                                            <div>+918698****80
+                                                <span class="right floated clear-btn color-blue" ng-if="!user.isSelected" ng-click="toggleSelectionUser(user, $index)"><strong>+ADD</strong></span>
+                                                <div class="ui right floated compact segment" style="padding:0; border: 0;" ng-if="user.isSelected" ng-click="toggleSelectionUser(user, $index)">
+                                                    <div class="ui fitted toggle checkbox">
+                                                    <input type="checkbox" checked>
+                                                    <label></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="header ellipsis" style="padding-right:15px;">{{user.firstName}} {{user.lastName}}</div>
-                                    <div class="meta ellipsis">{{user.organization}}</div>
-                                    <div class="description">{{user.email}}</div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <!--END OF FOR ADD COLLABORATORS -->
         </div>
-        <!--END OF FOR ADD COLLABORATORS -->
-        <!-- FOR SHOW COLLABORATORS-->
-        <div class="height-100" ng-if="!isAddCollaboratorPopup">
-            <div class="margin-left-right-10">
-                <!-- <h4 class="title">CURRENT COLLABORATORS</h4> -->
-                <div class="ui grid div-scroll">
-                    <div class="twelve wide column" ng-if="userSelection.length">
-                        <div class="ui middle aligned divided list list-background">
-                            <div class="item padding-bottom-5" ng-repeat="user in userSelection" id="userItem_{{user.identifier}}">
-                                <div class="right floated content remove-button">
-                                    <!-- <div class="ui button">DELETE</div> -->
-                                    <button class="clear-btn color-danger vertical-align-middle" id="remove-button" ng-click="removeCollaborator(user, $index)">REMOVE</button>
-                                </div>
-                                <img class="ui avatar tiny image" src="{{user.avatar || $ctrl.defaultImage}}">
-                                <div class="content">
-                                    <strong class="color-black">{{user.firstName}}&nbsp;{{user.lastName}}</strong>
-                                    <div class="meta secondary-text">{{user.email}}</div>
+        <div class="ui tab segment body-content" data-tab="userListTab">
+            <!-- FOR SHOW COLLABORATORS-->
+            <div class="height-100" ng-if="!isAddCollaboratorTab">
+                <div class="margin-left-right-10">
+                    <div class="ui grid div-scroll">
+                        <div class="twelve wide column">
+                            <div class="ui four stackable cards">
+                                <div class="card" style="box-shadow: none; background: #FFFFFF"  ng-repeat="user in collaboratorsList" in-view="lineInView($index, $inview, user, 'collaboratorPopup', $index)" in-view-options="{ throttle: 1000 }">
+                                    <div class="content" >
+                                        <img data-name="{{user.firstName}}" class="left floated tiny ui image profile" />
+                                        <div class="header ellipsis" style="padding-right:15px;">{{user.firstName}} {{user.lastName}}</div>
+                                        <div class="meta">
+                                            <div class="ellipsis">Ekstep</div>
+                                            <br>
+                                            <div>
+                                                user_email@gmail.com
+                                            </div>
+                                            <div>+918698****80
+                                                <span class="right floated clear-btn color-danger" ng-if="!user.isSelected" ng-click="toggleSelectionUser(user, $index)"><strong>Remove</strong></span>
+                                                <div class="ui right floated compact segment" style="padding:0; border: 0;" ng-if="user.isSelected" ng-click="toggleSelectionUser(user, $index)">
+                                                    <div class="ui fitted toggle checkbox">
+                                                    <input type="checkbox" checked>
+                                                    <label></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <br />
-                    <button class="clear-btn color-blue" ng-click="showUsersList()">Add collaborators</button>
                 </div>
             </div>
+            <!-- END OF FOR SHOW COLLABORATORS -->
         </div>
-        <!-- END OF FOR SHOW COLLABORATORS -->
         <!--END OF BODY -->
 
         <!--FOOTER-->
@@ -104,9 +147,7 @@
             <div class="ui clearing segment">
                 <div class="ui grid">
                     <div class="twelve wide column">
-                        <button ng-if="isAddCollaboratorPopup" class="ui right floated color-white background-blue tiny button next-btn" ng-click="returnSelectedUsers()" ng-disabled="!selectedUsersId.length">Next</button>
-                        <button ng-if="!isAddCollaboratorPopup" class="ui left floated tiny button next-btn" ng-click="showUsersList()">Back</button>
-                        <button ng-if="!isAddCollaboratorPopup" id="done-button" class="ui right floated color-white background-blue tiny button next-btn" ng-click="updateCollaborators()">Done</button>
+                        <button id="done-button" class="ui right floated color-white background-blue tiny button next-btn" ng-disabled="!selectedUsersId.length" ng-click="updateCollaborators()">Done</button>
                     </div>
                 </div>
             </div>
