@@ -179,11 +179,14 @@
                             <tr class="top aligned" ng-repeat="dynamicField in dynamicLayoutConfigurations">       
                                 <td class="two wide first-letter-capitalize"><b>{{dynamicField.label}}</b></td>
                                 <td class="one wide">:</td>
-                                <td class="six wide" ng-if="dynamicField.code !== 'dialcode'">{{contentMeta[dynamicField.code].join(', ') || contentMeta[dynamicField.code] || '--'}}</td>
+                                <td class="six wide" ng-if="dynamicField.code !== 'dialcode' && dynamicField.code !== 'ownedBy'">{{contentMeta[dynamicField.ownedBy] || contentMeta[dynamicField.code].join(', ') || contentMeta[dynamicField.code] || '--'}}</td>
                                 <td ng-if="dynamicField.code === 'dialcode'">
                                     {{contentMeta['dialcodes'].join(', ') || '--'}}
                                 </td>
-                            </tr>    
+                                <td ng-if="dynamicField.code === 'ownedBy'">
+                                    {{contentMeta['owner'] || '--'}}
+                                </td>
+                            </tr>  
                         </tbody>
                     </table>
                 </div>
