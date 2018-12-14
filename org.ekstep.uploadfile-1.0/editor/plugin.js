@@ -2,6 +2,7 @@
 
 org.ekstep.contenteditor.basePlugin.extend({
     callback: undefined,
+    configData: undefined,
     initialize: function() {
         var instance = this;
         ecEditor.addEventListener(this.manifest.id + ":show", this.showUploadForm, this);
@@ -9,12 +10,13 @@ org.ekstep.contenteditor.basePlugin.extend({
         var controllerPath = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, 'editor/uploadapp.js');
         ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
     },
-    showUploadForm: function(event, callback) {
+    showUploadForm: function(event, data) {
         var instance = this;
-        instance.callback = callback;
+        instance.configData = data;
+        instance.callback = data.callback;
         ecEditor.getService('popup').open({
-            template: 'partials_org.ekstep.uploadcontent.html',
-            controller: 'uploadController',
+            template: 'partials_org.ekstep.uploadfile.html',
+            controller: 'uploadfileController',
             controllerAs: '$ctrl',
             resolve: {
                 'instance': function() {
@@ -22,11 +24,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                 }
             },
             showClose: false,
-            closeByDocument: ecEditor.getContext('contentId') ? true : false,
-            closeByEscape: ecEditor.getContext('contentId') ? true : false,
-            width: 800,
+            width: 720,
             className: 'ngdialog-theme-plain'
         });
     }
 });
-//# sourceURL=uploadContentPlugin.js
+//# sourceURL=uploadfileplugin.js
