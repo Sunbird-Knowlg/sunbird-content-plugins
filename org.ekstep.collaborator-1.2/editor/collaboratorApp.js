@@ -24,12 +24,12 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         $scope.noResultFound = false;
         $scope.defaultLimit = 200;
 
-        let searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
+        let userService = org.ekstep.contenteditor.api.getService(ServiceConstants.USER_SERVICE);
         let searchBody = {
             "request": {
                 "query": "",
                 "filters": {},
-                "fields": ["email", "firstName", "identifier", "lastName", "organisations", "thumbnail"],
+                "fields": ["email", "firstName", "identifier", "lastName", "organisations"],
                 "offset": 0,
                 "limit": $scope.defaultLimit
             }
@@ -89,7 +89,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         $scope.fetchCollaborators = function () {
             if ($scope.collaboratorsId.length) {
                 searchBody.request.filters.userId = $scope.collaboratorsId;
-                searchService.userSearch(searchBody, function (err, res) {
+                userService.userSearch(searchBody, function (err, res) {
                     if (err) {
                         console.error('Unable to fetch collaborators Profile=>', err);
                     } else {
@@ -115,7 +115,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
 
             searchBody.request.query = "";
             searchBody.request.filters = {};
-            searchService.userSearch(searchBody, function (err, res) {
+            userService.userSearch(searchBody, function (err, res) {
                 if (err) {
                     console.error('Unable to fetch All Users ', err);
                 } else {
@@ -158,8 +158,8 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
 
                 updateCollaboratorRequest.request.content.collaborators = updatedUsersId;
             }
-            var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
-            searchService.updateCollaborators(ecEditor.getContext('contentId'), updateCollaboratorRequest, function (err, res) {
+
+            userService.updateCollaborators(ecEditor.getContext('contentId'), updateCollaboratorRequest, function (err, res) {
                 if (err) {
                     console.log('Unable to update collaborator', err);
                     ecEditor.dispatchEvent("org.ekstep.toaster:error", {
@@ -232,11 +232,10 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             $scope.searchStatus = "start";
             ecEditor.jQuery('.search-Loader').addClass('active');
 
-            var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
             searchBody.request.query = this.searchKeyword;
             $scope.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'search-button' });
 
-            searchService.userSearch(searchBody, function (err, res) {
+            userService.userSearch(searchBody, function (err, res) {
                 if (err) {
                     console.log('User Search Failed:=>', err);
                     ctrl.searchRes.content = [];
