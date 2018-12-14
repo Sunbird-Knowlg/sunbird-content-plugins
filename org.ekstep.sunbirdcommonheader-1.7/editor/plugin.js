@@ -4,7 +4,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         var instance = this;
         var templatePath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/limitedSharingConfirm.html");
         var checklistTemplate = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/checkList.html");
-        var tocErrorPopTemplate = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/tocErrorPopupTemplate.html");
         var controllerPath = ecEditor.resolvePluginResource(this.manifest.id, this.manifest.ver, "editor/headerApp.js");
         // ecEditor.getService('popup').loadNgModules(templatePath);
         ecEditor.addEventListener("org.ekstep.checklist:showpopup", this.showPopup, this);
@@ -13,7 +12,6 @@ org.ekstep.contenteditor.basePlugin.extend({
         })
         ecEditor.getService('popup').loadNgModules(templatePath, controllerPath);
         ecEditor.getService('popup').loadNgModules(checklistTemplate);
-        ecEditor.getService('popup').loadNgModules(tocErrorPopTemplate);
     },
     showPopup: function(event, data) {
         console.log('event..', event);
