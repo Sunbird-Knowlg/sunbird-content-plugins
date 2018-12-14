@@ -3,7 +3,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
     .controller('collaboratorCtrl', ['$scope', '$timeout', 'instance', '$filter', function ($scope, $timeout, instance, $filter) {
         var ctrl = this;
         var inViewLogs = [];
-        ctrl.defaultImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/default-avatar.jpg");
+        ctrl.contentNotFoundImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/content_not_found.jpg");
         ctrl.searchRes = { count: 0, content: [] };
 
         $scope.mode = ecEditor.getConfig('editorConfig').mode;
@@ -21,6 +21,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         $scope.collaboratorsId = [];
         $scope.isLoading = true;
         $scope.noResultFound = false;
+        $scope.defaultLimit = 200;
 
         let searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
         let searchBody = {
@@ -29,7 +30,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                 "filters": {},
                 "fields": ["email", "firstName", "identifier", "lastName", "organisations", "thumbnail"],
                 "offset": 0,
-                "limit": 100
+                "limit": $scope.defaultLimit
             }
         };
 
@@ -58,6 +59,11 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             $scope.$safeApply();
             $timeout(function () {
                 ecEditor.jQuery('.profile').initial({ fontWeight: 700 });
+                ecEditor.jQuery('.ui.dropdown').dropdown({
+                    onChange: function (val) {
+                        $scope.sortUsersList(val);
+                    }
+                });
             });
         }
         /**
@@ -72,7 +78,6 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                     console.log('Content Collaborators Response=>', res.data.result.content.collaborators);
 
                     searchBody.request.filters.userId = res.data.result.content.collaborators;
-                    // $scope.selectedUsersId = res.data.result.content.collaborators;
                     $scope.collaboratorsId = res.data.result.content.collaborators;
                     searchService.userSearch(searchBody, function (err, res) {
                         if (err) {
@@ -113,11 +118,12 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                     });
                     $scope.isLoading = false;
                     console.log('All users response=>', $scope.usersList);
-                    /* $timeout(function () {
-                        ecEditor.jQuery('.ui.fitted.toggle.checkbox').checkbox();
-                    }); */
                     $('.menu .item').tab();
-                    ecEditor.jQuery('.ui.dropdown').dropdown();
+                    ecEditor.jQuery('.ui.dropdown').dropdown({
+                        onChange: function (val) {
+                            $scope.sortUsersList(val);
+                        }
+                    });
                     $scope.$safeApply();
                     ecEditor.jQuery('.profile').initial({ fontWeight: 700 });
                 }
@@ -130,28 +136,34 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
          */
         $scope.updateCollaborators = function () {
             $scope.generateTelemetry({ type: 'click', subtype: 'update', target: 'updateCollaborator', targetid: 'done-button' });
-            console.log('selectedUsersId', $scope.selectedUsersId);
-
             updateCollaboratorRequest.request.content.collaborators = _.uniq($scope.selectedUsersId.concat($scope.collaboratorsId));
             if (!$scope.isAddCollaboratorTab) {
-                var updatedCollaborators = [];
+                var updatedUsersId = [];
                 $scope.collaboratorsId.forEach((element) => {
-                    var index = $scope.selectedUsersId.indexOf(element);
-                    if (index) {
-                        updatedCollaborators.push(element);
+                    let index = $scope.selectedUsersId.indexOf(element);
+                    if (index === -1) {
+                        updatedUsersId.push(element);
                     }
                 });
 
-                console.log('updated Collaborators', updatedCollaborators);
-
-                updateCollaboratorRequest.request.content.collaborators = updatedCollaborators;
+                updateCollaboratorRequest.request.content.collaborators = updatedUsersId;
             }
             var searchService = org.ekstep.contenteditor.api.getService(ServiceConstants.SEARCH_SERVICE);
             searchService.updateCollaborators(ecEditor.getContext('contentId'), updateCollaboratorRequest, function (err, res) {
                 if (err) {
                     console.log('Unable to update collaborator', err);
+                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                        message: 'Unable to update collaborator',
+                        position: 'topCenter',
+                        icon: 'fa fa-warning'
+                    });
                 } else {
-                    alert('Collaborator updated successfully');
+                    // alert('Collaborator updated successfully');
+                    ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                        message: 'Collaborator updated successfully',
+                        position: 'topCenter',
+                        icon: 'fa fa-check-circle'
+                    });
                     $scope.closePopup();
                 }
             });
@@ -163,13 +175,6 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             $scope.generateTelemetry({ type: 'click', subtype: 'cancel', target: 'closePopup', targetid: 'close-button' });
             $scope.closeThisDialog();
         };
-
-        // apply all jquery after dom render
-        ctrl.applyAllJquery = function () {
-            $timeout(function () {
-                ecEditor.jQuery('.checkbox').checkbox();
-            });
-        }
 
         $scope.toggleSelectionUser = function (user, index) {
             console.log('user', user);
@@ -195,6 +200,11 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                 }
             }
 
+            $scope.$safeApply();
+        }
+
+        $scope.sortUsersList = function (value) {
+            $scope.usersList = _.orderBy($scope.usersList, value);
             $scope.$safeApply();
         }
 

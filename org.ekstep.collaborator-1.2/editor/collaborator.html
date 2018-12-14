@@ -55,18 +55,18 @@
             <!-- FOR ADD COLLABORATORS -->
             <div ng-if="isAddCollaboratorTab">
                 <div class="ui grid">
-                    <div class="ten wide column">
+                    <div class="ten wide column" style="padding-top: 0">
                         <div ng-if="usersCount">
-                            <strong>Showing <span ng-if="usersCount > 200">200</span><span ng-if="usersCount < 200">{{usersCount}}</span> out of {{usersCount}} results</strong>
+                            <strong>Showing <span ng-if="usersCount > defaultLimit">{{defaultLimit}}</span><span ng-if="usersCount < defaultLimit">{{usersCount}}</span> out of {{usersCount}} results</strong>
                         </div>
                     </div>
-                    <div class="two wide right floated column">
+                    <div class="two wide right floated column" style="padding-top: 0">
                         <div class="ui dropdown"style="float: right;">
                             <div class="text"><strong>Sort</strong></div>
                             <i class="dropdown icon"></i>
                             <div class="menu" style="right: 0;left: auto;">
-                              <div class="item" data-value="name">Name</div>
-                              <div class="item" data-value="org">Organization</div>
+                              <div class="item" data-value="firstName">Name</div>
+                              <div class="item" data-value="organization">Organization</div>
                             </div>
                         </div>
                     </div>
@@ -97,6 +97,10 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div style="padding-bottom: 20px; text-align: center;">
+                                <img class="ui centered tiny image" ng-src="{{$ctrl.contentNotFoundImage}}">
+                                <p>Didn’t find what you were looking for? Try search for something more specific</p>
                             </div>
                         </div>
                     </div>
