@@ -88,7 +88,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         $scope.fetchCollaborators = function () {
             if ($scope.collaboratorsId.length) {
                 searchBody.request.filters.userId = $scope.collaboratorsId;
-                userService.userSearch(searchBody, function (err, res) {
+                userService.search(searchBody, function (err, res) {
                     if (err) {
                         console.error('Unable to fetch collaborators Profile=>', err);
                     } else {
@@ -113,7 +113,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
 
             searchBody.request.query = "";
             searchBody.request.filters = {};
-            userService.userSearch(searchBody, function (err, res) {
+            userService.search(searchBody, function (err, res) {
                 if (err) {
                     console.error('Unable to fetch All Users ', err);
                 } else {
@@ -229,7 +229,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             searchBody.request.query = this.searchKeyword;
             $scope.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'search-button' });
 
-            userService.userSearch(searchBody, function (err, res) {
+            userService.search(searchBody, function (err, res) {
                 if (err) {
                     ctrl.searchRes.content = [];
                     $scope.noResultFound = true;
