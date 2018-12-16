@@ -83,7 +83,7 @@
                                             <div class="ellipsis">Ekstep</div>
                                             <br>
                                             <div>
-                                                user_email@gmail.com
+                                                {{user.email}}
                                             </div>
                                             <div>+918698****80
                                                 <span class="right floated clear-btn color-blue" ng-if="!user.isSelected" ng-click="toggleSelectionUser(user, $index, 'selectedUsersId', 'usersList')"><strong>+ADD</strong></span>
@@ -123,7 +123,7 @@
                                             <div class="ellipsis">Ekstep</div>
                                             <br>
                                             <div>
-                                                user_email@gmail.com
+                                                {{user.email}}
                                             </div>
                                             <div>+918698****80
                                                 <span class="right floated clear-btn color-danger" ng-if="!user.isSelected" ng-click="toggleSelectionUser(user, $index, 'removedUsersId', 'collaboratorsList')"><strong>Remove</strong></span>
