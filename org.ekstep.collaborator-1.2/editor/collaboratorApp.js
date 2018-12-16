@@ -55,7 +55,6 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                     $scope.isLoading = false;
                     $scope.closePopup();
                 } else if (res && res.data && res.data.responseCode === "OK") {
-                    console.log('Content Collaborators Response=>', res.data.result.content.collaborators);
                     $scope.collaboratorsId = res.data.result.content.collaborators;
                     $scope.loadAllUsers();
                 }
@@ -98,7 +97,6 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                             $scope.collaboratorsList.forEach((element) => {
                                 element.isSelected = false;
                             });
-                            console.log("currentCollaborators", $scope.collaboratorsList);
                             $timeout(function () {
                                 ecEditor.jQuery('.profile').initial({ fontWeight: 700 });
                             });
@@ -119,7 +117,6 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                 if (err) {
                     console.error('Unable to fetch All Users ', err);
                 } else {
-                    console.log("Users", res.data.result.response.content);
                     $scope.usersList = $scope.excludeCollaborators(res.data.result.response.content);
 
                     $scope.usersCount = res.data.result.response.count < $scope.defaultLimit ? $scope.usersList.length : res.data.result.response.count;
@@ -161,7 +158,6 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
 
             userService.updateCollaborators(ecEditor.getContext('contentId'), updateCollaboratorRequest, function (err, res) {
                 if (err) {
-                    console.log('Unable to update collaborator', err);
                     ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                         message: 'Unable to update collaborator',
                         position: 'topCenter',
@@ -199,8 +195,6 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         };
 
         $scope.toggleSelectionUser = function (user, index, usersId, list) {
-            console.log('user', user);
-
             var idx = $scope[usersId].indexOf(user.identifier);
             if (idx > -1) {
                 $scope.generateTelemetry({ type: 'click', subtype: 'uncheck', target: 'user', targetid: user.identifier });
@@ -237,7 +231,6 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
 
             userService.userSearch(searchBody, function (err, res) {
                 if (err) {
-                    console.log('User Search Failed:=>', err);
                     ctrl.searchRes.content = [];
                     $scope.noResultFound = true;
                     ctrl.searchErr = "Oops! Something went wrong. Please try again later.";
@@ -253,7 +246,6 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                     }
 
                     ctrl.searchRes.count = res.data.result.response.count;
-                    console.log('User Search Response=>', ctrl.searchRes);
                 }
             });
         }
