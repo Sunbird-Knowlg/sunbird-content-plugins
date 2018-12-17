@@ -40,7 +40,7 @@
             "title": "Show Controls",
             "description": "Show the play/pause controls on video?",
             "dataType": "boolean",
-            "defaultValue": false
+            "defaultValue": true
         }, {
             "propertyName": "muted",
             "title": "Mute Audio",
