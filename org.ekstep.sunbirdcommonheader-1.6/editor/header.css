@@ -327,11 +327,6 @@ body {
     border-radius:2px 
 }
 
-.reviewer-comment-box::-webkit-scrollbar-thumb{
-    background:black;
-}
-
-
 .reviewer-content{
     padding:2%;
 }
