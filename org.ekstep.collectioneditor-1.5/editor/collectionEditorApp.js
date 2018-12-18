@@ -355,7 +355,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:added', $scope.addContent, $scope);
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:removed', $scope.removeContent, $scope);
-
     $scope.parseKeywords = function(keywords){
         if(_.isString(keywords)){
             return JSON.parse(keywords);
