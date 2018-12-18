@@ -318,24 +318,6 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         });
     };
 
-    $scope.reloadContent = function() {
-        org.ekstep.collectioneditor.api.getService('collection').clearCache();
-        $('#collection-tree').remove();
-        $("#treeWrapper").append('<div id="collection-tree" ng-class="collectionTreeHeight" class="collection-tree-height-with-footer"></div>');
-        var mode;
-        if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
-        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
-            org.ekstep.services.collectionService.fromCollection(res.data.result.content);
-            var activeNode = org.ekstep.services.collectionService.getActiveNode();
-            $scope.contentDetails.contentTitle = activeNode.title ? activeNode.title : "Untitled Content";
-            setTimeout(function() {
-                ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', activeNode);
-                ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode);
-                ecEditor.dispatchEvent("org.ekstep.collectioneditor:content:load");
-            }, 200);
-        });
-    }
-
     $scope.expandNode = function() {
         ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).expandAll($scope.expandNodeFlag);
         $scope.expandNodeFlag = !($scope.expandNodeFlag);
@@ -368,9 +350,10 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
         });
     });
 
-    $scope.realodContent = function() {
+    $scope.reloadContent = function() {
+        org.ekstep.collectioneditor.api.getService('collection').clearCache();
         $('#collection-tree').remove();
-        $("#treeWrapper").append('<div id="collection-tree" ng-class="collectionTreeHeight"></div>');
+        $("#treeWrapper").append('<div id="collection-tree" ng-class="collectionTreeHeight" class="collection-tree-height-with-footer"></div>');
         var mode;
         if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
         ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
