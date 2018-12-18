@@ -49,8 +49,8 @@ describe("Sunbird header plugin:", function() {
         it("Should invoke downloadToc method to download Toc csv file if response is given", function(done) {
             var data = 'do_1126448093921853441209'; 
             var resp = {"data":{"id":"api.textbook.toc.download","ver":"v1","ts":"2018-11-30 10:50:29:057+0000","params":{"resmsgid":null,"msgid":"8a9a21a5-d18f-4969-9fc4-ab116d46a3e8","err":null,"status":"success","errmsg":null},"responseCode":"OK","result":{"textbook":{"tocUrl":"https://sunbirddev.blob.core.windows.net/sunbird-content-dev/content/do_1126441512460369921103/artifact/1_1543475510769.pdf","ttl":86400}},"responseTime":226}};
-            ecEditor.getService('content').downloadFile = jasmine.createSpy().and.callFake(function(data, callBack) {
-                callBack(false, resp);
+            ecEditor.getService('content').downloadTableContent = jasmine.createSpy().and.callFake(function(data, callBack) {
+                callBack(undefined, resp);
             });
             spyOn($scope, "downloadToc").and.callThrough();
             $scope.downloadToc();
@@ -60,9 +60,9 @@ describe("Sunbird header plugin:", function() {
         }); 
 
         it("Should invoke downloadToc method to download Toc csv file, if response is null", function(done) {
-            var resp = {}; 
+            var resp = undefined; 
             var contentId = 'do_1126448093921853441209';
-            ecEditor.getService('content').downloadFile = jasmine.createSpy().and.callFake(function(contentId, callBack) {
+            ecEditor.getService('content').downloadTableContent = jasmine.createSpy().and.callFake(function(contentId, callBack) {
                 callBack(true, resp);
             });
             spyOn($scope, "downloadToc").and.callThrough();
@@ -106,7 +106,6 @@ describe("Sunbird header plugin:", function() {
         it("Should disable downloadtoc button if enable save button", function(done) {
             var event = {"type":"org.ekstep.collectioneditor:node:modified"};
             var data = {};
-            $scope.editorEnv = "COLLECTION";
             spyOn($scope, "setPendingChangingStatus").and.callThrough();
             $scope.setPendingChangingStatus(event, data);
             $scope.disableDownloadToc = true;
@@ -122,10 +121,10 @@ describe("Sunbird header plugin:", function() {
         }); 
 
         it("Should invoke updateContentCreditList method to update content owner list", function(done) {
-            var node = {'data': {"objectType":"TextBookUnit","id":"dbd23d1e-1c9e-4a73-8bc8-0c6c5471e8a9","root":false,"metadata":{"mimeType":"application/vnd.ekstep.content-collection","topicData":"(0) topics selected","name":"Untitled TextBook","owner":"rajesh","ownedBy":"rajesh"}}};
+            var node ={'data': {"objectType":"TextBookUnit","id":"dbd23d1e-1c9e-4a73-8bc8-0c6c5471e8a9","root":false,"metadata":{"mimeType":"application/vnd.ekstep.content-collection","topicData":"(0) topics selected","name":"Untitled TextBook","owner":"rajesh","ownedBy":"rajesh"}}};
             var event = "org.ekstep.collectioneditor:node:added";
             spyOn($scope, "updateContentCreditList").and.callThrough();
-            $scope.updateContentCreditList(node);
+            $scope.updateContentCreditList(event, node);
             expect($scope.updateContentCreditList).toHaveBeenCalled();
             expect($scope.updateContentCreditList).not.toBeUndefined();
             done();
@@ -154,100 +153,6 @@ describe("Sunbird header plugin:", function() {
             ecEditor.dispatchEvent('org.ekstep.checklist:showpopup', { mode: 'publish' })
             done();
         });
-
-        it("Should invoke previewContent  method to preview creted content", function(done) {
-            var data = undefined;
-            var fromBeginning = {};
-            spyOn(ecEditor, 'dispatchEvent').and.callThrough();
-            spyOn($scope, "previewContent").and.callThrough();
-            $scope.previewContent(data);
-            expect($scope.previewContent).toHaveBeenCalled();
-            ecEditor.dispatchEvent('org.ekstep.contenteditor:preview', { mofromBeginningde: 'fromBeginning' })
-            done();
-        });
-        
-        it("Should call editContentMeta  when changed content", function(done) {
-            var subType = "COLLECTION";
-            $scope.editorEnv = "COLLECTION";
-            spyOn(ecEditor, 'dispatchEvent').and.callThrough();
-            spyOn($scope, "editContentMeta").and.callThrough();
-            $scope.editContentMeta();
-            expect($scope.editContentMeta).toHaveBeenCalled();
-           ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', {
-                action: 'save',
-                subType: subType.toLowerCase(),
-                framework: ecEditor.getContext('framework'),
-                rootOrgId: ecEditor.getContext('channel'),
-                type: 'content',
-                popup: true,
-                editMode: $scope.getViewMode()
-            })
-            done();
-        });
-
-        it("Should call _sendReview method", function(done) {
-            var subType = "COLLECTION";
-            $scope.editorEnv = "CONTENT";
-            spyOn(ecEditor, 'dispatchEvent').and.callThrough();
-            spyOn($scope, "_sendReview").and.callThrough();
-            $scope._sendReview ();
-            expect($scope._sendReview).toHaveBeenCalled();
-            ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup', {
-                action: 'review',
-                subType: subType.toLowerCase(),
-                framework: ecEditor.getContext('framework'),
-                rootOrgId: ecEditor.getContext('channel'),
-                type: 'content',
-                popup: true,
-                editMode: $scope.getViewMode()
-            });
-            done();
-        });
-
-        xit("Should invoke publishContent method to published content", function(done) {
-            $scope.checkedContents = 'checkedContents';
-            var resp = {};
-            spyOn(ecEditor, 'dispatchEvent').and.callThrough();
-            spyOn($scope, "publishContent").and.callThrough();
-            $scope.publishContent();
-            expect($scope.publishContent).toHaveBeenCalled();
-            ecEditor.dispatchEvent("org.ekstep.contenteditor:publish", function(callback){
-                callback(true, resp);
-            });
-            done();
-        });
-
-        it("Should invoke showNoContent method to close editor", function(done) {
-            $scope.alertOnUnload = true;
-            $scope.pendingChanges = true;
-            ecEditor.getConfig('editorConfig').mode = true;
-            spyOn($scope, "showNoContent").and.callThrough();
-            spyOn($scope, "closeEditor").and.callThrough();
-            $scope.showNoContent();
-            $scope.closeEditor();
-            expect($scope.showNoContent).toHaveBeenCalled();
-            expect($scope.showNoContent).not.toBeUndefined();
-            expect($scope.closeEditor).toHaveBeenCalled();
-            done();
-        });
-
-        it("should generate telemetry for user interaction", function() {
-            var telemetryData = { type: 'click', subtype: 'back', target: 'backButton' };
-            spyOn(ecEditor, 'getCurrentStage').and.returnValue({ id: 24234234234 });
-            spyOn(org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE), 'interact');
-            spyOn($scope, "generateTelemetry").and.callThrough();
-            $scope.generateTelemetry(telemetryData);
-            expect(org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).interact).toHaveBeenCalledWith({
-                "type": telemetryData.type,
-                "subtype": telemetryData.subtype,
-                "target": telemetryData.target,
-                "pluginid": jasmine.any(String),
-                "pluginver": jasmine.any(String),
-                "objectid": "",
-                "stage": jasmine.any(Number)
-            });
-        });
-
         it("Should get the mode ex:review/publish", function(done) {
             ecEditor.addEventListener("org.ekstep.checklist:getMode", function(event, callback) {
                 console.log("Event is dispatched")
