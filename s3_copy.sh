@@ -66,7 +66,7 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.3"
                 "org.ekstep.unitmeta-1.7"
                 "org.ekstep.uploadfile-1.0"
                 "org.ekstep.reviewercomments-1.0"
-                "org.ekstep.collectioneditor-1.5"
+                "org.ekstep.collectioneditor-1.6"
                 "org.ekstep.sunbirdcommonheader-1.8");
 
 for i in "${coreplugins[@]}"
