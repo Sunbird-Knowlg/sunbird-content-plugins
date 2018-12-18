@@ -283,32 +283,32 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
                 $scope.sidebarPages = org.ekstep.collectioneditor.metaPageManager.getSidebar();
                 $scope.breadcrumb = org.ekstep.collectioneditor.metaPageManager.getBreadcrumb();
                 $scope.showsuggestedContent = res.data.result.content.contentType === 'TextBook' ? true : false;
-                // if(showToc && res.data.result.content.contentType === 'TextBook' && !res.data.result.content.children){
-                //     ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
-                //         headerTitle: $scope.CONSTANTS.tocUploadHeader,
-                //         description: $scope.CONSTANTS.tocUploadDescription,
-                //         validation: {
-                //             'allowedExtension': ['csv']
-                //         },
-                //         buttonText: {
-                //             'primaryBtn': $scope.CONSTANTS.tocUploadBtnUpload,
-                //             'exitBtn': $scope.CONSTANTS.tocUploadBtnClose
-                //         },
-                //         callback: function (data, errTitle) {
-                //             console.log('response err', data);
-                //             $scope.errTitle = errTitle;
-                //             $scope.errMessage = data;
-                //             ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
-                //                 template: 'updateTocError',
-                //                 controller: 'headerController',
-                //                 controllerAs: '$ctrl',
-                //                 showClose: false,
-                //                 scope: $scope,
-                //                 className: 'ngdialog-theme-default'
-                //             });                   
-                //         }
-                //     });
-                // }
+                if(showToc && res.data.result.content.contentType === 'TextBook' && !res.data.result.content.children){
+                    ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
+                        headerTitle: $scope.CONSTANTS.tocUploadHeader,
+                        description: $scope.CONSTANTS.tocUploadDescription,
+                        validation: {
+                            'allowedExtension': ['csv']
+                        },
+                        buttonText: {
+                            'primaryBtn': $scope.CONSTANTS.tocUploadBtnUpload,
+                            'exitBtn': $scope.CONSTANTS.tocUploadBtnClose
+                        },
+                        callback: function (data, errTitle) {
+                            console.log('response err', data);
+                            $scope.errTitle = errTitle;
+                            $scope.errMessage = data;
+                            ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
+                                template: 'updateTocError',
+                                controller: 'headerController',
+                                controllerAs: '$ctrl',
+                                showClose: false,
+                                scope: $scope,
+                                className: 'ngdialog-theme-default'
+                            });                   
+                        }
+                    });
+                }
                 $scope.metaPages = org.ekstep.collectioneditor.metaPageManager.getPages();
                 $scope.$safeApply();
                 callback && callback(err, res);
@@ -317,6 +317,24 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
             }
         });
     };
+
+    $scope.reloadContent = function() {
+        org.ekstep.collectioneditor.api.getService('collection').clearCache();
+        $('#collection-tree').remove();
+        $("#treeWrapper").append('<div id="collection-tree" ng-class="collectionTreeHeight" class="collection-tree-height-with-footer"></div>');
+        var mode;
+        if (ecEditor.getConfig('editorConfig').contentStatus === "draft") mode = "edit";
+        ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: $scope.contentId, mode: mode }, function(err, res) {
+            org.ekstep.services.collectionService.fromCollection(res.data.result.content);
+            var activeNode = org.ekstep.services.collectionService.getActiveNode();
+            $scope.contentDetails.contentTitle = activeNode.title ? activeNode.title : "Untitled Content";
+            setTimeout(function() {
+                ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected', activeNode);
+                ecEditor.dispatchEvent('org.ekstep.collectioneditor:node:selected:' + activeNode.data.objectType, activeNode);
+                ecEditor.dispatchEvent("org.ekstep.collectioneditor:content:load");
+            }, 200);
+        });
+    }
 
     $scope.expandNode = function() {
         ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).expandAll($scope.expandNodeFlag);
@@ -405,7 +423,7 @@ angular.module('org.ekstep.collectioneditor', ["Scope.safeApply", "ui.sortable"]
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected', $scope.setSelectedNode, $scope);
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:added', $scope.addContent, $scope);
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:removed', $scope.removeContent, $scope);
-    ecEditor.addEventListener('org.ekstep.collectioneditor:reload', $scope.realodContent, $scope);
+    ecEditor.addEventListener('org.ekstep.collectioneditor:reload', $scope.reloadContent, $scope);
    
     $scope.parseKeywords = function(keywords){
         if(_.isString(keywords)){

@@ -1,7 +1,7 @@
 <div ng-app="org.ekstep.collectioneditor" ng-controller="mainController" class="ui masthead vertical segment collection-masterhead" id="collectionMasterhead">
     <div ng-repeat="header in headers" ng-include="header.templateURL"></div>
     <div class="ui grid main-body" id="mainBody">
-        <div  class="ui three wide column" id="table-of-contents">
+        <div class="ui three wide column" id="table-of-contents">
             <div class="ui segment content-editor-segment margin-bottom-none">
                 <div class="ui grid container">
                     <div class="ten wide column">
@@ -26,7 +26,7 @@
             </div>
         </div>
         <div class="nine wide column editor-body">
-            <div class="breadcrumbTemplate" ng-repeat="page in breadcrumb" data-attr="{{page.objectType[0]}}" ng-include="page.identifier || page.templateURL"></div>
+            <div class="breadcrumbTemplate" ng-repeat="page in breadcrumb" data-attr="{{page.objectType[0]}}|{{page.identifier}}" ng-include="page.identifier || page.templateURL"></div>
             <div class="ui grid no-margin" ng-show="!isNewCollection">
                 <div class="padded ui eight" ng-class="(showsuggestedContent && mode === 'Edit') ? 'wide column' : 'twelve wide column'" id="contents-pane">
                     <div class="content-manifest">
