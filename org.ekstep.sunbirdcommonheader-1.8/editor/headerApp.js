@@ -1,5 +1,5 @@
-angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22.angular-timeago"]).controller('headerController', ['$scope', function ($scope) {
-
+angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22.angular-timeago"]).controller('headerController', ['$scope', '$interval',
+ function ($scope, $interval) {
     $scope.contentDetails = {
         contentTitle: "",
         contentImage: ""
@@ -77,7 +77,16 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         tocUpdateBtnUpload: 'Upload',
         tocUpdateBtnClose: 'Close'
     }
-
+    $scope.contentLockRefershInterval = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').lockRefreshInterval || 3000;
+    $scope.contentLockIdleTimeout = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').lockIdleTimeout || 5000;
+    $scope.contentLockExpiryTimeout = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').lockExpiryTimeout || 8000;
+    $scope.dataChanged = false;
+    $scope.lastContentLockSyncTime = new Date();
+    $scope.onContentLockMessage = {
+        show: false,
+        text: undefined
+    }
+    $scope.previewMode = false;
     /*
      * Update ownership list when adding and removing the content.
      */
@@ -435,6 +444,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.internetStatusFn = function (event) {
         $scope.$safeApply(function () {
             $scope.internetStatusObj.status = navigator.onLine;
+            $scope.setContentLockListener();
         });
     };
 
@@ -770,6 +780,113 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         });
     }
 
+    $scope.setPreviewStatus = function(event,data) {
+        $scope.previewMode = $scope.previewMode === true ? false : true;
+        $scope.$safeApply();
+    }
+    $scope.setInteractStatus = function(event){
+        $scope.interactActive = true;
+    }
+    $scope.removeContentLockListener = function () {
+        $interval.cancel($scope.contentLockListener);
+        $scope.$safeApply();
+    }
+
+     $scope.contentDataChanged = function(){
+        $scope.dataChanged = true;
+    }
+
+ 
+ 
+     $scope.refreshContentLock = function () {
+        if($scope.internetStatusObj.status === true){           
+            var request = {
+                resourceId: ecEditor.getContext('contentId'),
+                resourceType: 'Content'
+            }
+            ecEditor.getService('lock').refreshLock({request:request}, function (err, res) {
+                if(res && res.responseCode && res.responseCode == 'OK'){
+                    console.log('lock refresh success ',res.result);
+                }else if(err){                  
+                    $scope.showStatusPopup('LOCK_REFRESH_ERROR',false,err.responseJSON.params.errmsg);
+                    $scope.removeContentLockListener();
+              }
+            });
+        } else {
+            //$scope.showStatusPopup('INTERNET_DISCONNECTED',false);
+            $scope.removeContentLockListener();
+        }        
+    }
+
+     $scope.showStatusPopup = function(type,isContinue,message){
+        $scope.onContentLockMessage.show = true;
+        var statusMessages = {
+            LOCK_REFRESH_ERROR: message,
+            IDLE_TIMEOUT: 'It seems your are idle for a long time.',
+            SESSION_TIMEOUT: 'Your session has been timed out.',
+            INTERNET_DISCONNECTED: 'Internet disconnected.Your are in offline mode.',
+            LOCKED_BY_COLLOBORATOR: message
+        };
+        $scope.isContinue = isContinue;
+        $scope.onContentLockMessage.text = statusMessages[type] || 'Error Occured.Try again after sometime.';             
+        $scope.$safeApply(function(){
+            ecEditor.jQuery('#errorLockContentModal').modal({
+                closable: false,
+                onDeny: function() {
+                    $scope.closeEditor();
+                },
+                onApprove: function() {
+                    $scope.interactActive = true;
+                    $scope.validateContentLock();
+                }
+            }).modal('show');
+        });
+
+     }
+
+     $scope.validateContentLock = function () {
+        console.log("called ", $scope.contentLockListener)
+        var lastSyncTime = $scope.lastContentLockSyncTime.getTime();
+        var currentTime = (new Date()).getTime();
+        var timeDiff = currentTime - lastSyncTime;
+        if($scope.dataChanged === true || $scope.previewMode === true || 
+            $scope.interactActive === true){
+            try {
+                $scope.refreshContentLock();
+            } catch(e) {
+             console.log("err ",e)
+            }
+            $scope.dataChanged = false;
+            $scope.lastContentLockSyncTime = new Date();
+            $scope.interactActive = false;
+            return;
+        }
+
+         if(Math.abs(timeDiff) >=  $scope.contentLockIdleTimeout) {
+            $scope.showStatusPopup('IDLE_TIMEOUT',true);
+            return;
+        }
+
+         if(Math.abs(timeDiff) >=  $scope.contentLockExpiryTimeout) {
+            try {
+                $scope.refreshContentLock();
+            } catch(e) {
+             console.log("err ",e)
+            }
+            $scope.lastContentLockSyncTime = new Date();
+            return;
+        }
+    }
+
+     $scope.setContentLockListener = function (event) {
+        if($scope.contentLockListener){
+          $scope.removeContentLockListener()
+        }
+        $scope.contentLockListener = $interval($scope.validateContentLock,$scope.contentLockRefershInterval);
+
+     }
+
+
     /**
      * @description - on init of checklist pop-up
      */
@@ -873,5 +990,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
     //others
     ecEditor.addEventListener("org.ekstep:sunbirdcommonheader:close:editor", $scope.closeEditor, $scope);
+    ecEditor.addEventListener('org.ekstep.contenteditor:preview', $scope.setPreviewStatus,$scope);
+    ecEditor.addEventListener('org.ekstep.contenteditor:preview:close', $scope.setPreviewStatus,$scope);
+    ecEditor.addEventListener('instance:editor:keepalive', $scope.setInteractStatus,$scope);
+    $scope.setContentLockListener();
 }]);
 //# sourceURL=sunbirdheaderapp.js
