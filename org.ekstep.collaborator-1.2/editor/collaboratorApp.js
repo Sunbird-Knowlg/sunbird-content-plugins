@@ -8,10 +8,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
 
         $scope.mode = ecEditor.getConfig('editorConfig').mode;
         $scope.contentId = ecEditor.getContext('contentId');
-        $scope.telemetry = {
-            "pluginid": instance.manifest.id,
-            "pluginver": instance.manifest.ver
-        };
+        $scope.telemetry = { "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver };
         $scope.selectedUsersId = [];
         $scope.removedUsersId = [];
         $scope.isAddCollaboratorTab = false;
@@ -29,7 +26,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             "request": {
                 "query": "",
                 "filters": {},
-                "fields": ["email", "firstName", "identifier", "lastName", "organisations"],
+                // "fields": ["email", "firstName", "identifier", "lastName", "organisations", "rootOrgName", "phone"],
                 "offset": 0,
                 "limit": $scope.defaultLimit
             }
@@ -82,6 +79,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                 });
             });
         }
+
         /**
         * Makes API call to fetch currently added collaborators/owners
         */
@@ -140,8 +138,8 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         /**
          * Updates collaborators
          */
-        $scope.updateCollaborators = function () {
-            $scope.generateTelemetry({ type: 'click', subtype: 'update', target: 'updateCollaborator', targetid: 'done-button' });
+        $scope.updateCollaborators = function (target) {
+            $scope.generateTelemetry({ type: 'click', subtype: 'update', target: target, targetid: 'done-button' });
             if ($scope.isAddCollaboratorTab) {
                 updateCollaboratorRequest.request.content.collaborators = _.uniq($scope.selectedUsersId.concat($scope.collaboratorsId));
             } else {
@@ -209,7 +207,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         }
 
         $scope.sortUsersList = function (value) {
-            $scope.usersList = _.orderBy($scope.usersList, value);
+            $scope.usersList = _.orderBy($scope.usersList, [user => user[value].toLowerCase()]);
             $scope.$safeApply();
         }
 
@@ -237,12 +235,15 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                 } else {
                     $scope.searchStatus = "end";
 
-                    if (res.data.result.response.content.length) {
-                        ctrl.searchRes.content = res.data.result.response.content;
-
+                    if (res.data.result.response.count) {
+                        ctrl.searchRes.content = $scope.excludeCollaborators(res.data.result.response.content);
+                        if (!ctrl.searchRes.content.length) {
+                            $scope.noResultFound = true;
+                            ctrl.searchRes.content = [];
+                        }
                     } else {
                         $scope.noResultFound = true;
-                        ctrl.searchRes.content = $scope.excludeCollaborators(res.data.result.response.content);
+                        ctrl.searchRes.content = [];
                     }
 
                     ctrl.searchRes.count = res.data.result.response.count;
@@ -263,7 +264,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         }
 
         $scope.refreshSearch = function () {
-            $scope.generateTelemetry({ type: 'click', subtype: 'refresh', target: 'viewAll', targetid: "" });
+            $scope.generateTelemetry({ type: 'click', subtype: 'refresh', target: 'refreshSearch', targetid: "refresh-button" });
             this.searchKeyword = '';
         }
 
