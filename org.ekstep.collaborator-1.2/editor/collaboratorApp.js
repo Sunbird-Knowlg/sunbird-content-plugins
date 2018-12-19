@@ -52,7 +52,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                     $scope.isLoading = false;
                     $scope.closePopup();
                 } else if (res && res.data && res.data.responseCode === "OK") {
-                    $scope.collaboratorsId = res.data.result.content.collaborators;
+                    $scope.collaboratorsId = res.data.result.content.collaborators || [];
                     $scope.loadAllUsers();
                 }
             });
@@ -66,6 +66,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                     $scope.fetchCollaborators();
                 }
             } else {
+                $scope.isLoading = false;
                 $scope.isAddCollaboratorTab = true;
             }
             $('.menu .item').tab();
@@ -84,7 +85,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         * Makes API call to fetch currently added collaborators/owners
         */
         $scope.fetchCollaborators = function () {
-            if ($scope.collaboratorsId.length) {
+            if ($scope.collaboratorsId && $scope.collaboratorsId.length) {
                 searchBody.request.filters.userId = $scope.collaboratorsId;
                 userService.search(searchBody, function (err, res) {
                     if (err) {
@@ -115,7 +116,12 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                 if (err) {
                     console.error('Unable to fetch All Users ', err);
                 } else {
-                    $scope.usersList = $scope.excludeCollaborators(res.data.result.response.content);
+
+                    if ($scope.collaboratorsId && $scope.collaboratorsId.length) {
+                        $scope.usersList = $scope.excludeCollaborators(res.data.result.response.content);
+                    } else {
+                        $scope.usersList = res.data.result.response.content;
+                    }
 
                     $scope.usersCount = res.data.result.response.count < $scope.defaultLimit ? $scope.usersList.length : res.data.result.response.count;
                     $scope.usersList.forEach(element => {
@@ -174,14 +180,17 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         }
 
         $scope.excludeCollaborators = function (result) {
-            $scope.collaboratorsId.forEach((id) => {
-                result.forEach((user, index) => {
-                    if (user.identifier === id) {
-                        result.splice(index, 1);
-                        return;
-                    }
+            if ($scope.collaboratorsId && $scope.collaboratorsId.length) {
+                $scope.collaboratorsId.forEach((id) => {
+                    result.forEach((user, index) => {
+                        if (user.identifier === id) {
+                            result.splice(index, 1);
+                            return;
+                        }
+                    });
                 });
-            });
+            }
+
             return result;
         }
 
@@ -237,9 +246,8 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
 
                     if (res.data.result.response.count) {
                         ctrl.searchRes.content = $scope.excludeCollaborators(res.data.result.response.content);
-                        if (!ctrl.searchRes.content.length) {
-                            $scope.noResultFound = true;
-                            ctrl.searchRes.content = [];
+                        if (ctrl.searchRes.content.length) {
+                            $scope.noResultFound = false;
                         }
                     } else {
                         $scope.noResultFound = true;
@@ -247,6 +255,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                     }
 
                     ctrl.searchRes.count = res.data.result.response.count;
+                    $scope.$safeApply();
                 }
             });
         }
@@ -280,6 +289,10 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         $scope.resetSearch = function () {
             ctrl.searchRes.content = [];
             $scope.noResultFound = false;
+        }
+
+        $scope.getOrganisation = function (organisations) {
+            return _.uniq(_.map(organisations, 'orgName')).toString();
         }
 
         /**

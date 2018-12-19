@@ -84,8 +84,8 @@
 }
 
 .margin-left-right-10 {
-    margin-left: 20px;
-    margin-right: 20px;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .div-scroll {
@@ -100,7 +100,7 @@
 }
 
 .ui.cards>.card .content img {
-    margin-top: 10px;
+    margin-top: 5px;
     border-radius: 50%;
 }
 
@@ -137,6 +137,10 @@ button.clear-btn:focus {
 
 .text-capitalize {
     text-transform: capitalize;
+}
+
+.width-100 {
+    width: 100%;
 }
 
 /* Footer */
