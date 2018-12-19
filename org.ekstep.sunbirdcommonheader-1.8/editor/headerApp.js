@@ -138,11 +138,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     /*
-     * This method is used for download Table of contents which is created by Textbook creator.
-     */
-    $scope.downloadToc = function () {
+    * This method is used for download Table of contents which is created by Textbook creator.
+    */
+    $scope.downloadToc = function() {
         $scope.loader = true;
-        org.ekstep.services.textbookService.downloadFile(ecEditor.getContext('contentId'), function (err, resp) {
+        org.ekstep.services.textbookService.downloadFile(ecEditor.getContext('contentId'), function(err, resp) {
             if (!err && resp.data.responseCode == "OK") {
                 $scope.loader = false;
                 $scope.$safeApply();
@@ -156,7 +156,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 link.download = link.href;
                 link.style.display = 'none';
                 document.body.appendChild(link);
-                if (link.href.split(".").pop().toLowerCase() != 'csv')
+                if(link.href.split(".").pop().toLowerCase() != 'csv')
                     link.setAttribute('target', '_blank');
                 link.click();
                 document.body.removeChild(link);
@@ -172,7 +172,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         });
     }
 
-    $scope.setEditorDetails = function () {
+    $scope.setEditorDetails = function() {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         if (meta.rejectComment || meta.rejectedReasons) {
             $scope.isReviewCommentsPresent = true;
@@ -186,7 +186,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.editorEnv = "COLLECTION"
                 $scope.publishMode = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').publishMode;
                 $scope.isFlagReviewer = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').isFlagReviewer;
-                $scope.collectionType = ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild().data.objectType;
+                $scope.collectionType =  ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild().data.objectType;
                 $scope.collectionMode = ecEditor.getConfig('editorConfig').mode;
                 if (ecEditor.getConfig('editorConfig').mode === 'Read')
                     $scope.showEditMeta = false;
@@ -225,7 +225,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         $scope.hideReviewBtn = false;
                         $scope.resolveReviewBtnStatus();
                         var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
-                        if (rootNode.children)
+                        if(rootNode.children)
                             $scope.disableDownloadToc = false;
                         // $scope.getContentMetadata();
                         $scope.getQRCodeRequestCount();
@@ -406,13 +406,12 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.setPendingChangingStatus = function (event, data) {
-        if ($scope.editorEnv === "COLLECTION") {
+        if($scope.editorEnv === "COLLECTION"){
             $scope.pendingChanges = ecEditor.getConfig('editorConfig').mode === 'Read' ? false : true;
             $scope.disableDownloadToc = true;
-        }
+        }        
         $scope.disableSaveBtn = false;
         $scope.disableQRGenerateBtn = false;
-        $scope.contentDataChanged();
         // $scope.qrRequestCount = 0;
         $scope.$safeApply();
     };
@@ -460,8 +459,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.getContentMetadata = function () {
         var rootNode = org.ekstep.services.collectionService.getNodeById(ecEditor.getContext('contentId'));
         var status = rootNode.data.metadata.status;
-        $scope.disableDownloadToc = rootNode.children == null ? true : false;
-        if (rootNode.data.metadata.contentCredits)
+        $scope.disableDownloadToc = rootNode.children == null ? true: false;
+        if(rootNode.data.metadata.contentCredits)
             $scope.contentCredits = rootNode.data.metadata.contentCredits;
         $scope.hideReviewBtn = (status === 'Draft' || status === 'FlagDraft') ? false : true;
         $scope.resolveReviewBtnStatus();
@@ -661,7 +660,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     type: "org.ekstep.toaster:success",
                     icon: 'fa fa-check-circle'
                 }
-                ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContent(org.ekstep.contenteditor.api.getContext('contentId'), function (err, content) {
+                ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContent(org.ekstep.contenteditor.api.getContext('contentId'), function(err, content) {
                     if (err) {
                         toasterPrompt = {
                             message: err.responseJSON.params.errmsg,
@@ -675,7 +674,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     $scope.qrCodeProcessId = res.data.result.processId
                     $scope.getQRCodeRequestCount();
                     $scope.resolveQRDownloadBtn();
-                });
+                 });
             }
             ecEditor.dispatchEvent(toasterPrompt.type, {
                 message: toasterPrompt.message,
@@ -756,7 +755,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     /**
      * @description - used to update toc via csv
      */
-    $scope.updateToc = function () {
+    $scope.updateToc = function () {        
         ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
             headerTitle: $scope.CONSTANTS.tocUpdateHeader,
             description: $scope.CONSTANTS.tocUpdateDescription,
@@ -767,7 +766,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 'primaryBtn': $scope.CONSTANTS.tocUpdateBtnUpload,
                 'exitBtn': $scope.CONSTANTS.tocUpdateBtnClose
             },
-            callback: function (data, errTitle) {
+            callback: function(data, errTitle){
                 console.log('response err', data);
                 $scope.errTitle = errTitle;
                 $scope.errMessage = data;
@@ -890,9 +889,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                
     }
 
-    
-    
-
     /**
      * @description - on init of checklist pop-up
      */
@@ -990,6 +986,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     ecEditor.addEventListener('stage:reorder', $scope.setPendingChangingStatus, $scope);
     ecEditor.addEventListener('object:removed', $scope.setPendingChangingStatus, $scope);
     ecEditor.addEventListener('org.ekstep.contenteditor:save', $scope.onSave, $scope);
+
     //Generic editor events
     ecEditor.addEventListener("org.ekstep.genericeditor:reload", $scope.setPendingChangingStatus, $scope);
 
@@ -1001,3 +998,4 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.setContentLockListener();
 }]);
 //# sourceURL=sunbirdheaderapp.js
+
