@@ -60,32 +60,32 @@
                             <strong>Showing {{usersList.length}} out of {{usersCount}} results</strong>
                         </div>
                     </div>
-                    <div class="two wide right floated column" style="padding-right:20px">
+                    <div class="two wide right floated column" style="padding-right:19px">
                         <div class="ui dropdown" style="float: right; ">
                             <div class="text"><strong>Sort</strong></div>
                             <i class="dropdown icon"></i>
                             <div class="menu" style="right: 0;left: auto;">
                               <div class="item" data-value="firstName">Name</div>
-                              <div class="item" data-value="rootOrgName">Organisation</div>
+                              <div class="item" data-value="organisations">Organisation</div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="margin-left-right-0" style="margin-top: 15px">
+                <div class="margin-left-right-0">
                     <div class="ui grid div-scroll">
                         <div class="twelve wide column" >
                             <div class="ui four stackable cards">
-                                <div class="card" style="background: #FFFFFF;min-height:80px;"  ng-repeat="user in usersList" in-view="lineInView($index, $inview, user, 'collaboratorPopup', $index)" in-view-options="{ throttle: 1000 }">
+                                <div class="card" style="background: #FFFFFF;height:80px;"  ng-repeat="user in usersList" in-view="lineInView($index, $inview, user, 'collaboratorPopup', $index)" in-view-options="{ throttle: 1000 }">
                                     <div class="content" >
                                         <img data-name="{{user.firstName}}" class="left floated ui image profile" style="margin-bottom: 0" height="50px" width="50px" />
                                         <div class="header ellipsis text-capitalize" style="font-size:1rem">{{user.firstName}} {{user.lastName}}</div>
                                         <div class="meta">
-                                            <div class="ellipsis" ng-show="user.organisations.length">{{getOrganisation(user.organisations)}}</div>
+                                            <div class="ellipsis" ng-show="user.organisations.length">{{user.organisations[0].orgName}}</div>
                                             <div ng-show="!user.organisations.length">&nbsp;</div>
                                             <div ng-hide="true">{{user.email}}</div>
                                             <div>
                                                 <span ng-hide="true">{{user.phone}}</span>
-                                                <button class="right floated clear-btn color-blue" ng-if="!user.isSelected" ng-click="toggleSelectionUser(user, $index, 'selectedUsersId', 'usersList')"><strong>+ADD</strong></button>
+                                                <button class="right floated clear-btn color-blue" style="padding-right: 0" ng-if="!user.isSelected" ng-click="toggleSelectionUser(user, $index, 'selectedUsersId', 'usersList')"><strong>+ADD</strong></button>
                                                 <div class="ui right floated compact segment" style="padding:0; border: 0;margin:0;" ng-if="user.isSelected" ng-click="toggleSelectionUser(user, $index, 'selectedUsersId', 'usersList')">
                                                     <div class="ui mini fitted toggle checkbox" style="transform:scale(0.7)">
                                                         <input type="checkbox" checked>
@@ -121,17 +121,17 @@
                     <div class="ui grid div-scroll">
                         <div class="twelve wide column">
                             <div class="ui four stackable cards">
-                                <div class="card" style="background: #FFFFFF; min-height:80px;" ng-repeat="user in collaboratorsList" in-view="lineInView($index, $inview, user, 'collaboratorPopup', $index)" in-view-options="{ throttle: 1000 }">
+                                <div class="card" style="background: #FFFFFF; height:80px;" ng-repeat="user in collaboratorsList" in-view="lineInView($index, $inview, user, 'collaboratorPopup', $index)" in-view-options="{ throttle: 1000 }">
                                     <div class="content" >
                                         <img data-name="{{user.firstName}}" class="left floated ui image profile" style="margin-bottom: 0" height="50px" width="50px" />
                                         <div class="header ellipsis text-capitalize" style="font-size:1rem">{{user.firstName}} {{user.lastName}}</div>
                                         <div class="meta">
-                                                <div class="ellipsis" ng-show="user.organisations.length">{{getOrganisation(user.organisations)}}</div>
+                                                <div class="ellipsis" ng-show="user.organisations.length">{{user.organisations[0].orgName}}</div>
                                                 <div ng-show="!user.organisations.length">&nbsp;</div>
                                             <div ng-hide="true">{{user.email}}</div>
                                             <div>
                                                 <span ng-hide="true">{{user.phone}}</span>
-                                                <button class="right floated clear-btn color-danger" ng-if="!user.isSelected" ng-click="toggleSelectionUser(user, $index, 'removedUsersId', 'collaboratorsList')"><strong>REMOVE</strong></button>
+                                                <button class="right floated clear-btn color-danger" style="padding-right:0;" ng-if="!user.isSelected" ng-click="toggleSelectionUser(user, $index, 'removedUsersId', 'collaboratorsList')"><strong>REMOVE</strong></button>
                                                 <div class="ui right floated compact segment" style="padding:0; border: 0;margin:0;" ng-if="user.isSelected" ng-click="toggleSelectionUser(user, $index, 'removedUsersId', 'collaboratorsList')">
                                                     <div class="ui fitted toggle checkbox" style="transform:scale(0.7)">
                                                         <input type="checkbox" checked>
@@ -160,7 +160,7 @@
                 <div class="ui grid">
                     <div class="twelve wide column">
                         <button ng-if="isAddCollaboratorTab" id="done-button" class="ui right floated color-white background-blue tiny button next-btn" ng-disabled="!selectedUsersId.length" ng-click="updateCollaborators('addCollaborator')">Done</button>
-                        <button ng-if="!isAddCollaboratorTab" id="done-button" class="ui right floated color-white background-blue tiny button next-btn" ng-disabled="!removedUsersId.length" ng-click="updateCollaborators('removeCollaborator')">Done</button>
+                        <button ng-if="!isAddCollaboratorTab" id="done-button" class="ui right floated color-white background-blue tiny button next-btn" ng-disabled="!removedUsersId.length || !isContentOwner" ng-click="updateCollaborators('removeCollaborator')">Done</button>
                     </div>
                 </div>
             </div>

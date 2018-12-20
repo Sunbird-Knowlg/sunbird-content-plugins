@@ -20,13 +20,16 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         $scope.isLoading = true;
         $scope.noResultFound = false;
         $scope.defaultLimit = 200;
+        $scope.isContentOwner = false;
 
         let userService = org.ekstep.contenteditor.api.getService(ServiceConstants.USER_SERVICE);
         let searchBody = {
             "request": {
                 "query": "",
-                "filters": {},
-                // "fields": ["email", "firstName", "identifier", "lastName", "organisations", "rootOrgName", "phone"],
+                "filters": {
+                    "organisations.roles": ["CONTENT_CREATOR"],
+                },
+                "fields": ["email", "firstName", "identifier", "lastName", "organisations", "rootOrgName", "phone"],
                 "offset": 0,
                 "limit": $scope.defaultLimit
             }
@@ -46,13 +49,14 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         }
 
         $scope.getContentCollaborators = function () {
-            ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getCollectionHierarchy({ contentId: ecEditor.getContext('contentId'), mode: 'edit' }, function (err, res) {
+            ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContent(ecEditor.getContext('contentId'), function (err, res) {
                 if (err) {
                     console.error('Unable to fetch collaborators', err);
                     $scope.isLoading = false;
                     $scope.closePopup();
-                } else if (res && res.data && res.data.responseCode === "OK") {
-                    $scope.collaboratorsId = res.data.result.content.collaborators || [];
+                } else if (res) {
+                    $scope.isContentOwner = (res.createdBy === ecEditor.getContext('uid')) ? true : false;
+                    $scope.collaboratorsId = res.collaborators || [];
                     $scope.loadAllUsers();
                 }
             });
@@ -69,6 +73,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                 $scope.isLoading = false;
                 $scope.isAddCollaboratorTab = true;
             }
+
             $('.menu .item').tab();
             $scope.$safeApply();
             $timeout(function () {
@@ -111,12 +116,14 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             $scope.isAddCollaboratorTab = true;
 
             searchBody.request.query = "";
-            searchBody.request.filters = {};
+            if (searchBody.hasOwnProperty('userId')) {
+                delete searchBody.request.userId;
+            }
+
             userService.search(searchBody, function (err, res) {
                 if (err) {
                     console.error('Unable to fetch All Users ', err);
                 } else {
-
                     if ($scope.collaboratorsId && $scope.collaboratorsId.length) {
                         $scope.usersList = $scope.excludeCollaborators(res.data.result.response.content);
                     } else {
@@ -168,7 +175,6 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                         icon: 'fa fa-warning'
                     });
                 } else {
-                    // alert('Collaborator updated successfully');
                     ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                         message: 'Collaborator updated successfully',
                         position: 'topCenter',
@@ -215,8 +221,15 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             $scope.$safeApply();
         }
 
+        /**
+         * Sort Users List by Name and Organisation
+         */
         $scope.sortUsersList = function (value) {
-            $scope.usersList = _.orderBy($scope.usersList, [user => user[value].toLowerCase()]);
+            if (value === 'firstName') {
+                $scope.usersList = _.orderBy($scope.usersList, [user => user[value].toLowerCase()]);
+            } else {
+                 $scope.usersList = _.orderBy($scope.usersList, [user => user.organisations[0].orgName ? user.organisations[0].orgName.toLowerCase() : '' ]);
+            }
             $scope.$safeApply();
         }
 
