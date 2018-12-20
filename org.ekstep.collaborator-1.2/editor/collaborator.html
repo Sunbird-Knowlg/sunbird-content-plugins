@@ -81,7 +81,7 @@
                                         <div class="header ellipsis text-capitalize" style="font-size:1rem">{{user.firstName}} {{user.lastName}}</div>
                                         <div class="meta">
                                             <div class="ellipsis" ng-show="user.organisations.length">{{user.organisations[0].orgName}}</div>
-                                            <div ng-show="!user.organisations.length">&nbsp;</div>
+                                            <div ng-show="!user.organisations.length || !user.organisations[0].orgName">&nbsp;</div>
                                             <div ng-hide="true">{{user.email}}</div>
                                             <div>
                                                 <span ng-hide="true">{{user.phone}}</span>
@@ -113,7 +113,7 @@
                 <div class="ui grid">
                     <div class="twelve wide column">
                         <div ng-if="collaboratorsList.length">
-                            <strong>Showing {{collaboratorsList.length}} existing collaborators</strong>
+                            <strong>{{collaboratorsList.length}} collaborators exist</strong>
                         </div>
                     </div>
                 </div>
@@ -127,13 +127,13 @@
                                         <div class="header ellipsis text-capitalize" style="font-size:1rem">{{user.firstName}} {{user.lastName}}</div>
                                         <div class="meta">
                                                 <div class="ellipsis" ng-show="user.organisations.length">{{user.organisations[0].orgName}}</div>
-                                                <div ng-show="!user.organisations.length">&nbsp;</div>
+                                                <div ng-show="!user.organisations.length || !user.organisations[0].orgName">&nbsp;</div>
                                             <div ng-hide="true">{{user.email}}</div>
                                             <div>
                                                 <span ng-hide="true">{{user.phone}}</span>
                                                 <button class="right floated clear-btn color-danger" style="padding-right:0;" ng-if="!user.isSelected" ng-click="toggleSelectionUser(user, $index, 'removedUsersId', 'collaboratorsList')"><strong>REMOVE</strong></button>
                                                 <div class="ui right floated compact segment" style="padding:0; border: 0;margin:0;" ng-if="user.isSelected" ng-click="toggleSelectionUser(user, $index, 'removedUsersId', 'collaboratorsList')">
-                                                    <div class="ui fitted toggle checkbox" style="transform:scale(0.7)">
+                                                    <div class="ui mini fitted toggle checkbox" style="transform:scale(0.7)">
                                                         <input type="checkbox" checked>
                                                         <label></label>
                                                     </div>

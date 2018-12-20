@@ -92,6 +92,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             }
             searchBody.request.query = "";
         }
+
         /**
         * Makes API call to fetch currently added collaborators/owners
         */
@@ -118,6 +119,9 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             }
         }
 
+        /**
+         * Fetches users having content creation role
+         */
         $scope.loadAllUsers = function () {
             $scope.isAddCollaboratorTab = true;
             $scope.resetSearchRequest();
@@ -186,6 +190,11 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             });
         }
 
+        /**
+         * It excludes users those are already a collaborator.
+         * @param result {object} User search API Result
+         * @returns Users list with excluding existing collabortors
+         */
         $scope.excludeCollaborators = function (result) {
             if ($scope.collaboratorsId && $scope.collaboratorsId.length) {
                 $scope.collaboratorsId.forEach((id) => {
@@ -201,13 +210,23 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             return result;
         }
 
-        // Close the popup
+        /**
+         * It closes the popup
+         * @param pageId {string} Current page id.
+         */
         $scope.closePopup = function (pageId) {
             inViewLogs = [];
             $scope.generateTelemetry({ type: 'click', subtype: 'cancel', target: 'closePopup', targetid: 'close-button' });
             $scope.closeThisDialog();
         };
 
+        /**
+         * It selects or unselects users from the list
+         * @param user {object} User Object
+         * @param index {number} Index of the user in the userList
+         * @param usersId {string} Variable to hold user's Id - selectedUsersId | removedUsersId
+         * @param list {string} Variable to hold whole object - usersList | collaboratorsList
+         */
         $scope.toggleSelectionUser = function (user, index, usersId, list) {
             var idx = $scope[usersId].indexOf(user.identifier);
             if (idx > -1) {
@@ -224,6 +243,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
 
         /**
          * Sort Users List by Name and Organisation
+         * @param value {string} - Sort by value - firstName | organisations
          */
         $scope.sortUsersList = function (value) {
             if (value === 'firstName') {
@@ -236,6 +256,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
 
         /**
          * Selects User and show check mark checked
+         * @param user {object} User's object
          */
         $scope.selectUser = function (user) {
             $scope.generateTelemetry({ type: 'click', subtype: 'select', target: 'user', targetid: user.identifier });
@@ -305,10 +326,6 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             $scope.noResultFound = false;
         }
 
-        $scope.getOrganisation = function (organisations) {
-            return _.uniq(_.map(organisations, 'orgName')).toString();
-        }
-
         /**
          * Generates telemetry
          */
@@ -326,7 +343,9 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             }
         }
 
-        // Generate Impression telemetry
+        /**
+         * Generates Impression telemetry
+         */
         $scope.generateImpression = function (data) {
             if (data) {
                 ecEditor.getService('telemetry').impression({
