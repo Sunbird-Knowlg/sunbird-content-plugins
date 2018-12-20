@@ -77,9 +77,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         tocUpdateBtnUpload: 'Upload',
         tocUpdateBtnClose: 'Close'
     }
-    $scope.contentLockRefershInterval = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').lockRefreshInterval || 3000;
-    $scope.contentLockIdleTimeout = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').lockIdleTimeout || 5000;
-    $scope.contentLockExpiryTimeout = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').lockExpiryTimeout || 8000;
+    $scope.contentLockRefershInterval = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').lockRefreshInterval || 10000;
+    $scope.contentLockIdleTimeout = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').lockIdleTimeout || 30000;
+    $scope.contentLockExpiryTimeout = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').lockExpiryTimeout || 60000;
     $scope.dataChanged = false;
     $scope.lastContentLockSyncTime = new Date();
     $scope.onContentLockMessage = {
@@ -806,8 +806,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             }
             ecEditor.getService('lock').refreshLock({request:request}, function (err, res) {
                 if(res && res.responseCode && res.responseCode == 'OK'){
-                    console.log('lock refresh success ',res.result);
-                }else if(err){                  
+                    $scope.contentLockExpired = false;
+                }else if(err && $scope.contentLockExpired === true){                  
                     $scope.showStatusPopup('LOCK_REFRESH_ERROR',false,err.responseJSON.params.errmsg);
                     $scope.removeContentLockListener();
               }
@@ -831,7 +831,15 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.onContentLockMessage.text = statusMessages[type] || 'Error Occured.Try again after sometime.';             
         $scope.$safeApply(function(){
             ecEditor.jQuery('#errorLockContentModal').modal({
+                inverted: true,
                 closable: false,
+                onVisible: function(){
+                  ecEditor.jQuery('#errorLockContentModal').mouseover(function(){
+                    if($scope.isContinue){
+                          ecEditor.jQuery('#errorLockContentModal').modal('hide');
+                    }
+                   });
+                },
                 onDeny: function() {
                     $scope.closeEditor();
                 },
@@ -841,8 +849,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 }
             }).modal('show');
         });
-
-     }
+   }
 
      $scope.validateContentLock = function () {
         console.log("called ", $scope.contentLockListener)
@@ -862,18 +869,18 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             return;
         }
 
-         if(Math.abs(timeDiff) >=  $scope.contentLockIdleTimeout) {
-            $scope.showStatusPopup('IDLE_TIMEOUT',true);
-            return;
-        }
-
-         if(Math.abs(timeDiff) >=  $scope.contentLockExpiryTimeout) {
+        if(Math.abs(timeDiff) >=  $scope.contentLockExpiryTimeout) {
             try {
+                $scope.contentLockExpired = true;
                 $scope.refreshContentLock();
             } catch(e) {
              console.log("err ",e)
             }
             $scope.lastContentLockSyncTime = new Date();
+            return;
+        }
+        if(Math.abs(timeDiff) >=  $scope.contentLockIdleTimeout) {
+            $scope.showStatusPopup('IDLE_TIMEOUT',true);
             return;
         }
     }

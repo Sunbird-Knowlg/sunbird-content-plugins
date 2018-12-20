@@ -1,11 +1,11 @@
 <div ng-app="sunbirdcommonheader:app" ng-controller="headerController" class="ui vertical segment content-masterhead" id="commonHeader">
     <div class="ui grid fluid container custom-container">
-         <div id="errorLockContentModal" class="ui modal">       
+         <div id="errorLockContentModal" class="ui basic inverted modal">       
                     <div class="ui icon header" ng-bind="onContentLockMessage.text">
                     </div>
                    <div class="actions">
-                           <div class="ui ok button" ng-if="isContinue" ><i class="checkmark icon"></i>Continue</div>  
-                           <div class="ui basic cancel button"><i class="close icon"></i>Close Editor</div>
+                           <!-- <div class="ui ok button" ng-if="isContinue" ><i class="checkmark icon"></i>Continue</div> -->
+                           <div class="ui basic cancel button" ng-if="!isContinue"><i class="close icon"></i>Close Editor</div>
                    </div>
         </div>
         <div class="one wide centered column custom-1-wide">
