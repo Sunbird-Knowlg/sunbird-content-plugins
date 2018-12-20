@@ -439,3 +439,7 @@ body {
     bottom: -4px;
     color: #9b9b9b;
 }
+
+.reviewer-comment-box::-webkit-scrollbar-thumb{
+    background:black;
+}
