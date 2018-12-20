@@ -86,6 +86,12 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             });
         }
 
+        $scope.resetSearchRequest = function () {
+            searchBody.request.filters = {
+                "organisations.roles": ["CONTENT_CREATOR"],
+            }
+            searchBody.request.query = "";
+        }
         /**
         * Makes API call to fetch currently added collaborators/owners
         */
@@ -114,12 +120,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
 
         $scope.loadAllUsers = function () {
             $scope.isAddCollaboratorTab = true;
-
-            searchBody.request.query = "";
-            if (searchBody.hasOwnProperty('userId')) {
-                delete searchBody.request.userId;
-            }
-
+            $scope.resetSearchRequest();
             userService.search(searchBody, function (err, res) {
                 if (err) {
                     console.error('Unable to fetch All Users ', err);
@@ -228,7 +229,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             if (value === 'firstName') {
                 $scope.usersList = _.orderBy($scope.usersList, [user => user[value].toLowerCase()]);
             } else {
-                 $scope.usersList = _.orderBy($scope.usersList, [user => user.organisations[0].orgName ? user.organisations[0].orgName.toLowerCase() : '' ]);
+                $scope.usersList = _.orderBy($scope.usersList, [user => user.organisations[0].orgName ? user.organisations[0].orgName.toLowerCase() : '']);
             }
             $scope.$safeApply();
         }
@@ -245,7 +246,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         $scope.searchByKeyword = function () {
             $scope.searchStatus = "start";
             ecEditor.jQuery('.search-Loader').addClass('active');
-
+            $scope.resetSearchRequest();
             searchBody.request.query = this.searchKeyword;
             $scope.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'search-button' });
 
