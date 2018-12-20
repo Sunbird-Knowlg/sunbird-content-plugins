@@ -14,16 +14,37 @@
                     <span ng-if="showEditMeta"><i class="edit icon link"></i>&nbsp;Edit Details</span>
                     <span ng-if="!showEditMeta"><i class="eye icon link"></i>&nbsp;View Details </span>
                 </a>
+                <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}"><span class="spinner"></span>{{internetStatusObj.text}}</label>
             </div>
+
         </div>
         <div class="two wide column">
             <div ng-if="lastSaved" class="last-saved-label">
                 <label class="">Last saved {{lastSaved | timeAgo }}</label>
             </div>
         </div>
+        <div class="ui active inverted dimmer" id="downloadtoc-loader" ng-if="loader" style="top:30px !important">
+            <div class="ui large text loader">Downloading</div>
+        </div>
         <div class="five wide column custom-5-wide" style="padding-top:1rem!important;">
             <div class="row header-icon-container">
                 <div class="custom-row-2">
+                    <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook' && collectionMode != 'Read')" class="custom-row-2" style="float: left; margin: 2px">
+                        <div  class="ui dropdown" style=" vertical-align: -webkit-baseline-middle; ">
+                            <div class="ui dropdown">
+                                Download/Update ToC
+                                <i class="dropdown icon"></i>
+                            </div>
+                            <div class="menu" style="left: auto; right: 0; top: 25px;">
+                                <div class="item" ng-click="downloadToc(); generateTelemetry({ subtype: 'downloadToc', target: 'downloadTocButton'});"
+                                    ng-class="disableDownloadToc ? 'disabled' : 'enabled'">
+                                    <i class="download icon"></i> Download ToC Metadata
+                                </div>
+                                <div class="item" ng-click="updateToc()">
+                                    <i class="upload icon"></i> Update ToC Metadata</div>
+                            </div>
+                        </div>
+                    </div>
                     <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook' && collectionMode != 'Read')" class="custom-row-2" style="float: left;margin: 0.4em 3em;">
                         <div class="ui dropdown qrCodeStyler">
                             <div class="ui dropdown">
@@ -65,9 +86,6 @@
                             <a ng-click="closeEditor(); generateTelemetry({ subtype: 'close', target: 'closeButton'})">
                                 <i class="remove icon custom-cursor"></i>
                             </a>
-                        </div>
-                        <div class="icon-box popup-item" data-content="Add Collaborator" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'collaborator:add'});">
-                            <i class="add user icon custom-icon"></i>
                         </div>
                         <div ng-show="showEditMeta && !publishMode && !isFlagReviewer" id="saveButton" ng-class="disableSaveBtn ? 'icon-box popup-item label-icon-box disabled' : 'icon-box popup-item label-icon-box'"
                             data-content="Save content" data-variation="tiny inverted" data-position="bottom center"
@@ -139,4 +157,5 @@
 <script>
     $(".ui.dropdown").dropdown();
     $("#contentCreditsList .item").addClass('disabled');
+    $('.users.icon').popup();
 </script>

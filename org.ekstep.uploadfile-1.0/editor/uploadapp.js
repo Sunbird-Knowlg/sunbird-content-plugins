@@ -97,7 +97,7 @@ angular.module('org.ekstep.uploadfile-1.0', []).controller('uploadfileController
                         var fileUrl = signedURL.split('?')[0];
                         $scope.textbookService.uploadFile(ecEditor.getContext('contentId'), fileUrl, function(err, res) {
                             if (err) {
-                                const errTitle = 'CSV update Error';
+                                const errTitle = 'CSV update error';
                                 const errMessage = err.responseJSON.params.errmsg;
                                 console.log('Error message: ', err.responseJSON.params.errmsg);
                                 $scope.closeThisDialog();

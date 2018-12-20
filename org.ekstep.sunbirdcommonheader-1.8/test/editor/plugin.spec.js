@@ -46,6 +46,73 @@ describe("Sunbird header plugin:", function() {
         });
     });
     describe("Content review", function() {
+        it("Should invoke downloadToc method to download Toc csv file if response is given", function(done) {
+            var data = 'do_1126448093921853441209'; 
+            var resp = {"data":{"id":"api.textbook.toc.download","ver":"v1","ts":"2018-11-30 10:50:29:057+0000","params":{"resmsgid":null,"msgid":"8a9a21a5-d18f-4969-9fc4-ab116d46a3e8","err":null,"status":"success","errmsg":null},"responseCode":"OK","result":{"textbook":{"tocUrl":"https://sunbirddev.blob.core.windows.net/sunbird-content-dev/content/do_1126441512460369921103/artifact/1_1543475510769.pdf","ttl":86400}},"responseTime":226}};
+            ecEditor.getService('content').downloadTableContent = jasmine.createSpy().and.callFake(function(data, callBack) {
+                callBack(undefined, resp);
+            });
+            spyOn($scope, "downloadToc").and.callThrough();
+            $scope.downloadToc();
+            expect($scope.downloadToc).toHaveBeenCalled();
+            expect($scope.downloadToc).not.toBeUndefined();
+            done();
+        }); 
+
+        it("Should invoke downloadToc method to download Toc csv file, if response is null", function(done) {
+            var resp = undefined; 
+            var contentId = 'do_1126448093921853441209';
+            ecEditor.getService('content').downloadTableContent = jasmine.createSpy().and.callFake(function(contentId, callBack) {
+                callBack(true, resp);
+            });
+            spyOn($scope, "downloadToc").and.callThrough();
+            $scope.downloadToc();
+            expect($scope.downloadToc).toHaveBeenCalled();
+            expect($scope.downloadToc).not.toBeUndefined();
+            done();
+        }); 
+
+        it("Should enable downloadtoc button if rootnode has no any child", function(done) {
+            var event = {"type":"org.ekstep.collectioneditor:node:added"};
+            var node = {"children":null,"data":{"objectType":"TextBookUnit","id":"462a48a1-29bc-4acc-81e1-6b99c1189da0","root":false,"metadata":{"mimeType":"application/vnd.ekstep.content-collection","topicData":"(0) topics selected","name":"Untitled TextBook"}}};
+            spyOn($scope, "addOwnershipList").and.callThrough();
+            $scope.addOwnershipList(event, node);
+            var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
+            $scope.disableDownloadToc = rootNode.children == null ? true: false;
+            expect($scope.addOwnershipList).toHaveBeenCalled();
+            done();
+        }); 
+
+        it("Should enable downloadtoc button if rootnode has at leat one child", function(done) {
+            var event = {"type":"org.ekstep.collectioneditor:node:added"};
+            var node = {"children":null,"data":{"objectType":"TextBookUnit","id":"462a48a1-29bc-4acc-81e1-6b99c1189da0","root":false,"metadata":{"mimeType":"application/vnd.ekstep.content-collection","topicData":"(0) topics selected","name":"Untitled TextBook"}}};
+            spyOn($scope, "removeOwnershipList").and.callThrough();
+            $scope.removeOwnershipList(event, node);
+            $scope.disableDownloadToc = false;
+            expect($scope.removeOwnershipList).toHaveBeenCalled();
+            done();
+        }); 
+
+        it("Should enable downloadtoc button if rootnode has no child", function(done) {
+            var event = {"type":"org.ekstep.collectioneditor:node:added"};
+            var node = {"children":{'h':'h1'},"data":{"objectType":"TextBookUnit","id":"462a48a1-29bc-4acc-81e1-6b99c1189da0","root":false,"metadata":{"mimeType":"application/vnd.ekstep.content-collection","topicData":"(0) topics selected","name":"Untitled TextBook"}}};
+            spyOn($scope, "removeOwnershipList").and.callThrough();
+            $scope.removeOwnershipList(event, node);
+            $scope.disableDownloadToc = false;
+            expect($scope.removeOwnershipList).toHaveBeenCalled();
+            done();
+        }); 
+
+        it("Should disable downloadtoc button if enable save button", function(done) {
+            var event = {"type":"org.ekstep.collectioneditor:node:modified"};
+            var data = {};
+            spyOn($scope, "setPendingChangingStatus").and.callThrough();
+            $scope.setPendingChangingStatus(event, data);
+            $scope.disableDownloadToc = true;
+            expect($scope.setPendingChangingStatus).toHaveBeenCalled();
+            done();
+        }); 
+
         it("Should invoke addListSize method to increase listSize", function(done) {
             spyOn($scope, "addListSize").and.callThrough();
             $scope.addListSize();
@@ -244,6 +311,39 @@ describe("Sunbird header plugin:", function() {
                 expect($scope.checklistItems).toEqual(checklistConfig.reject);
                 expect($scope.checklistItems.title).toEqual(checklistConfig.read.title);
                 expect($scope.checklistItems.subtitle).toEqual(checklistConfig.read.subtitle);
+            })
+        })
+        describe("update TOC", function() {        
+            it("Should call updateTOC", function (done) {
+                spyOn($scope, "updateToc").and.callThrough();
+                $scope.updateToc();
+                expect($scope.updateToc).toHaveBeenCalled();
+                expect($scope.updateToc).not.toBeUndefined();
+                done();
+            })
+            it('updateToC gets the error response ', function () {
+                spyOn($scope, "updateToc").and.callThrough();
+                spyOn(ecEditor, 'dispatchEvent').and.callThrough();
+                $scope.updateToc();
+                var config = {}
+                var data = { "err": "ERR_SCRIPT_NOT_FOUND", "status": "failed", "errmsg": "Invalid request path: /content/v1/textbook/toc/upload/do_1126448093921853441209", "responseCode": "SERVER_ERROR", "result": {} };
+                var errTitle = 'CSV update error';
+                ecEditor.dispatchEvent('org.ekstep.uploadfile:show', function (event, callback) {
+                    callback(data.params.errmsg, errTitle);
+                    spyOn(ecEditor.getService('popup'), 'open');
+                    expect(ecEditor.getService('popup').open).toHaveBeenCalledWith({
+                        template: 'updateTocError',
+                        controller: 'headerController',
+                        controllerAs: '$ctrl',
+                        resolve: {
+                            'instance': jasmine.any(Function)
+                        },
+                        showClose: false,
+                        className: 'ngdialog-theme-plain'
+                    }, jasmine.any(Function));
+                    expect($scope.errMessage).toEqual(data.errmsg);
+                    expect($scope.errTitle).toEqual(errTitle);
+                });
             })
         })
 
