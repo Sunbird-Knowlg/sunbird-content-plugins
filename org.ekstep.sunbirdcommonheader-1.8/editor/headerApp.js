@@ -824,7 +824,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         $scope.onContentLockMessage.show = true;
         var statusMessages = {
-            LOCK_REFRESH_ERROR: message,
+            LOCK_REFRESH_ERROR: 'Someone is currently working on '+meta.name+'. Try again later.',
             IDLE_TIMEOUT: 'It seems your are idle for a long time.',
             SESSION_TIMEOUT: meta.name + ' locked due to inactivity, click Resume to continue editing. Closing will result in loss of unsaved changes.'
         };
