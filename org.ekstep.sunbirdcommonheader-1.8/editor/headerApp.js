@@ -805,9 +805,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     $scope.lockObj.lockKey = res.result.lockKey;
                     $scope.lockObj.expiresIn = res.result.expiresIn;
                     $scope.lockObj.expiresAt = new Date(res.result.expiresAt);                    
-                }else if(err && $scope.contentLockExpired === true){                  
-                    $scope.showStatusPopup('LOCK_REFRESH_ERROR',false,false,err.responseJSON.params.errmsg);
-                    $scope.removeContentLockListener();
+                }else if(err){
+                    $scope.handleError(err);                  
                 }
                 $scope.contentLockExpired = false;
             });
@@ -817,19 +816,49 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         }        
     }
 
-     $scope.showStatusPopup = function(type,isIdle,isResume,message){
+    $scope.handleError = function(err){
+        switch(err.status)
+        {
+            case 500:
+            $scope.showStatusPopup('LOCK_REFRESH_ERROR');   
+            break;
+            case 403:
+              $scope.showStatusPopup('LOCK_NOT_AVAILABLE');
+            break;
+            default:
+            $scope.showStatusPopup('LOCK_REFRESH_ERROR');   
+            break;
+        }
+        $scope.removeContentLockListener();      
+    }
+
+     $scope.showStatusPopup = function(type,message){
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        // reset status flags
+        $scope.isIdle = false;
+        $scope.isResume = false;
+        $scope.isRefresh = false;
+        $scope.isClose = false;
         if(meta){
-        $scope.onContentLockMessage.show = true;
-        var statusMessages = {
-            LOCK_REFRESH_ERROR: 'Someone is currently working on '+meta.name+'. Try again later.',
-            IDLE_TIMEOUT: 'It seems your are idle for a long time.',
-            SESSION_TIMEOUT: meta.name + ' locked due to inactivity, click Resume to continue editing. Closing will result in loss of unsaved changes.'
-        };
-        $scope.isIdle = isIdle;
-        $scope.isResume = isResume;
-        $scope.onContentLockMessage.text = statusMessages[type] || 'Error Occured.Try again after sometime.';             
-       
+        switch(type){
+            case 'LOCK_REFRESH_ERROR':
+            $scope.onContentLockMessage.text = 'Error Occured.Try again after sometime.';
+            $scope.isClose = true;
+            $scope.isRefresh = true;
+            break;
+            case 'IDLE_TIMEOUT':
+            $scope.onContentLockMessage.text = 'You have been inactive.';
+            $scope.isIdle = true;
+            break;
+            case 'LOCK_NOT_AVAILABLE':
+            $scope.onContentLockMessage.text = 'Someone is currently working on '+meta.name+'. Try again later.';
+            $scope.isClose = true;
+            break;
+            case 'SESSION_TIMEOUT':
+            $scope.onContentLockMessage.text = meta.name + ' locked due to inactivity, click Resume to continue editing. Closing will result in loss of unsaved changes.';
+            $scope.isClose = true;
+            $scope.isResume = true;
+        } 
         $scope.$safeApply(function(){
             ecEditor.jQuery('#errorLockContentModal').modal({
                 inverted: true,
@@ -841,7 +870,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     }
                    });
                 },
-                onDeny: function() {
+                onDeny: function() {s
                     $scope.closeEditor();
                 },
                 onApprove: function() {
@@ -852,8 +881,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         });
      }
    }
+   $scope.refreshContent = function() {
+    location.reload();
+   }
 
-     $scope.validateContentLock = function () {
+    $scope.validateContentLock = function () {
         //console.log("called ", $scope.contentLockListener);
         var lastSyncTime = $scope.lastContentLockSyncTime.getTime();
         var currentTime = (new Date()).getTime();
@@ -874,7 +906,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         // if lock expires then show resume/close message
         if(Math.floor(timeDiff/1000) >=  $scope.contentLockExpiresIn) {
             try {                
-                $scope.showStatusPopup('SESSION_TIMEOUT',false,true);
+                $scope.showStatusPopup('SESSION_TIMEOUT');
                 $scope.contentLockExpired = true;
             } catch(e) {
              console.log("err ",e)
@@ -891,7 +923,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.saveContent(function(err,res){});
             }
             $scope.idleTimer = 0;            
-            $scope.showStatusPopup('IDLE_TIMEOUT',true);
+            $scope.showStatusPopup('IDLE_TIMEOUT');
             return;
         }
     }
