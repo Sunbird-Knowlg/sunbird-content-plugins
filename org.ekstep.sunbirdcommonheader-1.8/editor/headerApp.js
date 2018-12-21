@@ -85,6 +85,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         text: undefined
     }
     $scope.previewMode = false;
+    $scope.contentLockExpired = false;
     /*
      * Update ownership list when adding and removing the content.
      */
