@@ -1,4 +1,4 @@
-org.ekstep.collectioneditor.basePlugin.extend({
+org.ekstep.contenteditor.basePlugin.extend({
     currentInstance: undefined,
 
     /**

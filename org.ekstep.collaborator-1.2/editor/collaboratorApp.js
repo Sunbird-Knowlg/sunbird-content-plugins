@@ -5,8 +5,6 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
         var inViewLogs = [];
         ctrl.contentNotFoundImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/content_not_found.jpg");
         ctrl.searchRes = { count: 0, content: [] };
-
-        $scope.mode = ecEditor.getConfig('editorConfig').mode;
         $scope.contentId = ecEditor.getContext('contentId');
         $scope.telemetry = { "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver };
         $scope.selectedUsersId = [];
