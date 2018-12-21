@@ -880,6 +880,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             } catch(e) {
              console.log("err ",e)
             }
+            $scope.idleTimer = 0;
             $scope.lastContentLockSyncTime = new Date();
             return;
         }
