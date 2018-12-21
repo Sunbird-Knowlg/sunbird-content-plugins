@@ -900,7 +900,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
           $scope.removeContentLockListener()
         }
         if($scope.lockObj && $scope.lockObj.lockKey){
-            //convert to seconds (minimum value of 'expiresIn' should be 30 mins)
+            //convert to seconds
             $scope.contentLockExpiresIn = $scope.lockObj.expiresIn*60;
             //idle timeout and refresh intervals should be a fraction of content lock expiry mins
             $scope.contentLockIdleTimeOut = Math.floor($scope.contentLockExpiresIn/3);
