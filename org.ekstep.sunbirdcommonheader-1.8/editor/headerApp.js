@@ -443,7 +443,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.internetStatusFn = function (event) {
         $scope.$safeApply(function () {
             $scope.internetStatusObj.status = navigator.onLine;
-            $scope.setContentLockListener();
+            if($scope.internetStatusObj.status === true){
+                $scope.setContentLockListener();
+            } else {
+                $scope.removeContentLockListener();
+            }           
         });
     };
 
