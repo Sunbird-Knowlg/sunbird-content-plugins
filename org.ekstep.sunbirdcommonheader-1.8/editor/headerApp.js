@@ -77,9 +77,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         tocUpdateBtnUpload: 'Upload',
         tocUpdateBtnClose: 'Close'
     }
-    $scope.contentLockRefershInterval = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').lockRefreshInterval || 10000;
-    $scope.contentLockIdleTimeout = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').lockIdleTimeout || 30000;
-    $scope.contentLockExpiryTimeout = ecEditor.getConfig('editorConfig') && ecEditor.getConfig('editorConfig').lockExpiryTimeout || 60000;
+    var config = window.config || window.parent.config;
+    $scope.lockObj = {expiresIn:1};
+    if(config && config.lock){
+        $scope.lockObj = config.lock;
+    }    
     $scope.dataChanged = false;
     $scope.lastContentLockSyncTime = new Date();
     $scope.onContentLockMessage = {
@@ -784,9 +786,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.previewMode = $scope.previewMode === true ? false : true;
         $scope.$safeApply();
     }
-    $scope.setInteractStatus = function(event){
-        $scope.interactActive = true;
-    }
+  
     $scope.removeContentLockListener = function () {
         $interval.cancel($scope.contentLockListener);
         $scope.$safeApply();
@@ -795,47 +795,50 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
      $scope.contentDataChanged = function(){
         $scope.dataChanged = true;
     }
-
- 
  
      $scope.refreshContentLock = function () {
         if($scope.internetStatusObj.status === true){           
             var request = {
                 resourceId: ecEditor.getContext('contentId'),
-                resourceType: 'Content'
+                resourceType: 'Content',
+                lockId: $scope.lockObj.lockId
             }
             ecEditor.getService('lock').refreshLock({request:request}, function (err, res) {
-                if(res && res.responseCode && res.responseCode == 'OK'){
-                    $scope.contentLockExpired = false;
+                if(res && res.responseCode && res.responseCode == 'OK' && res.result){
+                    $scope.lockObj.lockId = res.result.lockKey;
+                    $scope.lockObj.expiresIn = res.result.expiresIn;
+                    $scope.lockObj.expiresAt = new Date(res.result.expiresAt);                    
                 }else if(err && $scope.contentLockExpired === true){                  
-                    $scope.showStatusPopup('LOCK_REFRESH_ERROR',false,err.responseJSON.params.errmsg);
+                    $scope.showStatusPopup('LOCK_REFRESH_ERROR',false,false,err.responseJSON.params.errmsg);
                     $scope.removeContentLockListener();
-              }
+                }
+                $scope.contentLockExpired = false;
             });
         } else {
-            //$scope.showStatusPopup('INTERNET_DISCONNECTED',false);
-            $scope.removeContentLockListener();
+            // $scope.showStatusPopup('INTERNET_DISCONNECTED',false);
+             $scope.removeContentLockListener();
         }        
     }
 
-     $scope.showStatusPopup = function(type,isContinue,message){
+     $scope.showStatusPopup = function(type,isIdle,isResume,message){
+        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         $scope.onContentLockMessage.show = true;
         var statusMessages = {
             LOCK_REFRESH_ERROR: message,
             IDLE_TIMEOUT: 'It seems your are idle for a long time.',
-            SESSION_TIMEOUT: 'Your session has been timed out.',
-            INTERNET_DISCONNECTED: 'Internet disconnected.Your are in offline mode.',
-            LOCKED_BY_COLLOBORATOR: message
+            SESSION_TIMEOUT: meta.name + ' locked due to inactivity, click Resume to continue editing. Closing will result in loss of unsaved changes.'
         };
-        $scope.isContinue = isContinue;
+        $scope.isIdle = isIdle;
+        $scope.isResume = isResume;
         $scope.onContentLockMessage.text = statusMessages[type] || 'Error Occured.Try again after sometime.';             
+       
         $scope.$safeApply(function(){
             ecEditor.jQuery('#errorLockContentModal').modal({
                 inverted: true,
                 closable: false,
                 onVisible: function(){
                   ecEditor.jQuery('#errorLockContentModal').mouseover(function(){
-                    if($scope.isContinue){
+                    if($scope.isIdle){
                           ecEditor.jQuery('#errorLockContentModal').modal('hide');
                     }
                    });
@@ -844,7 +847,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     $scope.closeEditor();
                 },
                 onApprove: function() {
-                    $scope.interactActive = true;
+                    $scope.contentDataChanged();
                     $scope.validateContentLock();
                 }
             }).modal('show');
@@ -852,34 +855,42 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
    }
 
      $scope.validateContentLock = function () {
-        console.log("called ", $scope.contentLockListener)
+        //console.log("called ", $scope.contentLockListener);
         var lastSyncTime = $scope.lastContentLockSyncTime.getTime();
         var currentTime = (new Date()).getTime();
         var timeDiff = currentTime - lastSyncTime;
-        if($scope.dataChanged === true || $scope.previewMode === true || 
-            $scope.interactActive === true){
+        $scope.idleTimer += $scope.contentLockRefershInterval;
+        // if screen is active(not idle)then refresh the lock regularly 
+        if($scope.dataChanged === true || $scope.previewMode === true){
             try {
-                $scope.refreshContentLock();
+             $scope.refreshContentLock();
             } catch(e) {
              console.log("err ",e)
             }
             $scope.dataChanged = false;
+            $scope.idleTimer = 0;
             $scope.lastContentLockSyncTime = new Date();
-            $scope.interactActive = false;
             return;
         }
-
-        if(Math.abs(timeDiff) >=  $scope.contentLockExpiryTimeout) {
-            try {
+        // if lock expires then show resume/close message
+        if(Math.floor(timeDiff/1000) >=  $scope.contentLockExpiresIn) {
+            try {                
+                $scope.showStatusPopup('SESSION_TIMEOUT',false,true);
                 $scope.contentLockExpired = true;
-                $scope.refreshContentLock();
             } catch(e) {
              console.log("err ",e)
             }
             $scope.lastContentLockSyncTime = new Date();
             return;
         }
-        if(Math.abs(timeDiff) >=  $scope.contentLockIdleTimeout) {
+
+         // if user is idle and lock not expired then show idle screen
+        if($scope.idleTimer >=  $scope.contentLockIdleTimeOut && $scope.contentLockExpired === false) {
+            // save content if any changes before showing idle screen
+            if($scope.disableSaveBtn === false){
+                $scope.saveContent(function(err,res){});
+            }
+            $scope.idleTimer = 0;            
             $scope.showStatusPopup('IDLE_TIMEOUT',true);
             return;
         }
@@ -889,7 +900,14 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         if($scope.contentLockListener){
           $scope.removeContentLockListener()
         }
-        $scope.contentLockListener = $interval($scope.validateContentLock,$scope.contentLockRefershInterval);
+        //convert to seconds
+        $scope.contentLockExpiresIn = $scope.lockObj.expiresIn*60;
+        //idle timeout and refresh intervals should be a fraction of content lock expiry mins
+        $scope.contentLockIdleTimeOut = Math.floor($scope.contentLockExpiresIn/3);
+        $scope.contentLockRefershInterval = Math.floor($scope.contentLockIdleTimeOut/5);
+        $scope.idleTimer = 0;
+        // set lock refresh interval
+        $scope.contentLockListener = $interval($scope.validateContentLock,$scope.contentLockRefershInterval*1000);
 
      }
 
@@ -999,7 +1017,12 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     ecEditor.addEventListener("org.ekstep:sunbirdcommonheader:close:editor", $scope.closeEditor, $scope);
     ecEditor.addEventListener('org.ekstep.contenteditor:preview', $scope.setPreviewStatus,$scope);
     ecEditor.addEventListener('org.ekstep.contenteditor:preview:close', $scope.setPreviewStatus,$scope);
-    ecEditor.addEventListener('instance:editor:keepalive', $scope.setInteractStatus,$scope);
+    ecEditor.addEventListener('instance:editor:keepalive', $scope.contentDataChanged,$scope);
+    $scope.$watch('disableSaveBtn', function() {
+        if($scope.disableSaveBtn === false){
+            $scope.contentDataChanged();   
+        }
+    });
     $scope.setContentLockListener();
 }]);
 //# sourceURL=sunbirdheaderapp.js
