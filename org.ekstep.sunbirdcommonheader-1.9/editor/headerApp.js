@@ -485,7 +485,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         rootNode.visit(function (node) {
             (node.data.metadata.dialcodeRequired == 'Yes') ? $scope.qrRequestCount += 1: $scope.qrRequestCount;
         });
-        $scope.qrRequestCount += 1;
     }
     $scope.showUploadForm = function () {
         ecEditor.jQuery('.popup-item').popup();
@@ -617,7 +616,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         var request = {
             "request": {
                 "dialcodes": {
-                    "count": $scope.qrRequestCount,
+                    "count": $scope.qrRequestCount + 1, //+1 is for Root node
                     "qrCodeSpec": {
                         "errorCorrectionLevel": "H"
                     }
