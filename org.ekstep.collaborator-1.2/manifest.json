@@ -15,6 +15,10 @@
             {
                 "type": "js",
                 "src": "editor/libs/initial.min.js"
+            },
+            {
+                "type": "js",
+                "src": "editor/libs/angular-inview.js"
             }
         ]
     }
