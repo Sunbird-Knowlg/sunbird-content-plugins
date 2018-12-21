@@ -64,12 +64,14 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
 
         $scope.selectTab = function (event) {
             if (event.currentTarget.dataset.tab === 'userListTab') {
+                $scope.generateTelemetry({ type: 'click', subtype: 'changeTab', target: 'manageCollaborator', targetid: 'userListTab' });
                 $scope.isAddCollaboratorTab = false;
                 if (!$scope.collaboratorsList.length) {
                     $scope.isLoading = true;
                     $scope.fetchCollaborators();
                 }
             } else {
+                $scope.generateTelemetry({ type: 'click', subtype: 'changeTab', target: 'addCollaborator', targetid: 'addCollaboratorTab' });
                 $scope.isLoading = false;
                 $scope.isAddCollaboratorTab = true;
             }
@@ -314,7 +316,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
 
         $scope.addCollaborators = function () {
             $scope.generateImpression({ type: 'click', subtype: 'submit', pageid: 'AddCollaborator' });
-            $scope.updateCollaborators();
+            $scope.updateCollaborators('addCollaborator');
             inViewLogs = [];
         }
 
