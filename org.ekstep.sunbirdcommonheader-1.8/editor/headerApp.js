@@ -870,7 +870,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     }
                    });
                 },
-                onDeny: function() {s
+                onDeny: function() {
                     $scope.closeEditor();
                 },
                 onApprove: function() {
