@@ -5,7 +5,7 @@
                     </div>
                    <div class="actions">
                            <div class="ui ok blue button" ng-if="contentLockExpired && isResume" ><i class="checkmark icon"></i>RESUME</div>
-                           <div class="ui basic cancel button" ng-if="(contentLockExpired && isResume) || !isResume"><i class="close icon"></i>Close Editor</div>
+                           <div class="ui basic cancel button" ng-if="(contentLockExpired && isResume) || (!isResume && !isIdle)"><i class="close icon"></i>Close Editor</div>
                    </div>
         </div>
         <div class="one wide centered column custom-1-wide">
