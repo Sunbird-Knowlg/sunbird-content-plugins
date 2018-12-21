@@ -398,7 +398,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         if($scope.editorEnv === "COLLECTION"){
             $scope.pendingChanges = ecEditor.getConfig('editorConfig').mode === 'Read' ? false : true;
             $scope.disableDownloadToc = true;
-        }
+        }        
         $scope.disableSaveBtn = false;
         $scope.disableQRGenerateBtn = false;
         // $scope.qrRequestCount = 0;
@@ -616,7 +616,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         var request = {
             "request": {
                 "dialcodes": {
-                    "count": $scope.qrRequestCount + 1, //+1 is for Root node
+                    "count": $scope.qrRequestCount,
                     "qrCodeSpec": {
                         "errorCorrectionLevel": "H"
                     }
@@ -743,7 +743,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     /**
      * @description - used to update toc via csv
      */
-    $scope.updateToc = function () {
+    $scope.updateToc = function () {        
         ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
             headerTitle: $scope.CONSTANTS.tocUpdateHeader,
             description: $scope.CONSTANTS.tocUpdateDescription,
