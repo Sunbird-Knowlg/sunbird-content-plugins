@@ -89,7 +89,7 @@
 }
 
 .div-scroll {
-    max-height: 60vh;
+    height: calc(100vh - 250px)!important;
     overflow-y: scroll;
 }
 
