@@ -77,11 +77,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         tocUpdateBtnUpload: 'Upload',
         tocUpdateBtnClose: 'Close'
     }
-    var config = window.config || window.parent.config;
-    $scope.lockObj = {expiresIn:1};
-    if(config && config.lock){
-        $scope.lockObj = config.lock;
-    }    
+    $scope.lockObj = ecEditor.getConfig('lock');       
     $scope.dataChanged = false;
     $scope.lastContentLockSyncTime = new Date();
     $scope.onContentLockMessage = {
@@ -801,11 +797,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             var request = {
                 resourceId: ecEditor.getContext('contentId'),
                 resourceType: 'Content',
-                lockId: $scope.lockObj.lockId
+                lockId: $scope.lockObj.lockKey
             }
             ecEditor.getService('lock').refreshLock({request:request}, function (err, res) {
                 if(res && res.responseCode && res.responseCode == 'OK' && res.result){
-                    $scope.lockObj.lockId = res.result.lockKey;
+                    $scope.lockObj.lockKey = res.result.lockKey;
                     $scope.lockObj.expiresIn = res.result.expiresIn;
                     $scope.lockObj.expiresAt = new Date(res.result.expiresAt);                    
                 }else if(err && $scope.contentLockExpired === true){                  
@@ -822,6 +818,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
 
      $scope.showStatusPopup = function(type,isIdle,isResume,message){
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        if(meta){
         $scope.onContentLockMessage.show = true;
         var statusMessages = {
             LOCK_REFRESH_ERROR: 'Someone is currently working on '+meta.name+'. Try again later.',
@@ -852,6 +849,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 }
             }).modal('show');
         });
+     }
    }
 
      $scope.validateContentLock = function () {
@@ -901,15 +899,16 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         if($scope.contentLockListener){
           $scope.removeContentLockListener()
         }
-        //convert to seconds
-        $scope.contentLockExpiresIn = $scope.lockObj.expiresIn*60;
-        //idle timeout and refresh intervals should be a fraction of content lock expiry mins
-        $scope.contentLockIdleTimeOut = Math.floor($scope.contentLockExpiresIn/3);
-        $scope.contentLockRefershInterval = Math.floor($scope.contentLockIdleTimeOut/5);
-        $scope.idleTimer = 0;
-        // set lock refresh interval
-        $scope.contentLockListener = $interval($scope.validateContentLock,$scope.contentLockRefershInterval*1000);
-
+        if($scope.lockObj && $scope.lockObj.lockKey){
+            //convert to seconds (minimum value of 'expiresIn' should be 30 mins)
+            $scope.contentLockExpiresIn = $scope.lockObj.expiresIn*60;
+            //idle timeout and refresh intervals should be a fraction of content lock expiry mins
+            $scope.contentLockIdleTimeOut = Math.floor($scope.contentLockExpiresIn/3);
+            $scope.contentLockRefershInterval = Math.floor($scope.contentLockIdleTimeOut/5);
+            $scope.idleTimer = 0;
+            // set lock refresh interval
+            $scope.contentLockListener = $interval($scope.validateContentLock,$scope.contentLockRefershInterval*1000);
+        }
      }
 
 
