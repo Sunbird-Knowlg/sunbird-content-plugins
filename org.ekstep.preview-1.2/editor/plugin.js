@@ -128,6 +128,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 modal.style.display = "none";
                 previewContentIframe.contentWindow.EkstepRendererAPI.stopAll();
                 previewContentIframe.contentWindow.EkstepRendererAPI.removeHtmlElements();
+                ecEditor.dispatchEvent('org.ekstep.contenteditor:preview:close');
             }
         }
     }
