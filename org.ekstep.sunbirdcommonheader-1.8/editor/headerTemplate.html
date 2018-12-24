@@ -1,11 +1,12 @@
-<div ng-app="sunbirdcommonheader:app" ng-controller="headerController" class="ui vertical segment content-masterhead" id="commonHeader">
+<div ng-app="sunbirdcommonheader:app" ng-controller="headerController" class="ui vertical segment content-masterhead"
+    id="commonHeader">
     <div class="ui grid fluid container custom-container">
-        <div id="errorLockContentModal" class="ui basic inverted modal">
+         <div id="errorLockContentModal" class="ui modal">
             <div class="ui icon header" ng-bind="onContentLockMessage.text"></div>
-            <div class="actions">
-                <div class="ui ok blue button" ng-if="contentLockExpired && isResume"><i class="checkmark icon"></i>RESUME</div>
-                <div class="ui basic cancel button" ng-if="(contentLockExpired && isResume) || (!isResume && !isIdle)"><i
-                        class="close icon"></i>Close Editor</div>
+            <div class="actions" ng-if="isResume || isClose || isRefresh">
+                <div class="ui ok blue button" ng-if="isResume" ><i class="checkmark icon"></i>Resume</div>
+                <div class="ui ok blue button" ng-if="isRefresh" ng-click="refreshContent()"><i class="refresh icon"></i>Refresh</div>
+                <div class="ui basic cancel button" ng-if="isClose"><i class="close icon"></i>Close Editor</div>
             </div>
         </div>
         <div class="one wide centered column custom-1-wide">
@@ -14,14 +15,16 @@
         <div class="four wide column custom-6-wide">
             <div class="content-title-container row custom-row-1">
                 <label ng-if="contentDetails.contentTitle.length < 52" class="content-title popup-item">{{contentDetails.contentTitle}}</label>
-                <label ng-if="contentDetails.contentTitle.length >= 52" class="content-title popup-item" data-content="{{contentDetails.contentTitle}}" data-variation="wide" data-position="bottom left">{{contentDetails.contentTitle}}</label>
+                <label ng-if="contentDetails.contentTitle.length >= 52" class="content-title popup-item" data-content="{{contentDetails.contentTitle}}"
+                    data-variation="wide" data-position="bottom left">{{contentDetails.contentTitle}}</label>
             </div>
             <div class="row custom-row-2">
                 <a class="btn at-btn at-btn-ok" ng-click="editContentMeta();generateTelemetry({subtype:'',target:'editmeta'})">
                     <span ng-if="showEditMeta"><i class="edit icon link"></i>&nbsp;Edit Details</span>
                     <span ng-if="!showEditMeta"><i class="eye icon link"></i>&nbsp;View Details </span>
                 </a>
-                <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}"><span class="spinner"></span>{{internetStatusObj.text}}</label>
+                <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}"><span
+                        class="spinner"></span>{{internetStatusObj.text}}</label>
             </div>
 
         </div>
@@ -37,8 +40,8 @@
             <div class="row header-icon-container">
                 <div class="custom-row-2">
                     <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook' && collectionMode != 'Read')"
-                        class="custom-row-2" style="float: left;padding: 5px;">
-                        <div class="ui dropdown">
+                        class="custom-row-2" style="float: left; margin: 2px">
+                        <div class="ui dropdown" style=" vertical-align: -webkit-baseline-middle; ">
                             <div class="ui dropdown">
                                 <span class="ui tiny header">
                                     TOC
@@ -55,11 +58,12 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook' && collectionMode != 'Read')" class="custom-row-2" style="float: left;padding: 5px;">
+                    <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook' && collectionMode != 'Read')"
+                        class="custom-row-2" style="float: left;margin: 0.4em 2em;">
                         <div class="ui dropdown qrCodeStyler">
                             <div class="ui dropdown">
                                 <span class="ui tiny header">
-                                    QR Codes
+                                    QR Code Generation
                                 </span>
                                 <i class="dropdown icon"></i>
                             </div>
@@ -102,7 +106,7 @@
                                 <i class="remove icon custom-cursor"></i>
                             </a>
                         </div>
-                        <div class="icon-box popup-item" style="padding: 0.4em;" data-content="Add Collaborator" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'org.ekstep.collaborator:add'});">
+                        <div class="icon-box popup-item" data-content="Add Collaborator" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'org.ekstep.collaborator:add'});">
                             <i class="add user icon custom-icon"></i>
                         </div>
                         <div ng-show="showEditMeta && !publishMode && !isFlagReviewer" id="saveButton" ng-class="disableSaveBtn ? 'icon-box popup-item label-icon-box disabled' : 'icon-box popup-item label-icon-box'"
@@ -136,7 +140,9 @@
                             <i class="fa fa-trash"></i>
                             <span class="label-icon-box-text">Request Changes</span>
                         </div>
-                        <div ng-show="publishMode && !isFlagReviewer" class="icon-box popup-item label-icon-box" data-content="Publish content" data-variation="tiny inverted" data-position="bottom center" ng-click="openCheckList('publish')">
+                        <div ng-show="publishMode && !isFlagReviewer" class="icon-box popup-item label-icon-box"
+                            data-content="Publish content" data-variation="tiny inverted" data-position="bottom center"
+                            ng-click="openCheckList('publish')">
                             <i class="fa fa-cloud-upload"></i>
                             <span class="label-icon-box-text">Publish</span>
                         </div>
@@ -146,12 +152,15 @@
                             <i class="fa fa-trash"></i>
                             <span class="label-icon-box-text">Discard</span>
                         </div>
-                        <div ng-show="isFlagReviewer" id="acceptButton" class="icon-box popup-item label-icon-box" data-content="Retire content" data-variation="tiny inverted" data-position="bottom center" ng-click="acceptContentFlag(); generateTelemetry({ subtype: 'accept', target: 'acceptContentFlag'});">
+                        <div ng-show="isFlagReviewer" id="acceptButton" class="icon-box popup-item label-icon-box"
+                            data-content="Retire content" data-variation="tiny inverted" data-position="bottom center"
+                            ng-click="acceptContentFlag(); generateTelemetry({ subtype: 'accept', target: 'acceptContentFlag'});">
                             <i class="fa fa-check"></i>
                             <span class="label-icon-box-text">Accept</span>
                         </div>
                         <div ng-if="editorEnv == 'ECML'" class="ui buttons preview-dropdown">
-                            <div class="ui button text-part popup-item" data-content="Preview" data-variation="tiny inverted" data-position="bottom center" ng-click="previewContent();">
+                            <div class="ui button text-part popup-item" data-content="Preview" data-variation="tiny inverted"
+                                data-position="bottom center" ng-click="previewContent();">
                                 <i class="fa fa-eye"></i>
                             </div>
                             <div class="ui pointing dropdown icon button">

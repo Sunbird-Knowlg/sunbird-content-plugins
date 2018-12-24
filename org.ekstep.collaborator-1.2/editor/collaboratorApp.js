@@ -185,6 +185,11 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                         position: 'topCenter',
                         icon: 'fa fa-check-circle'
                     });
+                    var metaData = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+                    if(res.data.result && res.data.result.versionKey){
+                        metaData.versionKey = res.data.result.versionKey;
+                    }
+                    ecEditor.getService(ServiceConstants.CONTENT_SERVICE)._setContentMeta(ecEditor.getContext('contentId'), metaData);
                     $scope.closePopup();
                 }
             });
