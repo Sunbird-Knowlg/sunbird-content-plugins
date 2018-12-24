@@ -218,8 +218,39 @@ angular.module('org.ekstep.uploadcontent-1.4', []).controller('uploadController'
                 } else {
                     var result = res.data.result;
                     ecEditor.setContext('contentId', result.node_id);
-                    $scope.uploadCancelLabel = "Cancel";
-                    $scope.uploadByURL(fileUpload, mimeType);
+                    var resourceInfo = {
+                        "identifier": result.node_id,
+                        "mimeType": mimeType,
+                        "framework": ecEditor.getContext('framework'),
+                        "contentType": "Resource",
+                    }
+                    var creatorInfo = {
+                        "name": ecEditor.getContext('user').name,
+                        "id": ecEditor.getContext('user').id
+                    }
+                    var lockRequest = {
+                        request: {
+                            "resourceId": result.node_id,
+                            "resourceType": "Content",
+                            "resourceInfo": JSON.stringify(resourceInfo),
+                            "creatorInfo": JSON.stringify(creatorInfo),
+                            "createdBy": ecEditor.getContext('user').id
+                        }
+                    }
+                    ecEditor.getService(ServiceConstants.CONTENT_LOCK_SERVICE).createLock(lockRequest, function(err, lockRes){
+                        if (err) {
+                            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                                message: 'Unable to create lock!',
+                                position: 'topCenter',
+                                icon: 'fa fa-warning'
+                            });
+                            $scope.showLoader(false);                    
+                        } else {
+                            ecEditor.setConfig('lock', lockRes.data.result);
+                            $scope.uploadCancelLabel = "Cancel";
+                            $scope.uploadByURL(fileUpload, mimeType);
+                        }
+                    });
                 }
             });
         } else {
