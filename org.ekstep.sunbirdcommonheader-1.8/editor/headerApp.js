@@ -804,7 +804,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 resourceType: 'Content',
                 lockId: $scope.lockObj.lockKey
             }
-            ecEditor.getService('lock').refreshLock({request:request}, function (err, res) {
+            ecEditor.getService(ServiceConstants.CONTENT_LOCK_SERVICE).refreshLock({request:request}, function (err, res) {
                 if(res && res.responseCode && res.responseCode == 'OK' && res.result){
                     $scope.lockObj.lockKey = res.result.lockKey;
                     $scope.lockObj.expiresIn = res.result.expiresIn;
@@ -821,17 +821,16 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     }
 
     $scope.handleError = function(err){
-        switch(err.status)
-        {
+        switch(err.status){
             case 500:
-            $scope.showStatusPopup('LOCK_REFRESH_ERROR');   
-            break;
+                $scope.showStatusPopup('LOCK_REFRESH_ERROR');   
+                break;
             case 403:
-              $scope.showStatusPopup('LOCK_NOT_AVAILABLE');
-            break;
+                $scope.showStatusPopup('LOCK_NOT_AVAILABLE');
+                break;
             default:
-            $scope.showStatusPopup('LOCK_REFRESH_ERROR');   
-            break;
+                $scope.showStatusPopup('LOCK_REFRESH_ERROR');   
+                break;
         }
         $scope.removeContentLockListener();      
     }
@@ -846,33 +845,34 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         if(meta){
         switch(type){
             case 'LOCK_REFRESH_ERROR':
-            $scope.onContentLockMessage.text = 'Error Occured.Try again after sometime.';
-            $scope.isClose = true;
-            $scope.isRefresh = true;
-            break;
+                $scope.onContentLockMessage.text = 'Error Occured. Try again after sometime.';
+                $scope.isClose = true;
+                $scope.isRefresh = true;
+                break;
             case 'IDLE_TIMEOUT':
-            $scope.onContentLockMessage.text = 'You have been inactive.';
-            $scope.isIdle = true;
-            break;
+                $scope.onContentLockMessage.text = 'You have been inactive.';
+                $scope.isIdle = true;
+                break;
             case 'LOCK_NOT_AVAILABLE':
-            $scope.onContentLockMessage.text = 'Someone is currently working on '+meta.name+'. Try again later.';
-            $scope.isClose = true;
-            break;
+                $scope.onContentLockMessage.text = 'Someone is currently working on '+meta.name+'. Try again later.';
+                $scope.isClose = true;
+                break;
             case 'SESSION_TIMEOUT':
-            $scope.onContentLockMessage.text = meta.name + ' locked due to inactivity, click Resume to continue editing. Closing will result in loss of unsaved changes.';
-            $scope.isClose = true;
-            $scope.isResume = true;
+                $scope.onContentLockMessage.text = meta.name + ' locked due to inactivity, click Resume to continue editing. Closing will result in loss of unsaved changes.';
+                $scope.isClose = true;
+                $scope.isResume = true;
+                break;
         } 
         $scope.$safeApply(function(){
             ecEditor.jQuery('#errorLockContentModal').modal({
                 inverted: true,
                 closable: false,
                 onVisible: function(){
-                  ecEditor.jQuery('#errorLockContentModal').mouseover(function(){
-                    if($scope.isIdle){
-                          ecEditor.jQuery('#errorLockContentModal').modal('hide');
-                    }
-                   });
+                    ecEditor.jQuery('#errorLockContentModal').mouseover(function(){
+                        if($scope.isIdle){
+                            ecEditor.jQuery('#errorLockContentModal').modal('hide');
+                        }
+                    });
                 },
                 onDeny: function() {
                     $scope.closeEditor();

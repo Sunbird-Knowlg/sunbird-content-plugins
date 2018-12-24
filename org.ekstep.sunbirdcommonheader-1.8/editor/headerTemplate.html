@@ -2,13 +2,12 @@
     id="commonHeader">
     <div class="ui grid fluid container custom-container">
          <div id="errorLockContentModal" class="ui modal">
-                    <div class="ui icon header" ng-bind="onContentLockMessage.text">
-                    </div>
-                   <div class="actions" ng-if="isResume || isClose || isRefresh">
-                           <div class="ui ok blue button" ng-if="isResume" ><i class="checkmark icon"></i>Resume</div>
-                           <div class="ui ok blue button" ng-if="isRefresh" ng-click="refreshContent()"><i class="refresh icon"></i>Refresh</div>
-                           <div class="ui basic cancel button" ng-if="isClose"><i class="close icon"></i>Close Editor</div>
-                   </div>
+            <div class="ui icon header" ng-bind="onContentLockMessage.text"></div>
+            <div class="actions" ng-if="isResume || isClose || isRefresh">
+                <div class="ui ok blue button" ng-if="isResume" ><i class="checkmark icon"></i>Resume</div>
+                <div class="ui ok blue button" ng-if="isRefresh" ng-click="refreshContent()"><i class="refresh icon"></i>Refresh</div>
+                <div class="ui basic cancel button" ng-if="isClose"><i class="close icon"></i>Close Editor</div>
+            </div>
         </div>
         <div class="one wide centered column custom-1-wide">
             <img class="ui tiny centered image" ng-show="contentDetails.contentImage != ''" ng-src="{{contentDetails.contentImage}}" />
@@ -60,11 +59,11 @@
                         </div>
                     </div>
                     <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook' && collectionMode != 'Read')"
-                        class="custom-row-2" style="float: left;margin: 0.4em 3em;">
+                        class="custom-row-2" style="float: left;margin: 0.4em 2em;">
                         <div class="ui dropdown qrCodeStyler">
                             <div class="ui dropdown">
                                 <span class="ui tiny header">
-                                    QR Codes
+                                    QR Code Generation
                                 </span>
                                 <i class="dropdown icon"></i>
                             </div>
