@@ -1,6 +1,6 @@
 
-angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-inview'])
-    .controller('collaboratorCtrl', ['$scope', '$timeout', 'instance', '$filter', function ($scope, $timeout, instance, $filter) {
+angular.module('collaboratorApp', ['angular-inview'])
+    .controller('collaboratorCtrl', ['$scope', '$timeout', 'instance', function ($scope, $timeout, instance) {
         var ctrl = this;
         var inViewLogs = [];
         ctrl.contentNotFoundImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/content_not_found.jpg");
@@ -43,6 +43,12 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
 
 
         $scope.init = function () {
+            $(document).keydown(function (e) {
+                // ESCAPE key pressed
+                if (e.keyCode == 27) {
+                    $scope.closePopup();
+                }
+            });
             $scope.getContentCollaborators();
         }
 
@@ -64,6 +70,8 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             if (event.currentTarget.dataset.tab === 'userListTab') {
                 $scope.generateTelemetry({ type: 'click', subtype: 'changeTab', target: 'manageCollaborator', targetid: 'userListTab' });
                 $scope.isAddCollaboratorTab = false;
+
+                /* istanbul ignore else */
                 if (!$scope.collaboratorsList.length) {
                     $scope.isLoading = true;
                     $scope.fetchCollaborators();
@@ -150,7 +158,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                     ecEditor.jQuery('.profile').initial({ fontWeight: 700 });
                 }
             });
-            $scope.$safeApply();
+            // $scope.$safeApply();
         }
 
         /**
