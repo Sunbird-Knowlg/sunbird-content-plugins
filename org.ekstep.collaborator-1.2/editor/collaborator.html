@@ -45,8 +45,8 @@
         <!--END OF HEADER -->
         <!--BODY-->
         <div class="ui pointing secondary menu tab-bar">
-            <a class="item active" style="padding-left:20px;padding-top: 15px;padding-bottom: 15px;" data-tab="addCollaboratorTab" ng-click="selectTab($event)">Add Collaborators</a>
-            <a class="item" data-tab="userListTab" ng-click="selectTab($event)">Manage Collaborators</a>
+            <a class="item active" ng-if="isContentOwner" style="padding-left:20px;padding-top: 15px;padding-bottom: 15px;" data-tab="addCollaboratorTab" ng-click="selectTab($event)">Add Collaborators</a>
+            <a class="item"  ng-class="isContentOwner ? '' : 'active'" data-tab="userListTab" ng-click="selectTab($event)">Manage Collaborators</a>
         </div>
         <div class="ui tab segment active height-100 body-content" data-tab="addCollaboratorTab">
             <div class="ui active inverted dimmer" ng-if="isLoading">
@@ -77,7 +77,7 @@
                             <div class="ui four stackable cards">
                                 <div class="card" style="background: #FFFFFF;height:80px;"  ng-repeat="user in usersList" in-view="lineInView($index, $inview, user, 'collaboratorPopup', $index)" in-view-options="{ throttle: 1000 }">
                                     <div class="content" >
-                                        <img data-name="{{user.firstName}}" class="left floated ui image profile" style="margin-bottom: 0" height="50px" width="50px" />
+                                        <img data-name="{{user.firstName}}" data-font-weight="700" class="left floated ui image profile" style="margin-bottom: 0" height="50px" width="50px" />
                                         <div class="header ellipsis text-capitalize" style="font-size:1rem">{{user.firstName}} {{user.lastName}}</div>
                                         <div class="meta">
                                             <div class="ellipsis" ng-show="user.organisations.length">{{user.organisations[0].orgName}}</div>
@@ -123,7 +123,7 @@
                             <div class="ui four stackable cards">
                                 <div class="card" style="background: #FFFFFF; height:80px;" ng-repeat="user in collaboratorsList" in-view="lineInView($index, $inview, user, 'collaboratorPopup', $index)" in-view-options="{ throttle: 1000 }">
                                     <div class="content" >
-                                        <img data-name="{{user.firstName}}" class="left floated ui image profile" style="margin-bottom: 0" height="50px" width="50px" />
+                                        <img data-name="{{user.firstName}}" data-font-weight="700" class="left floated ui image profile" style="margin-bottom: 0" height="50px" width="50px" />
                                         <div class="header ellipsis text-capitalize" style="font-size:1rem">{{user.firstName}} {{user.lastName}}</div>
                                         <div class="meta">
                                                 <div class="ellipsis" ng-show="user.organisations.length">{{user.organisations[0].orgName}}</div>

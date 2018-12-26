@@ -1,6 +1,6 @@
 
-angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-inview'])
-    .controller('collaboratorCtrl', ['$scope', '$timeout', 'instance', '$filter', function ($scope, $timeout, instance, $filter) {
+angular.module('collaboratorApp', ['angular-inview'])
+    .controller('collaboratorCtrl', ['$scope', '$timeout', 'instance', function ($scope, $timeout, instance) {
         var ctrl = this;
         var inViewLogs = [];
         ctrl.contentNotFoundImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/content_not_found.jpg");
@@ -43,6 +43,12 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
 
 
         $scope.init = function () {
+            $(document).keydown(function (e) {
+                // ESCAPE key pressed
+                if (e.keyCode == 27) {
+                    $scope.closePopup();
+                }
+            });
             $scope.getContentCollaborators();
         }
 
@@ -64,6 +70,8 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             if (event.currentTarget.dataset.tab === 'userListTab') {
                 $scope.generateTelemetry({ type: 'click', subtype: 'changeTab', target: 'manageCollaborator', targetid: 'userListTab' });
                 $scope.isAddCollaboratorTab = false;
+
+                /* istanbul ignore else */
                 if (!$scope.collaboratorsList.length) {
                     $scope.isLoading = true;
                     $scope.fetchCollaborators();
@@ -77,7 +85,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             $('.menu .item').tab();
             $scope.$safeApply();
             $timeout(function () {
-                ecEditor.jQuery('.profile').initial({ fontWeight: 700 });
+                ecEditor.jQuery('.profile').initial();
                 ecEditor.jQuery('.ui.dropdown').dropdown({
                     onChange: function (val) {
                         $scope.sortUsersList(val);
@@ -109,7 +117,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                                 element.isSelected = false;
                             });
                             $timeout(function () {
-                                ecEditor.jQuery('.profile').initial({ fontWeight: 700 });
+                                ecEditor.jQuery('.profile').initial();
                             });
                         }
                     }
@@ -140,17 +148,20 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                         element.isSelected = false;
                     });
                     $scope.isLoading = false;
+
                     $('.menu .item').tab();
-                    ecEditor.jQuery('.ui.dropdown').dropdown({
-                        onChange: function (val) {
-                            $scope.sortUsersList(val);
-                        }
-                    });
+                    $timeout(function () {
+                        ecEditor.jQuery('.ui.dropdown').dropdown({
+                            onChange: function (val) {
+                                $scope.sortUsersList(val);
+                            }
+                        });
+                    }, 0);
                     $scope.$safeApply();
-                    ecEditor.jQuery('.profile').initial({ fontWeight: 700 });
+                    ecEditor.jQuery('.profile').initial();
                 }
             });
-            $scope.$safeApply();
+            // $scope.$safeApply();
         }
 
         /**
@@ -186,7 +197,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
                         icon: 'fa fa-check-circle'
                     });
                     var metaData = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
-                    if(res.data.result && res.data.result.versionKey){
+                    if (res.data.result && res.data.result.versionKey) {
                         metaData.versionKey = res.data.result.versionKey;
                     }
                     ecEditor.getService(ServiceConstants.CONTENT_SERVICE)._setContentMeta(ecEditor.getContext('contentId'), metaData);
@@ -202,13 +213,10 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
          */
         $scope.excludeCollaborators = function (result) {
             if ($scope.collaboratorsId && $scope.collaboratorsId.length) {
-                $scope.collaboratorsId.forEach((id) => {
-                    result.forEach((user, index) => {
-                        if (user.identifier === id) {
-                            result.splice(index, 1);
-                            return;
-                        }
-                    });
+                _.find(result, function (val) {
+                    if (_.indexOf($scope.collaboratorsId, val.identifier) >= 0) {
+                        result = _.reject(result, ['identifier', val.identifier]);
+                    }
                 });
             }
 
@@ -264,9 +272,22 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
          * @param user {object} User's object
          */
         $scope.selectUser = function (user) {
-            $scope.generateTelemetry({ type: 'click', subtype: 'select', target: 'user', targetid: user.identifier });
+            var index = _.findIndex($scope.usersList, (obj) => {
+                return obj.identifier === user.identifier;
+            });
+            user.isSelected = true;
             $scope.selectedUsersId.push(user.identifier);
-            $scope.addCollaborators();
+
+            if (index === -1) {
+                $scope.usersCount += 1;
+            } else {
+                $scope.usersList.splice(index, 1);
+            }
+            $scope.usersList.unshift(user);
+            $timeout(function () {
+                ecEditor.jQuery('.profile').initial();
+            });
+            $scope.generateTelemetry({ type: 'click', subtype: 'select', target: 'user', targetid: user.identifier });
         }
 
         $scope.searchByKeyword = function () {
@@ -308,7 +329,7 @@ angular.module('collaboratorApp', ['ngTagsInput', 'Scope.safeApply', 'angular-in
             $scope.usersList = $scope.excludeCollaborators(ctrl.searchRes.content);
             $scope.usersCount = ctrl.searchRes.count < $scope.defaultLimit ? $scope.usersList.length : ctrl.searchRes.count;
             $timeout(function () {
-                ecEditor.jQuery('.profile').initial({ fontWeight: 700 });
+                ecEditor.jQuery('.profile').initial();
             });
         }
 
