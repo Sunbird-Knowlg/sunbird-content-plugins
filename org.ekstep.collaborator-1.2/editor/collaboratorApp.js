@@ -129,6 +129,9 @@ angular.module('collaboratorApp', ['angular-inview'])
                     $scope.isLoading = false;
                     $scope.$safeApply();
                 });
+            }else{
+                $scope.isLoading = false;
+                $scope.$safeApply();
             }
         }
 
