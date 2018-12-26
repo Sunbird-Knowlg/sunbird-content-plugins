@@ -64,6 +64,10 @@ angular.module('collaboratorApp', ['angular-inview'])
             });
         }
 
+        /**
+         * Changes Tab
+         * @param {Object} event 
+         */
         $scope.selectTab = function (event) {
             if (event.currentTarget.dataset.tab === 'userListTab') {
                 $scope.generateTelemetry({ type: 'click', subtype: 'changeTab', target: 'manageCollaborator', targetid: 'userListTab' });
@@ -80,7 +84,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                 $scope.isAddCollaboratorTab = true;
             }
 
-            $('.menu .item').tab();
+            ecEditor.jQuery('.menu .item').tab();
             $scope.$safeApply();
             $timeout(function () {
                 ecEditor.jQuery('.profile-avatar').initial();
@@ -129,6 +133,7 @@ angular.module('collaboratorApp', ['angular-inview'])
             $scope.userService.search($scope.userSearchBody, function (err, res) {
                 if (err) {
                     console.error('Unable to fetch All Users ', err);
+                    $scope.generateError({ status: '', error: err });
                 } else {
                     if ($scope.currentCollaborators && $scope.currentCollaborators.length) {
                         $scope.users = $scope.excludeCollaborators(res.data.result.response.content);
@@ -151,6 +156,7 @@ angular.module('collaboratorApp', ['angular-inview'])
 
         /**
          * Updates collaborators
+         * @param {Array<string>} newCollaborators - List of new collaborators id.
          */
         $scope.updateCollaborators = function (newCollaborators) {
             $scope.updateCollaboratorRequest.request.content.collaborators = newCollaborators;
@@ -179,8 +185,8 @@ angular.module('collaboratorApp', ['angular-inview'])
 
         /**
          * It excludes users those are already a collaborator.
-         * @param users {object} User search API Result
-         * @returns Users list with excluding existing collabortors
+         * @param {Object} users - User search API Result
+         * @returns Users list with excluding existing collaborators
          */
         $scope.excludeCollaborators = function (users) {
             users.count = users.length;
@@ -198,7 +204,7 @@ angular.module('collaboratorApp', ['angular-inview'])
 
         /**
          * It closes the popup
-         * @param pageId {string} Current page id.
+         * @param {String} pageId - Current page id.
          */
         $scope.closePopup = function (pageId) {
             $scope.inViewLogs = [];
@@ -208,9 +214,9 @@ angular.module('collaboratorApp', ['angular-inview'])
 
         /**
          * It selects or unselects users from the list
-         * @param user {object} User Object
-         * @param index {number} Index of the user in the userList
-         * @param list {string} Variable to hold whole object - users | collaborators
+         * @param {Object} user  - User Object
+         * @param {Number} index - Index of the user in the userList
+         * @param {String} list  -Variable to hold whole object - users | collaborators
          */
         $scope.toggleSelectionUser = function (user, index, list) {
             if ($scope[list][index].isSelected) {
@@ -228,7 +234,7 @@ angular.module('collaboratorApp', ['angular-inview'])
 
         /**
          * Sort Users List by Name and Organisation
-         * @param value {string} - Sort by value - firstName | organisations
+         * @param {String} value - Sort by value - firstName | organisations
          */
         $scope.sortUsersList = function (value) {
             if (value === 'firstName') {
@@ -240,8 +246,8 @@ angular.module('collaboratorApp', ['angular-inview'])
         }
 
         /**
-         * Selects User and show check mark checked
-         * @param user {object} User's object
+         * Selects User and added to list with checked mark
+         * @param {Object} user User's object
          */
         $scope.selectUser = function (user) {
             var index = _.findIndex($scope.users, (element) => { return element.identifier === user.identifier; });
@@ -278,6 +284,7 @@ angular.module('collaboratorApp', ['angular-inview'])
 
                     if (res.data.result.response.count) {
                         $scope.searchRes.content = $scope.excludeCollaborators(res.data.result.response.content);
+
                         if ($scope.searchRes.content.length) {
                             $scope.searchRes.isEmptyResponse = false;
                         }
@@ -301,7 +308,7 @@ angular.module('collaboratorApp', ['angular-inview'])
          * Shows Search Results in large screen
          */
         $scope.viewAllResults = function () {
-            $scope.generateTelemetry({ type: 'click', subtype: 'submit', target: 'viewAll', targetid: "" });
+            $scope.generateTelemetry({ type: 'click', subtype: 'submit', target: 'viewAll', targetid: "view-all-results" });
             $scope.users = $scope.searchRes.content;
             $timeout(function () {
                 ecEditor.jQuery('.profile-avatar').initial();
@@ -391,7 +398,14 @@ angular.module('collaboratorApp', ['angular-inview'])
             }
         }
 
-        $scope.lineInView = function (index, inview, item, section, pageSectionId) {
+        /**
+         * Makes records of available dom elements currently visible in the browser viewport
+         * @param {Number} index   - Index of the element in the list
+         * @param {Array} inview   - Object of the logs currently available in the viewport 
+         * @param {Object} item    - Object of the individual item in the viewport
+         * @param {String} section - Section name  
+         */
+        $scope.lineInView = function (index, inview, item, section) {
             var obj = $scope.inViewLogs.filter((log) => log.identifier === item.identifier);
             if (inview && !obj.length) {
                 $scope.inViewLogs.push({
