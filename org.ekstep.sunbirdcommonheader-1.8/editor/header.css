@@ -226,6 +226,7 @@ body {
     color: #9b9b9b!important;
     height: 30px!important;
     right: -11px !important;
+    vertical-align: text-bottom!important;
 }
 .preview-dropdown-nonecml{
     display: inline-block !important;
