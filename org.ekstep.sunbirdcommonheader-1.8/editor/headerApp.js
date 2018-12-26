@@ -1054,7 +1054,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     ecEditor.addEventListener("org.ekstep:sunbirdcommonheader:close:editor", $scope.closeEditor, $scope);
     ecEditor.addEventListener('org.ekstep.contenteditor:preview', $scope.setPreviewStatus,$scope);
     ecEditor.addEventListener('org.ekstep.contenteditor:preview:close', $scope.setPreviewStatus,$scope);
-    ecEditor.addEventListener('instance:editor:keepalive', $scope.contentDataChanged,$scope);
+    ecEditor.addEventListener('org.ekstep.editor:keepalive', $scope.contentDataChanged,$scope);
     $scope.$watch('disableSaveBtn', function() {
         if($scope.disableSaveBtn === false){
             $scope.contentDataChanged();   
