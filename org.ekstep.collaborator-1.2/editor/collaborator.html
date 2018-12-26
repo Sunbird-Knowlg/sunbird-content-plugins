@@ -134,8 +134,8 @@
                                             <div ng-hide="true">{{user.email}}</div>
                                             <div>
                                                 <span ng-hide="true">{{user.phone}}</span>
-                                                <button class="right floated clear-btn color-danger" style="padding-right:0;" ng-if="!user.isSelected" ng-click="toggleSelectionUser(user, $index, 'removedUsersId', 'collaboratorsList')"><strong>REMOVE</strong></button>
-                                                <div class="ui right floated compact segment" style="padding:0; border: 0;margin:0;" ng-if="user.isSelected" ng-click="toggleSelectionUser(user, $index, 'removedUsersId', 'collaboratorsList')">
+                                                <button class="right floated clear-btn color-danger" style="padding-right:0;" ng-if="!user.isSelected && isContentOwner" ng-click="toggleSelectionUser(user, $index, 'removedUsersId', 'collaboratorsList')"><strong>REMOVE</strong></button>
+                                                <div class="ui right floated compact segment" style="padding:0; border: 0;margin:0;" ng-if="user.isSelected && isContentOwner" ng-click="toggleSelectionUser(user, $index, 'removedUsersId', 'collaboratorsList')">
                                                     <div class="ui mini fitted toggle checkbox" style="transform:scale(0.7)">
                                                         <input type="checkbox" checked>
                                                         <label></label>
