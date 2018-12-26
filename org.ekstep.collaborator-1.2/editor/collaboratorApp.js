@@ -61,7 +61,12 @@ angular.module('collaboratorApp', ['angular-inview'])
                 } else if (res) {
                     $scope.isContentOwner = (res.createdBy === ecEditor.getContext('uid')) ? true : false;
                     $scope.collaboratorsId = res.collaborators || [];
-                    $scope.loadAllUsers();
+
+                    if ($scope.isContentOwner) {
+                        $scope.loadAllUsers();
+                    } else {
+                        $scope.fetchCollaborators();
+                    }
                 }
             });
         }
@@ -132,6 +137,7 @@ angular.module('collaboratorApp', ['angular-inview'])
          */
         $scope.loadAllUsers = function () {
             $scope.isAddCollaboratorTab = true;
+
             $scope.resetSearchRequest();
             userService.search(searchBody, function (err, res) {
                 if (err) {
