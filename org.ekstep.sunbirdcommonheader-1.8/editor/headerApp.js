@@ -944,14 +944,15 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             $scope.removeContentLockListener()
         }
         //convert to seconds
-        $scope.contentLockExpiresIn = $scope.contentLock.expiresIn * 60;
-        //idle timeout and refresh intervals should be a fraction of content lock expiry mins
-        $scope.contentLockIdleTimeOut = Math.floor($scope.contentLockExpiresIn / 3);
-        $scope.contentLockRefershInterval = Math.floor($scope.contentLockIdleTimeOut / 5);
-        $scope.idleTimer = 0;
-        // set lock refresh interval
-        $scope.contentLockListener = $interval($scope.validateContentLock, $scope.contentLockRefershInterval * 1000);
-
+        if($scope.contentLock && $scope.contentLock.lockKey){
+            $scope.contentLockExpiresIn = $scope.contentLock.expiresIn * 60;
+            //idle timeout and refresh intervals should be a fraction of content lock expiry mins
+            $scope.contentLockIdleTimeOut = Math.floor($scope.contentLockExpiresIn / 3);
+            $scope.contentLockRefershInterval = Math.floor($scope.contentLockIdleTimeOut / 5);
+            $scope.idleTimer = 0;
+            // set lock refresh interval
+            $scope.contentLockListener = $interval($scope.validateContentLock, $scope.contentLockRefershInterval * 1000);
+        }
     }
     
     /**
