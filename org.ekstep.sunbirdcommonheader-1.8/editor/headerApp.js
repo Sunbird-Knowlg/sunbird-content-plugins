@@ -67,13 +67,13 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.showEditMeta = true;
     $scope.contentCredits = [];
     $scope.listLimit = 5;
-    $scope.disableDownloadToc = false;
+    $scope.disableTocActionBtn = false;
     $scope.loader = false;
     $scope.CONSTANTS = {
         tocDownloadFailed: 'Unable to download the content, please try again later',
         tocDownloadSuccess: 'Table of Content downloadeding!',
         tocUpdateHeader: 'Update Table of Contents Metadata attributes via CSV',
-        tocUpdateDescription: 'Please note that no sections could be added or removed using CSV upload, only the values of the attributes can be changes',
+        tocUpdateDescription: 'Please note that no sections can be added or removed through this update, only the values of the attributes can be changed.',
         tocUpdateBtnUpload: 'Upload',
         tocUpdateBtnClose: 'Close'
     }
@@ -220,7 +220,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         $scope.resolveReviewBtnStatus();
                         var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
                         if(rootNode.children)
-                            $scope.disableDownloadToc = false;
+                            $scope.disableTocActionBtn = false;
                         // $scope.getContentMetadata();
                         $scope.getQRCodeRequestCount();
                     }
@@ -402,8 +402,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.setPendingChangingStatus = function (event, data) {
         if($scope.editorEnv === "COLLECTION"){
             $scope.pendingChanges = ecEditor.getConfig('editorConfig').mode === 'Read' ? false : true;
-            $scope.disableDownloadToc = true;
-        }        
+            $scope.disableTocActionBtn = true;
+        }
         $scope.disableSaveBtn = false;
         $scope.disableQRGenerateBtn = false;
         // $scope.qrRequestCount = 0;
@@ -444,7 +444,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.setContentLockListener();
             } else {
                 $scope.removeContentLockListener();
-            }           
+            }
         });
     };
 
@@ -457,7 +457,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.getContentMetadata = function () {
         var rootNode = org.ekstep.services.collectionService.getNodeById(ecEditor.getContext('contentId'));
         var status = rootNode.data.metadata.status;
-        $scope.disableDownloadToc = rootNode.children == null ? true: false;
+        $scope.disableTocActionBtn = rootNode.children == null ? true: false;
         if(rootNode.data.metadata.contentCredits)
             $scope.contentCredits = rootNode.data.metadata.contentCredits;
         $scope.hideReviewBtn = (status === 'Draft' || status === 'FlagDraft') ? false : true;
@@ -626,7 +626,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         var request = {
             "request": {
                 "dialcodes": {
-                    "count": $scope.qrRequestCount,
+                    "count": $scope.qrRequestCount + 1, // +1 is for RootNode
                     "qrCodeSpec": {
                         "errorCorrectionLevel": "H"
                     }
@@ -753,7 +753,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     /**
      * @description - used to update toc via csv
      */
-    $scope.updateToc = function () {        
+    $scope.updateToc = function () {
         ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
             headerTitle: $scope.CONSTANTS.tocUpdateHeader,
             description: $scope.CONSTANTS.tocUpdateDescription,
@@ -1062,7 +1062,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     ecEditor.addEventListener('org.ekstep.editor:keepalive', $scope.contentDataChanged,$scope);
     $scope.$watch('disableSaveBtn', function() {
         if($scope.disableSaveBtn === false){
-            $scope.contentDataChanged();   
+            $scope.contentDataChanged();
         }
     });
     // if content lock is present initiate lock listener else display error
