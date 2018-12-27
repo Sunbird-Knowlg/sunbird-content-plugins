@@ -1067,11 +1067,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         }
     });
     // if content lock is present initiate lock listener else display error
-    if($scope.contentLock && $scope.contentLock.lockKey){
-        $scope.setContentLockListener();
-    }
-    else{
-        $scope.showStatusPopup('LOCK_REFRESH_ERROR');   
-    }
+    $scope.setContentLockListener();
 }]);
 //# sourceURL=sunbirdheaderapp.js
