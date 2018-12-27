@@ -2,10 +2,10 @@
     id="commonHeader">
     <div class="ui grid fluid container custom-container">
          <div id="errorLockContentModal" class="ui modal">
-            <div class="ui icon header" ng-bind="onContentLockMessage.text"></div>
+            <div class="ui icon header" ng-bind="contentLockstatusMessage"></div>
             <div class="actions" ng-if="isResume || isClose || isRefresh">
                 <div class="ui ok blue button" ng-if="isResume" ><i class="checkmark icon"></i>Resume</div>
-                <div class="ui ok blue button" ng-if="isRefresh" ng-click="refreshContent()"><i class="refresh icon"></i>Refresh</div>
+                <div class="ui ok blue button" ng-if="isRefresh" ng-click="refreshLock()"><i class="refresh icon"></i>Refresh</div>
                 <div class="ui basic cancel button" ng-if="isClose"><i class="close icon"></i>Close Editor</div>
             </div>
         </div>
