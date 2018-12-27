@@ -48,10 +48,11 @@
                             </div>
                             <div class="menu" style="left: auto; right: 0; top: 25px;">
                                 <div class="item" ng-click="downloadToc(); generateTelemetry({ subtype: 'downloadToc', target: 'downloadTocButton'});"
-                                    ng-class="disableDownloadToc ? 'disabled' : 'enabled'">
+                                    ng-class="disableTocActionBtn ? 'disabled' : 'enabled'">
                                     <i class="download icon"></i> Download ToC Metadata
                                 </div>
-                                <div class="item" ng-click="updateToc()">
+                                <div class="item" ng-click="updateToc(); generateTelemetry({ subtype: 'uploadToc', target: 'uploadTocButton'});"
+                                    ng-class="disableTocActionBtn ? 'disabled' : 'enabled'">
                                     <i class="upload icon"></i> Update ToC Metadata</div>
                             </div>
                         </div>
