@@ -66,7 +66,7 @@
                                 <i class="dropdown icon"></i>
                             </div>
                             <div class="menu" style="left: auto; right: 0; top: 25px;">
-                                <div class="item" ng-class="(!disableQRGenerateBtn || qrRequestCount === 0 || qrRequestCount <= reservedDialCount ) ? 'disabled' : ' '" 
+                                <div class="item" ng-class="(!disableQRGenerateBtn || qrRequestCount === 0 || qrRequestCount + 1 <= reservedDialCount ) ? 'disabled' : ' '"
                                     ng-click="reserveDialCode(); generateTelemetry({ subtype: 'reserveDialCode', target: 'reserveDialCodeButton'});"><i class="qrcode icon"></i> <span class="text">Generate
                                         {{(qrRequestCount > 0 )? qrRequestCount + ' + 1' :'' }} QR Codes</span></div>
                                 <div class="item" ng-class="(!disableQRDownloadBtn) ? 'disabled' : ' ' " ng-click="downloadQRCodes(); generateTelemetry({ subtype: 'downloadQRCodes', target: 'downloadQRCodesButton'});"><i
