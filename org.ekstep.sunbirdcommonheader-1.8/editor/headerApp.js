@@ -73,11 +73,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         tocDownloadFailed: 'Unable to download the content, please try again later',
         tocDownloadSuccess: 'Table of Content downloadeding!',
         tocUpdateHeader: 'Update Table of Contents Metadata attributes via CSV',
-        tocUpdateDescription: 'Please note that no sections could be added or removed using CSV upload, only the values of the attributes can be changes',
+        tocUpdateDescription: 'Please note that no sections can be added or removed through this update, only the values of the attributes can be changed.',
         tocUpdateBtnUpload: 'Upload',
         tocUpdateBtnClose: 'Close'
     }
-    $scope.lockObj = ecEditor.getConfig('lock');       
+    $scope.lockObj = ecEditor.getConfig('lock');
     $scope.dataChanged = false;
     $scope.lastContentLockSyncTime = new Date();
     $scope.onContentLockMessage = {
@@ -447,7 +447,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.setContentLockListener();
             } else {
                 $scope.removeContentLockListener();
-            }           
+            }
         });
     };
 
@@ -787,7 +787,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.previewMode = $scope.previewMode === true ? false : true;
         $scope.$safeApply();
     }
-  
+
     $scope.removeContentLockListener = function () {
         $interval.cancel($scope.contentLockListener);
         $scope.$safeApply();
@@ -796,9 +796,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
      $scope.contentDataChanged = function(){
         $scope.dataChanged = true;
     }
- 
+
      $scope.refreshContentLock = function () {
-        if($scope.internetStatusObj.status === true){           
+        if($scope.internetStatusObj.status === true){
             var request = {
                 resourceId: ecEditor.getContext('contentId'),
                 resourceType: 'Content',
@@ -808,31 +808,31 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 if(res && res.responseCode && res.responseCode == 'OK' && res.result){
                     $scope.lockObj.lockKey = res.result.lockKey;
                     $scope.lockObj.expiresIn = res.result.expiresIn;
-                    $scope.lockObj.expiresAt = new Date(res.result.expiresAt);                    
+                    $scope.lockObj.expiresAt = new Date(res.result.expiresAt);
                 }else if(err){
-                    $scope.handleError(err);                  
+                    $scope.handleError(err);
                 }
                 $scope.contentLockExpired = false;
             });
         } else {
             // $scope.showStatusPopup('INTERNET_DISCONNECTED',false);
              $scope.removeContentLockListener();
-        }        
+        }
     }
 
     $scope.handleError = function(err){
         switch(err.status){
             case 500:
-                $scope.showStatusPopup('LOCK_REFRESH_ERROR');   
+                $scope.showStatusPopup('LOCK_REFRESH_ERROR');
                 break;
             case 403:
                 $scope.showStatusPopup('LOCK_NOT_AVAILABLE');
                 break;
             default:
-                $scope.showStatusPopup('LOCK_REFRESH_ERROR');   
+                $scope.showStatusPopup('LOCK_REFRESH_ERROR');
                 break;
         }
-        $scope.removeContentLockListener();      
+        $scope.removeContentLockListener();
     }
 
      $scope.showStatusPopup = function(type,message){
@@ -862,7 +862,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.isClose = true;
                 $scope.isResume = true;
                 break;
-        } 
+        }
         $scope.$safeApply(function(){
             ecEditor.jQuery('#errorLockContentModal').modal({
                 inverted: true,
@@ -895,7 +895,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         var currentTime = (new Date()).getTime();
         var timeDiff = currentTime - lastSyncTime;
         $scope.idleTimer += $scope.contentLockRefershInterval;
-        // if screen is active(not idle)then refresh the lock regularly 
+        // if screen is active(not idle)then refresh the lock regularly
         if($scope.dataChanged === true || $scope.previewMode === true){
             try {
              $scope.refreshContentLock();
@@ -909,7 +909,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         }
         // if lock expires then show resume/close message
         if(Math.floor(timeDiff/1000) >=  $scope.contentLockExpiresIn) {
-            try {                
+            try {
                 $scope.showStatusPopup('SESSION_TIMEOUT');
                 $scope.contentLockExpired = true;
             } catch(e) {
@@ -926,7 +926,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             if($scope.disableSaveBtn === false){
                 $scope.saveContent(function(err,res){});
             }
-            $scope.idleTimer = 0;            
+            $scope.idleTimer = 0;
             $scope.showStatusPopup('IDLE_TIMEOUT');
             return;
         }
@@ -1057,7 +1057,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     ecEditor.addEventListener('org.ekstep.editor:keepalive', $scope.contentDataChanged,$scope);
     $scope.$watch('disableSaveBtn', function() {
         if($scope.disableSaveBtn === false){
-            $scope.contentDataChanged();   
+            $scope.contentDataChanged();
         }
     });
     $scope.setContentLockListener();
