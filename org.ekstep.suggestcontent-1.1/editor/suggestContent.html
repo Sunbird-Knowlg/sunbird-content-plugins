@@ -4,7 +4,7 @@
             <a><i class="angle right icon color-blue"></i></a>
             <span class="suggest-content-header-title">Explore Suggestions</span>
             <span ng-class="suggestedContentList.content.length ? 'color-blue' : 'disabled'" class="float-right">
-                <i ng-click="refreshSuggestions(); generateTelemetry({type: 'click', subtype: 'RefreshContentButton', target: 'Refresh Content'})"
+                <i ng-click="suggestedContentList.content.length === 0 || refreshSuggestions(); generateTelemetry({type: 'click', subtype: 'RefreshContentButton', target: 'Refresh Content'})"
                     ng-class="suggestedContentList.content.length ? 'color-blue' : 'disabled'" class="undo icon refresh-btn"></i>
                 <span ng-click="openResourceBrowser();generateTelemetry({type: 'click', subtype: 'ViewAllButton', target: 'View All'})" class="padding-right-20 padding-left-8">View All</span>
             </span>

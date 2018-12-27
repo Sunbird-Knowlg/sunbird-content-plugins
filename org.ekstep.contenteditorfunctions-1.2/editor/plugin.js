@@ -445,13 +445,13 @@ org.ekstep.contenteditor.basePlugin.extend({
                     position: 'topCenter',
                     icon: 'fa fa-check-circle'
                 });
+                instance.highlightNodeForInvalidDialCode(res, contentBody.nodesModified);
                 org.ekstep.collectioneditor.api.getService('collection').clearCache();
                 // update node id's of collection
                 ecEditor._.forIn(res.data.result.identifiers, function(newId, oldId) {
                     var node = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(oldId);
                     if (node) node.data.id = newId;
                 });
-                instance.highlightNodeForInvalidDialCode(res);
                 ecEditor.dispatchEvent("meta:after:save", {});
 
             } else if(err && res.status === 401 && res.statusText === "Unauthorized") {
@@ -470,7 +470,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             data.callback && data.callback(err, res);
         });
     },
-    highlightNodeForInvalidDialCode: function(res) {
+    highlightNodeForInvalidDialCode: function(res, nodesModified) {
         var instance = this;
         var mapArr = [];
         ecEditor._.forEach(org.ekstep.services.stateService.state.invaliddialCodeMap, function(value, key) {
@@ -497,9 +497,18 @@ org.ekstep.contenteditor.basePlugin.extend({
                 instance.storeDialCodes(key, value);
             }
         });
-        instance.dialcodeLink(mapArr);
+        var dialcodesUpdated = false;
+        ecEditor._.forIn(nodesModified, function(node) {
+            if(node.metadata.dialcodes && !dialcodesUpdated){
+                dialcodesUpdated = true;
+            }
+        });
+        if(dialcodesUpdated){
+            instance.dialcodeLink(mapArr);
+        }
     },
     dialcodeLink: function(dialcodeMap) {
+        var dialcodeMapObj = _.find(dialcodeMap, 'dialcode');
         if(!_.isEmpty(dialcodeMap)){
             var request = {
                 "request": {
@@ -514,7 +523,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                             position: 'topCenter',
                             icon: 'fa fa-warning'
                         });
-                    }else{
+                    } else {
                         ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                             title: 'DIAL code(s) updated successfully!',
                             position: 'topCenter',
@@ -539,7 +548,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     },
     storeDialCodes: function(nodeId, dialCode){
         var node = ecEditor.getService(ServiceConstants.COLLECTION_SERVICE).getNodeById(nodeId);
-        if(node && node.data)
+        if(node && node.data) 
             node.data.metadata["dialcodes"] = dialCode;
     },
     hightlightNode: function(invalidNodes) {
