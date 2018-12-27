@@ -67,7 +67,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.showEditMeta = true;
     $scope.contentCredits = [];
     $scope.listLimit = 5;
-    $scope.disableDownloadToc = false;
+    $scope.disableTocActionBtn = false;
     $scope.loader = false;
     $scope.CONSTANTS = {
         tocDownloadFailed: 'Unable to download the content, please try again later',
@@ -223,7 +223,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         $scope.resolveReviewBtnStatus();
                         var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
                         if(rootNode.children)
-                            $scope.disableDownloadToc = false;
+                            $scope.disableTocActionBtn = false;
                         // $scope.getContentMetadata();
                         $scope.getQRCodeRequestCount();
                     }
@@ -405,7 +405,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.setPendingChangingStatus = function (event, data) {
         if($scope.editorEnv === "COLLECTION"){
             $scope.pendingChanges = ecEditor.getConfig('editorConfig').mode === 'Read' ? false : true;
-            $scope.disableDownloadToc = true;
+            $scope.disableTocActionBtn = true;
         }
         $scope.disableSaveBtn = false;
         $scope.disableQRGenerateBtn = false;
@@ -460,7 +460,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.getContentMetadata = function () {
         var rootNode = org.ekstep.services.collectionService.getNodeById(ecEditor.getContext('contentId'));
         var status = rootNode.data.metadata.status;
-        $scope.disableDownloadToc = rootNode.children == null ? true: false;
+        $scope.disableTocActionBtn = rootNode.children == null ? true: false;
         if(rootNode.data.metadata.contentCredits)
             $scope.contentCredits = rootNode.data.metadata.contentCredits;
         $scope.hideReviewBtn = (status === 'Draft' || status === 'FlagDraft') ? false : true;
