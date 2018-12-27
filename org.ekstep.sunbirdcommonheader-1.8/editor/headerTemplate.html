@@ -1,5 +1,14 @@
-<div ng-app="sunbirdcommonheader:app" ng-controller="headerController" class="ui vertical segment content-masterhead" id="commonHeader">
+<div ng-app="sunbirdcommonheader:app" ng-controller="headerController" class="ui vertical segment content-masterhead"
+    id="commonHeader">
     <div class="ui grid fluid container custom-container">
+         <div id="errorLockContentModal" class="ui modal">
+            <div class="ui icon header" ng-bind="onContentLockMessage.text"></div>
+            <div class="actions" ng-if="isResume || isClose || isRefresh">
+                <div class="ui ok blue button" ng-if="isResume" ><i class="checkmark icon"></i>Resume</div>
+                <div class="ui ok blue button" ng-if="isRefresh" ng-click="refreshContent()"><i class="refresh icon"></i>Refresh</div>
+                <div class="ui basic cancel button" ng-if="isClose"><i class="close icon"></i>Close Editor</div>
+            </div>
+        </div>
         <div class="one wide centered column custom-1-wide">
             <img class="ui tiny centered image" ng-show="contentDetails.contentImage != ''" ng-src="{{contentDetails.contentImage}}" />
         </div>
@@ -14,7 +23,8 @@
                     <span ng-if="showEditMeta"><i class="edit icon link"></i>&nbsp;Edit Details</span>
                     <span ng-if="!showEditMeta"><i class="eye icon link"></i>&nbsp;View Details </span>
                 </a>
-                <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}"><span class="spinner"></span>{{internetStatusObj.text}}</label>
+                <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}"><span
+                        class="spinner"></span>{{internetStatusObj.text}}</label>
             </div>
 
         </div>
@@ -29,12 +39,11 @@
         <div class="five wide column custom-5-wide" style="padding-top:1rem!important;">
             <div class="row header-icon-container">
                 <div class="custom-row-2">
-                    <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook' && collectionMode != 'Read')" class="custom-row-2" style="float: left; margin: 2px">
-                        <div  class="ui dropdown" style=" vertical-align: -webkit-baseline-middle; ">
+                    <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook' && collectionMode != 'Read')"
+                        class="custom-row-2" style="float: left; margin: 2px">
+                        <div class="ui dropdown" style=" vertical-align: -webkit-baseline-middle; ">
                             <div class="ui dropdown">
-                                <span class="ui tiny header">
-                                  Download/Update ToC
-                                </span>
+                                <span class="ui tiny header">TOC</span>
                                 <i class="dropdown icon"></i>
                             </div>
                             <div class="menu" style="left: auto; right: 0; top: 25px;">
@@ -47,16 +56,17 @@
                             </div>
                         </div>
                     </div>
-                    <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook' && collectionMode != 'Read')" class="custom-row-2" style="float: left;margin: 0.4em 3em;">
+                    <div ng-show="(editorEnv === 'COLLECTION' && collectionType === 'TextBook' && collectionMode != 'Read')"
+                        class="custom-row-2" style="float: left;margin: 0.4em 2em;">
                         <div class="ui dropdown qrCodeStyler">
                             <div class="ui dropdown">
                                 <span class="ui tiny header">
-                                    QR Code Generation
+                                    QR Codes
                                 </span>
                                 <i class="dropdown icon"></i>
                             </div>
                             <div class="menu" style="left: auto; right: 0; top: 25px;">
-                                <div class="item" ng-class="(!disableQRGenerateBtn || qrRequestCount === 0 || qrRequestCount <= reservedDialCount ) ? 'disabled' : ' '"
+                                <div class="item" ng-class="(!disableQRGenerateBtn || qrRequestCount === 0 || qrRequestCount <= reservedDialCount ) ? 'disabled' : ' '" 
                                     ng-click="reserveDialCode(); generateTelemetry({ subtype: 'reserveDialCode', target: 'reserveDialCodeButton'});"><i class="qrcode icon"></i> <span class="text">Generate
                                         {{(qrRequestCount > 0 )? qrRequestCount + ' + 1' :'' }} QR Codes</span></div>
                                 <div class="item" ng-class="(!disableQRDownloadBtn) ? 'disabled' : ' ' " ng-click="downloadQRCodes(); generateTelemetry({ subtype: 'downloadQRCodes', target: 'downloadQRCodesButton'});"><i
@@ -65,7 +75,9 @@
                         </div>
                     </div>
                     <div ng-show="editorEnv === 'COLLECTION'" class="content-contributors ownerlist-dropdown" id="contentCreditsList">
-                        <span ng-class="contentCredits.length > 0 ? 'addcolor' : 'removecolor'">{{contentCredits.length}}  <i class="users icon"  data-content="Created with contribution from {{contentCredits.length}} " data-variation="small" ng-mouseover="resetList()" ></i></span>
+                        <span ng-class="contentCredits.length > 0 ? 'addcolor' : 'removecolor'">{{contentCredits.length}}
+                            <i class="users icon" data-content="Created with contribution from {{contentCredits.length}} "
+                                data-variation="small" ng-mouseover="resetList()"></i></span>
                         <div class="dropdown-content">
                             <div class="item" ng-repeat="contentCredit in contentCredits | limitTo:listLimit">{{contentCredit.name}}</div>
                             <button class="fluid ui button" ng-click="addListSize(); $event.stopPropagation()" ng-if="listLimit < contentCredits.length">See
@@ -91,6 +103,9 @@
                                 <i class="remove icon custom-cursor"></i>
                             </a>
                         </div>
+                        <div ng-show="showEditMeta && !publishMode && !isFlagReviewer" class="icon-box popup-item" data-content="Add Collaborator" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'org.ekstep.collaborator:add'});">
+                            <i class="add user icon custom-icon"></i>
+                        </div>
                         <div ng-show="showEditMeta && !publishMode && !isFlagReviewer" id="saveButton" ng-class="disableSaveBtn ? 'icon-box popup-item label-icon-box disabled' : 'icon-box popup-item label-icon-box'"
                             data-content="Save content" data-variation="tiny inverted" data-position="bottom center"
                             ng-click="saveContent(); generateTelemetry({ subtype: 'save', target: 'savebutton'});">
@@ -114,7 +129,6 @@
                             data-content="Review comments" data-variation="tiny inverted" data-position="bottom center"
                             ng-click="openCheckList('read')">
                             <i class="fa fa-comment"></i>
-                            <span class="label-icon-box-text">Reviewer Suggestions</span>
                         </div>
                         <div ng-show="publishMode && !isFlagReviewer" class="icon-box popup-item label-icon-box"
                             data-content="Reject content" data-variation="tiny inverted" data-position="bottom center"
