@@ -1,5 +1,5 @@
 describe("Collaborator plugin", function () {
-    var manifest, path, ctrl, $scope, pluginInstance, contentData;
+    var manifest, path, ctrl, $scope, pluginInstance, contentData, $timeout, userSearchData;
 
     beforeAll(function (done) {
         manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.collaborator");
@@ -8,7 +8,6 @@ describe("Collaborator plugin", function () {
         pluginInstance = ecEditor.instantiatePlugin("org.ekstep.collaborator");
 
         contentData = {
-
             "ownershipType": [
                 "createdBy"
             ],
@@ -40,6 +39,61 @@ describe("Collaborator plugin", function () {
             "resourceType": "Book",
             "status": "Draft"
         }
+
+        userSearchData = {
+            "data": {
+                "id": "api.user.search",
+                "ver": "v1",
+                "ts": "2018-12-28 06:57:11:742+0000",
+                "params": {
+                    "resmsgid": null,
+                    "msgid": "af2af5c2-5910-4c87-b5c5-db4b37591c79",
+                    "err": null,
+                    "status": "success",
+                    "errmsg": null
+                },
+                "responseCode": "OK",
+                "result": {
+                    "response": {
+                        "count": 1,
+                        "content": [
+                            {
+                                "lastName": "Raj",
+                                "identifier": "4a698288-5d8b-4ed1-8b21-3215d945c474",
+                                "firstName": "Rajath",
+                                "organisations": [
+                                    {
+                                        "organisationId": "01243890518834380856",
+                                        "updatedBy": "781c21fc-5054-4ee0-9a02-fbb1006a4fdd",
+                                        "orgName": "hello3001",
+                                        "addedByName": null,
+                                        "addedBy": null,
+                                        "roles": [
+                                            "CONTENT_CREATOR"
+                                        ],
+                                        "approvedBy": null,
+                                        "updatedDate": "2018-05-21 09:35:50:475+0000",
+                                        "userId": "4a698288-5d8b-4ed1-8b21-3215d945c474",
+                                        "approvaldate": null,
+                                        "isDeleted": false,
+                                        "hashTagId": null,
+                                        "isRejected": null,
+                                        "id": "0125082889641984004",
+                                        "position": null,
+                                        "isApproved": null,
+                                        "orgjoindate": "2018-05-21 08:02:47:911+0000",
+                                        "orgLeftDate": null
+                                    }
+                                ],
+                                "phone": "",
+                                "email": ""
+                            }
+                        ]
+                    }
+                },
+                "responseTime": 93
+            }
+        };
         ecEditor.getService('content').getContent = jasmine.createSpy().and.callFake(function (data, callback) {
             return callback(undefined, contentData);
         });
@@ -56,8 +110,9 @@ describe("Collaborator plugin", function () {
     it('mock controller', function (done) {
         angular.mock.module('oc.lazyLoad');
         angular.mock.module('Scope.safeApply');
-        inject(function ($ocLazyLoad, _$rootScope_, _$controller_) {
+        inject(function ($ocLazyLoad, _$rootScope_, _$controller_, _$timeout_) {
             var $controller = _$controller_;
+            $timeout = _$timeout_;
             $scope = _$rootScope_.$new();
 
             $ocLazyLoad.load([
@@ -65,6 +120,7 @@ describe("Collaborator plugin", function () {
             ]).then(function () {
                 ctrl = $controller("collaboratorCtrl", { $scope: $scope, instance: { manifest: manifest } });
                 $scope.$safeApply = function () { };
+                $scope.closeThisDialog = function () { };
                 done();
             }, function (error) {
                 done();
@@ -104,8 +160,43 @@ describe("Collaborator plugin", function () {
             $scope.getContentCollaborators();
             expect(ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContent).toHaveBeenCalledWith(ecEditor.getContext('contentId'), jasmine.any(Function));
             expect($scope.isContentOwner).toBeTruthy();
-            expect($scope.collaboratorsId).toEqual(["0c383526-2677-46be-8fb0-06d41392d40b", "bf7d7cf5-810c-46f2-9422-810843990e82"]);
+            expect($scope.currentCollaborators).toEqual(["0c383526-2677-46be-8fb0-06d41392d40b", "bf7d7cf5-810c-46f2-9422-810843990e82"]);
             expect($scope.isLoading).toBeTruthy();
+            done();
+        });
+
+        it('should set isContentOwner to false', function (done) {
+            ecEditor.getContext = jasmine.createSpy().and.callFake(function (param) {
+                if (param === 'contentId') {
+                    return "do_112480621612351488118";
+                } else if (param === 'uid') {
+                    return '874ed8a5-782e-4f6c-8f36-e0288455901f';
+                }
+            });
+            $scope.getContentCollaborators();
+            expect($scope.isContentOwner).toBeFalsy();
+            done();
+        });
+
+        it('should fetch collaborators', function (done) {
+            spyOn($scope, 'fetchCollaborators');
+            ecEditor.getService('content').getContent = jasmine.createSpy().and.callFake(function (data, callback) {
+                return callback(undefined, []);
+            });
+            $scope.getContentCollaborators();
+            expect($scope.currentCollaborators).toEqual([]);
+            expect($scope.fetchCollaborators).toHaveBeenCalled();
+            done();
+        });
+
+        it('should show error message and close popup', function (done) {
+            ecEditor.getService('content').getContent = jasmine.createSpy().and.callFake(function (data, callback) {
+                return callback({}, undefined);
+            });
+            spyOn(ecEditor, 'dispatchEvent');
+            $scope.getContentCollaborators();
+            expect($scope.isLoading).toBeFalsy();
+            expect(ecEditor.dispatchEvent).toHaveBeenCalledWith("org.ekstep.toaster:error", { message: 'Unable to fetch collaborators', position: 'topCenter', icon: 'fa fa-warning' });
             done();
         });
     });
@@ -113,21 +204,549 @@ describe("Collaborator plugin", function () {
     describe('selectTab', () => {
         it('should call fetchCollaborators if there are no existing collaborators on selecting a add collaborators tab', () => {
             spyOn($scope, 'generateTelemetry');
+            spyOn($scope, 'fetchCollaborators');
             let event = { currentTarget: { dataset: { tab: 'userListTab' } } };
             spyOn($scope, 'selectTab').and.callThrough();
             $scope.selectTab(event);
             expect($scope.selectTab).toHaveBeenCalled();
             expect($scope.isAddCollaboratorTab).toBeFalsy();
             expect($scope.generateTelemetry).toHaveBeenCalledWith({ type: 'click', subtype: 'changeTab', target: 'manageCollaborator', targetid: 'userListTab' });
-            expect($scope.isLoading).toBeTruthy();
+            expect($scope.isLoading).toBe(true);
+            expect($scope.fetchCollaborators).toHaveBeenCalled();
 
         });
+
         it('should not make api call if there are collaborators exists', () => {
-            spyOn($scope, 'generateTelemetry');
+            spyOn($scope, 'fetchCollaborators');
             let event = { currentTarget: { dataset: { tab: 'userListTab' } } };
             spyOn($scope, 'selectTab').and.callThrough();
-            $scope.collaboratorsList = [];
+            $scope.collaboratorsList = ['874ed8a5-782e-4f6c-8f36-e0288455901e'];
             $scope.selectTab(event);
+            expect($scope.isLoading).toBe(true);
+            //expect($scope.fetchCollaborators).not.toHaveBeenCalled();
+        });
+
+        it('should change a tab to the add collaborator', (done) => {
+            spyOn($scope, 'generateTelemetry');
+            spyOn($scope, 'fetchCollaborators');
+            spyOn($scope, 'applyJQuery');
+            let event = { currentTarget: { dataset: { tab: 'addCollaboratorTab' } } };
+            spyOn($scope, 'selectTab').and.callThrough();
+            $scope.selectTab(event);
+            expect($scope.isLoading).toBe(false);
+            expect($scope.isAddCollaboratorTab).toBe(true);
+            expect($scope.generateTelemetry).toHaveBeenCalledWith({ type: 'click', subtype: 'changeTab', target: 'addCollaborator', targetid: 'addCollaboratorTab' });
+            $timeout.flush();
+            expect($scope.applyJQuery).toHaveBeenCalled();
+            done();
+        });
+    });
+
+    describe('fetchCollaborators', () => {
+        it('should fetch details of the collaborators, if there are collaborators for the content', () => {
+            $scope.userService = { search: () => { } };
+            spyOn($scope, 'fetchCollaborators').and.callThrough();
+            spyOn($scope.userService, 'search');
+            $scope.userService.search = jasmine.createSpy().and.callFake(function (data, callback) {
+                return callback(undefined, userSearchData);
+            });
+            $scope.currentCollaborators = ['4a698288-5d8b-4ed1-8b21-3215d945c474'];
+            $scope.fetchCollaborators();
+            expect($scope.fetchCollaborators).toHaveBeenCalled();
+            expect($scope.userSearchBody.request.filters.userId).toEqual(['4a698288-5d8b-4ed1-8b21-3215d945c474']);
+            let searchBody = {
+                "request": {
+                    "query": "",
+                    "filters": {
+                        "organisations.roles": ["CONTENT_CREATOR"],
+                        "userId": ['4a698288-5d8b-4ed1-8b21-3215d945c474']
+                    },
+                    "fields": ["email", "firstName", "identifier", "lastName", "organisations", "rootOrgName", "phone"],
+                    "offset": 0,
+                    "limit": 200
+                }
+            };
+            expect($scope.userSearchBody).toEqual(searchBody);
+            expect($scope.userService.search).toHaveBeenCalledWith(searchBody, jasmine.any(Function));
+            expect($scope.collaborators).toEqual(userSearchData.data.result.response.content);
+            expect($scope.collaborators.selectedCount).toEqual(0);
+            $timeout.flush();
+            expect($scope.isLoading).toBe(false);
+
+        });
+
+        it('should log error telemetry event if user service fails', () => {
+            $scope.userService = { search: () => { } };
+            spyOn($scope, 'fetchCollaborators').and.callThrough();
+            spyOn($scope.userService, 'search');
+            spyOn($scope, 'generateError');
+            $scope.userService.search = jasmine.createSpy().and.callFake(function (data, callback) {
+                return callback({}, undefined);
+            });
+            $scope.currentCollaborators = ['4a698288-5d8b-4ed1-8b21-3215d945c474'];
+            $scope.fetchCollaborators();
+            expect($scope.generateError).toHaveBeenCalledWith({ status: '', error: {} });
+        });
+
+        it('should not make user search api call if there are no collaborators present for the content', () => {
+            spyOn($scope, 'fetchCollaborators').and.callThrough();
+            spyOn($scope, '$safeApply')
+            $scope.currentCollaborators = [];
+            $scope.fetchCollaborators();
+            expect($scope.isLoading).toBe(false);
+            expect($scope.$safeApply).toHaveBeenCalled();
+        });
+    });
+
+    describe('loadAllUsers', () => {
+        it('should call user search API to fetch users, if there are no collaborators present', () => {
+            let searchBody = {
+                "request": {
+                    "query": "",
+                    "filters": {
+                        "organisations.roles": ["CONTENT_CREATOR"]
+                    },
+                    "fields": ["email", "firstName", "identifier", "lastName", "organisations", "rootOrgName", "phone"],
+                    "offset": 0,
+                    "limit": 200
+                }
+            };
+            $scope.userSearchBody.request.filters = { "organisations.roles": ["CONTENT_CREATOR"] };
+            $scope.userService = { search: () => { } };
+            spyOn($scope, 'loadAllUsers').and.callThrough();
+            spyOn($scope, 'resetSearchRequest');
+            spyOn($scope.userService, 'search');
+            spyOn($scope, 'applyJQuery');
+            $scope.userService.search = jasmine.createSpy().and.callFake(function (data, callback) {
+                return callback(undefined, userSearchData);
+            });
+
+            $scope.loadAllUsers();
+            expect($scope.loadAllUsers).toHaveBeenCalled();
+            expect($scope.isAddCollaboratorTab).toBe(true);
+            expect($scope.resetSearchRequest).toHaveBeenCalled();
+            expect($scope.userSearchBody).toEqual(searchBody);
+            expect($scope.currentCollaborators).toEqual([]);
+            expect($scope.userService.search).toHaveBeenCalledWith(searchBody, jasmine.any(Function));
+            expect($scope.users).toEqual(userSearchData.data.result.response.content);
+            expect($scope.users.count).toEqual(1);
+            expect($scope.users.selectedCount).toEqual(0);
+            expect($scope.isLoading).toBe(false);
+            $timeout.flush();
+            expect($scope.applyJQuery).toHaveBeenCalled();
+        });
+
+        it('should exclude the current collaborators from the list', () => {
+            let searchBody = {
+                "request": {
+                    "query": "",
+                    "filters": {
+                        "organisations.roles": ["CONTENT_CREATOR"]
+                    },
+                    "fields": ["email", "firstName", "identifier", "lastName", "organisations", "rootOrgName", "phone"],
+                    "offset": 0,
+                    "limit": 200
+                }
+            };
+            $scope.userSearchBody.request.filters = { "organisations.roles": ["CONTENT_CREATOR"] };
+            $scope.userService = { search: () => { } };
+            $scope.currentCollaborators = ['4a698288-5d8b-4ed1-8b21-3215d945c474'];
+            spyOn($scope, 'loadAllUsers').and.callThrough();
+            spyOn($scope.userService, 'search');
+            spyOn($scope, 'excludeCollaborators');
+            $scope.userService.search = jasmine.createSpy().and.callFake(function (data, callback) {
+                return callback(undefined, userSearchData);
+            });
+            $scope.excludeCollaborators = jasmine.createSpy().and.returnValue({});
+
+            $scope.loadAllUsers();
+            expect($scope.excludeCollaborators).toHaveBeenCalledWith(userSearchData.data.result.response.content);
+        });
+        it('should log the error telemetry event if user search API fails', () => {
+            let searchBody = {
+                "request": {
+                    "query": "",
+                    "filters": {
+                        "organisations.roles": ["CONTENT_CREATOR"]
+                    },
+                    "fields": ["email", "firstName", "identifier", "lastName", "organisations", "rootOrgName", "phone"],
+                    "offset": 0,
+                    "limit": 200
+                }
+            };
+            $scope.userSearchBody.request.filters = { "organisations.roles": ["CONTENT_CREATOR"] };
+            $scope.userService = { search: () => { } };
+            spyOn($scope, 'loadAllUsers').and.callThrough();
+            spyOn($scope.userService, 'search');
+            spyOn($scope, 'generateError');
+            $scope.userService.search = jasmine.createSpy().and.callFake(function (data, callback) {
+                return callback({}, undefined);
+            });
+
+            $scope.loadAllUsers();
+            expect($scope.generateError).toHaveBeenCalled();
+        })
+    });
+
+    describe('updateCollaborators', () => {
+        it('should update the collaborators for a content', () => {
+            let newCollaborators = ['874ed8a5-782e-4f6c-8f36-e0288455901f', '454ed8a5-782e-4f6c-8f36-e0288455903f'];
+            let updateRequest = {
+                "request": {
+                    "content": {
+                        "collaborators": ['874ed8a5-782e-4f6c-8f36-e0288455901f', '454ed8a5-782e-4f6c-8f36-e0288455903f']
+                    }
+                }
+            }
+
+            let updateResponse = {
+                "data": {
+                    "id": "api.collaborator.update",
+                    "ver": "1.0",
+                    "ts": "2018-12-28T11:09:52.783Z",
+                    "params": {
+                        "resmsgid": "199df9f0-0a91-11e9-8a91-450ab715ff69",
+                        "msgid": "19889d30-0a91-11e9-82de-0b2c133f0d4f",
+                        "status": "successful",
+                        "err": null,
+                        "errmsg": null
+                    },
+                    "responseCode": "OK",
+                    "result": {
+                        "content_id": "do_11265256986546995213",
+                        "versionKey": "1545995392694"
+                    },
+                    "responseTime": 291
+                }
+            };
+
+            spyOn($scope, 'updateCollaborators').and.callThrough()
+            spyOn(ecEditor, 'dispatchEvent');
+            spyOn($scope, 'closePopup');
+            spyOn($scope.contentService, '_setContentMeta');
+            $scope.userService.updateCollaborators = jasmine.createSpy().and.callFake(function (contentId, updateRequest, callback) {
+                return callback(undefined, updateResponse);
+            });
+            $scope.contentService.getContentMeta = jasmine.createSpy().and.returnValue(contentData);
+            $scope.updateCollaborators(newCollaborators);
+
+            expect(ecEditor.dispatchEvent).toHaveBeenCalledWith("org.ekstep.toaster:success", {
+                message: 'Collaborators updated successfully',
+                position: 'topCenter',
+                icon: 'fa fa-check-circle'
+            });
+            expect($scope.updateCollaboratorRequest.request.content.collaborators).toEqual(['874ed8a5-782e-4f6c-8f36-e0288455901f', '454ed8a5-782e-4f6c-8f36-e0288455903f']);
+            expect($scope.userService.updateCollaborators).toHaveBeenCalledWith('do_112480621612351488118', updateRequest, jasmine.any(Function));
+            expect($scope.contentService.getContentMeta).toHaveBeenCalledWith('do_112480621612351488118');
+            expect($scope.contentService.getContentMeta(ecEditor.getContext('contentId'))).toEqual(contentData);
+            contentData.versionKey = 1545995392694;
+            expect($scope.contentService._setContentMeta).toHaveBeenCalledWith('do_112480621612351488118', contentData);
+            expect($scope.closePopup).toHaveBeenCalled();
+        });
+
+        it('should show the error message if collaborator API fails to update', () => {
+            let updateRequest = {
+                "request": {
+                    "content": {
+                        "collaborators": ['874ed8a5-782e-4f6c-8f36-e0288455901f', '454ed8a5-782e-4f6c-8f36-e0288455903f']
+                    }
+                }
+            }
+            spyOn($scope, 'updateCollaborators').and.callThrough();
+            spyOn(ecEditor, 'dispatchEvent');
+            $scope.userService.updateCollaborators = jasmine.createSpy().and.callFake(function (contentId, updateRequest, callback) {
+                return callback({}, undefined);
+            });
+            $scope.updateCollaborators([]);
+
+            expect(ecEditor.dispatchEvent).toHaveBeenCalledWith("org.ekstep.toaster:error", {
+                message: 'Unable to update collaborator',
+                position: 'topCenter',
+                icon: 'fa fa-warning'
+            });
+        });
+    });
+
+    describe('excludeCollaborators', () => {
+        it('should exclude the current collaborators from the usersList', () => {
+            let users = [
+                {
+                    "lastName": "",
+                    "identifier": "0c383526-2677-46be-8fb0-06d41392d40b",
+                    "firstName": "sezal",
+                    "organisations": [],
+                    "phone": "******8098",
+                    "email": "se****@gmail.com"
+                },
+                {
+                    "lastName": "Raj",
+                    "identifier": "4a698288-5d8b-4ed1-8b21-3215d945c474",
+                    "firstName": "Rajath",
+                    "organisations": [],
+                    "phone": "",
+                    "email": ""
+                },
+                {
+                    "lastName": "Kumar",
+                    "identifier": "bb4c9877-a025-44fe-aa3b-e2291fba0008",
+                    "firstName": "Amit",
+                    "organisations": [],
+                    "phone": "",
+                    "email": ""
+                },
+                {
+                    "lastName": "07",
+                    "identifier": "6e4fa739-84b9-47ea-9758-914e0b967697",
+                    "firstName": "content_creator_org_003",
+                    "organisations": [],
+                    "phone": null,
+                    "email": ""
+                },
+                {
+                    "lastName": "Raj",
+                    "identifier": "91eedfbe-4cc1-463f-9f6a-ff1045dd504e",
+                    "firstName": "Rajjath",
+                    "organisations": [],
+                    "phone": "",
+                    "email": null
+                }
+            ]
+            $scope.currentCollaborators = ['91eedfbe-4cc1-463f-9f6a-ff1045dd504e', '4a698288-5d8b-4ed1-8b21-3215d945c474'];
+            spyOn($scope, 'excludeCollaborators').and.callThrough();
+            let result = $scope.excludeCollaborators(users);
+            expect($scope.excludeCollaborators).toHaveBeenCalled();
+            users.splice(1, 1);
+            users.splice(4, 1);
+            expect(result).toEqual(users);
+        });
+
+        it('should not exclude any user if there are no collaborators', () => {
+            let users = [
+                {
+                    "lastName": "",
+                    "identifier": "0c383526-2677-46be-8fb0-06d41392d40b",
+                    "firstName": "sezal",
+                    "organisations": [],
+                    "phone": "******8098",
+                    "email": "se****@gmail.com"
+                },
+                {
+                    "lastName": "Raj",
+                    "identifier": "4a698288-5d8b-4ed1-8b21-3215d945c474",
+                    "firstName": "Rajath",
+                    "organisations": [],
+                    "phone": "",
+                    "email": ""
+                },
+                {
+                    "lastName": "Kumar",
+                    "identifier": "bb4c9877-a025-44fe-aa3b-e2291fba0008",
+                    "firstName": "Amit",
+                    "organisations": [],
+                    "phone": "",
+                    "email": ""
+                },
+                {
+                    "lastName": "07",
+                    "identifier": "6e4fa739-84b9-47ea-9758-914e0b967697",
+                    "firstName": "content_creator_org_003",
+                    "organisations": [],
+                    "phone": null,
+                    "email": ""
+                },
+                {
+                    "lastName": "Raj",
+                    "identifier": "91eedfbe-4cc1-463f-9f6a-ff1045dd504e",
+                    "firstName": "Rajjath",
+                    "organisations": [],
+                    "phone": "",
+                    "email": null
+                }
+            ]
+            $scope.currentCollaborators = [];
+            spyOn($scope, 'excludeCollaborators').and.callThrough();
+            let result = $scope.excludeCollaborators(users);
+            expect($scope.excludeCollaborators).toHaveBeenCalled();
+            expect(result).toEqual(users);
+        });
+    });
+
+    describe('closePopup', () => {
+        it('should close the popup and call telemetry event', () => {
+            spyOn($scope, 'closePopup').and.callThrough();
+            spyOn($scope, 'generateTelemetry');
+            spyOn($scope, 'closeThisDialog');
+            $scope.closePopup();
+            expect($scope.closePopup).toHaveBeenCalled();
+            expect($scope.inViewLogs).toEqual([]);
+            expect($scope.generateTelemetry).toHaveBeenCalledWith({ type: 'click', subtype: 'cancel', target: 'closePopup', targetid: 'close-button' });
+            expect($scope.closeThisDialog).toHaveBeenCalled();
+        });
+    });
+
+    describe('toggleSelectionUser', () => {
+        it('should check the selection', () => {
+            $scope.users = [{
+                "lastName": "",
+                "identifier": "0c383526-2677-46be-8fb0-06d41392d40b",
+                "firstName": "sezal",
+                "organisations": [],
+                "phone": "******8098",
+                "email": "se****@gmail.com"
+            },
+            {
+                "lastName": "Raj",
+                "identifier": "4a698288-5d8b-4ed1-8b21-3215d945c474",
+                "firstName": "Rajath",
+                "organisations": [],
+                "phone": "",
+                "email": ""
+            }];
+
+            $scope.users.selectedCount = 0;
+            spyOn($scope, 'toggleSelectionUser').and.callThrough();
+            spyOn($scope, 'generateTelemetry');
+            spyOn($scope, '$safeApply');
+            $scope.toggleSelectionUser($scope.users[0], 0, 'users');
+
+            expect($scope.toggleSelectionUser).toHaveBeenCalledWith($scope.users[0], 0, 'users');
+            expect($scope.generateTelemetry).toHaveBeenCalledWith({ type: 'click', subtype: 'check', target: 'user', targetid: '0c383526-2677-46be-8fb0-06d41392d40b' });
+            expect($scope.users[0].isSelected).toBe(true);
+            expect($scope.users.selectedCount).toEqual(1);
+            expect($scope.$safeApply).toHaveBeenCalled();
+        });
+
+        it('should uncheck the selection', () => {
+            $scope.users = [{
+                "lastName": "",
+                "identifier": "0c383526-2677-46be-8fb0-06d41392d40b",
+                "firstName": "sezal",
+                "organisations": [],
+                "phone": "******8098",
+                "email": "se****@gmail.com",
+                "isSelected": true
+            },
+            {
+                "lastName": "Raj",
+                "identifier": "4a698288-5d8b-4ed1-8b21-3215d945c474",
+                "firstName": "Rajath",
+                "organisations": [],
+                "phone": "",
+                "email": ""
+            }];
+
+            $scope.users.selectedCount = 1;
+
+            spyOn($scope, 'toggleSelectionUser').and.callThrough();
+            spyOn($scope, 'generateTelemetry');
+            spyOn($scope, '$safeApply');
+            $scope.toggleSelectionUser($scope.users[0], 0, 'users');
+
+            expect($scope.toggleSelectionUser).toHaveBeenCalledWith($scope.users[0], 0, 'users');
+            expect($scope.generateTelemetry).toHaveBeenCalledWith({ type: 'click', subtype: 'uncheck', target: 'user', targetid: '0c383526-2677-46be-8fb0-06d41392d40b' });
+            expect($scope.users[0].isSelected).toBe(false);
+            expect($scope.users.selectedCount).toEqual(0);
+            expect($scope.$safeApply).toHaveBeenCalled();
+        });
+    });
+
+    describe('sortUsersList', ()=>{
+        it('should sort a users list based on the received input', () => {
+            $scope.users = [{
+                "lastName": "",
+                "identifier": "0c383526-2677-46be-8fb0-06d41392d40b",
+                "firstName": "sezal",
+                "organisations": [],
+                "phone": "******8098",
+                "email": "se****@gmail.com",
+                "isSelected": true
+            },
+            {
+                "lastName": "Raj",
+                "identifier": "4a698288-5d8b-4ed1-8b21-3215d945c474",
+                "firstName": "Rajath",
+                "organisations": [],
+                "phone": "",
+                "email": ""
+            }];
+            spyOn($scope, 'sortUsersList').and.callThrough();
+            spyOn($scope, '$safeApply');
+            $scope.sortUsersList('firstName');
+            expect($scope.sortUsersList).toHaveBeenCalled();
+            expect($scope.users).toEqual($scope.users.reverse());
+            expect($scope.$safeApply).toHaveBeenCalled();
+        });
+        it('should sort a users list based on the received input', () => {
+            $scope.users = [{
+                "lastName": "",
+                "identifier": "0c383526-2677-46be-8fb0-06d41392d40b",
+                "firstName": "sezal",
+                "organisations": [{
+                    "organisationId": "01243890518834380856",
+                    "updatedBy": "781c21fc-5054-4ee0-9a02-fbb1006a4fdd",
+                    "orgName": "hello3001",
+                    "addedByName": null,
+                    "addedBy": null,
+                    "roles": [
+                        "CONTENT_CREATOR"
+                    ],
+                    "approvedBy": null,
+                    "updatedDate": "2018-05-21 09:35:50:475+0000",
+                    "userId": "4a698288-5d8b-4ed1-8b21-3215d945c474",
+                    "approvaldate": null,
+                    "isDeleted": false,
+                    "hashTagId": null,
+                    "isRejected": null,
+                    "id": "0125082889641984004",
+                    "position": null,
+                    "isApproved": null,
+                    "orgjoindate": "2018-05-21 08:02:47:911+0000",
+                    "orgLeftDate": null
+                }],
+                "phone": "******8098",
+                "email": "se****@gmail.com",
+                "isSelected": true
+            },
+            {
+                "lastName": "Kumar",
+                "identifier": "8cb56ae8-c056-4dd1-a42d-29009e4efc25",
+                "firstName": "Amit",
+                "organisations": [
+                  {
+                    "organisationId": "01230597559319756819",
+                    "updatedBy": null,
+                    "orgName": "Bangalore ",
+                    "addedByName": null,
+                    "addedBy": null,
+                    "roles": [
+                      "CONTENT_CREATOR"
+                    ],
+                    "approvedBy": null,
+                    "updatedDate": null,
+                    "userId": "8cb56ae8-c056-4dd1-a42d-29009e4efc25",
+                    "approvaldate": null,
+                    "isDeleted": false,
+                    "hashTagId": null,
+                    "isRejected": null,
+                    "id": "0123102670801879049",
+                    "position": null,
+                    "isApproved": null,
+                    "orgjoindate": "2017-08-14 13:29:53:309+0000",
+                    "orgLeftDate": null
+                  }
+                ],
+                "phone": "",
+                "email": "",
+                "$$hashKey": "object:10493"
+              }];
+            let sortedArray = [];
+            sortedArray.push($scope.users[])
+            spyOn($scope, 'sortUsersList').and.callThrough();
+            spyOn($scope, '$safeApply');
+            $scope.sortUsersList('firstName');
+            expect($scope.sortUsersList).toHaveBeenCalled();
+            expect($scope.users).toEqual();
+            expect($scope.$safeApply).toHaveBeenCalled();
         });
     });
 });

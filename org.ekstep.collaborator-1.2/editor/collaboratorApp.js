@@ -34,9 +34,10 @@ angular.module('collaboratorApp', ['angular-inview'])
             $scope.telemetry = { "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver };
             $scope.contentId = ecEditor.getContext('contentId');
             $scope.userService = org.ekstep.contenteditor.api.getService(ServiceConstants.USER_SERVICE);
+            $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
 
             /* Close popup on press of ESCAPE key */
-            $(document).keydown(function (e) {
+            ecEditor.jQuery(document).keydown(function (e) {
                 if (e.keyCode == 27) {
                     $scope.closePopup();
                 }
@@ -45,7 +46,8 @@ angular.module('collaboratorApp', ['angular-inview'])
         }
 
         $scope.getContentCollaborators = function () {
-            ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContent(ecEditor.getContext('contentId'), function (err, res) {
+            $scope.contentService.getContent(ecEditor.getContext('contentId'), function (err, res) {
+
                 if (err) {
                     console.error('Unable to fetch collaborators', err);
                     $scope.isLoading = false;
@@ -59,7 +61,11 @@ angular.module('collaboratorApp', ['angular-inview'])
                 } else if (res) {
                     $scope.isContentOwner = (res.createdBy === ecEditor.getContext('uid')) ? true : false;
                     $scope.currentCollaborators = res.collaborators || [];
-                    $scope.loadAllUsers();
+                    if ($scope.isContentOwner) {
+                        $scope.loadAllUsers();
+                    } else {
+                        $scope.fetchCollaborators();
+                    }
                 }
             });
         }
@@ -72,6 +78,7 @@ angular.module('collaboratorApp', ['angular-inview'])
             if (event.currentTarget.dataset.tab === 'userListTab') {
                 $scope.generateTelemetry({ type: 'click', subtype: 'changeTab', target: 'manageCollaborator', targetid: 'userListTab' });
                 $scope.isAddCollaboratorTab = false;
+
 
                 /* istanbul ignore else */
                 if (!$scope.collaborators.length) {
@@ -108,8 +115,10 @@ angular.module('collaboratorApp', ['angular-inview'])
                 $scope.userService.search($scope.userSearchBody, function (err, res) {
                     if (err) {
                         console.error('Unable to fetch collaborators Profile=>', err);
+                        $scope.generateError({ status: '', error: err });
                     } else {
-                        if (res.data.result.response.content.length) {
+                        /* istanbul ignore else */
+                        if (res && res.data && res.data.result && res.data.result.response && res.data.result.response.content && res.data.result.response.content.length) {
                             $scope.collaborators = res.data.result.response.content;
                             $scope.collaborators.selectedCount = 0;
 
@@ -121,6 +130,9 @@ angular.module('collaboratorApp', ['angular-inview'])
                     $scope.isLoading = false;
                     $scope.$safeApply();
                 });
+            } else {
+                $scope.isLoading = false;
+                $scope.$safeApply();
             }
         }
 
@@ -138,7 +150,11 @@ angular.module('collaboratorApp', ['angular-inview'])
                     if ($scope.currentCollaborators && $scope.currentCollaborators.length) {
                         $scope.users = $scope.excludeCollaborators(res.data.result.response.content);
                     } else {
-                        $scope.users = res.data.result.response.content;
+                        /*istanbul ignore else */
+                        if (res && res.data && res.data.result && res.data.result.response && res.data.result.response.content) {
+                            $scope.users = res.data.result.response.content;
+                            $scope.users.count = res.data.result.response.content.length;
+                        }
                     }
 
                     $scope.users.selectedCount = 0;
@@ -173,11 +189,13 @@ angular.module('collaboratorApp', ['angular-inview'])
                         position: 'topCenter',
                         icon: 'fa fa-check-circle'
                     });
-                    var metaData = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+                    var metaData = $scope.contentService.getContentMeta(ecEditor.getContext('contentId'));
+
+                    /* istanbul ignore else */
                     if (res.data.result && res.data.result.versionKey) {
                         metaData.versionKey = res.data.result.versionKey;
                     }
-                    ecEditor.getService(ServiceConstants.CONTENT_SERVICE)._setContentMeta(ecEditor.getContext('contentId'), metaData);
+                    $scope.contentService._setContentMeta(ecEditor.getContext('contentId'), metaData);
                     $scope.closePopup();
                 }
             });
@@ -190,6 +208,8 @@ angular.module('collaboratorApp', ['angular-inview'])
          */
         $scope.excludeCollaborators = function (users) {
             users.count = users.length;
+
+            /*istanbul ignore else */
             if ($scope.currentCollaborators && $scope.currentCollaborators.length) {
                 _.find(users, function (val, index) {
                     if (_.indexOf($scope.currentCollaborators, val.identifier) >= 0) {
@@ -204,9 +224,9 @@ angular.module('collaboratorApp', ['angular-inview'])
 
         /**
          * It closes the popup
-         * @param {String} pageId - Current page id.
          */
-        $scope.closePopup = function (pageId) {
+        $scope.closePopup = function () {
+            ecEditor.jQuery(document).off('keydown');
             $scope.inViewLogs = [];
             $scope.generateTelemetry({ type: 'click', subtype: 'cancel', target: 'closePopup', targetid: 'close-button' });
             $scope.closeThisDialog();
