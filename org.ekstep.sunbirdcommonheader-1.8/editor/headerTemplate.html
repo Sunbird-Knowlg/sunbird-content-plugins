@@ -23,15 +23,15 @@
                     <span ng-if="showEditMeta"><i class="edit icon link"></i>&nbsp;Edit Details</span>
                     <span ng-if="!showEditMeta"><i class="eye icon link"></i>&nbsp;View Details </span>
                 </a>
-                <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}"><span
-                        class="spinner"></span>{{internetStatusObj.text}}</label>
             </div>
 
         </div>
         <div class="two wide column">
-            <div ng-if="lastSaved" class="last-saved-label">
+            <div ng-if="lastSaved && internetStatusObj.status" class="last-saved-label">
                 <label class="">Last saved {{lastSaved | timeAgo }}</label>
             </div>
+            <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}"><span
+                class="spinner"></span>{{internetStatusObj.text}}</label>
         </div>
         <div class="ui active inverted dimmer" id="downloadtoc-loader" ng-if="loader" style="top:30px !important">
             <div class="ui large text loader">Downloading</div>
