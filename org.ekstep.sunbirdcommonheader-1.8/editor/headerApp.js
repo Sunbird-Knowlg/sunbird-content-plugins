@@ -71,13 +71,13 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.loader = false;
     $scope.CONSTANTS = {
         tocDownloadFailed: 'Unable to download the content, please try again later',
-        tocDownloadSuccess: 'Table of Content downloadeding!',
+        tocDownloadSuccess: 'Table of Content downloaded!',
         tocUpdateHeader: 'Update Table of Contents Metadata attributes via CSV',
         tocUpdateDescription: 'Please note that no sections can be added or removed through this update, only the values of the attributes can be changed.',
         tocUpdateBtnUpload: 'Upload',
         tocUpdateBtnClose: 'Close'
     }
-    $scope.contentLock = ecEditor.getConfig('lock');       
+    $scope.contentLock = ecEditor.getConfig('lock');
     $scope.dataChanged = false;
     $scope.lastContentLockSyncTime = new Date();
     $scope.contentLockstatusMessage = "";
@@ -817,7 +817,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 } else if (err && $scope.contentLockExpired === true) {
                     $scope.handleError(err);
                 }
-               
+
             });
         } else {
             // $scope.showStatusPopup('INTERNET_DISCONNECTED',false);
@@ -902,7 +902,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         var currentTime = (new Date()).getTime();
         var timeDiff = currentTime - lastSyncTime;
         $scope.idleTimer += $scope.contentLockRefershInterval;
-        // if screen is active(not idle)then refresh the lock regularly 
+        // if screen is active(not idle)then refresh the lock regularly
         if ($scope.dataChanged === true || $scope.previewMode === true) {
             try {
                 $scope.refreshContentLock();
@@ -954,7 +954,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             $scope.contentLockListener = $interval($scope.validateContentLock, $scope.contentLockRefershInterval * 1000);
         }
     }
-    
+
     /**
      * @description - on init of checklist pop-up
      */
