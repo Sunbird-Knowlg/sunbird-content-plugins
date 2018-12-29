@@ -26,6 +26,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                 "query": "",
                 "filters": {
                     "organisations.roles": ["CONTENT_CREATOR"],
+                    "rootOrgId": ecEditor.getContext('user').orgIds
                 },
                 "fields": ["email", "firstName", "identifier", "lastName", "organisations", "rootOrgName", "phone"],
                 "offset": 0,
@@ -102,6 +103,7 @@ angular.module('collaboratorApp', ['angular-inview'])
         $scope.resetSearchRequest = function () {
             searchBody.request.filters = {
                 "organisations.roles": ["CONTENT_CREATOR"],
+                "rootOrgId": ecEditor.getContext('user').orgIds
             }
             searchBody.request.query = "";
         }
@@ -129,7 +131,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                     $scope.isLoading = false;
                     $scope.$safeApply();
                 });
-            }else{
+            } else {
                 $scope.isLoading = false;
                 $scope.$safeApply();
             }
@@ -303,7 +305,15 @@ angular.module('collaboratorApp', ['angular-inview'])
             $scope.searchStatus = "start";
             ecEditor.jQuery('.search-Loader').addClass('active');
             $scope.resetSearchRequest();
-            searchBody.request.query = this.searchKeyword;
+            
+            if ($scope.validateEmail(this.searchKeyword)) {
+                searchBody.request.filters.email = this.searchKeyword;
+            } else if (/^\d+$/.test(this.searchKeyword)) {
+                searchBody.request.filters.phone = this.searchKeyword;
+            } else {
+                searchBody.request.query = this.searchKeyword;
+            }
+
             $scope.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'search-button' });
 
             userService.search(searchBody, function (err, res) {
@@ -402,6 +412,11 @@ angular.module('collaboratorApp', ['angular-inview'])
                     index: index
                 });
             }
+        }
+
+        $scope.validateEmail = function (email) {
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
         }
 
         $scope.init();
