@@ -100,21 +100,14 @@ angular.module('collaboratorApp', ['angular-inview'])
             });
         }
 
-        $scope.resetSearchRequest = function () {
-            searchBody.request.filters = {
-                "organisations.roles": ["CONTENT_CREATOR"],
-                "rootOrgId": ecEditor.getContext('user').orgIds
-            }
-            searchBody.request.query = "";
-        }
-
         /**
         * Makes API call to fetch currently added collaborators/owners
         */
         $scope.fetchCollaborators = function () {
             if ($scope.collaboratorsId && $scope.collaboratorsId.length) {
-                searchBody.request.filters.userId = $scope.collaboratorsId;
-                userService.search(searchBody, function (err, res) {
+                let searchRequest = _.cloneDeep(searchBody);
+                searchRequest.request.filters.userId = $scope.collaboratorsId;
+                userService.search(searchRequest, function (err, res) {
                     if (err) {
                         console.error('Unable to fetch collaborators Profile=>', err);
                     } else {
@@ -142,8 +135,6 @@ angular.module('collaboratorApp', ['angular-inview'])
          */
         $scope.loadAllUsers = function () {
             $scope.isAddCollaboratorTab = true;
-
-            $scope.resetSearchRequest();
             userService.search(searchBody, function (err, res) {
                 if (err) {
                     console.error('Unable to fetch All Users ', err);
@@ -172,7 +163,6 @@ angular.module('collaboratorApp', ['angular-inview'])
                     ecEditor.jQuery('.profile').initial();
                 }
             });
-            // $scope.$safeApply();
         }
 
         /**
@@ -304,19 +294,19 @@ angular.module('collaboratorApp', ['angular-inview'])
         $scope.searchByKeyword = function () {
             $scope.searchStatus = "start";
             ecEditor.jQuery('.search-Loader').addClass('active');
-            $scope.resetSearchRequest();
-            
+
+            let searchRequest = _.cloneDeep(searchBody);
             if ($scope.validateEmail(this.searchKeyword)) {
-                searchBody.request.filters.email = this.searchKeyword;
+                searchRequest.request.filters.email = this.searchKeyword;
             } else if (/^\d+$/.test(this.searchKeyword)) {
-                searchBody.request.filters.phone = this.searchKeyword;
+                searchRequest.request.filters.phone = this.searchKeyword;
             } else {
-                searchBody.request.query = this.searchKeyword;
+                searchRequest.request.query = this.searchKeyword;
             }
 
             $scope.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'search-button' });
 
-            userService.search(searchBody, function (err, res) {
+            userService.search(searchRequest, function (err, res) {
                 if (err) {
                     ctrl.searchRes.content = [];
                     $scope.noResultFound = true;
