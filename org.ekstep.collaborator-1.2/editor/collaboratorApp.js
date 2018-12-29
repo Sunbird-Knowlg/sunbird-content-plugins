@@ -21,11 +21,19 @@ angular.module('collaboratorApp', ['angular-inview'])
         $scope.isContentOwner = false;
 
         let userService = org.ekstep.contenteditor.api.getService(ServiceConstants.USER_SERVICE);
+        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        var filterRoles = ['CONTENT_CREATOR'];
+        if (meta.mimeType === 'application/vnd.ekstep.content-collection') {
+            var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
+            if (rootNodeConfig.type === 'TextBook') {
+                filterRoles = ['BOOK_CREATOR'];
+            }
+        }
         let searchBody = {
             "request": {
                 "query": "",
                 "filters": {
-                    "organisations.roles": ["CONTENT_CREATOR"],
+                    "organisations.roles": filterRoles,
                     "rootOrgId": ecEditor.getContext('user').orgIds
                 },
                 "fields": ["email", "firstName", "identifier", "lastName", "organisations", "rootOrgName", "phone"],
