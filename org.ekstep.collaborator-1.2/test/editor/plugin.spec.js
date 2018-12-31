@@ -102,6 +102,10 @@ describe("Collaborator plugin", function () {
                 return "do_112480621612351488118";
             } else if (param === 'uid') {
                 return '874ed8a5-782e-4f6c-8f36-e0288455901e';
+            } else if (param === 'user') {
+                return {
+                    orgIds: ["0123653943740170242", "ORG_001"]
+                }
             }
         });
         done();
@@ -165,18 +169,22 @@ describe("Collaborator plugin", function () {
             done();
         });
 
-        it('should set isContentOwner to false', function (done) {
-            ecEditor.getContext = jasmine.createSpy().and.callFake(function (param) {
-                if (param === 'contentId') {
-                    return "do_112480621612351488118";
-                } else if (param === 'uid') {
-                    return '874ed8a5-782e-4f6c-8f36-e0288455901f';
-                }
-            });
-            $scope.getContentCollaborators();
-            expect($scope.isContentOwner).toBeFalsy();
-            done();
-        });
+        /*         it('should set isContentOwner to false', function (done) {
+                    ecEditor.getContext = jasmine.createSpy().and.callFake(function (param) {
+                        if (param === 'contentId') {
+                            return "do_112480621612351488118";
+                        } else if (param === 'uid') {
+                            return '874ed8a5-782e-4f6c-8f36-e0288455901f';
+                        } else if (param === 'user') {
+                            return {
+                                orgIds: ["0123653943740170242", "ORG_001"]
+                            }
+                        }
+                    });
+                    $scope.getContentCollaborators();
+                    expect($scope.isContentOwner).toBeFalsy();
+                    done();
+                }); */
 
         it('should fetch collaborators', function (done) {
             spyOn($scope, 'fetchCollaborators');
@@ -252,13 +260,12 @@ describe("Collaborator plugin", function () {
             });
             $scope.currentCollaborators = ['4a698288-5d8b-4ed1-8b21-3215d945c474'];
             $scope.fetchCollaborators();
-            expect($scope.fetchCollaborators).toHaveBeenCalled();
-            expect($scope.userSearchBody.request.filters.userId).toEqual(['4a698288-5d8b-4ed1-8b21-3215d945c474']);
             let searchBody = {
                 "request": {
                     "query": "",
                     "filters": {
                         "organisations.roles": ["CONTENT_CREATOR"],
+                        "rootOrgId": ["0123653943740170242", "ORG_001"],
                         "userId": ['4a698288-5d8b-4ed1-8b21-3215d945c474']
                     },
                     "fields": ["email", "firstName", "identifier", "lastName", "organisations", "rootOrgName", "phone"],
@@ -266,7 +273,7 @@ describe("Collaborator plugin", function () {
                     "limit": 200
                 }
             };
-            expect($scope.userSearchBody).toEqual(searchBody);
+            expect($scope.fetchCollaborators).toHaveBeenCalled();
             expect($scope.userService.search).toHaveBeenCalledWith(searchBody, jasmine.any(Function));
             expect($scope.collaborators).toEqual(userSearchData.data.result.response.content);
             expect($scope.collaborators.selectedCount).toEqual(0);
@@ -304,17 +311,16 @@ describe("Collaborator plugin", function () {
                 "request": {
                     "query": "",
                     "filters": {
-                        "organisations.roles": ["CONTENT_CREATOR"]
+                        "organisations.roles": ["CONTENT_CREATOR"],
+                        "rootOrgId": ["0123653943740170242", "ORG_001"]
                     },
                     "fields": ["email", "firstName", "identifier", "lastName", "organisations", "rootOrgName", "phone"],
                     "offset": 0,
                     "limit": 200
                 }
             };
-            $scope.userSearchBody.request.filters = { "organisations.roles": ["CONTENT_CREATOR"] };
             $scope.userService = { search: () => { } };
             spyOn($scope, 'loadAllUsers').and.callThrough();
-            spyOn($scope, 'resetSearchRequest');
             spyOn($scope.userService, 'search');
             spyOn($scope, 'applyJQuery');
             $scope.userService.search = jasmine.createSpy().and.callFake(function (data, callback) {
@@ -324,8 +330,6 @@ describe("Collaborator plugin", function () {
             $scope.loadAllUsers();
             expect($scope.loadAllUsers).toHaveBeenCalled();
             expect($scope.isAddCollaboratorTab).toBe(true);
-            expect($scope.resetSearchRequest).toHaveBeenCalled();
-            expect($scope.userSearchBody).toEqual(searchBody);
             expect($scope.currentCollaborators).toEqual([]);
             expect($scope.userService.search).toHaveBeenCalledWith(searchBody, jasmine.any(Function));
             expect($scope.users).toEqual(userSearchData.data.result.response.content);
@@ -341,14 +345,14 @@ describe("Collaborator plugin", function () {
                 "request": {
                     "query": "",
                     "filters": {
-                        "organisations.roles": ["CONTENT_CREATOR"]
+                        "organisations.roles": ["CONTENT_CREATOR"],
+                        "rootOrgId": ["0123653943740170242", "ORG_001"],
                     },
                     "fields": ["email", "firstName", "identifier", "lastName", "organisations", "rootOrgName", "phone"],
                     "offset": 0,
                     "limit": 200
                 }
             };
-            $scope.userSearchBody.request.filters = { "organisations.roles": ["CONTENT_CREATOR"] };
             $scope.userService = { search: () => { } };
             $scope.currentCollaborators = ['4a698288-5d8b-4ed1-8b21-3215d945c474'];
             spyOn($scope, 'loadAllUsers').and.callThrough();
@@ -367,14 +371,14 @@ describe("Collaborator plugin", function () {
                 "request": {
                     "query": "",
                     "filters": {
-                        "organisations.roles": ["CONTENT_CREATOR"]
+                        "organisations.roles": ["CONTENT_CREATOR"],
+                        "rootOrgId": ["0123653943740170242", "ORG_001"],
                     },
                     "fields": ["email", "firstName", "identifier", "lastName", "organisations", "rootOrgName", "phone"],
                     "offset": 0,
                     "limit": 200
                 }
             };
-            $scope.userSearchBody.request.filters = { "organisations.roles": ["CONTENT_CREATOR"] };
             $scope.userService = { search: () => { } };
             spyOn($scope, 'loadAllUsers').and.callThrough();
             spyOn($scope.userService, 'search');
@@ -650,7 +654,7 @@ describe("Collaborator plugin", function () {
         });
     });
 
-    describe('sortUsersList', ()=>{
+    describe('sortUsersList', () => {
         it('should sort a users list based on the received input', () => {
             $scope.users = [{
                 "lastName": "",
@@ -712,41 +716,256 @@ describe("Collaborator plugin", function () {
                 "identifier": "8cb56ae8-c056-4dd1-a42d-29009e4efc25",
                 "firstName": "Amit",
                 "organisations": [
-                  {
-                    "organisationId": "01230597559319756819",
-                    "updatedBy": null,
-                    "orgName": "Bangalore ",
-                    "addedByName": null,
-                    "addedBy": null,
-                    "roles": [
-                      "CONTENT_CREATOR"
-                    ],
-                    "approvedBy": null,
-                    "updatedDate": null,
-                    "userId": "8cb56ae8-c056-4dd1-a42d-29009e4efc25",
-                    "approvaldate": null,
-                    "isDeleted": false,
-                    "hashTagId": null,
-                    "isRejected": null,
-                    "id": "0123102670801879049",
-                    "position": null,
-                    "isApproved": null,
-                    "orgjoindate": "2017-08-14 13:29:53:309+0000",
-                    "orgLeftDate": null
-                  }
+                    {
+                        "organisationId": "01230597559319756819",
+                        "updatedBy": null,
+                        "orgName": "Bangalore ",
+                        "addedByName": null,
+                        "addedBy": null,
+                        "roles": [
+                            "CONTENT_CREATOR"
+                        ],
+                        "approvedBy": null,
+                        "updatedDate": null,
+                        "userId": "8cb56ae8-c056-4dd1-a42d-29009e4efc25",
+                        "approvaldate": null,
+                        "isDeleted": false,
+                        "hashTagId": null,
+                        "isRejected": null,
+                        "id": "0123102670801879049",
+                        "position": null,
+                        "isApproved": null,
+                        "orgjoindate": "2017-08-14 13:29:53:309+0000",
+                        "orgLeftDate": null
+                    }
                 ],
                 "phone": "",
                 "email": "",
                 "$$hashKey": "object:10493"
-              }];
-            let sortedArray = [];
-            sortedArray.push($scope.users[])
+            }];
+            let sortedArray = $scope.users.reverse();
             spyOn($scope, 'sortUsersList').and.callThrough();
             spyOn($scope, '$safeApply');
             $scope.sortUsersList('firstName');
             expect($scope.sortUsersList).toHaveBeenCalled();
-            expect($scope.users).toEqual();
+            expect($scope.users).toEqual(sortedArray);
             expect($scope.$safeApply).toHaveBeenCalled();
+        });
+
+        it('should sort a users list by organization', () => {
+            let sortedArray = $scope.users.reverse();
+            spyOn($scope, 'sortUsersList').and.callThrough();
+            spyOn($scope, '$safeApply');
+            $scope.sortUsersList('organisations');
+            expect($scope.sortUsersList).toHaveBeenCalled();
+            expect($scope.users).toEqual($scope.users);
+            expect($scope.$safeApply).toHaveBeenCalled();
+        })
+    });
+
+    /**
+     * This will add a user to the list, (with selection icon). The selectedCount should increase by one.
+     * If user is present in the list then it should move it to 1st position.
+     * If the user is not present in the list it should add that user in the top of the list and user count should increase by one.
+     */
+    describe('selectUser', () => {
+        it('should select a user from the list, and move it to the top of the list', () => {
+            spyOn($scope, 'selectUser').and.callThrough();
+            spyOn($scope, 'generateTelemetry');
+            spyOn($scope, '$safeApply');
+            $scope.users.selectedCount = 0
+            $scope.selectUser($scope.users[1]);
+
+            expect($scope.selectUser).toHaveBeenCalled();
+            expect($scope.users.selectedCount).toBe(1);
+            expect($scope.users).toEqual($scope.users.reverse());
+            expect($scope.generateTelemetry).toHaveBeenCalledWith({ type: 'click', subtype: 'select', target: 'user', targetid: $scope.users[1].identifier });
+            $timeout.flush();
+            expect($scope.$safeApply).toHaveBeenCalled();
+        });
+        it('should add new user to the top of the list', () => {
+            spyOn($scope, 'selectUser').and.callThrough();
+            spyOn($scope, 'generateTelemetry');
+            $scope.users.selectedCount = 0;
+            $scope.users.count = 0;
+            $scope.selectUser({ 'firstName': 'Kumar', 'identifier': '4a698288-5d8b-4ed1-8b21-3215d945c456' });
+
+            expect($scope.users.selectedCount).toBe(1);
+            expect($scope.users.count).toEqual(1);
+            expect($scope.generateTelemetry).toHaveBeenCalledWith({ type: 'click', subtype: 'select', target: 'user', targetid: '4a698288-5d8b-4ed1-8b21-3215d945c456' });
+        });
+    });
+
+    describe('searchByKeyword', () => {
+        it('should check validate the email and should make API request accordingly', () => {
+            spyOn($scope, 'searchByKeyword').and.callThrough();
+            spyOn($scope, '$safeApply');
+            spyOn($scope, 'generateTelemetry');
+           // $scope.validateEmail = jasmine.createSpy().and.returnValue(true);
+            $scope.searchKeyword = "vivek_kasture@techjoomla.com";
+            $scope.userService.search = jasmine.createSpy().and.callFake(function (data, callback) {
+                return callback(undefined, userSearchData);
+            });
+            $scope.excludeCollaborators = jasmine.createSpy().and.returnValue(userSearchData.data.result.response.content);
+            let searchBody = {
+                "request": {
+                    "query": "",
+                    "filters": {
+                        "organisations.roles": ["CONTENT_CREATOR"],
+                        "rootOrgId": ["0123653943740170242", "ORG_001"],
+                        "email": "vivek_kasture@techjoomla.com"
+                    },
+                    "fields": ["email", "firstName", "identifier", "lastName", "organisations", "rootOrgName", "phone"],
+                    "offset": 0,
+                    "limit": 200
+                }
+            };
+            $scope.searchByKeyword();
+            expect($scope.searchByKeyword).toHaveBeenCalled();
+            expect($scope.userService.search).toHaveBeenCalledWith(searchBody, jasmine.any(Function));
+            expect($scope.searchRes.searchStatus).toBe("end");
+            expect($scope.excludeCollaborators).toHaveBeenCalledWith(userSearchData.data.result.response.content);
+            expect($scope.searchRes.content).toEqual(userSearchData.data.result.response.content);
+            expect($scope.searchRes.isEmptyResponse).toBe(false);
+            expect($scope.searchRes.count).toEqual(userSearchData.data.result.response.count);
+            expect($scope.$safeApply).toHaveBeenCalled();
+            expect($scope.generateTelemetry).toHaveBeenCalledWith({ type: 'click', subtype: 'submit', target: 'search', targetid: 'search-button' });
+        });
+        it('should check validate the phone and should make API request accordingly', () => {
+            spyOn($scope, 'searchByKeyword').and.callThrough();
+           // $scope.validateEmail = jasmine.createSpy().and.returnValue(false);
+            $scope.searchKeyword = "8698645680";
+            let response = { data: { result: { response: { count: 0 } } } }
+            $scope.userService.search = jasmine.createSpy().and.callFake(function (data, callback) {
+                return callback(undefined, response);
+            });
+            $scope.excludeCollaborators = jasmine.createSpy().and.returnValue(response.data.result.response.content);
+            let searchBody = {
+                "request": {
+                    "query": "",
+                    "filters": {
+                        "organisations.roles": ["CONTENT_CREATOR"],
+                        "rootOrgId": ["0123653943740170242", "ORG_001"],
+                        "phone": "8698645680"
+                    },
+                    "fields": ["email", "firstName", "identifier", "lastName", "organisations", "rootOrgName", "phone"],
+                    "offset": 0,
+                    "limit": 200
+                }
+            };
+            $scope.searchByKeyword();
+            expect($scope.searchByKeyword).toHaveBeenCalled();
+            expect($scope.userService.search).toHaveBeenCalledWith(searchBody, jasmine.any(Function));
+            expect($scope.searchRes.searchStatus).toBe("end");
+            expect($scope.searchRes.isEmptyResponse).toBe(true);
+            expect($scope.searchRes.content).toEqual([]);
+            expect($scope.searchRes.count).toEqual(0);
+        });
+        it('should send keyword as query if the keyword is not the email or mobile number, and should make API request accordingly', () => {
+            spyOn($scope, 'searchByKeyword').and.callThrough();
+            //$scope.validateEmail = jasmine.createSpy().and.returnValue(false);
+            $scope.searchKeyword = "test";
+            let response = { data: { result: { response: { count: 0 } } } }
+            $scope.userService.search = jasmine.createSpy().and.callFake(function (data, callback) {
+                return callback({ error: '' }, undefined);
+            });
+            $scope.excludeCollaborators = jasmine.createSpy().and.returnValue(response.data.result.response.content);
+            let searchBody = {
+                "request": {
+                    "query": "test",
+                    "filters": {
+                        "organisations.roles": ["CONTENT_CREATOR"],
+                        "rootOrgId": ["0123653943740170242", "ORG_001"]
+                    },
+                    "fields": ["email", "firstName", "identifier", "lastName", "organisations", "rootOrgName", "phone"],
+                    "offset": 0,
+                    "limit": 200
+                }
+            };
+            $scope.searchByKeyword();
+            expect($scope.searchByKeyword).toHaveBeenCalled();
+            expect($scope.userService.search).toHaveBeenCalledWith(searchBody, jasmine.any(Function));
+            expect($scope.searchRes.content).toEqual([]);
+            expect($scope.searchRes.isEmptyResponse).toBe(true);
+            expect($scope.searchRes.errorMessage).toEqual('Oops! Something went wrong. Please try again later.');
+        });
+    });
+
+    describe('filterSearch', () => {
+        it('should return whether the user is collaborator or not', () => {
+            spyOn($scope, 'filterSearch').and.callThrough();
+            let res = $scope.filterSearch($scope.users[1]);
+            expect($scope.filterSearch).toHaveBeenCalled();
+            expect(res).toBe(true);
+        });
+    });
+
+    describe('viewAllResults', () => {
+        it('should show search results in main list page', () => {
+            spyOn($scope, 'viewAllResults').and.callThrough();
+            spyOn($scope, 'generateTelemetry');
+            $scope.searchRes.content = userSearchData.data.result.response.content;
+            $scope.viewAllResults();
+            expect($scope.viewAllResults).toHaveBeenCalled();
+            expect($scope.generateTelemetry).toHaveBeenCalledWith({ type: 'click', subtype: 'submit', target: 'viewAll', targetid: "view-all-results" });
+            expect($scope.users).toEqual(userSearchData.data.result.response.content);
+            $timeout.flush();
+        });
+    });
+
+    describe('refreshSearch', () => {
+        it('should refresh a search and reset a values to defaults', () => {
+            spyOn($scope, 'refreshSearch').and.callThrough();
+            spyOn($scope, 'generateTelemetry');
+            $scope.refreshSearch();
+            expect($scope.refreshSearch).toHaveBeenCalled();
+            expect($scope.generateTelemetry).toHaveBeenCalledWith({ type: 'click', subtype: 'refresh', target: 'refreshSearch', targetid: "refresh-button" });
+            expect($scope.searchKeyword).toEqual('');
+        });
+    });
+
+    describe('addCollaborators', () => {
+        it('should add newly selected users as collaborators', () => {
+            spyOn($scope, 'addCollaborators').and.callThrough();
+            spyOn($scope, 'generateImpression');
+            $scope.addCollaborators();
+            expect($scope.addCollaborators).toHaveBeenCalled();
+            expect($scope.generateImpression).toHaveBeenCalledWith({ type: 'click', subtype: 'submit', pageid: 'AddCollaborator' });
+        });
+    });
+
+    describe('removeCollaborators', () => {
+        it('should remove selected existing collaborators', () => {
+            spyOn($scope, 'removeCollaborators').and.callThrough();
+            spyOn($scope, 'generateImpression');
+            $scope.removeCollaborators();
+            expect($scope.removeCollaborators).toHaveBeenCalled();
+            expect($scope.generateImpression).toHaveBeenCalledWith({ type: 'click', subtype: 'submit', pageid: 'RemoveCollaborator' });
+        });
+    });
+
+    describe('resetSearch', () => {
+        it('should reset the search results', () => {
+            spyOn($scope, 'resetSearch').and.callThrough();
+            $scope.resetSearch();
+            expect($scope.resetSearch).toHaveBeenCalled();
+        });
+    });
+
+    describe('validateEmail', () => {
+        it('should return true', () => {
+            spyOn($scope, 'validateEmail').and.callThrough();
+            let res = $scope.validateEmail('test@gmail.com');
+            expect($scope.validateEmail).toHaveBeenCalled();
+            expect(res).toBe(true);
+        });
+    });
+
+    describe('lineInView', () => {
+        it('should register line view items', () => {
+            spyOn($scope, 'lineInView').and.callThrough();
+            $scope.lineInView();
+            expect($scope.lineInView).toHaveBeenCalled();
         });
     });
 });

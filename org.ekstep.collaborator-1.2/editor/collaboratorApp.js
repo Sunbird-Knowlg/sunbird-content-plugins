@@ -10,11 +10,20 @@ angular.module('collaboratorApp', ['angular-inview'])
         $scope.users = [];
         $scope.collaborators = [];
         $scope.currentCollaborators = []; //existingCollaborators
+        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        var filterRoles = ['CONTENT_CREATOR'];
+        if (meta.mimeType === 'application/vnd.ekstep.content-collection') {
+            var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
+            if (rootNodeConfig.type === 'TextBook') {
+                filterRoles = ['BOOK_CREATOR'];
+            }
+        }
         $scope.userSearchBody = {
             "request": {
                 "query": "",
                 "filters": {
-                    "organisations.roles": ["CONTENT_CREATOR"],
+                    "organisations.roles": filterRoles,
+                    "rootOrgId": ecEditor.getContext('user').orgIds
                 },
                 "fields": ["email", "firstName", "identifier", "lastName", "organisations", "rootOrgName", "phone"],
                 "offset": 0,
@@ -48,6 +57,7 @@ angular.module('collaboratorApp', ['angular-inview'])
         $scope.getContentCollaborators = function () {
             $scope.contentService.getContent(ecEditor.getContext('contentId'), function (err, res) {
 
+                console.log({err, res})
                 if (err) {
                     console.error('Unable to fetch collaborators', err);
                     $scope.isLoading = false;
@@ -59,6 +69,9 @@ angular.module('collaboratorApp', ['angular-inview'])
                     $scope.generateError({ status: '', error: err });
                     $scope.closePopup();
                 } else if (res) {
+
+                    console.log('isContentOwner', res.createdBy, ecEditor.getContext('uid'));
+                    
                     $scope.isContentOwner = (res.createdBy === ecEditor.getContext('uid')) ? true : false;
                     $scope.currentCollaborators = res.collaborators || [];
                     if ($scope.isContentOwner) {
@@ -99,20 +112,17 @@ angular.module('collaboratorApp', ['angular-inview'])
             }, 0);
         }
 
-        $scope.resetSearchRequest = function () {
-            $scope.userSearchBody.request.filters = {
-                "organisations.roles": ["CONTENT_CREATOR"],
-            }
-            $scope.userSearchBody.request.query = "";
-        }
-
         /**
         * Makes API call to fetch currently added collaborators/owners
         */
         $scope.fetchCollaborators = function () {
             if ($scope.currentCollaborators && $scope.currentCollaborators.length) {
-                $scope.userSearchBody.request.filters.userId = $scope.currentCollaborators;
-                $scope.userService.search($scope.userSearchBody, function (err, res) {
+                let searchRequest = _.cloneDeep($scope.userSearchBody);
+                searchRequest.request.filters.userId = $scope.currentCollaborators;
+
+                console.log('searchRequest', searchRequest);
+                
+                $scope.userService.search(searchRequest, function (err, res) {
                     if (err) {
                         console.error('Unable to fetch collaborators Profile=>', err);
                         $scope.generateError({ status: '', error: err });
@@ -141,7 +151,6 @@ angular.module('collaboratorApp', ['angular-inview'])
          */
         $scope.loadAllUsers = function () {
             $scope.isAddCollaboratorTab = true;
-            $scope.resetSearchRequest();
             $scope.userService.search($scope.userSearchBody, function (err, res) {
                 if (err) {
                     console.error('Unable to fetch All Users ', err);
@@ -290,11 +299,19 @@ angular.module('collaboratorApp', ['angular-inview'])
         }
 
         $scope.searchByKeyword = function () {
+            console.log('searchByKeyword', this.searchKeyword);
+            
             ecEditor.jQuery('.search-Loader').addClass('active');
-            $scope.resetSearchRequest();
-            $scope.userSearchBody.request.query = this.searchKeyword;
+            let searchRequest = _.cloneDeep($scope.userSearchBody);
+            if ($scope.validateEmail(this.searchKeyword)) {
+                searchRequest.request.filters.email = this.searchKeyword;
+            } else if (/^\d+$/.test(this.searchKeyword)) {
+                searchRequest.request.filters.phone = this.searchKeyword;
+            } else {
+                searchRequest.request.query = this.searchKeyword;
+            }
 
-            $scope.userService.search($scope.userSearchBody, function (err, res) {
+            $scope.userService.search(searchRequest, function (err, res) {
                 if (err) {
                     $scope.searchRes.content = [];
                     $scope.searchRes.isEmptyResponse = true;
@@ -302,9 +319,14 @@ angular.module('collaboratorApp', ['angular-inview'])
                 } else {
                     $scope.searchRes.searchStatus = "end";
 
+                    /* istanbul ignore else */
                     if (res.data.result.response.count) {
+                        
                         $scope.searchRes.content = $scope.excludeCollaborators(res.data.result.response.content);
 
+                        console.log('$scope.searchRes.content', $scope.searchRes.content);
+                        
+                        /* istanbul ignore else */
                         if ($scope.searchRes.content.length) {
                             $scope.searchRes.isEmptyResponse = false;
                         }
@@ -360,6 +382,11 @@ angular.module('collaboratorApp', ['angular-inview'])
         $scope.resetSearch = function () {
             $scope.searchRes.content = [];
             $scope.searchRes.isEmptyResponse = false;
+        }
+
+        $scope.validateEmail = function (email) {
+            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
         }
 
         $scope.applyJQuery = function () {
