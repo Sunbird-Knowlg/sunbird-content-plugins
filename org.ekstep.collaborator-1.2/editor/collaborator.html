@@ -46,8 +46,8 @@
             <!-- FOR ADD COLLABORATORS -->
             <div ng-if="isAddCollaboratorTab">
                 <div class="ui grid">
-                    <div class="ten wide column"><div ng-if="users.length"><strong>Showing {{users.count}} out of {{users.length}} results</strong></div></div>
-                    <div class="two wide right floated column" style="padding-right:19px">
+                    <div class="ten wide column"><div ng-if="users.count"><strong>Showing {{users.count}} out of {{users.length}} results</strong></div></div>
+                    <div class="two wide right floated column" ng-if="users.count" style="padding-right:19px">
                         <div class="ui dropdown float-right">
                             <div class="text"><strong>Sort By</strong></div>
                             <i class="dropdown icon"></i>

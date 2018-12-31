@@ -10,10 +10,10 @@ angular.module('collaboratorApp', ['angular-inview'])
         $scope.users = [];
         $scope.collaborators = [];
         $scope.currentCollaborators = []; //existingCollaborators
-        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
-        var filterRoles = ['CONTENT_CREATOR'];
+        let meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        let filterRoles = ['CONTENT_CREATOR'];
         if (meta.mimeType === 'application/vnd.ekstep.content-collection') {
-            var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
+            let rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
             if (rootNodeConfig.type === 'TextBook') {
                 filterRoles = ['BOOK_CREATOR'];
             }
@@ -57,7 +57,7 @@ angular.module('collaboratorApp', ['angular-inview'])
         $scope.getContentCollaborators = function () {
             $scope.contentService.getContent(ecEditor.getContext('contentId'), function (err, res) {
 
-                console.log({err, res})
+                console.log({ err, res })
                 if (err) {
                     console.error('Unable to fetch collaborators', err);
                     $scope.isLoading = false;
@@ -71,7 +71,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                 } else if (res) {
 
                     console.log('isContentOwner', res.createdBy, ecEditor.getContext('uid'));
-                    
+
                     $scope.isContentOwner = (res.createdBy === ecEditor.getContext('uid')) ? true : false;
                     $scope.currentCollaborators = res.collaborators || [];
                     if ($scope.isContentOwner) {
@@ -121,7 +121,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                 searchRequest.request.filters.userId = $scope.currentCollaborators;
 
                 console.log('searchRequest', searchRequest);
-                
+
                 $scope.userService.search(searchRequest, function (err, res) {
                     if (err) {
                         console.error('Unable to fetch collaborators Profile=>', err);
@@ -198,13 +198,14 @@ angular.module('collaboratorApp', ['angular-inview'])
                         position: 'topCenter',
                         icon: 'fa fa-check-circle'
                     });
-                    var metaData = $scope.contentService.getContentMeta(ecEditor.getContext('contentId'));
+                    let metaData = $scope.contentService.getContentMeta(ecEditor.getContext('contentId'));
 
                     /* istanbul ignore else */
                     if (res.data.result && res.data.result.versionKey) {
                         metaData.versionKey = res.data.result.versionKey;
                     }
                     $scope.contentService._setContentMeta(ecEditor.getContext('contentId'), metaData);
+                    $scope.isLoading = false;
                     $scope.closePopup();
                 }
             });
@@ -266,11 +267,15 @@ angular.module('collaboratorApp', ['angular-inview'])
          * @param {String} value - Sort by value - firstName | organisations
          */
         $scope.sortUsersList = function (value) {
+            let { count, selectedCount } = $scope.users;
             if (value === 'firstName') {
                 $scope.users = _.orderBy($scope.users, [user => user[value].toLowerCase()]);
             } else {
                 $scope.users = _.orderBy($scope.users, [user => user.organisations[0].orgName ? user.organisations[0].orgName.toLowerCase() : '']);
             }
+
+            $scope.users.count = count;
+            $scope.users.selectedCount = selectedCount;
             $scope.$safeApply();
         }
 
@@ -279,7 +284,7 @@ angular.module('collaboratorApp', ['angular-inview'])
          * @param {Object} user User's object
          */
         $scope.selectUser = function (user) {
-            var index = _.findIndex($scope.users, (element) => { return element.identifier === user.identifier; });
+            let index = _.findIndex($scope.users, (element) => { return element.identifier === user.identifier; });
             user.isSelected = true;
             $scope.users.selectedCount += 1;
 
@@ -300,7 +305,7 @@ angular.module('collaboratorApp', ['angular-inview'])
 
         $scope.searchByKeyword = function () {
             console.log('searchByKeyword', this.searchKeyword);
-            
+
             ecEditor.jQuery('.search-Loader').addClass('active');
             let searchRequest = _.cloneDeep($scope.userSearchBody);
             if ($scope.validateEmail(this.searchKeyword)) {
@@ -321,11 +326,11 @@ angular.module('collaboratorApp', ['angular-inview'])
 
                     /* istanbul ignore else */
                     if (res.data.result.response.count) {
-                        
+
                         $scope.searchRes.content = $scope.excludeCollaborators(res.data.result.response.content);
 
                         console.log('$scope.searchRes.content', $scope.searchRes.content);
-                        
+
                         /* istanbul ignore else */
                         if ($scope.searchRes.content.length) {
                             $scope.searchRes.isEmptyResponse = false;
@@ -363,15 +368,17 @@ angular.module('collaboratorApp', ['angular-inview'])
         }
 
         $scope.addCollaborators = function () {
+            $scope.isLoading = true;
             $scope.generateImpression({ type: 'click', subtype: 'submit', pageid: 'AddCollaborator' });
-            var newCollaborators = _.map(_.filter($scope.users, (user) => { return user.isSelected || user.isCollaborator }), 'identifier');
+            let newCollaborators = _.map(_.filter($scope.users, (user) => { return user.isSelected || user.isCollaborator }), 'identifier');
             $scope.updateCollaborators(_.uniq(newCollaborators.concat($scope.currentCollaborators)));
             $scope.inViewLogs = [];
         }
 
         $scope.removeCollaborators = function () {
+            $scope.isLoading = true;
             $scope.generateImpression({ type: 'click', subtype: 'submit', pageid: 'RemoveCollaborator' });
-            var newCollaborators = _.difference($scope.currentCollaborators, _.map(_.filter($scope.collaborators, (collaborator) => { return collaborator.isSelected }), 'identifier'));
+            let newCollaborators = _.difference($scope.currentCollaborators, _.map(_.filter($scope.collaborators, (collaborator) => { return collaborator.isSelected }), 'identifier'));
             $scope.updateCollaborators(newCollaborators);
             $scope.inViewLogs = [];
         }
@@ -385,7 +392,7 @@ angular.module('collaboratorApp', ['angular-inview'])
         }
 
         $scope.validateEmail = function (email) {
-            var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             return re.test(String(email).toLowerCase());
         }
 
@@ -453,7 +460,7 @@ angular.module('collaboratorApp', ['angular-inview'])
          * @param {String} section - Section name  
          */
         $scope.lineInView = function (index, inview, item, section) {
-            var obj = $scope.inViewLogs.filter((log) => log.identifier === item.identifier);
+            let obj = $scope.inViewLogs.filter((log) => log.identifier === item.identifier);
             if (inview && !obj.length) {
                 $scope.inViewLogs.push({
                     objid: item.identifier,
