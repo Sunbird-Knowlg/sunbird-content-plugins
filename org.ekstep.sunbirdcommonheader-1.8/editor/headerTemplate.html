@@ -2,10 +2,10 @@
     id="commonHeader">
     <div class="ui grid fluid container custom-container">
          <div id="errorLockContentModal" class="ui modal">
-            <div class="ui icon header" ng-bind="onContentLockMessage.text"></div>
+            <div class="ui icon header" ng-bind="contentLockstatusMessage"></div>
             <div class="actions" ng-if="isResume || isClose || isRefresh">
                 <div class="ui ok blue button" ng-if="isResume" ><i class="checkmark icon"></i>Resume</div>
-                <div class="ui ok blue button" ng-if="isRefresh" ng-click="refreshContent()"><i class="refresh icon"></i>Refresh</div>
+                <div class="ui ok blue button" ng-if="isRefresh" ng-click="refreshLock()"><i class="refresh icon"></i>Refresh</div>
                 <div class="ui basic cancel button" ng-if="isClose"><i class="close icon"></i>Close Editor</div>
             </div>
         </div>
@@ -23,15 +23,16 @@
                     <span ng-if="showEditMeta"><i class="edit icon link"></i>&nbsp;Edit Details</span>
                     <span ng-if="!showEditMeta"><i class="eye icon link"></i>&nbsp;View Details </span>
                 </a>
-                <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}"><span
-                        class="spinner"></span>{{internetStatusObj.text}}</label>
             </div>
 
         </div>
         <div class="two wide column">
-            <div ng-if="lastSaved" class="last-saved-label">
+            <div ng-if="lastSaved && internetStatusObj.status" class="last-saved-label">
                 <label class="">Last saved {{lastSaved | timeAgo }}</label>
             </div>
+            <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}">
+                <span class="spinner"></span>{{internetStatusObj.text}}
+            </label>
         </div>
         <div class="ui active inverted dimmer" id="downloadtoc-loader" ng-if="loader" style="top:30px !important">
             <div class="ui large text loader">Downloading</div>
@@ -43,17 +44,16 @@
                         class="custom-row-2" style="float: left; margin: 2px">
                         <div class="ui dropdown" style=" vertical-align: -webkit-baseline-middle; ">
                             <div class="ui dropdown">
-                                <span class="ui tiny header">
-                                    TOC
-                                </span>
+                                <span class="ui tiny header">TOC</span>
                                 <i class="dropdown icon"></i>
                             </div>
                             <div class="menu" style="left: auto; right: 0; top: 25px;">
                                 <div class="item" ng-click="downloadToc(); generateTelemetry({ subtype: 'downloadToc', target: 'downloadTocButton'});"
-                                    ng-class="disableDownloadToc ? 'disabled' : 'enabled'">
+                                    ng-class="disableTocActionBtn ? 'disabled' : 'enabled'">
                                     <i class="download icon"></i> Download ToC Metadata
                                 </div>
-                                <div class="item" ng-click="updateToc()">
+                                <div class="item" ng-click="updateToc(); generateTelemetry({ subtype: 'uploadToc', target: 'uploadTocButton'});"
+                                    ng-class="disableTocActionBtn ? 'disabled' : 'enabled'">
                                     <i class="upload icon"></i> Update ToC Metadata</div>
                             </div>
                         </div>
@@ -63,15 +63,14 @@
                         <div class="ui dropdown qrCodeStyler">
                             <div class="ui dropdown">
                                 <span class="ui tiny header">
-                                    QR Code Generation
+                                    QR Codes
                                 </span>
                                 <i class="dropdown icon"></i>
                             </div>
                             <div class="menu" style="left: auto; right: 0; top: 25px;">
-                                <div class="item" ng-class="(!disableQRGenerateBtn || qrRequestCount === 0 || qrRequestCount <= reservedDialCount ) ? 'disabled' : ' '"
-                                    ng-click="reserveDialCode(); generateTelemetry({ subtype: 'reserveDialCode', target: 'reserveDialCodeButton'});"><i
-                                        class="qrcode icon"></i> <span class="text">Generate
-                                        {{(qrRequestCount > 0 )? qrRequestCount :'' }} QR Codes</span></div>
+                                <div class="item" ng-class="(!disableQRGenerateBtn || qrRequestCount === 0 || qrRequestCount + 1 <= reservedDialCount ) ? 'disabled' : ' '"
+                                    ng-click="reserveDialCode(); generateTelemetry({ subtype: 'reserveDialCode', target: 'reserveDialCodeButton'});"><i class="qrcode icon"></i> <span class="text">Generate
+                                        {{(qrRequestCount > 0 )? qrRequestCount + ' + 1' :'' }} QR Codes</span></div>
                                 <div class="item" ng-class="(!disableQRDownloadBtn) ? 'disabled' : ' ' " ng-click="downloadQRCodes(); generateTelemetry({ subtype: 'downloadQRCodes', target: 'downloadQRCodesButton'});"><i
                                         class="download icon"></i> <span class="text">Download QR code</span></div>
                             </div>
@@ -106,7 +105,7 @@
                                 <i class="remove icon custom-cursor"></i>
                             </a>
                         </div>
-                        <div class="icon-box popup-item" data-content="Add Collaborator" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'org.ekstep.collaborator:add'});">
+                        <div ng-show="showEditMeta && !publishMode && !isFlagReviewer" class="icon-box popup-item" data-content="Add Collaborator" data-variation="tiny inverted" data-position="bottom center" ng-click="fireEvent({id: 'org.ekstep.collaborator:add'});">
                             <i class="add user icon custom-icon"></i>
                         </div>
                         <div ng-show="showEditMeta && !publishMode && !isFlagReviewer" id="saveButton" ng-class="disableSaveBtn ? 'icon-box popup-item label-icon-box disabled' : 'icon-box popup-item label-icon-box'"
@@ -132,7 +131,6 @@
                             data-content="Review comments" data-variation="tiny inverted" data-position="bottom center"
                             ng-click="openCheckList('read')">
                             <i class="fa fa-comment"></i>
-                            <span class="label-icon-box-text">Reviewer Suggestions</span>
                         </div>
                         <div ng-show="publishMode && !isFlagReviewer" class="icon-box popup-item label-icon-box"
                             data-content="Reject content" data-variation="tiny inverted" data-position="bottom center"

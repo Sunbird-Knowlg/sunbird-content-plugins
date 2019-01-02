@@ -94,13 +94,16 @@
             <!--END OF FOR ADD COLLABORATORS -->
         </div>
         <div class="ui tab segment body-content" ng-class="isContentOwner ? '' : 'active'" data-tab="userListTab">
+            <div class="ui active inverted dimmer" ng-if="isLoading">
+                <div class="ui large text loader">Loading</div>
+            </div>
             <!-- FOR SHOW COLLABORATORS-->
             <div class="ui active inverted dimmer" ng-if="isLoading">
                     <div class="ui large text loader">Loading</div>
             </div>
             <div class="height-100" ng-if="!isAddCollaboratorTab">
                 <div class="ui grid">
-                    <div class="twelve wide column"><div ng-if="collaborators.length"><strong>{{collaborators.length}} collaborators exist</strong></div></div>
+                    <div class="twelve wide column"><div ng-if="collaborators.length"><strong>{{collaborators.length}} collaborators exists</strong></div></div>
                 </div>
                 <div class="margin-left-right-0 margin-top-5">
                     <div class="ui grid div-scroll">
