@@ -44,13 +44,6 @@ angular.module('collaboratorApp', ['angular-inview'])
             $scope.contentId = ecEditor.getContext('contentId');
             $scope.userService = org.ekstep.contenteditor.api.getService(ServiceConstants.USER_SERVICE);
             $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
-
-            /* Close popup on press of ESCAPE key */
-            ecEditor.jQuery(document).keydown(function (e) {
-                if (e.keyCode == 27) {
-                    $scope.closePopup();
-                }
-            });
             $scope.getContentCollaborators();
         }
 
@@ -231,7 +224,6 @@ angular.module('collaboratorApp', ['angular-inview'])
          * It closes the popup
          */
         $scope.closePopup = function () {
-            ecEditor.jQuery(document).off('keydown');
             $scope.inViewLogs = [];
             $scope.generateTelemetry({ type: 'click', subtype: 'cancel', target: 'closePopup', targetid: 'close-button' });
             $scope.closeThisDialog();
