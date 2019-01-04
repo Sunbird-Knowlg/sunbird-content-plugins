@@ -33,7 +33,7 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.3"
                 "org.ekstep.genericeditor-1.0"
                 "org.ekstep.genericeditor-1.1"
                 "org.ekstep.genericeditorsidebar-1.0"
-                "org.ekstep.uploadcontent-1.3"
+                "org.ekstep.uploadcontent-1.4"
                 "org.ekstep.richtext-1.0"
                 "org.ekstep.image-1.1"
                 "org.ekstep.assetbrowser-1.1"
@@ -66,7 +66,10 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.3"
                 "org.ekstep.lessonplanunitmeta-1.5"
                 "org.ekstep.unitmeta-1.7"
                 "org.ekstep.uploadfile-1.0"
-                "org.ekstep.reviewercomments-1.0");
+                "org.ekstep.reviewercomments-1.0"
+                "org.ekstep.collectioneditor-1.6"
+                "org.ekstep.sunbirdcommonheader-1.8"
+                "org.ekstep.collaborator-1.2");
 
 for i in "${coreplugins[@]}"
 do

@@ -295,7 +295,7 @@ angular.module('videoApp', [])
                 "h": 79.51,
                 "config": {
                     "autoplay": true,
-                    "controls": false,
+                    "controls": true,
                     "muted": false,
                     "visible": true,
                     "url": ctrl.videoUrl

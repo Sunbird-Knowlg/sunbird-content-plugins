@@ -67,16 +67,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.showEditMeta = true;
     $scope.contentCredits = [];
     $scope.listLimit = 5;
-    $scope.disableDownloadToc = false;
-    $scope.loader = false;
-    $scope.CONSTANTS = {
-        tocDownloadFailed: 'Unable to download the content, please try again later',
-        tocDownloadSuccess: 'Table of Content downloadeding!',
-        tocUpdateHeader: 'Update Table of Contents Metadata attributes via CSV',
-        tocUpdateDescription: 'Please note that no sections could be added or removed using CSV upload, only the values of the attributes can be changes',
-        tocUpdateBtnUpload: 'Upload',
-        tocUpdateBtnClose: 'Close'
-    }
 
     /*
      * Update ownership list when adding and removing the content.
@@ -125,41 +115,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.listLimit = $scope.contentCredits.length;
         $scope.$safeApply();
     };
-
-    /*
-    * This method is used for download Table of contents which is created by Textbook creator.
-    */
-    $scope.downloadToc = function() {
-        $scope.loader = true;
-        org.ekstep.services.textbookService.downloadFile(ecEditor.getContext('contentId'), function(err, resp) {
-            if (!err && resp.data.responseCode == "OK") {
-                $scope.loader = false;
-                $scope.$safeApply();
-                ecEditor.dispatchEvent("org.ekstep.toaster:success", {
-                    title: $scope.CONSTANTS.tocDownloadSuccess,
-                    position: 'topCenter',
-                    icon: 'fa fa-download'
-                });
-                var link = document.createElement('a');
-                link.href = resp.data.result.textbook.tocUrl;
-                link.download = link.href;
-                link.style.display = 'none';
-                document.body.appendChild(link);
-                if(link.href.split(".").pop().toLowerCase() != 'csv')
-                    link.setAttribute('target', '_blank');
-                link.click();
-                document.body.removeChild(link);
-            } else {
-                $scope.loader = false;
-                $scope.$safeApply();
-                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                    message: $scope.CONSTANTS.tocDownloadFailed,
-                    position: 'topCenter',
-                    icon: 'fa fa-warning'
-                });
-            }
-        });
-    }
 
     $scope.setEditorDetails = function() {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
@@ -215,7 +170,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         $scope.resolveReviewBtnStatus();
                         var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
                         if(rootNode.children)
-                            $scope.disableDownloadToc = false;
                         // $scope.getContentMetadata();
                         $scope.getQRCodeRequestCount();
                     }
@@ -447,7 +401,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.getContentMetadata = function () {
         var rootNode = org.ekstep.services.collectionService.getNodeById(ecEditor.getContext('contentId'));
         var status = rootNode.data.metadata.status;
-        $scope.disableDownloadToc = rootNode.children == null ? true: false;
         if(rootNode.data.metadata.contentCredits)
             $scope.contentCredits = rootNode.data.metadata.contentCredits;
         $scope.hideReviewBtn = (status === 'Draft' || status === 'FlagDraft') ? false : true;
@@ -739,36 +692,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             $scope.enableBtn = ''; // to disable checklist buttons(Publish / Request changes)
         }
     };
-
-    /**
-     * @description - used to update toc via csv
-     */
-    $scope.updateToc = function () {        
-        ecEditor.dispatchEvent("org.ekstep.uploadfile:show", {
-            headerTitle: $scope.CONSTANTS.tocUpdateHeader,
-            description: $scope.CONSTANTS.tocUpdateDescription,
-            validation: {
-                'allowedExtension': ['csv']
-            },
-            buttonText: {
-                'primaryBtn': $scope.CONSTANTS.tocUpdateBtnUpload,
-                'exitBtn': $scope.CONSTANTS.tocUpdateBtnClose
-            },
-            callback: function(data, errTitle){
-                console.log('response err', data);
-                $scope.errTitle = errTitle;
-                $scope.errMessage = data;
-                ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
-                    template: 'updateTocError',
-                    controller: 'headerController',
-                    controllerAs: '$ctrl',
-                    showClose: false,
-                    scope: $scope,
-                    className: 'ngdialog-theme-default'
-                });
-            }
-        });
-    }
 
     /**
      * @description - on init of checklist pop-up
