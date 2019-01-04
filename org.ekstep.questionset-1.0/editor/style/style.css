@@ -1,0 +1,17 @@
+/*Questionset popup loading issue
+    while loading question set the full screen popup show
+*/
+.ui.modal.qb-question-bank {
+    top: 0 !important;
+    left: 0 !important;
+    height: 100vh;
+    width: 100% !important;
+    margin: 0 auto;
+    border-radius: 0;
+    display: flex;
+    -webkit-flex-flow: column;
+    -moz-flex-flow: column;
+    -ms-flex-flow: column;
+    -o-flex-flow: column;
+    flex-flow: column;
+}
