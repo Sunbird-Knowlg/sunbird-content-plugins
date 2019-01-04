@@ -68,7 +68,21 @@ declare -a coreplugins=("org.ekstep.activitybrowser-1.3"
                 "org.ekstep.reviewercomments-1.0"
                 "org.ekstep.collectioneditor-1.6"
                 "org.ekstep.sunbirdcommonheader-1.8"
-                "org.ekstep.collaborator-1.2");
+                "org.ekstep.collaborator-1.2"
+                "org.ekstep.libs.ckeditor-1.0"
+                "org.ekstep.mathtext-1.0"
+                "org.ekstep.keyboard-1.0"
+                "org.ekstep.questionset-1.0"
+                "org.ekstep.questionset.quiz-1.0"
+                "org.ekstep.questionset.preview-1.0"
+                "org.ekstep.questionbank-1.0"
+                "org.ekstep.question-1.0"
+                "org.ekstep.questionunit-1.0"
+                "org.ekstep.questionunit.mcq-1.1"
+                "org.ekstep.questionunit.ftb-1.0"
+                "org.ekstep.questionunit.mtf-1.1"
+                "org.ekstep.questionunit.reorder-1.0"
+                "org.ekstep.questionunit.sequence-1.0");
 
 for i in "${coreplugins[@]}"
 do
