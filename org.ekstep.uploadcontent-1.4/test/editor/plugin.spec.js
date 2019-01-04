@@ -207,31 +207,50 @@ describe("uploadContent plugin", function () {
     });
 
     describe('upload', () => {
-        it('should upload a file, if its valid', () => {
+        xit('should upload a file, if its valid', () => {
             spyOn($scope, 'upload').and.callThrough();
             spyOn($scope, 'generateTelemetry');
             spyOn($scope, 'showLoader');
+            spyOn($scope, 'uploadByURL');
+            spyOn(ecEditor, 'setConfig');
             $scope.uploader = {
                 getFile: function () { },
                 getName: function () { return 'file:///home/ttpllt44/Documents/git/sunbird_fork/test.mp4' }
             };
-            $scope.newContent = true;
             $scope.uploader.getFile = jasmine.createSpy().and.returnValue('file:///home/ttpllt44/Documents/git/sunbird_fork/test.mp4');
-            $scope.contentService.createContent = jasmine.createSpy().and.callFake(({}, (err, res) => {
-                return res({
+            $scope.contentService.createContent = jasmine.createSpy().and.callFake((data, callback) => {
+                return callback(undefined, {
                     "data": {
                         "result": {
                             "node_id": "do_11266971091475660817",
                             "versionKey": "1546595570649"
                         }
                     }
-                })
-            }));
+                });
+            });
+
+            let lockResponse = {
+                "data": {
+                    "result": {
+                        "lockKey": "8b870d21-0f2c-4f4e-9de5-6dfc7eb472ab",
+                        "expiresAt": "2019-01-04T10:52:52.059Z",
+                        "expiresIn": 60
+                    }
+                }
+            }
+            ecEditor.getService(ServiceConstants.CONTENT_LOCK_SERVICE).createLock = jasmine.createSpy().and.callFake((data, callback) => {
+                return callback(undefined, lockResponse);
+            });
+            $scope.newContent = true;
             $scope.upload();
             expect($scope.generateTelemetry).toHaveBeenCalledWith({ subtype: "upload", target: "browseButton", objecttype: 'content' });
             expect($scope.showLoader).toHaveBeenCalledWith(true);
             expect(ecEditor.getContext('contentId')).toEqual('do_112480621612351488118');
             expect($scope.contentService.createContent).toHaveBeenCalled();
+            expect(ecEditor.getService('lock').createLock).toHaveBeenCalled();
+            expect(ecEditor.setConfig).toHaveBeenCalledWith(ServiceConstants.CONTENT_LOCK_SERVICE, lockResponse.data.result);
+            expect($scope.uploadCancelLabel).toEqual('Cancel');
+            expect($scope.uploadByURL).toHaveBeenCalled();
         });
     });
     describe('uploadFormClose', () => {
@@ -257,7 +276,7 @@ describe("uploadContent plugin", function () {
     describe('generateTelemetry', () => {
         it('should generate telemetry', () => {
             spyOn($scope, 'generateTelemetry').and.callThrough();
-            spyOn(ecEditor.getService('telemetry'), 'interact');
+            //spyOn(ecEditor.getService('telemetry'), 'interact');
             let data = { subtype: 'close', target: 'closeupload' };
             let requestData = {
                 "type": "click",
