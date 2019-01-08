@@ -73,7 +73,7 @@ angular.module('org.ekstep.uploadcontent-1.4', []).controller('uploadController'
                 }
             },
             showMessage: function(messages) {
-                console.info(" hiding the alert messages from fine uploader");                
+                console.info(" hiding the alert messages from fine uploader");
             }
         });
         $('#qq-template-validation').remove();
@@ -96,18 +96,14 @@ angular.module('org.ekstep.uploadcontent-1.4', []).controller('uploadController'
             case 'webm':
                 return 'video/webm';
             default:
-               return $scope.validateUploadURL(fileName);
+                return '';
         }
     }
 
     $scope.validateUploadURL = function(url){
         var response = '';
         if($scope.isValidURL(url) && $scope.isWhitelistedURL(url)){
-            if($scope.validateYoutubeURL(url)){
-                response = 'video/x-youtube';
-            } else {
-                response =  'text/x-url';
-            }
+            response = $scope.validateYoutubeURL(url);
         }
         return response;
     }
@@ -126,7 +122,7 @@ angular.module('org.ekstep.uploadcontent-1.4', []).controller('uploadController'
         var isWhitelistedURL = false;
         var hostName = $scope.getHostName(url);
         for (let domain of domainList){
-            if(hostName[2] === domain || (hostName[1]+hostName[2]) === domain ){ //the whitelisted domain can be either youtube.com or www.youtube.com 
+            if(hostName && hostName[2] && (hostName[2] === domain || (hostName[1] + hostName[2]) === domain)) { //the whitelisted domain can be either youtube.com or www.youtube.com 
                 isWhitelistedURL = true;
                 break;
             }
@@ -134,7 +130,7 @@ angular.module('org.ekstep.uploadcontent-1.4', []).controller('uploadController'
         return isWhitelistedURL;
     }
 
-    $scope.getHostName = function(url){ 
+    $scope.getHostName = function(url){
         var match = url.match(/:\/\/(www[0-9]?\.)?(.[^/:]+)/i);
         if (match != null && match.length > 2 && typeof match[2] === 'string' && match[2].length > 0) {
             return match;
@@ -150,14 +146,29 @@ angular.module('org.ekstep.uploadcontent-1.4', []).controller('uploadController'
         }
         return domainList;
     }
-    
+
     $scope.validateYoutubeURL = function(fileName) {
+        var response = 'INVALID_YOUTUBE_URL';
+        var host = $scope.getHostName(fileName);
         var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=|\?v=)([^#\&\?]*).*/;
         var match = fileName.match(regExp);
         if (match && match[2].length == 11) {
-            return true;
+            response = 'video/x-youtube';
+        } else if (host && host[2] && (host[2] === 'youtube.com' || host[2] === 'youtu.be')) {
+            return response;
+        } else {
+            response = 'text/x-url';
         }
-        return false;
+        return response;
+    }
+
+    $scope.showErrorToastMessage = function(message) {
+        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+            message: message,
+            position: 'topCenter',
+            icon: 'fa fa-warning'
+        });
+        $scope.showLoader(false);
     }
 
     $scope.upload = function() {
@@ -173,18 +184,14 @@ angular.module('org.ekstep.uploadcontent-1.4', []).controller('uploadController'
             return;
         }
 
-        var fileUpload = false;
-        if ($scope.uploader.getFile(0) != null) {
-            fileUpload = true;
-        }
-        var mimeType = fileUpload ? $scope.detectMimeType($scope.uploader.getName(0)) : $scope.detectMimeType($scope.contentURL);
-        if (!mimeType) {
-            ecEditor.dispatchEvent("org.ekstep.toaster:error", {
-                message: 'Invalid content type (supported type: pdf, epub, h5p, mp4, youtube, html-zip, webm, whitelisted-domain)',
-                position: 'topCenter',
-                icon: 'fa fa-warning'
-            });
-            $scope.showLoader(false);
+        var fileUpload = $scope.uploader.getFile(0) != null ? true : false;
+        var mimeType = (fileUpload) ? $scope.detectMimeType($scope.uploader.getName(0)) : $scope.validateUploadURL($scope.contentURL);
+
+        if (mimeType === 'INVALID_YOUTUBE_URL') {
+            $scope.showErrorToastMessage('Invalid Youtube URL');
+            return;
+        } else if (!mimeType) {
+            $scope.showErrorToastMessage('Invalid content type (supported type: pdf, epub, h5p, mp4, youtube, html-zip, webm, whitelisted-domain)');
             return;
         }
         if ($scope.newContent) {
@@ -214,7 +221,7 @@ angular.module('org.ekstep.uploadcontent-1.4', []).controller('uploadController'
                         position: 'topCenter',
                         icon: 'fa fa-warning'
                     });
-                    $scope.showLoader(false);                    
+                    $scope.showLoader(false);
                 } else {
                     var result = res.data.result;
                     ecEditor.setContext('contentId', result.node_id);
@@ -244,7 +251,7 @@ angular.module('org.ekstep.uploadcontent-1.4', []).controller('uploadController'
                                 position: 'topCenter',
                                 icon: 'fa fa-warning'
                             });
-                            $scope.showLoader(false);                    
+                            $scope.showLoader(false);
                         } else {
                             ecEditor.setConfig('lock', lockRes.data.result);
                             $scope.uploadCancelLabel = "Cancel";
@@ -367,6 +374,6 @@ angular.module('org.ekstep.uploadcontent-1.4', []).controller('uploadController'
             "targetid": "",
             "stage": ""
         })
-    }    
+    }
 }]);
 //# sourceURL=uploadContentApp.js
