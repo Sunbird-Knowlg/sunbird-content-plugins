@@ -515,7 +515,8 @@ angular.module('org.ekstep.mathtext', [])
         latexText: "\\sphericalangle"
       },
       {
-        latexText: "\\xleftrightharpoons{abc}"
+        latexText: "\\xleftrightharpoons{abc}",
+        customImage: 'assets/equilibrium.png'
       },
       {
         latexText: "\\leftrightarrows"
@@ -555,7 +556,12 @@ angular.module('org.ekstep.mathtext', [])
     });
 
     _.each($scope.advancedSymbols, function(value,key){
-      var url = "https://latex.codecogs.com/gif.latex?" + encodeURIComponent(value.latexText);
+      var url;
+      if(value.customImage){
+        url = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, value.customImage);
+      }else{
+        url = "https://latex.codecogs.com/gif.latex?" + encodeURIComponent(value.latexText);
+      } 
       $scope.advancedImageArray.push(url);
     })
 
@@ -729,7 +735,8 @@ angular.module('org.ekstep.mathtext', [])
     }
 
     $scope.getCursorPosition = function(e){
-      $scope.cursorPosition = e.target.selectionStart;
+      var currentPosition = e.target.selectionStart;
+      $scope.cursorPosition = currentPosition == 0 ? currentPosition : currentPosition -1;
     }
 
     $scope.addToStage = function (activeTab) {
