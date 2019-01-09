@@ -190,14 +190,25 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     if (!this._displayedPopup) {
       EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ":evaluate", function(result) {
         QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);
-        instance.saveQuestionState(instance._currentQuestion.id, result.state);
-        if (instance._questionSetConfig.show_feedback == true) {
-          // Display feedback popup (tryagain or goodjob)
-          // result.pass is added to handle sorting-template(Custom IEvaluator) issue. This can be generic solution for other
-          instance.displayFeedback(result);
-        } else {
-          // If show_feedback is set to false, move to next question without displaying feedback popup
+        var oldState, newState;
+        if (instance._currentQuestionState) {
+            oldState = JSON.stringify(instance._currentQuestionState.val)
+            newState = JSON.stringify(result.state.val)
+        }
+
+        if(instance._currentQuestionState && oldState == newState){
           instance.renderNextQuestion();
+        }
+        else {
+          instance.saveQuestionState(instance._currentQuestion.id, result.state);
+          if (instance._questionSetConfig.show_feedback == true) {
+            // Display feedback popup (tryagain or goodjob)
+             // result.pass is added to handle sorting-template(Custom IEvaluator) issue. This can be generic solution for other
+             instance.displayFeedback(result);
+           } else {
+            // If show_feedback is set to false, move to next question without displaying feedback popup
+            instance.renderNextQuestion();
+          }
         }
       }, this);
     } else {
