@@ -240,6 +240,9 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   }
   $scope.sendMetaData = function (newQuestionCreate) {
     $scope.isNewQuestion = newQuestionCreate;
+    if($scope.isNewQuestion === false && EventBus.hasEventListener('org.ekstep.questionunit:ready')){
+      EventBus.listeners["org.ekstep.questionunit:ready"]=[];
+    }
   	var formElement = $($scope._constants.formElementId).find("#content-meta-form");
   	var frmScope = formElement.scope();
     ecEditor.dispatchEvent("metadata:form:onsuccess", {target: $scope._constants.formElementId, form: frmScope.metaForm});
