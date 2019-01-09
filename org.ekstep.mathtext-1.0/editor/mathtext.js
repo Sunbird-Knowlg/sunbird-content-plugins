@@ -735,7 +735,8 @@ angular.module('org.ekstep.mathtext', [])
     }
 
     $scope.getCursorPosition = function(e){
-      $scope.cursorPosition = e.target.selectionStart - 1;
+      var currentPosition = e.target.selectionStart;
+      $scope.cursorPosition = currentPosition == 0 ? currentPosition : currentPosition -1;
     }
 
     $scope.addToStage = function (activeTab) {
