@@ -216,3 +216,10 @@ body {
 .plugin-content-container em {
     font-style: italic;
 }
+
+.urdu-right-align{
+    font-family: NotoNastaliqUrdu;
+    direction: rtl;
+    text-align: right;
+    line-height:2.08; /* magicNumber (1.13) x font-size (14px in em) line-height (19px in em)  */
+}
