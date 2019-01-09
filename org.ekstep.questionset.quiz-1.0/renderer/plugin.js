@@ -163,6 +163,9 @@ Plugin.extend({
     }
     result.values = result.res;
     result.eval = result.pass;
+    result.state = {};
+    result.state.val = result.res;
+
     // result.eval = res.pass;
     // result.score = res.score;
     // result.res = res.res;
