@@ -190,13 +190,7 @@ org.ekstep.questionsetRenderer = IteratorPlugin.extend({ // eslint-disable-line 
     if (!this._displayedPopup) {
       EkstepRendererAPI.dispatchEvent(this._currentQuestion.pluginId + ":evaluate", function(result) {
         QSTelemetryLogger.logEvent(QSTelemetryLogger.EVENT_TYPES.ASSESSEND, result);
-        var oldState, newState;
-        if (instance._currentQuestionState) {
-            oldState = JSON.stringify(instance._currentQuestionState.val)
-            newState = JSON.stringify(result.state.val)
-        }
-
-        if(instance._currentQuestionState && oldState == newState){
+        if(instance._currentQuestionState && _.isEqual(instance._currentQuestionState.val, result.state.val)){
           instance.renderNextQuestion();
         }
         else {
