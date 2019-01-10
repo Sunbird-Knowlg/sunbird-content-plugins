@@ -296,7 +296,7 @@ MCQController.vertical2.getQuestionTemplate = function (question) {
                 <%}%>\
                 </div>\
                 <% if(question.data.question.text){%>\
-                <div class='mcq-question-text'>\
+                <div class='mcq-question-text question-title-text-common-questionunit-plugins'>\
                   <div class='mcq-text-content'>\
                   <div><%= question.data.question.text %></div>\
                   </div>\
