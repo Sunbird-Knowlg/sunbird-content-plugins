@@ -348,5 +348,61 @@ describe("Sunbird header plugin:", function() {
         })
 
     })
+    describe("refresh content lock", function() {
+        it("Should set content lock listener if lockobject is provided", function (done) {
+            $scope.contentLock = {
+                lockKey:'129a3558-3d54-4320-8f2b-427764b92636',
+                expiresAt:'2018-12-31T03:47:14.283Z',
+                expiresIn:60
+            }
+            spyOn($scope, "setContentLockListener").and.callThrough();
+            $scope.setContentLockListener();
+            expect($scope.contentLockListener).toBeDefined();
+            done();
+        })
+        it("Should refresh content lock on user action or preview", function (done) {
+            $scope.dataChanged = true;
+            spyOn($scope, "refreshContentLock").and.callThrough();
+            $scope.validateContentLock();
+            expect($scope.refreshContentLock).toHaveBeenCalled();
+            done();
+        })
+        it("Should trigger idle popup on long time idle", function (done) {
+            $scope.dataChanged = false;
+            $scope.idleTimer = 10;
+            $scope.contentLockIdleTimeOut = 5;
+            $scope.contentLockExpired = false;
+            spyOn($scope, "showStatusPopup").and.callThrough();
+            $scope.validateContentLock();
+            expect($scope.showStatusPopup).toHaveBeenCalled();
+            done();
+        })
+        it("Should trigger session timeout popup on lock expiry timeout", function (done) {
+            $scope.contentLockExpiresIn = 1;
+            spyOn($scope, "showStatusPopup").and.callThrough();
+            $scope.validateContentLock();
+            expect($scope.contentLockExpired).toBe(true);
+            expect($scope.showStatusPopup).toHaveBeenCalled();
+            done();
+        })
+        it("Should refresh lock if online", function (done) {
+            $scope.internetStatusObj = {status: true};
+            spyOn(ecEditor.getService('lock'), "refreshLock").and.returnValue(Promise.resolve({
+                data:{"id":"api.v1.refresh","ver":"1.0","ts":"2018-12-31T04:15:37.055Z","params":{"resmsgid":"b9b01ef0-0cb2-11e9-a2c7-bd997da83dbb","msgid":"b9a597a0-0cb2-11e9-95a6-75e890e44e91","status":"successful","err":null,"errmsg":null},"responseCode":"OK","result":{"lockKey":"ca8966a5-d91f-4989-8cb0-5a06dadf8d83","expiresAt":"2018-12-31T05:15:36.987Z","expiresIn":60}}
+            }));
+            $scope.refreshContentLock();
+            expect(ecEditor.getService('lock').refreshLock).toHaveBeenCalled();
+            done();
+        })
+        it("Should remove lock listener if offline", function (done) {
+            $scope.internetStatusObj = {status: false};
+            spyOn($scope, "removeContentLockListener").and.callThrough();
+            $scope.refreshContentLock();
+            expect($scope.removeContentLockListener).toHaveBeenCalled();
+            done();
+        })
+    })  
+
+})
 
 })
