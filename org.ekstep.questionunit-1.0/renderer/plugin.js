@@ -4,11 +4,13 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
   _addUrduSupport: function(){
     // Add to Question Title
     var urduSupportClass = 'urdu-right-align'
-    $('.question-title-text-common-questionunit-plugins').addClass(urduSupportClass);
+    $('.common-qs-title').addClass(urduSupportClass);
 
     // Add to Question Options
-    _.each($('.option-text-common-questionunit-plugins'), function(option){
-      $(option).addClass(urduSupportClass);
+    _.each($('.common-option-text'), function(option){
+      if(option){
+        $(option).addClass(urduSupportClass);
+      }
     })
   },
   _question: {

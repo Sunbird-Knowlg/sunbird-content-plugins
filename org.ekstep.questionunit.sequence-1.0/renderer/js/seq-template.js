@@ -41,7 +41,7 @@ SEQController.getOptionLayout = function (type) {
       <div class="option-block-container options-<%= question.data.options.length %>">\
       <% _.each(question.data.options,function(val,key){ %>\
           <div data-seqorder=<%= val.sequenceOrder %> class="option-block">\
-            <span class="option-text-common-questionunit-plugins"><%= val.text %></span>\
+            <span class="common-option-text"><%= val.text %></span>\
           </div>\
       <% }) %>\
       </div>\
