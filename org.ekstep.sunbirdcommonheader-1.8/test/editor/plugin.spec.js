@@ -47,7 +47,7 @@ describe("Sunbird header plugin:", function() {
     });
     describe("Content review", function() {
         it("Should invoke downloadToc method to download Toc csv file if response is given", function(done) {
-            var data = 'do_1126448093921853441209'; 
+            var data = 'do_1126448093921853441209';
             var resp = {"data":{"id":"api.textbook.toc.download","ver":"v1","ts":"2018-11-30 10:50:29:057+0000","params":{"resmsgid":null,"msgid":"8a9a21a5-d18f-4969-9fc4-ab116d46a3e8","err":null,"status":"success","errmsg":null},"responseCode":"OK","result":{"textbook":{"tocUrl":"https://sunbirddev.blob.core.windows.net/sunbird-content-dev/content/do_1126441512460369921103/artifact/1_1543475510769.pdf","ttl":86400}},"responseTime":226}};
             ecEditor.getService('content').downloadTableContent = jasmine.createSpy().and.callFake(function(data, callBack) {
                 callBack(undefined, resp);
@@ -57,10 +57,10 @@ describe("Sunbird header plugin:", function() {
             expect($scope.downloadToc).toHaveBeenCalled();
             expect($scope.downloadToc).not.toBeUndefined();
             done();
-        }); 
+        });
 
         it("Should invoke downloadToc method to download Toc csv file, if response is null", function(done) {
-            var resp = undefined; 
+            var resp = undefined;
             var contentId = 'do_1126448093921853441209';
             ecEditor.getService('content').downloadTableContent = jasmine.createSpy().and.callFake(function(contentId, callBack) {
                 callBack(true, resp);
@@ -70,7 +70,7 @@ describe("Sunbird header plugin:", function() {
             expect($scope.downloadToc).toHaveBeenCalled();
             expect($scope.downloadToc).not.toBeUndefined();
             done();
-        }); 
+        });
 
         it("Should enable downloadtoc button if rootnode has no any child", function(done) {
             var event = {"type":"org.ekstep.collectioneditor:node:added"};
@@ -81,7 +81,7 @@ describe("Sunbird header plugin:", function() {
             $scope.disableDownloadToc = rootNode.children == null ? true: false;
             expect($scope.addOwnershipList).toHaveBeenCalled();
             done();
-        }); 
+        });
 
         it("Should enable downloadtoc button if rootnode has at leat one child", function(done) {
             var event = {"type":"org.ekstep.collectioneditor:node:added"};
@@ -91,7 +91,7 @@ describe("Sunbird header plugin:", function() {
             $scope.disableDownloadToc = false;
             expect($scope.removeOwnershipList).toHaveBeenCalled();
             done();
-        }); 
+        });
 
         it("Should enable downloadtoc button if rootnode has no child", function(done) {
             var event = {"type":"org.ekstep.collectioneditor:node:added"};
@@ -101,7 +101,7 @@ describe("Sunbird header plugin:", function() {
             $scope.disableDownloadToc = false;
             expect($scope.removeOwnershipList).toHaveBeenCalled();
             done();
-        }); 
+        });
 
         it("Should disable downloadtoc button if enable save button", function(done) {
             var event = {"type":"org.ekstep.collectioneditor:node:modified"};
@@ -111,14 +111,14 @@ describe("Sunbird header plugin:", function() {
             $scope.disableDownloadToc = true;
             expect($scope.setPendingChangingStatus).toHaveBeenCalled();
             done();
-        }); 
+        });
 
         it("Should invoke addListSize method to increase listSize", function(done) {
             spyOn($scope, "addListSize").and.callThrough();
             $scope.addListSize();
             expect($scope.addListSize).toHaveBeenCalled();
             done();
-        }); 
+        });
 
         it("Should invoke updateContentCreditList method to update content owner list", function(done) {
             var node = {'data': {"objectType":"TextBookUnit","id":"dbd23d1e-1c9e-4a73-8bc8-0c6c5471e8a9","root":false,"metadata":{"mimeType":"application/vnd.ekstep.content-collection","topicData":"(0) topics selected","name":"Untitled TextBook","owner":"rajesh","ownedBy":"rajesh"}}};
@@ -164,7 +164,7 @@ describe("Sunbird header plugin:", function() {
             ecEditor.dispatchEvent('org.ekstep.contenteditor:preview', { mofromBeginningde: 'fromBeginning' })
             done();
         });
-        
+
         it("Should call editContentMeta  when changed content", function(done) {
             var subType = "COLLECTION";
             $scope.editorEnv = "COLLECTION";
@@ -236,14 +236,14 @@ describe("Sunbird header plugin:", function() {
             var telemetryData = { type: 'click', subtype: 'back', target: 'backButton' };
             $scope.generateTelemetry(telemetryData);
             expect(org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).interact).toHaveBeenCalledWith({
-                type: 'click', 
-                subtype: 'back', 
-                target: 'backButton', 
+                type: 'click',
+                subtype: 'back',
+                target: 'backButton',
                 pluginid: 'org.ekstep.sunbirdcommonheader',
-                pluginver: '1.8', 
-                objectid: '', 
-                targetid: '', 
-                stage: '' 
+                pluginver: '1.8',
+                objectid: '',
+                targetid: '',
+                stage: ''
             });
         });
 
@@ -563,7 +563,7 @@ describe("Sunbird header plugin:", function() {
                 expect($scope.checklistItems.subtitle).toEqual(checklistConfig.read.subtitle);
             })
         })
-        describe("update TOC", function() {        
+        describe("update TOC", function() {
             it("Should call updateTOC", function (done) {
                 spyOn($scope, "updateToc").and.callThrough();
                 $scope.updateToc();
@@ -651,8 +651,6 @@ describe("Sunbird header plugin:", function() {
             expect($scope.removeContentLockListener).toHaveBeenCalled();
             done();
         })
-    })  
-
-})
+    })
 
 })
