@@ -75,7 +75,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         tocUpdateHeader: 'Update Table of Contents Metadata attributes via CSV',
         tocUpdateDescription: 'Please note that no sections can be added or removed through this update, only the values of the attributes can be changed.',
         tocUpdateBtnUpload: 'Upload',
-        tocUpdateBtnClose: 'Close'
+        tocUpdateBtnClose: 'Close',
+        requestQRCodes: 'Request for QR Codes',
+        requestBtn: 'Request'
     }
     $scope.contentLock = ecEditor.getConfig('lock');
     $scope.dataChanged = false;
@@ -164,6 +166,10 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 });
             }
         });
+    }
+
+    $scope.submitRequest = function() {
+        $scope.closeThisDialog();
     }
 
     $scope.setEditorDetails = function() {
@@ -623,6 +629,17 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.reserveDialCode = function () {
+        ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
+            template: 'requestQRCode',
+            controller: 'headerController',
+            controllerAs: '$ctrl',
+            showClose: false,
+            scope: $scope,
+            className: 'ngdialog-theme-default'
+        });
+
+
+
         var request = {
             "request": {
                 "dialcodes": {
