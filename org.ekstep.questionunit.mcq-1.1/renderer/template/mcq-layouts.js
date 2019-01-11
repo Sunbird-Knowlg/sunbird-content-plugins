@@ -99,7 +99,7 @@ MCQController.grid.getOptionTemplate = function (option, index) {
     <div class="selected-icon"><img src="<%= MCQController.pluginInstance.getDefaultAsset("tick_icon.png") %>"></div>\
     <% if (option.text){ %> \
       <div class="mcq-grid-option-text">\
-        <div class="option-text-common-questionunit-plugins"><%= option.text %></div>\
+        <div><%= option.text %></div>\
       </div>\
     <% } %> \
     </div>\
@@ -233,7 +233,7 @@ MCQController.horizontal.getOptionLayout = function (layout) {
                     <% } %>\
                     <div class="option-text-container<% if(val.audio) { %> with-audio <% } %> <% if(val.image) { %>with-image<% } %>">\
                   <%  if(val.text) { %>\
-                        <span class="option-text-common-questionunit-plugins"><%= val.text %></span>\
+                        <span><%= val.text %></span>\
                   <% } %>\
                     </div>\
                     <img src="<%= MCQController.pluginInstance.getDefaultAsset("tick_icon.png") %>" class="tick" />\
@@ -298,7 +298,7 @@ MCQController.vertical2.getQuestionTemplate = function (question) {
                 <% if(question.data.question.text){%>\
                 <div class='mcq-question-text'>\
                   <div class='mcq-text-content'>\
-                  <div class='question-title-text-common-questionunit-plugins'><%= question.data.question.text %></div>\
+                  <div><%= question.data.question.text %></div>\
                   </div>\
                 </div>\
                 <%}%>\
@@ -345,7 +345,7 @@ MCQController.vertical2.getOption = function (option, key) {
     </div>\
     <div class='org-ekstep-questionunit-mcq-option-element text-option option-background' onClick=MCQController.vertical2.onOptionSelected(event,<%= key %>)>\
     <div class='text-content'>\
-    <span class='option-text-common-questionunit-plugins' >\
+    <span>\
     <%= option.text %>\
     <span>\
     </div>\
@@ -462,7 +462,7 @@ MCQController.grid2.getOption = function (option, key) {
       src=<%=MCQController.pluginInstance.getAssetUrl(option.image) %> />\
   <%}%>\
   <%if(!option.image && option.text){%>\
-    <div class='mcq2-2-option-text option-text-common-questionunit-plugins'><%= option.text %></div>\
+    <div class='mcq2-2-option-text'><%= option.text %></div>\
   <%}%>\
   <div class='mcq2-2-check-image-holder' >\
     <img class='mcq2-2-check-image'\
