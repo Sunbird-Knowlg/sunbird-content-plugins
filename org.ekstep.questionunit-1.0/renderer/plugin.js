@@ -1,6 +1,18 @@
 org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
   _type: 'org.ekstep.questionUnitPlugin',
   _render: true,
+  _addUrduSupport: function(){
+    // Add to Question Title
+    var urduSupportClass = 'urdu-right-align'
+    $('.common-qs-title').addClass(urduSupportClass);
+
+    // Add to Question Options
+    _.each($('.common-option-text'), function(option){
+      if(option){
+        $(option).addClass(urduSupportClass);
+      }
+    })
+  },
   _question: {
     template: undefined,
     data: {},
