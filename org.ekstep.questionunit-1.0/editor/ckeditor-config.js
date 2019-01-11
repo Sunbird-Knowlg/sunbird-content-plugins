@@ -53,6 +53,17 @@ CKEDITOR.editorConfig = function (config) {
   // Simplify the dialog windows.
   config.removeDialogTabs = 'image:advanced;link:advanced';
 
+  // Set the most common block elemnts.
+  config.format_tags = 'p;h1;h2;h3';
+  
+  config.extraPlugins = 'colorbutton,font,justify,clipboard';
+  // Default setting: text, lists and tables supported.
+  config.copyFormatting_allowedContexts = true;
+
+  // Only allow text styles to be copied.
+  config.copyFormatting_allowedContexts = [ 'text' ];
+  config.copyFormatting_allowRules = 'b s u i em strong; span{text-decoration,font-weight}';
+
   config.wordcount = {
 
     // Whether or not you want to show the Paragraphs Count
