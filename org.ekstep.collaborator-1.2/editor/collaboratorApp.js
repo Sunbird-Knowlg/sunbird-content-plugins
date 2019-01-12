@@ -1,35 +1,24 @@
 
 angular.module('collaboratorApp', ['angular-inview'])
     .controller('collaboratorCtrl', ['$scope', '$timeout', 'instance', function ($scope, $timeout, instance) {
-        var ctrl = this;
-        var inViewLogs = [];
-        ctrl.contentNotFoundImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/content_not_found.jpg");
-        ctrl.searchRes = { count: 0, content: [] };
-        $scope.contentId = ecEditor.getContext('contentId');
-        $scope.telemetry = { "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver };
-        $scope.selectedUsersId = [];
-        $scope.removedUsersId = [];
+        $scope.inViewLogs = [];
+        $scope.searchRes = { count: 0, content: [], isEmptyResponse: false, errorMessage: '', searchStatus: 'start' };
         $scope.isAddCollaboratorTab = false;
-        $scope.searchResponse = [];
-        $scope.usersList = [];
-        $scope.usersCount = 0;
-        $scope.collaboratorsList = [];
-        $scope.collaboratorsId = [];
         $scope.isLoading = true;
-        $scope.noResultFound = false;
         $scope.defaultLimit = 200;
         $scope.isContentOwner = false;
-
-        let userService = org.ekstep.contenteditor.api.getService(ServiceConstants.USER_SERVICE);
-        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
-        var filterRoles = ['CONTENT_CREATOR'];
+        $scope.users = [];
+        $scope.collaborators = [];
+        $scope.currentCollaborators = []; //existingCollaborators
+        let meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        let filterRoles = ['CONTENT_CREATOR'];
         if (meta.mimeType === 'application/vnd.ekstep.content-collection') {
-            var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
+            let rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
             if (rootNodeConfig.type === 'TextBook') {
                 filterRoles = ['BOOK_CREATOR'];
             }
         }
-        let searchBody = {
+        $scope.userSearchBody = {
             "request": {
                 "query": "",
                 "filters": {
@@ -41,8 +30,7 @@ angular.module('collaboratorApp', ['angular-inview'])
                 "limit": $scope.defaultLimit
             }
         };
-
-        let updateCollaboratorRequest = {
+        $scope.updateCollaboratorRequest = {
             "request": {
                 "content": {
                     "collaborators": []
@@ -50,27 +38,31 @@ angular.module('collaboratorApp', ['angular-inview'])
             }
         };
 
-
         $scope.init = function () {
-            $(document).keydown(function (e) {
-                // ESCAPE key pressed
-                if (e.keyCode == 27) {
-                    $scope.closePopup();
-                }
-            });
+            $scope.contentNotFoundImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/content_not_found.jpg");
+            $scope.telemetry = { "pluginid": instance.manifest.id, "pluginver": instance.manifest.ver };
+            $scope.contentId = ecEditor.getContext('contentId');
+            $scope.userService = org.ekstep.contenteditor.api.getService(ServiceConstants.USER_SERVICE);
+            $scope.contentService = ecEditor.getService(ServiceConstants.CONTENT_SERVICE);
             $scope.getContentCollaborators();
         }
 
         $scope.getContentCollaborators = function () {
-            ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContent(ecEditor.getContext('contentId'), function (err, res) {
+            $scope.contentService.getContent(ecEditor.getContext('contentId'), function (err, res) {
+
                 if (err) {
                     console.error('Unable to fetch collaborators', err);
                     $scope.isLoading = false;
+                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                        message: 'Unable to fetch collaborators',
+                        position: 'topCenter',
+                        icon: 'fa fa-warning'
+                    });
+                    $scope.generateError({ status: '', error: err });
                     $scope.closePopup();
                 } else if (res) {
                     $scope.isContentOwner = (res.createdBy === ecEditor.getContext('uid')) ? true : false;
-                    $scope.collaboratorsId = res.collaborators || [];
-
+                    $scope.currentCollaborators = res.collaborators || [];
                     if ($scope.isContentOwner) {
                         $scope.loadAllUsers();
                     } else {
@@ -80,13 +72,18 @@ angular.module('collaboratorApp', ['angular-inview'])
             });
         }
 
+        /**
+         * Changes Tab
+         * @param {Object} event 
+         */
         $scope.selectTab = function (event) {
             if (event.currentTarget.dataset.tab === 'userListTab') {
                 $scope.generateTelemetry({ type: 'click', subtype: 'changeTab', target: 'manageCollaborator', targetid: 'userListTab' });
                 $scope.isAddCollaboratorTab = false;
 
+
                 /* istanbul ignore else */
-                if (!$scope.collaboratorsList.length) {
+                if (!$scope.collaborators.length) {
                     $scope.isLoading = true;
                     $scope.fetchCollaborators();
                 }
@@ -96,37 +93,34 @@ angular.module('collaboratorApp', ['angular-inview'])
                 $scope.isAddCollaboratorTab = true;
             }
 
-            $('.menu .item').tab();
+            ecEditor.jQuery('.menu .item').tab();
             $scope.$safeApply();
             $timeout(function () {
-                ecEditor.jQuery('.profile').initial();
-                ecEditor.jQuery('.ui.dropdown').dropdown({
-                    onChange: function (val) {
-                        $scope.sortUsersList(val);
-                    }
-                });
-            });
+                ecEditor.jQuery('.profile-avatar').initial();
+                $scope.applyJQuery();
+            }, 0);
         }
 
         /**
         * Makes API call to fetch currently added collaborators/owners
         */
         $scope.fetchCollaborators = function () {
-            if ($scope.collaboratorsId && $scope.collaboratorsId.length) {
-                let searchRequest = _.cloneDeep(searchBody);
-                searchRequest.request.filters.userId = $scope.collaboratorsId;
-                userService.search(searchRequest, function (err, res) {
+            if ($scope.currentCollaborators && $scope.currentCollaborators.length) {
+                let searchRequest = _.cloneDeep($scope.userSearchBody);
+                searchRequest.request.filters.userId = $scope.currentCollaborators;
+                $scope.userService.search(searchRequest, function (err, res) {
                     if (err) {
                         console.error('Unable to fetch collaborators Profile=>', err);
+                        $scope.generateError({ status: '', error: err });
                     } else {
-                        if (res.data.result.response.content.length) {
-                            $scope.collaboratorsList = res.data.result.response.content;
-                            $scope.collaboratorsList.forEach((element) => {
-                                element.isSelected = false;
-                            });
+                        /* istanbul ignore else */
+                        if (res && res.data && res.data.result && res.data.result.response && res.data.result.response.content && res.data.result.response.content.length) {
+                            $scope.collaborators = res.data.result.response.content;
+                            $scope.collaborators.selectedCount = 0;
+
                             $timeout(function () {
-                                ecEditor.jQuery('.profile').initial();
-                            });
+                                ecEditor.jQuery('.profile-avatar').initial();
+                            }, 0);
                         }
                     }
                     $scope.isLoading = false;
@@ -143,56 +137,43 @@ angular.module('collaboratorApp', ['angular-inview'])
          */
         $scope.loadAllUsers = function () {
             $scope.isAddCollaboratorTab = true;
-            userService.search(searchBody, function (err, res) {
+            $scope.userService.search($scope.userSearchBody, function (err, res) {
                 if (err) {
                     console.error('Unable to fetch All Users ', err);
+                    $scope.generateError({ status: '', error: err });
+                    $scope.isLoading = false;
+                    $scope.$safeApply();
                 } else {
-                    if ($scope.collaboratorsId && $scope.collaboratorsId.length) {
-                        $scope.usersList = $scope.excludeCollaborators(res.data.result.response.content);
+                    if ($scope.currentCollaborators && $scope.currentCollaborators.length) {
+                        $scope.users = $scope.excludeCollaborators(res.data.result.response.content);
                     } else {
-                        $scope.usersList = res.data.result.response.content;
+                        /*istanbul ignore else */
+                        if (res && res.data && res.data.result && res.data.result.response && res.data.result.response.content) {
+                            $scope.users = res.data.result.response.content;
+                            $scope.users.count = res.data.result.response.content.length;
+                        }
                     }
 
-                    $scope.usersCount = res.data.result.response.count < $scope.defaultLimit ? $scope.usersList.length : res.data.result.response.count;
-                    $scope.usersList.forEach(element => {
-                        element.isSelected = false;
-                    });
+                    $scope.users.selectedCount = 0;
                     $scope.isLoading = false;
 
                     $('.menu .item').tab();
                     $timeout(function () {
-                        ecEditor.jQuery('.ui.dropdown').dropdown({
-                            onChange: function (val) {
-                                $scope.sortUsersList(val);
-                            }
-                        });
+                        ecEditor.jQuery('.profile-avatar').initial();
+                        $scope.applyJQuery();
                     }, 0);
                     $scope.$safeApply();
-                    ecEditor.jQuery('.profile').initial();
                 }
             });
         }
 
         /**
          * Updates collaborators
+         * @param {Array<string>} newCollaborators - List of new collaborators id.
          */
-        $scope.updateCollaborators = function (target) {
-            $scope.generateTelemetry({ type: 'click', subtype: 'update', target: target, targetid: 'done-button' });
-            if ($scope.isAddCollaboratorTab) {
-                updateCollaboratorRequest.request.content.collaborators = _.uniq($scope.selectedUsersId.concat($scope.collaboratorsId));
-            } else {
-                var updatedUsersId = [];
-                $scope.collaboratorsId.forEach((element) => {
-                    let index = $scope.removedUsersId.indexOf(element);
-                    if (index === -1) {
-                        updatedUsersId.push(element);
-                    }
-                });
-
-                updateCollaboratorRequest.request.content.collaborators = updatedUsersId;
-            }
-
-            userService.updateCollaborators(ecEditor.getContext('contentId'), updateCollaboratorRequest, function (err, res) {
+        $scope.updateCollaborators = function (newCollaborators) {
+            $scope.updateCollaboratorRequest.request.content.collaborators = newCollaborators;
+            $scope.userService.updateCollaborators(ecEditor.getContext('contentId'), $scope.updateCollaboratorRequest, function (err, res) {
                 if (err) {
                     ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                         message: 'Unable to update collaborator',
@@ -201,15 +182,18 @@ angular.module('collaboratorApp', ['angular-inview'])
                     });
                 } else {
                     ecEditor.dispatchEvent("org.ekstep.toaster:success", {
-                        message: 'Collaborator updated successfully',
+                        message: 'Collaborators updated successfully',
                         position: 'topCenter',
                         icon: 'fa fa-check-circle'
                     });
-                    var metaData = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+                    let metaData = $scope.contentService.getContentMeta(ecEditor.getContext('contentId'));
+
+                    /* istanbul ignore else */
                     if (res.data.result && res.data.result.versionKey) {
                         metaData.versionKey = res.data.result.versionKey;
                     }
-                    ecEditor.getService(ServiceConstants.CONTENT_SERVICE)._setContentMeta(ecEditor.getContext('contentId'), metaData);
+                    $scope.contentService._setContentMeta(ecEditor.getContext('contentId'), metaData);
+                    $scope.isLoading = false;
                     $scope.closePopup();
                 }
             });
@@ -217,93 +201,98 @@ angular.module('collaboratorApp', ['angular-inview'])
 
         /**
          * It excludes users those are already a collaborator.
-         * @param result {object} User search API Result
-         * @returns Users list with excluding existing collabortors
+         * @param {Object} users - User search API Result
+         * @returns Users list with excluding existing collaborators
          */
-        $scope.excludeCollaborators = function (result) {
-            if ($scope.collaboratorsId && $scope.collaboratorsId.length) {
-                _.find(result, function (val) {
-                    if (_.indexOf($scope.collaboratorsId, val.identifier) >= 0) {
-                        result = _.reject(result, ['identifier', val.identifier]);
+        $scope.excludeCollaborators = function (users) {
+            users.count = users.length;
+
+            /*istanbul ignore else */
+            if ($scope.currentCollaborators && $scope.currentCollaborators.length) {
+                _.find(users, function (val, index) {
+                    if (_.indexOf($scope.currentCollaborators, val.identifier) >= 0) {
+                        users[index].isCollaborator = true;
+                        users.count -= 1;
                     }
                 });
             }
 
-            return result;
+            return users;
         }
 
         /**
          * It closes the popup
-         * @param pageId {string} Current page id.
          */
-        $scope.closePopup = function (pageId) {
-            inViewLogs = [];
+        $scope.closePopup = function () {
+            $scope.inViewLogs = [];
             $scope.generateTelemetry({ type: 'click', subtype: 'cancel', target: 'closePopup', targetid: 'close-button' });
             $scope.closeThisDialog();
         };
 
         /**
          * It selects or unselects users from the list
-         * @param user {object} User Object
-         * @param index {number} Index of the user in the userList
-         * @param usersId {string} Variable to hold user's Id - selectedUsersId | removedUsersId
-         * @param list {string} Variable to hold whole object - usersList | collaboratorsList
+         * @param {Object} user  - User Object
+         * @param {Number} index - Index of the user in the userList
+         * @param {String} list  -Variable to hold whole object - users | collaborators
          */
-        $scope.toggleSelectionUser = function (user, index, usersId, list) {
-            var idx = $scope[usersId].indexOf(user.identifier);
-            if (idx > -1) {
+        $scope.toggleSelectionUser = function (user, index, list) {
+            if ($scope[list][index].isSelected) {
                 $scope.generateTelemetry({ type: 'click', subtype: 'uncheck', target: 'user', targetid: user.identifier });
-                $scope[usersId].splice(idx, 1);
                 $scope[list][index].isSelected = false;
+                $scope[list].selectedCount -= 1;
             } else {
                 $scope.generateTelemetry({ type: 'click', subtype: 'check', target: 'user', targetid: user.identifier });
-                $scope[usersId].push(user.identifier);
                 $scope[list][index].isSelected = true;
+                $scope[list].selectedCount += 1;
             }
+
             $scope.$safeApply();
         }
 
         /**
          * Sort Users List by Name and Organisation
-         * @param value {string} - Sort by value - firstName | organisations
+         * @param {String} value - Sort by value - firstName | organisations
          */
         $scope.sortUsersList = function (value) {
+            let { count, selectedCount } = $scope.users;
             if (value === 'firstName') {
-                $scope.usersList = _.orderBy($scope.usersList, [user => user[value].toLowerCase()]);
+                $scope.users = _.orderBy($scope.users, [user => user[value].toLowerCase()]);
             } else {
-                $scope.usersList = _.orderBy($scope.usersList, [user => user.organisations[0].orgName ? user.organisations[0].orgName.toLowerCase() : '']);
+                $scope.users = _.orderBy($scope.users, [user => user.organisations[0].orgName ? user.organisations[0].orgName.toLowerCase() : '']);
             }
+
+            $scope.users.count = count;
+            $scope.users.selectedCount = selectedCount;
             $scope.$safeApply();
         }
 
         /**
-         * Selects User and show check mark checked
-         * @param user {object} User's object
+         * Selects User and added to list with checked mark
+         * @param {Object} user User's object
          */
         $scope.selectUser = function (user) {
-            var index = _.findIndex($scope.usersList, (obj) => {
-                return obj.identifier === user.identifier;
-            });
+            let index = _.findIndex($scope.users, (element) => { return element.identifier === user.identifier; });
             user.isSelected = true;
-            $scope.selectedUsersId.push(user.identifier);
+            $scope.users.selectedCount += 1;
 
+            /* If New user other than existing users */
             if (index === -1) {
-                $scope.usersCount += 1;
+                $scope.users.count += 1;
             } else {
-                $scope.usersList.splice(index, 1);
+                $scope.users.splice(index, 1);
             }
-            $scope.usersList.unshift(user);
-            $timeout(function () {
-                ecEditor.jQuery('.profile').initial();
-            });
+            $scope.users.unshift(user);
+
             $scope.generateTelemetry({ type: 'click', subtype: 'select', target: 'user', targetid: user.identifier });
+            $timeout(function () {
+                ecEditor.jQuery('.profile-avatar').initial();
+            }, 0);
+            $scope.$safeApply();
         }
 
         $scope.searchByKeyword = function () {
-            $scope.searchStatus = "start";
             ecEditor.jQuery('.search-Loader').addClass('active');
-
-            let searchRequest = _.cloneDeep(searchBody);
+            let searchRequest = _.cloneDeep($scope.userSearchBody);
             if ($scope.validateEmail(this.searchKeyword)) {
                 searchRequest.request.filters.email = this.searchKeyword;
             } else if (/^\d+$/.test(this.searchKeyword)) {
@@ -312,42 +301,50 @@ angular.module('collaboratorApp', ['angular-inview'])
                 searchRequest.request.query = this.searchKeyword;
             }
 
-            $scope.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'search-button' });
-
-            userService.search(searchRequest, function (err, res) {
+            $scope.userService.search(searchRequest, function (err, res) {
                 if (err) {
-                    ctrl.searchRes.content = [];
-                    $scope.noResultFound = true;
-                    ctrl.searchErr = "Oops! Something went wrong. Please try again later.";
+                    $scope.searchRes.content = [];
+                    $scope.searchRes.isEmptyResponse = true;
+                    $scope.searchRes.errorMessage = "Oops! Something went wrong. Please try again later.";
                 } else {
-                    $scope.searchStatus = "end";
+                    $scope.searchRes.searchStatus = "end";
 
+                    /* istanbul ignore else */
                     if (res.data.result.response.count) {
-                        ctrl.searchRes.content = $scope.excludeCollaborators(res.data.result.response.content);
-                        if (ctrl.searchRes.content.length) {
-                            $scope.noResultFound = false;
+
+                        $scope.searchRes.content = $scope.excludeCollaborators(res.data.result.response.content);
+
+                        console.log('$scope.searchRes.content', $scope.searchRes.content);
+
+                        /* istanbul ignore else */
+                        if ($scope.searchRes.content.length) {
+                            $scope.searchRes.isEmptyResponse = false;
                         }
                     } else {
-                        $scope.noResultFound = true;
-                        ctrl.searchRes.content = [];
+                        $scope.searchRes.isEmptyResponse = true;
+                        $scope.searchRes.content = [];
                     }
 
-                    ctrl.searchRes.count = res.data.result.response.count;
+                    $scope.searchRes.count = res.data.result.response.count;
                     $scope.$safeApply();
                 }
             });
+            $scope.generateTelemetry({ type: 'click', subtype: 'submit', target: 'search', targetid: 'search-button' });
+        }
+
+        $scope.filterSearch = function (user) {
+            return !user.isCollaborator;
         }
 
         /**
          * Shows Search Results in large screen
          */
         $scope.viewAllResults = function () {
-            $scope.generateTelemetry({ type: 'click', subtype: 'submit', target: 'viewAll', targetid: "" });
-            $scope.usersList = $scope.excludeCollaborators(ctrl.searchRes.content);
-            $scope.usersCount = ctrl.searchRes.count < $scope.defaultLimit ? $scope.usersList.length : ctrl.searchRes.count;
+            $scope.generateTelemetry({ type: 'click', subtype: 'submit', target: 'viewAll', targetid: "view-all-results" });
+            $scope.users = $scope.searchRes.content;
             $timeout(function () {
-                ecEditor.jQuery('.profile').initial();
-            });
+                ecEditor.jQuery('.profile-avatar').initial();
+            }, 0);
         }
 
         $scope.refreshSearch = function () {
@@ -356,17 +353,40 @@ angular.module('collaboratorApp', ['angular-inview'])
         }
 
         $scope.addCollaborators = function () {
+            $scope.isLoading = true;
             $scope.generateImpression({ type: 'click', subtype: 'submit', pageid: 'AddCollaborator' });
-            $scope.updateCollaborators('addCollaborator');
-            inViewLogs = [];
+            let newCollaborators = _.map(_.filter($scope.users, (user) => { return user.isSelected || user.isCollaborator }), 'identifier');
+            $scope.updateCollaborators(_.uniq(newCollaborators.concat($scope.currentCollaborators)));
+            $scope.inViewLogs = [];
+        }
+
+        $scope.removeCollaborators = function () {
+            $scope.isLoading = true;
+            $scope.generateImpression({ type: 'click', subtype: 'submit', pageid: 'RemoveCollaborator' });
+            let newCollaborators = _.difference($scope.currentCollaborators, _.map(_.filter($scope.collaborators, (collaborator) => { return collaborator.isSelected }), 'identifier'));
+            $scope.updateCollaborators(newCollaborators);
+            $scope.inViewLogs = [];
         }
 
         /**
          * Resets search values
          */
         $scope.resetSearch = function () {
-            ctrl.searchRes.content = [];
-            $scope.noResultFound = false;
+            $scope.searchRes.content = [];
+            $scope.searchRes.isEmptyResponse = false;
+        }
+
+        $scope.validateEmail = function (email) {
+            let re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            return re.test(String(email).toLowerCase());
+        }
+
+        $scope.applyJQuery = function () {
+            ecEditor.jQuery('.ui.dropdown').dropdown({
+                onChange: function (val) {
+                    $scope.sortUsersList(val);
+                }
+            });
         }
 
         /**
@@ -396,15 +416,38 @@ angular.module('collaboratorApp', ['angular-inview'])
                     "subtype": data.subtype || "",
                     "pageid": data.pageid || "",
                     "uri": window.location.href,
-                    "visits": inViewLogs
+                    "visits": $scope.inViewLogs
                 });
             }
         }
 
-        $scope.lineInView = function (index, inview, item, section, pageSectionId) {
-            let obj = inViewLogs.filter((log) => log.identifier === item.identifier);
+        $scope.generateError = function (error) {
+            if (error) {
+                ecEditor.getService('telemetry').error({
+                    "env": 'content',
+                    "stage": '',
+                    "action": 'download',
+                    "objectid": "",
+                    "objecttype": "",
+                    "err": error.status,
+                    "type": "API",
+                    "data": error,
+                    "severity": "fatal"
+                });
+            }
+        }
+
+        /**
+         * Makes records of available dom elements currently visible in the browser viewport
+         * @param {Number} index   - Index of the element in the list
+         * @param {Array} inview   - Object of the logs currently available in the viewport 
+         * @param {Object} item    - Object of the individual item in the viewport
+         * @param {String} section - Section name  
+         */
+        $scope.lineInView = function (index, inview, item, section) {
+            let obj = $scope.inViewLogs.filter((log) => log.identifier === item.identifier);
             if (inview && !obj.length) {
-                inViewLogs.push({
+                $scope.inViewLogs.push({
                     objid: item.identifier,
                     section: section,
                     index: index
