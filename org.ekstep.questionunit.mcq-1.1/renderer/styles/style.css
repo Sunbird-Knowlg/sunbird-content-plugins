@@ -1012,7 +1012,7 @@ span.qc-option-txt {
     text-overflow: clip;
     white-space: nowrap;
     padding-left: 1vw;
-    padding-right: 1vw;
+    padding-right: 1vw; 
 }
 
 .mcq-grid-option-audio {

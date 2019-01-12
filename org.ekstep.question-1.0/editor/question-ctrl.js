@@ -455,7 +455,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   	})
   }
   var verifyFontFamily = function (qData){
-    var fontsToCheck = ['NotoNastaliqUrdu'];
+    var fontsToCheck = ['NotoNastaliqUrdu']; 
     var qText = qData.question.text;
     var isUrduSupportRequired =  false;
     _.each(fontsToCheck, function(fontFamily) { 
