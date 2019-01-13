@@ -44,7 +44,7 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
    */
   showQuestion: function (event) {
     this.preQuestionShow(event);
-
+    var qData = JSON.parse(questionsetInstance._currentQuestion.data)
     var template = _.template(this._question.template);
     var questionsetInstance = event.target;
     $(questionsetInstance._constants.qsElement).html(template({
