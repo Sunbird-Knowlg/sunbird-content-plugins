@@ -149,6 +149,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   }
   $scope.setPreviewData = function () {
     var confData = {};
+    verifyFontFamily($scope.questionCreationFormData);
     var qObj = {
       "config": '{"metadata":{"title":"question title","description":"question description","medium":"English"},"max_time":0,"max_score":' + $scope.questionData.max_score + ',"partial_scoring":' + $scope.questionData.isPartialScore + ',"isShuffleOption":' + $scope.questionData.isShuffleOption + ',"layout":' + JSON.stringify($scope.questionData.templateType) + ',"evalUnordered":' + $scope.questionData.evalUnordered + '}',
       "data": JSON.stringify($scope.questionCreationFormData),
