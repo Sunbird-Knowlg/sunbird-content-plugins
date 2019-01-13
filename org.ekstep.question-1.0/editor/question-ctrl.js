@@ -149,6 +149,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   }
   $scope.setPreviewData = function () {
     var confData = {};
+    verifyFontFamily($scope.questionCreationFormData);
     var qObj = {
       "config": '{"metadata":{"title":"question title","description":"question description","medium":"English"},"max_time":0,"max_score":' + $scope.questionData.max_score + ',"partial_scoring":' + $scope.questionData.isPartialScore + ',"isShuffleOption":' + $scope.questionData.isShuffleOption + ',"layout":' + JSON.stringify($scope.questionData.templateType) + ',"evalUnordered":' + $scope.questionData.evalUnordered + '}',
       "data": JSON.stringify($scope.questionCreationFormData),
@@ -459,6 +460,17 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   			"ver": instance.manifest.ver
   		}
   	})
+  }
+  var verifyFontFamily = function (qData){
+    var fontsToCheck = ['NotoNastaliqUrdu']; 
+    var qText = qData.question.text;
+    var isUrduSupportRequired =  false;
+    _.each(fontsToCheck, function(fontFamily) { 
+      if(qText.indexOf(fontFamily) != -1) {
+        isUrduSupportRequired = true; return false;
+      }
+    });
+    isUrduSupportRequired ? qData.question.urdu = true : qData.question.urdu = false;
   }
   $scope.init();
 }]);
