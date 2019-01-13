@@ -54,6 +54,9 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
     this.postQuestionShow(event);
 
     this.renderMath(event);
+    if(qData.question.urdu) {
+      this._addUrduSupport();
+    }
   },
   /**
    * Set the question properties - data, config and state.
