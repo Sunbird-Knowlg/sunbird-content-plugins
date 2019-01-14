@@ -491,7 +491,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.qrRequestCount = 0;
         var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
         var rootMeta = rootNode.data.metadata;
-        $scope.reservedDialCount = (rootMeta.reservedDialcodes) ? rootMeta.reservedDialcodes.length : 0;
+        $scope.reservedDialCount = (rootMeta.reservedDialcodes) ? Object.keys(rootMeta.reservedDialcodes).length : 0;
         rootNode.visit(function (node) {
             (node.data.metadata.dialcodeRequired == 'Yes') ? $scope.qrRequestCount += 1: $scope.qrRequestCount;
         });
@@ -683,63 +683,52 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     }
 
     $scope.downloadQRCodes = function () {
-        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
-        if(meta.medium && meta.gradeLevel && meta.subject){
-            var rootNode = ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild();
-            $scope.qrCodeProcessId = rootNode.data.metadata['qrCodeProcessId'];
-            ecEditor.getService('dialcode').downloadQRCode(org.ekstep.contenteditor.api.getContext("channel"), $scope.qrCodeProcessId, function (err, res) {
-                var toasterPrompt = {};
-                if (err) {
-                    toasterPrompt = {
-                        message: err.responseJSON.params.errmsg,
-                        type: "org.ekstep.toaster:error",
-                        icon: 'fa fa-warning'
-                    }
-                } else {
-                    var response = res.data.result;
-                    if (response && response.hasOwnProperty('status')) {
-                        if (res.data.result.status === 'in-process') {
-                            toasterPrompt = {
-                                message: 'QR code image generation is in progress. Please try downloading after sometime',
-                                type: "org.ekstep.toaster:info",
-                                icon: 'fa fa-info-circle'
-                            }
-                        } else if (response.status === 'completed') {
-                            var zip_file_path = response.url;
-                            var p  = new RegExp('([0-9])+(?=.[.zip])');
-                            var timeStamp = zip_file_path.match(p);
-                            var category_name = ((meta.medium + '_' + meta.gradeLevel.join('_') +'_' + meta.subject).split(" ")).join("_").toLowerCase();
-                            var zip_file_name = ecEditor.getContext('contentId') + '_' + category_name + '_' + timeStamp[0] + '.zip'; //put inside "" file name or something
-                            var a = document.createElement("a");
-                            document.body.appendChild(a);
-                            a.style = "display: none";
-                            a.href = 'data:,'+zip_file_path;
-                            a.download = zip_file_name;
-                            a.click();
-                            document.body.removeChild(a);
+        var rootNode = ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild();
+        $scope.qrCodeProcessId = rootNode.data.metadata['qrCodeProcessId'];
+        ecEditor.getService('dialcode').downloadQRCode(org.ekstep.contenteditor.api.getContext("channel"), $scope.qrCodeProcessId, function (err, res) {
+            var toasterPrompt = {};
+            if (err) {
+                toasterPrompt = {
+                    message: err.responseJSON.params.errmsg,
+                    type: "org.ekstep.toaster:error",
+                    icon: 'fa fa-warning'
+                }
+            } else {
+                var response = res.data.result;
+                if (response && response.hasOwnProperty('status')) {
+                    if (res.data.result.status === 'in-process') {
+                        toasterPrompt = {
+                            message: 'QR code image generation is in progress. Please try downloading after sometime',
+                            type: "org.ekstep.toaster:info",
+                            icon: 'fa fa-info-circle'
+                        }
+                    } else if (response.status === 'completed') {
+                        var zip_file_path = response.url;
+                        var zip_file_name = $scope.qrCodeProcessId + '.zip'; //put inside "" file name or something
+                        var a = document.createElement("a");
+                        document.body.appendChild(a);
+                        a.style = "display: none";
+                        a.href = zip_file_path;
+                        a.download = zip_file_name;
+                        a.click();
+                        document.body.removeChild(a);
 
-                            toasterPrompt = {
-                                message: 'QR codes downloaded',
-                                type: "org.ekstep.toaster:success",
-                                icon: 'fa fa-check-circle'
-                            }
+                        toasterPrompt = {
+                            message: 'QR codes downloaded',
+                            type: "org.ekstep.toaster:success",
+                            icon: 'fa fa-check-circle'
                         }
                     }
                 }
-                ecEditor.dispatchEvent(toasterPrompt.type, {
-                    message: toasterPrompt.message,
-                    position: 'topCenter',
-                    icon: toasterPrompt.icon
-                });
+            }
 
-            })
-        }else{
-            ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
-                message: "Please ensure Medium, Class and Subject value are added to the Textbook",
-                position: "topCenter",
-                icon: "fa fa-warning"
+            ecEditor.dispatchEvent(toasterPrompt.type, {
+                message: toasterPrompt.message,
+                position: 'topCenter',
+                icon: toasterPrompt.icon
             });
-        }
+
+        })
     }
     /**
      * @description - which is used to enable and disable 'Publish' and 'Request changes' button on click of checkbox
