@@ -44,9 +44,16 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
    */
   showQuestion: function (event) {
     this.preQuestionShow(event);
-    var template = _.template(this._question.template);
+    var template = _.template(this._question.template), qData;
     var questionsetInstance = event.target;
-    var qData = JSON.parse(questionsetInstance._currentQuestion.data)
+    if(questionsetInstance._currentQuestion.data){ // v1 question check
+      if(questionsetInstance._currentQuestion.data.__cdata){ // content preview
+        qData = JSON.parse(questionsetInstance._currentQuestion.data.__cdata)
+      }else{
+        qData = JSON.parse(questionsetInstance._currentQuestion.data) // questionset preview
+      }
+    }
+    
     $(questionsetInstance._constants.qsElement).html(template({
       question: this._question
     }));
@@ -54,7 +61,7 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
     this.postQuestionShow(event);
 
     this.renderMath(event);
-    if(qData.question.urdu) {
+    if(qData && qData.question.urdu) {
       this._addUrduSupport();
     }
   },
