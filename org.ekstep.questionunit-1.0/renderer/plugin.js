@@ -61,7 +61,7 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
     this.postQuestionShow(event);
 
     this.renderMath(event);
-    if(qData && qData.question.urdu) {
+    if(qData && qData.question && qData.question.urdu) {
       this._addUrduSupport();
     }
   },
