@@ -710,19 +710,41 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                             var timeStamp = zip_file_path.match(p);
                             var category_name = ((meta.medium + '_' + meta.gradeLevel.join('_') +'_' + meta.subject).split(" ")).join("_").toLowerCase();
                             var zip_file_name = ecEditor.getContext('contentId') + '_' + category_name + '_' + timeStamp[0] + '.zip'; //put inside "" file name or something
-                            var a = document.createElement("a");
-                            document.body.appendChild(a);
-                            a.style = "display: none";
-                            a.href = 'data:,'+zip_file_path;
-                            a.download = zip_file_name;
-                            a.click();
-                            document.body.removeChild(a);
 
-                            toasterPrompt = {
-                                message: 'QR codes downloaded',
-                                type: "org.ekstep.toaster:success",
-                                icon: 'fa fa-check-circle'
-                            }
+                            var toDataURL = function toDataURL(url) {
+                                return fetch(url).then(function (response) {
+                                    return response.blob();
+                                }).then(function (blob) {
+                                    return new Promise(function (resolve, reject) {
+                                        var reader = new FileReader();
+                                        reader.onloadend = function () {
+                                        return resolve(reader.result);
+                                        };
+                                        reader.onerror = reject;
+                                        reader.readAsDataURL(blob);
+                                    });
+                                }).catch(function(error){
+                                    console.error('failed to convert url to base64 '+ error);
+                                });
+                            };
+
+                            toDataURL(zip_file_path).then(function (dataUrl) {
+                                console.log('RESULT:', dataUrl);
+                                var a = document.createElement("a");
+                                document.body.appendChild(a);
+                                a.style = "display: none";
+                                a.href = dataUrl;
+                                a.download = zip_file_name;
+                                a.click();
+                                document.body.removeChild(a);
+                                toasterPrompt = {
+                                    message: 'QR codes downloaded',
+                                    type: "org.ekstep.toaster:success",
+                                    icon: 'fa fa-check-circle'
+                                }
+                            }).catch(function(error){
+                                console.error('failed to rename zip file using base64 url '+ error);
+                            });
                         }
                     }
                 }
