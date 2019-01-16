@@ -501,26 +501,15 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.$safeApply();
     }
     $scope.getQRCodeRequestCount = function () {
-        // $scope.qrRequestCount = 0;
         $scope.qrCodeCount.request = 0;
         var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
         var rootMeta = rootNode.data.metadata;
-        // $scope.reservedDialCount = (rootMeta.reservedDialcodes) ? Object.keys(rootMeta.reservedDialcodes).length : 0;
         $scope.qrCodeCount.reserve = (rootMeta.reservedDialcodes) ? Object.keys(rootMeta.reservedDialcodes).length : 0;
         $scope.dialCount = $scope.qrCodeCount.reserve;
-        console.log($scope.qrCodeCount.reserve);
-        
-        rootNode.visit(function (node) {
-            // (node.data.metadata.dialcodeRequired == 'Yes') ? $scope.qrRequestCount += 1: $scope.qrRequestCount;
+                rootNode.visit(function (node) {
             (node.data.metadata.dialcodeRequired == 'Yes') ? $scope.qrCodeCount.request += 1: $scope.qrCodeCount.request;
         });
-        console.log("$scope.qrCodeCount.request check", $scope.qrCodeCount.request);
-        console.log("reservedDialCount", $scope.qrCodeCount.reserve);
-        $scope.dummyCall()
         $scope.$apply();
-    }
-    $scope.dummyCall = function(){
-        console.log($scope.qrCodeCount.reserve +'Reserved Dial Code')
     }
     $scope.showUploadForm = function () {
         ecEditor.jQuery('.popup-item').popup();
@@ -649,8 +638,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.openRequestPopup = function() {
-        // $scope.requestNumber = $scope.reservedDialCount > 0 ? $scope.reservedDialCount : '';
-
         if($scope.qrCodeCount.request > 0) {
             $scope.reserveDialCode($scope.qrCodeCount.request+1);
         } else {
@@ -676,16 +663,11 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     };
 
     $scope.reserveDialCode = function (requestCount, closeDialog) {
-        console.log('$scope.qrCodeCount.request', $scope.qrCodeCount.request);
-        console.log("Request", requestCount);
-        
         $scope.isGeneratingQRCodes = true;
-        // $scope.qrRequestCount = _.cloneDeep(requestCount);
         $scope.qrCodeCount.request = _.cloneDeep(requestCount);
         var request = {
             "request": {
                 "dialcodes": {
-                    // "count": $scope.qrRequestCount + 1, // +1 is for RootNode
                     "count": requestCount,
                     "qrCodeSpec": {
                         "errorCorrectionLevel": "H"
@@ -698,7 +680,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             if (err) {
                 var errResponse = (err.responseJSON) ? err.responseJSON.result : undefined;
                 if (!_.isEmpty(errResponse) && errResponse.hasOwnProperty('count')) {
-                    // if (errResponse.count >= $scope.qrRequestCount) {
                         if (errResponse.count >= $scope.qrCodeCount.request) {
                         toasterPrompt = {
                             message: 'No new DIAL Codes have been generated!',

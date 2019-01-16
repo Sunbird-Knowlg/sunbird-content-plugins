@@ -70,7 +70,7 @@
                             <div class="menu" style="left: auto; right: 0; top: 25px;">
                                 <div class="item" ng-class="(!disableQRGenerateBtn || (qrCodeCount.request > 0 && qrCodeCount.request + 1 <= qrCodeCount.reserve) || isGeneratingQRCodes ) ? 'disabled' : ' '"><i class="qrcode icon"></i>
                                     <span ng-if="!isGeneratingQRCodes" class="text" ng-click="openRequestPopup(); generateTelemetry({ subtype: 'reserveDialCode', target: 'reserveDialCodeButton'});">Generate
-                                            {{(qrCodeCount.request+1 > qrCodeCount.reserve )? qrCodeCount.request + ' + 1' : (qrCodeCount.reserve > 0) ? qrCodeCount.reserve-1 +' + 1' : '' }} QR Codes
+                                            {{(qrCodeCount.request > 0 && qrCodeCount.request+1 > qrCodeCount.reserve)? qrCodeCount.request + ' + 1' : (qrCodeCount.reserve > 0) ? qrCodeCount.reserve-1 +' + 1' : '' }} QR Codes
                                     </span>
                                     <span ng-if="isGeneratingQRCodes" class="text">Generating {{(qrCodeCount.request > 0 )? qrCodeCount.request-1 + ' + 1' :'' }} QR codes</span>
                                 </div>
