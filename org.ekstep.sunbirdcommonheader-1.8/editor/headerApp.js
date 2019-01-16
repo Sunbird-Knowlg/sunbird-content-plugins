@@ -723,6 +723,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                                         reader.onerror = reject;
                                         reader.readAsDataURL(blob);
                                     });
+                                }).catch(function(error){
+                                    console.error('failed to convert url to base64 '+ error);
                                 });
                             };
 
@@ -740,6 +742,8 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                                     type: "org.ekstep.toaster:success",
                                     icon: 'fa fa-check-circle'
                                 }
+                            }).catch(function(error){
+                                console.error('failed to rename zip file using base64 url '+ error);
                             });
                         }
                     }
