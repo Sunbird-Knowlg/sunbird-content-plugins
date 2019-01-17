@@ -866,6 +866,9 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             case 403:
                 $scope.showStatusPopup('LOCK_NOT_AVAILABLE');
                 break;
+            case 422:
+                $scope.showStatusPopup('INVALID_LOCK_ID');
+                break;
             default:
                 $scope.showStatusPopup('LOCK_REFRESH_ERROR');
                 break;
@@ -893,6 +896,10 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     break;
                 case 'LOCK_NOT_AVAILABLE':
                     $scope.contentLockstatusMessage = 'Someone is currently working on ' + meta.name + '. Try again later.';
+                    $scope.isClose = true;
+                    break;
+                case 'INVALID_LOCK_ID':
+                    $scope.contentLockstatusMessage = 'Close and Re-open content to resume editing.';
                     $scope.isClose = true;
                     break;
                 case 'SESSION_TIMEOUT':
