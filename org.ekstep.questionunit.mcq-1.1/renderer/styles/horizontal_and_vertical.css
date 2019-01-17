@@ -265,11 +265,12 @@
 }
 
 .mcq-content-container .option-container.horizontal .option-block-container .option-block .option-text-container>span {
+    width:92%;
     height: auto;
     position: relative;
     top: 0;
     bottom: 0;
-    display: table-cell;
+    display: block;
     align-items: center;
     vertical-align: middle;
 }

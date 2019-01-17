@@ -175,10 +175,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         });
     }
 
-    $scope.submitRequest = function() {
-        $scope.closeThisDialog();
-    }
-
     $scope.setEditorDetails = function() {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         if (meta.rejectComment || meta.rejectedReasons) {
@@ -505,8 +501,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
         var rootMeta = rootNode.data.metadata;
         $scope.qrCodeCount.reserve = (rootMeta.reservedDialcodes) ? Object.keys(rootMeta.reservedDialcodes).length : 0;
-        $scope.dialCount = $scope.qrCodeCount.reserve;
-                rootNode.visit(function (node) {
+        rootNode.visit(function (node) {
             (node.data.metadata.dialcodeRequired == 'Yes') ? $scope.qrCodeCount.request += 1: $scope.qrCodeCount.request;
         });
         $scope.$apply();
@@ -711,7 +706,6 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     }
                     var rootNode = ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild();
                     rootNode.data.metadata['reservedDialcodes'] = res.data.result.reservedDialcodes;
-                    $scope.dialCount = res.data.result.reservedDialcodes.length;
                     rootNode.data.metadata['qrCodeProcessId'] = res.data.result.processId;
                     $scope.qrCodeProcessId = res.data.result.processId
                     $scope.isGeneratingQRCodes = false;
@@ -725,56 +719,89 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 position: 'topCenter',
                 icon: toasterPrompt.icon
             });
-        });
+        })
     }
 
     $scope.downloadQRCodes = function () {
-        var rootNode = ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild();
-        $scope.qrCodeProcessId = rootNode.data.metadata['qrCodeProcessId'];
-        ecEditor.getService('dialcode').downloadQRCode(org.ekstep.contenteditor.api.getContext("channel"), $scope.qrCodeProcessId, function (err, res) {
-            var toasterPrompt = {};
-            if (err) {
-                toasterPrompt = {
-                    message: err.responseJSON.params.errmsg,
-                    type: "org.ekstep.toaster:error",
-                    icon: 'fa fa-warning'
-                }
-            } else {
-                var response = res.data.result;
-                if (response && response.hasOwnProperty('status')) {
-                    if (res.data.result.status === 'in-process') {
-                        toasterPrompt = {
-                            message: 'QR code image generation is in progress. Please try downloading after sometime',
-                            type: "org.ekstep.toaster:info",
-                            icon: 'fa fa-info-circle'
-                        }
-                    } else if (response.status === 'completed') {
-                        var zip_file_path = response.url;
-                        var zip_file_name = $scope.qrCodeProcessId + '.zip'; //put inside "" file name or something
-                        var a = document.createElement("a");
-                        document.body.appendChild(a);
-                        a.style = "display: none";
-                        a.href = zip_file_path;
-                        a.download = zip_file_name;
-                        a.click();
-                        document.body.removeChild(a);
+        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        if(meta.medium && meta.gradeLevel && meta.subject){
+            var rootNode = ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild();
+            $scope.qrCodeProcessId = rootNode.data.metadata['qrCodeProcessId'];
+            ecEditor.getService('dialcode').downloadQRCode(org.ekstep.contenteditor.api.getContext("channel"), $scope.qrCodeProcessId, function (err, res) {
+                var toasterPrompt = {};
+                if (err) {
+                    toasterPrompt = {
+                        message: err.responseJSON.params.errmsg,
+                        type: "org.ekstep.toaster:error",
+                        icon: 'fa fa-warning'
+                    }
+                } else {
+                    var response = res.data.result;
+                    if (response && response.hasOwnProperty('status')) {
+                        if (res.data.result.status === 'in-process') {
+                            toasterPrompt = {
+                                message: 'QR code image generation is in progress. Please try downloading after sometime',
+                                type: "org.ekstep.toaster:info",
+                                icon: 'fa fa-info-circle'
+                            }
+                        } else if (response.status === 'completed') {
+                            var zip_file_path = response.url;
+                            var p  = new RegExp('([0-9])+(?=.[.zip])');
+                            var timeStamp = zip_file_path.match(p);
+                            var category_name = ((meta.medium + '_' + meta.gradeLevel.join('_') +'_' + meta.subject).split(" ")).join("_").toLowerCase();
+                            var zip_file_name = ecEditor.getContext('contentId') + '_' + category_name + '_' + timeStamp[0] + '.zip'; //put inside "" file name or something
 
-                        toasterPrompt = {
-                            message: 'QR codes downloaded',
-                            type: "org.ekstep.toaster:success",
-                            icon: 'fa fa-check-circle'
+                            var toDataURL = function toDataURL(url) {
+                                return fetch(url).then(function (response) {
+                                    return response.blob();
+                                }).then(function (blob) {
+                                    return new Promise(function (resolve, reject) {
+                                        var reader = new FileReader();
+                                        reader.onloadend = function () {
+                                        return resolve(reader.result);
+                                        };
+                                        reader.onerror = reject;
+                                        reader.readAsDataURL(blob);
+                                    });
+                                }).catch(function(error){
+                                    console.error('failed to convert url to base64 '+ error);
+                                });
+                            };
+
+                            toDataURL(zip_file_path).then(function (dataUrl) {
+                                console.log('RESULT:', dataUrl);
+                                var a = document.createElement("a");
+                                document.body.appendChild(a);
+                                a.style = "display: none";
+                                a.href = dataUrl;
+                                a.download = zip_file_name;
+                                a.click();
+                                document.body.removeChild(a);
+                                toasterPrompt = {
+                                    message: 'QR codes downloaded',
+                                    type: "org.ekstep.toaster:success",
+                                    icon: 'fa fa-check-circle'
+                                }
+                            }).catch(function(error){
+                                console.error('failed to rename zip file using base64 url '+ error);
+                            });
                         }
                     }
                 }
-            }
+                ecEditor.dispatchEvent(toasterPrompt.type, {
+                    message: toasterPrompt.message,
+                    position: 'topCenter',
+                    icon: toasterPrompt.icon
+                });
 
-            ecEditor.dispatchEvent(toasterPrompt.type, {
-                message: toasterPrompt.message,
-                position: 'topCenter',
-                icon: toasterPrompt.icon
+            })
+        }else{
+            ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
+                message: "Please ensure Medium, Class and Subject value are added to the Textbook",
+                position: "topCenter",
+                icon: "fa fa-warning"
             });
-
-        })
+        }
     }
     /**
      * @description - which is used to enable and disable 'Publish' and 'Request changes' button on click of checkbox
