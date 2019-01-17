@@ -65,7 +65,7 @@ org.ekstep.questionunit.questionComponent = {
             </div>\
         <% } %>\
             <div class="hiding-container">\
-                <div class="expand-container <% if(question.data.question.image || question.data.question.audio){ %> with-media <% } %>">\
+                <div class="expand-container common-qs-title <% if(question.data.question.image || question.data.question.audio){ %> with-media <% } %>">\
                 <%= question.data.question.text %>\
                 </div>\
             </div>\
