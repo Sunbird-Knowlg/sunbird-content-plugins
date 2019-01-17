@@ -899,7 +899,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     $scope.isClose = true;
                     break;
                 case 'INVALID_LOCK_ID':
-                    $scope.contentLockstatusMessage = 'Waiting for error message';
+                    $scope.contentLockstatusMessage = 'Close and Re-open content to resume editing';
                     $scope.isClose = true;
                     break;
                 case 'SESSION_TIMEOUT':
