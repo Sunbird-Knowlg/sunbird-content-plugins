@@ -26,7 +26,14 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     /**
      * @property - to get count of nodes that require qr code generation
      */
-    $scope.qrRequestCount = 0;
+    $scope.qrCodeCount = {
+        request: 0,
+        reserve: 0
+    }
+    /**
+     * @property - shows if its generating QR code
+     */
+    $scope.isGeneratingQRCodes = false;
     /**
      * @property - used to get rejected reasons
      */
@@ -488,13 +495,14 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         $scope.$safeApply();
     }
     $scope.getQRCodeRequestCount = function () {
-        $scope.qrRequestCount = 0;
+        $scope.qrCodeCount.request = 0;
         var rootNode = ecEditor.jQuery("#collection-tree").fancytree("getRootNode").getFirstChild();
         var rootMeta = rootNode.data.metadata;
-        $scope.reservedDialCount = (rootMeta.reservedDialcodes) ? rootMeta.reservedDialcodes.length : 0;
+        $scope.qrCodeCount.reserve = (rootMeta.reservedDialcodes) ? Object.keys(rootMeta.reservedDialcodes).length : 0;
         rootNode.visit(function (node) {
-            (node.data.metadata.dialcodeRequired == 'Yes') ? $scope.qrRequestCount += 1: $scope.qrRequestCount;
+            (node.data.metadata.dialcodeRequired == 'Yes') ? $scope.qrCodeCount.request += 1: $scope.qrCodeCount.request;
         });
+        $scope.$apply();
     }
     $scope.showUploadForm = function () {
         ecEditor.jQuery('.popup-item').popup();
@@ -622,11 +630,38 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         };
     };
 
-    $scope.reserveDialCode = function () {
+    $scope.openRequestPopup = function() {
+        if($scope.qrCodeCount.request > 0) {
+            $scope.reserveDialCode($scope.qrCodeCount.request+1);
+        } else {
+            $scope.requestNumber = $scope.qrCodeCount.reserve > 0 ? $scope.qrCodeCount.reserve : '';
+            ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
+                template: 'requestQRCode',
+                controller: ['$scope', 'mainCtrlScope', function($scope, mainCtrlScope) {
+                    $scope.requestNumber = mainCtrlScope.requestNumber;
+                    $scope.qrCodeCount = mainCtrlScope.qrCodeCount;
+                    $scope.reserveDialCode = function(requestNumber, closeDialog) {
+                        $scope.closeThisDialog()
+                        mainCtrlScope.reserveDialCode(requestNumber, closeDialog);
+                    }
+                }],
+                resolve: {
+                    mainCtrlScope: function() {
+                        return $scope;
+                    }
+                },
+                showClose: false
+            });
+        }
+    };
+
+    $scope.reserveDialCode = function (requestCount, closeDialog) {
+        $scope.isGeneratingQRCodes = true;
+        $scope.qrCodeCount.request = _.cloneDeep(requestCount);
         var request = {
             "request": {
                 "dialcodes": {
-                    "count": $scope.qrRequestCount + 1, // +1 is for RootNode
+                    "count": requestCount,
                     "qrCodeSpec": {
                         "errorCorrectionLevel": "H"
                     }
@@ -638,7 +673,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             if (err) {
                 var errResponse = (err.responseJSON) ? err.responseJSON.result : undefined;
                 if (!_.isEmpty(errResponse) && errResponse.hasOwnProperty('count')) {
-                    if (errResponse.count >= $scope.qrRequestCount) {
+                        if (errResponse.count >= $scope.qrCodeCount.request) {
                         toasterPrompt = {
                             message: 'No new DIAL Codes have been generated!',
                             type: "org.ekstep.toaster:warning",
@@ -652,6 +687,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                         icon: 'fa fa-warning'
                     }
                 }
+                $scope.isGeneratingQRCodes = false;
             } else if (res) {
                 toasterPrompt = {
                     message: 'DIAL code generated.',
@@ -670,8 +706,10 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                     rootNode.data.metadata['reservedDialcodes'] = res.data.result.reservedDialcodes;
                     rootNode.data.metadata['qrCodeProcessId'] = res.data.result.processId;
                     $scope.qrCodeProcessId = res.data.result.processId
+                    $scope.isGeneratingQRCodes = false;
                     $scope.getQRCodeRequestCount();
                     $scope.resolveQRDownloadBtn();
+                    $scope.$safeApply();
                  });
             }
             ecEditor.dispatchEvent(toasterPrompt.type, {

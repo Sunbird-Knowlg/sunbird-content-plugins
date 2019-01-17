@@ -439,3 +439,26 @@ body {
 .reviewer-comment-box::-webkit-scrollbar-thumb{
     background:black;
 }
+
+/* Bulk Request Popup */
+.float-right {
+    float: right;
+}
+.color-red {
+    color: red;
+}
+.margin-right-0 {
+    margin-right: 0 !important;
+}
+.top-25 {
+    top: 25vh !important;
+}
+.cursor-pointer {
+    cursor: pointer;
+}
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+/* End of Bulk Request Popup */
