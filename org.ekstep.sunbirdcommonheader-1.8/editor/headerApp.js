@@ -71,19 +71,16 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     $scope.loader = false;
     $scope.CONSTANTS = {
         tocDownloadFailed: 'Unable to download the content, please try again later',
-        tocDownloadSuccess: 'Table of Content downloadeding!',
+        tocDownloadSuccess: 'Table of Content downloaded!',
         tocUpdateHeader: 'Update Table of Contents Metadata attributes via CSV',
-        tocUpdateDescription: 'Please note that no sections could be added or removed using CSV upload, only the values of the attributes can be changes',
+        tocUpdateDescription: 'Please note that no sections can be added or removed through this update, only the values of the attributes can be changed.',
         tocUpdateBtnUpload: 'Upload',
         tocUpdateBtnClose: 'Close'
     }
-    $scope.lockObj = ecEditor.getConfig('lock');       
+    $scope.contentLock = ecEditor.getConfig('lock');
     $scope.dataChanged = false;
     $scope.lastContentLockSyncTime = new Date();
-    $scope.onContentLockMessage = {
-        show: false,
-        text: undefined
-    }
+    $scope.contentLockstatusMessage = "";
     $scope.previewMode = false;
     $scope.contentLockExpired = false;
     /*
@@ -447,7 +444,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
                 $scope.setContentLockListener();
             } else {
                 $scope.removeContentLockListener();
-            }           
+            }
         });
     };
 
@@ -686,52 +683,85 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     }
 
     $scope.downloadQRCodes = function () {
-        var rootNode = ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild();
-        $scope.qrCodeProcessId = rootNode.data.metadata['qrCodeProcessId'];
-        ecEditor.getService('dialcode').downloadQRCode(org.ekstep.contenteditor.api.getContext("channel"), $scope.qrCodeProcessId, function (err, res) {
-            var toasterPrompt = {};
-            if (err) {
-                toasterPrompt = {
-                    message: err.responseJSON.params.errmsg,
-                    type: "org.ekstep.toaster:error",
-                    icon: 'fa fa-warning'
-                }
-            } else {
-                var response = res.data.result;
-                if (response && response.hasOwnProperty('status')) {
-                    if (res.data.result.status === 'in-process') {
-                        toasterPrompt = {
-                            message: 'QR code image generation is in progress. Please try downloading after sometime',
-                            type: "org.ekstep.toaster:info",
-                            icon: 'fa fa-info-circle'
-                        }
-                    } else if (response.status === 'completed') {
-                        var zip_file_path = response.url;
-                        var zip_file_name = $scope.qrCodeProcessId + '.zip'; //put inside "" file name or something
-                        var a = document.createElement("a");
-                        document.body.appendChild(a);
-                        a.style = "display: none";
-                        a.href = zip_file_path;
-                        a.download = zip_file_name;
-                        a.click();
-                        document.body.removeChild(a);
+        var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
+        if(meta.medium && meta.gradeLevel && meta.subject){
+            var rootNode = ecEditor.jQuery('#collection-tree').fancytree('getRootNode').getFirstChild();
+            $scope.qrCodeProcessId = rootNode.data.metadata['qrCodeProcessId'];
+            ecEditor.getService('dialcode').downloadQRCode(org.ekstep.contenteditor.api.getContext("channel"), $scope.qrCodeProcessId, function (err, res) {
+                var toasterPrompt = {};
+                if (err) {
+                    toasterPrompt = {
+                        message: err.responseJSON.params.errmsg,
+                        type: "org.ekstep.toaster:error",
+                        icon: 'fa fa-warning'
+                    }
+                } else {
+                    var response = res.data.result;
+                    if (response && response.hasOwnProperty('status')) {
+                        if (res.data.result.status === 'in-process') {
+                            toasterPrompt = {
+                                message: 'QR code image generation is in progress. Please try downloading after sometime',
+                                type: "org.ekstep.toaster:info",
+                                icon: 'fa fa-info-circle'
+                            }
+                        } else if (response.status === 'completed') {
+                            var zip_file_path = response.url;
+                            var p  = new RegExp('([0-9])+(?=.[.zip])');
+                            var timeStamp = zip_file_path.match(p);
+                            var category_name = ((meta.medium + '_' + meta.gradeLevel.join('_') +'_' + meta.subject).split(" ")).join("_").toLowerCase();
+                            var zip_file_name = ecEditor.getContext('contentId') + '_' + category_name + '_' + timeStamp[0] + '.zip'; //put inside "" file name or something
 
-                        toasterPrompt = {
-                            message: 'QR codes downloaded',
-                            type: "org.ekstep.toaster:success",
-                            icon: 'fa fa-check-circle'
+                            var toDataURL = function toDataURL(url) {
+                                return fetch(url).then(function (response) {
+                                    return response.blob();
+                                }).then(function (blob) {
+                                    return new Promise(function (resolve, reject) {
+                                        var reader = new FileReader();
+                                        reader.onloadend = function () {
+                                        return resolve(reader.result);
+                                        };
+                                        reader.onerror = reject;
+                                        reader.readAsDataURL(blob);
+                                    });
+                                }).catch(function(error){
+                                    console.error('failed to convert url to base64 '+ error);
+                                });
+                            };
+
+                            toDataURL(zip_file_path).then(function (dataUrl) {
+                                console.log('RESULT:', dataUrl);
+                                var a = document.createElement("a");
+                                document.body.appendChild(a);
+                                a.style = "display: none";
+                                a.href = dataUrl;
+                                a.download = zip_file_name;
+                                a.click();
+                                document.body.removeChild(a);
+                                toasterPrompt = {
+                                    message: 'QR codes downloaded',
+                                    type: "org.ekstep.toaster:success",
+                                    icon: 'fa fa-check-circle'
+                                }
+                            }).catch(function(error){
+                                console.error('failed to rename zip file using base64 url '+ error);
+                            });
                         }
                     }
                 }
-            }
+                ecEditor.dispatchEvent(toasterPrompt.type, {
+                    message: toasterPrompt.message,
+                    position: 'topCenter',
+                    icon: toasterPrompt.icon
+                });
 
-            ecEditor.dispatchEvent(toasterPrompt.type, {
-                message: toasterPrompt.message,
-                position: 'topCenter',
-                icon: toasterPrompt.icon
+            })
+        }else{
+            ecEditor.dispatchEvent("org.ekstep.toaster:warning", {
+                message: "Please ensure Medium, Class and Subject value are added to the Textbook",
+                position: "topCenter",
+                icon: "fa fa-warning"
             });
-
-        })
+        }
     }
     /**
      * @description - which is used to enable and disable 'Publish' and 'Request changes' button on click of checkbox
@@ -783,111 +813,121 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         });
     }
 
-    $scope.setPreviewStatus = function(event,data) {
-        $scope.previewMode = $scope.previewMode === true ? false : true;
+    $scope.setPreviewStatus = function (event, data) {
+        $scope.previewMode = true;
         $scope.$safeApply();
     }
-  
+
+    $scope.revertPreviewStatus = function (event, data) {
+        $scope.previewMode = false;
+        $scope.$safeApply();
+    }
+
     $scope.removeContentLockListener = function () {
         $interval.cancel($scope.contentLockListener);
         $scope.$safeApply();
     }
 
-     $scope.contentDataChanged = function(){
+    $scope.contentDataChanged = function () {
         $scope.dataChanged = true;
     }
- 
-     $scope.refreshContentLock = function () {
-        if($scope.internetStatusObj.status === true){           
+
+    $scope.refreshContentLock = function () {
+        if ($scope.internetStatusObj.status === true) {
             var request = {
                 resourceId: ecEditor.getContext('contentId'),
                 resourceType: 'Content',
-                lockId: $scope.lockObj.lockKey
+                lockId: $scope.contentLock.lockKey
             }
-            ecEditor.getService(ServiceConstants.CONTENT_LOCK_SERVICE).refreshLock({request:request}, function (err, res) {
-                if(res && res.responseCode && res.responseCode == 'OK' && res.result){
-                    $scope.lockObj.lockKey = res.result.lockKey;
-                    $scope.lockObj.expiresIn = res.result.expiresIn;
-                    $scope.lockObj.expiresAt = new Date(res.result.expiresAt);                    
-                }else if(err){
-                    $scope.handleError(err);                  
+            ecEditor.getService(ServiceConstants.CONTENT_LOCK_SERVICE).refreshLock({
+                request: request
+            }, function (err, res) {
+                if (res && res.data && res.data.responseCode === 'OK' && res.data.result) {
+                    $scope.contentLock.lockKey = res.data.result.lockKey;
+                    $scope.contentLock.expiresIn = res.data.result.expiresIn;
+                    $scope.contentLock.expiresAt = new Date(res.data.result.expiresAt);
+                    $scope.contentLockExpired = false;
+                } else if (err && $scope.contentLockExpired === true) {
+                    $scope.handleError(err);
                 }
-                $scope.contentLockExpired = false;
+
             });
         } else {
             // $scope.showStatusPopup('INTERNET_DISCONNECTED',false);
-             $scope.removeContentLockListener();
-        }        
+            $scope.removeContentLockListener();
+        }
     }
 
-    $scope.handleError = function(err){
-        switch(err.status){
+    $scope.handleError = function (err) {
+        switch (err.status) {
             case 500:
-                $scope.showStatusPopup('LOCK_REFRESH_ERROR');   
+                $scope.showStatusPopup('LOCK_REFRESH_ERROR');
                 break;
             case 403:
                 $scope.showStatusPopup('LOCK_NOT_AVAILABLE');
                 break;
             default:
-                $scope.showStatusPopup('LOCK_REFRESH_ERROR');   
+                $scope.showStatusPopup('LOCK_REFRESH_ERROR');
                 break;
         }
-        $scope.removeContentLockListener();      
+        $scope.removeContentLockListener();
     }
 
-     $scope.showStatusPopup = function(type,message){
+    $scope.showStatusPopup = function (type, message) {
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         // reset status flags
         $scope.isIdle = false;
         $scope.isResume = false;
         $scope.isRefresh = false;
         $scope.isClose = false;
-        if(meta){
-        switch(type){
-            case 'LOCK_REFRESH_ERROR':
-                $scope.onContentLockMessage.text = 'Error Occured. Try again after sometime.';
-                $scope.isClose = true;
-                $scope.isRefresh = true;
-                break;
-            case 'IDLE_TIMEOUT':
-                $scope.onContentLockMessage.text = 'You have been inactive.';
-                $scope.isIdle = true;
-                break;
-            case 'LOCK_NOT_AVAILABLE':
-                $scope.onContentLockMessage.text = 'Someone is currently working on '+meta.name+'. Try again later.';
-                $scope.isClose = true;
-                break;
-            case 'SESSION_TIMEOUT':
-                $scope.onContentLockMessage.text = meta.name + ' locked due to inactivity, click Resume to continue editing. Closing will result in loss of unsaved changes.';
-                $scope.isClose = true;
-                $scope.isResume = true;
-                break;
-        } 
-        $scope.$safeApply(function(){
-            ecEditor.jQuery('#errorLockContentModal').modal({
-                inverted: true,
-                closable: false,
-                onVisible: function(){
-                    ecEditor.jQuery('#errorLockContentModal').mouseover(function(){
-                        if($scope.isIdle){
-                            ecEditor.jQuery('#errorLockContentModal').modal('hide');
-                        }
-                    });
-                },
-                onDeny: function() {
-                    $scope.closeEditor();
-                },
-                onApprove: function() {
-                    $scope.contentDataChanged();
-                    $scope.validateContentLock();
-                }
-            }).modal('show');
-        });
-     }
-   }
-   $scope.refreshContent = function() {
-    location.reload();
-   }
+        if (meta) {
+            switch (type) {
+                case 'LOCK_REFRESH_ERROR':
+                    $scope.contentLockstatusMessage = 'Error Occured. Try again after sometime.';
+                    $scope.isClose = true;
+                    $scope.isRefresh = true;
+                    break;
+                case 'IDLE_TIMEOUT':
+                    $scope.contentLockstatusMessage = 'You have been inactive.';
+                    $scope.isIdle = true;
+                    break;
+                case 'LOCK_NOT_AVAILABLE':
+                    $scope.contentLockstatusMessage = 'Someone is currently working on ' + meta.name + '. Try again later.';
+                    $scope.isClose = true;
+                    break;
+                case 'SESSION_TIMEOUT':
+                    $scope.contentLockstatusMessage = meta.name + ' locked due to inactivity, click Resume to continue editing. Closing will result in loss of unsaved changes.';
+                    $scope.isClose = true;
+                    $scope.isResume = true;
+                    break;
+            }
+            $scope.$safeApply(function () {
+                ecEditor.jQuery('#errorLockContentModal').modal({
+                    inverted: true,
+                    closable: false,
+                    onVisible: function () {
+                        ecEditor.jQuery(document).mousemove(function () {
+                            if ($scope.isIdle) {
+                                ecEditor.jQuery('#errorLockContentModal').modal('hide');
+                            }
+                        });
+                    },
+                    onDeny: function () {
+                        $scope.closeEditor();
+                    },
+                    onApprove: function () {
+                        $scope.contentDataChanged();
+                        $scope.validateContentLock();
+                    }
+                }).modal('show');
+            });
+        }
+    }
+
+    $scope.refreshLock = function () {
+        $scope.refreshContentLock();
+        $scope.setContentLockListener();
+    }
 
     $scope.validateContentLock = function () {
         //console.log("called ", $scope.contentLockListener);
@@ -895,12 +935,12 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         var currentTime = (new Date()).getTime();
         var timeDiff = currentTime - lastSyncTime;
         $scope.idleTimer += $scope.contentLockRefershInterval;
-        // if screen is active(not idle)then refresh the lock regularly 
-        if($scope.dataChanged === true || $scope.previewMode === true){
+        // if screen is active(not idle)then refresh the lock regularly
+        if ($scope.dataChanged === true || $scope.previewMode === true) {
             try {
-             $scope.refreshContentLock();
-            } catch(e) {
-             console.log("err ",e)
+                $scope.refreshContentLock();
+            } catch (e) {
+                console.log("err ", e)
             }
             $scope.dataChanged = false;
             $scope.idleTimer = 0;
@@ -908,46 +948,45 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
             return;
         }
         // if lock expires then show resume/close message
-        if(Math.floor(timeDiff/1000) >=  $scope.contentLockExpiresIn) {
-            try {                
+        if (Math.floor(timeDiff / 1000) >= $scope.contentLockExpiresIn) {
+            try {
                 $scope.showStatusPopup('SESSION_TIMEOUT');
                 $scope.contentLockExpired = true;
-            } catch(e) {
-             console.log("err ",e)
+            } catch (e) {
+                console.log("err ", e)
             }
             $scope.idleTimer = 0;
             $scope.lastContentLockSyncTime = new Date();
             return;
         }
 
-         // if user is idle and lock not expired then show idle screen
-        if($scope.idleTimer >=  $scope.contentLockIdleTimeOut && $scope.contentLockExpired === false) {
+        // if user is idle and lock not expired then show idle screen
+        if ($scope.idleTimer >= $scope.contentLockIdleTimeOut && $scope.contentLockExpired === false) {
             // save content if any changes before showing idle screen
-            if($scope.disableSaveBtn === false){
-                $scope.saveContent(function(err,res){});
+            if ($scope.disableSaveBtn === false) {
+                $scope.saveContent(function (err, res) {});
             }
-            $scope.idleTimer = 0;            
+            $scope.idleTimer = 0;
             $scope.showStatusPopup('IDLE_TIMEOUT');
             return;
         }
     }
 
-     $scope.setContentLockListener = function (event) {
-        if($scope.contentLockListener){
-          $scope.removeContentLockListener()
+    $scope.setContentLockListener = function (event) {
+        if ($scope.contentLockListener) {
+            $scope.removeContentLockListener()
         }
-        if($scope.lockObj && $scope.lockObj.lockKey){
-            //convert to seconds
-            $scope.contentLockExpiresIn = $scope.lockObj.expiresIn*60;
+        //convert to seconds
+        if($scope.contentLock && $scope.contentLock.lockKey){
+            $scope.contentLockExpiresIn = $scope.contentLock.expiresIn * 60;
             //idle timeout and refresh intervals should be a fraction of content lock expiry mins
-            $scope.contentLockIdleTimeOut = Math.floor($scope.contentLockExpiresIn/3);
-            $scope.contentLockRefershInterval = Math.floor($scope.contentLockIdleTimeOut/5);
+            $scope.contentLockIdleTimeOut = Math.floor($scope.contentLockExpiresIn / 3);
+            $scope.contentLockRefershInterval = Math.floor($scope.contentLockIdleTimeOut / 5);
             $scope.idleTimer = 0;
             // set lock refresh interval
-            $scope.contentLockListener = $interval($scope.validateContentLock,$scope.contentLockRefershInterval*1000);
+            $scope.contentLockListener = $interval($scope.validateContentLock, $scope.contentLockRefershInterval * 1000);
         }
-     }
-
+    }
 
     /**
      * @description - on init of checklist pop-up
@@ -1053,13 +1092,14 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
     //others
     ecEditor.addEventListener("org.ekstep:sunbirdcommonheader:close:editor", $scope.closeEditor, $scope);
     ecEditor.addEventListener('org.ekstep.contenteditor:preview', $scope.setPreviewStatus,$scope);
-    ecEditor.addEventListener('org.ekstep.contenteditor:preview:close', $scope.setPreviewStatus,$scope);
+    ecEditor.addEventListener('org.ekstep.contenteditor:preview:close', $scope.revertPreviewStatus,$scope);
     ecEditor.addEventListener('org.ekstep.editor:keepalive', $scope.contentDataChanged,$scope);
     $scope.$watch('disableSaveBtn', function() {
         if($scope.disableSaveBtn === false){
-            $scope.contentDataChanged();   
+            $scope.contentDataChanged();
         }
     });
+    // if content lock is present initiate lock listener else display error
     $scope.setContentLockListener();
 }]);
 //# sourceURL=sunbirdheaderapp.js

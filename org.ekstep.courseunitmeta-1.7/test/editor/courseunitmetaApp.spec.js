@@ -1,6 +1,6 @@
 describe("Ekstep Unitmeta Plugin:", function() {
     var manifest, ctrl, $scope, pluginInstance;
-    var instance = { manifest: {id: "org.ekstep.courseunitmeta", ver: "1.6"}, "data":""};
+    var instance = { manifest: {id: "org.ekstep.courseunitmeta", ver: "1.7"}, "data":""};
     
     beforeAll(function(done) {
             manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.courseunitmeta");

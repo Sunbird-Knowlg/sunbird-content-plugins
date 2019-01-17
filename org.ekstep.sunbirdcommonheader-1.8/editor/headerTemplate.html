@@ -2,10 +2,10 @@
     id="commonHeader">
     <div class="ui grid fluid container custom-container">
          <div id="errorLockContentModal" class="ui modal">
-            <div class="ui icon header" ng-bind="onContentLockMessage.text"></div>
+            <div class="ui icon header" ng-bind="contentLockstatusMessage"></div>
             <div class="actions" ng-if="isResume || isClose || isRefresh">
                 <div class="ui ok blue button" ng-if="isResume" ><i class="checkmark icon"></i>Resume</div>
-                <div class="ui ok blue button" ng-if="isRefresh" ng-click="refreshContent()"><i class="refresh icon"></i>Refresh</div>
+                <div class="ui ok blue button" ng-if="isRefresh" ng-click="refreshLock()"><i class="refresh icon"></i>Refresh</div>
                 <div class="ui basic cancel button" ng-if="isClose"><i class="close icon"></i>Close Editor</div>
             </div>
         </div>
@@ -23,15 +23,16 @@
                     <span ng-if="showEditMeta"><i class="edit icon link"></i>&nbsp;Edit Details</span>
                     <span ng-if="!showEditMeta"><i class="eye icon link"></i>&nbsp;View Details </span>
                 </a>
-                <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}"><span
-                        class="spinner"></span>{{internetStatusObj.text}}</label>
             </div>
 
         </div>
         <div class="two wide column">
-            <div ng-if="lastSaved" class="last-saved-label">
+            <div ng-if="lastSaved && internetStatusObj.status" class="last-saved-label">
                 <label class="">Last saved {{lastSaved | timeAgo }}</label>
             </div>
+            <label class="internet-status" ng-class="{'internet-status-label':internetStatusObj.status}">
+                <span class="spinner"></span>{{internetStatusObj.text}}
+            </label>
         </div>
         <div class="ui active inverted dimmer" id="downloadtoc-loader" ng-if="loader" style="top:30px !important">
             <div class="ui large text loader">Downloading</div>
