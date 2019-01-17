@@ -131,7 +131,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
         var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
         ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup',
             {
-                action: "course-unitmeta-form",
+                action: "unitsave",
                 subType: rootNodeConfig.type.toLowerCase(),
                 framework: ecEditor.getContext('framework'),
                 rootOrgId: ecEditor.getContext('channel'),
@@ -166,7 +166,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
             }
         }, true);
         ecEditor.addEventListener('editor:template:loaded', function (event, object) {
-            if (object.formAction == 'course-unitmeta-form') {
+            if (object.formAction == 'unitsave') {
                 $scope.courseForm = object.templatePath;
             }
         });
