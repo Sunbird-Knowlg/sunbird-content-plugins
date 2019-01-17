@@ -15,12 +15,15 @@ angular.module('videoApp', [])
         ctrl.loadMoreAssetSpinner = false;
         ctrl.showLoadMoreWarningMsg = false;
         ctrl.showAddLessonBtn = false;
+        ctrl.maxVideoSize = ecEditor.getContext('MAX_ASSET_FILE_SIZE_LIMIT');
         ctrl.previewMessages = {
             emptyState : 'Click Go to preview' ,
             previewError: 'Could not load the preview. Check the link and try again',
-            invalidURL : 'Please provide valid YouTube URL!',
+            invalidYoutubeURL : 'Please provide valid YouTube URL!',
+            invalidDriveURL : 'Please provide valid Google drive URL!',
             invalidLicense : 'The video you are trying to upload is not license by CC-BY. Please try another video.',
-            loadingState: 'Loading Video...'
+            loadingState: 'Loading Video...',
+            fileExceed: 'Video file is exceeded'
         }
         ctrl.isPreviewPlaying = false;
         function hideLoader() {
@@ -68,7 +71,7 @@ angular.module('videoApp', [])
                     videojs.getPlayers()['ID'+ctrl.vidID].pause();
                 }
             }
-            else if(ctrl.isPreviewPlaying && ctrl.provider==='gdrive'){
+            else if(ctrl.isPreviewPlaying && ctrl.provider==='googledrive'){
                 var video = document.getElementsByTagName('video')[0];
                 video.pause();
             }
@@ -139,7 +142,7 @@ angular.module('videoApp', [])
             else if (url.indexOf('drive') != -1) {
                 var gdrive = url.replace('/view?usp=sharing', '').replace('open?id=', 'uc?export=download&id=').replace('file/d/', 'uc?export=download&id=').replace('/edit?usp=sharing', '');
                 ctrl.videoUrl = gdrive;
-                ctrl.provider = 'gdrive'
+                ctrl.provider = 'googledrive'
                 cb(null, ctrl.videoUrl, ctrl.provider);
             }
             else{
@@ -167,10 +170,10 @@ angular.module('videoApp', [])
             }
             org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE).getVideoLicense(requestObj, function (err, res) {
                 if (err) {
-                    ctrl.toastManager('error', true, false, ctrl.previewMessages.invalidURL);
+                    ctrl.toastManager('error', true, false, ctrl.previewMessages.invalidYoutubeURL);
                     ctrl.isPreviewPlaying = false;
                 }
-                else if(res.data.result.validLicense) {
+                else if(res.data.result.license.valid) {
                     videoelement.id = 'ID'+ctrl.vidID;
                     videoelement.className = 'video-js vjs-default-skin';
                     ctrl.isPreviewPlaying = true;
@@ -205,7 +208,20 @@ angular.module('videoApp', [])
         };
 
         ctrl.driveLoader =  function(videoelement, video){
-            video.play()
+            var requestObj = {
+                "request" : {
+                    "asset" : {
+                        "provider": ctrl.provider,
+                        "url": ctrl.videoUrl
+                    }
+                }
+            }
+            org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE).getDriveVideoFileSize(requestObj, function (err, res) {
+                if (err) {
+                    ctrl.toastManager('error', true, false, ctrl.previewMessages.invalidDriveURL);
+                    ctrl.isPreviewPlaying = false;
+                }else if(res.data.result.size.valid && res.data.result.size.value <= ctrl.maxVideoSize) {
+                    video.play()
                         .then(function () {
                             ctrl.isPreviewPlaying = true;
                             ctrl.toastManager('', false, true, '');
@@ -233,6 +249,12 @@ angular.module('videoApp', [])
                             });
                             console.log("Invalid URL:", err);
                         });
+                }else{
+                    ctrl.toastManager('error', true, false, "File size is exceeded");
+                }
+
+                });
+            
         }
         ctrl.previewVideo = function () {            
             ctrl.messageDiv = true;
@@ -245,7 +267,7 @@ angular.module('videoApp', [])
                 var video = document.getElementsByTagName('video')[0];
                 if (provider === 'youtube') {
                     ctrl.youtubeLoader(videoelement, video);
-                } else if(provider === 'gdrive') {
+                } else if(provider === 'googledrive') {
                     ctrl.driveLoader(videoelement, video)
                 }
                 else{
@@ -302,6 +324,14 @@ angular.module('videoApp', [])
                 }
             });
         };
+
+        ctrl.bytesToMB = function(){
+            var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+            if (ctrl.maxVideoSize == 0) return '0 Byte';
+            var i = parseInt(Math.floor(Math.log(ctrl.maxVideoSize) / Math.log(1024)));
+            ctrl.videoSizeinMB = Math.round(ctrl.maxVideoSize / Math.pow(1024, i), 2) + ' ' + sizes[i];
+        };
+
         ctrl.generateTelemetry = function (data) {
             if (data) org.ekstep.contenteditor.api.getService(ServiceConstants.TELEMETRY_SERVICE).interact({
                 "type": data.type,
