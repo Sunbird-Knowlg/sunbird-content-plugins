@@ -1,37 +1,6 @@
 <ng-template id="courseunitmetaID">
 <div ng-app="courseunitmetaApp" class="metacontent-wrapper" ng-controller="courseunitmetaController">
-    <div ng-include="courseForm" ng-if="mode === 'Edit'"></div>
-    <!-- View template -->
-    <div class="ui basic segment" ng-if="mode !== 'Edit'">       
-        <table class="ui very basic table contentDetails">
-            <tbody>
-                <tr class="top aligned">       
-                    <td class="one wide column"><b>Name</b></td>
-                    <td>:</td>
-                    <td class="eleven wide">{{courseunit.name || '--'}}</td>
-                </tr>    
-                <tr class="top aligned">
-                    <td class="one wide column"><b>Description</b></td>
-                    <td>:</td>
-                    <td class="eleven wide">{{courseunit.description || '--'}}</td>
-                </tr>
-                <tr class="top aligned">
-                    <td class="one wide column"><b>Topics</b></td>
-                    <td>:</td>
-                    <td class="eleven wide">
-                        <span ng-if="!courseunit.topic.length">--</span>
-                        <span ng-repeat="topic in courseunit.topic">{{topic}}{{$last ? '' : ', '}}</span>
-                    </td>
-                </tr>
-                <tr class="top aligned">
-                    <td class="one wide column"><b>Keywords</b></td>
-                    <td>:</td>
-                    <td class="eleven wide">{{courseunit.keywords.join(', ') || '--'}}</td>
-                </tr>     
-            </tbody>
-        </table>
-    </div>  
-    <!-- View template -->    
+    <div ng-include="courseForm"></div>   
 </div>
 
 </ng-template> 
