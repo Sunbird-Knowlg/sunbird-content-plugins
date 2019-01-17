@@ -129,17 +129,18 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
         
         ecEditor.dispatchEvent('org.ekstep.collectioneditor:breadcrumb');
         var rootNodeConfig = _.find(ecEditor.getConfig('editorConfig').rules.objectTypes, ['isRoot', true]);
-        ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup',
-            {
-                action: "unitsave",
-                subType: rootNodeConfig.type.toLowerCase(),
-                framework: ecEditor.getContext('framework'),
-                rootOrgId: ecEditor.getContext('channel'),
-                type: 'content',
-                popup: false,
-                metadata: $scope.courseunit
-            });
+        
+        ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup',{
+            action: "unitsave",
+            subType: rootNodeConfig.type.toLowerCase(),
+            framework: ecEditor.getContext('framework'),
+            rootOrgId: ecEditor.getContext('channel'),
+            type: 'content',
+            popup: false,
+            metadata: $scope.courseunit
+        });
         $scope.isLoading = false;
+        
         $scope.$safeApply();
     }
     ecEditor.addEventListener('org.ekstep.collectioneditor:node:selected:CourseUnit', $scope.onNodeSelect);
@@ -167,7 +168,11 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
         }, true);
         ecEditor.addEventListener('editor:template:loaded', function (event, object) {
             if (object.formAction == 'unitsave') {
-                $scope.courseForm = object.templatePath;
+                $scope.courseForm = "";
+                setTimeout(function(){
+                    $scope.courseForm = object.templatePath;
+                    $scope.$safeApply();
+                },0);
             }
         });
         ecEditor.addEventListener('editor:form:change', function (event, data) {
