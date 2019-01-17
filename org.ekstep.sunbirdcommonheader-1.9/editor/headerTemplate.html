@@ -75,7 +75,7 @@
                                     <span ng-if="isGeneratingQRCodes" class="text">Generating {{(qrCodeCount.request > 0 )? qrCodeCount.request-1 + ' + 1' :'' }} QR codes</span>
                                 </div>
                                 <div class="item" ng-class="(!disableQRDownloadBtn) ? 'disabled' : ' ' " ng-click="downloadQRCodes(); generateTelemetry({ subtype: 'downloadQRCodes', target: 'downloadQRCodesButton'});"><i
-                                        class="download icon"></i> <span class="text">Download QR code</span></div>
+                                        class="download icon"></i> <span class="text">Download {{(qrCodeCount.reserve > 1) ? qrCodeCount.reserve-1 + ' +1' : ''}} QR codes</span></div>
                             </div>
                         </div>
                     </div>
