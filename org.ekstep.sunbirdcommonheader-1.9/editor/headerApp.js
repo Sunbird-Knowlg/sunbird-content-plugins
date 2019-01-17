@@ -82,9 +82,7 @@ angular.module('org.ekstep.sunbirdcommonheader:app', ["Scope.safeApply", "yaru22
         tocUpdateHeader: 'Update Table of Contents Metadata attributes via CSV',
         tocUpdateDescription: 'Please note that no sections can be added or removed through this update, only the values of the attributes can be changed.',
         tocUpdateBtnUpload: 'Upload',
-        tocUpdateBtnClose: 'Close',
-        requestQRCodes: 'Request for QR Codes',
-        requestBtn: 'Request'
+        tocUpdateBtnClose: 'Close'
     }
     $scope.contentLock = ecEditor.getConfig('lock');
     $scope.dataChanged = false;
