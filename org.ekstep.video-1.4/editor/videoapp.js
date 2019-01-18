@@ -15,7 +15,7 @@ angular.module('videoApp', [])
         ctrl.loadMoreAssetSpinner = false;
         ctrl.showLoadMoreWarningMsg = false;
         ctrl.showAddLessonBtn = false;
-        ctrl.maxVideoSize = ecEditor.getContext('videoMaxSize');
+        ctrl.maxVideoSize = _.isUndefined(ecEditor.getContext('videoMaxSize')) ? 50 : ecEditor.getContext('videoMaxSize');
         ctrl.videoSizeInBytes = 0;
         ctrl.previewMessages = {
             emptyState : 'Click Go to preview' ,
