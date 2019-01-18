@@ -9,6 +9,7 @@ formApp.directive('topicSelector', function() {
         $scope.contentMeta = $scope.$parent.contentMeta;
         $scope.topicSelectorMessage = $scope.contentMeta.topic ? '(' + $scope.contentMeta.topic.length + ') topics selected' : '(0) topics selected';
         /**Added for more than one topic selector on same page, element id should be unique as per template **/
+        $scope.framework = ($scope.$parent.$parent.tempalteName == "resourceFilterTemplate") ? ecEditor.getContext('resource_framework') : ecEditor.getContext('framework');
         $scope.templateId = (!_.isUndefined($scope.$parent.$parent.tempalteName)) ? $scope.$parent.$parent.tempalteName : 'metaform';
         $scope.topicElementId = $scope.templateId + '-topic';
         $scope.invokeTopicSelector = function() {
@@ -17,7 +18,8 @@ formApp.directive('topicSelector', function() {
                 element: $scope.topicElementId,
                 selectedTopics: $scope.contentMeta.topic || [],
                 isCategoryDependant : true,
-                callback: $scope.callbackFn
+                callback: $scope.callbackFn,
+                framework: $scope.framework
             });
         }
         $scope.callbackFn = function(data) {
