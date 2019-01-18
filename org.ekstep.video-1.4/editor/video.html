@@ -128,7 +128,7 @@
                         </div>
                         <div ng-show="!$ctrl.messageDiv" id="previewVideo"></div>
                     </div>
-                    <div class="six wide column" style="padding-right:0;">
+                    <div class="six wide column" style="padding-right:0;" ng-init=$ctrl.mbToBytes()>
                         <p>
                             <b>YouTube</b>: </br>
                             <ul>
@@ -137,7 +137,7 @@
                             <b>Google Drive</b>:
                             <ul>
                                 <li>Supported File Type: WebM, MP4.</li>
-                                <li>Recommended File Size: Less than 20MB</li>
+                                <li>Recommended File Size: Less than {{$ctrl.maxVideoSize}}MB</li>
                             </ul>
                         </p>
                     </div>
