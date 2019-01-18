@@ -16,7 +16,8 @@
                 <div class="row">
                     <div class="column">
                         <p class="color-red" ng-if="requestNumber > 250">This number is too large for the request</p>
-                        <p class="color-red" ng-if="requestNumber === 0 || ( requestNumber && requestNumber < 2)">The number should be at least 2</p>
+                        <p class="color-red" ng-if="qrCodeCount.reserve === 0 && (requestNumber === 0 || ( requestNumber && requestNumber < 2))">The number should be at least 2</p>
+                        <p class="color-red" ng-if="qrCodeCount.reserve > 0 && requestNumber <= qrCodeCount.reserve">The number should be greater than {{qrCodeCount.reserve}}</p>
                     </div>
                 </div>
             </div>
