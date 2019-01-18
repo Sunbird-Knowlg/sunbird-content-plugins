@@ -44,9 +44,9 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
    */
   showQuestion: function (event) {
     this.preQuestionShow(event);
+
     var template = _.template(this._question.template);
     var questionsetInstance = event.target;
-    var qData = JSON.parse(questionsetInstance._currentQuestion.data)
     $(questionsetInstance._constants.qsElement).html(template({
       question: this._question
     }));
@@ -54,9 +54,6 @@ org.ekstep.contentrenderer.questionUnitPlugin = Plugin.extend({
     this.postQuestionShow(event);
 
     this.renderMath(event);
-    if(qData.question.urdu) {
-      this._addUrduSupport();
-    }
   },
   /**
    * Set the question properties - data, config and state.
