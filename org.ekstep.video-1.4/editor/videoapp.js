@@ -219,7 +219,7 @@ angular.module('videoApp', [])
                 }
             }
             var fields = 'size';
-            org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE).getDriveVideoFileSize(requestObj, fields, function (err, res) {
+            org.ekstep.contenteditor.api.getService(ServiceConstants.META_SERVICE).getVideoLicense(requestObj, fields, function (err, res) {
                 if (err) {
                     ctrl.toastManager('error', true, false, ctrl.previewMessages.invalidDriveURL);
                     ctrl.isPreviewPlaying = false;
