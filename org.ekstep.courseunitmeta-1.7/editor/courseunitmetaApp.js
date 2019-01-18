@@ -132,7 +132,7 @@ angular.module('courseunitmetaApp', []).controller('courseunitmetaController', [
         
         ecEditor.dispatchEvent('org.ekstep.editcontentmeta:showpopup',{
             action: "unitsave",
-            subType: rootNodeConfig.type.toLowerCase(),
+            subType: DEFAULT_NODETYPE.toLowerCase(),
             framework: ecEditor.getContext('framework'),
             rootOrgId: ecEditor.getContext('channel'),
             type: 'content',
