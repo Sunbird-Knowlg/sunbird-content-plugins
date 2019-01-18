@@ -324,7 +324,7 @@ angular.module('org.ekstep.lessonbrowserapp', ['angular-inview', 'luegg.directiv
                 {
                     action: "resource-filters", 
                     subType: rootNodeConfig.type.toLowerCase(), 
-                    framework: ecEditor.getContext('framework'),
+                    framework: ecEditor.getContext('resource_framework') || ecEditor.getContext('framework'),
                     rootOrgId: ecEditor.getContext('channel'),
                     type: 'content',
                     popup: false, 

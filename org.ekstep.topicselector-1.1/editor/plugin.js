@@ -10,6 +10,11 @@
 
 org.ekstep.contenteditor.basePlugin.extend({
     /**
+     * framework to get topics
+     * @memberof topicselector
+     */
+    framework: undefined,
+    /**
      * topic data for sematic ui tree picker lib
      * @memberof topicselector
      */
@@ -68,6 +73,7 @@ org.ekstep.contenteditor.basePlugin.extend({
     initTopicBrowser: function(event, data) {
         var instance = this;
         instance.data = data;
+        instance.framework = data.framework || ecEditor.getService('content').getContentMeta(ecEditor.getContext('contentId')).framework;
         instance.terms = [];
         instance.getCategory(function(){
             if(instance.categories.length > 0){
@@ -166,7 +172,7 @@ org.ekstep.contenteditor.basePlugin.extend({
      */
     getCategory: function(callback) {
         var instance = this;
-        var frameworkId = org.ekstep.contenteditor.api.getContext('framework') || ecEditor.getService('content').getContentMeta(org.ekstep.contenteditor.api.getContext('contentId')).framework;
+        var frameworkId = instance.framework;
         if (frameworkId){
             ecEditor.getService(ServiceConstants.META_SERVICE).getCategorys(frameworkId, function(error, response) {
                 if (!error) {

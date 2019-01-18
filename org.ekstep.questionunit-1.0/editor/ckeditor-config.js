@@ -31,7 +31,7 @@ CKEDITOR.editorConfig = function (config) {
     // { name: 'others' },
     '/',
     {name: 'basicstyles', groups: ['basicstyles', 'cleanup']},
-    {name: 'paragraph', groups: ['list', 'align']},
+    // {name: 'paragraph', groups: ['list', 'align']},
     {name: 'styles'},
     {name: 'colors'},
     {name: 'input'}
@@ -39,17 +39,13 @@ CKEDITOR.editorConfig = function (config) {
   // Font pixel to wm conversion done based on taking 14px = 1em;
   config.fontSize_sizes = '18/1.285714285em;20/1.428571428em;22/1.571428571em;24/1.714285714em;26/1.857142857em;28/2em;';
 
-  //config.fontSize_defaultLabel = '18';
-  config.font_names = 'NotoSans;NotoSansBengali;NotoSansDevanagari;NotoSansGujarati;NotoSansGurmukhi;NotoSansKannada;NotoSansMalayalam;NotoSansOriya;NotoSansTamil;NotoSansTelugu;NotoNastaliqUrdu';
-  config.font_names = 'বাংলা (Bengali)/NotoSansBengali;देवनागरी (Devanagari)/NotoSansDevanagari;English & other languages/NotoSans;ગુજરાતી (Gujarati)/NotoSansGujarati;ਗੁਰਮੁਖੀ (Gurmukhi)/NotoSansGurmukhi;ಕನ್ನಡ (Kannada)/NotoSansKannada;മലയാളലിപി (Malayalam)/NotoSansMalayalam;ଓଡ଼ିଆ (Oriya)/NotoSansOriya;தமிழ் (Tamil)/NotoSansTamil;తెలుగు (Telugu)/NotoSansTelugu;اردو (Urdu)/NotoNastaliqUrdu';
+  // config.fontSize_defaultLabel = '18';
 
-  // Default font family
-  config.font_defaultLabel = 'English & other languages';
   config.removePlugins = 'stylescombo, magicline';
 
   // Remove some buttons provided by the standard plugins, which are
   // not needed in the Standard(s) toolbar.
-  config.removeButtons = 'Subscript,Superscript,Format';
+  config.removeButtons = 'Subscript,Superscript,Font,Format';
 
   // Set the most common block elemnts.
   // config.format_tags = 'p;h1;h2;h3';
