@@ -39,7 +39,11 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   });
 	$scope.questionData.templateType = $scope.templatesType[0];
 	$scope.questionMetaData = {};
-
+  $scope.formulaLimitMsg = {
+    show: false,
+    text: 'Preview the question and split long formulae to ensure they are displayed correctly.'
+  };
+  $scope.formulaCount = 0;
 	$scope.init = function () {
 		ecEditor.addEventListener('editor:template:loaded', function (event, object) {
 			if(object.formAction == 'question-meta-save') {
@@ -65,6 +69,7 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
       }
     });
     ecEditor.addEventListener($scope._constants.EVENT_FORM_SUCCESS, $scope.saveMetaData, $scope);  
+    ecEditor.addEventListener('org.ekstep.mathtext:addEquation', $scope.showEquationMessage, $scope);  
 	}
 	$scope.showTemplates = function() {
     $scope.templatesScreen = true;
@@ -459,6 +464,12 @@ angular.module('org.ekstep.question', ['org.ekstep.metadataform'])
   			"ver": instance.manifest.ver
   		}
   	})
+  }
+  $scope.showEquationMessage = function(event, object){
+    if($scope.formulaCount === 0){
+      $scope.formulaLimitMsg.show = true;
+    }
+    $scope.formulaCount++;
   }
   $scope.init();
 }]);
