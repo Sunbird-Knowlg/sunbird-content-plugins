@@ -15,8 +15,8 @@ angular.module('videoApp', [])
         ctrl.loadMoreAssetSpinner = false;
         ctrl.showLoadMoreWarningMsg = false;
         ctrl.showAddLessonBtn = false;
-        ctrl.maxVideoSize = _.isUndefined(ecEditor.getContext('videoMaxSize')) ? 50 : ecEditor.getContext('videoMaxSize');
-        ctrl.videoSizeInBytes = 0;
+        ctrl.maxVideoSize =  ecEditor.getContext('videoMaxSize') || 50;
+        ctrl.videoSizeInBytes = parseInt(ctrl.maxVideoSize * 1024 * 1024);
         ctrl.previewMessages = {
             emptyState : 'Click Go to preview' ,
             previewError: 'Could not load the preview. Check the link and try again',
@@ -326,10 +326,6 @@ angular.module('videoApp', [])
                     "url": ctrl.videoUrl
                 }
             });
-        };
-
-        ctrl.mbToBytes = function(){
-            ctrl.videoSizeInBytes = parseInt(ctrl.maxVideoSize * 1024 * 1024);
         };
 
         ctrl.generateTelemetry = function (data) {
