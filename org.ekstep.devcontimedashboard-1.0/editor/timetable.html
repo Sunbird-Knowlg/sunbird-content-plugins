@@ -1,0 +1,126 @@
+<script type="text/ng-template" ng-app="timetableApp" ng-controller="timetableCtrl as $ctrl" id="partials/timetable">
+
+    <div class="container">
+        <div class="row pt-3">
+          <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
+            <div class="form-group row">
+              <label class="col-3 col-sm-2 col-form-label">Class</label>
+              <div class="col-9 col-sm-10">
+                <select class="custom-select">
+                  <option selected>Select Class....</option>
+                  <option value="c1">Class 1</option>
+                  <option value="c2">Class 2</option>
+                  <option value="c3">Class 3</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="col-12 col-md-6 col-lg-4">
+            <div class="form-group row">
+              <label class="col-3 col-form-label">Subject</label>
+              <div class="col-9">
+                <select class="custom-select">
+                  <option selected>Select Subject...</option>
+                  <option value="s1">Subject 1</option>
+                  <option value="s2">Subject 2</option>
+                  <option value="s3">Subject 3</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="table-div">
+              <div class="table-responsive">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th class="text-center text-uppercase">Teaching</th>
+                      <th class="text-center text-uppercase">Practice</th>
+                      <th class="text-center text-uppercase">Preparation</th>
+                      <th class="text-center text-uppercase">Assement</th>
+                      <th class="text-center text-uppercase">Supplementry</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th class="align-middle py-0">Topic 1</th>
+                      <td class="align-middle py-0">
+                        <a class="btn btn-link w-100 text-center table-cell rounded-0" ng-click="showDetailedRow('teaching', 'topic1')"
+                          [ngClass]="{'active': (type === 'teaching' && topic === 'topic1' && showDetailedView) ? true : false}">
+                          1
+                        </a>
+                      </td>
+                      <td class="align-middle py-0">
+                        <a class="btn btn-link w-100 text-center table-cell rounded-0" ng-click="showDetailedRow('practice', 'topic1')"
+                          [ngClass]="{'active': (type === 'practice' && topic === 'topic1' && showDetailedView) ? true : false}">
+                          1
+                        </a>
+                      </td>
+                      <td class="align-middle py-0">
+                        <a class="btn btn-link w-100 text-center table-cell rounded-0">
+                          1
+                        </a>
+                      </td>
+                      <td class="align-middle py-0">
+                        <a class="btn btn-link w-100 text-center table-cell rounded-0">
+                          1
+                        </a>
+                      </td>
+                      <td class="align-middle py-0">
+                        <a class="btn btn-link w-100 text-center table-cell rounded-0">
+                          1
+                        </a>
+                      </td>
+                    </tr>
+                    <tr class="detailed-row" *ngIf="topic === 'topic1' && showDetailedView">
+                      <td colspan="6" class="px-0">
+                        <h4 class="text-uppercase text-center ">{{type}}</h4>
+                        <table class="table">
+                          <tr>
+                            <td class="align-top p-1" style="width:20%">
+                              <a class="btn btn-link px-0 w-100 text-capitalize">
+                                topic title {{type}}
+                              </a>
+                            </td>
+                            <td class="align-top p-1" style="width:20%">
+                              <a class="btn btn-link px-0 w-100 text-capitalize">
+                                topic title {{type}}
+                              </a>
+                            </td>
+                            <td class="align-top p-1" style="width:20%">
+                              <a class="btn btn-link px-0 w-100 text-capitalize">
+                                topic title {{type}}
+                              </a>
+                            </td>
+                            <td class="align-top p-1" style="width:20%">
+                              <a class="btn btn-link px-0 w-100 text-capitalize">
+                                topic title {{type}}
+                              </a>
+                            </td>
+                            <td class="align-middle p-1 text-center" style="width:20%">
+                              <a class="btn btn-outline-secondary btn-sm mr-2">
+                                View More
+                              </a>
+                              <a class="btn btn-outline-primary btn-sm">
+                                + Create New
+                              </a>
+                            </td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <!-- <h1 ng-repeat="x in records">{{x}}</h1>
+    <h2 ng-repeat="x in topics.topic1">
+        {{x}}
+    </h2> -->
+</script>
