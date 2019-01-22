@@ -27,7 +27,7 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
 
             function tick() {
                 if (video.readyState === video.HAVE_ENOUGH_DATA) {
-                    canvasElement.height = video.videoHeight;
+                    canvasElement.height = video.videoHeight + 180;
                     canvasElement.width = video.videoWidth;
                     canvas.drawImage(video, 0, 0, canvasElement.width, canvasElement.height);
                     var imageData = canvas.getImageData(0, 0, canvasElement.width, canvasElement.height);
@@ -61,8 +61,8 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
                 };
 
                 $.ajax({
-                    method: "POST",
-                    url: "https://dev.sunbirded.org/api/data/v1/form/read",
+                    method: 'POST',
+                    url: 'https://dev.ekstep.in/api/devcon/v3/login',
                     data: JSON.stringify(data),
                     dataType: 'json',
                     contentType: 'application/json',

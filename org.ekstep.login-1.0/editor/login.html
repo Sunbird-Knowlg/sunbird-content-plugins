@@ -1,20 +1,26 @@
 <script type="text/ng-template" ng-controller="logincontroller as $ctrl" id="partials/login.html">
    
    <div class="login-container p-3">
+       <div class="text-center">
+            <img alt="null" class="logo-image" src="https://diksha.gov.in/auth/resources/3.2.0.final/login/ntp/img/diksha_gov_logo.svg">
+       </div>
         <div class="title">
-            <h2 class="text-left">Devcon Login</h2>
+            <h2 class="">SIGN IN</h2>
         </div>
         <div class="content login-body">
-            <canvas style="width: 100%;" id="loginCanvas"></canvas>
+            <div class="scan-mask">
+     <canvas style="width: 100%;" id="loginCanvas"></canvas>    
+    </div>
+           
 
             <label class="d-block">(OR)</label>
-            <label class="d-block text-left px-30" for="input-QR">Enter QR Code</label>
+            <label class="d-block" for="input-QR">Enter QR Code</label>
             <div class="ui fluid icon input dial-section-input py-10 px-30">
                
-                <input class="d-block ng-untouched ng-pristine ng-valid"  id="qrcode" name="input-QR" title="Search" type="text" placeholder=""><i class="search icon"></i></div>
+                <input class="d-block ng-untouched ng-pristine ng-valid"  id="qrcode" name="input-QR" title="Search" type="text" placeholder=""></div>
         </div>
         <div class="actions">
-            <button type="button" ng-click="$ctrl.verifyQrCode();" class="ui primary text-align-center icon button">Login</button>
+            <button type="button" ng-click="$ctrl.verifyQrCode();" class="ui primary text-align-center w-100 icon button green-cust">Sign In</button>
         </div>
     </div>
 </script>

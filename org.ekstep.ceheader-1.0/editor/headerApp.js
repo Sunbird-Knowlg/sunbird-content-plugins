@@ -117,6 +117,11 @@ angular.module('org.ekstep.ceheader:headerApp', ['yaru22.angular-timeago']).cont
         store.set('previousversion', $scope.nextversion);
         $scope.whatsNewBadge = false;
     };
+    $scope.displayLogout = function() {
+        $scope.fireEvent({ id: 'org.ekstep.login:showpopup' });
+        store.set('previousversion', $scope.nextversion);
+        $scope.whatsNewBadge = false;
+    };
 
 
     $scope.init = function() {
