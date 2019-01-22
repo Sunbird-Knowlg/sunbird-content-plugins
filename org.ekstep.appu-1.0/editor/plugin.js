@@ -43,7 +43,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             instance.stopSpeechListener();
             setTimeout(function () {
                 instance.startSpeechListener();
-            },2000);
+            }, 2000);
         }
 
         window.recognition.onerror = function (event) {
@@ -52,7 +52,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 instance.stopSpeechListener();
                 setTimeout(function () {
                     instance.startSpeechListener();
-                },2000);
+                }, 2000);
             };
         }
 
@@ -71,10 +71,12 @@ org.ekstep.contenteditor.basePlugin.extend({
         try {
             var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             window.recognition = new SpeechRecognition();
+            window.screenView = 'editor';
             console.log('plugin ' + this.manifest.id + ' initalized');
             this.setVoiceRecognition();
             ecEditor.addEventListener(this.manifest.id + ":startSpeechListener", this.startSpeechListener, this);
             ecEditor.addEventListener(this.manifest.id + ":stopSpeechListener", this.stopSpeechListener, this);
+            ecEditor.addEventListener(this.manifest.id + ":currentCommands", this.updateCommands, this);
         }
         catch (e) {
             console.error(e);
