@@ -7,10 +7,9 @@
     "description": "",
     "publishedDate": "",
     "editor": {
-        "main": "editor/plugin.js",
+        "main": "./editor/plugin.js",
         "dependencies": [
-            { "type": "css", "src": "editor/style.css" },
-            { "type": "js", "src": "editor/command.js" }
+            { "type": "js", "src": "./editor/command.js" }
         ]
     }
 }

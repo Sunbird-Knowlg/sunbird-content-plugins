@@ -1,15 +1,6 @@
 org.ekstep.contenteditor.basePlugin.extend({
     type: "editor",
     appuVoice: false,
-    loadWindow: function () {
-      var template = `<div class="chatbot-container"> <div class="chat-grid"> <div class="chat-header"> Appu </div><div class="chat-body"> <div class="chat chat-end"> <div class="chat-msg user-msg"> Hi how are you </div></div><div class="chat chat-start"> <div class="chat-msg reply-msg"> I'm fine and how about you! </div></div><div class="chat chat-end"> <div class="chat-msg user-msg"> Hi how are you </div></div><div class="chat chat-start"> <div class="chat-msg reply-msg"> I'm fine and how about you! </div></div></div><div class="chat-input-container"> <input type="text" name="chat-input" class="chat-input" value="" placeholder="How can I help you ?"> <div class="voice-container"> <div class="voice-rounded"> </div></div></div></div></div>`;
-       var node = document.createElement("div");
-       node.id = 'dv-chat-bot';
-      node.innerHTML = template;
-      var _body = document.getElementsByTagName('body') [0];
-      _body.appendChild(node);
-
-    },
     setVoiceRecognition: function () {
         var instance = this;
         /*-----------------------------
@@ -81,7 +72,6 @@ org.ekstep.contenteditor.basePlugin.extend({
             var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             window.recognition = new SpeechRecognition();
             console.log('plugin ' + this.manifest.id + ' initalized');
-            this.loadWindow();
             this.setVoiceRecognition();
             ecEditor.addEventListener(this.manifest.id + ":startSpeechListener", this.startSpeechListener, this);
         }
