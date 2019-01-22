@@ -9,6 +9,7 @@
  */
 org.ekstep.contenteditor.basePlugin.extend({
     type: 'assetbrowser',
+    query:undefined,
     initData: undefined,
     /**
      *   @memberof cb {Funtion} callback
@@ -20,9 +21,36 @@ org.ekstep.contenteditor.basePlugin.extend({
      *   @memberof assetBrowser
      *
      */
+
+     processAppuCommand:function(event,data){
+        var instance = this;    
+        console.log('voice command executed ',data);
+        instance.query =  data.value;
+      var browseData = {
+            type: data.item.type,
+            search_filter: {}, // All composite keys except mediaType
+            callback: function(data) {
+               
+             }
+      };
+      instance.initPreview(event,browseData);
+      setTimeout(function(){
+          if(data.item.type == 'image'){
+            $('#allImagesTab').trigger('click');
+            $("#searchAllImageAssets").val(instance.query);
+          }else {
+            $('#allAudioTab').trigger('click');
+            $("#searchAllAudioAssets").val(instance.query);
+          }
+        
+      },800);
+    },
+
     initialize: function() {
         var instance = this;        
         org.ekstep.contenteditor.api.addEventListener(this.manifest.id + ":show", this.initPreview, this);
+        ecEditor.addEventListener('org.ekstep.appu:openImageBrowser',instance.processAppuCommand,this);
+        ecEditor.addEventListener('org.ekstep.appu:openAudioBrowser',instance.processAppuCommand,this);
         var templatePath = org.ekstep.contenteditor.api.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assetBrowser.html");
         var controllerPath = org.ekstep.contenteditor.api.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "editor/assetbrowserapp.js");
         org.ekstep.contenteditor.api.getService('popup').loadNgModules(templatePath, controllerPath);
@@ -81,7 +109,9 @@ org.ekstep.contenteditor.basePlugin.extend({
                 "offset": offset
             }
         };
-
+        if( instance.query &&  instance.query != ""){
+            searchText =  instance.query;
+        }
         org.ekstep.contenteditor.api._.isUndefined(searchText) ? null : requestObj.request.query = searchText;
 
         // Public assets only
