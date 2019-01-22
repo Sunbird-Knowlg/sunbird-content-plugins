@@ -14,15 +14,7 @@
             },
             {
                 "type": "css",
-                "src": "editor/libs/bootstrap.min.css"
-            },
-            {
-                "type": "css",
                 "src": "editor/libs/iziToast.min.css"
-            },
-            {
-                "type": "js",
-                "src": "editor/libs/bootstrap.min.js"
             },
             {
                 "type": "js",
@@ -31,14 +23,6 @@
             {
                 "type": "js",
                 "src": "editor/libs/iziToast.min.js"
-            },
-            {
-                "type": "js",
-                "src": "editor/libs/jquery.min.js"
-            },
-            {
-                "type": "js",
-                "src": "editor/libs/jquery-1.10.2.js"
             },
             {
                 "type": "js",

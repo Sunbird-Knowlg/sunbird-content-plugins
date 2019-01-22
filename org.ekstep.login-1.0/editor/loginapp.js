@@ -1,27 +1,4 @@
 'use strict';
-
-// angular.module('loginApp')
-//     .controller('loginCtrl', ['$scope', function ($scope) {
-//         var ctrl = this;
-//         ctrl.show = 'message';
-//         ctrl.messageDiv = true;
-//         ctrl.maxLimit = 1000;
-//         ctrl.limit = 200;
-//         ctrl.offset = 0;
-//         ctrl.offsetInc = 200;
-//         ctrl.loadMoreAssetSpinner = false;
-//         ctrl.showLoadMoreWarningMsg = false;
-
-//         function hideLoader() {
-//             ctrl.loading = '';
-//         }
-
-//         function showLoader() {
-//             ctrl.loading = 'active';
-//         }
-//     }]
-// );
-
 angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instance', function ($scope, instance) {
     var ctrl = this;
     var audiodata = {};

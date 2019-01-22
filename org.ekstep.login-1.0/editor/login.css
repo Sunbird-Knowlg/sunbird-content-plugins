@@ -12,16 +12,18 @@
     margin:0 auto;
   }
 
-  .login-container .title h2 {
-    font-size: 26px;
-  }
   .login-container input {
-    border: 1px solid #d2d0d0;
+        border: 1px solid #d3d3d3;
+      width: 90%;
+      margin: 10px auto;
+      padding: 10px;
+  
   }
   .ngdialog.ngdialog-theme-plain .ngdialog-content {
     width: 100%;
     height: 100%;
     background:#284fd9;
+    background-image: linear-gradient(-45deg, #284fd9, #466cf3);
   }     
   .ngdialog.ngdialog-theme-plain {
       padding:0 0 0 0;
@@ -33,4 +35,30 @@
   }
   .text-left {
 text-align: left;
+  }
+
+  .title {
+    padding: 15px 30px;
+  }
+  .title h2 {
+    font-size:1.5em;
+  }
+  .d-block {
+    display: block;
+  }
+  div.actions {
+    width:100%;
+    text-align: center;
+    padding: 15px 0px;
+  }
+  .px-30 {
+    padding-left:30px;
+    padding-right:30px;
+  }
+  .py-10 {
+    padding-top:10px;
+    padding-bottom:10px;
+  }
+  .ui.icon.input>i.icon {
+    right:30px;
   }
