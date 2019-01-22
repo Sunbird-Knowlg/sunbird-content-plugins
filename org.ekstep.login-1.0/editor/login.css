@@ -26,3 +26,11 @@
   .ngdialog.ngdialog-theme-plain {
       padding:0 0 0 0;
   }
+  .ui.primary.button{
+    padding: 15px 20px;
+    min-width: 200px;
+    background: #2846d9;
+  }
+  .text-left {
+text-align: left;
+  }
