@@ -74,6 +74,7 @@ org.ekstep.contenteditor.basePlugin.extend({
             console.log('plugin ' + this.manifest.id + ' initalized');
             this.setVoiceRecognition();
             ecEditor.addEventListener(this.manifest.id + ":startSpeechListener", this.startSpeechListener, this);
+            ecEditor.addEventListener(this.manifest.id + ":stopSpeechListener", this.stopSpeechListener, this);
         }
         catch (e) {
             console.error(e);
