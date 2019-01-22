@@ -1,0 +1,30 @@
+{
+    "id": "org.ekstep.devconquestion",
+    "ver": "1.0",
+    "author": "Vivek Kasture",
+    "title": "Devcon Question plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            {
+                "type": "css",
+                "src": "editor/worksheet.css"
+            }
+        ],
+        "menu": [
+            {
+                "id": "worksheet",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Create Question",
+                "title": "Create Question",
+                "iconClass": "icon-questions icon",
+                "onclick": {
+                    "id": "org.ekstep.devconquestion:add"
+                }
+            }
+        ]
+    }
+}

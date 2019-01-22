@@ -1,0 +1,19 @@
+<script type="text/ng-template" ng-app="worksheetApp" ng-controller="worksheetCtrl as $ctrl" id="partials/worksheet">
+
+    <div class="ui active longer modal fullscreen-modal">
+        <div class="ui clearing segment overlap-all margin-bottom-0 header-height">
+            <strong class="ui left floated header header-title">Upload a Pdf</strong>
+
+            <div class="ui right floated header">
+                <span><i class="close link icon" id="close-button" ng-click="closeThisDialog()"></i><span>
+            </div>
+        </div>
+        <div>
+            <form method="POST" enctype="multipart/form-data" id="fileUploadForm" style="margin-left: 70px;">
+                <input type = "file" onchange="angular.element(this).scope().uploadFile()" ng-model="fileupload" id="resume"/>
+                <button ng-click = "uploadFile()">upload me</button>
+            </form>
+        </div>
+
+   </div>
+</script>
