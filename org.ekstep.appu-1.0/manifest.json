@@ -1,0 +1,16 @@
+{
+    "id": "org.ekstep.appu",
+    "ver": "1.0",
+    "shortId": "appu",
+    "author": "",
+    "title": "Appu Bot",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            { "type": "css", "src": "editor/style.css" },
+            { "type": "js", "src": "editor/command.js" }
+        ]
+    }
+}
