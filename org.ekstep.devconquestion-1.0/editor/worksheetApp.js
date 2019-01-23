@@ -165,11 +165,11 @@ angular.module('worksheetApp', ['angular-inview'])
                         icon: 'fa fa-warning'
                     });
                 } else {
-                    ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                    /* ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                         message: 'Question created successfully',
                         position: 'topCenter',
                         icon: 'fa fa-warning'
-                    });
+                    }); */
                 }
             })
             // console.log("Parsed", JSON.parse(data.request.assessment_item.metadata.body));
@@ -253,6 +253,10 @@ angular.module('worksheetApp', ['angular-inview'])
                         position: 'topCenter',
                         icon: 'fa fa-warning'
                     });
+<<<<<<< HEAD
+=======
+                    $scope.closeThisDialog();
+>>>>>>> 609c70b69920bbaec0e54c51fe07fdd57e631c32
                     $scope.$safeApply();
                 },
                 error: function (e) {
