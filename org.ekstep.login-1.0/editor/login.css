@@ -23,9 +23,13 @@
   .w-100 {
     width:100%;
   }
-  .ngdialog.ngdialog-theme-plain .ngdialog-content {
+  .ngdialog-content {
+    height:100%;
+  }
+
+  .ngdialog-overlay.login-bg {
     width: 100%;
-    height: 100%;
+    height:100%;
     background-size: cover;
     background-repeat: no-repeat;
     min-height: 100vh;

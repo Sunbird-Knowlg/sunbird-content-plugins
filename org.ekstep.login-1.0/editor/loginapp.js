@@ -2,12 +2,19 @@
 angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instance', function ($scope, instance) {
     var ctrl = this;
     var audiodata = {};
+    ctrl.showDiv = true;
     $scope.init = function () {
+        var deviceId;
+        var fp = new Fingerprint2()
+		fp.get(function (result) {
+			deviceId= result.toString()
+		})
+        
         setTimeout(function () {
             var video = document.createElement("video");
             var canvasElement = document.getElementById("loginCanvas");
             var canvas = canvasElement.getContext("2d");
-
+            console.log(deviceId);
             function drawLine(begin, end, color) {
                 canvas.beginPath();
                 canvas.moveTo(begin.x, begin.y);
@@ -18,7 +25,11 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
             }
 
             // Use facingMode: environment to attemt to get the front camera on phones
-            navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } }).then(function (stream) {
+            navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: "environment"
+                }
+            }).then(function (stream) {
                 video.srcObject = stream;
                 video.setAttribute("playsinline", true); // required to tell iOS safari we don't want fullscreen
                 video.play();
@@ -46,8 +57,8 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
             }
             ctrl.verifyQrCode = function (code) {
                 console.log("In the QR code varify code");
-                if(!code){
-                    var   x=angular.element(document.getElementById("qrcode"));      
+                if (!code) {
+                    var x = angular.element(document.getElementById("qrcode"));
                     code = x.val();
                 }
                 var data = {
@@ -59,6 +70,38 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
                         framework: code
                     }
                 };
+                // Add your stall telemetry data and remove unwanted telemetry
+                var telemetryData = {
+                    "events": [{
+                            "eid": "DC_START",
+                            "ets": new Date().getTime(),
+                            "did": deviceId,
+                            "dimensions": {
+                                "visitorId": code,
+                                "stallId": "stallId",
+                                "ideaId": "ideaId",
+                                "visitorName": "Visitor Name",
+                                "studentId": "studentId",
+                                "studentName": "studentName",
+                                "teacherId": "teacherId",
+                                "teacherName": "teacherName",
+                                "parentId": "parentId",
+                                "parentName": "parentName",
+                                "stallName": "stallName",
+                                "ideaName": "ideaName",
+                                "classroomId": "classroomId",
+                                "school": "school",
+                                "district": "district",
+                                "period": "period",
+                                "topics": "topics",
+                                "subject": "subject",
+                                "grade": "grade"
+                            },
+                            "edata": {}
+                        }
+
+                    ]
+                };
 
                 $.ajax({
                     method: 'POST',
@@ -66,39 +109,46 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
                     data: JSON.stringify(data),
                     dataType: 'json',
                     contentType: 'application/json',
-                }).done(function (msg) {
-                    iziToast.success({ title: 'Success', message: 'Login successful', position: 'topCenter' });
+                }).done(function (data) {
+                    ctrl.showDiv = false;
+                    $scope.$safeApply();
+                    $scope.fireEvent({ id: 'org.ekstep.timetable:add' });
+                    if (data.result && data.result.Visitor) {
+                        $.ajax({
+                            method: 'POST',
+                            url: 'http://52.172.188.118:3000/v1/telemetry',
+                            data: JSON.stringify(telemetryData),
+                            dataType: 'json',
+                            contentType: 'application/json',
+                        }).done(function (data) {
+                            console.log(data)
+                        });
+                        iziToast.success({
+                            title: 'Success',
+                            message: 'Login successful',
+                            position: 'topCenter'
+                        });
+                    } else {
+                        iziToast.error({
+                            title: 'Error',
+                            message: 'Invalid Login ID',
+                            position: 'topCenter'
+                        });
+                    }
                 }).error(function (error) {
-                    iziToast.error({ title: 'Error', message: 'Something went wrong. Please try again later...', position: 'topCenter' });
+                    iziToast.error({
+                        title: 'Error',
+                        message: 'Something went wrong. Please try again later...',
+                        position: 'topCenter'
+                    });
                 });
             }
-
-            // function verifyQrCode(code) {
-            //     var data = {
-            //         request: {
-            //             type: 'sample',
-            //             subType: 'test',
-            //             action: 'create',
-            //             rootOrgId: '1234567890',
-            //             framework: code
-            //         }
-            //     };
-
-            //     $.ajax({
-            //         method: "POST",
-            //         url: "https://dev.sunbirded.org/api/data/v1/form/read",
-            //         data: JSON.stringify(data),
-            //         dataType: 'json',
-            //         contentType: 'application/json',
-            //     }).done(function (msg) {
-            //         iziToast.success({ title: 'Success', message: 'Login successful', position: 'topCenter' });
-            //     }).error(function (error) {
-            //         iziToast.error({ title: 'Error', message: 'Something went wrong. Please try again later...', position: 'topCenter' });
-            //     });
-            // }
         }, 3000);
 
     }
+    $scope.fireEvent = function(event) {
+        if (event) org.ekstep.contenteditor.api.dispatchEvent(event.id, event.data);
+    };
     $scope.init();
 }]);
 
