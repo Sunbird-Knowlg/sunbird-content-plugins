@@ -1,0 +1,14 @@
+.detailed-row a:hover, a:focus {
+    background: transparent;
+}
+.table-cell:hover, .table-cell.active {
+    background: #024f9d;
+    color: white !important;
+}
+.table tr th {
+    font-size: 12px;
+}
+h4 {
+    font-size: 12px;
+    font-weight: bold;
+}
