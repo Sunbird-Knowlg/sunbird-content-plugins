@@ -64,8 +64,8 @@ angular.module('worksheetApp', ['angular-inview'])
                             "isPartialScore": true,
                             "evalUnordered": false,
                             "templateType": "Horizontal",
-                            "name": question.question.replace('[[','{{').replace(']]', '}}').replace(/{{.*?}}/g, ''),
-                            "title": question.question.replace('[[','{{').replace(']]', '}}').replace(/{{.*?}}/g, ''),
+                            "name": "Fill in the blanks",
+                            "title": "Fill in the blanks",
                             "board": "CBSE",
                             "topic": [window.isSecureContext.dcTopic],
                             "medium": "English",
@@ -129,8 +129,8 @@ angular.module('worksheetApp', ['angular-inview'])
                             "isPartialScore": true,
                             "evalUnordered": false,
                             "templateType": "Horizontal",
-                            "name": question.question.replace('[[','{{').replace(']]', '}}').replace(/{{.*?}}/g, ''),
-                            "title": question.question.replace('[[','{{').replace(']]', '}}').replace(/{{.*?}}/g, ''),
+                            "name": "Fill in the blanks \n",
+                            "title": "Fill in the blanks\n",
                             "board": "CBSE",
                             "topic": [],
                             "medium": "English",
@@ -165,11 +165,11 @@ angular.module('worksheetApp', ['angular-inview'])
                         icon: 'fa fa-warning'
                     });
                 } else {
-                    /* ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                    ecEditor.dispatchEvent("org.ekstep.toaster:success", {
                         message: 'Question created successfully',
                         position: 'topCenter',
                         icon: 'fa fa-warning'
-                    }); */
+                    });
                 }
             })
             // console.log("Parsed", JSON.parse(data.request.assessment_item.metadata.body));
@@ -200,7 +200,7 @@ angular.module('worksheetApp', ['angular-inview'])
                     type: "POST",
                     "async": true,
                     "crossDomain": true,
-                    url: "https://dev.ekstep.in/api/content/v3/pdf2text/uploadFile",
+                    url: "/pdf2text/uploadFile",
                     headers: {
                         "cache-control": "no-cache",
                     },
@@ -253,7 +253,6 @@ angular.module('worksheetApp', ['angular-inview'])
                         position: 'topCenter',
                         icon: 'fa fa-warning'
                     });
-                    $scope.closeThisDialog();
                     $scope.$safeApply();
                 },
                 error: function (e) {

@@ -20,7 +20,7 @@
                 "type": "icon",
                 "toolTip": "Create Question",
                 "title": "Create Question",
-                "iconClass": "file pdf outline icon",
+                "iconClass": "icon-questions icon",
                 "onclick": {
                     "id": "org.ekstep.devconquestion:add"
                 }
