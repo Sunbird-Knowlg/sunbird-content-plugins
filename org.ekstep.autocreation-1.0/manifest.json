@@ -1,0 +1,30 @@
+{
+    "id": "org.ekstep.autocreation",
+    "ver": "1.0",
+    "author": "Vivek Kasture",
+    "title": "Devcon Question plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            {
+                "type": "css",
+                "src": "editor/autocreation.css"
+            }
+        ],
+        "menu": [
+            {
+                "id": "autocreation",
+                "category": "main",
+                "type": "icon",
+                "toolTip": "Create slides",
+                "title": "Create slides",
+                "iconClass": "file pdf outline icon",
+                "onclick": {
+                    "id": "org.ekstep.autocreation:add"
+                }
+            }
+        ]
+    }
+}
