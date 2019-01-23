@@ -1,5 +1,5 @@
 angular.module('editorApp', ['ngSanitize'])
-    .controller('org.ekstep.config:configController', ['$scope', '$timeout', '$ocLazyLoad', function($scope, $timeout, $ocLazyLoad) {
+    .controller('org.ekstep.config:configController', ['$scope', '$timeout', '$ocLazyLoad','$injector', function($scope, $timeout, $ocLazyLoad, $injector) {
 
         var visibleActionsList = {
             "show": "Show",
@@ -383,6 +383,7 @@ angular.module('editorApp', ['ngSanitize'])
         }
     
         $scope.initAppu = function () {
+            $scope.sce = $injector.get('$sce');
             // $scope.appuPath =  ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/appu.png");
             // console.log('$scope.appuPath :',$scope.appuPath);
             $scope.showInput = true;

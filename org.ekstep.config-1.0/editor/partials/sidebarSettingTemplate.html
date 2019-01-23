@@ -302,12 +302,12 @@ a.item.at-menu-item.popup-item.active {
                 <div class="content " id="appuDiv" ng-if="showAppu">
                     <p>Hey Vinu, I am Appu your personal assistant!</p>
                     <div ng-repeat="hist in history" style="padding-bottom: 10px; border-bottom: dashed 1px #ddd;">
-                        <p ng-bind-html="hist.msg"></p>
+                        <p ng-bind-html="sce.trustAsHtml(hist.msg)"></p>
                         <button ng-class="option.selected? 'ui button':'ui button disabled'" ng-repeat="option in hist.options">{{option.command}}
                             <i class="check icon" ng-if="option.selected"></i></button>
                     </div>
                     <div style="padding-top: 10px">
-                        <p ng-bind-html="currentOption.msg"></p>
+                        <p ng-bind-html="sce.trustAsHtml(currentOption.msg)"></p>
                         <button class="ui button" ng-repeat="option in currentOption.options" ng-click="chooseOption(option)"
                             class="chat-color">{{option.command}}</button>
                         <button class="ui button" ng-if="!currentOption.options && remainingOptions.length > 0"
