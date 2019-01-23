@@ -231,3 +231,42 @@ button.clear-btn:focus {
 .font-size-1 {
     font-size: 1rem !important;
 }
+
+
+
+
+
+input[type="file"] {
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .drop-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #ccc;
+    border: 3px dotted #bebebe;
+    border-radius: 10px;
+  }
+
+  label {
+    display: inline-block;
+    position: relative;
+    height: 100px;
+    width: 400px;
+  }
+  
+  div.dragover {
+    background-color: #aaa;
+  }
+  
