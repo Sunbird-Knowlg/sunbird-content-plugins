@@ -1,26 +1,16 @@
 
 angular.module('worksheetApp', ['angular-inview'])
     .controller('worksheetCtrl', ['$scope', '$timeout', 'instance', function ($scope, $timeout, instance) {
+        $scope.isLoading = false;
+        $scope.loadingText = 'Loading';
         $scope.init = function () {
-            console.log("in init");
-            let questions = [{
-                "question": "The sun is [[sun]]",
-                "answer": "sun"
-            }, {
-                "question": "Tejas is in class [[seventh]]",
-                "answer": "seventh"
-            }, {
-                "question": "Today is [[Sunday]]",
-                "answer": "Sunday"
-            }];
+            $('input[type=file]').on('dragenter', function () {
+                $('div.drop-area').addClass('dragover');
+            });
 
-            // let newQuestions = _.map(questions, function (value) {
-            //     return "<p>" + value.question + "</p>"
-            // }).join("\n\n");
-
-            // _.forEach(questions, function (value) {
-            //     $scope.generateRequest(value);
-            // })
+            $('input[type=file]').on('dragleave', function () {
+                $('div.drop-area').removeClass('dragover');
+            });
         }
 
         $scope.generateRequest = function (question) {
@@ -79,10 +69,8 @@ angular.module('worksheetApp', ['angular-inview'])
                             "board": "CBSE",
                             "topic": [window.isSecureContext.dcTopic],
                             "medium": "English",
-                            "gradeLevel": [
-                                "KG"
-                            ],
-                            "subject": "Mathematics",
+                            "gradeLevel": ["KG"],
+                            "subject": "English",
                             "qlevel": "EASY",
                             "category": "FTB"
                         },
@@ -127,7 +115,7 @@ angular.module('worksheetApp', ['angular-inview'])
                         "metadata": {
                             "code": "NA",
                             "isShuffleOption": false,
-                            "body": body,
+                            "body": JSON.stringify(body),
                             "itemType": "UNIT",
                             "version": 2,
                             "category": "FTB",
@@ -149,7 +137,7 @@ angular.module('worksheetApp', ['angular-inview'])
                             "gradeLevel": [
                                 "KG"
                             ],
-                            "subject": "Mathematics",
+                            "subject": "English",
                             "qlevel": "EASY",
                             "answer": [
                                 {
@@ -165,9 +153,9 @@ angular.module('worksheetApp', ['angular-inview'])
                     }
                 }
             }
-
             $scope.createQuestion(data);
         }
+
         $scope.createQuestion = function (requestObj) {
             ecEditor.getService(ServiceConstants.ASSESSMENT_SERVICE).saveQuestionV3(undefined, requestObj, function (err, res) {
                 if (err) {
@@ -184,55 +172,105 @@ angular.module('worksheetApp', ['angular-inview'])
                     });
                 }
             })
-            console.log("Parsed", JSON.parse(data.request.assessment_item.metadata.body));
+            // console.log("Parsed", JSON.parse(data.request.assessment_item.metadata.body));
         }
-        $scope.uploadFile = function (e) {
-            let r = new FileReader();
 
+        $scope.uploadFile = function (e) {
+            // $("#filename").text($(this).val());
+            $scope.isLoading = true;
+            $scope.loadingText = 'Uploading file';
             var filePath = document.getElementById('inputFile').value;
             var allowedExtensions = /(\.pdf)$/i;
 
             if (!allowedExtensions.exec(filePath)) {
+                $scope.isLoading = false;
                 ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                     message: 'Please upload pdf file only',
                     position: 'topCenter',
                     icon: 'fa fa-warning'
                 });
                 document.getElementById('inputFile').value = '';
+                $scope.$safeApply();
                 return false;
             } else {
-                // var form = $('#fileUploadForm')[0];
                 var data = new FormData();
                 data.append("file", document.getElementById('inputFile').files[0]);
-                // data.append("file", "/home/ttpllt44/Downloads/Ticket_6323075888.pdf");
 
                 $.ajax({
                     type: "POST",
                     "async": true,
                     "crossDomain": true,
-                    url: "/pdf2ecml/uploadFile",
+                    url: "/pdf2text/uploadFile",
                     headers: {
                         "cache-control": "no-cache",
-                      },                    
+                    },
                     data: data,
                     "processData": false,
                     "contentType": false,
                     "mimeType": "multipart/form-data",
                     success: function (data) {
-                        alert("Success");
+                        $scope.getQuestions(JSON.parse(data).text);
                     },
                     error: function (e) {
-                        alert("Error");
-                        console.log(e);
-
+                        $scope.isLoading = false;
+                        $scope.$safeApply();
+                        ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                            message: 'Unable to upload file, please choose other file',
+                            position: 'topCenter',
+                            icon: 'fa fa-warning'
+                        });
                     }
                 });
             }
         };
 
+        $scope.getQuestions = function (text) {
+            $scope.loadingText = 'Fetching questions';
+            $scope.$safeApply();
+            var data = {
+                "request": {
+                    "text": text,
+                    "num_of_questions": "5",
+                    "session_id": "aAbB12345",
+                    "model": "genQuest"
+                }
+            };
+
+            $.ajax({
+                method: "POST",
+                url: "https://dev.ekstep.in/api/devcon/v3/generate/qb",
+                data: JSON.stringify(data),
+                dataType: 'json',
+                contentType: 'application/json',
+                success: function (data) {
+                    console.log("success", data);
+                    _.forEach(data.result.questions, function (element) {
+                        $scope.generateRequest(element);
+                    });
+                    $scope.isLoading = false;
+                    ecEditor.dispatchEvent("org.ekstep.toaster:success", {
+                        message: 'Question Created Successfully',
+                        position: 'topCenter',
+                        icon: 'fa fa-warning'
+                    });
+                    $scope.$safeApply();
+                },
+                error: function (e) {
+                    $scope.isLoading = false;
+                    ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                        message: 'Unable to create question',
+                        position: 'topCenter',
+                        icon: 'fa fa-warning'
+                    });
+                    console.log(e);
+                    $scope.$safeApply();
+                }
+            });
+        }
+
         $scope.init();
     }]);
 
-//# sourceURL=collaborator.js
+//# sourceURL=worksheetApp.js
 
 

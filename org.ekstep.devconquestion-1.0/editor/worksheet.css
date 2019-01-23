@@ -5,12 +5,12 @@
     left: 250px !important;
     right: 0;
     width: 55% !important;
-    height: 65% !important;
+    height: 50% !important;
     margin: 0 !important;
 }
 
 .ui.modal>.content {
-    height: 60%;
+    height: 55%;
 }
 
 .ui.left.header.header-title {
@@ -231,3 +231,44 @@ button.clear-btn:focus {
 .font-size-1 {
     font-size: 1rem !important;
 }
+
+
+
+
+
+input[type="file"] {
+    position: absolute;
+    left: 0;
+    opacity: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .drop-area {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #bcdebc;
+    border: 3px dotted #0d770d;
+    border-radius: 10px;
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+
+  label {
+    display: inline-block;
+    position: relative;
+    height: 100px;
+    width: 400px;
+  }
+  
+  div.dragover {
+    background-color: #aaa;
+  }
+  
