@@ -1,103 +1,103 @@
 <script type="text/ng-template" ng-app="timetableApp" ng-controller="timetableCtrl as $ctrl" id="partials/timetable">
-    <div style="float:right">
-        <button ng-click="closePopup()">Close</button>
-    </div>
-    <div class="container">
-        <div class="row pt-3">
-          <div class="col-12 col-md-6 col-lg-4 offset-lg-2">
-            <div class="form-group row">
-              <label class="col-3 col-sm-2 col-form-label">Class</label>
-              <div class="col-9 col-sm-10">
-                    <select class="custom-select" ng-init="selectedClass = classDetails[0]" ng-model="selectedClass" ng-options="class for class in classDetails">
+    <div class="ui modal fullscreen active activity-browser-modal">
+            <div class="header" style="padding-right:1em;">
+                <div class="ui two column grid">
+                    <div class="row">
+                        <div class="column">
+                            <span>Teacher Dashboared</span>
+                        </div>
+                        <div class="column right aligned">
+                            <i class="cursor-pointer close link icon" ng-click="closePopup()"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui grid">
+                <div class="four wide column">
+                    <label class="">Class</label>
+                    <select class="ui dropdown" ng-init="selectedClass = classDetails[0]" ng-model="selectedClass" ng-options="class for class in classDetails">
                     </select>
-              </div>
+                </div>
+                <div class="four wide column">
+                    <label class="">Subject</label>
+                    <select class="ui dropdown" ng-init="selectedSubject = subjedDetails[0]" ng-model="selectedSubject" ng-options="subject for subject in subjedDetails">
+                    </select>
+                </div>
             </div>
-          </div>
-          <div class="col-12 col-md-6 col-lg-4">
-            <div class="form-group row">
-              <label class="col-3 col-form-label">Subject</label>
-              <div class="col-9">
-                <select class="custom-select" ng-init="selectedSubject = subjedDetails[0]" ng-model="selectedSubject" ng-options="subject for subject in subjedDetails">
-                </select>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-12">
-            <div class="table-div">
-              <div class="table-responsive">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <th>#</th>
-                      <th class="text-center text-uppercase">Teaching</th>
-                      <th class="text-center text-uppercase">Practice</th>
-                      <th class="text-center text-uppercase">Preparation</th>
-                      <th class="text-center text-uppercase">Assement</th>
-                      <th class="text-center text-uppercase">Supplementry</th>
-                    </tr>
-                  </thead>
-                  <tbody >
-                    <tr ng-repeat="topic in topic2.data.result.topics">
-                      <th class="align-middle py-0">{{topic.dc_practice[0].topic[0]}}</th>
-                      <td class="align-middle py-0">
-                        <a class="btn btn-link w-100 text-center table-cell rounded-0" ng-click="showDetailedRow(topic.dc_primary, 'Teaching')"
-                          ng-class="{'active': (type === 'teaching' && topic === 'topic1' && showDetailedView) ? true : false}">
-                          {{topic.dc_primary.length}}
-                        </a>
-                      </td>
-                      <td class="align-middle py-0">
-                        <a class="btn btn-link w-100 text-center table-cell rounded-0" ng-click="showDetailedRow(topic.dc_practice, 'practice')"
-                          ng-class="{'active': (type === 'practice' && topic === 'topic1' && showDetailedView) ? true : false}">
-                          {{topic.dc_practice.length}}
-                        </a>
-                      </td>
-                      <td class="align-middle py-0">
-                        <a class="btn btn-link w-100 text-center table-cell rounded-0" ng-click="showDetailedRow(topic.dc_preparatory, 'preparation')">
-                         {{topic.dc_preparatory.length}}
-                        </a>
-                      </td>
-                      <td class="align-middle py-0">
-                        <a class="btn btn-link w-100 text-center table-cell rounded-0" ng-click="showDetailedRow(topic.dc_assessment, 'assesment')">
-                            {{topic.dc_assessment.length}}
-                        </a>
-                      </td>
-                      <td class="align-middle py-0">
-                        <a class="btn btn-link w-100 text-center table-cell rounded-0" ng-click="showDetailedRow(topic.dc_secondary, 'secondry')">
-                            {{topic.dc_secondary.length}}
-                        </a>
-                      </td>
-                    </tr>
-                    <tr class="detailed-row" ng-if="showDetailedView">
-                      <td colspan="6" class="px-0">
-                        <h4 class="text-uppercase text-center">{{topicTitle}}</h4>
-                        <table class="table">
-                          <tr ng-repeat="data in detailsView track by $index">
-                            <td class="align-top p-1" style="width:20%">
-                              <a class="btn btn-link px-0 w-100 text-capitalize">
-                                topic title {{data}}
-                              </a>
+            
+
+            <div class="ui grid">
+                <div class="eight wide column">
+                    <table class="ui celled table">
+                        <thead>
+                            <tr>
+                            <th>#Topics</th>
+                            <th class="text-center text-uppercase">Teaching</th>
+                            <th class="text-center text-uppercase">Practice</th>
+                            <th class="text-center text-uppercase">Preparation</th>
+                            <th class="text-center text-uppercase">Assement</th>
+                            <th class="text-center text-uppercase">Supplementry</th>
+                            </tr>
+                        </thead>
+                        <tbody ng-repeat="topic in topic2.data.result.topics">
+                            <tr >
+                            <th class="align-middle py-0">{{topic.dc_practice[0].topic[0] || topic.dc_primary[0].topic[0] || topic.dc_preparatory[0].topic[0] || topic.dc_assessment[0].topic[0] || topic.dc_secondary[0].topic[0]}}</th>
+                            <td class="align-middle py-0">
+                                <a class="text-center table-cell rounded-0" ng-click="showDetailedRow(topic.dc_primary, 'Teaching')"
+                                ng-class="{'active': (type === 'teaching' && topic === 'topic1' && showDetailedView) ? true : false}">
+                                {{topic.dc_primary.length}}
+                                </a>
                             </td>
-                            
-                            <td class="align-middle p-1 text-center" style="width:20%">
-                              <a class="btn btn-outline-secondary btn-sm mr-2">
-                                View More
-                              </a>
-                              <a class="btn btn-outline-primary btn-sm">
-                                + Create New
-                              </a>
+                            <td class="align-middle py-0">
+                                <a class="w-100 text-center table-cell rounded-0" ng-click="showDetailedRow(topic.dc_practice, 'practice')"
+                                ng-class="{'active': (type === 'practice' && topic === 'topic1' && showDetailedView) ? true : false}">
+                                {{topic.dc_practice.length}}
+                                </a>
+                                <a ng-if="!topic.dc_practice.length" data-content="Teacher Dashboard">
+                                        <div  class="icon-box popup-item" data-content="Teacher Dashboard"  data-position="bottom center" ng-click="fireEvent({id: 'org.ekstep.timetable:add'});">
+                                                <i class="plus square icon"></i>
+                                            </div>
+                                 
+                                </a>
                             </td>
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+                            <td class="align-middle py-0">
+                                <a class="w-100 text-center table-cell rounded-0" ng-click="showDetailedRow(topic.dc_preparatory, 'preparation')">
+                                {{topic.dc_preparatory.length}}
+                                </a>
+                            </td>
+                            <td class="align-middle py-0">
+                                <a class="text-center table-cell rounded-0" ng-click="showDetailedRow(topic.dc_assessment, 'assesment')">
+                                    {{topic.dc_assessment.length }} 
+                                </a>
+                            </td>
+                            <td class="align-middle py-0">
+                                <a class="text-center table-cell rounded-0" ng-click="showDetailedRow(topic.dc_secondary, 'supplementry')">
+                                    {{topic.dc_secondary.length}}
+                                </a>
+                            </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="six wide column" ng-if="showDetailedView">
+                    <div class="ui card">
+                        <div class="ui bottom attached button" ng-click="closePopup()">
+                            <i class="add icon"></i>
+                            Create New
+                        </div>
+                        <div class="content">
+                            <h4 class="text-uppercase text-align-left font-size-14">{{topicTitle}}</h4>
+                            <div ng-repeat="data in detailsView track by $index">
+                                <li class="text-capitalize text-align-left font-weight-normal">
+                                    {{data}}
+                                </li>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-      
+    </div>
+    
+   
 </script>

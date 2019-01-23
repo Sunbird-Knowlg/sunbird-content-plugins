@@ -12,3 +12,42 @@ h4 {
     font-size: 12px;
     font-weight: bold;
 }
+.ngdialog.ngdialog-theme-plain {
+    padding-bottom: 0 !important;
+    padding-top: 0 !important;
+}
+.py-30 {
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
+}
+.pb-20 {
+    padding-bottom: 20px !important;
+}
+
+.text-align-left {
+    text-align: left !important;
+}
+
+.font-size-14 {
+    font-size: 14px !important;
+}
+
+.font-weight-bold {
+    font-weight: bold !important;
+}
+
+.create-content-data {
+    padding-top: 12px;
+    padding-left: 15px;
+    padding-bottom: 15px;
+}
+
+.font-weight-normal {
+    font-weight: normal !important;
+}
+
+.dashboard-content {
+    overflow-y: auto;
+    max-height: 400px;
+}
+
