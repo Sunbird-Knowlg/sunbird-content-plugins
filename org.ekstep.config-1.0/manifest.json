@@ -8,7 +8,8 @@
     "editor": {
         "main": "editor/plugin.js",
         "dependencies": [
-            {"type": "js", "src": "editor/libs/jquery-ui.min.js"},            
+            {"type": "js", "src": "editor/libs/jquery-ui.min.js"},
+            {"type": "js", "src": "editor/libs/angular-sanitize.min.js"},            
             {"type": "css", "src": "editor/config.css"},
             {"type": "plugin", "plugin": "org.ekstep.colorpicker", "ver": "1.0"}
 		],        

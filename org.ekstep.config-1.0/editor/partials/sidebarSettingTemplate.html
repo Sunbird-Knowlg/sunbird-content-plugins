@@ -241,4 +241,52 @@ a.item.at-menu-item.popup-item.active {
             </tbody>
         </table>
     </div>
+    <div>
+        <div id='appuDv' class="ui fluid container" ng-init="initAppu()">
+            <div class="ui modal" style="width: 450px;right: 5%; position: fixed; bottom: 0; height: 450px;display: block;left:auto !important; transition: all 0.25s ease-in-out;"
+                ng-class="{'minimizeAppu': !showAppu}">
+                <div class="header chat-color">
+                    Ask Appu
+                    <i class="window minimize icon float-right clickable" ng-click="showAppu = !showAppu"></i>
+                </div>
+                
+                <div class="content " id="appuDiv" ng-if="showAppu">
+                    <p>Hey Vinu, I am Appu your personal assistant !</p>
+                    <div ng-repeat="hist in history" style="padding-bottom: 10px; border-bottom: dashed 1px #ddd;">
+                        <p ng-bind-html="hist.msg"></p>
+                        <button ng-class="option.selected? 'ui button':'ui button disabled'" ng-repeat="option in hist.options">{{option.command}}
+                            <i class="check icon" ng-if="option.selected"></i></button>
+                    </div>
+                    <div style="padding-top: 10px">
+                        <p ng-bind-html="currentOption.msg"></p>
+                        <button class="ui button" ng-repeat="option in currentOption.options" ng-click="chooseOption(option)"
+                            class="chat-color">{{option.command}}</button>
+                        <button class="ui button" ng-if="!currentOption.options && remainingOptions.length > 0"
+                            ng-click="selectAnother()" class="chat-color">Select Another Option</button>
+                        <button class="ui button" ng-if="!currentOption.options && remainingOptions.length <= 0"
+                            ng-click="done(currentOption)" class="chat-color">Done</button>
+                    </div>
+                </div>
+        
+                <div class="actions " style="bottom: 0px;position: absolute;display: block;width: 100%;" ng-if="showAppu">
+                    <div class="floating">
+                        <div ng-if="!showInput" class="ui approve button chat-color" ng-click="reset()">Reset</div>
+        
+                </div>
+        
+                    <div ng-if="showInput" class="chat-actions">
+        
+                        <form class="ui form chat-form">
+                            <textarea placeholeder="Enter any command" name="chat-input" rows="2" class=""
+                                ng-keypress="myFunct($event)" autofocus></textarea>
+                        </form>
+                        <button id='btnMic' ng-if="showInput" class="circular ui icon button chat-color chat-voice-btn"
+                            ng-click="startAppuVoice($event)" ng-class="{red:(appuVoice == true)}">
+                            <i class="microphone icon"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
