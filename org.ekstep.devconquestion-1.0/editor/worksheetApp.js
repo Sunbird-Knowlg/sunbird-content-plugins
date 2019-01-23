@@ -18,9 +18,9 @@ angular.module('worksheetApp', ['angular-inview'])
             //     return "<p>" + value.question + "</p>"
             // }).join("\n\n");
 
-            _.forEach(questions, function (value) {
-                $scope.generateRequest(value);
-            })
+            // _.forEach(questions, function (value) {
+            //     $scope.generateRequest(value);
+            // })
         }
 
         $scope.generateRequest = function (question) {
@@ -186,67 +186,49 @@ angular.module('worksheetApp', ['angular-inview'])
             })
             console.log("Parsed", JSON.parse(data.request.assessment_item.metadata.body));
         }
-        $scope.uploadFile = function () {
-            $scope.createQuestion();
-            console.log("uploadResume", $scope.fileupload);
-            var f = document.getElementById('resume').files[0];
-            $scope.selectedResumeName = f.name;
-            $scope.selectedResumeType = f.type;
+        $scope.uploadFile = function (e) {
             let r = new FileReader();
 
-            r.onloadend = function (e) {
-                $scope.data = e.target.result;
-                console.log("data", $scope.data);
+            var filePath = document.getElementById('inputFile').value;
+            var allowedExtensions = /(\.pdf)$/i;
 
-                /*                 var data = {
-                                    request: {
-                                        type: 'sample',
-                                        subType: 'test',
-                                        action: 'create',
-                                        rootOrgId: '1234567890',
-                                        framework: "code"
-                                    }
-                                };
-                    
-                                $.ajax({
-                                    method: "POST",
-                                    url: "https://dev.sunbirded.org/api/data/v1/form/read",
-                                    data: JSON.stringify(data),
-                                    dataType: 'json',
-                                    contentType: 'application/json',
-                                }).done(function (msg) {
-                                    alert("success");
-                                }).error(function (error) {
-                                    alert("error");
-                                }); */
-
-                var form = $('#fileUploadForm')[0];
-                console.log("Form", form);
-                var data = new FormData(form);
+            if (!allowedExtensions.exec(filePath)) {
+                ecEditor.dispatchEvent("org.ekstep.toaster:error", {
+                    message: 'Please upload pdf file only',
+                    position: 'topCenter',
+                    icon: 'fa fa-warning'
+                });
+                document.getElementById('inputFile').value = '';
+                return false;
+            } else {
+                // var form = $('#fileUploadForm')[0];
+                var data = new FormData();
+                data.append("file", document.getElementById('inputFile').files[0]);
+                // data.append("file", "/home/ttpllt44/Downloads/Ticket_6323075888.pdf");
 
                 $.ajax({
                     type: "POST",
-                    enctype: 'multipart/form-data',
-                    url: "",
+                    "async": true,
+                    "crossDomain": true,
+                    url: "/pdf2ecml/uploadFile",
+                    headers: {
+                        "cache-control": "no-cache",
+                      },                    
                     data: data,
-                    processData: false,
-                    contentType: false,
-                    cache: false,
-                    timeout: 600000,
+                    "processData": false,
+                    "contentType": false,
+                    "mimeType": "multipart/form-data",
                     success: function (data) {
                         alert("Success");
                     },
                     error: function (e) {
                         alert("Error");
+                        console.log(e);
+
                     }
                 });
-
             }
-
-            r.readAsDataURL(f);
-
         };
-
 
         $scope.init();
     }]);
