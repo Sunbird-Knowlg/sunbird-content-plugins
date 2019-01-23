@@ -6,10 +6,11 @@
     right:0px;
     transform: translateY(-50%);
     text-align: center;
-    box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 2px 16px 0 rgba(0,0,0,0.2);
     border-radius: 5px;
     background:#fff;
     margin:0 auto;
+    padding:30px;
   }
 
   .login-container input {
@@ -19,11 +20,17 @@
       padding: 10px;
   
   }
+  .w-100 {
+    width:100%;
+  }
   .ngdialog.ngdialog-theme-plain .ngdialog-content {
     width: 100%;
     height: 100%;
-    background:#284fd9;
-    background-image: linear-gradient(-45deg, #284fd9, #466cf3);
+    background-size: cover;
+    background-repeat: no-repeat;
+    min-height: 100vh;
+    background: url('https://diksha.gov.in/auth/resources/3.2.0.final/login/ntp/img/bg.svg') no-repeat center center fixed;
+    background-size: cover;
   }     
   .ngdialog.ngdialog-theme-plain {
       padding:0 0 0 0;
@@ -31,7 +38,10 @@
   .ui.primary.button{
     padding: 15px 20px;
     min-width: 200px;
-    background: #2846d9;
+    background: #4ca58c;
+  }
+  .green-cust {
+    background:#4ca58c;
   }
   .text-left {
 text-align: left;
@@ -49,7 +59,7 @@ text-align: left;
   div.actions {
     width:100%;
     text-align: center;
-    padding: 15px 0px;
+    padding: 15px 30px;
   }
   .px-30 {
     padding-left:30px;
@@ -59,6 +69,21 @@ text-align: left;
     padding-top:10px;
     padding-bottom:10px;
   }
+  .py-20 {
+    padding-top:20px;
+    padding-bottom:20px;
+  }
   .ui.icon.input>i.icon {
     right:30px;
+  }
+  .logo-image {
+    width:150px;
+  }
+  .scan-mask {
+    border-radius: 50%;
+    width: 295px;
+    height: 295px;
+    background: #4ca58c;
+    overflow: hidden;
+    margin: 0 auto;
   }
