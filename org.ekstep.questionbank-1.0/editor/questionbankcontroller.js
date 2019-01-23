@@ -169,7 +169,7 @@ angular.module('createquestionapp', [])
               });
               break;
             case "topics":
-              data.request.filters.topic = pluginInstance.topicValue || value;
+              data.request.filters.topic = value;
               break;
           }
         }

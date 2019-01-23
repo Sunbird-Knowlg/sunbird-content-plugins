@@ -24,8 +24,14 @@ org.ekstep.questionbank.EditorPlugin = org.ekstep.contenteditor.basePlugin.exten
     instance.callback = dataObj.callback;
     instance.editData = (!ecEditor._.isUndefined(dataObj.data)) ? dataObj.data : '';
     instance.limit = dataObj.limit || 200;
-    instance.topicKey = dataObj.topic;
-    instance.topicValue = dataObj.value;
+    console.log('topic command',dataObj);
+    if(dataObj.topic && dataObj.topic == 'topic'){
+      
+      setTimeout(function(){
+        ecEditor.dispatchEvent('editor:form:change',{templateId:'filterMetaDataTemplate',key:dataObj.topic,value:[dataObj.value]});
+      },2000);   
+    }
+     
     ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
       template: 'QuestionFormTemplate',
       controller: 'QuestionFormController',
