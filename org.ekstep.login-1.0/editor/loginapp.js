@@ -112,6 +112,7 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
                 }).done(function (data) {
                     ctrl.showDiv = false;
                     $scope.$safeApply();
+                    ecEditor.jQuery('.login-container').parents('#ngdialog1').addClass('hide');
                     $scope.fireEvent({ id: 'org.ekstep.timetable:add' });
                     if (data.result && data.result.Visitor) {
                         $.ajax({
