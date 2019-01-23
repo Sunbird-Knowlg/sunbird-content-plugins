@@ -1,6 +1,7 @@
 <script type="text/ng-template" ng-app="worksheetApp" ng-controller="worksheetCtrl as $ctrl" id="partials/worksheet">
 
     <div class="ui active longer modal fullscreen-modal">
+        
         <div class="ui clearing segment overlap-all margin-bottom-0 header-height">
             <strong class="ui left floated header header-title">Upload a Pdf</strong>
 
@@ -8,11 +9,28 @@
                 <span><i class="close link icon" id="close-button" ng-click="closeThisDialog()"></i><span>
             </div>
         </div>
-        <div>
-            <form method="POST" enctype="multipart/form-data" id="fileUploadForm" style="margin-left: 70px;">
-                <input type = "file" onchange="angular.element(this).scope().uploadFile()" ng-model="fileupload" id="resume"/>
-                <button ng-click = "uploadFile()">upload me</button>
-            </form>
+        <div class="content">
+            <div>
+                <form method="POST" enctype="multipart/form-data" id="fileUploadForm" style="margin-left: 70px;">
+                    <input type = "file" ng-model="fileupload" id="inputFile" style="margin-left:60px"/>
+                    <button ng-click = "uploadFile($event)">upload me</button>
+                </form>
+            </div>
+            <div id="upload-content-div" style="margin-top: 15px"></div>
+            <div id="upload-content-loader-area" ng-if='showLoaderIcon' style="width:69px;height:89px; top:38%;left:45%; position:absolute; padding:2px;"><img ng-src = "{{loaderIcon}}" width="64" height="64" /><br>Uploading..</div>
+            <div class="ui message" style="top: 100px;">
+                <ul class="list">
+                    <li>File accepted - pdf, mp4, webm, epub, youtube, h5p and html zip</li>
+                    <li>Max file size - 50 Mb</li>
+                </ul>
+            </div>
+        </div>
+        <div class="actions">
+            <div class="ui buttons">
+                <button class="ui orange button" ng-click="closeThisDialog()">Cancel</button>
+                <div class="or"></div>
+                <button class="ui blue button" ng-click="upload(); generateTelemetry({subtype:'upload',target:'uploadButton'}) " ng-disabled="showLoaderIcon">Upload</button>
+            </div>
         </div>
 
    </div>

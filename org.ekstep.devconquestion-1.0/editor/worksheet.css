@@ -5,8 +5,12 @@
     left: 250px !important;
     right: 0;
     width: 55% !important;
-    height: 35% !important;
+    height: 65% !important;
     margin: 0 !important;
+}
+
+.ui.modal>.content {
+    height: 60%;
 }
 
 .ui.left.header.header-title {
