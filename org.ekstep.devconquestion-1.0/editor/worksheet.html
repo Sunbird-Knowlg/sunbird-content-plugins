@@ -1,8 +1,8 @@
 <script type="text/ng-template" ng-app="worksheetApp" ng-controller="worksheetCtrl as $ctrl" id="partials/worksheet">
 
     <div class="ui active longer modal fullscreen-modal">
-        <div class="ui clearing segment overlap-all margin-bottom-0 header-height">
-            <strong class="ui left floated header header-title">Upload a Pdf</strong>
+        <div class="ui clearing segment overlap-all">
+            <strong class="ui left floated header header-title">Upload a PDF</strong>
 
             <div class="ui right floated header">
                 <span><i class="close link icon" id="close-button" ng-click="closeThisDialog()"></i><span>
@@ -20,7 +20,7 @@
             </div> -->
 
             <label for="inputFile">
-                <div class="drop-area" style="margin-left: 140px; margin-bottom: 10px;">Click or drop something here</div>
+                <div class="drop-area" style="margin-left: 140px; margin-bottom: 10px;">Click or drop files here</div>
                 <form method="POST" enctype="multipart/form-data" id="fileUploadForm">
                     <input type="file" onchange="angular.element(this).scope().uploadFile(this)" ng-model="fileupload" id="inputFile">
                     <p id="filename"></p>
@@ -32,17 +32,17 @@
             <div class="ui message">
                 <ul class="list">
                     <li>File accepted - pdf</li>
-                    <li>Max file size - 50 Mb</li>
+                    <!-- <li>Max file size - 50 Mb</li> -->
                 </ul>
             </div>
         </div>
-        <div class="actions">
+        <!-- <div class="actions">
             <div class="ui buttons">
                 <button class="ui orange button" ng-click="closeThisDialog()">Cancel</button>
                 <div class="or"></div>
                 <button class="ui blue button" ng-click="uploadFile($event)" ng-disabled="showLoaderIcon">Upload</button>
             </div>
-        </div>
+        </div> -->
 
    </div>
 </script>

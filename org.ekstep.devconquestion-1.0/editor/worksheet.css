@@ -5,12 +5,12 @@
     left: 250px !important;
     right: 0;
     width: 55% !important;
-    height: 65% !important;
+    height: 50% !important;
     margin: 0 !important;
 }
 
 .ui.modal>.content {
-    height: 60%;
+    height: 55%;
 }
 
 .ui.left.header.header-title {
@@ -254,9 +254,11 @@ input[type="file"] {
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #ccc;
-    border: 3px dotted #bebebe;
+    background: #bcdebc;
+    border: 3px dotted #0d770d;
     border-radius: 10px;
+    font-size: 1.5rem;
+    font-weight: bold;
   }
 
   label {
