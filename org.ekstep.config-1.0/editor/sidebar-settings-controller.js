@@ -389,7 +389,7 @@ angular.module('editorApp', ['ngSanitize'])
             $scope.appuVoice = false;
             $scope.showAppu = true;
             $scope.data = {
-				msg :'For assistance click <b>Start</b> or type the command in the text box or press mic button and speak <br/> Ask <b>APPU </b> <ul><li>get images of crow</li><li>get audios of crow sound</li><li>get questions of java topic</li></ul>',
+				msg :'For assistance click <b>Start</b> or type the command in the text box or press mic button and speak <br/> Ask <b>APPU </b> <ul><li>get images of crow</li><li>get audios of crow sound</li><li>get questions of sun topic</li></ul>',
 				options:
 					[{
 						command: "START",
