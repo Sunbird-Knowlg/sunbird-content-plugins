@@ -2,6 +2,7 @@
 angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instance', function ($scope, instance) {
     var ctrl = this;
     var audiodata = {};
+    ctrl.showDiv = true;
     $scope.init = function () {
         var deviceId;
         var fp = new Fingerprint2()
@@ -102,7 +103,6 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
                     ]
                 };
 
-
                 $.ajax({
                     method: 'POST',
                     url: 'https://dev.ekstep.in/api/devcon/v3/login',
@@ -110,6 +110,9 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
                     dataType: 'json',
                     contentType: 'application/json',
                 }).done(function (data) {
+                    ctrl.showDiv = false;
+                    $scope.$safeApply();
+                    $scope.fireEvent({ id: 'org.ekstep.timetable:add' });
                     if (data.result && data.result.Visitor) {
                         $.ajax({
                             method: 'POST',
@@ -143,6 +146,9 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
         }, 3000);
 
     }
+    $scope.fireEvent = function(event) {
+        if (event) org.ekstep.contenteditor.api.dispatchEvent(event.id, event.data);
+    };
     $scope.init();
 }]);
 
