@@ -1,14 +1,114 @@
-.detailed-row a:hover, a:focus {
-    background: transparent;
-}
-.table-cell:hover, .table-cell.active {
-    background: #024f9d;
-    color: white !important;
-}
+
+
 .table tr th {
     font-size: 12px;
 }
 h4 {
     font-size: 12px;
     font-weight: bold;
+}
+.ngdialog.ngdialog-theme-plain {
+    padding-bottom: 0 !important;
+    padding-top: 0 !important;
+}
+.py-30 {
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
+}
+.pb-20 {
+    padding-bottom: 20px !important;
+}
+
+.text-align-left {
+    text-align: left !important;
+}
+
+.text-align-center {
+    text-align: center !important;
+}
+
+.font-size-14 {
+    font-size: 14px !important;
+}
+
+.font-weight-bold {
+    font-weight: bold !important;
+}
+
+.create-content-data {
+    padding-top: 12px;
+    padding-left: 15px;
+    padding-bottom: 15px;
+}
+
+.font-weight-normal {
+    font-weight: normal !important;
+}
+
+.dashboard-content {
+    overflow-y: auto;
+    max-height: 400px;
+}
+
+.ui.table td.active, .btn:hover {
+    background: #666 !important;
+    color: #fff !important;
+ }
+ .numberCircle {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  padding: 4px !important;
+  background: #fff;
+  border: 2px solid #666;
+  color: #666 !important;
+  text-align: center;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.ui.card.dashboard {
+    width: 350px;
+}
+.text-uppercase {
+    text-transform: capitalize !important;
+}
+.mb-30 {
+    margin-bottom:30px !important;
+}
+.mb-20 {
+    margin-bottom:20px !important;
+}
+.mt-20 {
+    margin-top:20px !important;
+}
+.px-10 {
+    padding-left:10px !important;
+    padding-right:10px !important;
+}
+.pl-10 {
+    padding-left:10px !important;
+}
+.pt-10 {
+    padding-top:10px !important;
+}
+.pb-5 {
+    padding-bottom:5px !important;
+}
+.dropdwn-align {
+    margin-right: 15px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.list-type-none, li {
+    list-style-type: none !important;
+}
+
+li .list-type-none:hover {
+    color:#007aff;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
 }
