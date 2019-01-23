@@ -288,6 +288,7 @@ angular.module('assetbrowserapp').controller('browsercontroller', ['$scope', '$i
             callback && instance.getAsset(searchText, mediaType, ctrl.createdBy, ctrl.offset=0, callback);
             ecEditor.jQuery("#" + ctrl.myTabScrollElement).unbind('scroll').scroll(ctrl.bindScroll);
         } else {
+            instance.query = "";
             var mediaType = instance.mediaType != "image" ? new Array('audio', 'voice') : new Array(instance.mediaType);
             callback && instance.getAsset(searchText, mediaType, undefined, ctrl.offset=0, callback);
             ecEditor.jQuery("#" + ctrl.allTabScrollElement).unbind('scroll').scroll(ctrl.bindScroll);

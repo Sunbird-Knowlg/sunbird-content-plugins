@@ -1,4 +1,4 @@
-angular.module('editorApp')
+angular.module('editorApp', ['ngSanitize'])
     .controller('org.ekstep.config:configController', ['$scope', '$timeout', '$ocLazyLoad', function($scope, $timeout, $ocLazyLoad) {
 
         var visibleActionsList = {
@@ -15,6 +15,7 @@ angular.module('editorApp')
         };
 
         var stageActionsList = { "link": "Link To" };
+        
         var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.config");
 
         $scope.actionTargetObject = {};
@@ -303,6 +304,172 @@ angular.module('editorApp')
             $scope.selectedObject.stage = true;
             $scope.showSettingsTab(event, data);
         };
+
+
+
+        $scope.chooseOption = function (option) {
+            if (option.action) {
+                $scope.showInput = false;
+            }
+            option.selected = true;
+            $scope.history.push(JSON.parse(JSON.stringify($scope.currentOption)));
+            $scope.currentOption = option;
+            $scope.remainingOptions = _.filter($scope.remainingOptions, function (mainOption) { return mainOption.command != option.command; });
+            $('#appuDiv').animate({ scrollTop: $('#appuDiv').get(0).scrollHeight }, 1000);
+            $scope.$safeApply();
+        }
+    
+        $scope.reset = function () {
+            $scope.showInput = true;
+            $scope.currentOption = JSON.parse(JSON.stringify($scope.data));
+            $scope.history = [];
+            $scope.remainingOptions = $scope.optionsData.options;
+            $scope.$safeApply();
+        }
+    
+        $scope.selectAnother = function () {
+            $scope.currentOption = { 'options': $scope.remainingOptions };
+            $scope.$safeApply();
+        }
+    
+        $scope.startAppuVoice = function ($event) {
+            if ($scope.appuVoice === false) {
+                $scope.appuVoice = true;
+                $scope.showToolTip('Speak any of the given command.')
+                ecEditor.dispatchEvent('org.ekstep.appu:startSpeechListener');
+            } else {
+                $scope.appuVoice = false;
+                ecEditor.dispatchEvent('org.ekstep.appu:stopSpeechListener');
+            }
+            $scope.$safeApply();
+    
+        }
+    
+        $scope.done = function (currentOption) {
+            console.log('currentOption', currentOption);
+            console.log('yay! you are all set...');
+    
+            if(currentOption.trigger=='org.ekstep.devconquestion:add'){
+                ecEditor.dispatchEvent(currentOption.trigger, undefined)
+            }
+            else if(currentOption.trigger=='org.ekstep.questionbank:showpopup') {
+                ecEditor.dispatchEvent(currentOption.trigger, {'limit': currentOption.command})
+            }
+        }
+    
+        
+        $scope.showToolTip = function (message) {
+            $('#btnMic')
+                .attr('title', message)
+                .popup('fixTitle')
+                .popup({
+                    onCreate: function () {
+                        $('#btnMic').popup({
+                            position: 'top center',
+                            delay: {
+                                show: 300,
+                                hide: 800
+                              }
+                        }).popup('toggle');
+                    }
+                }).popup('show').popup('toggle');
+        }
+    
+        $scope.myFunct = function(keyEvent) {
+            if (keyEvent.which === 13){
+                window.executeCommand(keyEvent.currentTarget.value);
+            }
+                
+        }
+    
+        $scope.initAppu = function () {
+            // $scope.appuPath =  ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/appu.png");
+            // console.log('$scope.appuPath :',$scope.appuPath);
+            $scope.showInput = true;
+            $scope.appuVoice = false;
+            $scope.showAppu = true;
+            $scope.data = {
+				msg :'For assistance click <b>Start</b> or type the command in the text box or press mic button and speak <br/> Ask <b>APPU </b> <ul><li>get images of crow</li><li>get audios of crow sound</li><li>get questions of sun topic</li></ul>',
+				options:
+					[{
+						command: "START",
+						msg: "Would you like to create ?",
+						action: true,
+						options: [{
+							command: "Assessment",
+							msg: "Choose type ?",
+							options: [{
+								command: "PDF",
+								msg: "How many questions you want to create ?",
+								options: [{
+									command: "5",
+									trigger: "org.ekstep.devconquestion:add",
+									msg: "A package wit,h the given details has been initiated..."
+								},
+								{
+									command: "10",
+									trigger: "org.ekstep.devconquestion:add",
+									msg: "A package with the given details has been initiated..."
+								},
+								{
+									command: "15",
+									trigger: "org.ekstep.devconquestion:add",
+									msg: "A package with the given details has been initiated..."
+								}]
+							},
+							{
+								command: "Other",
+								msg: "How many questions you want to create ?",
+								// options: [{
+									// command: "auto suggest?",
+									// msg: "How many questions you want to create ?",
+									options: [{
+										command: "5",
+										trigger: "org.ekstep.questionbank:showpopup",
+										msg: "A package with the given details has been initiated..."
+									},
+									{
+										command: "10",
+										trigger: "org.ekstep.questionbank:showpopup",
+										msg: "A package with the given details has been initiated..."
+									},
+									{
+										command: "15",
+										trigger: "org.ekstep.questionbank:showpopup",
+										msg: "A package with the given details has been initiated..."
+									}
+									]
+								// }]
+							}]
+						},
+						{
+							command: "Content",
+							msg: "Would you like to create using",
+							options: [{
+								command: "PDF",
+								// msg: "pdf"
+								trigger: "org.ekstep.devconquestion:add"
+							},
+							{
+								command: "Image",
+								// msg: "image"
+								trigger: "org.ekstep.devconquestion:add"
+							}]
+						}]
+					}]
+
+			}
+            $scope.optionsData = JSON.parse(JSON.stringify($scope.data));
+            $scope.currentOption = $scope.optionsData;
+            $scope.remainingOptions = $scope.optionsData.options;
+            $scope.history = [];
+            ecEditor.addEventListener('org.ekstep.appu:message', function (e,data) {
+                $scope.showToolTip(data.message);
+            }, this);
+            $scope.$safeApply();
+        }
+        ecEditor.addEventListener("org.ekstep.appu:init", $scope.initAppu, $scope);
+    
 
         org.ekstep.contenteditor.api.addEventListener("object:selected", $scope.objectSelected, $scope);
         org.ekstep.contenteditor.api.addEventListener("object:unselected", $scope.objectUnselected, $scope);

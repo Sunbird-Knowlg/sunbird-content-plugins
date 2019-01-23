@@ -29,6 +29,7 @@ angular.module('createquestionapp', [])
     $scope.framework = ecEditor.getContext('framework');
     $scope.difficultyLevels = ['All', 'Easy', 'Medium', 'Difficult'];
     $scope.configScore = false;
+    console.log("PLUGIN INST",pluginInstance);
     $scope.questionTypes = [{
       "name": "Multiple Choice Questions",
       "value": "mcq"
@@ -61,7 +62,7 @@ angular.module('createquestionapp', [])
         "sort_by": {
           "lastUpdatedOn": "desc"
         },
-        "limit": 200
+        "limit": pluginInstance.limit || 200
       }
     };
     $scope.csspath = ecEditor.resolvePluginResource(pluginInstance.manifest.id, pluginInstance.manifest.ver, 'editor/style.css');
@@ -113,7 +114,7 @@ angular.module('createquestionapp', [])
           "sort_by": {
             "lastUpdatedOn": "desc"
           },
-          "limit": 200
+          "limit": pluginInstance.limit || 200 
         }
       };
       if (filterData) {
