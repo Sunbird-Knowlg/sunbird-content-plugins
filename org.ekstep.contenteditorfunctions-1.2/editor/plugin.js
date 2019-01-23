@@ -17,6 +17,7 @@ org.ekstep.contenteditor.basePlugin.extend({
         ecEditor.addEventListener('org.ekstep.contenteditor:preview', function(event, data) {
             instance.previewContent(data.fromBeginning);
         }, this);
+        ecEditor.addEventListener('org.ekstep.contenteditor:save:auto', this.saveAuto, this);
         ecEditor.addEventListener('org.ekstep.contenteditor:save:force', this.saveBrowserContent, this);
         ecEditor.addEventListener('org.ekstep.contenteditor:review', this.reviewContent, this);
         ecEditor.addEventListener("org.ekstep.contenteditor:publish", this.publishContent, this);
@@ -50,6 +51,8 @@ org.ekstep.contenteditor.basePlugin.extend({
         });
     },
     resolveSaveFn: function(event, data) {
+        console.log('resolveSaveFn========');
+        
         var meta = ecEditor.getService(ServiceConstants.CONTENT_SERVICE).getContentMeta(ecEditor.getContext('contentId'));
         switch (meta.mimeType) {
             case "application/vnd.ekstep.ecml-archive":
@@ -78,6 +81,13 @@ org.ekstep.contenteditor.basePlugin.extend({
         var options = ecEditor._.assign({ savingPopup: true, successPopup: true, failPopup: true }, data);
         if (options.savingPopup) this.saveNotification('saving');
         this._patchContent(data, data.body, options);
+    },
+    saveAuto: function(event, data){
+        console.log(data);
+        this.contentService.saveContent(org.ekstep.contenteditor.api.getContext('contentId'), {}, JSON.parse(data), function(){
+            console.log("Auto save success");
+            location.reload();
+        });
     },
     saveContent: function(event, options) {
         console.log('Save invoked:', event, options)

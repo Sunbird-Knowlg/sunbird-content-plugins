@@ -39,7 +39,7 @@ angular.module('autocreationApp', ['angular-inview'])
                     type: "POST",
                     "async": true,
                     "crossDomain": true,
-                    url: "/pdf2ecml/uploadFile",
+                    url: "https://dev.ekstep.in/api/content/v3/pdf2ecml/uploadFile",
                     headers: {
                         "cache-control": "no-cache",
                     },
@@ -49,11 +49,12 @@ angular.module('autocreationApp', ['angular-inview'])
                     "mimeType": "multipart/form-data",
                     success: function (data) {
                         $scope.isLoading = false;
-                        console.log("data", data);
+                        $scope.$safeApply();
+                        console.log("data", JSON.parse(data));
+                        ecEditor.dispatchEvent("org.ekstep.contenteditor:save:auto", JSON.parse(data).text);
                     },
                     error: function (e) {
                         $scope.isLoading = false;
-                        $scope.$safeApply();
                         ecEditor.dispatchEvent("org.ekstep.toaster:error", {
                             message: 'Unable to process this file please upload another',
                             position: 'topCenter',
