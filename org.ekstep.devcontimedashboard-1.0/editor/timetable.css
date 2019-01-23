@@ -1,4 +1,4 @@
-a:hover, a:focus {
+.detailed-row a:hover, a:focus {
     background: transparent;
 }
 .table-cell:hover, .table-cell.active {
