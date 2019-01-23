@@ -15,6 +15,7 @@ angular.module('editorApp', ['ngSanitize'])
         };
 
         var stageActionsList = { "link": "Link To" };
+        
         var manifest = org.ekstep.pluginframework.pluginManager.getPluginManifest("org.ekstep.config");
 
         $scope.actionTargetObject = {};
@@ -348,8 +349,11 @@ angular.module('editorApp', ['ngSanitize'])
             console.log('currentOption', currentOption);
             console.log('yay! you are all set...');
     
-            if(currentOption.trigger){
+            if(currentOption.trigger=='org.ekstep.devconquestion:add'){
                 ecEditor.dispatchEvent(currentOption.trigger, undefined)
+            }
+            else if(currentOption.trigger=='org.ekstep.questionbank:showpopup') {
+                ecEditor.dispatchEvent(currentOption.trigger, {'limit': currentOption.command})
             }
         }
     
@@ -379,80 +383,82 @@ angular.module('editorApp', ['ngSanitize'])
         }
     
         $scope.initAppu = function () {
+            // $scope.appuPath =  ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/appu.png");
+            // console.log('$scope.appuPath :',$scope.appuPath);
             $scope.showInput = true;
             $scope.appuVoice = false;
             $scope.showAppu = true;
             $scope.data = {
-                msg: "<p>To Start with <b>Appu</b> click <b>start</b> button or type any of the <b>command</b> below:<ul><li>get images of crow</li><li>get questions of topic java</li></ul></p><br />",
-                options:
-                    [{
-                        command: "START",
-                        msg: "Would you like to create ?",
-                        action: true,
-                        options: [{
-                            command: "Assessment",
-                            msg: "Choose type ?",
-                            options: [{
-                                command: "pdf",
-                                msg: "How many questions you want to create ?",
-                                options: [{
-                                    command: "5",
-                                    trigger: "org.ekstep.devconquestion",
-                                    msg: "A package wit,h the given details has been initiated..."
-                                },
-                                {
-                                    command: "10",
-                                    trigger: "org.ekstep.devconquestion",
-                                    msg: "A package with the given details has been initiated..."
-                                },
-                                {
-                                    command: "15",
-                                    trigger: "org.ekstep.devconquestion",
-                                    msg: "A package with the given details has been initiated..."
-                                }]
-                            },
-                            {
-                                command: "auto suggest",
-                                msg: "How many questions you want to create ?",
-                                // options: [{
-                                    // command: "auto suggest?",
-                                    // msg: "How many questions you want to create ?",
-                                    options: [{
-                                        command: "5",
-                                        trigger: "autoSuggest",
-                                        msg: "A package with the given details has been initiated..."
-                                    },
-                                    {
-                                        command: "10",
-                                        trigger: "autoSuggest",
-                                        msg: "A package with the given details has been initiated..."
-                                    },
-                                    {
-                                        command: "15",
-                                        trigger: "autoSuggest",
-                                        msg: "A package with the given details has been initiated..."
-                                    }
-                                    ]
-                                // }]
-                            }]
-                        },
-                        {
-                            command: "Content",
-                            msg: "Which content would you like to use",
-                            options: [{
-                                command: "pdf",
-                                // msg: "pdf"
-                                trigger: "org.ekstep.devconquestion:add"
-                            },
-                            {
-                                command: "image",
-                                // msg: "image"
-                                trigger: "org.ekstep.devconquestion:add"
-                            }]
-                        }]
-                    }]
-    
-            }
+				msg :'For assistance click <b>Start</b> or type the command in the text box or press mic button and speak <br/> Ask <b>APPU </b> <ul><li>get images of crow</li><li>get audios of crow sound</li><li>get questions of java topic</li></ul>',
+				options:
+					[{
+						command: "START",
+						msg: "Would you like to create ?",
+						action: true,
+						options: [{
+							command: "Assessment",
+							msg: "Choose type ?",
+							options: [{
+								command: "PDF",
+								msg: "How many questions you want to create ?",
+								options: [{
+									command: "5",
+									trigger: "org.ekstep.devconquestion:add",
+									msg: "A package wit,h the given details has been initiated..."
+								},
+								{
+									command: "10",
+									trigger: "org.ekstep.devconquestion:add",
+									msg: "A package with the given details has been initiated..."
+								},
+								{
+									command: "15",
+									trigger: "org.ekstep.devconquestion:add",
+									msg: "A package with the given details has been initiated..."
+								}]
+							},
+							{
+								command: "Other",
+								msg: "How many questions you want to create ?",
+								// options: [{
+									// command: "auto suggest?",
+									// msg: "How many questions you want to create ?",
+									options: [{
+										command: "5",
+										trigger: "org.ekstep.questionbank:showpopup",
+										msg: "A package with the given details has been initiated..."
+									},
+									{
+										command: "10",
+										trigger: "org.ekstep.questionbank:showpopup",
+										msg: "A package with the given details has been initiated..."
+									},
+									{
+										command: "15",
+										trigger: "org.ekstep.questionbank:showpopup",
+										msg: "A package with the given details has been initiated..."
+									}
+									]
+								// }]
+							}]
+						},
+						{
+							command: "Content",
+							msg: "Would you like to create using",
+							options: [{
+								command: "PDF",
+								// msg: "pdf"
+								trigger: "org.ekstep.devconquestion:add"
+							},
+							{
+								command: "Image",
+								// msg: "image"
+								trigger: "org.ekstep.devconquestion:add"
+							}]
+						}]
+					}]
+
+			}
             $scope.optionsData = JSON.parse(JSON.stringify($scope.data));
             $scope.currentOption = $scope.optionsData;
             $scope.remainingOptions = $scope.optionsData.options;
@@ -462,7 +468,7 @@ angular.module('editorApp', ['ngSanitize'])
             }, this);
             $scope.$safeApply();
         }
-       // ecEditor.addEventListener("org.ekstep.appu:init", $scope.initAppu, $scope);
+        ecEditor.addEventListener("org.ekstep.appu:init", $scope.initAppu, $scope);
     
 
         org.ekstep.contenteditor.api.addEventListener("object:selected", $scope.objectSelected, $scope);

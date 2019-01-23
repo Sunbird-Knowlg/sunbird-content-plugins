@@ -23,6 +23,9 @@ org.ekstep.questionbank.EditorPlugin = org.ekstep.contenteditor.basePlugin.exten
     var instance = this;
     instance.callback = dataObj.callback;
     instance.editData = (!ecEditor._.isUndefined(dataObj.data)) ? dataObj.data : '';
+    instance.limit = dataObj.limit || 200;
+    instance.topicKey = dataObj.topic;
+    instance.topicValue = dataObj.value;
     ecEditor.getService(ServiceConstants.POPUP_SERVICE).open({
       template: 'QuestionFormTemplate',
       controller: 'QuestionFormController',

@@ -44,6 +44,7 @@ var executeCommand = function(text){
 }
 
 function hanldeQuery(item, key, value){
+    console.log('------------handleQuery :', key , value);
     if(item && item.event != "" && value){
         ecEditor.dispatchEvent('org.ekstep.appu:stopSpeechListener');
         var evData = {key:key,value:value,item:item};
@@ -51,3 +52,7 @@ function hanldeQuery(item, key, value){
         
     }
 }
+
+ecEditor.addEventListener("org.ekstep.appu:openQuestionBrowser", function(event, data){
+    ecEditor.dispatchEvent("org.ekstep.questionbank:showpopup", {'topic': data.key, 'value': data.value});
+}, this);
