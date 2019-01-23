@@ -27,7 +27,7 @@ org.ekstep.contenteditor.basePlugin.extend({
                 }
             },
             width: "100%",
-            height: "250%",
+            height: "100%",
             showClose: false,
             closeByDocument: false,
             closeByEscape: true,

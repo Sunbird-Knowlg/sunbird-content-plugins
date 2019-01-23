@@ -21,8 +21,8 @@ angular.module('timetableApp', ['angular-inview'])
         $scope.type;
         $scope.flag = false;
   
-        $scope.classDetails = ["Class 1"];
-        $scope.subjedDetails = ["Physics"];
+        $scope.classDetails = ["class 3"];
+        $scope.subjedDetails = ["evs"];
 
         $scope.init = function () {
             $scope.contentNotFoundImage = ecEditor.resolvePluginResource(instance.manifest.id, instance.manifest.ver, "assets/content_not_found.jpg");
@@ -39,6 +39,15 @@ angular.module('timetableApp', ['angular-inview'])
          *
         */
         $scope.getteacherProfile = function() {
+            if(window.context.dcUser) {
+                $scope.classDetails = [];
+                $scope.subjedDetails = [];
+
+                $scope.classDetails.push(window.context.dcUser.gradeLevel);
+                $scope.subjedDetails.push(window.context.dcUser.subject)
+
+            }
+            ;
 
         }
 
@@ -52,7 +61,8 @@ angular.module('timetableApp', ['angular-inview'])
                 "filters":{
                     "objectType":["Content"],
                     "status":[],
-                    "subject":"evs",
+                    "subject":$scope.subjedDetails[0],
+                    "gradeLevel":$scope.classDetails[0],
                     "keywords":["dc_primary","dc_secondary","dc_preparatory","dc_practice","dc_assessment"]
                 },
                 "exists":["keywords"],
@@ -81,7 +91,7 @@ angular.module('timetableApp', ['angular-inview'])
                 $scope.detailsView.push(data.name);
             });
             $scope.topicTitle = topic;
-            $scope.showDetailedView = !$scope.showDetailedView;
+            $scope.showDetailedView = true;
         }
 
 
