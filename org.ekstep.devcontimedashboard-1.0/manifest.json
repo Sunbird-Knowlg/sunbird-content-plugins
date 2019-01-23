@@ -1,0 +1,41 @@
+{
+    "id": "org.ekstep.devcontimedashboard",
+    "ver": "1.0",
+    "author": "Rajesh Gupta",
+    "title": "Timetable Dashboard plugin",
+    "description": "",
+    "publishedDate": "",
+    "editor": {
+        "main": "editor/plugin.js",
+        "dependencies": [
+            {
+                "type": "css",
+                "src": "editor/timetable.css"
+            },
+            {
+                "type": "css",
+                "src": "https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+            },
+            {
+                "type": "js",
+                "src": "editor/libs/initial.min.js"
+            },
+            {
+                "type": "js",
+                "src": "editor/libs/angular-inview.js"
+            },
+            {
+                "type": "js",
+                "src": "https://code.jquery.com/jquery-3.3.1.slim.min.js"
+            },
+            {
+                "type": "js",
+                "src": "https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js"
+            },
+            {
+                "type": "js",
+                "src": "https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js"
+            }
+        ]
+    }
+}
