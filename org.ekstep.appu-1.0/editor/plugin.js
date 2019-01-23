@@ -68,6 +68,8 @@ org.ekstep.contenteditor.basePlugin.extend({
         this.appuVoice = false;
     },
     initialize: function () {
+        var instance = this;
+       
         try {
             var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             window.recognition = new SpeechRecognition();
@@ -85,5 +87,4 @@ org.ekstep.contenteditor.basePlugin.extend({
         }
 
     }
-
 });
