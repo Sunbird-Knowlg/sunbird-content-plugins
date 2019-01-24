@@ -289,18 +289,19 @@ a.item.at-menu-item.popup-item.active {
                 </div>
             </div>
         </div> -->
-        <div id='appuDv' class="ui fluid container" ng-init="initAppu()">
+        <div id='appuDv' class="ui fluid container" ng-if="appuActive">
             <div class="ui modal" style="width: 450px;right: 5%; position: fixed; bottom: 10%; min-height: 450px;left:auto !important; transition: all 0.25s ease-in-out; top: 100%;
             transform: translateY(-460px); display: block;"
                 ng-class="{'minimizeAppu': !showAppu}">
                 <div class="header chat-color">
+                 <img class='ui image' src='assets/appu.png' />
                     <!-- <img src="{{appuPath}}" alt="appu"> -->
                     Ask Appu
                     <i class="window minimize icon float-right clickable" ng-click="showAppu = !showAppu"></i>
                 </div>
                 
                 <div class="content " id="appuDiv" ng-if="showAppu">
-                    <p>Hey Vinu, I am Appu your personal assistant!</p>
+                    <p>Hey <strong>{{loginData.name}}</strong>, I am Appu your personal assistant!</p>
                     <div ng-repeat="hist in history" style="padding-bottom: 10px; border-bottom: dashed 1px #ddd;">
                         <p ng-bind-html="sce.trustAsHtml(hist.msg)"></p>
                         <button ng-class="option.selected? 'ui button':'ui button disabled'" ng-repeat="option in hist.options">{{option.command}}
