@@ -78,17 +78,17 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
                             "did": deviceId,
                             "dimensions": {
                                 "visitorId": code,
-                                "stallId": "stallId",
-                                "ideaId": "ideaId",
-                                "visitorName": "Visitor Name",
+                                "stallId": "STA1",
+                                "ideaId": "IDE2",
+                                "visitorName": "",
                                 "studentId": "studentId",
                                 "studentName": "studentName",
-                                "teacherId": "teacherId",
-                                "teacherName": "teacherName",
+                                "teacherId": "TCH1",
+                                "teacherName": "Nirmala",
                                 "parentId": "parentId",
                                 "parentName": "parentName",
-                                "stallName": "stallName",
-                                "ideaName": "ideaName",
+                                "stallName": "Creation",
+                                "ideaName": "AI Assisted Content Creation",
                                 "classroomId": "classroomId",
                                 "school": "school",
                                 "district": "district",
@@ -99,10 +99,9 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
                             },
                             "edata": {}
                         }
-
+ 
                     ]
                 };
-
                 $.ajax({
                     method: 'POST',
                     url: 'https://dev.ekstep.in/api/devcon/v3/login',

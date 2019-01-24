@@ -294,8 +294,11 @@ a.item.at-menu-item.popup-item.active {
             transform: translateY(-460px); display: block;"
                 ng-class="{'minimizeAppu': !showAppu}">
                 <div class="header chat-color">
-                 <img class='ui image' src='assets/appu.png' />
-                    <!-- <img src="{{appuPath}}" alt="appu"> -->
+                 <img class='ui image' src='../plugins/org.ekstep.config-1.0/assets/appu.png' style="height: 60px;
+                 display: inline-block;
+                 margin-right: 10px;
+                 border-radius: 50%;
+                 object-position: 27%;"/>
                     Ask Appu
                     <i class="window minimize icon float-right clickable" ng-click="showAppu = !showAppu"></i>
                 </div>
