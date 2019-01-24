@@ -781,10 +781,6 @@ angular.module('org.ekstep.mathtext', [])
           });
         }
       }
-      ecEditor.dispatchEvent('org.ekstep.mathtext:addEquation', {
-        latex: equation,
-        advance: advance
-      });
       $scope.closeThisDialog();
     }
   }]);
