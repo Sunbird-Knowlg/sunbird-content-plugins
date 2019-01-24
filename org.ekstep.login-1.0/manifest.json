@@ -28,17 +28,6 @@
                 "type": "js",
                 "src": "editor/libs/jsQR.js"
             }
-        ],
-        "menu": [{
-           "id": "login",
-           "category": "main",
-           "type": "icon",
-           "toolTip": "Login",
-           "title": "login",
-           "iconClass": "icon-user icon",
-           "onclick": {
-               "id": "org.ekstep.login:showPopup"
-           }
-       }]
+        ]
     }
 }
