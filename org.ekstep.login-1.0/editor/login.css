@@ -91,3 +91,6 @@ text-align: left;
     overflow: hidden;
     margin: 0 auto;
   }
+  .h-auto{
+    height: auto;
+  }
