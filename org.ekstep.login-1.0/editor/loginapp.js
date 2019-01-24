@@ -67,7 +67,7 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
                         subType: 'test',
                         action: 'create',
                         rootOrgId: '1234567890',
-                        framework: code
+                        code: code
                     }
                 };
                 // Add your stall telemetry data and remove unwanted telemetry
@@ -112,8 +112,10 @@ angular.module('loginApp', []).controller('logincontroller', ['$scope', 'instanc
                 }).done(function (data) {
                     ctrl.showDiv = false;
                     $scope.$safeApply();
+                    ecEditor.jQuery('.login-container').parents('#ngdialog1').addClass('hide');
                     $scope.fireEvent({ id: 'org.ekstep.timetable:add' });
                     if (data.result && data.result.Visitor) {
+                        ecEditor.dispatchEvent("org.ekstep.login:success",data.result);
                         $.ajax({
                             method: 'POST',
                             url: 'http://52.172.188.118:3000/v1/telemetry',

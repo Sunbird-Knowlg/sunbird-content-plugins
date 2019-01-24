@@ -99,6 +99,11 @@
                             data-variation="tiny inverted" data-position="bottom center" ng-click="download(); generateTelemetry({ subtype: 'download', target: 'downloadButton'})">
                             <i class="download icon custom-icon"></i>
                         </div>
+                        <div class="close" ng-init="disableRedirectBtn = false">
+                            <span ng-click="fireEvent({id: 'org.ekstep.login:showPopup'});">
+                                <i class="sign out icon custom-cursor"></i>
+                            </span>
+                        </div>
                         <div id="closeButton" class="close icon-box popup-item" data-content="Close" data-variation="tiny inverted"
                             data-position="bottom center">
                             <a ng-click="closeEditor(); generateTelemetry({ subtype: 'close', target: 'closeButton'})">
