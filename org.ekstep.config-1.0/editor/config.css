@@ -236,5 +236,9 @@ input[type=range].config-slider:focus::-ms-fill-upper {
   top: 100% !important;
   transform: translateY(-62px) !important;
 }
+.ui.modal.fullscreen.active.activity-browser-modal{
+  height: 100%;
+  top: 0;
+ }
 
 /* toggle checkbox */
